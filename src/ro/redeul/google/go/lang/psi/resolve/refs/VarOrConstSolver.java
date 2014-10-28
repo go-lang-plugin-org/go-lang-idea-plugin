@@ -70,22 +70,4 @@ public class VarOrConstSolver extends VisitingReferenceSolver<VarOrConstReferenc
             }
         });
     }
-
-    @Override
-    public PsiElement resolve(@NotNull VarOrConstReference reference, boolean incompleteCode) {
-        PsiElement solution = super.resolve(reference, incompleteCode);
-
-        if ( solution != null ) {
-
-            System.out.println();
-            System.out.println(reference.getElement().getParent().getParent().getText());
-            System.out.println(solution.getParent().getParent().getText());
-        }
-
-
-        // PsiElement secondSolution = GoPsiUtils.resolveSafely(solution);
-//
-//        return secondSolution != null ? secondSolution : solution;
-        return solution;
-    }
 }

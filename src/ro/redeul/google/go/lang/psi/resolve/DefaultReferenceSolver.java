@@ -72,15 +72,16 @@ public abstract class DefaultReferenceSolver<R extends ReferenceWithSolver<?, S,
     public void handleEvent(@NotNull Event event, Object associated) { }
 
     @Override
+    @SuppressWarnings("ConstantConditions")
     public PsiElement resolveFromCache(R reference) {
         boolean incompleteCode = false;
 
         // uncomment if we want to skip cache
-        return resolve(reference, false);
+//        return resolve(reference, incompleteCode);
 
         // this will go via the cache
-//        return ResolveCache
-//                .getInstance(reference.getElement().getProject())
-//                .resolveWithCaching(reference, self(), true, false);
+        return ResolveCache
+                .getInstance(reference.getElement().getProject())
+                .resolveWithCaching(reference, self(), true, incompleteCode);
     }
 }
