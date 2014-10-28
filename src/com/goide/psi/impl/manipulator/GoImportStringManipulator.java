@@ -11,14 +11,15 @@ import org.jetbrains.annotations.NotNull;
 public class GoImportStringManipulator extends AbstractElementManipulator<GoImportString> {
   @NotNull
   @Override
-  public GoImportString handleContentChange(@NotNull GoImportString string, TextRange range, String s) throws IncorrectOperationException {
+  public GoImportString handleContentChange(@NotNull GoImportString string, @NotNull TextRange range, String s) throws IncorrectOperationException {
     String newPackage = range.replace(string.getText(), s);
     checkQuoted(string);
     return (GoImportString)string.replace(GoElementFactory.createImportString(string.getProject(), newPackage));
   }
 
+  @NotNull
   @Override
-  public TextRange getRangeInElement(GoImportString element) {
+  public TextRange getRangeInElement(@NotNull GoImportString element) {
     checkQuoted(element);
     return TextRange.create(1, element.getTextLength() - 1);
   }

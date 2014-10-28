@@ -27,7 +27,7 @@ public class GoFormatterTest extends GoCodeInsightFixtureTestCase {
     assertSameLinesWithFile(getTestDataPath() + "/" + after, myFixture.getFile().getText());
   }
 
-  private String doTest(boolean format, String testName) throws IOException {
+  private String doTest(boolean format, String testName) {
     if (format) {
       ApplicationManager.getApplication().runWriteAction(new Runnable() {
         @Override

@@ -214,10 +214,10 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
     public ChildAttributes getChildAttributes(int newChildIndex) {
       Indent childIndent = Indent.getNoneIndent();
       IElementType parentType = myNode.getElementType();
-      if (BLOCKS_TOKEN_SET.contains(parentType)) {
-        childIndent = Indent.getNormalIndent();
-      }
-      else if (parentType == IMPORT_DECLARATION || parentType == CONST_DECLARATION || parentType == VAR_DECLARATION) {
+      if (BLOCKS_TOKEN_SET.contains(parentType) ||
+          parentType == IMPORT_DECLARATION ||
+          parentType == CONST_DECLARATION ||
+          parentType == VAR_DECLARATION) {
         childIndent = Indent.getNormalIndent();
       }
       return new ChildAttributes(childIndent, null);

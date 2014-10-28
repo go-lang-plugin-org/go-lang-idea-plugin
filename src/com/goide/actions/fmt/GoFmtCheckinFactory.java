@@ -27,7 +27,7 @@ public class GoFmtCheckinFactory extends CheckinHandlerFactory {
   public static final String GO_FMT = "GO_FMT";
 
   @NotNull
-  public CheckinHandler createHandler(@NotNull final CheckinProjectPanel panel, CommitContext commitContext) {
+  public CheckinHandler createHandler(@NotNull final CheckinProjectPanel panel, @NotNull CommitContext commitContext) {
     return new CheckinHandler() {
       @Override
       public RefreshableOnComponent getBeforeCheckinConfigurationPanel() {

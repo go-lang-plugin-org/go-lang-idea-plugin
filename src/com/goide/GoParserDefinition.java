@@ -78,7 +78,7 @@ public class GoParserDefinition implements ParserDefinition {
   @NotNull
   @Override
   public PsiElement createElement(ASTNode node) {
-    return GoTypes.Factory.createElement(node);
+    return Factory.createElement(node);
   }
 
   @NotNull

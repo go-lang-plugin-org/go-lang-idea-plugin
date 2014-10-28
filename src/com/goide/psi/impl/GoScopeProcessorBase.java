@@ -26,7 +26,7 @@ public abstract class GoScopeProcessorBase extends BaseScopeProcessor {
   }
 
   @Override
-  public boolean execute(@NotNull PsiElement psiElement, ResolveState resolveState) {
+  public boolean execute(@NotNull PsiElement psiElement, @NotNull ResolveState resolveState) {
     if (psiElement instanceof GoFunctionOrMethodDeclaration) return false;
     if (!(psiElement instanceof GoNamedElement)) return true;
     if (condition(psiElement)) return true;
