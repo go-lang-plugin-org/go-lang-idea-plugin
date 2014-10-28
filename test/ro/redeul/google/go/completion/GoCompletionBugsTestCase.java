@@ -15,5 +15,8 @@ public class GoCompletionBugsTestCase extends GoCompletionTestCase{
         _testVariants();
     }
 
-    public void testGH749() {doTestVariants("net.go");}
+    public void testGH749() throws IOException {
+        addPackage("net", "net.go");
+        _testSingleCompletion();
+    }
 }

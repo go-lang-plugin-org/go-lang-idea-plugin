@@ -1,5 +1,8 @@
 package ro.redeul.google.go.resolve;
 
+import org.junit.Ignore;
+import org.junit.Test;
+
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
  * <p/>
@@ -125,10 +128,12 @@ public class GoResolveCallsTest extends GoPsiResolveTestCase {
         doTest();
     }
 
+    @Ignore("Not supporting relative package references yet.")
     public void testRelativePackageReference() throws Exception {
         doTest();
     }
 
+    @Ignore("Not supporting relative package references yet.")
     public void testRelativePackageReferenceDeep() throws Exception {
         doTest();
     }

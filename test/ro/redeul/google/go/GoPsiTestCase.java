@@ -8,6 +8,7 @@ import org.junit.Ignore;
 import ro.redeul.google.go.lang.psi.GoFile;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 @Ignore
 public abstract class GoPsiTestCase extends PsiTestCase {
@@ -15,7 +16,7 @@ public abstract class GoPsiTestCase extends PsiTestCase {
     protected void addBuiltinPackage(VirtualFile contentRoot) throws IOException {
         VirtualFile builtin = LocalFileSystem.getInstance().findFileByPath("testdata/builtin/builtin.go");
 
-        if ( builtin != null ) {
+        if (builtin != null) {
             createFile(myModule, createChildDirectory(contentRoot, "builtin"), "builtin.go", VfsUtil.loadText(builtin));
         }
     }
@@ -28,7 +29,26 @@ public abstract class GoPsiTestCase extends PsiTestCase {
         return "";
     }
 
-    protected  GoFile parse(String content) throws Exception {
-        return (GoFile)createFile("temp.go", content);
+    protected GoFile parse(String content) throws Exception {
+        return (GoFile) createFile("temp.go", content);
+    }
+
+    @Override
+    public void runBare() throws Throwable {
+        try {
+            String methodName = getName();
+            Method runMethod = this.getClass().getMethod(methodName, (Class[]) null);
+            if (runMethod != null) {
+                Ignore ignore = runMethod.getAnnotation(Ignore.class);
+                if (ignore != null) {
+                    LOG.warn(String.format("@Ignore: %s => %s", methodName, ignore.value()));
+                    return;
+                }
+            }
+        } catch (NoSuchMethodException var5) {
+            //
+        }
+
+        super.runBare();
     }
 }

@@ -17,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.completion.insertHandler.*;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoExpressionList;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
@@ -26,20 +25,17 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.statements.*;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
-import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 import java.util.*;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
-import static com.intellij.patterns.StandardPatterns.not;
-import static com.intellij.patterns.StandardPatterns.or;
 import static com.intellij.patterns.StandardPatterns.and;
+import static com.intellij.patterns.StandardPatterns.or;
 import static ro.redeul.google.go.lang.completion.GoCompletionUtil.*;
 
 /**
@@ -55,10 +51,6 @@ public class GoCompletionContributor extends CompletionContributor {
     private static final String[] BULTINS_WITH_RETURN = {
             "new", "make", "len", "cap", "append", "copy", "complex",
             "real", "imag", "recover"
-    };
-
-    private static final String[] BULTINS_WITHOUT_RETURN = {
-            "delete", "panic", "print", "println"
     };
 
     // Check whether a PsiElement is a valid position for a type name.
@@ -206,6 +198,7 @@ public class GoCompletionContributor extends CompletionContributor {
 
                 Project project = params.getOriginalFile().getProject();
 
+                //TODO: reevaluate this.
                 GoNamesCache packageNamesCache = GoNamesCache.getInstance(project);
                 Collection<String> goSdkPackages = packageNamesCache.getSdkPackages();
 
@@ -220,6 +213,9 @@ public class GoCompletionContributor extends CompletionContributor {
                 Collection<String> goProjectPackages = packageNamesCache.getProjectPackages();
 
                 for (String goPackage : goProjectPackages) {
+                    if ( goPackage.equals("builtin"))
+                        continue;
+
                     result.addElement(
                             LookupElementBuilder.create(goPackage)
                                     .withIcon(PlatformIcons.PACKAGE_ICON)

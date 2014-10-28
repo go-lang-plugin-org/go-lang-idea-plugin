@@ -1,6 +1,7 @@
 package ro.redeul.google.go;
 
 import com.intellij.openapi.command.WriteCommandAction;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.roots.ContentEntry;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.ModuleRootManager;
@@ -13,10 +14,13 @@ import ro.redeul.google.go.lang.psi.GoFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 @Ignore
 public abstract class GoLightCodeInsightFixtureTestCase
     extends LightCodeInsightFixtureTestCase {
+
+    protected static final Logger LOG = Logger.getInstance("#ro.redeul.google.go.GoLightCodeInsightFixtureTestCase");
 
     protected static String testDataRoot = "testdata/";
     @Override
@@ -76,5 +80,24 @@ public abstract class GoLightCodeInsightFixtureTestCase
                 modifiableModel.commit();
             }
         }.execute().throwException();
+    }
+
+    @Override
+    public void runBare() throws Throwable {
+        try {
+            String methodName = getName();
+            Method runMethod = this.getClass().getMethod(methodName, (Class[]) null);
+            if (runMethod != null) {
+                Ignore ignore = runMethod.getAnnotation(Ignore.class);
+                if (ignore != null) {
+                    LOG.warn(String.format("@Ignore: %s => %s", methodName, ignore.value()));
+                    return;
+                }
+            }
+        } catch (NoSuchMethodException var5) {
+            //
+        }
+
+        super.runBare();
     }
 }
