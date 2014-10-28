@@ -5,8 +5,6 @@ import org.junit.Test;
 
 public class GoLexerTest {
 
-    @Test
-    @Ignore("not sure how this work")
     public void testXX() {
         String text = "" +
             "package main\n" +
@@ -33,8 +31,6 @@ public class GoLexerTest {
         }
     }
 
-    @Test
-    @Ignore("not sure how this work")
     public void testXxx2() {
         String text = "" +
             "func usage() {\n" +

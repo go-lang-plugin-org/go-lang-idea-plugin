@@ -1,14 +1,15 @@
 package ro.redeul.google.go;
 
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.PsiTestCase;
 import org.junit.Ignore;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.util.GoTestUtils;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 
 @Ignore
 public abstract class GoPsiTestCase extends PsiTestCase {
@@ -35,20 +36,7 @@ public abstract class GoPsiTestCase extends PsiTestCase {
 
     @Override
     public void runBare() throws Throwable {
-        try {
-            String methodName = getName();
-            Method runMethod = this.getClass().getMethod(methodName, (Class[]) null);
-            if (runMethod != null) {
-                Ignore ignore = runMethod.getAnnotation(Ignore.class);
-                if (ignore != null) {
-                    LOG.warn(String.format("@Ignore: %s => %s", methodName, ignore.value()));
-                    return;
-                }
-            }
-        } catch (NoSuchMethodException var5) {
-            //
-        }
-
-        super.runBare();
+        if ( GoTestUtils.shouldRunBare(this) )
+            super.runBare();
     }
 }

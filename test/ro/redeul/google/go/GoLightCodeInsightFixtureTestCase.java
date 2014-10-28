@@ -11,6 +11,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 import org.junit.Ignore;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.util.GoTestUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,8 +20,6 @@ import java.lang.reflect.Method;
 @Ignore
 public abstract class GoLightCodeInsightFixtureTestCase
     extends LightCodeInsightFixtureTestCase {
-
-    protected static final Logger LOG = Logger.getInstance("#ro.redeul.google.go.GoLightCodeInsightFixtureTestCase");
 
     protected static String testDataRoot = "testdata/";
     @Override
@@ -37,7 +36,11 @@ public abstract class GoLightCodeInsightFixtureTestCase
     protected void addPackage(String importPath, String ... files) throws IOException {
         for (String file : files) {
             VirtualFile virtualFile = VfsUtil.findFileByIoFile(new File(getBasePath() + "/" + file), true);
-            if (virtualFile == null)
+            if (virtualFile == null) {
+                virtualFile = VfsUtil.findFileByIoFile(new File(file), true);
+            }
+
+            if ( virtualFile == null)
                 continue;
 
             myFixture.addFileToProject(
@@ -47,7 +50,7 @@ public abstract class GoLightCodeInsightFixtureTestCase
     }
 
     protected void addPackageBuiltin() throws IOException {
-        addPackage("builtin", "../../../builtin/builtin.go");
+        addPackage("builtin", testDataRoot + "/builtin/builtin.go");
     }
 
     @Override
@@ -84,20 +87,7 @@ public abstract class GoLightCodeInsightFixtureTestCase
 
     @Override
     public void runBare() throws Throwable {
-        try {
-            String methodName = getName();
-            Method runMethod = this.getClass().getMethod(methodName, (Class[]) null);
-            if (runMethod != null) {
-                Ignore ignore = runMethod.getAnnotation(Ignore.class);
-                if (ignore != null) {
-                    LOG.warn(String.format("@Ignore: %s => %s", methodName, ignore.value()));
-                    return;
-                }
-            }
-        } catch (NoSuchMethodException var5) {
-            //
-        }
-
-        super.runBare();
+        if ( GoTestUtils.shouldRunBare(this) )
+            super.runBare();
     }
 }

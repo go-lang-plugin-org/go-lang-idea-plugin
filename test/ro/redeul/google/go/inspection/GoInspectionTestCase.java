@@ -55,6 +55,7 @@ public abstract class GoInspectionTestCase
     }
 
     protected void doTest() throws Exception {
+        addPackageBuiltin();
         doTestWithOneFile(myFixture.configureByFile(getTestName(true) + ".go"));
     }
 
@@ -74,6 +75,7 @@ public abstract class GoInspectionTestCase
                 return true;
             }
         });
+        addPackageBuiltin();
         for (PsiFile psi : list) {
             doTestWithOneFile(psi);
         }
@@ -118,8 +120,6 @@ public abstract class GoInspectionTestCase
 
     protected String processFile(String fileText)
             throws InstantiationException, IllegalAccessException, IOException {
-
-        addPackageBuiltin();
 
         GoFile file = (GoFile) myFixture.configureByText(GoFileType.INSTANCE, fileText);
         Document document = myFixture.getDocument(file);
