@@ -1,7 +1,13 @@
 package p3
 
-type P1 int
+type T1 int
 
-func (p *P1) F1() {
+func (p *T1) F1() {
+
+}
+
+type T2 int
+
+func (p T2) F2() {
 
 }
