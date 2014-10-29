@@ -56,13 +56,14 @@ public class UnusedVariableInspectionTest extends GoInspectionTestCase {
         doTest();
     }
 
-    /* TODO FIX TEST
+    @Ignore("failing test")
     public void testIssue438() throws Exception {
         doTestWithDirectory();
     }
+
+    @Ignore("failing test")
     public void testIssue865() throws Exception {
         doTest();
     }
-    */
 
 }

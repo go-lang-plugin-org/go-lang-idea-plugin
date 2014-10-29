@@ -21,4 +21,7 @@ public class RedeclareInspectionTest extends GoInspectionTestCase {
 
     @Ignore("broken by the new resolver")
     public void testMultiFiles() throws Exception{ doTestWithDirectory(); }
+
+    @Ignore("failing test")
+    public void testBuildTags() throws Exception{ doTestWithDirectory(); }
 }
