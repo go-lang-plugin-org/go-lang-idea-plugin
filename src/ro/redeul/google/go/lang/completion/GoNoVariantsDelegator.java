@@ -13,7 +13,7 @@ public class GoNoVariantsDelegator extends CompletionContributor {
     public void fillCompletionVariants(CompletionParameters parameters, CompletionResultSet result) {
         if (parameters.getCompletionType() == CompletionType.BASIC) {
             if (VALID_PACKAGE_NAME_POSITION.accepts(parameters.getPosition())) {
-                addAllPackageNames(result, parameters.getOriginalFile());
+                // addAllPackageNames(result, parameters.getOriginalFile());
             }
         }
     }

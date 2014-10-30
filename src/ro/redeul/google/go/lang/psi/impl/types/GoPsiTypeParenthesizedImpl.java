@@ -7,8 +7,7 @@ import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeParenthesized;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 
-public class GoPsiTypeParenthesizedImpl extends GoPsiPackagedElementBase
-    implements GoPsiTypeParenthesized
+public class GoPsiTypeParenthesizedImpl extends GoPsiTypeImpl implements GoPsiTypeParenthesized
 {
     public GoPsiTypeParenthesizedImpl(@NotNull ASTNode node) {
         super(node);
@@ -31,7 +30,7 @@ public class GoPsiTypeParenthesizedImpl extends GoPsiPackagedElementBase
     }
 
     @Override
-    public String getPresentationTailText() {
-        return String.format("(%s)", getInnerType().getPresentationTailText());
+    public String getLookupTailText() {
+        return String.format("(%s)", getInnerType().getLookupTailText());
     }
 }

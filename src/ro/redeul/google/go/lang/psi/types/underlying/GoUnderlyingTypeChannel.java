@@ -26,4 +26,9 @@ public class GoUnderlyingTypeChannel implements GoUnderlyingType {
     public String toString() {
         return String.format("%s%s", channelType.toString(), elementType);
     }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visitChannel(this);
+    }
 }

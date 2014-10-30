@@ -19,8 +19,8 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
-import ro.redeul.google.go.lang.psi.resolve.references.BuiltinCallOrConversionReference;
-import ro.redeul.google.go.lang.psi.resolve.references.CallOrConversionReference;
+//import ro.redeul.google.go.lang.psi.resolve.references.BuiltinCallOrConversionReference;
+//import ro.redeul.google.go.lang.psi.resolve.refs.CallOrConversionReference;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
@@ -69,12 +69,12 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
 
             @Override
             public void visitLiteralExpression(GoLiteralExpression expression) {
-                if (CallOrConversionReference.MATCHER.accepts(expression) ||
-                        BuiltinCallOrConversionReference.MATCHER.accepts(expression)) {
-                    tryToResolveReference(expression, expression.getText());
-                } else {
+//                if (CallOrConversionReference.MATCHER.accepts(expression) ||
+//                        BuiltinCallOrConversionReference.MATCHER.accepts(expression)) {
+//                    tryToResolveReference(expression, expression.getText());
+//                } else {
                     super.visitLiteralExpression(expression);
-                }
+//                }
             }
 
             @Override
@@ -116,7 +116,7 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
                                 final GoImportDeclaration[] declarations = goImportDeclarations.getDeclarations();
                                 for (final GoImportDeclaration declaration : declarations) {
 
-                                    final String visiblePackageName = declaration.getVisiblePackageName();
+                                    final String visiblePackageName = declaration.getPackageAlias();
                                     if (visiblePackageName.equals(element.getFirstChild().getText())) {
 
                                         final Project project = element.getProject();

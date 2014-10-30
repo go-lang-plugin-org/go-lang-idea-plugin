@@ -64,7 +64,8 @@ public class GoPsiManager {
 
     @NotNull
     public <T extends GoPsiElement> GoType[] getType(T element, Function<T, GoType[]> calculator) {
-        GoType[] types = myCalculatedTypes.get(element);
+//        GoType[] types = myCalculatedTypes.get(element);
+        GoType[] types = null;
         if (types == null) {
             RecursionGuard.StackStamp stamp = ourGuard.markStack();
             types = calculator.fun(element);

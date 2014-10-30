@@ -1,56 +1,70 @@
 package ro.redeul.google.go.completion;
 
+import java.io.IOException;
+
 public class GoPackageCompletionTestCase extends GoCompletionTestCase {
     @Override
     protected String getTestDataRelativePath() {
         return super.getTestDataRelativePath() + "package";
     }
 
-    public void testPackageInTypeDeclaration() {
-        doTestVariants("net.go");
+    public void testPackageInTypeDeclaration() throws IOException {
+        addPackage("net", "net.go");
+        _testVariants();
     }
 
-    public void testPackageInExpression() {
-        doTestVariants("net.go");
+    public void testPackageInExpression() throws IOException {
+        addPackage("net", "net.go");
+        _testVariants();
     }
 
-    public void testPackageInFunctionParameter1() {
-        doTestVariants("net.go");
+    public void testPackageInFunctionParameter1() throws IOException {
+        addPackage("net", "net.go");
+        _testVariants();
     }
 
-    public void testPackageInFunctionParameter2() {
-        doTestVariants("net.go");
+    public void testPackageInFunctionParameter2() throws IOException {
+        addPackage("net", "net.go");
+        _testVariants();
     }
 
-    public void testPackageInAssignment1() {
-        doTestVariants("net.go");
+    public void testPackageInAssignment1() throws IOException {
+        addPackage("net", "net.go");
+        _testVariants();
     }
 
-    public void testPackageInAssignment2() {
-        doTestVariants("net.go");
+    public void testPackageInAssignment2() throws IOException {
+        addPackage("net", "net.go");
+        _testVariants();
     }
 
-    public void testPackageInReturnStatement() {
-        doTestVariants("net.go");
+    public void testPackageInReturnStatement() throws IOException {
+        addPackage("net", "net.go");
+        _testVariants();
     }
 
-    public void testPackageInGoStatement() {
-        doTest("net.go");
+    public void testPackageInGoStatement() throws IOException {
+        addPackage("net", "net.go");
+        _testVariants();
     }
 
-    public void testPackageInDeferStatement() {
-        doTest("net.go");
+    public void testPackageInDeferStatement() throws IOException {
+        addPackage("net", "net.go");
+        _testVariants();
     }
 
-    public void testPackageInFunctionParameterType() {
-        doTestVariants("net.go");
+    public void testPackageInFunctionParameterType() throws IOException {
+        addPackage("net", "net.go");
+        _testVariants();
     }
 
-    public void testPackageInFunctionResultType() {
-        doTestVariants("net.go");
+    public void testPackageInFunctionResultType() throws IOException {
+        addPackage("net", "net.go");
+        _testVariants();
     }
 
-    public void testPackageInVarDeclaration() {
-        doTestVariants("net.go");
+    public void testPackageInVarDeclaration() throws IOException {
+        addPackage("net", "net.go");
+        _testVariants();
     }
 }

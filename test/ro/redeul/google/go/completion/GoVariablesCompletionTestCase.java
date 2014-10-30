@@ -1,43 +1,46 @@
 package ro.redeul.google.go.completion;
 
+import java.io.IOException;
+
 public class GoVariablesCompletionTestCase extends GoCompletionTestCase {
     protected String getTestDataRelativePath() {
         return super.getTestDataRelativePath() + "variables";
     }
 
-    public void testLocalVar() {
-        doTest();
+    public void testLocalVar() throws IOException {
+        _testSingleCompletion();
     }
 
-    public void testEnclosingScopeVar() {
-        doTest();
+    public void testEnclosingScopeVar() throws IOException {
+        _testSingleCompletion();
     }
 
-    public void testLocalVarVariants() {
-        doTestVariants();
+    public void testLocalVarVariants() throws IOException {
+        _testVariants();
     }
 
-    public void testLocalVarVariantsCaseInsensitive() {
-        doTestVariants();
+    public void testLocalVarVariantsCaseInsensitive() throws IOException {
+        _testVariants();
     }
 
-    public void testStructFieldViaChannelExpression() {
-        doTestVariants();
+    public void testStructFieldViaChannelExpression() throws IOException {
+        _testVariants();
     }
 
-    public void testMethodReference() {
-        doTestVariants();
+    public void testMethodReference() throws IOException {
+        _testVariants();
     }
 
-    public void testShortVar() {
-        doTestVariants();
+    public void testShortVar() throws IOException {
+        _testVariants();
     }
 
-    public void testVarWithoutType() {
-        doTestVariants();
+    public void testVarWithoutType() throws IOException {
+        _testVariants();
     }
 
-    public void testFromDotImportedPackages() {
-        doTestVariants();
+    public void testFromDotImportedPackages() throws IOException {
+        addPackage("test", "test/type1.go", "test/type2.go");
+        _testVariants();
     }
 }

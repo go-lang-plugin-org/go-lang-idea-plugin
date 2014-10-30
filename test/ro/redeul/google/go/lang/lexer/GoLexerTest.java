@@ -1,12 +1,14 @@
 package ro.redeul.google.go.lang.lexer;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class GoLexerTest {
 
     @Test
-    @Ignore("not sure how this work")
+    public void testPassing() {
+
+    }
+
     public void testXX() {
         String text = "" +
             "package main\n" +
@@ -33,8 +35,6 @@ public class GoLexerTest {
         }
     }
 
-    @Test
-    @Ignore("not sure how this work")
     public void testXxx2() {
         String text = "" +
             "func usage() {\n" +

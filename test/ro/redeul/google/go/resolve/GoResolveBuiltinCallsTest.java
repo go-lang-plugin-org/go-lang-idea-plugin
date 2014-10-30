@@ -31,10 +31,9 @@ public class GoResolveBuiltinCallsTest extends GoPsiResolveTestCase {
             resolvedDefinition = resolvedDefinition.getParent();
         }
 
-        assertTrue("It resolved to the name of a function",
-                   psiElement(GoLiteralIdentifier.class)
-                       .withParent(GoFunctionDeclaration.class)
-                       .accepts(resolvedDefinition)
+        assertTrue("It should have resolved to a function",
+                   psiElement(GoFunctionDeclaration.class)
+                           .accepts(resolvedDefinition)
         );
     }
 

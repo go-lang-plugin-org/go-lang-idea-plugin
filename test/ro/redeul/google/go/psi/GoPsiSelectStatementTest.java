@@ -5,12 +5,12 @@ package ro.redeul.google.go.psi;
 
 import ro.redeul.google.go.GoPsiTestCase;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseDefault;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseRecv;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectStatement;
-import static ro.redeul.google.go.util.GoPsiTestUtils.castAs;
-import static ro.redeul.google.go.util.GoPsiTestUtils.childAt;
-import static ro.redeul.google.go.util.GoPsiTestUtils.get;
+
+import static ro.redeul.google.go.util.GoPsiTestUtils.*;
 
 /**
  * // TODO: mtoader ! Please explain yourself.
@@ -85,11 +85,12 @@ public class GoPsiSelectStatementTest extends GoPsiTestCase {
                    0, selectStatement.getCommClauses());
 
 
-        assertEquals(1, clauseRecv.getVariables().length);
-        assertEquals("i1", childAt(0, clauseRecv.getVariables()).getText());
+        assertNotNull(clauseRecv.getAssignment());
+        GoExpr[] expressions = clauseRecv.getAssignment().getLeftSideExpressions().getExpressions();
+        assertEquals(1, expressions.length);
+        assertEquals("i1", expressions[0].getText());
 
-        assertTrue(clauseRecv.isAssignment());
-        assertFalse(clauseRecv.isDeclaration());
+        assertNull(clauseRecv.getShortVarDeclaration());
 
         assertEquals("<-c1", get(clauseRecv.getReceiveExpression()).getText());
     }
@@ -118,12 +119,12 @@ public class GoPsiSelectStatementTest extends GoPsiTestCase {
             castAs(GoSelectCommClauseRecv.class,
                    0, selectStatement.getCommClauses());
 
+        assertNotNull(clauseRecv.getShortVarDeclaration());
 
-        assertEquals(1, clauseRecv.getVariables().length);
-        assertEquals("i1", childAt(0, clauseRecv.getVariables()).getText());
+        assertEquals(1, clauseRecv.getShortVarDeclaration().getDeclarations().length);
+        assertEquals("i1", childAt(0, clauseRecv.getShortVarDeclaration().getDeclarations()).getText());
 
-        assertFalse(clauseRecv.isAssignment());
-        assertTrue(clauseRecv.isDeclaration());
+        assertNull(clauseRecv.getAssignment());
 
         assertEquals("<-c1", get(clauseRecv.getReceiveExpression()).getText());
     }

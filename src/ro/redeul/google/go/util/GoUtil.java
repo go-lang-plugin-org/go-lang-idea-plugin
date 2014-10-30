@@ -24,7 +24,7 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
-import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
+import ro.redeul.google.go.lang.psi.processors.ResolveStates;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.*;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
@@ -192,6 +192,7 @@ public class GoUtil {
         return e.getStartOffsetInParent() == 0;
     }
 
+    // TODO: what is this doing ?
     private static String recursiveNameOrGlobalTypeImp(GoPsiType type, GoFile currentFile) {
         if (type instanceof GoPsiTypePointer) {
             return String.format("*%s", recursiveNameOrGlobalTypeImp(((GoPsiTypePointer) type).getTargetType(), currentFile));
@@ -268,7 +269,7 @@ public class GoUtil {
                     String canonicalPath = containingDirectory.getVirtualFile().getCanonicalPath();
                     GoLiteralString importPath = declaration.getImportPath();
                     if (importPath != null && canonicalPath != null && canonicalPath.endsWith(importPath.getValue())) {
-                        String visiblePackageName = declaration.getVisiblePackageName();
+                        String visiblePackageName = declaration.getPackageAlias();
                         if (visiblePackageName.equals(".")) {
                             stringBuilder.append(type.getName());
                         } else {
@@ -460,7 +461,7 @@ public class GoUtil {
     }
 
     public static boolean TestDeclVar(PsiElement expr, String k) {
-        return !GoPsiScopesUtil.treeWalkUp(new GoVariableScopeCheck(k), expr, expr.getContainingFile(), GoResolveStates.variables());
+        return !GoPsiScopesUtil.treeWalkUp(new GoVariableScopeCheck(k), expr, expr.getContainingFile(), ResolveStates.variables());
     }
 
     public static GoType[] getFuncCallTypes(GoPsiTypeFunction psiTypeFunction) {

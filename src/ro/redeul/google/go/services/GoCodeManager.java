@@ -33,7 +33,7 @@ public class GoCodeManager {
 
         for (GoImportDeclarations importDeclarations : file.getImportDeclarations()) {
             for (GoImportDeclaration declaration : importDeclarations.getDeclarations()) {
-                String visiblePackageName = declaration.getVisiblePackageName();
+                String visiblePackageName = declaration.getPackageAlias();
                 if (!"".equals(visiblePackageName) && !"C".equals(visiblePackageName)) {
                     imports.put(visiblePackageName, declaration);
                 }

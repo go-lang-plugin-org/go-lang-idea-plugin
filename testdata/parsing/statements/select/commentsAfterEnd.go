@@ -34,13 +34,12 @@ Go file
         SelectCommClauseRecvImpl
           PsiElement(KEYWORD_CASE)('case')
           PsiWhiteSpace(' ')
-          LiteralExpressionImpl
+          ShortVarStmtImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('a')
-          PsiWhiteSpace(' ')
-          PsiElement(:=)(':=')
-          PsiWhiteSpace(' ')
-          SelectCommClauseRecvExpr
+            PsiWhiteSpace(' ')
+            PsiElement(:=)(':=')
+            PsiWhiteSpace(' ')
             UnaryExpressionImpl
               PsiElement(<-)('<-')
               PsiWhiteSpace(' ')

@@ -2,12 +2,13 @@ package ro.redeul.google.go.lang.psi.impl.expressions.literals;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.patterns.ElementPattern;
+import com.intellij.patterns.PlatformPatterns;
+import com.intellij.patterns.StandardPatterns;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
@@ -17,18 +18,25 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
-import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComposite;
+import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeElement;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoLiteralExpressionImpl;
 import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
-import ro.redeul.google.go.lang.psi.resolve.references.*;
+import ro.redeul.google.go.lang.psi.resolve.Reference;
+import ro.redeul.google.go.lang.psi.resolve.refs.*;
+import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
+import ro.redeul.google.go.lang.psi.typing.*;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
@@ -37,8 +45,8 @@ import static com.intellij.patterns.StandardPatterns.string;
 import static ro.redeul.google.go.lang.lexer.GoTokenTypes.mIDENT;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.FOR_WITH_CLAUSES_STATEMENT;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.FOR_WITH_RANGE_STATEMENT;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.*;
-import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getGlobalElementSearchScope;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getLocalElementSearchScope;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -46,8 +54,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
  * Date: Jul 24, 2010
  * Time: 10:43:49 PM
  */
-public class GoLiteralIdentifierImpl extends GoPsiElementBase
-        implements GoLiteralIdentifier {
+public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiteralIdentifier {
 
     private final boolean isIota;
     private Integer iotaValue;
@@ -173,46 +180,124 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
 
     @NotNull
     @Override
-    public PsiReference[] getReferences() {
-//        if (references != null)
-//            return references;
-
-        if (NO_REFERENCE.accepts(this))
-            return refs(PsiReference.EMPTY_ARRAY);
+    public PsiReference[] defineReferences() {
+//        if (NO_REFERENCE.accepts(this))
+//            return PsiReference.EMPTY_ARRAY;
 
 //        if (BuiltinCallOrConversionReference.MATCHER.accepts(this))
 //            return refs(new BuiltinCallOrConversionReference(this));
 
-        if (LabelReference.MATCHER.accepts(this))
-            return refs(new LabelReference(this));
+//        if (LabelReference.MATCHER.accepts(this))
+//            return refs(new LabelReference(this));
 
-        if (CompositeElementOfStructFieldReference.MATCHER_KEY.accepts(this)) {
-            GoLiteralComposite composite = findParentOfType(this, GoLiteralComposite.class);
-            if (resolveToFinalType(composite.getLiteralType()) instanceof GoPsiTypeStruct) {
-                return refs(
-                        new CompositeElementOfStructFieldReference(this, this)
-                );
-            }
+//        if (CompositeElementOfStructFieldReference.MATCHER_KEY.accepts(this)) {
+//            GoLiteralComposite composite = findParentOfType(this, GoLiteralComposite.class);
+//            if (resolveToFinalType(composite.getLiteralType()) instanceof GoPsiTypeStruct) {
+//                return refs(
+//                        new CompositeElementOfStructFieldReference(this, this)
+//                );
+//            }
+//
+//            return refs(
+//                    new CompositeElementOfStructFieldReference(this, this),
+//                    new VarOrConstReference(this)
+//            );
+//        }
 
-            return refs(
-                    new CompositeElementOfStructFieldReference(this, this),
-                    new VarOrConstReference(this)
-            );
+//        if (CompositeElementOfStructFieldReference.MATCHER_ELEMENT.accepts(this))
+//            return refs(new VarOrConstReference(this));
+
+//        if (ShortVarDeclarationReference.MATCHER.accepts(this))
+//            return refs(new ShortVarDeclarationReference(this));
+
+        if (psiElement().withParent(
+                psiElement(GoLiteralExpressionImpl.class).withParent(
+                        psiElement(GoElementTypes.LITERAL_COMPOSITE_ELEMENT_KEY))
+        ).accepts(this)) {
+            GoLiteralCompositeElement parent = GoPsiUtils.findParentOfType(this, GoLiteralCompositeElement.class);
+
+            if (parent == null)
+                return PsiReference.EMPTY_ARRAY;
+
+            GoTypeStruct typeStruct = GoTypes.resolveToStruct(parent.getElementType());
+            if (typeStruct == null)
+                return PsiReference.EMPTY_ARRAY;
+
+            return new PsiReference[]{new StructFieldReference(this, typeStruct)};
         }
 
-        if (CompositeElementOfStructFieldReference.MATCHER_ELEMENT.accepts(this))
-            return refs(new VarOrConstReference(this));
+        //noinspection unchecked
+        if (psiElement()
+                .withParent(
+                        psiElement(GoLiteralExpression.class)
+                                .atStartOf(
+                                        or(
+                                                psiElement(GoBuiltinCallExpression.class),
+                                                psiElement(GoCallOrConvExpression.class))))
+                .withSuperParent(2,
+                        or(
+                                psiElement(GoBuiltinCallExpression.class),
+                                psiElement(GoCallOrConvExpression.class))
+                ).accepts(this)) {
+            return new PsiReference[]{new FunctionOrTypeNameReference(this)};
+        }
 
-        if (ShortVarDeclarationReference.MATCHER.accepts(this))
-            return refs(new ShortVarDeclarationReference(this));
+        if (psiElement().withParent(psiElement(GoShortVarDeclaration.class)).accepts(this)) {
+            return new PsiReference[]{new ShortVarReference(this)};
+        }
 
-        if (VarOrConstReference.MATCHER.accepts(this))
-            return refs(new VarOrConstReference(this));
+        if (psiElement().withParent(psiElement(GoSelectorExpression.class)).accepts(this)) {
+            GoSelectorExpression selectorExpression = (GoSelectorExpression) getParent();
 
-        if (SelectorOfStructFieldReference.MATCHER.accepts(this))
-            return findParentOfType(this, GoSelectorExpression.class).getReferences();
+            GoType baseTypes[] = selectorExpression.getBaseExpression().getType();
 
-        return refs(PsiReference.EMPTY_ARRAY);
+            return GoTypes.visitFirstType(baseTypes, new GoType.Visitor<PsiReference[]>(PsiReference.EMPTY_ARRAY) {
+                final GoLiteralIdentifier ident = GoLiteralIdentifierImpl.this;
+
+                List<Reference> refs = new ArrayList<Reference>();
+
+                @Override
+                public PsiReference[] getData() {
+                    return refs.toArray(new PsiReference[refs.size()]);
+                }
+
+                @Override
+                public void visitPointer(GoTypePointer type) {
+                    visit(type.getTargetType());
+                }
+
+                @Override
+                public void visitPackage(GoTypePackage type) {
+                    refs.add(new PackageSymbolReference(ident, type.getPackage()));
+                }
+
+                @Override
+                public void visitName(final GoTypeName type) {
+                    refs.add(new InterfaceMethodReference(ident, type));
+                    refs.add(new MethodReference(ident, type));
+
+                    visit(type.getDefinition());
+                }
+
+                @Override
+                public void visitStruct(GoTypeStruct type) {
+                    refs.add(new StructFieldReference(ident, type));
+                }
+            });
+        }
+
+        if (VarOrConstReference.MATCHER.accepts(this)) {
+//            if (PackageReference.MATCHER.accepts(this))
+                return new PsiReference[]{new VarOrConstReference(this), new PackageReference(this)};
+//            else
+//                return new PsiReference[]{new VarOrConstReference(this)};
+        }
+
+        if (psiElement(GoLiteralIdentifier.class).insideStarting(psiElement(GoPsiTypeName.class)).accepts(this)) {
+            return new PsiReference[]{new PackageReference(this)};
+        }
+
+        return PsiReference.EMPTY_ARRAY;
     }
 
 //    @Override
@@ -290,7 +375,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
         GoImportDeclarations[] goImportDeclarations = goFile.getImportDeclarations();
         for (GoImportDeclarations importDeclarations : goImportDeclarations) {
             for (GoImportDeclaration importDeclaration : importDeclarations.getDeclarations()) {
-                if (importDeclaration.getVisiblePackageName().toLowerCase()
+                if (importDeclaration.getPackageAlias().toLowerCase()
                         .equals(packageName.toLowerCase())) {
                     GoLiteralString importPath = importDeclaration.getImportPath();
                     if (importPath != null)
@@ -322,11 +407,11 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
             return getGlobalElementSearchScope(this, getName());
         }
 
-        if (isNodeOfType(getParent(), GoElementTypes.LABELED_STATEMENT) ||
-                LabelReference.MATCHER.accepts(this)) {
-            return new LocalSearchScope(
-                    findParentOfType(this, GoFunctionDeclaration.class));
-        }
+//        if (isNodeOfType(getParent(), GoElementTypes.LABELED_STATEMENT) ||
+//                LabelReference.MATCHER.accepts(this)) {
+//            return new LocalSearchScope(
+//                    findParentOfType(this, GoFunctionDeclaration.class));
+//        }
 
         return getLocalElementSearchScope(this);
     }
@@ -338,7 +423,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase
 
     @Override
     public Integer getIotaValue() {
-        if (isIota()){
+        if (isIota()) {
             return iotaValue;
         }
         return null;

@@ -32,7 +32,8 @@ Go file
           TypeNameImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('hash')
-              PsiElement(.)('.')
+            PsiElement(.)('.')
+            LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('Hash')
       PsiElement())(')')
     PsiWhiteSpace(' ')

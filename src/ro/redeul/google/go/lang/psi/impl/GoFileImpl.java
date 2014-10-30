@@ -10,7 +10,6 @@ import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.search.GlobalSearchScopes;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
@@ -19,20 +18,19 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.GoLanguage;
 import ro.redeul.google.go.components.GoSdkParsingHelper;
+import ro.redeul.google.go.lang.packages.GoPackages;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
-import ro.redeul.google.go.lang.psi.processors.GoResolveStates;
+import ro.redeul.google.go.lang.psi.processors.ResolveStates;
 import ro.redeul.google.go.lang.psi.toplevel.*;
-import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitorWithData;
-import ro.redeul.google.go.lang.stubs.GoNamesCache;
-import ro.redeul.google.go.util.GoUtil;
 import ro.redeul.google.go.util.LookupElementUtil;
 
-import java.util.Collection;
+import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public class GoFileImpl extends PsiFileBase implements GoFile {
 
@@ -78,34 +76,16 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
             return "";
         }
 
-        VirtualFile sourceRoot =
-            projectFileIndex.getSourceRootForFile(virtualFile);
+        VirtualFile sourceRoot = projectFileIndex.getSourceRootForFile(virtualFile);
 
         if (sourceRoot == null) {
             return "";
         }
 
-        String path = VfsUtil.getRelativePath(virtualFile.getParent(),
-                                              sourceRoot, '/');
+        String path = VfsUtil.getRelativePath(virtualFile.getParent(), sourceRoot, '/');
 
         if (path == null || path.equals(""))
-            path = getPackageName();
-
-        String pathCheck = GoPsiUtils.findRealImportPathValue(path);
-        if (path != null && !isApplicationPart() && !pathCheck.endsWith(getPackageName()) && !pathCheck.toLowerCase().endsWith(getPackageName())) {
-            path = path + "/" + getPackageName();
-        }
-
-        String makefileTarget =
-            GoUtil.getTargetFromMakefile(
-                virtualFile.getParent().findChild("Makefile"));
-
-        if (makefileTarget != null) {
-            path = makefileTarget;
-        }
-
-        if (path == null)
-            path = "";
+            return "";
 
         return path;
     }
@@ -142,18 +122,18 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
     public GoFunctionDeclaration[] getFunctions() {
         return
             ContainerUtil.mapNotNull(
-                findChildrenByClass(GoFunctionDeclaration.class),
-                new Function<GoFunctionDeclaration, GoFunctionDeclaration>() {
-                    @Override
-                    public GoFunctionDeclaration fun(
-                        GoFunctionDeclaration functionDeclaration) {
-                        if (functionDeclaration instanceof GoMethodDeclaration) {
-                            return null;
-                        }
+                    findChildrenByClass(GoFunctionDeclaration.class),
+                    new Function<GoFunctionDeclaration, GoFunctionDeclaration>() {
+                        @Override
+                        public GoFunctionDeclaration fun(
+                                GoFunctionDeclaration functionDeclaration) {
+                            if (functionDeclaration instanceof GoMethodDeclaration) {
+                                return null;
+                            }
 
-                        return functionDeclaration;
-                    }
-                }, new GoFunctionDeclaration[]{});
+                            return functionDeclaration;
+                        }
+                    }, new GoFunctionDeclaration[]{});
     }
 
     public GoMethodDeclaration[] getMethods() {
@@ -246,69 +226,57 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
         PsiElement child = this.getLastChild();
 
         while (child != null) {
-            if (!(child instanceof GoImportDeclarations) &&
-                !child.processDeclarations(processor, state, null, place))
+            while ( child != null && (child instanceof PsiWhiteSpace || child instanceof PsiComment))
+                child = child.getPrevSibling();
+
+            if (child != null && !child.processDeclarations(processor, state, lastParent, place))
                 return false;
 
-            child = child.getPrevSibling();
+            do {
+                child = child.getPrevSibling();
+            } while (child != null && (child instanceof PsiWhiteSpace || child instanceof PsiComment));
         }
 
-        if (state.get(GoResolveStates.IsOriginalFile)) {
-            ResolveState newState =
-                state.put(GoResolveStates.IsOriginalFile, false);
+        if ( ResolveStates.get(state, ResolveStates.Key.IsOriginalFile)) {
+            GoPackages packages = GoPackages.getInstance(getProject());
 
-            GoNamesCache names = GoNamesCache.getInstance(getProject());
+            GoPackage myPackage = packages.getPackage(getPackageImportPath());
+            if (myPackage != null &&
+                    !myPackage.processDeclarations(processor, ResolveStates.currentPackage(), this.getOriginalFile(), place))
+                return false;
 
-            PsiDirectory parentDirectory = getParent();
-            Collection<GoFile> goFiles;
-
-            if (isApplicationPart() && parentDirectory != null) {
-                goFiles =
-                    names.getFilesByPackageImportPath(
-                        getPackageImportPath(),
-                        GlobalSearchScopes.directoryScope(parentDirectory, false));
-            } else {
-                goFiles = names.getFilesByPackageImportPath(getPackageImportPath());
-            }
-
-            for (GoFile goFile : goFiles) {
-                if (!goFile.getOriginalFile().equals(this.getOriginalFile())) {
-                    if (!goFile.processDeclarations(processor, newState, null, place))
-                        return false;
-                }
-            }
-
-            for (GoImportDeclarations importDeclarations : getImportDeclarations()) {
-                if (!importDeclarations.processDeclarations(processor, state, null, place))
-                    return false;
-            }
+            GoPackage builtinPackage = packages.getBuiltinPackage();
+            return builtinPackage.processDeclarations(processor, ResolveStates.builtins(), lastParent, place);
         }
 
         return true;
     }
 
     @Override
-    final public LookupElementBuilder getCompletionPresentation() {
+    final public LookupElementBuilder getLookupPresentation() {
         return LookupElementUtil.createLookupElement(this);
     }
 
     @Override
-    public LookupElementBuilder getCompletionPresentation(GoPsiElement child) {
+    public LookupElementBuilder getLookupPresentation(GoPsiElement child) {
         return LookupElementUtil.createLookupElement(this);
     }
 
     @Override
-    public String getPresentationText() {
+    public String getLookupText() {
         return "";
     }
 
     @Override
-    public String getPresentationTailText() {
+    public String getLookupTailText() {
         return "";
     }
 
     @Override
-    public String getPresentationTypeText() {
+    public String getLookupTypeText() {
         return "";
     }
+
+    @Override
+    public GoPsiElement getReferenceContext() { return this; }
 }

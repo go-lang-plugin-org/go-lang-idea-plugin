@@ -44,4 +44,9 @@ public class GoUnderlyingTypePredeclared implements GoUnderlyingType {
     public String toString() {
         return type.name().toLowerCase();
     }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visitPredeclared(this);
+    }
 }

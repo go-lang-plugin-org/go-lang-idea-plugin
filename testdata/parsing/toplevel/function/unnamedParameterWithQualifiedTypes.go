@@ -46,7 +46,8 @@ Go file
         TypeNameImpl
           LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('io')
-            PsiElement(.)('.')
+          PsiElement(.)('.')
+          LiteralIdentifierImpl
             PsiElement(IDENTIFIER)('Reader')
     PsiElement())(')')
     PsiWhiteSpace(' ')
@@ -125,7 +126,8 @@ Go file
               TypeNameImpl
                 LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('io')
-                  PsiElement(.)('.')
+                PsiElement(.)('.')
+                LiteralIdentifierImpl
                   PsiElement(IDENTIFIER)('Reader')
           PsiElement())(')')
           PsiWhiteSpace(' ')

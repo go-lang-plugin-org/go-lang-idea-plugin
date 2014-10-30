@@ -92,7 +92,7 @@ public class GoFileUtils {
 
     public static boolean isPackageNameImported(GoFile file, String packageName) {
         for (GoImportDeclaration id : getImportDeclarations(file)) {
-            if (id.getVisiblePackageName().equals(packageName)) {
+            if (id.getPackageAlias().equals(packageName)) {
                 return true;
             }
         }

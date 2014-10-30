@@ -37,28 +37,41 @@ public interface GoType {
 
         T data;
 
+        public Visitor() { this(null); }
         public Visitor(T data) {
             this.data = data;
         }
 
         public T visit(GoType node) {
-            node.accept(this);
+            if ( node != null )
+                node.accept(this);
             return data;
         }
+
         protected void setData(T data) {
             this.data = data;
         }
 
-        protected void visitTypeArray(GoTypeArray array) { }
+        public T getData() {
+            return data;
+        }
 
-        public void visitTypeChannel(GoTypeChannel channel) { }
+        public void visitArray(GoTypeArray type) { }
 
-        public void visitTypeName(GoTypeName name) { }
+        public void visitFunction(GoTypeFunction type) { }
 
-        public void visitTypeSlice(GoTypeSlice slice) { }
+        public void visitChannel(GoTypeChannel type) { }
 
-        public void visitTypePointer(GoTypePointer pointer) { }
+        public void visitName(GoTypeName type) { }
 
-        public void visitTypeMap(GoTypeMap map) { }
+        public void visitSlice(GoTypeSlice type) { }
+
+        public void visitPointer(GoTypePointer type) { }
+
+        public void visitMap(GoTypeMap type) { }
+
+        public void visitPackage(GoTypePackage type) { }
+
+        public void visitStruct(GoTypeStruct type) { }
     }
 }

@@ -42,7 +42,7 @@ public abstract class GoPsiResolveTestCase extends GoFileBasedPsiTestCase {
                     resolvedDefinition = resolvedDefinition.getParent();
                 }
 
-                assertSame(def, resolvedDefinition);
+                assertSame(def.getNavigationElement(), resolvedDefinition.getNavigationElement());
             } else {
                 assertNull("The resolving should have failed", resolvedDefinition);
             }

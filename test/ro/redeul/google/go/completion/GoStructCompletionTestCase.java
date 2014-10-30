@@ -1,43 +1,46 @@
 package ro.redeul.google.go.completion;
 
+import java.io.IOException;
+
 public class GoStructCompletionTestCase extends GoCompletionTestCase{
     protected String getTestDataRelativePath() {
         return super.getTestDataRelativePath() + "struct";
     }
 
-    public void testStructMembers() {
-        doTestVariants();
+    public void testStructMembers() throws IOException {
+        _testVariants();
     }
 
-    public void testAnonymousStructMembers() {
-        doTestVariants();
+    public void testAnonymousStructMembers() throws IOException {
+        _testVariants();
     }
 
-    public void testPromotedFieldStructMembers() {
-        doTestVariants();
+    public void testPromotedFieldStructMembers() throws IOException {
+        _testVariants();
     }
 
-    public void testMembersOfAnonymousField() {
-        doTestVariants();
+    public void testMembersOfAnonymousField() throws IOException {
+        _testVariants();
     }
 
-    public void testMemberOfTypePointerCompletion() {
-        doTestVariants();
+    public void testMemberOfTypePointerCompletion() throws IOException {
+        _testVariants();
     }
 
-    public void testPromotedFields() {
-        doTestVariants();
+    public void testPromotedFields() throws IOException {
+        _testVariants();
     }
 
-    public void testRecursiveFields() {
-        doTestVariants();
+    public void testRecursiveFields() throws IOException {
+        _testVariants();
     }
 
-    public void testMethodsOfTypePointerCompletion(){
-        doTestVariants();
+    public void testMethodsOfTypePointerCompletion() throws IOException {
+        _testVariants();
     }
 
-    public void testPublicStructMemberFromImported() {
-        doTestVariants();
+    public void testPublicStructMemberFromImported() throws IOException {
+        addPackage("package1", "package1/file1.go");
+        _testVariants();
     }
 }

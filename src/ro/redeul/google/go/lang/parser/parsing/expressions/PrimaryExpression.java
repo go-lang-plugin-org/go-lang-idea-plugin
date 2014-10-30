@@ -109,7 +109,7 @@ class PrimaryExpression implements GoElementTypes {
 
             if (parseLiteralIdentifier(builder, parser)) {
                 // package? '.' ident '{' -> CompositeLiteral
-                if (builder.getTokenType() == pLCURLY) {
+                if (ParserUtils.lookAhead(builder, pLCURLY) || ParserUtils.lookAhead(builder, oDOT, mIDENT, pLCURLY)) {
                     if ( parser.isSet(GoParser.ParsingFlag.AllowCompositeLiteral)) {
                         if (parseLiteralComposite(builder, parser, mark)) {
                             return true;
@@ -392,7 +392,7 @@ class PrimaryExpression implements GoElementTypes {
             }
 
             if (ParserUtils.lookAhead(builder, oCOLON)) {
-                valueElement.done(COMPOSITE_LITERAL_ELEMENT_KEY);
+                valueElement.done(LITERAL_COMPOSITE_ELEMENT_KEY);
                 valueElement = valueElement.precede();
 
                 ParserUtils.getToken(builder, oCOLON);
@@ -417,8 +417,7 @@ class PrimaryExpression implements GoElementTypes {
             return true;
         }
 
-        if (IOTA_LITERAL.matcher(identifier).matches() && parser.isSet(
-            ParseIota)) {
+        if (IOTA_LITERAL.matcher(identifier).matches() && parser.isSet(ParseIota)) {
             ParserUtils.eatElement(builder, LITERAL_IOTA);
             return true;
         }
@@ -428,20 +427,18 @@ class PrimaryExpression implements GoElementTypes {
         if (!ParserUtils.getToken(builder, mIDENT))
             return false;
 
-        if ( identifier != null) {
-            identifier = identifier.replaceAll(GoCompletionContributor.DUMMY_IDENTIFIER, "");
-        }
+//        if ( identifier != null) {
+//            identifier = identifier.replaceAll(GoCompletionContributor.DUMMY_IDENTIFIER, "");
+//        }
 
-        if (parser.isPackageName(identifier) &&
-            ParserUtils.lookAhead(builder, oDOT)) {
-            ParserUtils.getToken(builder, oDOT);
-            if (ParserUtils.lookAhead(builder, mIDENT)) {
-                ParserUtils.getToken(builder, mIDENT);
-            } else {
-                builder.error(GoBundle.message("identifier.expected"));
-            }
-
-        }
+//        if (ParserUtils.lookAhead(builder, oDOT, mIDENT)) {
+//            ParserUtils.getToken(builder, oDOT);
+//            if (ParserUtils.lookAhead(builder, mIDENT)) {
+//                ParserUtils.getToken(builder, mIDENT);
+//            } else {
+//                builder.error(GoBundle.message("identifier.expected"));
+//            }
+//        }
 
         mark.done(GoElementTypes.LITERAL_IDENTIFIER);
         return true;

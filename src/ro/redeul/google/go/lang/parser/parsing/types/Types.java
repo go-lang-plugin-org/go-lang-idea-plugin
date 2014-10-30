@@ -78,14 +78,16 @@ public class Types implements GoElementTypes {
             return null;
 
         PsiBuilder.Marker marker = builder.mark();
-        ParserUtils.getToken(builder, mIDENT);
+        ParserUtils.eatElement(builder, LITERAL_IDENTIFIER);
 
-        if (ParserUtils.getToken(builder, oDOT)) {
-            ParserUtils.getToken(builder, mIDENT, GoBundle.message("error.identifier.expected"));
+        if (ParserUtils.lookAhead(builder, oDOT, mIDENT)) {
+            ParserUtils.getToken(builder, oDOT);
+            PsiBuilder.Marker mark = builder.mark();
+            ParserUtils.getToken(builder, mIDENT);
+            mark.done(LITERAL_IDENTIFIER);
         }
 
-        marker.done(LITERAL_IDENTIFIER);
-        marker.precede().done(TYPE_NAME);
+        marker.done(TYPE_NAME);
 
         return TYPE_NAME;
     }

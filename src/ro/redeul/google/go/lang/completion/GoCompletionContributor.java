@@ -17,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.completion.insertHandler.*;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoExpressionList;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
@@ -26,20 +25,17 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.statements.*;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
-import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 import java.util.*;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
-import static com.intellij.patterns.StandardPatterns.not;
-import static com.intellij.patterns.StandardPatterns.or;
 import static com.intellij.patterns.StandardPatterns.and;
+import static com.intellij.patterns.StandardPatterns.or;
 import static ro.redeul.google.go.lang.completion.GoCompletionUtil.*;
 
 /**
@@ -52,38 +48,38 @@ public class GoCompletionContributor extends CompletionContributor {
 
     public static final String DUMMY_IDENTIFIER = CompletionInitializationContext.DUMMY_IDENTIFIER_TRIMMED;
 
-    private static final  String [] BULTINS_WITH_RETURN = {
-        "new", "make", "len", "cap", "append", "copy", "complex",
-        "real", "imag", "recover"
-    };
-
-    private static final  String [] BULTINS_WITHOUT_RETURN = {
-        "delete", "panic", "print", "println"
+    private static final String[] BULTINS_WITH_RETURN = {
+            "new", "make", "len", "cap", "append", "copy", "complex",
+            "real", "imag", "recover"
     };
 
     // Check whether a PsiElement is a valid position for a type name.
     @SuppressWarnings("unchecked")
-    private static final PsiElementPattern.Capture<PsiElement> TYPE_DECLARATION = psiElement().withParent(
-            psiElement(GoLiteralIdentifier.class).withParent(
-                    or(psiElement(GoPsiTypeName.class),             // where type name is expected
-                            psiElement(GoLiteralExpression.class).withParent(
-                                    or(psiElement(GoExpr.class),                            // in an expression
-                                            psiElement(GoExpressionList.class).withParent(
-                                                    // in method invocation parameter or assignment
-                                                    or(psiElement(GoCallOrConvExpression.class),
-                                                            psiElement(GoAssignmentStatement.class)
-                                                    )
-                                            ),
-                                            // in return statement
-                                            psiElement(GoReturnStatement.class),
-
-                                            // in variable declaration statement
-                                            psiElement(GoVarDeclaration.class)
-                                    )
-                            )
-                    )
-            )
-    );
+    private static final ElementPattern<? extends PsiElement> TYPE_DECLARATION =
+            psiElement().withParent(
+                    psiElement(GoLiteralIdentifier.class)
+                            .atStartOf(psiElement(GoPsiTypeName.class)));
+//                    .withParent(
+//                            or(
+//                                    psiElement(GoPsiTypeName.class),             // where type name is expected
+//                                    psiElement(GoLiteralExpression.class).withParent(
+//                                            or(psiElement(GoExpr.class),                            // in an expression
+//                                                    psiElement(GoExpressionList.class).withParent(
+//                                                            // in method invocation parameter or assignment
+//                                                            or(psiElement(GoCallOrConvExpression.class),
+//                                                                    psiElement(GoAssignmentStatement.class)
+//                                                            )
+//                                                    ),
+//                                                    // in return statement
+//                                                    psiElement(GoReturnStatement.class),
+//
+//                                                    // in variable declaration statement
+//                                                    psiElement(GoVarDeclaration.class)
+//                                            )
+//                                    )
+//                            )
+//                    )
+//    );
 
     private static final ElementPattern<? extends PsiElement> BLOCK_STATEMENT =
             psiElement().withParent(
@@ -130,40 +126,40 @@ public class GoCompletionContributor extends CompletionContributor {
     );
 
 
-    CompletionProvider<CompletionParameters> localImportsCompletion =
-        new CompletionProvider<CompletionParameters>() {
-            @Override
-            protected void addCompletions(@NotNull CompletionParameters parameters,
-                                          ProcessingContext context,
-                                          @NotNull CompletionResultSet result) {
-                PsiFile originalFile = parameters.getOriginalFile();
-                if (!(originalFile instanceof GoFile))
-                    return;
-
-                GoFile file = (GoFile) originalFile;
-
-                for (GoImportDeclarations imports : file.getImportDeclarations()) {
-                    for (GoImportDeclaration importDecl : imports.getDeclarations()) {
-                        result.addElement(LookupElementBuilder.create(
-                            importDecl.getVisiblePackageName() + "."));
-                    }
-                }
-            }
-        };
+//    CompletionProvider<CompletionParameters> localImportsCompletion =
+//        new CompletionProvider<CompletionParameters>() {
+//            @Override
+//            protected void addCompletions(@NotNull CompletionParameters parameters,
+//                                          ProcessingContext context,
+//                                          @NotNull CompletionResultSet result) {
+//                PsiFile originalFile = parameters.getOriginalFile();
+//                if (!(originalFile instanceof GoFile))
+//                    return;
+//
+//                GoFile file = (GoFile) originalFile;
+//
+//                for (GoImportDeclarations imports : file.getImportDeclarations()) {
+//                    for (GoImportDeclaration importDecl : imports.getDeclarations()) {
+//                        result.addElement(LookupElementBuilder.create(
+//                            importDecl.getPackageAlias() + "."));
+//                    }
+//                }
+//            }
+//        };
 
     CompletionProvider<CompletionParameters> debuggingCompletionProvider =
-        new CompletionProvider<CompletionParameters>() {
-            @Override
-            protected void addCompletions(@NotNull CompletionParameters parameters,
-                                          ProcessingContext context,
-                                          @NotNull CompletionResultSet result) {
-                String currentFile =
-                    DebugUtil.psiToString(
-                        parameters.getPosition().getContainingFile(), false);
+            new CompletionProvider<CompletionParameters>() {
+                @Override
+                protected void addCompletions(@NotNull CompletionParameters parameters,
+                                              ProcessingContext context,
+                                              @NotNull CompletionResultSet result) {
+                    String currentFile =
+                            DebugUtil.psiToString(
+                                    parameters.getPosition().getContainingFile(), false);
 
-                System.out.println(currentFile);
-            }
-        };
+                    System.out.println(currentFile);
+                }
+            };
 
     @SuppressWarnings("unchecked")
     public GoCompletionContributor() {
@@ -182,16 +178,16 @@ public class GoCompletionContributor extends CompletionContributor {
             }
         };
         extend(CompletionType.BASIC,
-               psiElement()
-                   .withParent(
-                       psiElement(PsiErrorElement.class)
-                           .withParent(
-                               psiElement(GoPackageDeclaration.class)
-                                   .withFirstNonWhitespaceChild(
-                                       psiElement(PsiErrorElement.class)
-                                   )
-                           )
-                   ),
+                psiElement()
+                        .withParent(
+                                psiElement(PsiErrorElement.class)
+                                        .withParent(
+                                                psiElement(GoPackageDeclaration.class)
+                                                        .withFirstNonWhitespaceChild(
+                                                                psiElement(PsiErrorElement.class)
+                                                        )
+                                        )
+                        ),
                 packageCompletionProvider);
 
         CompletionProvider<CompletionParameters> importPathCompletionProvider = new CompletionProvider<CompletionParameters>() {
@@ -202,33 +198,38 @@ public class GoCompletionContributor extends CompletionContributor {
 
                 Project project = params.getOriginalFile().getProject();
 
-                GoNamesCache packageNamesCache =
-                        GoNamesCache.getInstance(project);
+                //TODO: reevaluate this.
+                GoNamesCache packageNamesCache = GoNamesCache.getInstance(project);
                 Collection<String> goSdkPackages = packageNamesCache.getSdkPackages();
 
                 for (String goPackage : goSdkPackages) {
                     result.addElement(
-                            LookupElementBuilder.create("\"" + goPackage)
+                            LookupElementBuilder.create(goPackage)
                                     .withIcon(PlatformIcons.PACKAGE_ICON)
-                                    .withTypeText("via sdk"));
+                                    .withTypeText("via sdk")
+                                    .withInsertHandler(ImportPathInsertHandler.INSTANCE));
                 }
 
                 Collection<String> goProjectPackages = packageNamesCache.getProjectPackages();
 
                 for (String goPackage : goProjectPackages) {
+                    if ( goPackage.equals("builtin"))
+                        continue;
+
                     result.addElement(
-                            LookupElementBuilder.create("\"" + goPackage)
+                            LookupElementBuilder.create(goPackage)
                                     .withIcon(PlatformIcons.PACKAGE_ICON)
                                     .bold()
+                                    .withInsertHandler(ImportPathInsertHandler.INSTANCE)
                                     .withTypeText("via project"));
                 }
             }
         };
         extend(CompletionType.BASIC,
-               psiElement(GoTokenTypes.litSTRING)
-                   .withParent(
-                       psiElement(GoLiteralString.class)
-                           .withParent(GoImportDeclaration.class)),
+                psiElement(GoTokenTypes.litSTRING)
+                        .withParent(
+                                psiElement(GoLiteralString.class)
+                                        .withParent(GoImportDeclaration.class)),
                 importPathCompletionProvider);
 
         CompletionProvider<CompletionParameters> blockStatementsCompletionProvider = new CompletionProvider<CompletionParameters>() {
@@ -255,21 +256,21 @@ public class GoCompletionContributor extends CompletionContributor {
                 result.addElement(
                         keyword("defer"));
 
-                for (String builtin : BULTINS_WITHOUT_RETURN) {
-                    result.addElement(
-                            builtinFunc(builtin, new FunctionInsertHandler()));
-                }
-
-                for (String builtin : BULTINS_WITH_RETURN) {
-                    result.addElement(
-                            builtinFunc(builtin, new FunctionInsertHandler()));
-                }
+//                for (String builtin : BULTINS_WITHOUT_RETURN) {
+//                    result.addElement(
+//                            builtinFunc(builtin, new FunctionInsertHandler()));
+//                }
+//
+//                for (String builtin : BULTINS_WITH_RETURN) {
+//                    result.addElement(
+//                            builtinFunc(builtin, new FunctionInsertHandler()));
+//                }
 
                 addPackageAutoCompletion(parameters, result);
             }
         };
         extend(CompletionType.BASIC,
-               BLOCK_STATEMENT,
+                BLOCK_STATEMENT,
                 blockStatementsCompletionProvider);
 
         CompletionProvider<CompletionParameters> forStatementsCompletionProvider = new CompletionProvider<CompletionParameters>() {
@@ -284,7 +285,7 @@ public class GoCompletionContributor extends CompletionContributor {
             }
         };
         extend(CompletionType.BASIC,
-                and(BLOCK_STATEMENT,psiElement().inside(GoForStatement.class)),
+                and(BLOCK_STATEMENT, psiElement().inside(GoForStatement.class)),
                 forStatementsCompletionProvider);
 
         CompletionProvider<CompletionParameters> topLevelKeywordsProvider = new CompletionProvider<CompletionParameters>() {
@@ -301,13 +302,13 @@ public class GoCompletionContributor extends CompletionContributor {
             }
         };
         extend(CompletionType.BASIC,
-               psiElement().withParent(
-                   psiElement(PsiErrorElement.class).withParent(
-                       psiElement(GoFile.class).withChild(
-                           psiElement(GoPackageDeclaration.class)
-                       )
-                   )
-               ),
+                psiElement().withParent(
+                        psiElement(PsiErrorElement.class).withParent(
+                                psiElement(GoFile.class).withChild(
+                                        psiElement(GoPackageDeclaration.class)
+                                )
+                        )
+                ),
                 topLevelKeywordsProvider);
 
         CompletionProvider<CompletionParameters> goAndDeferStatementCompletionProvider = new CompletionProvider<CompletionParameters>() {
@@ -335,21 +336,22 @@ public class GoCompletionContributor extends CompletionContributor {
                 }
             }
         };
-        extend(CompletionType.BASIC,
-               psiElement().withParent(
-                   psiElement(GoLiteralIdentifier.class).withParent(
-                       psiElement(GoLiteralExpression.class).withParent(
-                           not(or(
-                               psiElement(GoExpressionStatement.class),
 
-                               // No builtin function is appropriate for go/defer statement.
-                               psiElement(GoGoStatement.class),
-                               psiElement(GoDeferStatement.class)
-                           ))
-                       )
-                   )
-               ),
-                builtinFunctionsCompletionProvider);
+//        extend(CompletionType.BASIC,
+//               psiElement().withParent(
+//                   psiElement(GoLiteralIdentifier.class).withParent(
+//                       psiElement(GoLiteralExpression.class).withParent(
+//                           not(or(
+//                               psiElement(GoExpressionStatement.class),
+//
+//                               // No builtin function is appropriate for go/defer statement.
+//                               psiElement(GoGoStatement.class),
+//                               psiElement(GoDeferStatement.class)
+//                           ))
+//                       )
+//                   )
+//               ),
+//                builtinFunctionsCompletionProvider);
 
         CompletionProvider<CompletionParameters> typeDeclarationCompletionProvider = new CompletionProvider<CompletionParameters>() {
             @Override
@@ -361,9 +363,9 @@ public class GoCompletionContributor extends CompletionContributor {
                 result.addElement(
                         keyword("struct", new CurlyBracesInsertHandler()));
 
-                for (GoTypes.Builtin builtin : GoTypes.Builtin.values()) {
-                    result.addElement(keyword(builtin.name().toLowerCase(), null));
-                }
+//                for (GoTypes.Builtin builtin : GoTypes.Builtin.values()) {
+//                    result.addElement(keyword(builtin.name().toLowerCase(), null));
+//                }
             }
 
             private KeywordInsertionHandler createInterfaceInsertionHandler(CompletionParameters params) {
@@ -374,8 +376,7 @@ public class GoCompletionContributor extends CompletionContributor {
                 }
             }
         };
-        extend(CompletionType.BASIC,
-                TYPE_DECLARATION,
+        extend(CompletionType.BASIC, TYPE_DECLARATION,
                 typeDeclarationCompletionProvider);
 
         CompletionProvider<CompletionParameters> packageNameCompletionProvider = new CompletionProvider<CompletionParameters>() {
@@ -394,6 +395,10 @@ public class GoCompletionContributor extends CompletionContributor {
     @Override
     public void beforeCompletion(@NotNull CompletionInitializationContext context) {
         context.setDummyIdentifier(DUMMY_IDENTIFIER);
+        PsiElement element = context.getFile().findElementAt(context.getStartOffset());
+        if ( element != null && element.getNode() != null && element.getNode().getElementType() == GoTokenTypes.litSTRING){
+            context.setReplacementOffset((element.getTextOffset() + element.getTextLength() - 1));
+        }
     }
 
     private static void addPackageAutoCompletion(CompletionParameters parameters, CompletionResultSet result) {

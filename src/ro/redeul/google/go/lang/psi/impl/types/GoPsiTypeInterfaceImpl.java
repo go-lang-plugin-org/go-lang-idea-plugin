@@ -18,8 +18,7 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  * Date: 5/29/11
  * Time: 2:14 PM
  */
-public class GoPsiTypeInterfaceImpl extends GoPsiPackagedElementBase implements
-        GoPsiTypeInterface {
+public class GoPsiTypeInterfaceImpl extends GoPsiTypeImpl implements GoPsiTypeInterface {
 
     public GoPsiTypeInterfaceImpl(@NotNull ASTNode node) {
         super(node);
@@ -62,7 +61,7 @@ public class GoPsiTypeInterfaceImpl extends GoPsiPackagedElementBase implements
 
 
     @Override
-    public String getPresentationTailText() {
+    public String getLookupTailText() {
         return "interface{}";
     }
 }

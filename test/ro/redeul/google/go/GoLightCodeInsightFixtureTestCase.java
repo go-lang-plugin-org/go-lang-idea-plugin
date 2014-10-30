@@ -1,14 +1,21 @@
 package ro.redeul.google.go;
 
-import java.io.File;
-
 import com.intellij.openapi.command.WriteCommandAction;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.roots.ContentEntry;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.vfs.VfsUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 import org.junit.Ignore;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.util.GoTestUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Method;
 
 @Ignore
 public abstract class GoLightCodeInsightFixtureTestCase
@@ -26,6 +33,25 @@ public abstract class GoLightCodeInsightFixtureTestCase
         return (GoFile) myFixture.configureByText(GoFileType.INSTANCE, fileText);
     }
 
+    protected void addPackage(String importPath, String ... files) throws IOException {
+        for (String file : files) {
+            VirtualFile virtualFile = VfsUtil.findFileByIoFile(new File(getBasePath() + "/" + file), true);
+            if (virtualFile == null) {
+                virtualFile = VfsUtil.findFileByIoFile(new File(file), true);
+            }
+
+            if ( virtualFile == null)
+                continue;
+
+            myFixture.addFileToProject(
+                    FileUtil.toCanonicalPath(importPath + "/" + virtualFile.getName()),
+                    VfsUtil.loadText(virtualFile));
+        }
+    }
+
+    protected void addPackageBuiltin() throws IOException {
+        addPackage("builtin", testDataRoot + "/builtin/builtin.go");
+    }
 
     @Override
     protected String getTestDataPath() {
@@ -57,5 +83,11 @@ public abstract class GoLightCodeInsightFixtureTestCase
                 modifiableModel.commit();
             }
         }.execute().throwException();
+    }
+
+    @Override
+    public void runBare() throws Throwable {
+        if ( GoTestUtils.shouldRunBare(this) )
+            super.runBare();
     }
 }

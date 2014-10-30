@@ -2,4 +2,4 @@ package main
 
 import tictic "test"
 
-var x = /*ref*/tictic.Var
+var x = tictic./*ref*/Var

@@ -13,13 +13,13 @@ public class GoFormatterTest extends GoEditorAwareTestCase {
     public void testBinaryExpressions() throws Exception { doTest(); }
     public void testAssignment() throws Exception { 
         // TODO: Fix Formatter Test
-        // doTest(); 
+        // _testSingleCompletion();
     }
     public void testType() throws Exception { doTest(); }
     public void testCastFunc() throws Exception { doTest(); }
     public void testFunctionCall() throws Exception { 
         // TODO: Fix Formatter Test
-        // doTest();
+        // _testSingleCompletion();
     }
     public void testInterfaceType() throws Exception { doTest(); }
     public void testCallParameters() throws Exception { doTest(); }
@@ -33,8 +33,8 @@ public class GoFormatterTest extends GoEditorAwareTestCase {
 
     // @TODO These tests are not passing yet due to refactoring done automatically by gofmt
     /*
-    public void testImport() throws Exception { doTest(); }
-    public void testTypeswitch() throws Exception { doTest(); }
+    public void testImport() throws Exception { _testSingleCompletion(); }
+    public void testTypeswitch() throws Exception { _testSingleCompletion(); }
     */
 
     public void testIssue_gh255() throws  Exception { doTest(); }

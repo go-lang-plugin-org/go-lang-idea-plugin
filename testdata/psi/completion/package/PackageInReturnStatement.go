@@ -11,4 +11,3 @@ func foo() int {
 /**---
 net
 new
-rune

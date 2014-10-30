@@ -2,7 +2,10 @@ package ro.redeul.google.go.lang.psi.impl.types;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
 import com.intellij.psi.impl.PsiElementBase;
+import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.scope.util.PsiScopesUtil;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
@@ -16,6 +19,7 @@ import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructPromotedFields;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 import java.util.ArrayList;
@@ -29,7 +33,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
  * Date: 5/27/11
  * Time: 12:17 AM
  */
-public class GoPsiTypeStructImpl extends GoPsiPackagedElementBase implements
+public class GoPsiTypeStructImpl extends GoPsiTypeImpl implements
         GoPsiTypeStruct {
 
     public GoPsiTypeStructImpl(@NotNull ASTNode node) {
@@ -52,13 +56,18 @@ public class GoPsiTypeStructImpl extends GoPsiPackagedElementBase implements
         return new PromotedFieldsDiscover(this).getPromotedFields();
     }
 
-
     @Override
     public GoTypeStructAnonymousField[] getAnonymousFields() {
         return findChildrenByClass(GoTypeStructAnonymousField.class);
     }
 
-//    @Override
+    @Override
+    public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state,
+                                       PsiElement lastParent, @NotNull PsiElement place) {
+        return processor.execute(this, state);
+    }
+
+    //    @Override
 //    public GoPsiElement[] getMembers() {
 //        List<GoPsiElement> members = new ArrayList<GoPsiElement>();
 //
@@ -120,7 +129,7 @@ public class GoPsiTypeStructImpl extends GoPsiPackagedElementBase implements
                 vector.add(element);
             }
         }
-        return vector.toArray(new GoPsiElement[vector.size()]);
+        return vector.toArray(new PsiElement[vector.size()]);
     }
 
     @Override

@@ -32,7 +32,7 @@ public class MethodSetDiscover {
     }
 
     private void discover() {
-        myIgnoredNames.add(myPsiType.getQualifiedName());
+        myIgnoredNames.add(myPsiType.getName());
         myMethodSet = new GoTypeInterfaceMethodSet();
 
         for (GoPsiTypeName embeddedInterface : myPsiType.getTypeNames()) {

@@ -32,7 +32,7 @@ class GoExpressionTypeResolver extends BaseScopeProcessor {
 
             String functionName = function.getFunctionName();
 
-            if ( GoNamesUtil.isExportedName(functionName) ) {
+            if ( GoNamesUtil.isExported(functionName) ) {
                 nodeFunctions.add(function);
             }
 

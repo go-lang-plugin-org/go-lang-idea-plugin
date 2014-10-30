@@ -1,7 +1,5 @@
 package main
 
 import (
-	"n<caret>"
+	"n<caret>
 )
-/**---
-"net

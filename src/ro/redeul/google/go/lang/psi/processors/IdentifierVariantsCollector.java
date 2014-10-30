@@ -68,7 +68,7 @@ class IdentifierVariantsCollector extends BaseScopeProcessor{
         boolean isImported = isImported(state);
 
         for (GoLiteralIdentifier identifier : identifiers) {
-            if ( ! isImported || GoNamesUtil.isPublicType(identifier.getName()) ) {
+            if ( ! isImported || GoNamesUtil.isExported(identifier.getName()) ) {
                 addVariant(identifier, identifier.getName(), state, PlatformIcons.VARIABLE_ICON);
             }
         }
@@ -81,7 +81,7 @@ class IdentifierVariantsCollector extends BaseScopeProcessor{
         boolean isImported = isImported(state);
 
         for (GoLiteralIdentifier identifier : identifiers) {
-            if ( ! isImported || GoNamesUtil.isPublicType(identifier.getName()) ) {
+            if ( ! isImported || GoNamesUtil.isExported(identifier.getName()) ) {
                 addVariant(identifier, identifier.getName(), state, GoIcons.CONST_ICON);
             }
         }
@@ -97,14 +97,14 @@ class IdentifierVariantsCollector extends BaseScopeProcessor{
             return;
         }
 
-        if ( ! isImported(state) || GoNamesUtil.isPublicType(function.getFunctionName()) ) {
+        if ( ! isImported(state) || GoNamesUtil.isExported(function.getFunctionName()) ) {
             String text = DocumentUtil.getFunctionPresentationText(function);
             addVariant(function, text, state, PlatformIcons.FUNCTION_ICON, new FunctionInsertHandler());
         }
     }
 
     private boolean isImported(ResolveState state) {
-        return !(state.get(GoResolveStates.IsOriginalFile) || state.get(GoResolveStates.IsOriginalPackage));
+        return !(ResolveStates.get(state, ResolveStates.Key.IsOriginalFile) || ResolveStates.get(state, ResolveStates.Key.IsOriginalPackage));
     }
 
     private void addVariant(PsiNamedElement target, String presentableText, ResolveState state, Icon icon) {
@@ -115,7 +115,9 @@ class IdentifierVariantsCollector extends BaseScopeProcessor{
                             @Nullable InsertHandler<LookupElement> insertHandler) {
         boolean isImported = isImported(state);
 
-        String visiblePackageName = state.get(GoResolveStates.VisiblePackageName);
+//        String visiblePackageName = state.get(ResolveStates.VisiblePackageName);
+        String visiblePackageName = null;
+
 
         String lookupString = target.getName();
         if (lookupString == null || presentableText == null) {
@@ -128,7 +130,7 @@ class IdentifierVariantsCollector extends BaseScopeProcessor{
         }
 
         if (!names.contains(presentableText)) {
-            String type = isImported ? state.get(GoResolveStates.PackageName) : "<current>";
+            String type = isImported ? null /*state.get(ResolveStates.PackageName)*/ : "<current>";
             variants.add(LookupElementBuilder.create(target, lookupString)
                                              .withIcon(icon)
                                              .withTypeText(type)

@@ -4,9 +4,6 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypePointer;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 
-/**
- * // TODO: mtoader ! Implement this.
- */
 public class GoTypePointer extends GoAbstractType<GoUnderlyingTypePointer> implements GoType {
 
     private final GoType targetType;
@@ -26,7 +23,7 @@ public class GoTypePointer extends GoAbstractType<GoUnderlyingTypePointer> imple
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visitTypePointer(this);
+        visitor.visitPointer(this);
     }
 
     @Override

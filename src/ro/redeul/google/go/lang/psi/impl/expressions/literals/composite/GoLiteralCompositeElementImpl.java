@@ -3,7 +3,6 @@ package ro.redeul.google.go.lang.psi.impl.expressions.literals.composite;
 import com.intellij.lang.ASTNode;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
@@ -19,7 +18,7 @@ import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
-import static ro.redeul.google.go.lang.parser.GoElementTypes.COMPOSITE_LITERAL_ELEMENT_KEY;
+import static ro.redeul.google.go.lang.parser.GoElementTypes.LITERAL_COMPOSITE_ELEMENT_KEY;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveTypeSpec;
 
@@ -49,7 +48,7 @@ public class GoLiteralCompositeElementImpl extends GoPsiElementBase
 
     @Override
     public GoExpr getIndex() {
-        PsiElement keyNode = findChildByType(COMPOSITE_LITERAL_ELEMENT_KEY);
+        PsiElement keyNode = findChildByType(LITERAL_COMPOSITE_ELEMENT_KEY);
 
         if (keyNode == null) {
             return null;
@@ -151,9 +150,4 @@ public class GoLiteralCompositeElementImpl extends GoPsiElementBase
         visitor.visitLiteralCompositeElement(this);
     }
 
-
-    @Override
-    public PsiReference getReference() {
-        return null;
-    }
 }

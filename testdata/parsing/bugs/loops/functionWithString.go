@@ -1705,7 +1705,8 @@ Go file
           TypeNameImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('bufio')
-              PsiElement(.)('.')
+            PsiElement(.)('.')
+            LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('Writer')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
@@ -1823,7 +1824,8 @@ Go file
           TypeNameImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('bufio')
-              PsiElement(.)('.')
+            PsiElement(.)('.')
+            LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('Reader')
     PsiElement())(')')
     PsiWhiteSpace(' ')
@@ -2058,7 +2060,8 @@ Go file
           TypeNameImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('bufio')
-              PsiElement(.)('.')
+            PsiElement(.)('.')
+            LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('Reader')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
@@ -2172,7 +2175,8 @@ Go file
           TypeNameImpl
             LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('bufio')
-              PsiElement(.)('.')
+            PsiElement(.)('.')
+            LiteralIdentifierImpl
               PsiElement(IDENTIFIER)('Writer')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
@@ -2253,7 +2257,8 @@ Go file
             TypeNameImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('bufio')
-                PsiElement(.)('.')
+              PsiElement(.)('.')
+              LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('Reader')
     PsiWhiteSpace(' ')
     BlockStmtImpl
@@ -2375,7 +2380,8 @@ Go file
             TypeNameImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('bufio')
-                PsiElement(.)('.')
+              PsiElement(.)('.')
+              LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('Writer')
     PsiWhiteSpace(' ')
     BlockStmtImpl

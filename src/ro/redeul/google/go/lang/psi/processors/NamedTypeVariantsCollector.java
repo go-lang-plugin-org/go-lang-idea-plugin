@@ -56,14 +56,14 @@ class NamedTypeVariantsCollector extends BaseScopeProcessor {
 
         String typeName = typeNameDeclaration.getText();
 
-        String typeText = state.get(GoResolveStates.PackageName);
+        String typeText = null; // state.get(ResolveStates.PackageName);
 
         boolean isCandidate = false;
-        if ( GoNamesUtil.isPublicType(typeName) ) {
+        if ( GoNamesUtil.isExported(typeName) ) {
             isCandidate = true;
         }
 
-        if ( state.get(GoResolveStates.IsOriginalFile) || state.get(GoResolveStates.IsOriginalPackage) ) {
+        if ( ResolveStates.get(state, ResolveStates.Key.IsOriginalFile) || ResolveStates.get(state, ResolveStates.Key.IsOriginalPackage) ) {
             isCandidate = true;
             typeText = "<current>";
         }
@@ -72,7 +72,9 @@ class NamedTypeVariantsCollector extends BaseScopeProcessor {
             boolean isInterface = typeSpec.getType() instanceof GoPsiTypeInterface;
             Icon icon = isInterface ? PlatformIcons.INTERFACE_ICON : PlatformIcons.CLASS_ICON;
 
-            String visiblePackageName = state.get(GoResolveStates.VisiblePackageName);
+//            String visiblePackageName = state.get(ResolveStates.VisiblePackageName);
+
+            String visiblePackageName = null;
 
             if ( visiblePackageName != null && visiblePackageName.length() > 0 ) {
                 typeName = String.format("%s.%s", visiblePackageName, typeName);

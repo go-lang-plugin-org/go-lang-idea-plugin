@@ -15,13 +15,8 @@
 
 package ro.redeul.google.go.util;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import com.intellij.openapi.application.PluginPathManager;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
@@ -31,12 +26,24 @@ import com.intellij.psi.PsiFileFactory;
 import com.intellij.testFramework.PlatformTestUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.LocalTimeCounter;
+import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Ignore;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Utility class, that contains various methods for testing
  */
 public abstract class GoTestUtils {
+
+    protected static final Logger LOG = Logger.getInstance("#ro.redeul.google.go.GoTestUtils");
+
     public static final String TEMP_FILE = "temp.go";
 
     public static final String MARKER_CARET = "<caret>";
@@ -150,6 +157,35 @@ public abstract class GoTestUtils {
 
     public static void writeTestFile(String data, String parseTree, String fileName) throws IOException {
         FileUtil.writeToFile(new File(fileName), (data + "\n/**-----\n" + parseTree).getBytes());
+    }
+
+    private static boolean runOnlyIgnored = Boolean.parseBoolean(System.getProperty("run_only_ignored", "false"));
+    private static boolean runWithIgnored = Boolean.parseBoolean(System.getProperty("run_with_ignored", "false"));
+
+    public static boolean shouldRunBare(TestCase test) {
+        try {
+            String methodName = test.getName();
+            Method runMethod = test.getClass().getMethod(methodName, (Class[]) null);
+            if (runMethod != null) {
+                Ignore ignore = runMethod.getAnnotation(Ignore.class);
+                if (ignore != null) {
+                    if ( runOnlyIgnored || runWithIgnored)
+                        return true;
+
+                    LOG.warn(String.format("@Ignore: %s.%s => %s",
+                            test.getClass().getCanonicalName(),
+                            methodName, ignore.value()));
+                    return false;
+                } else {
+                    if ( runOnlyIgnored )
+                        return false;
+                }
+            }
+        } catch (NoSuchMethodException var5) {
+            //
+        }
+
+        return true;
     }
 }
 

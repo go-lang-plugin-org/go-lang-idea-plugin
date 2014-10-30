@@ -31,7 +31,8 @@ Go file
             TypeNameImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('ast')
-                PsiElement(.)('.')
+              PsiElement(.)('.')
+              LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('ArrayType')
             LiteralCompositeValueImpl
               PsiElement({)('{')

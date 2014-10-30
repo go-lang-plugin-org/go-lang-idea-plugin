@@ -49,7 +49,8 @@ Go file
             TypeNameImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('bson')
-                PsiElement(.)('.')
+              PsiElement(.)('.')
+              LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('M')
             LiteralCompositeValueImpl
               PsiElement({)('{')

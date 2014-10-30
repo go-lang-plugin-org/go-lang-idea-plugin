@@ -73,7 +73,7 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
         for (GoImportDeclarations ids : file.getImportDeclarations()) {
             for (GoImportDeclaration id : ids.getDeclarations()) {
                 String name = id.getPackageName();
-                if (name != null && !id.getVisiblePackageName().isEmpty()) {
+                if (name != null && !id.getPackageAlias().isEmpty()) {
                     imported.add(name);
                 }
             }

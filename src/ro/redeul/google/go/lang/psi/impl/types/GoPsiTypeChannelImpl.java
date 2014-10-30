@@ -15,8 +15,7 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  * Date: Sep 2, 2010
  * Time: 1:22:29 PM
  */
-public class GoPsiTypeChannelImpl extends GoPsiPackagedElementBase implements
-        GoPsiTypeChannel {
+public class GoPsiTypeChannelImpl extends GoPsiTypeImpl implements GoPsiTypeChannel {
 
     private final GoTypeChannel.ChannelType channelType;
 
@@ -59,7 +58,7 @@ public class GoPsiTypeChannelImpl extends GoPsiPackagedElementBase implements
     }
 
     @Override
-    public String getPresentationTailText() {
-        return GoTypeChannel.ChannelType.getText(getChannelType()) + getElementType().getPresentationTailText();    //To change body of overridden methods use File | Settings | File Templates.
+    public String getLookupTailText() {
+        return GoTypeChannel.ChannelType.getText(getChannelType()) + getElementType().getLookupTailText();    //To change body of overridden methods use File | Settings | File Templates.
     }
 }

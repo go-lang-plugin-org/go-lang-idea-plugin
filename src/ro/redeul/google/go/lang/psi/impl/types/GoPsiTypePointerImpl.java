@@ -15,7 +15,7 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
  * Date: 5/26/11
  * Time: 11:53 PM
  */
-public class GoPsiTypePointerImpl extends GoPsiPackagedElementBase implements
+public class GoPsiTypePointerImpl extends GoPsiTypeImpl implements
         GoPsiTypePointer {
 
     public GoPsiTypePointerImpl(@NotNull ASTNode node) {
@@ -43,7 +43,7 @@ public class GoPsiTypePointerImpl extends GoPsiPackagedElementBase implements
     }
 
     @Override
-    public String getPresentationTailText() {
-        return String.format("*%s", getTargetType().getPresentationTailText());
+    public String getLookupTailText() {
+        return String.format("*%s", getTargetType().getLookupTailText());
     }
 }

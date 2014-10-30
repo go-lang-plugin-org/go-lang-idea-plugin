@@ -38,7 +38,7 @@ public abstract class GoAbstractForWithRangeStatementImpl<Self extends GoAbstrac
         return
                 new GoType.Visitor<GoType[]>(GoType.EMPTY_ARRAY) {
                     @Override
-                    protected void visitTypeArray(GoTypeArray array) {
+                    public void visitArray(GoTypeArray type) {
                         setData(new GoType[]{
                                 GoTypes.getBuiltin(
                                         GoTypes.Builtin.Int,
@@ -47,11 +47,11 @@ public abstract class GoAbstractForWithRangeStatementImpl<Self extends GoAbstrac
                     }
 
                     @Override
-                    public void visitTypePointer(GoTypePointer pointer) {
+                    public void visitPointer(GoTypePointer pointer) {
                         setData(
                                 new GoType.Visitor<GoType[]>(GoType.EMPTY_ARRAY) {
                                     @Override
-                                    protected void visitTypeArray(GoTypeArray array) {
+                                    public void visitArray(GoTypeArray type) {
                                         setData(new GoType[]{
                                                 GoTypes.getBuiltin(
                                                         GoTypes.Builtin.Int,
@@ -60,7 +60,7 @@ public abstract class GoAbstractForWithRangeStatementImpl<Self extends GoAbstrac
                                     }
 
                                     @Override
-                                    public void visitTypeSlice(GoTypeSlice slice) {
+                                    public void visitSlice(GoTypeSlice type) {
                                         setData(new GoType[]{
                                                 GoTypes.getBuiltin(
                                                         GoTypes.Builtin.Int,
@@ -72,7 +72,7 @@ public abstract class GoAbstractForWithRangeStatementImpl<Self extends GoAbstrac
                     }
 
                     @Override
-                    public void visitTypeSlice(GoTypeSlice slice) {
+                    public void visitSlice(GoTypeSlice type) {
                         setData(new GoType[]{
                                 GoTypes.getBuiltin(
                                         GoTypes.Builtin.Int,
@@ -81,8 +81,8 @@ public abstract class GoAbstractForWithRangeStatementImpl<Self extends GoAbstrac
                     }
 
                     @Override
-                    public void visitTypeName(GoTypeName name) {
-                        if (name.getName().equals("string")) {
+                    public void visitName(GoTypeName type) {
+                        if (type.getName().equals("string")) {
                             setData(new GoType[]{
                                     GoTypes.getBuiltin(
                                             GoTypes.Builtin.Int,
@@ -92,13 +92,13 @@ public abstract class GoAbstractForWithRangeStatementImpl<Self extends GoAbstrac
                     }
 
                     @Override
-                    public void visitTypeMap(GoTypeMap map) {
-                        setData(new GoType[]{map.getKeyType()});
+                    public void visitMap(GoTypeMap type) {
+                        setData(new GoType[]{type.getKeyType()});
                     }
 
                     @Override
-                    public void visitTypeChannel(GoTypeChannel channel) {
-                        setData(new GoType[]{channel.getElementType()});
+                    public void visitChannel(GoTypeChannel type) {
+                        setData(new GoType[]{type.getElementType()});
                     }
                 }.visit(goType);
     }
@@ -124,33 +124,33 @@ public abstract class GoAbstractForWithRangeStatementImpl<Self extends GoAbstrac
         return
                 new GoType.Visitor<GoType[]>(GoType.EMPTY_ARRAY) {
                     @Override
-                    protected void visitTypeArray(GoTypeArray array) {
-                        setData(new GoType[]{array.getElementType()});
+                    public void visitArray(GoTypeArray type) {
+                        setData(new GoType[]{type.getElementType()});
                     }
 
                     @Override
-                    public void visitTypeSlice(GoTypeSlice slice) {
-                        setData(new GoType[]{slice.getElementType()});
+                    public void visitSlice(GoTypeSlice type) {
+                        setData(new GoType[]{type.getElementType()});
                     }
 
                     @Override
-                    public void visitTypePointer(GoTypePointer pointer) {
+                    public void visitPointer(GoTypePointer pointer) {
                         setData(new GoType.Visitor<GoType[]>(GoType.EMPTY_ARRAY) {
                             @Override
-                            protected void visitTypeArray(GoTypeArray array) {
-                                setData(new GoType[]{array.getElementType()});
+                            public void visitArray(GoTypeArray type) {
+                                setData(new GoType[]{type.getElementType()});
                             }
 
                             @Override
-                            public void visitTypeSlice(GoTypeSlice slice) {
-                                setData(new GoType[]{slice.getElementType()});
+                            public void visitSlice(GoTypeSlice type) {
+                                setData(new GoType[]{type.getElementType()});
                             }
                         }.visit(pointer.getTargetType()));
                     }
 
                     @Override
-                    public void visitTypeName(GoTypeName name) {
-                        if (name.getName().equals("string")) {
+                    public void visitName(GoTypeName type) {
+                        if (type.getName().equals("string")) {
                             setData(new GoType[]{
                                     GoTypes.getBuiltin(
                                             GoTypes.Builtin.Rune,
@@ -160,8 +160,8 @@ public abstract class GoAbstractForWithRangeStatementImpl<Self extends GoAbstrac
                     }
 
                     @Override
-                    public void visitTypeMap(GoTypeMap map) {
-                        setData(new GoType[]{map.getElementType()});
+                    public void visitMap(GoTypeMap type) {
+                        setData(new GoType[]{type.getElementType()});
                     }
                 }.visit(goType);
     }

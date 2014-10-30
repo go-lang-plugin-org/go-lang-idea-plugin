@@ -77,22 +77,25 @@ class SelectStatement implements GoElementTypes {
 
         // case a |<- <expr>:
         if ( oSEND_CHANNEL == builder.getTokenType() ) {
-            builder.advanceLexer();
-            parser.parseExpression(builder);
-            mark.done(SEND_STATEMENT);
+            mark.rollbackTo();
+            parser.parseStatementSimple(builder);
             return SELECT_COMM_CLAUSE_SEND;
         }
 
         // case a(, b)? |(= | :=) <expr>:
-        if ( (exprCount == 1 || exprCount == 2) &&
-            (oASSIGN == builder.getTokenType() || oVAR_ASSIGN == builder.getTokenType())) {
-            builder.advanceLexer();
-            mark.drop();
-            mark = builder.mark();
-            parser.parseExpression(builder);
-            mark.done(SELECT_COMM_CLAUSE_RECV_EXPR);
+        if ( oASSIGN == builder.getTokenType() || oVAR_ASSIGN == builder.getTokenType()) {
+            mark.rollbackTo();
+            parser.parseStatementSimple(builder);
             return SELECT_COMM_CLAUSE_RECV;
         }
+//        if ( (oASSIGN == builder.getTokenType() || oVAR_ASSIGN == builder.getTokenType())) {
+//            builder.advanceLexer();
+//            mark.drop();
+//            mark = builder.mark();
+//            parser.parseExpression(builder);
+//            mark.done(SELECT_COMM_CLAUSE_RECV_EXPR);
+//            return SELECT_COMM_CLAUSE_RECV;
+//        }
 
         // case expr:
         if ( exprCount == 1 && oCOLON == builder.getTokenType() ) {

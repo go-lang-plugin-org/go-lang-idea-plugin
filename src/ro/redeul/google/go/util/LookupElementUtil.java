@@ -4,14 +4,13 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.util.PlatformIcons;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.completion.insertHandler.FunctionInsertHandler;
+import ro.redeul.google.go.lang.completion.insertHandler.PackageInsertHandler;
+import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
+import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.*;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
@@ -26,20 +25,19 @@ public class LookupElementUtil extends GoElementVisitor {
     }
 
     public static LookupElementBuilder createLookupElement(GoPsiElement element) {
-        return createLookupElement(element, element.getPresentationText(),
-                                   element);
+        return createLookupElement(element, element.getLookupText(), element);
     }
 
     public static LookupElementBuilder createLookupElement(GoPsiElement element, GoPsiElement child) {
-        return createLookupElement(element, child.getPresentationText(), child);
+        return createLookupElement(element, child.getLookupText(), child);
     }
 
     public static LookupElementBuilder createLookupElement(GoPsiElement element, String text, GoPsiElement child) {
 
         LookupElementBuilder lookup =
             LookupElementBuilder.create(child, text)
-                                .withTailText(element.getPresentationTailText())
-                                .withTypeText( element.getPresentationTypeText());
+                                .withTailText(element.getLookupTailText())
+                                .withTypeText( element.getLookupTypeText());
 
         LookupElementUtil visitor = new LookupElementUtil(lookup);
         element.accept(visitor);
@@ -135,6 +133,17 @@ public class LookupElementUtil extends GoElementVisitor {
     @Override
     public void visitTypeStructAnonymousField(GoTypeStructAnonymousField field) {
         lookupElement = lookupElement.withIcon(PlatformIcons.FIELD_ICON);
+    }
+
+    @Override
+    public void visitPackage(GoPackage aPackage) {
+    }
+
+    @Override
+    public void visitImportDeclaration(GoImportDeclaration declaration) {
+        lookupElement = lookupElement
+                .withInsertHandler(new PackageInsertHandler())
+                .withIcon(PlatformIcons.PACKAGE_ICON);
     }
 
     LookupElementBuilder getLookupElement() {

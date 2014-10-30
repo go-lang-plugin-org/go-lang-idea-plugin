@@ -4,10 +4,13 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiLock;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
+import com.intellij.psi.impl.SharedPsiElementImplUtil;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.tree.IElementType;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
@@ -24,13 +27,11 @@ import ro.redeul.google.go.util.LookupElementUtil;
 public class GoPsiElementBase extends ASTWrapperPsiElement
     implements GoPsiElement {
 
-
-    protected PsiReference[] refs(PsiReference ... references) {
-        return references;
-    }
+    protected PsiReference[] myReferences = null;
 
     public GoPsiElementBase(@NotNull ASTNode node) {
         super(node);
+//        System.out.println("" + hashCode() + " constructor: " + node.getText());
     }
 
     protected IElementType getTokenType() {
@@ -50,7 +51,7 @@ public class GoPsiElementBase extends ASTWrapperPsiElement
 
     @Override
     public <T> T accept(GoElementVisitorWithData<T> visitor) {
-        accept((GoElementVisitor)visitor);
+        accept((GoElementVisitor) visitor);
         return visitor.getData();
     }
 
@@ -65,9 +66,37 @@ public class GoPsiElementBase extends ASTWrapperPsiElement
         }
     }
 
+    /**
+     * Always implement {@link #defineReferences()}
+     * @return a null reference
+     */
+    @Override
+    final public PsiReference getReference() {
+        return null;
+    }
+
     @NotNull
     @Override
-    public String getPresentationText() {
+    final public PsiReference[] getReferences() {
+//        System.out.println("" + hashCode() + ", refs: " + myReferences + " text: " + getText() + " ");
+//        if (myReferences == null)
+            myReferences = defineReferences();
+
+        return myReferences;
+    }
+
+    @NonNls
+    protected PsiReference[] defineReferences() {
+        return PsiReference.EMPTY_ARRAY;
+    }
+
+    protected PsiReference[] refs(PsiReference ... references) {
+        return myReferences;
+    }
+
+    @NotNull
+    @Override
+    public String getLookupText() {
         String name = getName();
 
         return name != null ? name : "";
@@ -75,22 +104,27 @@ public class GoPsiElementBase extends ASTWrapperPsiElement
 
     @Nullable
     @Override
-    public String getPresentationTailText() {
+    public String getLookupTailText() {
         return "";
     }
 
     @Override
-    public String getPresentationTypeText() {
+    public String getLookupTypeText() {
         return "";
     }
 
     @Override
-    final public LookupElementBuilder getCompletionPresentation() {
+    public GoPsiElement getReferenceContext() {
+        return this;
+    }
+
+    @Override
+    public LookupElementBuilder getLookupPresentation() {
         return LookupElementUtil.createLookupElement(this);
     }
 
     @Override
-    public LookupElementBuilder getCompletionPresentation(GoPsiElement child) {
+    public LookupElementBuilder getLookupPresentation(GoPsiElement child) {
         return LookupElementUtil.createLookupElement(this, child);
     }
 
@@ -106,5 +140,16 @@ public class GoPsiElementBase extends ASTWrapperPsiElement
                                        PsiElement lastParent,
                                        @NotNull PsiElement place) {
         return true;
+    }
+
+    @Override
+    protected Object clone() {
+        GoPsiElementBase clone = (GoPsiElementBase)super.clone();
+        synchronized (PsiLock.LOCK) {
+            clone.myReferences = null;
+        }
+
+        return clone;
+
     }
 }

@@ -211,22 +211,23 @@ public class GoCompletionUtil {
 
     public static LookupElement[] getImportedPackagesNames(PsiFile file) {
 
-        if (!(file instanceof GoFile)) {
-            return LookupElement.EMPTY_ARRAY;
-        }
-
-        GoFile goFile = (GoFile) file;
-
-        List<LookupElement> elements = new ArrayList<LookupElement>();
-        for (GoImportDeclaration importDeclaration : GoFileUtils.getImportDeclarations(goFile)) {
-            String visiblePackageName = importDeclaration.getVisiblePackageName();
-            GoLiteralString importPath1 = importDeclaration.getImportPath();
-            if (importPath1 != null) {
-                String importPath = importPath1.getValue();
-                elements.add(packageElement(visiblePackageName, importPath));
-            }
-        }
-
-        return elements.toArray(new LookupElement[elements.size()]);
+        return LookupElement.EMPTY_ARRAY;
+//        if (!(file instanceof GoFile)) {
+//            return LookupElement.EMPTY_ARRAY;
+//        }
+//
+//        GoFile goFile = (GoFile) file;
+//
+//        List<LookupElement> elements = new ArrayList<LookupElement>();
+//        for (GoImportDeclaration importDeclaration : GoFileUtils.getImportDeclarations(goFile)) {
+//            String visiblePackageName = importDeclaration.getPackageAlias();
+//            GoLiteralString importPath1 = importDeclaration.getImportPath();
+//            if (importPath1 != null) {
+//                String importPath = importPath1.getValue();
+//                elements.add(packageElement(visiblePackageName, importPath));
+//            }
+//        }
+//
+//        return elements.toArray(new LookupElement[elements.size()]);
     }
 }

@@ -1,10 +1,13 @@
 package ro.redeul.google.go.lang.psi.impl.types;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
+import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.inspection.InspectionUtil;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeValue;
+import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.composite.GoLiteralCompositeValueImpl;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
@@ -24,8 +27,7 @@ import static ro.redeul.google.go.inspection.FunctionCallInspection.getNumberVal
  * Date: Aug 30, 2010
  * Time: 9:07:51 PM
  */
-public class GoPsiTypeArrayImpl extends GoPsiPackagedElementBase implements
-        GoPsiTypeArray {
+public class GoPsiTypeArrayImpl extends GoPsiTypeImpl implements GoPsiTypeArray {
 
     public GoPsiTypeArrayImpl(@NotNull ASTNode node) {
         super(node);
@@ -76,7 +78,7 @@ public class GoPsiTypeArrayImpl extends GoPsiPackagedElementBase implements
 
     @NotNull
     @Override
-    public String getPresentationText() {
-        return String.format("[]%s", getElementType().getPresentationText());
+    public String getLookupText() {
+        return String.format("[]%s", getElementType().getLookupText());
     }
 }

@@ -1,47 +1,50 @@
 package ro.redeul.google.go.completion;
 
+import java.io.IOException;
+
 public class GoBasicCompletionTestCase extends GoCompletionTestCase {
     protected String getTestDataRelativePath() {
         return super.getTestDataRelativePath() + "basic";
     }
 
-    public void testTypeInterfaceCompletion() {
-        doTest();
+    public void testTypeInterfaceCompletion() throws IOException {
+        _testSingleCompletion();
     }
 
-    public void testTypeStructCompletion() {
-        doTest();
+    public void testTypeStructCompletion() throws IOException {
+        _testSingleCompletion();
     }
 
-    public void testTopLevelConstDeclaration() {
-        doTest();
+    public void testTopLevelConstDeclaration() throws IOException {
+        _testSingleCompletion();
     }
 
-    public void testTopLevelVarDeclaration() {
-        doTest();
+    public void testTopLevelVarDeclaration() throws IOException {
+        _testSingleCompletion();
     }
 
-    public void testPackage() {
-        doTest();
+    public void testPackage() throws IOException {
+        _testSingleCompletion();
     }
 
-    public void testPackageInside() {
-        doTest();
+    public void testPackageInside() throws IOException {
+        _testSingleCompletion();
     }
 
-    public void testImportDeclaration() {
-        doTest();
+    public void testImportDeclaration() throws IOException {
+        _testSingleCompletion();
     }
 
-    public void testImportedPackages() {
-        doTestVariants();
+    public void testImportedPackages() throws IOException {
+        addPackage("fmt", "fmt.go");
+        _testVariants();
     }
 
-    public void testReturnCompletion() {
-        doTest();
+    public void testReturnCompletion() throws IOException {
+        _testSingleCompletion();
     }
 
-    public void testReturnCompletionWithOneResult() {
-        doTest();
+    public void testReturnCompletionWithOneResult() throws IOException {
+        _testSingleCompletion();
     }
 }

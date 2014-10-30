@@ -4,6 +4,8 @@ import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.newvfs.impl.VfsRootAccess;
+import com.intellij.psi.PsiFile;
+import org.junit.Ignore;
 import ro.redeul.google.go.GoLightCodeInsightFixtureTestCase;
 
 import java.io.File;
@@ -13,54 +15,26 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class GoCompletionTestCase
-        extends GoLightCodeInsightFixtureTestCase {
+public abstract class GoCompletionTestCase extends GoLightCodeInsightFixtureTestCase {
 
     protected String getTestDataRelativePath() {
         return "psi/completion/";
     }
 
-    private boolean testDataFileExists(String fileName) {
-        String absName = getTestDataPath() + File.separator + fileName;
-        return LocalFileSystem.getInstance().findFileByPath(absName) != null;
-    }
-
-    protected void doTestVariants(String... additionalFiles) {
-        // @TODO Fix this. Hack way to allow test to run
-        try {
-            String testDataRootDir = new File(GoCompletionTestCase.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "../../../" + testDataRoot).getCanonicalPath();
-            VfsRootAccess.allowRootAccess(testDataRootDir);
-        } catch (IOException ignored) {}
+    @Ignore
+    protected void _testVariants() throws IOException {
 
         LocalFileSystem fileSystem = LocalFileSystem.getInstance();
         final VirtualFile testRoot =
                 fileSystem.findFileByPath(
                         getTestDataPath() + File.separator + getTestName(false));
 
-        List<String> files = new LinkedList<String>();
+        addPackageBuiltin();
 
-        for (String file : additionalFiles) {
-            if (testDataFileExists(file)) {
-                files.add(file);
-            }
-        }
-
-        if (testDataFileExists("builtin.go")) {
-            files.add("builtin.go");
-        }
-
-        if (testRoot != null && testRoot.isDirectory()) {
-            String path = getTestName(false);
-            myFixture.copyDirectoryToProject(path, "");
-        }
-
-        files.add(getTestName(false) + ".go");
-
-        Collections.reverse(files);
-        myFixture.configureByFiles(files.toArray(new String[files.size()]));
+        PsiFile testFile = myFixture.configureByFile(getTestName(false) + ".go");
 
         // find the expected outcome
-        String fileText = myFixture.getFile().getText();
+        String fileText = testFile.getText();
         List<String> expected = new ArrayList<String>();
         int dataPos = fileText.indexOf("/**---");
         if (dataPos != -1) {
@@ -76,25 +50,15 @@ public abstract class GoCompletionTestCase
         // do the completion
         myFixture.completeBasic();
 
-
-        // validate assertions
-        List<String> lookupElementStrings = myFixture.getLookupElementStrings();
-        if (lookupElementStrings.get(0).equals(""))
-            lookupElementStrings = lookupElementStrings.subList(1, lookupElementStrings.size());
-        assertOrderedEquals(lookupElementStrings, expected);
+        List<String> lookupStrings = myFixture.getLookupElementStrings();
+        assertNotNull("We should have multiple completion variants", lookupStrings);
+        assertOrderedEquals("The completions should be the expected ones", lookupStrings, expected);
     }
 
-    protected void doTest(String... additionalFiles) {
-        List<String> files = new ArrayList<String>();
-        for (String file : additionalFiles) {
-            if (testDataFileExists(file)) {
-                files.add(file);
-            }
-        }
-        files.add(getTestName(false) + ".go");
-        Collections.reverse(files);
-
-        myFixture.configureByFiles(files.toArray(new String[files.size()]));
+    @Ignore
+    protected void _testSingleCompletion() throws IOException {
+        addPackageBuiltin();
+        myFixture.configureByFile(getTestName(false) + ".go");
         myFixture.complete(CompletionType.BASIC);
         myFixture.checkResultByFile(getTestName(false) + "_after.go", true);
     }

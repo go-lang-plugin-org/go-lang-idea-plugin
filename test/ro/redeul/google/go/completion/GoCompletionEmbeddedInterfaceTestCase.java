@@ -3,6 +3,8 @@
 */
 package ro.redeul.google.go.completion;
 
+import java.io.IOException;
+
 public class GoCompletionEmbeddedInterfaceTestCase extends GoCompletionTestCase {
 
     @Override
@@ -10,11 +12,11 @@ public class GoCompletionEmbeddedInterfaceTestCase extends GoCompletionTestCase 
         return super.getTestDataRelativePath() + "embedded/";
     }
 
-    public void testEmbeddedInterface() {
-        doTestVariants();
+    public void testEmbeddedInterface() throws IOException {
+        _testVariants();
     }
 
-    public void testEmbeddedInterfaceViaPointer() {
-        doTestVariants();
+    public void testEmbeddedInterfaceViaPointer() throws IOException {
+        _testVariants();
     }
 }

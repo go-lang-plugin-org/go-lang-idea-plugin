@@ -2,6 +2,8 @@ package ro.redeul.google.go.lang.psi.impl.types.struct;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
@@ -48,6 +50,11 @@ public class GoTypeStructAnonymousFieldImpl extends GoPsiElementBase implements 
     }
 
     @Override
+    public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+        return processor.execute(this, state);
+    }
+
+    @Override
     public String getName() {
         return getFieldName();
     }
@@ -58,12 +65,12 @@ public class GoTypeStructAnonymousFieldImpl extends GoPsiElementBase implements 
     }
 
     @Override
-    public String getPresentationTypeText() {
+    public String getLookupTypeText() {
         return getType().getText();
     }
 
     @Override
-    public String getPresentationTailText() {
+    public String getLookupTailText() {
         return " (anonymous)";
     }
 }

@@ -269,7 +269,7 @@ public class GoVariableUsageStatVisitor extends GoRecursiveElementVisitor {
 
         PsiElement parent = id.getParent().getParent();
         if (parent == null || parent.getNode() == null ||
-                parent.getNode().getElementType() != GoElementTypes.COMPOSITE_LITERAL_ELEMENT_KEY) {
+                parent.getNode().getElementType() != GoElementTypes.LITERAL_COMPOSITE_ELEMENT_KEY) {
             return false;
         }
 

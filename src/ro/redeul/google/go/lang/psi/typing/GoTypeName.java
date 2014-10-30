@@ -40,7 +40,7 @@ public class GoTypeName extends GoTypePsiBacked<GoPsiTypeName, GoUnderlyingType>
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visitTypeName(this);
+        visitor.visitName(this);
     }
 
     public String getName() {

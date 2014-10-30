@@ -153,16 +153,6 @@ public class GoLiteralFunctionImpl extends GoPsiElementBase
     }
 
     @Override
-    public String getPackageName() {
-        return "";
-    }
-
-    @Override
-    public String getQualifiedName() {
-        return "";
-    }
-
-    @Override
     public GoPsiType[] getReturnType() {
         List<GoPsiType> types = new ArrayList<GoPsiType>();
 

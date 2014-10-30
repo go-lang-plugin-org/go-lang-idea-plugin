@@ -14,7 +14,6 @@ import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.impl.GoStubPsiElementBase;
-import ro.redeul.google.go.lang.psi.resolve.references.TypeNameDeclarationReference;
 import ro.redeul.google.go.lang.psi.stubs.GoTypeNameDeclarationStub;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
@@ -58,12 +57,12 @@ public class GoTypeNameDeclarationImpl
     }
 
     @Override
-    public LookupElementBuilder getCompletionPresentation() {
+    public LookupElementBuilder getLookupPresentation() {
         return LookupElementUtil.createLookupElement(this);
     }
 
     @Override
-    public LookupElementBuilder getCompletionPresentation(GoPsiElement child) {
+    public LookupElementBuilder getLookupPresentation(GoPsiElement child) {
         return LookupElementUtil.createLookupElement(this, child);
     }
 
@@ -109,23 +108,25 @@ public class GoTypeNameDeclarationImpl
     }
 
     @Override
-    public String getPresentationText() {
-        return "";
+    public String getLookupText() {
+        return getName();
     }
 
     @Override
-    public String getPresentationTailText() {
-        return "";
+    public String getLookupTailText() {
+        return null;
     }
 
     @Override
-    public String getPresentationTypeText() {
-        return "";
+    public String getLookupTypeText() {
+        return "type";
     }
 
     @NotNull
     @Override
     public PsiReference[] getReferences() {
-        return new PsiReference[]{(new TypeNameDeclarationReference(this))};
+        return new PsiReference[]{
+//                new TypeNameDeclarationReference(this))
+        };
     }
 }

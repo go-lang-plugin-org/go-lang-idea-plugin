@@ -4,6 +4,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.scope.util.PsiScopesUtil;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
@@ -37,16 +38,6 @@ public class GoConstDeclarationsImpl extends GoPsiElementBase implements GoConst
                                        @NotNull ResolveState state,
                                        PsiElement lastParent,
                                        @NotNull PsiElement place) {
-        PsiElement child = getLastChild();
-
-        while (child != null) {
-            if (child != lastParent &&
-                !child.processDeclarations(processor, state, null, place))
-                return false;
-
-            child = child.getPrevSibling();
-        }
-
-        return true;
+        return PsiScopesUtil.walkChildrenScopes(this, processor, state, lastParent, place);
     }
 }

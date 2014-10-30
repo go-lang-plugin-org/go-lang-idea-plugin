@@ -30,7 +30,7 @@ public class GoTypeMap
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visitTypeMap(this);
+        visitor.visitMap(this);
     }
 
     public GoType getKeyType() {

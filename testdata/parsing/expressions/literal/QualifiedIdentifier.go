@@ -28,10 +28,12 @@ Go file
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
       CallOrConversionExpressionImpl
-        LiteralExpressionImpl
+        SelectorExpressionImpl
+          LiteralExpressionImpl
+            LiteralIdentifierImpl
+              PsiElement(IDENTIFIER)('a')
+          PsiElement(.)('.')
           LiteralIdentifierImpl
-            PsiElement(IDENTIFIER)('a')
-            PsiElement(.)('.')
             PsiElement(IDENTIFIER)('A')
         PsiElement(()('(')
         PsiElement())(')')

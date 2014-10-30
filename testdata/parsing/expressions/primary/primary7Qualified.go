@@ -27,8 +27,10 @@ Go file
       PsiWhiteSpace(' ')
       PsiElement(=)('=')
       PsiWhiteSpace(' ')
-      LiteralExpressionImpl
+      SelectorExpressionImpl
+        LiteralExpressionImpl
+          LiteralIdentifierImpl
+            PsiElement(IDENTIFIER)('M')
+        PsiElement(.)('.')
         LiteralIdentifierImpl
-          PsiElement(IDENTIFIER)('M')
-          PsiElement(.)('.')
           PsiElement(IDENTIFIER)('sin')

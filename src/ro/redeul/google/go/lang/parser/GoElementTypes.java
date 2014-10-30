@@ -73,7 +73,7 @@ public interface GoElementTypes extends GoTokenTypes {
     GoElementType LITERAL_COMPOSITE_ELEMENT =
         new GoElementTypeImpl("LiteralCompositeElement");
 
-    GoElementType COMPOSITE_LITERAL_ELEMENT_KEY =
+    GoElementType LITERAL_COMPOSITE_ELEMENT_KEY =
         new GoElementTypeImpl("CompositeLiteralElementKey");
     GoElementType LITERAL_COMPOSITE_ELEMENT_VALUE =
         new GoElementTypeImpl("LiteralCompositeElementValue");
