@@ -103,3 +103,8 @@ in the project. Please make sure that all the test cases pass before committing 
 
 Now you can play, add functionality and commit or make pull requests.
 That's it. Enjoy your play time.
+
+
+### Notice on run test cases
+* If you see a lot of java.io.FileNotFoundException when run test cases and those test cases
+are passed in Travis CI, you may need to try [#923](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/issues/923). Please look at the location: /Users/xxx/Library/Caches/IntelliJIdea14/plugins-sandbox/test and remove the test folder from there. This usually happens when you change the directory structure in one of the tests. The testing idea will not update it's caches properly.
