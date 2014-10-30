@@ -103,3 +103,8 @@ in the project. Please make sure that all the test cases pass before committing 
 
 Now you can play, add functionality and commit or make pull requests.
 That's it. Enjoy your play time.
+
+
+### Notice on run test cases
+* If you see a lot of java.io.FileNotFoundException when run test cases and those test cases
+are passed in Travis CI, you may need to try #923 .
