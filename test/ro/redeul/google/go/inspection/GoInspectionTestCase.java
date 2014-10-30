@@ -7,8 +7,13 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.io.FileUtilRt;
+import com.intellij.openapi.vfs.VfsUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
+import com.intellij.ui.ListUtil;
+import com.intellij.util.Function;
 import com.intellij.util.Processor;
+import com.intellij.util.containers.ContainerUtil;
 import org.junit.Assert;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.GoLightCodeInsightFixtureTestCase;
@@ -21,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public abstract class GoInspectionTestCase
         extends GoLightCodeInsightFixtureTestCase {
@@ -56,28 +62,23 @@ public abstract class GoInspectionTestCase
 
     protected void doTest() throws Exception {
         addPackageBuiltin();
-        doTestWithOneFile(myFixture.configureByFile(getTestName(true) + ".go"));
+        doTestWithOneFile((GoFile)myFixture.configureByFile(getTestName(true) + ".go"));
     }
 
     protected void doTestWithDirectory() throws Exception {
-        final ArrayList<PsiFile> list = new ArrayList<PsiFile>();
-        String FolderPath = getTestDataPath() + getTestName(true);
-        FileUtil.visitFiles(new File(FolderPath), new Processor<File>() {
+        final File folder = new File(getTestDataPath(), getTestName(true));
+        addPackageBuiltin();
+        List<File> files = new ArrayList<File>();
+        FileUtil.collectMatchedFiles(folder, Pattern.compile(".*\\.go$"), files);
+        List<String> fileNames = ContainerUtil.map(files, new Function<File, String>() {
             @Override
-            public boolean process(File file) {
-                String path = file.getPath();
-                String ext = FileUtilRt.getExtension(path);
-                if (!ext.equals("go")) {
-                    return true;
-                }
-                PsiFile psi = myFixture.configureByFile(FileUtil.getRelativePath(getTestDataPath(), path, '/'));
-                list.add(psi);
-                return true;
+            public String fun(File file) {
+                return FileUtil.getRelativePath(folder.getParentFile(), file);
             }
         });
-        addPackageBuiltin();
-        for (PsiFile psi : list) {
-            doTestWithOneFile(psi);
+        PsiFile psiFiles[] = myFixture.configureByFiles(ContainerUtil.findAllAsArray(fileNames, String.class));
+        for (PsiFile psi : psiFiles) {
+            doTestWithOneFile((GoFile)psi);
         }
     }
 
@@ -87,13 +88,12 @@ public abstract class GoInspectionTestCase
         super.tearDown();
     }
 
-    // TODO: validate this.
-    private void doTestWithOneFile(PsiFile file) throws Exception {
-//        Document document = myFixture.getDocument(file);
-        List<String> data = readInput(file.getText());
+    private void doTestWithOneFile(GoFile file) throws Exception {
 
+        List<String> data = readInput(file.getText());
         String expected = data.get(1).trim();
-        Assert.assertEquals("fail at " + file.getVirtualFile().getPath(), expected, processFile(data.get(0).trim()));
+
+        Assert.assertEquals("fail at " + file.getVirtualFile().getPath(), expected, processFile(file));
     }
 
     private List<String> readInput(String content) throws IOException {
@@ -118,10 +118,8 @@ public abstract class GoInspectionTestCase
         return data;
     }
 
-    protected String processFile(String fileText)
-            throws InstantiationException, IllegalAccessException, IOException {
+    protected String processFile(GoFile file) throws InstantiationException, IllegalAccessException, IOException {
 
-        GoFile file = (GoFile) myFixture.configureByText(GoFileType.INSTANCE, fileText);
         Document document = myFixture.getDocument(file);
         InspectionResult result = new InspectionResult(getProject());
         detectProblems(file, result);
