@@ -33,7 +33,6 @@ public class UnresolvedSymbolsTest extends GoInspectionTestCase {
         doTest();
     }
 
-    @Ignore("broken by new resolver")
     public void testUndefinedTypeInMethodReceiver() throws Exception {
         doTest();
     }
@@ -48,7 +47,6 @@ public class UnresolvedSymbolsTest extends GoInspectionTestCase {
         doTest();
     }
 
-    @Ignore("broken by new resolver")
     public void testConversionToPointerType() throws Exception {
         doTest();
     }
@@ -62,7 +60,6 @@ public class UnresolvedSymbolsTest extends GoInspectionTestCase {
         doTest();
     }
 
-    @Ignore("broken by new resolver")
     public void testStructField() throws Exception {
         doTest();
     }
@@ -72,7 +69,6 @@ public class UnresolvedSymbolsTest extends GoInspectionTestCase {
         doTest();
     }
 
-    @Ignore("failing test")
     public void testIssue858() throws Exception {
         doTestWithDirectory();
     }
