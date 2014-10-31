@@ -12,8 +12,7 @@ public class ImportPathInspectionTest extends GoInspectionTestCase {
     public void testNotFound() throws Exception{ doTestWithDirectory(); }
     public void testDirPackageNotEqual() throws Exception { doTestWithDirectory();}
 
-    @Ignore("Broken by new resolver")
-    public void testSelf() throws Exception{ doTest(); }
+    public void testSelf() throws Exception{ doTestWithDirectory(); }
 
     @Ignore("failing test")
     public void testCaseInsensitive() throws Exception { doTestWithDirectory();}

@@ -18,6 +18,8 @@ public interface GoLiteralIdentifier extends GoLiteral<String>,
 
     boolean isIota();
 
+    boolean isNil();
+
     boolean isQualified();
 
     String getUnqualifiedName();

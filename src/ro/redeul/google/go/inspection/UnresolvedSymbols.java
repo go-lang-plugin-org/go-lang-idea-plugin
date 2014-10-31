@@ -19,8 +19,6 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
-//import ro.redeul.google.go.lang.psi.resolve.references.BuiltinCallOrConversionReference;
-//import ro.redeul.google.go.lang.psi.resolve.refs.CallOrConversionReference;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
@@ -46,7 +44,6 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
     @Override
     protected void doCheckFile(@NotNull GoFile file,
                                @NotNull final InspectionResult result) {
-
         new GoRecursiveElementVisitor() {
             @Override
             public void visitShortVarDeclaration(GoShortVarDeclaration declaration) {
@@ -62,7 +59,7 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
 
             @Override
             public void visitLiteralIdentifier(GoLiteralIdentifier identifier) {
-                if (!identifier.isIota() && !identifier.isBlank()) {
+                if (!identifier.isIota() && !identifier.isBlank() && !identifier.isNil()) {
                     tryToResolveReference(identifier, identifier.getName());
                 }
             }
