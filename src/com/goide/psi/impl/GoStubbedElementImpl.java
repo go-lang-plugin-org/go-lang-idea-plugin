@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public abstract class GoStubbedElementImpl<T extends StubBase<?> & TextHolder> extends StubBasedPsiElementBase<T> implements GoCompositeElement {
+public abstract class GoStubbedElementImpl<T extends StubBase<?>> extends StubBasedPsiElementBase<T> implements GoCompositeElement {
   public GoStubbedElementImpl(@NotNull T stub, @NotNull IStubElementType nodeType) {
     super(stub, nodeType);
   }
@@ -36,8 +36,8 @@ public abstract class GoStubbedElementImpl<T extends StubBase<?> & TextHolder> e
   @Override
   public String getText() {
     T stub = getStub();
-    if (stub != null) {
-      String text = stub.getText();
+    if (stub instanceof TextHolder) {
+      String text = ((TextHolder)stub).getText();
       if (text != null) return text;
     }
     return super.getText();

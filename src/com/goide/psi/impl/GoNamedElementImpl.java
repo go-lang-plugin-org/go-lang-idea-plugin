@@ -3,7 +3,6 @@ package com.goide.psi.impl;
 import com.goide.GoIcons;
 import com.goide.psi.*;
 import com.goide.stubs.GoNamedStub;
-import com.goide.stubs.TextHolder;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
@@ -18,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-public abstract class GoNamedElementImpl<T extends GoNamedStub<?> & TextHolder> extends GoStubbedElementImpl<T> implements GoCompositeElement, GoNamedElement {
+public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStubbedElementImpl<T> implements GoCompositeElement, GoNamedElement {
 
   public GoNamedElementImpl(@NotNull T stub, @NotNull IStubElementType nodeType) {
     super(stub, nodeType);
