@@ -26,6 +26,7 @@ import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -179,13 +180,8 @@ public class GoPsiImplUtil {
         text = getText((GoInterfaceType)parent);
       }
     }
-    if (!StringUtil.isEmpty(text)) return " " + arrow() + " " + text;
+    if (!StringUtil.isEmpty(text)) return " " + UIUtil.rightArrow() + " " + text;
     return null;
-  }
-
-  @NotNull
-  private static String arrow() {
-    return "→";
   }
 
   @NotNull
