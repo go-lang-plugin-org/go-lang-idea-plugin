@@ -42,28 +42,12 @@ public interface GoTokenTypeSets extends GoTokenTypes {
         mWRONG
     );
 
-    static final TokenSet tGSTRINGS = TokenSet.create(
-//         mGSTRING_BEGIN,
-//         mGSTRING_CONTENT,
-//         mGSTRING_END,
-//         mGSTRING_LITERAL
-    );
-
     static final TokenSet STRINGS = TokenSet.create(
         litSTRING, litCHAR
     );
 
     static final TokenSet IDENTIFIERS = TokenSet.create(
         mIDENT
-    );
-
-    static final TokenSet tREGEXP = TokenSet.create(
-//         mREGEX_LITERAL,
-//
-//         mREGEX_BEGIN,
-//         mREGEX_CONTENT,
-//         mREGEX_END
-
     );
 
     static final TokenSet BRACES = TokenSet.create(
@@ -104,10 +88,8 @@ public interface GoTokenTypeSets extends GoTokenTypes {
         kGO,
         kGOTO,
         kIF,
-        kIMPORT,
         kINTERFACE,
         kMAP,
-        kPACKAGE,
         kRANGE,
         kRETURN,
         kSELECT,
