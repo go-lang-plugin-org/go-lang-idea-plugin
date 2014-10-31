@@ -5,10 +5,10 @@
     <!-- set global properties for this build -->
     <property name="build.compiler" value="modern"/>
 
-    <property name="src" location="../src"/>
-    <property name="gen" location="../gen"/>
-    <property name="jps" location="../jps-plugin"/>
-    <property name="test.src" location="../tests"/>
+    <property name="src" location="${basedir}/src"/>
+    <property name="gen" location="${basedir}/gen"/>
+    <property name="jps" location="${basedir}/jps-plugin"/>
+    <property name="test.src" location="${basedir}/tests"/>
     <property name="build" location="build"/>
     <property name="test.build" location="build_test"/>
     <property name="resources" value="${basedir}/resources"/>
@@ -48,9 +48,42 @@
             <pathelement location="${idea.community.build}/lib/asm-all.jar" />
         </classpath>
     </taskdef>
+    
+    <macrodef name="copy_resources">
+        <attribute name="dest"/>
+        <sequential>
+            <echo message="Copying resources"/>
+            <patternset id="resources">
+                <include name="**/*.properties"/>
+                <include name="**/*.xml"/>
+                <include name="**/*.txt"/>
+                <include name="**/*.go"/>
+            </patternset>
+
+            <copy toDir="@{dest}">
+                <fileset dir="${resources}">
+                    <patternset refid="resources"/>
+                </fileset>
+                <fileset dir="${src}">
+                    <patternset refid="resources"/>
+                </fileset>
+                <fileset dir="${gen}">
+                    <patternset refid="resources"/>
+                </fileset>
+                <fileset dir="${jps}">
+                    <patternset refid="resources"/>
+                </fileset>
+                <fileset dir="${jps}/src">
+                    <include name="META-INF/services/**"/>
+                </fileset>
+                <fileset dir="${test.src}">
+                    <patternset refid="resources"/>
+                </fileset>
+            </copy>
+        </sequential>
+    </macrodef>
 
     <macrodef name="compile">
-        <attribute name="src"/>
         <attribute name="dest"/>
         <sequential>
             <pathconvert property="classpathProp" refid="classpath"/>
@@ -63,14 +96,7 @@
                 <src path="${test.src}"/>
             </javac2>
 
-            <copy toDir="@{dest}">
-                <fileset dir="@{src}">
-                    <include name="**/*.properties"/>
-                    <include name="**/*.xml"/>
-                    <include name="**/*.txt"/>
-                    <include name="**/*.go"/>
-                </fileset>
-            </copy>
+            <copy_resources dest="@{dest}"/>
         </sequential>
     </macrodef>
 
@@ -91,7 +117,7 @@
             </classpath>
         </taskdef>
 
-        <compile src="${src}" dest="${build}"/>
+        <compile dest="${build}"/>
 
         <copy todir="${build}">
             <fileset dir="${resources}">
@@ -101,11 +127,10 @@
     </target>
 
     <target name="compile_test" depends="compile" description="Compile tests">
-        <compile src="${test.src}" dest="${test.build}"/>
+        <compile dest="${test.build}"/>
     </target>
 
     <target name="test" depends="compile_test" description="Run the tests">
-
         <echo message="Running tests"/>
 
         <property name="suspend" value="n"/>
