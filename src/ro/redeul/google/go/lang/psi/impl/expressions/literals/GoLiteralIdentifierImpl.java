@@ -79,6 +79,11 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
         return isIota;
     }
 
+    @Override
+    public boolean isNil() {
+        return getText().equals("nil");
+    }
+
     @NotNull
     @Override
     public String getValue() {

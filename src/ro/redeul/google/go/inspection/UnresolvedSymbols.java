@@ -59,7 +59,7 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
 
             @Override
             public void visitLiteralIdentifier(GoLiteralIdentifier identifier) {
-                if (!identifier.isIota() && !identifier.isBlank() && !identifier.getText().equals("nil")) {
+                if (!identifier.isIota() && !identifier.isBlank() && !identifier.isNil()) {
                     tryToResolveReference(identifier, identifier.getName());
                 }
             }

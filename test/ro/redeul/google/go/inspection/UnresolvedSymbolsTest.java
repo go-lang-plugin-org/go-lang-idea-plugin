@@ -22,8 +22,6 @@ public class UnresolvedSymbolsTest extends GoInspectionTestCase {
         doTest();
     }
 
-    @Test
-    @Ignore("broken by new resolver")
     public void testForWithRange() throws Exception {
         doTest();
     }
