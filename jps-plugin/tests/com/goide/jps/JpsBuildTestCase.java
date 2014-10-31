@@ -1,5 +1,6 @@
 package com.goide.jps;
 
+import com.goide.jps.model.JpsGoModuleType;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.application.ex.PathManagerEx;
 import com.intellij.openapi.util.io.FileSystemUtil;
@@ -31,11 +32,13 @@ import org.jetbrains.jps.indices.ModuleExcludeIndex;
 import org.jetbrains.jps.indices.impl.IgnoredFileIndexImpl;
 import org.jetbrains.jps.indices.impl.ModuleExcludeIndexImpl;
 import org.jetbrains.jps.model.*;
-import org.jetbrains.jps.model.java.*;
+import org.jetbrains.jps.model.java.JavaSourceRootType;
+import org.jetbrains.jps.model.java.JpsJavaExtensionService;
+import org.jetbrains.jps.model.java.JpsJavaModuleExtension;
+import org.jetbrains.jps.model.java.JpsJavaSdkType;
 import org.jetbrains.jps.model.library.JpsOrderRootType;
 import org.jetbrains.jps.model.library.JpsTypedLibrary;
 import org.jetbrains.jps.model.library.sdk.JpsSdk;
-import org.jetbrains.jps.model.library.sdk.JpsSdkReference;
 import org.jetbrains.jps.model.library.sdk.JpsSdkType;
 import org.jetbrains.jps.model.module.JpsModule;
 import org.jetbrains.jps.model.module.JpsSdkReferencesTable;
@@ -144,13 +147,6 @@ public abstract class JpsBuildTestCase extends UsefulTestCase {
     assertTrue("Cannot modify timestamp for " + file.getAbsolutePath(), updated);
   }
 
-  protected static void delete(@NotNull String filePath) {
-    File file = new File(FileUtil.toSystemDependentName(filePath));
-    assertTrue("File " + file.getAbsolutePath() + " doesn't exist", file.exists());
-    final boolean deleted = FileUtil.delete(file);
-    assertTrue("Cannot delete file " + file.getAbsolutePath(), deleted);
-  }
-
   @NotNull
   protected JpsSdk<JpsDummyElement> addJdk(@NotNull final String name) {
     try {
@@ -230,16 +226,11 @@ public abstract class JpsBuildTestCase extends UsefulTestCase {
                                                        @Nullable String outputPath,
                                                        @Nullable String testOutputPath,
                                                        @NotNull JpsSdk<T> sdk) {
-    JpsModule module = myProject.addModule(moduleName, JpsJavaModuleType.INSTANCE);
+    JpsModule module = myProject.addModule(moduleName, JpsGoModuleType.INSTANCE);
     final JpsSdkType<T> sdkType = sdk.getSdkType();
     final JpsSdkReferencesTable sdkTable = module.getSdkReferencesTable();
     sdkTable.setSdkReference(sdkType, sdk.createReference());
 
-    if (sdkType instanceof JpsJavaSdkTypeWrapper) {
-      final JpsSdkReference<T> wrapperRef = sdk.createReference();
-      sdkTable.setSdkReference(JpsJavaSdkType.INSTANCE, JpsJavaExtensionService.
-        getInstance().createWrappedJavaSdkReference((JpsJavaSdkTypeWrapper)sdkType, wrapperRef));
-    }
     module.getDependenciesList().addSdkDependency(sdkType);
     if (srcPaths.length > 0 || outputPath != null) {
       for (String srcPath : srcPaths) {
