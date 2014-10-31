@@ -1,0 +1,4 @@
+language: java
+jdk:
+  - oraclejdk7
+script: "./travis.sh"
