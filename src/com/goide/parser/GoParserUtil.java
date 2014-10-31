@@ -2,11 +2,10 @@ package com.goide.parser;
 
 import com.intellij.lang.LighterASTNode;
 import com.intellij.lang.PsiBuilder;
-import com.intellij.lang.WhitespacesAndCommentsBinder;
+import com.intellij.lang.WhitespacesBinders;
 import com.intellij.lang.impl.PsiBuilderAdapter;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
 import com.intellij.openapi.util.Key;
-import com.intellij.psi.tree.IElementType;
 import com.intellij.util.containers.ContainerUtil;
 import gnu.trove.TObjectIntHashMap;
 import org.jetbrains.annotations.NotNull;
@@ -28,11 +27,7 @@ public class GoParserUtil extends GeneratedParserUtilBase {
   public static boolean emptyImportList(PsiBuilder builder_, @SuppressWarnings("UnusedParameters") int level) {
     PsiBuilder.Marker marker = getCurrentMarker(builder_ instanceof PsiBuilderAdapter ? ((PsiBuilderAdapter)builder_).getDelegate() : builder_);
     if (marker != null) {
-      marker.setCustomEdgeTokenBinders(new WhitespacesAndCommentsBinder() {
-        public int getEdgePosition(List<IElementType> tokens, boolean atStreamEdge, TokenTextGetter getter) {
-          return 0;
-        }
-      }, null);
+      marker.setCustomEdgeTokenBinders(WhitespacesBinders.GREEDY_LEFT_BINDER, WhitespacesBinders.DEFAULT_RIGHT_BINDER);
     }
     return true;
   }
