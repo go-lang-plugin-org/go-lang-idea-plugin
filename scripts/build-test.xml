@@ -1,14 +1,14 @@
-<project name="Idea Google Go language scripted test file" default="test" basedir=".">
+<project name="Idea Google Go language scripted test file" default="test" basedir="../">
 
     <property file="build.properties" />
 
     <!-- set global properties for this build -->
     <property name="build.compiler" value="modern"/>
 
-    <property name="src" location="src"/>
-    <property name="gen" location="gen"/>
-    <property name="jps" location="jps-plugin"/>
-    <property name="test.src" location="tests"/>
+    <property name="src" location="../src"/>
+    <property name="gen" location="../gen"/>
+    <property name="jps" location="../jps-plugin"/>
+    <property name="test.src" location="../tests"/>
     <property name="build" location="build"/>
     <property name="test.build" location="build_test"/>
     <property name="resources" value="${basedir}/resources"/>
