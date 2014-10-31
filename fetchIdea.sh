@@ -8,7 +8,7 @@ if [ ! -d ./idea-IC ]; then
     then
         cp ~/Tools/ideaIC-${ideaVersion}.tar.gz .
     else
-        # wget http://download-cf.jetbrains.com/idea/ideaIC-${ideaVersion}.tar.gz
+        wget http://download-cf.jetbrains.com/idea/ideaIC-${ideaVersion}.tar.gz
         # wget http://download.labs.intellij.net/idea/ideaIC-${ideaVersion}.tar.gz
     fi
 
