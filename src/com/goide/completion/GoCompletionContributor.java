@@ -87,8 +87,8 @@ public class GoCompletionContributor extends CompletionContributor {
   }
 
   private static PsiElementPattern.Capture<PsiElement> onNewLine() {
-    return psiElement().afterLeafSkipping(psiElement().whitespaceCommentEmptyOrError().withoutText(string().contains("\n")),
-                                          or(psiElement(GoTypes.SEMICOLON), psiElement().withText(string().contains("\n"))));
+    return psiElement().afterLeafSkipping(psiElement().whitespaceCommentEmptyOrError().withoutText(string().containsChars("\n")),
+                                          or(psiElement(GoTypes.SEMICOLON), psiElement().withText(string().containsChars("\n"))));
   }
 
   private static PsiFilePattern.Capture<GoFile> goFileWithPackage() {
