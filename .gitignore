@@ -2,3 +2,7 @@ out/
 bin/
 system-test/
 config-test/
+
+idea-IC/
+build/
+build_test/
