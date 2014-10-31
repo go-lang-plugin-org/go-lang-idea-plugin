@@ -1,7 +1,5 @@
 #!/bin/bash
 
-cd ..
-
 ./fetchIdea.sh
 
 # Run the tests
