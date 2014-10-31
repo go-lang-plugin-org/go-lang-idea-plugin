@@ -27,7 +27,7 @@ public class GoParserUtil extends GeneratedParserUtilBase {
   public static boolean emptyImportList(PsiBuilder builder_, @SuppressWarnings("UnusedParameters") int level) {
     PsiBuilder.Marker marker = getCurrentMarker(builder_ instanceof PsiBuilderAdapter ? ((PsiBuilderAdapter)builder_).getDelegate() : builder_);
     if (marker != null) {
-      marker.setCustomEdgeTokenBinders(WhitespacesBinders.GREEDY_LEFT_BINDER, WhitespacesBinders.DEFAULT_RIGHT_BINDER);
+      marker.setCustomEdgeTokenBinders(WhitespacesBinders.GREEDY_LEFT_BINDER, null);
     }
     return true;
   }
@@ -65,13 +65,15 @@ public class GoParserUtil extends GeneratedParserUtilBase {
   @Nullable
   private static PsiBuilder.Marker getCurrentMarker(@NotNull PsiBuilder builder_) {
     try {
-      Field field = builder_.getClass().getDeclaredField("myProduction");
-      field.setAccessible(true);
-      List production = (List)field.get(builder_);
-      return (PsiBuilder.Marker)ContainerUtil.getLastItem(production);
+      for (Field field : builder_.getClass().getDeclaredFields()) {
+        if ("MyList".equals(field.getType().getSimpleName())) {
+          field.setAccessible(true);
+          List production = (List)field.get(builder_);
+          return (PsiBuilder.Marker)ContainerUtil.getLastItem(production);
+        }
+      }
     }
-    catch (Exception e) {
-      return null;
-    }
+    catch (Exception ignored) {}
+    return null;
   }
 }
