@@ -121,6 +121,9 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
                 case Identifier:
                     GoLiteralIdentifier identifier = (GoLiteralIdentifier) literal;
 
+                    if ( identifier.isNil() )
+                        return new GoType[] { GoType.Nil };
+
                     PsiElement resolved = GoUtil.ResolveReferece(identifier);
                     if (resolved == null) {
                         return GoType.EMPTY_ARRAY;

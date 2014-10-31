@@ -17,6 +17,7 @@ public interface GoExpr extends GoPsiElement {
 
     boolean isConstantExpression();
 
+    // TODO: This doesn't belong here
     boolean hasType(GoTypes.Builtin builtinType);
 
     boolean hasType(GoType type);

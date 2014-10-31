@@ -17,6 +17,7 @@ public class GoParenthesisedExpressionImpl extends GoPsiElementBase
     @Override
     public GoExpr getInnerExpression() {
         GoExpr childByClass = findChildByClass(GoExpr.class);
+        // TODO: Why is this here ? It shouldn't be
         if (childByClass instanceof GoParenthesisedExpression)
             return ((GoParenthesisedExpression) childByClass).getInnerExpression();
         return childByClass;

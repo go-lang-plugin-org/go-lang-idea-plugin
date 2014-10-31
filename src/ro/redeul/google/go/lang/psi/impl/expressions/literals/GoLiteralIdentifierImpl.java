@@ -80,9 +80,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
     }
 
     @Override
-    public boolean isNil() {
-        return getText().equals("nil");
-    }
+    public boolean isNil() { return getText().equals("nil"); }
 
     @NotNull
     @Override

@@ -23,7 +23,24 @@ public interface GoType {
 
         @Override
         public void accept(Visitor visitor) {
+            visitor.visitUnknown(this);
+        }
+    };
 
+    static final GoType Nil = new GoType() {
+        @Override
+        public boolean isIdentical(GoType type) {
+            return true;
+        }
+
+        @Override
+        public GoUnderlyingType getUnderlyingType() {
+            return GoUnderlyingType.Undefined;
+        }
+
+        @Override
+        public void accept(Visitor visitor) {
+            visitor.visitNil(this);
         }
     };
 
@@ -73,5 +90,9 @@ public interface GoType {
         public void visitPackage(GoTypePackage type) { }
 
         public void visitStruct(GoTypeStruct type) { }
+
+        public void visitNil(GoType nil) { }
+
+        public void visitUnknown(GoType unknown) { }
     }
 }
