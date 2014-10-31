@@ -23,7 +23,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
     doCheckResult("package main; \n" +
                   "func test(){Fprintl<caret>}",
                   "package main;\n" +
-                  "import \"fmt\"\n" +
+                  "import \"fmt\"\n\n" +
                   "func test(){fmt.Fprintln(<caret>)}");
   }
 
