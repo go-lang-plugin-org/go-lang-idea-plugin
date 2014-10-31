@@ -120,7 +120,6 @@ public class GoResolveCallsTest extends GoPsiResolveTestCase {
         doTest();
     }
 
-    @Ignore("broken by the new resolver")
     public void testCallToMethodViaShortVar() throws Exception {
         doTest();
     }

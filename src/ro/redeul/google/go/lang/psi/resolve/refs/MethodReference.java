@@ -1,13 +1,18 @@
 package ro.redeul.google.go.lang.psi.resolve.refs;
 
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.packages.GoPackages;
+import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.processors.ResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.ReferenceWithSolver;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
-import ro.redeul.google.go.lang.psi.typing.*;
+import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypeName;
+import ro.redeul.google.go.lang.psi.typing.GoTypeStruct;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
 
 import java.util.HashSet;
@@ -37,11 +42,18 @@ public class MethodReference extends ReferenceWithSolver<GoLiteralIdentifier, Me
 
     @Override
     public void walkSolver(MethodSolver solver) {
-        GoPsiScopesUtil.treeWalkUp(
-                solver,
-                getElement().getContainingFile().getLastChild(),
-                getElement().getContainingFile(),
-                ResolveStates.initial());
+
+        GoPackage goPackage = GoPackages.getTargetPackageIfDifferent(getElement(), type.getPsiType());
+
+        if ( goPackage != null) {
+            GoPsiScopesUtil.walkPackage(solver, getElement(), goPackage);
+        } else {
+            GoPsiScopesUtil.treeWalkUp(
+                    solver,
+                    getElement().getContainingFile().getLastChild(),
+                    getElement().getContainingFile(),
+                    ResolveStates.initial());
+        }
     }
 
     @NotNull

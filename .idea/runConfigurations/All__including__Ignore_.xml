@@ -29,6 +29,8 @@
       <env name="run_with_ignored" value="true" />
     </envs>
     <patterns />
+    <RunnerSettings RunnerId="Run" />
+    <ConfigurationWrapper RunnerId="Run" />
     <method />
   </configuration>
 </component>
