@@ -7,6 +7,7 @@ import com.intellij.openapi.ui.TextBrowseFolderListener;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.text.CharSequenceHashingStrategy;
@@ -26,18 +27,8 @@ public class GoUtil {
   public static final Set<CharSequence> OS = set("openbsd", "plan9", "unix", "linux", "netbsd", "darwin", "dragonfly", "bsd", "windows", 
                                                  "posix", "freebsd", "notwin");
 
-  @NotNull
-  public static String replaceLast(@NotNull String src, @NotNull String from) {
-    return src.endsWith(from) ? src.substring(0, src.length() - from.length()) : src;
-  }
-
-  @NotNull
-  public static String replaceFirst(@NotNull String src, @NotNull String from) {
-    return src.startsWith(from) ? src.substring(from.length()) : src;
-  }
-
   public static boolean allowed(@NotNull PsiFile file) {
-    String name = replaceLast(FileUtil.getNameWithoutExtension(file.getName()), "_test");
+    String name = StringUtil.trimEnd(FileUtil.getNameWithoutExtension(file.getName()), "_test");
     Matcher matcher = FULL.matcher(name);
     if (matcher.matches()) {
       String os = matcher.group(1);

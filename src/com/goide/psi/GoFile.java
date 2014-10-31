@@ -6,7 +6,6 @@ import com.goide.GoTypes;
 import com.goide.psi.impl.GoElementFactory;
 import com.goide.stubs.GoFileStub;
 import com.goide.stubs.types.*;
-import com.goide.util.GoUtil;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
 import com.intellij.openapi.fileTypes.FileType;
@@ -166,7 +165,7 @@ public class GoFile extends PsiFileBase {
           if (file instanceof GoFile) {
             String name = ((GoFile)file).getPackageName();
             if (name != null) {
-              set.add(GoUtil.replaceLast(name, "_test"));
+              set.add(StringUtil.trimEnd(name, "_test"));
             }
           }
         }

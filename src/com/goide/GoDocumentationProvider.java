@@ -1,7 +1,6 @@
 package com.goide;
 
 import com.goide.psi.*;
-import com.goide.util.GoUtil;
 import com.intellij.lang.documentation.AbstractDocumentationProvider;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
@@ -71,8 +70,8 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
           text = text.replaceAll("//", "");
         }
         else if (type == GoParserDefinition.MULTILINE_COMMENT) {
-          text = GoUtil.replaceLast(text, "*/");
-          text = GoUtil.replaceFirst(text, "/*");
+          text = StringUtil.trimEnd(text, "*/");
+          text = StringUtil.trimStart(text, "/*");
           text = LEADING_TAB.matcher(text).replaceAll("");
         }
         return text;
