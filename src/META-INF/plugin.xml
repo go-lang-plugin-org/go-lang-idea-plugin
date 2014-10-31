@@ -49,8 +49,8 @@
     <completion.contributor language="go" order="last" implementationClass="com.goide.completion.GoCompletionContributor$AutoImport"/>
     <completion.confidence language="go" order="last" implementationClass="com.goide.completion.GoCompletionConfidence"/>
     <lang.refactoringSupport language="go" implementationClass="com.goide.refactor.GoRefactoringSupportProvider"/>
-    <elementDescriptionProvider implementation="com.goide.refactor.GoDescriptionProvider"/>
     <spellchecker.support language="go" implementationClass="com.goide.spellchecker.GoSpellcheckingStrategy"/>
+    <elementDescriptionProvider implementation="com.goide.refactor.GoDescriptionProvider"/>
     <lang.namesValidator language="go" implementationClass="com.goide.GoNamesValidator"/>
     <lang.findUsagesProvider language="go" implementationClass="com.goide.GoFindUsagesProvider"/>
     <lang.documentationProvider language="go" implementationClass="com.goide.GoDocumentationProvider"/>
@@ -97,6 +97,8 @@
 
     <checkinHandlerFactory implementation="com.goide.actions.fmt.GoFmtCheckinFactory" order="last"/>
 
+    <lang.inspectionSuppressor language="go" implementationClass="com.goide.inspections.suppression.GoInspectionSuppressor"/>
+    
     <localInspection language="go" displayName="Unresolved reference inspection"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.unresolved.GoUnresolvedReferenceInspection"/>
