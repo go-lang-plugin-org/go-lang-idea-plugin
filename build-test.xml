@@ -1,4 +1,4 @@
-<project name="Idea Google Go language scripted test file" default="test" basedir="..//">
+<project name="Idea Google Go language scripted test file" default="test" basedir=".">
 
     <property file="build.properties" />
 
