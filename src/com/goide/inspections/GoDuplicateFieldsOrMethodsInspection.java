@@ -3,7 +3,6 @@ package com.goide.inspections;
 import com.goide.psi.*;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,8 +13,7 @@ import static com.intellij.codeInspection.ProblemHighlightType.GENERIC_ERROR_OR_
 
 public class GoDuplicateFieldsOrMethodsInspection extends GoInspectionBase {
   @Override
-  protected void checkFile(PsiFile file, @NotNull final ProblemsHolder problemsHolder) {
-    if (!(file instanceof GoFile)) return;
+  protected void checkFile(@NotNull GoFile file, @NotNull final ProblemsHolder problemsHolder) {
     file.accept(new GoRecursiveVisitor() {
       @Override
       public void visitStructType(@NotNull final GoStructType type) {

@@ -5,7 +5,6 @@ import com.goide.psi.GoFunctionDeclaration;
 import com.goide.psi.GoRecursiveVisitor;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 import com.intellij.util.containers.MultiMap;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,10 +13,8 @@ import java.util.List;
 
 public class GoDuplicateFunctionInspection extends GoInspectionBase {
   @Override
-  protected void checkFile(PsiFile file, @NotNull final ProblemsHolder problemsHolder) {
-    if (!(file instanceof GoFile)) return;
-
-    List<GoFunctionDeclaration> functions = ((GoFile)file).getFunctions();
+  protected void checkFile(@NotNull GoFile file, @NotNull final ProblemsHolder problemsHolder) {
+    List<GoFunctionDeclaration> functions = file.getFunctions();
     final MultiMap<String, GoFunctionDeclaration> map = new MultiMap<String, GoFunctionDeclaration>();
     for (GoFunctionDeclaration function : functions) {
       map.putValue(function.getName(), function);

@@ -10,7 +10,6 @@ import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveResult;
 import com.intellij.psi.formatter.FormatterUtil;
@@ -23,8 +22,7 @@ import static com.intellij.codeInspection.ProblemHighlightType.LIKE_UNKNOWN_SYMB
 
 public class GoUnresolvedReferenceInspection extends GoInspectionBase {
   @Override
-  protected void checkFile(PsiFile file, @NotNull final ProblemsHolder problemsHolder) {
-    if (!(file instanceof GoFile)) return;
+  protected void checkFile(@NotNull GoFile file, @NotNull final ProblemsHolder problemsHolder) {
     file.accept(new GoRecursiveVisitor() {
       @Override
       public void visitReferenceExpression(@NotNull GoReferenceExpression o) {

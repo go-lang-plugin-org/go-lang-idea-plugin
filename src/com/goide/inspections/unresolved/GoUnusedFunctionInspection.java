@@ -12,7 +12,6 @@ import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.util.Query;
@@ -20,13 +19,12 @@ import org.jetbrains.annotations.NotNull;
 
 public class GoUnusedFunctionInspection extends GoInspectionBase {
   @Override
-  protected void checkFile(final PsiFile file, @NotNull final ProblemsHolder problemsHolder) {
-    if (!(file instanceof GoFile)) return;
+  protected void checkFile(@NotNull final GoFile file, @NotNull final ProblemsHolder problemsHolder) {
     file.accept(new GoRecursiveVisitor() {
       @Override
       public void visitFunctionDeclaration(@NotNull GoFunctionDeclaration o) {
         String name = o.getName();
-        if ("main".equals(((GoFile)file).getPackageName()) && "main".equals(name)) return;
+        if ("main".equals(file.getPackageName()) && "main".equals(name)) return;
         if (GoTestFinder.isTestFile(file) && name != null && (name.startsWith("Test") || name.startsWith("Benchmark"))) return;
         Query<PsiReference> search = ReferencesSearch.search(o, o.getUseScope());
         if (search.findFirst() == null) {
