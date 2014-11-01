@@ -1,4 +1,4 @@
-package com.goide.spellchecker;
+package com.goide.inspections;
 
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.intellij.spellchecker.inspections.SpellCheckingInspection;

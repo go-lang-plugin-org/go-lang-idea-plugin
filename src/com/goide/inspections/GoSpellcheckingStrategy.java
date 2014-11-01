@@ -1,4 +1,4 @@
-package com.goide.spellchecker;
+package com.goide.inspections;
 
 import com.goide.GoLanguage;
 import com.intellij.psi.PsiElement;
