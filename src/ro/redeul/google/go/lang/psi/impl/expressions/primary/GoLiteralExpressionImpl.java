@@ -253,7 +253,7 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
             case Identifier:
                 GoLiteralIdentifier identifier = (GoLiteralIdentifier) literal;
 
-                if (identifier.isIota()) {
+                if (identifier.isIota() || identifier.isNil()) {
                     return true;
                 }
 
