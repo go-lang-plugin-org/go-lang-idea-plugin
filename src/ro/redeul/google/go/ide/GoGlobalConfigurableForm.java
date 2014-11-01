@@ -65,15 +65,10 @@ public class GoGlobalConfigurableForm {
             return;
         }
 
-        String goRootSDK = "";
-        String goAppEngineRootSDK = "";
-        String goPathSDK = "";
-
         if (goRoot.getText().equals("")) {
             sdkList.addAll(GoSdkUtil.getSdkOfType(GoSdkType.getInstance(), jdkTable));
             if (sdkList.size() > 0) {
                 goRoot.setText(sdkList.get(0).getHomePath());
-                goRootSDK = goRoot.getText();
             }
         }
 
@@ -82,7 +77,6 @@ public class GoGlobalConfigurableForm {
             sdkList.addAll(GoSdkUtil.getSdkOfType(GoAppEngineSdkType.getInstance(), jdkTable));
             if (sdkList.size() > 0) {
                 goAppEngineRoot.setText(sdkList.get(0).getHomePath());
-                goAppEngineRootSDK = goAppEngineRoot.getText();
             }
         }
 
@@ -101,12 +95,7 @@ public class GoGlobalConfigurableForm {
                 }
 
                 goPath.setText(goPathString.substring(0, goPathString.length() - 4));
-                goPathSDK = goPath.getText();
             }
-        }
-
-        if (!goPathSDK.isEmpty() || !goAppEngineRootSDK.isEmpty() || !goPathSDK.isEmpty()) {
-            goGlobalSettings.setPaths(goRootSDK, goAppEngineRootSDK, goPathSDK);
         }
     }
 
