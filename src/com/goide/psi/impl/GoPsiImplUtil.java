@@ -524,6 +524,8 @@ public class GoPsiImplUtil {
     return Collections.emptyList();
   }
 
+
+  // todo: check GK, try to eliminate those duplicates
   @Nullable
   public static GoType getGoType(@NotNull GoMethodSpec o) {
     return getGoType(((GoSignatureOwner)o));
