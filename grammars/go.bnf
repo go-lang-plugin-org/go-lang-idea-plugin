@@ -82,7 +82,6 @@
   pin('.*List(?:_\d.*)?')=1
 
   generateTokenAccessors=true
-  generate=[names="classic" tokenAccessors="yes"]
 }
 
 File ::= PackageClause semi ImportList TopLevelDeclaration* {pin(".*")=1}
