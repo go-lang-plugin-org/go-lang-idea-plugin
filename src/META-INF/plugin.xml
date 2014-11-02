@@ -122,7 +122,10 @@
                      implementationClass="com.goide.inspections.GoDuplicateFunctionInspection"/>
     <localInspection language="go" displayName="Duplicate argument"
                      groupName="Go" enabledByDefault="true" level="ERROR" 
-                     implementationClass="com.goide.inspections.GoDuplicateArgumentsInspection"/>
+                     implementationClass="com.goide.inspections.GoDuplicateArgumentInspection"/>
+    <localInspection language="go" displayName="Duplicate return argument"
+                     groupName="Go" enabledByDefault="true" level="ERROR" 
+                     implementationClass="com.goide.inspections.GoDuplicateReturnArgumentInspection"/>
   </extensions>
   <actions>
     <action id="Go.NewGoFile" class="com.goide.actions.GoCreateFileAction"

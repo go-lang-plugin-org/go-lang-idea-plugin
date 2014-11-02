@@ -19,7 +19,8 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       new GoUnusedFunctionInspection(),
       new GoAssignmentToConstantInspection(),
       new GoDuplicateFunctionInspection(),
-      new GoDuplicateArgumentsInspection()
+      new GoDuplicateArgumentInspection(),
+      new GoDuplicateReturnArgumentInspection()
     );
   }
 

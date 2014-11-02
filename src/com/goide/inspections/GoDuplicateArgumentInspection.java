@@ -11,7 +11,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-public class GoDuplicateArgumentsInspection extends GoInspectionBase {
+public class GoDuplicateArgumentInspection extends GoInspectionBase {
   @NotNull
   @Override
   protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder,
@@ -34,7 +34,7 @@ public class GoDuplicateArgumentsInspection extends GoInspectionBase {
     };
   }
 
-  public static void check(@Nullable GoSignature o, @NotNull ProblemsHolder holder) {
+  public void check(@Nullable GoSignature o, @NotNull ProblemsHolder holder) {
     if (o == null) return;
     List<GoParameterDeclaration> params = o.getParameters().getParameterDeclarationList();
     Set<String> parameters = new LinkedHashSet<String>();
@@ -43,12 +43,16 @@ public class GoDuplicateArgumentsInspection extends GoInspectionBase {
         String text = parameter.getIdentifier().getText();
         if ("_".equals(text)) continue;
         if (parameters.contains(text)) {
-          holder.registerProblem(parameter, "Duplicate argument " + "'" + text + "'", ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+          holder.registerProblem(parameter, errorText(text), ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
         }
         else {
           parameters.add(text);
         }
       }
     }
+  }
+
+  protected static String errorText(@NotNull String name) {
+    return "Duplicate argument " + "'" + name + "'";
   }
 }

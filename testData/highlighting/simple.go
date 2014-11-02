@@ -319,4 +319,6 @@ func <warning>main123</warning>() {
     Println(response.<error>Body</error>)
 }
 
-func <warning>duplicates</warning>(a int, <error>a</error> int, c, d, <error>c</error> int) {}
+func <warning>duplicates</warning>(a int, <error>a</error> int, c, d, <error>c</error> int) (<error>a</error>, <error>d</error>, x int) {
+  return 1,1,1
+}
