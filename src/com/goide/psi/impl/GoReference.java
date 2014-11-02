@@ -164,10 +164,19 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
   private boolean processGoType(@NotNull GoType type, @NotNull MyScopeProcessor processor, @NotNull ResolveState state) {
     if (!processExistingType(type, processor, state)) return false;
-    GoType returnType = type;
-    if (type instanceof GoPointerType) returnType = ((GoPointerType)type).getType(); // todo: different processing for pointer type?
-    GoTypeReferenceExpression reference = getTypeReference(returnType);
-    return processInTypeRef(reference, returnType, processor, state);
+    if (type instanceof GoPointerType) {
+      GoType pointer = type.getType();
+      if (!processTypeRef(pointer, processor, state)) return false;
+      if (pointer instanceof GoPointerType) {
+        if (!processTypeRef(pointer.getType(), processor, state)) return false;
+        return true;
+      }
+    }
+    return processTypeRef(type, processor, state);
+  }
+
+  private boolean processTypeRef(@Nullable GoType type, @NotNull MyScopeProcessor processor, @NotNull ResolveState state) {
+    return processInTypeRef(getTypeReference(type), type, processor, state);
   }
 
   private boolean processExistingType(@NotNull GoType type, @NotNull MyScopeProcessor processor, @NotNull ResolveState state) {
