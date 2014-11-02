@@ -72,7 +72,7 @@ public class AnonymousFeedback {
     }
 
     private static void sendFeedback(AnonymousFeedback.HttpConnectionFactory httpConnectionFactory, byte[] payload) throws IOException {
-        String url = "https://api.github.com/repos/go-lang-plugin-org/go-lang-idea-plugin/issues";
+        String url = "https://github-intellij-plugin.appspot.com/go-lang-plugin-org/go-lang-idea-plugin/submitError";
         String userAgent = "golang IntelliJ IDEA plugin";
 
         IdeaPluginDescriptorImpl pluginDescriptor = (IdeaPluginDescriptorImpl) PluginManager.getPlugin(PluginId.getId("ro.redeul.google.go"));
@@ -87,7 +87,6 @@ public class AnonymousFeedback {
         httpURLConnection.setRequestMethod("POST");
         httpURLConnection.setRequestProperty("User-Agent", userAgent);
         httpURLConnection.setRequestProperty("Content-Type", "application/json");
-        httpURLConnection.setRequestProperty("Authorization", "token xxxx");
         OutputStream outputStream = httpURLConnection.getOutputStream();
 
         try {
