@@ -46,6 +46,7 @@ public class GoParserTest extends ParsingTestCase {
   public void testStr2Num()     { doTest(true);  }
   public void testCars()        { doTest(true);  }
   public void testIfWithNew()   { doTest(true);  }
+  public void testRanges()      { doTest(true);  }
   public void testRecover()     { doTest(false); }
   public void testRecover2()    { doTest(false); }
   public void testMethodExpr()  { doTest(false); }

@@ -2457,17 +2457,24 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // ExpressionsOrVariables range ExpressionNoLiteral
+  // ExpressionsOrVariables? range ExpressionNoLiteral
   public static boolean RangeClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RangeClause")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, "<range clause>");
-    r = ExpressionsOrVariables(b, l + 1);
+    r = RangeClause_0(b, l + 1);
     r = r && consumeToken(b, RANGE);
     p = r; // pin = 2
     r = r && ExpressionNoLiteral(b, l + 1);
     exit_section_(b, l, m, RANGE_CLAUSE, r, p, null);
     return r || p;
+  }
+
+  // ExpressionsOrVariables?
+  private static boolean RangeClause_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RangeClause_0")) return false;
+    ExpressionsOrVariables(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */

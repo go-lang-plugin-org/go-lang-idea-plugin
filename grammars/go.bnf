@@ -366,7 +366,7 @@ ForStatement ::= for (ForOrRangeClause Block | Block | ExpressionNoLiteral Block
 private ForOrRangeClause ::= ForClause | RangeClause
 private ExpressionNoLiteral ::= <<enterMode "NO_EMPTY_LITERAL">> (Expression <<exitMode "NO_EMPTY_LITERAL">> | <<exitMode "NO_EMPTY_LITERAL">>)
 ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement?
-RangeClause ::= ExpressionsOrVariables range ExpressionNoLiteral {pin=2}
+RangeClause ::= ExpressionsOrVariables? range ExpressionNoLiteral {pin=2}
 private ExpressionsOrVariables ::= ExpressionList '=' | VarDefinitionList ':='
 GoStatement ::= go Expression
 SelectStatement ::= select '{' ( CommClause )* '}'
