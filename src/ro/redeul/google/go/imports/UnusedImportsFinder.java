@@ -1,7 +1,5 @@
-package ro.redeul.google.go.services;
+package ro.redeul.google.go.imports;
 
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
@@ -12,24 +10,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Author: Toader Mihai Claudiu <mtoader@gmail.com>
- * <p/>
- * Date: 7/15/11
- * Time: 7:50 AM
+ * Created by bronze1man on 14-11-3.
  */
-public class GoCodeManager {
-
-    private GoCodeManager() {
-    }
-
-    public static GoCodeManager getInstance(Project project) {
-        return ServiceManager.getService(project, GoCodeManager.class);
-    }
-
-    public Collection<GoImportDeclaration> findUnusedImports(GoFile file) {
+public class UnusedImportsFinder {
+    public static Collection<GoImportDeclaration> findUnusedImports(GoFile file) {
 
         Map<String, GoImportDeclaration> imports =
-            new HashMap<String, GoImportDeclaration>();
+                new HashMap<String, GoImportDeclaration>();
 
         for (GoImportDeclarations importDeclarations : file.getImportDeclarations()) {
             for (GoImportDeclaration declaration : importDeclarations.getDeclarations()) {

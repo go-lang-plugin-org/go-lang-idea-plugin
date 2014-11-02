@@ -12,7 +12,6 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
-import ro.redeul.google.go.services.GoCodeManager;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -52,9 +51,8 @@ public class GoImportOptimizer implements ImportOptimizer {
 
     public static void optimize(final GoFile goFile) {
         final Project project = goFile.getProject();
-        GoCodeManager goCodeManager = GoCodeManager.getInstance(project);
         final Set<GoImportDeclaration> unusedImports =
-            new HashSet<GoImportDeclaration>(goCodeManager.findUnusedImports(goFile));
+            new HashSet<GoImportDeclaration>(UnusedImportsFinder.findUnusedImports(goFile));
 
         for (GoImportDeclaration id : unusedImports) {
             GoLiteralString importPath = id.getImportPath();
