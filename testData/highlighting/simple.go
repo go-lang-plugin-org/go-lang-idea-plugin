@@ -318,3 +318,5 @@ func <warning>main123</warning>() {
     Println(r.Body)
     Println(response.<error>Body</error>)
 }
+
+func <warning>duplicates</warning>(a int, <error>a</error> int, c, d, <error>c</error> int) {}
