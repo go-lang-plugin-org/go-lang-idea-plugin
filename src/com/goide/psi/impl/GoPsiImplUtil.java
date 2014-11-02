@@ -105,11 +105,22 @@ public class GoPsiImplUtil {
            GoCompositeElementImpl.precessDeclarationDefault(o, processor, state, lastParent, place);
   }
 
-  public static boolean processDeclarations(@NotNull GoCompositeElement o,
-                                            @NotNull PsiScopeProcessor processor,
-                                            @NotNull ResolveState state,
-                                            PsiElement lastParent,
-                                            @NotNull PsiElement place) {
+  // todo: check GK, try to eliminate those duplicates
+  public static boolean processDeclarations(@NotNull GoBlock o, @NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+    return processDeclarations(((GoCompositeElement)o), processor, state, lastParent, place);
+  }
+  
+  // todo: check GK, try to eliminate those duplicates
+  public static boolean processDeclarations(@NotNull GoStatement o, @NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+    return processDeclarations(((GoCompositeElement)o), processor, state, lastParent, place);
+  }
+  
+  // todo: check GK, try to eliminate those duplicates
+  public static boolean processDeclarations(@NotNull GoFunctionLit o, @NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
+    return processDeclarations(((GoCompositeElement)o), processor, state, lastParent, place);
+  }
+  
+  public static boolean processDeclarations(@NotNull GoCompositeElement o, @NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
     boolean isAncestor = PsiTreeUtil.isAncestor(o, place, false);
     if (isAncestor) return GoCompositeElementImpl.precessDeclarationDefault(o, processor, state, lastParent, place);
 
@@ -514,6 +525,11 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
+  public static GoType getGoType(@NotNull GoMethodSpec o) {
+    return getGoType(((GoSignatureOwner)o));
+  }
+
+  @Nullable
   public static GoType getGoType(@NotNull GoSignatureOwner o) {
     GoSignature signature = o.getSignature();
     GoResult result = signature != null ? signature.getResult() : null;
@@ -547,6 +563,12 @@ public class GoPsiImplUtil {
 
           @Nullable
           @Override
+          public GoType getType() {
+            return null;
+          }
+
+          @Nullable
+          @Override
           public GoTypeReferenceExpression getTypeReferenceExpression() {
             return null;
           }
@@ -563,10 +585,9 @@ public class GoPsiImplUtil {
             return null;
           }
 
-          @Nullable
           @Override
           public String toString() {
-            return null;
+            return "MyGoTypeList{myTypes=" + myTypes + '}';
           }
 
           @NotNull

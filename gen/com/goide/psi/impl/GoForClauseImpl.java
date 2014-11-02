@@ -29,8 +29,8 @@ public class GoForClauseImpl extends GoCompositeElementImpl implements GoForClau
 
   @Override
   @NotNull
-  public List<GoSimpleStatement> getSimpleStatementList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoSimpleStatement.class);
+  public List<GoStatement> getStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoStatement.class);
   }
 
 }

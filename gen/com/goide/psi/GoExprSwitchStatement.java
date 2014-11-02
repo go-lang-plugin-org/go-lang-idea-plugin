@@ -14,7 +14,7 @@ public interface GoExprSwitchStatement extends GoSwitchStatement {
   GoExpression getExpression();
 
   @Nullable
-  GoSimpleStatement getSimpleStatement();
+  GoStatement getStatement();
 
   @NotNull
   GoSwitchStart getSwitchStart();

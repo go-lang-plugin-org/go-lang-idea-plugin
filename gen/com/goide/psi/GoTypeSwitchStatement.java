@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface GoTypeSwitchStatement extends GoSwitchStatement {
 
   @Nullable
-  GoSimpleStatement getSimpleStatement();
+  GoStatement getStatement();
 
   @NotNull
   GoSwitchStart getSwitchStart();

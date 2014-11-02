@@ -23,8 +23,8 @@ public class GoTypeSwitchStatementImpl extends GoSwitchStatementImpl implements 
 
   @Override
   @Nullable
-  public GoSimpleStatement getSimpleStatement() {
-    return findChildByClass(GoSimpleStatement.class);
+  public GoStatement getStatement() {
+    return findChildByClass(GoStatement.class);
   }
 
   @Override

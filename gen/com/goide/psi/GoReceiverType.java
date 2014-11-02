@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface GoReceiverType extends GoType {
 
   @Nullable
+  GoReceiverType getReceiverType();
+
+  @Nullable
   GoTypeReferenceExpression getTypeReferenceExpression();
 
   @Nullable

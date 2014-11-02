@@ -43,12 +43,12 @@ GO_FILE
       SIMPLE_STATEMENT
         REFERENCE_EXPRESSION
           PsiElement(identifier)('foo')
-      PsiErrorElement:'!=', '%', '%=', '&', '&&', '&=', '&^', '&^=', '(', '*', '*=', '+', '++', '+=', ',', '-', '--', '-=', '.', '/', '/=', ':', ':=', ';', <, <-, <<, <<=, <=, <NL>, <literal value>, '=', '==', '>', '>=', '>>', '>>=', '[', '^', '^=', '{', '|', '|=', '||' or '}' expected, got '('
+      PsiErrorElement:'!=', '%', '%=', '&', '&=', '&^', '&^=', '(', '*', '*=', '+', '++', '+=', ',', '-', '--', '-=', '.', '/', '/=', ':', ':=', ';', <, <-, <<, <<=, <=, <NL>, <literal value>, '=', '==', '>', '>=', '>>', '>>=', '^', '^=', '{', '|', '|=' or '}' expected, got '('
         <empty list>
       SIMPLE_STATEMENT
         PARENTHESES_EXPR
           PsiElement(()('(')
-          PsiErrorElement:'!=', '%', '&', '&&', '&^', '(', ')', '*', '+', ',', '-', '.', '/', <, <-, <<, <=, <assign op>, <expression>, <receiver type>, '==', '>', '>=', '>>', '[', '^', chan, func, interface, map, struct, '|' or '||' expected, got 'if'
+          PsiErrorElement:'!=', '%', '&', '&^', '(', ')', '*', '+', ',', '-', '/', <, <-, <<, <=, <assign op>, <expression>, <receiver type>, '==', '>', '>=', '>>', '[', '^', chan, func, interface, map, struct or '|' expected, got 'if'
             <empty list>
       IF_STATEMENT
         PsiElement(if)('if')

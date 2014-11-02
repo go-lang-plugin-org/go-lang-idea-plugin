@@ -82,6 +82,7 @@
   pin('.*List(?:_\d.*)?')=1
 
   generateTokenAccessors=true
+  generate=[names="classic" tokenAccessors="yes"]
 }
 
 File ::= PackageClause semi ImportList TopLevelDeclaration* {pin(".*")=1}
@@ -269,7 +270,7 @@ OperandName ::= ReferenceExpression QualifiedReferenceExpression? {elementType=R
 left QualifiedReferenceExpression ::= '.' identifier {elementType=ReferenceExpression}
 ReferenceExpression ::= identifier { methods=[getReference getQualifier] extends=Expression}
 
-CompositeLit ::= LiteralTypeExpr LiteralValue
+CompositeLit ::= (LiteralTypeExpr LiteralValue)
 LiteralTypeExpr ::=
     StructType
   | ArrayOrSliceType

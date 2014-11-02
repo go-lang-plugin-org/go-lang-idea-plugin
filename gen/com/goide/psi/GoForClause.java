@@ -11,6 +11,6 @@ public interface GoForClause extends GoCompositeElement {
   GoExpression getExpression();
 
   @NotNull
-  List<GoSimpleStatement> getSimpleStatementList();
+  List<GoStatement> getStatementList();
 
 }
