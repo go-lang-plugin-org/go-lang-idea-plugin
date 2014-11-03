@@ -34,6 +34,7 @@ import com.intellij.notification.Notifications;
 import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.openapi.progress.PerformInBackgroundOption;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
@@ -72,7 +73,7 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
     final String path = getSdkPath(element);
     if (path == null) return;
 
-    final Task.Modal task = new Task.Modal(project, "Go get '" + myPackage + "'", true) {
+    final Task task = new Task.Backgroundable(project, "Go get '" + myPackage + "'", true, PerformInBackgroundOption.ALWAYS_BACKGROUND) {
       private OSProcessHandler myHandler;
 
       @Override
