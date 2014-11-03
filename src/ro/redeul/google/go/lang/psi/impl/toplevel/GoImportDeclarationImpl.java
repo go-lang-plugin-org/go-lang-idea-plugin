@@ -2,6 +2,7 @@ package ro.redeul.google.go.lang.psi.impl.toplevel;
 
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.lang.ASTNode;
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
@@ -9,6 +10,7 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.packages.GoPackages;
+import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.GoPackageReference;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
@@ -44,7 +46,7 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
         if (importPathLiteral == null)
             return "";
 
-        GoPackage goPackage = GoPackages.getInstance(getProject()).getPackage(importPathLiteral.getValue());
+        GoPackage goPackage = getPackage();
 
         if (goPackage == null)
             return "";
@@ -91,32 +93,6 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
         }
 
         return processor.execute(this, state);
-
-//        GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
-//
-//        GoLiteralString importPath = getImportPath();
-//
-//        //Some times import path can be null
-//        if (importPath == null)
-//            return true;
-//
-//        GoFile goFile = getContainingGoFile(this);
-//
-//        String importPathValue = getAbsoluteImportPath(importPath.getValue(), goFile);
-//
-//        // get the file included in the imported package name
-//        Collection<GoFile> files =
-//                namesCache.getFilesByPackageImportPath(importPathValue);
-//
-//        for (GoFile file : files) {
-//            ResolveState newState =
-//                    GoResolveStates.imported(getPackageName(), getPackageAlias());
-//
-//            if (!file.processDeclarations(processor, newState, lastParent, place))
-//                return false;
-//        }
-//
-//        return true;
     }
 
     @Override
@@ -180,8 +156,13 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
         if (importPathLiteral == null)
             return null;
 
-        // TODO: A Good place to start adding support for not workspace support.
         String importPath = importPathLiteral.getValue();
+
+        // if it's a relative import we normalize this and hope it falls into our project.
+        // we don't support relative import paths from files outside of our project
+        if ( importPath.startsWith(".") && getContainingFile() instanceof GoFile ) {
+            importPath = FileUtil.toCanonicalPath(((GoFile)getContainingFile()).getPackageImportPath() + "/" + importPath, '/');
+        }
 
         return GoPackages.getInstance(getProject()).getPackage(importPath);
     }

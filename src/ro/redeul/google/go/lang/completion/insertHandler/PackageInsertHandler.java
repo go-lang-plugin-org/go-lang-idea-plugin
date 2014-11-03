@@ -13,7 +13,8 @@ public class PackageInsertHandler implements com.intellij.codeInsight.completion
         if (context.getCompletionChar() == '.') {
             context.setAddCompletionChar(true);
         } else {
-            if ( ! context.getDocument().getText(new TextRange(offset, offset + 1)).equals("."))
+            if ( offset == context.getDocument().getTextLength() ||
+                    ! context.getDocument().getText(new TextRange(offset, offset + 1)).equals("."))
                 context.getDocument().insertString(offset, ".");
         }
 
