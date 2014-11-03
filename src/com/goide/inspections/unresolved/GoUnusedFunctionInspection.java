@@ -16,16 +16,14 @@
 
 package com.goide.inspections.unresolved;
 
+import com.goide.inspections.GoDeleteQuickFix;
 import com.goide.inspections.GoInspectionBase;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoFunctionDeclaration;
 import com.goide.psi.GoRecursiveVisitor;
 import com.goide.runconfig.testing.GoTestFinder;
-import com.intellij.codeInspection.LocalQuickFixBase;
-import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
@@ -47,15 +45,7 @@ public class GoUnusedFunctionInspection extends GoInspectionBase {
           PsiElement id = o.getIdentifier();
           TextRange range = TextRange.from(id.getStartOffsetInParent(), id.getTextLength());
           problemsHolder.registerProblem(o, "Unused function " + "'" + name + "'", ProblemHighlightType.LIKE_UNUSED_SYMBOL, range,
-            new LocalQuickFixBase("Delete function '" + name + "'") {
-              @Override
-              public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-                PsiElement element = descriptor.getPsiElement();
-                if (element != null) {
-                  element.delete();
-                }
-              }
-            });
+                                         new GoDeleteQuickFix("Delete function '" + name + "'"));
         }
       }
     });

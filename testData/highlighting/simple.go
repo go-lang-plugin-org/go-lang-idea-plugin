@@ -322,3 +322,11 @@ func <warning>main123</warning>() {
 func <warning>duplicates</warning>(a int, <error>a</error> int, c, d, <error>c</error> int) (<error>a</error>, <error>d</error>, x int) {
   return 1,1,1
 }
+
+func <warning>variadic</warning>(a int,  d<error>...</error> int, c string) (y,x,z int) {
+    return 1,1,1
+} 
+
+func <warning>variadic2</warning>(a int, c, d<error>...</error> int) (y,x,z <error>...</error>int) {
+    return 1,1,1
+}
