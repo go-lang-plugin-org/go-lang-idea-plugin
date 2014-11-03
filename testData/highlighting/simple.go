@@ -330,3 +330,15 @@ func <warning>variadic</warning>(a int,  d<error>...</error> int, c string) (y,x
 func <warning>variadic2</warning>(a int, c, d<error>...</error> int) (y,x,z <error>...</error>int) {
     return 1,1,1
 }
+
+type RGBA struct {
+    R, G, B, A uint8
+}
+
+type (
+    Color RGBA
+)
+
+func <warning>name</warning>(col Color) string {
+    Println(col.B)  
+}

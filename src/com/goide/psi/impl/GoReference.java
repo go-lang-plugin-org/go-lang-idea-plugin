@@ -247,7 +247,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     if (resolve instanceof GoTypeSpec) {
       GoType resolveType = ((GoTypeSpec)resolve).getType();
       if (resolveType != null && (recursiveStopper == null || !resolveType.textMatches(recursiveStopper)) &&
-          !processExistingType(resolveType, processor, state)) {
+          !processGoType(resolveType, processor, state)) {
         return false;
       }
     }
