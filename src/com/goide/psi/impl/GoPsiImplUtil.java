@@ -391,7 +391,7 @@ public class GoPsiImplUtil {
         }
       }
       else if (type instanceof GoArrayOrSliceType) {
-        return ((GoArrayOrSliceType)type).getType();
+        return type.getType();
       }
     }
     else if (o instanceof GoTypeAssertionExpr) {
@@ -459,7 +459,7 @@ public class GoPsiImplUtil {
       int i = varList.indexOf(o);
       i = i == -1 ? 0 : i;
       GoType type = last.getGoType();
-      if (type instanceof GoArrayOrSliceType && i == 1) return ((GoArrayOrSliceType)type).getType();
+      if (type instanceof GoArrayOrSliceType && i == 1) return type.getType();
       if (type instanceof GoMapType) {
         List<GoType> list = ((GoMapType)type).getTypeList();
         if (i == 0) return ContainerUtil.getFirstItem(list);
