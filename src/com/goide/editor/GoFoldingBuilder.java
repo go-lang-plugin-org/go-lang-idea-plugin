@@ -17,7 +17,10 @@
 package com.goide.editor;
 
 import com.goide.GoParserDefinition;
-import com.goide.psi.*;
+import com.goide.psi.GoBlock;
+import com.goide.psi.GoFile;
+import com.goide.psi.GoFunctionOrMethodDeclaration;
+import com.goide.psi.GoImportDeclaration;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.folding.FoldingBuilderEx;
 import com.intellij.lang.folding.FoldingDescriptor;

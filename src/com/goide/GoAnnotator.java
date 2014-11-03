@@ -17,7 +17,10 @@
 package com.goide;
 
 import com.goide.highlighting.GoSyntaxHighlightingColors;
-import com.goide.psi.*;
+import com.goide.psi.GoImportSpec;
+import com.goide.psi.GoReferenceExpression;
+import com.goide.psi.GoTypeReferenceExpression;
+import com.goide.psi.GoTypeSpec;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.psi.impl.GoReference;
 import com.intellij.lang.annotation.AnnotationHolder;
