@@ -341,4 +341,9 @@ type (
 
 func <warning>name</warning>(col Color) string {
     Println(col.B)  
+    
+    var testdata *struct {
+        a *[7]int
+    }
+    Println(testdata.a)
 }
