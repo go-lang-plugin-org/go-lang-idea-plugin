@@ -21,6 +21,7 @@ import com.goide.psi.GoFile;
 import com.goide.psi.GoRecursiveVisitor;
 import com.goide.psi.GoShortVarDeclaration;
 import com.goide.psi.GoVarDefinition;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElement;
@@ -36,7 +37,7 @@ public class GoUnusedVariableInspection extends GoInspectionBase {
     file.accept(new GoRecursiveVisitor() {
       @Override
       public void visitVarDefinition(@NotNull GoVarDefinition o) {
-        if ("_".equals(o.getIdentifier().getText())) return;
+        if (GoPsiImplUtil.isBlank(o.getIdentifier())) return;
         if (PsiTreeUtil.getParentOfType(o, GoShortVarDeclaration.class) == null) return;
         PsiReference reference = o.getReference();
         PsiElement resolve = reference != null ? reference.resolve() : null;

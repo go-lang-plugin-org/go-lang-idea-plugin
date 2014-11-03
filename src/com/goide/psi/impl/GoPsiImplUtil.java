@@ -665,4 +665,8 @@ public class GoPsiImplUtil {
     declaration.addBefore(GoElementFactory.createNewLine(declaration.getProject()), rParen);
     return (GoImportSpec)declaration.addBefore(GoElementFactory.createImportSpec(declaration.getProject(), packagePath, alias), rParen);
   }
+  
+  public static boolean isBlank(@NotNull PsiElement o) {
+    return StringUtil.equals(o.getText(), "_");
+  }
 }
