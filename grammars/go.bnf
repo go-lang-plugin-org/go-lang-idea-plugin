@@ -164,7 +164,8 @@ MethodSpec ::= TypeName &(!'(') | identifier Signature {
 }
 
 MapType ::= map '[' Type ']' Type {pin=1}
-ChannelType ::= ( chan [ '<-' ] | '<-' chan ) Type {pin(".*")='chan'}
+ChannelType ::= ChanTypePrefix Type {pin=1}
+private ChanTypePrefix ::= chan '<-'? | '<-' chan {pin(".*")=1}
 
 Block ::= '{' Statements '}' {pin=1 methods=[processDeclarations]}
 private Statements ::= StatementWithSemi* {pin=1}

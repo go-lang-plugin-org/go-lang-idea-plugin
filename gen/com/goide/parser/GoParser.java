@@ -1,3 +1,19 @@
+/*
+ * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 // This is a generated file. Not intended for manual editing.
 package com.goide.parser;
 
@@ -558,57 +574,61 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // ( chan [ '<-' ] | '<-' chan ) Type
-  public static boolean ChannelType(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ChannelType")) return false;
-    if (!nextTokenIs(b, "<channel type>", SEND_CHANNEL, CHAN)) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, "<channel type>");
-    r = ChannelType_0(b, l + 1);
-    r = r && Type(b, l + 1);
-    exit_section_(b, l, m, CHANNEL_TYPE, r, false, null);
-    return r;
-  }
-
-  // chan [ '<-' ] | '<-' chan
-  private static boolean ChannelType_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ChannelType_0")) return false;
+  // chan '<-'? | '<-' chan
+  static boolean ChanTypePrefix(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ChanTypePrefix")) return false;
+    if (!nextTokenIs(b, "", SEND_CHANNEL, CHAN)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = ChannelType_0_0(b, l + 1);
-    if (!r) r = ChannelType_0_1(b, l + 1);
+    r = ChanTypePrefix_0(b, l + 1);
+    if (!r) r = ChanTypePrefix_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // chan [ '<-' ]
-  private static boolean ChannelType_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ChannelType_0_0")) return false;
+  // chan '<-'?
+  private static boolean ChanTypePrefix_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ChanTypePrefix_0")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeToken(b, CHAN);
-    p = r; // pin = chan
-    r = r && ChannelType_0_0_1(b, l + 1);
+    p = r; // pin = 1
+    r = r && ChanTypePrefix_0_1(b, l + 1);
     exit_section_(b, l, m, null, r, p, null);
     return r || p;
   }
 
-  // [ '<-' ]
-  private static boolean ChannelType_0_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ChannelType_0_0_1")) return false;
+  // '<-'?
+  private static boolean ChanTypePrefix_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ChanTypePrefix_0_1")) return false;
     consumeToken(b, SEND_CHANNEL);
     return true;
   }
 
   // '<-' chan
-  private static boolean ChannelType_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ChannelType_0_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+  private static boolean ChanTypePrefix_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ChanTypePrefix_1")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeToken(b, SEND_CHANNEL);
+    p = r; // pin = 1
     r = r && consumeToken(b, CHAN);
-    exit_section_(b, m, null, r);
-    return r;
+    exit_section_(b, l, m, null, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
+  // ChanTypePrefix Type
+  public static boolean ChannelType(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ChannelType")) return false;
+    if (!nextTokenIs(b, "<channel type>", SEND_CHANNEL, CHAN)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _COLLAPSE_, "<channel type>");
+    r = ChanTypePrefix(b, l + 1);
+    p = r; // pin = 1
+    r = r && Type(b, l + 1);
+    exit_section_(b, l, m, CHANNEL_TYPE, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */

@@ -329,7 +329,8 @@ public class GoPsiImplUtil {
   public static GoTypeReferenceExpression getTypeReference(@Nullable GoType o) {
     if (o == null) return null;
     if (o instanceof GoChannelType) {
-      return ((GoChannelType)o).getType().getTypeReferenceExpression();
+      GoType type = o.getType();
+      return type != null ? type.getTypeReferenceExpression() : null;
     }
     return o.getTypeReferenceExpression();
   }
@@ -340,7 +341,7 @@ public class GoPsiImplUtil {
       GoExpression expression = ((GoUnaryExpr)o).getExpression();
       if (expression != null) {
         GoType type = expression.getGoType();
-        if (type instanceof GoChannelType && ((GoUnaryExpr)o).getSendChannel() != null) return ((GoChannelType)type).getType();
+        if (type instanceof GoChannelType && ((GoUnaryExpr)o).getSendChannel() != null) return type.getType();
         return type;
       }
       return null;
