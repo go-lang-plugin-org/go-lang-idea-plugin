@@ -1,3 +1,5 @@
+// comment
+// comment
 package main
 
 <caret>

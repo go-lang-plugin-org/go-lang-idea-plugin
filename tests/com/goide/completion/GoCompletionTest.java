@@ -53,7 +53,7 @@ public class GoCompletionTest extends GoCompletionTestBase {
   public void testImports() {
     doCheckResult("package foo; import imp \"\"; func foo(a im<caret>) {}", "package foo; import imp \"\"; func foo(a imp.) {}");
   }
-  
+
   public void testImportsForRefs() {
     doCheckResult("package foo; import imp \"\"; func foo() {im<caret>.foo}", "package foo; import imp \"\"; func foo() {imp.<caret>foo}");
   }
@@ -67,10 +67,36 @@ public class GoCompletionTest extends GoCompletionTestBase {
   }
 
   public void testBlockKeywords() {
-    myFixture.testCompletionVariants(getTestName(true) + ".go", "for", "const", "var", "return", "if", "switch", "go", "defer", "select", "main");
+    myFixture
+      .testCompletionVariants(getTestName(true) + ".go", "for", "const", "var", "return", "if", "switch", "go", "defer", "select", "main");
   }
 
   public void testAddSpaceAfterKeyword() {
+    myFixture.testCompletion(getTestName(true) + ".go", getTestName(true) + "_after.go");
+  }
+
+  public void testTypeKeywords() {
+    myFixture.testCompletionVariants(getTestName(true) + ".go", "struct", "interface", "Bar", "Bar");
+  }
+
+  public void testTypeKeywordsInsideParentheses() {
+    myFixture.testCompletionVariants(getTestName(true) + ".go", "Bar", "Bar");
+  }
+
+  public void testTypeKeywordInsertBraces() {
+    myFixture.testCompletion(getTestName(true) + ".go", getTestName(true) + "_after.go");
+  }
+
+  public void testTypeKeywordDoNotInsertBraces() {
+    myFixture.testCompletion(getTestName(true) + ".go", getTestName(true) + "_after.go");
+  }
+
+  public void testForStatementKeywords() {
+    myFixture.testCompletionVariants(getTestName(true) + ".go", "bar", "break", "const", "continue", "defer", "for", "go", "if", "return",
+                                     "select", "switch", "var");
+  }
+
+  public void testForStatementKeywordsDoNotInsertSpace() {
     myFixture.testCompletion(getTestName(true) + ".go", getTestName(true) + "_after.go");
   }
 
@@ -85,7 +111,7 @@ public class GoCompletionTest extends GoCompletionTestBase {
   public void testPackageKeyword() {
     myFixture.testCompletion(getTestName(true) + ".go", getTestName(true) + "_after.go");
   }
-  
+
   public void testMethods() {
     doTestEquals("package foo; type T interface{}; func (t T) f() {t.<caret>}", "f");
   }
@@ -145,7 +171,7 @@ public class GoCompletionTest extends GoCompletionTestBase {
     doCheckResult("package foo; import imp \"\"; func foo(a im<caret>.SomeType) {}",
                   "package foo; import imp \"\"; func foo(a imp.<caret>SomeType) {}");
   }
-  
+
   public void testNoUnderscore() {
     String theSame = "package foo; func foo() {_ := 1; <caret>}";
     doCheckResult(theSame, theSame);

@@ -14,6 +14,18 @@
       <option name='GO' value='true'/>
     </context>
   </template>
+  <template description='Defer declaration' id='go_lang_break' name='go_lang_break' toReformat='true' toShortenFQNames='true'
+            value='break'>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='Defer declaration' id='go_lang_continue' name='go_lang_continue' toReformat='true' toShortenFQNames='true'
+            value='continue'>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
   <template description='Constant declaration' id='go_lang_const' name='go_lang_const' toReformat='true' toShortenFQNames='true'
             value='const $NAME$ $TYPE$ = $VALUE$'>
     <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
@@ -26,18 +38,6 @@
   <template description='For loop' id='go_lang_for' name='go_lang_for' toReformat='true' toShortenFQNames='true'
             value='for $CONDITION$ {&#10;	$END$&#10;}'>
     <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='CONDITION'/>
-    <context>
-      <option name='GO' value='true'/>
-    </context>
-  </template>
-  <template description='struct' id='go_lang_struct' name='go_lang_struct' toReformat='true' toShortenFQNames='true'
-            value='struct {&#10;	$END$&#10;}'>
-    <context>
-      <option name='GO' value='true'/>
-    </context>
-  </template>
-  <template description='interface' id='go_lang_interface' name='go_lang_interface' toReformat='true' toShortenFQNames='true'
-            value='interface {$END$}'>
     <context>
       <option name='GO' value='true'/>
     </context>
@@ -91,7 +91,7 @@
       <option name='GO' value='true'/>
     </context>
   </template>
-  <template description='Interface or struct' id='go_lang_type' name='type' toReformat='true' toShortenFQNames='true'
+  <template description='Interface or struct' id='go_lang_type' name='go_lang_type' toReformat='true' toShortenFQNames='true'
             value='type $NAME$ $TYPE$ {&#10;	$END$&#10;}'>
     <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
     <variable alwaysStopAt='true' defaultValue='' expression='complete' name='TYPE'/>
