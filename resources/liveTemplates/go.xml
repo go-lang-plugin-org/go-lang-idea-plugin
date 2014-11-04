@@ -1,4 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!--
+  ~ Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <templateSet group="Go">
   <template description='Import declaration' name='imp' toReformat='true' toShortenFQNames='true'
             value='import (&#10;	"$END$"&#10;)&#10;'>
@@ -95,15 +111,6 @@
   </template>
   <template description='Init function' name='init' toReformat='true' toShortenFQNames='true'
             value='func init() {&#10;	$END$&#10;}'>
-    <context>
-      <option name='GO_FILE' value='true'/>
-    </context>
-  </template>
-  <template description='Function' name='fun' toReformat='true' toShortenFQNames='true'
-            value='func $NAME$($PARAMS$) $TYPE$ {   &#10;	$END$&#10;}'>
-    <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
-    <variable alwaysStopAt='true' defaultValue='&quot;&quot;' expression='' name='PARAMS'/>
-    <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='TYPE'/>
     <context>
       <option name='GO_FILE' value='true'/>
     </context>
