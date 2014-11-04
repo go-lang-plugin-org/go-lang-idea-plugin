@@ -202,11 +202,9 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
 
             @Override
             public void visitFunctionLiteral(GoLiteralFunction declaration) {
-                System.out.println("visitFunctionLiteral 1 "+declaration.getText());
                 blockNameStack.push(new HashSet<String>());
                 for(GoFunctionParameter parameter: declaration.getParameters()){
                     for(GoLiteralIdentifier paramterId: parameter.getIdentifiers()){
-                        System.out.println("visitFunctionLiteral 2 "+paramterId.getName());
                         nameCheck(paramterId, paramterId.getName(),result);
                     }
                 }

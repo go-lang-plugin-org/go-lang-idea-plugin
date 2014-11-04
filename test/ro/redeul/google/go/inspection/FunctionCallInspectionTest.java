@@ -42,6 +42,5 @@ public class FunctionCallInspectionTest extends GoInspectionTestCase {
     @Ignore("failing test")
     public void testInterface() throws Exception{ doTest(); }
 
-    @Ignore("failing test")
     public void testIssue875() throws Exception{ doTestWithDirectory(); }
 }

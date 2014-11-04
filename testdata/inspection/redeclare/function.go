@@ -29,3 +29,21 @@ func bad5(){
 		return
 	}
 }
+
+func Foo() int {
+	return 1
+}
+
+func Redeclared1(a, _ int) (/*begin*/a/*end.Redeclare in this block*/, _, b int){
+	return 1, 2, 3
+}
+
+func Redeclared2(a int) (/*begin*/a/*end.Redeclare in this block*/ int){
+	return 1
+}
+
+func DuplicateArg1(a int, b int, /*begin*/a/*end.Redeclare in this block*/ int) {
+}
+
+func DuplicateArg2(a, b, /*begin*/a/*end.Redeclare in this block*/, _, _ int) {
+}
