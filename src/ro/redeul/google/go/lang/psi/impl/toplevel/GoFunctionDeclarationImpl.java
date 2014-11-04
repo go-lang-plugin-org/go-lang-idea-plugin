@@ -150,7 +150,7 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
 
         // if we are not coming from a child then we should not expose the
         // parameters as declarations
-        if (lastParent == null)
+        if (lastParent != getBlock())
             return true;
 
         for (GoFunctionParameter functionParameter : getParameters()) {
