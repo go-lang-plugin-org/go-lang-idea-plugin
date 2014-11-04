@@ -18,9 +18,11 @@ package com.goide.psi.impl;
 
 import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.goide.psi.GoNamedElement;
+import com.goide.psi.GoRangeClause;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.OrderedSet;
 import org.jetbrains.annotations.NotNull;
@@ -48,6 +50,8 @@ public abstract class GoScopeProcessorBase extends BaseScopeProcessor {
     if (condition(psiElement)) return true;
     if (!myIsCompletion && !myRequestedName.equals(((GoNamedElement)psiElement).getName())) return true;
     if (psiElement.equals(myOrigin)) return true;
+    PsiElement commonParent = PsiTreeUtil.findCommonParent(psiElement, myOrigin);
+    if (commonParent instanceof GoRangeClause) return true;
 
     boolean add = add((GoNamedElement)psiElement);
     return myIsCompletion || !add;

@@ -38,6 +38,8 @@ func main() {
     for _, p2 := range create() {
         println(p2.Likes)
     }
-
+    
+    for _, p := range <error>p</error>.Packets {
+    }
 }
 func create() []*Person {return make([]*Person, 0)}
