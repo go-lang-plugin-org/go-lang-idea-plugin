@@ -460,6 +460,13 @@ public class GoPsiImplUtil {
       int i = varList.indexOf(o);
       i = i == -1 ? 0 : i;
       GoType type = last.getGoType();
+      GoTypeReferenceExpression typeRef = type != null ? type.getTypeReferenceExpression() : null;
+      if (typeRef != null) {
+        PsiElement resolve = typeRef.getReference().resolve();
+        if (resolve instanceof GoTypeSpec) {
+          type = ((GoTypeSpec)resolve).getType();
+        }
+      }
       if (type instanceof GoArrayOrSliceType && i == 1) return type.getType();
       if (type instanceof GoMapType) {
         List<GoType> list = ((GoMapType)type).getTypeList();

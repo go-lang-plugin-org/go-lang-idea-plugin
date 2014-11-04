@@ -15,6 +15,19 @@ type Person struct {
     Name  string
     Likes []string
 }
+
+type (
+    Packet struct {
+        path string
+    }
+
+    Plugin struct {
+        Path    string
+        Packets Packets
+    }
+    Packets []*Packet
+)
+
 func main() {
     var people []*Person
 
@@ -39,7 +52,12 @@ func main() {
         println(p2.Likes)
     }
     
-    for _, p := range <error>p</error>.Packets {
+    var p Plugin = nil
+    for _, p := range p.Packets {
+        println(p.path)
+    }
+    
+    for _, d := range <error>d</error>.Packets {
     }
 }
 func create() []*Person {return make([]*Person, 0)}
