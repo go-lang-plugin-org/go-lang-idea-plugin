@@ -19,10 +19,12 @@ package com.goide.psi.impl;
 import com.goide.GoSdkUtil;
 import com.goide.psi.*;
 import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
@@ -71,7 +73,13 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
   @Override
   public Object[] getVariants() {
     List<LookupElement> variants = ContainerUtil.newArrayList();
-    processResolveVariants(GoReference.createCompletionProcessor(variants, true));
+    final PsiElement spec = PsiTreeUtil.getParentOfType(myElement, GoFieldDeclaration.class, GoTypeSpec.class);
+    processResolveVariants(GoReference.createCompletionProcessor(variants, true, new Condition<PsiElement>() {
+      @Override
+      public boolean value(PsiElement element) {
+        return element != spec;
+      }
+    }));
     return ArrayUtil.toObjectArray(variants);
   }
 

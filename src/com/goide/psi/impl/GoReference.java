@@ -22,6 +22,7 @@ import com.goide.util.GoUtil;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.Comparing;
+import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
@@ -102,12 +103,15 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   }
 
   @NotNull
-  static MyScopeProcessor createCompletionProcessor(@NotNull final Collection<LookupElement> variants, final boolean forTypes) {
+  static MyScopeProcessor createCompletionProcessor(@NotNull final Collection<LookupElement> variants, final boolean forTypes,
+                                                    @NotNull final Condition<PsiElement> filter) {
     return new MyScopeProcessor() {
       @Override
       public boolean execute(@NotNull PsiElement o, @NotNull ResolveState state) {
         if (isBlank(o) || printOrPrintln(o)) return true;
-        ContainerUtil.addIfNotNull(variants, createLookup(o));
+        if (filter.value(o)) {
+          ContainerUtil.addIfNotNull(variants, createLookup(o));
+        }
         return true;
       }
       
@@ -145,7 +149,8 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   @Override
   public Object[] getVariants() {
     List<LookupElement> variants = ContainerUtil.newArrayList();
-    processResolveVariants(createCompletionProcessor(variants, false));
+    //noinspection unchecked
+    processResolveVariants(createCompletionProcessor(variants, false, Condition.TRUE));
     return ArrayUtil.toObjectArray(variants);
   }
 

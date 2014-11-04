@@ -92,11 +92,11 @@ public class GoCompletionTest extends GoCompletionTestBase {
   }
 
   public void testTypeKeywords() {
-    myFixture.testCompletionVariants(getTestName(true) + ".go", "struct", "interface", "chan", "map", "Bar", "Bar");
+    myFixture.testCompletionVariants(getTestName(true) + ".go", "struct", "interface", "chan", "map");
   }
 
   public void testTypeKeywordsInsideParentheses() {
-    myFixture.testCompletionVariants(getTestName(true) + ".go", "chan", "map", "Bar", "Bar");
+    myFixture.testCompletionVariants(getTestName(true) + ".go", "chan", "map");
   }
 
   public void testSelectKeywordInsertHandler() {
