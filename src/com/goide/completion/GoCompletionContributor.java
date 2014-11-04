@@ -29,6 +29,7 @@ import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
@@ -47,7 +48,7 @@ import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static com.intellij.patterns.PlatformPatterns.psiFile;
 import static com.intellij.patterns.StandardPatterns.*;
 
-public class GoCompletionContributor extends CompletionContributor {
+public class GoCompletionContributor extends CompletionContributor implements DumbAware {
   public static final int KEYWORD_PRIORITY = 20;
   public static final int CONTEXT_KEYWORD_PRIORITY = 25;
   public static final int FUNCTION_PRIORITY = 10;
