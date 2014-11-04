@@ -5,10 +5,12 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.statements.*;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseDefault;
@@ -86,112 +88,83 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
                 blockNameStack.pop();
             }
             @Override
-            public void visitIfStatement(GoIfStatement statement){
-                blockNameStack.push(new HashSet<String>());
-                visitElement(statement);
-                blockNameStack.pop();
-            }
+            public void visitIfStatement(GoIfStatement element){ visitSampleBlock(element); }
+
             @Override
-            public void visitForWithRange(GoForWithRangeStatement statement) {
-                blockNameStack.push(new HashSet<String>());
-                visitElement(statement);
-                blockNameStack.pop();
-            }
+            public void visitForWithRange(GoForWithRangeStatement element) { visitSampleBlock(element); }
+
             @Override
-            public void visitForWithRangeAndVars(GoForWithRangeAndVarsStatement statement) {
-                blockNameStack.push(new HashSet<String>());
-                visitElement(statement);
-                blockNameStack.pop();
-            }
+            public void visitForWithRangeAndVars(GoForWithRangeAndVarsStatement element) { visitSampleBlock(element); }
+
             @Override
-            public void visitForWithClauses(GoForWithClausesStatement statement) {
-                blockNameStack.push(new HashSet<String>());
-                visitElement(statement);
-                blockNameStack.pop();
-            }
+            public void visitForWithClauses(GoForWithClausesStatement element) { visitSampleBlock(element); }
+
             @Override
-            public void visitInterfaceType(GoPsiTypeInterface type) {
-                blockNameStack.push(new HashSet<String>());
-                visitElement(type);
-                blockNameStack.pop();
-            }
+            public void visitInterfaceType(GoPsiTypeInterface element) { visitSampleBlock(element); }
+
+            @Override
+            public void visitSwitchExpressionClause(GoSwitchExpressionClause element) { visitSampleBlock(element); }
+
+            @Override
+            public void visitSwitchTypeClause(GoSwitchTypeClause element) { visitSampleBlock(element); }
+
+            @Override
+            public void visitSwitchExpressionStatement(GoSwitchExpressionStatement element) { visitSampleBlock(element); }
+
+            @Override
+            public void visitSwitchTypeGuard(GoSwitchTypeGuard element) { visitSampleBlock(element); }
+
+            @Override
+            public void visitSwitchTypeStatement(GoSwitchTypeStatement element) { visitSampleBlock(element); }
+
+            @Override
+            public void visitSelectStatement(GoSelectStatement element) { visitSampleBlock(element); }
+
+            @Override
+            public void visitSelectCommClauseDefault(GoSelectCommClauseDefault element) { visitSampleBlock(element); }
+
+            @Override
+            public void visitSelectCommClauseRecv(GoSelectCommClauseRecv element) { visitSampleBlock(element); }
+            @Override
+            public void visitSelectCommClauseSend(GoSelectCommClauseSend element) { visitSampleBlock(element); }
 
             @Override
             public void visitBlockStatement(GoBlockStatement statement) {
-                blockNameStack.push(new HashSet<String>());
-                visitElement(statement);
-                blockNameStack.pop();
+                if (statement.getParent() instanceof GoFunctionDeclaration){
+                    visitElement(statement);
+                }else {
+                    visitSampleBlock(statement);
+                }
             }
-
-            @Override
-            public void visitSwitchExpressionClause(GoSwitchExpressionClause statement) {
+            private void visitSampleBlock(GoPsiElement element){
                 blockNameStack.push(new HashSet<String>());
-                visitElement(statement);
-                blockNameStack.pop();
-            }
-
-            @Override
-            public void visitSwitchTypeClause(GoSwitchTypeClause statement) {
-                blockNameStack.push(new HashSet<String>());
-                visitElement(statement);
-                blockNameStack.pop();
-            }
-
-            @Override
-            public void visitSwitchExpressionStatement(GoSwitchExpressionStatement statement) {
-                blockNameStack.push(new HashSet<String>());
-                visitElement(statement);
-                blockNameStack.pop();
-            }
-
-            @Override
-            public void visitSwitchTypeGuard(GoSwitchTypeGuard typeGuard) {
-                blockNameStack.push(new HashSet<String>());
-                visitElement(typeGuard);
-                blockNameStack.pop();
-            }
-
-            @Override
-            public void visitSwitchTypeStatement(GoSwitchTypeStatement statement) {
-                blockNameStack.push(new HashSet<String>());
-                visitElement(statement);
-                blockNameStack.pop();
-            }
-
-            @Override
-            public void visitSelectStatement(GoSelectStatement statement) {
-                blockNameStack.push(new HashSet<String>());
-                visitElement(statement);
-                blockNameStack.pop();
-            }
-
-            @Override
-            public void visitSelectCommClauseDefault(GoSelectCommClauseDefault commClause) {
-                blockNameStack.push(new HashSet<String>());
-                visitElement(commClause);
-                blockNameStack.pop();
-            }
-
-            @Override
-            public void visitSelectCommClauseRecv(GoSelectCommClauseRecv commClause) {
-                blockNameStack.push(new HashSet<String>());
-                visitElement(commClause);
-                blockNameStack.pop();
-            }
-            @Override
-            public void visitSelectCommClauseSend(GoSelectCommClauseSend commClause) {
-                blockNameStack.push(new HashSet<String>());
-                visitElement(commClause);
+                visitElement(element);
                 blockNameStack.pop();
             }
 
             @Override
             public void visitMethodDeclaration(GoMethodDeclaration declaration) {
-                super.visitMethodDeclaration(declaration);
                 if (declaration.getMethodReceiver()==null ||
                         declaration.getMethodReceiver().getType()==null){
+                    visitElement(declaration);
                     return;
                 }
+                blockNameStack.push(new HashSet<String>());
+                GoLiteralIdentifier id = declaration.getMethodReceiver().getIdentifier();
+                nameCheck(id,id.getName(),result);
+                for(GoFunctionParameter parameter: declaration.getParameters()){
+                    for(GoLiteralIdentifier paramterId: parameter.getIdentifiers()){
+                        nameCheck(paramterId,paramterId.getName(),result);
+                    }
+                }
+                for(GoFunctionParameter parameter: declaration.getResults()){
+                    for(GoLiteralIdentifier paramterId: parameter.getIdentifiers()){
+                        nameCheck(paramterId,paramterId.getName(),result);
+                    }
+                }
+
+                visitElement(declaration);
+                blockNameStack.pop();
                 String name = declaration.getMethodReceiver().getType().getText()+"."+declaration.getName();
                 if (name.startsWith("*")){
                     name = name.substring(1);
@@ -206,7 +179,20 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
 
             @Override
             public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
-                super.visitFunctionDeclaration(declaration);
+                blockNameStack.push(new HashSet<String>());
+                for(GoFunctionParameter parameter: declaration.getParameters()){
+                    for(GoLiteralIdentifier paramterId: parameter.getIdentifiers()){
+                        nameCheck(paramterId,paramterId.getName(),result);
+                    }
+                }
+                for(GoFunctionParameter parameter: declaration.getResults()){
+                    for(GoLiteralIdentifier paramterId: parameter.getIdentifiers()){
+                        nameCheck(paramterId,paramterId.getName(),result);
+                    }
+                }
+
+                visitElement(declaration);
+                blockNameStack.pop();
                 String name = declaration.getName();
                 if (name==null || name.equals("init")){
                     return;
@@ -215,9 +201,28 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
             }
 
             @Override
+            public void visitFunctionLiteral(GoLiteralFunction declaration) {
+                blockNameStack.push(new HashSet<String>());
+                for(GoFunctionParameter parameter: declaration.getParameters()){
+                    for(GoLiteralIdentifier paramterId: parameter.getIdentifiers()){
+                        nameCheck(paramterId, paramterId.getName(),result);
+                    }
+                }
+                for(GoFunctionParameter parameter: declaration.getResults()){
+                    for(GoLiteralIdentifier paramterId: parameter.getIdentifiers()){
+                        nameCheck(paramterId,paramterId.getName(),result);
+                    }
+                }
+                visitElement(declaration);
+                blockNameStack.pop();
+
+            }
+
+
+            @Override
             public void visitTypeNameDeclaration(GoTypeNameDeclaration declaration) {
-                super.visitTypeNameDeclaration(declaration);
                 nameCheck(declaration, declaration.getName(), result);
+                visitElement(declaration);
             }
 
             @Override
@@ -226,6 +231,7 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
                 for(GoLiteralIdentifier id: ids){
                     nameCheck(id,id.getUnqualifiedName(),result);
                 }
+                visitElement(declaration);
             }
 
             @Override
@@ -234,6 +240,7 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
                 for(GoLiteralIdentifier id: ids){
                     nameCheck(id,id.getUnqualifiedName(),result);
                 }
+                visitElement(declaration);
             }
 
             @Override
@@ -250,6 +257,7 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
                     result.addProblem(ids[0],ids[ids.length-1], GoBundle.message("error.no.new.variables.on.left.side"),
                             ProblemHighlightType.GENERIC_ERROR);
                 }
+                visitElement(declaration);
             }
             private void nameCheck(PsiElement errorElement,String name,InspectionResult result){
                 if (name.equals("_")){
