@@ -34,8 +34,6 @@ public class AddBracesInsertHandler implements InsertHandler<LookupElement> {
   @Override
   public void handleInsert(InsertionContext context, LookupElement item) {
     final Editor editor = context.getEditor();
-
-    
     final CharSequence documentText = context.getDocument().getImmutableCharSequence();
     int offset = skipWhiteSpaces(editor.getCaretModel().getOffset(), documentText);
     if (documentText.charAt(offset) != '{') {
@@ -49,8 +47,8 @@ public class AddBracesInsertHandler implements InsertHandler<LookupElement> {
       ApplicationManager.getApplication().runWriteAction(new Runnable() {
         @Override
         public void run() {
-          final EditorActionHandler enterAction = EditorActionManager.getInstance().getActionHandler(IdeActions.ACTION_EDITOR_START_NEW_LINE);
-      enterAction.execute(editor, editor.getCaretModel().getCurrentCaret(), ((EditorEx)editor).getDataContext());
+          EditorActionHandler enterAction = EditorActionManager.getInstance().getActionHandler(IdeActions.ACTION_EDITOR_START_NEW_LINE);
+          enterAction.execute(editor, editor.getCaretModel().getCurrentCaret(), ((EditorEx)editor).getDataContext());
         }
       });
     }

@@ -1,3 +1,19 @@
+/*
+ * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.goide.completion;
 
 import com.intellij.testFramework.TreePrintCondition;
@@ -67,49 +83,81 @@ public class GoCompletionTest extends GoCompletionTestBase {
   }
 
   public void testBlockKeywords() {
-    myFixture
-      .testCompletionVariants(getTestName(true) + ".go", "for", "const", "var", "return", "if", "switch", "go", "defer", "select", "main");
+    myFixture.testCompletionVariants(getTestName(true) + ".go", "for", "const", "var", "return", "if", "switch", "go", "defer", "select",
+                                     "fallthrough", "goto", "main");
   }
 
   public void testAddSpaceAfterKeyword() {
-    myFixture.testCompletion(getTestName(true) + ".go", getTestName(true) + "_after.go");
+    doTestCompletion();
   }
 
   public void testTypeKeywords() {
-    myFixture.testCompletionVariants(getTestName(true) + ".go", "struct", "interface", "Bar", "Bar");
+    myFixture.testCompletionVariants(getTestName(true) + ".go", "struct", "interface", "chan", "map", "Bar", "Bar");
   }
 
   public void testTypeKeywordsInsideParentheses() {
-    myFixture.testCompletionVariants(getTestName(true) + ".go", "Bar", "Bar");
+    myFixture.testCompletionVariants(getTestName(true) + ".go", "chan", "map", "Bar", "Bar");
+  }
+
+  public void testSelectKeywordInsertHandler() {
+    doTestCompletion();
   }
 
   public void testTypeKeywordInsertBraces() {
-    myFixture.testCompletion(getTestName(true) + ".go", getTestName(true) + "_after.go");
+    doTestCompletion();
   }
 
   public void testTypeKeywordDoNotInsertBraces() {
-    myFixture.testCompletion(getTestName(true) + ".go", getTestName(true) + "_after.go");
+    doTestCompletion();
   }
 
   public void testForStatementKeywords() {
     myFixture.testCompletionVariants(getTestName(true) + ".go", "bar", "break", "const", "continue", "defer", "for", "go", "if", "return",
-                                     "select", "switch", "var");
+                                     "fallthrough", "goto", "select", "switch", "var");
+  }
+
+  public void testChanKeyword() {
+    doTestCompletion();
+  }
+
+  public void testChanKeyword_2() {
+    doTestCompletion();
+  }
+
+  public void testChanKeyword_3() {
+    doTestCompletion();
+  }
+
+  public void testMapKeyword() {
+    doTestCompletion();
+  }
+
+  public void testMapKeyword_2() {
+    doTestCompletion();
+  }
+
+  public void testMapKeywordInsertHandler() {
+    doTestCompletion();
+  }
+
+  public void testMapKeywordInsertHandlerDoNotInsertBrackets() {
+    doTestCompletion();
   }
 
   public void testForStatementKeywordsDoNotInsertSpace() {
-    myFixture.testCompletion(getTestName(true) + ".go", getTestName(true) + "_after.go");
+    doTestCompletion();
   }
 
   public void testFunctionInDefer() {
-    myFixture.testCompletion(getTestName(true) + ".go", getTestName(true) + "_after.go");
+    doTestCompletion();
   }
 
   public void testFunctionInGo() {
-    myFixture.testCompletion(getTestName(true) + ".go", getTestName(true) + "_after.go");
+    doTestCompletion();
   }
 
   public void testPackageKeyword() {
-    myFixture.testCompletion(getTestName(true) + ".go", getTestName(true) + "_after.go");
+    doTestCompletion();
   }
 
   public void testMethods() {
@@ -191,5 +239,9 @@ public class GoCompletionTest extends GoCompletionTestBase {
     List<String> stringList = myFixture.getLookupElementStrings();
     assertNotNull(stringList);
     assertSize(1, ContainerUtil.filter(stringList, new TreePrintCondition.Include("a")));
+  }
+
+  private void doTestCompletion() {
+    myFixture.testCompletion(getTestName(true) + ".go", getTestName(true) + "_after.go");
   }
 }

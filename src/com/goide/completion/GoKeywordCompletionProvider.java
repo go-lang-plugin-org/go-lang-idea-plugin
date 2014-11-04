@@ -101,7 +101,14 @@ public class GoKeywordCompletionProvider extends CompletionProvider<CompletionPa
           templateManager.startTemplate(editor, template);
         }
         else {
-          EditorModificationUtil.insertStringAtCaret(editor, " ");
+          final int currentOffset = editor.getCaretModel().getOffset();
+          final CharSequence documentText = editor.getDocument().getImmutableCharSequence();
+          if (documentText.length() <= currentOffset || documentText.charAt(currentOffset) != ' ') {
+            EditorModificationUtil.insertStringAtCaret(editor, " ");
+          }
+          else {
+            EditorModificationUtil.moveCaretRelatively(editor, 1);
+          }
         }
       }
     };

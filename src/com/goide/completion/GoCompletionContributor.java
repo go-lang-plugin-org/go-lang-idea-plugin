@@ -58,6 +58,9 @@ public class GoCompletionContributor extends CompletionContributor {
   public static final int LABEL_PRIORITY = 15;
   public static final int PACKAGE_PRIORITY = 5;
 
+  private static final AddBracesInsertHandler ADD_BRACES_INSERT_HANDLER = new AddBracesInsertHandler();
+  private static final InsertHandler<LookupElement> ADD_BRACKETS_INSERT_HANDLER = new AddBracketsInsertHandler();
+
   public GoCompletionContributor() {
     // todo: move it away to GoKeywordCompletionContributor
     extend(CompletionType.BASIC, packagePattern(), new GoKeywordCompletionProvider(KEYWORD_PRIORITY,
@@ -65,13 +68,20 @@ public class GoCompletionContributor extends CompletionContributor {
     extend(CompletionType.BASIC, importPattern(), new GoKeywordCompletionProvider(KEYWORD_PRIORITY, "import"));
     extend(CompletionType.BASIC, topLevelPattern(), new GoKeywordCompletionProvider(KEYWORD_PRIORITY, "const", "var", "func", "type"));
     extend(CompletionType.BASIC, insideBlockPattern(), new GoKeywordCompletionProvider(KEYWORD_PRIORITY, "for", "const", "var", "return",
-                                                                                       "if", "switch", "go", "defer", "select"));
+                                                                                       "if", "switch", "go", "defer", "goto"));
+    extend(CompletionType.BASIC, insideBlockPattern(), new GoKeywordCompletionProvider(KEYWORD_PRIORITY, EMPTY_INSERT_HANDLER,
+                                                                                       "fallthrough"));
+    extend(CompletionType.BASIC, insideBlockPattern(), new GoKeywordCompletionProvider(KEYWORD_PRIORITY, ADD_BRACES_INSERT_HANDLER,
+                                                                                       "select"));
     extend(CompletionType.BASIC, typeDeclaration(), new GoKeywordCompletionProvider(KEYWORD_PRIORITY, new AddBracesInsertHandler(),
                                                                                     "interface", "struct"));
     extend(CompletionType.BASIC, insideForStatement(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, EMPTY_INSERT_HANDLER,
                                                                                        "break", "continue"));
+    extend(CompletionType.BASIC, typeExpression(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, "chan"));
+    extend(CompletionType.BASIC, typeExpression(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, ADD_BRACKETS_INSERT_HANDLER, 
+                                                                                   "map"));
     //extend(CompletionType.BASIC, insideSwitchStatement(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, "case", "default"));
-    //  todo: "chan", "fallthrough", "goto", "map", "range", "select" 
+    //  todo: "case", "default", "range", "else" 
   }
 
   @Override
@@ -85,6 +95,10 @@ public class GoCompletionContributor extends CompletionContributor {
 
   private static ElementPattern<? extends PsiElement> insideForStatement() {
     return insideBlockPattern().inside(GoForStatement.class);
+  }
+
+  private static ElementPattern<? extends PsiElement> typeExpression() {
+    return psiElement().withParent(GoTypeReferenceExpression.class);
   }
 
   //private static ElementPattern<? extends PsiElement> insideSwitchStatement() {
