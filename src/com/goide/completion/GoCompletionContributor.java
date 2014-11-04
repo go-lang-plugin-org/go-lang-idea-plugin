@@ -213,6 +213,7 @@ public class GoCompletionContributor extends CompletionContributor implements Du
               for (String name : StubIndex.getInstance().getAllKeys(GoTypesIndex.KEY, project)) {
                 if (StringUtil.isCapitalized(name)) {
                   for (GoTypeSpec declaration : GoTypesIndex.find(name, project, GlobalSearchScope.allScope(project))) {
+                    if (declaration.getContainingFile() == parameters.getOriginalFile()) continue;
                     PsiReference reference = parent.getReference();
                     if (reference instanceof GoTypeReference && !((GoTypeReference)reference).allowed(declaration)) continue;
                     if (!allowed(declaration)) continue;
