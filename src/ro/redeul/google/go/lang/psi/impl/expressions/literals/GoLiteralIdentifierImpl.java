@@ -351,11 +351,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
 
     @Override
     public String getLocalPackageName() {
-        if (isQualified()) {
-            return findChildrenByType(GoTokenTypes.mIDENT).get(0).getText();
-        }
-
-        return null;
+        return findChildrenByType(GoTokenTypes.mIDENT).get(0).getText();
     }
 
     @NotNull

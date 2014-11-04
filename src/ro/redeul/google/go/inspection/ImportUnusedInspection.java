@@ -6,11 +6,10 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.imports.UnusedImportsFinder;
 import ro.redeul.google.go.inspection.fix.RemoveImportFix;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
-import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
-import ro.redeul.google.go.services.GoCodeManager;
 
 import java.util.Collection;
 
@@ -27,16 +26,6 @@ public class ImportUnusedInspection extends AbstractWholeGoFileInspection {
     @Override
     protected void doCheckFile(@NotNull GoFile file,
                                @NotNull final InspectionResult result) {
-        new GoRecursiveElementVisitor() {
-            @Override
-            public void visitFile(GoFile file) {
-                super.visitFile(file);
-                checkUnusedImport(file, result);
-            }
-        }.visitFile(file);
-    }
-
-    private static void checkUnusedImport(GoFile file, InspectionResult result) {
         Project project = file.getProject();
 
         PsiDocumentManager pdm = PsiDocumentManager.getInstance(project);
@@ -46,7 +35,7 @@ public class ImportUnusedInspection extends AbstractWholeGoFileInspection {
         }
 
         Collection<GoImportDeclaration> unusedImports =
-            GoCodeManager.getInstance(project).findUnusedImports(file);
+                UnusedImportsFinder.findUnusedImports(file);
 
         for (GoImportDeclaration unused : unusedImports) {
             if (!unused.isValidImport()) {
@@ -54,10 +43,10 @@ public class ImportUnusedInspection extends AbstractWholeGoFileInspection {
             }
 
             result.addProblem(
-                unused,
-                message("warning.unused.import", unused.getImportPath().getValue()),
-                ProblemHighlightType.LIKE_UNUSED_SYMBOL,
-                new RemoveImportFix(unused));
+                    unused,
+                    message("warning.unused.import", unused.getImportPath().getValue()),
+                    ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+                    new RemoveImportFix(unused));
         }
     }
 }

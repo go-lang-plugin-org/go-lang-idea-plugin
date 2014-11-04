@@ -600,10 +600,6 @@
                 order="after EnterBetweenBracesHandler"/>
 
         <projectService
-                serviceInterface="ro.redeul.google.go.services.GoCodeManager"
-                serviceImplementation="ro.redeul.google.go.services.GoCodeManager"/>
-
-        <projectService
                 serviceInterface="ro.redeul.google.go.services.GoPsiManager"
                 serviceImplementation="ro.redeul.google.go.services.GoPsiManager"/>
 

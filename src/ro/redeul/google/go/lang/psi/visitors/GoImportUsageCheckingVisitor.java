@@ -42,7 +42,7 @@ public class GoImportUsageCheckingVisitor extends GoRecursiveElementVisitor {
     }
 
     private void checkQualifiedIdentifier(GoLiteralIdentifier identifier) {
-        if ( identifier != null && identifier.isQualified() ) {
+        if ( identifier != null ) {
             if ( imports.remove(identifier.getLocalPackageName()) == null ) {
                 for (String s : new HashSet<String>(imports.keySet())) {
                     if (s.toLowerCase()
