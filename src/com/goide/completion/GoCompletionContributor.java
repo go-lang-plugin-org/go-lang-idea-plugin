@@ -96,9 +96,11 @@ public class GoCompletionContributor extends CompletionContributor {
   }
 
   private static ElementPattern<? extends PsiElement> afterIfBlock() {
-    return psiElement().withParent(psiElement(GoExpression.class).withParent(psiElement(GoStatement.class)
-                                                                               .afterSibling(psiElement(GoIfStatement.class))))
-      .andNot(afterElseKeyword());
+    return psiElement().withParent(
+      psiElement(GoExpression.class).withParent(psiElement(GoStatement.class)
+                                                  .afterSiblingSkipping(psiElement().whitespaceCommentEmptyOrError(),
+                                                                        psiElement(GoIfStatement.class))))
+      .andNot(afterElseKeyword()).andNot(onNewLine());
   }
 
   private static ElementPattern<? extends PsiElement> afterElseKeyword() {
