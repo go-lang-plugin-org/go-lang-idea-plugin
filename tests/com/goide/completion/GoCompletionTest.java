@@ -143,6 +143,14 @@ public class GoCompletionTest extends GoCompletionTestBase {
   public void testMapKeywordInsertHandlerDoNotInsertBrackets() {
     doTestCompletion();
   }
+  
+  public void testElseKeyword() {
+    doTestCompletion();
+  }
+  
+  public void testIfKeywordAfterElse() {
+    doTestCompletion();
+  }
 
   public void testForStatementKeywordsDoNotInsertSpace() {
     doTestCompletion();

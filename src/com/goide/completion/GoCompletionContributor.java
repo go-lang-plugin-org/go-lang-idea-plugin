@@ -78,10 +78,12 @@ public class GoCompletionContributor extends CompletionContributor {
     extend(CompletionType.BASIC, insideForStatement(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, EMPTY_INSERT_HANDLER,
                                                                                        "break", "continue"));
     extend(CompletionType.BASIC, typeExpression(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, "chan"));
-    extend(CompletionType.BASIC, typeExpression(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, ADD_BRACKETS_INSERT_HANDLER, 
+    extend(CompletionType.BASIC, typeExpression(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, ADD_BRACKETS_INSERT_HANDLER,
                                                                                    "map"));
+    extend(CompletionType.BASIC, afterIfBlock(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, "else"));
+    extend(CompletionType.BASIC, afterElseKeyword(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, "if"));
     //extend(CompletionType.BASIC, insideSwitchStatement(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, "case", "default"));
-    //  todo: "case", "default", "range", "else" 
+    //  todo: "case", "default", "range" 
   }
 
   @Override
@@ -91,6 +93,16 @@ public class GoCompletionContributor extends CompletionContributor {
       InsertHandler<LookupElement> insertHandler = GoKeywordCompletionProvider.createTemplateBasedInsertHandler("go_lang_anonymous_func");
       result.addElement(GoKeywordCompletionProvider.createKeywordLookupElement("func", CONTEXT_KEYWORD_PRIORITY, insertHandler));
     }
+  }
+
+  private static ElementPattern<? extends PsiElement> afterIfBlock() {
+    return psiElement().withParent(psiElement(GoExpression.class).withParent(psiElement(GoStatement.class)
+                                                                               .afterSibling(psiElement(GoIfStatement.class))))
+      .andNot(afterElseKeyword());
+  }
+
+  private static ElementPattern<? extends PsiElement> afterElseKeyword() {
+    return psiElement().afterLeafSkipping(psiElement().whitespaceCommentEmptyOrError(), psiElement(GoTypes.ELSE));
   }
 
   private static ElementPattern<? extends PsiElement> insideForStatement() {
@@ -111,8 +123,8 @@ public class GoCompletionContributor extends CompletionContributor {
   }
 
   private static PsiElementPattern.Capture<PsiElement> insideGoOrDeferStatements() {
-    return psiElement().withParent(
-      psiElement(GoExpression.class).withParent(or(psiElement(GoDeferStatement.class), psiElement(GoGoStatement.class))));
+    return psiElement()
+      .withParent(psiElement(GoExpression.class).withParent(or(psiElement(GoDeferStatement.class), psiElement(GoGoStatement.class))));
   }
 
   private static PsiElementPattern.Capture<PsiElement> insideBlockPattern() {
