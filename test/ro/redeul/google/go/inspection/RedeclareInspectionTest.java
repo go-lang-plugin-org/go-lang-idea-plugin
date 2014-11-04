@@ -23,4 +23,7 @@ public class RedeclareInspectionTest extends GoInspectionTestCase {
 
     @Ignore("failing test")
     public void testBuildTags() throws Exception{ doTestWithDirectory(); }
+
+    public void testFunction() throws Exception{ doTest(); }
+
 }
