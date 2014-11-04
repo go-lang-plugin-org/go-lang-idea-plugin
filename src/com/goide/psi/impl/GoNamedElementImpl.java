@@ -24,6 +24,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -124,6 +125,6 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
   @NotNull
   @Override
   public SearchScope getUseScope() {
-    return isPublic() ? super.getUseScope() : getContainingFile().getResolveScope();
+    return isPublic() ? super.getUseScope() : GlobalSearchScope.fileScope(getContainingFile());
   }
 }
