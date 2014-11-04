@@ -8,6 +8,7 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
+import ro.redeul.google.go.lang.packages.GoPackages;
 import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.GoPackageReference;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
@@ -104,6 +105,9 @@ public class GoPsiTypeNameImpl extends GoPsiElementBase implements GoPsiTypeName
             GoImportDeclaration importDeclaration = GoPsiUtils.resolveSafely(identifiers[0], GoImportDeclaration.class);
             goPackage = importDeclaration != null ? importDeclaration.getPackage() : null;
         }
+
+        if ( goPackage != null && goPackage == GoPackages.C )
+            return PsiReference.EMPTY_ARRAY;
 
         return new PsiReference[] { goPackage != null ? new TypeNameReference(this, goPackage) : new TypeNameReference(this) };
     }

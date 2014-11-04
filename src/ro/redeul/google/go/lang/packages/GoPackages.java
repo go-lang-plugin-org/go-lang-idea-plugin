@@ -11,8 +11,10 @@ import com.intellij.openapi.util.NotNullLazyKey;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.reference.SoftReference;
 import com.intellij.util.ConcurrencyUtil;
 import com.intellij.util.PathUtil;
@@ -32,6 +34,36 @@ public class GoPackages extends AbstractProjectComponent {
     private static final NotNullLazyKey<GoPackages, Project> INSTANCE_KEY = ServiceManager.createLazyKey(GoPackages.class);
 
     private volatile SoftReference<ConcurrentMap<String, GoPackage>> packagesCache;
+
+    public static final GoPackage C = new GoPackageImpl(null, null, null) {
+        @Override
+        public String getImportPath() {
+            return "C";
+        }
+
+        @NotNull
+        @Override
+        public String getName() {
+            return "C";
+        }
+
+        @Override
+        public GoFile[] getFiles() {
+            return GoFile.EMPTY_ARRAY;
+        }
+
+        @NotNull
+        @Override
+        public PsiDirectory[] getDirectories() {
+            return PsiDirectory.EMPTY_ARRAY;
+        }
+
+        @NotNull
+        @Override
+        public PsiDirectory[] getDirectories(@NotNull GlobalSearchScope scope) {
+            return getDirectories();
+        }
+    };
 
     public GoPackages(Project project) {
         super(project);
@@ -68,6 +100,9 @@ public class GoPackages extends AbstractProjectComponent {
     }
 
     private GoPackage resolvePackage(String path){
+        if ( path.equals(C.getImportPath()))
+            return C;
+
         VirtualFile sourceRoots[] = ProjectRootManagerEx.getInstanceEx(myProject).getContentSourceRoots();
 
         for (VirtualFile sourceRoot : sourceRoots) {

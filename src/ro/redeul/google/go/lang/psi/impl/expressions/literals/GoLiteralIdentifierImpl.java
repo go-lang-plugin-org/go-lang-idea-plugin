@@ -14,6 +14,7 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
+import ro.redeul.google.go.lang.packages.GoPackages;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
@@ -271,7 +272,8 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
 
                 @Override
                 public void visitPackage(GoTypePackage type) {
-                    refs.add(new PackageSymbolReference(ident, type.getPackage()));
+                    if ( type.getPackage() != GoPackages.C )
+                        refs.add(new PackageSymbolReference(ident, type.getPackage()));
                 }
 
                 @Override
@@ -334,6 +336,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
     }
 
     @Override
+    // TODO: delete this
     public boolean isQualified() {
         return findChildByType(GoTokenTypes.oDOT) != null;
     }
@@ -350,6 +353,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
     }
 
     @Override
+    // TODO: check to see why this is needed
     public String getLocalPackageName() {
         return findChildrenByType(GoTokenTypes.mIDENT).get(0).getText();
     }

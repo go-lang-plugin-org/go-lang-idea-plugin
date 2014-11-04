@@ -82,13 +82,13 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
             }
 
             private void tryToResolveReference(PsiElement element, String name) {
-                if (GoPsiUtils.hasHardReferences(element) &&
-                        resolveSafely(element, PsiElement.class) == null &&
-                        !isCgoUsage(element)) {
-
+                if (GoPsiUtils.hasHardReferences(element) && resolveSafely(element, PsiElement.class) == null) {
                     LocalQuickFix[] fixes = null;
                     if (GoUtil.isFunctionNameIdentifier(element)) {
-                        fixes = new LocalQuickFix[]{new CreateFunctionFix(element), new CreateClosureFunctionFix(element)};
+                        fixes = new LocalQuickFix[]{
+                                new CreateFunctionFix(element),
+                                new CreateClosureFunctionFix(element)
+                        };
                     } else if (isLocalVariableIdentifier(element)) {
                         fixes = new LocalQuickFix[]{
                                 new CreateLocalVariableFix(element),
@@ -103,12 +103,12 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
                     } else {
                         String text = element.getLastChild().getText();
                         if (text.length() != 0 && Character.isUpperCase(text.charAt(0))) {
-                         /*
-                         * We can also resolve nested packages
-                         */
-
+                             /*
+                             * We can also resolve nested packages
+                             */
                             final GoFile containingFile = (GoFile) element.getContainingFile();
                             final GoImportDeclarations[] importDeclarations = containingFile.getImportDeclarations();
+
                             for (GoImportDeclarations goImportDeclarations : importDeclarations) {
                                 final GoImportDeclaration[] declarations = goImportDeclarations.getDeclarations();
                                 for (final GoImportDeclaration declaration : declarations) {
@@ -168,29 +168,6 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
                 }
             }
         }.visitElement(file);
-    }
-
-    private boolean isCgoUsage(PsiElement element) {
-        PsiFile file = element.getContainingFile();
-        if (!(file instanceof GoFile)) {
-            return false;
-        }
-
-        if (element instanceof GoPsiTypeName) {
-            element = ((GoPsiTypeName) element).getIdentifier();
-        }
-
-        if (element instanceof GoLiteralExpression) {
-            element = ((GoLiteralExpression) element).getLiteral();
-        }
-
-        if (!(element instanceof GoLiteralIdentifier)) {
-            return false;
-        }
-
-        GoLiteralIdentifier identifier = (GoLiteralIdentifier) element;
-        return "C".equals(identifier.getLocalPackageName()) && GoFileUtils.isPackageNameImported((GoFile) file, "C");
-
     }
 
     private static boolean isUnqualifiedTypeName(PsiElement element) {
