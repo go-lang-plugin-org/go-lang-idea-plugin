@@ -17,10 +17,7 @@
 package com.goide.inspections.unresolved;
 
 import com.goide.inspections.GoInspectionBase;
-import com.goide.psi.GoFile;
-import com.goide.psi.GoRecursiveVisitor;
-import com.goide.psi.GoShortVarDeclaration;
-import com.goide.psi.GoVarDefinition;
+import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
@@ -38,13 +35,20 @@ public class GoUnusedVariableInspection extends GoInspectionBase {
       @Override
       public void visitVarDefinition(@NotNull GoVarDefinition o) {
         if (GoPsiImplUtil.isBlank(o.getIdentifier())) return;
-        if (PsiTreeUtil.getParentOfType(o, GoShortVarDeclaration.class) == null) return;
-        PsiReference reference = o.getReference();
-        PsiElement resolve = reference != null ? reference.resolve() : null;
-        if (resolve != null) return;
-        Query<PsiReference> search = ReferencesSearch.search(o, o.getUseScope());
-        if (search.findFirst() == null) {
-          problemsHolder.registerProblem(o, "Unused variable " + "'" + o.getText() + "'", ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+        GoShortVarDeclaration shortDecl = PsiTreeUtil.getParentOfType(o, GoShortVarDeclaration.class);
+        GoVarDeclaration decl = PsiTreeUtil.getParentOfType(o, GoVarDeclaration.class);
+        if (shortDecl != null || decl != null) {
+          PsiReference reference = o.getReference();
+          PsiElement resolve = reference != null ? reference.resolve() : null;
+          if (resolve != null) return;
+          Query<PsiReference> search = ReferencesSearch.search(o, o.getUseScope());
+          if (search.findFirst() == null) {
+            boolean globalVar = decl != null && decl.getParent() instanceof GoFile;
+            problemsHolder.registerProblem(o, "Unused variable " + "'" + o.getText() + "'",
+                                           globalVar
+                                           ? ProblemHighlightType.LIKE_UNUSED_SYMBOL
+                                           : ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+          }
         }
       }
     });

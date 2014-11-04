@@ -283,7 +283,7 @@ func <warning>eachProcessing</warning>() {
         if each.matchesContentType() {
         }
     }
-    var rs2, i = makeTuple()
+    var rs2, <error>i</error> = makeTuple()
     for _, each := range rs2 {
         if each.matchesContentType() {
         }
@@ -347,3 +347,6 @@ func <warning>name</warning>(col Color) string {
     }
     Println(testdata.a)
 }
+
+var <error>Name11</error> string  = ""
+var <error>nmame11</error> string  = ""
