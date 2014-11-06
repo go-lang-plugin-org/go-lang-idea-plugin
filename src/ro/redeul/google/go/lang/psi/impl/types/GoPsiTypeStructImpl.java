@@ -170,7 +170,7 @@ public class GoPsiTypeStructImpl extends GoPsiTypeImpl implements
                 for (int j = 0; j < identifiers.length; j++) {
                     GoLiteralIdentifier identifier = identifiers[j];
                     GoLiteralIdentifier otherIdentifier = otherIdentifiers[j];
-                    if (!identifier.getUnqualifiedName().equals(otherIdentifier.getUnqualifiedName()))
+                    if (!identifier.getName().equals(otherIdentifier.getName()))
                         return false;
                     if (!field.getType().isIdentical(otherField.getType()))
                         return false;

@@ -37,7 +37,7 @@ public class PromotedFieldsDiscover {
     }
 
     private boolean ignore(GoLiteralIdentifier identifier) {
-        return ignoreNames.contains(identifier.getUnqualifiedName());
+        return ignoreNames.contains(identifier.getName());
     }
 
     private GoLiteralIdentifier[] getNamedFields() {
@@ -129,7 +129,7 @@ public class PromotedFieldsDiscover {
             return;
         }
 
-        String name = identifier.getUnqualifiedName();
+        String name = identifier.getName();
         List<GoLiteralIdentifier> fields = namedFieldsMap.get(name);
         if (fields == null) {
             fields = new ArrayList<GoLiteralIdentifier>();
@@ -143,7 +143,7 @@ public class PromotedFieldsDiscover {
         for (GoTypeStructField field : struct.getFields()) {
             for (GoLiteralIdentifier identifier : field.getIdentifiers()) {
                 if (!identifier.isBlank()) {
-                    directFields.add(identifier.getUnqualifiedName());
+                    directFields.add(identifier.getName());
                 }
             }
         }

@@ -101,7 +101,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
     @Override
     @NotNull
     public String getName() {
-        return getUnqualifiedName();
+        return getText();
     }
 
     @Override
@@ -329,29 +329,6 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
     @Override
     public PsiElement getNameIdentifier() {
         return this;
-    }
-
-    @Override
-    @NotNull
-    public String getUnqualifiedName() {
-
-        List<PsiElement> tokens = findChildrenByType(mIDENT);
-        if (tokens.size() == 2)
-            return tokens.get(1).getText();
-
-        return tokens.size() > 0 ? tokens.get(0).getText() : "";
-    }
-
-    @Override
-    // TODO: check to see why this is needed
-    public String getLocalPackageName() {
-        return findChildrenByType(GoTokenTypes.mIDENT).get(0).getText();
-    }
-
-    @NotNull
-    @Override
-    public String getCanonicalName() {
-        return getUnqualifiedName();
     }
 
     @Override

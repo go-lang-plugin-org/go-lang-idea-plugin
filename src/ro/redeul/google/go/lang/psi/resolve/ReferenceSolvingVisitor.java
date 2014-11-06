@@ -19,7 +19,7 @@ public abstract class ReferenceSolvingVisitor extends GoElementVisitorWithData<R
 
         for (GoLiteralIdentifier identifier : identifiers) {
 
-            String identifierName = identifier.getUnqualifiedName();
+            String identifierName = identifier.getName();
 
             if ( !reference.canSee(identifier, identifierName))
                 continue;

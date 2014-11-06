@@ -83,7 +83,7 @@ public class TypeStructDeclarationInspection
             }
 
             for (GoLiteralIdentifier identifier : field.getIdentifiers()) {
-                String name = identifier.getUnqualifiedName();
+                String name = identifier.getName();
                 if (fields.contains(name)) {
                     result.addProblem(identifier,
                                       GoBundle.message("error.duplicate.field",
@@ -106,7 +106,7 @@ public class TypeStructDeclarationInspection
                 }
 
                 GoLiteralIdentifier identifier = typeName.getIdentifier();
-                String name = identifier.getUnqualifiedName();
+                String name = identifier.getName();
                 if (fields.contains(name)) {
                     result.addProblem(identifier, GoBundle.message(
                         "error.duplicate.field", name));

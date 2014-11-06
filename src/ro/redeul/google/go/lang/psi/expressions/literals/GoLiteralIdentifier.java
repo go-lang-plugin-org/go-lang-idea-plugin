@@ -20,14 +20,6 @@ public interface GoLiteralIdentifier extends GoLiteral<String>,
 
     boolean isNil();
 
-    String getUnqualifiedName();
-
-    @Nullable
-    String getLocalPackageName();
-
-    @NotNull
-    String getCanonicalName();
-
     Integer getIotaValue();
 
     public void setIotaValue(int value);

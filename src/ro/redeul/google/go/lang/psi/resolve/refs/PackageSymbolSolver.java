@@ -47,7 +47,7 @@ public class PackageSymbolSolver extends VisitingReferenceSolver<PackageSymbolRe
 
             boolean isReferenceTo(GoConstDeclaration constDeclaration) {
                 for (GoLiteralIdentifier identifier : constDeclaration.getIdentifiers())
-                    if (matchNames(reference.name(), identifier.getUnqualifiedName()))
+                    if (matchNames(reference.name(), identifier.getName()))
                         return true;
 
                 return false;
@@ -55,7 +55,7 @@ public class PackageSymbolSolver extends VisitingReferenceSolver<PackageSymbolRe
 
             boolean isReferenceTo(GoVarDeclaration varDeclaration) {
                 for (GoLiteralIdentifier identifier : varDeclaration.getIdentifiers())
-                    if (matchNames(reference.name(), identifier.getUnqualifiedName()))
+                    if (matchNames(reference.name(), identifier.getName()))
                         return true;
 
                 return false;

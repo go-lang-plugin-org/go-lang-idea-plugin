@@ -43,10 +43,10 @@ public class GoImportUsageCheckingVisitor extends GoRecursiveElementVisitor {
 
     private void checkQualifiedIdentifier(GoLiteralIdentifier identifier) {
         if ( identifier != null ) {
-            if ( imports.remove(identifier.getLocalPackageName()) == null ) {
+            if ( imports.remove(identifier.getName()) == null ) {
                 for (String s : new HashSet<String>(imports.keySet())) {
                     if (s.toLowerCase()
-                         .equals(identifier.getLocalPackageName()))  {
+                         .equals(identifier.getName()))  {
                         imports.remove(s);
                     }
                 }
