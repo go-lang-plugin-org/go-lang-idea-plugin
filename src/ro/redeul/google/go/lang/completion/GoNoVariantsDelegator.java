@@ -6,7 +6,6 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionType;
 
 import static ro.redeul.google.go.lang.completion.GoCompletionContributor.VALID_PACKAGE_NAME_POSITION;
-import static ro.redeul.google.go.lang.completion.GoCompletionContributor.addAllPackageNames;
 
 public class GoNoVariantsDelegator extends CompletionContributor {
     @Override

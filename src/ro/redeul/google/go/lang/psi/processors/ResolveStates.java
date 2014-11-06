@@ -1,6 +1,5 @@
 package ro.redeul.google.go.lang.psi.processors;
 
-import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.KeyWithDefaultValue;
 import com.intellij.psi.ResolveState;
 import org.jetbrains.annotations.NotNull;

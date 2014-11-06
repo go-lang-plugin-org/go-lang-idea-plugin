@@ -39,14 +39,12 @@ import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.progress.EmptyProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
 import com.intellij.util.Consumer;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 
 import java.awt.*;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 /**
  * Sends crash reports to Github.

@@ -1,12 +1,7 @@
 package ro.redeul.google.go.lang.psi.impl;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.GoPackagedElement;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

@@ -188,8 +188,6 @@ public class GoNamesCache {
 
     public Collection<GoFile> getFilesByPackageImportPath(@NotNull String importPath,
                                                           @NotNull GlobalSearchScope scope) {
-        StubIndex index = StubIndex.getInstance();
-
         Collection<GoFile> files = StubIndex.getElements(GoPackageImportPath.KEY, importPath, project, scope, GoFile.class);
         removeExcludedFiles(files);
         return files;

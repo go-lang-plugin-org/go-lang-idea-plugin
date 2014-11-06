@@ -1,7 +1,6 @@
 package ro.redeul.google.go.lang.psi.types;
 
 import com.intellij.psi.PsiNamedElement;
-import ro.redeul.google.go.lang.psi.GoPackagedElement;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 

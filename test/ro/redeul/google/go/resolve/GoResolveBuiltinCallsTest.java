@@ -1,7 +1,6 @@
 package ro.redeul.google.go.resolve;
 
 import com.intellij.psi.PsiElement;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import static com.intellij.patterns.PsiJavaPatterns.psiElement;
 

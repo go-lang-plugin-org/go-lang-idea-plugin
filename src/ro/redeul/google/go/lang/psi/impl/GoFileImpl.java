@@ -30,8 +30,6 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitorWithData;
 import ro.redeul.google.go.util.LookupElementUtil;
 
-import static com.intellij.patterns.PlatformPatterns.psiElement;
-
 public class GoFileImpl extends PsiFileBase implements GoFile {
 
     private static final Logger LOG = Logger.getInstance(GoFileImpl.class);
