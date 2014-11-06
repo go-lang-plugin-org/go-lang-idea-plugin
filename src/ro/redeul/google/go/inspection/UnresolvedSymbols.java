@@ -171,8 +171,7 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
     }
 
     private static boolean isUnqualifiedTypeName(PsiElement element) {
-        return element instanceof GoPsiTypeName &&
-                !((GoPsiTypeName) element).getIdentifier().isQualified();
+        return element instanceof GoPsiTypeName ;
     }
 
     private static boolean isGlobalVariableIdentifier(PsiElement element) {

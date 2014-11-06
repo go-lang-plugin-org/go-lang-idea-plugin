@@ -101,10 +101,6 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
     @Override
     @NotNull
     public String getName() {
-        if (isQualified()) {
-            return getLocalPackageName() + "." + getUnqualifiedName();
-        }
-
         return getUnqualifiedName();
     }
 
@@ -336,12 +332,6 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
     }
 
     @Override
-    // TODO: delete this
-    public boolean isQualified() {
-        return findChildByType(GoTokenTypes.oDOT) != null;
-    }
-
-    @Override
     @NotNull
     public String getUnqualifiedName() {
 
@@ -361,35 +351,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
     @NotNull
     @Override
     public String getCanonicalName() {
-        if (!isQualified())
-            return getUnqualifiedName();
-
-        String packageName = getLocalPackageName();
-        if (packageName == null) {
-            packageName = "";
-        }
-
-        PsiFile file = getContainingFile();
-        if (file == null || !(file instanceof GoFile)) {
-            return getUnqualifiedName();
-        }
-        GoFile goFile = (GoFile) file;
-
-        GoImportDeclarations[] goImportDeclarations = goFile.getImportDeclarations();
-        for (GoImportDeclarations importDeclarations : goImportDeclarations) {
-            for (GoImportDeclaration importDeclaration : importDeclarations.getDeclarations()) {
-                if (importDeclaration.getPackageAlias().toLowerCase()
-                        .equals(packageName.toLowerCase())) {
-                    GoLiteralString importPath = importDeclaration.getImportPath();
-                    if (importPath != null)
-                        return String.format("%s:%s",
-                                importPath.getValue(),
-                                getUnqualifiedName());
-                }
-            }
-        }
-
-        return getName();
+        return getUnqualifiedName();
     }
 
     @Override

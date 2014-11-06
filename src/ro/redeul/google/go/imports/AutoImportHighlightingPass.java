@@ -108,7 +108,7 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
             }
 
             // packages exist
-            String expectedPackage = id.isQualified() ? id.getLocalPackageName() : id.getText();
+            String expectedPackage = id.getText();
             List<String> sdkPackages = getPackagesByName(
                     namesCache.getSdkPackages(), expectedPackage);
             List<String> projectPackages = getPackagesByName(
@@ -137,7 +137,7 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
             return isTheFirstChild && parent.getParent() instanceof GoSelectorExpression;
         } else if (parent instanceof GoPsiTypeName) {
             // package usage in type name
-            return id.isQualified();
+            return false;
         }
         return false;
     }
@@ -248,12 +248,6 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
                 GoLiteralIdentifier identifier = data.identifier;
                 int start = identifier.getTextOffset();
                 int end = identifier.getTextRange().getEndOffset();
-                if (identifier.isQualified()) {
-                    String localPackageName = identifier.getLocalPackageName();
-                    if (localPackageName != null) {
-                        end = start + localPackageName.length();
-                    }
-                }
 
                 HintManager.getInstance()
                            .showQuestionHint(editor, importMessage, start, end,

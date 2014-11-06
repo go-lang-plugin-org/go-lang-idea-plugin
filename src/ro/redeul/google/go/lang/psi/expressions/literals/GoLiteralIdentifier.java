@@ -20,8 +20,6 @@ public interface GoLiteralIdentifier extends GoLiteral<String>,
 
     boolean isNil();
 
-    boolean isQualified();
-
     String getUnqualifiedName();
 
     @Nullable

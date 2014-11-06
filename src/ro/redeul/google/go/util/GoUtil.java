@@ -182,9 +182,6 @@ public class GoUtil {
         if (!(literal instanceof GoLiteralIdentifier))
             return false;
 
-        if (((GoLiteralIdentifier) literal).isQualified())
-            return false;
-
         if (!psiIsA(e.getParent(), GoCallOrConvExpression.class))
             return false;
 
