@@ -7,7 +7,6 @@ import ro.redeul.google.go.lang.psi.resolve.ReferenceSolvingVisitor;
 import ro.redeul.google.go.lang.psi.resolve.VisitingReferenceSolver;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 
 public class PackageSymbolSolver extends VisitingReferenceSolver<PackageSymbolReference, PackageSymbolSolver> {
@@ -47,7 +46,7 @@ public class PackageSymbolSolver extends VisitingReferenceSolver<PackageSymbolRe
 
             boolean isReferenceTo(GoConstDeclaration constDeclaration) {
                 for (GoLiteralIdentifier identifier : constDeclaration.getIdentifiers())
-                    if (matchNames(reference.name(), identifier.getUnqualifiedName()))
+                    if (matchNames(reference.name(), identifier.getName()))
                         return true;
 
                 return false;
@@ -55,7 +54,7 @@ public class PackageSymbolSolver extends VisitingReferenceSolver<PackageSymbolRe
 
             boolean isReferenceTo(GoVarDeclaration varDeclaration) {
                 for (GoLiteralIdentifier identifier : varDeclaration.getIdentifiers())
-                    if (matchNames(reference.name(), identifier.getUnqualifiedName()))
+                    if (matchNames(reference.name(), identifier.getName()))
                         return true;
 
                 return false;

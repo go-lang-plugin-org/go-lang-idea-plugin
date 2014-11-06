@@ -2,10 +2,7 @@ package ro.redeul.google.go.lang.psi.impl.expressions.literals;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.patterns.ElementPattern;
-import com.intellij.patterns.PlatformPatterns;
-import com.intellij.patterns.StandardPatterns;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
@@ -13,12 +10,9 @@ import com.intellij.psi.search.SearchScope;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.packages.GoPackages;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
-import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeElement;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
@@ -43,7 +37,6 @@ import java.util.List;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.or;
 import static com.intellij.patterns.StandardPatterns.string;
-import static ro.redeul.google.go.lang.lexer.GoTokenTypes.mIDENT;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.FOR_WITH_CLAUSES_STATEMENT;
 import static ro.redeul.google.go.lang.parser.GoElementTypes.FOR_WITH_RANGE_STATEMENT;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getGlobalElementSearchScope;
@@ -101,11 +94,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
     @Override
     @NotNull
     public String getName() {
-        if (isQualified()) {
-            return getLocalPackageName() + "." + getUnqualifiedName();
-        }
-
-        return getUnqualifiedName();
+        return getText();
     }
 
     @Override
@@ -333,63 +322,6 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
     @Override
     public PsiElement getNameIdentifier() {
         return this;
-    }
-
-    @Override
-    // TODO: delete this
-    public boolean isQualified() {
-        return findChildByType(GoTokenTypes.oDOT) != null;
-    }
-
-    @Override
-    @NotNull
-    public String getUnqualifiedName() {
-
-        List<PsiElement> tokens = findChildrenByType(mIDENT);
-        if (tokens.size() == 2)
-            return tokens.get(1).getText();
-
-        return tokens.size() > 0 ? tokens.get(0).getText() : "";
-    }
-
-    @Override
-    // TODO: check to see why this is needed
-    public String getLocalPackageName() {
-        return findChildrenByType(GoTokenTypes.mIDENT).get(0).getText();
-    }
-
-    @NotNull
-    @Override
-    public String getCanonicalName() {
-        if (!isQualified())
-            return getUnqualifiedName();
-
-        String packageName = getLocalPackageName();
-        if (packageName == null) {
-            packageName = "";
-        }
-
-        PsiFile file = getContainingFile();
-        if (file == null || !(file instanceof GoFile)) {
-            return getUnqualifiedName();
-        }
-        GoFile goFile = (GoFile) file;
-
-        GoImportDeclarations[] goImportDeclarations = goFile.getImportDeclarations();
-        for (GoImportDeclarations importDeclarations : goImportDeclarations) {
-            for (GoImportDeclaration importDeclaration : importDeclarations.getDeclarations()) {
-                if (importDeclaration.getPackageAlias().toLowerCase()
-                        .equals(packageName.toLowerCase())) {
-                    GoLiteralString importPath = importDeclaration.getImportPath();
-                    if (importPath != null)
-                        return String.format("%s:%s",
-                                importPath.getValue(),
-                                getUnqualifiedName());
-                }
-            }
-        }
-
-        return getName();
     }
 
     @Override

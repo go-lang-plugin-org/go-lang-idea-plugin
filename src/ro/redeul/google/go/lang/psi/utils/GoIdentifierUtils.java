@@ -4,7 +4,6 @@ import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;

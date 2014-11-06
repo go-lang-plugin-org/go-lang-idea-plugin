@@ -1,8 +1,5 @@
 package ro.redeul.google.go.resolve;
 
-import org.junit.Ignore;
-import org.junit.Test;
-
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
  * <p/>

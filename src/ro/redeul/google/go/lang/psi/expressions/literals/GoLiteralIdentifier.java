@@ -1,8 +1,6 @@
 package ro.redeul.google.go.lang.psi.expressions.literals;
 
 import com.intellij.psi.PsiNameIdentifierOwner;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -19,16 +17,6 @@ public interface GoLiteralIdentifier extends GoLiteral<String>,
     boolean isIota();
 
     boolean isNil();
-
-    boolean isQualified();
-
-    String getUnqualifiedName();
-
-    @Nullable
-    String getLocalPackageName();
-
-    @NotNull
-    String getCanonicalName();
 
     Integer getIotaValue();
 

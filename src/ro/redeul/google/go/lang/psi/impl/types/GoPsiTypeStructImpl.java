@@ -5,11 +5,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.impl.PsiElementBase;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.scope.util.PsiScopesUtil;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.impl.GoPsiPackagedElementBase;
 import ro.redeul.google.go.lang.psi.impl.types.struct.PromotedFieldsDiscover;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
@@ -19,7 +16,6 @@ import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructPromotedFields;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
-import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 import java.util.ArrayList;
@@ -170,7 +166,7 @@ public class GoPsiTypeStructImpl extends GoPsiTypeImpl implements
                 for (int j = 0; j < identifiers.length; j++) {
                     GoLiteralIdentifier identifier = identifiers[j];
                     GoLiteralIdentifier otherIdentifier = otherIdentifiers[j];
-                    if (!identifier.getUnqualifiedName().equals(otherIdentifier.getUnqualifiedName()))
+                    if (!identifier.getName().equals(otherIdentifier.getName()))
                         return false;
                     if (!field.getType().isIdentical(otherField.getType()))
                         return false;

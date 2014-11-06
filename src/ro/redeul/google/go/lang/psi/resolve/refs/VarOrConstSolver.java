@@ -1,7 +1,5 @@
 package ro.redeul.google.go.lang.psi.resolve.refs;
 
-import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
@@ -13,7 +11,6 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
-import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 
 public class VarOrConstSolver extends VisitingReferenceSolver<VarOrConstReference, VarOrConstSolver> {
 

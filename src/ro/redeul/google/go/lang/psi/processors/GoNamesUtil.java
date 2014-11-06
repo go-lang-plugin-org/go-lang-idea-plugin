@@ -1,9 +1,5 @@
 package ro.redeul.google.go.lang.psi.processors;
 
-import com.google.common.collect.ImmutableSet;
-
-import java.util.Set;
-
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
  * <p/>

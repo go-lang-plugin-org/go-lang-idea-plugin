@@ -133,7 +133,7 @@ public class ShadowedDuringReturnInspection extends AbstractWholeGoFileInspectio
             ArrayList<String> output = new ArrayList<String>();
             for(GoVarDeclaration varDeclaration: currentShadowedVarDeclarationSet){
                 for(GoLiteralIdentifier ids : varDeclaration.getIdentifiers()){
-                    output.add(ids.getCanonicalName());
+                    output.add(ids.getName());
                 }
             }
             return output;

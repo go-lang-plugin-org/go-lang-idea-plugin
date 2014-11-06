@@ -78,7 +78,7 @@ public class GoConfigurableForm {
             return true;
         }
 
-        if (settingsBean.goimportsPath != goimportsPath.getText()) {
+        if (settingsBean.goimportsPath.equals(goimportsPath.getText())) {
             return true;
         }
 

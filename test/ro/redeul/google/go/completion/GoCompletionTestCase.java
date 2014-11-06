@@ -3,7 +3,6 @@ package ro.redeul.google.go.completion;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.newvfs.impl.VfsRootAccess;
 import com.intellij.psi.PsiFile;
 import org.junit.Ignore;
 import ro.redeul.google.go.GoLightCodeInsightFixtureTestCase;
@@ -11,8 +10,6 @@ import ro.redeul.google.go.GoLightCodeInsightFixtureTestCase;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 public abstract class GoCompletionTestCase extends GoLightCodeInsightFixtureTestCase {

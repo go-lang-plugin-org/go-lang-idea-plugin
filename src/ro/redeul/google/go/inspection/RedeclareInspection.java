@@ -52,14 +52,14 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
                     for(GoVarDeclarations declarations:file1.getGlobalVariables()){
                         for(GoVarDeclaration declaration: declarations.getDeclarations()) {
                             for (GoLiteralIdentifier id : declaration.getIdentifiers()) {
-                                blockNameStack.peek().add(id.getUnqualifiedName());
+                                blockNameStack.peek().add(id.getName());
                             }
                         }
                     }
                     for(GoConstDeclarations declarations:file1.getConsts()){
                         for(GoConstDeclaration declaration: declarations.getDeclarations()) {
                             for (GoLiteralIdentifier id : declaration.getIdentifiers()) {
-                                blockNameStack.peek().add(id.getUnqualifiedName());
+                                blockNameStack.peek().add(id.getName());
                             }
                         }
                     }
@@ -229,7 +229,7 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
             public void visitConstDeclaration(GoConstDeclaration declaration) {
                 GoLiteralIdentifier[] ids = declaration.getIdentifiers();
                 for(GoLiteralIdentifier id: ids){
-                    nameCheck(id,id.getUnqualifiedName(),result);
+                    nameCheck(id,id.getName(),result);
                 }
                 visitElement(declaration);
             }
@@ -238,7 +238,7 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
             public void visitVarDeclaration(GoVarDeclaration declaration) {
                 GoLiteralIdentifier[] ids = declaration.getIdentifiers();
                 for(GoLiteralIdentifier id: ids){
-                    nameCheck(id,id.getUnqualifiedName(),result);
+                    nameCheck(id,id.getName(),result);
                 }
                 visitElement(declaration);
             }
@@ -248,9 +248,9 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
                 GoLiteralIdentifier[] ids = declaration.getIdentifiers();
                 boolean isAllRepeat = true;
                 for(GoLiteralIdentifier id: ids){
-                    if (!blockNameStack.peek().contains(id.getUnqualifiedName())) {
+                    if (!blockNameStack.peek().contains(id.getName())) {
                         isAllRepeat = false;
-                        blockNameStack.peek().add(id.getUnqualifiedName());
+                        blockNameStack.peek().add(id.getName());
                     }
                 }
                 if (isAllRepeat){

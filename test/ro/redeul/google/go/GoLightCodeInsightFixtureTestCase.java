@@ -1,7 +1,6 @@
 package ro.redeul.google.go;
 
 import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.roots.ContentEntry;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.ModuleRootManager;
@@ -15,7 +14,6 @@ import ro.redeul.google.go.util.GoTestUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
 
 @Ignore
 public abstract class GoLightCodeInsightFixtureTestCase
