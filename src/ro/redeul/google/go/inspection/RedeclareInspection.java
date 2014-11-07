@@ -251,6 +251,9 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
                 GoLiteralIdentifier[] ids = declaration.getIdentifiers();
                 boolean isAllRepeat = true;
                 for (GoLiteralIdentifier id : ids) {
+                    if (id.isBlank()) {
+                        continue;
+                    }
                     String idName = id.getName();
                     if (!blockNameStack.peek().contains(idName)) {
                         isAllRepeat = false;
