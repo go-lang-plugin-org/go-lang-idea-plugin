@@ -26,4 +26,5 @@ public class RedeclareInspectionTest extends GoInspectionTestCase {
 
     public void testFunction() throws Exception{ doTest(); }
 
+    public void testShortVarDeclaration() throws Exception{ doTest(); }
 }
