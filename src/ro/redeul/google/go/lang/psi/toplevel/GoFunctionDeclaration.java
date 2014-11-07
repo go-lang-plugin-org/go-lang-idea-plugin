@@ -1,10 +1,12 @@
 package ro.redeul.google.go.lang.psi.toplevel;
 
 import com.intellij.psi.PsiNameIdentifierOwner;
+import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
+import ro.redeul.google.go.lang.psi.typing.GoType;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -15,9 +17,15 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
 public interface GoFunctionDeclaration extends GoPsiElement, PsiNameIdentifierOwner,
                                                GoPsiTypeFunction {
 
+    @NotNull
+    @Override
+    String getName();
+
     String getFunctionName();
 
     boolean isMain();
+
+    boolean isInit();
 
     GoBlockStatement getBlock();
 
@@ -26,5 +34,15 @@ public interface GoFunctionDeclaration extends GoPsiElement, PsiNameIdentifierOw
 
     GoFunctionParameter[] getResults();
 
+    /**
+     * This will return an array of types for each positional parameter regardless of how they are defined
+     */
+//    @NotNull
+//    GoType[] getParameterTypes();
+
+//    @NotNull
+//    GoType[] getReturnTypes();
+
+    @NotNull
     GoPsiType[] getReturnType();
 }

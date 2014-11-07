@@ -19,6 +19,7 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
+import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
@@ -33,6 +34,9 @@ public class GoLiteralFunctionImpl extends GoPsiElementBase
     public GoLiteralFunctionImpl(@NotNull ASTNode node) {
         super(node);
     }
+
+    @Override
+    public boolean isInit() { return false; }
 
     @NotNull
     @Override
@@ -153,6 +157,7 @@ public class GoLiteralFunctionImpl extends GoPsiElementBase
     }
 
     @Override
+    @NotNull
     public GoPsiType[] getReturnType() {
         List<GoPsiType> types = new ArrayList<GoPsiType>();
 

@@ -24,6 +24,7 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
+import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.util.GoUtil;
@@ -63,11 +64,13 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
         super(node);
     }
 
+    @NotNull
     public String getFunctionName() {
         GoLiteralIdentifier nameIdentifier = getNameIdentifier();
         return nameIdentifier != null ? nameIdentifier.getName() : "";
     }
 
+    @NotNull
     @Override
     public String getName() {
         return getFunctionName();
@@ -81,6 +84,11 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
 
     public boolean isMain() {
         return getFunctionName().equals("main");
+    }
+
+    @Override
+    public boolean isInit() {
+        return getFunctionName().equals("init");
     }
 
     public GoBlockStatement getBlock() {
@@ -107,6 +115,7 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
     }
 
     @Override
+    @NotNull
     public GoPsiType[] getReturnType() {
 
         List<GoPsiType> types = new ArrayList<GoPsiType>();

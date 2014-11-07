@@ -2,7 +2,9 @@ package ro.redeul.google.go.inspection;
 
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiNamedElement;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
@@ -36,49 +38,50 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
         new GoRecursiveElementVisitor() {
             private Stack<HashSet<String>> blockNameStack = new Stack<HashSet<String>>();
             private HashSet<String> methodNameSet = new HashSet<String>();
+
             @Override
             public void visitFile(GoFile file) {
                 blockNameStack.push(new HashSet<String>());
                 methodNameSet = new HashSet<String>();
                 //add names from other files in this package.
                 Collection<GoFile> packageFiles = GoNamesCache.getInstance(file.getProject()).getFilesByPackageImportPath(file.getFullPackageName());
-                for(GoFile file1:packageFiles){
-                    if (file1==file){
+                for (GoFile file1 : packageFiles) {
+                    if (file1 == file) {
                         continue;
                     }
-                    for(GoFunctionDeclaration declaration:file1.getFunctions()){
+                    for (GoFunctionDeclaration declaration : file1.getFunctions()) {
                         blockNameStack.peek().add(declaration.getName());
                     }
-                    for(GoVarDeclarations declarations:file1.getGlobalVariables()){
-                        for(GoVarDeclaration declaration: declarations.getDeclarations()) {
+                    for (GoVarDeclarations declarations : file1.getGlobalVariables()) {
+                        for (GoVarDeclaration declaration : declarations.getDeclarations()) {
                             for (GoLiteralIdentifier id : declaration.getIdentifiers()) {
                                 blockNameStack.peek().add(id.getName());
                             }
                         }
                     }
-                    for(GoConstDeclarations declarations:file1.getConsts()){
-                        for(GoConstDeclaration declaration: declarations.getDeclarations()) {
+                    for (GoConstDeclarations declarations : file1.getConsts()) {
+                        for (GoConstDeclaration declaration : declarations.getDeclarations()) {
                             for (GoLiteralIdentifier id : declaration.getIdentifiers()) {
                                 blockNameStack.peek().add(id.getName());
                             }
                         }
                     }
-                    for(GoTypeDeclaration declaration:file1.getTypeDeclarations()){
-                        for(GoTypeSpec spec: declaration.getTypeSpecs()) {
+                    for (GoTypeDeclaration declaration : file1.getTypeDeclarations()) {
+                        for (GoTypeSpec spec : declaration.getTypeSpecs()) {
                             GoTypeNameDeclaration names = spec.getTypeNameDeclaration();
-                            if (names==null){
+                            if (names == null) {
                                 continue;
                             }
                             blockNameStack.peek().add(names.getName());
                         }
                     }
-                    for(GoMethodDeclaration declaration:file1.getMethods()){
-                        if (declaration.getMethodReceiver()==null ||
-                                declaration.getMethodReceiver().getType()==null){
+                    for (GoMethodDeclaration declaration : file1.getMethods()) {
+                        if (declaration.getMethodReceiver() == null ||
+                                declaration.getMethodReceiver().getType() == null) {
                             return;
                         }
-                        String name = declaration.getMethodReceiver().getType().getText()+"."+declaration.getName();
-                        if (name.startsWith("*")){
+                        String name = declaration.getMethodReceiver().getType().getText() + "." + declaration.getName();
+                        if (name.startsWith("*")) {
                             name = name.substring(1);
                         }
                         methodNameSet.add(name);
@@ -87,8 +90,9 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
                 visitElement(file);
                 blockNameStack.pop();
             }
+
             @Override
-            public void visitIfStatement(GoIfStatement element){ visitSampleBlock(element); }
+            public void visitIfStatement(GoIfStatement element) { visitSampleBlock(element); }
 
             @Override
             public void visitForWithRange(GoForWithRangeStatement element) { visitSampleBlock(element); }
@@ -125,18 +129,20 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
 
             @Override
             public void visitSelectCommClauseRecv(GoSelectCommClauseRecv element) { visitSampleBlock(element); }
+
             @Override
             public void visitSelectCommClauseSend(GoSelectCommClauseSend element) { visitSampleBlock(element); }
 
             @Override
             public void visitBlockStatement(GoBlockStatement statement) {
-                if (statement.getParent() instanceof GoFunctionDeclaration){
+                if (statement.getParent() instanceof GoFunctionDeclaration) {
                     visitElement(statement);
-                }else {
+                } else {
                     visitSampleBlock(statement);
                 }
             }
-            private void visitSampleBlock(GoPsiElement element){
+
+            private void visitSampleBlock(GoPsiElement element) {
                 blockNameStack.push(new HashSet<String>());
                 visitElement(element);
                 blockNameStack.pop();
@@ -144,32 +150,32 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
 
             @Override
             public void visitMethodDeclaration(GoMethodDeclaration declaration) {
-                if (declaration.getMethodReceiver()==null ||
-                        declaration.getMethodReceiver().getType()==null){
+                if (declaration.getMethodReceiver() == null ||
+                        declaration.getMethodReceiver().getType() == null) {
                     visitElement(declaration);
                     return;
                 }
                 blockNameStack.push(new HashSet<String>());
                 GoLiteralIdentifier id = declaration.getMethodReceiver().getIdentifier();
-                nameCheck(id,id.getName(),result);
-                for(GoFunctionParameter parameter: declaration.getParameters()){
-                    for(GoLiteralIdentifier paramterId: parameter.getIdentifiers()){
-                        nameCheck(paramterId,paramterId.getName(),result);
+                nameCheck(id, result);
+                for (GoFunctionParameter parameter : declaration.getParameters()) {
+                    for (GoLiteralIdentifier paramterId : parameter.getIdentifiers()) {
+                        nameCheck(paramterId, result);
                     }
                 }
-                for(GoFunctionParameter parameter: declaration.getResults()){
-                    for(GoLiteralIdentifier paramterId: parameter.getIdentifiers()){
-                        nameCheck(paramterId,paramterId.getName(),result);
+                for (GoFunctionParameter parameter : declaration.getResults()) {
+                    for (GoLiteralIdentifier paramterId : parameter.getIdentifiers()) {
+                        nameCheck(paramterId, result);
                     }
                 }
 
                 visitElement(declaration);
                 blockNameStack.pop();
-                String name = declaration.getMethodReceiver().getType().getText()+"."+declaration.getName();
-                if (name.startsWith("*")){
+                String name = declaration.getMethodReceiver().getType().getText() + "." + declaration.getName();
+                if (name.startsWith("*")) {
                     name = name.substring(1);
                 }
-                if (methodNameSet.contains(name)){
+                if (methodNameSet.contains(name)) {
                     result.addProblem(declaration.getNameIdentifier(), GoBundle.message("error.redeclare"),
                             ProblemHighlightType.GENERIC_ERROR);
                     return;
@@ -180,37 +186,34 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
             @Override
             public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
                 blockNameStack.push(new HashSet<String>());
-                for(GoFunctionParameter parameter: declaration.getParameters()){
-                    for(GoLiteralIdentifier paramterId: parameter.getIdentifiers()){
-                        nameCheck(paramterId,paramterId.getName(),result);
+                for (GoFunctionParameter parameter : declaration.getParameters()) {
+                    for (GoLiteralIdentifier parameterIdentifier : parameter.getIdentifiers()) {
+                        nameCheck(parameterIdentifier, result);
                     }
                 }
-                for(GoFunctionParameter parameter: declaration.getResults()){
-                    for(GoLiteralIdentifier paramterId: parameter.getIdentifiers()){
-                        nameCheck(paramterId,paramterId.getName(),result);
+                for (GoFunctionParameter parameter : declaration.getResults()) {
+                    for (GoLiteralIdentifier parameterIdentifier : parameter.getIdentifiers()) {
+                        nameCheck(parameterIdentifier, result);
                     }
                 }
 
                 visitElement(declaration);
                 blockNameStack.pop();
-                String name = declaration.getName();
-                if (name==null || name.equals("init")){
-                    return;
-                }
-                nameCheck(declaration.getNameIdentifier(), name, result);
+                if (!declaration.isInit())
+                    nameCheck(declaration.getNameIdentifier(), declaration.getName(), result);
             }
 
             @Override
             public void visitFunctionLiteral(GoLiteralFunction declaration) {
                 blockNameStack.push(new HashSet<String>());
-                for(GoFunctionParameter parameter: declaration.getParameters()){
-                    for(GoLiteralIdentifier paramterId: parameter.getIdentifiers()){
-                        nameCheck(paramterId, paramterId.getName(),result);
+                for (GoFunctionParameter parameter : declaration.getParameters()) {
+                    for (GoLiteralIdentifier parameterIdentifier : parameter.getIdentifiers()) {
+                        nameCheck(parameterIdentifier, result);
                     }
                 }
-                for(GoFunctionParameter parameter: declaration.getResults()){
-                    for(GoLiteralIdentifier paramterId: parameter.getIdentifiers()){
-                        nameCheck(paramterId,paramterId.getName(),result);
+                for (GoFunctionParameter parameter : declaration.getResults()) {
+                    for (GoLiteralIdentifier parameterIdentifier : parameter.getIdentifiers()) {
+                        nameCheck(parameterIdentifier, result);
                     }
                 }
                 visitElement(declaration);
@@ -228,8 +231,8 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
             @Override
             public void visitConstDeclaration(GoConstDeclaration declaration) {
                 GoLiteralIdentifier[] ids = declaration.getIdentifiers();
-                for(GoLiteralIdentifier id: ids){
-                    nameCheck(id,id.getName(),result);
+                for (GoLiteralIdentifier id : ids) {
+                    nameCheck(id, result);
                 }
                 visitElement(declaration);
             }
@@ -237,8 +240,8 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
             @Override
             public void visitVarDeclaration(GoVarDeclaration declaration) {
                 GoLiteralIdentifier[] ids = declaration.getIdentifiers();
-                for(GoLiteralIdentifier id: ids){
-                    nameCheck(id,id.getName(),result);
+                for (GoLiteralIdentifier id : ids) {
+                    nameCheck(id, result);
                 }
                 visitElement(declaration);
             }
@@ -247,23 +250,29 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
             public void visitShortVarDeclaration(GoShortVarDeclaration declaration) {
                 GoLiteralIdentifier[] ids = declaration.getIdentifiers();
                 boolean isAllRepeat = true;
-                for(GoLiteralIdentifier id: ids){
-                    if (!blockNameStack.peek().contains(id.getName())) {
+                for (GoLiteralIdentifier id : ids) {
+                    String idName = id.getName();
+                    if (!blockNameStack.peek().contains(idName)) {
                         isAllRepeat = false;
-                        blockNameStack.peek().add(id.getName());
+                        blockNameStack.peek().add(idName);
                     }
                 }
-                if (isAllRepeat){
-                    result.addProblem(ids[0],ids[ids.length-1], GoBundle.message("error.no.new.variables.on.left.side"),
+                if (isAllRepeat) {
+                    result.addProblem(ids[0], ids[ids.length - 1], GoBundle.message("error.no.new.variables.on.left.side"),
                             ProblemHighlightType.GENERIC_ERROR);
                 }
                 visitElement(declaration);
             }
-            private void nameCheck(PsiElement errorElement,String name,InspectionResult result){
-                if (name.equals("_")){
+
+            private void nameCheck(@Nullable GoLiteralIdentifier identifier, InspectionResult result) {
+                if (identifier == null || identifier.isBlank())
                     return;
-                }
-                if (blockNameStack.peek().contains(name)){
+
+                nameCheck(identifier, identifier.getName(), result);
+            }
+
+            private void nameCheck(PsiElement errorElement, String name, InspectionResult result) {
+                if (blockNameStack.peek().contains(name)) {
                     result.addProblem(errorElement, GoBundle.message("error.redeclare"),
                             ProblemHighlightType.GENERIC_ERROR);
                 }
