@@ -488,7 +488,7 @@ public class GoUtil {
         }
 
         @Override
-        public boolean execute(@NotNull PsiElement element, ResolveState state) {
+        public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state) {
             return !element.getText().equals(var);
         }
 
@@ -499,7 +499,7 @@ public class GoUtil {
         }
 
         @Override
-        public void handleEvent(Event event, @Nullable Object associated) {
+        public void handleEvent(@NotNull Event event, @Nullable Object associated) {
 
         }
     }

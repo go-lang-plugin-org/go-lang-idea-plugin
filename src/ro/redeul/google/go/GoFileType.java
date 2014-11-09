@@ -45,7 +45,7 @@ public class GoFileType extends LanguageFileType {
     }
 
     @Override
-    public String getCharset(@NotNull VirtualFile file, byte[] content) {
+    public String getCharset(@NotNull VirtualFile file, @NotNull byte[] content) {
         return CharsetToolkit.UTF8;
     }
 

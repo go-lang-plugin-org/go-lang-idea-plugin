@@ -242,4 +242,9 @@ public class GoPackageImpl extends PsiElementBase implements GoPackage {
     public GoPsiElement getReferenceContext() {
         return this;
     }
+
+    @Override
+    public String toString(){
+        return "GoPackageImpl("+getImportPath()+")";
+    }
 }
