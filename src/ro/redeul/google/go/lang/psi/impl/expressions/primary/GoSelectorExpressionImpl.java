@@ -7,7 +7,9 @@ import com.intellij.psi.PsiReference;
 import com.intellij.util.Function;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mozilla.javascript.ast.VariableDeclaration;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
+import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
@@ -78,6 +80,11 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
                             if (functionDeclaration != null) {
                                 return new GoType[]{
                                         GoTypes.fromPsiType(functionDeclaration)
+                                };
+                            }
+                            if (target.getParent() instanceof GoVarDeclaration){
+                                return new GoType[]{
+                                        ((GoVarDeclaration)target.getParent()).getIdentifierType((GoLiteralIdentifier)target)
                                 };
                             }
                         }

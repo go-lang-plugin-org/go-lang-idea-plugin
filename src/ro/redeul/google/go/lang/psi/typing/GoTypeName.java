@@ -50,4 +50,9 @@ public class GoTypeName extends GoTypePsiBacked<GoPsiTypeName, GoUnderlyingType>
     public GoType getDefinition() {
         return definition;
     }
+
+    @Override
+    public String toString(){
+        return "GoTypeName("+getName()+")";
+    }
 }

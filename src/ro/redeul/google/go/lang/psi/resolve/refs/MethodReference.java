@@ -1,7 +1,9 @@
 package ro.redeul.google.go.lang.psi.resolve.refs;
 
+import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.packages.GoPackages;
+import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.processors.ResolveStates;
@@ -42,8 +44,13 @@ public class MethodReference extends ReferenceWithSolver<GoLiteralIdentifier, Me
 
     @Override
     public void walkSolver(MethodSolver solver) {
-
-        GoPackage goPackage = GoPackages.getTargetPackageIfDifferent(getElement(), type.getPsiType());
+        PsiElement toFindPackagePsi;
+        if (type.getDefinition() instanceof GoTypeName){
+            toFindPackagePsi = ((GoTypeName) type.getDefinition()).getPsiType();
+        }else{
+            toFindPackagePsi = type.getPsiType();
+        }
+        GoPackage goPackage = GoPackages.getTargetPackageIfDifferent(getElement(), toFindPackagePsi);
 
         if ( goPackage != null) {
             GoPsiScopesUtil.walkPackage(solver, getElement(), goPackage);
