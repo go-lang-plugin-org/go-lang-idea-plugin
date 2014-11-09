@@ -83,8 +83,12 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
                                 };
                             }
                             if (target.getParent() instanceof GoVarDeclaration){
+                                GoType output = ((GoVarDeclaration)target.getParent()).getIdentifierType((GoLiteralIdentifier)target);
+                                if (output==null){
+                                    return GoType.EMPTY_ARRAY;
+                                }
                                 return new GoType[]{
-                                        ((GoVarDeclaration)target.getParent()).getIdentifierType((GoLiteralIdentifier)target)
+                                        output
                                 };
                             }
                         }

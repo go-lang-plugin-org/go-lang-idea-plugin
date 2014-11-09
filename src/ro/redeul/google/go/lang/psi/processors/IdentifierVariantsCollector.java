@@ -41,7 +41,7 @@ class IdentifierVariantsCollector extends BaseScopeProcessor{
     private final Set<String> names = new HashSet<String>();
 
     @Override
-    public boolean execute(@NotNull PsiElement element, ResolveState state) {
+    public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state) {
 
         if ( element instanceof GoFunctionDeclaration && ! (element instanceof GoMethodDeclaration) ) {
             collectFunctionName((GoFunctionDeclaration) element, state);

@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.psi.typing;
 
 import com.intellij.util.Function;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPackage;
@@ -87,6 +88,7 @@ public class GoTypes {
         return cachedTypes.get(builtinType);
     }
 
+    @NotNull
     public static GoType fromPsiType(final GoPsiType psiType) {
         if (psiType == null)
             return GoType.Unknown;

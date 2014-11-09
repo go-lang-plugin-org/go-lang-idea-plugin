@@ -25,7 +25,7 @@ class GoExpressionTypeResolver extends BaseScopeProcessor {
     }
 
     @Override
-    public boolean execute(@NotNull PsiElement element, ResolveState state) {
+    public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state) {
         if ( element instanceof GoFunctionDeclaration && ! (element instanceof GoMethodDeclaration) ) {
 
             GoFunctionDeclaration function = (GoFunctionDeclaration) element;
