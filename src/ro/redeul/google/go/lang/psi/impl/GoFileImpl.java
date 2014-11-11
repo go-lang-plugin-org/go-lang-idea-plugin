@@ -231,7 +231,8 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
                 return false;
 
             do {
-                child = child.getPrevSibling();
+                if ( child != null)
+                    child = child.getPrevSibling();
             } while (child != null && (child instanceof PsiWhiteSpace || child instanceof PsiComment));
         }
 
