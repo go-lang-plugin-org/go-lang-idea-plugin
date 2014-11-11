@@ -31,7 +31,11 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase
 
     @Override
     protected GoType[] resolveTypes() {
-        GoType baseCallType[] = getBaseExpression().getType();
+        GoPrimaryExpression baseExpr = getBaseExpression();
+        if ( baseExpr == null )
+            return GoType.EMPTY_ARRAY;
+
+        GoType baseCallType[] = baseExpr.getType();
 
         return GoTypes.visitFirstType(baseCallType, new GoType.Visitor<GoType[]>(GoType.EMPTY_ARRAY) {
             @Override
