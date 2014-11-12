@@ -19,9 +19,6 @@ import ro.redeul.google.go.sdk.GoSdkUtil;
 import java.io.File;
 import java.util.Map;
 
-/**
- * Created by d3xter on 13.03.14.
- */
 public class GoVetRunner extends Task.Backgroundable {
     private static final Logger LOG = Logger.getInstance(GoVetRunner.class);
     private GoApplicationConfiguration goConfig;

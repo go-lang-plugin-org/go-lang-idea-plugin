@@ -3,8 +3,6 @@
 */
 package ro.redeul.google.go.completion;
 
-import org.junit.Ignore;
-
 import java.io.IOException;
 
 public class GoGeneralCompletionTestCase extends GoCompletionTestCase {

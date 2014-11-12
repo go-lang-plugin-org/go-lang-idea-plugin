@@ -4,6 +4,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ProjectRootManager;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
@@ -24,9 +25,10 @@ public class NewGAEDebugGroup extends DefaultActionGroup
             return;
         }
 
-        Sdk sdk = ProjectRootManager.getInstance(e.getProject()).getProjectSdk();
-        e.getPresentation().setVisible(debugEnabled &&
-                sdk != null &&
-                sdk.getSdkType() instanceof GoAppEngineSdkType);
+        Project project = e.getProject();
+        if ( project != null ) {
+            Sdk sdk = ProjectRootManager.getInstance(project).getProjectSdk();
+            e.getPresentation().setVisible(debugEnabled && sdk != null && sdk.getSdkType() instanceof GoAppEngineSdkType);
+        }
     }
 }

@@ -2,7 +2,6 @@ package ro.redeul.google.go.lang.psi.expressions.literals;
 
 import com.intellij.psi.PsiNameIdentifierOwner;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.math.BigInteger;
 

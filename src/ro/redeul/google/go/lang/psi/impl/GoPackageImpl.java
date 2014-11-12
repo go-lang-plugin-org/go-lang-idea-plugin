@@ -178,13 +178,8 @@ public class GoPackageImpl extends PsiElementBase implements GoPackage {
 
     @NotNull
     public String getName() {
-
-        // fix this to handle test packages and other things.
-        for (GoFile file : getFiles()) {
-            return file.getPackage().getPackageName();
-        }
-
-        return "";
+        GoFile[] files = getFiles();
+        return files.length > 0 ? files[0].getPackage().getPackageName() : "";
     }
 
     @Override

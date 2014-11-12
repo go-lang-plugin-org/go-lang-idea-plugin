@@ -16,9 +16,6 @@ import ro.redeul.google.go.runner.GoApplicationConfiguration;
 
 import javax.swing.*;
 
-/**
- * Created by d3xter on 13.03.14.
- */
 public class GoVetTaskProvider extends BeforeRunTaskProvider<GoVetTask> {
     private static final Logger LOG = Logger.getInstance(GoVetTaskProvider.class);
     private final Key<GoVetTask> TaskID = new Key<GoVetTask>("GoVet");

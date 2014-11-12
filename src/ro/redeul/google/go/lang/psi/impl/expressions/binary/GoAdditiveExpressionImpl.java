@@ -50,7 +50,7 @@ public class GoAdditiveExpressionImpl extends GoBinaryExpressionImpl<Op> impleme
                 return GoType.Unknown;
 
 
-            return types.constant(GoTypeConstant.Kind.String, lString.concat(rString));
+            return GoTypes.constant(GoTypeConstant.Kind.String, lString.concat(rString));
         }
 
         if ( left.getKind() == GoTypeConstant.Kind.Complex || right.getKind() == GoTypeConstant.Kind.Complex ) {
@@ -62,9 +62,9 @@ public class GoAdditiveExpressionImpl extends GoBinaryExpressionImpl<Op> impleme
 
             switch (op()) {
                 case Plus:
-                    return types.constant(GoTypeConstant.Kind.Complex, leftValue.add(rightValue));
+                    return GoTypes.constant(GoTypeConstant.Kind.Complex, leftValue.add(rightValue));
                 case Minus:
-                    return types.constant(GoTypeConstant.Kind.Complex, leftValue.substract(rightValue));
+                    return GoTypes.constant(GoTypeConstant.Kind.Complex, leftValue.substract(rightValue));
                 default:
                     return GoType.Unknown;
             }
@@ -79,9 +79,9 @@ public class GoAdditiveExpressionImpl extends GoBinaryExpressionImpl<Op> impleme
 
             switch (op()){
                 case Plus:
-                    return types.constant(GoTypeConstant.Kind.Float, leftValue.add(rightValue));
+                    return GoTypes.constant(GoTypeConstant.Kind.Float, leftValue.add(rightValue));
                 case Minus:
-                    return types.constant(GoTypeConstant.Kind.Float, leftValue.subtract(rightValue));
+                    return GoTypes.constant(GoTypeConstant.Kind.Float, leftValue.subtract(rightValue));
                 default:
                     return GoType.Unknown;
             }
@@ -96,13 +96,13 @@ public class GoAdditiveExpressionImpl extends GoBinaryExpressionImpl<Op> impleme
 
             switch (op()){
                 case Plus:
-                    return types.constant(GoTypeConstant.Kind.Integer, leftValue.add(rightValue));
+                    return GoTypes.constant(GoTypeConstant.Kind.Integer, leftValue.add(rightValue));
                 case Minus:
-                    return types.constant(GoTypeConstant.Kind.Integer, leftValue.subtract(rightValue));
+                    return GoTypes.constant(GoTypeConstant.Kind.Integer, leftValue.subtract(rightValue));
                 case BitAnd:
-                    return types.constant(GoTypeConstant.Kind.Integer, leftValue.and(rightValue));
+                    return GoTypes.constant(GoTypeConstant.Kind.Integer, leftValue.and(rightValue));
                 case BitOr:
-                    return types.constant(GoTypeConstant.Kind.Integer, leftValue.or(rightValue));
+                    return GoTypes.constant(GoTypeConstant.Kind.Integer, leftValue.or(rightValue));
                 default:
                     return GoType.Unknown;
             }

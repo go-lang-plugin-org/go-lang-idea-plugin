@@ -55,11 +55,6 @@ public class GoTypeFunction
     }
 
     @Override
-    public boolean isAssignableFrom(GoType source) {
-        return super.isAssignableFrom(source);
-    }
-
-    @Override
     public String toString() {
         return String.format("func ... ");
     }

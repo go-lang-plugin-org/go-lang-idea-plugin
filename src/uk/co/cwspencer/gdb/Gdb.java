@@ -22,7 +22,7 @@ public class Gdb {
     private static final Logger m_log = Logger.getInstance("#uk.co.cwspencer.gdb.Gdb");
 
     // Size in KB for the buffer
-    private static Integer BUFFER_SIZE = 256 * 1024;
+    private static final int BUFFER_SIZE = 256 * 1024;
 
     /**
      * Interface for callbacks for results from completed GDB commands.

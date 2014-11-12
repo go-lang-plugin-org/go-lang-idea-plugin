@@ -1,6 +1,5 @@
 package ro.redeul.google.go.intentions.statements;
 
-import org.junit.Ignore;
 import ro.redeul.google.go.intentions.GoIntentionTestCase;
 
 public class CheckErrorIntentionTest extends GoIntentionTestCase {

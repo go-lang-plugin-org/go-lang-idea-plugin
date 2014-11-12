@@ -8,7 +8,6 @@ import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

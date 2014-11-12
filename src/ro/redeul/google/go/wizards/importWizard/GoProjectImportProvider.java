@@ -9,9 +9,6 @@ import com.intellij.projectImport.ProjectImportProvider;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.ide.GoModuleBuilder;
 
-/**
- * Created by sinz on 01.03.14.
- */
 public class GoProjectImportProvider extends ProjectImportProvider {
     protected GoProjectImportProvider(final GoProjectImportBuilder builder) {
         super(builder);

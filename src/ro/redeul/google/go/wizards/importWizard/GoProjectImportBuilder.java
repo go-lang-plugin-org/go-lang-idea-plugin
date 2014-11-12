@@ -24,9 +24,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by sinz on 01.03.14.
- */
 public class GoProjectImportBuilder extends ProjectImportBuilder<String> {
     private static final Logger LOG = Logger.getInstance(GoProjectImportBuilder.class);
     @NotNull

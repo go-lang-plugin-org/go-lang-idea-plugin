@@ -3,12 +3,9 @@ package ro.redeul.google.go.lang.psi.impl;
 import com.intellij.extapi.psi.StubBasedPsiElementBase;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.IncorrectOperationException;
-import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitorWithData;
@@ -39,7 +36,7 @@ public abstract class GoStubPsiElementBase<T extends StubElement> extends StubBa
     }
 
     @Override
-    public <T> T accept(GoElementVisitorWithData<T> visitor) {
+    public <Data> Data accept(GoElementVisitorWithData<Data> visitor) {
         accept((GoElementVisitor) visitor);
         return visitor.getData();
     }

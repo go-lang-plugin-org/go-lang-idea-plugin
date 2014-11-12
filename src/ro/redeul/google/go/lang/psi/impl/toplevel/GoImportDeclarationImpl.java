@@ -134,11 +134,6 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
     }
 
     @Override
-    public LookupElementBuilder getLookupPresentation(GoPsiElement child) {
-        return super.getLookupPresentation(child);
-    }
-
-    @Override
     public boolean isValidImport() {
         String importPathValue = null;
         GoLiteralString importPath = this.getImportPath();

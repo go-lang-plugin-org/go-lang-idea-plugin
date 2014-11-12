@@ -8,9 +8,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
- * Created by holgerfinger on 03.08.14.
- */
 public class GoModuleWizardStepPackageConfig extends ModuleWizardStep {
     private JTextField txtPackageURL;
     private JPanel panelGoPackageSettings;

@@ -8,9 +8,6 @@ import ro.redeul.google.go.ide.GoProjectSettings;
 
 import javax.swing.*;
 
-/**
- * Created by holgerfinger on 10.08.14.
- */
 public class GoModuleWizardProjectSettings extends ModuleWizardStep {
     private GoModuleBuilder moduleBuilder;
     private GoConfigurableForm form;

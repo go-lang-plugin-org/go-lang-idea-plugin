@@ -4,6 +4,6 @@ public interface GoMultiplicativeExpression extends GoBinaryExpression<GoMultipl
     public enum Op {
         None,
 
-        Mul, Quotient, Remainder, ShiftLeft, ShiftRight, BitAnd, BitClear;
+        Mul, Quotient, Remainder, ShiftLeft, ShiftRight, BitAnd, BitClear
     }
 }

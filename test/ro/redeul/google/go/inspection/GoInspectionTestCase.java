@@ -76,12 +76,6 @@ public abstract class GoInspectionTestCase
         }
     }
 
-    @Override
-    protected void tearDown() throws Exception {
-//        removeContentRoots();
-        super.tearDown();
-    }
-
     private void doTestWithOneFile(GoFile file) throws Exception {
 
         List<String> data = readInput(file.getText());

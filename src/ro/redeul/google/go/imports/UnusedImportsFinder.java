@@ -9,9 +9,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by bronze1man on 14-11-3.
- */
 public class UnusedImportsFinder {
     public static Collection<GoImportDeclaration> findUnusedImports(GoFile file) {
 

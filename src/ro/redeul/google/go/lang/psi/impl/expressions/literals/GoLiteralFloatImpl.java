@@ -4,14 +4,9 @@ import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFloat;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
-import ro.redeul.google.go.lang.psi.typing.GoType;
-import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -19,8 +14,7 @@ import java.util.Set;
  * Date: 6/2/11
  * Time: 3:44 AM
  */
-public class GoLiteralFloatImpl extends GoPsiElementBase
-        implements GoLiteralFloat {
+public class GoLiteralFloatImpl extends GoPsiElementBase implements GoLiteralFloat {
 
     public GoLiteralFloatImpl(@NotNull ASTNode node) {
         super(node);

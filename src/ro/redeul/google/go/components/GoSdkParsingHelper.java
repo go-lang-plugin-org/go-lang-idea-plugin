@@ -23,7 +23,6 @@ import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.sdk.GoSdkUtil;
-import ro.redeul.google.go.util.GoUtil;
 
 import java.util.*;
 

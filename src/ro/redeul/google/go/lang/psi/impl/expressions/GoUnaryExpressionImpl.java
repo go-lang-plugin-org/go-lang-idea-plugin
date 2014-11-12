@@ -4,14 +4,12 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoUnaryExpression;
 import ro.redeul.google.go.lang.psi.typing.*;
 import ro.redeul.google.go.lang.psi.utils.GoTokenSets;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.util.GoNumber;
 
 import java.math.BigDecimal;
@@ -85,11 +83,11 @@ public class GoUnaryExpressionImpl extends GoExpressionBase
                     case Plus:
                         return constant;
                     case Minus:
-                        return types().constant(GoTypeConstant.Kind.Integer, intValue.negate());
+                        return GoTypes.constant(GoTypeConstant.Kind.Integer, intValue.negate());
                     case Not:
-                        return types().constant(GoTypeConstant.Kind.Integer, intValue.not());
+                        return GoTypes.constant(GoTypeConstant.Kind.Integer, intValue.not());
                     case Xor:
-                        return types().constant(GoTypeConstant.Kind.Integer, intValue.not());
+                        return GoTypes.constant(GoTypeConstant.Kind.Integer, intValue.not());
                     default:
                         return GoType.Unknown;
                 }
@@ -103,7 +101,7 @@ public class GoUnaryExpressionImpl extends GoExpressionBase
                     case Plus:
                         return constant;
                     case Minus:
-                        return types().constant(GoTypeConstant.Kind.Float, decimalValue.negate());
+                        return GoTypes.constant(GoTypeConstant.Kind.Float, decimalValue.negate());
                     default:
                         return GoType.Unknown;
                 }
@@ -117,7 +115,7 @@ public class GoUnaryExpressionImpl extends GoExpressionBase
                     case Plus:
                         return constant;
                     case Minus:
-                        return types().constant(GoTypeConstant.Kind.Complex, complexValue.negate());
+                        return GoTypes.constant(GoTypeConstant.Kind.Complex, complexValue.negate());
                     default:
                         return GoType.Unknown;
                 }

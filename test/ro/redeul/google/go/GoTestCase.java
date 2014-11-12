@@ -56,10 +56,6 @@ public abstract class GoTestCase<FixtureType extends IdeaProjectTestFixture> ext
         return testFixtureFactory.createLightFixtureBuilder(getProjectDescriptor());
     }
 
-    protected void customizeProject(TestFixtureBuilder<IdeaProjectTestFixture> projectBuilder) {
-        
-    }
-
     private <ModuleBuilder extends ModuleFixtureBuilder> Class<ModuleFixtureBuilder> getModuleBuilderClass() {
         return ModuleFixtureBuilder.class;
     }

@@ -20,9 +20,6 @@ import ro.redeul.google.go.sdk.GoSdkUtil;
 import java.io.File;
 import java.util.Map;
 
-/**
- * Created by d3xter on 28.02.14.
- */
 public class GoRunProfileState extends CommandLineState {
     public GoApplicationConfiguration m_configuration;
     public Project m_project;

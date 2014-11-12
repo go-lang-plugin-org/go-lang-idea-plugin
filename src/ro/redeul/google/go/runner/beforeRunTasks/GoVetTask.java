@@ -5,9 +5,6 @@ import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.openapi.util.Key;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Created by d3xter on 13.03.14.
- */
 public class GoVetTask extends BeforeRunTask<GoVetTask> {
     private RunConfiguration config;
 

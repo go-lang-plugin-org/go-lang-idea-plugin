@@ -1,6 +1,5 @@
 package ro.redeul.google.go.intentions.statements;
 
-import org.junit.Ignore;
 import ro.redeul.google.go.intentions.GoIntentionTestCase;
 
 //This Test Covers The ConvertStatementToForWhileIntention too, since the only thing that changes is the first string from "if " to "for "

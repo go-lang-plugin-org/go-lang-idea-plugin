@@ -1,8 +1,6 @@
 package ro.redeul.google.go.lang.psi.typing;
 
 import org.jetbrains.annotations.Nullable;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
-import ro.redeul.google.go.util.GoUtil;
 
 public interface GoType {
 

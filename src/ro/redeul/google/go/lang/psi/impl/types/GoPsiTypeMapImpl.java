@@ -43,12 +43,10 @@ public class GoPsiTypeMapImpl extends GoPsiTypeImpl implements GoPsiTypeMap {
         if (!(goType instanceof GoPsiTypeMap))
             return false;
         GoPsiTypeMap otherTypeMap = (GoPsiTypeMap)goType;
-        if (!(getKeyType().isIdentical(otherTypeMap.getKeyType()))){
-            return false;
-        }
-        if (!(getElementType().isIdentical(otherTypeMap.getElementType()))){
-            return false;
-        }
+
+        if (!(getKeyType().isIdentical(otherTypeMap.getKeyType()))) return false;
+
+        if (!(getElementType().isIdentical(otherTypeMap.getElementType()))) return false;
 
         return true;
     }

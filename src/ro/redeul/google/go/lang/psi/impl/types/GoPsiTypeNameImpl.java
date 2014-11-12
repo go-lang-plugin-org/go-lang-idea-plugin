@@ -116,7 +116,7 @@ public class GoPsiTypeNameImpl extends GoPsiElementBase implements GoPsiTypeName
     public boolean isIdentical(GoPsiType goType) {
         if (goType instanceof GoPsiTypeName) {
 
-            if (!getName().equals(((GoPsiTypeName) goType).getName()))
+            if (!getName().equals(goType.getName()))
                 return false;
 
             if (isPrimitive())
@@ -130,6 +130,7 @@ public class GoPsiTypeNameImpl extends GoPsiElementBase implements GoPsiTypeName
 
             if (!goTypeSpec.getContainingFile().getContainingDirectory().equals(goTypeSpec1.getContainingFile().getContainingDirectory()))
                 return false;
+
             return true;
         }
         else {

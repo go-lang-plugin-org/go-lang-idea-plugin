@@ -19,8 +19,6 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitorWithData;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.services.GoPsiManager;
 
-import javax.help.plaf.gtk.GTKCursorFactory;
-import javax.management.Query;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
