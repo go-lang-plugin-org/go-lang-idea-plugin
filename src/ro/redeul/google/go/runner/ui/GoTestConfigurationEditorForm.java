@@ -1,5 +1,6 @@
 package ro.redeul.google.go.runner.ui;
 
+import com.google.common.collect.Sets;
 import com.intellij.ide.util.TreeFileChooser;
 import com.intellij.ide.util.TreeFileChooserFactory;
 import com.intellij.openapi.options.ConfigurationException;
@@ -19,7 +20,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Collection;
+import java.util.TreeSet;
 import java.util.Vector;
 
 import static ro.redeul.google.go.runner.GoTestConfiguration.TestTargetType;
@@ -56,15 +57,8 @@ public class GoTestConfigurationEditorForm extends SettingsEditor<GoTestConfigur
             }
         });
 
-        Vector<String> myPackages = new Vector<String>();
-        Collection<String> allPackages =
-            GoNamesCache.getInstance(project).getProjectPackages();
-
-        for (String packageName : allPackages) {
-            myPackages.add(packageName);
-        }
-
-        packages.setModel(new DefaultComboBoxModel(myPackages));
+        final TreeSet<String> packageNames = Sets.newTreeSet(GoNamesCache.getInstance(project).getProjectPackages());
+        packages.setModel(new DefaultComboBoxModel(new Vector<String>(packageNames)));
         packageNameRadioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
