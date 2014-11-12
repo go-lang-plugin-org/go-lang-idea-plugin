@@ -499,7 +499,7 @@ public class GoTypes extends AbstractProjectComponent {
 
             @Override
             public void visitConstant(GoTypeConstant type, StringBuilder data, GoType.Visitor<StringBuilder> visitor) {
-                if ( type.getType() != null ){
+                if ( type.getType() != GoType.Unknown ){
                     type.getType().accept(visitor);
                     return;
                 }
