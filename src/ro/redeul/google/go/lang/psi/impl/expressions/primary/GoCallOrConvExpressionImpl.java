@@ -29,6 +29,7 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase
         super(node);
     }
 
+    @NotNull
     @Override
     protected GoType[] resolveTypes() {
         GoPrimaryExpression baseExpr = getBaseExpression();
@@ -36,13 +37,19 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase
             return GoType.EMPTY_ARRAY;
 
         GoType baseCallType[] = baseExpr.getType();
-
-        return GoTypes.visitFirstType(baseCallType, new GoType.Visitor<GoType[]>(GoType.EMPTY_ARRAY) {
+        //try function call
+        GoType[] goTypes = GoTypes.visitFirstType(baseCallType, new GoType.Visitor<GoType[]>(GoType.EMPTY_ARRAY) {
             @Override
             public GoType[] visitFunction(GoTypeFunction type) {
                 return type.getResultTypes();
             }
         });
+        if (goTypes!=null){
+            return goTypes;
+        }
+        //try type convert
+        //TODO finish this.
+        return GoType.EMPTY_ARRAY;
 
 //
 //
