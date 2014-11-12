@@ -49,6 +49,7 @@ public abstract class GoExpressionBase extends GoPsiElementBase implements GoExp
         return false;
     }
 
+    @NotNull
     protected GoType[] resolveTypes() {
         return GoType.EMPTY_ARRAY;
     }

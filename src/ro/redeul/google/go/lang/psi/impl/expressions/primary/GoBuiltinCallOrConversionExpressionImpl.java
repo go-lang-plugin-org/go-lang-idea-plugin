@@ -47,6 +47,7 @@ public class GoBuiltinCallOrConversionExpressionImpl extends GoCallOrConvExpress
         super(node);
     }
 
+    @NotNull
     @Override
     protected GoType[] resolveTypes() {
         GoType[] callType = getBaseExpression().getType();
