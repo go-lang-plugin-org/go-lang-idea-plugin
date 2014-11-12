@@ -50,14 +50,30 @@ public class GoBuiltinCallOrConversionExpressionImpl extends GoCallOrConvExpress
     @NotNull
     @Override
     protected GoType[] resolveTypes() {
-        GoType[] callType = getBaseExpression().getType();
+        GoType[] baseExprType = getBaseExpression().getType();
 
-        if ( callType.length != 1 || !(callType[0] instanceof GoTypeFunction))
+        if ( baseExprType.length != 1 )
             return GoType.EMPTY_ARRAY;
 
-        GoTypeFunction function = (GoTypeFunction)callType[0];
+        if ( baseExprType[0] instanceof GoTypeFunction )
+            return processBuiltinFunction(((GoTypeFunction) baseExprType[0]).getPsiType().getName());
 
-        return processBuiltinFunction(function.getPsiType().getName());
+        if ( baseExprType[0] instanceof GoTypePrimitive ) {
+            GoTypePrimitive castType = (GoTypePrimitive) baseExprType[0];
+
+            GoExpr[] arguments = getArguments();
+            if ( arguments.length != 1 )
+                return baseExprType;
+
+            GoType[] argumentType = arguments[0].getType();
+            if (argumentType.length != 1 || !(argumentType[0] instanceof GoTypeConstant) )
+                return baseExprType;
+
+            GoTypeConstant constantArgument = (GoTypeConstant) argumentType[0];
+            return new GoType[]{GoTypes.constant(constantArgument.getKind(), constantArgument.getValue(), castType)};
+        }
+
+        return GoType.EMPTY_ARRAY;
     }
 
     @Override
@@ -192,12 +208,6 @@ public class GoBuiltinCallOrConversionExpressionImpl extends GoCallOrConvExpress
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitBuiltinCallExpression(this);
-    }
-
-    @Override
-    public boolean isConstantExpression() {
-        GoExpr[] arguments = getArguments();
-        return arguments.length == 1 && arguments[0].isConstantExpression();
     }
 }
 

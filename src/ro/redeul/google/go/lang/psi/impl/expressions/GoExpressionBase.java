@@ -6,6 +6,7 @@ import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypeConstant;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
@@ -46,7 +47,17 @@ public abstract class GoExpressionBase extends GoPsiElementBase implements GoExp
 
     @Override
     public boolean isConstantExpression() {
-        return false;
+        GoType types[] = getType();
+
+        if ( types.length == 0 )
+            return false;
+
+        for (GoType type : types) {
+            if ( !(type instanceof GoTypeConstant) )
+                return false;
+        }
+
+        return true;
     }
 
     @NotNull

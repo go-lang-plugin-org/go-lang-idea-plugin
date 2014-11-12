@@ -137,35 +137,43 @@ public class GoPsiExpressionTest extends GoPsiTestCase {
         Number val;
 
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(declarations[0].getExpression(declarations[0].getIdentifiers()[0]));
+        assertNotNull(val);
         assertInstanceOf(val, BigInteger.class);
         assertEquals(BigInteger.ZERO, val);
 
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(declarations[0].getExpression(declarations[0].getIdentifiers()[1]));
+        assertNotNull(val);
         assertInstanceOf(val, BigInteger.class);
         assertEquals(0, val.intValue());
 
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(declarations[1].getExpression(declarations[1].getIdentifiers()[0]));
+        assertNotNull(val);
         assertInstanceOf(val, BigInteger.class);
         assertEquals(1, val.intValue());
+
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(declarations[1].getExpression(declarations[1].getIdentifiers()[1]));
+        assertNotNull(val);
         assertInstanceOf(val, BigInteger.class);
         assertEquals(2, val.intValue());
 
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(declarations[2].getExpression(declarations[2].getIdentifiers()[0]));
+        assertNotNull(val);
         assertInstanceOf(val, BigInteger.class);
         assertEquals(3, val.intValue());
+
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(declarations[2].getExpression(declarations[2].getIdentifiers()[1]));
+        assertNotNull(val);
         assertInstanceOf(val, BigInteger.class);
         assertEquals(5, val.intValue());
 
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(declarations[3].getExpression(declarations[3].getIdentifiers()[0]));
+        assertNotNull(val);
         assertInstanceOf(val, BigDecimal.class);
         assertEquals(6.0, val.floatValue(), DELTA);
 
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(declarations[3].getExpression(declarations[3].getIdentifiers()[1]));
+        assertNotNull(val);
         assertInstanceOf(val, BigInteger.class);
         assertEquals(-3, val.intValue());
-
     }
-
 }

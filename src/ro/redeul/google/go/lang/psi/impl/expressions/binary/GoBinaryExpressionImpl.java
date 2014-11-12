@@ -12,7 +12,8 @@ import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.typing.*;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
-public abstract class GoBinaryExpressionImpl<Op extends Enum<Op>> extends GoExpressionBase
+public abstract class GoBinaryExpressionImpl<Op extends Enum<Op>>
+        extends GoExpressionBase
         implements GoBinaryExpression<Op> {
 
     GoBinaryExpressionImpl(@NotNull ASTNode node) {
@@ -41,6 +42,7 @@ public abstract class GoBinaryExpressionImpl<Op extends Enum<Op>> extends GoExpr
         return children.length <= 1 ? null : children[1];
     }
 
+    @NotNull
     @Override
     protected GoType[] resolveTypes() {
         GoExpr leftOperand = getLeftOperand();
@@ -71,62 +73,7 @@ public abstract class GoBinaryExpressionImpl<Op extends Enum<Op>> extends GoExpr
 
         // old behaviour
         return leftType instanceof GoTypeConstant ? rightTypes : leftTypes;
-
-//                // based on http://golang.org/ref/spec#Constant_expressions
-//                if (leftOperand.isConstantExpression() && rightOperand.isConstantExpression()){
-//                    String operator = getOperator().toString();
-//                    boolean equality = operator.equals("!=") || operator.equals("==");
-//                    boolean shift = operator.equals("<<")||operator.equals(">>");
-//                    GoType leftType = leftTypes[0];
-//                    GoType rightType = rightTypes[0];
-//                    if (!equality) {
-//                        if (shift){
-//                            // shift operation returns untyped int
-//                            GoNamesCache namesCache =
-//                                    GoNamesCache.getInstance(this.getProject());
-//                            return new GoType[]{
-//                                    types().getBuiltin(GoTypes.Builtin.Int)
-//                            };
-//                        } else {
-//                            if (leftType instanceof GoTypePointer && rightType instanceof GoTypePointer){
-//                                GoTypePointer lptr = (GoTypePointer)leftType;
-//                                GoTypePointer rptr = (GoTypePointer)rightType;
-//                                leftType = lptr.getTargetType();
-//                                rightType = rptr.getTargetType();
-//                            }
-//                            if (leftType instanceof GoTypeName && rightType instanceof GoTypeName) {
-//                                String leftName = ((GoTypeName)leftType).getName();
-//                                String rightName = ((GoTypeName)rightType).getName();
-//                                // the right order is complex, float, rune, int
-//                                if (leftName.startsWith("complex")){
-//                                    return leftTypes;
-//                                }
-//                                if (rightName.startsWith("complex")){
-//                                    return rightTypes;
-//                                }
-//                                if (leftName.startsWith("float")){
-//                                    return leftTypes;
-//                                }
-//                                if (rightName.startsWith("float")){
-//                                    return rightTypes;
-//                                }
-//                                if (leftName.startsWith("rune")) {
-//                                    return leftTypes;
-//                                }
-//                                if (rightName.startsWith("rune")) {
-//                                    return rightTypes;
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-            }
+    }
 
     protected abstract GoType computeConstant(GoTypeConstant left, GoTypeConstant right);
-
-    @Override
-    public boolean isConstantExpression() {
-        GoType[] type = getType();
-        return type.length == 1 && type[0] instanceof GoTypeConstant;
-    }
 }

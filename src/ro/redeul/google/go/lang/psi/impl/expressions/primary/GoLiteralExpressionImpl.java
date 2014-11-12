@@ -32,11 +32,11 @@ import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitorWithData;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
+import ro.redeul.google.go.services.GoPsiManager;
 
 import static ro.redeul.google.go.lang.psi.typing.GoTypes.getInstance;
 
-public class GoLiteralExpressionImpl extends GoExpressionBase
-        implements GoLiteralExpression {
+public class GoLiteralExpressionImpl extends GoExpressionBase implements GoLiteralExpression {
 
     public GoLiteralExpressionImpl(@NotNull ASTNode node) {
         super(node);
@@ -216,48 +216,8 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
     @NotNull
     @Override
     public GoType[] getType() {
-//        return GoPsiManager.getInstance(getProject()).getType(this, TYPE_CALCULATOR);
-        return TYPE_CALCULATOR.fun(this);
-    }
-
-    @Override
-    public boolean isConstantExpression() {
-        GoLiteral literal = getLiteral();
-        if (literal == null)
-            return true;
-
-        switch (literal.getType()) {
-            case Bool:
-            case Char:
-            case Float:
-            case ImaginaryFloat:
-            case ImaginaryInt:
-            case Int:
-            case InterpretedString:
-            case RawString:
-                return true;
-            case Identifier:
-                GoLiteralIdentifier identifier = (GoLiteralIdentifier) literal;
-
-                if (identifier.isIota() || identifier.isNil()) {
-                    return true;
-                }
-
-                GoLiteralIdentifier resolved = GoPsiUtils.resolveSafely(identifier, GoLiteralIdentifier.class);
-
-                if (resolved == null)
-                    return false;
-
-                PsiElement parent = resolved.getParent();
-                if (parent instanceof GoConstDeclaration) {
-                    GoConstDeclaration constDeclaration = (GoConstDeclaration) parent;
-                    GoExpr expr = constDeclaration.getExpression(resolved);
-                    return expr == null || expr.isConstantExpression();
-                }
-
-        }
-
-        return false;
+        return GoPsiManager.getInstance(getProject()).getType(this, TYPE_CALCULATOR);
+//        return TYPE_CALCULATOR.fun(this);
     }
 
     @Override
@@ -272,26 +232,4 @@ public class GoLiteralExpressionImpl extends GoExpressionBase
     protected PsiReference[] defineReferences() {
         return PsiReference.EMPTY_ARRAY;
     }
-
-
-    /*
-    @NotNull
-    @Override
-    public PsiReference[] getReferences() {
-
-//        if (BuiltinCallOrConversionReference.MATCHER.accepts(this)) {
-//            if (getLiteral().getText().matches("print|println"))
-//                return refs(PsiReference.EMPTY_ARRAY);
-//
-//            return refs(new BuiltinCallOrConversionReference(this));
-//        }
-//
-//        if (CallOrConversionReference.MATCHER.accepts(this))
-//            return refs(
-//                    new CallOrConversionReference(this),
-//                    new VarOrConstReference((GoLiteralIdentifier) this.getLiteral()));
-
-        return super.getReferences();
-    }
-*/
 }

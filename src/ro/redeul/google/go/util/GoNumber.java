@@ -125,6 +125,9 @@ public class GoNumber extends Number {
         if ( value == null )
             return null;
 
+        if ( value instanceof GoNumber)
+            return (GoNumber) value;
+
         if ( value instanceof BigInteger )
             return new GoNumber(new BigDecimal((BigInteger) value), BigDecimal.ZERO);
 

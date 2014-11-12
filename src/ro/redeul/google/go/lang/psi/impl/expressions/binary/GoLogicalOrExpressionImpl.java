@@ -16,6 +16,7 @@ public class GoLogicalOrExpressionImpl extends GoBinaryExpressionImpl<GoLogicalO
         super(node);
     }
 
+    @NotNull
     @Override
     protected GoType[] resolveTypes() {
         return new GoType[]{

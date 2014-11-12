@@ -26,6 +26,7 @@ public class GoSliceExpressionImpl extends GoExpressionBase
         visitor.visitSliceExpression(this);
     }
 
+    @NotNull
     @Override
     protected GoType[] resolveTypes() {
         return getBaseExpression().getType();
@@ -122,10 +123,5 @@ public class GoSliceExpressionImpl extends GoExpressionBase
         }
 
         return (GoExpr) elem;
-    }
-
-    @Override
-    public boolean isConstantExpression() {
-        return false;
     }
 }

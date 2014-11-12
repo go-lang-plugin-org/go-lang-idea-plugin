@@ -15,6 +15,7 @@ public class GoIndexExpressionImpl extends GoExpressionBase
         super(node);
     }
 
+    @NotNull
     @Override
     protected GoType[] resolveTypes() {
         GoType[] baseTypes = getBaseExpression().getType();
@@ -56,10 +57,5 @@ public class GoIndexExpressionImpl extends GoExpressionBase
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitIndexExpression(this);
-    }
-
-    @Override
-    public boolean isConstantExpression() {
-        return false;
     }
 }

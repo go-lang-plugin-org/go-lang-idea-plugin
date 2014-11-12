@@ -17,8 +17,13 @@ public class GoRelationalExpressionImpl extends GoBinaryExpressionImpl<GoRelatio
         super(node);
     }
 
+    @NotNull
     @Override
     protected GoType[] resolveTypes() {
+        GoType[] types = super.resolveTypes();
+        if ( types.length == 1 && types[0] instanceof GoTypeConstant && ((GoTypeConstant)types[0]).getKind() == GoTypeConstant.Kind.Boolean)
+            return types;
+
         return new GoType[]{types().getBuiltin(GoTypes.Builtin.Bool)};
     }
 
@@ -40,7 +45,8 @@ public class GoRelationalExpressionImpl extends GoBinaryExpressionImpl<GoRelatio
 
     @Override
     protected GoType computeConstant(GoTypeConstant left, GoTypeConstant right) {
-        return GoType.Unknown;
+        // TODO: finish this implementation (actually calculate the values and set the constant here)
+        return GoTypes.constant(GoTypeConstant.Kind.Boolean, false);
     }
 
     @Override

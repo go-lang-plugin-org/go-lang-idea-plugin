@@ -9,15 +9,15 @@ import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
-import ro.redeul.google.go.lang.psi.expressions.GoUnaryExpression;
-import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
+
+import java.util.Collections;
+import java.util.List;
 
 public class GoConstDeclarationImpl extends GoPsiElementBase
         implements GoConstDeclaration {
@@ -82,81 +82,84 @@ public class GoConstDeclarationImpl extends GoPsiElementBase
     @Override
     @NotNull
     public GoExpr[] getExpressions() {
-        GoExpr[] goExprs = findChildrenByClass(GoExpr.class);
-        if (goExprs.length == 0 && !hasInitializers()) {
-            // Omitting the list of expressions is therefore equivalent to repeating the previous list
-            PsiElement parent = getParent();
-            if (parent instanceof GoConstDeclarations) {
-                GoConstDeclaration previous = null;
-                for (GoConstDeclaration declaration : ((GoConstDeclarations) parent).getDeclarations()) {
-                    if (declaration != this) {
-                        previous = declaration;
-                    }
-                    // return previous ConstSpec type
-                    if (declaration == this) {
-                        if (previous != null){
-                            return previous.getExpressions();
-                        }
-                    }
-                }
-            }
+        GoExpr goExprs[] = findChildrenByClass(GoExpr.class);
+//        if (goExprs.length == 0 && !hasInitializers()) {
+//
+//            // Omitting the list of expressions is therefore equivalent to repeating the previous list
+//            // So we will find the previous list and clone it.
+//
+//            List<GoExpr> expressions = Collections.emptyList();
+//            PsiElement sibling = this.getPrevSibling();
+//            while ( sibling != null && expressions.size() == 0) {
+//                while ( sibling != null && !(sibling instanceof GoConstDeclaration))
+//                    sibling = sibling.getPrevSibling();
+//
+//                if ( sibling != null) {
+//                    expressions = GoPsiUtils.findChildrenOfType(sibling, GoExpr.class);
+//                    sibling = sibling.getPrevSibling();
+//                }
+//            }
+//
+//            goExprs = new GoExpr[expressions.size()];
+//            for (int i = 0; i < expressions.size(); i++) {
+//                GoExpr expression = expressions.get(i);
+//                goExprs[i] = (GoExpr) expression.copy();
+//            }
+//        }
+
+        for (GoExpr expr : goExprs) {
+            setIotaValue(expr, getConstSpecIndex());
         }
+
         return goExprs;
     }
 
-    private void setIotaValue(GoExpr expr, Integer iotaValue) {
-        if (expr instanceof GoLiteralExpression){
-            GoLiteral literal = ((GoLiteralExpression) expr).getLiteral();
-            if (literal instanceof GoLiteralIdentifier){
-                if (((GoLiteralIdentifier) literal).isIota()){
-                   ((GoLiteralIdentifier) literal).setIotaValue(iotaValue);
-                }
+    private void setIotaValue(GoExpr expr, final Integer iotaValue) {
+        expr.accept(new GoRecursiveElementVisitor() {
+            @Override
+            public void visitLiteralIdentifier(GoLiteralIdentifier identifier) {
+                if (identifier.isIota())
+                    identifier.setIotaValue(iotaValue);
             }
-        }
-        if (expr instanceof GoUnaryExpression){
-            setIotaValue(((GoUnaryExpression) expr).getExpression(), iotaValue);
-        }
-        if (expr instanceof GoBinaryExpression){
-            setIotaValue(((GoBinaryExpression) expr).getLeftOperand(), iotaValue);
-            setIotaValue(((GoBinaryExpression) expr).getRightOperand(), iotaValue);
-        }
-        if (expr instanceof GoParenthesisedExpression){
-            setIotaValue(((GoParenthesisedExpression) expr).getInnerExpression(), iotaValue);
-        }
+        });
     }
 
     @Override
     public GoExpr getExpression(GoLiteralIdentifier identifier) {
         Integer identifierIndex = getIdentifierIndex(identifier);
-        if (identifierIndex == null){
+        if (identifierIndex == null ) {
             return null;
         }
-        if (hasInitializers()){
-            GoExpr[] goExprs = getExpressions();
-            if (goExprs.length <= identifierIndex)
-                return null;
-            GoExpr expr = goExprs[identifierIndex];
-            setIotaValue(expr, getConstSpecIndex());
-            return expr;
-        } else {
-            PsiElement goConstDecls = getParent();
-            if (goConstDecls instanceof GoConstDeclarations){
-                PsiElement[] goConstSpecs = goConstDecls.getChildren();
-                for (int i = 1; i < goConstSpecs.length; i++) {
-                    if (goConstSpecs[i] == this && goConstSpecs[i - 1] instanceof GoConstDeclaration) {
-                        GoConstDeclaration prevConstSpec = (GoConstDeclaration) goConstSpecs[i - 1];
-                        GoExpr prevExpr = prevConstSpec.getExpression(prevConstSpec.getIdentifiers()[identifierIndex]);
-                        if (prevExpr != null){
-                            // copy expression from previous constant specification and set necessary iota value
-                            GoExpr expr = (GoExpr) prevExpr.copy();
-                            setIotaValue(expr, getConstSpecIndex());
-                            return expr;
-                        }
-                    }
+
+        GoExpr[] goExprs = getExpressions();
+        if (goExprs.length == 0 && !hasInitializers()) {
+            // Omitting the list of expressions is therefore equivalent to repeating the previous list
+            // So we will find the previous list and clone it.
+            List<GoExpr> expressions = Collections.emptyList();
+            PsiElement sibling = this.getPrevSibling();
+            while ( sibling != null && expressions.size() == 0) {
+                while ( sibling != null && !(sibling instanceof GoConstDeclaration))
+                    sibling = sibling.getPrevSibling();
+
+                if ( sibling != null) {
+                    expressions = GoPsiUtils.findChildrenOfType(sibling, GoExpr.class);
+                    sibling = sibling.getPrevSibling();
                 }
             }
+
+            goExprs = new GoExpr[expressions.size()];
+            Integer iotaValue = getConstSpecIndex();
+            for (int i = 0; i < expressions.size(); i++) {
+                GoExpr expression = expressions.get(i);
+                goExprs[i] = (GoExpr) expression.copy();
+                setIotaValue(goExprs[i], iotaValue);
+            }
         }
-        return null;
+
+        if (goExprs.length <= identifierIndex)
+            return null;
+
+        return goExprs[identifierIndex];
     }
 
     @Override

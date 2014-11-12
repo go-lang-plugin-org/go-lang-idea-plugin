@@ -38,6 +38,7 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
         visitor.visitSelectorExpression(this);
     }
 
+    @NotNull
     @Override
     protected GoType[] resolveTypes() {
         return GoPsiManager.getInstance(getProject()).getType(
@@ -159,6 +160,7 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
     @NotNull
     @Override
     public PsiReference[] defineReferences() {
+        // TODO understand if this can be removed.
         GoPrimaryExpression baseExpression = getBaseExpression();
 
         if (baseExpression == null) {
@@ -206,16 +208,9 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
             };
         }
 
-
 //        if ( type instanceof GoPsiTypeStruct) {
 //            return new StructFieldReference(this);
-
         return PsiReference.EMPTY_ARRAY;
-    }
-
-    @Override
-    public boolean isConstantExpression() {
-        return false;
     }
 }
 

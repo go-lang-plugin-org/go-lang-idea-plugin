@@ -23,8 +23,8 @@ import java.util.Arrays;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 
-public class GoCallOrConvExpressionImpl extends GoExpressionBase
-        implements GoCallOrConvExpression {
+public class GoCallOrConvExpressionImpl extends GoExpressionBase implements GoCallOrConvExpression {
+
     public GoCallOrConvExpressionImpl(@NotNull ASTNode node) {
         super(node);
     }
@@ -33,20 +33,26 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase
     @Override
     protected GoType[] resolveTypes() {
         GoPrimaryExpression baseExpr = getBaseExpression();
-        if ( baseExpr == null )
+        if (baseExpr == null)
             return GoType.EMPTY_ARRAY;
 
         GoType baseCallType[] = baseExpr.getType();
-        //try function call
+
         GoType[] goTypes = GoTypes.visitFirstType(baseCallType, new GoType.Visitor<GoType[]>(GoType.EMPTY_ARRAY) {
+
             @Override
             public GoType[] visitFunction(GoTypeFunction type) {
                 return type.getResultTypes();
             }
+
+            @Override
+            public GoType[] visitName(GoTypeName type) {
+                return new GoType[]{type};
+            }
         });
-        if (goTypes!=null){
-            return goTypes;
-        }
+
+        if (goTypes != null) return goTypes;
+
         //try type convert
         //TODO finish this.
         return GoType.EMPTY_ARRAY;
@@ -170,27 +176,18 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase
         visitor.visitCallOrConvExpression(this);
     }
 
-    @Override
-    public boolean isConstantExpression() {
-        PsiElement reference = resolveSafely(getBaseExpression(), PsiElement.class);
-
-        if (reference instanceof GoTypeSpec) {
-            GoExpr[] arguments = getArguments();
-            return arguments.length == 1 && arguments[0].isConstantExpression();
-        }
-
-        return false;
-    }
-
-    public boolean isCallWithVariadicParameter(){
+    public boolean isCallWithVariadicParameter() {
         PsiElement psi1 = findLastChildByType(GoTokenTypes.oTRIPLE_DOT);
-        if (psi1!=null){
+
+        if (psi1 != null) {
             return true;
         }
+
         GoExpressionList list = findChildByClass(GoExpressionList.class);
         if (list == null) {
             return false;
         }
-        return list.getLastChild().getText().equals("...");
+
+        return list.getLastChild().getNode().getElementType() == GoTokenTypes.oTRIPLE_DOT;
     }
 }

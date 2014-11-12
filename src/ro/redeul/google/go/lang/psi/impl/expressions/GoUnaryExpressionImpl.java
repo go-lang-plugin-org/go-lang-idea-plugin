@@ -23,6 +23,7 @@ public class GoUnaryExpressionImpl extends GoExpressionBase
         super(node);
     }
 
+    @NotNull
     @Override
     protected GoType[] resolveTypes() {
         GoExpr expression = getExpression();
@@ -132,26 +133,13 @@ public class GoUnaryExpressionImpl extends GoExpressionBase
             return Op.None;
 
         IElementType elementType = operatorChild.getNode().getElementType();
-        if (elementType == GoTokenTypes.oPLUS)
-            return Op.Plus;
-
-        if (elementType == GoTokenTypes.oMINUS)
-            return Op.Minus;
-
-        if (elementType == GoTokenTypes.oNOT)
-            return Op.Not;
-
-        if (elementType == GoTokenTypes.oBIT_XOR)
-            return Op.Xor;
-
-        if (elementType == GoTokenTypes.oMUL)
-            return Op.Pointer;
-
-        if (elementType == GoTokenTypes.oBIT_AND)
-            return Op.Address;
-
-        if (elementType == GoTokenTypes.oSEND_CHANNEL)
-            return Channel;
+        if (elementType == GoTokenTypes.oPLUS) return Op.Plus;
+        if (elementType == GoTokenTypes.oMINUS) return Op.Minus;
+        if (elementType == GoTokenTypes.oNOT) return Op.Not;
+        if (elementType == GoTokenTypes.oBIT_XOR) return Op.Xor;
+        if (elementType == GoTokenTypes.oMUL) return Op.Pointer;
+        if (elementType == GoTokenTypes.oBIT_AND) return Op.Address;
+        if (elementType == GoTokenTypes.oSEND_CHANNEL) return Channel;
 
         return Op.None;
     }
@@ -159,12 +147,6 @@ public class GoUnaryExpressionImpl extends GoExpressionBase
     @Override
     public GoExpr getExpression() {
         return findChildByClass(GoExpr.class);
-    }
-
-    @Override
-    public boolean isConstantExpression() {
-        GoExpr expression = getExpression();
-        return expression != null && expression.isConstantExpression();
     }
 
     @Override

@@ -10,12 +10,13 @@ import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
-public class GoTypeAssertionExpressionImpl extends GoExpressionBase
-    implements GoTypeAssertionExpression {
+public class GoTypeAssertionExpressionImpl extends GoExpressionBase implements GoTypeAssertionExpression {
+
     public GoTypeAssertionExpressionImpl(@NotNull ASTNode node) {
         super(node);
     }
 
+    @NotNull
     @Override
     protected GoType[] resolveTypes() {
 
@@ -34,10 +35,5 @@ public class GoTypeAssertionExpressionImpl extends GoExpressionBase
     @Override
     public GoPsiType getAssertedType() {
         return findChildByClass(GoPsiType.class);
-    }
-
-    @Override
-    public boolean isConstantExpression() {
-        return false;
     }
 }
