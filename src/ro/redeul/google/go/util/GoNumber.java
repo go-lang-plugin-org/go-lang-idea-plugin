@@ -35,24 +35,25 @@ public class GoNumber extends Number {
 
     @Override
     public int intValue() {
-        if ( !isComplex() )
-            try {
-                return real.toBigIntegerExact().intValueExact();
-            } catch (ArithmeticException ex) {
-                //
-            }
+        if ( !isComplex() ) {
+            BigInteger bigInteger = real.toBigIntegerExact();
+            int intValue = bigInteger.intValue();
+
+            if (BigInteger.valueOf(intValue).equals(bigInteger))
+                return intValue;
+        }
 
         throw new ArithmeticException(String.format("%s can't be represented as a int", this));
     }
 
     @Override
     public long longValue() {
-        if ( !isComplex() )
-            try {
-                return real.toBigIntegerExact().longValueExact();
-            } catch (ArithmeticException ex) {
-                //
-            }
+        if ( !isComplex() ) {
+            BigInteger integer = real.toBigIntegerExact();
+            long value = integer.longValue();
+            if (BigInteger.valueOf(value).equals(integer))
+                return longValue();
+        }
 
         throw new ArithmeticException(String.format("%s can't be represented as a long", this));
     }
