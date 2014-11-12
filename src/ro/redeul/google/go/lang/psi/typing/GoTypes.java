@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 
 public class GoTypes extends AbstractProjectComponent {
 
-    public GoTypes(Project project) {
+    private GoTypes(Project project) {
         super(project);
     }
 
@@ -42,7 +42,7 @@ public class GoTypes extends AbstractProjectComponent {
                     "complex(64|128)");
 
     @Nullable
-    public static <T extends GoType> T resolveTo(GoType type, Class<T> targetType) {
+    private static <T extends GoType> T resolveTo(GoType type, Class<T> targetType) {
 
         GoType target = type;
         while (target != null && target != GoType.Unknown && !targetType.isAssignableFrom(target.getClass())) {
@@ -57,17 +57,8 @@ public class GoTypes extends AbstractProjectComponent {
         return (target != null && targetType.isAssignableFrom(target.getClass())) ? targetType.cast(target) : null;
     }
 
-    public static GoTypeInterface resolveToInterface(GoPsiTypeName typeName) {
-        return resolveTo(fromPsi(typeName), GoTypeInterface.class);
-    }
-
     public static GoType makePointer(GoPsiType argumentType) {
         return new GoTypePointer(fromPsi(argumentType));
-    }
-
-    public static GoType getPackageTypeSimple(GoImportDeclaration declaration) {
-        GoPackage goPackage = declaration.getPackage();
-        return goPackage != null ? new GoTypePackage(goPackage) : null;
     }
 
     public static GoType[] getPackageType(GoImportDeclaration declaration) {
@@ -119,7 +110,7 @@ public class GoTypes extends AbstractProjectComponent {
         return false;
     }
 
-    public static boolean isNamedType(GoType type) {
+    private static boolean isNamedType(GoType type) {
         if (type instanceof GoTypeName)
             return true;
 
@@ -129,10 +120,6 @@ public class GoTypes extends AbstractProjectComponent {
         }
 
         return false;
-    }
-
-    public GoType untypedConstant(GoTypeConstant.Kind kind) {
-        return constant(kind, null);
     }
 
     public static GoType constant(GoTypeConstant.Kind kind, Object value) {
@@ -191,7 +178,7 @@ public class GoTypes extends AbstractProjectComponent {
 
     @NotNull
     public static GoType fromPsi(final GoPsiType psiType) {
-        return getInstance(psiType.getProject()).fromPsiType(psiType);
+        return psiType != null ? getInstance(psiType.getProject()).fromPsiType(psiType) : GoType.Unknown;
     }
 
     @NotNull
@@ -293,7 +280,7 @@ public class GoTypes extends AbstractProjectComponent {
         return resolveToStruct(fromPsi(type));
     }
 
-    public static GoTypeStruct resolveToStruct(@Nullable GoType type) {
+    private static GoTypeStruct resolveToStruct(@Nullable GoType type) {
         return new GoType.Visitor<GoTypeStruct>() {
             @Override
             public GoTypeStruct visitStruct(GoTypeStruct type) { return type; }
@@ -319,7 +306,7 @@ public class GoTypes extends AbstractProjectComponent {
     }
 
     @Nullable
-    public static GoType dereference(@Nullable GoType type, final int dereferences) {
+    private static GoType dereference(@Nullable GoType type, final int dereferences) {
         return new GoType.Visitor<GoType>(null) {
             int myDereferences = dereferences;
 

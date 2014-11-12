@@ -1,5 +1,6 @@
 package ro.redeul.google.go.lang.psi.expressions.literals.composite;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
@@ -20,6 +21,6 @@ public interface GoLiteralCompositeElement extends GoPsiElement {
     @Nullable
     GoLiteralCompositeValue getLiteralValue();
 
-    @Nullable
+    @NotNull
     GoType getElementType();
 }

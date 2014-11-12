@@ -14,7 +14,7 @@ import ro.redeul.google.go.lang.packages.GoPackages;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeElement;
+import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeValue;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallOrConversionExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
@@ -209,16 +209,30 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
                 psiElement(GoLiteralExpressionImpl.class).withParent(
                         psiElement(GoElementTypes.LITERAL_COMPOSITE_ELEMENT_KEY))
         ).accepts(this)) {
-            GoLiteralCompositeElement parent = GoPsiUtils.findParentOfType(this, GoLiteralCompositeElement.class);
+            GoLiteralCompositeValue compositeValue = GoPsiUtils.findParentOfType(this, GoLiteralCompositeValue.class);
 
-            if (parent == null)
+            if (compositeValue == null )
                 return PsiReference.EMPTY_ARRAY;
 
-            GoTypeStruct typeStruct = GoTypes.resolveToStruct(parent.getElementType());
-            if (typeStruct == null)
-                return PsiReference.EMPTY_ARRAY;
+            final GoLiteralIdentifier identifier = this;
 
-            return new PsiReference[]{new StructFieldReference(this, typeStruct)};
+            List<Reference> references = compositeValue.getType().getUnderlyingType().accept(new GoType.ForwardingVisitor<List<Reference>>(
+                    new ArrayList<Reference>(),
+                    new GoType.Second<List<Reference>>() {
+                        @Override
+                        public void visitStruct(GoTypeStruct type, List<Reference> data, GoType.Visitor<List<Reference>> visitor) {
+                            data.add(new StructFieldReference(identifier, type));
+                        }
+
+                        @Override
+                        public void visitMap(GoTypeMap type, List<Reference> data, GoType.Visitor<List<Reference>> visitor) {
+                            data.add(new TypedConstReference(identifier, type.getKeyType()));
+                        }
+                    }
+            ));
+
+            return references.toArray(new PsiReference[references.size()]);
+//            return PsiReference.EMPTY_ARRAY;
         }
 
         //noinspection unchecked
