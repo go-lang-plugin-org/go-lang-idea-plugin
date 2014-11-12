@@ -5,9 +5,18 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructPromotedFields;
-import ro.redeul.google.go.lang.psi.typing.*;
+import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypeName;
+import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
+import ro.redeul.google.go.lang.psi.typing.GoTypeStruct;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class PromotedFieldsDiscover {
     private final Map<String, List<GoLiteralIdentifier>> namedFieldsMap = new HashMap<String, List<GoLiteralIdentifier>>();
@@ -17,13 +26,8 @@ public class PromotedFieldsDiscover {
     private final Set<String> ignoreNames;
 
     public PromotedFieldsDiscover(GoPsiTypeStruct struct) {
-        this(struct, Collections.<String>emptySet());
-    }
-
-    private PromotedFieldsDiscover(GoPsiTypeStruct struct, Set<String> ignoreNames) {
         this.struct = struct;
-        this.ignoreNames = new HashSet<String>(ignoreNames);
-        this.ignoreNames.addAll(getDirectFieldNameSet());
+        ignoreNames = new HashSet<String>();
     }
 
     public GoTypeStructPromotedFields getPromotedFields() {
@@ -42,7 +46,7 @@ public class PromotedFieldsDiscover {
     private GoLiteralIdentifier[] getNamedFields() {
         List<GoLiteralIdentifier> namedFields = new ArrayList<GoLiteralIdentifier>();
         for (List<GoLiteralIdentifier> identifiers : namedFieldsMap.values()) {
-            if (identifiers.size() == 1 && !ignore(identifiers.get(0))) {
+            if (identifiers.size() > 0 && !ignore(identifiers.get(0))) {
                 namedFields.add(identifiers.get(0));
             }
         }
@@ -53,7 +57,7 @@ public class PromotedFieldsDiscover {
     private GoTypeStructAnonymousField[] getAnonymousFields() {
         List<GoTypeStructAnonymousField> anonymousFields = new ArrayList<GoTypeStructAnonymousField>();
         for (List<GoTypeStructAnonymousField> fields : anonymousFieldsMap.values()) {
-            if (fields.size() == 1 && !ignore(fields.get(0))) {
+            if (fields.size() == 1) {
                 anonymousFields.add(fields.get(0));
             }
         }
@@ -63,10 +67,9 @@ public class PromotedFieldsDiscover {
     private void discover() {
         namedFieldsMap.clear();
         anonymousFieldsMap.clear();
-
-        for (GoTypeStructAnonymousField field : struct.getAnonymousFields()) {
-            processAnonymousField(field);
-        }
+        ignoreNames.clear();
+        ignoreNames.addAll(getDirectFieldNameSet());
+        processStruct(struct);
     }
 
     private void processAnonymousField(GoTypeStructAnonymousField field) {
@@ -92,36 +95,24 @@ public class PromotedFieldsDiscover {
             return;
 
         processStruct(structTypePsi);
-        discoverSubType(structTypePsi);
     }
 
     private void processStruct(GoPsiTypeStruct psiTypeStruct) {
 
         for (GoTypeStructField subField : psiTypeStruct.getFields()) {
             for (GoLiteralIdentifier identifier : subField.getIdentifiers()) {
-                if (!ignore(identifier)) {
-                    addNamedField(identifier);
-                }
+                if (ignore(identifier))
+                    continue;
+
+                addNamedField(identifier);
             }
         }
 
         for (GoTypeStructAnonymousField subField : psiTypeStruct.getAnonymousFields()) {
-            if (ignore(subField)) {
-                continue;
+            if (!ignore(subField)) {
+                addAnonymousField(subField);
+                processAnonymousField(subField);
             }
-
-            addAnonymousField(subField);
-        }
-    }
-
-    private void discoverSubType(GoPsiTypeStruct subPsiType) {
-        GoTypeStructPromotedFields fields = new PromotedFieldsDiscover(subPsiType, ignoreNames).getPromotedFields();
-        for (GoLiteralIdentifier identifier : fields.getNamedFields()) {
-            addNamedField(identifier);
-        }
-
-        for (GoTypeStructAnonymousField field2 : fields.getAnonymousFields()) {
-            addAnonymousField(field2);
         }
     }
 
@@ -131,14 +122,14 @@ public class PromotedFieldsDiscover {
         if (fields == null) {
             fields = new ArrayList<GoTypeStructAnonymousField>();
             anonymousFieldsMap.put(name, fields);
+            ignoreNames.add(name);
         }
+
         fields.add(field);
     }
 
     private void addNamedField(GoLiteralIdentifier identifier) {
-        if (identifier.isBlank()) {
-            return;
-        }
+        if (identifier.isBlank()) return;
 
         String name = identifier.getName();
         List<GoLiteralIdentifier> fields = namedFieldsMap.get(name);
@@ -146,23 +137,20 @@ public class PromotedFieldsDiscover {
             fields = new ArrayList<GoLiteralIdentifier>();
             namedFieldsMap.put(name, fields);
         }
+
         fields.add(identifier);
     }
 
     private Set<String> getDirectFieldNameSet() {
-        Set<String> directFields = new HashSet<String>();
+        Set<String> fields = new HashSet<String>();
         for (GoTypeStructField field : struct.getFields()) {
             for (GoLiteralIdentifier identifier : field.getIdentifiers()) {
                 if (!identifier.isBlank()) {
-                    directFields.add(identifier.getName());
+                    fields.add(identifier.getName());
                 }
             }
         }
 
-        for (GoTypeStructAnonymousField field : struct.getAnonymousFields()) {
-            directFields.add(field.getFieldName());
-        }
-        return directFields;
+        return fields;
     }
-
 }

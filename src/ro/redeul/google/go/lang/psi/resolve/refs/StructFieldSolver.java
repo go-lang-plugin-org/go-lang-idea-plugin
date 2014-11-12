@@ -18,8 +18,7 @@ public class StructFieldSolver extends VisitingReferenceSolver<StructFieldRefere
 
             @Override
             public void visitTypeStructAnonymousField(GoTypeStructAnonymousField field) {
-                if (reference.canSee(field, field.getFieldName()) &&
-                        matchNames(reference.name(), field.getFieldName()))
+                if (reference.canSee(field, field.getFieldName()) && matchNames(reference.name(), field.getFieldName()))
                     addTarget(field);
             }
 

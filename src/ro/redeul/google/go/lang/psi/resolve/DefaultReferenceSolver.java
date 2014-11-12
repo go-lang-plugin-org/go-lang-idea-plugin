@@ -53,10 +53,7 @@ public abstract class DefaultReferenceSolver<R extends ReferenceWithSolver<?, S,
     @Override
     public PsiElement resolve(@NotNull R reference, boolean incompleteCode) {
         reference.walkSolver(self());
-
         return target;
-//        PsiElement redirectedTarget = GoPsiUtils.resolveSafely(target);
-//        return redirectedTarget != null ? redirectedTarget : target;
     }
 
     @Nullable
