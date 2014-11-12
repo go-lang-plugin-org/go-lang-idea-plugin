@@ -12,8 +12,8 @@ type MyString string
 
 var (
 	l_slices = make([]int, 10)
-	l_array  = [10]int
-	l_map    = map[string]int
+	l_array  [10]int
+	l_map    map[string]int
 )
 
 func main() {
@@ -44,8 +44,8 @@ func main() {
 
 	//Maps
 	l_map["Hey"]
-	l_map[/*begin*/my/*end.Expression type mismatch, the expected type is string|CastTypeFix*/]
-	l_map[/*begin*/0/*end.Expression type mismatch, the expected type is string|CastTypeFix*/]
-	l_map[/*begin*/true/*end.Expression type mismatch, the expected type is string|CastTypeFix*/]
+	l_map[/*begin*/my/*end.Cannot use my (type MyString) as type string in map index|CastTypeFix*/]
+	l_map[/*begin*/0/*end.Cannot use 0 (type int) as type string in map index|CastTypeFix*/]
+	l_map[/*begin*/true/*end.Cannot use true (type bool) as type string in map index|CastTypeFix*/]
 	l_map["Hey," + "How are " + "You"]
 }

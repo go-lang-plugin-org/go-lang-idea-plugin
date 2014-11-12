@@ -7,7 +7,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
-import ro.redeul.google.go.lang.psi.typing.GoTypeName;
+import ro.redeul.google.go.lang.psi.typing.*;
 
 import java.util.Set;
 
@@ -25,26 +25,21 @@ public class MethodSolver extends VisitingReferenceSolver<MethodReference, Metho
             }
 
             boolean isReferenceTo(GoMethodDeclaration declaration) {
-                GoPsiType receiverType = declaration.getMethodReceiver().getType();
+                GoType receiverType = GoTypes.fromPsi(declaration.getMethodReceiver().getType());
 
-                if (receiverType == null)
+                if (receiverType instanceof GoTypePointer)
+                    receiverType = ((GoTypePointer) receiverType).getTargetType();
+
+                if (!(receiverType instanceof GoTypeName))
                     return false;
 
-                if (receiverType instanceof GoPsiTypePointer) {
-                    receiverType = ((GoPsiTypePointer) receiverType).getTargetType();
-                }
-
-                if (!(receiverType instanceof GoPsiTypeName))
-                    return false;
-
-                GoPsiTypeName methodTypeName = (GoPsiTypeName) receiverType;
+                GoTypeName methodTypeName = (GoTypeName) receiverType;
 
                 Set<GoTypeName> receiverTypes = reference.resolveBaseReceiverTypes();
 
                 GoLiteralIdentifier identifier = reference.getElement();
-                if (identifier == null) {
+                if (identifier == null)
                     return false;
-                }
 
                 for (GoTypeName type : receiverTypes) {
                     if ( type.getName().equals(methodTypeName.getName())) {
@@ -58,5 +53,4 @@ public class MethodSolver extends VisitingReferenceSolver<MethodReference, Metho
             }
         });
     }
-
 }

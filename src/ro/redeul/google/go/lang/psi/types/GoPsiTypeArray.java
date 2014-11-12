@@ -1,5 +1,7 @@
 package ro.redeul.google.go.lang.psi.types;
 
+import ro.redeul.google.go.lang.psi.expressions.GoExpr;
+
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
  * <p/>
@@ -9,6 +11,8 @@ package ro.redeul.google.go.lang.psi.types;
 public interface GoPsiTypeArray extends GoPsiType {
 
     int getArrayLength();
+
+    GoExpr getIndexExpression();
 
     GoPsiType getElementType();
 }

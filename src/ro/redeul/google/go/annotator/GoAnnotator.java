@@ -17,9 +17,8 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralBool;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallOrConversionExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.statements.GoDeferStatement;
@@ -111,7 +110,7 @@ public class GoAnnotator extends GoRecursiveElementVisitor
     }
 
     @Override
-    public void visitLiteralBool(GoLiteralBool literal) {
+    public void visitLiteralBool(GoLiteral<Boolean> literal) {
         Annotation ann = annotationHolder.createInfoAnnotation(literal, null);
         ann.setTextAttributes(GoSyntaxHighlighter.KEYWORD);
     }
@@ -152,7 +151,7 @@ public class GoAnnotator extends GoRecursiveElementVisitor
     }
 
     @Override
-    public void visitBuiltinCallExpression(GoBuiltinCallExpression expression) {
+    public void visitBuiltinCallExpression(GoBuiltinCallOrConversionExpression expression) {
         PsiElement definition = resolveSafely(expression.getBaseExpression(),
                                               PsiElement.class);
 

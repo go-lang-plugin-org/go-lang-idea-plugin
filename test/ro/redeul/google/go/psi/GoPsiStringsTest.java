@@ -5,6 +5,7 @@ import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralChar;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
@@ -36,9 +37,7 @@ public class GoPsiStringsTest extends GoPsiTestCase {
                     file.getGlobalVariables()
             ).getDeclarations();
 
-        GoLiteralString string;
-
-        string =
+        GoLiteralString string =
             getAs(GoLiteralString.class,
                   getAs(GoLiteralExpression.class,
                         childAt(0,
@@ -63,8 +62,8 @@ public class GoPsiStringsTest extends GoPsiTestCase {
         assertEquals("b", string.getValue());
 
 
-        string =
-                getAs(GoLiteralString.class,
+        GoLiteralChar aChar =
+                getAs(GoLiteralChar.class,
                         getAs(GoLiteralExpression.class,
                                 childAt(0,
                                         declarations[2].getExpressions()
@@ -72,11 +71,11 @@ public class GoPsiStringsTest extends GoPsiTestCase {
                         ).getLiteral()
                 );
 
-        assertEquals(GoLiteral.Type.InterpretedString, string.getType());
-        assertEquals("本", string.getValue());
+        assertEquals(GoLiteral.Type.Char, aChar.getType());
+        assertEquals(Character.valueOf('本'), aChar.getValue());
 
-        string =
-                getAs(GoLiteralString.class,
+        aChar =
+                getAs(GoLiteralChar.class,
                         getAs(GoLiteralExpression.class,
                                 childAt(0,
                                         declarations[3].getExpressions()
@@ -84,9 +83,8 @@ public class GoPsiStringsTest extends GoPsiTestCase {
                         ).getLiteral()
                 );
 
-        assertEquals(GoLiteral.Type.InterpretedString, string.getType());
-        assertEquals("ሴ", string.getValue());
-
+        assertEquals(GoLiteral.Type.Char, aChar.getType());
+        assertEquals('ሴ', (char)aChar.getValue());
     }
 
     public void testRune() throws Exception {
@@ -132,13 +130,13 @@ public class GoPsiStringsTest extends GoPsiTestCase {
                         file.getGlobalVariables()
                 ).getDeclarations();
 
-        GoLiteralString string;
+        GoLiteralChar aChar;
 
         for (Map.Entry<Integer, Integer> entry : testRuneValues.entrySet()) {
             Integer key = entry.getKey();
             Integer value = entry.getValue();
-            string =
-                    getAs(GoLiteralString.class,
+            aChar =
+                    getAs(GoLiteralChar.class,
                             getAs(GoLiteralExpression.class,
                                     childAt(0,
                                             declarations[key].getExpressions()
@@ -146,9 +144,9 @@ public class GoPsiStringsTest extends GoPsiTestCase {
                             ).getLiteral()
                     );
 
-            assertEquals(GoLiteral.Type.InterpretedString, string.getType());
-            assertEquals(GoElementTypes.LITERAL_CHAR, string.getNode().getElementType());
-            assertEquals(value, GoPsiUtils.getRuneValue(string.getText()));
+            assertEquals(GoLiteral.Type.Char, aChar.getType());
+            assertEquals(GoElementTypes.LITERAL_CHAR, aChar.getNode().getElementType());
+            assertEquals(value, GoPsiUtils.getRuneValue(aChar.getText()));
         }
 
         List<String> badRuneValues = Arrays.asList("'aa'", "'\\xa'", "'\\0'", "'\\uDFFF'", "'\\U00110000'");
@@ -156,6 +154,5 @@ public class GoPsiStringsTest extends GoPsiTestCase {
         for (String rune: badRuneValues){
             assertNull(GoPsiUtils.getRuneValue(rune));
         }
-
     }
 }

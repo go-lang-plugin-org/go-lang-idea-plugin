@@ -2,7 +2,6 @@ package ro.redeul.google.go.lang.psi.types;
 
 import com.intellij.psi.PsiNamedElement;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -13,8 +12,6 @@ import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 public interface GoPsiType extends GoPsiElement, PsiNamedElement {
 
     public static final GoPsiType[] EMPTY_ARRAY = new GoPsiType[0];
-
-    GoUnderlyingType getUnderlyingType();
 
     boolean isIdentical(GoPsiType goType);
 }

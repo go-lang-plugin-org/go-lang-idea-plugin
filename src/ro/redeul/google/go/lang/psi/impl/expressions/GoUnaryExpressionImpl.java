@@ -4,15 +4,18 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoUnaryExpression;
-import ro.redeul.google.go.lang.psi.typing.GoType;
-import ro.redeul.google.go.lang.psi.typing.GoTypeChannel;
-import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
-import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.typing.*;
 import ro.redeul.google.go.lang.psi.utils.GoTokenSets;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
+import ro.redeul.google.go.util.GoNumber;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import static ro.redeul.google.go.lang.psi.expressions.GoUnaryExpression.Op.Channel;
 
@@ -27,15 +30,21 @@ public class GoUnaryExpressionImpl extends GoExpressionBase
         GoExpr expression = getExpression();
         if (expression == null)
             return GoType.EMPTY_ARRAY;
+
         GoType[] basic = expression.getType();
+
+        if ( basic.length == 1 && basic[0] instanceof GoTypeConstant ) {
+            GoType myType = computeConstant((GoTypeConstant) basic[0]);
+            return new GoType[]{myType};
+        }
+
         switch (getUnaryOp()) {
             case Channel:
                 if (basic.length == 1 && basic[0] instanceof GoTypeChannel) {
                     GoTypeChannel channelType = (GoTypeChannel) basic[0];
                     return new GoType[]{
                             channelType.getElementType(),
-                            GoTypes.getBuiltin(GoTypes.Builtin.Bool,
-                                    GoNamesCache.getInstance(getProject()))
+                            types().getBuiltin(GoTypes.Builtin.Bool)
                     };
                 }
                 return GoType.EMPTY_ARRAY;
@@ -54,9 +63,67 @@ public class GoUnaryExpressionImpl extends GoExpressionBase
                     };
                 }
                 return GoType.EMPTY_ARRAY;
+            case Minus:
+
             default:
                 return basic;
         }
+    }
+
+    private GoType computeConstant(GoTypeConstant constant) {
+
+        switch (constant.getKind()) {
+            case String:
+            case Boolean:
+                return GoType.Unknown;
+            case Integer:
+                BigInteger intValue = constant.getValueAs(BigInteger.class);
+                if ( intValue == null )
+                    return GoType.Unknown;
+
+                switch (getUnaryOp()) {
+                    case Plus:
+                        return constant;
+                    case Minus:
+                        return types().constant(GoTypeConstant.Kind.Integer, intValue.negate());
+                    case Not:
+                        return types().constant(GoTypeConstant.Kind.Integer, intValue.not());
+                    case Xor:
+                        return types().constant(GoTypeConstant.Kind.Integer, intValue.not());
+                    default:
+                        return GoType.Unknown;
+                }
+
+            case Float:
+                BigDecimal decimalValue = constant.getValueAs(BigDecimal.class);
+                if ( decimalValue == null )
+                    return GoType.Unknown;
+
+                switch (getUnaryOp()) {
+                    case Plus:
+                        return constant;
+                    case Minus:
+                        return types().constant(GoTypeConstant.Kind.Float, decimalValue.negate());
+                    default:
+                        return GoType.Unknown;
+                }
+
+            case Complex:
+                GoNumber complexValue = constant.getValueAs(GoNumber.class);
+                if ( complexValue == null )
+                    return GoType.Unknown;
+
+                switch (getUnaryOp()) {
+                    case Plus:
+                        return constant;
+                    case Minus:
+                        return types().constant(GoTypeConstant.Kind.Complex, complexValue.negate());
+                    default:
+                        return GoType.Unknown;
+                }
+        }
+
+        return GoType.Unknown;
     }
 
     @Override
@@ -100,5 +167,10 @@ public class GoUnaryExpressionImpl extends GoExpressionBase
     public boolean isConstantExpression() {
         GoExpr expression = getExpression();
         return expression != null && expression.isConstantExpression();
+    }
+
+    @Override
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitUnaryExpression(this);
     }
 }

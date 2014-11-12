@@ -7,8 +7,6 @@ import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 /**
@@ -21,11 +19,6 @@ public class GoPsiTypeInterfaceImpl extends GoPsiTypeImpl implements GoPsiTypeIn
 
     public GoPsiTypeInterfaceImpl(@NotNull ASTNode node) {
         super(node);
-    }
-
-    @Override
-    public GoUnderlyingType getUnderlyingType() {
-        return GoUnderlyingTypes.getInterface();
     }
 
     @Override

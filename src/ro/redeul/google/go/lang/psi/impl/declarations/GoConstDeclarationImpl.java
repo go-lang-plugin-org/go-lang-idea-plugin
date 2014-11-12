@@ -6,6 +6,7 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
+import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
@@ -66,25 +67,17 @@ public class GoConstDeclarationImpl extends GoPsiElementBase
 
     @Override
     public GoPsiType getIdentifiersType() {
-        GoPsiType types = findChildByClass(GoPsiType.class);
-        PsiElement parent = getParent();
+        GoPsiType type = findChildByClass(GoPsiType.class);
 
-        if (types == null && parent instanceof GoConstDeclarations && !hasInitializers()) {
-            // Omitting the list of expressions is therefore equivalent to repeating the previous list
-            GoConstDeclaration previous = null;
-            for (GoConstDeclaration declaration : ((GoConstDeclarations) parent).getDeclarations()) {
-                if (declaration != this) {
-                    previous = declaration;
-                }
-                if (declaration == this) {
-                    if (previous != null){
-                        return previous.getIdentifiersType();
-                    }
-                    break;
-                }
-            }
-        }
-        return types;
+        if ( type != null )
+            return type;
+
+        PsiElement declaration = this.getPrevSibling();
+
+        while (declaration != null && !(declaration instanceof GoConstDeclaration))
+            declaration = declaration.getPrevSibling();
+
+        return declaration != null ? ((GoConstDeclaration)declaration).getIdentifiersType() : null;
     }
 
     @Override

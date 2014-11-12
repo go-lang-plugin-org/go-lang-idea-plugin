@@ -164,7 +164,7 @@ class GoPsiCreator implements GoElementTypes {
             return new GoLiteralStringImpl(node);
 
         if (elementType.equals(LITERAL_CHAR))
-            return new GoLiteralStringImpl(node);
+            return new GoLiteralCharImpl(node);
 
         if (elementType.equals(LITERAL_IMAGINARY))
             return new GoLiteralImaginaryImpl(node);
@@ -236,7 +236,7 @@ class GoPsiCreator implements GoElementTypes {
             return new GoForWithRangeAndVarsStatementImpl(node);
 
         if (elementType.equals(BUILTIN_CALL_EXPRESSION))
-            return new GoBuiltinCallExpressionImpl(node);
+            return new GoBuiltinCallOrConversionExpressionImpl(node);
 
         if (elementType.equals(ASSIGN_STATEMENT))
             return new GoAssignmentStatementImpl(node);

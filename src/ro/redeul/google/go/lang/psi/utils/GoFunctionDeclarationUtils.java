@@ -1,8 +1,13 @@
 package ro.redeul.google.go.lang.psi.utils;
 
+import com.intellij.util.Function;
+import com.intellij.util.containers.ContainerUtil;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +22,15 @@ public class GoFunctionDeclarationUtils {
         return false;
     }
 
-    public static int GetResultCount(GoFunctionDeclaration declaration){
+    public static int getResultCount(GoFunctionParameter []params) {
         int returnCount = 0;
-        for (GoFunctionParameter resParam : declaration.getResults()) {
+        for (GoFunctionParameter resParam : params) {
             returnCount += Math.max(resParam.getIdentifiers().length, 1);
         }
         return returnCount;
+    }
+    public static int getResultCount(GoFunctionDeclaration declaration) {
+        return getResultCount(declaration.getResults());
     }
 
     public static boolean hasResult(GoFunctionDeclaration function) {
@@ -46,5 +54,25 @@ public class GoFunctionDeclarationUtils {
             }
         }
         return parameterNames;
+    }
+
+    public static GoType[] getParameterTypes(GoFunctionParameter[] params) {
+        List<GoPsiType> types = new ArrayList<GoPsiType>();
+        for (GoFunctionParameter result : params) {
+            GoLiteralIdentifier identifiers[] = result.getIdentifiers();
+
+            if (identifiers.length == 0 && result.getType() != null) {
+                types.add(result.getType());
+            } else {
+                for (GoLiteralIdentifier identifier : identifiers) {
+                    types.add(result.getType());
+                }
+            }
+        }
+
+        return ContainerUtil.map2Array(types, GoType.class, new Function<GoPsiType, GoType>() {
+            @Override
+            public GoType fun(GoPsiType type) { return GoTypes.fromPsi(type); }
+        });
     }
 }

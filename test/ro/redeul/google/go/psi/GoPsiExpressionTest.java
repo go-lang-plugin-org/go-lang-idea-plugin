@@ -5,6 +5,9 @@ import ro.redeul.google.go.inspection.FunctionCallInspection;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 import static ro.redeul.google.go.util.GoPsiTestUtils.childAt;
 import static ro.redeul.google.go.util.GoPsiTestUtils.get;
 
@@ -43,39 +46,39 @@ public class GoPsiExpressionTest extends GoPsiTestCase {
                         file.getConsts()
                 ).getDeclarations();
 
-        Number val;
+        Number val = null;
 
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(childAt(0, declarations[0].getExpressions()));
-        assertInstanceOf(val, Integer.class);
-        assertEquals(val, 100);
+        assertInstanceOf(val, BigInteger.class);
+        assertEquals(val.intValue(), 100);
 
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(childAt(0, declarations[1].getExpressions()));
-        assertInstanceOf(val, Float.class);
-        assertEquals((Float) val, 101.0, DELTA);
+        assertInstanceOf(val, BigDecimal.class);
+        assertEquals(val.floatValue(), 101.0, DELTA);
 
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(childAt(0, declarations[2].getExpressions()));
-        assertInstanceOf(val, Float.class);
-        assertEquals((Float) val, 102.3456, DELTA);
+        assertInstanceOf(val, BigDecimal.class);
+        assertEquals(val.floatValue(), 102.3456, DELTA);
 
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(childAt(0, declarations[3].getExpressions()));
-        assertInstanceOf(val, Integer.class);
-        assertEquals(val, 103);
+        assertInstanceOf(val, BigInteger.class);
+        assertEquals(val.intValue(), 103);
 
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(childAt(0, declarations[4].getExpressions()));
-        assertInstanceOf(val, Integer.class);
-        assertEquals(val, -104);
+        assertInstanceOf(val, BigInteger.class);
+        assertEquals(val.intValue(), -104);
 
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(childAt(0, declarations[5].getExpressions()));
-        assertInstanceOf(val, Integer.class);
-        assertEquals(val, 105);
+        assertInstanceOf(val, BigInteger.class);
+        assertEquals(105, val.intValue());
 
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(childAt(0, declarations[6].getExpressions()));
-        assertInstanceOf(val, Integer.class);
-        assertEquals(val, 106);
+        assertInstanceOf(val, BigInteger.class);
+        assertEquals(106, val.intValue());
 
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(childAt(0, declarations[7].getExpressions()));
-        assertInstanceOf(val, Integer.class);
-        assertEquals(val, 107);
+        assertInstanceOf(val, BigInteger.class);
+        assertEquals(107, val.intValue());
 
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(childAt(0, declarations[8].getExpressions()));
         assertNull(val);
@@ -84,20 +87,20 @@ public class GoPsiExpressionTest extends GoPsiTestCase {
         assertNull(val);
 
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(childAt(0, declarations[10].getExpressions()));
-        assertInstanceOf(val, Integer.class);
-        assertEquals(val, 110);
+        assertInstanceOf(val, BigInteger.class);
+        assertEquals(110, val.intValue());
 
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(childAt(0, declarations[11].getExpressions()));
-        assertInstanceOf(val, Float.class);
-        assertEquals((Float) val, 111.65, DELTA);
+        assertInstanceOf(val, BigDecimal.class);
+        assertEquals(111.65, val.floatValue(),DELTA);
 
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(childAt(0, declarations[12].getExpressions()));
-        assertInstanceOf(val, Float.class);
-        assertEquals((Float) val, 112, DELTA);
+        assertInstanceOf(val, BigDecimal.class);
+        assertEquals(112, val.floatValue(), DELTA);
 
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(childAt(0, declarations[13].getExpressions()));
-        assertInstanceOf(val, Integer.class);
-        assertEquals(val, 16);
+        assertInstanceOf(val, BigInteger.class);
+        assertEquals(16, val.intValue());
 
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(childAt(0, declarations[14].getExpressions()));
         assertNull(val);
@@ -106,8 +109,8 @@ public class GoPsiExpressionTest extends GoPsiTestCase {
         assertNull(val);
 
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(childAt(0, declarations[16].getExpressions()));
-        assertInstanceOf(val, Integer.class);
-        assertEquals(val, 16);
+        assertInstanceOf(val, BigInteger.class);
+        assertEquals(val.intValue(), 16);
 
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(childAt(0, declarations[17].getExpressions()));
         assertNull(val);
@@ -134,32 +137,34 @@ public class GoPsiExpressionTest extends GoPsiTestCase {
         Number val;
 
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(declarations[0].getExpression(declarations[0].getIdentifiers()[0]));
-        assertInstanceOf(val, Integer.class);
-        assertEquals(val, 0);
+        assertInstanceOf(val, BigInteger.class);
+        assertEquals(BigInteger.ZERO, val);
+
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(declarations[0].getExpression(declarations[0].getIdentifiers()[1]));
-        assertInstanceOf(val, Integer.class);
-        assertEquals(val, 0);
+        assertInstanceOf(val, BigInteger.class);
+        assertEquals(0, val.intValue());
 
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(declarations[1].getExpression(declarations[1].getIdentifiers()[0]));
-        assertInstanceOf(val, Integer.class);
-        assertEquals(val, 1);
+        assertInstanceOf(val, BigInteger.class);
+        assertEquals(1, val.intValue());
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(declarations[1].getExpression(declarations[1].getIdentifiers()[1]));
-        assertInstanceOf(val, Integer.class);
-        assertEquals(val, 2);
+        assertInstanceOf(val, BigInteger.class);
+        assertEquals(2, val.intValue());
 
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(declarations[2].getExpression(declarations[2].getIdentifiers()[0]));
-        assertInstanceOf(val, Integer.class);
-        assertEquals(val, 3);
+        assertInstanceOf(val, BigInteger.class);
+        assertEquals(3, val.intValue());
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(declarations[2].getExpression(declarations[2].getIdentifiers()[1]));
-        assertInstanceOf(val, Integer.class);
-        assertEquals(val, 5);
+        assertInstanceOf(val, BigInteger.class);
+        assertEquals(5, val.intValue());
 
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(declarations[3].getExpression(declarations[3].getIdentifiers()[0]));
-        assertInstanceOf(val, Float.class);
-        assertEquals((Float) val, 6.0, DELTA);
+        assertInstanceOf(val, BigDecimal.class);
+        assertEquals(6.0, val.floatValue(), DELTA);
+
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(declarations[3].getExpression(declarations[3].getIdentifiers()[1]));
-        assertInstanceOf(val, Integer.class);
-        assertEquals(val, -3);
+        assertInstanceOf(val, BigInteger.class);
+        assertEquals(-3, val.intValue());
 
     }
 

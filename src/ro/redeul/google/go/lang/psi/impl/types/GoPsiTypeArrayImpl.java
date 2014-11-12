@@ -9,13 +9,11 @@ import ro.redeul.google.go.lang.psi.impl.expressions.literals.composite.GoLitera
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeArray;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeArray;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
-import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
 import static ro.redeul.google.go.inspection.FunctionCallInspection.getNumberValueFromLiteralExpr;
+import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -46,6 +44,8 @@ public class GoPsiTypeArrayImpl extends GoPsiTypeImpl implements GoPsiTypeArray 
         return InspectionUtil.UNKNOWN_COUNT;
     }
 
+    public GoExpr getIndexExpression() { return findChildByClass(GoExpr.class); }
+
     public GoPsiType getElementType() {
         return findChildByClass(GoPsiType.class);
     }
@@ -53,11 +53,6 @@ public class GoPsiTypeArrayImpl extends GoPsiTypeImpl implements GoPsiTypeArray 
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitArrayType(this);
-    }
-
-    @Override
-    public GoUnderlyingType getUnderlyingType() {
-        return new GoUnderlyingTypeArray(getElementType().getUnderlyingType(), getArrayLength());
     }
 
     @Override
@@ -69,7 +64,7 @@ public class GoPsiTypeArrayImpl extends GoPsiTypeImpl implements GoPsiTypeArray 
             return false;
         }
         GoPsiTypeArray otherTypeArray = (GoPsiTypeArray) goType;
-        return getUnderlyingType().isIdentical(otherTypeArray.getUnderlyingType());
+        return false;
     }
 
     @NotNull

@@ -4,7 +4,6 @@ import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeChannel;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 import ro.redeul.google.go.lang.psi.typing.GoTypeChannel;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
@@ -34,11 +33,6 @@ public class GoPsiTypeChannelImpl extends GoPsiTypeImpl implements GoPsiTypeChan
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitChannelType(this);
-    }
-
-    @Override
-    public GoUnderlyingType getUnderlyingType() {
-        return GoUnderlyingType.Undefined;
     }
 
     @Override

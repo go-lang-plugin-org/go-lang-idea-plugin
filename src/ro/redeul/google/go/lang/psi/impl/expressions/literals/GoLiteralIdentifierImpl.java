@@ -12,9 +12,10 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.packages.GoPackages;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
+import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeElement;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallOrConversionExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
@@ -31,6 +32,7 @@ import ro.redeul.google.go.lang.psi.typing.*;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +53,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getLocalElementSearc
 public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiteralIdentifier {
 
     private final boolean isIota;
-    private Integer iotaValue;
+    private BigInteger iotaValue;
 
     public GoLiteralIdentifierImpl(@NotNull ASTNode node) {
         this(node, false);
@@ -225,11 +227,11 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
                         psiElement(GoLiteralExpression.class)
                                 .atStartOf(
                                         or(
-                                                psiElement(GoBuiltinCallExpression.class),
+                                                psiElement(GoBuiltinCallOrConversionExpression.class),
                                                 psiElement(GoCallOrConvExpression.class))))
                 .withSuperParent(2,
                         or(
-                                psiElement(GoBuiltinCallExpression.class),
+                                psiElement(GoBuiltinCallOrConversionExpression.class),
                                 psiElement(GoCallOrConvExpression.class))
                 ).accepts(this)) {
             return new PsiReference[]{new FunctionOrTypeNameReference(this)};
@@ -243,41 +245,47 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
             GoSelectorExpression selectorExpression = (GoSelectorExpression) getParent();
 
             GoType baseTypes[] = selectorExpression.getBaseExpression().getType();
+            List<Reference> references = GoTypes.visitFirstType(baseTypes, new GoType.ForwardingVisitor<List<Reference>>(
+                    new ArrayList<Reference>(),
+                    new GoType.Second<List<Reference>>() {
 
-            return GoTypes.visitFirstType(baseTypes, new GoType.Visitor<PsiReference[]>(PsiReference.EMPTY_ARRAY) {
-                final GoLiteralIdentifier ident = GoLiteralIdentifierImpl.this;
+                        final GoLiteralIdentifier ident = GoLiteralIdentifierImpl.this;
 
-                List<Reference> refs = new ArrayList<Reference>();
+                        @Override
+                        public void visitPointer(GoTypePointer type, List<Reference> data, GoType.Visitor<List<Reference>> visitor) {
+                            type.getTargetType().accept(visitor);
+                        }
 
-                @Override
-                public PsiReference[] getData() {
-                    return refs.toArray(new PsiReference[refs.size()]);
-                }
+                        @Override
+                        public void visitPackage(GoTypePackage type, List<Reference> data, GoType.Visitor<List<Reference>> visitor) {
+                            GoPackage goPackage = type.getPackage();
+                            if (goPackage != GoPackages.C)
+                                data.add(new PackageSymbolReference(ident, goPackage));
+                        }
 
-                @Override
-                public void visitPointer(GoTypePointer type) {
-                    visit(type.getTargetType());
-                }
+                        @Override
+                        public void visitName(GoTypeName type, List<Reference> data, GoType.Visitor<List<Reference>> visitor) {
+                            data.add(new InterfaceMethodReference(ident, type));
+                            data.add(new MethodReference(ident, type));
 
-                @Override
-                public void visitPackage(GoTypePackage type) {
-                    if ( type.getPackage() != GoPackages.C )
-                        refs.add(new PackageSymbolReference(ident, type.getPackage()));
-                }
+                            // HACK: I should not have to do this here
+                            if (type != type.getUnderlyingType() && !(type.getUnderlyingType() instanceof GoTypeName))
+                                type.getUnderlyingType().accept(visitor);
+                        }
 
-                @Override
-                public void visitName(final GoTypeName type) {
-                    refs.add(new InterfaceMethodReference(ident, type));
-                    refs.add(new MethodReference(ident, type));
+                        @Override
+                        public void visitPrimitive(GoTypePrimitive type, List<Reference> data, GoType.Visitor<List<Reference>> visitor) {
+                            data.add(new MethodReference(ident, type));
+                        }
 
-                    visit(type.getDefinition());
-                }
+                        @Override
+                        public void visitStruct(GoTypeStruct type, List<Reference> data, GoType.Visitor<List<Reference>> visitor) {
+                            data.add(new StructFieldReference(ident, type));
+                        }
+                    }
+            ));
 
-                @Override
-                public void visitStruct(GoTypeStruct type) {
-                    refs.add(new StructFieldReference(ident, type));
-                }
-            });
+            return references.toArray(new PsiReference[references.size()]);
         }
 
         if (VarOrConstReference.MATCHER.accepts(this)) {
@@ -353,11 +361,11 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
 
     @Override
     public void setIotaValue(int value) {
-        iotaValue = value;
+        iotaValue = BigInteger.valueOf(value);
     }
 
     @Override
-    public Integer getIotaValue() {
+    public BigInteger getIotaValue() {
         if (isIota()) {
             return iotaValue;
         }

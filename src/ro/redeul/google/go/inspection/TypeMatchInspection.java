@@ -4,9 +4,9 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeInterface;
+import ro.redeul.google.go.lang.psi.expressions.binary.GoRelationalExpression;
 import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypeInterface;
 import ro.redeul.google.go.lang.psi.typing.GoTypeName;
 import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
@@ -19,7 +19,45 @@ public class TypeMatchInspection extends AbstractWholeGoFileInspection {
             public void visitBinaryExpression(GoBinaryExpression expression) {
                 checkBinaryExpression(result, expression);
             }
+
+            @Override
+            public void visitRelExpression(GoRelationalExpression expression) {
+                if ( !preValidate(expression) )
+                    return;
+
+                checkRelationalExpression(result, expression);
+            }
         }.visitFile(file);
+    }
+
+    private boolean preValidate(GoBinaryExpression expression) {
+        GoExpr left = expression.getLeftOperand();
+        GoExpr right = expression.getRightOperand();
+
+        if (left == null || right == null)
+            return false;
+
+        if (left.isConstantExpression() || right.isConstantExpression())
+            return false;
+
+        GoType[] leftTypes = left.getType();
+        GoType[] rightTypes = right.getType();
+        if (leftTypes.length == 0 || rightTypes.length == 0 || leftTypes[0] == null || rightTypes[0] == null)
+            return false;
+
+        return true;
+    }
+
+
+    private void checkRelationalExpression(InspectionResult result, GoRelationalExpression expression) {
+
+        GoType leftType = expression.getLeftOperand().getType()[0];
+        GoType rightType = expression.getRightOperand().getType()[0];
+
+        switch (expression.op()) {
+            case Eq:
+            case NotEq:
+        }
     }
 
     public static void checkBinaryExpression(InspectionResult result, GoBinaryExpression expression) {
@@ -36,7 +74,8 @@ public class TypeMatchInspection extends AbstractWholeGoFileInspection {
         if (leftTypes.length == 0 || rightTypes.length == 0){
             return;
         }
-        String operator = expression.getOperator().toString();
+
+        String operator = expression.op().toString();
         boolean equality = operator.equals("!=") || operator.equals("==");
         boolean shift = operator.equals("<<")||operator.equals(">>");
         for (GoType leftType : leftTypes) {
@@ -44,9 +83,9 @@ public class TypeMatchInspection extends AbstractWholeGoFileInspection {
                 if (leftType == null || rightType == null) {
                     return;
                 }
-                GoUnderlyingType leftUnder = leftType.getUnderlyingType();
-                GoUnderlyingType rightUnder = rightType.getUnderlyingType();
-                boolean hasInterface = leftUnder instanceof GoUnderlyingTypeInterface || rightUnder instanceof GoUnderlyingTypeInterface;
+                GoType leftUnder = leftType.getUnderlyingType();
+                GoType rightUnder = rightType.getUnderlyingType();
+                boolean hasInterface = leftUnder instanceof GoTypeInterface || rightUnder instanceof GoTypeInterface;
                 if (!equality) {
                     if (leftType instanceof GoTypePointer || rightType instanceof GoTypePointer){
                         result.addProblem(expression, "operator "+operator+" not defined on pointer");

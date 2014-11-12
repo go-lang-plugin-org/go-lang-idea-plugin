@@ -11,10 +11,7 @@ import ro.redeul.google.go.lang.psi.resolve.ReferenceWithSolver;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
-import ro.redeul.google.go.lang.psi.typing.GoType;
-import ro.redeul.google.go.lang.psi.typing.GoTypeName;
-import ro.redeul.google.go.lang.psi.typing.GoTypeStruct;
-import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.typing.*;
 import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
 
 import java.util.HashSet;
@@ -45,12 +42,8 @@ public class MethodReference extends ReferenceWithSolver<GoLiteralIdentifier, Me
     @Override
     public void walkSolver(MethodSolver solver) {
         PsiElement toFindPackagePsi;
-        if (type.getDefinition() instanceof GoTypeName){
-            toFindPackagePsi = ((GoTypeName) type.getDefinition()).getPsiType();
-        }else{
-            toFindPackagePsi = type.getPsiType();
-        }
-        GoPackage goPackage = GoPackages.getTargetPackageIfDifferent(getElement(), toFindPackagePsi);
+
+        GoPackage goPackage = GoPackages.getTargetPackageIfDifferent(getElement(), type.getDefinition());
 
         if ( goPackage != null) {
             GoPsiScopesUtil.walkPackage(solver, getElement(), goPackage);
@@ -78,10 +71,11 @@ public class MethodReference extends ReferenceWithSolver<GoLiteralIdentifier, Me
 
             receiverTypes.add(currentTypeName);
 
-            if ( !(currentTypeName.getDefinition() instanceof GoTypeStruct) )
+            GoType underlyingType = currentTypeName.getUnderlyingType();
+            if ( !(underlyingType instanceof GoTypeStruct) )
                 continue;
 
-            GoTypeStruct typeStruct = (GoTypeStruct) currentTypeName.getDefinition();
+            GoTypeStruct typeStruct = (GoTypeStruct) underlyingType;
             for (GoTypeStructAnonymousField field : typeStruct.getPsiType().getAnonymousFields()) {
                 GoPsiType psiType = field.getType();
                 if ( psiType == null)
@@ -90,8 +84,8 @@ public class MethodReference extends ReferenceWithSolver<GoLiteralIdentifier, Me
                     psiType = ((GoPsiTypePointer) psiType).getTargetType();
                 }
 
-                GoType embeddedType = GoTypes.fromPsiType(psiType);
-                if (embeddedType == null || !(embeddedType instanceof GoTypeName))
+                GoType embeddedType = GoTypes.fromPsi(psiType);
+                if (!(embeddedType instanceof GoTypeName))
                     continue;
 
                 GoTypeName embeddedTypeName = (GoTypeName) embeddedType;
@@ -104,5 +98,4 @@ public class MethodReference extends ReferenceWithSolver<GoLiteralIdentifier, Me
 
         return receiverTypes;
     }
-
 }

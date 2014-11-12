@@ -9,7 +9,7 @@ import ro.redeul.google.go.inspection.fix.RemoveFunctionResultFix;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallOrConversionExpression;
 import ro.redeul.google.go.lang.psi.statements.*;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClause;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectStatement;
@@ -75,11 +75,11 @@ public class FunctionWithResultButWihtoutReturnInspection extends AbstractWholeG
         }
 
         PsiElement call = element.getFirstChild();
-        if (!(call instanceof GoBuiltinCallExpression)) {
+        if (!(call instanceof GoBuiltinCallOrConversionExpression)) {
             return false;
         }
 
-        GoPrimaryExpression expression = ((GoBuiltinCallExpression) call).getBaseExpression();
+        GoPrimaryExpression expression = ((GoBuiltinCallOrConversionExpression) call).getBaseExpression();
         return expression != null && "panic".equals(expression.getText());
     }
 

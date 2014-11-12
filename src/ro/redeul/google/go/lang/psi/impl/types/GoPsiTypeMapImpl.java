@@ -5,8 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.childAt;
@@ -35,12 +33,6 @@ public class GoPsiTypeMapImpl extends GoPsiTypeImpl implements GoPsiTypeMap {
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitMapType(this);
-    }
-
-    @Override
-    public GoUnderlyingType getUnderlyingType() {
-        return GoUnderlyingTypes.getMap(
-        );
     }
 
     @Override

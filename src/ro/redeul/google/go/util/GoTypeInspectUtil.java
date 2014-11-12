@@ -1,6 +1,7 @@
 package ro.redeul.google.go.util;
 
 import com.intellij.codeInspection.ProblemHighlightType;
+import com.intellij.openapi.util.Pair;
 import com.intellij.psi.PsiElement;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.inspection.FunctionCallInspection;
@@ -13,8 +14,11 @@ import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoUnaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
-import ro.redeul.google.go.lang.psi.expressions.literals.*;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFloat;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralInteger;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallOrConversionExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpression;
@@ -22,9 +26,10 @@ import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.types.*;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeSlice;
 import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypeName;
+import ro.redeul.google.go.lang.psi.typing.GoTypeSlice;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.utils.GoExpressionUtils;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 
@@ -37,7 +42,7 @@ public class GoTypeInspectUtil {
         if (psiType instanceof GoPsiTypeInterface)
             return true;
         if (psiType instanceof GoPsiTypeName)
-            return ((GoPsiTypeName)psiType).getName().equals("error") && ((GoPsiTypeName) psiType).isPrimitive();
+            return psiType.getName().equals("error") && ((GoPsiTypeName) psiType).isPrimitive();
         if (psiType instanceof GoPsiTypeSlice)
             return checkIsInterface(((GoPsiTypeSlice) psiType).getElementType());
         if (psiType instanceof GoPsiTypePointer)
@@ -49,8 +54,10 @@ public class GoTypeInspectUtil {
         return false;
     }
 
-    public static boolean checkParametersExp(GoPsiType type, GoExpr expr) {
-        GoPsiType resolved = resolveToFinalType(type);
+    public static boolean checkParametersExp(GoPsiType psiType, GoExpr expr) {
+        GoType type = GoTypes.fromPsi(psiType);
+
+        GoPsiType resolved = resolveToFinalType(psiType);
         if (resolved instanceof GoPsiTypeInterface)
             return true;
 
@@ -61,6 +68,13 @@ public class GoTypeInspectUtil {
         if (resolved == null) {
             return false;
         }
+
+
+        GoType[] goTypes = expr.getType();
+        if (goTypes.length != 0 && goTypes[0] != null) {
+            return GoUtil.areTypesAssignable(GoTypes.getInstance(expr.getProject()).fromPsiType(psiType), goTypes[0]);
+        }
+
         //Fix issue #520 with nil
         if (IsNil(expr)) {
             if (resolved instanceof GoPsiTypeName) {
@@ -76,69 +90,30 @@ public class GoTypeInspectUtil {
                     resolved instanceof GoPsiTypeMap ||
                     resolved instanceof GoPsiTypeChannel;
         } else if (expr.isConstantExpression()) {
-            String resolvedTypeName = resolved.getText();
+                  }
 
-            if (resolvedTypeName.startsWith("int") || resolvedTypeName.startsWith("uint")
-                    || resolvedTypeName.equals("byte") || resolvedTypeName.equals("rune")) {
-                Number numValue = FunctionCallInspection.getNumberValueFromLiteralExpr(expr);
-                if (numValue == null)
-                    return checkValidLiteralIntExpr(expr);
-                if (numValue instanceof Integer || numValue.intValue() == numValue.floatValue()) {
-                    Integer value = numValue.intValue();
-                    if (resolvedTypeName.equals("int8"))
-                        return value >= -128 && value <= 127;
-                    if (resolvedTypeName.equals("int16"))
-                        return value >= -32768 && value <= 32767;
-                    if (resolvedTypeName.equals("int32") || resolvedTypeName.equals("rune"))
-                        return value >= -2147483648 && value <= 2147483647;
-                    if (resolvedTypeName.equals("int64") || resolvedTypeName.equals("int"))
-                        return true;
-
-                    if (resolvedTypeName.equals("uint8") || resolvedTypeName.equals("byte"))
-                        return value >= 0 && value <= 255;
-                    if (resolvedTypeName.equals("uint16"))
-                        return value >= 0 && value <= 65535;
-                    if (resolvedTypeName.equals("uint32"))
-                        return value >= 0;
-                    if (resolvedTypeName.equals("uint64") || resolvedTypeName.equals("uint"))
-                        return value >= 0;
-                } else {
-                    return false;
-                }
-            }
-            if (resolvedTypeName.startsWith("float")) {
-                return checkValidLiteralFloatExpr(expr);
-            }
-            if (firstChildOfExp instanceof GoLiteralString) {
-                return resolvedTypeName.equals("string");
-            }
-            if (firstChildOfExp instanceof GoLiteralBool) {
-                return resolvedTypeName.equals("bool");
-            }
-        }
-
-        GoType[] goTypes = expr.getType();
+        goTypes = expr.getType();
         if (goTypes.length != 0 && goTypes[0] != null) {
-            return GoUtil.CompareTypes(type, goTypes[0], expr);
+            return GoUtil.CompareTypes(psiType, goTypes[0], expr);
         }
 
-        if (type instanceof GoPsiTypeFunction)
-            return GoUtil.CompareTypes(type, null, expr);
+        if (psiType instanceof GoPsiTypeFunction)
+            return GoUtil.CompareTypes(psiType, null, expr);
 
         if (firstChildOfExp instanceof GoLiteralIdentifier) {
             GoPsiElement goPsiElement = GoUtil.ResolveTypeOfVarDecl((GoPsiElement) firstChildOfExp);
             if (goPsiElement instanceof GoPsiType)
-                return GoUtil.CompareTypes(type, goPsiElement);
+                return GoUtil.CompareTypes(psiType, goPsiElement);
         }
         if (expr instanceof GoCallOrConvExpression && firstChildOfExp instanceof GoPsiTypeParenthesized) {
-            return GoUtil.CompareTypes(type, ((GoPsiTypeParenthesized) firstChildOfExp).getInnerType(), expr);
+            return GoUtil.CompareTypes(psiType, ((GoPsiTypeParenthesized) firstChildOfExp).getInnerType(), expr);
         }
-        type = resolved;
-        if (type == null) {
+        psiType = resolved;
+        if (psiType == null) {
             return false;
         }
 
-        String typeText = type.getText();
+        String typeText = psiType.getText();
         if (expr instanceof GoLiteralExpression) {
             GoLiteral.Type type1 = ((GoLiteralExpression) expr).getLiteral().getType();
             return type1 == GoLiteral.Type.Identifier || type1.name().toLowerCase().equals(typeText);
@@ -224,8 +199,8 @@ public class GoTypeInspectUtil {
         if (goFunctionDeclaration == null)
             return;
 
-        if (call instanceof GoBuiltinCallExpression) {
-            GoPsiType[] builtinTypes = ((GoBuiltinCallExpression) call).getArgumentsType();
+        if (call instanceof GoBuiltinCallOrConversionExpression) {
+            GoPsiType[] builtinTypes = ((GoBuiltinCallOrConversionExpression) call).getArgumentsType();
             if (builtinTypes.length > 0 && goExprs.length == builtinTypes.length) {
                 for (; index < goExprs.length; index++) {
                     GoExpr goExpr = goExprs[index];
@@ -234,7 +209,7 @@ public class GoTypeInspectUtil {
                         result.addProblem(
                                 goExpr,
                                 GoBundle.message("warning.functioncall.type.mismatch", type.getText()),
-                                ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type));
+                                ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, GoTypes.fromPsi(type)));
                         return;
                     }
                 }
@@ -258,8 +233,8 @@ public class GoTypeInspectUtil {
                                 ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
                         return;
                     }
-                    GoUnderlyingType exprType = types[0].getUnderlyingType();
-                    if (!(exprType instanceof GoUnderlyingTypeSlice)){
+                    GoType exprType = types[0].getUnderlyingType();
+                    if (!(exprType instanceof GoTypeSlice)){
                         result.addProblem(
                                 goExpr,
                                 GoBundle.message("warning.functioncall.type.mismatch", "[]"+typeName),
@@ -268,8 +243,7 @@ public class GoTypeInspectUtil {
                     }
 
                     //TODO test with assignable
-                    if (!((GoUnderlyingTypeSlice) exprType).getElementType()
-                            .isIdentical(type.getUnderlyingType()) ) {
+                    if (!((GoTypeSlice) exprType).getElementType().isIdentical(GoTypes.fromPsi(type)) ) {
                         result.addProblem(
                                 goExpr,
                                 GoBundle.message("warning.functioncall.type.mismatch", "[]"+typeName),
@@ -283,7 +257,7 @@ public class GoTypeInspectUtil {
                             result.addProblem(
                                     goExpr,
                                     GoBundle.message("warning.functioncall.type.mismatch", typeName),
-                                    ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type));
+                                    ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, GoTypes.fromPsi(type)));
                             return;
                         }
                     }
@@ -296,7 +270,7 @@ public class GoTypeInspectUtil {
                         result.addProblem(
                                 goExpr,
                                 GoBundle.message("warning.functioncall.type.mismatch", typeName),
-                                ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type));
+                                ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, GoTypes.fromPsi(type)));
                         return;
                     }
                     index++;
@@ -307,7 +281,7 @@ public class GoTypeInspectUtil {
                             result.addProblem(
                                     goExpr,
                                     GoBundle.message("warning.functioncall.type.mismatch", typeName),
-                                    ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, type));
+                                    ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(goExpr, GoTypes.fromPsi(type)));
                             return;
                         }
                         index++;
@@ -355,7 +329,7 @@ public class GoTypeInspectUtil {
                     result.addProblem(
                             goExpr,
                             GoBundle.message("warning.functioncall.type.mismatch", typeName),
-                            new CastTypeFix(goExpr, type),
+                            new CastTypeFix(goExpr, GoTypes.fromPsi(type)),
                             new ChangeReturnsParametersFix(statement));
                     return false;
                 }
@@ -367,7 +341,7 @@ public class GoTypeInspectUtil {
                         result.addProblem(
                                 goExpr,
                                 GoBundle.message("warning.functioncall.type.mismatch", typeName),
-                                new CastTypeFix(goExpr, type),
+                                new CastTypeFix(goExpr, GoTypes.fromPsi(type)),
                                 new ChangeReturnsParametersFix(statement));
 
                         return false;

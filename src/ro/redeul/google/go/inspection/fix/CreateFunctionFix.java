@@ -6,6 +6,7 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Pair;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -27,11 +28,10 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameterList;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
-import ro.redeul.google.go.lang.psi.typing.GoType;
-import ro.redeul.google.go.lang.psi.typing.GoTypeArray;
-import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
-import ro.redeul.google.go.lang.psi.typing.GoTypePsiBacked;
+import ro.redeul.google.go.lang.psi.typing.*;
 import ro.redeul.google.go.lang.psi.utils.GoExpressionUtils;
+import ro.redeul.google.go.lang.psi.utils.GoFunctionDeclarationUtils;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.util.GoUtil;
 
 import java.util.ArrayList;
@@ -65,14 +65,17 @@ public class CreateFunctionFix extends LocalQuickFixAndIntentionActionOnPsiEleme
      * @param stringList List<String>
      * @return the generated arugment list ex: arg0 int, arg1 string
      */
+    @Nullable
     public static String InspectionGenFuncArgs(PsiElement e, List<String> stringList) {
         StringBuilder stringBuilder = new StringBuilder();
         int arg = 0;
         final GoFile currentFile = (GoFile) e.getContainingFile();
 
-        if (GoUtil.isFunctionNameIdentifier(e)) {
 
-            for (GoExpr argument : ((GoCallOrConvExpression) e.getParent()).getArguments()) {
+        if (GoUtil.isFunctionNameIdentifier(e)) {
+            GoCallOrConvExpression callOrConvExpression = findParentOfType(e, GoCallOrConvExpression.class);
+            stringBuilder.append("(");
+            for (GoExpr argument : callOrConvExpression.getArguments()) {
                 if (arg != 0)
                     stringBuilder.append(',');
 
@@ -82,80 +85,15 @@ public class CreateFunctionFix extends LocalQuickFixAndIntentionActionOnPsiEleme
                 PsiElement firstChildExp = argument.getFirstChild();
                 GoType[] goTypes = argument.getType();
 
-
-                // FIX TEST ##321
-                // Check first Relational is alwais boolean
-                if (argument instanceof GoRelationalExpression) {
-                    stringBuilder.append("bool");
-                } else if (goTypes.length > 0 && goTypes[0] != null) {
+                if (goTypes.length > 0 && goTypes[0] != null) {
                     GoType goType = goTypes[0];
+                    stringBuilder.append(GoTypes.getRepresentation(goType, currentFile));
 
-                    if (goType instanceof GoTypePointer) {
-                        /*
-                         * Detects when a reference is being passed
-                         */
-                        //Fix: Now go we are receiving the right typ
-                        stringBuilder.append('*');
-                        goType = ((GoTypePointer) goType).getTargetType();
-                    }
-
-                    if (goType instanceof GoTypePsiBacked) {
-                         /*
-                          * Using the psiType,
-                          */
-                        String type = GoUtil.getNameLocalOrGlobal(((GoTypePsiBacked) goType).getPsiType(), currentFile);
-                        stringBuilder.append(type);
-                    } else if (goType instanceof GoTypeArray) {
-                         /*
-                          * Using the psiType,
-                          */
-                        String type = GoUtil.getNameLocalOrGlobal(((GoTypeArray) goType).getPsiType(), currentFile);
-                        stringBuilder.append(type);
-                    } else if (firstChildExp instanceof GoLiteralFunction) {
-                         /*
-                          * Resolves the type of a function decl
-                          * ex: the type of http.HandleFunc is func(string,func(http.ResponseWriter,*http.Request))
-                          */
-                        GoFunctionDeclaration functionDeclaration = (GoFunctionDeclaration) firstChildExp;
-                        stringBuilder.append(GoUtil.getFuncDecAsParam(functionDeclaration.getParameters(), functionDeclaration.getResults(), currentFile));
-                    } else {
-
-                        /*
-                         * This block try to resolve a closure variable
-                         * ex: var myClosure=func()int{return 25*4}
-                         *      unresolvedFn(myClosure)
-                         * will generate:
-                         * func unresolvedFn(arg0 func()int){}
-                         */
-
-                        final PsiReference[] references = firstChildExp.getReferences();
-                        if (references.length > 0) {
-                            PsiElement resolve = references[0].resolve();
-                            if (resolve != null) {
-                                GoPsiElement resl_element = (GoPsiElement) resolve.getParent().getLastChild();
-                                GoLiteralFunction fn = (GoLiteralFunction) resl_element.getFirstChild();
-                                stringBuilder.append(GoUtil.getFuncDecAsParam(fn.getParameters(), fn.getResults(), currentFile));
-                            } else {
-                                stringBuilder.append("interface{}");
-                            }
-                        } else {
-                            stringBuilder.append("interface{}");
-                        }
-
-                    }
                 } else if (firstChildExp instanceof GoLiteral) {
                     /*
                      * Resolves the type of a literal
                      */
-                    //GoPsiElement resolveTo = null;
-                    //if (firstChildExp instanceof GoLiteralIdentifier) {
-                    //   resolveTo = ResolveTypeOfVarDecl(firstChildExp);
-                    //}
-                    //if (resolveTo instanceof GoPsiType) {
-                    //    stringBuilder.append(getNameLocalOrGlobal((GoPsiType) resolveTo, currentFile));
-                    //} else {
                     stringBuilder.append(((GoLiteral) firstChildExp).getType().name().toLowerCase());
-                    //}
                 } else {
 
                     /*
@@ -168,9 +106,9 @@ public class CreateFunctionFix extends LocalQuickFixAndIntentionActionOnPsiEleme
                     PsiElement firstChild = firstChildExp.getFirstChild();
                     if (firstChild instanceof GoLiteralFunction) {
 
-                        GoPsiType[] returnType = ((GoLiteralFunction) firstChild).getReturnType();
+                        GoType[] returnType = ((GoLiteralFunction) firstChild).getReturnTypes();
                         if (returnType.length > 0) {
-                            stringBuilder.append(returnType[0].getName());
+                            stringBuilder.append("<berila>");
                         } else {
                             stringBuilder.append("interface{}");
                         }
@@ -188,6 +126,7 @@ public class CreateFunctionFix extends LocalQuickFixAndIntentionActionOnPsiEleme
                 }
                 arg++;
             }
+            stringBuilder.append(")");
         } else {
             /*
              * Try to resolve the type declaration for the generated function based on called function
@@ -195,53 +134,52 @@ public class CreateFunctionFix extends LocalQuickFixAndIntentionActionOnPsiEleme
              * will generate:
              *          func myIndexHandle(arg0 http.ResponseWriter, arg1 *http.Request){}
              */
-            //TODO: separate this block in another method, improve to be able to generate the function from an generated template, and generate the results
-            GoCallOrConvExpression parentOfTypeCallOrConvExpression = findParentOfType(e, GoCallOrConvExpression.class);
-            GoFunctionDeclaration goFunctionDeclaration = GoExpressionUtils.resolveToFunctionDeclaration(parentOfTypeCallOrConvExpression);
 
-            if (goFunctionDeclaration != null) {
+            GoCallOrConvExpression callExpression = findParentOfType(e, GoCallOrConvExpression.class);
+            GoType[] type = callExpression.getBaseExpression().getType();
 
-                int myIndex = 0;
-
-                for (GoExpr argum : parentOfTypeCallOrConvExpression.getArguments()) {
-                    if (argum.equals(e) || argum.getFirstChild().equals(e))
-                        break;
-                    myIndex++;
-                }
-
-                GoFunctionParameter[] parameter = goFunctionDeclaration.getParameters();
-
-                if (myIndex < parameter.length) {
-                    GoPsiType type = parameter[myIndex].getType();
-                    if (type instanceof GoPsiTypeFunction) {
-                        GoFunctionParameterList goFunctionParameterList = findChildOfClass(type, GoFunctionParameterList.class);
-                        if (goFunctionParameterList != null) {
-                            for (GoFunctionParameter parameter1 : goFunctionParameterList.getFunctionParameters()) {
-                                if (arg > 0)
-                                    stringBuilder.append(',');
-
-                                stringBuilder.append(String.format("$v%d$ ", arg));
-                                stringList.add(String.format("arg%d", arg));
-
-                                final GoPsiType type1 = parameter1.getType();
-                                if (type1 instanceof GoPsiTypePointer) {
-                                    if (type1.getParent().getNode().getElementType().equals(GoElementTypes.FUNCTION_PARAMETER_VARIADIC))
-                                        stringBuilder.append("...");
-                                    stringBuilder.append('*').append(GoUtil.getNameLocalOrGlobal(((GoPsiTypePointer) type1).getTargetType(), currentFile));
-                                } else {
-                                    stringBuilder.append(GoUtil.getNameLocalOrGlobalAsParameter(type1, currentFile));
-                                }
-                                arg++;
-                            }
-                        }
-
-                    }
-                }
-
-            } else {
+            if ( type.length != 1 || ! (type[0] instanceof GoTypeFunction) )
                 return "";
+
+            GoTypeFunction function = (GoTypeFunction) type[0];
+
+            int pos = -1;
+            for (GoExpr expr : callExpression.getArguments()) {
+                pos++;
+                if ( expr.getTextOffset() == e.getTextOffset() && expr.getTextLength() == e.getTextLength() )
+                    break;
             }
 
+            GoType desiredType = function.getParameterType(pos);
+
+            if ( desiredType instanceof GoTypeFunction ) {
+                GoTypeFunction typeFunction = (GoTypeFunction) desiredType;
+                int i = 0;
+
+                stringBuilder.append("(");
+                GoType parameterType = null;
+                while ( (parameterType = typeFunction.getParameterType(i)) != null) {
+                    stringList.add(String.format("arg%d", i));
+
+                    if ( i > 0 )
+                        stringBuilder.append(",");
+
+                    stringBuilder.append(String.format("$v%d$ ", i));
+                    stringBuilder.append(GoTypes.getRepresentation(parameterType, currentFile));
+                    i++;
+                }
+                stringBuilder.append(")");
+
+                GoType[] results = typeFunction.getResultTypes();
+                if ( results.length > 1 ) stringBuilder.append("(");
+                for (int i1 = 0; i1 < results.length; i1++) {
+                    GoType goType = results[i1];
+                    if( i1 > 0)
+                        stringBuilder.append(",");
+                    stringBuilder.append(GoTypes.getRepresentation(goType, currentFile));
+                }
+                if ( results.length > 1 ) stringBuilder.append(")");
+            }
         }
 
         return stringBuilder.toString();
@@ -304,8 +242,14 @@ public class CreateFunctionFix extends LocalQuickFixAndIntentionActionOnPsiEleme
             insertPoint += packStr.length();
         }
 
-        TemplateImpl template = TemplateUtil.createTemplate(String.format("\n\nfunc %s(%s) { \n$v%d$$END$\n}", e.getText(), fnArguments, arguments.size()));
+        TemplateImpl template = TemplateUtil.createTemplate(String.format("\n\nfunc %s%s { \n$v%d$$END$\n}", e.getText(), fnArguments, arguments.size()));
         arguments.add("//TODO: implements " + e.getText());
         TemplateUtil.runTemplate(editor, insertPoint, arguments, template);
     }
+
+    private static final String TEMPLATE = "" +
+            "" +
+            "func $functionName$()#if($returnCount > 1)()#end {" +
+            "   $END$" +
+            "#if($returnCount > 0)  return#{else}}#end";
 }

@@ -8,7 +8,7 @@ import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallOrConversionExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
@@ -49,8 +49,8 @@ public class GoExpressionUtils {
      */
     @Nullable
     public static GoFunctionDeclaration resolveToFunctionDeclaration(@Nullable PsiElement element) {
-        if (element instanceof GoBuiltinCallExpression){
-            PsiElement reference = resolveSafely(((GoBuiltinCallExpression) element).getBaseExpression(),
+        if (element instanceof GoBuiltinCallOrConversionExpression){
+            PsiElement reference = resolveSafely(((GoBuiltinCallOrConversionExpression) element).getBaseExpression(),
                     PsiElement.class);
             if (reference != null && reference.getParent() instanceof GoFunctionDeclaration){
                 return (GoFunctionDeclaration) reference.getParent();

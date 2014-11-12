@@ -1,14 +1,14 @@
 package ro.redeul.google.go.lang.psi.typing;
 
 import com.intellij.openapi.diagnostic.Logger;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypePredeclared;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveTypeSpec;
 
-public class GoTypeName extends GoTypePsiBacked<GoPsiTypeName, GoUnderlyingType> implements GoType {
+public class GoTypeName extends GoTypePsiBacked<GoPsiTypeName> implements GoType {
 
     private static final Logger LOG = Logger.getInstance(GoTypeName.class);
 
@@ -18,41 +18,46 @@ public class GoTypeName extends GoTypePsiBacked<GoPsiTypeName, GoUnderlyingType>
     public GoTypeName(GoPsiTypeName type) {
         super(type);
         name = type.getName();
+    }
 
-        setUnderlyingType(GoUnderlyingType.Undefined);
+    @Override
+    public GoType getUnderlyingType() {
+        if ( getPsiType().isPrimitive() )
+            return this;
 
-        if ( type.isPrimitive() ) {
-            setUnderlyingType(GoUnderlyingTypePredeclared.getForName(name));
-        } else {
-            GoTypeSpec spec = resolveTypeSpec(type);
-            if ( spec != null && spec.getType() != null) {
-                definition = GoTypes.fromPsiType(spec.getType());
-                if ( definition != null && definition.getUnderlyingType() != null )
-                    setUnderlyingType(definition.getUnderlyingType());
-            }
-        }
+        GoTypeSpec spec = resolveTypeSpec(getPsiType());
+        if ( spec != null && spec.getType() != null)
+            return types().fromPsiType(spec.getType()).getUnderlyingType();
+
+        return this;
     }
 
     @Override
     public boolean isIdentical(GoType type) {
-        return this == type;
+        return this == type || (type instanceof GoTypeName && getName().equals(((GoTypeName) type).getName()));
+    }
+
+    @Nullable
+    public GoTypeSpec getDefinition() {
+        return GoPsiUtils.resolveTypeSpec(getPsiType());
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitName(this);
+    public <T> T accept(Visitor<T> visitor) {
+        return visitor.visitName(this);
     }
 
     public String getName() {
         return name;
     }
 
-    public GoType getDefinition() {
-        return definition;
+    @Override
+    public boolean isAssignableFrom(GoType source) {
+        return GoTypes.isAssignableFrom(this, source);
     }
 
     @Override
-    public String toString(){
-        return "GoTypeName("+getName()+")";
+    public String toString() {
+        return name;
     }
 }

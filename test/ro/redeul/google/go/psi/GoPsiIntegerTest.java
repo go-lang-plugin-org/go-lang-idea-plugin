@@ -6,6 +6,9 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralInteger;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
+
+import java.math.BigInteger;
+
 import static ro.redeul.google.go.util.GoPsiTestUtils.childAt;
 import static ro.redeul.google.go.util.GoPsiTestUtils.get;
 import static ro.redeul.google.go.util.GoPsiTestUtils.getAs;
@@ -43,7 +46,7 @@ public class GoPsiIntegerTest extends GoPsiTestCase {
                 );
 
         assertEquals(GoLiteral.Type.Int, integer.getType());
-        assertEquals((Integer) 10, integer.getValue());
+        assertEquals(BigInteger.valueOf(10), integer.getValue());
 
         // y
         integer =
@@ -55,7 +58,7 @@ public class GoPsiIntegerTest extends GoPsiTestCase {
                         ).getLiteral()
                 );
         assertEquals(GoLiteral.Type.Int, integer.getType());
-        assertEquals((Integer) 0, integer.getValue());
+        assertEquals(BigInteger.ZERO, integer.getValue());
 
         // z
         integer =
@@ -67,7 +70,7 @@ public class GoPsiIntegerTest extends GoPsiTestCase {
                         ).getLiteral()
                 );
         assertEquals(GoLiteral.Type.Int, integer.getType());
-        assertEquals((Integer) 0120, integer.getValue());
+        assertEquals(BigInteger.valueOf(0120), integer.getValue());
 
         // h1
         integer =
@@ -79,7 +82,7 @@ public class GoPsiIntegerTest extends GoPsiTestCase {
                         ).getLiteral()
                 );
         assertEquals(GoLiteral.Type.Int, integer.getType());
-        assertEquals((Integer) 0xEF, integer.getValue());
+        assertEquals(BigInteger.valueOf(0xEF), integer.getValue());
 
         // h1
         integer =
@@ -91,7 +94,7 @@ public class GoPsiIntegerTest extends GoPsiTestCase {
                         ).getLiteral()
                 );
         assertEquals(GoLiteral.Type.Int, integer.getType());
-        assertEquals((Integer) 0xAB, integer.getValue());
+        assertEquals(BigInteger.valueOf(0xAB), integer.getValue());
 
     }
 }

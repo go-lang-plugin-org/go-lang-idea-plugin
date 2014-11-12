@@ -1,4 +1,7 @@
 package ro.redeul.google.go.lang.psi.expressions.literals;
 
-public interface GoLiteralInteger extends GoLiteral<Integer> {
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
+public interface GoLiteralInteger extends GoLiteral<BigInteger> {
 }

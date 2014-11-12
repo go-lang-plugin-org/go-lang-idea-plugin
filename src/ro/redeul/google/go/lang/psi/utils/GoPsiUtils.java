@@ -22,7 +22,7 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallOrConversionExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
@@ -468,7 +468,7 @@ public class GoPsiUtils {
     }
 
     public static boolean isFunctionOrMethodCall(PsiElement element) {
-        return element instanceof GoBuiltinCallExpression || element instanceof GoCallOrConvExpression;
+        return element instanceof GoBuiltinCallOrConversionExpression || element instanceof GoCallOrConvExpression;
     }
 
     @SuppressWarnings("unchecked")

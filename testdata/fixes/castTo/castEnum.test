@@ -16,6 +16,7 @@ func main() {
     var indexHandler = 45
     HandleFunc("/",index/*begin*/H/*end*/andler)
 }
+
 -----
 package main
 
@@ -33,5 +34,5 @@ func HandleFunc(pa string, handler MyEnum){
 
 func main() {
     var indexHandler = 45
-	HandleFunc("/", (MyEnum)(indexHandler))
+	HandleFunc("/", MyEnum(indexHandler))
 }

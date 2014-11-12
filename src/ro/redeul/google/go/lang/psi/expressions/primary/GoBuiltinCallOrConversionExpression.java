@@ -8,7 +8,7 @@ import ro.redeul.google.go.lang.psi.types.GoPsiType;
  * Date: 6/2/11
  * Time: 3:57 AM
  */
-public interface GoBuiltinCallExpression extends GoCallOrConvExpression {
+public interface GoBuiltinCallOrConversionExpression extends GoCallOrConvExpression {
 
     public GoPsiType[] getArgumentsType();
 }

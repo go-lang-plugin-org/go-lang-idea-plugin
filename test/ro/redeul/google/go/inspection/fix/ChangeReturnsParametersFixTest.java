@@ -25,7 +25,6 @@ public class ChangeReturnsParametersFixTest extends GoEditorAwareTestCase {
         doTest();
     }
 
-    @Ignore("broken by the new resolver")
     public void testTest4() throws Exception {
         doTest();
     }

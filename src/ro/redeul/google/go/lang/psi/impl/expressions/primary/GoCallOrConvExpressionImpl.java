@@ -3,6 +3,7 @@ package ro.redeul.google.go.lang.psi.impl.expressions.primary;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
@@ -39,8 +40,8 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase
 
         return GoTypes.visitFirstType(baseCallType, new GoType.Visitor<GoType[]>(GoType.EMPTY_ARRAY) {
             @Override
-            public void visitFunction(GoTypeFunction type) {
-                setData(GoUtil.getFuncCallTypes(type.getPsiType()));
+            public GoType[] visitFunction(GoTypeFunction type) {
+                return type.getResultTypes();
             }
         });
 

@@ -13,10 +13,13 @@ import com.intellij.psi.impl.PsiManagerEx;
 import com.intellij.util.ConcurrencyUtil;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ConcurrentWeakHashMap;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
@@ -32,18 +35,26 @@ public class GoPsiManager {
     private final ConcurrentMap<GoPsiElement, GoType[]> myCalculatedTypes =
             new ConcurrentWeakHashMap<GoPsiElement, GoType[]>();
 
+    private final ConcurrentMap<GoPsiElement, GoType> myComputedType =
+            new ConcurrentHashMap<GoPsiElement, GoType>();
+
     private static final RecursionGuard ourGuard =
             RecursionManager.createGuard("goPsiManager");
+
+    private static final RecursionGuard outSecondGuard =
+            RecursionManager.createGuard("goPsiManagerSecond");
 
     private GoPsiManager(Project project) {
 
         ((PsiManagerEx) PsiManager.getInstance(project)).registerRunnableToRunOnAnyChange(new Runnable() {
             public void run() {
                 myCalculatedTypes.clear();
+                myComputedType.clear();
             }
         });
         ((PsiManagerEx) PsiManager.getInstance(project)).registerRunnableToRunOnChange(new Runnable() {
             public void run() {
+                myComputedType.clear();
                 myCalculatedTypes.clear();
             }
         });
@@ -54,6 +65,7 @@ public class GoPsiManager {
 
             public void rootsChanged(ModuleRootEvent event) {
                 myCalculatedTypes.clear();
+                myComputedType.clear();
             }
         });
     }
@@ -63,9 +75,31 @@ public class GoPsiManager {
     }
 
     @NotNull
+    public <T extends GoPsiElement, V> GoType getOrCompute(T element, Function<T, GoType> valueCalculator) {
+        GoType type = myComputedType.get(element);
+//        GoType type = null;
+        if (type == null) {
+            RecursionGuard.StackStamp stamp = outSecondGuard.markStack();
+            type = valueCalculator.fun(element);
+            if ( type != null ) {
+                if (stamp.mayCacheNow()) {
+                    type = ConcurrencyUtil.cacheOrGet(myComputedType, element, type);
+                } else {
+                    final GoType alreadyInferred = myComputedType.get(element);
+                    if (alreadyInferred != null) {
+                        type = alreadyInferred;
+                    }
+                }
+            }
+        }
+
+        return type != null ? type : GoType.Unknown;
+    }
+
+    @NotNull
     public <T extends GoPsiElement> GoType[] getType(T element, Function<T, GoType[]> calculator) {
-//        GoType[] types = myCalculatedTypes.get(element);
-        GoType[] types = null;
+        GoType[] types = myCalculatedTypes.get(element);
+//        GoType[] types = null;
         if (types == null) {
             RecursionGuard.StackStamp stamp = ourGuard.markStack();
             types = calculator.fun(element);

@@ -63,7 +63,7 @@ public class GoVarDeclarationImpl extends GoPsiElementBase implements GoVarDecla
     public GoType getIdentifierType(GoLiteralIdentifier identifier) {
         GoPsiType identifiersType = getIdentifiersType();
         if (identifiersType != null) {
-            return GoTypes.fromPsiType(identifiersType);
+            return GoTypes.fromPsi(identifiersType);
         }
 
         GoLiteralIdentifier[] identifiers = getIdentifiers();

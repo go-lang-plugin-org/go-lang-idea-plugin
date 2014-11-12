@@ -1,11 +1,9 @@
 package ro.redeul.google.go.lang.psi.typing;
 
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeMap;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 
 public class GoTypeMap
-    extends GoTypePsiBacked<GoPsiTypeMap, GoUnderlyingTypeMap>
+    extends GoTypePsiBacked<GoPsiTypeMap>
     implements GoType {
 
     private final GoType keyType;
@@ -14,23 +12,24 @@ public class GoTypeMap
     public GoTypeMap(GoPsiTypeMap type) {
         super(type);
 
-        keyType = GoTypes.fromPsiType(type.getKeyType());
-        elementType = GoTypes.fromPsiType(type.getElementType());
-
-        setUnderlyingType(
-            GoUnderlyingTypes.getMap(
-            ));
-
+        keyType = types().fromPsiType(type.getKeyType());
+        elementType = types().fromPsiType(type.getElementType());
     }
 
     @Override
     public boolean isIdentical(GoType type) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        if (!(type instanceof GoTypeMap))
+            return false;
+
+        GoTypeMap typeMap = (GoTypeMap) type;
+
+        return getKeyType().isIdentical(typeMap.getKeyType()) &&
+                getElementType().isIdentical(typeMap.getElementType());
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitMap(this);
+    public <T> T accept(Visitor<T> visitor) {
+        return visitor.visitMap(this);
     }
 
     public GoType getKeyType() {
@@ -39,5 +38,15 @@ public class GoTypeMap
 
     public GoType getElementType() {
         return elementType;
+    }
+
+    @Override
+    public boolean isAssignableFrom(GoType source) {
+        return super.isAssignableFrom(source);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("map[%s]%s", getKeyType(), getElementType());
     }
 }

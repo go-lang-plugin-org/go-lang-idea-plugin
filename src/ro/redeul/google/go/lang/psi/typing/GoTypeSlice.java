@@ -1,22 +1,15 @@
 package ro.redeul.google.go.lang.psi.typing;
 
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeSlice;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 
-/**
- * // TODO: mtoader ! Please explain yourself.
- */
-public class GoTypeSlice extends GoTypePsiBacked<GoPsiTypeSlice, GoUnderlyingTypeSlice> implements GoType {
+public class GoTypeSlice extends GoTypePsiBacked<GoPsiTypeSlice> implements GoType {
 
     private final GoType elementType;
 
     public GoTypeSlice(GoPsiTypeSlice type) {
         super(type);
 
-        elementType = GoTypes.fromPsiType(type.getElementType());
-
-        setUnderlyingType(GoUnderlyingTypes.getSlice(elementType.getUnderlyingType()));
+        elementType = types().fromPsiType(type.getElementType());
     }
 
     @Override
@@ -25,15 +18,30 @@ public class GoTypeSlice extends GoTypePsiBacked<GoPsiTypeSlice, GoUnderlyingTyp
             return false;
 
         GoTypeSlice otherSlice = (GoTypeSlice)type;
+
         return elementType.isIdentical(otherSlice.getElementType());
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitSlice(this);
+    public <T> T accept(Visitor<T> visitor) {
+        return visitor.visitSlice(this);
     }
 
     public GoType getElementType() {
         return elementType;
+    }
+
+    @Override
+    public boolean isAssignableFrom(GoType source) {
+        return super.isAssignableFrom(source);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("[]%s", getElementType());
+    }
+
+    public GoType getKeyType() {
+        return types().getBuiltin(GoTypes.Builtin.Int);
     }
 }

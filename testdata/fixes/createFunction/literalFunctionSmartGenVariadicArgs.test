@@ -27,6 +27,6 @@ func main() {
    printMedia(Person{1000},myMediaProcess)
 }
 
-func myMediaProcess(arg0 ...Person) {
+func myMediaProcess(arg0 ...Person) int {
 	//TODO: implements myMediaProcess<caret>
 }

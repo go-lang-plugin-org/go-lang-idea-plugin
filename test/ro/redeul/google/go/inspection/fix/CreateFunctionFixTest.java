@@ -14,14 +14,13 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 
 public class CreateFunctionFixTest extends GoEditorAwareTestCase {
     public void testSimple() throws Exception{ doTest(); }
-    @Ignore("broken by the new resolver (only with Travis)")
     public void testLiteralFunction() throws Exception{ doTest(); }
     public void testLiteralFunctionPointerArg() throws Exception{ doTest(); }
     public void testLiteralFunctionSliceArg() throws Exception{ doTest(); }
 
-    @Ignore("broken by the new resolver")
     public void testLiteralFunctionComplexArg() throws Exception{ doTest(); }
     public void testLiteralFunctionBooleanExpArg() throws Exception{ doTest(); }
+
     public void testLiteralFunctionSmartGen() throws Exception{ doTest(); }
     public void testLiteralFunctionSmartGenVariadicArgs() throws Exception{ doTest(); }
 

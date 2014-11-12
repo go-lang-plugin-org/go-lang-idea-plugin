@@ -10,6 +10,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.utils.GoExpressionUtils;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
@@ -58,7 +59,7 @@ public class CastToFixTest extends GoEditorAwareTestCase {
         CommandProcessor.getInstance().executeCommand(project, new Runnable() {
             @Override
             public void run() {
-                new CastTypeFix(expression, type).invoke(project, file, editor, expression, expression);
+                new CastTypeFix(expression, GoTypes.fromPsi(type)).invoke(project, file, editor, expression, expression);
             }
         }, "", null);
     }

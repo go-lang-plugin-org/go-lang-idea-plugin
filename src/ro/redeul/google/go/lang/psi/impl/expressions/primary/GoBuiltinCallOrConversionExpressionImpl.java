@@ -1,29 +1,26 @@
 package ro.redeul.google.go.lang.psi.impl.expressions.primary;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.openapi.util.Condition;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallOrConversionExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
-import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
-import ro.redeul.google.go.lang.psi.typing.GoType;
-import ro.redeul.google.go.lang.psi.typing.GoTypeMap;
-import ro.redeul.google.go.lang.psi.typing.GoTypeSlice;
-import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.typing.*;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.string;
 import static ro.redeul.google.go.lang.psi.typing.GoTypes.Builtin.*;
-import static ro.redeul.google.go.lang.psi.typing.GoTypes.getBuiltin;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 
 /**
@@ -32,8 +29,8 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
  * Date: 6/2/11
  * Time: 3:58 AM
  */
-public class GoBuiltinCallExpressionImpl extends GoCallOrConvExpressionImpl
-        implements GoBuiltinCallExpression {
+public class GoBuiltinCallOrConversionExpressionImpl extends GoCallOrConvExpressionImpl
+        implements GoBuiltinCallOrConversionExpression {
 
     private static final ElementPattern<GoFunctionDeclaration> BUILTIN_FUNCTION =
             psiElement(GoFunctionDeclaration.class)
@@ -46,33 +43,20 @@ public class GoBuiltinCallExpressionImpl extends GoCallOrConvExpressionImpl
                                     )
                     );
 
-    public GoBuiltinCallExpressionImpl(@NotNull ASTNode node) {
+    public GoBuiltinCallOrConversionExpressionImpl(@NotNull ASTNode node) {
         super(node);
     }
 
     @Override
     protected GoType[] resolveTypes() {
-        PsiElement reference = resolveSafely(getBaseExpression(),
-                PsiElement.class);
+        GoType[] callType = getBaseExpression().getType();
 
-        if (reference == null) {
-            return processBuiltinFunction(this.getBaseExpression().getText());
-        }
+        if ( callType.length != 1 || !(callType[0] instanceof GoTypeFunction))
+            return GoType.EMPTY_ARRAY;
 
-        if (reference.getParent() instanceof GoMethodDeclaration) {
-            GoMethodDeclaration declaration = (GoMethodDeclaration) reference.getParent();
-            return GoTypes.fromPsiType(declaration.getReturnType());
-        }
+        GoTypeFunction function = (GoTypeFunction)callType[0];
 
-        if (reference.getParent() instanceof GoFunctionDeclaration) {
-            GoFunctionDeclaration declaration =
-                    (GoFunctionDeclaration) reference.getParent();
-
-            if (BUILTIN_FUNCTION.accepts(declaration))
-                return processBuiltinFunction(declaration.getFunctionName());
-        }
-
-        return GoType.EMPTY_ARRAY;
+        return processBuiltinFunction(function.getPsiType().getName());
     }
 
     @Override
@@ -137,6 +121,7 @@ public class GoBuiltinCallExpressionImpl extends GoCallOrConvExpressionImpl
         return GoPsiType.EMPTY_ARRAY;
     }
 
+    @NotNull
     private GoType[] processBuiltinFunction(String functionName) {
 
         GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
@@ -151,43 +136,29 @@ public class GoBuiltinCallExpressionImpl extends GoCallOrConvExpressionImpl
                 };
             }
         } else if (functionName.matches("^(len|cap|copy)$")) {
-            return new GoType[]{
-                    getBuiltin(Int, namesCache)
-            };
+            return new GoType[]{types().getBuiltin(Int)};
         } else if (functionName.equals("complex")) {
             if (args.length > 0) {
-                if (args[0].hasType(Float32))
-                    return new GoType[]{
-                            getBuiltin(Complex64, namesCache)
-                    };
+                if (hasBuiltinType(args[0].getType(), Float64))
+                    return new GoType[]{types().getBuiltin(Complex128)};
 
-                if (args[0].hasType(Float64))
-                    return new GoType[]{
-                            getBuiltin(Complex128, namesCache)
-                    };
+                if (hasBuiltinType(args[0].getType(), Float32))
+                    return new GoType[]{types().getBuiltin(Complex64)};
 
-                if (args[0].hasType(Int))
-                    return new GoType[]{
-                            getBuiltin(Complex128, namesCache)
-                    };
+//                if (hasBuiltinType(args[0].getType(), Int))
+//                    return new GoType[]{types().getBuiltin(Complex128)};
             }
         } else if (functionName.matches("^(real|imag)$")) {
             if (args.length > 0) {
-                if (args[0].hasType(Complex128))
-                    return new GoType[]{
-                            getBuiltin(Float64, namesCache)
-                    };
+                if (hasBuiltinType(args[0].getType(), Complex128))
+                    return new GoType[]{types().getBuiltin(Float64)};
 
-                if (args[0].hasType(Complex64))
-                    return new GoType[]{
-                            getBuiltin(Float32, namesCache)
-                    };
+                if (hasBuiltinType(args[0].getType(), Complex64))
+                    return new GoType[]{types().getBuiltin(Float32)};
             }
         } else if (functionName.equals("make")) {
             if (typeArg != null)
-                return new GoType[]{
-                        GoTypes.fromPsiType(typeArg)
-                };
+                return new GoType[]{types().fromPsiType(typeArg)};
         } else if (functionName.equals("append")) {
             if (args.length > 1) {
                 GoType[] types = args[0].getType();
@@ -198,6 +169,23 @@ public class GoBuiltinCallExpressionImpl extends GoCallOrConvExpressionImpl
         }
 
         return GoType.EMPTY_ARRAY;
+    }
+
+    private boolean hasBuiltinType(GoType[] types, final GoTypes.Builtin builtin) {
+        return ContainerUtil.find(types, new Condition<GoType>() {
+            @Override
+            public boolean value(GoType goType) {
+                if ( goType.isIdentical(types().getBuiltin(builtin)) )
+                    return true;
+
+                if ( goType instanceof GoTypeConstant ) {
+                    GoTypeConstant typeConstant = (GoTypeConstant) goType;
+                    return GoTypes.getInstance(getProject()).getBuiltin(builtin).canRepresent(typeConstant);
+                }
+
+                return false;
+            }
+        }) != null;
     }
 
     @Override

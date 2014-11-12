@@ -39,7 +39,7 @@ import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoExpressionList;
 import ro.redeul.google.go.lang.psi.expressions.GoUnaryExpression;
-import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
+import ro.redeul.google.go.lang.psi.expressions.binary.*;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
@@ -245,27 +245,28 @@ public class InlineLocalVariableActionHandler extends InlineActionHandler {
     );
 
     private static int getExpressionPrecedence(PsiElement element) {
-        if (element instanceof GoBinaryExpression) {
-            IElementType operator = ((GoBinaryExpression) element).getOperator();
-            if (MUL_TOKENS.contains(operator)) {
-                return 5;
-            } else if (ADD_TOKENS.contains(operator)) {
-                return 4;
-            } else if (REL_TOKENS.contains(operator)) {
-                return 3;
-            } else if (operator == GoElementTypes.oCOND_AND) {
-                return 2;
-            } else if (operator == GoElementTypes.oCOND_OR) {
-                return 1;
-            }
+        if (element instanceof GoMultiplicativeExpression)
+            return 5;
 
-            return -1;
-        } else if (element instanceof GoUnaryExpression) {
+        if ( element instanceof GoAdditiveExpression)
+            return 4;
+
+        if ( element instanceof GoRelationalExpression)
+            return 3;
+
+        if ( element instanceof GoLogicalAndExpression)
+            return 2;
+
+        if ( element instanceof GoLogicalOrExpression)
+            return 1;
+
+        if (element instanceof GoUnaryExpression)
             return 10;
-        } else if (element instanceof GoSelectorExpression) {
+
+        if (element instanceof GoSelectorExpression)
             return 15;
-        } else if (element instanceof GoLiteralIdentifier ||
-                element instanceof GoLiteralExpression) {
+
+        if (element instanceof GoLiteralIdentifier || element instanceof GoLiteralExpression) {
             return 20;
         }
 

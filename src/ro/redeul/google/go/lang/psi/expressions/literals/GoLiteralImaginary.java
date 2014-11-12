@@ -1,4 +1,7 @@
 package ro.redeul.google.go.lang.psi.expressions.literals;
 
-public interface GoLiteralImaginary extends GoLiteral<Number> {
+import ro.redeul.google.go.util.GoNumber;
+
+public interface GoLiteralImaginary extends GoLiteral<GoNumber> {
+
 }

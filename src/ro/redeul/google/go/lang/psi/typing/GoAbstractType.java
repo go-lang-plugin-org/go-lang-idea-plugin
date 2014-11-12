@@ -3,21 +3,26 @@
 */
 package ro.redeul.google.go.lang.psi.typing;
 
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
+import org.jetbrains.annotations.Nullable;
 
-public abstract class GoAbstractType<UnderlyingType extends GoUnderlyingType> implements GoType {
-
-    private UnderlyingType underlyingType;
+public abstract class GoAbstractType implements GoType {
 
     @Override
-    public GoUnderlyingType getUnderlyingType() {
-        return
-            underlyingType != null
-                ? underlyingType
-                : GoUnderlyingType.Undefined;
+    public GoType getUnderlyingType() { return this; }
+
+    @Nullable
+    public <T extends GoType> T getUnderlyingType(Class<T> tClass) {
+        GoType underlying = getUnderlyingType();
+        return tClass.isInstance(underlying) ? tClass.cast(underlying) : null;
     }
 
-    void setUnderlyingType(UnderlyingType underlyingType) {
-        this.underlyingType = underlyingType;
+    @Override
+    public boolean isAssignableFrom(GoType source) {
+        return GoTypes.isAssignableFrom(this, source);
+    }
+
+    @Override
+    public boolean canRepresent(GoTypeConstant constantType) {
+        return false;
     }
 }

@@ -21,8 +21,6 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeArray;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypePredeclared;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
@@ -112,31 +110,6 @@ public class GoPsiTypeNameImpl extends GoPsiElementBase implements GoPsiTypeName
 
     public void accept(GoElementVisitor visitor) {
         visitor.visitTypeName(this);
-    }
-
-    @Override
-    public GoUnderlyingType getUnderlyingType() {
-
-        if (PRIMITIVE_TYPES.accepts(this)) {
-            return GoUnderlyingTypePredeclared.getForName(getText());
-        }
-
-        PsiReference reference = getReference();
-        if (reference == null) {
-            return GoUnderlyingType.Undefined;
-        }
-
-        PsiElement resolved = reference.resolve();
-        if (resolved == null) {
-            return GoUnderlyingType.Undefined;
-        }
-
-        if (resolved instanceof GoTypeSpec) {
-            GoTypeSpec spec = (GoTypeSpec) resolved;
-            return spec.getType().getUnderlyingType();
-        }
-
-        return GoUnderlyingType.Undefined;
     }
 
     @Override

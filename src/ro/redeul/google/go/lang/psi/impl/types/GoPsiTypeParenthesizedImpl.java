@@ -4,7 +4,6 @@ import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeParenthesized;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 
 public class GoPsiTypeParenthesizedImpl extends GoPsiTypeImpl implements GoPsiTypeParenthesized
 {
@@ -15,11 +14,6 @@ public class GoPsiTypeParenthesizedImpl extends GoPsiTypeImpl implements GoPsiTy
     @Override
     public GoPsiType getInnerType() {
         return findChildByClass(GoPsiType.class);
-    }
-
-    @Override
-    public GoUnderlyingType getUnderlyingType() {
-        return getInnerType().getUnderlyingType();
     }
 
     @Override

@@ -7,14 +7,15 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.expressions.GoUnaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralBool;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.binary.GoRelationalExpression;
+import ro.redeul.google.go.lang.psi.expressions.literals.*;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComposite;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeValue;
 import ro.redeul.google.go.lang.psi.expressions.primary.*;
+import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoRelationalExpressionImpl;
 import ro.redeul.google.go.lang.psi.statements.*;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseDefault;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseRecv;
@@ -25,6 +26,10 @@ import ro.redeul.google.go.lang.psi.toplevel.*;
 import ro.redeul.google.go.lang.psi.types.*;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
+import ro.redeul.google.go.util.GoNumber;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -143,7 +148,7 @@ public class GoElementVisitor  {
     }
 
     public void visitShortVarDeclaration(GoShortVarDeclaration declaration) {
-        visitElement(declaration);
+        visitVarDeclaration(declaration);
     }
 
     public void visitIndexExpression(GoIndexExpression expression) {
@@ -170,12 +175,20 @@ public class GoElementVisitor  {
         visitElement(statement);
     }
 
-    public void visitBuiltinCallExpression(GoBuiltinCallExpression expression) {
+    public void visitBuiltinCallExpression(GoBuiltinCallOrConversionExpression expression) {
         visitElement(expression);
     }
 
-    public void visitLiteralBool(GoLiteralBool literal) {
+    public void visitLiteral(GoLiteral literal) {
         visitElement(literal);
+    }
+
+    public void visitLiteralBool(GoLiteral<Boolean> literal) {
+        visitLiteral(literal);
+    }
+
+    public void visitLiteralInteger(GoLiteral<BigInteger> literal) {
+        visitLiteral(literal);
     }
 
     public void visitReturnStatement(GoReturnStatement statement) {
@@ -294,7 +307,33 @@ public class GoElementVisitor  {
         visitElement(expression);
     }
 
+    public void visitRelExpression(GoRelationalExpression expression) { visitBinaryExpression(expression); }
+
+    public void visitParenthesisedExpression(GoParenthesisedExpression expression) {
+        visitElement(expression);
+    }
+
     public void visitPackage(GoPackage aPackage) {
         visitElement(aPackage);
+    }
+
+    public void visitLiteralFloat(GoLiteral<BigDecimal> literal) {
+        visitLiteral(literal);
+    }
+
+    public void visitLiteralChar(GoLiteral<Character> literal) {
+        visitLiteral(literal);
+    }
+
+    public void visitLiteralImaginary(GoLiteral<GoNumber> imaginary) {
+        visitLiteral(imaginary);
+    }
+
+    public void visitLiteralString(GoLiteral<String> literal) {
+        visitLiteral(literal);
+    }
+
+    public void visitUnaryExpression(GoUnaryExpression expression) {
+        visitElement(expression);
     }
 }

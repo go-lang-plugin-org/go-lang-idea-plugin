@@ -6,9 +6,11 @@ import java.util.Set;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import ro.redeul.google.go.GoFileBasedPsiTestCase;
+import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
 
 public class GoPsiTypingTestCase extends GoFileBasedPsiTestCase
 {
@@ -52,20 +54,27 @@ public class GoPsiTypingTestCase extends GoFileBasedPsiTestCase
         }
 
         GoType[] baseTypes = GoType.EMPTY_ARRAY;
-        for (GoType[] expressionTypes : expressionsTypes) {
-            assertEquals("We should have the same number of types",
-                         typesCount, expressionTypes.length);
-            baseTypes = expressionTypes;
+        for (GoType[] exprTypes : expressionsTypes) {
+            assertEquals("We should have the same number of types", typesCount, exprTypes.length);
+            baseTypes = exprTypes;
         }
 
         assertNotSame(GoPsiType.EMPTY_ARRAY, baseTypes);
 
-        for (GoType[] expressionsType : expressionsTypes) {
+        for (GoType[] exprTypes : expressionsTypes) {
             for (int i = 0; i < baseTypes.length; i++) {
-                assertNotNull(baseTypes[i]);
-                assertNotNull(expressionsType[i]);
-                assertTrue("We should have the same underlying type",
-                            baseTypes[i].getUnderlyingType().isIdentical(expressionsType[i].getUnderlyingType()));
+                GoType baseType = baseTypes[i];
+                GoType exprType = exprTypes[i];
+
+                assertNotNull(baseType);
+                assertNotNull(exprType);
+
+                assertTrue(
+                        String.format("%s should be the same as %s",
+                                GoTypes.getRepresentation(baseType.getUnderlyingType(), (GoFile) myFile),
+                                GoTypes.getRepresentation(exprType.getUnderlyingType(), (GoFile) myFile)),
+
+                        baseType.getUnderlyingType().isIdentical(exprType.getUnderlyingType()));
             }
         }
     }

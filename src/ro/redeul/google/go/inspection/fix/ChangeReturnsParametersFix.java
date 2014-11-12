@@ -104,11 +104,9 @@ public class ChangeReturnsParametersFix extends LocalQuickFixAndIntentionActionO
 
 
                     if (type instanceof GoTypePsiBacked) {
-                        GoPsiType goPsiType = ((GoTypePsiBacked) type).getPsiType();
-                        stringBuilder.append(GoUtil.getNameLocalOrGlobal(goPsiType, (GoFile) element.getContainingFile()));
+                        stringBuilder.append(GoUtil.getNameLocalOrGlobal(type, (GoFile) element.getContainingFile()));
                     } else if (type instanceof GoTypeArray) {
-                        GoPsiType goPsiType = ((GoTypeArray) type).getPsiType();
-                        stringBuilder.append(GoUtil.getNameLocalOrGlobal(goPsiType, (GoFile) element.getContainingFile()));
+                        stringBuilder.append(GoUtil.getNameLocalOrGlobal(type, (GoFile) element.getContainingFile()));
                     }
                 } else {
                     //As some Expression may not return a valid type, in this case will not modify anithing and exit

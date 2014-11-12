@@ -10,6 +10,5 @@ public class ConstantExpressionsInConstDeclarationsInspectionTest
     public void testConstantExpressions() throws Exception { doTest(); }
     public void testNonConstantExpressions() throws Exception { doTest(); }
 
-    @Ignore("failing test")
     public void testIssue874() throws Exception { doTest(); }
 }

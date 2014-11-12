@@ -1,14 +1,18 @@
 package ro.redeul.google.go.lang.psi.impl.types.struct;
 
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeStruct;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructPromotedFields;
-import ro.redeul.google.go.lang.psi.typing.GoTypeStruct;
-import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.typing.*;
 
 import java.util.*;
+
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getAs;
 
 public class PromotedFieldsDiscover {
     private final Map<String, List<GoLiteralIdentifier>> namedFieldsMap = new HashMap<String, List<GoLiteralIdentifier>>();
@@ -66,40 +70,52 @@ public class PromotedFieldsDiscover {
         anonymousFieldsMap.clear();
 
         for (GoTypeStructAnonymousField field : struct.getAnonymousFields()) {
-            GoTypeStruct struct = GoTypes.resolveToStruct(field.getType());
-            if (struct == null) {
+            processAnonymousField(field);
+        }
+    }
+
+    private void processAnonymousField(GoTypeStructAnonymousField field) {
+
+        GoType type = GoTypes.fromPsi(field.getType());
+
+        // we look at the field type and we dereference it once if necessary
+        if (type instanceof GoTypePointer)
+            type = ((GoTypePointer)type).getTargetType();
+
+        // we should have a type name now
+        if (!(type instanceof GoTypeName))
+            return;
+
+        type = type.getUnderlyingType();
+        if ( type == null || !(type instanceof GoTypeStruct))
+            return;
+
+        GoTypeStruct typeStruct = (GoTypeStruct) type;
+
+        GoPsiTypeStruct structTypePsi = typeStruct.getPsiType();
+        if (structTypePsi == null)
+            return;
+
+        processStruct(structTypePsi);
+        discoverSubType(structTypePsi);
+    }
+
+    private void processStruct(GoPsiTypeStruct psiTypeStruct) {
+
+        for (GoTypeStructField subField : psiTypeStruct.getFields()) {
+            for (GoLiteralIdentifier identifier : subField.getIdentifiers()) {
+                if (!ignore(identifier)) {
+                    addNamedField(identifier);
+                }
+            }
+        }
+
+        for (GoTypeStructAnonymousField subField : psiTypeStruct.getAnonymousFields()) {
+            if (ignore(subField)) {
                 continue;
             }
 
-            GoPsiTypeStruct psiType = struct.getPsiType();
-            if (psiType == null) {
-                continue;
-            }
-
-            for (GoTypeStructField subField : psiType.getFields()) {
-                for (GoLiteralIdentifier identifier : subField.getIdentifiers()) {
-                    if (!ignore(identifier)) {
-                        addNamedField(identifier);
-                    }
-                }
-            }
-
-            for (GoTypeStructAnonymousField subField : psiType.getAnonymousFields()) {
-                if (ignore(subField)) {
-                    continue;
-                }
-
-                addAnonymousField(subField);
-                GoTypeStruct subStruct = GoTypes.resolveToStruct(subField.getType());
-                if (subStruct == null) {
-                    continue;
-                }
-
-                GoPsiTypeStruct subPsiType = struct.getPsiType();
-                if (subPsiType != null) {
-                    discoverSubType(subPsiType);
-                }
-            }
+            addAnonymousField(subField);
         }
     }
 

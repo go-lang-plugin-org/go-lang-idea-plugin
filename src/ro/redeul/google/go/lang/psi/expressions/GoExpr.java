@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.psi.expressions;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
@@ -16,9 +17,4 @@ public interface GoExpr extends GoPsiElement {
     GoType[] getType();
 
     boolean isConstantExpression();
-
-    // TODO: This doesn't belong here
-    boolean hasType(GoTypes.Builtin builtinType);
-
-    boolean hasType(GoType type);
 }

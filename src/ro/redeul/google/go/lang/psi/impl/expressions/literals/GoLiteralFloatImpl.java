@@ -4,6 +4,14 @@ import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFloat;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -12,7 +20,7 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
  * Time: 3:44 AM
  */
 public class GoLiteralFloatImpl extends GoPsiElementBase
-    implements GoLiteralFloat {
+        implements GoLiteralFloat {
 
     public GoLiteralFloatImpl(@NotNull ASTNode node) {
         super(node);
@@ -20,12 +28,12 @@ public class GoLiteralFloatImpl extends GoPsiElementBase
 
     @NotNull
     @Override
-    public Float getValue() {
+    public BigDecimal getValue() {
         String textValue = getText();
         try {
-            return Float.parseFloat(textValue);
-        } catch (NumberFormatException e){
-            return (float) 0;
+            return new BigDecimal(textValue);
+        } catch (NumberFormatException e) {
+            return BigDecimal.ZERO;
         }
     }
 
@@ -33,4 +41,10 @@ public class GoLiteralFloatImpl extends GoPsiElementBase
     public Type getType() {
         return Type.Float;
     }
+
+    @Override
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitLiteralFloat(this);
+    }
 }
+

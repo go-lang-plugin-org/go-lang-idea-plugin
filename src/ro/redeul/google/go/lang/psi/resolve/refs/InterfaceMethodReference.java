@@ -30,7 +30,7 @@ public class InterfaceMethodReference extends Reference<GoLiteralIdentifier, Int
                         if ( type == null || type.getPsiType() == null)
                             return null;
 
-                        GoTypeInterfaceMethodSet methodSet = new MethodSetDiscover(type.getPsiType()).getMethodSet();
+                        GoTypeInterfaceMethodSet methodSet = new MethodSetDiscover(type).getMethodSet();
 
                         for (GoFunctionDeclaration declaration : methodSet.getMethods())
                             if (getElement().getText().equals(declaration.getFunctionName()))
@@ -43,7 +43,7 @@ public class InterfaceMethodReference extends Reference<GoLiteralIdentifier, Int
 
     public InterfaceMethodReference(GoLiteralIdentifier element, GoTypeName type) {
         super(element);
-        this.type = GoTypes.resolveToInterface(type.getPsiType());
+        this.type = type.getUnderlyingType(GoTypeInterface.class);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class InterfaceMethodReference extends Reference<GoLiteralIdentifier, Int
         if ( type == null )
             return EMPTY_ARRAY;
 
-        GoTypeInterfaceMethodSet methodSet = new MethodSetDiscover(type.getPsiType()).getMethodSet();
+        GoTypeInterfaceMethodSet methodSet = new MethodSetDiscover(type).getMethodSet();
 
         List<LookupElementBuilder> variants = new ArrayList<LookupElementBuilder>();
         for (GoFunctionDeclaration functionDeclaration : methodSet.getMethods()) {

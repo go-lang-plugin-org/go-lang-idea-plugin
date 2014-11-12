@@ -29,7 +29,6 @@ public interface GoFunctionDeclaration extends GoPsiElement, PsiNameIdentifierOw
 
     GoBlockStatement getBlock();
 
-//    GoFunctionParameterList getParameters();
     GoFunctionParameter[] getParameters();
 
     GoFunctionParameter[] getResults();
@@ -37,12 +36,9 @@ public interface GoFunctionDeclaration extends GoPsiElement, PsiNameIdentifierOw
     /**
      * This will return an array of types for each positional parameter regardless of how they are defined
      */
-//    @NotNull
-//    GoType[] getParameterTypes();
-
-//    @NotNull
-//    GoType[] getReturnTypes();
+    @NotNull
+    GoType[] getParameterTypes();
 
     @NotNull
-    GoPsiType[] getReturnType();
+    GoType[] getReturnTypes();
 }

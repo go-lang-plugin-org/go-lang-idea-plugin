@@ -22,15 +22,11 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameterList;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.utils.GoFunctionDeclarationUtils;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.util.GoUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getGlobalElementSearchScope;
 import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
@@ -43,11 +39,6 @@ import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
  */
 public class GoFunctionDeclarationImpl extends GoPsiElementBase
         implements GoFunctionDeclaration {
-
-    @Override
-    public GoUnderlyingType getUnderlyingType() {
-        return GoUnderlyingTypes.getFunction();
-    }
 
     @Override
     public boolean isIdentical(GoPsiType goType) {
@@ -114,26 +105,16 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase
         return GoPsiUtils.getParameters(result);
     }
 
-    @Override
     @NotNull
-    public GoPsiType[] getReturnType() {
+    @Override
+    public GoType[] getParameterTypes() {
+        return GoFunctionDeclarationUtils.getParameterTypes(getParameters());
+    }
 
-        List<GoPsiType> types = new ArrayList<GoPsiType>();
-
-        GoFunctionParameter[] results = getResults();
-        for (GoFunctionParameter result : results) {
-            GoLiteralIdentifier identifiers[] = result.getIdentifiers();
-
-            if (identifiers.length == 0 && result.getType() != null) {
-                types.add(result.getType());
-            } else {
-                for (GoLiteralIdentifier identifier : identifiers) {
-                    types.add(result.getType());
-                }
-            }
-        }
-
-        return types.toArray(new GoPsiType[types.size()]);
+    @NotNull
+    @Override
+    public GoType[] getReturnTypes() {
+        return GoFunctionDeclarationUtils.getParameterTypes(getResults());
     }
 
     public String toString() {

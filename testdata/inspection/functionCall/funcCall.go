@@ -275,20 +275,16 @@ func main() {
 	MatchInt32(2147483647)
 	MatchInt32(10.0)
 	MatchInt32(/*begin*/1.1/*end.Expression type mismatch, the expected type is int32|CastTypeFix*/)
-
-	// GoLiteralIntegerImpl does not return proper value now
-	//	MatchInt32(-2147483649)
-	//	MatchInt32(2147483649)
+	MatchInt32(/*begin*/-2147483649/*end.Expression type mismatch, the expected type is int32|CastTypeFix*/)
+	MatchInt32(/*begin*/2147483649/*end.Expression type mismatch, the expected type is int32|CastTypeFix*/)
 
 	MatchRune(0)
 	MatchRune(-2147483648)
 	MatchRune(2147483647)
 	MatchRune(10.0)
 	MatchRune(/*begin*/1.1/*end.Expression type mismatch, the expected type is rune|CastTypeFix*/)
-
-	// GoLiteralIntegerImpl does not return proper value now
-	//	MatchRune(-2147483649)
-	//	MatchRune(2147483649)
+	MatchRune(/*begin*/-2147483649/*end.Expression type mismatch, the expected type is rune|CastTypeFix*/)
+	MatchRune(/*begin*/2147483649/*end.Expression type mismatch, the expected type is rune|CastTypeFix*/)
 
 	var interfacE = interface{}
 	HandleIFunc(func() iFunc {return true})
@@ -398,7 +394,7 @@ func main() {
 	HandleArray(/*begin*/[...]int{1, 2 ,3}/*end.Expression type mismatch, the expected type is [3]string|CastTypeFix*/)
 
 	HandleMyFunc(HandleMap)
-	HandleMyFunc(HandleMyMap)
+	HandleMyFunc(/*begin*/HandleMyMap/*end.Expression type mismatch, the expected type is MyFunc|CastTypeFix*/)
 	HandleMyFunc(func(map[string]string){})
 	HandleMyFunc((func(map[string]string){}))
 	HandleMyFunc(/*begin*/(-(func(map[int]string){}))/*end.Expression type mismatch, the expected type is MyFunc|CastTypeFix*/)

@@ -12,17 +12,16 @@ import java.util.Set;
 
 public class MethodSetDiscover {
 
-    private final GoPsiTypeInterface myPsiType;
+    private final GoTypeInterface myTypeInterface;
     private final Set<String> myIgnoredNames;
     private GoTypeInterfaceMethodSet myMethodSet;
 
-    public MethodSetDiscover(GoPsiTypeInterface psiType) {
-        this(psiType, new HashSet<String>());
+    public MethodSetDiscover(GoTypeInterface interfaceType) {
+        this(interfaceType, new HashSet<String>());
     }
 
-    private MethodSetDiscover(GoPsiTypeInterface psiType,
-                              Set<String> ignoredNames) {
-        this.myPsiType = psiType;
+    private MethodSetDiscover(GoTypeInterface interfaceType, Set<String> ignoredNames) {
+        this.myTypeInterface = interfaceType;
         this.myIgnoredNames = ignoredNames;
     }
 
@@ -32,26 +31,24 @@ public class MethodSetDiscover {
     }
 
     private void discover() {
-        myIgnoredNames.add(myPsiType.getName());
+        GoPsiTypeInterface psiType = myTypeInterface.getPsiType();
+
+        myIgnoredNames.add(psiType.getName());
         myMethodSet = new GoTypeInterfaceMethodSet();
 
-        for (GoPsiTypeName embeddedInterface : myPsiType.getTypeNames()) {
-            GoTypeInterface typeInterface =
-                GoTypes.resolveToInterface(embeddedInterface);
+        for (GoPsiTypeName embeddedInterface : psiType.getTypeNames()) {
 
-            if (typeInterface == null) {
+            GoTypeInterface typeInterface = GoTypes.fromPsi(embeddedInterface).getUnderlyingType(GoTypeInterface.class);
+            if (typeInterface == null)
                 continue;
-            }
 
             GoTypeInterfaceMethodSet methodSet =
-                new MethodSetDiscover(
-                    typeInterface.getPsiType(),
-                    myIgnoredNames).getMethodSet();
+                    new MethodSetDiscover(typeInterface, myIgnoredNames).getMethodSet();
 
             myMethodSet.merge(methodSet);
         }
 
-        for (GoFunctionDeclaration functionDeclaration : myPsiType.getFunctionDeclarations()) {
+        for (GoFunctionDeclaration functionDeclaration : psiType.getFunctionDeclarations()) {
             myMethodSet.add(functionDeclaration);
         }
     }

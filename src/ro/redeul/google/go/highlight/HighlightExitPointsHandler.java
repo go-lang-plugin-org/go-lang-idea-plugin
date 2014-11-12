@@ -11,7 +11,7 @@ import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallOrConversionExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
@@ -57,7 +57,7 @@ public class HighlightExitPointsHandler extends HighlightUsagesHandlerBase<PsiEl
             }
 
             @Override
-            public void visitBuiltinCallExpression(GoBuiltinCallExpression expression) {
+            public void visitBuiltinCallExpression(GoBuiltinCallOrConversionExpression expression) {
                 GoPrimaryExpression baseExpression = expression.getBaseExpression();
                 if (baseExpression instanceof GoLiteralExpression) {
                     GoLiteral literal = ((GoLiteralExpression) baseExpression).getLiteral();

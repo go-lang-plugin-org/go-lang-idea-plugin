@@ -1,5 +1,7 @@
 package ro.redeul.google.go.lang.psi.expressions.literals;
 
-public interface GoLiteralFloat extends GoLiteral<Float> {
+import java.math.BigDecimal;
+
+public interface GoLiteralFloat extends GoLiteral<BigDecimal> {
 
 }

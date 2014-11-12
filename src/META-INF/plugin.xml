@@ -164,6 +164,9 @@
             <implementation-class>ro.redeul.google.go.lang.packages.GoPackages</implementation-class>
         </component>
 
+        <component>
+            <implementation-class>ro.redeul.google.go.lang.psi.typing.GoTypes</implementation-class>
+        </component>
     </project-components>
 
     <actions>

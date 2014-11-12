@@ -1,9 +1,8 @@
 package ro.redeul.google.go.lang.psi.typing;
 
 import ro.redeul.google.go.lang.psi.GoPackage;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingType;
 
-public class GoTypePackage implements GoType {
+public class GoTypePackage extends GoAbstractType implements GoType {
 
     private GoPackage goPackage;
 
@@ -12,8 +11,8 @@ public class GoTypePackage implements GoType {
     }
 
     @Override
-    public GoUnderlyingType getUnderlyingType() {
-        return GoUnderlyingType.Undefined;
+    public GoType getUnderlyingType() {
+        return this;
     }
 
     @Override
@@ -22,11 +21,16 @@ public class GoTypePackage implements GoType {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitPackage(this);
+    public <T> T accept(Visitor<T> visitor) {
+        return visitor.visitPackage(this);
     }
 
     public GoPackage getPackage() {
         return goPackage;
+    }
+
+    @Override
+    public boolean isAssignableFrom(GoType source) {
+        return false;
     }
 }

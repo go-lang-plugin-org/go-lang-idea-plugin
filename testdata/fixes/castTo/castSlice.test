@@ -8,6 +8,7 @@ func main() {
     indexHandler := 45
     HandleFunc("/",index/*begin*/H/*end*/andler)
 }
+
 -----
 package main
 

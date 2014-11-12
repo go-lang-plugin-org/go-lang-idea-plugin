@@ -1,10 +1,8 @@
 package ro.redeul.google.go.lang.psi.typing;
 
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeChannel;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeChannel;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 
-public class GoTypeChannel extends GoTypePsiBacked<GoPsiTypeChannel, GoUnderlyingTypeChannel> implements GoType {
+public class GoTypeChannel extends GoTypePsiBacked<GoPsiTypeChannel> implements GoType {
 
     private final GoType elementType;
     private final ChannelType channelType;
@@ -12,21 +10,23 @@ public class GoTypeChannel extends GoTypePsiBacked<GoPsiTypeChannel, GoUnderlyin
     public GoTypeChannel(GoPsiTypeChannel psiType) {
         super(psiType);
 
-        elementType = GoTypes.fromPsiType(psiType.getElementType());
+        elementType = types().fromPsiType(psiType.getElementType());
         channelType = psiType.getChannelType();
-        setUnderlyingType(
-            GoUnderlyingTypes.getChannel(channelType,
-                                         elementType.getUnderlyingType()));
     }
 
     @Override
     public boolean isIdentical(GoType type) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        if ( !(type instanceof GoTypeChannel))
+            return false;
+
+        GoTypeChannel other = (GoTypeChannel) type;
+
+        return getChannelType() == other.getChannelType() && getElementType().isIdentical(other.getElementType());
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitChannel(this);
+    public <T> T accept(Visitor<T> visitor) {
+        return visitor.visitChannel(this);
     }
 
     public GoType getElementType() {
@@ -51,5 +51,15 @@ public class GoTypeChannel extends GoTypePsiBacked<GoPsiTypeChannel, GoUnderlyin
 
             return "";
         }
+    }
+
+    @Override
+    public boolean isAssignableFrom(GoType source) {
+        return super.isAssignableFrom(source);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s %s", ChannelType.getText(getChannelType()), getElementType());
     }
 }

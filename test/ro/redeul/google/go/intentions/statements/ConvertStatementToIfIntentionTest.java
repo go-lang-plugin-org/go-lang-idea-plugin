@@ -13,7 +13,6 @@ public class ConvertStatementToIfIntentionTest extends GoIntentionTestCase {
         doTest();
     }
 
-    @Ignore("broken by the new resolver")
     public void testCallExpression() throws Exception {
         doTest();
     }

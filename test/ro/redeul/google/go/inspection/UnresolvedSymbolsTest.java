@@ -38,7 +38,6 @@ public class UnresolvedSymbolsTest extends GoInspectionTestCase {
         doTest();
     }
 
-    @Ignore("broken by new resolver")
     public void testCreateFunction() throws Exception {
         doTest();
     }

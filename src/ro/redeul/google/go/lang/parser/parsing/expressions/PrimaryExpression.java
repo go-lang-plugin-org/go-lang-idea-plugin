@@ -301,8 +301,7 @@ class PrimaryExpression implements GoElementTypes {
             return true;
         }
 
-        if (ParserUtils.markTokenIf(builder, LITERAL_IMAGINARY,
-                                    LITERALS_IMAGINARY)) {
+        if (ParserUtils.markTokenIf(builder, LITERAL_IMAGINARY, LITERALS_IMAGINARY)) {
             expr.done(LITERAL_EXPRESSION);
             return true;
         }

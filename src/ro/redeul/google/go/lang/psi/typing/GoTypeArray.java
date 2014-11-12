@@ -1,27 +1,14 @@
 package ro.redeul.google.go.lang.psi.typing;
 
-import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeArray;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypeArray;
-import ro.redeul.google.go.lang.psi.types.underlying.GoUnderlyingTypes;
 
-public class GoTypeArray extends GoAbstractType<GoUnderlyingTypeArray> implements GoType {
+public class GoTypeArray extends GoTypePsiBacked<GoPsiTypeArray> implements GoType {
 
     private final GoType elementType;
-    private GoPsiType elementPsiType = null;
 
     public GoTypeArray(GoPsiTypeArray type) {
-        this(GoTypes.fromPsiType(type.getElementType()));
-        elementPsiType = type;
-    }
-
-    public GoTypeArray(GoType elementType) {
-        this.elementType = elementType;
-        setUnderlyingType(GoUnderlyingTypes.getArray(elementType.getUnderlyingType(), 1));
-    }
-
-    public GoPsiType getPsiType() {
-        return elementPsiType;
+        super(type);
+        elementType = types().fromPsiType(type.getElementType());
     }
 
     @Override
@@ -30,9 +17,9 @@ public class GoTypeArray extends GoAbstractType<GoUnderlyingTypeArray> implement
             return false;
         }
 
-        GoTypeArray otherArray = (GoTypeArray) type;
+        GoTypeArray other = (GoTypeArray) type;
 
-        return elementType.isIdentical(otherArray.getElementType());
+        return getLength() == other.getLength() && elementType.isIdentical(other.getElementType());
     }
 
     public GoType getElementType() {
@@ -40,7 +27,25 @@ public class GoTypeArray extends GoAbstractType<GoUnderlyingTypeArray> implement
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitArray(this);
+    public <T> T accept(Visitor<T> visitor) {
+        return visitor.visitArray(this);
+    }
+
+    public int getLength() {
+        return getPsiType().getArrayLength();
+    }
+
+    @Override
+    public boolean isAssignableFrom(GoType source) {
+        return super.isAssignableFrom(source);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("[%d]%s", getLength(), getElementType());
+    }
+
+    public GoType getKeyType() {
+        return types().getBuiltin(GoTypes.Builtin.Int);
     }
 }

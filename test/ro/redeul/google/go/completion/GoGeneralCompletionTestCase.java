@@ -28,12 +28,10 @@ public class GoGeneralCompletionTestCase extends GoCompletionTestCase {
         _testVariants();
     }
 
-    @Ignore("To be fixed")
     public void testBuiltinFunctionsAtStatementLevel() throws IOException {
         _testVariants();
     }
 
-    @Ignore("To be fixed")
     public void testBuiltinFunctionsAtExpressionLevel() throws IOException {
         _testVariants();
     }

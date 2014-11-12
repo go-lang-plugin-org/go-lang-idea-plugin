@@ -2,7 +2,7 @@ package ro.redeul.google.go.psi;
 
 import ro.redeul.google.go.GoPsiTestCase;
 import ro.redeul.google.go.lang.psi.GoFile;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallOrConversionExpression;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import static ro.redeul.google.go.util.GoPsiTestUtils.castAs;
 import static ro.redeul.google.go.util.GoPsiTestUtils.childAt;
@@ -18,8 +18,8 @@ public class GoPsiBuiltinCallExpressionTest extends GoPsiTestCase {
                       "package main\n" +
                       "var e = new(int)"));
 
-        GoBuiltinCallExpression builtin =
-            castAs(GoBuiltinCallExpression.class, 0,
+        GoBuiltinCallOrConversionExpression builtin =
+            castAs(GoBuiltinCallOrConversionExpression.class, 0,
                  childAt(0,
                          childAt(0,
                                  file.getGlobalVariables()
@@ -37,8 +37,8 @@ public class GoPsiBuiltinCallExpressionTest extends GoPsiTestCase {
                       "package main\n" +
                       "var e = make(int, 1)"));
 
-        GoBuiltinCallExpression builtin =
-            castAs(GoBuiltinCallExpression.class, 0,
+        GoBuiltinCallOrConversionExpression builtin =
+            castAs(GoBuiltinCallOrConversionExpression.class, 0,
                  childAt(0,
                          childAt(0,
                                  file.getGlobalVariables()

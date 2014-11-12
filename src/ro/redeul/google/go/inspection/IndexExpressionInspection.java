@@ -1,27 +1,19 @@
 package ro.redeul.google.go.inspection;
 
-import com.intellij.codeInspection.ProblemHighlightType;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.inspection.fix.CastTypeFix;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFloat;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralInteger;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoIndexExpression;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.types.*;
-import ro.redeul.google.go.lang.psi.typing.GoType;
-import ro.redeul.google.go.lang.psi.typing.GoTypeArray;
-import ro.redeul.google.go.lang.psi.typing.GoTypePsiBacked;
-import ro.redeul.google.go.lang.psi.utils.GoTypeUtils;
+import ro.redeul.google.go.lang.psi.typing.*;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
-import ro.redeul.google.go.util.GoTypeInspectUtil;
-import ro.redeul.google.go.util.GoUtil;
+import ro.redeul.google.go.util.GoNumber;
 
-import static ro.redeul.google.go.util.GoTypeInspectUtil.checkValidLiteralIntExpr;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getAs;
 
 public class IndexExpressionInspection extends AbstractWholeGoFileInspection {
     @Override
@@ -37,104 +29,139 @@ public class IndexExpressionInspection extends AbstractWholeGoFileInspection {
         }.visitFile(file);
     }
 
-    private void checkIndexExpression(GoIndexExpression expression, InspectionResult result) {
-        GoExpr indexExpr = expression.getIndex();
+    private void checkIndexExpression(GoIndexExpression expression, final InspectionResult result) {
+        final GoExpr indexExpr = expression.getIndex();
         if (indexExpr == null)
             return;
-        for (GoType goType : expression.getBaseExpression().getType()) {
-            if (goType != null && goType instanceof GoTypePsiBacked) {
 
-                GoPsiType psiType = GoTypeUtils.resolveToFinalType(((GoTypePsiBacked) goType).getPsiType());
+        final GoFile goFile = getAs(GoFile.class, indexExpr.getContainingFile());
+        if ( goFile == null)
+            return;
 
-                if (psiType == null)
-                    psiType = ((GoTypePsiBacked) goType).getPsiType();
+        final GoType[] indexTypes = indexExpr.getType();
 
-                if (psiType instanceof GoPsiTypeArray || psiType instanceof GoPsiTypeSlice) {
-                    checkIndexSliceArray(indexExpr, result);
-                }
-                if (psiType instanceof GoPsiTypeMap) {
-                    checkIndexMap(((GoPsiTypeMap) psiType).getKeyType(), indexExpr, result);
+        if ( indexTypes.length != 1 || indexTypes[0] == null)
+            return;
+        final GoType indexType = indexTypes[0];
+
+        GoType[] expressionTypes = expression.getBaseExpression().getType();
+        if (expressionTypes.length != 1 || expressionTypes[0] == null)
+            return;
+
+        final BigInteger intConstant = getIntegerConstant(indexType);
+
+        new GoType.ForwardingVisitor<InspectionResult>(result, new GoType.Second<InspectionResult>() {
+            @Override
+            public void visitArray(GoTypeArray type, InspectionResult result, GoType.Visitor<InspectionResult> visitor) {
+                checkUnsignedIntegerConstantInRange(indexExpr, indexType, type.getLength(), result);
+            }
+
+            @Override
+            public void visitSlice(GoTypeSlice type, InspectionResult result, GoType.Visitor<InspectionResult> visitor) {
+                checkUnsignedIntegerConstantInRange(indexExpr, indexType, Integer.MAX_VALUE, result);
+            }
+
+            @Override
+            public void visitPrimitive(GoTypePrimitive type, InspectionResult data, GoType.Visitor<InspectionResult> visitor) {
+                switch (type.getType()) {
+                    case String:
+                        checkUnsignedIntegerConstantInRange(indexExpr, indexType, Integer.MAX_VALUE, result);
+                        break;
+                    default:
+                        result.addProblem(
+                                indexExpr,
+                                GoBundle.message("warning.functioncall.type.mismatch", GoTypes.getRepresentation(indexType, goFile))
+                        );
                 }
             }
-            if (goType != null && goType instanceof GoTypeArray) {
-                checkIndexSliceArray(indexExpr, result);
+
+            @Override
+            public void visitPointer(GoTypePointer type, InspectionResult data, GoType.Visitor<InspectionResult> visitor) {
+                type.getTargetType().getUnderlyingType().accept(visitor);
             }
-        }
+
+            @Override
+            public void visitConstant(GoTypeConstant type, InspectionResult data, GoType.Visitor<InspectionResult> visitor) {
+                switch (type.getKind()) {
+                    case String:
+                        String stringValue = type.getValueAs(String.class);
+                        checkUnsignedIntegerConstantInRange(indexExpr, indexType, stringValue != null ? stringValue.length() : Integer.MAX_VALUE, result);
+                    default:
+                        result.addProblem(
+                                indexExpr,
+                                GoBundle.message("warning.functioncall.type.mismatch", GoTypes.getRepresentation(indexType, goFile))
+                        );
+                }
+            }
+
+            @Override
+            public void visitMap(GoTypeMap type, InspectionResult data, GoType.Visitor<InspectionResult> visitor) {
+                GoType keyType = type.getKeyType();
+                if ( !keyType.isAssignableFrom(indexType)) {
+                    result.addProblem(
+                            indexExpr,
+                            GoBundle.message("warn.index.map.invalid.type",
+                                    indexExpr.getText(),
+                                    GoTypes.getRepresentation(indexType, goFile),
+                                    GoTypes.getRepresentation(keyType, goFile)),
+                            new CastTypeFix(indexExpr, keyType));
+                }
+             }
+        }).visit(expressionTypes[0].getUnderlyingType());
     }
 
-    private void checkIndexMap(GoPsiType keyType, GoExpr indexExpr, InspectionResult result) {
-        if (!GoTypeInspectUtil.checkParametersExp(keyType, indexExpr)) {
+    private void checkUnsignedIntegerConstantInRange(GoExpr indexExpr, GoType indexType, int length, InspectionResult result) {
+        BigInteger integer = getIntegerConstant(indexType);
+
+        if (!(indexType instanceof GoTypeConstant) || integer == null )
             result.addProblem(
                     indexExpr,
-                    GoBundle.message("warning.functioncall.type.mismatch", GoUtil.getNameLocalOrGlobal(keyType, (GoFile) indexExpr.getContainingFile())),
-                    ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new CastTypeFix(indexExpr, keyType));
-        }
+                    GoBundle.message("warning.functioncall.type.mismatch", "int"));
+
+        if ( integer != null && integer.compareTo(BigInteger.ZERO) < 0)
+            result.addProblem(
+                    indexExpr,
+                    GoBundle.message("warning.index.invalid", integer.longValue(), "(index must be non-negative)"));
+
+        if ( integer != null && integer.compareTo(BigInteger.valueOf(length)) > 0)
+            result.addProblem(
+                    indexExpr,
+                    GoBundle.message("warning.index.invalid", integer.longValue(), "(index out of bounds)"));
     }
 
-    private void checkIndexSliceArray(GoExpr index, InspectionResult result) {
+    private BigInteger getIntegerConstant(GoType indexType) {
+        if ( !(indexType instanceof GoTypeConstant) )
+            return null;
 
+        GoTypeConstant constant = (GoTypeConstant) indexType;
+        BigDecimal decimal = null;
+        BigInteger integer = null;
 
-        if (index instanceof GoLiteralExpression) {
-            GoLiteral literal = ((GoLiteralExpression) index).getLiteral();
-            if (literal instanceof GoLiteralInteger)
-                return;
-            if (literal instanceof GoLiteralFloat) {
-                Float value = ((GoLiteralFloat) literal).getValue();
-                if (!value.toString().matches("^[0-9]+\\.0+$")) {
-                    result.addProblem(
-                            index,
-                            GoBundle.message("warning.functioncall.type.mismatch", "int"));
-                    return;
-                }
-                return;
-            }
-            if (literal instanceof GoLiteralString) {
-                result.addProblem(
-                        index,
-                        GoBundle.message("warning.functioncall.type.mismatch", "int"));
-                return;
-            }
+        if ( constant.getKind() == GoTypeConstant.Kind.Complex) {
+            GoNumber goNumber = constant.getValueAs(GoNumber.class);
+            if ( goNumber == null || goNumber.isComplex())
+                return null;
 
-        }
-        if (index.isConstantExpression()) {
-            Number numValue = FunctionCallInspection.getNumberValueFromLiteralExpr(index);
-            if (numValue == null){
-                if (!checkValidLiteralIntExpr(index)) {
-                    result.addProblem(
-                            index,
-                            GoBundle.message("warning.functioncall.type.mismatch", "int"));
-                }
-            } else {
-                if (numValue instanceof Integer || numValue.intValue() == numValue.floatValue()) {
-                    Integer value = numValue.intValue();
-                    if (value < 0) {
-                        result.addProblem(
-                                index,
-                                GoBundle.message("warning.index.invalid", value, "(index must be non-negative)"));
-                    }
-
-                } else {
-                    result.addProblem(
-                            index,
-                            GoBundle.message("warning.functioncall.type.mismatch", "int"));
-                }
-            }
-            return;
+            decimal = goNumber.getReal();
         }
 
-        for (GoType goType : index.getType()) {
-            if (goType != null && goType instanceof GoTypePsiBacked) {
-                GoPsiType psiType = ((GoTypePsiBacked) goType).getPsiType();
-                GoPsiType resolvedType = GoTypeUtils.resolveToFinalType(psiType);
-                if (resolvedType != null)
-                    psiType = resolvedType;
-                String name = (psiType instanceof GoPsiTypeName) ? ((GoPsiTypeName)psiType).getName() : null;
-                if (name != null && !name.startsWith("int"))
-                    result.addProblem(
-                            index,
-                            GoBundle.message("warning.functioncall.type.mismatch", "int"));
-                return;
+        if ( decimal != null || constant.getKind() == GoTypeConstant.Kind.Float ) {
+            decimal = (decimal == null) ? constant.getValueAs(BigDecimal.class) : decimal;
+            if ( decimal == null )
+                return null;
+
+            try {
+                integer = decimal.toBigIntegerExact();
+            } catch (ArithmeticException e) {
+                return null;
             }
         }
+
+        if ( integer != null || constant.getKind() == GoTypeConstant.Kind.Integer) {
+            integer = (integer == null) ? constant.getValueAs(BigInteger.class) : integer;
+        }
+
+
+        return integer;
     }
 }

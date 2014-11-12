@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 public class GoLiteralStringImpl extends GoPsiElementBase
     implements GoLiteralString
@@ -25,7 +26,12 @@ public class GoLiteralStringImpl extends GoPsiElementBase
             ? Type.RawString : Type.InterpretedString;
     }
 
-//    @Override
+    @Override
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitLiteralString(this);
+    }
+
+    //    @Override
 //    protected PsiReference[] defineReferences() {
 //        if ( PlatformPatterns.psiElement().withParent(GoImportDeclaration.class).accepts(this) )
 //            return new PsiReference[] { new ImportReference(this)};

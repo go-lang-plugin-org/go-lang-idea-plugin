@@ -2,6 +2,7 @@ package ro.redeul.google.go.lang.psi.impl.expressions.primary;
 
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoTypeAssertionExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
@@ -18,10 +19,11 @@ public class GoTypeAssertionExpressionImpl extends GoExpressionBase
 
     @Override
     protected GoType[] resolveTypes() {
+
         GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
         return new GoType[]{
-            GoTypes.fromPsiType(getAssertedType()),
-            GoTypes.getBuiltin(GoTypes.Builtin.Bool, namesCache)
+            types().fromPsiType(getAssertedType()),
+            types().getBuiltin(GoTypes.Builtin.Bool)
         };
     }
 

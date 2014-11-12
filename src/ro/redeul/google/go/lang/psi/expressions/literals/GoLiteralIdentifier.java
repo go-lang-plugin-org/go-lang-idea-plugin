@@ -4,6 +4,8 @@ import com.intellij.psi.PsiNameIdentifierOwner;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.math.BigInteger;
+
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
  * <p/>
@@ -20,7 +22,7 @@ public interface GoLiteralIdentifier extends GoLiteral<String>,
 
     boolean isNil();
 
-    Integer getIotaValue();
+    BigInteger getIotaValue();
 
     public void setIotaValue(int value);
 

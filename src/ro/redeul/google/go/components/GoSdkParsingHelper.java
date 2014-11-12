@@ -220,17 +220,6 @@ public class GoSdkParsingHelper implements ApplicationComponent {
                         makefiles
                 ));
 
-        for (VirtualFile makefile : makefiles.getResults() ) {
-            String targetName = GoUtil.getTargetFromMakefile(makefile);
-
-            if ( targetName != null && librariesSet.contains(targetName) ) {
-                String relativePath = VfsUtil.getRelativePath(makefile.getParent(), sourcesRoot, '/');
-                if ( relativePath != null ) {
-                    result.put(relativePath, targetName);
-                }
-            }
-        }
-
         return result;
     }
 }

@@ -85,7 +85,7 @@ class GoBinaryExpressionBlock extends GoBlock {
             try {
                 if (preParentElement.getElementType() == ADD_EXPRESSION
                         && node != preParentElement
-                        && preParentElement.getPsi(GoAdditiveExpression.class).getOperator() == oBIT_OR) {
+                        && preParentElement.getPsi(GoAdditiveExpression.class).op() == GoAdditiveExpression.Op.BitOr) {
                     spacing = EMPTY_SPACING_KEEP_LINE_BREAKS;
                     return;
                 }
@@ -105,15 +105,9 @@ class GoBinaryExpressionBlock extends GoBlock {
         ASTNode expression = node;
         ASTNode expressionChild = node;
 
-        while (expression.getElementType() != BUILTIN_CALL_EXPRESSION
-                ) {
+        while (expression.getElementType() != BUILTIN_CALL_EXPRESSION) {
             expressionChild = expression;
             expression = expression.getTreeParent();
-        }
-
-        if (expression.getElementType() != BUILTIN_CALL_EXPRESSION) {
-            spacing = BASIC_SPACING_KEEP_LINE_BREAKS;
-            return;
         }
 
         ASTNode elem = expressionChild;

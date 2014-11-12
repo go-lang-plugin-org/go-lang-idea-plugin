@@ -2,11 +2,13 @@ package ro.redeul.google.go.lang.psi.impl.expressions.primary;
 
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpression;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 public class GoParenthesisedExpressionImpl extends GoPsiElementBase
         implements GoParenthesisedExpression {
@@ -35,12 +37,7 @@ public class GoParenthesisedExpressionImpl extends GoPsiElementBase
     }
 
     @Override
-    public boolean hasType(GoTypes.Builtin builtinType) {
-        return getInnerExpression().hasType(builtinType);
-    }
-
-    @Override
-    public boolean hasType(GoType type) {
-        return getInnerExpression().hasType(type);
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitParenthesisedExpression(this);
     }
 }
