@@ -11,4 +11,9 @@ public class FunctionReturnParameterInspectionTest extends GoInspectionTestCase 
     public void testIssue811() throws Exception {
         doTest();
     }
+
+    @Ignore("failing test")
+    public void testIssue989() throws Exception{
+        doTest();
+    }
 }
