@@ -1,5 +1,7 @@
 package ro.redeul.google.go.inspection;
 
+import org.junit.Ignore;
+
 public class ConstantExpressionsInConstDeclarationsInspectionTest
     extends GoInspectionTestCase {
 
@@ -9,4 +11,27 @@ public class ConstantExpressionsInConstDeclarationsInspectionTest
     public void testNonConstantExpressions() throws Exception { doTest(); }
 
     public void testIssue874() throws Exception { doTest(); }
+
+    @Ignore("failing test")
+    public void testComplementOperator() throws Exception {doTest();}
+
+    @Ignore("failing test")
+    public void testComplex() throws Exception {doTest();}
+
+    @Ignore("failing test")
+    public void testConversions() throws Exception {doTest();}
+
+    public void testDivByZero() throws Exception {doTest();}
+
+    @Ignore("failing test")
+    public void testLen() throws Exception {doTest();}
+
+    @Ignore("failing test")
+    public void testOverFlow() throws Exception {doTest();}
+
+    @Ignore("failing test")
+    public void testUnsafe() throws Exception {doTest();}
+
+    @Ignore("failing test")
+    public void testOrOperator() throws Exception {doTest();}
 }
