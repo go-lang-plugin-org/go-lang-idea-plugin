@@ -1,3 +1,3 @@
 package imported
 
-type /*def*/Type int
+type Type int

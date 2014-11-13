@@ -1,13 +1,5 @@
 package ro.redeul.google.go.resolve;
 
-import org.junit.Ignore;
-
-/**
- * Author: Toader Mihai Claudiu <mtoader@gmail.com>
- * <p/>
- * Date: Sep 8, 2010
- * Time: 2:59:17 PM
- */
 public class GoResolveTypesTest extends GoPsiResolveTestCase {
 
     @Override
@@ -59,7 +51,6 @@ public class GoResolveTypesTest extends GoPsiResolveTestCase {
         doTest();
     }
 
-    @Ignore("broken by the new resolver")
     public void testDontResolveIfImportedInAnotherFileSamePackage() throws Exception {
         doTest();
     }
