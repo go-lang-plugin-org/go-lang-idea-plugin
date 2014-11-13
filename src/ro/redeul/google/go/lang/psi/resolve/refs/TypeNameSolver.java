@@ -16,7 +16,7 @@ public class TypeNameSolver extends VisitingReferenceSolver<TypeNameReference, T
     @Override
     public TypeNameSolver self() { return this; }
 
-    public TypeNameSolver(final TypeNameReference reference) {
+    public TypeNameSolver(final TypeNameReference reference, boolean methodReceiver) {
         solveWithVisitor(new ReferenceSolvingVisitor(this, reference) {
                  @Override
                  public void visitTypeSpec(GoTypeSpec type) {

@@ -1,6 +1,5 @@
 package ro.redeul.google.go.lang.psi.resolve.refs;
 
-import com.intellij.openapi.util.TextRange;
 import com.intellij.patterns.ElementPattern;
 import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.processors.ResolveStates;
@@ -44,13 +43,13 @@ public class TypeNameReference
 
     @Override
     public TypeNameSolver newSolver() {
-        return new TypeNameSolver(self());
+        return new TypeNameSolver(self(), TYPE_IN_METHOD_RECEIVER.accepts(getElement()));
     }
 
 
     @Override
     public void walkSolver(TypeNameSolver solver) {
-        if ( goPackage == null)
+        if (goPackage == null)
             GoPsiScopesUtil.treeWalkUp(
                     solver,
                     getElement(),
@@ -58,10 +57,5 @@ public class TypeNameReference
                     ResolveStates.initial());
         else
             GoPsiScopesUtil.walkPackage(solver, getElement(), goPackage);
-    }
-
-    @Override
-    public TextRange getRangeInElement() {
-        return super.getRangeInElement();
     }
 }

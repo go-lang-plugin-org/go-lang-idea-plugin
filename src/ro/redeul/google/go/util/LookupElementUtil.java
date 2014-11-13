@@ -2,6 +2,8 @@ package ro.redeul.google.go.util;
 
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.util.PlatformIcons;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoIcons;
 import ro.redeul.google.go.lang.completion.insertHandler.FunctionInsertHandler;
 import ro.redeul.google.go.lang.completion.insertHandler.PackageInsertHandler;
@@ -24,15 +26,21 @@ public class LookupElementUtil extends GoElementVisitor {
         this.lookupElement = lookupElement;
     }
 
-    public static LookupElementBuilder createLookupElement(GoPsiElement element) {
+    @Nullable
+    public static LookupElementBuilder createLookupElement(@NotNull GoPsiElement element) {
         return createLookupElement(element, element.getLookupText(), element);
     }
 
-    public static LookupElementBuilder createLookupElement(GoPsiElement element, GoPsiElement child) {
-        return createLookupElement(element, child.getLookupText(), child);
+    @Nullable
+    public static LookupElementBuilder createLookupElement(@NotNull GoPsiElement element, @Nullable GoPsiElement child) {
+        return child != null ? createLookupElement(element, child.getLookupText(), child) : null;
     }
 
-    public static LookupElementBuilder createLookupElement(GoPsiElement element, String text, GoPsiElement child) {
+    @Nullable
+    public static LookupElementBuilder createLookupElement(@NotNull GoPsiElement element, String text, @Nullable GoPsiElement child) {
+
+        if ( child == null )
+            return null;
 
         LookupElementBuilder lookup =
             LookupElementBuilder.create(child, text)

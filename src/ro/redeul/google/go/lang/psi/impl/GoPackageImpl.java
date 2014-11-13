@@ -54,11 +54,13 @@ public class GoPackageImpl extends PsiElementBase implements GoPackage {
     }
 
     @Override
+    @Nullable
     public LookupElementBuilder getLookupPresentation() {
         return LookupElementUtil.createLookupElement(this);
     }
 
     @Override
+    @Nullable
     public LookupElementBuilder getLookupPresentation(GoPsiElement child) {
         return LookupElementUtil.createLookupElement(this, child);
     }

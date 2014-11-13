@@ -34,7 +34,9 @@ public abstract class DefaultReferenceSolver<R extends ReferenceWithSolver<?, S,
         this.target = target;
 
         if (variants != null) {
-            variants.add(target.getLookupPresentation());
+            LookupElementBuilder presentation = target.getLookupPresentation();
+            if ( presentation != null )
+                variants.add(presentation);
         }
     }
 

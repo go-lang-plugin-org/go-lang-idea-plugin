@@ -119,11 +119,13 @@ public class GoPsiElementBase extends ASTWrapperPsiElement
     }
 
     @Override
+    @Nullable
     public LookupElementBuilder getLookupPresentation() {
         return LookupElementUtil.createLookupElement(this);
     }
 
     @Override
+    @Nullable
     public LookupElementBuilder getLookupPresentation(GoPsiElement child) {
         return LookupElementUtil.createLookupElement(this, child);
     }

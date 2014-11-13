@@ -15,6 +15,7 @@ import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.indexing.IndexingDataKeys;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoFileType;
 import ro.redeul.google.go.GoLanguage;
 import ro.redeul.google.go.components.GoSdkParsingHelper;
@@ -253,11 +254,13 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
     }
 
     @Override
+    @Nullable
     final public LookupElementBuilder getLookupPresentation() {
         return LookupElementUtil.createLookupElement(this);
     }
 
     @Override
+    @Nullable
     public LookupElementBuilder getLookupPresentation(GoPsiElement child) {
         return LookupElementUtil.createLookupElement(this);
     }
