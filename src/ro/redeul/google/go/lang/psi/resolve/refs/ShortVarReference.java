@@ -1,6 +1,8 @@
 package ro.redeul.google.go.lang.psi.resolve.refs;
 
 import com.intellij.patterns.ElementPattern;
+import com.intellij.patterns.PsiElementPattern;
+import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.processors.ResolveStates;
@@ -18,14 +20,14 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getAs;
  * If the variable is redeclared in current short variable declaration, method {@link #resolve}
  * returns the identifier where it's declared. Otherwise, null is returned.
  */
-public class ShortVarReference
-        extends ReferenceWithSolver<GoLiteralIdentifier, ShortVarSolver, ShortVarReference> {
+public class ShortVarReference extends ReferenceWithSolver<GoLiteralIdentifier, ShortVarSolver, ShortVarReference> {
 
     public static final ElementPattern<GoLiteralIdentifier> MATCHER =
             psiElement(GoLiteralIdentifier.class)
                     .withParent(
                             psiElement(GoShortVarDeclaration.class)
                     );
+    public static final PsiElementPattern.Capture<PsiElement> SHORT_VAR_DECLARATION = psiElement().withParent(psiElement(GoShortVarDeclaration.class));
 
 //    private static final ResolveCache.AbstractResolver<ShortVarReference, ResolvingCache.Result> RESOLVER =
 //            new ResolveCache.AbstractResolver<ShortVarReference, ResolvingCache.Result>() {

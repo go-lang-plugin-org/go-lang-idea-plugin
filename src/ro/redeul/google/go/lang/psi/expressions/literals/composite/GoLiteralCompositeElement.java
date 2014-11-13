@@ -22,5 +22,5 @@ public interface GoLiteralCompositeElement extends GoPsiElement {
     GoLiteralCompositeValue getLiteralValue();
 
     @NotNull
-    GoType getElementType();
+    GoType getType();
 }

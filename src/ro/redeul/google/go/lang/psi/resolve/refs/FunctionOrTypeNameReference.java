@@ -1,11 +1,32 @@
 package ro.redeul.google.go.lang.psi.resolve.refs;
 
+import com.intellij.patterns.PsiElementPattern;
+import com.intellij.psi.PsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallOrConversionExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.processors.ResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.ReferenceWithSolver;
 import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
 
+import static com.intellij.patterns.PlatformPatterns.psiElement;
+import static com.intellij.patterns.StandardPatterns.or;
+
 public class FunctionOrTypeNameReference extends ReferenceWithSolver<GoLiteralIdentifier, FunctionOrTypeNameSolver, FunctionOrTypeNameReference> {
+
+    public static final PsiElementPattern.Capture<PsiElement> MATCHER = psiElement()
+            .withParent(
+                    psiElement(GoLiteralExpression.class)
+                            .atStartOf(
+                                    or(
+                                            psiElement(GoBuiltinCallOrConversionExpression.class),
+                                            psiElement(GoCallOrConvExpression.class))))
+            .withSuperParent(2,
+                    or(
+                            psiElement(GoBuiltinCallOrConversionExpression.class),
+                            psiElement(GoCallOrConvExpression.class))
+            );
 
     public FunctionOrTypeNameReference(GoLiteralIdentifier element) {
         super(element);

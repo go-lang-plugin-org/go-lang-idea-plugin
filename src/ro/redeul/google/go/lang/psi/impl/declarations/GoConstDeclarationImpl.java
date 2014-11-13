@@ -172,9 +172,6 @@ public class GoConstDeclarationImpl extends GoPsiElementBase
                                        @NotNull ResolveState state,
                                        PsiElement lastParent,
                                        @NotNull PsiElement place) {
-        //noinspection ConstantConditions
-//        if ( !GoNamesUtil.isExported(getName()) && ! ResolveStates.get(state, ResolveStates.Key.JustExports) )
-//            return true;
         return processor.execute(this, state);
     }
 }

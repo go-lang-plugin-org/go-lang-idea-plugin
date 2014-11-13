@@ -112,38 +112,38 @@ public interface GoType {
             return data;
         }
 
-        public T visitArray(GoTypeArray type) { return null; }
+        public T visitArray(GoTypeArray type) { return data; }
 
-        public T visitFunction(GoTypeFunction type) { return null; }
+        public T visitFunction(GoTypeFunction type) { return data; }
 
-        public T visitChannel(GoTypeChannel type) { return null; }
+        public T visitChannel(GoTypeChannel type) { return data; }
 
-        public T visitName(GoTypeName type) { return null; }
+        public T visitName(GoTypeName type) { return data; }
 
-        public T visitSlice(GoTypeSlice type) { return null; }
+        public T visitSlice(GoTypeSlice type) { return data; }
 
-        public T visitPointer(GoTypePointer type) { return null; }
+        public T visitPointer(GoTypePointer type) { return data; }
 
-        public T visitMap(GoTypeMap type) { return null; }
+        public T visitMap(GoTypeMap type) { return data; }
 
-        public T visitPackage(GoTypePackage type) { return null; }
+        public T visitPackage(GoTypePackage type) { return data; }
 
-        public T visitStruct(GoTypeStruct type) { return null; }
+        public T visitStruct(GoTypeStruct type) { return data; }
 
-        public T visitNil(GoType type) {return null; }
+        public T visitNil(GoType type) {return data; }
 
-        public T visitUnknown(GoType type) { return null; }
+        public T visitUnknown(GoType type) { return data; }
 
         public T visitVariadic(GoTypeVariadic type) { return type.getTargetType().accept(this); }
 
-        public T visitInterface(GoTypeInterface type) { return null; }
+        public T visitInterface(GoTypeInterface type) { return data; }
 
         public T visitConstant(GoTypeConstant constant) {
-            return null;
+            return data;
         }
 
         public T visitPrimitive(GoTypePrimitive typePrimitive) {
-            return null;
+            return data;
         }
     }
 
