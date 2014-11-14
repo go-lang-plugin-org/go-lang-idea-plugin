@@ -13,7 +13,10 @@ import ro.redeul.google.go.lang.psi.statements.GoExpressionStatement;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypePrimitive;
 import ro.redeul.google.go.lang.psi.typing.GoTypePsiBacked;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.typing.TypeVisitor;
 import ro.redeul.google.go.lang.psi.utils.GoTypeUtils;
 import ro.redeul.google.go.util.GoUtil;
 
@@ -29,26 +32,30 @@ public class CheckErrorIntention extends Intention {
 
     @Override
     protected boolean satisfiedBy(PsiElement element) {
-        statement = element instanceof GoExpressionStatement ? (GoExpressionStatement) element : findParentOfType(element, GoExpressionStatement.class);
-        if (statement == null && element instanceof PsiWhiteSpace && element.getPrevSibling() instanceof GoExpressionStatement) {
-            statement = (GoExpressionStatement) element.getPrevSibling();
-        }
-        if (statement != null) {
-            expr = statement.getExpression();
-            if (expr != null) {
-                for (GoType goType : expr.getType()) {
-                    if (goType != null) {
-                        if (goType instanceof GoTypePsiBacked) {
-                            GoPsiType psiType = GoTypeUtils.resolveToFinalType(((GoTypePsiBacked) goType).getPsiType());
-                            if (psiType instanceof GoPsiTypeName) {
-                                if (psiType.getText().equals("error") && ((GoPsiTypeName) psiType).isPrimitive())
-                                    return true;
-                            }
-                        }
-                    }
+
+        PsiElement node = element;
+        if (node == null) return false;
+
+        if (node instanceof PsiWhiteSpace)
+            node = node.getPrevSibling();
+
+        statement = findParentOfType(node, GoExpressionStatement.class);
+        if (statement == null) return false;
+
+        expr = statement.getExpression();
+        if (expr == null) return false;
+
+        for (GoType type : expr.getType()) {
+            if (type == null) continue;
+            GoType underlyingType = type.underlyingType();
+            return underlyingType.accept(new TypeVisitor<Boolean>(false) {
+                @Override
+                public Boolean visitPrimitive(GoTypePrimitive type) {
+                    return type.getType() == GoTypes.Builtin.Error;
                 }
-            }
+            });
         }
+
         return false;
     }
 

@@ -50,6 +50,7 @@ public class GoTypePrimitive extends GoTypeName {
             .put("rune", GoTypes.Builtin.Rune)
             .put("string", GoTypes.Builtin.String)
             .put("bool", GoTypes.Builtin.Bool)
+            .put("error", GoTypes.Builtin.Error)
             .build();
 
     GoTypes.Builtin type;
