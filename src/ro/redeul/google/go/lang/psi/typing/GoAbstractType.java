@@ -38,6 +38,15 @@ public abstract class GoAbstractType implements GoType {
         return false;
     }
 
+    @Nullable
+    @Override
+    public GoType castAs(GoType type) {
+        if ( type.isAssignableFrom(this) )
+            return type;
+
+        return null;
+    }
+
     class ForwardingVisitor<T> extends TypeVisitor<T> {
 
         private UpdatingTypeVisitor<T> second;

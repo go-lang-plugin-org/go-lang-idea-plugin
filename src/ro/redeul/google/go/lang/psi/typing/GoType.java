@@ -14,6 +14,9 @@ public interface GoType {
 
     boolean canRepresent(GoTypeConstant constantType);
 
+    @Nullable
+    GoType castAs(GoType type);
+
     boolean isIdentical(GoType type);
 
     @NotNull

@@ -55,16 +55,10 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase implements GoCa
                     return new GoType[]{type};
 
                 GoType argType[] = args[0].getType();
-                if ( argType.length != 1 || !(argType[0] instanceof GoTypeConstant))
+                if ( argType.length != 1)
                     return new GoType[] { type };
 
-                GoTypeConstant constant = (GoTypeConstant) argType[0];
-
-                if ( type.canRepresent(constant) ) {
-                    return new GoType[] { constant.retypeAs(type)};
-                }
-
-                return new GoType[]{type};
+                return new GoType[]{argType[0].castAs(type)};
             }
         });
 

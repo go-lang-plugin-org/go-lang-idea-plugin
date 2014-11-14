@@ -82,7 +82,7 @@ public class GoTypePrimitive extends GoTypeName {
             case Complex:
                 return canRepresent(constant.getValueAs(GoNumber.class));
             case Float:
-                return type != GoTypes.Builtin.String && canRepresent(constant.getValueAs(BigDecimal.class));
+                return canRepresent(constant.getValueAs(BigDecimal.class));
             case Rune:
                 return canRepresent(constant.getValueAs(BigInteger.class));
             case Integer:
@@ -159,8 +159,6 @@ public class GoTypePrimitive extends GoTypeName {
                 return BigInteger.ZERO.compareTo(value) <= 0 && value.compareTo(UINT16_MAX) <= 0;
             case uInt8: case Byte:
                 return BigInteger.ZERO.compareTo(value) <= 0 && value.compareTo(UINT8_MAX) <= 0;
-            case String:
-                return BigInteger.ZERO.compareTo(value) <= 0 && value.compareTo(UNICODE_MAX) <= 0;
             default:
                 return false;
         }
