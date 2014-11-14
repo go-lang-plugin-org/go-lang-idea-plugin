@@ -34,40 +34,40 @@ func Ok5(w io.Writer) (n int, err error) {
 }
 
 func NotEnough1() int {
-	/*begin*/return/*end.Not enough arguments to return|ChangeReturnsParametersFix*/
+	/*begin*/return/*end.not enough arguments to return|ChangeReturnsParametersFix*/
 }
 
 func NotEnough2(a int) (b, c int) {
 	if a == 1 {
 		return
 	} else if a == 2 {
-		/*begin*/return 1/*end.Not enough arguments to return|ChangeReturnsParametersFix*/
+		/*begin*/return 1/*end.not enough arguments to return|ChangeReturnsParametersFix*/
 	} else if a == 3 {
 		return 1, 2
 	}
-	/*begin*/return 3, 4, 5/*end.Too many arguments to return|ChangeReturnsParametersFix*/
+	/*begin*/return 3, 4, 5/*end.too many arguments to return|ChangeReturnsParametersFix*/
 }
 
 func NotEnough3(a int) (int, int) {
 	if a == 1 {
-		/*begin*/return/*end.Not enough arguments to return|ChangeReturnsParametersFix*/
+		/*begin*/return/*end.not enough arguments to return|ChangeReturnsParametersFix*/
 	} else if a == 2 {
-		/*begin*/return 1/*end.Not enough arguments to return|ChangeReturnsParametersFix*/
+		/*begin*/return 1/*end.not enough arguments to return|ChangeReturnsParametersFix*/
 	} else if a == 3 {
 		return 1, 2
 	}
-	/*begin*/return 3, 4, 5/*end.Too many arguments to return|ChangeReturnsParametersFix*/
+	/*begin*/return 3, 4, 5/*end.too many arguments to return|ChangeReturnsParametersFix*/
 }
 
 func TooMany1(a, b int) {
 	if a > 0 {
-		/*begin*/return a + b/*end.Too many arguments to return|ChangeReturnsParametersFix*/
+		/*begin*/return a + b/*end.too many arguments to return|ChangeReturnsParametersFix*/
 	}
-	/*begin*/return a/*end.Too many arguments to return|ChangeReturnsParametersFix*/
+	/*begin*/return a/*end.too many arguments to return|ChangeReturnsParametersFix*/
 }
 
 func NotMatchType() (string, int64) {
-	return "ok", /*begin*/"not ok"/*end.Expression type mismatch, the expected type is int64|CastTypeFix|ChangeReturnsParametersFix*/
+	return "ok", /*begin*/"not ok"/*end.cannot use "not ok" (type string) as type int64 in return argument|CastTypeFix|ChangeReturnsParametersFix*/
 }
 
 func NotMatchTypeCall() (string, int64) {
@@ -109,7 +109,7 @@ func testChan() {
 //Issue #630
 type MyError struct {}
 
-func (m MyError)Error() string {
+func (m MyError) Error() string {
 	return "foo"
 }
 

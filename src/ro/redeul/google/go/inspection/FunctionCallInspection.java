@@ -370,9 +370,9 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
             return;
         }
 
-        if (arguments.length > 1) {
-            checkExpressionShouldReturnOneResult(arguments, result);
-        }
+//        if (arguments.length > 1) {
+//            checkExpressionShouldReturnOneResult(arguments, result);
+//        }
 
         int argumentCount = arguments.length;
         if (argumentCount == 1) {

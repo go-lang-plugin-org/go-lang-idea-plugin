@@ -35,8 +35,9 @@ public class GoAnnotatorHighlightTest extends GoLightCodeInsightFixtureTestCase 
 
     @Ignore("Will have to revisit the highlighting once the resolving/reparsing is done")
     public void testHighlightConsts() throws Exception { doTest(); }
-    public void testNpeOnCallOrConversion() throws Exception { doTest(); }
 
+    @Ignore("Will have to revisit the highlighting once the resolving/reparsing is done")
+    public void testNpeOnCallOrConversion() throws Exception { doTest(); }
 
     @Override
     protected String getTestDataRelativePath() {

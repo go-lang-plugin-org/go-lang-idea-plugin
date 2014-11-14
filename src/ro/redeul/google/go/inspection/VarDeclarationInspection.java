@@ -33,7 +33,7 @@ public class VarDeclarationInspection extends AbstractWholeGoFileInspection {
         GoLiteralIdentifier[] ids = varDeclaration.getIdentifiers();
         GoExpr[] exprs = varDeclaration.getExpressions();
         if (ids.length == exprs.length) {
-            checkExpressionShouldReturnOneResult(exprs, result);
+//            checkExpressionShouldReturnOneResult(exprs, result);
             return;
         }
 

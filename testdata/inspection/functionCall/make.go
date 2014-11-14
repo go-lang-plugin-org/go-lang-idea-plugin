@@ -39,13 +39,13 @@ func main() {
     make([]int, 5)
     make([]int, 5, 10)
     /*begin*/make([]int)/*end.Missing len argument to make([]int)*/
-    make([]int, 1, 1, /*begin*/1, 1/*end.Too many arguments in call to make*/)
+    make([]int, 1, 1, /*begin*/1, 1/*end.too many arguments in call to make*/)
 
     make(chan int)
     make(chan int, 10)
-    make(chan int, 10, /*begin*/10/*end.Too many arguments in call to make*/)
+    make(chan int, 10, /*begin*/10/*end.too many arguments in call to make*/)
 
     make(map[int]string)
     make(map[int]string, 15)
-    make(map[int]string, 15, /*begin*/10/*end.Too many arguments in call to make*/)
+    make(map[int]string, 15, /*begin*/10/*end.too many arguments in call to make*/)
 }

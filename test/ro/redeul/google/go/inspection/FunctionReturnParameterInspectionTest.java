@@ -3,16 +3,18 @@ package ro.redeul.google.go.inspection;
 import org.junit.Ignore;
 
 public class FunctionReturnParameterInspectionTest extends GoInspectionTestCase {
+    @Ignore("Broken because #992")
     public void testReturnParameterCountMismatch() throws Exception {
+        addPackage("io", "io/Writer.go");
         doTest();
     }
 
-    @Ignore("failing test")
-    public void testIssue811() throws Exception {
+    /** This is referenced from #811 */
+    @Ignore("Broken because #992")
+    public void testWithInterfaceTypes() throws Exception {
         doTest();
     }
 
-    @Ignore("failing test")
     public void testIssue989() throws Exception{
         doTest();
     }

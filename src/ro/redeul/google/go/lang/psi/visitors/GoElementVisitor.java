@@ -63,7 +63,7 @@ public class GoElementVisitor  {
     }
 
     public void visitMethodDeclaration(GoMethodDeclaration declaration) {
-        visitElement(declaration);
+        visitFunctionDeclaration(declaration);
     }
 
     public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {

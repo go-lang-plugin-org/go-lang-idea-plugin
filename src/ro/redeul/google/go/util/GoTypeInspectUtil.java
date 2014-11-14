@@ -5,7 +5,6 @@ import com.intellij.psi.PsiElement;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.inspection.InspectionResult;
 import ro.redeul.google.go.inspection.fix.CastTypeFix;
-import ro.redeul.google.go.inspection.fix.ChangeReturnsParametersFix;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
@@ -291,63 +290,76 @@ public class GoTypeInspectUtil {
     public static boolean checkFunctionTypeReturns(GoReturnStatement statement, InspectionResult result) {
         int index = 0;
 
-        GoFunctionDeclaration goFunctionDeclaration = GoPsiUtils.findParentOfType(statement, GoFunctionDeclaration.class);
-        if (goFunctionDeclaration == null)
-            return true;
-        GoExpr[] goExprs = statement.getExpressions();
-
-        GoFunctionParameter[] results = goFunctionDeclaration.getResults();
-        if (goExprs.length == 1 && goExprs[0] instanceof GoCallOrConvExpression) {
-
-            GoFunctionDeclaration goFunctionDeclarationResolved = GoExpressionUtils.resolveToFunctionDeclaration(goExprs[0]);
-            for (GoFunctionParameter resolvedParameter : goFunctionDeclarationResolved.getResults()) {
-                if (!results[index].getType().isIdentical(resolvedParameter.getType())) {
-                    result.addProblem(
-                            goExprs[0],
-                            GoBundle.message("warning.function.return.call.types.mismatch"),
-                            new ChangeReturnsParametersFix(statement));
-                    return false;
-                }
-                index++;
-            }
+        GoFunctionDeclaration containingFunction = GoPsiUtils.findParentOfType(statement, GoFunctionDeclaration.class);
+        if (containingFunction == null)
             return true;
 
+        GoType[] returnTypes = containingFunction.getReturnTypes();
+
+        GoType[] valueTypes = GoType.EMPTY_ARRAY;
+
+        GoExpr[] expressions = statement.getExpressions();
+        if (expressions.length == 1 && expressions[0] instanceof GoCallOrConvExpression) {
+            GoFunctionDeclaration calledFunction = GoExpressionUtils.resolveToFunctionDeclaration(expressions[0]);
+            if ( calledFunction != null )
+                valueTypes = calledFunction.getReturnTypes();
         }
 
-        for (GoFunctionParameter functionParameter : results) {
-            if (index >= goExprs.length)
-                return false;
-            GoPsiType type = functionParameter.getType();
-            GoLiteralIdentifier[] identifiers = functionParameter.getIdentifiers();
-            String typeName = type != null ? type.getText() : "";
-            if (identifiers.length < 2) {
-                GoExpr goExpr = goExprs[index];
-                if (!checkParametersExp(functionParameter.getType(), goExpr)) {
-                    result.addProblem(
-                            goExpr,
-                            GoBundle.message("warning.functioncall.type.mismatch", typeName),
-                            new CastTypeFix(goExpr, GoTypes.fromPsi(type)),
-                            new ChangeReturnsParametersFix(statement));
-                    return false;
-                }
-                index++;
-            } else {
-                for (GoLiteralIdentifier goLiteralIdentifier : identifiers) {
-                    GoExpr goExpr = goExprs[index];
-                    if (!checkParametersExp(functionParameter.getType(), goExpr)) {
-                        result.addProblem(
-                                goExpr,
-                                GoBundle.message("warning.functioncall.type.mismatch", typeName),
-                                new CastTypeFix(goExpr, GoTypes.fromPsi(type)),
-                                new ChangeReturnsParametersFix(statement));
+        if ( valueTypes.length != returnTypes.length )
+            result.addProblem(
+                    statement,
+                    "Not Enough");
 
-                        return false;
-                    }
-                    index++;
-                }
-            }
+        //                for (GoType returnType : calledFunction.getReturnTypes()) {
+//                    if (!returnType.isAssignableFrom(returnTypes[index])) {
+//                        result.addProblem(
+//                                expressions[0],
+//                                GoBundle.message("warn.function.return.call.types.mismatch"),
+//                                new ChangeReturnsParametersFix(statement));
+//                        return false;
+//                    }
+//
+//                    index++;
+//                }
+//            return true;
 
-        }
-        return true;
+        return false;
+
+//        for (GoFunctionParameter functionParameter : results) {
+//            if (index >= expressions.length)
+//                return false;
+//            GoPsiType type = functionParameter.getType();
+//            GoLiteralIdentifier[] identifiers = functionParameter.getIdentifiers();
+//            String typeName = type != null ? type.getText() : "";
+//            if (identifiers.length < 2) {
+//                GoExpr goExpr = expressions[index];
+//                if (!checkParametersExp(functionParameter.getType(), goExpr)) {
+//                    result.addProblem(
+//                            goExpr,
+//                            GoBundle.message("warning.functioncall.type.mismatch", typeName),
+//                            new CastTypeFix(goExpr, GoTypes.fromPsi(type)),
+//                            new ChangeReturnsParametersFix(statement));
+//                    return false;
+//                }
+//                index++;
+//            } else {
+//                for (GoLiteralIdentifier goLiteralIdentifier : identifiers) {
+//                    GoExpr goExpr = expressions[index];
+//                    if (!checkParametersExp(functionParameter.getType(), goExpr)) {
+//                        result.addProblem(
+//                                goExpr,
+//                                GoBundle.message("warning.functioncall.type.mismatch", typeName),
+//                                new CastTypeFix(goExpr, GoTypes.fromPsi(type)),
+//                                new ChangeReturnsParametersFix(statement));
+//
+//                        return false;
+//                    }
+//                    index++;
+//                }
+//            }
+//
+//        }
+//        return true;
     }
 }
+

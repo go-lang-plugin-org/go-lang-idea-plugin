@@ -1,22 +1,22 @@
 package ro.redeul.google.go.inspection;
 
 import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
-import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoUnaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.expressions.primary.*;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoTypeAssertionExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 
-import static ro.redeul.google.go.lang.psi.utils.GoExpressionUtils.getCallFunctionIdentifier;
 import static ro.redeul.google.go.lang.psi.utils.GoExpressionUtils.resolveToFunctionDeclaration;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isNodeOfType;
 
@@ -99,26 +99,5 @@ public class InspectionUtil {
             }
         }
         return count;
-    }
-
-    public static void checkExpressionShouldReturnOneResult(GoExpr[] exprs, InspectionResult result) {
-        for (GoExpr expr : exprs) {
-            int count = getExpressionResultCount(expr);
-            if (count != UNKNOWN_COUNT && count != 1) {
-                String text = expr.getText();
-                if (expr instanceof GoCallOrConvExpression) {
-                    GoPsiElement id = getCallFunctionIdentifier((GoCallOrConvExpression) expr);
-                    if (id == null) {
-                        continue;
-                    }
-                    text = id.getText();
-                }
-
-                String msg = GoBundle.message(
-                        "error.multiple.value.in.single.value.context", text);
-                result.addProblem(expr, msg,
-                        ProblemHighlightType.GENERIC_ERROR);
-            }
-        }
     }
 }

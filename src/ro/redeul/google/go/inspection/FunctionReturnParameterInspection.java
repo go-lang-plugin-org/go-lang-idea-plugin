@@ -10,10 +10,9 @@ import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
+import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
-import ro.redeul.google.go.util.GoTypeInspectUtil;
-
-import static ro.redeul.google.go.inspection.InspectionUtil.*;
 
 public class FunctionReturnParameterInspection extends AbstractWholeGoFileInspection {
     @Override
@@ -41,11 +40,7 @@ public class FunctionReturnParameterInspection extends AbstractWholeGoFileInspec
     }
 
     public static void checkFunction(InspectionResult result, GoFunctionDeclaration function) {
-        hasReturnParameterCountMismatch(result, function);
-    }
-
-    private static void hasReturnParameterCountMismatch(InspectionResult result, GoFunctionDeclaration function) {
-        new ReturnVisitor(result, function).visitFunctionDeclaration(function);
+        function.accept(new ReturnVisitor(result));
     }
 
     /**
@@ -53,19 +48,35 @@ public class FunctionReturnParameterInspection extends AbstractWholeGoFileInspec
      * list with function's result list
      */
     private static class ReturnVisitor extends GoRecursiveElementVisitor {
+
         private final InspectionResult result;
-        int expectedResCount;
-        boolean hasNamedReturns;
+        private boolean hasNamedReturns;
+        private GoType[] expectedReturnTypes;
 
-        public ReturnVisitor(InspectionResult result, GoFunctionDeclaration declaration) {
+        public ReturnVisitor(InspectionResult result) {
             this.result = result;
-            this.expectedResCount = 0;
+        }
 
-            hasNamedReturns = false;
-            for (GoFunctionParameter resParam : declaration.getResults()) {
-                expectedResCount += Math.max(resParam.getIdentifiers().length, 1);
-                hasNamedReturns |= resParam.getIdentifiers().length > 0;
+        private boolean checkNamedReturns(GoFunctionDeclaration declaration) {
+            for (GoFunctionParameter returnParameter : declaration.getResults()) {
+                if (returnParameter.getIdentifiers().length > 0)
+                    return true;
             }
+
+            return false;
+        }
+
+        @Override
+        public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
+            this.expectedReturnTypes = declaration.getReturnTypes();
+            this.hasNamedReturns = checkNamedReturns(declaration);
+
+            visitElement(declaration);
+        }
+
+        @Override
+        public void visitMethodDeclaration(GoMethodDeclaration declaration) {
+            super.visitMethodDeclaration(declaration);
         }
 
         @Override
@@ -76,31 +87,52 @@ public class FunctionReturnParameterInspection extends AbstractWholeGoFileInspec
         @Override
         public void visitReturnStatement(GoReturnStatement statement) {
             GoExpr[] expressions = statement.getExpressions();
-            int returnCount = expressions.length;
-            if (returnCount == 1) {
-                returnCount = getExpressionResultCount(expressions[0]);
-            } else {
-                checkExpressionShouldReturnOneResult(expressions, result);
-            }
 
-            // when a method specifies named return parameters it's ok to have
-            // an empty return statement.
-            if (returnCount == UNKNOWN_COUNT ||
-                    returnCount == 0 && hasNamedReturns) {
+            // if a method has named Returns we can have an empty return statement
+            if (expressions.length == 0 && hasNamedReturns)
                 return;
+
+            int returnTypeIndex = 0;
+
+            GoFile currentFile = (GoFile) statement.getContainingFile();
+            // match the expression types with the expected return types.
+            for (GoExpr expression : expressions) {
+                GoType[] expressionTypes = expression.getType();
+                if (expressionTypes.length > 1 && expressions.length > 1) {
+                    result.addProblem(
+                            expression,
+                            GoBundle.message("error.multiple.value.in.single.value.context", expression.getText())
+                    );
+
+                    returnTypeIndex++;
+                    continue;
+                }
+
+                for (GoType expressionType : expressionTypes) {
+                    if (returnTypeIndex >= expectedReturnTypes.length) {
+                        result.addProblem(
+                                statement,
+                                GoBundle.message("error.too.many.arguments.to.return"),
+                                new ChangeReturnsParametersFix(statement));
+                        return;
+                    }
+
+                    if (!expectedReturnTypes[returnTypeIndex].isAssignableFrom(expressionType)) {
+                        result.addProblem(expression,
+                                GoBundle.message("warn.function.return.type.mismatch",
+                                        expression.getText(),
+                                        GoTypes.getRepresentation(expressionType, currentFile),
+                                        GoTypes.getRepresentation(expectedReturnTypes[returnTypeIndex], currentFile)));
+                    }
+
+                    returnTypeIndex++;
+                }
             }
 
-            if (expectedResCount < returnCount) {
-                result.addProblem(statement, GoBundle.message("error.too.many.arguments.to.return"),
+            if (returnTypeIndex < expectedReturnTypes.length)
+                result.addProblem(statement,
+                        GoBundle.message("error.not.enough.arguments.to.return"),
                         new ChangeReturnsParametersFix(statement));
-            } else if (expectedResCount > returnCount) {
-                result.addProblem(statement, GoBundle.message("error.not.enough.arguments.to.return"),
-                        new ChangeReturnsParametersFix(statement));
-            } else {
-                GoTypeInspectUtil.checkFunctionTypeReturns(statement, result);
-            }
-
-
         }
     }
 }
