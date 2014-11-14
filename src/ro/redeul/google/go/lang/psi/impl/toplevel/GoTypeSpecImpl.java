@@ -8,6 +8,7 @@ import com.intellij.psi.search.SearchScope;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.processors.GoNamesUtil;
 import ro.redeul.google.go.lang.psi.processors.ResolveStates;
@@ -34,9 +35,17 @@ public class GoTypeSpecImpl extends GoPsiElementBase implements GoTypeSpec {
         return findChildByClass(GoTypeNameDeclaration.class);
     }
 
+    @Nullable
     public GoPsiType getType() {
         GoPsiType types[] = findChildrenByClass(GoPsiType.class);
-        return types[types.length - 1];
+        for (GoPsiType type : types) {
+            if ( type instanceof GoTypeNameDeclaration )
+                continue;
+
+            return type;
+        }
+
+        return null;
     }
 
     @Override

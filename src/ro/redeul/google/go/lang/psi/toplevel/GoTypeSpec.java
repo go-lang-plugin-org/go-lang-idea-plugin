@@ -13,7 +13,9 @@ import ro.redeul.google.go.lang.psi.types.GoPsiType;
  */
 public interface GoTypeSpec extends GoPsiElement, PsiNamedElement {
 
-    @Nullable GoTypeNameDeclaration getTypeNameDeclaration();
+    @Nullable
+    GoTypeNameDeclaration getTypeNameDeclaration();
 
+    @Nullable
     GoPsiType getType();
 }

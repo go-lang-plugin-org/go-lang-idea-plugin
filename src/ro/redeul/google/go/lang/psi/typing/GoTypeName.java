@@ -17,29 +17,13 @@ import ro.redeul.google.go.lang.psi.visitors.GoElementVisitorWithData;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getAs;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveTypeSpec;
 
-public class GoTypeName extends GoTypePsiBacked<GoPsiType> implements GoType {
+public class GoTypeName extends GoTypePsiBacked<GoTypeNameDeclaration> implements GoType {
 
     private static final Logger LOG = Logger.getInstance(GoTypeName.class);
 
 
     public GoTypeName(GoTypeNameDeclaration declaration) {
         super(declaration);
-    }
-
-    public GoTypeName(GoPsiTypeName psiType) {
-        super(psiType);
-    }
-
-    @NotNull
-    public GoType findUnderlyingType(GoTypeNameDeclaration declaration) {
-        GoTypeSpec typeSpec = declaration.getTypeSpec();
-
-        GoPsiType type = typeSpec.getType();
-        if ( type instanceof GoPsiTypeName ) {
-            return types().fromPsiType(type).underlyingType();
-        }
-
-        return this;
     }
 
     @Override
@@ -49,42 +33,14 @@ public class GoTypeName extends GoTypePsiBacked<GoPsiType> implements GoType {
 
     @Nullable
     public GoTypeSpec getDefinition() {
-        return getPsiType().accept(new GoElementVisitorWithData<GoTypeSpec>(null) {
-            @Override
-            public void visitTypeNameDeclaration(GoTypeNameDeclaration declaration) {
-                setData(declaration.getTypeSpec());
-            }
-
-            @Override
-            public void visitTypeName(GoPsiTypeName typeName) {
-                setData(GoPsiUtils.resolveSafely(typeName, GoTypeSpec.class));
-            }
-        });
+        return getPsiType().getTypeSpec();
     }
 
     @NotNull
     @Override
     public GoType underlyingType() {
-        return getPsiType().accept(new GoElementVisitorWithData<GoType>(this) {
-            @Override
-            public void visitTypeNameDeclaration(GoTypeNameDeclaration declaration) {
-                setData(getUnderlyingType(declaration.getTypeSpec()));
-            }
-
-            private GoType getUnderlyingType(GoTypeSpec typeSpec) {
-                if ( typeSpec.getType() instanceof GoPsiTypeName )
-                    return GoTypes.fromPsi(typeSpec.getType());
-
-                return GoTypeName.this;
-            }
-
-            @Override
-            public void visitTypeName(GoPsiTypeName typeName) {
-                GoTypeNameDeclaration nameDeclaration = GoPsiUtils.resolveSafely(typeName, GoTypeNameDeclaration.class);
-                if ( nameDeclaration != null )
-                    visitTypeNameDeclaration(nameDeclaration);
-            }
-        });
+        GoTypeSpec definition = getDefinition();
+        return definition == null ? this : GoTypes.fromPsi(definition.getType()).underlyingType();
     }
 
     @Override

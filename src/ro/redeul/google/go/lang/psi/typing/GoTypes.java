@@ -15,6 +15,7 @@ import ro.redeul.google.go.lang.psi.types.*;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
 import ro.redeul.google.go.lang.psi.utils.GoFunctionDeclarationUtils;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitorWithData;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 import ro.redeul.google.go.services.GoPsiManager;
@@ -187,12 +188,14 @@ public class GoTypes extends AbstractProjectComponent {
         if (psiType == null)
             return GoType.Unknown;
 
-        return GoPsiManager.getInstance(psiType.getProject()).getOrCompute(psiType, new Function<GoPsiType, GoType>() {
-            @Override
-            public GoType fun(GoPsiType psiType) {
-                return psiType.accept(new GoTypeMakerVisitor());
-            }
-        });
+        return psiType.accept(new GoTypeMakerVisitor());
+
+//        return GoPsiManager.getInstance(psiType.getProject()).getOrCompute(psiType, new Function<GoPsiType, GoType>() {
+//            @Override
+//            public GoType fun(GoPsiType psiType) {
+//                return psiType.accept(new GoTypeMakerVisitor());
+//            }
+//        });
     }
 
     public static GoType[] fromPsiType(GoPsiType[] psiTypes) {
@@ -228,7 +231,9 @@ public class GoTypes extends AbstractProjectComponent {
 
         @Override
         public void visitTypeName(GoPsiTypeName psiType) {
-            data = psiType.isPrimitive() ? new GoTypePrimitive(psiType) : new GoTypeName(psiType);
+            GoTypeNameDeclaration declaration = GoPsiUtils.resolveSafely(psiType, GoTypeNameDeclaration.class);
+            if (declaration != null)
+                data = declaration.accept(this);
         }
 
         @Override
