@@ -65,6 +65,7 @@
   SEMICOLON_SYNTHETIC  = '<NL>'
   TYPE_                = 'type'
 
+  extends("(Or|Add|Conversion|Mul)Expr")=BinaryExpr
   extends(".*(Expr|Literal|Lit|OperandName)")=Expression
 
   implements("(Type|Import)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver")="com.goide.psi.GoNamedElement"
@@ -297,6 +298,8 @@ Expression ::=
   | ConversionExpr
   | MaxGroup
   | ParenthesesExpr {methods=[getGoType] implements="com.goide.psi.GoTypeOwner"}
+
+fake BinaryExpr ::=
 
 OrExpr ::= Expression '||' Expression
 AndExpr ::= Expression '&&' Expression
