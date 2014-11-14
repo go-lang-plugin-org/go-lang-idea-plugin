@@ -32,7 +32,7 @@ public class GoAdditiveExpressionImpl extends GoBinaryExpressionImpl<Op> impleme
     }
 
     @Override
-    protected GoType computeConstant(GoTypeConstant left, GoTypeConstant right) {
+    protected GoType computeConstant(@NotNull GoTypeConstant left, @NotNull GoTypeConstant right) {
 
         GoTypes types = GoTypes.getInstance(getProject());
 

@@ -44,7 +44,7 @@ public class GoRelationalExpressionImpl extends GoBinaryExpressionImpl<GoRelatio
     }
 
     @Override
-    protected GoType computeConstant(GoTypeConstant left, GoTypeConstant right) {
+    protected GoType computeConstant(@NotNull GoTypeConstant left, @NotNull GoTypeConstant right) {
         // TODO: finish this implementation (actually calculate the values and set the constant here)
         return GoTypes.constant(GoTypeConstant.Kind.Boolean, false);
     }

@@ -75,5 +75,5 @@ public abstract class GoBinaryExpressionImpl<Op extends Enum<Op>>
         return leftType instanceof GoTypeConstant ? rightTypes : leftTypes;
     }
 
-    protected abstract GoType computeConstant(GoTypeConstant left, GoTypeConstant right);
+    protected abstract GoType computeConstant(@NotNull GoTypeConstant left, @NotNull GoTypeConstant right);
 }

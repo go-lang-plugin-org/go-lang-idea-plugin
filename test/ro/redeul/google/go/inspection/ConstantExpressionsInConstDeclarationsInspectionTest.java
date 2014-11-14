@@ -12,6 +12,10 @@ public class ConstantExpressionsInConstDeclarationsInspectionTest
 
     public void testIssue874() throws Exception { doTest(); }
 
+    public void testAndOrOperators() throws Exception {doTest();}
+
+    public void testDivByZero() throws Exception {doTest();}
+
     @Ignore("failing test")
     public void testComplementOperator() throws Exception {doTest();}
 
@@ -21,7 +25,6 @@ public class ConstantExpressionsInConstDeclarationsInspectionTest
     @Ignore("failing test")
     public void testConversions() throws Exception {doTest();}
 
-    public void testDivByZero() throws Exception {doTest();}
 
     @Ignore("failing test")
     public void testLen() throws Exception {doTest();}
@@ -32,6 +35,4 @@ public class ConstantExpressionsInConstDeclarationsInspectionTest
     @Ignore("failing test")
     public void testUnsafe() throws Exception {doTest();}
 
-    @Ignore("failing test")
-    public void testOrOperator() throws Exception {doTest();}
 }

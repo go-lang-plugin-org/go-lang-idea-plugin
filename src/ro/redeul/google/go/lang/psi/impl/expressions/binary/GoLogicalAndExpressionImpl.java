@@ -19,9 +19,7 @@ public class GoLogicalAndExpressionImpl extends GoBinaryExpressionImpl<GoLogical
     @NotNull
     @Override
     protected GoType[] resolveTypes() {
-        return new GoType[]{
-                types().getBuiltin(GoTypes.Builtin.Bool)
-        };
+        return super.resolveTypes();
     }
 
     @Override
@@ -34,8 +32,20 @@ public class GoLogicalAndExpressionImpl extends GoBinaryExpressionImpl<GoLogical
     }
 
     @Override
-    protected GoType computeConstant(GoTypeConstant left, GoTypeConstant right) {
-        return GoType.Unknown;
+    protected GoType computeConstant(@NotNull GoTypeConstant left, @NotNull GoTypeConstant right) {
+        GoType builtinBool = GoTypes.getInstance(getProject()).getBuiltin(GoTypes.Builtin.Bool);
+
+        if ( left.getKind() != GoTypeConstant.Kind.Boolean || right.getKind() != GoTypeConstant.Kind.Boolean)
+            return builtinBool;
+
+        Boolean leftValue = left.getValueAs(Boolean.class);
+        Boolean rightValue = left.getValueAs(Boolean.class);
+
+        boolean value = false;
+        if ( leftValue != null && rightValue != null )
+            value = leftValue && rightValue;
+
+        return GoTypes.constant(GoTypeConstant.Kind.Boolean, value, builtinBool);
     }
 }
 
