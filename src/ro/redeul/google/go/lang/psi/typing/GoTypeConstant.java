@@ -55,6 +55,12 @@ public class GoTypeConstant extends GoAbstractType implements GoType {
         return (GoTypeConstant) GoTypes.constant(getKind(), getValue(), newType);
     }
 
+    @Nullable
+    @Override
+    public GoType castAs(GoType type) {
+        return super.castAs(type);
+    }
+
     public enum Kind {
         Boolean, Rune, Integer, Float, Complex, String;
 

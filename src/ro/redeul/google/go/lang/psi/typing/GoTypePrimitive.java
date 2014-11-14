@@ -2,6 +2,7 @@ package ro.redeul.google.go.lang.psi.typing;
 
 import com.google.common.collect.ImmutableMap;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.util.GoNumber;
@@ -82,6 +83,12 @@ public class GoTypePrimitive extends GoTypeName {
 
     public GoTypes.Builtin getType() {
         return type;
+    }
+
+    @Nullable
+    @Override
+    public GoType castAs(GoType type) {
+        return super.castAs(type);
     }
 
     @Override
