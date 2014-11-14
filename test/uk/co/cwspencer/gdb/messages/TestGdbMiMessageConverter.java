@@ -1,6 +1,7 @@
 package uk.co.cwspencer.gdb.messages;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import uk.co.cwspencer.gdb.gdbmi.GdbMiParser2;
 import uk.co.cwspencer.gdb.gdbmi.GdbMiRecord;
@@ -17,7 +18,8 @@ public class TestGdbMiMessageConverter
 	/**
 	 * Verifies the correct conversion of a 'connected' message.
 	 */
-	@Test(expected = AssertionError.class) //TODO FIX TEST
+	@Test
+	@Ignore("not ready yet")
 	public void testConnectedEvent() throws UnsupportedEncodingException
 	{
 		// Parse the message
@@ -87,7 +89,8 @@ public class TestGdbMiMessageConverter
 	/**
 	 * Verifies the correct conversion of a 'stopped' message.
 	 */
-	@Test(expected = AssertionError.class) // TODO FIX TEST
+	@Test
+	@Ignore("not ready yet")
 	public void testStoppedEvent() throws UnsupportedEncodingException
 	{
 		// Parse the message
@@ -259,7 +262,8 @@ public class TestGdbMiMessageConverter
 	/**
 	 * Verifies the correct conversion of a breakpoint message.
 	 */
-	@Test(expected = AssertionError.class) // TODO FIX TEST
+	@Test
+	@Ignore("not ready yet")
 	public void testBreakpoint() throws UnsupportedEncodingException
 	{
 		// Parse the message
