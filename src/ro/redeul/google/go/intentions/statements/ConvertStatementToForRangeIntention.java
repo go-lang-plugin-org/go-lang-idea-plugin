@@ -4,24 +4,18 @@ import com.intellij.codeInsight.template.impl.TemplateImpl;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiWhiteSpace;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.editor.TemplateUtil;
 import ro.redeul.google.go.intentions.Intention;
 import ro.redeul.google.go.intentions.IntentionExecutionException;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.statements.GoExpressionStatement;
-import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
-import ro.redeul.google.go.lang.psi.types.GoPsiType;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeArray;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypeArray;
-import ro.redeul.google.go.lang.psi.typing.GoTypePsiBacked;
-import ro.redeul.google.go.lang.psi.utils.GoTypeUtils;
+import ro.redeul.google.go.lang.psi.typing.GoTypeMap;
+import ro.redeul.google.go.lang.psi.typing.GoTypeSlice;
+import ro.redeul.google.go.lang.psi.typing.TypeVisitor;
 import ro.redeul.google.go.util.GoUtil;
 
 import java.util.ArrayList;
@@ -35,44 +29,43 @@ public class ConvertStatementToForRangeIntention extends Intention {
 
     @Override
     protected boolean satisfiedBy(PsiElement element) {
-        statement = element instanceof GoExpressionStatement ? (GoExpressionStatement) element : findParentOfType(element, GoExpressionStatement.class);
-        if (statement == null && element instanceof PsiWhiteSpace && element.getPrevSibling() instanceof GoExpressionStatement) {
-            statement = (GoExpressionStatement) element.getPrevSibling();
-        }
-        if (statement != null) {
-            expr = statement.getExpression();
-            if (expr != null) {
-                GoType[] types = expr.getType();
+        PsiElement node = element;
 
-                for (GoType goType : types) {
-                    if (goType != null) {
-                        if (goType instanceof GoTypePsiBacked) {
-                            GoPsiType psiType = ((GoTypePsiBacked) goType).getPsiType();
-                            psiType = GoTypeUtils.resolveToFinalType(psiType);
-                            if (psiType instanceof GoPsiTypeMap || psiType instanceof GoPsiTypeSlice || psiType instanceof GoPsiTypeArray)
-                                return true;
-                            break;
-                        }
-                        if (goType instanceof GoTypeArray)
-                            return true;
-                    }
+        if (node == null)
+            return false;
+
+        if (node instanceof PsiWhiteSpace)
+            node = node.getPrevSibling();
+
+        statement = findParentOfType(node, GoExpressionStatement.class);
+        if (statement == null) return false;
+
+        expr = statement.getExpression();
+        if (expr == null) return false;
+
+        GoType[] types = expr.getType();
+
+        for (GoType goType : types) {
+            if (goType == null) continue;
+
+            return goType.underlyingType().accept(new TypeVisitor<Boolean>(false) {
+                @Override
+                public Boolean visitArray(GoTypeArray type) {
+                    return true;
                 }
 
-                if (expr instanceof GoLiteralExpression) {
-                    for (PsiReference identifier : ((GoLiteralExpression) expr).getLiteral().getReferences()) {
-                        if (identifier != null) {
-                            PsiElement resolve = identifier.resolve();
-                            if (resolve != null) {
-                                resolve = resolve.getParent();
-                                if (resolve instanceof GoFunctionParameter) {
-                                    return ((GoFunctionParameter) resolve).isVariadic();
-                                }
-                            }
-                        }
-                    }
+                @Override
+                public Boolean visitSlice(GoTypeSlice type) {
+                    return true;
                 }
-            }
+
+                @Override
+                public Boolean visitMap(GoTypeMap type) {
+                    return true;
+                }
+            });
         }
+
         return false;
     }
 
@@ -106,7 +99,5 @@ public class ConvertStatementToForRangeIntention extends Intention {
 
         TemplateImpl template = TemplateUtil.createTemplate(String.format("for $v0$,$v1$ := range %s{$END$}", expr.getText()));
         TemplateUtil.runTemplate(editor, textRange, arguments, template);
-
     }
-
 }
