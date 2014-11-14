@@ -51,11 +51,7 @@ public class TypeVisitor<T> {
 
     public T visitInterface(GoTypeInterface type) { return state; }
 
-    public T visitConstant(GoTypeConstant constant) {
-        return state;
-    }
+    public T visitConstant(GoTypeConstant constant) { return state; }
 
-    public T visitPrimitive(GoTypePrimitive typePrimitive) {
-        return state;
-    }
+    public T visitPrimitive(GoTypePrimitive type) { return visitName(type); }
 }

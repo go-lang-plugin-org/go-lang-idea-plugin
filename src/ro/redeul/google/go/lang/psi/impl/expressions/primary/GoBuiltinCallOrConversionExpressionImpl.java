@@ -70,7 +70,11 @@ public class GoBuiltinCallOrConversionExpressionImpl extends GoCallOrConvExpress
                 return baseExprType;
 
             GoTypeConstant constantArgument = (GoTypeConstant) argumentType[0];
-            return new GoType[]{GoTypes.constant(constantArgument.getKind(), constantArgument.getValue(), castType)};
+            if ( castType.canRepresent(constantArgument)) {
+                return new GoType[] { constantArgument.retypeAs(castType)};
+            }
+
+            return new GoType[]{castType};
         }
 
         return GoType.EMPTY_ARRAY;

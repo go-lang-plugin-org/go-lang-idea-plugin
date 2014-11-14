@@ -27,6 +27,8 @@ public class GoTypePrimitive extends GoTypeName {
     public static final BigInteger UINT16_MAX = BigInteger.valueOf(65535);
     public static final BigInteger UINT8_MAX = BigInteger.valueOf(255);
 
+    public static final BigInteger UNICODE_MAX = BigInteger.valueOf(0x10FFFF);
+
     ImmutableMap<String, GoTypes.Builtin> typesMap = ImmutableMap.<String, GoTypes.Builtin>builder()
             .put("complex128", GoTypes.Builtin.Complex128)
             .put("complex64", GoTypes.Builtin.Complex64)
@@ -80,8 +82,9 @@ public class GoTypePrimitive extends GoTypeName {
             case Complex:
                 return canRepresent(constant.getValueAs(GoNumber.class));
             case Float:
-                return canRepresent(constant.getValueAs(BigDecimal.class));
+                return type != GoTypes.Builtin.String && canRepresent(constant.getValueAs(BigDecimal.class));
             case Rune:
+                return canRepresent(constant.getValueAs(BigInteger.class));
             case Integer:
                 return canRepresent(constant.getValueAs(BigInteger.class));
             case String:
@@ -156,6 +159,8 @@ public class GoTypePrimitive extends GoTypeName {
                 return BigInteger.ZERO.compareTo(value) <= 0 && value.compareTo(UINT16_MAX) <= 0;
             case uInt8: case Byte:
                 return BigInteger.ZERO.compareTo(value) <= 0 && value.compareTo(UINT8_MAX) <= 0;
+            case String:
+                return BigInteger.ZERO.compareTo(value) <= 0 && value.compareTo(UNICODE_MAX) <= 0;
             default:
                 return false;
         }
