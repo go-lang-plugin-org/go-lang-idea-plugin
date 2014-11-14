@@ -18,6 +18,8 @@ import ro.redeul.google.go.lang.psi.impl.GoStubPsiElementBase;
 import ro.redeul.google.go.lang.psi.stubs.GoTypeNameDeclarationStub;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.util.LookupElementUtil;
 
@@ -131,5 +133,15 @@ public class GoTypeNameDeclarationImpl
         return new PsiReference[]{
 //                new TypeNameDeclarationReference(this))
         };
+    }
+
+    @Override
+    public boolean isIdentical(GoPsiType goType) {
+        return false;
+    }
+
+    @Override
+    public boolean isPrimitive() {
+        return GoTypes.PRIMITIVE_TYPES_PATTERN.matcher(getText()).matches();
     }
 }

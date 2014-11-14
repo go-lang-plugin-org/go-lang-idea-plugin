@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.psi.typing;
 
 import com.google.common.collect.ImmutableMap;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.util.GoNumber;
 
@@ -53,6 +54,11 @@ public class GoTypePrimitive extends GoTypeName {
     GoTypes.Builtin type;
 
     public GoTypePrimitive(GoPsiTypeName psiType) {
+        super(psiType);
+        type = typesMap.get(getName());
+    }
+
+    public GoTypePrimitive(GoTypeNameDeclaration psiType) {
         super(psiType);
         type = typesMap.get(getName());
     }

@@ -27,8 +27,7 @@ import ro.redeul.google.go.services.GoPsiManager;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 
-public class GoSelectorExpressionImpl extends GoExpressionBase
-        implements GoSelectorExpression {
+public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSelectorExpression {
 
     public GoSelectorExpressionImpl(@NotNull ASTNode node) {
         super(node);
@@ -41,61 +40,50 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
     @NotNull
     @Override
     protected GoType[] resolveTypes() {
-        return GoPsiManager.getInstance(getProject()).getType(
-                this,
-                new Function<GoSelectorExpression, GoType[]>() {
-                    @Override
-                    public GoType[] fun(GoSelectorExpression expression) {
-                        PsiElement target = resolveSafely(getIdentifier(), PsiElement.class);
+        PsiElement target = resolveSafely(getIdentifier(), PsiElement.class);
 
-                        if (target instanceof GoFunctionDeclaration) {
-                            GoFunctionDeclaration functionDeclaration = (GoFunctionDeclaration) target;
-                            return new GoType[]{
-                                    types().fromPsiType(functionDeclaration)
-                            };
-                        }
+        if (target instanceof GoFunctionDeclaration) {
+            GoFunctionDeclaration functionDeclaration = (GoFunctionDeclaration) target;
+            return new GoType[]{
+                    types().fromPsiType(functionDeclaration)
+            };
+        }
 
-                        if (target != null &&
-                                target.getParent() instanceof GoTypeStructField) {
+        if (target != null && target.getParent() instanceof GoTypeStructField) {
 
-                            GoTypeStructField structField =
-                                    (GoTypeStructField) target.getParent();
+            GoTypeStructField structField = (GoTypeStructField) target.getParent();
 
-                            return new GoType[]{
-                                    types().fromPsiType(structField.getType())
-                            };
-                        }
+            return new GoType[]{types().fromPsiType(structField.getType())};
+        }
 
-                        if (target instanceof GoTypeStructAnonymousField) {
-                            GoTypeStructAnonymousField structField =
-                                    (GoTypeStructAnonymousField) target;
+        if (target instanceof GoTypeStructAnonymousField) {
+            GoTypeStructAnonymousField structField =
+                    (GoTypeStructAnonymousField) target;
 
-                            return new GoType[]{
-                                    types().fromPsiType(structField.getType())
-                            };
-                        }
+            return new GoType[]{
+                    types().fromPsiType(structField.getType())
+            };
+        }
 
-                        if (target instanceof GoLiteralIdentifier) {
-                            GoFunctionDeclaration functionDeclaration = GoIdentifierUtils.getFunctionDeclaration(target);
-                            if (functionDeclaration != null) {
-                                return new GoType[]{
-                                        types().fromPsiType(functionDeclaration)
-                                };
-                            }
-                            if (target.getParent() instanceof GoVarDeclaration){
-                                GoType output = ((GoVarDeclaration)target.getParent()).getIdentifierType((GoLiteralIdentifier)target);
-                                if (output==null){
-                                    return GoType.EMPTY_ARRAY;
-                                }
-                                return new GoType[]{
-                                        output
-                                };
-                            }
-                        }
+        if (target instanceof GoLiteralIdentifier) {
+            GoFunctionDeclaration functionDeclaration = GoIdentifierUtils.getFunctionDeclaration(target);
+            if (functionDeclaration != null) {
+                return new GoType[]{
+                        types().fromPsiType(functionDeclaration)
+                };
+            }
+            if (target.getParent() instanceof GoVarDeclaration){
+                GoType output = ((GoVarDeclaration)target.getParent()).getIdentifierType((GoLiteralIdentifier)target);
+                if (output==null){
+                    return GoType.EMPTY_ARRAY;
+                }
+                return new GoType[]{
+                        output
+                };
+            }
+        }
 
-                        return GoType.EMPTY_ARRAY;
-                    }
-                });
+        return GoType.EMPTY_ARRAY;
     }
 
     @Override

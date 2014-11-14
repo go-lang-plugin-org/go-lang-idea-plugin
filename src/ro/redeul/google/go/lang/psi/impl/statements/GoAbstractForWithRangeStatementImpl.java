@@ -25,13 +25,8 @@ public abstract class GoAbstractForWithRangeStatementImpl<Self extends GoAbstrac
         if (rangeType.length == 0) {
             return GoType.EMPTY_ARRAY;
         }
-        goType = rangeType[0];
-        if (goType instanceof GoTypeName) {
-            GoPsiTypeName psiType = ((GoTypeName) goType).getPsiType();
-            if (!psiType.isPrimitive()) {
-                goType = GoTypes.fromPsi(GoTypeUtils.resolveToFinalType(psiType));
-            }
-        }
+
+        goType = rangeType[0].underlyingType();
 
         final GoTypes types = GoTypes.getInstance(getProject());
 
@@ -88,13 +83,7 @@ public abstract class GoAbstractForWithRangeStatementImpl<Self extends GoAbstrac
         if (rangeType.length == 0) {
             return GoType.EMPTY_ARRAY;
         }
-        goType = rangeType[0];
-        if (goType instanceof GoTypeName) {
-            GoPsiTypeName psiType = ((GoTypeName) goType).getPsiType();
-            if (!psiType.isPrimitive()) {
-                goType = GoTypes.fromPsi(GoTypeUtils.resolveToFinalType(psiType));
-            }
-        }
+        goType = rangeType[0].underlyingType();
 
         final GoTypes types = GoTypes.getInstance(getProject());
         return

@@ -76,7 +76,8 @@ public class GoTypes extends AbstractProjectComponent {
             return true;
 
 //        x's type V and T have identical underlying types and at least one of V or T is not a named type.
-        if ((!isNamedType(srcVarType) || !isNamedType(dstType)) && srcVarType.underlyingType().isIdentical(dstType.underlyingType()))
+        if ((!isNamedType(srcVarType) || !isNamedType(dstType)) &&
+                srcVarType.underlyingType().isIdentical(dstType.underlyingType()))
             return true;
 
 //        T is an interface type and x implements T.
@@ -84,8 +85,8 @@ public class GoTypes extends AbstractProjectComponent {
 //            return true;
 
 //        x is a bidirectional channel value, T is a channel type, x's type V and T have identical element types, and at least one of V or T is not a named type.
-        if (srcVarType.underlyingType() instanceof GoTypeChannel && dstType.underlyingType() instanceof GoTypeChannel
-                && (!isNamedType(srcVarType) || !isNamedType(dstType))) {
+        if ((!isNamedType(srcVarType) || !isNamedType(dstType)) &&
+                srcVarType.underlyingType() instanceof GoTypeChannel && dstType.underlyingType() instanceof GoTypeChannel) {
             GoTypeChannel dstChannel = (GoTypeChannel) dstType.underlyingType();
             GoTypeChannel srcChannel = (GoTypeChannel) srcVarType.underlyingType();
 
@@ -228,6 +229,11 @@ public class GoTypes extends AbstractProjectComponent {
         @Override
         public void visitTypeName(GoPsiTypeName psiType) {
             data = psiType.isPrimitive() ? new GoTypePrimitive(psiType) : new GoTypeName(psiType);
+        }
+
+        @Override
+        public void visitTypeNameDeclaration(GoTypeNameDeclaration declaration) {
+            data = declaration.isPrimitive() ? new GoTypePrimitive(declaration) : new GoTypeName(declaration);
         }
 
         @Override

@@ -6,9 +6,7 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GoTypeInterface
-    extends GoTypePsiBacked<GoPsiTypeInterface>
-    implements GoType {
+public class GoTypeInterface extends GoTypePsiBacked<GoPsiTypeInterface> implements GoType {
 
     public GoTypeInterface(GoPsiTypeInterface psiType) {
         super(psiType);
@@ -53,11 +51,6 @@ public class GoTypeInterface
     @Override
     public <T> T accept(TypeVisitor<T> visitor) {
         return visitor.visitInterface(this);
-    }
-
-    @Override
-    public boolean isAssignableFrom(GoType source) {
-        return false;
     }
 
     @Override

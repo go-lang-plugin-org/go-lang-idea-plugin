@@ -35,7 +35,8 @@ public class GoTypeSpecImpl extends GoPsiElementBase implements GoTypeSpec {
     }
 
     public GoPsiType getType() {
-        return findChildByClass(GoPsiType.class);
+        GoPsiType types[] = findChildrenByClass(GoPsiType.class);
+        return types[types.length - 1];
     }
 
     @Override

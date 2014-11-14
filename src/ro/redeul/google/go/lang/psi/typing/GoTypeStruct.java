@@ -67,11 +67,6 @@ public class GoTypeStruct extends GoTypePsiBacked<GoPsiTypeStruct> implements Go
     }
 
     @Override
-    public boolean isAssignableFrom(GoType source) {
-        return false;
-    }
-
-    @Override
     public String toString() {
         return String.format("struct{ /* ... */ }");
     }
