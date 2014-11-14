@@ -60,6 +60,9 @@ public class EditorTweakingComponent extends FileDocumentManagerAdapter {
             ApplicationManager.getApplication().invokeLater(new Runnable() {
                 @Override
                 public void run() {
+                    if (p.isDisposed()) {
+                        return;
+                    }
                     ProcessFileWithGoImports(p, file);
                 }
             });
@@ -67,6 +70,9 @@ public class EditorTweakingComponent extends FileDocumentManagerAdapter {
             ApplicationManager.getApplication().invokeLater(new Runnable() {
                 @Override
                 public void run() {
+                    if (p.isDisposed()) {
+                        return;
+                    }
                     ProcessFileWithGoFmt(p, file);
                 }
             });
