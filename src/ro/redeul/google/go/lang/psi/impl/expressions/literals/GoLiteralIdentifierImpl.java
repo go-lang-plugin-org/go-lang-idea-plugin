@@ -30,14 +30,7 @@ import ro.redeul.google.go.lang.psi.resolve.refs.StructFieldReference;
 import ro.redeul.google.go.lang.psi.resolve.refs.TypedConstReference;
 import ro.redeul.google.go.lang.psi.resolve.refs.VarOrConstReference;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
-import ro.redeul.google.go.lang.psi.typing.GoType;
-import ro.redeul.google.go.lang.psi.typing.GoTypeMap;
-import ro.redeul.google.go.lang.psi.typing.GoTypeName;
-import ro.redeul.google.go.lang.psi.typing.GoTypePackage;
-import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
-import ro.redeul.google.go.lang.psi.typing.GoTypePrimitive;
-import ro.redeul.google.go.lang.psi.typing.GoTypeStruct;
-import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.typing.*;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
@@ -139,20 +132,18 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
             compositeValue.getType();
 
             GoType enclosingType = compositeValue.getType();
-            List<Reference> references = enclosingType.getUnderlyingType().accept(new GoType.ForwardingVisitor<List<Reference>>(
-                    new ArrayList<Reference>(),
-                    new GoType.Second<List<Reference>>() {
-                        @Override
-                        public void visitStruct(GoTypeStruct type, List<Reference> data, GoType.Visitor<List<Reference>> visitor) {
-                            data.add(new StructFieldReference(identifier, type));
-                        }
+            List<Reference> references = enclosingType.underlyingType().accept(new UpdatingTypeVisitor<List<Reference>>() {
+                                                                                   @Override
+                                                                                   public void visitStruct(GoTypeStruct type, List<Reference> data, TypeVisitor<List<Reference>> visitor) {
+                                                                                       data.add(new StructFieldReference(identifier, type));
+                                                                                   }
 
-                        @Override
-                        public void visitMap(GoTypeMap type, List<Reference> data, GoType.Visitor<List<Reference>> visitor) {
-                            data.add(new TypedConstReference(identifier, type.getKeyType()));
-                        }
-                    }
-            ));
+                                                                                   @Override
+                                                                                   public void visitMap(GoTypeMap type, List<Reference> data, TypeVisitor<List<Reference>> visitor) {
+                                                                                       data.add(new TypedConstReference(identifier, type.getKeyType()));
+                                                                                   }
+                                                                               }, new ArrayList<Reference>()
+            );
 
             return references.toArray(new PsiReference[references.size()]);
         }
@@ -166,46 +157,46 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
         if (SELECTOR_MATCHER.accepts(this)) {
             GoSelectorExpression selectorExpression = (GoSelectorExpression) getParent();
 
+            List<Reference> references = new ArrayList<Reference>();
             GoType baseTypes[] = selectorExpression.getBaseExpression().getType();
-            List<Reference> references = GoTypes.visitFirstType(baseTypes, new GoType.ForwardingVisitor<List<Reference>>(
-                    new ArrayList<Reference>(),
-                    new GoType.Second<List<Reference>>() {
+            if (baseTypes.length >= 1 && baseTypes[0] != null)
+                references = baseTypes[0].accept(
+                        new UpdatingTypeVisitor<List<Reference>>() {
+                            final GoLiteralIdentifier ident = GoLiteralIdentifierImpl.this;
 
-                        final GoLiteralIdentifier ident = GoLiteralIdentifierImpl.this;
+                            @Override
+                            public void visitPointer(GoTypePointer type, List<Reference> data, TypeVisitor<List<Reference>> visitor) {
+                                type.getTargetType().accept(visitor);
+                            }
 
-                        @Override
-                        public void visitPointer(GoTypePointer type, List<Reference> data, GoType.Visitor<List<Reference>> visitor) {
-                            type.getTargetType().accept(visitor);
-                        }
+                            @Override
+                            public void visitPackage(GoTypePackage type, List<Reference> data, TypeVisitor<List<Reference>> visitor) {
+                                GoPackage goPackage = type.getPackage();
+                                if (goPackage != GoPackages.C)
+                                    data.add(new PackageSymbolReference(ident, goPackage));
+                            }
 
-                        @Override
-                        public void visitPackage(GoTypePackage type, List<Reference> data, GoType.Visitor<List<Reference>> visitor) {
-                            GoPackage goPackage = type.getPackage();
-                            if (goPackage != GoPackages.C)
-                                data.add(new PackageSymbolReference(ident, goPackage));
-                        }
+                            @Override
+                            public void visitName(GoTypeName type, List<Reference> data, TypeVisitor<List<Reference>> visitor) {
+                                data.add(new InterfaceMethodReference(ident, type));
+                                data.add(new MethodReference(ident, type));
 
-                        @Override
-                        public void visitName(GoTypeName type, List<Reference> data, GoType.Visitor<List<Reference>> visitor) {
-                            data.add(new InterfaceMethodReference(ident, type));
-                            data.add(new MethodReference(ident, type));
+                                // HACK: I should not have to do this here
+                                if (type != type.underlyingType() && !(type.underlyingType() instanceof GoTypeName))
+                                    type.underlyingType().accept(visitor);
+                            }
 
-                            // HACK: I should not have to do this here
-                            if (type != type.getUnderlyingType() && !(type.getUnderlyingType() instanceof GoTypeName))
-                                type.getUnderlyingType().accept(visitor);
-                        }
+                            @Override
+                            public void visitPrimitive(GoTypePrimitive type, List<Reference> data, TypeVisitor<List<Reference>> visitor) {
+                                data.add(new MethodReference(ident, type));
+                            }
 
-                        @Override
-                        public void visitPrimitive(GoTypePrimitive type, List<Reference> data, GoType.Visitor<List<Reference>> visitor) {
-                            data.add(new MethodReference(ident, type));
-                        }
-
-                        @Override
-                        public void visitStruct(GoTypeStruct type, List<Reference> data, GoType.Visitor<List<Reference>> visitor) {
-                            data.add(new StructFieldReference(ident, type));
-                        }
-                    }
-            ));
+                            @Override
+                            public void visitStruct(GoTypeStruct type, List<Reference> data, TypeVisitor<List<Reference>> visitor) {
+                                data.add(new StructFieldReference(ident, type));
+                            }
+                        }, new ArrayList<Reference>()
+                );
 
             return references.toArray(new PsiReference[references.size()]);
         }

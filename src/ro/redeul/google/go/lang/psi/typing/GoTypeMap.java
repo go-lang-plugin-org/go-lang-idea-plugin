@@ -28,7 +28,7 @@ public class GoTypeMap
     }
 
     @Override
-    public <T> T accept(Visitor<T> visitor) {
+    public <T> T accept(TypeVisitor<T> visitor) {
         return visitor.visitMap(this);
     }
 

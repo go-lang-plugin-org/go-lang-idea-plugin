@@ -24,9 +24,9 @@ public class GoIndexExpressionImpl extends GoExpressionBase
             return GoType.EMPTY_ARRAY;
 
         GoType baseType = baseTypes[0];
-        GoType underlyingType = baseType.getUnderlyingType();
+        GoType underlyingType = baseType.underlyingType();
 
-        return underlyingType.accept(new GoType.Visitor<GoType[]>(GoType.EMPTY_ARRAY) {
+        return underlyingType.accept(new TypeVisitor<GoType[]>(GoType.EMPTY_ARRAY) {
             @Override
             public GoType[] visitSlice(GoTypeSlice type) {
                 return new GoType[] { type.getElementType() };

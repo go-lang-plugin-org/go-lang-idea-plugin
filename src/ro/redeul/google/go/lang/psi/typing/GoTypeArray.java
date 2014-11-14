@@ -27,7 +27,7 @@ public class GoTypeArray extends GoTypePsiBacked<GoPsiTypeArray> implements GoTy
     }
 
     @Override
-    public <T> T accept(Visitor<T> visitor) {
+    public <T> T accept(TypeVisitor<T> visitor) {
         return visitor.visitArray(this);
     }
 

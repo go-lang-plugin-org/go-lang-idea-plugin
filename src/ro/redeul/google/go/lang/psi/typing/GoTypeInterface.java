@@ -43,7 +43,7 @@ public class GoTypeInterface
         Map<String, GoType> methodsMap = new HashMap<String, GoType>();
         for (GoFunctionDeclaration function : functions) {
             GoType methodType = types().fromPsiType(function);
-            if (methodType != null)
+            if (methodType instanceof GoTypeFunction)
                 methodsMap.put(function.getName(), methodType);
         }
 
@@ -51,7 +51,7 @@ public class GoTypeInterface
     }
 
     @Override
-    public <T> T accept(Visitor<T> visitor) {
+    public <T> T accept(TypeVisitor<T> visitor) {
         return visitor.visitInterface(this);
     }
 

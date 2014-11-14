@@ -38,7 +38,7 @@ public class MethodSetDiscover {
 
         for (GoPsiTypeName embeddedInterface : psiType.getTypeNames()) {
 
-            GoTypeInterface typeInterface = GoTypes.fromPsi(embeddedInterface).getUnderlyingType(GoTypeInterface.class);
+            GoTypeInterface typeInterface = GoTypes.fromPsi(embeddedInterface).underlyingType(GoTypeInterface.class);
             if (typeInterface == null)
                 continue;
 

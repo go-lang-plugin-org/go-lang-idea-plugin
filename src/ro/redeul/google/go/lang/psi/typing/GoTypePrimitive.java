@@ -61,7 +61,7 @@ public class GoTypePrimitive extends GoTypeName {
     }
 
     @Override
-    public <T> T accept(Visitor<T> visitor) {
+    public <T> T accept(TypeVisitor<T> visitor) {
         return visitor.visitPrimitive(this);
     }
 

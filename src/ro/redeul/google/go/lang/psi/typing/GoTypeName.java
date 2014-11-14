@@ -1,6 +1,7 @@
 package ro.redeul.google.go.lang.psi.typing;
 
 import com.intellij.openapi.diagnostic.Logger;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
@@ -20,14 +21,15 @@ public class GoTypeName extends GoTypePsiBacked<GoPsiTypeName> implements GoType
         name = type.getName();
     }
 
+    @NotNull
     @Override
-    public GoType getUnderlyingType() {
+    public GoType underlyingType() {
         if ( getPsiType().isPrimitive() )
             return this;
 
         GoTypeSpec spec = resolveTypeSpec(getPsiType());
         if ( spec != null && spec.getType() != null)
-            return types().fromPsiType(spec.getType()).getUnderlyingType();
+            return types().fromPsiType(spec.getType()).underlyingType();
 
         return this;
     }
@@ -43,7 +45,7 @@ public class GoTypeName extends GoTypePsiBacked<GoPsiTypeName> implements GoType
     }
 
     @Override
-    public <T> T accept(Visitor<T> visitor) {
+    public <T> T accept(TypeVisitor<T> visitor) {
         return visitor.visitName(this);
     }
 

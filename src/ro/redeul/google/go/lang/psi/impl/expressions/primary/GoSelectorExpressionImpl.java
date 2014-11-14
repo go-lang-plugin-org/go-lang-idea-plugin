@@ -184,7 +184,7 @@ public class GoSelectorExpressionImpl extends GoExpressionBase
         if (type instanceof GoTypePointer)
             type = ((GoTypePointer) type).getTargetType();
 
-        GoType x = type.getUnderlyingType();
+        GoType x = type.underlyingType();
 
 //        if (x instanceof GoUnderlyingTypeInterface)
 //            return new PsiReference[]{new InterfaceMethodReference(this)};

@@ -42,7 +42,7 @@ public class InterfaceMethodReference extends Reference<GoLiteralIdentifier, Int
 
     public InterfaceMethodReference(GoLiteralIdentifier element, GoTypeName type) {
         super(element);
-        this.type = type.getUnderlyingType(GoTypeInterface.class);
+        this.type = type.underlyingType(GoTypeInterface.class);
     }
 
     @Override

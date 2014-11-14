@@ -25,7 +25,7 @@ public class GoTypeChannel extends GoTypePsiBacked<GoPsiTypeChannel> implements 
     }
 
     @Override
-    public <T> T accept(Visitor<T> visitor) {
+    public <T> T accept(TypeVisitor<T> visitor) {
         return visitor.visitChannel(this);
     }
 

@@ -35,7 +35,7 @@ public abstract class GoAbstractForWithRangeStatementImpl<Self extends GoAbstrac
 
         final GoTypes types = GoTypes.getInstance(getProject());
 
-        return new GoType.Visitor<GoType[]>(GoType.EMPTY_ARRAY) {
+        return new TypeVisitor<GoType[]>(GoType.EMPTY_ARRAY) {
             @Override
             public GoType[] visitArray(GoTypeArray type) {
                 return new GoType[]{types.getBuiltin(GoTypes.Builtin.Int)};
@@ -43,7 +43,7 @@ public abstract class GoAbstractForWithRangeStatementImpl<Self extends GoAbstrac
 
             @Override
             public GoType[] visitPointer(GoTypePointer pointer) {
-                return new GoType.Visitor<GoType[]>(GoType.EMPTY_ARRAY) {
+                return new TypeVisitor<GoType[]>(GoType.EMPTY_ARRAY) {
                     @Override
                     public GoType[] visitArray(GoTypeArray type) {
                         return new GoType[]{types.getBuiltin(GoTypes.Builtin.Int)};
@@ -98,7 +98,7 @@ public abstract class GoAbstractForWithRangeStatementImpl<Self extends GoAbstrac
 
         final GoTypes types = GoTypes.getInstance(getProject());
         return
-                new GoType.Visitor<GoType[]>(GoType.EMPTY_ARRAY) {
+                new TypeVisitor<GoType[]>(GoType.EMPTY_ARRAY) {
                     @Override
                     public GoType[] visitArray(GoTypeArray type) { return new GoType[]{type.getElementType()}; }
 
@@ -107,7 +107,7 @@ public abstract class GoAbstractForWithRangeStatementImpl<Self extends GoAbstrac
 
                     @Override
                     public GoType[] visitPointer(GoTypePointer pointer) {
-                        return new GoType.Visitor<GoType[]>(GoType.EMPTY_ARRAY) {
+                        return new TypeVisitor<GoType[]>(GoType.EMPTY_ARRAY) {
                             @Override
                             public GoType[] visitArray(GoTypeArray type) {
                                 return new GoType[]{type.getElementType()};

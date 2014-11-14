@@ -76,7 +76,7 @@ public class GoTypes extends AbstractProjectComponent {
             return true;
 
 //        x's type V and T have identical underlying types and at least one of V or T is not a named type.
-        if ((!isNamedType(srcVarType) || !isNamedType(dstType)) && srcVarType.getUnderlyingType().isIdentical(dstType.getUnderlyingType()))
+        if ((!isNamedType(srcVarType) || !isNamedType(dstType)) && srcVarType.underlyingType().isIdentical(dstType.underlyingType()))
             return true;
 
 //        T is an interface type and x implements T.
@@ -84,10 +84,10 @@ public class GoTypes extends AbstractProjectComponent {
 //            return true;
 
 //        x is a bidirectional channel value, T is a channel type, x's type V and T have identical element types, and at least one of V or T is not a named type.
-        if (srcVarType.getUnderlyingType() instanceof GoTypeChannel && dstType.getUnderlyingType() instanceof GoTypeChannel
+        if (srcVarType.underlyingType() instanceof GoTypeChannel && dstType.underlyingType() instanceof GoTypeChannel
                 && (!isNamedType(srcVarType) || !isNamedType(dstType))) {
-            GoTypeChannel dstChannel = (GoTypeChannel) dstType.getUnderlyingType();
-            GoTypeChannel srcChannel = (GoTypeChannel) srcVarType.getUnderlyingType();
+            GoTypeChannel dstChannel = (GoTypeChannel) dstType.underlyingType();
+            GoTypeChannel srcChannel = (GoTypeChannel) srcVarType.underlyingType();
 
             return srcChannel.getChannelType() == GoTypeChannel.ChannelType.Bidirectional &&
                     srcChannel.getElementType().isIdentical(dstChannel.getElementType());
@@ -104,7 +104,7 @@ public class GoTypes extends AbstractProjectComponent {
         if ( srcVarType instanceof GoTypeConstant ) {
             GoTypeConstant constant = (GoTypeConstant) srcVarType;
             if ( constant.getType() == GoType.Unknown)
-                return dstType.getUnderlyingType().canRepresent(constant);
+                return dstType.underlyingType().canRepresent(constant);
         }
 
         return false;
@@ -203,7 +203,7 @@ public class GoTypes extends AbstractProjectComponent {
         return types;
     }
 
-    public static <T> T visitFirstType(GoType[] types, GoType.Visitor<T> visitor) {
+    public static <T> T visitFirstType(GoType[] types, TypeVisitor<T> visitor) {
         if (types != null && types.length >= 1 && types[0] != null)
             return visitor.visit(types[0]);
 
@@ -281,12 +281,12 @@ public class GoTypes extends AbstractProjectComponent {
     }
 
     private static GoTypeStruct resolveToStruct(@Nullable GoType type) {
-        return new GoType.Visitor<GoTypeStruct>() {
+        return new TypeVisitor<GoTypeStruct>() {
             @Override
             public GoTypeStruct visitStruct(GoTypeStruct type) { return type; }
 
             @Override
-            public GoTypeStruct visitName(GoTypeName type) { return visit(type.getUnderlyingType()); }
+            public GoTypeStruct visitName(GoTypeName type) { return visit(type.underlyingType()); }
 
             @Override
             public GoTypeStruct visitPointer(GoTypePointer type) { return visit(type.getTargetType()); }
@@ -307,12 +307,12 @@ public class GoTypes extends AbstractProjectComponent {
 
     @Nullable
     private static GoType dereference(@Nullable GoType type, final int dereferences) {
-        return new GoType.Visitor<GoType>(null) {
+        return new TypeVisitor<GoType>(null) {
             int myDereferences = dereferences;
 
             @Override
             public GoType visitName(GoTypeName type) {
-                return type == type.getUnderlyingType() ? type : type.getUnderlyingType().accept(this);
+                return type == type.underlyingType() ? type : type.underlyingType().accept(this);
             }
 
             @Override
@@ -352,33 +352,33 @@ public class GoTypes extends AbstractProjectComponent {
             public GoType visitUnknown(GoType type) { return type; }
 
             @Override
-            public GoType visitVariadic(GoType.GoTypeVariadic type) { return type; }
+            public GoType visitVariadic(GoTypeVariadic type) { return type; }
 
         }.visit(type);
     }
 
     public static String getRepresentation(GoType type, final GoFile view) {
-        return type.accept(new GoType.ForwardingVisitor<StringBuilder>(new StringBuilder(), new GoType.Second<StringBuilder>() {
+        return type.accept(new UpdatingTypeVisitor<StringBuilder>() {
             @Override
-            public void visitSlice(GoTypeSlice type, StringBuilder builder, GoType.Visitor<StringBuilder> visitor) {
+            public void visitSlice(GoTypeSlice type, StringBuilder builder, TypeVisitor<StringBuilder> visitor) {
                 builder.append("[]");
                 type.getElementType().accept(visitor);
             }
 
             @Override
-            public void visitArray(GoTypeArray type, StringBuilder builder, GoType.Visitor<StringBuilder> visitor) {
+            public void visitArray(GoTypeArray type, StringBuilder builder, TypeVisitor<StringBuilder> visitor) {
                 builder.append("[").append(type.getLength()).append("]");
                 type.getElementType().accept(visitor);
             }
 
             @Override
-            public void visitPointer(GoTypePointer type, StringBuilder data, GoType.Visitor<StringBuilder> visitor) {
+            public void visitPointer(GoTypePointer type, StringBuilder data, TypeVisitor<StringBuilder> visitor) {
                 data.append("*");
                 type.getTargetType().accept(visitor);
             }
 
             @Override
-            public void visitFunction(GoTypeFunction type, StringBuilder data, GoType.Visitor<StringBuilder> visitor) {
+            public void visitFunction(GoTypeFunction type, StringBuilder data, TypeVisitor<StringBuilder> visitor) {
                 data.append("func");
 
                 data.append("(");
@@ -395,29 +395,29 @@ public class GoTypes extends AbstractProjectComponent {
             }
 
             @Override
-            public void visitChannel(GoTypeChannel type, StringBuilder data, GoType.Visitor<StringBuilder> visitor) {
+            public void visitChannel(GoTypeChannel type, StringBuilder data, TypeVisitor<StringBuilder> visitor) {
                 data.append(GoTypeChannel.ChannelType.getText(type.getChannelType())).append(" ");
                 type.getElementType().accept(visitor);
             }
 
             @Override
-            public void visitName(GoTypeName type, StringBuilder data, GoType.Visitor<StringBuilder> visitor) {
+            public void visitName(GoTypeName type, StringBuilder data, TypeVisitor<StringBuilder> visitor) {
                 data.append(type.getName());
             }
 
             @Override
-            public void visitInterface(GoTypeInterface type, StringBuilder data, GoType.Visitor<StringBuilder> visitor) {
+            public void visitInterface(GoTypeInterface type, StringBuilder data, TypeVisitor<StringBuilder> visitor) {
                 super.visitInterface(type, data, visitor);
             }
 
             @Override
-            public void visitVariadic(GoType.GoTypeVariadic type, StringBuilder data, GoType.Visitor<StringBuilder> visitor) {
+            public void visitVariadic(GoTypeVariadic type, StringBuilder data, TypeVisitor<StringBuilder> visitor) {
                 data.append("...");
                 type.getTargetType().accept(visitor);
             }
 
             @Override
-            public void visitMap(GoTypeMap type, StringBuilder data, GoType.Visitor<StringBuilder> visitor) {
+            public void visitMap(GoTypeMap type, StringBuilder data, TypeVisitor<StringBuilder> visitor) {
                 data.append("map[");
                 type.getKeyType().accept(visitor);
                 data.append("]");
@@ -425,17 +425,17 @@ public class GoTypes extends AbstractProjectComponent {
             }
 
             @Override
-            public void visitNil(GoType type, StringBuilder data, GoType.Visitor<StringBuilder> visitor) {
+            public void visitNil(GoType type, StringBuilder data, TypeVisitor<StringBuilder> visitor) {
                 super.visitNil(type, data, visitor);
             }
 
             @Override
-            public void visitPackage(GoTypePackage type, StringBuilder data, GoType.Visitor<StringBuilder> visitor) {
+            public void visitPackage(GoTypePackage type, StringBuilder data, TypeVisitor<StringBuilder> visitor) {
                 super.visitPackage(type, data, visitor);
             }
 
             @Override
-            public void visitStruct(GoTypeStruct type, StringBuilder data, GoType.Visitor<StringBuilder> visitor) {
+            public void visitStruct(GoTypeStruct type, StringBuilder data, TypeVisitor<StringBuilder> visitor) {
                 data.append("struct{");
 
                 boolean needsSemi = false;
@@ -478,12 +478,12 @@ public class GoTypes extends AbstractProjectComponent {
 
 
             @Override
-            public void visitUnknown(GoType type, StringBuilder data, GoType.Visitor<StringBuilder> visitor) {
+            public void visitUnknown(GoType type, StringBuilder data, TypeVisitor<StringBuilder> visitor) {
                 super.visitUnknown(type, data, visitor);
             }
 
             @Override
-            public void visitConstant(GoTypeConstant type, StringBuilder data, GoType.Visitor<StringBuilder> visitor) {
+            public void visitConstant(GoTypeConstant type, StringBuilder data, TypeVisitor<StringBuilder> visitor) {
                 if ( type.getType() != GoType.Unknown ){
                     type.getType().accept(visitor);
                     return;
@@ -500,11 +500,11 @@ public class GoTypes extends AbstractProjectComponent {
             }
 
             @Override
-            public void visitPrimitive(GoTypePrimitive type, StringBuilder data, GoType.Visitor<StringBuilder> visitor) {
+            public void visitPrimitive(GoTypePrimitive type, StringBuilder data, TypeVisitor<StringBuilder> visitor) {
                 data.append(type.getName());
             }
 
-            private void visitParameterList(GoFunctionParameter[] parameters, StringBuilder builder, GoType.Visitor<StringBuilder> visitor) {
+            private void visitParameterList(GoFunctionParameter[] parameters, StringBuilder builder, TypeVisitor<StringBuilder> visitor) {
                 boolean needsComma = false;
                 for (GoFunctionParameter parameter : parameters) {
                     int count = Math.max(1, parameter.getIdentifiers().length);
@@ -560,6 +560,6 @@ public class GoTypes extends AbstractProjectComponent {
         return stringBuilder.toString();
 
       */
-            })).toString();
+            }, new StringBuilder()).toString();
     }
 }

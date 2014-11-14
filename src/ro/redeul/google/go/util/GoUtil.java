@@ -249,7 +249,7 @@ public class GoUtil {
         }
 
         return false;
-//        return element.getUnderlyingType().isIdentical(((GoType) element2).getUnderlyingType());
+//        return element.underlyingType().isIdentical(((GoType) element2).underlyingType());
     }
 
 

@@ -18,6 +18,7 @@ import ro.redeul.google.go.lang.psi.typing.GoTypeFunction;
 import ro.redeul.google.go.lang.psi.typing.GoTypeName;
 import ro.redeul.google.go.lang.psi.typing.GoTypePsiBacked;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.typing.TypeVisitor;
 import ro.redeul.google.go.lang.psi.utils.GoTypeUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.util.GoUtil;
@@ -39,7 +40,7 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase implements GoCa
 
         GoType baseCallType[] = baseExpr.getType();
 
-        GoType[] goTypes = GoTypes.visitFirstType(baseCallType, new GoType.Visitor<GoType[]>(GoType.EMPTY_ARRAY) {
+        GoType[] goTypes = GoTypes.visitFirstType(baseCallType, new TypeVisitor<GoType[]>(GoType.EMPTY_ARRAY) {
 
             @Override
             public GoType[] visitFunction(GoTypeFunction type) {

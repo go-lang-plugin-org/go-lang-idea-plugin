@@ -84,7 +84,7 @@ public class PromotedFieldsDiscover {
         if (!(type instanceof GoTypeName))
             return;
 
-        type = type.getUnderlyingType();
+        type = type.underlyingType();
         if ( type == null || !(type instanceof GoTypeStruct))
             return;
 

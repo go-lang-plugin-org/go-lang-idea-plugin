@@ -1,6 +1,3 @@
-/*
-* Copyright 2012 Midokura Europe SARL
-*/
 package ro.redeul.google.go.psi;
 
 import ro.redeul.google.go.GoPsiTestCase;
@@ -12,9 +9,6 @@ import ro.redeul.google.go.lang.psi.statements.select.GoSelectStatement;
 
 import static ro.redeul.google.go.util.GoPsiTestUtils.*;
 
-/**
- * // TODO: mtoader ! Please explain yourself.
- */
 public class GoPsiSelectStatementTest extends GoPsiTestCase {
 
     public void testSimpleSelect() throws Exception {

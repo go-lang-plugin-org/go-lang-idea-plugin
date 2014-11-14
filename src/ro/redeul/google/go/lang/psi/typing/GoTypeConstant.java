@@ -93,12 +93,13 @@ public class GoTypeConstant extends GoAbstractType implements GoType {
     }
 
     @Override
-    public <T> T accept(Visitor<T> visitor) {
+    public <T> T accept(TypeVisitor<T> visitor) {
         return visitor.visitConstant(this);
     }
 
+    @NotNull
     @Override
-    public GoType getUnderlyingType() {
-        return type != null ? type.getUnderlyingType() : this;
+    public GoType underlyingType() {
+        return type != null ? type.underlyingType() : this;
     }
 }

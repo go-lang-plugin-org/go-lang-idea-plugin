@@ -18,6 +18,7 @@ import ro.redeul.google.go.lang.psi.typing.GoTypeMap;
 import ro.redeul.google.go.lang.psi.typing.GoTypeSlice;
 import ro.redeul.google.go.lang.psi.typing.GoTypeStruct;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.typing.TypeVisitor;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
@@ -75,7 +76,7 @@ public class GoLiteralCompositeElementImpl extends GoPsiElementBase implements G
 
         final GoLiteralIdentifier elementKey = getKey();
 
-        return parentType.getUnderlyingType().accept(new GoType.Visitor<GoType>(GoType.Unknown) {
+        return parentType.underlyingType().accept(new TypeVisitor<GoType>(GoType.Unknown) {
             @Override
             public GoType visitArray(GoTypeArray type) {
                 return type.getElementType();

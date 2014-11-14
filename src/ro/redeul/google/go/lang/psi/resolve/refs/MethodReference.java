@@ -73,7 +73,7 @@ public class MethodReference extends ReferenceWithSolver<GoLiteralIdentifier, Me
 
             receiverTypes.add(currentTypeName);
 
-            GoType underlyingType = currentTypeName.getUnderlyingType();
+            GoType underlyingType = currentTypeName.underlyingType();
             if ( !(underlyingType instanceof GoTypeStruct) )
                 continue;
 

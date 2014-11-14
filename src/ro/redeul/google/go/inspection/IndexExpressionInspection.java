@@ -35,12 +35,12 @@ public class IndexExpressionInspection extends AbstractWholeGoFileInspection {
             return;
 
         final GoFile goFile = getAs(GoFile.class, indexExpr.getContainingFile());
-        if ( goFile == null)
+        if (goFile == null)
             return;
 
         final GoType[] indexTypes = indexExpr.getType();
 
-        if ( indexTypes.length != 1 || indexTypes[0] == null)
+        if (indexTypes.length != 1 || indexTypes[0] == null)
             return;
         final GoType indexType = indexTypes[0];
 
@@ -50,19 +50,19 @@ public class IndexExpressionInspection extends AbstractWholeGoFileInspection {
 
         final BigInteger intConstant = getIntegerConstant(indexType);
 
-        new GoType.ForwardingVisitor<InspectionResult>(result, new GoType.Second<InspectionResult>() {
+        expressionTypes[0].underlyingType().accept(new UpdatingTypeVisitor<InspectionResult>() {
             @Override
-            public void visitArray(GoTypeArray type, InspectionResult result, GoType.Visitor<InspectionResult> visitor) {
+            public void visitArray(GoTypeArray type, InspectionResult result, TypeVisitor<InspectionResult> visitor) {
                 checkUnsignedIntegerConstantInRange(indexExpr, indexType, type.getLength(), result);
             }
 
             @Override
-            public void visitSlice(GoTypeSlice type, InspectionResult result, GoType.Visitor<InspectionResult> visitor) {
+            public void visitSlice(GoTypeSlice type, InspectionResult result, TypeVisitor<InspectionResult> visitor) {
                 checkUnsignedIntegerConstantInRange(indexExpr, indexType, Integer.MAX_VALUE, result);
             }
 
             @Override
-            public void visitPrimitive(GoTypePrimitive type, InspectionResult data, GoType.Visitor<InspectionResult> visitor) {
+            public void visitPrimitive(GoTypePrimitive type, InspectionResult data, TypeVisitor<InspectionResult> visitor) {
                 switch (type.getType()) {
                     case String:
                         checkUnsignedIntegerConstantInRange(indexExpr, indexType, Integer.MAX_VALUE, result);
@@ -76,12 +76,12 @@ public class IndexExpressionInspection extends AbstractWholeGoFileInspection {
             }
 
             @Override
-            public void visitPointer(GoTypePointer type, InspectionResult data, GoType.Visitor<InspectionResult> visitor) {
-                type.getTargetType().getUnderlyingType().accept(visitor);
+            public void visitPointer(GoTypePointer type, InspectionResult data, TypeVisitor<InspectionResult> visitor) {
+                type.getTargetType().underlyingType().accept(visitor);
             }
 
             @Override
-            public void visitConstant(GoTypeConstant type, InspectionResult data, GoType.Visitor<InspectionResult> visitor) {
+            public void visitConstant(GoTypeConstant type, InspectionResult data, TypeVisitor<InspectionResult> visitor) {
                 switch (type.getKind()) {
                     case String:
                         String stringValue = type.getValueAs(String.class);
@@ -95,9 +95,9 @@ public class IndexExpressionInspection extends AbstractWholeGoFileInspection {
             }
 
             @Override
-            public void visitMap(GoTypeMap type, InspectionResult data, GoType.Visitor<InspectionResult> visitor) {
+            public void visitMap(GoTypeMap type, InspectionResult data, TypeVisitor<InspectionResult> visitor) {
                 GoType keyType = type.getKeyType();
-                if ( !keyType.isAssignableFrom(indexType)) {
+                if (!keyType.isAssignableFrom(indexType)) {
                     result.addProblem(
                             indexExpr,
                             GoBundle.message("warn.index.map.invalid.type",
@@ -106,48 +106,48 @@ public class IndexExpressionInspection extends AbstractWholeGoFileInspection {
                                     GoTypes.getRepresentation(keyType, goFile)),
                             new CastTypeFix(indexExpr, keyType));
                 }
-             }
-        }).visit(expressionTypes[0].getUnderlyingType());
+            }
+        }, result);
     }
 
     private void checkUnsignedIntegerConstantInRange(GoExpr indexExpr, GoType indexType, int length, InspectionResult result) {
         BigInteger integer = getIntegerConstant(indexType);
 
-        if (!(indexType instanceof GoTypeConstant) || integer == null )
+        if (!(indexType instanceof GoTypeConstant) || integer == null)
             result.addProblem(
                     indexExpr,
                     GoBundle.message("warning.functioncall.type.mismatch", "int"));
 
-        if ( integer != null && integer.compareTo(BigInteger.ZERO) < 0)
+        if (integer != null && integer.compareTo(BigInteger.ZERO) < 0)
             result.addProblem(
                     indexExpr,
                     GoBundle.message("warning.index.invalid", integer.longValue(), "(index must be non-negative)"));
 
-        if ( integer != null && integer.compareTo(BigInteger.valueOf(length)) > 0)
+        if (integer != null && integer.compareTo(BigInteger.valueOf(length)) > 0)
             result.addProblem(
                     indexExpr,
                     GoBundle.message("warning.index.invalid", integer.longValue(), "(index out of bounds)"));
     }
 
     private BigInteger getIntegerConstant(GoType indexType) {
-        if ( !(indexType instanceof GoTypeConstant) )
+        if (!(indexType instanceof GoTypeConstant))
             return null;
 
         GoTypeConstant constant = (GoTypeConstant) indexType;
         BigDecimal decimal = null;
         BigInteger integer = null;
 
-        if ( constant.getKind() == GoTypeConstant.Kind.Complex) {
+        if (constant.getKind() == GoTypeConstant.Kind.Complex) {
             GoNumber goNumber = constant.getValueAs(GoNumber.class);
-            if ( goNumber == null || goNumber.isComplex())
+            if (goNumber == null || goNumber.isComplex())
                 return null;
 
             decimal = goNumber.getReal();
         }
 
-        if ( decimal != null || constant.getKind() == GoTypeConstant.Kind.Float ) {
+        if (decimal != null || constant.getKind() == GoTypeConstant.Kind.Float) {
             decimal = (decimal == null) ? constant.getValueAs(BigDecimal.class) : decimal;
-            if ( decimal == null )
+            if (decimal == null)
                 return null;
 
             try {
@@ -157,7 +157,7 @@ public class IndexExpressionInspection extends AbstractWholeGoFileInspection {
             }
         }
 
-        if ( integer != null || constant.getKind() == GoTypeConstant.Kind.Integer) {
+        if (integer != null || constant.getKind() == GoTypeConstant.Kind.Integer) {
             integer = (integer == null) ? constant.getValueAs(BigInteger.class) : integer;
         }
 

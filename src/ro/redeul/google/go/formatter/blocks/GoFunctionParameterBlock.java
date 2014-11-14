@@ -1,6 +1,3 @@
-/*
-* Copyright 2012 Midokura Europe SARL
-*/
 package ro.redeul.google.go.formatter.blocks;
 
 import com.intellij.formatting.Indent;
@@ -10,10 +7,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * // TODO: mtoader ! Please explain yourself.
- * // TODO: dlsniper ! Yeah, you do that!
- */
 class GoFunctionParameterBlock extends GoBlock {
     public GoFunctionParameterBlock(ASTNode node, Indent indent, CommonCodeStyleSettings styleSettings) {
         super(node, null, indent, null, styleSettings);

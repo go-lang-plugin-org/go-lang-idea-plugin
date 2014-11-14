@@ -71,10 +71,10 @@ public class GoPsiTypingTestCase extends GoFileBasedPsiTestCase
 
                 assertTrue(
                         String.format("%s should be the same as %s",
-                                GoTypes.getRepresentation(baseType.getUnderlyingType(), (GoFile) myFile),
-                                GoTypes.getRepresentation(exprType.getUnderlyingType(), (GoFile) myFile)),
+                                GoTypes.getRepresentation(baseType.underlyingType(), (GoFile) myFile),
+                                GoTypes.getRepresentation(exprType.underlyingType(), (GoFile) myFile)),
 
-                        baseType.getUnderlyingType().isIdentical(exprType.getUnderlyingType()));
+                        baseType.underlyingType().isIdentical(exprType.underlyingType()));
             }
         }
     }

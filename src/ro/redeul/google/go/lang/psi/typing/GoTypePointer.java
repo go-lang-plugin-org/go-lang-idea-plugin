@@ -21,7 +21,7 @@ public class GoTypePointer extends GoAbstractType implements GoType {
     }
 
     @Override
-    public <T> T accept(Visitor<T> visitor) {
+    public <T> T accept(TypeVisitor<T> visitor) {
         return visitor.visitPointer(this);
     }
 

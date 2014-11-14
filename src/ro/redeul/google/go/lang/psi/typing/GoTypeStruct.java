@@ -62,7 +62,7 @@ public class GoTypeStruct extends GoTypePsiBacked<GoPsiTypeStruct> implements Go
     }
 
     @Override
-    public <T> T accept(Visitor<T> visitor) {
+    public <T> T accept(TypeVisitor<T> visitor) {
         return visitor.visitStruct(this);
     }
 

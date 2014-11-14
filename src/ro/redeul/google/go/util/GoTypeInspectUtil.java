@@ -229,7 +229,7 @@ public class GoTypeInspectUtil {
                                 ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
                         return;
                     }
-                    GoType exprType = types[0].getUnderlyingType();
+                    GoType exprType = types[0].underlyingType();
                     if (!(exprType instanceof GoTypeSlice)){
                         result.addProblem(
                                 goExpr,

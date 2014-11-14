@@ -1,6 +1,3 @@
-/*
-* Copyright 2012 Midokura Europe SARL
-*/
 package ro.redeul.google.go.lang.psi.impl.statements.select;
 
 import com.intellij.lang.ASTNode;
@@ -19,8 +16,8 @@ import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseRecv;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
-public class GoSelectCommClauseRecvImpl extends GoPsiElementBase
-    implements GoSelectCommClauseRecv {
+public class GoSelectCommClauseRecvImpl extends GoPsiElementBase implements GoSelectCommClauseRecv {
+
     public GoSelectCommClauseRecvImpl(@NotNull ASTNode node) {
         super(node);
     }
@@ -42,22 +39,22 @@ public class GoSelectCommClauseRecvImpl extends GoPsiElementBase
     public GoExpr getReceiveExpression() {
 
         GoExpr expr = findChildByClass(GoExpr.class);
-        if ( expr != null )
+        if (expr != null)
             return expr;
 
         GoAssignmentStatement assignmentStatement = getAssignment();
-        if ( assignmentStatement != null ) {
+        if (assignmentStatement != null) {
             GoExpressionList expressionList = assignmentStatement.getRightSideExpressions();
-            if ( expressionList.getExpressions() != null && expressionList.getExpressions().length > 0)
+            if (expressionList.getExpressions() != null && expressionList.getExpressions().length > 0)
                 return expressionList.getExpressions()[0];
 
             return expr;
         }
 
         GoShortVarDeclaration declaration = getShortVarDeclaration();
-        if ( declaration != null ) {
+        if (declaration != null) {
             GoExpr expressions[] = declaration.getExpressions();
-            if ( expressions.length > 0 )
+            if (expressions.length > 0)
                 return expressions[0];
         }
 
@@ -84,9 +81,9 @@ public class GoSelectCommClauseRecvImpl extends GoPsiElementBase
 
         PsiElement node = lastParent != null ? lastParent.getPrevSibling() : null;
 
-        while ( node != null ) {
-            if ( GoElementPatterns.BLOCK_DECLARATIONS.accepts(node)) {
-                if ( ! node.processDeclarations(processor, state, null, place) ) {
+        while (node != null) {
+            if (GoElementPatterns.BLOCK_DECLARATIONS.accepts(node)) {
+                if (!node.processDeclarations(processor, state, null, place)) {
                     return false;
                 }
             }

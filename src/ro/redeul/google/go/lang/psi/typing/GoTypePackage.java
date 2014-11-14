@@ -1,5 +1,6 @@
 package ro.redeul.google.go.lang.psi.typing;
 
+import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.GoPackage;
 
 public class GoTypePackage extends GoAbstractType implements GoType {
@@ -10,18 +11,14 @@ public class GoTypePackage extends GoAbstractType implements GoType {
         this.goPackage = goPackage;
     }
 
+    @NotNull
     @Override
-    public GoType getUnderlyingType() {
+    public GoType underlyingType() {
         return this;
     }
 
     @Override
-    public boolean isIdentical(GoType type) {
-        return false;
-    }
-
-    @Override
-    public <T> T accept(Visitor<T> visitor) {
+    public <T> T accept(TypeVisitor<T> visitor) {
         return visitor.visitPackage(this);
     }
 

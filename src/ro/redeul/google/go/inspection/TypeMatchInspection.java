@@ -83,8 +83,8 @@ public class TypeMatchInspection extends AbstractWholeGoFileInspection {
                 if (leftType == null || rightType == null) {
                     return;
                 }
-                GoType leftUnder = leftType.getUnderlyingType();
-                GoType rightUnder = rightType.getUnderlyingType();
+                GoType leftUnder = leftType.underlyingType();
+                GoType rightUnder = rightType.underlyingType();
                 boolean hasInterface = leftUnder instanceof GoTypeInterface || rightUnder instanceof GoTypeInterface;
                 if (!equality) {
                     if (leftType instanceof GoTypePointer || rightType instanceof GoTypePointer){

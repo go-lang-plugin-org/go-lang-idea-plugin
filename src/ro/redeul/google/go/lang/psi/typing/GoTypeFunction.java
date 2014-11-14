@@ -50,7 +50,7 @@ public class GoTypeFunction
     }
 
     @Override
-    public <T> T accept(Visitor<T> visitor) {
+    public <T> T accept(TypeVisitor<T> visitor) {
         return visitor.visitFunction(this);
     }
 

@@ -1,6 +1,3 @@
-/*
-* Copyright 2012 Midokura Europe SARL
-*/
 package ro.redeul.google.go.lang.psi.impl.statements.select;
 
 import com.intellij.lang.ASTNode;
@@ -15,11 +12,7 @@ import ro.redeul.google.go.lang.psi.statements.GoStatement;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseSend;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
-/**
- * // TODO: mtoader ! Please explain yourself.
- */
-public class GoSelectCommClauseSendImpl extends GoPsiElementBase
-    implements GoSelectCommClauseSend {
+public class GoSelectCommClauseSendImpl extends GoPsiElementBase implements GoSelectCommClauseSend {
 
     public GoSelectCommClauseSendImpl(@NotNull ASTNode node) {
         super(node);
@@ -49,9 +42,9 @@ public class GoSelectCommClauseSendImpl extends GoPsiElementBase
     public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
         PsiElement node = lastParent != null ? lastParent.getPrevSibling() : null;
 
-        while ( node != null ) {
-            if ( GoElementPatterns.BLOCK_DECLARATIONS.accepts(node)) {
-                if ( ! node.processDeclarations(processor, state, null, place) ) {
+        while (node != null) {
+            if (GoElementPatterns.BLOCK_DECLARATIONS.accepts(node)) {
+                if (!node.processDeclarations(processor, state, null, place)) {
                     return false;
                 }
             }
