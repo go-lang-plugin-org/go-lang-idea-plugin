@@ -12,8 +12,10 @@ import ro.redeul.google.go.intentions.IntentionExecutionException;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.statements.GoExpressionStatement;
 import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypeConstant;
 import ro.redeul.google.go.lang.psi.typing.GoTypePrimitive;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.typing.TypeVisitor;
 
 import java.util.ArrayList;
 
@@ -29,10 +31,10 @@ public class ConvertStatementToIfIntention extends Intention {
     protected boolean satisfiedBy(PsiElement element) {
         PsiElement node = element;
 
-        if ( node == null)
+        if (node == null)
             return false;
 
-        if ( node instanceof PsiWhiteSpace )
+        if (node instanceof PsiWhiteSpace)
             node = node.getPrevSibling();
 
         statement = findParentOfType(node, GoExpressionStatement.class);
@@ -44,9 +46,17 @@ public class ConvertStatementToIfIntention extends Intention {
         for (GoType goType : expr.getType()) {
             if (goType == null) continue;
 
-            GoType underlyingType = goType.underlyingType();
-            if (underlyingType instanceof GoTypePrimitive)
-                    return ((GoTypePrimitive) underlyingType).getType() == GoTypes.Builtin.Bool;
+            return goType.underlyingType().accept(new TypeVisitor<Boolean>(false) {
+                @Override
+                public Boolean visitPrimitive(GoTypePrimitive type) {
+                    return type.getType() == GoTypes.Builtin.Bool;
+                }
+
+                @Override
+                public Boolean visitConstant(GoTypeConstant constant) {
+                    return constant.getKind() == GoTypeConstant.Kind.Boolean;
+                }
+            });
         }
 
         return false;

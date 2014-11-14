@@ -104,6 +104,6 @@ public class GoTypeConstant extends GoAbstractType implements GoType {
     @NotNull
     @Override
     public GoType underlyingType() {
-        return type != null ? type.underlyingType() : this;
+        return type != GoType.Unknown ? type.underlyingType() : this;
     }
 }
