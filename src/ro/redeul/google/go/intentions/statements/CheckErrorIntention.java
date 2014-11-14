@@ -17,6 +17,7 @@ import ro.redeul.google.go.lang.psi.typing.GoTypePrimitive;
 import ro.redeul.google.go.lang.psi.typing.GoTypePsiBacked;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.typing.TypeVisitor;
+import ro.redeul.google.go.lang.psi.typing.UpdatingTypeVisitor;
 import ro.redeul.google.go.lang.psi.utils.GoTypeUtils;
 import ro.redeul.google.go.util.GoUtil;
 
@@ -63,76 +64,72 @@ public class CheckErrorIntention extends Intention {
     protected void processIntention(@NotNull PsiElement element, Editor editor) throws IntentionExecutionException {
         TextRange textRange = statement.getTextRange();
 
-        StringBuilder ifString = new StringBuilder();
+        StringBuilder varListString = new StringBuilder();
+        StringBuilder checkString = new StringBuilder();
+        List<String> varNames = new ArrayList<String>();
 
-        String k = "err";
-        ifString.append("if ");
+
         GoType[] types = expr.getType();
-        List<String> stringList = new ArrayList<String>();
 
-        int j = 0;
-        if (types.length > 1) {
-            StringBuilder checkString = new StringBuilder();
-            j = 0;
-            int c = 0;
-            int i = 0;
+        int errorVarIndex = -1;
+        int varIndex = 0;
+        boolean needsComma = false;
+        for (GoType type : types) {
+            if ( type == null)
+                continue;
 
-            for (GoType goType : types) {
+            if ( needsComma )
+                varListString.append(", ");
+            else
+                needsComma = true;
 
-                if (j != 0) {
-                    ifString.append(",");
+            String templateVarName = String.format("$v%d$", varIndex++);
+            varListString.append(templateVarName);
+            GoType underlyingType = type.underlyingType();
+            if ( isErrorType(type.underlyingType()) ) {
+                errorVarIndex++;
+                String errVarName = findVarName(expr, errorVarIndex);
+                if (errorVarIndex > 0) {
+                    checkString.append(" || ");
                 }
 
-                String currentVar = String.format("$v%d$", j);
-                if (goType != null) {
-                    if (goType instanceof GoTypePsiBacked) {
-                        GoPsiType psiType = GoTypeUtils.resolveToFinalType(((GoTypePsiBacked) goType).getPsiType());
-                        if (psiType instanceof GoPsiTypeName && psiType.getText().equals("error") && ((GoPsiTypeName) psiType).isPrimitive()) {
-                            if (k.equals("err") && i != 0)
-                                k = "err0";
-                            while (GoUtil.TestDeclVar(expr, k)) {
-                                k = String.format("err%d", i);
-                                i++;
-                            }
-                            if (c != 0) {
-                                checkString.append(" || ");
-                            }
-                            stringList.add(k);
-
-                            ifString.append(currentVar);
-                            checkString.append(currentVar)
-                                    .append(" != nil");
-                            j++;
-                            i++;
-                            c++;
-                            continue;
-                        }
-                    }
-                }
-                ifString.append(currentVar);
-                stringList.add("_");
-                j++;
+                varNames.add(errVarName);
+                checkString.append(templateVarName).append(" != nil");
+            } else {
+                varNames.add("_");
             }
-
-            ifString
-                    .append(":=")
-                    .append(expr.getText())
-                    .append(";")
-                    .append(checkString)
-                    .append("{");
-
-
-        } else {
-            ifString
-                    .append(expr.getText())
-                    .append(" != nil {");
-
         }
 
-        ifString.append(String.format("\n$v%d$$END$\n}", j));
-        stringList.add("//TODO: Handle error(s)");
-        //stringList.add("panic(\"Unhandled error!\")");
-        TemplateUtil.runTemplate(editor, textRange, stringList, TemplateUtil.createTemplate(ifString.toString()));
+        if (types.length <= 1)
+            varNames.set(0, expr.getText());
+
+        StringBuilder template = new StringBuilder();
+
+        template.append("if ");
+        if ( types.length > 1 ) {
+            template.append(varListString).append(":=").append(expr.getText()).append(';');
+        } else {
+            varNames.set(0, expr.getText());
+        }
+
+        String bodyTemplate = String.format("\n$v%d$$END$\n}", varIndex);
+        varNames.add("//TODO: Handle error(s)");
+        template
+                .append(checkString)
+                .append("{")
+                .append(bodyTemplate);
+
+        //varNames.add("panic(\"Unhandled error!\")");
+        TemplateUtil.runTemplate(editor, textRange, varNames, TemplateUtil.createTemplate(template.toString()));
     }
 
+    private String findVarName(GoExpr expr, int varIndex) {
+        return String.format("err%s", varIndex == 0 ? "" : varIndex - 1);
+    }
+
+    private boolean isErrorType(GoType type) {
+        return type != null &&
+                type instanceof GoTypePrimitive &&
+                ((GoTypePrimitive) type).getType() == GoTypes.Builtin.Error;
+    }
 }
