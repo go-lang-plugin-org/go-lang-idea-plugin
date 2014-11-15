@@ -251,7 +251,7 @@ public class GoSdkUtil {
         sdkData.GOAPP_BIN_PATH = getGoAppBinPath(path);
         sdkData.GO_HOME_PATH = format("%s%sgoroot", path, File.separator);
 
-        String execName = sdkData.GO_HOME_PATH + "/bin/go";
+        String execName = sdkData.GO_HOME_PATH + "/bin/goapp";
         if (isHostOsWindows()) {
             execName += ".exe";
         }
