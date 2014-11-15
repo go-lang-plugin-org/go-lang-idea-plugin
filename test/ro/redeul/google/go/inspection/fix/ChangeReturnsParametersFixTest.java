@@ -34,7 +34,7 @@ public class ChangeReturnsParametersFixTest extends GoEditorAwareTestCase {
 
 
         final GoReturnStatement expression;
-        if (element.getParent() instanceof GoReturnStatement) {
+        if (element != null &&  element.getParent() instanceof GoReturnStatement) {
             expression = (GoReturnStatement) element.getParent();
         } else {
             expression = element instanceof GoReturnStatement ?

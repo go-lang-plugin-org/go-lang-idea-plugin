@@ -42,7 +42,7 @@ public class LabelReference
                     GoFunctionDeclaration function = findParentOfType(e,
                             GoFunctionDeclaration.class);
                     final String name = e.getName();
-                    if (function == null || name == null || name.isEmpty()) {
+                    if (function == null || name.isEmpty()) {
                         return null;
                     }
 

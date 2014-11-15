@@ -10,16 +10,10 @@ import ro.redeul.google.go.intentions.Intention;
 import ro.redeul.google.go.intentions.IntentionExecutionException;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.statements.GoExpressionStatement;
-import ro.redeul.google.go.lang.psi.types.GoPsiType;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypePrimitive;
-import ro.redeul.google.go.lang.psi.typing.GoTypePsiBacked;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.typing.TypeVisitor;
-import ro.redeul.google.go.lang.psi.typing.UpdatingTypeVisitor;
-import ro.redeul.google.go.lang.psi.utils.GoTypeUtils;
-import ro.redeul.google.go.util.GoUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +79,6 @@ public class CheckErrorIntention extends Intention {
 
             String templateVarName = String.format("$v%d$", varIndex++);
             varListString.append(templateVarName);
-            GoType underlyingType = type.underlyingType();
             if ( isErrorType(type.underlyingType()) ) {
                 errorVarIndex++;
                 String errVarName = findVarName(expr, errorVarIndex);

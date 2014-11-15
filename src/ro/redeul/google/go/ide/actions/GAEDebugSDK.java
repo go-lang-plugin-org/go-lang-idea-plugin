@@ -2,7 +2,6 @@ package ro.redeul.google.go.ide.actions;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.ui.Messages;
@@ -38,8 +37,6 @@ public class GAEDebugSDK extends GoCommonDebugAction {
         if (projectDir == null) {
             return;
         }
-
-        FileEditorManager fileEditorManager = FileEditorManager.getInstance(project);
 
         try {
             GoToolWindow toolWindow = this.getGoToolWindow(project);

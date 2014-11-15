@@ -50,14 +50,14 @@ public class TypeMatchInspection extends AbstractWholeGoFileInspection {
 
 
     private void checkRelationalExpression(InspectionResult result, GoRelationalExpression expression) {
-
-        GoType leftType = expression.getLeftOperand().getType()[0];
+        // TODO IMPLEMENT THIS
+        /*GoType leftType = expression.getLeftOperand().getType()[0];
         GoType rightType = expression.getRightOperand().getType()[0];
 
         switch (expression.op()) {
             case Eq:
             case NotEq:
-        }
+        }*/
     }
 
     public static void checkBinaryExpression(InspectionResult result, GoBinaryExpression expression) {
@@ -96,9 +96,6 @@ public class TypeMatchInspection extends AbstractWholeGoFileInspection {
                         return;
                     }
                     if (shift){
-                        if (rightUnder == null) {
-                            return;
-                        }
                         String rightUnderStr = rightUnder.toString();
                         if (rightUnderStr.startsWith("uint")||rightUnderStr.equals("byte")){
                             return;

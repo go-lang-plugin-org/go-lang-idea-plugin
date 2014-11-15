@@ -145,6 +145,10 @@ public class GoSdkUtil {
     public static VirtualFile getSdkSourcesRoot(Sdk sdk) {
         final VirtualFile homeDirectory = sdk.getHomeDirectory();
 
+        if (homeDirectory == null) {
+            return null;
+        }
+
         if (checkFolderExists(homeDirectory.getPath(), "src")) {
             return homeDirectory.findFileByRelativePath("src/pkg");
         }
@@ -186,7 +190,7 @@ public class GoSdkUtil {
     private static GoSdkData findHostOsAndArch(final String path, String goCommand, GoSdkData data) {
 
         if (data == null)
-            return data;
+            return null;
 
         try {
             GeneralCommandLine command = new GeneralCommandLine();
@@ -305,8 +309,11 @@ public class GoSdkUtil {
         }
 
         try {
-            String fileContent =
-                    VfsUtil.loadText(VfsUtil.findFileByIoFile(new File(format("%s/VERSION", path)), true));
+            VirtualFile filePath = VfsUtil.findFileByIoFile(new File(format("%s/VERSION", path)), true);
+            if (filePath == null) {
+                return null;
+            }
+            String fileContent = VfsUtil.loadText(filePath);
 
             Matcher matcher = RE_APP_ENGINE_VERSION_MATCHER.matcher(
                     fileContent);

@@ -84,7 +84,7 @@ public class LabelUsageInspection extends AbstractWholeGoFileInspection {
                 }
 
                 String name = label.getName();
-                if (name == null || name.isEmpty()) {
+                if (name.isEmpty()) {
                     return;
                 }
 
@@ -114,7 +114,7 @@ public class LabelUsageInspection extends AbstractWholeGoFileInspection {
 
         for (GoLiteralIdentifier label : labelUsages) {
             String name = label.getName();
-            if (name == null || !labelDeclarations.containsKey(name)) {
+            if (!labelDeclarations.containsKey(name)) {
                 continue;
             }
             checkUsage(label, labelDeclarations.get(name), result);

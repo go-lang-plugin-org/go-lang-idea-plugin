@@ -124,7 +124,7 @@ public class FmtUsageInspection extends AbstractWholeGoFileInspection {
 
     private static GoLiteralString findConstDefinition(GoLiteralIdentifier idToFind) {
         String name = idToFind.getName();
-        if (idToFind.isBlank() || idToFind.isIota() || name == null || name.isEmpty()) {
+        if (idToFind.isBlank() || idToFind.isIota() || name.isEmpty()) {
             return null;
         }
 

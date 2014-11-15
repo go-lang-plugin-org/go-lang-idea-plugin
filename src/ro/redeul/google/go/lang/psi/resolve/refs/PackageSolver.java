@@ -22,7 +22,7 @@ public class PackageSolver extends VisitingReferenceSolver<PackageReference, Pac
 
                 GoPackageReference packageReference = importDeclaration.getPackageReference();
 
-                String packageName = null;
+                String packageName;
                 if (packageReference != null && !(packageReference.isBlank() || packageReference.isLocal()))
                     packageName = packageReference.getString();
                 else {

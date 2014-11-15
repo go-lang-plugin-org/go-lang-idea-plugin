@@ -37,11 +37,6 @@ class VariableTypeResolver extends BaseScopeProcessor {
             GoLiteralIdentifier identifiers[] = shortVarDeclaration.getIdentifiers();
 
             for (GoLiteralIdentifier identifier : identifiers) {
-
-                if (identifier.getName() == null) {
-                    return false;
-                }
-
                 if (identifier.getName().equalsIgnoreCase(this.identifier.getName())) {
                     return false;
                 }

@@ -41,6 +41,7 @@ public class GoLabeledStatementImpl extends GoPsiElementBase implements GoLabele
                                        @NotNull PsiElement place) {
         GoStatement statement = getStatement();
 
+        //noinspection ConstantConditions
         return !(lastParent == null && statement != null) || statement.processDeclarations(processor, state, lastParent, place);
 
     }

@@ -8,7 +8,6 @@ import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
-import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 public class GoTypeAssertionExpressionImpl extends GoExpressionBase implements GoTypeAssertionExpression {
 
@@ -19,8 +18,6 @@ public class GoTypeAssertionExpressionImpl extends GoExpressionBase implements G
     @NotNull
     @Override
     protected GoType[] resolveTypes() {
-
-        GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
         return new GoType[]{
             types().fromPsiType(getAssertedType()),
             types().getBuiltin(GoTypes.Builtin.Bool)

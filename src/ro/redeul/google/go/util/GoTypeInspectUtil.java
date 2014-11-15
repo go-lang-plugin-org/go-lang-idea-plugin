@@ -37,7 +37,7 @@ public class GoTypeInspectUtil {
     public static boolean checkIsInterface(GoPsiType psiType) {
         if (psiType instanceof GoPsiTypeInterface)
             return true;
-        if (psiType instanceof GoPsiTypeName)
+        if (psiType instanceof GoPsiTypeName && psiType.getName() != null)
             return psiType.getName().equals("error") && ((GoPsiTypeName) psiType).isPrimitive();
         if (psiType instanceof GoPsiTypeSlice)
             return checkIsInterface(((GoPsiTypeSlice) psiType).getElementType());
@@ -51,8 +51,6 @@ public class GoTypeInspectUtil {
     }
 
     public static boolean checkParametersExp(GoPsiType psiType, GoExpr expr) {
-        GoType type = GoTypes.fromPsi(psiType);
-
         GoPsiType resolved = resolveToFinalType(psiType);
         if (resolved instanceof GoPsiTypeInterface)
             return true;
@@ -79,14 +77,12 @@ public class GoTypeInspectUtil {
                     return true;
                 }
             }
-            return resolved instanceof GoPsiTypeInterface ||
-                    resolved instanceof GoPsiTypeFunction ||
+            return resolved instanceof GoPsiTypeFunction ||
                     resolved instanceof GoPsiTypePointer ||
                     resolved instanceof GoPsiTypeSlice ||
                     resolved instanceof GoPsiTypeMap ||
                     resolved instanceof GoPsiTypeChannel;
-        } else if (expr.isConstantExpression()) {
-                  }
+        }
 
         goTypes = expr.getType();
         if (goTypes.length != 0 && goTypes[0] != null) {
@@ -105,9 +101,6 @@ public class GoTypeInspectUtil {
             return GoUtil.CompareTypes(psiType, ((GoPsiTypeParenthesized) firstChildOfExp).getInnerType(), expr);
         }
         psiType = resolved;
-        if (psiType == null) {
-            return false;
-        }
 
         String typeText = psiType.getText();
         if (expr instanceof GoLiteralExpression) {
@@ -288,8 +281,6 @@ public class GoTypeInspectUtil {
     }
 
     public static boolean checkFunctionTypeReturns(GoReturnStatement statement, InspectionResult result) {
-        int index = 0;
-
         GoFunctionDeclaration containingFunction = GoPsiUtils.findParentOfType(statement, GoFunctionDeclaration.class);
         if (containingFunction == null)
             return true;

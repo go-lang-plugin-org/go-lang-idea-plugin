@@ -16,12 +16,14 @@ public class GoSendStatementImpl extends GoPsiElementBase implements GoSendState
     @NotNull
     @Override
     public GoExpr getChannelExpr() {
+        // TODO mtoader this shouldn't be null here
         return null;
     }
 
     @NotNull
     @Override
     public GoExpr getValueExpr() {
+        // TODO mtoader this shouldn't be null here
         return null;
     }
 

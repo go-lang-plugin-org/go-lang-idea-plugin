@@ -15,6 +15,10 @@ public class NewGoGroup extends DefaultActionGroup
     {
         super.update(e);
 
+        if (e.getProject() == null) {
+            return;
+        }
+
         Sdk sdk = ProjectRootManager.getInstance(e.getProject()).getProjectSdk();
 
         final Module data = LangDataKeys.MODULE.getData(e.getDataContext());

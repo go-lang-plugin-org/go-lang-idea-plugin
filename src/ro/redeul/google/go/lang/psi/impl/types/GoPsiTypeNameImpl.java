@@ -148,6 +148,7 @@ public class GoPsiTypeNameImpl extends GoPsiElementBase implements GoPsiTypeName
     @NotNull
     @Override
     public GoLiteralIdentifier getIdentifier() {
+        // TODO mtoader this shouldn't return null
         return findChildByClass(GoLiteralIdentifier.class);
     }
 

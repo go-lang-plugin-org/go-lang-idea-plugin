@@ -28,8 +28,12 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
     public FormattingModel createModel(PsiElement element,
                                        CodeStyleSettings settings) {
 
-        final FileElement fileElement = TreeUtil.getFileElement(
-            (TreeElement) SourceTreeToPsiMap.psiElementToTree(element));
+        TreeElement treeElement = (TreeElement) SourceTreeToPsiMap.psiElementToTree(element);
+        // TODO better handle this case as it would throw an exception if unchecked
+        if (treeElement == null) {
+            return null;
+        }
+        final FileElement fileElement = TreeUtil.getFileElement(treeElement);
 
         CommonCodeStyleSettings goSettings =
             settings.getCommonSettings(GoLanguage.INSTANCE);

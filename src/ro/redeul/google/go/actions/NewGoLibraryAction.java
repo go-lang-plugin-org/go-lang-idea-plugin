@@ -8,16 +8,11 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.jps.model.java.JavaModuleSourceRootTypes;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.GoIcons;
-import ro.redeul.google.go.lang.psi.GoFile;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -105,7 +100,7 @@ public class NewGoLibraryAction extends CreateTemplateInPackageAction<PsiElement
     protected void buildDialog(Project project, PsiDirectory directory, CreateFileFromTemplateDialog.Builder builder) {
 //        builder.setTitle("New Go file creation");
 
-        PsiFile childs[] = directory.getFiles();
+        /*PsiFile childs[] = directory.getFiles();
 
         Set<String> packages = new HashSet<String>();
 
@@ -117,7 +112,7 @@ public class NewGoLibraryAction extends CreateTemplateInPackageAction<PsiElement
                     packages.add(goFile.getPackage().getPackageName());
                 }
             }
-        }
+        }*/
 
         builder.addKind("New library", GoIcons.GO_ICON_16x16, "multiple");
     }

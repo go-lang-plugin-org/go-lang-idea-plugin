@@ -60,11 +60,11 @@ public class TypeStructDeclarationInspection
         }
 
         GoPsiTypeStruct newStruct = (GoPsiTypeStruct) typeDefinition;
-        for (GoTypeStructField field : newStruct.getFields()) {
+//        for (GoTypeStructField field : newStruct.getFields()) {
 //            if (typeContainsStruct(field.getType(), struct)) {
 //                return true;
 //            }
-        }
+//        }
 
         for (GoTypeStructAnonymousField field : newStruct.getAnonymousFields()) {
             if (typeContainsStruct(field.getType(), struct)) {

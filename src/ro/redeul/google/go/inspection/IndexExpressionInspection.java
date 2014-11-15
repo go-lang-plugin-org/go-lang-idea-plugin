@@ -48,8 +48,6 @@ public class IndexExpressionInspection extends AbstractWholeGoFileInspection {
         if (expressionTypes.length != 1 || expressionTypes[0] == null)
             return;
 
-        final BigInteger intConstant = getIntegerConstant(indexType);
-
         expressionTypes[0].underlyingType().accept(new UpdatingTypeVisitor<InspectionResult>() {
             @Override
             public void visitArray(GoTypeArray type, InspectionResult result, TypeVisitor<InspectionResult> visitor) {

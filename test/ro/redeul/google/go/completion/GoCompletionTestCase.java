@@ -1,13 +1,10 @@
 package ro.redeul.google.go.completion;
 
 import com.intellij.codeInsight.completion.CompletionType;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import org.junit.Ignore;
 import ro.redeul.google.go.GoLightCodeInsightFixtureTestCase;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +17,6 @@ public abstract class GoCompletionTestCase extends GoLightCodeInsightFixtureTest
 
     @Ignore
     protected void _testVariants() throws IOException {
-
-        LocalFileSystem fileSystem = LocalFileSystem.getInstance();
-        final VirtualFile testRoot =
-                fileSystem.findFileByPath(
-                        getTestDataPath() + File.separator + getTestName(false));
 
         addPackageBuiltin();
 

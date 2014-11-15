@@ -93,6 +93,7 @@ public class ResolvingCache {
         public String toString() {
             StringBuilder elementTree = new StringBuilder();
 
+            // TODO mtoader element is always null here
             elementTree.append(element == null ? element : "" + element.getText().replaceAll("[\n]", "\\n") + " : " + element.isValid() + " ");
 
             PsiElement elem = element;

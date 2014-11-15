@@ -48,7 +48,7 @@ public class GoSmartEnterProcessor extends SmartEnterProcessor {
                 }
 
                 elementToFix = psiFile.findElementAt(previous.getTextRange().getEndOffset() - 1);
-            } else if (elementToFix != null && elementToFix.getParent() != null) {
+            } else if (elementToFix.getParent() != null) {
                 elementToFix = elementToFix.getParent();
             }
         }

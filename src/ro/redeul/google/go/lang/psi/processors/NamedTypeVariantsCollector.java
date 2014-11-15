@@ -76,6 +76,7 @@ class NamedTypeVariantsCollector extends BaseScopeProcessor {
 
             String visiblePackageName = null;
 
+            // TODO mtoader this is always false due to the first variable being always null
             if ( visiblePackageName != null && visiblePackageName.length() > 0 ) {
                 typeName = String.format("%s.%s", visiblePackageName, typeName);
             }

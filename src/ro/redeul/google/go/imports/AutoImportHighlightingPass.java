@@ -103,10 +103,6 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
                 continue;
             }
 
-            if (id == null) {
-                continue;
-            }
-
             // packages exist
             String expectedPackage = id.getText();
             List<String> sdkPackages = getPackagesByName(

@@ -86,7 +86,15 @@ public class GoModuleBuilder extends JavaModuleBuilder implements SourcePathsBui
             if (isNew) {
                 //Create folders bin and pkg and add main.go to src folder:
                 PsiDirectory srcDir = PsiManager.getInstance(module.getProject()).findDirectory(sourceRoots[0]);
+                if (srcDir == null) {
+                    return;
+                }
+
                 PsiDirectory baseDir = srcDir.getParentDirectory();
+                if (baseDir == null) {
+                    return;
+                }
+
                 baseDir.createSubdirectory("bin");
                 baseDir.createSubdirectory("pkg");
 

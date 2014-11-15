@@ -40,9 +40,7 @@ public class ParameterFormatMacro extends Macro {
             for (GoLiteralIdentifier id : fp.getIdentifiers()) {
                 if (id != null && !id.isBlank()) {
                     String name = id.getName();
-                    if (name != null) {
-                        sb.append(name).append(" = [").append(separator).append("], ");
-                    }
+                    sb.append(name).append(" = [").append(separator).append("], ");
                 }
             }
         }

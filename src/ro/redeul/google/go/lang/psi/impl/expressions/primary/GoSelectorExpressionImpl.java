@@ -4,7 +4,6 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
-import com.intellij.util.Function;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
@@ -23,7 +22,6 @@ import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
 import ro.redeul.google.go.lang.psi.typing.GoTypeStruct;
 import ro.redeul.google.go.lang.psi.utils.GoIdentifierUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-import ro.redeul.google.go.services.GoPsiManager;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 
@@ -123,9 +121,6 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
     private LookupElementBuilder getFieldPresentation(GoPsiType type, GoLiteralIdentifier id) {
 
         String name = id.getName();
-        if (name == null)
-            return null;
-
         LookupElementBuilder builder = LookupElementBuilder.create(id, name);
 
         GoPsiType ownerType = null;

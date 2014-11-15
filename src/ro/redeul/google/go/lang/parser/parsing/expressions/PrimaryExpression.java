@@ -410,6 +410,10 @@ class PrimaryExpression implements GoElementTypes {
                                                   GoParser parser) {
         String identifier = builder.getTokenText();
 
+        if (identifier == null) {
+            return false;
+        }
+
         if (BOOLEAN_LITERAL.matcher(identifier).matches()) {
             ParserUtils.eatElement(builder, LITERAL_BOOL);
             return true;

@@ -37,8 +37,6 @@ public class GoMultiplicativeExpressionImpl extends GoBinaryExpressionImpl<GoMul
 
     @Override
     protected GoType computeConstant(@NotNull GoTypeConstant left, @NotNull GoTypeConstant right) {
-        GoTypes types = GoTypes.getInstance(getProject());
-
         if ( left.getKind() == GoTypeConstant.Kind.Boolean || right.getKind() == GoTypeConstant.Kind.Boolean)
             return GoType.Unknown;
 

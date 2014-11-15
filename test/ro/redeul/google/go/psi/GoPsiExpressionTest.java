@@ -46,7 +46,7 @@ public class GoPsiExpressionTest extends GoPsiTestCase {
                         file.getConsts()
                 ).getDeclarations();
 
-        Number val = null;
+        Number val;
 
         val = FunctionCallInspection.getNumberValueFromLiteralExpr(childAt(0, declarations[0].getExpressions()));
         assertInstanceOf(val, BigInteger.class);
