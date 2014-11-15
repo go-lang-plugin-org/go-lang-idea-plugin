@@ -60,7 +60,6 @@ public class GoGlobalConfigurableForm {
         sdkList.addAll(GoSdkUtil.getSdkOfType(GoAppEngineSdkType.getInstance(), jdkTable));
 
         if (sdkList.size() == 0) {
-            Messages.showErrorDialog("No GO or GO AppEngine SDK could be identified. Please create one first (by creating a project).", "Error on Google Go Plugin");
             return;
         }
 
