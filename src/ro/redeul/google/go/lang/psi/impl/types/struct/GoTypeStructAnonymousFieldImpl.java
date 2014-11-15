@@ -66,7 +66,8 @@ public class GoTypeStructAnonymousFieldImpl extends GoPsiElementBase implements 
 
     @Override
     public String getLookupTypeText() {
-        return getType().getText();
+        GoPsiType type = getType();
+        return type == null ? "" : type.getText();
     }
 
     @Override

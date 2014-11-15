@@ -86,7 +86,7 @@ public class RemoveVariableFixTest extends GoEditorAwareTestCase {
     protected void invoke(Project project, Editor editor, GoFile file) {
         PsiElement element = file.findElementAt(
             editor.getSelectionModel().getSelectionStart());
-        if (!(element instanceof GoLiteralIdentifier)) {
+        if (element != null && !(element instanceof GoLiteralIdentifier)) {
             element = element.getParent();
         }
         assertTrue(element instanceof GoLiteralIdentifier);

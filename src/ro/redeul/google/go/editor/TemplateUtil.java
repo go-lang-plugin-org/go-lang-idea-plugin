@@ -38,6 +38,9 @@ public class TemplateUtil {
 
         TemplateImpl template = createTemplate(text);
         template.addVariable(variable, defaultValue, defaultValue, true);
+        if (editor.getProject() == null) {
+            return;
+        }
         TemplateManager.getInstance(editor.getProject()).startTemplate(editor, "", template);
     }
 
@@ -88,12 +91,18 @@ public class TemplateUtil {
             }
         };
         writeCommandAction.execute();
+        if (editor.getProject() == null) {
+            return;
+        }
         TemplateManager.getInstance(editor.getProject()).startTemplate(editor, "", template);
     }
 
     public static void runTemplate(Editor editor, int insertPoint, List<String> stringList, TemplateImpl template) {
         setTemplateVariableValues(template, stringList);
         editor.getCaretModel().moveToOffset(insertPoint,true);
+        if (editor.getProject() == null) {
+            return;
+        }
         TemplateManager.getInstance(editor.getProject()).startTemplate(editor, template);
     }
 }

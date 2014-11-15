@@ -47,9 +47,9 @@ public class GoLexerTest {
         flexLexer.start(text);
         while ( flexLexer.getTokenType() != null ) {
             flexLexer.advance();
-            if ( flexLexer.getTokenType() != GoTokenTypes.wsNLS && flexLexer.getTokenType() != GoTokenTypes.wsWS ) {
+            /*if ( flexLexer.getTokenType() != GoTokenTypes.wsNLS && flexLexer.getTokenType() != GoTokenTypes.wsWS ) {
                 //System.out.println("" + flexLexer.getTokenType() + " -> " + flexLexer.getTokenText());
-            }
+            }*/
         }
     }
 }

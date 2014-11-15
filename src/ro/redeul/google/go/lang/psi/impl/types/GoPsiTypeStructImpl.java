@@ -172,7 +172,7 @@ public class GoPsiTypeStructImpl extends GoPsiTypeImpl implements
                 GoTypeStructAnonymousField otherField = (GoTypeStructAnonymousField) otherStructAllFields[i];
                 if (!field.getFieldName().equals(otherField.getFieldName()))
                     return false;
-                if (!field.getType().isIdentical(otherField.getType()))
+                if (field.getType() != null && !field.getType().isIdentical(otherField.getType()))
                     return false;
                 PsiElementBase tag = field.getTag();
                 PsiElementBase otherTag = otherField.getTag();

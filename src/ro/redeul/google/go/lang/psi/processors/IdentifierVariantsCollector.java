@@ -124,6 +124,7 @@ class IdentifierVariantsCollector extends BaseScopeProcessor{
             return;
         }
 
+        // TODO mtoader this is always false as visiblePackage
         if (isImported && visiblePackageName != null && visiblePackageName.length() > 0) {
             presentableText = visiblePackageName + "." + presentableText;
             lookupString = visiblePackageName + "." + lookupString;

@@ -261,7 +261,6 @@ public class GdbMiMessageConverter {
         }
 
         // Invoke the method
-        Object resultValue = null;
         Object value;
         try {
             value = valueProcessor.invoke(event, result.value);

@@ -139,6 +139,9 @@ public class GoUsageTest extends GoFileBasedPsiTestCase {
 
     private String getElementInfo(PsiElement element) {
         Document doc = PsiDocumentManager.getInstance(element.getProject()).getDocument(element.getContainingFile());
+        if (doc == null) {
+            return "";
+        }
         int offset = element.getTextOffset();
         int line = doc.getLineNumber(offset);
         int col = offset - doc.getLineStartOffset(line);

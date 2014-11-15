@@ -43,7 +43,7 @@ public class GoTestFinder implements TestFinder {
         }
 
         String path = file.getPath();
-        if (path == null || !path.toLowerCase().endsWith(".go")) {
+        if (!path.toLowerCase().endsWith(".go")) {
             return Collections.emptyList();
         }
 

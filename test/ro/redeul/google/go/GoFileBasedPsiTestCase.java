@@ -45,7 +45,7 @@ public abstract class GoFileBasedPsiTestCase extends GoPsiTestCase {
             return;
         }
 
-        fail("no test files found in \"" + vFile + "\"");
+        fail("no test files found in \"" + fullPath + "\"");
     }
 
     private void doSingleFileTest(VirtualFile vFile) throws Exception {
@@ -134,8 +134,11 @@ public abstract class GoFileBasedPsiTestCase extends GoPsiTestCase {
     protected void parseFile(VirtualFile file, VirtualFile root,
                              VirtualFile vModuleRoot) {
 
-        String relativePath = VfsUtil.getRelativePath(file.getParent(), root,
-                                                      '/');
+        String relativePath = VfsUtil.getRelativePath(file.getParent(), root, '/');
+
+        if (relativePath == null) {
+            fail("could not determine relative path for file " + file.getCanonicalPath());
+        }
 
         try {
             String fileContent =

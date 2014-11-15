@@ -23,6 +23,7 @@ public class GoLiteralCompositeImpl extends GoPsiElementBase
     @NotNull
     @Override
     public GoLiteralCompositeValue getValue() {
+        // TODO mtoader this shouldn't return null
         return findChildByClass(GoLiteralCompositeValue.class);
     }
 

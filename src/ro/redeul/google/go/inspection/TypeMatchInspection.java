@@ -96,9 +96,6 @@ public class TypeMatchInspection extends AbstractWholeGoFileInspection {
                         return;
                     }
                     if (shift){
-                        if (rightUnder == null) {
-                            return;
-                        }
                         String rightUnderStr = rightUnder.toString();
                         if (rightUnderStr.startsWith("uint")||rightUnderStr.equals("byte")){
                             return;

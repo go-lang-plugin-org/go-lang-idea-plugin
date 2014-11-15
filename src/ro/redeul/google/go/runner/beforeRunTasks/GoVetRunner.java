@@ -45,6 +45,7 @@ public class GoVetRunner extends Task.Backgroundable {
         Sdk sdk = GoSdkUtil.getGoogleGoSdkForProject(myProject);
         if ( sdk == null ) {
             LOG.error("No Go Sdk defined for this project");
+            return;
         }
 
         final GoSdkData sdkData = (GoSdkData)sdk.getSdkAdditionalData();

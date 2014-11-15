@@ -94,7 +94,7 @@ public class GoIntroduceVariableHandler extends GoIntroduceVariableHandlerBase {
                 // get names of named parameters
                 for (GoLiteralIdentifier identifier : identifiers) {
                     String name = identifier.getName();
-                    if (name != null && !name.isEmpty()) {
+                    if (!name.isEmpty()) {
                         parameterNames.add(name);
                     } else {
                         parameterNames.add("v" + index);

@@ -85,7 +85,7 @@ public class PromotedFieldsDiscover {
             return;
 
         type = type.underlyingType();
-        if ( type == null || !(type instanceof GoTypeStruct))
+        if (!(type instanceof GoTypeStruct))
             return;
 
         GoTypeStruct typeStruct = (GoTypeStruct) type;

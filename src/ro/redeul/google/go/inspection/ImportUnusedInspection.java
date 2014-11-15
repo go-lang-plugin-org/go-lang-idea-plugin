@@ -38,7 +38,7 @@ public class ImportUnusedInspection extends AbstractWholeGoFileInspection {
                 UnusedImportsFinder.findUnusedImports(file);
 
         for (GoImportDeclaration unused : unusedImports) {
-            if (!unused.isValidImport()) {
+            if (!unused.isValidImport() || unused.getImportPath() == null) {
                 continue;
             }
 

@@ -237,12 +237,12 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
             if (getData() == null)
                 return;
 
-            Pair<GoLiteral.Type, ? extends Number> lValue = getData();
-            rExpr.accept(this);
-            if (getData() == null)
-                return;
-
-            Pair<GoLiteral.Type, ? extends Number> rValue = getData();
+//            Pair<GoLiteral.Type, ? extends Number> lValue = getData();
+//            rExpr.accept(this);
+//            if (getData() == null)
+//                return;
+//
+//            Pair<GoLiteral.Type, ? extends Number> rValue = getData();
 
             setData(null);
 

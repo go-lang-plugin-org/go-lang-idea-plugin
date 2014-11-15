@@ -39,10 +39,7 @@ public class ParameterListMacro extends Macro {
         for (GoFunctionParameter fp : fd.getParameters()) {
             for (GoLiteralIdentifier id : fp.getIdentifiers()) {
                 if (id != null && !id.isBlank()) {
-                    String name = id.getName();
-                    if (name != null) {
-                        sb.append(separator).append(name);
-                    }
+                    sb.append(separator).append(id.getName());
                 }
             }
         }
