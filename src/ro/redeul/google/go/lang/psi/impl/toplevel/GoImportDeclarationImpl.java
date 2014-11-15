@@ -1,6 +1,5 @@
 package ro.redeul.google.go.lang.psi.impl.toplevel;
 
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.PsiElement;
@@ -13,7 +12,6 @@ import ro.redeul.google.go.lang.packages.GoPackages;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.GoPackageReference;
-import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralString;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.processors.ResolveStates;

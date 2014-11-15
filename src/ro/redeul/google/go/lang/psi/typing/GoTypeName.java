@@ -1,21 +1,10 @@
 package ro.redeul.google.go.lang.psi.typing;
 
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
-import ro.redeul.google.go.lang.psi.types.GoPsiType;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
-import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
-import ro.redeul.google.go.lang.psi.utils.GoTokenSets;
-import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-import ro.redeul.google.go.lang.psi.visitors.GoElementVisitorWithData;
-
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getAs;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveTypeSpec;
 
 public class GoTypeName extends GoTypePsiBacked<GoTypeNameDeclaration> implements GoType {
 
