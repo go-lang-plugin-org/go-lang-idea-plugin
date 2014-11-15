@@ -16,7 +16,6 @@ import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
 import ro.redeul.google.go.lang.psi.typing.*;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.string;
@@ -144,8 +143,6 @@ public class GoBuiltinCallOrConversionExpressionImpl extends GoCallOrConvExpress
 
     @NotNull
     private GoType[] processBuiltinFunction(String functionName) {
-
-        GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
 
         GoExpr[] args = getArguments();
         GoPsiType typeArg = getTypeArgument();

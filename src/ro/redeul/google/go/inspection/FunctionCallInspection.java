@@ -246,12 +246,12 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
 
             setData(null);
 
-            BigDecimal lFloat = asFloatConstant(lValue.getSecond());
-            BigDecimal rFloat = asFloatConstant(rValue.getSecond());
-
-            BigInteger lInt = asIntegralConstant(lValue.getSecond());
-            BigInteger rInt = asIntegralConstant(rValue.getSecond());
-
+//            BigDecimal lFloat = asFloatConstant(lValue.getSecond());
+//            BigDecimal rFloat = asFloatConstant(rValue.getSecond());
+//
+//            BigInteger lInt = asIntegralConstant(lValue.getSecond());
+//            BigInteger rInt = asIntegralConstant(rValue.getSecond());
+//
 //            GoBinaryExpression.Op op = expression.op();
 //            if (lValue.first == GoLiteral.Type.Float || rValue.first == GoLiteral.Type.Float) {
 //

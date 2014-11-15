@@ -63,7 +63,6 @@ public class GoPsiTypeArrayImpl extends GoPsiTypeImpl implements GoPsiTypeArray 
         if (!(goType instanceof GoPsiTypeArray)) {
             return false;
         }
-        GoPsiTypeArray otherTypeArray = (GoPsiTypeArray) goType;
         return false;
     }
 

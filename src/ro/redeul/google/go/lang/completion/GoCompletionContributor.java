@@ -324,19 +324,19 @@ public class GoCompletionContributor extends CompletionContributor {
                 GO_OR_DEFER_STATEMENT,
                 goAndDeferStatementCompletionProvider);
 
-        CompletionProvider<CompletionParameters> builtinFunctionsCompletionProvider = new CompletionProvider<CompletionParameters>() {
-            @Override
-            protected void addCompletions(@NotNull CompletionParameters parameters,
-                                          ProcessingContext context,
-                                          @NotNull CompletionResultSet result) {
-
-                for (String builtinFunction : BULTINS_WITH_RETURN) {
-                    result.addElement(
-                            builtinFunc(builtinFunction, new FunctionInsertHandler()));
-                }
-            }
-        };
-
+//        CompletionProvider<CompletionParameters> builtinFunctionsCompletionProvider = new CompletionProvider<CompletionParameters>() {
+//            @Override
+//            protected void addCompletions(@NotNull CompletionParameters parameters,
+//                                          ProcessingContext context,
+//                                          @NotNull CompletionResultSet result) {
+//
+//                for (String builtinFunction : BULTINS_WITH_RETURN) {
+//                    result.addElement(
+//                            builtinFunc(builtinFunction, new FunctionInsertHandler()));
+//                }
+//            }
+//        };
+//
 //        extend(CompletionType.BASIC,
 //               psiElement().withParent(
 //                   psiElement(GoLiteralIdentifier.class).withParent(

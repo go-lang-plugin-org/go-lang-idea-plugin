@@ -267,7 +267,7 @@ public class GdbMiMessageConverter {
             value = valueProcessor.invoke(event, result.value);
         } catch (Throwable ex) {
             m_log.warn("Field to invoke value processor for field " + field.getName() + " with " +
-                    "value " + resultValue, ex);
+                    "value " + field, ex);
             return;
         }
 

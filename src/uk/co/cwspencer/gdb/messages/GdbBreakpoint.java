@@ -299,6 +299,7 @@ public class GdbBreakpoint extends GdbDoneEvent {
         // Make sure the string is a valid integer
         if (value.string.startsWith("0x")) {
             try {
+                //noinspection ResultOfMethodCallIgnored
                 Long.parseLong(value.string.substring(2), 16);
                 return AddressAvailability.Available;
             } catch (Throwable ex) {

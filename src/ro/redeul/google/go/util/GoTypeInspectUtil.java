@@ -51,8 +51,6 @@ public class GoTypeInspectUtil {
     }
 
     public static boolean checkParametersExp(GoPsiType psiType, GoExpr expr) {
-        GoType type = GoTypes.fromPsi(psiType);
-
         GoPsiType resolved = resolveToFinalType(psiType);
         if (resolved instanceof GoPsiTypeInterface)
             return true;
@@ -288,8 +286,6 @@ public class GoTypeInspectUtil {
     }
 
     public static boolean checkFunctionTypeReturns(GoReturnStatement statement, InspectionResult result) {
-        int index = 0;
-
         GoFunctionDeclaration containingFunction = GoPsiUtils.findParentOfType(statement, GoFunctionDeclaration.class);
         if (containingFunction == null)
             return true;

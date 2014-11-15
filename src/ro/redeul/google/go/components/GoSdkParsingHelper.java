@@ -199,8 +199,6 @@ public class GoSdkParsingHelper implements ApplicationComponent {
                         ))
         );
 
-        Set<String> librariesSet = new HashSet<String>(libraryNames.getResults());
-
         // find makefiles
         CommonProcessors.CollectUniquesProcessor<VirtualFile> makefiles = new CommonProcessors.CollectUniquesProcessor<VirtualFile>();
         final VirtualFile sourcesRoot = home.findFileByRelativePath(ownerSdk.getSdkType() == GoSdkType.getInstance() ? "src/pkg" : "goroot/src/pkg");

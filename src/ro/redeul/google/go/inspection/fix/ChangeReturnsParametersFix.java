@@ -18,7 +18,6 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.statements.GoReturnStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.typing.GoType;
-import ro.redeul.google.go.lang.psi.typing.GoTypeArray;
 import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
 import ro.redeul.google.go.lang.psi.typing.GoTypePsiBacked;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
@@ -104,9 +103,9 @@ public class ChangeReturnsParametersFix extends LocalQuickFixAndIntentionActionO
 
                     if (type instanceof GoTypePsiBacked) {
                         stringBuilder.append(GoUtil.getNameLocalOrGlobal(type, (GoFile) element.getContainingFile()));
-                    } else if (type instanceof GoTypeArray) {
+                    }/* else if (type instanceof GoTypeArray) {
                         stringBuilder.append(GoUtil.getNameLocalOrGlobal(type, (GoFile) element.getContainingFile()));
-                    }
+                    }*/
                 } else {
                     //As some Expression may not return a valid type, in this case will not modify anithing and exit
                     return;

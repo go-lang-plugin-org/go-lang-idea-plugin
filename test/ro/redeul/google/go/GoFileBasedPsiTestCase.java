@@ -1,11 +1,5 @@
 package ro.redeul.google.go;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.module.Module;
@@ -15,13 +9,18 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.ex.VirtualFileManagerEx;
 import com.intellij.psi.PsiFile;
 import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.util.FilteringProcessor;
 import com.intellij.util.Processor;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Ignore;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @Ignore
 public abstract class GoFileBasedPsiTestCase extends GoPsiTestCase {
@@ -67,7 +66,6 @@ public abstract class GoFileBasedPsiTestCase extends GoPsiTestCase {
 
     private void doDirectoryTest(@NotNull final VirtualFile file) throws Exception {
         files.clear();
-        VirtualFile virtualFile = VirtualFileManagerEx.getInstance().refreshAndFindFileByUrl(file.getPath());
 
         final VirtualFile contentRoot = PsiTestUtil.createTestProjectStructure(getProject(), getModule(), file.getPath(), new ArrayList<File>());
 

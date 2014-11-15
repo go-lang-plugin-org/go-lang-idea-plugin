@@ -103,6 +103,7 @@ public class GoRunProfileState extends CommandLineState {
             }
         }
 
+        //noinspection ResultOfMethodCallIgnored
         (new File(execName)).delete();
 
         try {

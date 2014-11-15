@@ -145,7 +145,7 @@ public class CreateFunctionFix extends LocalQuickFixAndIntentionActionOnPsiEleme
                 int i = 0;
 
                 stringBuilder.append("(");
-                GoType parameterType = null;
+                GoType parameterType;
                 while ( (parameterType = typeFunction.getParameterType(i)) != null) {
                     stringList.add(String.format("arg%d", i));
 
