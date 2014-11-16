@@ -3,6 +3,7 @@ package ro.redeul.google.go.lang.psi.typing;
 import com.intellij.openapi.components.AbstractProjectComponent;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
+import com.intellij.util.Function;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoFile;
@@ -17,6 +18,7 @@ import ro.redeul.google.go.lang.psi.utils.GoFunctionDeclarationUtils;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitorWithData;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
+import ro.redeul.google.go.services.GoPsiManager;
 
 import java.util.Collection;
 import java.util.HashMap;

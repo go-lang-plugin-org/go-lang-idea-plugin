@@ -2,7 +2,6 @@ package ro.redeul.google.go.inspection;
 
 import com.intellij.codeInspection.ProblemHighlightType;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.inspection.fix.CastTypeFix;
 import ro.redeul.google.go.lang.psi.GoFile;
@@ -10,15 +9,15 @@ import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallOrConversionExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeChannel;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
-import ro.redeul.google.go.lang.psi.typing.*;
+import ro.redeul.google.go.lang.psi.typing.GoFunctions;
+import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypeChannel;
+import ro.redeul.google.go.lang.psi.typing.GoTypeFunction;
+import ro.redeul.google.go.lang.psi.typing.GoTypeMap;
+import ro.redeul.google.go.lang.psi.typing.GoTypeSlice;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.typing.TypeVisitor;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
-
-import java.math.BigInteger;
-
-import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
 
 public class FunctionCallInspection extends AbstractWholeGoFileInspection {
 
@@ -58,13 +57,10 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
             case New:
                 if (typeArg != null) return true;
 
-    private static void checkMakeCall(GoBuiltinCallOrConversionExpression expression, InspectionResult result) {
-        GoExpr[] arguments = expression.getArguments();
-        GoPsiType type = expression.getTypeArgument();
-        if (type == null) {
-            result.addProblem(expression, GoBundle.message("error.incorrect.make.type"));
-            return;
-        }
+                if (args.length == 0)
+                    result.addProblem(expression, GoBundle.message("error.missing.argument", "make"));
+                else
+                    result.addProblem(args[0], GoBundle.message("error.expression.is.not.a.type", args[0].getText()));
 
                 return false;
             case Make:
