@@ -75,7 +75,6 @@ public class GoPsiManager {
     @NotNull
     public <T extends GoPsiElement, V> GoType getOrCompute(T element, Function<T, GoType> valueCalculator) {
         GoType type = myComputedType.get(element);
-//        GoType type = null;
         if (type == null) {
             RecursionGuard.StackStamp stamp = outSecondGuard.markStack();
             type = valueCalculator.fun(element);

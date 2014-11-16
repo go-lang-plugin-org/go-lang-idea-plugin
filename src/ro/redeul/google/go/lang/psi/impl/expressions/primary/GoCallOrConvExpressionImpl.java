@@ -34,95 +34,47 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase implements GoCa
     @NotNull
     @Override
     protected GoType[] resolveTypes() {
-        GoPrimaryExpression baseExpr = getBaseExpression();
-        if (baseExpr == null)
+
+        GoType[] baseType = getBaseExpression().getType();
+
+        if (baseType.length != 1)
             return GoType.EMPTY_ARRAY;
 
-        GoType baseCallType[] = baseExpr.getType();
-
-        GoType[] goTypes = GoTypes.visitFirstType(baseCallType, new TypeVisitor<GoType[]>(GoType.EMPTY_ARRAY) {
-
+        return GoTypes.visitFirstType(baseType, new TypeVisitor<GoType[]>(GoType.EMPTY_ARRAY) {
             @Override
             public GoType[] visitFunction(GoTypeFunction type) {
-                return type.getResultTypes();
+                return computeCallType(type);
             }
 
             @Override
             public GoType[] visitName(GoTypeName type) {
-                GoExpr args[] = getArguments();
-                if ( args.length != 1 )
-                    return new GoType[]{type};
-
-                GoType argType[] = args[0].getType();
-                if ( argType.length != 1)
-                    return new GoType[] { type };
-
-                return new GoType[]{argType[0].castAs(type)};
+                return computeConversionType(type);
             }
         });
-
-        if (goTypes != null) return goTypes;
-
-        //try type convert
-        //TODO finish this.
-        return GoType.EMPTY_ARRAY;
-
-//
-//
-//        PsiElement reference = resolveSafely(getBaseExpression(), PsiElement.class);
-//        if (reference != null) {
-//
-//            PsiElement parent = reference.getParent();
-//            if (parent instanceof GoMethodDeclaration) {
-//                GoMethodDeclaration declaration = (GoMethodDeclaration) parent;
-//                return GoTypes.fromPsiType(declaration.getReturnType());
-//            }
-//
-//            if (parent instanceof GoFunctionDeclaration) {
-//                GoFunctionDeclaration declaration = (GoFunctionDeclaration) parent;
-//                return GoTypes.fromPsiType(declaration.getReturnType());
-//            }
-//
-//            if (parent instanceof GoVarDeclaration) {
-//
-//                GoLiteralIdentifier[] identifiers = ((GoVarDeclaration) parent).getIdentifiers();
-//                int i;
-//                for (i = 0; i < identifiers.length; i++) {
-//                    if (identifiers[i].getText().equals(getBaseExpression().getText())) {
-//                        break;
-//                    }
-//                }
-//                if (i < identifiers.length)
-//                    return resolveVarTypes((GoVarDeclaration) parent, identifiers[i], i);
-//
-//            }
-//        }
-//
-//        GoPrimaryExpression baseExpression = this.getBaseExpression();
-//        if (baseExpression instanceof GoParenthesisedExpression) {
-//            GoType[] types = getBaseExpression().getType();
-//            if (types.length != 0) {
-//                GoType type = types[0];
-//                if (type != null) {
-//                    if (type instanceof GoTypePsiBacked) {
-//                        GoPsiType psiType = ((GoTypePsiBacked) type).getPsiType();
-//                        psiType = GoTypeUtils.resolveToFinalType(psiType);
-//                        if (psiType instanceof GoPsiTypeFunction) {
-//                            return GoUtil.getFuncCallTypes((GoPsiTypeFunction) psiType);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//
-//        if (baseExpression instanceof GoLiteralExpression
-//                && ((GoLiteralExpression) baseExpression).getLiteral() instanceof GoLiteralFunction) {
-//            return GoUtil.getFuncCallTypes((GoPsiTypeFunction) ((GoLiteralExpression) baseExpression).getLiteral());
-//        }
-
-//        return GoType.EMPTY_ARRAY;
     }
 
+    protected GoType[] computeCallType(GoTypeFunction type) {
+        return type.getResultTypes();
+    }
+    
+    protected GoType[] computeConversionType(GoTypeName type) {
+        GoExpr args[] = getArguments();
+        if ( args.length != 1 )
+            return new GoType[]{type};
+
+        GoType argType[] = args[0].getType();
+        if ( argType.length != 1 || !(argType[0] instanceof GoTypeConstant))
+            return new GoType[] { type };
+
+        GoTypeConstant constant = (GoTypeConstant) argType[0];
+
+        if ( type.canRepresent(constant) ) {
+            return new GoType[] { constant.retypeAs(type)};
+        }
+
+        return new GoType[]{type};
+    }
+    
     private GoType[] resolveVarTypes(GoVarDeclaration parent, GoLiteralIdentifier identifier, int i) {
 
         GoType identifierType = parent.getIdentifierType(identifier);

@@ -46,7 +46,7 @@ public class GoTypes extends AbstractProjectComponent {
         GoType target = type;
         while (target != null && target != GoType.Unknown && !targetType.isAssignableFrom(target.getClass())) {
             if (target instanceof GoTypeName) {
-                GoTypeSpec typeSpec = ((GoTypeName)target).getDefinition();
+                GoTypeSpec typeSpec = ((GoTypeName) target).getDefinition();
                 target = typeSpec != null ? fromPsi(typeSpec.getType()) : GoType.Unknown;
             } else {
                 target = GoType.Unknown;
@@ -54,6 +54,10 @@ public class GoTypes extends AbstractProjectComponent {
         }
 
         return (target != null && targetType.isAssignableFrom(target.getClass())) ? targetType.cast(target) : null;
+    }
+
+    public static GoType makePointer(GoType type) {
+        return new GoTypePointer(type);
     }
 
     public static GoType makePointer(GoPsiType argumentType) {
@@ -94,16 +98,16 @@ public class GoTypes extends AbstractProjectComponent {
         }
 
 //        x is the predeclared identifier nil and T is a pointer, function, slice, map, channel, or interface type.
-        if ( (srcVarType == GoType.Nil))
+        if ((srcVarType == GoType.Nil))
             return
                     dstType instanceof GoTypePointer || dstType instanceof GoTypeFunction ||
-                    dstType instanceof GoTypeSlice || dstType instanceof GoTypeMap ||
-                    dstType instanceof GoTypeChannel || dstType instanceof GoTypeInterface;
+                            dstType instanceof GoTypeSlice || dstType instanceof GoTypeMap ||
+                            dstType instanceof GoTypeChannel || dstType instanceof GoTypeInterface;
 
 //        x is an untyped constant representable by a value of type T.
-        if ( srcVarType instanceof GoTypeConstant ) {
+        if (srcVarType instanceof GoTypeConstant) {
             GoTypeConstant constant = (GoTypeConstant) srcVarType;
-            if ( constant.getType() == GoType.Unknown)
+            if (constant.getType() == GoType.Unknown)
                 return dstType.underlyingType().canRepresent(constant);
         }
 
@@ -133,7 +137,7 @@ public class GoTypes extends AbstractProjectComponent {
     }
 
     public static boolean areIdentical(GoType[] types, GoType[] oTypes) {
-        if ( types.length != oTypes.length )
+        if (types.length != oTypes.length)
             return false;
 
         for (int i = 0, typesLength = types.length; i < typesLength; i++)
@@ -186,14 +190,12 @@ public class GoTypes extends AbstractProjectComponent {
         if (psiType == null)
             return GoType.Unknown;
 
-        return psiType.accept(new GoTypeMakerVisitor());
-
-//        return GoPsiManager.getInstance(psiType.getProject()).getOrCompute(psiType, new Function<GoPsiType, GoType>() {
-//            @Override
-//            public GoType fun(GoPsiType psiType) {
-//                return psiType.accept(new GoTypeMakerVisitor());
-//            }
-//        });
+        return GoPsiManager.getInstance(psiType.getProject()).getOrCompute(psiType, new Function<GoPsiType, GoType>() {
+            @Override
+            public GoType fun(GoPsiType psiType) {
+                return psiType.accept(new GoTypeMakerVisitor());
+            }
+        });
     }
 
     public static GoType[] fromPsiType(GoPsiType[] psiTypes) {
@@ -206,8 +208,12 @@ public class GoTypes extends AbstractProjectComponent {
     }
 
     public static <T> T visitFirstType(GoType[] types, TypeVisitor<T> visitor) {
+        return visitFirstType(types, visitor, false);
+    }
+
+    public static <T> T visitFirstType(GoType[] types, TypeVisitor<T> visitor, boolean visitUnderlying) {
         if (types != null && types.length >= 1 && types[0] != null)
-            return visitor.visit(types[0]);
+            return visitor.visit(visitUnderlying ? types[0].underlyingType() : types[0]);
 
         return visitor.getData();
     }
@@ -493,18 +499,30 @@ public class GoTypes extends AbstractProjectComponent {
 
             @Override
             public void visitConstant(GoTypeConstant type, StringBuilder data, TypeVisitor<StringBuilder> visitor) {
-                if ( type.getType() != GoType.Unknown ){
+                if (type.getType() != GoType.Unknown) {
                     type.getType().accept(visitor);
                     return;
                 }
 
                 switch (type.getKind()) {
-                    case Integer: data.append("int"); break;
-                    case Boolean: data.append("bool"); break;
-                    case Complex: data.append("complex128"); break;
-                    case Float: data.append("float64"); break;
-                    case Rune: data.append("rune"); break;
-                    case String: data.append("string");break;
+                    case Integer:
+                        data.append("int");
+                        break;
+                    case Boolean:
+                        data.append("bool");
+                        break;
+                    case Complex:
+                        data.append("complex128");
+                        break;
+                    case Float:
+                        data.append("float64");
+                        break;
+                    case Rune:
+                        data.append("rune");
+                        break;
+                    case String:
+                        data.append("string");
+                        break;
                 }
             }
 
@@ -569,6 +587,6 @@ public class GoTypes extends AbstractProjectComponent {
         return stringBuilder.toString();
 
       */
-            }, new StringBuilder()).toString();
+        }, new StringBuilder()).toString();
     }
 }

@@ -4,8 +4,10 @@ import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.Condition;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
+import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallOrConversionExpression;
@@ -13,7 +15,6 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
 import ro.redeul.google.go.lang.psi.typing.*;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
@@ -28,8 +29,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
  * Date: 6/2/11
  * Time: 3:58 AM
  */
-public class GoBuiltinCallOrConversionExpressionImpl extends GoCallOrConvExpressionImpl
-        implements GoBuiltinCallOrConversionExpression {
+public class GoBuiltinCallOrConversionExpressionImpl extends GoCallOrConvExpressionImpl implements GoBuiltinCallOrConversionExpression {
 
     private static final ElementPattern<GoFunctionDeclaration> BUILTIN_FUNCTION =
             psiElement(GoFunctionDeclaration.class)
@@ -42,93 +42,101 @@ public class GoBuiltinCallOrConversionExpressionImpl extends GoCallOrConvExpress
                                     )
                     );
 
+    private GoFunctions.Builtin kind = null;
+
     public GoBuiltinCallOrConversionExpressionImpl(@NotNull ASTNode node) {
         super(node);
     }
 
-    @NotNull
+    protected GoFunctions.Builtin getBuiltinKind() {
+        if ( kind == null )
+            kind = GoFunctions.getFunction(getBaseExpression().getText());
+
+        return kind;
+    }
+
     @Override
-    protected GoType[] resolveTypes() {
-        GoType[] baseExprType = getBaseExpression().getType();
+    protected GoType[] computeCallType(GoTypeFunction type) {
+        String functionName = type.getPsiType().getName();
+        if (functionName == null)
+            return super.computeCallType(type);
 
-        if ( baseExprType.length != 1 )
-            return GoType.EMPTY_ARRAY;
+        GoExpr[] args = getArguments();
+        GoType[] argumentType = GoType.EMPTY_ARRAY;
 
-        if ( baseExprType[0] instanceof GoTypeFunction )
-            return processBuiltinFunction(((GoTypeFunction) baseExprType[0]).getPsiType().getName());
+        switch (getBuiltinKind()) {
+            case None:
+                return super.computeCallType(type);
 
-        if ( baseExprType[0] instanceof GoTypePrimitive ) {
-            GoTypePrimitive castType = (GoTypePrimitive) baseExprType[0];
+            case New:
+                return new GoType[]{GoTypes.makePointer(getTypeArgument())};
 
-            GoExpr[] arguments = getArguments();
-            if ( arguments.length != 1 )
-                return baseExprType;
+            case Append:
+                if (args.length <= 1)
+                    return new GoType[]{GoType.Unknown};
 
-            GoType[] argumentType = arguments[0].getType();
-            if (argumentType.length != 1 || !(argumentType[0] instanceof GoTypeConstant) )
-                return baseExprType;
+                return args[0].getType();
 
-            GoTypeConstant constantArgument = (GoTypeConstant) argumentType[0];
-            if ( castType.canRepresent(constantArgument)) {
-                return new GoType[] { constantArgument.retypeAs(castType)};
-            }
+            case Copy:
+                return new GoType[]{types().getBuiltin(Int)};
 
-            return new GoType[]{castType};
+            case Delete:
+                return GoType.EMPTY_ARRAY;
+
+            case Make:
+                return new GoType[]{GoTypes.fromPsi(getTypeArgument())};
+
+            case Complex:
+                // HACK: this has wrong semantics.
+                if( args.length < 2)
+                    return new GoType[] { types().getBuiltin(Complex128) };
+
+                GoTypes.Builtin firstFloatSize = findFloatSize(args[0]);
+                GoTypes.Builtin secondFloatSize = findFloatSize(args[1]);
+                if ( firstFloatSize == Float32  && secondFloatSize == Float32)
+                    return new GoType[] { types().getBuiltin(Complex64)};
+
+                return new GoType[] { types().getBuiltin(Complex128) };
+            case Real:
+            case Imag:
+                if( args.length < 1)
+                    return new GoType[] { types().getBuiltin(Float64) };
+
+                GoTypes.Builtin complexSize = findComplexSize(args[0]);
+
+                switch (complexSize) {
+                    case Complex128:
+                        return new GoType[]{types().getBuiltin(Float64)};
+                    case Complex64:
+                        return new GoType[]{types().getBuiltin(Float32)};
+                }
+
+            default:
+                return GoType.EMPTY_ARRAY;
         }
-
-        return GoType.EMPTY_ARRAY;
     }
 
     @Override
     public GoPsiType[] getArgumentsType() {
-        PsiElement reference = resolveSafely(getBaseExpression(),
-                PsiElement.class);
+        PsiElement reference = resolveSafely(getBaseExpression(), PsiElement.class);
 
-        if (reference == null) {
-            return processArgumentsType(this.getBaseExpression().getText());
-        }
+        if (reference == null) return processArgumentsType();
 
         if (reference.getParent() instanceof GoFunctionDeclaration) {
             GoFunctionDeclaration declaration =
                     (GoFunctionDeclaration) reference.getParent();
 
             if (BUILTIN_FUNCTION.accepts(declaration))
-                return processArgumentsType(declaration.getFunctionName());
+                return processArgumentsType();
         }
 
         return GoPsiType.EMPTY_ARRAY;
     }
 
-    private GoPsiType[] processArgumentsType(String functionName) {
+    private GoPsiType[] processArgumentsType() {
         GoExpr[] args = getArguments();
 
-        if (functionName.equals("append")) {
-            if (args.length > 1) {
-                GoType[] types = args[0].getType();
-                if (types.length > 0 && types[0] instanceof GoTypeSlice) {
-                    GoPsiTypeSlice appendedSlice = ((GoTypeSlice) types[0]).getPsiType();
-                    GoPsiType[] result = new GoPsiType[args.length];
-                    result[0] = appendedSlice;
-                    if (isCallWithVariadicParameter()){
-                        result[1] = appendedSlice;
-                        return result;
-                    }
-                    GoPsiType elem = appendedSlice.getElementType();
-                    for (int i = 1; i < args.length; i++) {
-                        result[i] = elem;
-                    }
-                    return result;
-                }
-            }
-        } else if (functionName.equals("copy")) {
-            if (args.length == 2) {
-                GoType[] types = args[0].getType();
-                if (types.length > 0 && types[0] instanceof GoTypeSlice) {
-                    GoPsiTypeSlice copiedSlice = ((GoTypeSlice) types[0]).getPsiType();
-                    return new GoPsiType[]{copiedSlice, copiedSlice};
-                }
-            }
-        } else if (functionName.equals("delete")) {
+        if (getBuiltinKind() == GoFunctions.Builtin.Delete) {
             if (args.length == 2) {
                 GoType[] types = args[0].getType();
                 if (types.length > 0 && types[0] instanceof GoTypeMap) {
@@ -141,62 +149,69 @@ public class GoBuiltinCallOrConversionExpressionImpl extends GoCallOrConvExpress
         return GoPsiType.EMPTY_ARRAY;
     }
 
-    @NotNull
-    private GoType[] processBuiltinFunction(String functionName) {
+    @Override
+    protected GoType[] computeConversionType(GoTypeName type) {
+        return super.computeConversionType(type);
+    }
 
-        GoExpr[] args = getArguments();
-        GoPsiType typeArg = getTypeArgument();
+    private GoTypes.Builtin findComplexSize(@Nullable GoExpr arg) {
+        if ( arg == null )
+            return Complex128;
 
-        if (functionName.equals("new")) {
-            if (typeArg != null) {
-                return new GoType[]{
-                        GoTypes.makePointer(typeArg)
-                };
-            }
-        } else if (functionName.matches("^(len|cap|copy)$")) {
-            return new GoType[]{types().getBuiltin(Int)};
-        } else if (functionName.equals("complex")) {
-            if (args.length > 0) {
-                if (hasBuiltinType(args[0].getType(), Float64))
-                    return new GoType[]{types().getBuiltin(Complex128)};
-
-                if (hasBuiltinType(args[0].getType(), Float32))
-                    return new GoType[]{types().getBuiltin(Complex64)};
-
-//                if (hasBuiltinType(args[0].getType(), Int))
-//                    return new GoType[]{types().getBuiltin(Complex128)};
-            }
-        } else if (functionName.matches("^(real|imag)$")) {
-            if (args.length > 0) {
-                if (hasBuiltinType(args[0].getType(), Complex128))
-                    return new GoType[]{types().getBuiltin(Float64)};
-
-                if (hasBuiltinType(args[0].getType(), Complex64))
-                    return new GoType[]{types().getBuiltin(Float32)};
-            }
-        } else if (functionName.equals("make")) {
-            if (typeArg != null)
-                return new GoType[]{types().fromPsiType(typeArg)};
-        } else if (functionName.equals("append")) {
-            if (args.length > 1) {
-                GoType[] types = args[0].getType();
-                if (types.length > 0) {
-                    return new GoType[]{types[0]};
+        return GoTypes.visitFirstType(arg.getType(), new TypeVisitor<GoTypes.Builtin>(Float64) {
+            @Override
+            public GoTypes.Builtin visitPrimitive(GoTypePrimitive type) {
+                switch (type.getType()) {
+                    case Complex64:
+                        return Complex64;
+                    default:
+                        return Complex128;
                 }
             }
-        }
 
-        return GoType.EMPTY_ARRAY;
+            @Override
+            public GoTypes.Builtin visitConstant(GoTypeConstant constant) {
+                if (constant.getType() != GoType.Unknown)
+                    return constant.getType().accept(this);
+
+                return Complex128;
+            }
+        }, true);
+    }
+
+    private GoTypes.Builtin findFloatSize(@Nullable GoExpr arg) {
+        if ( arg == null )
+            return Float64;
+
+        return GoTypes.visitFirstType(arg.getType(), new TypeVisitor<GoTypes.Builtin>(Float64) {
+            @Override
+            public GoTypes.Builtin visitPrimitive(GoTypePrimitive type) {
+                switch (type.getType()) {
+                    case Float32:
+                        return Float32;
+                    default:
+                        return Float64;
+                }
+            }
+
+            @Override
+            public GoTypes.Builtin visitConstant(GoTypeConstant constant) {
+                if (constant.getType() != GoType.Unknown)
+                    return constant.getType().accept(this);
+
+                return Float64;
+            }
+        }, true);
     }
 
     private boolean hasBuiltinType(GoType[] types, final GoTypes.Builtin builtin) {
         return ContainerUtil.find(types, new Condition<GoType>() {
             @Override
             public boolean value(GoType goType) {
-                if ( goType.isIdentical(types().getBuiltin(builtin)) )
+                if (goType.isIdentical(types().getBuiltin(builtin)))
                     return true;
 
-                if ( goType instanceof GoTypeConstant ) {
+                if (goType instanceof GoTypeConstant) {
                     GoTypeConstant typeConstant = (GoTypeConstant) goType;
                     return GoTypes.getInstance(getProject()).getBuiltin(builtin).canRepresent(typeConstant);
                 }
@@ -204,6 +219,18 @@ public class GoBuiltinCallOrConversionExpressionImpl extends GoCallOrConvExpress
                 return false;
             }
         }) != null;
+    }
+
+    @Override
+    public GoExpr[] getArguments() {
+//        GoExpr[] arguments = super.getArguments();
+//        switch (getBuiltinKind()) {
+//            case New: case Make:
+//                return ArrayUtil.remove(arguments, 0);
+//            default:
+//                return arguments;
+//        }
+        return super.getArguments();
     }
 
     @Override

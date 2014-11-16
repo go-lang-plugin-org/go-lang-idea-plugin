@@ -68,7 +68,7 @@ public class IndexExpressionInspection extends AbstractWholeGoFileInspection {
                     default:
                         result.addProblem(
                                 indexExpr,
-                                GoBundle.message("warning.functioncall.type.mismatch", GoTypes.getRepresentation(indexType, goFile))
+                                GoBundle.message("warn.function.call.arg.type.mismatch", GoTypes.getRepresentation(indexType, goFile))
                         );
                 }
             }
@@ -87,7 +87,7 @@ public class IndexExpressionInspection extends AbstractWholeGoFileInspection {
                     default:
                         result.addProblem(
                                 indexExpr,
-                                GoBundle.message("warning.functioncall.type.mismatch", GoTypes.getRepresentation(indexType, goFile))
+                                GoBundle.message("warn.function.call.arg.type.mismatch", GoTypes.getRepresentation(indexType, goFile))
                         );
                 }
             }
@@ -114,7 +114,7 @@ public class IndexExpressionInspection extends AbstractWholeGoFileInspection {
         if (!(indexType instanceof GoTypeConstant) || integer == null)
             result.addProblem(
                     indexExpr,
-                    GoBundle.message("warning.functioncall.type.mismatch", "int"));
+                    GoBundle.message("warn.function.call.arg.type.mismatch", "int"));
 
         if (integer != null && integer.compareTo(BigInteger.ZERO) < 0)
             result.addProblem(

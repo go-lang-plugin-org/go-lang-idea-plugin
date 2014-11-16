@@ -1,20 +1,26 @@
 package ro.redeul.google.go.lang.psi.typing;
 
+import com.intellij.util.ArrayUtil;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
 import ro.redeul.google.go.lang.psi.utils.GoFunctionDeclarationUtils;
 
-public class GoTypeFunction
-        extends GoTypePsiBacked<GoPsiTypeFunction>
-        implements GoType {
+public class GoTypeFunction extends GoTypePsiBacked<GoPsiTypeFunction> implements GoType {
 
     public GoType[] getResultTypes() {
         return GoFunctionDeclarationUtils.getParameterTypes(getPsiType().getResults());
     }
 
     public GoType[] getParameterTypes() {
-        return GoFunctionDeclarationUtils.getParameterTypes(getPsiType().getParameters());
+        GoFunctionParameter[] parameters = getPsiType().getParameters();
+
+        switch (GoFunctions.getFunction(getPsiType().getName())) {
+            case New: case Delete:
+                parameters = ArrayUtil.remove(parameters, 0);
+        }
+
+        return GoFunctionDeclarationUtils.getParameterTypes(parameters);
     }
 
     GoTypeFunction(GoPsiTypeFunction type) { super(type); }

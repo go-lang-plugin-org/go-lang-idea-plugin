@@ -16,36 +16,36 @@ type T2 T3
 type T1 T2
 
 type T struct {
-    a int
+	a int
 }
 
 func main() {
-    /*begin*/make()/*end.Make type must be a slice, map or channel*/
-    /*begin*/make(int)/*end.Cannot make type int*/
-    /*begin*/make(T)/*end.Cannot make type T*/
+	/*begin*/make()/*end.missing argument to make*/
+	make(/*begin*/int/*end.cannot make type int*/)
+	make(/*begin*/T/*end.cannot make type T*/)
 
-    // final type is a chan string
-    make(T1)
+	// final type is a chan string
+	make(T1)
 
-    // final type is a pointer
-    /*begin*/make(T5)/*end.Cannot make type T5*/
+	// final type is a pointer
+	make(/*begin*/T5/*end.cannot make type T5*/)
 
-    // recursive definition
-    /*begin*/make(T10)/*end.Cannot make type T10*/
+	// recursive definition
+	make(/*begin*/T10/*end.cannot make type T10*/)
 
-    // final type is a primitive
-    /*begin*/make(T15)/*end.Cannot make type T15*/
+	// final type is a primitive
+	make(/*begin*/T15/*end.cannot make type T15*/)
 
-    make([]int, 5)
-    make([]int, 5, 10)
-    /*begin*/make([]int)/*end.Missing len argument to make([]int)*/
-    make([]int, 1, 1, /*begin*/1, 1/*end.too many arguments in call to make*/)
+	make([]int, 5)
+	make([]int, 5, 10)
+	/*begin*/make([]int)/*end.missing argument to make([]int)*/
+	make([]int, 1, 1, /*begin*/1/*end.too many arguments in call to make*/, /*begin*/1/*end.too many arguments in call to make*/)
 
-    make(chan int)
-    make(chan int, 10)
-    make(chan int, 10, /*begin*/10/*end.too many arguments in call to make*/)
+	make(chan int)
+	make(chan int, 10)
+	make(chan int, 10, /*begin*/10/*end.too many arguments in call to make*/)
 
-    make(map[int]string)
-    make(map[int]string, 15)
-    make(map[int]string, 15, /*begin*/10/*end.too many arguments in call to make*/)
+	make(map[int]string)
+	make(map[int]string, 15)
+	make(map[int]string, 15, /*begin*/10/*end.too many arguments in call to make*/)
 }

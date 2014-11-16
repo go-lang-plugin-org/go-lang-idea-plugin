@@ -5,8 +5,9 @@ type T struct {
 }
 
 func main() {
-    /*begin*/new()/*end.Missing type argument to new*/
-    /*begin*/new(5)/*end.5 is not a type*/
+    /*begin*/new()/*end.missing type argument to new*/
+    new(/*begin*/5/*end.5 is not a type*/)
+    new(/*begin*/3/*end.3 is not a type*/, 5)
     /*begin*/new(int, 5)/*end.too many arguments in call to new*/
 
     new(int)

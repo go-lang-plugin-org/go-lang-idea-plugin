@@ -8,12 +8,9 @@ import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComp
 import ro.redeul.google.go.lang.psi.impl.expressions.literals.composite.GoLiteralCompositeValueImpl;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeArray;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
+import ro.redeul.google.go.lang.psi.utils.GoExpressionUtils;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-
-import static ro.redeul.google.go.inspection.FunctionCallInspection.getNumberValueFromLiteralExpr;
-import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -31,10 +28,9 @@ public class GoPsiTypeArrayImpl extends GoPsiTypeImpl implements GoPsiTypeArray 
     public int getArrayLength() {
         GoExpr child = GoPsiUtils.findChildOfClass(this, GoExpr.class);
         if (child != null) {
-            Number value = getNumberValueFromLiteralExpr(child);
+            Number value = GoExpressionUtils.getConstantNumberValue(child);
             if (value != null && (value instanceof Integer || value.intValue() == value.floatValue()))
                 return value.intValue();
-
         } else {
             // for this case [...]type{el1, el2, el3}
             GoLiteralCompositeValue compositeValue = GoPsiUtils.findChildOfClass(this.getParent(), GoLiteralCompositeValueImpl.class);
