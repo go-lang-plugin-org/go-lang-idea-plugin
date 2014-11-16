@@ -40,6 +40,10 @@ func foo() *T {
     return new(T)
 }
 
+func doubleFoo() (*T, *T) {
+    return foo(), foo()
+}
+
 func (t T) createT() *T {
     return new(T)
 }
@@ -64,6 +68,8 @@ func main() {
     t.name()
     t2 := t.createT()
     Println(t2)
+    t3 := <error>doubleFoo()</error>
+    Println(t3)
 }
 
 type inte struct {
