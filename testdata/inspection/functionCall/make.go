@@ -20,7 +20,7 @@ type T struct {
 }
 
 func main() {
-	/*begin*/make()/*end.missing argument to make*/
+	/*begin*/make()/*end.missing type argument to make*/
 	make(/*begin*/int/*end.cannot make type int*/)
 	make(/*begin*/T/*end.cannot make type T*/)
 

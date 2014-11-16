@@ -58,7 +58,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
                 if (typeArg != null) return true;
 
                 if (args.length == 0)
-                    result.addProblem(expression, GoBundle.message("error.missing.argument", "make"));
+                    result.addProblem(expression, GoBundle.message("error.missing.type.argument", "new"));
                 else
                     result.addProblem(args[0], GoBundle.message("error.expression.is.not.a.type", args[0].getText()));
 
@@ -68,7 +68,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
                     return validateMakeCall(callType, expression, result);
 
                 if (args.length == 0)
-                    result.addProblem(expression, GoBundle.message("error.missing.argument", "make"));
+                    result.addProblem(expression, GoBundle.message("error.missing.type.argument", "make"));
                 else
                     result.addProblem(args[0], GoBundle.message("error.expression.is.not.a.type", args[0].getText()));
 
