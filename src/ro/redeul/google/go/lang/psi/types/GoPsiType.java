@@ -13,5 +13,5 @@ public interface GoPsiType extends GoPsiElement, PsiNamedElement {
 
     public static final GoPsiType[] EMPTY_ARRAY = new GoPsiType[0];
 
-    boolean isIdentical(GoPsiType goType);
+//    boolean isIdentical(GoPsiType goType);
 }

@@ -18,46 +18,9 @@ public class GoPsiTypeFunctionImpl extends GoPsiTypeImpl implements GoPsiTypeFun
     }
 
     @Override
-    public boolean isIdentical(GoPsiType goType) {
-        if (!(goType instanceof GoPsiTypeFunction))
-            return false;
-
-        GoPsiTypeFunction functionDeclaration = (GoPsiTypeFunction) goType;
-
-        GoFunctionParameter[] funcTypeArguments = this.getParameters();
-        GoFunctionParameter[] funcDeclArguments = functionDeclaration.getParameters();
-
-        int idx = 0;
-
-        if (funcDeclArguments.length != funcTypeArguments.length)
-            return false;
-
-        for (GoFunctionParameter parameter : funcDeclArguments) {
-            if (!parameter.getType().isIdentical(funcTypeArguments[idx].getType()))
-                return false;
-            idx++;
-        }
-
-        funcTypeArguments = this.getResults();
-        funcDeclArguments = functionDeclaration.getResults();
-
-        if (funcDeclArguments.length != funcTypeArguments.length)
-            return false;
-
-        idx = 0;
-        for (GoFunctionParameter parameter : funcDeclArguments) {
-            if (!parameter.getType().isIdentical(funcTypeArguments[idx].getType()))
-                return false;
-            idx++;
-        }
-        return true;
-    }
-
-    @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitFunctionType(this);
     }
-
 
     @Override
     public GoFunctionParameter[] getParameters() {
@@ -74,5 +37,4 @@ public class GoPsiTypeFunctionImpl extends GoPsiTypeImpl implements GoPsiTypeFun
         PsiElement result = findChildByType(GoElementTypes.FUNCTION_RESULT);
         return GoPsiUtils.getParameters(result);
     }
-
 }

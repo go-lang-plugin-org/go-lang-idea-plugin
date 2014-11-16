@@ -17,12 +17,6 @@ public class GoPsiTypeParenthesizedImpl extends GoPsiTypeImpl implements GoPsiTy
     }
 
     @Override
-    public boolean isIdentical(GoPsiType goType) {
-        // TODO: implement this
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
     public String getLookupTailText() {
         return String.format("(%s)", getInnerType().getLookupTailText());
     }

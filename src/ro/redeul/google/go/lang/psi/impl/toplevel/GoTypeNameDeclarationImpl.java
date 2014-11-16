@@ -130,14 +130,7 @@ public class GoTypeNameDeclarationImpl
     @NotNull
     @Override
     public PsiReference[] getReferences() {
-        return new PsiReference[]{
-//                new TypeNameDeclarationReference(this))
-        };
-    }
-
-    @Override
-    public boolean isIdentical(GoPsiType goType) {
-        return false;
+        return PsiReference.EMPTY_ARRAY;
     }
 
     @Override

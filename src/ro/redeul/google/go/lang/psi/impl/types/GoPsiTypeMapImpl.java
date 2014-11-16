@@ -36,22 +36,6 @@ public class GoPsiTypeMapImpl extends GoPsiTypeImpl implements GoPsiTypeMap {
     }
 
     @Override
-    public boolean isIdentical(GoPsiType goType) {
-        if (goType instanceof GoPsiTypeName) {
-            goType =  resolveToFinalType(goType);
-        }
-        if (!(goType instanceof GoPsiTypeMap))
-            return false;
-        GoPsiTypeMap otherTypeMap = (GoPsiTypeMap)goType;
-
-        if (!(getKeyType().isIdentical(otherTypeMap.getKeyType()))) return false;
-
-        if (!(getElementType().isIdentical(otherTypeMap.getElementType()))) return false;
-
-        return true;
-    }
-
-    @Override
     public String getLookupTailText() {
         return String.format("map[%s]%s",
                              getKeyType().getLookupTailText(),

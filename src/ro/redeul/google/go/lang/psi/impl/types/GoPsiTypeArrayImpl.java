@@ -55,17 +55,6 @@ public class GoPsiTypeArrayImpl extends GoPsiTypeImpl implements GoPsiTypeArray 
         visitor.visitArrayType(this);
     }
 
-    @Override
-    public boolean isIdentical(GoPsiType goType) {
-        if (goType instanceof GoPsiTypeName) {
-            goType = resolveToFinalType(goType);
-        }
-        if (!(goType instanceof GoPsiTypeArray)) {
-            return false;
-        }
-        return false;
-    }
-
     @NotNull
     @Override
     public String getLookupText() {

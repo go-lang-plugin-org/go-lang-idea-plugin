@@ -148,10 +148,6 @@ public class GoUtil {
     }
 
 
-    public static boolean CompareTypes(GoPsiType element, Object element2) {
-        return CompareTypes(element, element2, null);
-    }
-
     public static GoPsiElement ResolveReferece(GoPsiElement element) {
         for (PsiReference reference : element.getReferences()) {
             PsiElement resolve = reference.resolve();
@@ -161,136 +157,48 @@ public class GoUtil {
         return element;
     }
 
-
     public static boolean areTypesAssignable(@NotNull GoType destination, @NotNull GoType source) {
         return destination.isAssignableFrom(source);
     }
 
-    public static boolean CompareTypes(GoPsiType element, Object element2, GoPsiElement goExpr) {
-
-        if (element2 instanceof GoTypePsiBacked) {
-            GoPsiType psiType = ((GoTypePsiBacked) element2).getPsiType();
-            if (psiType != null)
-                return psiType.isIdentical(element);
-        }
-
-        if (element instanceof GoPsiTypeFunction && !(element2 instanceof GoPsiTypeFunction)) {
-
-
-            if (goExpr instanceof GoCallOrConvExpression) {
-                element2 = findChildOfClass(goExpr, GoPsiTypeParenthesized.class);
-                if (element2 != null) {
-                    element2 = ((GoPsiTypeParenthesized) element2).getInnerType();
-                    return CompareTypes(element, element2, null);
-                }
-            }
-            if (goExpr instanceof GoParenthesisedExpression) {
-                goExpr = ((GoParenthesisedExpression) goExpr).getInnerExpression();
-            }
-            if (goExpr instanceof GoLiteralExpression) {
-                goExpr = ((GoLiteralExpression) goExpr).getLiteral();
-            }
-            if (goExpr instanceof GoLiteralIdentifier) {
-                goExpr = ResolveReferece(goExpr);
-                element2 = getFunctionDeclaration(goExpr);
-                if (element2 == null) {
-                    element2 = goExpr.getParent().getLastChild();
-                    if (!(element2 instanceof GoFunctionDeclaration)) {
-                        if (element2 instanceof GoLiteralExpression) {
-                            GoType[] type = ((GoLiteralExpression) element2).getType();
-                            if (type.length != 0 && type[0] instanceof GoTypePsiBacked)
-                                return CompareTypes(element, type[0], (GoPsiElement) element2);
-                            element2 = ((GoLiteralExpression) element2).getLiteral();
-                            if (!(element2 instanceof GoFunctionDeclaration)) {
-                                return false;
-                            }
-                        }
-                    } else {
-                        return false;
-                    }
-                }
-            }
-
-            if (goExpr instanceof GoFunctionDeclaration)
-                return CompareFnTypeToDecl((GoPsiTypeFunction) element, (GoFunctionDeclaration) goExpr);
-
-            return element2 instanceof GoFunctionDeclaration && CompareFnTypeToDecl((GoPsiTypeFunction) element, (GoFunctionDeclaration) element2);
-        }
-
-
-        if (element2 instanceof GoPsiType) {
-            GoTypeUtils.resolveToFinalType((GoPsiType) element2);
-            return element.isIdentical((GoPsiType) element2);
-        }
-        //Resolve Issue In PR #330
-        if (element instanceof GoPsiTypePointer && element2 instanceof GoTypePointer) {
-            GoType targetType1 = ((GoTypePointer) element2).getTargetType();
-            return CompareTypes(((GoPsiTypePointer) element).getTargetType(), targetType1);
-//            if (targetType1 instanceof GoTypePsiBacked) {
-//                GoTypePsiBacked targetType = (GoTypePsiBacked) targetType1;
-//                return ((GoPsiTypePointer) element).getTargetType().isIdentical(targetType.getPsiType());
+//    private static boolean CompareFnTypeToDecl(GoPsiTypeFunction psiType, GoFunctionDeclaration functionDeclaration) {
+//        if (!CompareParameterList(psiType.getParameters(), functionDeclaration.getParameters()))
+//            return false;
+//        return CompareParameterList(psiType.getResults(), functionDeclaration.getResults());
+//    }
+//
+//    private static boolean CompareParameterList(GoFunctionParameter[] funcTypeArguments, GoFunctionParameter[] funcDeclArguments) {
+//        List<GoPsiType> list = new ArrayList<GoPsiType>();
+//        for (GoFunctionParameter argument : funcDeclArguments) {
+//            GoLiteralIdentifier[] identifiers = argument.getIdentifiers();
+//            if (identifiers.length == 0) {
+//                list.add(argument.getType());
+//            } else {
+//                for (GoLiteralIdentifier identifier : identifiers) {
+//                    list.add(argument.getType());
+//                }
 //            }
-        }
-        if (element2 instanceof GoTypeArray) {
-            GoPsiType psiType = ((GoTypeArray) element2).getPsiType();
-            if (psiType != null)
-                return psiType.isIdentical(element);
-        }
-        if (element2 instanceof GoType) {
-            if (goExpr instanceof GoParenthesisedExpression)
-                goExpr = ((GoParenthesisedExpression) goExpr).getInnerExpression();
-            if (goExpr instanceof GoLiteralExpression) {
-                GoLiteral literal = ((GoLiteralExpression) goExpr).getLiteral();
-                if (literal instanceof GoLiteralFunction) {
-                    return ((GoLiteralFunction) literal).isIdentical(element);
-                }
-            }
-
-        }
-
-        return false;
-//        return element.underlyingType().isIdentical(((GoType) element2).underlyingType());
-    }
-
-
-    public static boolean CompareFnTypeToDecl(GoPsiTypeFunction psiType, GoFunctionDeclaration functionDeclaration) {
-        if (!CompareParameterList(psiType.getParameters(), functionDeclaration.getParameters()))
-            return false;
-        return CompareParameterList(psiType.getResults(), functionDeclaration.getResults());
-    }
-
-    private static boolean CompareParameterList(GoFunctionParameter[] funcTypeArguments, GoFunctionParameter[] funcDeclArguments) {
-        List<GoPsiType> list = new ArrayList<GoPsiType>();
-        for (GoFunctionParameter argument : funcDeclArguments) {
-            GoLiteralIdentifier[] identifiers = argument.getIdentifiers();
-            if (identifiers.length == 0) {
-                list.add(argument.getType());
-            } else {
-                for (GoLiteralIdentifier identifier : identifiers) {
-                    list.add(argument.getType());
-                }
-            }
-        }
-        int i = 0;
-        for (GoFunctionParameter argument : funcTypeArguments) {
-            if (argument.getIdentifiers().length == 0) {
-                if (i >= list.size())
-                    return false;
-                if (!argument.getType().isIdentical(list.get(i)))
-                    return false;
-                i++;
-            } else {
-                for (GoLiteralIdentifier identifier : argument.getIdentifiers()) {
-                    if (i >= list.size())
-                        return false;
-                    if (!argument.getType().isIdentical(list.get(i)))
-                        return false;
-                    i++;
-                }
-            }
-        }
-        return true;
-    }
+//        }
+//        int i = 0;
+//        for (GoFunctionParameter argument : funcTypeArguments) {
+//            if (argument.getIdentifiers().length == 0) {
+//                if (i >= list.size())
+//                    return false;
+//                if (!argument.getType().isIdentical(list.get(i)))
+//                    return false;
+//                i++;
+//            } else {
+//                for (GoLiteralIdentifier identifier : argument.getIdentifiers()) {
+//                    if (i >= list.size())
+//                        return false;
+//                    if (!argument.getType().isIdentical(list.get(i)))
+//                        return false;
+//                    i++;
+//                }
+//            }
+//        }
+//        return true;
+//    }
 
     public static GoPsiElement ResolveTypeOfVarDecl(GoPsiElement element) {
         PsiElement parent = element.getParent();

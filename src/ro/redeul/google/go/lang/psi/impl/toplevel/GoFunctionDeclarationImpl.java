@@ -37,19 +37,18 @@ import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
  * Date: Aug 26, 2010
  * Time: 2:33:51 PM
  */
-public class GoFunctionDeclarationImpl extends GoPsiElementBase
-        implements GoFunctionDeclaration {
+public class GoFunctionDeclarationImpl extends GoPsiElementBase implements GoFunctionDeclaration {
 
-    @Override
-    public boolean isIdentical(GoPsiType goType) {
-        if (goType instanceof GoPsiTypeName) {
-            goType = resolveToFinalType(goType);
-        }
-        if (!(goType instanceof GoPsiTypeFunction))
-            return false;
-
-        return GoUtil.CompareFnTypeToDecl((GoPsiTypeFunction) goType, this);
-    }
+//    @Override
+//    public boolean isIdentical(GoPsiType goType) {
+//        if (goType instanceof GoPsiTypeName) {
+//            goType = resolveToFinalType(goType);
+//        }
+//        if (!(goType instanceof GoPsiTypeFunction))
+//            return false;
+//
+//        return GoUtil.CompareFnTypeToDecl((GoPsiTypeFunction) goType, this);
+//    }
 
     public GoFunctionDeclarationImpl(@NotNull ASTNode node) {
         super(node);

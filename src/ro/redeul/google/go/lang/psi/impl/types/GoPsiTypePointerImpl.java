@@ -30,11 +30,6 @@ public class GoPsiTypePointerImpl extends GoPsiTypeImpl implements
     }
 
     @Override
-    public boolean isIdentical(GoPsiType goType) {
-        return goType instanceof GoPsiTypePointer && this.getTargetType().isIdentical(((GoPsiTypePointer) goType).getTargetType());
-    }
-
-    @Override
     public String getLookupTailText() {
         return String.format("*%s", getTargetType().getLookupTailText());
     }

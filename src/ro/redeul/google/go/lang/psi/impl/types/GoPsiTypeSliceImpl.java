@@ -30,19 +30,6 @@ public class GoPsiTypeSliceImpl extends GoPsiTypeImpl implements GoPsiTypeSlice 
         visitor.visitSliceType(this);
     }
 
-    @Override
-    public boolean isIdentical(GoPsiType goType) {
-        if (goType instanceof GoPsiTypeName) {
-            goType =  resolveToFinalType(goType);
-        }
-        if (!(goType instanceof GoPsiTypeSlice))
-            return false;
-
-        GoPsiTypeSlice otherTypeSlice = (GoPsiTypeSlice)goType;
-
-        return getElementType().isIdentical(otherTypeSlice.getElementType());
-    }
-
     @NotNull
     @Override
     public String getLookupTailText() {

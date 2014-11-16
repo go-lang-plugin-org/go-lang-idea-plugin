@@ -22,22 +22,12 @@ public class GoPsiTypeInterfaceImpl extends GoPsiTypeImpl implements GoPsiTypeIn
     }
 
     @Override
-    public boolean isIdentical(GoPsiType goType) {
-        //if (!(goType instanceof GoPsiTypeInterface))
-        //    return false;
-        //TODO: this may need to be changed later
-        //Right now the only interface{} expressions are getting this type
-        return goType instanceof GoPsiTypeInterface;
-    }
-
-    @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitInterfaceType(this);
     }
 
     @Override
     public GoMethodDeclaration[] getMethodSet() {
-//        return declarations;
         return GoMethodDeclaration.EMPTY_ARRAY;
     }
 
