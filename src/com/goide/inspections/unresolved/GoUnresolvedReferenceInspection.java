@@ -21,6 +21,7 @@ import com.goide.codeInsight.imports.GoImportPackageQuickFix;
 import com.goide.inspections.GoInspectionBase;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoReference;
+import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
@@ -37,9 +38,11 @@ import static com.intellij.codeInspection.ProblemHighlightType.GENERIC_ERROR_OR_
 import static com.intellij.codeInspection.ProblemHighlightType.LIKE_UNKNOWN_SYMBOL;
 
 public class GoUnresolvedReferenceInspection extends GoInspectionBase {
+  @NotNull
   @Override
-  protected void checkFile(@NotNull GoFile file, @NotNull final ProblemsHolder problemsHolder) {
-    file.accept(new GoRecursiveVisitor() {
+  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder,
+                                     @SuppressWarnings({"UnusedParameters", "For future"}) @NotNull LocalInspectionToolSession session) {
+    return new GoVisitor() {
       @Override
       public void visitReferenceExpression(@NotNull GoReferenceExpression o) {
         super.visitReferenceExpression(o);
@@ -52,7 +55,7 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
         PsiElement id = o.getIdentifier();
         String name = id.getText();
         if (results.length > 1) {
-          problemsHolder.registerProblem(id, "Ambiguous reference " + "'" + name + "'", GENERIC_ERROR_OR_WARNING);
+          holder.registerProblem(id, "Ambiguous reference " + "'" + name + "'", GENERIC_ERROR_OR_WARNING);
         }
         else if (reference.resolve() == null) {
           LocalQuickFix[] fixes = !isProhibited(o, qualifier) ?
@@ -62,7 +65,7 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
                                     new GoIntroduceGlobalConstantFix(id, name),
                                   } :
                                   new LocalQuickFix[]{new GoImportPackageQuickFix(reference)};
-          problemsHolder.registerProblem(id, "Unresolved reference " + "'" + name + "'", LIKE_UNKNOWN_SYMBOL, fixes);
+          holder.registerProblem(id, "Unresolved reference " + "'" + name + "'", LIKE_UNKNOWN_SYMBOL, fixes);
         }
       }
 
@@ -75,11 +78,11 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
             ResolveResult[] resolveResults = ((FileReference)reference).multiResolve(false);
             if (resolveResults.length == 0) {
               ProblemHighlightType type = reference.getRangeInElement().isEmpty() ? GENERIC_ERROR_OR_WARNING : LIKE_UNKNOWN_SYMBOL;
-              problemsHolder.registerProblem(reference, ProblemsHolder.unresolvedReferenceMessage(reference), type);
+              holder.registerProblem(reference, ProblemsHolder.unresolvedReferenceMessage(reference), type);
             }
             else if (resolveResults.length > 1) {
-              problemsHolder.registerProblem(reference, "Resolved to several targets", GENERIC_ERROR_OR_WARNING);
-            } 
+              holder.registerProblem(reference, "Resolved to several targets", GENERIC_ERROR_OR_WARNING);
+            }
           }
         }
       }
@@ -89,7 +92,7 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
         PsiReference reference = o.getReference();
         String name = o.getText();
         if (reference.resolve() == null) {
-          problemsHolder.registerProblem(o, "Unresolved label " + "'" + name + "'", LIKE_UNKNOWN_SYMBOL);
+          holder.registerProblem(o, "Unresolved label " + "'" + name + "'", LIKE_UNKNOWN_SYMBOL);
         }
       }
 
@@ -108,10 +111,10 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
           LocalQuickFix[] fixes = isProhibited
                                   ? new LocalQuickFix[]{new GoImportPackageQuickFix(reference)}
                                   : new LocalQuickFix[]{new GoIntroduceTypeFix(id, name)};
-          problemsHolder.registerProblem(id, "Unresolved type " + "'" + name + "'", LIKE_UNKNOWN_SYMBOL, fixes);
+          holder.registerProblem(id, "Unresolved type " + "'" + name + "'", LIKE_UNKNOWN_SYMBOL, fixes);
         }
       }
-    });
+    };
   }
 
   private static boolean isProhibited(@NotNull GoCompositeElement o, @Nullable GoCompositeElement qualifier) {

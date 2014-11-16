@@ -19,6 +19,7 @@ package com.goide.inspections.unresolved;
 import com.goide.inspections.GoInspectionBase;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
+import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElement;
@@ -29,9 +30,11 @@ import com.intellij.util.Query;
 import org.jetbrains.annotations.NotNull;
 
 public class GoUnusedVariableInspection extends GoInspectionBase {
+  @NotNull
   @Override
-  protected void checkFile(@NotNull GoFile file, @NotNull final ProblemsHolder problemsHolder) {
-    file.accept(new GoRecursiveVisitor() {
+  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder,
+                                     @SuppressWarnings({"UnusedParameters", "For future"}) @NotNull LocalInspectionToolSession session) {
+    return new GoVisitor() {
       @Override
       public void visitVarDefinition(@NotNull GoVarDefinition o) {
         if (GoPsiImplUtil.isBlank(o.getIdentifier())) return;
@@ -44,13 +47,13 @@ public class GoUnusedVariableInspection extends GoInspectionBase {
           Query<PsiReference> search = ReferencesSearch.search(o, o.getUseScope());
           if (search.findFirst() == null) {
             boolean globalVar = decl != null && decl.getParent() instanceof GoFile;
-            problemsHolder.registerProblem(o, "Unused variable " + "'" + o.getText() + "'",
-                                           globalVar
-                                           ? ProblemHighlightType.LIKE_UNUSED_SYMBOL
-                                           : ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+            holder.registerProblem(o, "Unused variable " + "'" + o.getText() + "'",
+                                   globalVar
+                                   ? ProblemHighlightType.LIKE_UNUSED_SYMBOL
+                                   : ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
           }
         }
       }
-    });
+    };
   }
 }

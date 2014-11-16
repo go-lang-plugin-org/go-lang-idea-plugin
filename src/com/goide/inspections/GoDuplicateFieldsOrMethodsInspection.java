@@ -17,6 +17,7 @@
 package com.goide.inspections;
 
 import com.goide.psi.*;
+import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.containers.ContainerUtil;
@@ -28,9 +29,11 @@ import java.util.Set;
 import static com.intellij.codeInspection.ProblemHighlightType.GENERIC_ERROR_OR_WARNING;
 
 public class GoDuplicateFieldsOrMethodsInspection extends GoInspectionBase {
+  @NotNull
   @Override
-  protected void checkFile(@NotNull GoFile file, @NotNull final ProblemsHolder problemsHolder) {
-    file.accept(new GoRecursiveVisitor() {
+  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder,
+                                     @SuppressWarnings({"UnusedParameters", "For future"}) @NotNull LocalInspectionToolSession session) {
+    return new GoVisitor() {
       @Override
       public void visitStructType(@NotNull final GoStructType type) {
         final List<GoNamedElement> fields = ContainerUtil.newArrayList();
@@ -47,19 +50,19 @@ public class GoDuplicateFieldsOrMethodsInspection extends GoInspectionBase {
 
           @Override
           public void visitType(@NotNull GoType o) {
-            if (o == type) super.visitType(o); 
+            if (o == type) super.visitType(o);
           }
         });
-        check(fields, problemsHolder, "field");
+        check(fields, holder, "field");
         super.visitStructType(type);
       }
 
       @Override
       public void visitInterfaceType(@NotNull GoInterfaceType o) {
-        check(o.getMethodSpecList(), problemsHolder, "method");
+        check(o.getMethodSpecList(), holder, "method");
         super.visitInterfaceType(o);
       }
-    });
+    };
   }
 
   private static void check(@NotNull List<? extends GoNamedElement> fields, @NotNull ProblemsHolder problemsHolder, @NotNull String what) {

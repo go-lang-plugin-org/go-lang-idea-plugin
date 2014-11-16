@@ -20,8 +20,9 @@ import com.goide.inspections.GoDeleteQuickFix;
 import com.goide.inspections.GoInspectionBase;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoFunctionDeclaration;
-import com.goide.psi.GoRecursiveVisitor;
+import com.goide.psi.GoVisitor;
 import com.goide.runconfig.testing.GoTestFinder;
+import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.util.TextRange;
@@ -32,11 +33,14 @@ import com.intellij.util.Query;
 import org.jetbrains.annotations.NotNull;
 
 public class GoUnusedFunctionInspection extends GoInspectionBase {
+  @NotNull
   @Override
-  protected void checkFile(@NotNull final GoFile file, @NotNull final ProblemsHolder problemsHolder) {
-    file.accept(new GoRecursiveVisitor() {
+  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder,
+                                     @SuppressWarnings({"UnusedParameters", "For future"}) @NotNull LocalInspectionToolSession session) {
+    return new GoVisitor() {
       @Override
       public void visitFunctionDeclaration(@NotNull GoFunctionDeclaration o) {
+        GoFile file = o.getContainingFile();
         String name = o.getName();
         if ("main".equals(file.getPackageName()) && "main".equals(name)) return;
         if (GoTestFinder.isTestFile(file) && name != null && (name.startsWith("Test") || name.startsWith("Benchmark"))) return;
@@ -44,10 +48,10 @@ public class GoUnusedFunctionInspection extends GoInspectionBase {
         if (search.findFirst() == null) {
           PsiElement id = o.getIdentifier();
           TextRange range = TextRange.from(id.getStartOffsetInParent(), id.getTextLength());
-          problemsHolder.registerProblem(o, "Unused function " + "'" + name + "'", ProblemHighlightType.LIKE_UNUSED_SYMBOL, range,
-                                         new GoDeleteQuickFix("Delete function '" + name + "'"));
+          holder.registerProblem(o, "Unused function " + "'" + name + "'", ProblemHighlightType.LIKE_UNUSED_SYMBOL, range,
+                                 new GoDeleteQuickFix("Delete function '" + name + "'"));
         }
       }
-    });
+    };
   }
 }
