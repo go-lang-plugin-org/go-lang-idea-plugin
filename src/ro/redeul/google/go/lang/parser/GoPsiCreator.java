@@ -5,6 +5,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
 import ro.redeul.google.go.lang.psi.impl.GoPackageReferenceImpl;
+import ro.redeul.google.go.lang.psi.impl.GoParenthesisedExpressionOrTypeImpl;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoConstDeclarationImpl;
 import ro.redeul.google.go.lang.psi.impl.declarations.GoConstDeclarationsImpl;
@@ -83,7 +84,7 @@ class GoPsiCreator implements GoElementTypes {
             return new GoMethodReceiverImpl(node);
 
         if (elementType.equals(TYPE_PARENTHESIZED))
-            return new GoPsiTypeParenthesizedImpl(node);
+            return new GoParenthesisedExpressionOrTypeImpl(node);
 
         if (elementType.equals(TYPE_NAME))
             return new GoPsiTypeNameImpl(node);
@@ -146,7 +147,7 @@ class GoPsiCreator implements GoElementTypes {
             return new GoSelectorExpressionImpl(node);
 
         if (elementType.equals(PARENTHESISED_EXPRESSION))
-            return new GoParenthesisedExpressionImpl(node);
+            return new GoParenthesisedExpressionOrTypeImpl(node);
 
         if (elementType.equals(TYPE_ASSERTION_EXPRESSION))
             return new GoTypeAssertionExpressionImpl(node);

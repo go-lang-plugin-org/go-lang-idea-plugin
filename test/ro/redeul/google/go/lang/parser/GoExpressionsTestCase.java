@@ -33,6 +33,10 @@ public class GoExpressionsTestCase extends GoParsingTestCase {
         doTest();
     }
 
+    public void testCallOrConversion_funcLiteralCall() throws Throwable {
+        doTest();
+    }
+
     public void testIndex_simple() throws Throwable {
         doTest();
     }

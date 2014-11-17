@@ -2,12 +2,14 @@ package ro.redeul.google.go.lang.psi.impl.expressions.primary;
 
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.psi.GoParenthesizedExprOrType;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoExpressionList;
 import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeParenthesized;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypeConstant;
 import ro.redeul.google.go.lang.psi.typing.GoTypeFunction;
@@ -15,6 +17,7 @@ import ro.redeul.google.go.lang.psi.typing.GoTypeName;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.typing.TypeVisitor;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitorWithData;
 
 import java.util.Arrays;
 
@@ -27,42 +30,49 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase implements GoCa
     @NotNull
     @Override
     protected GoType[] resolveTypes() {
+        GoExpr baseExpression = getBaseExpression();
 
-        GoType[] baseType = getBaseExpression().getType();
-
-        if (baseType.length != 1)
-            return GoType.EMPTY_ARRAY;
-
-        return GoTypes.visitFirstType(baseType, new TypeVisitor<GoType[]>(GoType.EMPTY_ARRAY) {
+        boolean isType = baseExpression.accept(new GoElementVisitorWithData<Boolean>(false) {
             @Override
-            public GoType[] visitFunction(GoTypeFunction type) {
-                return computeCallType(type);
-            }
-
-            @Override
-            public GoType[] visitName(GoTypeName type) {
-                return computeConversionType(type);
+            public void visitParenthesisedExprOrType(GoParenthesizedExprOrType exprOrType) {
+                setData(exprOrType.isType());
             }
         });
+
+        if (isType)
+            return computeConversionType(GoTypes.fromPsi((GoPsiTypeParenthesized) baseExpression));
+        else {
+            return GoTypes.get(getBaseExpression().getType()).accept(new TypeVisitor<GoType[]>(GoType.EMPTY_ARRAY) {
+                @Override
+                public GoType[] visitFunction(GoTypeFunction type) {
+                    return computeCallType(type);
+                }
+
+                @Override
+                public GoType[] visitName(GoTypeName type) {
+                    return computeConversionType(type);
+                }
+            });
+        }
     }
 
     protected GoType[] computeCallType(GoTypeFunction type) {
         return type.getResultTypes();
     }
-    
-    protected GoType[] computeConversionType(GoTypeName type) {
+
+    protected GoType[] computeConversionType(GoType type) {
         GoExpr args[] = getArguments();
-        if ( args.length != 1 )
+        if (args.length != 1)
             return new GoType[]{type};
 
         GoType argType[] = args[0].getType();
-        if ( argType.length != 1 || !(argType[0] instanceof GoTypeConstant))
-            return new GoType[] { type };
+        if (argType.length != 1 || !(argType[0] instanceof GoTypeConstant))
+            return new GoType[]{type};
 
         GoTypeConstant constant = (GoTypeConstant) argType[0];
 
-        if ( type.canRepresent(constant) ) {
-            return new GoType[] { constant.retypeAs(type)};
+        if (type.canRepresent(constant)) {
+            return new GoType[]{constant.retypeAs(type)};
         }
 
         return new GoType[]{type};

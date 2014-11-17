@@ -9,13 +9,18 @@ import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSliceExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypeArray;
+import ro.redeul.google.go.lang.psi.typing.GoTypeConstant;
+import ro.redeul.google.go.lang.psi.typing.GoTypePrimitive;
+import ro.redeul.google.go.lang.psi.typing.GoTypeSlice;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.typing.TypeVisitor;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.hasPrevSiblingOfType;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.isWhiteSpaceOrComment;
 
-public class GoSliceExpressionImpl extends GoExpressionBase
-    implements GoSliceExpression {
+public class GoSliceExpressionImpl extends GoExpressionBase implements GoSliceExpression {
 
     public GoSliceExpressionImpl(@NotNull ASTNode node) {
         super(node);
@@ -29,7 +34,44 @@ public class GoSliceExpressionImpl extends GoExpressionBase
     @NotNull
     @Override
     protected GoType[] resolveTypes() {
-        return getBaseExpression().getType();
+        GoType baseType = GoTypes.get(getBaseExpression().getType());
+
+        GoType elementType = baseType.underlyingType().accept(new TypeVisitor<GoType>(GoType.Unknown) {
+            @Override
+            public GoType visitSlice(GoTypeSlice type) {
+                return type.getElementType();
+            }
+
+            @Override
+            public GoType visitArray(GoTypeArray type) {
+                return type.getElementType();
+            }
+
+            @Override
+            public GoType visitPrimitive(GoTypePrimitive type) {
+                switch (type.getType()) {
+                    case String:
+                        return types().getBuiltin(GoTypes.Builtin.Rune);
+                    default:
+                        return GoType.Unknown;
+                }
+            }
+
+            @Override
+            public GoType visitConstant(GoTypeConstant constant) {
+                if (constant.getType() != GoType.Unknown)
+                    return constant.getType().accept(this);
+
+                switch (constant.getKind()) {
+                    case String:
+                        return types().getBuiltin(GoTypes.Builtin.Rune);
+                    default:
+                        return GoType.Unknown;
+                }
+            }
+        });
+
+        return new GoType[]{GoTypes.makeSlice(getProject(), elementType)};
     }
 
     @Override

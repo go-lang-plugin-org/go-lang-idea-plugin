@@ -1,15 +1,20 @@
 package ro.redeul.google.go.lang.psi.typing;
 
+import com.intellij.openapi.project.Project;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeSlice;
 
-public class GoTypeSlice extends GoTypePsiBacked<GoPsiTypeSlice> implements GoType {
+public class GoTypeSlice extends GoAbstractType implements GoType {
 
-    private final GoType elementType;
+    private Project project;
+    private GoType elementType;
+
+    public GoTypeSlice(Project project, GoType elementType) {
+        this.project = project;
+        this.elementType = elementType;
+    }
 
     public GoTypeSlice(GoPsiTypeSlice type) {
-        super(type);
-
-        elementType = types().fromPsiType(type.getElementType());
+        this(type.getProject(), GoTypes.getInstance(type.getProject()).fromPsiType(type.getElementType()));
     }
 
     @Override
@@ -20,6 +25,11 @@ public class GoTypeSlice extends GoTypePsiBacked<GoPsiTypeSlice> implements GoTy
         GoTypeSlice otherSlice = (GoTypeSlice)type;
 
         return elementType.isIdentical(otherSlice.getElementType());
+    }
+
+    @Override
+    public boolean isAssignableFrom(GoType source) {
+        return super.isAssignableFrom(source);
     }
 
     @Override
@@ -37,6 +47,6 @@ public class GoTypeSlice extends GoTypePsiBacked<GoPsiTypeSlice> implements GoTy
     }
 
     public GoType getKeyType() {
-        return types().getBuiltin(GoTypes.Builtin.Int);
+        return GoTypes.getInstance(project).getBuiltin(GoTypes.Builtin.Int);
     }
 }

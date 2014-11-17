@@ -3,6 +3,7 @@ package ro.redeul.google.go.lang.psi.visitors;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPackage;
+import ro.redeul.google.go.lang.psi.GoParenthesizedExprOrType;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
@@ -15,6 +16,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComp
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeValue;
 import ro.redeul.google.go.lang.psi.expressions.primary.*;
+import ro.redeul.google.go.lang.psi.impl.GoParenthesisedExpressionOrTypeImpl;
 import ro.redeul.google.go.lang.psi.statements.*;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseDefault;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseRecv;
@@ -308,10 +310,6 @@ public class GoElementVisitor  {
 
     public void visitRelExpression(GoRelationalExpression expression) { visitBinaryExpression(expression); }
 
-    public void visitParenthesisedExpression(GoParenthesisedExpression expression) {
-        visitElement(expression);
-    }
-
     public void visitPackage(GoPackage aPackage) {
         visitElement(aPackage);
     }
@@ -334,5 +332,9 @@ public class GoElementVisitor  {
 
     public void visitUnaryExpression(GoUnaryExpression expression) {
         visitElement(expression);
+    }
+
+    public void visitParenthesisedExprOrType(GoParenthesizedExprOrType exprOrType) {
+        visitElement(exprOrType);
     }
 }

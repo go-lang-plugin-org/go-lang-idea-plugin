@@ -4,7 +4,6 @@ import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.Condition;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
-import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,7 +14,14 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
-import ro.redeul.google.go.lang.psi.typing.*;
+import ro.redeul.google.go.lang.psi.typing.GoFunctions;
+import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypeConstant;
+import ro.redeul.google.go.lang.psi.typing.GoTypeFunction;
+import ro.redeul.google.go.lang.psi.typing.GoTypeMap;
+import ro.redeul.google.go.lang.psi.typing.GoTypePrimitive;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.typing.TypeVisitor;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
@@ -150,7 +156,7 @@ public class GoBuiltinCallOrConversionExpressionImpl extends GoCallOrConvExpress
     }
 
     @Override
-    protected GoType[] computeConversionType(GoTypeName type) {
+    protected GoType[] computeConversionType(GoType type) {
         return super.computeConversionType(type);
     }
 

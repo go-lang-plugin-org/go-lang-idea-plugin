@@ -306,7 +306,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
             }
 
             GoType[] exprType = expr.getType();
-            if (exprType.length != 1) {
+            if (exprType.length != 1 && parameterTypes.length > 1) {
                 result.addProblem(expr, GoBundle.message("error.multiple.value.in.single.value.context", expr.getText()));
                 continue;
             }
@@ -324,7 +324,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
             }
         }
 
-        if (i < parameterTypes.length)
+        if (i < parameterTypes.length && !(i == parameterTypes.length - 1 && isVariadicCall))
             result.addProblem(call, GoBundle.message("error.not.enough.arguments.in.call", functionName));
     }
 
