@@ -43,10 +43,6 @@ public class TypeVisitor<T> {
 
     public T visitStruct(GoTypeStruct type) { return state; }
 
-    public T visitNil(GoType type) {return state; }
-
-    public T visitUnknown(GoType type) { return state; }
-
     public T visitVariadic(GoTypeVariadic type) { return type.getTargetType().accept(this); }
 
     public T visitInterface(GoTypeInterface type) { return state; }
@@ -54,4 +50,10 @@ public class TypeVisitor<T> {
     public T visitConstant(GoTypeConstant constant) { return state; }
 
     public T visitPrimitive(GoTypePrimitive type) { return visitName(type); }
+
+    public T visitAny(GoType type) { return state; }
+
+    public T visitNil(GoType type) {return state; }
+
+    public T visitUnknown(GoType type) { return state; }
 }

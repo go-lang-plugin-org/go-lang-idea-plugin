@@ -23,15 +23,17 @@ public class UpdatingTypeVisitor<T> {
 
     public void visitMap(GoTypeMap type, T data, TypeVisitor<T> visitor) { }
 
-    public void visitNil(GoType type, T data, TypeVisitor<T> visitor) { }
-
     public void visitPackage(GoTypePackage type, T data, TypeVisitor<T> visitor) { }
 
     public void visitStruct(GoTypeStruct type, T data, TypeVisitor<T> visitor) { }
 
-    public void visitUnknown(GoType type, T data, TypeVisitor<T> visitor) { }
-
     public void visitConstant(GoTypeConstant type, T data, TypeVisitor<T> visitor) { }
 
     public void visitPrimitive(GoTypePrimitive type, T data, TypeVisitor<T> visitor) { }
+
+    public void visitNil(GoType type, T data, TypeVisitor<T> visitor) { }
+
+    public void visitUnknown(GoType type, T data, TypeVisitor<T> visitor) { }
+
+    public void visitAny(GoType type, T data, TypeVisitor<T> visitor) { }
 }

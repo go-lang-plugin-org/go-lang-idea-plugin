@@ -104,6 +104,12 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase implements GoFun
         return GoPsiUtils.getParameters(result);
     }
 
+    @Override
+    public boolean isVariadic() {
+        GoFunctionParameter params[] = getParameters();
+        return params.length > 0 && params[params.length - 1].isVariadic();
+    }
+
     @NotNull
     @Override
     public GoType[] getParameterTypes() {

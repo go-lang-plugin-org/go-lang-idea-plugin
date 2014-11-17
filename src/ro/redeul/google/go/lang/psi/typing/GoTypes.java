@@ -66,6 +66,10 @@ public class GoTypes extends AbstractProjectComponent {
         return new GoTypePointer(fromPsi(argumentType));
     }
 
+    @NotNull
+    public static GoType get(GoType[] types) {
+        return types == null || types.length != 1 || types[0] == null ? GoType.Unknown : types[0];
+    }
     public static GoType[] getPackageType(GoImportDeclaration declaration) {
         GoPackage goPackage = declaration.getPackage();
         return goPackage != null ? new GoType[]{new GoTypePackage(goPackage)} : GoType.EMPTY_ARRAY;

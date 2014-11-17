@@ -7,4 +7,6 @@ public interface GoPsiTypeFunction extends GoPsiType {
     GoFunctionParameter[] getParameters();
 
     GoFunctionParameter[] getResults();
+
+    boolean isVariadic();
 }

@@ -222,18 +222,6 @@ public class GoBuiltinCallOrConversionExpressionImpl extends GoCallOrConvExpress
     }
 
     @Override
-    public GoExpr[] getArguments() {
-//        GoExpr[] arguments = super.getArguments();
-//        switch (getBuiltinKind()) {
-//            case New: case Make:
-//                return ArrayUtil.remove(arguments, 0);
-//            default:
-//                return arguments;
-//        }
-        return super.getArguments();
-    }
-
-    @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitBuiltinCallExpression(this);
     }

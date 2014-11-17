@@ -3,6 +3,7 @@ package ro.redeul.google.go.lang.parser.parsing.expressions;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
+import ro.redeul.google.go.lang.lexer.GoElementType;
 import ro.redeul.google.go.lang.lexer.GoTokenTypeSets;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.parser.GoParser;
@@ -18,11 +19,11 @@ class BinaryExpression implements GoElementTypes {
     private final IElementType elementType;
     private final TokenSet operators;
 
-    private static final BinaryExpression MUL_EXPR = new BinaryExpression(MUL_EXPRESSION, oMUL, oQUOTIENT, oREMAINDER, oSHIFT_LEFT, oSHIFT_RIGHT, oBIT_AND, oBIT_CLEAR);
-    private static final BinaryExpression ADD_EXPR = new BinaryExpression(ADD_EXPRESSION, oPLUS, oMINUS, oBIT_OR, oBIT_XOR);
-    private static final BinaryExpression REL_EXPR = new BinaryExpression(REL_EXPRESSION, oEQ, oNOT_EQ, oLESS, oLESS_OR_EQUAL, oGREATER, oGREATER_OR_EQUAL);
-    private static final BinaryExpression LOG_AND_EXPR = new BinaryExpression(LOG_AND_EXPRESSION, oCOND_AND);
-    private static final BinaryExpression LOG_OR_EXPR = new BinaryExpression(LOG_OR_EXPRESSION, oCOND_OR);
+    private static final BinaryExpression MUL_EXPR = new BinaryExpression(MUL_EXPRESSION, GoElementTypes.MUL_OPS);
+    private static final BinaryExpression ADD_EXPR = new BinaryExpression(ADD_EXPRESSION, GoElementTypes.ADD_OPS);
+    private static final BinaryExpression REL_EXPR = new BinaryExpression(REL_EXPRESSION, GoElementTypes.REL_OPS);
+    private static final BinaryExpression LOG_AND_EXPR = new BinaryExpression(LOG_AND_EXPRESSION, GoElementTypes.LOG_AND_OPS);
+    private static final BinaryExpression LOG_OR_EXPR = new BinaryExpression(LOG_OR_EXPRESSION, GoElementTypes.LOG_OR_OPS);
 
     private static final BinaryExpression[] precedence = {
             LOG_OR_EXPR,
@@ -68,8 +69,8 @@ class BinaryExpression implements GoElementTypes {
         return true;
     }
 
-    private BinaryExpression(IElementType elementType, IElementType... operators) {
+    private BinaryExpression(IElementType elementType, TokenSet operators) {
         this.elementType = elementType;
-        this.operators = TokenSet.create(operators);
+        this.operators = operators;
     }
 }

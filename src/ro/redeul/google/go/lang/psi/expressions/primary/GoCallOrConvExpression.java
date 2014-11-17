@@ -11,6 +11,4 @@ public interface GoCallOrConvExpression extends GoPrimaryExpression {
     GoPsiType getTypeArgument();
 
     GoExpr[] getArguments();
-
-    boolean isCallWithVariadicParameter();
 }

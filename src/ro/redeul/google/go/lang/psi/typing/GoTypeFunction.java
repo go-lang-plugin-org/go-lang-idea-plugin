@@ -13,9 +13,11 @@ public class GoTypeFunction extends GoTypePsiBacked<GoPsiTypeFunction> implement
     }
 
     public GoType[] getParameterTypes() {
+
         GoFunctionParameter[] parameters = getPsiType().getParameters();
 
-        switch (GoFunctions.getFunction(getPsiType().getName())) {
+        GoFunctions.Builtin builtin = GoFunctions.getFunction(getPsiType().getName());
+        switch (builtin) {
             case New: case Delete:
                 parameters = ArrayUtil.remove(parameters, 0);
         }
@@ -63,5 +65,9 @@ public class GoTypeFunction extends GoTypePsiBacked<GoPsiTypeFunction> implement
     @Override
     public String toString() {
         return String.format("func ... ");
+    }
+
+    public boolean isVariadic() {
+        return getPsiType().isVariadic();
     }
 }

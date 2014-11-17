@@ -24,11 +24,11 @@ public class GoPsiTypeFunctionImpl extends GoPsiTypeImpl implements GoPsiTypeFun
 
     @Override
     public GoFunctionParameter[] getParameters() {
-        GoFunctionParameterList parameterList =
-                findChildByClass(GoFunctionParameterList.class);
+        GoFunctionParameterList parameterList = findChildByClass(GoFunctionParameterList.class);
         if (parameterList == null) {
             return GoFunctionParameter.EMPTY_ARRAY;
         }
+
         return parameterList.getFunctionParameters();
     }
 
@@ -36,5 +36,11 @@ public class GoPsiTypeFunctionImpl extends GoPsiTypeImpl implements GoPsiTypeFun
     public GoFunctionParameter[] getResults() {
         PsiElement result = findChildByType(GoElementTypes.FUNCTION_RESULT);
         return GoPsiUtils.getParameters(result);
+    }
+
+    @Override
+    public boolean isVariadic() {
+        GoFunctionParameter params[] = getParameters();
+        return params.length > 0 && params[params.length - 1].isVariadic();
     }
 }

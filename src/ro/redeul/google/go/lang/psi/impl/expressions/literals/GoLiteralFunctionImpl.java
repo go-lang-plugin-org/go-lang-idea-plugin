@@ -94,6 +94,12 @@ public class GoLiteralFunctionImpl extends GoPsiElementBase implements GoLiteral
     }
 
     @Override
+    public boolean isVariadic() {
+        GoFunctionParameter parameters[] = getParameters();
+        return parameters.length > 0 && parameters[parameters.length - 1].isVariadic();
+    }
+
+    @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitFunctionLiteral(this);
     }
@@ -116,44 +122,4 @@ public class GoLiteralFunctionImpl extends GoPsiElementBase implements GoLiteral
 
         return processor.execute(this, state);
     }
-
-//    @Override
-//    public boolean isIdentical(GoPsiType goType) {
-//        if (goType instanceof GoPsiTypeName) {
-//            goType = resolveToFinalType(goType);
-//        }
-//
-//        if (!(goType instanceof GoPsiTypeFunction))
-//            return false;
-//
-//        GoPsiTypeFunction functionDeclaration = (GoPsiTypeFunction) goType;
-//
-//        GoFunctionParameter[] funcTypeArguments = getParameters();
-//        GoFunctionParameter[] funcDeclArguments = functionDeclaration.getParameters();
-//
-//        int idx = 0;
-//
-//        if (funcDeclArguments.length != funcTypeArguments.length)
-//            return false;
-//
-//        for (GoFunctionParameter parameter : funcDeclArguments) {
-//            if (!parameter.getType().isIdentical(funcTypeArguments[idx].getType()))
-//                return false;
-//            idx++;
-//        }
-//
-//        funcTypeArguments = this.getResults();
-//        funcDeclArguments = functionDeclaration.getResults();
-//
-//        if (funcDeclArguments.length != funcTypeArguments.length)
-//            return false;
-//
-//        idx = 0;
-//        for (GoFunctionParameter parameter : funcDeclArguments) {
-//            if (!parameter.getType().isIdentical(funcTypeArguments[idx].getType()))
-//                return false;
-//            idx++;
-//        }
-//        return true;
-//    }
 }

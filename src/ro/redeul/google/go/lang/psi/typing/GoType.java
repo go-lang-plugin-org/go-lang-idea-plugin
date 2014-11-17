@@ -28,6 +28,26 @@ public interface GoType {
 
     <T> T accept(UpdatingTypeVisitor<T> visitor, T initialData);
 
+    static final GoType Any = new GoAbstractType() {
+        @Override
+        public <T> T accept(TypeVisitor<T> visitor) {
+            return visitor.visitAny(this);
+        }
+
+        @Override
+        public boolean isAssignableFrom(GoType source) { return true; }
+
+        @Override
+        public boolean isIdentical(GoType type) { return true; }
+
+        @Nullable
+        @Override
+        public GoType castAs(GoType type) { return type; }
+
+        @Override
+        public String toString() { return "<any>"; }
+    };
+
     static final GoType Unknown = new GoAbstractType() {
         @Override
         public <T> T accept(TypeVisitor<T> visitor) {
@@ -36,7 +56,7 @@ public interface GoType {
 
         @Override
         public String toString() {
-            return "unknown";
+            return "<unknown>";
         }
     };
 
@@ -49,7 +69,7 @@ public interface GoType {
 
         @Override
         public String toString() {
-            return "nil";
+            return "<nil>";
         }
     };
 }

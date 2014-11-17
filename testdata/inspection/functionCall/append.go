@@ -10,11 +10,6 @@ func main() {
 	arr1 = append(arr1, /*begin*/1.2/*end.cannot use 1.2 (type float64) as type int in argument to append|CastTypeFix*/)
 	arr1 = append(arr1, /*begin*/""/*end.cannot use "" (type string) as type int in argument to append|CastTypeFix*/)
 
-	map1 := map[string]int{}
-	delete(map1, "key")
-	delete(map1, /*begin*/1/*end.Expression type mismatch, the expected type is string|CastTypeFix*/)
-
 	arr1 = append(arr1, arr1...)
 	arr3 = append(arr3, /*begin*/"test"/*end. cannot use "test" (type string) as type byte in argument to append|CastTypeFix*/...)
-
 }
