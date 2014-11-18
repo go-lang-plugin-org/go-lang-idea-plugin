@@ -132,6 +132,10 @@ public class GoResolveCallsTest extends GoPsiResolveTestCase {
     public void testRelativePackageReferenceDeep() throws Exception {
         doTest();
     }
+
+    public void testImportedEmbeddedTypeMethod() throws Exception {
+        doTest();
+    }
 //    public void testConversionToLocallyImportedType() throws Exception {
 //        _testSingleCompletion();
 //    }
