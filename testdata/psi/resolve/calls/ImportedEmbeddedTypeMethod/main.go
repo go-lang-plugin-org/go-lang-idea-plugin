@@ -18,3 +18,7 @@ func test() {
     x := Foo{}
     x./*ref*/Get("asdf")
 }
+
+func main() {
+
+}

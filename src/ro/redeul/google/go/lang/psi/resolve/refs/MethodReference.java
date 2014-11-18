@@ -42,16 +42,21 @@ public class MethodReference extends ReferenceWithSolver<GoLiteralIdentifier, Me
 
     @Override
     public void walkSolver(MethodSolver solver) {
-        GoPackage goPackage = GoPackages.getTargetPackageIfDifferent(getElement(), type.getDefinition());
 
-        if ( goPackage != null) {
-            GoPsiScopesUtil.walkPackage(solver, getElement(), goPackage);
-        } else {
-            GoPsiScopesUtil.treeWalkUp(
-                    solver,
-                    getElement().getContainingFile().getLastChild(),
-                    getElement().getContainingFile(),
-                    ResolveStates.initial());
+        Set<GoTypeName> allTypes = resolveBaseReceiverTypes();
+
+        for (GoTypeName typeName : allTypes) {
+            GoPackage goPackage = GoPackages.getTargetPackageIfDifferent(getElement(), typeName.getDefinition());
+
+            if ( goPackage != null) {
+                GoPsiScopesUtil.walkPackage(solver, getElement(), goPackage);
+            } else {
+                GoPsiScopesUtil.treeWalkUp(
+                        solver,
+                        getElement().getContainingFile().getLastChild(),
+                        getElement().getContainingFile(),
+                        ResolveStates.initial());
+            }
         }
     }
 
