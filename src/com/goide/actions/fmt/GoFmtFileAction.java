@@ -16,9 +16,9 @@
 
 package com.goide.actions.fmt;
 
-import com.goide.GoSdkType;
 import com.goide.jps.model.JpsGoSdkType;
 import com.goide.psi.GoFile;
+import com.goide.sdk.GoSdkType;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.OSProcessHandler;

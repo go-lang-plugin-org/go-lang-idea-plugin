@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.goide;
+package com.goide.sdk;
 
 import com.goide.psi.GoFile;
 import com.intellij.openapi.application.PathMacros;

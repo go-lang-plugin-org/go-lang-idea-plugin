@@ -16,8 +16,8 @@
 
 package com.goide.psi.impl;
 
-import com.goide.GoSdkUtil;
 import com.goide.psi.*;
+import com.goide.sdk.GoSdkUtil;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.TextRange;

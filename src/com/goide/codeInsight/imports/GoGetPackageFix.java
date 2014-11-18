@@ -16,8 +16,8 @@
 
 package com.goide.codeInsight.imports;
 
-import com.goide.GoSdkUtil;
 import com.goide.jps.model.JpsGoSdkType;
+import com.goide.sdk.GoSdkUtil;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInspection.LocalQuickFixBase;
 import com.intellij.codeInspection.ProblemDescriptor;

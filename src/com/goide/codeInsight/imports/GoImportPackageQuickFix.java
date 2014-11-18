@@ -76,7 +76,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
     if (element == null || !element.isValid()) {
       return false;
     }
-
+    
     if (myReference.resolve() != null) return false;
 
     if (isPerformed) {

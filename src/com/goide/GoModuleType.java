@@ -16,6 +16,7 @@
 
 package com.goide;
 
+import com.goide.sdk.GoSdkType;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ide.util.projectWizard.ProjectJdkForModuleStep;
 import com.intellij.ide.util.projectWizard.WizardContext;

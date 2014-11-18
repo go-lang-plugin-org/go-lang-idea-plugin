@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.goide;
+package com.goide.sdk;
 
+import com.goide.GoIcons;
 import com.goide.jps.model.JpsGoModelSerializerExtension;
 import com.goide.jps.model.JpsGoSdkType;
 import com.intellij.execution.configurations.PathEnvironmentVariableUtil;

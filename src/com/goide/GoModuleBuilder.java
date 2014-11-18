@@ -16,6 +16,7 @@
 
 package com.goide;
 
+import com.goide.sdk.GoSdkType;
 import com.intellij.compiler.CompilerWorkspaceConfiguration;
 import com.intellij.ide.util.projectWizard.JavaModuleBuilder;
 import com.intellij.ide.util.projectWizard.ModuleBuilderListener;

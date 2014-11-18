@@ -16,9 +16,9 @@
 
 package com.goide.runconfig.file;
 
-import com.goide.GoSdkUtil;
 import com.goide.jps.model.JpsGoSdkType;
 import com.goide.runconfig.GoRunningState;
+import com.goide.sdk.GoSdkUtil;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.ParametersList;
@@ -52,7 +52,7 @@ public class GoRunFileRunningState extends GoRunningState {
     list.add("run");
     String filePath = myConfiguration.getFilePath();
     list.addParametersString(filePath);
-    commandLine.setWorkDirectory(PathUtil.getParentPath(filePath));
+    commandLine.withWorkDirectory(PathUtil.getParentPath(filePath));
     TextConsoleBuilder consoleBuilder = TextConsoleBuilderFactory.getInstance().createBuilder(myModule.getProject());
     setConsoleBuilder(consoleBuilder);
     return commandLine;

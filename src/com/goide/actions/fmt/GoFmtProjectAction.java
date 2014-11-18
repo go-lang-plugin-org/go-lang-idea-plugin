@@ -16,8 +16,8 @@
 
 package com.goide.actions.fmt;
 
-import com.goide.GoSdkType;
 import com.goide.jps.model.JpsGoSdkType;
+import com.goide.sdk.GoSdkType;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.process.ProcessAdapter;
@@ -75,7 +75,7 @@ public class GoFmtProjectAction extends AnAction implements DumbAware {
 
       File executable = JpsGoSdkType.getGoExecutableFile(sdkHome);
 
-      commandLine.setWorkDirectory(project.getBasePath());
+      commandLine.withWorkDirectory(project.getBasePath());
       commandLine.setExePath(executable.getAbsolutePath());
       commandLine.addParameters("fmt", "./...");
 
