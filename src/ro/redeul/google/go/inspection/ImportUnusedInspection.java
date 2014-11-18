@@ -34,8 +34,7 @@ public class ImportUnusedInspection extends AbstractWholeGoFileInspection {
             pdm.commitDocument(document);
         }
 
-        Collection<GoImportDeclaration> unusedImports =
-                UnusedImportsFinder.findUnusedImports(file);
+        Collection<GoImportDeclaration> unusedImports = UnusedImportsFinder.findUnusedImports(file);
 
         for (GoImportDeclaration unused : unusedImports) {
             if (!unused.isValidImport() || unused.getImportPath() == null) {

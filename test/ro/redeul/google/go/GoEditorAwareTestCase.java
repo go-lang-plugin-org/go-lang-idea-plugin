@@ -52,8 +52,7 @@ public abstract class GoEditorAwareTestCase
             @Override
             public void run() {
                 invoke(getProject(), myEditor, goFile);
-                PostprocessReformattingAspect.getInstance(getProject())
-                        .doPostponedFormatting();
+                PostprocessReformattingAspect.getInstance(getProject()).doPostponedFormatting();
             }
         });
 

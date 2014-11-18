@@ -1,12 +1,13 @@
 package main
 
 import (
-    "fmt"
-    "io"
+    "p1"
+    "p2"
 )
 
 func main() {
 }
+
 -----
 package main
 

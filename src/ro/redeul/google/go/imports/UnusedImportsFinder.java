@@ -10,10 +10,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UnusedImportsFinder {
+
     public static Collection<GoImportDeclaration> findUnusedImports(GoFile file) {
 
-        Map<String, GoImportDeclaration> imports =
-                new HashMap<String, GoImportDeclaration>();
+        Map<String, GoImportDeclaration> imports = new HashMap<String, GoImportDeclaration>();
 
         for (GoImportDeclarations importDeclarations : file.getImportDeclarations()) {
             for (GoImportDeclaration declaration : importDeclarations.getDeclarations()) {
