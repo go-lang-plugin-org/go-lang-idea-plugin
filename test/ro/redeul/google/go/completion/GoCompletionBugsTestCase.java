@@ -22,8 +22,7 @@ public class GoCompletionBugsTestCase extends GoCompletionTestCase{
         _testSingleCompletion();
     }
 
-    @Ignore("failing test")
-    public void testGH1006_MissionMethodInAnotherPackage() throws IOException {
+    public void testMissingMethodInAnotherPackage() throws IOException {
         addPackage("net", "net.go");
         _testVariants();
     }
