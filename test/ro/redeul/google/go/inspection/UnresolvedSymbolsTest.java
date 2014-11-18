@@ -72,8 +72,6 @@ public class UnresolvedSymbolsTest extends GoInspectionTestCase {
         doTest();
     }
 
-    //finish GoCallOrConvExpressionImpl.resolveTypes() to pass this test case.
-    @Ignore("failing test")
     public void testCallOrConvExpressResolveToConv() throws Exception {
         doTest();
     }
@@ -88,13 +86,8 @@ public class UnresolvedSymbolsTest extends GoInspectionTestCase {
         doTestWithDirectory();
     }
 
-    @Ignore("failing test")
+    @Ignore("failing")
     public void testMethodFromAnotherPackage() throws Exception{
         doTestWithDirectory();
-    }
-
-    @Ignore("failing test")
-    public void testIssue1008() throws Exception{
-        doTest();
     }
 }

@@ -20,10 +20,7 @@ import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
  * Date: 5/31/11
  * Time: 11:28 PM
  */
-public class GoShortVarDeclarationImpl extends GoVarDeclarationImpl
-        implements GoShortVarDeclaration {
-
-    private GoLiteralIdentifier[] declarations;
+public class GoShortVarDeclarationImpl extends GoVarDeclarationImpl implements GoShortVarDeclaration {
 
     public GoShortVarDeclarationImpl(@NotNull ASTNode node) {
         super(node);
@@ -39,22 +36,18 @@ public class GoShortVarDeclarationImpl extends GoVarDeclarationImpl
                                        @NotNull ResolveState state,
                                        PsiElement lastParent,
                                        @NotNull PsiElement place) {
-        if (lastParent != null)
-            return true;
-        return processor.execute(this, state);
+        return lastParent != null || processor.execute(this, state);
     }
 
     @Override
     public GoLiteralIdentifier[] getDeclarations() {
 
-        if (declarations == null) {
-            declarations = ContainerUtil.findAllAsArray(
-                    ContainerUtil.filter(getIdentifiers(), new Condition<GoLiteralIdentifier>() {
-                        public boolean value(GoLiteralIdentifier ident) { return resolveSafely(ident) == null;  }
-                    }),
-            GoLiteralIdentifier.class);
-        }
-
-        return declarations;
+        return ContainerUtil.findAllAsArray(
+                ContainerUtil.filter(getIdentifiers(), new Condition<GoLiteralIdentifier>() {
+                    public boolean value(GoLiteralIdentifier ident) {
+                        return resolveSafely(ident) == null;
+                    }
+                }),
+                GoLiteralIdentifier.class);
     }
 }

@@ -1,5 +1,6 @@
 package ro.redeul.google.go.lang.psi.resolve.refs;
 
+import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.resolve.ReferenceSolvingVisitor;
 import ro.redeul.google.go.lang.psi.resolve.VisitingReferenceSolver;
@@ -36,12 +37,11 @@ public class FunctionOrTypeNameSolver extends VisitingReferenceSolver<FunctionOr
                 return name != null && matchNames(reference.name(), name);
             }
 
-//            @Override
-//            public void visitVarDeclaration(GoVarDeclaration declaration) {
-//                if (checkReference(declaration))
-//                    addTarget(declaration);
-//            }
-//
+            @Override
+            public void visitVarDeclaration(GoVarDeclaration declaration) {
+                checkIdentifiers(reference.name(), declaration.getIdentifiers());
+            }
+
             @Override
             public void visitShortVarDeclaration(GoShortVarDeclaration declaration) {
                 GoLiteralIdentifier ids[] = declaration.getDeclarations();

@@ -8,5 +8,5 @@ func (t T1)String()string{
 func f1(){
 	d0 := T1(1)
 	_ := d0.String()
-	d0./*begin*/NotExist/*end.Unresolved symbol: 'notExist'*/()
+	d0./*begin*/NotExist/*end.Unresolved symbol: 'NotExist'*/()
 }
