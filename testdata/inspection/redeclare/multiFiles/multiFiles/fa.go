@@ -1,4 +1,4 @@
-package mulitFiles
+package multiFiles
 
 var /*begin*/bad1/*end.Redeclare in this block*/ = 1
 

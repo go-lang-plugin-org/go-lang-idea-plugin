@@ -9,12 +9,12 @@ public class ImportPathInspectionTest extends GoInspectionTestCase {
     public void testEmptyImportPath() throws Exception{ doTest(); }
     public void testCgo() throws Exception{ doTest(); }
     public void testRepeat() throws Exception{ doTest(); }
-    public void testNotFound() throws Exception{ doTestWithDirectory(); }
-    public void testDirPackageNotEqual() throws Exception { doTestWithDirectory();}
+    public void testNotFound() throws Exception{ doTest(); }
+    public void testDirPackageNotEqual() throws Exception { doTest();}
 
-    public void testSelf() throws Exception{ doTestWithDirectory(); }
+    public void testSelf() throws Exception{ doTest(); }
 
     @Ignore("failing test")
-    public void testCaseInsensitive() throws Exception { doTestWithDirectory();}
+    public void testCaseInsensitive() throws Exception { doTest();}
 
 }

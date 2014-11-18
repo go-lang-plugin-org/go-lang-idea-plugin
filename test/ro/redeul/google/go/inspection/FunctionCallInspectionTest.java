@@ -24,7 +24,7 @@ public class FunctionCallInspectionTest extends GoInspectionTestCase {
 
     public void testInterface() throws Exception { doTest(); }
 
-    public void testIssue875() throws Exception { doTestWithDirectory(); }
+    public void testIssue875() throws Exception { doTest(); }
 
     public void testIssue686() throws Exception { doTest(); }
 

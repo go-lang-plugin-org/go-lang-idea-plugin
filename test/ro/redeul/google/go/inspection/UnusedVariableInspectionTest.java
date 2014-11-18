@@ -58,7 +58,7 @@ public class UnusedVariableInspectionTest extends GoInspectionTestCase {
 
     @Ignore("failing test")
     public void testIssue438() throws Exception {
-        doTestWithDirectory();
+        doTest();
     }
 
     @Ignore("failing test")

@@ -1,8 +1,8 @@
 package p2
 
 import (
-	"caseinsensitive/p1"
-	/*begin*/"caseInsensitive/P3"/*end.Package "caseInsensitive/P3" not found in project*/
+	"p1"
+	/*begin*/"P3"/*end.Package "P3" not found in project*/
 )
 
 func f1(){
