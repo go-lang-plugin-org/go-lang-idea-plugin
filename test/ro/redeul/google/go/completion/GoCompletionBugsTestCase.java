@@ -1,7 +1,5 @@
 package ro.redeul.google.go.completion;
 
-import org.junit.Ignore;
-
 import java.io.IOException;
 
 public class GoCompletionBugsTestCase extends GoCompletionTestCase{
@@ -9,11 +7,11 @@ public class GoCompletionBugsTestCase extends GoCompletionTestCase{
         return super.getTestDataRelativePath() + "bugs";
     }
 
-    public void testGH218_MissingTypeSpec() throws IOException {
+    public void testMissingTypeSpec() throws IOException {
         _testVariants();
     }
 
-    public void testGH530_MissingFunctionName() throws IOException {
+    public void testMissingFunctionName() throws IOException {
         _testVariants();
     }
 
