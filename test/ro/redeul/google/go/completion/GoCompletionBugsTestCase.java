@@ -1,5 +1,7 @@
 package ro.redeul.google.go.completion;
 
+import org.junit.Ignore;
+
 import java.io.IOException;
 
 public class GoCompletionBugsTestCase extends GoCompletionTestCase{
@@ -18,5 +20,11 @@ public class GoCompletionBugsTestCase extends GoCompletionTestCase{
     public void testGH749() throws IOException {
         addPackage("net", "net.go");
         _testSingleCompletion();
+    }
+
+    @Ignore("failing test")
+    public void testGH1006_MissionMethodInAnotherPackage() throws IOException {
+        addPackage("net", "net.go");
+        _testVariants();
     }
 }
