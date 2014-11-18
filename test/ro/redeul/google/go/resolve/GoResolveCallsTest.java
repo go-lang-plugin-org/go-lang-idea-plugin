@@ -73,6 +73,10 @@ public class GoResolveCallsTest extends GoPsiResolveTestCase {
         doTest();
     }
 
+    public void testCallToFunctionLiteral() throws Exception {
+        doTest();
+    }
+
     public void testTypeConversionToLocalType() throws Exception {
         doTest();
     }
@@ -136,6 +140,7 @@ public class GoResolveCallsTest extends GoPsiResolveTestCase {
     public void testImportedEmbeddedTypeMethod() throws Exception {
         doTest();
     }
+
 //    public void testConversionToLocallyImportedType() throws Exception {
 //        _testSingleCompletion();
 //    }
