@@ -20,7 +20,8 @@ public class GoTypeAssertionExpressionImpl extends GoExpressionBase implements G
     protected GoType[] resolveTypes() {
         return new GoType[]{
             types().fromPsiType(getAssertedType()),
-            types().getBuiltin(GoTypes.Builtin.Bool)
+            // this should be in here once we have the concept of a single-value context for evaluating an expression
+//            types().getBuiltin(GoTypes.Builtin.Bool)
         };
     }
 

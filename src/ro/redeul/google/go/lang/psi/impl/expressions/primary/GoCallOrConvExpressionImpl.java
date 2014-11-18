@@ -2,6 +2,7 @@ package ro.redeul.google.go.lang.psi.impl.expressions.primary;
 
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoParenthesizedExprOrType;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoExpressionList;
@@ -108,5 +109,10 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase implements GoCa
     @Override
     public void accept(GoElementVisitor visitor) {
         visitor.visitCallOrConvExpression(this);
+    }
+
+    @Override
+    public boolean isVariadic() {
+        return findLastChildByType(GoElementTypes.oTRIPLE_DOT) != null;
     }
 }

@@ -15,6 +15,8 @@ public class InspectionResult {
     private final InspectionManager manager;
     private final List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
 
+    private int problemsCreated;
+
     public InspectionResult(Project project) {
         this(InspectionManager.getInstance(project));
     }
@@ -27,6 +29,13 @@ public class InspectionResult {
         return problems;
     }
 
+    public void resetCount() {
+        problemsCreated = 0;
+    }
+
+    public int getCount() {
+        return problemsCreated;
+    }
     public void addProblem(PsiElement element, String msg, LocalQuickFix... fixes) {
         addProblem(element, element, msg, fixes);
     }
@@ -40,18 +49,21 @@ public class InspectionResult {
     }
 
     public void addProblem(PsiElement start, PsiElement end, String msg, ProblemHighlightType type, LocalQuickFix... fixes) {
+        problemsCreated++;
+
         TextRange startTextRange = start.getTextRange();
         TextRange endTextRange = end.getTextRange();
-        if (startTextRange.getStartOffset() < endTextRange.getEndOffset()) {
+        if (startTextRange.getStartOffset() < endTextRange.getEndOffset())
             problems.add(manager.createProblemDescriptor(start, end, msg, type, true, fixes));
-        }
     }
 
     public void addProblem(PsiElement element, int start, int end, String msg, ProblemHighlightType type, LocalQuickFix... fixes) {
-        if (start < end) {
-            problems.add(manager.createProblemDescriptor(element,
-                                                         new TextRange(start, end),
-                                                         msg, type, true, fixes));
-        }
+        problemsCreated++;
+
+        if (start < end)
+            problems.add(
+                    manager.createProblemDescriptor(element,
+                            new TextRange(start, end),
+                            msg, type, true, fixes));
     }
 }

@@ -9,8 +9,7 @@ func Return2() (int, int) {
 }
 
 func main() {
-	/*begin*/Return1(1, 1)/*end.too many arguments in call to Return1*/
+	Return1(1, /*begin*/1/*end.extra argument to Return1*/)
 	Return1(/*begin*/Return2()/*end.too many arguments in call to Return1*/)
-
-	println(Return1(1), /*begin*/Return2()/*end.Multiple-value Return2() in single-value context*/)
+	println(Return1(1), /*begin*/Return2()/*end.multiple-value Return2() in single-value context*/)
 }

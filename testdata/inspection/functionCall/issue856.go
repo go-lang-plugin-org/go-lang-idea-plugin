@@ -1,9 +1,7 @@
-package functionCall
+package main
 
 func main() {
-	stuff := []string{"1", "2", "3"}
 	var myStuff []string
-	myStuff = append(myStuff, stuff...)
 	doSomething(myStuff...)
 }
 

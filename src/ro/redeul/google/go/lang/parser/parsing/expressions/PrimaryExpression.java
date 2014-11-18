@@ -252,6 +252,7 @@ class PrimaryExpression implements GoElementTypes {
             }
         }
 
+        ParserUtils.getToken(builder, oTRIPLE_DOT);
         ParserUtils.getToken(builder, pRPAREN, "closed.parenthesis.expected");
 
         mark.done(CALL_OR_CONVERSION_EXPRESSION);

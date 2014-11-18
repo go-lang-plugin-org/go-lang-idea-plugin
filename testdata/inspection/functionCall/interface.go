@@ -14,7 +14,7 @@ func f4(arg ...t1) int {
 	return 0
 }
 func bad4() {
-	f4(/*begin*/[]string{}/*end.Expression type mismatch, the expected type is []t1*/...)
+	f4(/*begin*/[]string{}/*end.cannot use []string{} (type []string) as type []t1 in argument to f4|CastTypeFix*/...)
 }
 func good4() {
 	a := []t1{}

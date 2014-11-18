@@ -13,6 +13,7 @@ import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
 import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructAnonymousField;
 import ro.redeul.google.go.lang.psi.types.struct.GoTypeStructField;
@@ -39,6 +40,10 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
     @Override
     protected GoType[] resolveTypes() {
         PsiElement target = resolveSafely(getIdentifier(), PsiElement.class);
+
+        if (target instanceof GoTypeSpec)
+            return new GoType[]{
+                    types().fromPsiType(((GoTypeSpec) target).getTypeNameDeclaration())};
 
         if (target instanceof GoFunctionDeclaration) {
             GoFunctionDeclaration functionDeclaration = (GoFunctionDeclaration) target;

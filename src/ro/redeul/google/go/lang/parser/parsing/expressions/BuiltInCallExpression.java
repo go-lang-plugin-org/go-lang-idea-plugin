@@ -99,6 +99,7 @@ class BuiltInCallExpression implements GoElementTypes {
             }
         }
 
+        ParserUtils.getToken(builder, oTRIPLE_DOT);
         ParserUtils.getToken(builder, pRPAREN, "closed.parenthesis.expected");
 
         mark.done(BUILTIN_CALL_EXPRESSION);

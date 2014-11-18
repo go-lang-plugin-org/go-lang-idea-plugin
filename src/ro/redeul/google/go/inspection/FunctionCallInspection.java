@@ -75,7 +75,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
 
     private boolean validateDeleteCall(GoCallOrConvExpression expr, GoExpr[] args, GoFile file, InspectionResult result) {
         if ( args.length == 0 ) {
-            result.addProblem(expr, GoBundle.message("error.call.missing.args", "delete"));
+            result.addProblem(expr, GoBundle.message("error.call.builtin.missing.args", "delete"));
             return false;
         }
 
@@ -140,7 +140,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
         if ( args.length < 2 ) {
             result.addProblem(
                     expression,
-                    GoBundle.message("error.call.missing.args", "copy"));
+                    GoBundle.message("error.call.builtin.missing.args", "copy"));
             return false;
         }
 
@@ -192,9 +192,9 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
         return false;
     }
 
-    private boolean validateAppendCall(GoCallOrConvExpression expression, GoExpr[] args, GoFile file, InspectionResult result) {
+    private boolean validateAppendCall(GoCallOrConvExpression call, GoExpr[] args, GoFile file, InspectionResult result) {
         if (args.length == 0) {
-            result.addProblem(expression, GoBundle.message("error.not.enough.arguments.in.call", "append"));
+            result.addProblem(call, GoBundle.message("error.call.missing.args", "append"));
             return false;
         }
 
@@ -208,26 +208,29 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
         }
 
         if (args.length == 1) {
-            result.addProblem(
-                    expression,
-                    GoBundle.message(
-                            "error.not.enough.arguments.in.call", "append"));
+            result.addProblem(call, GoBundle.message("error.call.missing.args", "append"));
             return false;
         }
 
         GoType elementType = ((GoTypeSlice) sliceType[0].underlyingType()).getElementType();
 
         for (int i = 1; i < args.length; i++) {
-            GoType argType[] = args[i].getType();
-            if (argType.length != 1 || !elementType.isAssignableFrom(argType[0])) {
-                result.addProblem(args[i],
+            GoExpr arg = args[i];
+            GoType[] argTypes = arg.getType();
+            GoType argType = GoTypes.get(argTypes);
+            GoType expectedElementType = elementType;
+            if ( i == args.length - 1 && call.isVariadic() )
+                expectedElementType = GoTypes.makeSlice(call.getProject(), elementType);
+
+            if (argTypes.length != 1 || !expectedElementType.isAssignableFrom(argType)) {
+                result.addProblem(arg,
                         GoBundle.message(
                                 "warn.function.call.arg.type.mismatch",
-                                args[i].getText(),
-                                GoTypes.getRepresentation(argType[0], file),
+                                arg.getText(),
+                                GoTypes.getRepresentation(argType, file),
                                 GoTypes.getRepresentation(elementType, file), "append"),
                         ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-                        new CastTypeFix(args[i], elementType));
+                        new CastTypeFix(arg, elementType));
             }
         }
 
@@ -252,7 +255,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
             @Override
             public Boolean visitMap(GoTypeMap type) {
                 for (int i = 1; i < args.length; i++)
-                    result.addProblem(args[i], GoBundle.message("error.too.many.arguments.in.call", "make"));
+                    result.addProblem(args[i], GoBundle.message("error.call.extra.args", "make"));
 
                 return getData();
             }
@@ -260,7 +263,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
             @Override
             public Boolean visitChannel(GoTypeChannel type) {
                 for (int i = 1; i < args.length; i++)
-                    result.addProblem(args[i], GoBundle.message("error.too.many.arguments.in.call", "make"));
+                    result.addProblem(args[i], GoBundle.message("error.call.extra.args", "make"));
 
                 return getData();
             }
@@ -268,7 +271,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
             @Override
             public Boolean visitSlice(GoTypeSlice type) {
                 for (int i = 2; i < args.length; i++)
-                    result.addProblem(args[i], GoBundle.message("error.too.many.arguments.in.call", "make"));
+                    result.addProblem(args[i], GoBundle.message("error.call.extra.args", "make"));
 
                 if (args.length == 0)
                     result.addProblem(call, GoBundle.message("error.call.missing.arg", call.getText()));
@@ -286,46 +289,115 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
         GoExpr[] arguments = call.getArguments();
         if (arguments == null) return;
 
+        boolean isVariadicFunction = callType.isVariadic();
         GoType[] parameterTypes = callType.getParameterTypes();
-        boolean isVariadicCall = callType.isVariadic();
 
-        int i = 0, exprCount = arguments.length;
-        for (; i < exprCount; i++) {
-            GoExpr expr = arguments[i];
-            GoType parameterType;
+        validateCall(call, getFunctionName(callType), callType.isVariadic(), callType.getParameterTypes(), call.isVariadic(), call.getArguments(), result, file);
+    }
 
-            if (i < parameterTypes.length) {
-                parameterType = parameterTypes[i];
-            } else {
-                if (isVariadicCall) {
-                    parameterType = parameterTypes[parameterTypes.length - 1];
-                } else {
-                    result.addProblem(call, GoBundle.message("error.too.many.arguments.in.call", functionName));
-                    continue;
+    private static void validateCall(GoCallOrConvExpression call, String name, boolean isVarFunc, GoType[] paramTypes, boolean isVarCall, GoExpr[] args, InspectionResult problems, GoFile file) {
+
+        problems.resetCount();
+        if (args.length != 1) {
+            for (GoExpr argument : args) {
+                if (argument.getType().length != 1) {
+                    problems.addProblem(argument, GoBundle.message("error.multiple.value.in.single.value.context", argument.getText()));
                 }
             }
+        }
+        if (problems.getCount() != 0)
+            return;
 
-            GoType[] exprType = expr.getType();
-            if (exprType.length != 1 && parameterTypes.length > 1) {
-                result.addProblem(expr, GoBundle.message("error.multiple.value.in.single.value.context", expr.getText()));
-                continue;
-            }
+        if (args.length == 1) {
+            GoExpr arg = args[0];
+            GoType argTypes[] = arg.getType();
+            // we have a single value as a single argument, let's see if it matches
+            if ( argTypes.length > 1) {
+                // if we have to few arguments and the definition is not variadic we complain and bail
+                if (paramTypes.length < argTypes.length) {
+                    if (!isVarFunc) {
+                        problems.addProblem(arg, GoBundle.message("error.call.extra.args", name));
+                        return;
+                    }
 
-            if (!parameterType.isAssignableFrom(exprType[0])) {
-                result.addProblem(expr,
-                        GoBundle.message(
-                                "warn.function.call.arg.type.mismatch",
-                                expr.getText(),
-                                GoTypes.getRepresentation(exprType[0], file),
-                                GoTypes.getRepresentation(parameterType, file),
-                                functionName),
-                        ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-                        new CastTypeFix(expr, parameterType));
+                    if (isVarCall) {
+                        problems.addProblem(arg, GoBundle.message("error.multiple.value.in.single.value.context", arg.getText()));
+                        return;
+                    }
+                }
+
+                if ( paramTypes.length > argTypes.length) {
+                    problems.addProblem(arg, GoBundle.message("error.call.missing.args", name));
+                    return;
+                }
+
+                // validate argument types
+                int max = argTypes.length;
+                if ( paramTypes.length < max && !isVarFunc)
+                    max = paramTypes.length;
+
+                for (int i = 0; i < max; i++) {
+                    GoType argType = argTypes[i];
+                    GoType paramType = i < paramTypes.length ? paramTypes[i] : paramTypes[paramTypes.length - 1];
+
+
+                    if (!paramType.isAssignableFrom(argType)) {
+                        problems.addProblem(arg,
+                                GoBundle.message(
+                                        "error.call.arg.type.mismatch.multival",
+                                        GoTypes.getRepresentation(argType, file),
+                                        GoTypes.getRepresentation(paramType, file),
+                                        name),
+                                ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+                        break;
+                    }
+                }
+
+                return;
             }
         }
 
-        if (i < parameterTypes.length && !(i == parameterTypes.length - 1 && isVariadicCall))
-            result.addProblem(call, GoBundle.message("error.not.enough.arguments.in.call", functionName));
+        int exprIdx = 0, exprCount = args.length;
+        for (; exprIdx < exprCount; exprIdx++) {
+            GoExpr expr = args[exprIdx];
+
+            GoType expectedType = GoType.Unknown;
+
+            if (exprIdx < paramTypes.length) {
+                expectedType = paramTypes[exprIdx];
+            }
+
+            if (exprIdx >= paramTypes.length) {
+                if (!isVarFunc) {
+                    problems.addProblem(expr, GoBundle.message("error.call.extra.arg", name));
+                    continue;
+                }
+
+                expectedType = paramTypes[paramTypes.length - 1];
+            }
+
+            if ( exprIdx == paramTypes.length - 1) {
+                if ( isVarCall )
+                    expectedType = GoTypes.makeSlice(expr.getProject(), expectedType);
+            }
+
+            GoType argumentType = GoTypes.get(expr.getType());
+
+            if (!expectedType.isAssignableFrom(argumentType)) {
+                problems.addProblem(expr,
+                        GoBundle.message(
+                                "warn.function.call.arg.type.mismatch",
+                                expr.getText(),
+                                GoTypes.getRepresentation(argumentType, file),
+                                GoTypes.getRepresentation(expectedType, file),
+                                name),
+                        ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
+                        new CastTypeFix(expr, expectedType));
+            }
+        }
+
+        if (exprIdx < paramTypes.length && !(exprIdx == paramTypes.length - 1 && isVarFunc))
+            problems.addProblem(call, GoBundle.message("error.call.missing.args", name));
     }
 
     private static String getFunctionName(GoTypeFunction callType) {

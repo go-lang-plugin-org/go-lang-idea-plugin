@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallOrConversionExpression;

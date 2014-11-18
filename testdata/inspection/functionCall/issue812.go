@@ -1,4 +1,4 @@
-package functionCall
+package main
 
 // issue #812
 func f1(s string, arg ...int) int {
@@ -15,7 +15,7 @@ func f12()(int,float64){
 func bad() {
 	a := 1
 
-	f1("" , /*begin*/a/*end.Expression type mismatch, the expected type is []int*/ ...)
+	f1("", /*begin*/a/*end.cannot use a (type int) as type []int in argument to f1|CastTypeFix*/ ...)
 
 }
 func good1() {
@@ -27,8 +27,8 @@ func f2(arg ...int) int {
 	return 0
 }
 func bad2(){
-	f2(/*begin*/f11()/*end.Expression type mismatch, the expected type is []int*/ ...) //TODO good error reporting like golang compiler
-	//f2(f12()) //TODO find this kind of error.
+	f2(/*begin*/f11()/*end.multiple-value f11() in single-value context*/...)
+	f2(/*begin*/f12()/*end.cannot use float64 as type int in argument to f2*/)
 }
 
 func good2() {
@@ -39,3 +39,5 @@ func good2() {
 	f2(f2([]int{1, 2, 3}...))
 	f2(f11())
 }
+
+func main() {}

@@ -25,8 +25,6 @@ public class Expressions implements GoElementTypes {
             if ( ParserUtils.lookAhead(builder, GoTokenTypeSets.EOS) )
                 break;
 
-            ParserUtils.getToken(builder, oTRIPLE_DOT);
-
             if ( !ParserUtils.lookAhead(builder, oCOMMA))
                 break;
 

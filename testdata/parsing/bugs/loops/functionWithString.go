@@ -2547,7 +2547,7 @@ Go file
             LiteralExpressionImpl
               LiteralIdentifierImpl
                 PsiElement(IDENTIFIER)('v')
-            PsiElement(...)('...')
+          PsiElement(...)('...')
           PsiElement())(')')
       PsiWhiteSpace('\n')
       PsiWhiteSpace('\t')

@@ -11,5 +11,10 @@ func main() {
 	arr1 = append(arr1, /*begin*/""/*end.cannot use "" (type string) as type int in argument to append|CastTypeFix*/)
 
 	arr1 = append(arr1, arr1...)
-	arr3 = append(arr3, /*begin*/"test"/*end. cannot use "test" (type string) as type byte in argument to append|CastTypeFix*/...)
+	arr3 = append(arr3, /*begin*/"test"/*end.cannot use "test" (type string) as type byte in argument to append|CastTypeFix*/...)
+
+
+	stuff := []string{"1", "2", "3"}
+	var myStuff []string
+	myStuff = append(myStuff, stuff...)
 }
