@@ -48,7 +48,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.LinkedHashSet;
+import java.util.Collection;
 import java.util.List;
 
 public class GoFile extends PsiFileBase {
@@ -161,7 +161,7 @@ public class GoFile extends PsiFileBase {
   }
 
   @NotNull
-  public MultiMap<String, GoImportSpec> getImportMap() { // todo: use cached value
+  public MultiMap<String, GoImportSpec> getImportMap() {
     MultiMap<String, GoImportSpec> map = MultiMap.create();
     for (GoImportSpec spec : getImports()) {
       GoImportString string = spec.getImportString();
@@ -176,18 +176,9 @@ public class GoFile extends PsiFileBase {
       }
       PsiDirectory dir = string.resolve();
       if (dir != null) {
-        LinkedHashSet<String> set = ContainerUtil.newLinkedHashSet();
-        for (PsiFile file : dir.getFiles()) {
-          if (file instanceof GoFile) {
-            String name = ((GoFile)file).getPackageName();
-            if (name != null) {
-              set.add(StringUtil.trimEnd(name, "_test"));
-            }
-          }
-        }
-        for (String key : set) {
-          if (!StringUtil.isEmpty(key)) {
-            map.putValue(key, spec);
+        for (String packageNames : getAllPackagesInDirectory(dir)) {
+          if (!StringUtil.isEmpty(packageNames)) {
+            map.putValue(packageNames, spec);
           }
         }
       }
@@ -221,6 +212,25 @@ public class GoFile extends PsiFileBase {
       @Override
       public Result<List<GoConstDefinition>> compute() {
         return Result.create(calcConsts(), GoFile.this);
+      }
+    });
+  }
+
+  private static Collection<String> getAllPackagesInDirectory(@NotNull final PsiDirectory dir) {
+    return CachedValuesManager.getCachedValue(dir, new CachedValueProvider<Collection<String>>() {
+      @Nullable
+      @Override
+      public Result<Collection<String>> compute() {
+        Collection<String> set = ContainerUtil.newLinkedHashSet();
+        for (PsiFile file : dir.getFiles()) {
+          if (file instanceof GoFile) {
+            String name = ((GoFile)file).getPackageName();
+            if (name != null && !"main".equals(name)) {
+              set.add(StringUtil.trimEnd(name, "_test"));
+            }
+          }
+        }
+        return Result.create(set, dir);
       }
     });
   }
