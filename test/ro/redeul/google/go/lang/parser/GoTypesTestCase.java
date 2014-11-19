@@ -55,5 +55,5 @@ public class GoTypesTestCase extends GoParsingTestCase {
     public void testInterface_case3() throws Throwable { doTest(); }
     public void testInterface_incomplete1() throws Throwable { doTest(); }
 
-
+    public void testInterface_imported() throws Throwable { doTest(); }
 }

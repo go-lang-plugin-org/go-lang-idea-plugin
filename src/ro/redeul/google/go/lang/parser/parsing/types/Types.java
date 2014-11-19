@@ -98,21 +98,15 @@ public class Types implements GoElementTypes {
     public static boolean parseTypeName(PsiBuilder builder, GoParser parser) {
 
         PsiBuilder.Marker typeNameMarker = builder.mark();
-        PsiBuilder.Marker identifier = builder.mark();
-        if ( builder.getTokenType() == mIDENT) {
-            String identifierName = builder.getTokenText();
-            ParserUtils.getToken(builder, mIDENT);
 
-            if (parser.isPackageName(identifierName) && ParserUtils.lookAhead(builder, oDOT) ) {
+        if ( ParserUtils.markTokenIf(builder, LITERAL_IDENTIFIER, mIDENT)) {
+            if (ParserUtils.lookAhead(builder, oDOT) ) {
                 ParserUtils.getToken(builder, oDOT);
-                ParserUtils.getToken(builder, mIDENT,
-                                     GoBundle.message("identifier.expected"));
+                if (!ParserUtils.markTokenIf(builder, LITERAL_IDENTIFIER, mIDENT) )
+                    ParserUtils.wrapError(builder, "identifier.expected");
             }
-
-            identifier.done(LITERAL_IDENTIFIER);
         } else {
             ParserUtils.wrapError(builder, "identifier.expected");
-            identifier.drop();
         }
 
         typeNameMarker.done(TYPE_NAME);
