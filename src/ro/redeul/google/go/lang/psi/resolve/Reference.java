@@ -61,10 +61,13 @@ public abstract class Reference<
     }
 
     public boolean canSee(GoPsiElement element, String name) {
+        if (GoNamesUtil.isExported(name)) {
+            return true;
+        }
         GoPackage elementPackage = GoPackages.getPackageFor(element);
         GoPackage referencePackage = GoPackages.getPackageFor(getElement());
 
-        return elementPackage == referencePackage || GoNamesUtil.isExported(name);
+        return elementPackage == referencePackage;
     }
 
     public String name() {
