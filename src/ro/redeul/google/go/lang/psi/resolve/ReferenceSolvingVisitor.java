@@ -21,10 +21,7 @@ public abstract class ReferenceSolvingVisitor extends GoElementVisitorWithData<R
 
             String identifierName = identifier.getName();
 
-            if ( !reference.canSee(identifier, identifierName))
-                continue;
-
-            if (matchNames(name, identifierName))
+            if (matchNames(name, identifierName) && reference.canSee(identifier, identifierName))
                 solver.addTarget(identifier);
         }
     }
