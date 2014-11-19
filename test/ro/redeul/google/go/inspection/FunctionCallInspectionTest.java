@@ -30,4 +30,13 @@ public class FunctionCallInspectionTest extends GoInspectionTestCase {
 
     @Ignore("failing test")
     public void testIssue1007() throws Exception { doTest(); }
+
+    @Ignore("failing test")
+    public void testPanic() throws Exception { doTest(); }
+
+    @Ignore("failing test")
+    public void testLen() throws Exception { doTest(); }
+
+    @Ignore("failing test")
+    public void testClose() throws Exception { doTest(); }
 }
