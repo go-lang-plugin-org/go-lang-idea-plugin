@@ -4,9 +4,6 @@ import (
 	"io"
 )
 
-type string string
-type bool bool
-
 func Ok1() (n int) {
 	return
 }

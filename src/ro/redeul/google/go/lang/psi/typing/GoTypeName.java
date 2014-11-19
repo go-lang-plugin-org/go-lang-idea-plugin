@@ -4,21 +4,16 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.RecursionGuard;
 import com.intellij.openapi.util.RecursionManager;
-import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ro.redeul.google.go.lang.psi.toplevel.GoTypeDeclaration;
+import ro.redeul.google.go.lang.psi.GoPackage;
+import ro.redeul.google.go.lang.psi.resolve.refs.MethodReference;
+import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
-import ro.redeul.google.go.lang.psi.types.GoPsiType;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
-import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
-import ro.redeul.google.go.lang.psi.utils.GoTokenSets;
-import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-import ro.redeul.google.go.lang.psi.visitors.GoElementVisitorWithData;
 
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getAs;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveTypeSpec;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GoTypeName extends GoTypePsiBacked<GoTypeNameDeclaration> implements GoType {
 
@@ -73,5 +68,22 @@ public class GoTypeName extends GoTypePsiBacked<GoTypeNameDeclaration> implement
     @Override
     public String toString() {
         return getName();
+    }
+
+    @Override
+    @NotNull
+    public Map<String, GoTypeFunction> getDeclaredMethods(@Nullable GoPackage goPackage) {
+        Map<String, GoTypeFunction> methodMap = new HashMap<String, GoTypeFunction>();
+
+        Object[] methods = new MethodReference(getPsiType().getContainingFile(), this).getVariants();
+        for (Object method : methods) {
+            if ( !(method instanceof GoMethodDeclaration))
+                continue;
+
+            GoMethodDeclaration methodDeclaration = (GoMethodDeclaration) method;
+            methodMap.put(methodDeclaration.getFunctionName(), (GoTypeFunction) types().fromPsiType(methodDeclaration));
+        }
+
+        return methodMap;
     }
 }

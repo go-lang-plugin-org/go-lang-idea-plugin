@@ -2,6 +2,9 @@ package ro.redeul.google.go.lang.psi.typing;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.lang.psi.GoPackage;
+
+import java.util.Map;
 
 public interface GoType {
 
@@ -72,4 +75,6 @@ public interface GoType {
             return "<nil>";
         }
     };
+
+    Map<String,GoTypeFunction> getDeclaredMethods(GoPackage context);
 }

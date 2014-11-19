@@ -1,6 +1,5 @@
 package ro.redeul.google.go.lang.psi.resolve.refs;
 
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.resolve.ReferenceSolvingVisitor;
 import ro.redeul.google.go.lang.psi.resolve.VisitingReferenceSolver;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodDeclaration;
@@ -17,6 +16,8 @@ public class MethodSolver extends VisitingReferenceSolver<MethodReference, Metho
     public MethodSolver self() { return this; }
 
     public MethodSolver(final MethodReference reference) {
+        final Set<GoTypeName> embeddedTypes = reference.findEmbeddedTypes(reference.getTypeName());
+
         solveWithVisitor(new ReferenceSolvingVisitor(this, reference) {
             @Override
             public void visitMethodDeclaration(GoMethodDeclaration declaration) {
@@ -27,7 +28,7 @@ public class MethodSolver extends VisitingReferenceSolver<MethodReference, Metho
             boolean isReferenceTo(GoMethodDeclaration declaration) {
                 GoType receiverType = GoTypes.fromPsi(declaration.getMethodReceiver().getType());
 
-                if (receiverType instanceof GoTypePointer)
+                if ( receiverType instanceof GoTypePointer )
                     receiverType = ((GoTypePointer) receiverType).getTargetType();
 
                 if (!(receiverType instanceof GoTypeName))
@@ -35,14 +36,9 @@ public class MethodSolver extends VisitingReferenceSolver<MethodReference, Metho
 
                 GoTypeName methodTypeName = (GoTypeName) receiverType;
 
-                Set<GoTypeName> receiverTypes = reference.resolveBaseReceiverTypes();
+                for (GoTypeName type : embeddedTypes) {
 
-                GoLiteralIdentifier identifier = reference.getElement();
-                if (identifier == null)
-                    return false;
-
-                for (GoTypeName type : receiverTypes) {
-                    if ( type.getName().equals(methodTypeName.getName())) {
+                    if (type.getName().equals(methodTypeName.getName())) {
                         String methodName = declaration.getFunctionName();
 
                         return matchNames(reference.name(), methodName);

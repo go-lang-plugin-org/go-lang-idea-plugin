@@ -56,6 +56,6 @@ public class TypeNameReference
                     getElement().getContainingFile(),
                     ResolveStates.initial());
         else
-            GoPsiScopesUtil.walkPackage(solver, getElement(), goPackage);
+            GoPsiScopesUtil.walkPackageExports(solver, getElement(), goPackage);
     }
 }

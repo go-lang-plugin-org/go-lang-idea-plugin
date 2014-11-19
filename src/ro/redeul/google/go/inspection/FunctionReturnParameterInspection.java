@@ -2,6 +2,7 @@ package ro.redeul.google.go.inspection;
 
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
+import ro.redeul.google.go.inspection.fix.CastTypeFix;
 import ro.redeul.google.go.inspection.fix.ChangeReturnsParametersFix;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
@@ -51,7 +52,7 @@ public class FunctionReturnParameterInspection extends AbstractWholeGoFileInspec
 
         private final InspectionResult result;
         private boolean hasNamedReturns;
-        private GoType[] expectedReturnTypes;
+        private GoType[] expectedTypes;
 
         public ReturnVisitor(InspectionResult result) {
             this.result = result;
@@ -68,7 +69,7 @@ public class FunctionReturnParameterInspection extends AbstractWholeGoFileInspec
 
         @Override
         public void visitFunctionDeclaration(GoFunctionDeclaration declaration) {
-            this.expectedReturnTypes = declaration.getReturnTypes();
+            this.expectedTypes = declaration.getReturnTypes();
             this.hasNamedReturns = checkNamedReturns(declaration);
 
             visitElement(declaration);
@@ -92,7 +93,7 @@ public class FunctionReturnParameterInspection extends AbstractWholeGoFileInspec
             if (expressions.length == 0 && hasNamedReturns)
                 return;
 
-            int returnTypeIndex = 0;
+            int expectedTypeIdx = 0;
 
             GoFile currentFile = (GoFile) statement.getContainingFile();
             // match the expression types with the expected return types.
@@ -104,12 +105,12 @@ public class FunctionReturnParameterInspection extends AbstractWholeGoFileInspec
                             GoBundle.message("error.multiple.value.in.single.value.context", expression.getText())
                     );
 
-                    returnTypeIndex++;
+                    expectedTypeIdx++;
                     continue;
                 }
 
                 for (GoType expressionType : expressionTypes) {
-                    if (returnTypeIndex >= expectedReturnTypes.length) {
+                    if (expectedTypeIdx >= expectedTypes.length) {
                         result.addProblem(
                                 statement,
                                 GoBundle.message("error.too.many.arguments.to.return"),
@@ -117,19 +118,22 @@ public class FunctionReturnParameterInspection extends AbstractWholeGoFileInspec
                         return;
                     }
 
-                    if (!expectedReturnTypes[returnTypeIndex].isAssignableFrom(expressionType)) {
+                    if (!expectedTypes[expectedTypeIdx].isAssignableFrom(expressionType)) {
                         result.addProblem(expression,
                                 GoBundle.message("warn.function.return.type.mismatch",
                                         expression.getText(),
                                         GoTypes.getRepresentation(expressionType, currentFile),
-                                        GoTypes.getRepresentation(expectedReturnTypes[returnTypeIndex], currentFile)));
+                                        GoTypes.getRepresentation(expectedTypes[expectedTypeIdx], currentFile)),
+                                new CastTypeFix(expression, expectedTypes[expectedTypeIdx]),
+                                new ChangeReturnsParametersFix(statement));
+                        continue;
                     }
 
-                    returnTypeIndex++;
+                    expectedTypeIdx++;
                 }
             }
 
-            if (returnTypeIndex < expectedReturnTypes.length)
+            if (expectedTypeIdx < expectedTypes.length)
                 result.addProblem(statement,
                         GoBundle.message("error.not.enough.arguments.to.return"),
                         new ChangeReturnsParametersFix(statement));

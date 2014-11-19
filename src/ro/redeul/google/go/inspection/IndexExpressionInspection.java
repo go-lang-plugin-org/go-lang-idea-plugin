@@ -29,7 +29,7 @@ public class IndexExpressionInspection extends AbstractWholeGoFileInspection {
         }.visitFile(file);
     }
 
-    private void checkIndexExpression(GoIndexExpression expression, final InspectionResult result) {
+    private void checkIndexExpression(final GoIndexExpression expression, final InspectionResult result) {
         final GoExpr indexExpr = expression.getIndex();
         if (indexExpr == null)
             return;
@@ -44,52 +44,24 @@ public class IndexExpressionInspection extends AbstractWholeGoFileInspection {
             return;
         final GoType indexType = indexTypes[0];
 
-        GoType[] expressionTypes = expression.getBaseExpression().getType();
+        final GoType[] expressionTypes = expression.getBaseExpression().getType();
         if (expressionTypes.length != 1 || expressionTypes[0] == null)
             return;
 
         expressionTypes[0].underlyingType().accept(new UpdatingTypeVisitor<InspectionResult>() {
-            @Override
-            public void visitArray(GoTypeArray type, InspectionResult result, TypeVisitor<InspectionResult> visitor) {
-                checkUnsignedIntegerConstantInRange(indexExpr, indexType, type.getLength(), result);
-            }
-
-            @Override
-            public void visitSlice(GoTypeSlice type, InspectionResult result, TypeVisitor<InspectionResult> visitor) {
-                checkUnsignedIntegerConstantInRange(indexExpr, indexType, Integer.MAX_VALUE, result);
-            }
-
-            @Override
-            public void visitPrimitive(GoTypePrimitive type, InspectionResult data, TypeVisitor<InspectionResult> visitor) {
-                switch (type.getType()) {
-                    case String:
-                        checkUnsignedIntegerConstantInRange(indexExpr, indexType, Integer.MAX_VALUE, result);
-                        break;
-                    default:
-                        result.addProblem(
-                                indexExpr,
-                                GoBundle.message("warn.function.call.arg.type.mismatch", GoTypes.getRepresentation(indexType, goFile))
-                        );
-                }
-            }
-
             @Override
             public void visitPointer(GoTypePointer type, InspectionResult data, TypeVisitor<InspectionResult> visitor) {
                 type.getTargetType().underlyingType().accept(visitor);
             }
 
             @Override
-            public void visitConstant(GoTypeConstant type, InspectionResult data, TypeVisitor<InspectionResult> visitor) {
-                switch (type.getKind()) {
-                    case String:
-                        String stringValue = type.getValueAs(String.class);
-                        checkUnsignedIntegerConstantInRange(indexExpr, indexType, stringValue != null ? stringValue.length() : Integer.MAX_VALUE, result);
-                    default:
-                        result.addProblem(
-                                indexExpr,
-                                GoBundle.message("warn.function.call.arg.type.mismatch", GoTypes.getRepresentation(indexType, goFile))
-                        );
-                }
+            public void visitArray(GoTypeArray type, InspectionResult result, TypeVisitor<InspectionResult> visitor) {
+                checkUnsignedIntegerConstantInRange(indexExpr, indexType, type.getLength(), "array", result);
+            }
+
+            @Override
+            public void visitSlice(GoTypeSlice type, InspectionResult result, TypeVisitor<InspectionResult> visitor) {
+                checkUnsignedIntegerConstantInRange(indexExpr, indexType, Integer.MAX_VALUE, "slice", result);
             }
 
             @Override
@@ -98,33 +70,69 @@ public class IndexExpressionInspection extends AbstractWholeGoFileInspection {
                 if (!keyType.isAssignableFrom(indexType)) {
                     result.addProblem(
                             indexExpr,
-                            GoBundle.message("warn.index.map.invalid.type",
+                            GoBundle.message("warn.index.invalid.key.type",
                                     indexExpr.getText(),
                                     GoTypes.getRepresentation(indexType, goFile),
                                     GoTypes.getRepresentation(keyType, goFile)),
                             new CastTypeFix(indexExpr, keyType));
                 }
             }
+
+            @Override
+            public void visitPrimitive(GoTypePrimitive type, InspectionResult data, TypeVisitor<InspectionResult> visitor) {
+                switch (type.getType()) {
+                    case String:
+                        checkUnsignedIntegerConstantInRange(indexExpr, indexType, Integer.MAX_VALUE, "string", result);
+                        break;
+                    default:
+                        result.addProblem(
+                                expression,
+                                GoBundle.message(
+                                        "warn.index.not.indexable.type",
+                                        expression.getText(),
+                                        GoTypes.getRepresentation(expressionTypes[0], goFile))
+                        );
+                }
+            }
+
+            @Override
+            public void visitConstant(GoTypeConstant type, InspectionResult data, TypeVisitor<InspectionResult> visitor) {
+                switch (type.getKind()) {
+                    case String:
+                        String stringValue = type.getValueAs(String.class);
+                        checkUnsignedIntegerConstantInRange(indexExpr, indexType, stringValue != null ? stringValue.length() : Integer.MAX_VALUE, "string", result);
+                        break;
+                    default:
+                        result.addProblem(
+                                expression,
+                                GoBundle.message(
+                                        "warn.index.not.indexable.type",
+                                        expression.getText(),
+                                        GoTypes.getRepresentation(expressionTypes[0], goFile))
+                        );
+                }
+            }
+
         }, result);
     }
 
-    private void checkUnsignedIntegerConstantInRange(GoExpr indexExpr, GoType indexType, int length, InspectionResult result) {
-        BigInteger integer = getIntegerConstant(indexType);
+    private void checkUnsignedIntegerConstantInRange(GoExpr indexExpr, GoType indexType, int length, String type, InspectionResult result) {
+        BigInteger value = getIntegerConstant(indexType);
 
-        if (!(indexType instanceof GoTypeConstant) || integer == null)
+        if (!(indexType instanceof GoTypeConstant) || value == null)
             result.addProblem(
                     indexExpr,
-                    GoBundle.message("warn.function.call.arg.type.mismatch", "int"));
+                    GoBundle.message("warn.index.invalid.index.type", type, indexExpr.getText()));
 
-        if (integer != null && integer.compareTo(BigInteger.ZERO) < 0)
+        if (value != null && value.compareTo(BigInteger.ZERO) < 0)
             result.addProblem(
                     indexExpr,
-                    GoBundle.message("warning.index.invalid", integer.longValue(), "(index must be non-negative)"));
+                    GoBundle.message("warn.index.invalid.index", type, indexExpr.getText(), value.toString(), "index must be non-negative"));
 
-        if (integer != null && integer.compareTo(BigInteger.valueOf(length)) > 0)
+        if (value != null && value.compareTo(BigInteger.valueOf(length)) > 0)
             result.addProblem(
                     indexExpr,
-                    GoBundle.message("warning.index.invalid", integer.longValue(), "(index out of bounds)"));
+                    GoBundle.message("warn.index.invalid.index", type, indexExpr.getText(), value.toString(), "out of bounds"));
     }
 
     private BigInteger getIntegerConstant(GoType indexType) {

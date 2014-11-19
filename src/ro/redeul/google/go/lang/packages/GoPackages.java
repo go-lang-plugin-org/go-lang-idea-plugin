@@ -145,20 +145,23 @@ public class GoPackages extends AbstractProjectComponent {
         return goPackages.getPackage(packageImportPath);
     }
 
-    @Nullable public static GoPackage getTargetPackageIfDifferent(PsiElement source, PsiElement target) {
-        if ( source == null || target == null)
+    @Nullable public static GoPackage getTargetPackageIfDifferent(GoPackage sourcePackage, PsiElement target) {
+        if ( sourcePackage == null || target == null)
             return null;
 
-        GoPackage sourcePackage = getPackageFor(source);
         GoPackage targetPackage = getPackageFor(target);
 
-        if ( sourcePackage != null && targetPackage != null && !sourcePackage.equals(targetPackage) ) {
-            GoPackage builtin = GoPackages.getInstance(source.getProject()).getBuiltinPackage();
+        if (targetPackage != null && !sourcePackage.equals(targetPackage)) {
+            GoPackage builtin = GoPackages.getInstance(target.getProject()).getBuiltinPackage();
 
             if ( !builtin.equals(targetPackage))
                 return targetPackage;
         }
 
         return null;
+    }
+
+    @Nullable public static GoPackage getTargetPackageIfDifferent(PsiElement source, PsiElement target) {
+        return getTargetPackageIfDifferent(GoPackages.getPackageFor(source), target);
     }
 }

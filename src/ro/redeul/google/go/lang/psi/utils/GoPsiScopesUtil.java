@@ -30,7 +30,6 @@ import com.intellij.psi.scope.PsiScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoPackage;
-import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.processors.ResolveStates;
 
 public class GoPsiScopesUtil {
@@ -72,10 +71,14 @@ public class GoPsiScopesUtil {
         return true;
     }
 
-    public static boolean walkPackage(@NotNull PsiScopeProcessor processor,
-                                      @NotNull PsiElement entrance,
-                                      @NotNull GoPackage goPackage) {
-        return goPackage.processDeclarations(processor, ResolveStates.packageExports(), null, entrance);
+    public static boolean walkPackageExports(@NotNull PsiScopeProcessor processor,
+                                             PsiElement entrance,
+                                             @NotNull GoPackage goPackage) {
+        return walkPackage(processor, ResolveStates.packageExports(), entrance, goPackage);
+    }
+
+    public static boolean walkPackage(PsiScopeProcessor processor, ResolveState state, PsiElement entrance, GoPackage goPackage) {
+        return goPackage.processDeclarations(processor, state, null, entrance);
     }
 
     public static boolean walkChildrenScopes(@NotNull PsiElement thisElement,
@@ -101,8 +104,4 @@ public class GoPsiScopesUtil {
         return true;
     }
 
-    @Deprecated
-    public static boolean packageWalk(GoPackage goPackage, PsiScopeProcessor processor, GoPsiElement entrance, ResolveState state) {
-        return goPackage.processDeclarations(processor, state, entrance.getContainingFile(), entrance);
-    }
 }

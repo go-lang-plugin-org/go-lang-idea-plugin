@@ -42,6 +42,6 @@ public class PackageSymbolReference
 
     @Override
     protected void walkSolver(PackageSymbolSolver solver) {
-        GoPsiScopesUtil.walkPackage(solver, getElement(), myTargetPackage);
+        GoPsiScopesUtil.walkPackageExports(solver, getElement(), myTargetPackage);
     }
 }

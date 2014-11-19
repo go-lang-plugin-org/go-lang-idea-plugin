@@ -68,7 +68,12 @@ public class GoTypePrimitive extends GoTypeName {
     @NotNull
     @Override
     public GoType underlyingType() {
-        return this;
+        switch (getType()) {
+            case Error:
+                return super.underlyingType();
+            default:
+                return this;
+        }
     }
 
     @Override

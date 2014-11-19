@@ -2,6 +2,10 @@ package ro.redeul.google.go.lang.psi.typing;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.lang.psi.GoPackage;
+
+import java.util.Collections;
+import java.util.Map;
 
 public abstract class GoAbstractType implements GoType {
 
@@ -45,6 +49,12 @@ public abstract class GoAbstractType implements GoType {
             return type;
 
         return null;
+    }
+
+    @NotNull
+    @Override
+    public Map<String, GoTypeFunction> getDeclaredMethods(@Nullable GoPackage goPackage) {
+        return Collections.emptyMap();
     }
 
     class ForwardingVisitor<T> extends TypeVisitor<T> {

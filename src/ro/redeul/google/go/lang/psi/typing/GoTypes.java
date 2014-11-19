@@ -70,51 +70,61 @@ public class GoTypes extends AbstractProjectComponent {
     public static GoType get(GoType[] types) {
         return types == null || types.length != 1 || types[0] == null ? GoType.Unknown : types[0];
     }
+
     public static GoType[] getPackageType(GoImportDeclaration declaration) {
         GoPackage goPackage = declaration.getPackage();
         return goPackage != null ? new GoType[]{new GoTypePackage(goPackage)} : GoType.EMPTY_ARRAY;
     }
 
+    /**
+     * checks type assignability according to the spec: {@linkplain http://golang.org/ref/spec#Assignability}
+     */
     public static boolean isAssignableFrom(GoType dstType, GoType srcVarType) {
 
         if (dstType == null || srcVarType == null)
             return false;
 
-//          x's type is identical to T.
+        // x's type is identical to T.
         if (srcVarType.isIdentical(dstType))
             return true;
 
-//        x's type V and T have identical underlying types and at least one of V or T is not a named type.
+        // x's type V and T have identical underlying types and at least one of V or T is not a named type.
+        GoType srcUnderlying = srcVarType.underlyingType();
+        GoType dstUnderlying = dstType.underlyingType();
+
         if ((!isNamedType(srcVarType) || !isNamedType(dstType)) &&
-                srcVarType.underlyingType().isIdentical(dstType.underlyingType()))
+                srcUnderlying.isIdentical(dstUnderlying))
             return true;
 
-//        T is an interface type and x implements T.
-//        if ((dstType instanceof GoTypeInterface) && ((GoTypeInterface)dstType.isImplementedBy(srcVarType)))
-//            return true;
+        // T is an interface type and x implements T.
+        if (dstUnderlying instanceof GoTypeInterface) {
+            GoTypeInterface typeInterface = dstType.underlyingType(GoTypeInterface.class);
+            if (typeInterface != null) return typeInterface.isImplementedBy(srcVarType);
 
-//        x is a bidirectional channel value, T is a channel type, x's type V and T have identical element types, and at least one of V or T is not a named type.
+        }
+
+        // x is a bidirectional channel value, T is a channel type, x's type V and T have identical element types, and at least one of V or T is not a named type.
         if ((!isNamedType(srcVarType) || !isNamedType(dstType)) &&
-                srcVarType.underlyingType() instanceof GoTypeChannel && dstType.underlyingType() instanceof GoTypeChannel) {
-            GoTypeChannel dstChannel = (GoTypeChannel) dstType.underlyingType();
-            GoTypeChannel srcChannel = (GoTypeChannel) srcVarType.underlyingType();
+                srcUnderlying instanceof GoTypeChannel && dstUnderlying instanceof GoTypeChannel) {
+            GoTypeChannel dstChannel = (GoTypeChannel) dstUnderlying;
+            GoTypeChannel srcChannel = (GoTypeChannel) srcUnderlying;
 
             return srcChannel.getChannelType() == GoTypeChannel.ChannelType.Bidirectional &&
                     srcChannel.getElementType().isIdentical(dstChannel.getElementType());
         }
 
-//        x is the predeclared identifier nil and T is a pointer, function, slice, map, channel, or interface type.
-        if ((srcVarType == GoType.Nil))
+        // x is the predeclared identifier nil and T is a pointer, function, slice, map, channel, or interface type.
+        if (srcVarType == GoType.Nil)
             return
-                    dstType instanceof GoTypePointer || dstType instanceof GoTypeFunction ||
-                            dstType instanceof GoTypeSlice || dstType instanceof GoTypeMap ||
-                            dstType instanceof GoTypeChannel || dstType instanceof GoTypeInterface;
+                    dstUnderlying instanceof GoTypePointer || dstUnderlying instanceof GoTypeFunction ||
+                            dstUnderlying instanceof GoTypeSlice || dstUnderlying instanceof GoTypeMap ||
+                            dstUnderlying instanceof GoTypeChannel || dstUnderlying instanceof GoTypeInterface;
 
-//        x is an untyped constant representable by a value of type T.
+        // x is an untyped constant representable by a value of type T.
         if (srcVarType instanceof GoTypeConstant) {
             GoTypeConstant constant = (GoTypeConstant) srcVarType;
             if (constant.getType() == GoType.Unknown)
-                return dstType.underlyingType().canRepresent(constant);
+                return dstUnderlying.canRepresent(constant);
         }
 
         return false;
@@ -299,7 +309,7 @@ public class GoTypes extends AbstractProjectComponent {
         @Override
         public void visitParenthesisedExprOrType(GoParenthesizedExprOrType exprOrType) {
             GoPsiType innerType = exprOrType.getInnerType();
-            if ( innerType != null )
+            if (innerType != null)
                 innerType.accept(this);
         }
     }

@@ -1,5 +1,8 @@
 package ro.redeul.google.go.lang.psi.typing;
 
+import ro.redeul.google.go.lang.packages.GoPackages;
+import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
 
@@ -17,32 +20,57 @@ public class GoTypeInterface extends GoTypePsiBacked<GoPsiTypeInterface> impleme
         if ( !(type instanceof GoTypeInterface) )
             return false;
 
-        GoTypeInterface other = (GoTypeInterface) type;
+        GoTypeInterface her = (GoTypeInterface) type;
 
-        Map<String, GoType> myMethodTypes = getMethodSetTypes();
-        Map<String, GoType> otherMethodTypes = other.getMethodSetTypes();
+        Map<String, GoTypeFunction> ourMethods = getMethodSetTypes();
+        Map<String, GoTypeFunction> herMethods = her.getMethodSetTypes();
 
-        for (Map.Entry<String, GoType> entry : myMethodTypes.entrySet()) {
-            if (!(otherMethodTypes.containsKey(entry.getKey())))
+        for (Map.Entry<String, GoTypeFunction> entry : ourMethods.entrySet()) {
+            if (!(herMethods.containsKey(entry.getKey())))
                 return false;
 
-            if (!entry.getValue().isIdentical(otherMethodTypes.get(entry.getKey())))
+            if (!entry.getValue().isIdentical(herMethods.get(entry.getKey())))
                 return false;
 
-            otherMethodTypes.remove(entry.getKey());
+            herMethods.remove(entry.getKey());
         }
 
-        return otherMethodTypes.size() == 0 ;
+        return herMethods.size() == 0 ;
     }
 
-    protected Map<String, GoType> getMethodSetTypes() {
+    public boolean isImplementedBy(GoType type) {
+        Map<String, GoTypeFunction> myMethodSet = getMethodSetTypes();
+
+        GoPackage myPackage = getPackage();
+
+        Map<String, GoTypeFunction> otherMethodSet = type.getDeclaredMethods(myPackage);
+
+        for (Map.Entry<String, GoTypeFunction> myMethod : myMethodSet.entrySet()) {
+            if (!otherMethodSet.containsKey(myMethod.getKey()))
+                return false;
+
+            GoTypeFunction methodType = otherMethodSet.get(myMethod.getKey());
+
+            if ( ! myMethod.getValue().isIdentical(methodType))
+                return false;
+        }
+
+        return true;
+    }
+
+    private GoPackage getPackage() {GoPackages packages = GoPackages.getInstance(this.getPsiType().getProject());
+        GoFile contextFile = (GoFile) this.getPsiType().getContainingFile();
+        return packages.getPackage(contextFile.getPackageImportPath());
+    }
+
+    protected Map<String, GoTypeFunction> getMethodSetTypes() {
         GoFunctionDeclaration functions[] = getPsiType().getMethodSet();
 
-        Map<String, GoType> methodsMap = new HashMap<String, GoType>();
+        Map<String, GoTypeFunction> methodsMap = new HashMap<String, GoTypeFunction>();
         for (GoFunctionDeclaration function : functions) {
             GoType methodType = types().fromPsiType(function);
             if (methodType instanceof GoTypeFunction)
-                methodsMap.put(function.getName(), methodType);
+                methodsMap.put(function.getName(), (GoTypeFunction) methodType);
         }
 
         return methodsMap;
