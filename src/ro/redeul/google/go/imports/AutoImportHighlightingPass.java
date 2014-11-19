@@ -143,8 +143,7 @@ public class AutoImportHighlightingPass extends TextEditorHighlightingPass {
         List<String> packageFiles = new ArrayList<String>();
         for (String p : allPackages) {
             String importPath = GoPsiUtils.findRealImportPathValue(p);
-            if (expectedName.equals(p) || importPath.endsWith(
-                "/" + expectedName)) {
+            if (expectedName.equals(p) || importPath.endsWith("/" + expectedName)) {
                 packageFiles.add(p);
             }
         }

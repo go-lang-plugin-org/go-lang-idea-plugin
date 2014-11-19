@@ -12,9 +12,6 @@ public class AddImportFixTest extends GoEditorAwareTestCase {
     public void testOneExistingImport() throws Exception{ doTest(); }
     public void testMultipleExistingImport() throws Exception{ doTest(); }
 
-    @Ignore("not ready yet")
-    public void testDotImport() throws Exception{ doTest(); }
-
     @Override
     protected void invoke(Project project, Editor editor, GoFile file) {
         int start = editor.getSelectionModel().getSelectionStart();
