@@ -43,10 +43,6 @@ public class UnusedVariableInspectionTest extends GoInspectionTestCase {
         doTest();
     }
 
-    public void testReturnVariable() throws Exception {
-        doTest();
-    }
-
     public void testCompositeExpressionKey() throws Exception {
         doTest();
     }
@@ -57,12 +53,11 @@ public class UnusedVariableInspectionTest extends GoInspectionTestCase {
 
     @Ignore("failing test")
     public void testIssue438() throws Exception {
-        doTestWithDirectory();
+        doTest();
     }
 
     @Ignore("failing test")
     public void testIssue865() throws Exception {
         doTest();
     }
-
 }

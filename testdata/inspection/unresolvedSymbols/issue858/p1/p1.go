@@ -1,6 +1,6 @@
 package p1
 
-import "issue858/p3"
+import "p3"
 
 //p1 is from another package
 var V1 *p3.T1

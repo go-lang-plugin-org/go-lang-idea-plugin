@@ -19,10 +19,10 @@ public class RedeclareInspectionTest extends GoInspectionTestCase {
 
     public void testInit() throws Exception{ doTest(); }
 
-    public void testMultiFiles() throws Exception{ doTestWithDirectory(); }
+    public void testMultiFiles() throws Exception{ doTest(); }
 
     @Ignore("failing test")
-    public void testBuildTags() throws Exception{ doTestWithDirectory(); }
+    public void testBuildTags() throws Exception{ doTest(); }
 
     public void testFunction() throws Exception{ doTest(); }
 
