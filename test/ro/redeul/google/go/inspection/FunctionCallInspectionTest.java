@@ -30,12 +30,11 @@ public class FunctionCallInspectionTest extends GoInspectionTestCase {
 
     public void testEmptyInterfaceImplementedByString() throws Exception { doTest(); }
 
-    @Ignore("failing test")
     public void testPanic() throws Exception { doTest(); }
+
+    public void testClose() throws Exception { doTest(); }
 
     @Ignore("failing test")
     public void testLen() throws Exception { doTest(); }
 
-    @Ignore("failing test")
-    public void testClose() throws Exception { doTest(); }
 }

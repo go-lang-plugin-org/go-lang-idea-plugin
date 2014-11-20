@@ -1,9 +1,17 @@
-package functionCall
+package main
 
-func good1(c1 chan<- int) {
-	close(c1)
+func good1() {
+	close((chan<- int)(nil))
+	close((chan int)(nil))
 }
 
 func bad1(v int){
-	close(/*begin*/v/*end.cannot use v (type int) as type chan<- Type in argument to close|CastTypeFix*/)
+	/*begin*/close()/*end.missing argument to close: close()*/
+	/*begin*/close(1, "")/*end.too many arguments in call to close*/
+	close(/*begin*/""/*end.invalid operation: "" (non-chan type string)*/)
+	close(/*begin*/(<-chan int)(nil)/*end.invalid operation: (<-chan int)(nil) (cannot close receive-only channel)*/)
+	close(/*begin*/v/*end.invalid operation: v (non-chan type int)*/)
+}
+
+func main() {
 }

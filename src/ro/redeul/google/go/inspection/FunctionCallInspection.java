@@ -68,9 +68,47 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
                 return validateCopyCall(expression, args, file, result);
             case Delete:
                 return validateDeleteCall(expression, args, file, result);
+            case Close:
+                return validateCloseCall(expression, args, file, result);
             default:
                 return true;
         }
+    }
+
+    private boolean validateCloseCall(GoCallOrConvExpression expr, GoExpr[] args, GoFile file, InspectionResult result) {
+        if ( args.length == 0 ) {
+            result.addProblem(expr, GoBundle.message("error.call.builtin.close.missing.arg"));
+            return false;
+        }
+
+        if ( args.length > 1 ) {
+            result.addProblem(expr, GoBundle.message("error.call.extra.args", "close"));
+            return false;
+        }
+
+        GoType argType = GoTypes.get(args[0].getType());
+        GoType underlyingType = argType.underlyingType();
+
+        if ( !(underlyingType instanceof GoTypeChannel) ) {
+            result.addProblem(
+                    args[0],
+                    GoBundle.message(
+                            "error.call.builtin.close.no.channel.type",
+                            args[0].getText(),
+                            GoTypes.getRepresentation(argType, file)));
+            return false;
+        }
+
+        GoTypeChannel channel = (GoTypeChannel) underlyingType;
+        if (channel.getChannelType() == GoTypeChannel.ChannelType.Receiving) {
+            result.addProblem(
+                    args[0],
+                    GoBundle.message(
+                            "error.call.builtin.close.wrong.channel.type",
+                            args[0].getText()));
+        }
+
+        return false;
     }
 
     private boolean validateDeleteCall(GoCallOrConvExpression expr, GoExpr[] args, GoFile file, InspectionResult result) {

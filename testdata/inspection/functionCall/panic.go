@@ -1,7 +1,7 @@
-package functionCall
+package mainin
 
-func good1(){
+func good1() {
 	panic(1)
 	panic("hello")
-	/*begin*/panic()/*end.missing arguments to panic*/
+	/*begin*/panic()/*end.not enough arguments in call to panic*/
 }
