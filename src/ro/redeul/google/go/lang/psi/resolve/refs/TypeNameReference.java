@@ -12,8 +12,7 @@ import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.or;
 
-public class TypeNameReference
-        extends ReferenceWithSolver<GoPsiTypeName, TypeNameSolver, TypeNameReference> {
+public class TypeNameReference extends ReferenceWithSolver<GoPsiTypeName, TypeNameSolver, TypeNameReference> {
 
     public static final ElementPattern<GoPsiTypeName> MATCHER =
             psiElement(GoPsiTypeName.class);
@@ -45,7 +44,6 @@ public class TypeNameReference
     public TypeNameSolver newSolver() {
         return new TypeNameSolver(self(), TYPE_IN_METHOD_RECEIVER.accepts(getElement()));
     }
-
 
     @Override
     public void walkSolver(TypeNameSolver solver) {

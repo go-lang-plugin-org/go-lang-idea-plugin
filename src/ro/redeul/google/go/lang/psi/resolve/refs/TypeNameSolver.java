@@ -4,6 +4,11 @@ import ro.redeul.google.go.lang.psi.resolve.ReferenceSolvingVisitor;
 import ro.redeul.google.go.lang.psi.resolve.VisitingReferenceSolver;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
+import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypeInterface;
+import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.typing.TypeVisitor;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -16,7 +21,16 @@ public class TypeNameSolver extends VisitingReferenceSolver<TypeNameReference, T
     @Override
     public TypeNameSolver self() { return this; }
 
-    public TypeNameSolver(final TypeNameReference reference, boolean methodReceiver) {
+    public TypeNameSolver(final TypeNameReference reference, final boolean methodReceiver) {
+
+        final TypeVisitor<Boolean> visitor = new TypeVisitor<Boolean>(true) {
+            @Override
+            public Boolean visitInterface(GoTypeInterface type) { return false; }
+
+            @Override
+            public Boolean visitPointer(GoTypePointer type) { return false; }
+        };
+
         solveWithVisitor(new ReferenceSolvingVisitor(this, reference) {
                  @Override
                  public void visitTypeSpec(GoTypeSpec type) {
@@ -29,7 +43,11 @@ public class TypeNameSolver extends VisitingReferenceSolver<TypeNameReference, T
                      if (declaration == null || declaration.getName() == null)
                          return false;
 
-                     return matchNames(reference.name(), declaration.getName());
+                     if ( ! methodReceiver )
+                         return matchNames(reference.name(), declaration.getName());
+
+
+                     return GoTypes.fromPsi(declaration).underlyingType().accept(visitor) && matchNames(reference.name(), declaration.getName());
                  }
              }
         );
