@@ -1,5 +1,6 @@
 package ro.redeul.google.go.inspection;
 
+import com.intellij.codeInspection.ProblemHighlightType;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.inspection.fix.CastTypeFix;
@@ -95,48 +96,86 @@ public class FunctionReturnParameterInspection extends AbstractWholeGoFileInspec
 
             int expectedTypeIdx = 0;
 
+
+
             GoFile currentFile = (GoFile) statement.getContainingFile();
-            // match the expression types with the expected return types.
-            for (GoExpr expression : expressions) {
-                GoType[] expressionTypes = expression.getType();
-                if (expressionTypes.length > 1 && expressions.length > 1) {
-                    result.addProblem(
-                            expression,
-                            GoBundle.message("error.multiple.value.in.single.value.context", expression.getText())
-                    );
 
-                    expectedTypeIdx++;
-                    continue;
+            result.resetCount();
+            if (expressions.length != 1) {
+                for (GoExpr expression : expressions) {
+                    if (expression.getType().length != 1) {
+                        result.addProblem(expression, GoBundle.message("error.multiple.value.in.single.value.context", expression.getText()));
+                    }
                 }
+            }
+            if (result.getCount() != 0)
+                return;
 
-                for (GoType expressionType : expressionTypes) {
-                    if (expectedTypeIdx >= expectedTypes.length) {
-                        result.addProblem(
-                                statement,
-                                GoBundle.message("error.too.many.arguments.to.return"),
-                                new ChangeReturnsParametersFix(statement));
+            if (expressions.length == 1) {
+                GoExpr arg = expressions[0];
+                GoType argTypes[] = arg.getType();
+                // we have a single value as a single argument, let's see if it matches
+                if ( argTypes.length > 1) {
+                    // if we have to few arguments and the definition is not variadic we complain and bail
+                    if (expectedTypes.length < argTypes.length) {
+                        result.addProblem(arg, GoBundle.message("error.return.extra.args"), new ChangeReturnsParametersFix(statement));
                         return;
                     }
 
-                    if (!expectedTypes[expectedTypeIdx].isAssignableFrom(expressionType)) {
-                        result.addProblem(expression,
-                                GoBundle.message("warn.function.return.type.mismatch",
-                                        expression.getText(),
-                                        GoTypes.getRepresentation(expressionType, currentFile),
-                                        GoTypes.getRepresentation(expectedTypes[expectedTypeIdx], currentFile)),
-                                new CastTypeFix(expression, expectedTypes[expectedTypeIdx]),
-                                new ChangeReturnsParametersFix(statement));
-                        continue;
+                    if ( expectedTypes.length > argTypes.length) {
+                        result.addProblem(arg, GoBundle.message("error.return.enough.args"), new ChangeReturnsParametersFix(statement));
+                        return;
                     }
 
-                    expectedTypeIdx++;
+                    // validate argument types for a multi valued expression
+                    for (int i = 0; i < argTypes.length; i++) {
+                        GoType argType = argTypes[i];
+                        GoType paramType = expectedTypes[i];
+
+                        if (!paramType.isAssignableFrom(argType)) {
+                            result.addProblem(arg,
+                                    GoBundle.message(
+                                            "error.return.wrong.arg.type",
+                                            arg.getText(),
+                                            GoTypes.getRepresentation(argType, currentFile),
+                                            GoTypes.getRepresentation(paramType, currentFile)),
+                                    ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
+                                    new ChangeReturnsParametersFix(statement));
+                            break;
+                        }
+                    }
+
+                    return;
                 }
             }
 
-            if (expectedTypeIdx < expectedTypes.length)
-                result.addProblem(statement,
-                        GoBundle.message("error.not.enough.arguments.to.return"),
-                        new ChangeReturnsParametersFix(statement));
+            int exprIdx = 0, exprCount = expressions.length;
+            for (; exprIdx < exprCount; exprIdx++) {
+                GoExpr expr = expressions[exprIdx];
+                if (exprIdx >= expectedTypes.length) {
+                    result.addProblem(expr, GoBundle.message("error.return.extra.arg"), new ChangeReturnsParametersFix(statement));
+                    continue;
+                }
+
+                GoType expectedType = expectedTypes[exprIdx];
+                GoType argumentType = GoTypes.get(expr.getType());
+
+                if (!expectedType.isAssignableFrom(argumentType)) {
+                    result.addProblem(
+                            expr,
+                            GoBundle.message(
+                                    "warn.function.return.type.mismatch",
+                                    expr.getText(),
+                                    GoTypes.getRepresentation(argumentType, currentFile),
+                                    GoTypes.getRepresentation(expectedType, currentFile)),
+                            ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
+                            new CastTypeFix(expr, expectedType),
+                            new ChangeReturnsParametersFix(statement));
+                }
+            }
+
+            if ( exprIdx < expectedTypes.length )
+                result.addProblem(statement, GoBundle.message("error.return.enough.args"), new ChangeReturnsParametersFix(statement));
         }
     }
 }

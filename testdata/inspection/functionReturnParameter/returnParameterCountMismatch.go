@@ -42,7 +42,7 @@ func NotEnough2(a int) (b, c int) {
 	} else if a == 3 {
 		return 1, 2
 	}
-	/*begin*/return 3, 4, 5/*end.too many arguments to return|ChangeReturnsParametersFix*/
+	return 3, 4, /*begin*/5/*end.extra argument to return|ChangeReturnsParametersFix*/
 }
 
 func NotEnough3(a int) (int, int) {
@@ -53,14 +53,14 @@ func NotEnough3(a int) (int, int) {
 	} else if a == 3 {
 		return 1, 2
 	}
-	/*begin*/return 3, 4, 5/*end.too many arguments to return|ChangeReturnsParametersFix*/
+	return 3, 4, /*begin*/5/*end.extra argument to return|ChangeReturnsParametersFix*/
 }
 
 func TooMany1(a, b int) {
 	if a > 0 {
-		/*begin*/return a + b/*end.too many arguments to return|ChangeReturnsParametersFix*/
+		return /*begin*/a + b/*end.extra argument to return|ChangeReturnsParametersFix*/
 	}
-	/*begin*/return a/*end.too many arguments to return|ChangeReturnsParametersFix*/
+	return /*begin*/a/*end.extra argument to return|ChangeReturnsParametersFix*/
 }
 
 func NotMatchType() (string, int64) {
@@ -68,7 +68,7 @@ func NotMatchType() (string, int64) {
 }
 
 func NotMatchTypeCall() (string, int64) {
-	return /*begin*/Ok2()/*end.The returned expressions don't match with the return parameters|ChangeReturnsParametersFix*/
+	return /*begin*/Ok2()/*end.cannot use Ok2() (type int) as type string in return argument|ChangeReturnsParametersFix*/
 }
 
 func IsError() error {
