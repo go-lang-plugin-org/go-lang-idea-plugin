@@ -116,6 +116,9 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
                             args[0].getText(),
                             GoTypes.getRepresentation(argType, file)));
 
+        for (int i = 1; i < args.length; i++)
+            result.addProblem(args[i], GoBundle.message("error.call.extra.arg", "len"));
+
         return false;
     }
 
