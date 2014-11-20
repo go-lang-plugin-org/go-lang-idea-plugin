@@ -28,8 +28,7 @@ public class FunctionCallInspectionTest extends GoInspectionTestCase {
 
     public void testIssue686() throws Exception { doTest(); }
 
-    @Ignore("failing test")
-    public void testIssue1007() throws Exception { doTest(); }
+    public void testEmptyInterfaceImplementedByString() throws Exception { doTest(); }
 
     @Ignore("failing test")
     public void testPanic() throws Exception { doTest(); }
