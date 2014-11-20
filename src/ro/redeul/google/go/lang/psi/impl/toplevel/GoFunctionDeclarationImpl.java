@@ -19,17 +19,12 @@ import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameterList;
-import ro.redeul.google.go.lang.psi.types.GoPsiType;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
-import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.utils.GoFunctionDeclarationUtils;
+import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
-import ro.redeul.google.go.util.GoUtil;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getGlobalElementSearchScope;
-import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -224,24 +219,4 @@ public class GoFunctionDeclarationImpl extends GoPsiElementBase implements GoFun
         GoLiteralIdentifier nameIdentifier = getNameIdentifier();
         return nameIdentifier != null ? nameIdentifier : this;
     }
-
-    //    @Override
-//    public LookupElementBuilder getLookupPresentation() {
-//
-//        StringBuilder presentationText = new StringBuilder();
-//
-//        if ( getName() != null ) {
-//            presentationText.append(getName()).append("(");
-//        }
-//
-//        for (GoFunctionParameter parameter : getParameters()) {
-//            for (GoLiteralIdentifier identifier : parameter.getIdentifiers()) {
-//                presentationText.append(identifier.getName()).append(", ");
-//            }
-//
-//            presentationText.append(parameter.getType().toString()).append(", ");
-//        }
-//
-//        return LookupElementUtil.createLookupElement(this);
-//    }
 }

@@ -43,7 +43,6 @@ public class UnusedVariableInspectionTest extends GoInspectionTestCase {
         doTest();
     }
 
-    @Ignore("broken by the new resolver")
     public void testReturnVariable() throws Exception {
         doTest();
     }
