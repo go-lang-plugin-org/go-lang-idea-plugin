@@ -1,7 +1,5 @@
 package ro.redeul.google.go.inspection;
 
-import org.junit.Ignore;
-
 public class FunctionCallInspectionTest extends GoInspectionTestCase {
 
     public void testSimple() throws Exception { doTest(); }
@@ -34,7 +32,6 @@ public class FunctionCallInspectionTest extends GoInspectionTestCase {
 
     public void testClose() throws Exception { doTest(); }
 
-    @Ignore("failing test")
     public void testLen() throws Exception { doTest(); }
 
 }
