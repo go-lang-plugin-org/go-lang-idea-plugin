@@ -56,22 +56,27 @@ public abstract class GoInspectionTestCase
 
     protected void doTest() throws Exception {
         addPackageBuiltin();
-        doTestWithOneFile((GoFile)myFixture.configureByFile(getTestName(true) + ".go"));
+        if ((new File(getTestDataPath(),getTestName(true) + ".go").exists())){
+            doTestWithOneFile((GoFile)myFixture.configureByFile(getTestName(true) + ".go"));
+            return;
+        }else {
+            doTestWithDirectory();
+        }
     }
 
-    protected void doTestWithDirectory() throws Exception {
+    private void doTestWithDirectory() throws Exception {
         final File folder = new File(getTestDataPath(), getTestName(true));
-        addPackageBuiltin();
         List<File> files = new ArrayList<File>();
         FileUtil.collectMatchedFiles(folder, Pattern.compile(".*\\.go$"), files);
         List<String> fileNames = ContainerUtil.map(files, new Function<File, String>() {
             @Override
             public String fun(File file) {
-                return FileUtil.getRelativePath(folder.getParentFile(), file);
+                return FileUtil.getRelativePath(folder, file);
             }
         });
-        PsiFile psiFiles[] = myFixture.configureByFiles(ContainerUtil.findAllAsArray(fileNames, String.class));
-        for (PsiFile psi : psiFiles) {
+        myFixture.copyDirectoryToProject(getTestName(true),"/");
+        for (String fileName : fileNames) {
+            PsiFile psi = myFixture.configureFromTempProjectFile(fileName);
             doTestWithOneFile((GoFile)psi);
         }
     }

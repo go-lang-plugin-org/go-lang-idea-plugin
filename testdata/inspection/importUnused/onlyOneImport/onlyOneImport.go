@@ -1,7 +1,7 @@
 package onlyOneImport
 
 import (
-/*begin*/"onlyOneImport/p1"/*end.Unused import "onlyOneImport/p1"|RemoveImportFix*/
+/*begin*/"p1"/*end.Unused import "p1"|RemoveImportFix*/
 )
 
 func main() {

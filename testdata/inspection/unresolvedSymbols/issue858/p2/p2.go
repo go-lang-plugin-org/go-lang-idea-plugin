@@ -1,7 +1,7 @@
 package p2
 
 import (
-	"issue858/p1"
+	"p1"
 )
 
 func good() {

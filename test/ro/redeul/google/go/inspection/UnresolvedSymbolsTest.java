@@ -64,7 +64,7 @@ public class UnresolvedSymbolsTest extends GoInspectionTestCase {
     }
 
     public void testIssue858() throws Exception {
-        doTestWithDirectory();
+        doTest();
     }
     
     public void testIssue979() throws Exception {
@@ -82,7 +82,7 @@ public class UnresolvedSymbolsTest extends GoInspectionTestCase {
 
     @Ignore("failing test")
     public void testGoTestFiles() throws Exception{
-        doTestWithDirectory();
+        doTest();
     }
 
     public void testMethodFromAnotherPackage() throws Exception{

@@ -1,7 +1,7 @@
 package p2
 
 import (
-	"dirPackageNotEqual/p1"
+	"p1"
 )
 
 func f1(){
