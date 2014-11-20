@@ -61,6 +61,36 @@ public class GoPackages extends AbstractProjectComponent {
         }
     };
 
+    public static final GoPackage Invalid = new GoPackageImpl(null, null, null) {
+        @Override
+        public String getImportPath() {
+            return "";
+        }
+
+        @NotNull
+        @Override
+        public String getName() {
+            return "";
+        }
+
+        @Override
+        public GoFile[] getFiles() {
+            return GoFile.EMPTY_ARRAY;
+        }
+
+        @NotNull
+        @Override
+        public PsiDirectory[] getDirectories() {
+            return PsiDirectory.EMPTY_ARRAY;
+        }
+
+        @NotNull
+        @Override
+        public PsiDirectory[] getDirectories(@NotNull GlobalSearchScope scope) {
+            return getDirectories();
+        }
+    };
+
     public GoPackages(Project project) {
         super(project);
     }
@@ -79,7 +109,7 @@ public class GoPackages extends AbstractProjectComponent {
      * @param path a fully qualified path name (not a relative one) accessible from one of the source roots.
      * @return an object encapsulating a go package.
      */
-    @Nullable
+    @NotNull
     public GoPackage getPackage(String path) {
         ConcurrentMap<String, GoPackage> cache = SoftReference.dereference(packagesCache);
         if (cache == null) {
@@ -92,7 +122,7 @@ public class GoPackages extends AbstractProjectComponent {
         }
 
         aPackage = resolvePackage(path);
-        return aPackage != null ? ConcurrencyUtil.cacheOrGet(cache, path, aPackage) : null;
+        return aPackage != null ? ConcurrencyUtil.cacheOrGet(cache, path, aPackage) : Invalid;
     }
 
     private GoPackage resolvePackage(String path){
@@ -163,5 +193,9 @@ public class GoPackages extends AbstractProjectComponent {
 
     @Nullable public static GoPackage getTargetPackageIfDifferent(PsiElement source, PsiElement target) {
         return getTargetPackageIfDifferent(GoPackages.getPackageFor(source), target);
+    }
+
+    public GoPackage getInvalidPackage() {
+        return Invalid;
     }
 }

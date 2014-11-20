@@ -2,7 +2,7 @@ package main
 
 import (
     "a"
-    "b"
+    b "b"
 )
 
 var a = []struct {
@@ -22,7 +22,7 @@ package main
 
 import (
     "a"
-    "b"
+    b "b"
 )
 
 var a = []struct {

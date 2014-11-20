@@ -5,7 +5,7 @@ type Foo struct {
 }
 
 func main() {
-	foo := doSomething()  // foo marked as Unused
+	foo := doSomething()              // foo marked as Unused
 	for _, v := range (*foo).Things { // foo marked as Unresolved
 		_ = v
 	}

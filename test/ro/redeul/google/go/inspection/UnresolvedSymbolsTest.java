@@ -46,7 +46,6 @@ public class UnresolvedSymbolsTest extends GoInspectionTestCase {
         doTest();
     }
 
-    @Ignore("broken by new resolver")
     public void testNullPointerImportDecl() throws Exception {
         doTest();
     }
@@ -86,8 +85,8 @@ public class UnresolvedSymbolsTest extends GoInspectionTestCase {
         doTestWithDirectory();
     }
 
-    @Ignore("failing")
     public void testMethodFromAnotherPackage() throws Exception{
-        doTestWithDirectory();
+        addPackage("p1", "p1/p1.go");
+        doTest();
     }
 }

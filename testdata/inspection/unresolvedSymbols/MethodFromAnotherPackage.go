@@ -1,4 +1,4 @@
-package MethodFromAnotherPackage
+package main
 
 import (
 	"p1"

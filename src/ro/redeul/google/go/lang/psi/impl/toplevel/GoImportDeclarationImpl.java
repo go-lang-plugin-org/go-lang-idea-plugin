@@ -44,12 +44,7 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
         if (importPathLiteral == null)
             return "";
 
-        GoPackage goPackage = getPackage();
-
-        if (goPackage == null)
-            return "";
-
-        return goPackage.getName();
+        return getPackage().getName();
     }
 
     @Override
@@ -79,16 +74,12 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
 
         // import _ "a"; ( no declarations are visible from this import )
         GoPackageReference packageReference = getPackageReference();
-        if (packageReference != null && packageReference.isBlank()) {
+        if (packageReference != null && packageReference.isBlank())
             return true;
-        }
 
         // import . "asdfaf" -> exports in the target package should act as declaration in the current one (but only if this is the initial state)
-        if ( packageReference != null && packageReference.isLocal() && lastParent != null ) {
-            GoPackage goPackage = getPackage();
-            if ( goPackage != null )
-                return goPackage.processDeclarations(processor, ResolveStates.packageExports(), null,  place);
-        }
+        if ( packageReference != null && packageReference.isLocal() && lastParent != null )
+            return getPackage().processDeclarations(processor, ResolveStates.packageExports(), null, place);
 
         return processor.execute(this, state);
     }
@@ -124,7 +115,7 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
         if (importPathLiteral == null)
             return null;
 
-        if (goPackage != null)
+        if (goPackage != GoPackages.Invalid)
             return String.format(" (%s:%s)", goPackage.getName(), importPathLiteral.getValue());
 
         // TODO: decide if we want to include invalid import statements here
@@ -142,12 +133,13 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
         return !(importPathValue == null || importPathValue.isEmpty()) && !(importPathValue.contains(" ") || importPathValue.contains("\t")) && !importPathValue.contains("\\");
     }
 
+    @NotNull
     @Override
     public GoPackage getPackage() {
 
         GoLiteralString importPathLiteral = getImportPath();
         if (importPathLiteral == null)
-            return null;
+            return GoPackages.Invalid;
 
         String importPath = importPathLiteral.getValue();
 

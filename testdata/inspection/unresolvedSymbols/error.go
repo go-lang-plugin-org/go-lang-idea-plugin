@@ -1,13 +1,13 @@
-package unresolvedSymbols
+package main
 
-func good1(){
+func good1() {
 	var err error
 	err = e1{}
-	_=err.Error()
+	_ = err.Error()
 }
 
 type e1 struct{}
 
-func (e e1)Error()string{
+func (e e1) Error() string {
 	return ""
 }
