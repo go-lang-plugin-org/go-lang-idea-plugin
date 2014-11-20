@@ -16,8 +16,7 @@ import java.io.File;
 import java.io.IOException;
 
 @Ignore
-public abstract class GoLightCodeInsightFixtureTestCase
-    extends LightCodeInsightFixtureTestCase {
+public abstract class GoLightCodeInsightFixtureTestCase extends LightCodeInsightFixtureTestCase {
 
     protected static String testDataRoot = "testdata/";
     @Override

@@ -22,8 +22,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public abstract class GoInspectionTestCase
-        extends GoLightCodeInsightFixtureTestCase {
+public abstract class GoInspectionTestCase extends GoLightCodeInsightFixtureTestCase {
 
     protected AbstractWholeGoFileInspection createInspection() {
         try {
@@ -42,8 +41,7 @@ public abstract class GoInspectionTestCase
         try {
             String name = getClass().getSimpleName();
             name = name.replaceAll("(Inspection)?Test$", "");
-            return String.format("inspection/%s/",
-                    lowercaseFirstLetter(name, true));
+            return String.format("inspection/%s/", lowercaseFirstLetter(name, true));
         } catch (Exception e) {
             return "inspection/undefined/";
         }
@@ -56,10 +54,9 @@ public abstract class GoInspectionTestCase
 
     protected void doTest() throws Exception {
         addPackageBuiltin();
-        if ((new File(getTestDataPath(),getTestName(true) + ".go").exists())){
-            doTestWithOneFile((GoFile)myFixture.configureByFile(getTestName(true) + ".go"));
-            return;
-        }else {
+        if ((new File(getTestDataPath(), getTestName(true) + ".go").exists())) {
+            doTestWithOneFile((GoFile) myFixture.configureByFile(getTestName(true) + ".go"));
+        } else {
             doTestWithDirectory();
         }
     }
@@ -67,6 +64,7 @@ public abstract class GoInspectionTestCase
     private void doTestWithDirectory() throws Exception {
         final File folder = new File(getTestDataPath(), getTestName(true));
         List<File> files = new ArrayList<File>();
+
         FileUtil.collectMatchedFiles(folder, Pattern.compile(".*\\.go$"), files);
         List<String> fileNames = ContainerUtil.map(files, new Function<File, String>() {
             @Override
@@ -74,10 +72,11 @@ public abstract class GoInspectionTestCase
                 return FileUtil.getRelativePath(folder, file);
             }
         });
-        myFixture.copyDirectoryToProject(getTestName(true),"/");
+
+        myFixture.copyDirectoryToProject(getTestName(true), "/");
         for (String fileName : fileNames) {
             PsiFile psi = myFixture.configureFromTempProjectFile(fileName);
-            doTestWithOneFile((GoFile)psi);
+            doTestWithOneFile((GoFile) psi);
         }
     }
 
@@ -95,18 +94,16 @@ public abstract class GoInspectionTestCase
 
         Assert.assertNotNull(content);
         int pos = -1;
-        while ((pos = content.indexOf(GoTestUtils.MARKER_BEGIN,
-                pos + 1)) >= 0) {
+        while ((pos = content.indexOf(GoTestUtils.MARKER_BEGIN, pos + 1)) >= 0) {
             pos += GoTestUtils.MARKER_BEGIN.length();
             int endPos = content.indexOf("/*end.", pos);
             String variable = content.substring(pos, endPos);
-            String info = content.substring(endPos + 6,
-                    content.indexOf("*/", endPos));
+            String info = content.substring(endPos + 6, content.indexOf("*/", endPos));
             sb.append(variable).append(" => ").append(info).append("\n");
             pos = endPos;
         }
-        data.add(content.replaceAll(GoTestUtils.MARKER_BEGIN, "")
-                .replaceAll("/\\*end\\.[^\\*/]\\*/", ""));
+
+        data.add(content.replaceAll(GoTestUtils.MARKER_BEGIN, "").replaceAll("/\\*end\\.[^\\*/]\\*/", ""));
         data.add(sb.toString());
         return data;
     }
@@ -141,21 +138,16 @@ public abstract class GoInspectionTestCase
             }
             String text = document.getText(range);
 
-            sb.append(text
-                            .replaceAll("\"?.*(, )?/\\*begin\\*/([^\\*/]*)/\\*end\\.[^\\*/]*\\*/(\\\\n)?\"?", "$2")
-            ).append(" => ").append(pd.getDescriptionTemplate());
+            sb.append(text.replaceAll("\"?.*(, )?/\\*begin\\*/([^\\*/]*)/\\*end\\.[^\\*/]*\\*/(\\\\n)?\"?", "$2")).append(" => ").append(pd.getDescriptionTemplate());
 
             QuickFix[] fixes = pd.getFixes();
-
             if (fixes == null || fixes.length == 0) {
                 sb.append("\n");
-
                 continue;
             }
 
-            for (QuickFix fix : fixes) {
+            for (QuickFix fix : fixes)
                 sb.append("|").append(fix.getClass().getSimpleName());
-            }
             sb.append("\n");
         }
         return sb.toString().trim();
