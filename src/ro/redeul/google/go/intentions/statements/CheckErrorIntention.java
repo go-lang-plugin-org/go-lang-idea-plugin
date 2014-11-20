@@ -41,14 +41,8 @@ public class CheckErrorIntention extends Intention {
         if (expr == null) return false;
 
         for (GoType type : expr.getType()) {
-            if (type == null) continue;
-            GoType underlyingType = type.underlyingType();
-            return underlyingType.accept(new TypeVisitor<Boolean>(false) {
-                @Override
-                public Boolean visitPrimitive(GoTypePrimitive type) {
-                    return type.getType() == GoTypes.Builtin.Error;
-                }
-            });
+            if (type != null && (isErrorType(type) || isErrorType(type.underlyingType())))
+                return true;
         }
 
         return false;
@@ -69,17 +63,17 @@ public class CheckErrorIntention extends Intention {
         int varIndex = 0;
         boolean needsComma = false;
         for (GoType type : types) {
-            if ( type == null)
+            if (type == null)
                 continue;
 
-            if ( needsComma )
+            if (needsComma)
                 varListString.append(", ");
             else
                 needsComma = true;
 
             String templateVarName = String.format("$v%d$", varIndex++);
             varListString.append(templateVarName);
-            if ( isErrorType(type.underlyingType()) ) {
+            if (isErrorType(type) || isErrorType(type.underlyingType())) {
                 errorVarIndex++;
                 String errVarName = findVarName(expr, errorVarIndex);
                 if (errorVarIndex > 0) {
@@ -99,7 +93,7 @@ public class CheckErrorIntention extends Intention {
         StringBuilder template = new StringBuilder();
 
         template.append("if ");
-        if ( types.length > 1 ) {
+        if (types.length > 1) {
             template.append(varListString).append(":=").append(expr.getText()).append(';');
         } else {
             varNames.set(0, expr.getText());

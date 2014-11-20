@@ -56,6 +56,7 @@ public class GoTypeInterface extends GoTypePsiBacked<GoPsiTypeInterface> impleme
         }
 
         return true;
+//        return false;
     }
 
     private GoPackage getPackage() {GoPackages packages = GoPackages.getInstance(this.getPsiType().getProject());
