@@ -4,7 +4,6 @@ import ro.redeul.google.go.lang.psi.resolve.ReferenceSolvingVisitor;
 import ro.redeul.google.go.lang.psi.resolve.VisitingReferenceSolver;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeSpec;
-import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypeInterface;
 import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;

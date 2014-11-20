@@ -9,7 +9,6 @@ import ro.redeul.google.go.util.GoNumber;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-
 public class GoTypePrimitive extends GoTypeName {
 
     public static final BigInteger INT64_MIN = BigInteger.valueOf(0x8000000000000000L);
