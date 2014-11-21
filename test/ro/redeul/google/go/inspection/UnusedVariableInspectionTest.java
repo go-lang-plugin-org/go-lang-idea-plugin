@@ -51,8 +51,7 @@ public class UnusedVariableInspectionTest extends GoInspectionTestCase {
         doTest();
     }
 
-    @Ignore("failing test")
-    public void testIssue438() throws Exception {
+    public void testSamePackageVariableDeclaredInDifferentFile() throws Exception {
         doTest();
     }
 

@@ -1,4 +1,4 @@
-package issue438
+package demopackage
 
 func alpha() {
 	_ = demO
