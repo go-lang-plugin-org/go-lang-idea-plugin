@@ -1055,3 +1055,27 @@ GO_FILE
                 PsiElement(string)('""')
           PsiElement(,)(',')
           PsiElement(})('}')
+  FUNCTION_DECLARATION
+    PsiElement(func)('func')
+    PsiElement(identifier)('foo')
+    SIGNATURE
+      PARAMETERS
+        PsiElement(()('(')
+        PsiElement())(')')
+    BLOCK
+      PsiElement({)('{')
+      SIMPLE_STATEMENT
+        CALL_EXPR
+          FUNCTION_LIT
+            PsiElement(func)('func')
+            SIGNATURE
+              PARAMETERS
+                PsiElement(()('(')
+                PsiElement())(')')
+            BLOCK
+              PsiElement({)('{')
+              PsiElement(})('}')
+          ARGUMENT_LIST
+            PsiElement(()('(')
+            PsiElement())(')')
+      PsiElement(})('}')

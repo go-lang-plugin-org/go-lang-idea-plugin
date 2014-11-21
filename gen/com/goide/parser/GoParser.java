@@ -1,19 +1,3 @@
-/*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 // This is a generated file. Not intended for manual editing.
 package com.goide.parser;
 
@@ -472,7 +456,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // '{' Statements '}'
+  // '{' ('}' | Statements '}')
   public static boolean Block(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Block")) return false;
     if (!nextTokenIs(b, LBRACE)) return false;
@@ -480,10 +464,31 @@ public class GoParser implements PsiParser {
     Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeToken(b, LBRACE);
     p = r; // pin = 1
-    r = r && report_error_(b, Statements(b, l + 1));
-    r = p && consumeToken(b, RBRACE) && r;
+    r = r && Block_1(b, l + 1);
     exit_section_(b, l, m, BLOCK, r, p, null);
     return r || p;
+  }
+
+  // '}' | Statements '}'
+  private static boolean Block_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Block_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, RBRACE);
+    if (!r) r = Block_1_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // Statements '}'
+  private static boolean Block_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Block_1_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Statements(b, l + 1);
+    r = r && consumeToken(b, RBRACE);
+    exit_section_(b, m, null, r);
+    return r;
   }
 
   /* ********************************************************** */

@@ -128,3 +128,8 @@ var a =    []byte(b.Type + "-----\n")
 var b = map[string]int{
     "",
 }
+
+func foo() {
+    func () {
+    }()
+}
