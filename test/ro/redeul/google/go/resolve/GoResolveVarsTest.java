@@ -151,11 +151,6 @@ public class GoResolveVarsTest extends GoPsiResolveTestCase {
         doTest();
     }
 
-    @Ignore("short var resolution is broken")
-    public void testShortAssignToReturnVar() throws Exception {
-        doTest();
-    }
-
     public void testShortVarDeclarationFromSelectClause() throws Exception {
         doTest();
     }
@@ -177,6 +172,16 @@ public class GoResolveVarsTest extends GoPsiResolveTestCase {
     }
 
     public void testRangeExpressionVarsShouldNotResolveToRangeVars() throws Exception {
+        doTest();
+    }
+
+    @Ignore("short var resolution is broken")
+    public void testShortAssignToReturnVar() throws Exception {
+        doTest();
+    }
+
+    @Ignore("Failing as it needs some care when looking at a parsing corner case: aka is not trivial. See #865")
+    public void testVarDereferenceAsTypeCast() throws Exception {
         doTest();
     }
 }

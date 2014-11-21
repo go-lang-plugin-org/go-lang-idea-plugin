@@ -58,15 +58,15 @@ public class UnresolvedSymbolsTest extends GoInspectionTestCase {
         doTest();
     }
 
-    @Ignore("failing test")
-    public void testIssue865() throws Exception {
+    public void testMethodFromAnotherPackage() throws Exception{
+        addPackage("p1", "p1/p1.go");
         doTest();
     }
 
     public void testIssue858() throws Exception {
         doTest();
     }
-    
+
     public void testIssue979() throws Exception {
         doTest();
     }
@@ -85,8 +85,8 @@ public class UnresolvedSymbolsTest extends GoInspectionTestCase {
         doTest();
     }
 
-    public void testMethodFromAnotherPackage() throws Exception{
-        addPackage("p1", "p1/p1.go");
+    @Ignore("Failing as it needs some care when looking at a parsing corner case: aka is not trivial. See #865")
+    public void testVarDereferenceParsedAsTypeCast() throws Exception {
         doTest();
     }
 }
