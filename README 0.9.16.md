@@ -6,7 +6,7 @@ Thank you for installing the latest version of the golang plugin for IDEA.
 This version has been almost complete reworked from ground up to fix many
 of the previous version issues with resolving and other problems.
 
-We've also removed the dependency on system variables and we we are using
+We've also removed the dependency on system variables and we are using
 a IntelliJ IDEA based approach.
 
 Please help us finding them by submitting a proper bug report to the [repository](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/issues?state=open)
