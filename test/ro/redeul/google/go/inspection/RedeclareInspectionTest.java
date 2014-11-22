@@ -21,10 +21,10 @@ public class RedeclareInspectionTest extends GoInspectionTestCase {
 
     public void testMultiFiles() throws Exception{ doTest(); }
 
-    @Ignore("failing test")
-    public void testBuildTags() throws Exception{ doTest(); }
-
     public void testFunction() throws Exception{ doTest(); }
 
     public void testShortVarDeclaration() throws Exception{ doTest(); }
+
+    @Ignore("Will not be fixed in master unless there is a big huge need for it.")
+    public void testBuildTags() throws Exception{ doTest(); }
 }
