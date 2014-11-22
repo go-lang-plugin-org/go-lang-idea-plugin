@@ -395,6 +395,10 @@ public class GoPsiImplUtil {
         return type.getType();
       }
     }
+    else if (o instanceof GoSliceExpr) {
+      GoExpression first = ContainerUtil.getFirstItem(((GoSliceExpr)o).getExpressionList());
+      return first == null ? null : getGoType(first);
+    }
     else if (o instanceof GoTypeAssertionExpr) {
       return ((GoTypeAssertionExpr)o).getType();
     }

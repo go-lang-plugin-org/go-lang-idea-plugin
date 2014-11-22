@@ -320,6 +320,7 @@ private MaxGroup ::=
   | TypeAssertionExpr
   | SelectorExpr
   | MethodExpr
+  | SliceExpr
   | IndexExpr
   | Literal
   | LiteralTypeExpr
@@ -334,7 +335,9 @@ MethodExpr ::= ReceiverType '.' identifier
 ReceiverType ::= TypeName | '(' '*' TypeName ')' | '(' ReceiverType ')'
 SelectorExpr ::= Expression '.' &(!('(' 'type')) Expression
 IndexExpr ::= Expression '[' IndexExprBody ']'
-private IndexExprBody ::= (Expression? ':' Expression ':' Expression) | (Expression? ':' Expression?) | Expression
+SliceExpr ::= Expression '[' SliceExprBody ']'
+private IndexExprBody ::= Expression
+private SliceExprBody ::= (Expression? ':' Expression ':' Expression) | (Expression? ':' Expression?)
 TypeAssertionExpr ::= Expression '.' '(' &(!'type') Type ')'
 CallExpr ::= Expression ArgumentList
 ArgumentList ::= '(' [ ExpressionList '...'? ] ')' {pin=0}

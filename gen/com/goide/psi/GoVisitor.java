@@ -322,6 +322,10 @@ public class GoVisitor extends PsiElementVisitor {
     visitStatement(o);
   }
 
+  public void visitSliceExpr(@NotNull GoSliceExpr o) {
+    visitExpression(o);
+  }
+
   public void visitStatement(@NotNull GoStatement o) {
     visitCompositeElement(o);
   }

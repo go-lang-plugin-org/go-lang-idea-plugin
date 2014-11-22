@@ -367,7 +367,7 @@ GO_FILE
                   PsiElement(identifier)('Write')
               ARGUMENT_LIST
                 PsiElement(()('(')
-                INDEX_EXPR
+                SLICE_EXPR
                   REFERENCE_EXPRESSION
                     PsiElement(identifier)('zeroBlock')
                   PsiElement([)('[')
@@ -1752,7 +1752,7 @@ GO_FILE
                 PsiElement(identifier)('copy')
               ARGUMENT_LIST
                 PsiElement(()('(')
-                INDEX_EXPR
+                SLICE_EXPR
                   REFERENCE_EXPRESSION
                     PsiElement(identifier)('header')
                   PsiElement([)('[')
@@ -1800,7 +1800,7 @@ GO_FILE
                 PsiElement(identifier)('copy')
               ARGUMENT_LIST
                 PsiElement(()('(')
-                INDEX_EXPR
+                SLICE_EXPR
                   REFERENCE_EXPRESSION
                     PsiElement(identifier)('header')
                   PsiElement([)('[')
@@ -1851,7 +1851,7 @@ GO_FILE
             PsiElement(identifier)('octal')
           ARGUMENT_LIST
             PsiElement(()('(')
-            INDEX_EXPR
+            SLICE_EXPR
               REFERENCE_EXPRESSION
                 PsiElement(identifier)('header')
               PsiElement([)('[')
@@ -2060,7 +2060,7 @@ GO_FILE
               PsiElement(identifier)('LastIndex')
             ARGUMENT_LIST
               PsiElement(()('(')
-              INDEX_EXPR
+              SLICE_EXPR
                 REFERENCE_EXPRESSION
                   PsiElement(identifier)('name')
                 PsiElement([)('[')
@@ -2132,7 +2132,7 @@ GO_FILE
           PsiElement(identifier)('suffix')
         ASSIGN_OP
           PsiElement(=)('=')
-        INDEX_EXPR
+        SLICE_EXPR
           REFERENCE_EXPRESSION
             PsiElement(identifier)('name')
           PsiElement([)('[')
@@ -2141,7 +2141,7 @@ GO_FILE
             PsiElement(identifier)('i')
           PsiElement(])(']')
         PsiElement(,)(',')
-        INDEX_EXPR
+        SLICE_EXPR
           REFERENCE_EXPRESSION
             PsiElement(identifier)('name')
           PsiElement([)('[')
@@ -2273,7 +2273,7 @@ GO_FILE
           PsiElement(identifier)('Name')
         ASSIGN_OP
           PsiElement(=)('=')
-        INDEX_EXPR
+        SLICE_EXPR
           CALL_EXPR
             REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
@@ -2818,7 +2818,7 @@ GO_FILE
               PsiElement(identifier)('b')
             ASSIGN_OP
               PsiElement(=)('=')
-            INDEX_EXPR
+            SLICE_EXPR
               REFERENCE_EXPRESSION
                 PsiElement(identifier)('b')
               PsiElement([)('[')
