@@ -26,6 +26,10 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
             public void visitCallOrConvExpression(GoCallOrConvExpression expression) {
                 super.visitCallOrConvExpression(expression);
 
+                // if this is a cast expression we should ignore it for now
+                if ( expression.getBaseExpression() == null )
+                    return;
+
                 GoType exprTypes[] = expression.getBaseExpression().getType();
                 if (exprTypes.length == 1 && exprTypes[0] != null && exprTypes[0] instanceof GoTypeFunction) {
 
