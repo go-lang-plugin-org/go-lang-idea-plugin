@@ -81,6 +81,17 @@ public class GoSdkUtil {
     private static final Pattern RE_ROOT_MATCHER =
             Pattern.compile("^(?:set )?GOROOT=\"?([^\"]+)\"?$", Pattern.MULTILINE);
 
+    private static final HashMap<String, String> GoVersionPackagesPath =
+            new HashMap<String, String>(){
+                {
+                    put("1.0", "/src/pkg");
+                    put("1.1", "/src/pkg");
+                    put("1.2", "/src/pkg");
+                    put("1.3", "/src/pkg");
+                    put("1.4", "/src");
+                }
+            };
+
     public static GoSdkData testGoogleGoSdk(String path) {
 
         if (!checkFolderExists(path)) {
@@ -156,13 +167,7 @@ public class GoSdkUtil {
         String sourceRoot = "";
 
         if (sdk.getSdkType() == GoSdkType.getInstance()) {
-            Float sdkRealVersion = Float.parseFloat(sdkVersion.substring(2, 5));
-
-            switch (Float.compare(sdkRealVersion, Float.parseFloat("1.4"))) {
-                case 1  :
-                case 0  : sourceRoot = "src"; break;
-                case -1 : sourceRoot = "src/pkg"; break;
-            }
+            sourceRoot = getPackagesPathForGoVersion(sdkVersion);
         } else if (sdk.getSdkType() == GoAppEngineSdkType.getInstance()) {
             //Float sdkMajorVersion = Float.parseFloat(sdkVersion.substring(0, 3));
             //Float sdkMinorVersion = Float.parseFloat(sdkVersion.substring(4, 6));
@@ -184,6 +189,38 @@ public class GoSdkUtil {
 
         LOG.warn("Could not find GO SDK sources root");
         return null;
+    }
+
+    @Nullable
+    public static String computeGoBuiltinPackagesPath(String goRoot) {
+        String goCommand = GoSdkUtil.findGoExecutable(goRoot);
+        if (goCommand.equals("")) {
+            LOG.warn("GO SDK: Could not find go binary in expected locations.");
+            return null;
+        }
+
+        GoSdkData data = GoSdkUtil.findHostOsAndArch(goRoot, goCommand, new GoSdkData());
+
+        data = GoSdkUtil.findVersion(goRoot, goCommand, data);
+        if (data == null) {
+            LOG.warn("GO SDK: Could not detect go version.");
+            return null;
+        }
+
+        return goRoot + getPackagesPathForGoVersion(data.VERSION_MAJOR);
+    }
+
+
+
+    private static String getPackagesPathForGoVersion(String goVersionOutput) {
+        String sdkVersion = goVersionOutput.substring(2, 5);
+
+        String goPackagesPath = GoVersionPackagesPath.get(sdkVersion);
+        if (goPackagesPath == null) {
+            return "/src";
+        }
+
+        return goPackagesPath;
     }
 
     public static GoSdkData findVersion(final String path, String goCommand, GoSdkData data) {

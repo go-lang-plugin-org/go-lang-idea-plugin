@@ -13,7 +13,6 @@ import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.vfs.StandardFileSystems;
 import com.intellij.openapi.vfs.VirtualFile;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
-import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
@@ -76,31 +75,13 @@ public class GoGlobalSettings implements PersistentStateComponent<GoGlobalSettin
         List<Sdk> sdkList = new ArrayList<Sdk>();
 
         if (!goRoot.equals("")) {
-            String goCommand = GoSdkUtil.findGoExecutable(goRoot);
-            if (goCommand.equals("")) {
-                LOG.warn("GO SDK: Could not find go binary in expected locations.");
-                return;
-            }
+            goRoot = GoSdkUtil.computeGoBuiltinPackagesPath(goRoot);
 
-            GoSdkData data = GoSdkUtil.findHostOsAndArch(goRoot, goCommand, new GoSdkData());
-
-            data = GoSdkUtil.findVersion(goRoot, goCommand, data);
-            if (data == null) {
-                LOG.warn("GO SDK: Could not detect go version.");
-                return;
-            }
-
-            Float sdkRealVersion = Float.parseFloat(data.VERSION_MAJOR.substring(2, 5));
-
-            switch (Float.compare(sdkRealVersion, Float.parseFloat("1.4"))) {
-                case 1  :
-                case 0  : goRoot += "/src"; break;
-                case -1 : goRoot += "/src/pkg"; break;
-            }
-
-            sdkList.addAll(GoSdkUtil.getSdkOfType(GoSdkType.getInstance(), jdkTable));
-            for (Sdk sdk : sdkList) {
-                updateSDK(sdk, goRoot, goPath);
+            if (goRoot != null) {
+                sdkList.addAll(GoSdkUtil.getSdkOfType(GoSdkType.getInstance(), jdkTable));
+                for (Sdk sdk : sdkList) {
+                    updateSDK(sdk, goRoot, goPath);
+                }
             }
         }
 
