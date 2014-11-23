@@ -13,17 +13,17 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     super.setUp();
     setUpProjectSdk();
     myFixture.enableInspections(
-      new GoUnresolvedReferenceInspection(),
-      new GoDuplicateFieldsOrMethodsInspection(),
-      new GoUnusedVariableInspection(),
-      new GoUnusedFunctionInspection(),
-      new GoAssignmentToConstantInspection(),
-      new GoDuplicateFunctionInspection(),
-      new GoDuplicateArgumentInspection(),
-      new GoDuplicateReturnArgumentInspection(),
-      new GoFunctionVariadicParameterInspection(),
-      new GoVarDeclarationInspection(),
-      new GoNoNewVariablesInspection()
+      GoUnresolvedReferenceInspection.class,
+      GoDuplicateFieldsOrMethodsInspection.class,
+      GoUnusedVariableInspection.class,
+      GoUnusedFunctionInspection.class,
+      GoAssignmentToConstantInspection.class,
+      GoDuplicateFunctionInspection.class,
+      GoDuplicateArgumentInspection.class,
+      GoDuplicateReturnArgumentInspection.class,
+      GoFunctionVariadicParameterInspection.class,
+      GoVarDeclarationInspection.class,
+      GoNoNewVariablesInspection.class
     );
   }
 
