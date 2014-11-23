@@ -44,8 +44,6 @@ import static java.lang.String.format;
 
 public class GoSdkUtil {
 
-    public static final String PACKAGES = "src/pkg";
-
     private static final Logger LOG = Logger.getInstance(
             "ro.redeul.google.go.sdk.GoSdkUtil");
     private static final String TEST_SDK_PATH = "go.test.sdk.home";
@@ -142,6 +140,7 @@ public class GoSdkUtil {
         return "";
     }
 
+    @Nullable
     public static VirtualFile getSdkSourcesRoot(Sdk sdk) {
         final VirtualFile homeDirectory = sdk.getHomeDirectory();
 
@@ -149,14 +148,45 @@ public class GoSdkUtil {
             return null;
         }
 
-        if (checkFolderExists(homeDirectory.getPath(), "src")) {
-            return homeDirectory.findFileByRelativePath("src/pkg");
+        String sdkVersion = sdk.getVersionString();
+        if (sdkVersion ==null || sdkVersion.isEmpty()) {
+            return null;
         }
-        LOG.warn("Could not find GO SDK sources root (src/pkg)");
+
+        String sourceRoot = "";
+
+        if (sdk.getSdkType() == GoSdkType.getInstance()) {
+            Float sdkRealVersion = Float.parseFloat(sdkVersion.substring(2, 5));
+
+            switch (Float.compare(sdkRealVersion, Float.parseFloat("1.4"))) {
+                case 1  :
+                case 0  : sourceRoot = "src"; break;
+                case -1 : sourceRoot = "src/pkg"; break;
+            }
+        } else if (sdk.getSdkType() == GoAppEngineSdkType.getInstance()) {
+            //Float sdkMajorVersion = Float.parseFloat(sdkVersion.substring(0, 3));
+            //Float sdkMinorVersion = Float.parseFloat(sdkVersion.substring(4, 6));
+
+            // For now Go AppEngine SDK at version 1.9.15 stil uses goroot/src/pkg
+            // When a new version will be released to use the goroot/src layout
+            // or any other form of layout, this should be changed as well
+            sourceRoot = "goroot/src/pkg";
+        }
+
+        if (sourceRoot.isEmpty()) {
+            return null;
+        }
+
+
+        if (checkFolderExists(homeDirectory.getPath(), sourceRoot)) {
+            return homeDirectory.findFileByRelativePath(sourceRoot);
+        }
+
+        LOG.warn("Could not find GO SDK sources root");
         return null;
     }
 
-    private static GoSdkData findVersion(final String path, String goCommand, GoSdkData data) {
+    public static GoSdkData findVersion(final String path, String goCommand, GoSdkData data) {
 
         if (data == null)
             return null;
@@ -187,7 +217,7 @@ public class GoSdkUtil {
         }
     }
 
-    private static GoSdkData findHostOsAndArch(final String path, String goCommand, GoSdkData data) {
+    public static GoSdkData findHostOsAndArch(final String path, String goCommand, GoSdkData data) {
 
         if (data == null)
             return null;

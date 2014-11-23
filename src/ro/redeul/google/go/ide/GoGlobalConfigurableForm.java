@@ -9,6 +9,7 @@ import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.vfs.VirtualFile;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
+import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.options.GoSettings;
 import ro.redeul.google.go.sdk.GoSdkUtil;
@@ -173,15 +174,32 @@ public class GoGlobalConfigurableForm {
             return "";
         }
 
-        String goExecName = GoSdkUtil.isHostOsWindows() ? "/bin/go.exe" : "/bin/go";
-        if (!new File(goRootStr.concat(goExecName)).exists()) {
+        String goExecName = GoSdkUtil.findGoExecutable(goRootStr);
+        if (goExecName.equals("")) {
             Messages.showErrorDialog("Error while saving your settings. \nGOROOT" + goExecName + " doesn't exists.", "Error on Google Go Plugin");
             return "";
         }
 
-        if (!(new File(goRootStr.concat("/src")).exists()) ||
-                !(new File(goRootStr.concat("/src/pkg")).exists())) {
-            Messages.showErrorDialog("Error while saving your settings. \nGOROOT/src/pkg doesn't exists.", "Error on Google Go Plugin");
+        GoSdkData data = GoSdkUtil.findHostOsAndArch(goRootStr, goExecName, new GoSdkData());
+
+        data = GoSdkUtil.findVersion(goRootStr, goExecName, data);
+        if (data == null) {
+            Messages.showErrorDialog("GO SDK: Could not detect go version.", "Error on Google Go Plugin");
+            return "";
+        }
+
+        Float sdkRealVersion = Float.parseFloat(data.VERSION_MAJOR.substring(2, 5));
+
+        String goPackagesDir = "";
+
+        switch (Float.compare(sdkRealVersion, Float.parseFloat("1.4"))) {
+            case 1  :
+            case 0  : goPackagesDir = goRootStr + "/src"; break;
+            case -1 : goPackagesDir = goRootStr + "/src/pkg"; break;
+        }
+
+        if (!(new File(goPackagesDir).exists())) {
+            Messages.showErrorDialog("Error while saving your settings. \nPackages could not be found.", "Error on Google Go Plugin");
             return "";
         }
 

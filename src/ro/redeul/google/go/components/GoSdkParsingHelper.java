@@ -11,20 +11,19 @@ import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.AdapterProcessor;
 import com.intellij.util.CommonProcessors;
 import com.intellij.util.FilteringProcessor;
-import com.intellij.util.Function;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ro.redeul.google.go.config.sdk.GoAppEngineSdkData;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
-import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -144,7 +143,7 @@ public class GoSdkParsingHelper implements ApplicationComponent {
             return result;
         }
 
-        String activeTarget = "";
+        /*String activeTarget = "";
         VirtualFile goRoot = home;
 
         if ( ownerSdk.getSdkType() == GoAppEngineSdkType.getInstance() ) {
@@ -197,11 +196,11 @@ public class GoSdkParsingHelper implements ApplicationComponent {
                                     }
                                 }
                         ))
-        );
+        );*/
 
         // find makefiles
         CommonProcessors.CollectUniquesProcessor<VirtualFile> makefiles = new CommonProcessors.CollectUniquesProcessor<VirtualFile>();
-        final VirtualFile sourcesRoot = home.findFileByRelativePath(ownerSdk.getSdkType() == GoSdkType.getInstance() ? "src/pkg" : "goroot/src/pkg");
+        final VirtualFile sourcesRoot = GoSdkUtil.getSdkSourcesRoot(ownerSdk);
         if (sourcesRoot == null) {
             return result;
         }
