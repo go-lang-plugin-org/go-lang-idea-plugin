@@ -306,8 +306,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     Collection<? extends GoNamedElement> result = delegate.getVariants();
     if (!processNamedElements(processor, state, result, localResolve)) return false;
     if (!processFileEntities(file, processor, state, localResolve)) return false;
-    PsiDirectory dir = file.getOriginalFile().getParent();
-    if (!processDirectory(dir, file, file.getPackageName(), processor, state, true)) return false;
+    if (!processDirectory(file.getOriginalFile().getParent(), file, file.getPackageName(), processor, state, true)) return false;
     if (processImports(file, processor, state, myElement)) return false;
     if (processBuiltin(processor, state, myElement)) return false;
     return true;
