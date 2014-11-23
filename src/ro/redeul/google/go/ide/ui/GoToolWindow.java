@@ -110,8 +110,11 @@ public class GoToolWindow extends AbstractProjectComponent {
 
     @Override
     public void disposeComponent() {
-        consoleViewImpl.dispose();
-        Disposer.dispose(consoleViewImpl);
-        consoleViewImpl = null;
+        // HACK: avoiding a NPE that we have no idea where it comes from. refs #1021
+        if (consoleViewImpl!=null) {
+            consoleViewImpl.dispose();
+            Disposer.dispose(consoleViewImpl);
+            consoleViewImpl = null;
+        }
     }
 }
