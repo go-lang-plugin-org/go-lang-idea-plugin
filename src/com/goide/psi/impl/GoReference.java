@@ -142,6 +142,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   @Override
   @NotNull
   public ResolveResult[] multiResolve(final boolean incompleteCode) {
+    if (!myElement.isValid()) return ResolveResult.EMPTY_ARRAY;
     return ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, MY_RESOLVER, false, false);
   }
 
