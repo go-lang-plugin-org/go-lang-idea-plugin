@@ -36,18 +36,10 @@ public class GoDuplicateArgumentInspection extends GoInspectionBase {
                                      @SuppressWarnings({"UnusedParameters", "For future"}) @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
-      public void visitSignatureOwner(@NotNull GoSignatureOwner o) {
-        check(o.getSignature(), holder);
-      }
-
-      @Override
-      public void visitFunctionLit(@NotNull GoFunctionLit o) {
-        check(o.getSignature(), holder);
-      }
-
-      @Override
-      public void visitFunctionOrMethodDeclaration(@NotNull GoFunctionOrMethodDeclaration o) {
-        check(o.getSignature(), holder);
+      public void visitCompositeElement(@NotNull GoCompositeElement o) {
+        if (o instanceof GoSignatureOwner) {
+          check(((GoSignatureOwner)o).getSignature(), holder);
+        }
       }
     };
   }

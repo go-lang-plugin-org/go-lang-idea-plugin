@@ -154,12 +154,12 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
-  public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoSignatureOwner f) {
+  public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoNamedSignatureOwner f) {
     return createFunctionOrMethodLookupElement(f, false, null);
   }
 
   @NotNull
-  public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoSignatureOwner f,
+  public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoNamedSignatureOwner f,
                                                                   boolean showPkg,
                                                                   @Nullable InsertHandler<LookupElement> h) {
     Icon icon = f instanceof GoMethodDeclaration || f instanceof GoMethodSpec ? GoIcons.METHOD : GoIcons.FUNCTION;

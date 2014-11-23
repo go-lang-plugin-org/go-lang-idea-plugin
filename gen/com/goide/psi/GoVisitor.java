@@ -152,6 +152,7 @@ public class GoVisitor extends PsiElementVisitor {
 
   public void visitFunctionLit(@NotNull GoFunctionLit o) {
     visitExpression(o);
+    // visitSignatureOwner(o);
   }
 
   public void visitFunctionType(@NotNull GoFunctionType o) {
@@ -235,7 +236,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitMethodSpec(@NotNull GoMethodSpec o) {
-    visitSignatureOwner(o);
+    visitNamedSignatureOwner(o);
   }
 
   public void visitMulExpr(@NotNull GoMulExpr o) {
@@ -418,7 +419,7 @@ public class GoVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitSignatureOwner(@NotNull GoSignatureOwner o) {
+  public void visitNamedSignatureOwner(@NotNull GoNamedSignatureOwner o) {
     visitCompositeElement(o);
   }
 

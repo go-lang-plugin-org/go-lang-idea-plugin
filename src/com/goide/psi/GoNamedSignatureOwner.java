@@ -16,21 +16,5 @@
 
 package com.goide.psi;
 
-import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-public interface GoFunctionOrMethodDeclaration extends GoTopLevelDeclaration, GoNamedSignatureOwner {
-
-  @Nullable
-  GoBlock getBlock();
-
-  @Nullable
-  GoSignature getSignature();
-
-  @NotNull
-  PsiElement getFunc();
-
-  @Nullable
-  PsiElement getIdentifier();
+public interface GoNamedSignatureOwner extends GoNamedElement, GoSignatureOwner {
 }
