@@ -55,7 +55,6 @@ public class UnusedVariableInspectionTest extends GoInspectionTestCase {
         doTest();
     }
 
-    @Ignore("Failing as it needs some care when looking at a parsing corner case: aka is not trivial. See #865")
     public void testVarDereferenceParsedAsTypeCast() throws Exception {
         doTest();
     }
