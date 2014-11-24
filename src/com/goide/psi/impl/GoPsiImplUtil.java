@@ -112,32 +112,10 @@ public class GoPsiImplUtil {
     return PsiTreeUtil.getChildOfType(o, GoReferenceExpression.class);
   }
 
-  public static boolean processDeclarations(@NotNull GoVarSpec o,
-                                            @NotNull PsiScopeProcessor processor,
-                                            @NotNull ResolveState state,
-                                            PsiElement lastParent,
-                                            @NotNull PsiElement place) {
-    return PsiTreeUtil.isAncestor(o, place, false) ||
-           GoCompositeElementImpl.precessDeclarationDefault(o, processor, state, lastParent, place);
-  }
-
-  // todo: check GK, try to eliminate those duplicates
-  public static boolean processDeclarations(@NotNull GoBlock o, @NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
-    return processDeclarations(((GoCompositeElement)o), processor, state, lastParent, place);
-  }
-  
-  // todo: check GK, try to eliminate those duplicates
-  public static boolean processDeclarations(@NotNull GoStatement o, @NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
-    return processDeclarations(((GoCompositeElement)o), processor, state, lastParent, place);
-  }
-  
-  // todo: check GK, try to eliminate those duplicates
-  public static boolean processDeclarations(@NotNull GoFunctionLit o, @NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
-    return processDeclarations(((GoCompositeElement)o), processor, state, lastParent, place);
-  }
-  
   public static boolean processDeclarations(@NotNull GoCompositeElement o, @NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
     boolean isAncestor = PsiTreeUtil.isAncestor(o, place, false);
+    if (o instanceof GoVarSpec) return isAncestor || GoCompositeElementImpl.precessDeclarationDefault(o, processor, state, lastParent, place);
+
     if (isAncestor) return GoCompositeElementImpl.precessDeclarationDefault(o, processor, state, lastParent, place);
 
     if (o instanceof GoBlock ||
@@ -550,13 +528,6 @@ public class GoPsiImplUtil {
       return ContainerUtil.newArrayList(declarations);
     }
     return Collections.emptyList();
-  }
-
-
-  // todo: check GK, try to eliminate those duplicates
-  @Nullable
-  public static GoType getGoType(@NotNull GoMethodSpec o) {
-    return getGoType(((GoSignatureOwner)o));
   }
 
   @Nullable
