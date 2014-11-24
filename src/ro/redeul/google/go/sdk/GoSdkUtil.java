@@ -1,5 +1,6 @@
 package ro.redeul.google.go.sdk;
 
+import com.google.common.collect.ImmutableMap;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.CapturingProcessHandler;
@@ -26,7 +27,12 @@ import com.intellij.util.SystemProperties;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoIcons;
-import ro.redeul.google.go.config.sdk.*;
+import ro.redeul.google.go.config.sdk.GoAppEngineSdkData;
+import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
+import ro.redeul.google.go.config.sdk.GoSdkData;
+import ro.redeul.google.go.config.sdk.GoSdkType;
+import ro.redeul.google.go.config.sdk.GoTargetArch;
+import ro.redeul.google.go.config.sdk.GoTargetOs;
 import ro.redeul.google.go.ide.GoGlobalSettings;
 import ro.redeul.google.go.ide.GoProjectSettings;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
@@ -36,7 +42,13 @@ import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -81,31 +93,29 @@ public class GoSdkUtil {
     private static final Pattern RE_ROOT_MATCHER =
             Pattern.compile("^(?:set )?GOROOT=\"?([^\"]+)\"?$", Pattern.MULTILINE);
 
-    private static final HashMap<String, String> GoVersionPackagesPath =
-            new HashMap<String, String>(){
-                {
-                    put("1.0", "/src/pkg");
-                    put("1.1", "/src/pkg");
-                    put("1.2", "/src/pkg");
-                    put("1.3", "/src/pkg");
-                    put("1.4", "/src");
-                }
-            };
+    private static final ImmutableMap<String, String> GoVersionPackagesPath =
+            ImmutableMap.of(
+                    "1.0", "/src/pkg",
+                    "1.1", "/src/pkg",
+                    "1.2", "/src/pkg",
+                    "1.3", "/src/pkg",
+                    "1.4", "/src"
+            );
 
     public static GoSdkData testGoogleGoSdk(String path) {
 
         if (!checkFolderExists(path)) {
-            LOG.warn("GO SDK: Could not find root directory @ "+path);
+            LOG.warn("GO SDK: Could not find root directory @ " + path);
             return null;
         }
 
         if (!checkFolderExists(path, "src")) {
-            LOG.warn("GO SDK: Could not find src directory @ "+path+"/src");
+            LOG.warn("GO SDK: Could not find src directory @ " + path + "/src");
             return null;
         }
 
         if (!checkFolderExists(path, "pkg")) {
-            LOG.warn("GO SDK: Could not find src directory @ "+path+"/pkg");
+            LOG.warn("GO SDK: Could not find src directory @ " + path + "/pkg");
             return null;
         }
 
@@ -160,7 +170,7 @@ public class GoSdkUtil {
         }
 
         String sdkVersion = sdk.getVersionString();
-        if (sdkVersion ==null || sdkVersion.isEmpty()) {
+        if (sdkVersion == null || sdkVersion.isEmpty()) {
             return null;
         }
 
@@ -211,7 +221,6 @@ public class GoSdkUtil {
     }
 
 
-
     private static String getPackagesPathForGoVersion(String goVersionOutput) {
         String sdkVersion = goVersionOutput.substring(2, 5);
 
@@ -241,8 +250,7 @@ public class GoSdkUtil {
                     command.getCommandLineString()).runProcess();
 
             if (output.getExitCode() != 0) {
-                LOG.error("Go compiler exited with invalid exit code: " +
-                        output.getExitCode());
+                LOG.error("Go compiler exited with invalid exit code: " + output.getExitCode());
                 return null;
             }
 
@@ -626,7 +634,7 @@ public class GoSdkUtil {
     private static boolean isSdkRegistered(String homePath, SdkType sdkType) {
 
         VirtualFile homePathAsVirtualFile;
-        homePathAsVirtualFile = VfsUtil.findFileByIoFile(new File(homePath),true);
+        homePathAsVirtualFile = VfsUtil.findFileByIoFile(new File(homePath), true);
         /* Use the above because the following does not work on Windows:
         try {
             homePathAsVirtualFile = VfsUtil.findFileByURL(
@@ -717,6 +725,7 @@ public class GoSdkUtil {
     public static String getAppEngineDevServer() {
         return getEnvVariable("APPENGINE_DEV_APPSERVER");
     }
+
     @NotNull
     public static String getSysGoRootPath() {
         return getEnvVariable("GOROOT");
@@ -750,6 +759,7 @@ public class GoSdkUtil {
 
         String topPackageName = packageName.split("/")[0];
 
+        //noinspection SimplifiableIfStatement
         if (!topPackageName.contains(".")) {
             return false;
         }
@@ -877,7 +887,7 @@ public class GoSdkUtil {
         return convertEnvMapToArray(getExtendedSysEnv(sdkData, projectDir, envVars));
     }
 
-    public static String[] getExtendedGoEnv(GoSdkData sdkData, String projectDir, String envVars, boolean prependSysGoPath, boolean appendSysGoPath ) {
+    public static String[] getExtendedGoEnv(GoSdkData sdkData, String projectDir, String envVars, boolean prependSysGoPath, boolean appendSysGoPath) {
         return convertEnvMapToArray(getExtendedSysEnv(sdkData, projectDir, envVars, prependSysGoPath, appendSysGoPath));
     }
 
@@ -950,7 +960,7 @@ public class GoSdkUtil {
     }
 
     @Nullable
-    public static Sdk getProjectSdk(Project project){
+    public static Sdk getProjectSdk(Project project) {
         Sdk sdk = GoSdkUtil.getGoogleGoSdkForProject(project);
         if (sdk != null) {
             return sdk;
@@ -1007,19 +1017,29 @@ public class GoSdkUtil {
             }
 
             switch (size) {
-                case 13: return GoIcons.GO_ICON_13x13;
-                case 24: return GoIcons.GO_ICON_24x24;
-                case 32: return GoIcons.GO_ICON_32x32;
-                case 48: return GoIcons.GO_ICON_48x48;
-                default: return GoIcons.GO_ICON_16x16;
+                case 13:
+                    return GoIcons.GO_ICON_13x13;
+                case 24:
+                    return GoIcons.GO_ICON_24x24;
+                case 32:
+                    return GoIcons.GO_ICON_32x32;
+                case 48:
+                    return GoIcons.GO_ICON_48x48;
+                default:
+                    return GoIcons.GO_ICON_16x16;
             }
         } else if (sdk.getSdkAdditionalData() instanceof GoAppEngineSdkData) {
             switch (size) {
-                case 13: return GoIcons.GAE_ICON_13x13;
-                case 24: return GoIcons.GAE_ICON_24x24;
-                case 32: return GoIcons.GAE_ICON_32x32;
-                case 48: return GoIcons.GAE_ICON_48x48;
-                default: return GoIcons.GAE_ICON_16x16;
+                case 13:
+                    return GoIcons.GAE_ICON_13x13;
+                case 24:
+                    return GoIcons.GAE_ICON_24x24;
+                case 32:
+                    return GoIcons.GAE_ICON_32x32;
+                case 48:
+                    return GoIcons.GAE_ICON_48x48;
+                default:
+                    return GoIcons.GAE_ICON_16x16;
             }
         }
 
@@ -1075,8 +1095,9 @@ public class GoSdkUtil {
 
     /**
      * Returns the Package, which the file belongs to
+     *
      * @param projectRoot Folder, where the project is located
-     * @param file The file, which package we want to find out
+     * @param file        The file, which package we want to find out
      * @return String
      */
     public static String getPackageOfFile(String projectRoot, String file) {
@@ -1087,13 +1108,13 @@ public class GoSdkUtil {
         String root = new File(projectRoot).getAbsolutePath();
         String child = new File(file).getAbsolutePath();
 
-        if(child.startsWith(root)) {
+        if (child.startsWith(root)) {
             String src = File.separator + "src" + File.separator;
 
             String fileFolder = new File(file).getParent();
 
             String relativePath = fileFolder.substring(projectRoot.length());
-            if(relativePath.startsWith(src)) {
+            if (relativePath.startsWith(src)) {
                 pkg = relativePath.substring(src.length());
             } else {
                 pkg = relativePath;
