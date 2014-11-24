@@ -51,6 +51,9 @@ public class InspectionResult {
     public void addProblem(PsiElement start, PsiElement end, String msg, ProblemHighlightType type, LocalQuickFix... fixes) {
         problemsCreated++;
 
+        if ( start == null || end == null )
+            return;
+
         TextRange startTextRange = start.getTextRange();
         TextRange endTextRange = end.getTextRange();
         if (startTextRange.getStartOffset() < endTextRange.getEndOffset())
@@ -60,7 +63,7 @@ public class InspectionResult {
     public void addProblem(PsiElement element, int start, int end, String msg, ProblemHighlightType type, LocalQuickFix... fixes) {
         problemsCreated++;
 
-        if (start < end)
+        if (start < end && element != null)
             problems.add(
                     manager.createProblemDescriptor(element,
                             new TextRange(start, end),

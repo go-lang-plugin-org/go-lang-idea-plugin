@@ -28,9 +28,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Stack;
 
-/**
- * find redeclare compiler error.
- */
 public class RedeclareInspection extends AbstractWholeGoFileInspection {
     @Override
     protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result) {
@@ -174,9 +171,8 @@ public class RedeclareInspection extends AbstractWholeGoFileInspection {
                 if (name.startsWith("*")) {
                     name = name.substring(1);
                 }
-                if (methodNameSet.contains(name)) {
-                    result.addProblem(declaration.getNameIdentifier(), GoBundle.message("error.redeclare"),
-                            ProblemHighlightType.GENERIC_ERROR);
+                if (methodNameSet.contains(name) && declaration.getNameIdentifier() != null) {
+                    result.addProblem(declaration.getNameIdentifier(), GoBundle.message("error.redeclare"), ProblemHighlightType.GENERIC_ERROR);
                     return;
                 }
                 methodNameSet.add(name);
