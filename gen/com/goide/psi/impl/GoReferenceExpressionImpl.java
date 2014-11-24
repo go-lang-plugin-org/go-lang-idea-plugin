@@ -9,7 +9,6 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
-import com.intellij.psi.PsiReference;
 
 public class GoReferenceExpressionImpl extends GoExpressionImpl implements GoReferenceExpression {
 

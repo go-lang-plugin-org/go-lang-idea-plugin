@@ -14,11 +14,11 @@ import com.intellij.lang.PsiParser;
 public class GoParser implements PsiParser {
 
   public ASTNode parse(IElementType t, PsiBuilder b) {
-    parse_only_(t, b);
+    parseLight(t, b);
     return b.getTreeBuilt();
   }
 
-  public void parse_only_(IElementType t, PsiBuilder b) {
+  public void parseLight(IElementType t, PsiBuilder b) {
     boolean r;
     b = adapt_builder_(t, b, this, EXTENDS_SETS_);
     Marker m = enter_section_(b, 0, _COLLAPSE_, null);

@@ -34,9 +34,15 @@ public class GoIfStatementImpl extends GoStatementImpl implements GoIfStatement 
   }
 
   @Override
-  @NotNull
-  public List<GoStatement> getStatementList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoStatement.class);
+  @Nullable
+  public GoIfStatement getIfStatement() {
+    return findChildByClass(GoIfStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public GoStatement getStatement() {
+    return findChildByClass(GoStatement.class);
   }
 
   @Override

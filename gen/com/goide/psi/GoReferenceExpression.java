@@ -4,7 +4,7 @@ package com.goide.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
+import com.goide.psi.impl.GoReference;
 
 public interface GoReferenceExpression extends GoExpression {
 
@@ -12,7 +12,7 @@ public interface GoReferenceExpression extends GoExpression {
   PsiElement getIdentifier();
 
   @NotNull
-  com.goide.psi.impl.GoReference getReference();
+  GoReference getReference();
 
   @Nullable
   GoReferenceExpression getQualifier();

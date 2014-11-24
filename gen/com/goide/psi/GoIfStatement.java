@@ -13,8 +13,11 @@ public interface GoIfStatement extends GoStatement {
   @Nullable
   GoExpression getExpression();
 
-  @NotNull
-  List<GoStatement> getStatementList();
+  @Nullable
+  GoIfStatement getIfStatement();
+
+  @Nullable
+  GoStatement getStatement();
 
   @Nullable
   PsiElement getSemicolon();
