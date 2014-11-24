@@ -11,20 +11,19 @@ import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.AdapterProcessor;
 import com.intellij.util.CommonProcessors;
 import com.intellij.util.FilteringProcessor;
-import com.intellij.util.Function;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ro.redeul.google.go.config.sdk.GoAppEngineSdkData;
 import ro.redeul.google.go.config.sdk.GoAppEngineSdkType;
-import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.config.sdk.GoSdkType;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -144,64 +143,9 @@ public class GoSdkParsingHelper implements ApplicationComponent {
             return result;
         }
 
-        String activeTarget = "";
-        VirtualFile goRoot = home;
-
-        if ( ownerSdk.getSdkType() == GoAppEngineSdkType.getInstance() ) {
-            goRoot = home.findFileByRelativePath("goroot");
-
-            GoAppEngineSdkData sdkData = (GoAppEngineSdkData) ownerSdk.getSdkAdditionalData();
-            if ( sdkData != null && sdkData.TARGET_OS != null && sdkData.TARGET_ARCH != null ) {
-                activeTarget = String.format("%s_%s", sdkData.TARGET_OS.getName(), sdkData.TARGET_ARCH.getName());
-            }
-        } else {
-            GoSdkData sdkData = (GoSdkData) ownerSdk.getSdkAdditionalData();
-            if ( sdkData != null && sdkData.TARGET_OS != null && sdkData.TARGET_ARCH != null ) {
-                activeTarget = String.format("%s_%s", sdkData.TARGET_OS.getName(), sdkData.TARGET_ARCH.getName());
-            }
-        }
-
-        if ( goRoot == null ) {
-            return result;
-        }
-
-        // find libraries
-        final VirtualFile packageRoot = goRoot.findFileByRelativePath("pkg");
-        if (packageRoot == null) {
-            return result;
-        }
-
-        CommonProcessors.CollectUniquesProcessor<String> libraryNames = new CommonProcessors.CollectUniquesProcessor<String>();
-
-        final VirtualFile librariesRoot = packageRoot.findFileByRelativePath(activeTarget);
-
-        if ( librariesRoot == null ) {
-            return result;
-        }
-
-        VfsUtil.processFilesRecursively(librariesRoot,
-                new FilteringProcessor<VirtualFile>(
-                        new Condition<VirtualFile>() {
-                            @Override
-                            public boolean value(VirtualFile virtualFile) {
-                                return !virtualFile.isDirectory() && virtualFile.getName().matches(".*\\.a");
-                            }
-                        },
-                        new AdapterProcessor<VirtualFile, String>(
-                                libraryNames,
-                                new Function<VirtualFile, String>() {
-                                    @Override
-                                    public String fun(VirtualFile virtualFile) {
-                                        String relativePath = VfsUtil.getRelativePath(virtualFile, librariesRoot, '/');
-                                        return relativePath != null ? relativePath.replaceAll("\\.a$", "") : "";
-                                    }
-                                }
-                        ))
-        );
-
         // find makefiles
         CommonProcessors.CollectUniquesProcessor<VirtualFile> makefiles = new CommonProcessors.CollectUniquesProcessor<VirtualFile>();
-        final VirtualFile sourcesRoot = home.findFileByRelativePath(ownerSdk.getSdkType() == GoSdkType.getInstance() ? "src/pkg" : "goroot/src/pkg");
+        final VirtualFile sourcesRoot = GoSdkUtil.getSdkSourcesRoot(ownerSdk);
         if (sourcesRoot == null) {
             return result;
         }

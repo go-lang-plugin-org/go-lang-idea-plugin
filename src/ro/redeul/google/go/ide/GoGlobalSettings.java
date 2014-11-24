@@ -75,9 +75,13 @@ public class GoGlobalSettings implements PersistentStateComponent<GoGlobalSettin
         List<Sdk> sdkList = new ArrayList<Sdk>();
 
         if (!goRoot.equals("")) {
-            sdkList.addAll(GoSdkUtil.getSdkOfType(GoSdkType.getInstance(), jdkTable));
-            for (Sdk sdk : sdkList) {
-                updateSDK(sdk, goRoot, goPath);
+            goRoot = GoSdkUtil.computeGoBuiltinPackagesPath(goRoot);
+
+            if (goRoot != null) {
+                sdkList.addAll(GoSdkUtil.getSdkOfType(GoSdkType.getInstance(), jdkTable));
+                for (Sdk sdk : sdkList) {
+                    updateSDK(sdk, goRoot, goPath);
+                }
             }
         }
 
@@ -93,7 +97,7 @@ public class GoGlobalSettings implements PersistentStateComponent<GoGlobalSettin
 
     private void updateSDK(Sdk sdk, String goRoot, String goPath) {
         final SdkModificator sdkModificator = sdk.getSdkModificator();
-        final VirtualFile finalGoRoot = StandardFileSystems.local().findFileByPath(goRoot + "/src/pkg");
+        final VirtualFile finalGoRoot = StandardFileSystems.local().findFileByPath(goRoot);
         final VirtualFile finalGoPath = StandardFileSystems.local().findFileByPath(goPath + "/src");
 
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
@@ -109,8 +113,9 @@ public class GoGlobalSettings implements PersistentStateComponent<GoGlobalSettin
 
         sdkModificator.commitChanges();
 
-        if (GoSdkUtil.getSdkSourcesRoot(sdk) != null) {
-            GoSdkUtil.getSdkSourcesRoot(sdk).refresh(false, false);
+        VirtualFile goSourcesRoot = GoSdkUtil.getSdkSourcesRoot(sdk);
+        if (goSourcesRoot != null) {
+            goSourcesRoot.refresh(false, false);
         }
     }
 }

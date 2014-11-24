@@ -173,15 +173,15 @@ public class GoGlobalConfigurableForm {
             return "";
         }
 
-        String goExecName = GoSdkUtil.isHostOsWindows() ? "/bin/go.exe" : "/bin/go";
-        if (!new File(goRootStr.concat(goExecName)).exists()) {
+        String goExecName = GoSdkUtil.findGoExecutable(goRootStr);
+        if (goExecName.equals("")) {
             Messages.showErrorDialog("Error while saving your settings. \nGOROOT" + goExecName + " doesn't exists.", "Error on Google Go Plugin");
             return "";
         }
 
-        if (!(new File(goRootStr.concat("/src")).exists()) ||
-                !(new File(goRootStr.concat("/src/pkg")).exists())) {
-            Messages.showErrorDialog("Error while saving your settings. \nGOROOT/src/pkg doesn't exists.", "Error on Google Go Plugin");
+        String goPackagesDir = GoSdkUtil.computeGoBuiltinPackagesPath(goRootStr);
+        if (goPackagesDir == null || !(new File(goPackagesDir).exists())) {
+            Messages.showErrorDialog("Error while saving your settings. \nPackages could not be found.", "Error on Google Go Plugin");
             return "";
         }
 

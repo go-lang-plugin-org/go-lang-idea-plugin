@@ -13,6 +13,7 @@ import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.xdebugger.XDebugProcess;
 import com.intellij.xdebugger.XDebugProcessStarter;
 import com.intellij.xdebugger.XDebugSession;
@@ -129,7 +130,13 @@ public class GoApplicationRunner extends DefaultProgramRunner {
             });
             gdbProcess.sendCommand("add-auto-load-safe-path " + goRootPath);
 
-            String pythonRuntime = goRootPath + "/src/pkg/runtime/runtime-gdb.py";
+            VirtualFile goSourceRoot = GoSdkUtil.getSdkSourcesRoot(sdk);
+            if (goSourceRoot==null){
+                debugSession.stop();
+                return null;
+            }
+
+            String pythonRuntime = goSourceRoot.getCanonicalPath() + "/runtime/runtime-gdb.py";
             if (GoSdkUtil.checkFileExists(pythonRuntime)) {
                 gdbProcess.sendCommand("source " + pythonRuntime);
             }

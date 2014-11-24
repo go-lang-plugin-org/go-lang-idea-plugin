@@ -44,8 +44,6 @@ import static java.lang.String.format;
 
 public class GoSdkUtil {
 
-    public static final String PACKAGES = "src/pkg";
-
     private static final Logger LOG = Logger.getInstance(
             "ro.redeul.google.go.sdk.GoSdkUtil");
     private static final String TEST_SDK_PATH = "go.test.sdk.home";
@@ -82,6 +80,17 @@ public class GoSdkUtil {
 
     private static final Pattern RE_ROOT_MATCHER =
             Pattern.compile("^(?:set )?GOROOT=\"?([^\"]+)\"?$", Pattern.MULTILINE);
+
+    private static final HashMap<String, String> GoVersionPackagesPath =
+            new HashMap<String, String>(){
+                {
+                    put("1.0", "/src/pkg");
+                    put("1.1", "/src/pkg");
+                    put("1.2", "/src/pkg");
+                    put("1.3", "/src/pkg");
+                    put("1.4", "/src");
+                }
+            };
 
     public static GoSdkData testGoogleGoSdk(String path) {
 
@@ -142,6 +151,7 @@ public class GoSdkUtil {
         return "";
     }
 
+    @Nullable
     public static VirtualFile getSdkSourcesRoot(Sdk sdk) {
         final VirtualFile homeDirectory = sdk.getHomeDirectory();
 
@@ -149,14 +159,71 @@ public class GoSdkUtil {
             return null;
         }
 
-        if (checkFolderExists(homeDirectory.getPath(), "src")) {
-            return homeDirectory.findFileByRelativePath("src/pkg");
+        String sdkVersion = sdk.getVersionString();
+        if (sdkVersion ==null || sdkVersion.isEmpty()) {
+            return null;
         }
-        LOG.warn("Could not find GO SDK sources root (src/pkg)");
+
+        String sourceRoot = "";
+
+        if (sdk.getSdkType() == GoSdkType.getInstance()) {
+            sourceRoot = getPackagesPathForGoVersion(sdkVersion);
+        } else if (sdk.getSdkType() == GoAppEngineSdkType.getInstance()) {
+            //Float sdkMajorVersion = Float.parseFloat(sdkVersion.substring(0, 3));
+            //Float sdkMinorVersion = Float.parseFloat(sdkVersion.substring(4, 6));
+
+            // For now Go AppEngine SDK at version 1.9.15 stil uses goroot/src/pkg
+            // When a new version will be released to use the goroot/src layout
+            // or any other form of layout, this should be changed as well
+            sourceRoot = "goroot/src/pkg";
+        }
+
+        if (sourceRoot.isEmpty()) {
+            return null;
+        }
+
+
+        if (checkFolderExists(homeDirectory.getPath(), sourceRoot)) {
+            return homeDirectory.findFileByRelativePath(sourceRoot);
+        }
+
+        LOG.warn("Could not find GO SDK sources root");
         return null;
     }
 
-    private static GoSdkData findVersion(final String path, String goCommand, GoSdkData data) {
+    @Nullable
+    public static String computeGoBuiltinPackagesPath(String goRoot) {
+        String goCommand = GoSdkUtil.findGoExecutable(goRoot);
+        if (goCommand.equals("")) {
+            LOG.warn("GO SDK: Could not find go binary in expected locations.");
+            return null;
+        }
+
+        GoSdkData data = GoSdkUtil.findHostOsAndArch(goRoot, goCommand, new GoSdkData());
+
+        data = GoSdkUtil.findVersion(goRoot, goCommand, data);
+        if (data == null) {
+            LOG.warn("GO SDK: Could not detect go version.");
+            return null;
+        }
+
+        return goRoot + getPackagesPathForGoVersion(data.VERSION_MAJOR);
+    }
+
+
+
+    private static String getPackagesPathForGoVersion(String goVersionOutput) {
+        String sdkVersion = goVersionOutput.substring(2, 5);
+
+        String goPackagesPath = GoVersionPackagesPath.get(sdkVersion);
+        if (goPackagesPath == null) {
+            return "/src";
+        }
+
+        return goPackagesPath;
+    }
+
+    public static GoSdkData findVersion(final String path, String goCommand, GoSdkData data) {
 
         if (data == null)
             return null;
@@ -187,7 +254,7 @@ public class GoSdkUtil {
         }
     }
 
-    private static GoSdkData findHostOsAndArch(final String path, String goCommand, GoSdkData data) {
+    public static GoSdkData findHostOsAndArch(final String path, String goCommand, GoSdkData data) {
 
         if (data == null)
             return null;
