@@ -75,6 +75,10 @@ public class UnresolvedSymbolsTest extends GoInspectionTestCase {
         doTest();
     }
 
+    public void testVarDereferenceParsedAsTypeCast() throws Exception {
+        doTest();
+    }
+
     @Ignore("failing test")
     public void testError() throws Exception {
         doTest();
@@ -82,11 +86,6 @@ public class UnresolvedSymbolsTest extends GoInspectionTestCase {
 
     @Ignore("failing test")
     public void testGoTestFiles() throws Exception{
-        doTest();
-    }
-
-    @Ignore("Failing as it needs some care when looking at a parsing corner case: aka is not trivial. See #865")
-    public void testVarDereferenceParsedAsTypeCast() throws Exception {
         doTest();
     }
 }

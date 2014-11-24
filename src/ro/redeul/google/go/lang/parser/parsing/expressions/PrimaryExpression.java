@@ -125,19 +125,6 @@ class PrimaryExpression implements GoElementTypes {
         mark = builder.mark();
 
         if (ParserUtils.getToken(builder, pLPAREN)) {
-            if (ParserUtils.getToken(builder, oMUL)) {
-                if (parseLiteralIdentifier(builder, parser)) {
-                    if (ParserUtils.lookAhead(builder, pRPAREN, oDOT)) {
-                        mark.rollbackTo();
-                        return parseMethodExpression(builder, parser);
-                    }
-                }
-            }
-        }
-
-        mark.rollbackTo();
-        mark = builder.mark();
-        if (ParserUtils.getToken(builder, pLPAREN)) {
             boolean allowComposite =
                 parser.resetFlag(AllowCompositeLiteral, true);
             if (parser.parseExpression(builder)) {
@@ -169,25 +156,6 @@ class PrimaryExpression implements GoElementTypes {
 
         mark.drop();
         return false;
-    }
-
-    private static boolean parseMethodExpression(PsiBuilder builder,
-                                                 GoParser parser) {
-        PsiBuilder.Marker mark = builder.mark();
-
-        if (ParserUtils.getToken(builder, pLPAREN)) {
-            ParserUtils.getToken(builder, oMUL);
-            parser.parseTypeName(builder);
-            ParserUtils.getToken(builder, pRPAREN);
-        }
-
-        ParserUtils.getToken(builder, oDOT);
-
-        ParserUtils.getToken(builder, mIDENT,
-                             GoBundle.message("error.method.name.expected"));
-        mark.done(GoElementTypes.METHOD_EXPRESSION);
-
-        return true;
     }
 
     private static void parseLiteralFunction(PsiBuilder builder,
@@ -429,19 +397,6 @@ class PrimaryExpression implements GoElementTypes {
 
         if (!ParserUtils.getToken(builder, mIDENT))
             return false;
-
-//        if ( identifier != null) {
-//            identifier = identifier.replaceAll(GoCompletionContributor.DUMMY_IDENTIFIER, "");
-//        }
-
-//        if (ParserUtils.lookAhead(builder, oDOT, mIDENT)) {
-//            ParserUtils.getToken(builder, oDOT);
-//            if (ParserUtils.lookAhead(builder, mIDENT)) {
-//                ParserUtils.getToken(builder, mIDENT);
-//            } else {
-//                builder.error(GoBundle.message("identifier.expected"));
-//            }
-//        }
 
         mark.done(GoElementTypes.LITERAL_IDENTIFIER);
         return true;
