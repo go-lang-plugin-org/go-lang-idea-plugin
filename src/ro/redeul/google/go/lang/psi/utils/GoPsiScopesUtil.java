@@ -77,7 +77,7 @@ public class GoPsiScopesUtil {
         return walkPackage(processor, ResolveStates.packageExports(), entrance, goPackage);
     }
 
-    public static boolean walkPackage(PsiScopeProcessor processor, ResolveState state, PsiElement entrance, GoPackage goPackage) {
+    public static boolean walkPackage(PsiScopeProcessor processor, ResolveState state, @NotNull PsiElement entrance, GoPackage goPackage) {
         return goPackage.processDeclarations(processor, state, null, entrance);
     }
 

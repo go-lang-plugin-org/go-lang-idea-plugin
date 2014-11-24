@@ -31,11 +31,8 @@ public class FunctionOrTypeNameReference extends ReferenceWithSolver<GoLiteralId
                             psiElement(GoCallOrConvExpression.class))
             );
 
-    private final GoPackage srcPackage;
-
     public FunctionOrTypeNameReference(GoLiteralIdentifier element) {
         super(element);
-        this.srcPackage = GoPackages.getPackageFor(element);
     }
 
     @Override
@@ -46,6 +43,6 @@ public class FunctionOrTypeNameReference extends ReferenceWithSolver<GoLiteralId
 
     @Override
     public void walkSolver(FunctionOrTypeNameSolver solver) {
-        GoPsiScopesUtil.walkPackage(solver, ResolveState.initial(), getElement(), srcPackage);
+        GoPsiScopesUtil.treeWalkUp(solver, getElement(), null, ResolveStates.initial());
     }
 }

@@ -32,7 +32,7 @@ public class TypeNameReference extends ReferenceWithSolver<GoPsiTypeName, TypeNa
     private final GoPackage srcPackage;
 
     public TypeNameReference(GoPsiTypeName element) {
-        this(element, null);
+        this(element, GoPackages.getPackageFor(element));
     }
 
     public TypeNameReference(GoPsiTypeName element, GoPackage goPackage) {
@@ -51,8 +51,8 @@ public class TypeNameReference extends ReferenceWithSolver<GoPsiTypeName, TypeNa
 
     @Override
     public void walkSolver(TypeNameSolver solver) {
-        if ( srcPackage == goPackage)
-            GoPsiScopesUtil.walkPackage(solver, ResolveState.initial(), null, srcPackage);
+        if ( srcPackage == goPackage )
+            GoPsiScopesUtil.treeWalkUp(solver, getElement(), null, ResolveStates.initial());
         else
             GoPsiScopesUtil.walkPackageExports(solver, getElement(), goPackage);
     }
