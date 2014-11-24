@@ -79,13 +79,13 @@ public class UnresolvedSymbolsTest extends GoInspectionTestCase {
         doTest();
     }
 
-    @Ignore("failing test")
-    public void testError() throws Exception {
+    public void testTests() throws Exception{
+        addPackage("p1", "p1/p11.go", "p1/p12.go", "p1/p11_test.go", "p1/p12_test.go");
         doTest();
     }
 
-    @Ignore("failing test")
-    public void testGoTestFiles() throws Exception{
+    @Ignore("this requires dynamic typing support which is not going to happen in master")
+    public void testError() throws Exception {
         doTest();
     }
 }

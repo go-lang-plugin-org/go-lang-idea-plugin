@@ -36,4 +36,6 @@ public interface GoFile extends PsiFile, GoPsiElement, GoPackagedElement {
     GoFunctionDeclaration getMainFunction();
 
     GoTypeDeclaration[] getTypeDeclarations();
+
+    boolean isTestFile();
 }

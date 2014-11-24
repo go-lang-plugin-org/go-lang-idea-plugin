@@ -36,7 +36,7 @@ public class GoStubFileElementType extends IStubFileElementType<GoFileStub> {
 
     @Override
     public int getStubVersion() {
-        return super.getStubVersion() + 16;
+        return super.getStubVersion() + 17 ;
     }
 
     @Override
@@ -77,9 +77,8 @@ public class GoStubFileElementType extends IStubFileElementType<GoFileStub> {
         StringRef packageImportPath = stub.getPackageImportPath();
         if ( packageImportPath != null ) {
             // don't index any package information on test files or test data.
-            if (isTestDataInStandardLibrary(packageImportPath) || isTestFile(stub.getPsi())) {
+            if (isTestDataInStandardLibrary(packageImportPath))
                 return;
-            }
 
             sink.occurrence(GoPackageImportPath.KEY, packageImportPath.toString());
         }

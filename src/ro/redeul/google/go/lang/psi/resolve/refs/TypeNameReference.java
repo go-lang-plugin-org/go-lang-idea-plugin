@@ -1,6 +1,8 @@
 package ro.redeul.google.go.lang.psi.resolve.refs;
 
 import com.intellij.patterns.ElementPattern;
+import com.intellij.psi.ResolveState;
+import ro.redeul.google.go.lang.packages.GoPackages;
 import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.processors.ResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.ReferenceWithSolver;
@@ -27,6 +29,7 @@ public class TypeNameReference extends ReferenceWithSolver<GoPsiTypeName, TypeNa
             );
 
     private final GoPackage goPackage;
+    private final GoPackage srcPackage;
 
     public TypeNameReference(GoPsiTypeName element) {
         this(element, null);
@@ -35,6 +38,7 @@ public class TypeNameReference extends ReferenceWithSolver<GoPsiTypeName, TypeNa
     public TypeNameReference(GoPsiTypeName element, GoPackage goPackage) {
         super(element);
         this.goPackage = goPackage;
+        this.srcPackage = GoPackages.getPackageFor(element);
     }
 
     @Override
@@ -47,12 +51,8 @@ public class TypeNameReference extends ReferenceWithSolver<GoPsiTypeName, TypeNa
 
     @Override
     public void walkSolver(TypeNameSolver solver) {
-        if (goPackage == null)
-            GoPsiScopesUtil.treeWalkUp(
-                    solver,
-                    getElement(),
-                    getElement().getContainingFile(),
-                    ResolveStates.initial());
+        if ( srcPackage == goPackage)
+            GoPsiScopesUtil.walkPackage(solver, ResolveState.initial(), null, srcPackage);
         else
             GoPsiScopesUtil.walkPackageExports(solver, getElement(), goPackage);
     }

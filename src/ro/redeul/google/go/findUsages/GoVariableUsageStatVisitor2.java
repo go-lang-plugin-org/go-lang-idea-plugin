@@ -60,10 +60,9 @@ public class GoVariableUsageStatVisitor2 extends GoRecursiveElementVisitor {
 
         visitElement(file);
 
-        GoPackages packages = GoPackages.getInstance(file.getProject());
+        GoPackage currentPackage = GoPackages.getPackageFor(file);
 
-        GoPackage goPackage = packages.getPackage(file.getPackageImportPath());
-        for (GoFile packageFile : goPackage.getFiles()) {
+        for (GoFile packageFile : currentPackage.getFiles()) {
             if (!file.isEquivalentTo(packageFile)) {
                 visitElement(packageFile);
             }
@@ -74,6 +73,10 @@ public class GoVariableUsageStatVisitor2 extends GoRecursiveElementVisitor {
         }
 
         for (GoPsiElement declaration : declarations) {
+
+            // only highlight usages of declarations in this file
+            if ( declaration.getContainingFile() != file )
+                continue;
 
             if (psiElement(GoLiteralIdentifier.class).accepts(declaration)) {
                 GoLiteralIdentifier ident = (GoLiteralIdentifier) declaration;

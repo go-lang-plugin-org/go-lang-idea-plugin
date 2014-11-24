@@ -143,12 +143,19 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
 
         String importPath = importPathLiteral.getValue();
 
-        // if it's a relative import we normalize this and hope it falls into our project.
-        // we don't support relative import paths from files outside of our project
-        if ( importPath.startsWith(".") && getContainingFile() instanceof GoFile ) {
-            importPath = FileUtil.toCanonicalPath(((GoFile)getContainingFile()).getPackageImportPath() + "/" + importPath, '/');
+        boolean testPackage = false;
+        if ( getContainingFile() instanceof GoFile ) {
+            GoFile file = (GoFile) getContainingFile();
+
+            testPackage = file.isTestFile();
+
+            // if it's a relative import we normalize this and hope it falls into our project.
+            // we don't support relative import paths from files outside of our project
+            if ( importPath.startsWith(".") ) {
+                importPath = FileUtil.toCanonicalPath(file.getPackageImportPath() + "/" + importPath, '/');
+            }
         }
 
-        return GoPackages.getInstance(getProject()).getPackage(importPath);
+        return GoPackages.getInstance(getProject()).getPackage(importPath, testPackage);
     }
 }

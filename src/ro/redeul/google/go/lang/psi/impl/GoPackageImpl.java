@@ -5,6 +5,7 @@ import com.intellij.extapi.psi.PsiElementBase;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.Language;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
+import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -12,6 +13,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.IncorrectOperationException;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoLanguage;
@@ -31,11 +33,13 @@ public class GoPackageImpl extends PsiElementBase implements GoPackage {
 
     private final VirtualFile mySourceRootFile;
     private final VirtualFile myPackageFile;
+    private final boolean myTestPackage;
 
-    public GoPackageImpl(VirtualFile packageFile, VirtualFile packageSourceRoot, PsiManager psiManager) {
+    public GoPackageImpl(VirtualFile packageFile, VirtualFile packageSourceRoot, PsiManager psiManager, boolean testPackage) {
         this.myPackageFile = packageFile;
         this.mySourceRootFile = packageSourceRoot;
         this.myPsiManager = psiManager;
+        this.myTestPackage = testPackage;
     }
 
     @Override
@@ -186,14 +190,23 @@ public class GoPackageImpl extends PsiElementBase implements GoPackage {
 
     @Override
     public GoFile[] getFiles() {
+        return getFiles(isTestPackage());
+    }
+
+    @Override
+    public boolean isTestPackage() {
+        return myTestPackage;
+    }
+
+    private GoFile[] getFiles(final boolean includeTestFiles) {
         GoNamesCache namesCache = GoNamesCache.getInstance(getProject());
 
         List<GoFile> files = new ArrayList<GoFile>(namesCache.getFilesByPackageImportPath(getImportPath()));
 
-        Collections.sort(files, new Comparator<GoFile>() {
+        files = ContainerUtil.filter(files, new Condition<GoFile>() {
             @Override
-            public int compare(GoFile o1, GoFile o2) {
-                return o1.getVirtualFile().getName().compareTo(o2.getVirtualFile().getName());
+            public boolean value(GoFile file) {
+                return includeTestFiles || !(file.getVirtualFile().getName().endsWith("_test.go"));
             }
         });
 

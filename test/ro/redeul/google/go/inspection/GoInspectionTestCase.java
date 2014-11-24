@@ -65,6 +65,8 @@ public abstract class GoInspectionTestCase extends GoLightCodeInsightFixtureTest
         final File folder = new File(getTestDataPath(), getTestName(true));
         List<File> files = new ArrayList<File>();
 
+        myFixture.copyDirectoryToProject(getTestName(true), "/");
+
         FileUtil.collectMatchedFiles(folder, Pattern.compile(".*\\.go$"), files);
         List<String> fileNames = ContainerUtil.map(files, new Function<File, String>() {
             @Override
@@ -73,7 +75,6 @@ public abstract class GoInspectionTestCase extends GoLightCodeInsightFixtureTest
             }
         });
 
-        myFixture.copyDirectoryToProject(getTestName(true), "/");
         for (String fileName : fileNames) {
             PsiFile psi = myFixture.configureFromTempProjectFile(fileName);
             doTestWithOneFile((GoFile) psi);

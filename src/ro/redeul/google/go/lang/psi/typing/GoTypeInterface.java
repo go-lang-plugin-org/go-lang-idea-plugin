@@ -1,7 +1,6 @@
 package ro.redeul.google.go.lang.psi.typing;
 
 import ro.redeul.google.go.lang.packages.GoPackages;
-import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeInterface;
@@ -41,7 +40,7 @@ public class GoTypeInterface extends GoTypePsiBacked<GoPsiTypeInterface> impleme
     public boolean isImplementedBy(GoType type) {
         Map<String, GoTypeFunction> myMethodSet = getMethodSetTypes();
 
-        GoPackage myPackage = getPackage();
+        GoPackage myPackage = GoPackages.getPackageFor(this.getPsiType());
 
         Map<String, GoTypeFunction> otherMethodSet = type.getDeclaredMethods(myPackage);
 
@@ -57,11 +56,6 @@ public class GoTypeInterface extends GoTypePsiBacked<GoPsiTypeInterface> impleme
 
         return true;
 //        return false;
-    }
-
-    private GoPackage getPackage() {GoPackages packages = GoPackages.getInstance(this.getPsiType().getProject());
-        GoFile contextFile = (GoFile) this.getPsiType().getContainingFile();
-        return packages.getPackage(contextFile.getPackageImportPath());
     }
 
     protected Map<String, GoTypeFunction> getMethodSetTypes() {

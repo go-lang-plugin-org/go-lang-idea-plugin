@@ -9,4 +9,6 @@ public interface GoPackage extends GoPsiElement, PsiDirectoryContainer {
     public String getName();
 
     GoFile[] getFiles();
+
+    boolean isTestPackage();
 }

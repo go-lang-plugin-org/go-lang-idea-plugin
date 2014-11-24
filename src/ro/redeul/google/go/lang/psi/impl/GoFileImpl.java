@@ -164,6 +164,11 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
         return findChildrenByClass(GoTypeDeclaration.class);
     }
 
+    @Override
+    public boolean isTestFile() {
+        return getCurrentOrIndexedVirtualFile().getName().endsWith("_test.go");
+    }
+
     private VirtualFile getCurrentOrIndexedVirtualFile() {
         VirtualFile virtualFile = getVirtualFile();
 
@@ -240,9 +245,8 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
         if ( ResolveStates.get(state, ResolveStates.Key.IsOriginalFile)) {
             GoPackages packages = GoPackages.getInstance(getProject());
 
-            GoPackage myPackage = packages.getPackage(getPackageImportPath());
-            if (myPackage != null &&
-                    !myPackage.processDeclarations(processor, ResolveStates.currentPackage(), this.getOriginalFile(), place))
+            GoPackage myPackage = packages.getPackage(getPackageImportPath(), isTestFile());
+            if (!myPackage.processDeclarations(processor, ResolveStates.currentPackage(), this.getOriginalFile(), place))
                 return false;
 
             GoPackage builtinPackage = packages.getBuiltinPackage();

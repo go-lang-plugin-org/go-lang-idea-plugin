@@ -2,6 +2,9 @@ package ro.redeul.google.go.lang.psi.resolve.refs;
 
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
+import ro.redeul.google.go.lang.packages.GoPackages;
+import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallOrConversionExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
@@ -28,8 +31,11 @@ public class FunctionOrTypeNameReference extends ReferenceWithSolver<GoLiteralId
                             psiElement(GoCallOrConvExpression.class))
             );
 
+    private final GoPackage srcPackage;
+
     public FunctionOrTypeNameReference(GoLiteralIdentifier element) {
         super(element);
+        this.srcPackage = GoPackages.getPackageFor(element);
     }
 
     @Override
@@ -40,10 +46,6 @@ public class FunctionOrTypeNameReference extends ReferenceWithSolver<GoLiteralId
 
     @Override
     public void walkSolver(FunctionOrTypeNameSolver solver) {
-        GoPsiScopesUtil.treeWalkUp(
-                solver,
-                getElement(),
-                getElement().getContainingFile(),
-                ResolveStates.initial());
+        GoPsiScopesUtil.walkPackage(solver, ResolveState.initial(), getElement(), srcPackage);
     }
 }

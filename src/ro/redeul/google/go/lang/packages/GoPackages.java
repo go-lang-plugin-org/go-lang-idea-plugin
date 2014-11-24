@@ -7,6 +7,7 @@ import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.ex.ProjectRootManagerEx;
 import com.intellij.openapi.util.NotNullLazyKey;
+import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
@@ -29,9 +30,9 @@ public class GoPackages extends AbstractProjectComponent {
 
     private static final NotNullLazyKey<GoPackages, Project> INSTANCE_KEY = ServiceManager.createLazyKey(GoPackages.class);
 
-    private volatile SoftReference<ConcurrentMap<String, GoPackage>> packagesCache;
+    private volatile SoftReference<ConcurrentMap<Pair<String, Boolean>, GoPackage>> packagesCache;
 
-    public static final GoPackage C = new GoPackageImpl(null, null, null) {
+    public static final GoPackage C = new GoPackageImpl(null, null, null, false) {
         @Override
         public String getImportPath() {
             return "C";
@@ -61,7 +62,7 @@ public class GoPackages extends AbstractProjectComponent {
         }
     };
 
-    public static final GoPackage Invalid = new GoPackageImpl(null, null, null) {
+    public static final GoPackage Invalid = new GoPackageImpl(null, null, null, false) {
         @Override
         public String getImportPath() {
             return "";
@@ -110,22 +111,22 @@ public class GoPackages extends AbstractProjectComponent {
      * @return an object encapsulating a go package.
      */
     @NotNull
-    public GoPackage getPackage(String path) {
-        ConcurrentMap<String, GoPackage> cache = SoftReference.dereference(packagesCache);
+    public GoPackage getPackage(String path, boolean testPackage) {
+        ConcurrentMap<Pair<String, Boolean>, GoPackage> cache = SoftReference.dereference(packagesCache);
         if (cache == null) {
-            packagesCache = new SoftReference<ConcurrentMap<String, GoPackage>>(cache = new ConcurrentHashMap<String, GoPackage>());
+            packagesCache = new SoftReference<ConcurrentMap<Pair<String, Boolean>, GoPackage>>(cache = new ConcurrentHashMap<Pair<String, Boolean>, GoPackage>());
         }
 
-        GoPackage aPackage = cache.get(path);
+        GoPackage aPackage = cache.get(Pair.create(path, testPackage));
         if (aPackage != null) {
             return aPackage;
         }
 
-        aPackage = resolvePackage(path);
-        return aPackage != null ? ConcurrencyUtil.cacheOrGet(cache, path, aPackage) : Invalid;
+        aPackage = resolvePackage(path, testPackage);
+        return aPackage != null ? ConcurrencyUtil.cacheOrGet(cache, Pair.create(path, testPackage), aPackage) : Invalid;
     }
 
-    private GoPackage resolvePackage(String path){
+    private GoPackage resolvePackage(String path, boolean testPackage){
         if ( path.equals(C.getImportPath()))
             return C;
 
@@ -134,7 +135,7 @@ public class GoPackages extends AbstractProjectComponent {
         for (VirtualFile sourceRoot : sourceRoots) {
             VirtualFile packagePath = sourceRoot.findFileByRelativePath(path);
             if (packagePath != null && packagePath.isDirectory()) {
-                return new GoPackageImpl(packagePath, sourceRoot, PsiManager.getInstance(myProject));
+                return new GoPackageImpl(packagePath, sourceRoot, PsiManager.getInstance(myProject), testPackage);
             }
         }
 
@@ -147,7 +148,7 @@ public class GoPackages extends AbstractProjectComponent {
         for (VirtualFile sourceRoot : sdkSourceRoots) {
             VirtualFile packagePath = sourceRoot.findFileByRelativePath(path);
             if ( packagePath != null && packagePath.isDirectory()) {
-                return new GoPackageImpl(packagePath, sourceRoot, PsiManager.getInstance(myProject));
+                return new GoPackageImpl(packagePath, sourceRoot, PsiManager.getInstance(myProject), testPackage);
             }
         }
 
@@ -155,24 +156,22 @@ public class GoPackages extends AbstractProjectComponent {
     }
 
     public GoPackage getBuiltinPackage() {
-        return getPackage("builtin");
+        return getPackage("builtin", false);
     }
 
-    @Nullable
+    @NotNull
     public static GoPackage getPackageFor(@Nullable PsiElement element) {
         if ( element == null )
-            return null;
+            return GoPackages.Invalid;
 
         GoPackages goPackages = getInstance(element.getProject());
 
         GoFile goFile = getAs(GoFile.class, element.getContainingFile());
 
         if ( goFile == null )
-            return null;
+            return GoPackages.Invalid;
 
-        String packageImportPath = goFile.getPackageImportPath();
-
-        return goPackages.getPackage(packageImportPath);
+        return goPackages.getPackage(goFile.getPackageImportPath(), goFile.isTestFile());
     }
 
     @Nullable public static GoPackage getTargetPackageIfDifferent(GoPackage sourcePackage, PsiElement target) {
