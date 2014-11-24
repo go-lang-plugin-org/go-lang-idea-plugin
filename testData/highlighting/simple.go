@@ -19,7 +19,7 @@ type Boom struct {
 
 func (b *Boom) Run(a aaa) (r1 aaa, r2 aaa) {
    b.err + a + r1 + r2
-}
+<error>}</error>
 
 func <warning>foo</warning>() {
     i := 1
@@ -346,7 +346,7 @@ func <warning>name</warning>(col Color) string {
         a *[7]int
     }
     Println(testdata.a)
-}
+<error>}</error>
 
 var <error>Name11</error> string  = ""
 var <error>nmame11</error> string  = ""

@@ -7,23 +7,20 @@ import com.intellij.psi.PsiElement;
 
 public interface GoIfStatement extends GoStatement {
 
-  @NotNull
-  List<GoBlock> getBlockList();
+  @Nullable
+  GoBlock getBlock();
+
+  @Nullable
+  GoElseStatement getElseStatement();
 
   @Nullable
   GoExpression getExpression();
-
-  @Nullable
-  GoIfStatement getIfStatement();
 
   @Nullable
   GoStatement getStatement();
 
   @Nullable
   PsiElement getSemicolon();
-
-  @Nullable
-  PsiElement getElse();
 
   @NotNull
   PsiElement getIf();

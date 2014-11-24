@@ -23,7 +23,8 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       GoDuplicateReturnArgumentInspection.class,
       GoFunctionVariadicParameterInspection.class,
       GoVarDeclarationInspection.class,
-      GoNoNewVariablesInspection.class
+      GoNoNewVariablesInspection.class,
+      GoReturnInspection.class
     );
   }
 
@@ -49,6 +50,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testPointers()  { doTest(); }
   public void testSlices()    { doTest(); }
   public void testShortVars() { doTest(); }
+  public void testReturns()   { doTest(); }
   
   @Override
   protected LightProjectDescriptor getProjectDescriptor() {

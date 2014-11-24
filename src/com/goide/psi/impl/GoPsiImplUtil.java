@@ -58,6 +58,18 @@ public class GoPsiImplUtil {
     return "builtin".equals(((GoFile)file).getPackageName()) && file.getName().equals("builtin.go");
   }
 
+  public static boolean isPanic(@NotNull GoCallExpr o) {
+    GoExpression e = o.getExpression();
+    if (StringUtil.equals("panic", e.getText()) && e instanceof GoReferenceExpression) {
+      PsiReference reference = e.getReference();
+      PsiElement resolve = reference != null ? reference.resolve() : null;
+      if (!(resolve instanceof GoFunctionDeclaration)) return false;
+      GoFile file = ((GoFunctionDeclaration)resolve).getContainingFile();
+      return StringUtil.equals(file.getPackageName(), "builtin") && StringUtil.equals(file.getName(), "builtin.go");
+    }
+    return false;
+  }
+
   private static class Lazy {
     private static final SingleCharInsertHandler DIR_INSERT_HANDLER = new SingleCharInsertHandler('/');
     private static final SingleCharInsertHandler PACKAGE_INSERT_HANDLER = new SingleCharInsertHandler('.');

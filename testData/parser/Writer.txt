@@ -1161,23 +1161,24 @@ GO_FILE
                       PsiElement(identifier)('err')
                   PsiElement(})('}')
               PsiElement(})('}')
-            PsiElement(else)('else')
-            IF_STATEMENT
-              PsiElement(if)('if')
-              SIMPLE_STATEMENT
-                CONDITIONAL_EXPR
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('err')
-                  PsiElement(!=)('!=')
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('nil')
-              BLOCK
-                PsiElement({)('{')
-                RETURN_STATEMENT
-                  PsiElement(return)('return')
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('err')
-                PsiElement(})('}')
+            ELSE_STATEMENT
+              PsiElement(else)('else')
+              IF_STATEMENT
+                PsiElement(if)('if')
+                SIMPLE_STATEMENT
+                  CONDITIONAL_EXPR
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('err')
+                    PsiElement(!=)('!=')
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('nil')
+                BLOCK
+                  PsiElement({)('{')
+                  RETURN_STATEMENT
+                    PsiElement(return)('return')
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('err')
+                  PsiElement(})('}')
           PsiElement(})('}')
       ASSIGNMENT_STATEMENT
         REFERENCE_EXPRESSION
@@ -2021,32 +2022,33 @@ GO_FILE
               LITERAL
                 PsiElement(int)('1')
           PsiElement(})('}')
-        PsiElement(else)('else')
-        IF_STATEMENT
-          PsiElement(if)('if')
-          SIMPLE_STATEMENT
-            CONDITIONAL_EXPR
-              INDEX_EXPR
-                REFERENCE_EXPRESSION
-                  PsiElement(identifier)('name')
-                PsiElement([)('[')
-                ADD_EXPR
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('length')
-                  PsiElement(-)('-')
-                  LITERAL
-                    PsiElement(int)('1')
-                PsiElement(])(']')
-              PsiElement(==)('==')
-              LITERAL
-                PsiElement(char)(''/'')
-          BLOCK
-            PsiElement({)('{')
+        ELSE_STATEMENT
+          PsiElement(else)('else')
+          IF_STATEMENT
+            PsiElement(if)('if')
             SIMPLE_STATEMENT
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('length')
-              PsiElement(--)('--')
-            PsiElement(})('}')
+              CONDITIONAL_EXPR
+                INDEX_EXPR
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('name')
+                  PsiElement([)('[')
+                  ADD_EXPR
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('length')
+                    PsiElement(-)('-')
+                    LITERAL
+                      PsiElement(int)('1')
+                  PsiElement(])(']')
+                PsiElement(==)('==')
+                LITERAL
+                  PsiElement(char)(''/'')
+            BLOCK
+              PsiElement({)('{')
+              SIMPLE_STATEMENT
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('length')
+                PsiElement(--)('--')
+              PsiElement(})('}')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
           VAR_DEFINITION

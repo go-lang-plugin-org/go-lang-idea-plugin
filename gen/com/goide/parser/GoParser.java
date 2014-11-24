@@ -94,6 +94,9 @@ public class GoParser implements PsiParser {
     else if (t == ELEMENT_INDEX) {
       r = ElementIndex(b, 0);
     }
+    else if (t == ELSE_STATEMENT) {
+      r = ElseStatement(b, 0);
+    }
     else if (t == EXPR_CASE_CLAUSE) {
       r = ExprCaseClause(b, 0);
     }
@@ -340,10 +343,10 @@ public class GoParser implements PsiParser {
       MAP_TYPE, POINTER_TYPE, RECEIVER_TYPE, STRUCT_TYPE,
       TYPE, TYPE_LIST),
     create_token_set_(ASSIGNMENT_STATEMENT, BREAK_STATEMENT, CONTINUE_STATEMENT, DEFER_STATEMENT,
-      EXPR_SWITCH_STATEMENT, FALLTHROUGH_STATEMENT, FOR_STATEMENT, GOTO_STATEMENT,
-      GO_STATEMENT, IF_STATEMENT, LABELED_STATEMENT, RETURN_STATEMENT,
-      SELECT_STATEMENT, SEND_STATEMENT, SIMPLE_STATEMENT, STATEMENT,
-      SWITCH_STATEMENT, TYPE_SWITCH_STATEMENT),
+      ELSE_STATEMENT, EXPR_SWITCH_STATEMENT, FALLTHROUGH_STATEMENT, FOR_STATEMENT,
+      GOTO_STATEMENT, GO_STATEMENT, IF_STATEMENT, LABELED_STATEMENT,
+      RETURN_STATEMENT, SELECT_STATEMENT, SEND_STATEMENT, SIMPLE_STATEMENT,
+      STATEMENT, SWITCH_STATEMENT, TYPE_SWITCH_STATEMENT),
     create_token_set_(ADD_EXPR, AND_EXPR, BUILTIN_CALL_EXPR, CALL_EXPR,
       COMPOSITE_LIT, CONDITIONAL_EXPR, CONVERSION_EXPR, EXPRESSION,
       FUNCTION_LIT, INDEX_EXPR, LITERAL, LITERAL_TYPE_EXPR,
@@ -1102,6 +1105,31 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // else ( IfStatement | Block )
+  public static boolean ElseStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ElseStatement")) return false;
+    if (!nextTokenIs(b, ELSE)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = consumeToken(b, ELSE);
+    p = r; // pin = 1
+    r = r && ElseStatement_1(b, l + 1);
+    exit_section_(b, l, m, ELSE_STATEMENT, r, p, null);
+    return r || p;
+  }
+
+  // IfStatement | Block
+  private static boolean ElseStatement_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ElseStatement_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = IfStatement(b, l + 1);
+    if (!r) r = Block(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // ExprSwitchCase ':' Statements?
   public static boolean ExprCaseClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExprCaseClause")) return false;
@@ -1660,14 +1688,14 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // if Condition Block [ else ( IfStatement | Block ) ]
+  // if Condition Block ElseStatement?
   public static boolean IfStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IfStatement")) return false;
     if (!nextTokenIs(b, IF)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeToken(b, IF);
-    p = r; // pin = if|else
+    p = r; // pin = 1
     r = r && report_error_(b, Condition(b, l + 1));
     r = p && report_error_(b, Block(b, l + 1)) && r;
     r = p && IfStatement_3(b, l + 1) && r;
@@ -1675,34 +1703,11 @@ public class GoParser implements PsiParser {
     return r || p;
   }
 
-  // [ else ( IfStatement | Block ) ]
+  // ElseStatement?
   private static boolean IfStatement_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IfStatement_3")) return false;
-    IfStatement_3_0(b, l + 1);
+    ElseStatement(b, l + 1);
     return true;
-  }
-
-  // else ( IfStatement | Block )
-  private static boolean IfStatement_3_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "IfStatement_3_0")) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, null);
-    r = consumeToken(b, ELSE);
-    p = r; // pin = if|else
-    r = r && IfStatement_3_0_1(b, l + 1);
-    exit_section_(b, l, m, null, r, p, null);
-    return r || p;
-  }
-
-  // IfStatement | Block
-  private static boolean IfStatement_3_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "IfStatement_3_0_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = IfStatement(b, l + 1);
-    if (!r) r = Block(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   /* ********************************************************** */

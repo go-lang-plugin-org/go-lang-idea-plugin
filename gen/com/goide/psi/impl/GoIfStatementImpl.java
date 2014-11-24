@@ -22,21 +22,21 @@ public class GoIfStatementImpl extends GoStatementImpl implements GoIfStatement 
   }
 
   @Override
-  @NotNull
-  public List<GoBlock> getBlockList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoBlock.class);
+  @Nullable
+  public GoBlock getBlock() {
+    return findChildByClass(GoBlock.class);
+  }
+
+  @Override
+  @Nullable
+  public GoElseStatement getElseStatement() {
+    return findChildByClass(GoElseStatement.class);
   }
 
   @Override
   @Nullable
   public GoExpression getExpression() {
     return findChildByClass(GoExpression.class);
-  }
-
-  @Override
-  @Nullable
-  public GoIfStatement getIfStatement() {
-    return findChildByClass(GoIfStatement.class);
   }
 
   @Override
@@ -49,12 +49,6 @@ public class GoIfStatementImpl extends GoStatementImpl implements GoIfStatement 
   @Nullable
   public PsiElement getSemicolon() {
     return findChildByType(SEMICOLON);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getElse() {
-    return findChildByType(ELSE);
   }
 
   @Override

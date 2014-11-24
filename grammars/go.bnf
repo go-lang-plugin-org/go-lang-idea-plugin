@@ -354,7 +354,8 @@ LabelDefinition ::= identifier {
 SendStatement ::= Expression '<-' Expression {pin=2}
 AssignmentStatement ::= ExpressionList assign_op ExpressionList {pin=2}
 assign_op ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=' | '&=' | '&^='
-IfStatement ::= if Condition Block [ else ( IfStatement | Block ) ] {pin(".*")="if|else"}
+IfStatement ::= if Condition Block ElseStatement?
+ElseStatement ::= else (IfStatement | Block)
 SwitchStatement ::= SwitchStart (TypeSwitchStatement | ExprSwitchStatement)
 SwitchStart ::= switch
 left ExprSwitchStatement ::= Condition '{' ( ExprCaseClause )* '}' {pin=2 extends=SwitchStatement}

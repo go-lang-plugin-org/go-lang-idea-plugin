@@ -18,13 +18,12 @@ package com.goide.highlighting;
 
 import com.goide.GoTypes;
 import com.goide.psi.*;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInsight.highlighting.HighlightUsagesHandlerBase;
 import com.intellij.codeInsight.highlighting.HighlightUsagesHandlerFactory;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Consumer;
@@ -77,22 +76,10 @@ public class GoHighlightExitPointsHandlerFactory implements HighlightUsagesHandl
 
         @Override
         public void visitCallExpr(@NotNull GoCallExpr o) {
-          if (isPanic(o)) addOccurrence(o);
+          if (GoPsiImplUtil.isPanic(o)) addOccurrence(o);
           super.visitCallExpr(o);
         }
       }.visitTypeOwner(myFunction);
-    }
-
-    private static boolean isPanic(@NotNull GoCallExpr o) {
-      GoExpression e = o.getExpression();
-      if (StringUtil.equals("panic", e.getText()) && e instanceof GoReferenceExpression) {
-        PsiReference reference = e.getReference();
-        PsiElement resolve = reference != null ? reference.resolve() : null;
-        if (!(resolve instanceof GoFunctionDeclaration)) return false;
-        GoFile file = ((GoFunctionDeclaration)resolve).getContainingFile();
-        return StringUtil.equals(file.getPackageName(), "builtin") && StringUtil.equals(file.getName(), "builtin.go");
-      }
-      return false;
     }
 
     @Nullable
@@ -109,7 +96,7 @@ public class GoHighlightExitPointsHandlerFactory implements HighlightUsagesHandl
       PsiElement parent = e.getParent();
       if (parent instanceof GoReferenceExpression) {
         PsiElement grandPa = parent.getParent();
-        if (grandPa instanceof GoCallExpr) return isPanic((GoCallExpr)grandPa);
+        if (grandPa instanceof GoCallExpr) return GoPsiImplUtil.isPanic((GoCallExpr)grandPa);
       }
       return false;
     }

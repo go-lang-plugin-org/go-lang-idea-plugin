@@ -36,6 +36,7 @@ public interface GoTypes {
   IElementType DEFER_STATEMENT = new GoCompositeElementType("DEFER_STATEMENT");
   IElementType ELEMENT = new GoCompositeElementType("ELEMENT");
   IElementType ELEMENT_INDEX = new GoCompositeElementType("ELEMENT_INDEX");
+  IElementType ELSE_STATEMENT = new GoCompositeElementType("ELSE_STATEMENT");
   IElementType EXPRESSION = new GoCompositeElementType("EXPRESSION");
   IElementType EXPR_CASE_CLAUSE = new GoCompositeElementType("EXPR_CASE_CLAUSE");
   IElementType EXPR_SWITCH_CASE = new GoCompositeElementType("EXPR_SWITCH_CASE");
@@ -274,6 +275,9 @@ public interface GoTypes {
       }
       else if (type == ELEMENT_INDEX) {
         return new GoElementIndexImpl(node);
+      }
+      else if (type == ELSE_STATEMENT) {
+        return new GoElseStatementImpl(node);
       }
       else if (type == EXPRESSION) {
         return new GoExpressionImpl(node);
