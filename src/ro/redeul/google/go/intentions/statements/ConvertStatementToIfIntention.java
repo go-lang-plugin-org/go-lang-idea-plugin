@@ -54,7 +54,7 @@ public class ConvertStatementToIfIntention extends Intention {
 
                 @Override
                 public Boolean visitConstant(GoTypeConstant constant) {
-                    return constant.getKind() == GoTypeConstant.Kind.Boolean;
+                    return constant.kind() == GoTypeConstant.Kind.Boolean;
                 }
             });
         }

@@ -2,7 +2,7 @@ package ro.redeul.google.go.lang.psi.expressions.binary;
 
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 
-public interface GoBinaryExpression<Op extends Enum<Op>> extends GoExpr {
+public interface GoBinaryExpression<Op extends Enum<Op> & GoBinaryExpression.BinaryOp> extends GoExpr {
 
     Op op();
 
@@ -10,4 +10,7 @@ public interface GoBinaryExpression<Op extends Enum<Op>> extends GoExpr {
 
     GoExpr getRightOperand();
 
+    public interface BinaryOp {
+        String getText();
+    }
 }

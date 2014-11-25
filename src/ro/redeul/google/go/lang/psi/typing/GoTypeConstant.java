@@ -13,7 +13,7 @@ public class GoTypeConstant extends GoAbstractType implements GoType {
     private Object value;
     private GoType type = GoType.Unknown;
 
-    public Kind getKind() {
+    public Kind kind() {
         return kind;
     }
 
@@ -37,7 +37,7 @@ public class GoTypeConstant extends GoAbstractType implements GoType {
         }
 
         if ( clazz.equals(BigInteger.class) ) {
-            switch (getKind()) {
+            switch (kind()) {
                 case Rune:
                     Character character = getValueAs(Character.class);
                     return character == null ? null : clazz.cast(BigInteger.valueOf(character));
@@ -52,7 +52,7 @@ public class GoTypeConstant extends GoAbstractType implements GoType {
     }
 
     public GoTypeConstant retypeAs(GoType newType) {
-        return (GoTypeConstant) GoTypes.constant(getKind(), getValue(), newType);
+        return (GoTypeConstant) GoTypes.constant(kind(), getValue(), newType);
     }
 
     @Nullable

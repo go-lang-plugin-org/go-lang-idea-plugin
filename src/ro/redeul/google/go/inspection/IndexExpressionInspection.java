@@ -97,7 +97,7 @@ public class IndexExpressionInspection extends AbstractWholeGoFileInspection {
 
             @Override
             public void visitConstant(GoTypeConstant type, InspectionResult data, TypeVisitor<InspectionResult> visitor) {
-                switch (type.getKind()) {
+                switch (type.kind()) {
                     case String:
                         String stringValue = type.getValueAs(String.class);
                         checkUnsignedIntegerConstantInRange(indexExpr, indexType, stringValue != null ? stringValue.length() : Integer.MAX_VALUE, "string", result);
@@ -143,7 +143,7 @@ public class IndexExpressionInspection extends AbstractWholeGoFileInspection {
         BigDecimal decimal = null;
         BigInteger integer = null;
 
-        if (constant.getKind() == GoTypeConstant.Kind.Complex) {
+        if (constant.kind() == GoTypeConstant.Kind.Complex) {
             GoNumber goNumber = constant.getValueAs(GoNumber.class);
             if (goNumber == null || goNumber.isComplex())
                 return null;
@@ -151,7 +151,7 @@ public class IndexExpressionInspection extends AbstractWholeGoFileInspection {
             decimal = goNumber.getReal();
         }
 
-        if (decimal != null || constant.getKind() == GoTypeConstant.Kind.Float) {
+        if (decimal != null || constant.kind() == GoTypeConstant.Kind.Float) {
             decimal = (decimal == null) ? constant.getValueAs(BigDecimal.class) : decimal;
             if (decimal == null)
                 return null;
@@ -163,7 +163,7 @@ public class IndexExpressionInspection extends AbstractWholeGoFileInspection {
             }
         }
 
-        if (integer != null || constant.getKind() == GoTypeConstant.Kind.Integer) {
+        if (integer != null || constant.kind() == GoTypeConstant.Kind.Integer) {
             integer = (integer == null) ? constant.getValueAs(BigInteger.class) : integer;
         }
 

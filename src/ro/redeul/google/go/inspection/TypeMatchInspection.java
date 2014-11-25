@@ -1,139 +1,158 @@
 package ro.redeul.google.go.inspection;
 
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
+import ro.redeul.google.go.lang.psi.expressions.binary.GoAdditiveExpression;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
+import ro.redeul.google.go.lang.psi.expressions.binary.GoMultiplicativeExpression;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoRelationalExpression;
-import ro.redeul.google.go.lang.psi.typing.GoType;
-import ro.redeul.google.go.lang.psi.typing.GoTypeInterface;
-import ro.redeul.google.go.lang.psi.typing.GoTypeName;
-import ro.redeul.google.go.lang.psi.typing.GoTypePointer;
+import ro.redeul.google.go.lang.psi.typing.*;
 import ro.redeul.google.go.lang.psi.visitors.GoRecursiveElementVisitor;
 
 public class TypeMatchInspection extends AbstractWholeGoFileInspection {
+
     @Override
-    protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result) {
+    protected void doCheckFile(@NotNull final GoFile file, @NotNull final InspectionResult problems) {
         new GoRecursiveElementVisitor() {
             @Override
-            public void visitBinaryExpression(GoBinaryExpression expression) {
-                checkBinaryExpression(result, expression);
+            public void visitAdditiveExpression(GoAdditiveExpression expression) {
+                visitElement(expression);
+
+                checkBinaryExpression(expression, problems, file);
             }
 
             @Override
-            public void visitRelExpression(GoRelationalExpression expression) {
-                if ( !preValidate(expression) )
-                    return;
+            public void visitMultiplicativeExpression(GoMultiplicativeExpression expression) {
+                visitElement(expression);
 
-                checkRelationalExpression(result, expression);
+                checkBinaryExpression(expression, problems, file);
+            }
+
+            @Override
+            public void visitRelationalExpression(GoRelationalExpression expression) {
+                visitElement(expression);
+
+                checkRelationalExpression(expression, problems, file);
             }
         }.visitFile(file);
     }
 
-    private boolean preValidate(GoBinaryExpression expression) {
-        GoExpr left = expression.getLeftOperand();
-        GoExpr right = expression.getRightOperand();
+    private void checkBinaryExpression(final GoBinaryExpression<? extends GoBinaryExpression.BinaryOp> expression, final InspectionResult problems, GoFile file) {
 
-        if (left == null || right == null)
+        GoExpr rightOperand = expression.getRightOperand();
+        GoExpr leftOperand = expression.getLeftOperand();
+
+        if (!validateSingleValue(leftOperand, problems) || !(validateSingleValue(rightOperand, problems)))
+            return;
+
+        GoType leftType = GoTypes.get(leftOperand.getType());
+        GoType rightType = GoTypes.get(rightOperand.getType());
+
+        if (leftType.isIdentical(rightType)) {
+            String wrongType = leftType.underlyingType().accept(new TypeVisitor<String>() {
+                @Override
+                public String visitArray(GoTypeArray type) { return "array"; }
+
+                @Override
+                public String visitPointer(GoTypePointer type) { return "pointer"; }
+
+                @Override
+                public String visitChannel(GoTypeChannel type) {
+                    return "chan";
+                }
+
+                @Override
+                public String visitFunction(GoTypeFunction type) {
+                    return "function";
+                }
+
+                @Override
+                public String visitMap(GoTypeMap type) {
+                    return "map";
+                }
+
+                @Override
+                public String visitSlice(GoTypeSlice type) { return "slice"; }
+
+                @Override
+                public String visitInterface(GoTypeInterface type) { return "interface"; }
+
+                @Override
+                public String visitPrimitive(GoTypePrimitive type) {
+                    return type.implementsOp(expression.op()) ? null : type.getName();
+                }
+            });
+
+            if (wrongType != null) {
+                problems.addProblem(
+                        expression,
+                        GoBundle.message(
+                                "warn.expr.op.not.defined",
+                                expression.getText(),
+                                expression.op().getText(),
+                                wrongType));
+            }
+        } else {
+            if ( leftType instanceof GoTypeConstant || rightType instanceof GoTypeConstant )
+                return;
+
+            problems.addProblem(
+                    expression,
+                    GoBundle.message(
+                            "warn.expr.mispatched.types",
+                            expression.getText(),
+                            GoTypes.getRepresentation(leftType, file),
+                            GoTypes.getRepresentation(rightType, file)));
+        }
+    }
+
+    private boolean validateSingleValue(GoExpr expr, InspectionResult problems) {
+        if (expr == null)
             return false;
 
-        if (left.isConstantExpression() || right.isConstantExpression())
+        GoType types[] = expr.getType();
+        if (types.length > 1) {
+            problems.addProblem(expr, GoBundle.message("error.multiple.value.in.single.value.context", expr.getText()));
             return false;
-
-        GoType[] leftTypes = left.getType();
-        GoType[] rightTypes = right.getType();
-        if (leftTypes.length == 0 || rightTypes.length == 0 || leftTypes[0] == null || rightTypes[0] == null)
-            return false;
+        }
 
         return true;
     }
 
+    private void checkRelationalExpression(GoRelationalExpression expression, InspectionResult problems, GoFile file) {
 
-    private void checkRelationalExpression(InspectionResult result, GoRelationalExpression expression) {
-        // TODO IMPLEMENT THIS
-        /*GoType leftType = expression.getLeftOperand().getType()[0];
-        GoType rightType = expression.getRightOperand().getType()[0];
+        GoExpr rightOperand = expression.getRightOperand();
+        GoExpr leftOperand = expression.getLeftOperand();
 
-        switch (expression.op()) {
-            case Eq:
-            case NotEq:
-        }*/
-    }
-
-    public static void checkBinaryExpression(InspectionResult result, GoBinaryExpression expression) {
-        GoExpr left = expression.getLeftOperand();
-        GoExpr right = expression.getRightOperand();
-        if (left == null || right == null) {
+        if (!validateSingleValue(leftOperand, problems) || !(validateSingleValue(rightOperand, problems)))
             return;
-        }
-        if (left.isConstantExpression() || right.isConstantExpression()){
-            return;
-        }
-        GoType[] leftTypes = left.getType();
-        GoType[] rightTypes = right.getType();
-        if (leftTypes.length == 0 || rightTypes.length == 0){
-            return;
-        }
 
-        String operator = expression.op().toString();
-        boolean equality = operator.equals("!=") || operator.equals("==");
-        boolean shift = operator.equals("<<")||operator.equals(">>");
-        for (GoType leftType : leftTypes) {
-            for (GoType rightType : rightTypes) {
-                if (leftType == null || rightType == null) {
-                    return;
-                }
-                GoType leftUnder = leftType.underlyingType();
-                GoType rightUnder = rightType.underlyingType();
-                boolean hasInterface = leftUnder instanceof GoTypeInterface || rightUnder instanceof GoTypeInterface;
-                if (!equality) {
-                    if (leftType instanceof GoTypePointer || rightType instanceof GoTypePointer){
-                        result.addProblem(expression, "operator "+operator+" not defined on pointer");
-                        return;
-                    }
-                    if (hasInterface) {
-                        result.addProblem(expression, "operator "+operator+" not defined on interface");
-                        return;
-                    }
-                    if (shift){
-                        String rightUnderStr = rightUnder.toString();
-                        if (rightUnderStr.startsWith("uint")||rightUnderStr.equals("byte")){
-                            return;
-                        }else{
-                            result.addProblem(expression, "shift count type " + rightUnder+", must be unsigned integer");
-                            return;
-                        }
-                    }
-                }else{
-                    if (hasInterface) {
-                        return;
-                    }
-                    if (leftType instanceof GoTypePointer && rightType instanceof GoTypePointer){
-                        GoTypePointer lptr = (GoTypePointer)leftType;
-                        GoTypePointer rptr = (GoTypePointer)rightType;
-                        leftType = lptr.getTargetType();
-                        rightType = rptr.getTargetType();
-                    }
-                }
-                if (leftType instanceof GoTypeName && rightType instanceof GoTypeName) {
-                    String leftName = ((GoTypeName)leftType).getName();
-                    if (leftName.equals("byte")) {
-                        leftName = "uint8";
-                    }else if (leftName.equals("rune")) {
-                        leftName = "int32";
-                    }
-                    String rightName = ((GoTypeName)rightType).getName();
-                    if (rightName.equals("byte")) {
-                        rightName = "uint8";
-                    }else if (rightName.equals("rune")) {
-                        rightName = "int32";
-                    }
-                    if (leftName.equals(rightName)) {
-                        return;
-                    }
-                }
-            }
+        GoType leftType = GoTypes.get(leftOperand.getType());
+        GoType rightType = GoTypes.get(rightOperand.getType());
+
+        GoType underlyingLeft = leftType.underlyingType();
+        GoType underlyingRight = rightType.underlyingType();
+
+        if (!underlyingLeft.isIdentical(underlyingRight)) {
+
+            if ( underlyingLeft instanceof GoTypeConstant || underlyingRight instanceof GoTypeConstant )
+                return;
+
+            if ( leftType == GoType.Nil && (underlyingRight instanceof GoTypePointer || underlyingRight instanceof GoTypeSlice || underlyingRight instanceof GoTypeMap || underlyingRight instanceof GoTypeFunction || underlyingRight instanceof GoTypeInterface))
+                return;
+
+            if ( rightType == GoType.Nil && (underlyingLeft instanceof GoTypePointer || underlyingLeft instanceof GoTypeSlice || underlyingLeft instanceof GoTypeMap || underlyingLeft instanceof GoTypeFunction || underlyingLeft instanceof GoTypeInterface))
+                return;
+
+            problems.addProblem(
+                    expression,
+                    GoBundle.message(
+                            "warn.expr.mispatched.types",
+                            expression.getText(),
+                            GoTypes.getRepresentation(leftType, file),
+                            GoTypes.getRepresentation(rightType, file)));
         }
-        result.addProblem(expression, "mismatched types");
     }
 }

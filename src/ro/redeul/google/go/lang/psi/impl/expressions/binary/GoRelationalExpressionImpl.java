@@ -21,7 +21,7 @@ public class GoRelationalExpressionImpl extends GoBinaryExpressionImpl<GoRelatio
     @Override
     protected GoType[] resolveTypes() {
         GoType[] types = super.resolveTypes();
-        if ( types.length == 1 && types[0] instanceof GoTypeConstant && ((GoTypeConstant)types[0]).getKind() == GoTypeConstant.Kind.Boolean)
+        if ( types.length == 1 && types[0] instanceof GoTypeConstant && ((GoTypeConstant)types[0]).kind() == GoTypeConstant.Kind.Boolean)
             return types;
 
         return new GoType[]{types().getBuiltin(GoTypes.Builtin.Bool)};
@@ -51,7 +51,7 @@ public class GoRelationalExpressionImpl extends GoBinaryExpressionImpl<GoRelatio
 
     @Override
     public void accept(GoElementVisitor visitor) {
-        visitor.visitRelExpression(this);
+        visitor.visitRelationalExpression(this);
     }
 }
 

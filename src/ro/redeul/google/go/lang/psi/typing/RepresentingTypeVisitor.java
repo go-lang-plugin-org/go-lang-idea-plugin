@@ -151,7 +151,7 @@ class RepresentingTypeVisitor extends UpdatingTypeVisitor<StringBuilder> {
 
 //        data.append("untyped ")
 
-        switch (type.getKind()) {
+        switch (type.kind()) {
             case Integer:
                 data.append("int");
                 break;

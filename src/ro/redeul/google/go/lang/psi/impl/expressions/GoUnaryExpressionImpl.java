@@ -71,7 +71,7 @@ public class GoUnaryExpressionImpl extends GoExpressionBase
 
     private GoType computeConstant(GoTypeConstant constant) {
 
-        switch (constant.getKind()) {
+        switch (constant.kind()) {
             case String:
             case Boolean:
                 return GoType.Unknown;

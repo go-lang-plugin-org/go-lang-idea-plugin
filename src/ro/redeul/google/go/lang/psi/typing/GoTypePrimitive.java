@@ -1,13 +1,18 @@
 package ro.redeul.google.go.lang.psi.typing;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.lang.psi.expressions.binary.GoAdditiveExpression;
+import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
+import ro.redeul.google.go.lang.psi.expressions.binary.GoMultiplicativeExpression;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.util.GoNumber;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Set;
 
 public class GoTypePrimitive extends GoTypeName {
 
@@ -62,7 +67,27 @@ public class GoTypePrimitive extends GoTypeName {
 
     @Override
     public boolean isIdentical(GoType type) {
-        return (type instanceof GoTypePrimitive) && getName().equals(((GoTypePrimitive) type).getName());
+        if (!(type instanceof GoTypePrimitive)) return false;
+
+        GoTypePrimitive other = (GoTypePrimitive) type;
+        switch (getType()) {
+            case Rune: case Int32:
+                switch (other.getType()) {
+                    case Rune:case Int32:
+                        return true;
+                    default:
+                        return false;
+                }
+            case Byte: case uInt8:
+                switch (other.getType()) {
+                    case Byte: case uInt8:
+                        return true;
+                    default:
+                        return false;
+                }
+            default:
+                return getType() == other.getType();
+        }
     }
 
     @NotNull
@@ -98,7 +123,7 @@ public class GoTypePrimitive extends GoTypeName {
     @Override
     public boolean canRepresent(GoTypeConstant constant) {
 
-        switch (constant.getKind()) {
+        switch (constant.kind()) {
             case Complex:
                 return canRepresent(constant.getValueAs(GoNumber.class));
             case Float:
@@ -144,10 +169,12 @@ public class GoTypePrimitive extends GoTypeName {
             return canRepresent(value.toBigIntegerExact());
         } catch (ArithmeticException ex) {
             switch (type) {
-                case Float64: case Complex128:
+                case Float64:
+                case Complex128:
                     double doubleValue = value.doubleValue();
                     return doubleValue != Double.POSITIVE_INFINITY && doubleValue != Double.NEGATIVE_INFINITY;
-                case Float32: case Complex64:
+                case Float32:
+                case Complex64:
                     float floatValue = value.floatValue();
                     return floatValue != Float.POSITIVE_INFINITY && floatValue != Float.NEGATIVE_INFINITY;
 
@@ -158,13 +185,19 @@ public class GoTypePrimitive extends GoTypeName {
     }
 
     private boolean canRepresent(BigInteger value) {
-        if ( value == null )
+        if (value == null)
             return false;
 
         switch (type) {
-            case Int64: case Float64: case Complex128:
+            case Int64:
+            case Float64:
+            case Complex128:
                 return INT64_MIN.compareTo(value) <= 0 && value.compareTo(INT64_MAX) <= 0;
-            case Int: case Int32: case Rune: case Float32: case Complex64:
+            case Int:
+            case Int32:
+            case Rune:
+            case Float32:
+            case Complex64:
                 return INT32_MIN.compareTo(value) <= 0 && value.compareTo(INT32_MAX) <= 0;
             case Int16:
                 return INT16_MIN.compareTo(value) <= 0 && value.compareTo(INT16_MAX) <= 0;
@@ -173,11 +206,13 @@ public class GoTypePrimitive extends GoTypeName {
 
             case uInt64:
                 return BigInteger.ZERO.compareTo(value) <= 0 && value.compareTo(UINT64_MAX) <= 0;
-            case uInt32: case uInt:
+            case uInt32:
+            case uInt:
                 return BigInteger.ZERO.compareTo(value) <= 0 && value.compareTo(UINT32_MAX) <= 0;
             case uInt16:
                 return BigInteger.ZERO.compareTo(value) <= 0 && value.compareTo(UINT16_MAX) <= 0;
-            case uInt8: case Byte:
+            case uInt8:
+            case Byte:
                 return BigInteger.ZERO.compareTo(value) <= 0 && value.compareTo(UINT8_MAX) <= 0;
             default:
                 return false;
@@ -190,5 +225,43 @@ public class GoTypePrimitive extends GoTypeName {
 
     private boolean canRepresent(Boolean value) {
         return type == GoTypes.Builtin.Bool;
+    }
+
+    private static Set<GoBinaryExpression.BinaryOp> stringOps =
+            ImmutableSet.<GoBinaryExpression.BinaryOp>of(GoAdditiveExpression.Op.Plus);
+
+    private static Set<GoBinaryExpression.BinaryOp> numberOps =
+            new ImmutableSet.Builder<GoBinaryExpression.BinaryOp>()
+                    .addAll(stringOps)
+                    .add(GoAdditiveExpression.Op.Minus)
+                    .add(GoMultiplicativeExpression.Op.Mul, GoMultiplicativeExpression.Op.Quotient)
+                    .build();
+
+    private static Set<GoBinaryExpression.BinaryOp> integerOps =
+            new ImmutableSet.Builder<GoBinaryExpression.BinaryOp>()
+                    .addAll(numberOps)
+                    .add(GoAdditiveExpression.Op.BitOr, GoAdditiveExpression.Op.BitXor)
+                    .add(GoMultiplicativeExpression.Op.BitAnd, GoMultiplicativeExpression.Op.BitClear, GoMultiplicativeExpression.Op.Remainder)
+                    .build();
+
+    public boolean implementsOp(GoBinaryExpression.BinaryOp op) {
+        switch (type) {
+            case String:
+                return stringOps.contains(op);
+
+            case Float32: case Float64:
+            case Complex128: case Complex64:
+                return numberOps.contains(op);
+
+            case Byte: case Rune:
+            case Int: case Int8:
+            case Int16: case Int32: case Int64:
+            case uInt: case uIntPtr:
+            case uInt8: case uInt16: case uInt32: case uInt64:
+                return integerOps.contains(op);
+
+            default:
+                return true;
+        }
     }
 }

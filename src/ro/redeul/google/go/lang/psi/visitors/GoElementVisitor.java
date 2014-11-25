@@ -9,7 +9,11 @@ import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.expressions.GoUnaryExpression;
+import ro.redeul.google.go.lang.psi.expressions.binary.GoAdditiveExpression;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoBinaryExpression;
+import ro.redeul.google.go.lang.psi.expressions.binary.GoLogicalAndExpression;
+import ro.redeul.google.go.lang.psi.expressions.binary.GoLogicalOrExpression;
+import ro.redeul.google.go.lang.psi.expressions.binary.GoMultiplicativeExpression;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoRelationalExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.*;
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComposite;
@@ -17,6 +21,10 @@ import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralComp
 import ro.redeul.google.go.lang.psi.expressions.literals.composite.GoLiteralCompositeValue;
 import ro.redeul.google.go.lang.psi.expressions.primary.*;
 import ro.redeul.google.go.lang.psi.impl.GoParenthesisedExpressionOrTypeImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoAdditiveExpressionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoLogicalAndExpressionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoLogicalOrExpressionImpl;
+import ro.redeul.google.go.lang.psi.impl.expressions.binary.GoMultiplicativeExpressionImpl;
 import ro.redeul.google.go.lang.psi.statements.*;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseDefault;
 import ro.redeul.google.go.lang.psi.statements.select.GoSelectCommClauseRecv;
@@ -308,7 +316,7 @@ public class GoElementVisitor  {
         visitElement(expression);
     }
 
-    public void visitRelExpression(GoRelationalExpression expression) { visitBinaryExpression(expression); }
+    public void visitRelationalExpression(GoRelationalExpression expression) { visitBinaryExpression(expression); }
 
     public void visitPackage(GoPackage aPackage) {
         visitElement(aPackage);
@@ -336,5 +344,21 @@ public class GoElementVisitor  {
 
     public void visitParenthesisedExprOrType(GoParenthesizedExprOrType exprOrType) {
         visitElement(exprOrType);
+    }
+
+    public void visitMultiplicativeExpression(GoMultiplicativeExpression expression) {
+        visitBinaryExpression(expression);
+    }
+
+    public void visitLogicalAndExpression(GoLogicalAndExpression expression) {
+        visitBinaryExpression(expression);
+    }
+
+    public void visitLogicalOrExpression(GoLogicalOrExpression expression) {
+        visitBinaryExpression(expression);
+    }
+
+    public void visitAdditiveExpression(GoAdditiveExpression expression) {
+        visitBinaryExpression(expression);
     }
 }

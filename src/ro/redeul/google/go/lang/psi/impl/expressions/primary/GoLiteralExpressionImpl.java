@@ -142,7 +142,7 @@ public class GoLiteralExpressionImpl extends GoExpressionBase implements GoLiter
                                 if (exprType.length == 1 && exprType[0] instanceof GoTypeConstant) {
                                     GoTypeConstant constant = (GoTypeConstant) exprType[0];
                                     if (declaredType != GoType.Unknown)
-                                        setData(new GoType[]{GoTypes.constant(constant.getKind(), constant.getValue(), declaredType)});
+                                        setData(new GoType[]{GoTypes.constant(constant.kind(), constant.getValue(), declaredType)});
                                     else
                                         setData(new GoType[]{constant});
                                 }

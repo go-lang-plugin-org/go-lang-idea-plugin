@@ -108,7 +108,7 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
                 if (constant.getType() != GoType.Unknown)
                     return constant.getType().accept(this);
                 else
-                    return constant.getKind() == GoTypeConstant.Kind.String;
+                    return constant.kind() == GoTypeConstant.Kind.String;
             }
         });
 

@@ -8,9 +8,11 @@ import ro.redeul.google.go.lang.psi.expressions.binary.GoLogicalAndExpression;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypeConstant;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
-public class GoLogicalAndExpressionImpl extends GoBinaryExpressionImpl<GoLogicalAndExpression.Op>
-    implements GoLogicalAndExpression
+import static ro.redeul.google.go.lang.psi.typing.GoTypeConstant.Kind.Boolean;
+
+public class GoLogicalAndExpressionImpl extends GoBinaryExpressionImpl<GoLogicalAndExpression.Op> implements GoLogicalAndExpression
 {
     public GoLogicalAndExpressionImpl(@NotNull ASTNode node) {
         super(node);
@@ -35,7 +37,7 @@ public class GoLogicalAndExpressionImpl extends GoBinaryExpressionImpl<GoLogical
     protected GoType computeConstant(@NotNull GoTypeConstant left, @NotNull GoTypeConstant right) {
         GoType builtinBool = GoTypes.getInstance(getProject()).getBuiltin(GoTypes.Builtin.Bool);
 
-        if ( left.getKind() != GoTypeConstant.Kind.Boolean || right.getKind() != GoTypeConstant.Kind.Boolean)
+        if ( left.kind() != Boolean || right.kind() != Boolean)
             return builtinBool;
 
         Boolean leftValue = left.getValueAs(Boolean.class);
@@ -45,7 +47,12 @@ public class GoLogicalAndExpressionImpl extends GoBinaryExpressionImpl<GoLogical
         if ( leftValue != null && rightValue != null )
             value = leftValue && rightValue;
 
-        return GoTypes.constant(GoTypeConstant.Kind.Boolean, value, builtinBool);
+        return GoTypes.constant(Boolean, value, builtinBool);
+    }
+
+    @Override
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitLogicalAndExpression(this);
     }
 }
 

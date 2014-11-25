@@ -62,7 +62,7 @@ public class GoSliceExpressionImpl extends GoExpressionBase implements GoSliceEx
                 if (constant.getType() != GoType.Unknown)
                     return constant.getType().accept(this);
 
-                switch (constant.getKind()) {
+                switch (constant.kind()) {
                     case String:
                         return types().getBuiltin(GoTypes.Builtin.Rune);
                     default:

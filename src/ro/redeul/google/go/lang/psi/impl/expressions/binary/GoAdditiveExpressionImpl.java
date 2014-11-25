@@ -8,11 +8,15 @@ import ro.redeul.google.go.lang.psi.expressions.binary.GoAdditiveExpression;
 import ro.redeul.google.go.lang.psi.expressions.binary.GoAdditiveExpression.Op;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypeConstant;
+import ro.redeul.google.go.lang.psi.typing.GoTypeConstant.Kind;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.util.GoNumber;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+
+import static ro.redeul.google.go.lang.psi.typing.GoTypeConstant.Kind.*;
 
 public class GoAdditiveExpressionImpl extends GoBinaryExpressionImpl<Op> implements GoAdditiveExpression {
     public GoAdditiveExpressionImpl(@NotNull ASTNode node) {
@@ -25,8 +29,8 @@ public class GoAdditiveExpressionImpl extends GoBinaryExpressionImpl<Op> impleme
 
         if (opTok == GoElementTypes.oPLUS) return Op.Plus;
         if (opTok == GoElementTypes.oMINUS) return Op.Minus;
-        if (opTok == GoElementTypes.oBIT_AND) return Op.BitAnd;
         if (opTok == GoElementTypes.oBIT_OR) return Op.BitOr;
+        if (opTok == GoElementTypes.oBIT_XOR) return Op.BitXor;
 
         return Op.None;
     }
@@ -34,11 +38,11 @@ public class GoAdditiveExpressionImpl extends GoBinaryExpressionImpl<Op> impleme
     @Override
     protected GoType computeConstant(@NotNull GoTypeConstant left, @NotNull GoTypeConstant right) {
 
-        if ( left.getKind() == GoTypeConstant.Kind.Boolean || right.getKind() == GoTypeConstant.Kind.Boolean)
+        if ( left.kind() == Boolean || right.kind() == Boolean)
             return GoType.Unknown;
 
-        if ( left.getKind() == GoTypeConstant.Kind.String ) {
-            if ( right.getKind() != GoTypeConstant.Kind.String || op() != Op.Plus)
+        if ( left.kind() == String ) {
+            if ( right.kind() != String || op() != Op.Plus)
                 return GoType.Unknown;
 
             String lString = left.getValueAs(String.class);
@@ -48,10 +52,10 @@ public class GoAdditiveExpressionImpl extends GoBinaryExpressionImpl<Op> impleme
                 return GoType.Unknown;
 
 
-            return GoTypes.constant(GoTypeConstant.Kind.String, lString.concat(rString));
+            return GoTypes.constant(String, lString.concat(rString));
         }
 
-        if ( left.getKind() == GoTypeConstant.Kind.Complex || right.getKind() == GoTypeConstant.Kind.Complex ) {
+        if ( left.kind() == Complex || right.kind() == Complex ) {
             GoNumber leftValue = GoNumber.buildFrom(left.getValue());
             GoNumber rightValue = GoNumber.buildFrom(right.getValue());
 
@@ -60,15 +64,15 @@ public class GoAdditiveExpressionImpl extends GoBinaryExpressionImpl<Op> impleme
 
             switch (op()) {
                 case Plus:
-                    return GoTypes.constant(GoTypeConstant.Kind.Complex, leftValue.add(rightValue));
+                    return GoTypes.constant(Complex, leftValue.add(rightValue));
                 case Minus:
-                    return GoTypes.constant(GoTypeConstant.Kind.Complex, leftValue.substract(rightValue));
+                    return GoTypes.constant(Complex, leftValue.substract(rightValue));
                 default:
                     return GoType.Unknown;
             }
         }
 
-        if ( left.getKind() == GoTypeConstant.Kind.Float || right.getKind() == GoTypeConstant.Kind.Float ) {
+        if ( left.kind() == Float || right.kind() == Float ) {
             BigDecimal leftValue = left.getValueAs(BigDecimal.class);
             BigDecimal rightValue = right.getValueAs(BigDecimal.class);
 
@@ -77,15 +81,15 @@ public class GoAdditiveExpressionImpl extends GoBinaryExpressionImpl<Op> impleme
 
             switch (op()){
                 case Plus:
-                    return GoTypes.constant(GoTypeConstant.Kind.Float, leftValue.add(rightValue));
+                    return GoTypes.constant(Float, leftValue.add(rightValue));
                 case Minus:
-                    return GoTypes.constant(GoTypeConstant.Kind.Float, leftValue.subtract(rightValue));
+                    return GoTypes.constant(Float, leftValue.subtract(rightValue));
                 default:
                     return GoType.Unknown;
             }
         }
 
-        if ( left.getKind() == GoTypeConstant.Kind.Integer || right.getKind() == GoTypeConstant.Kind.Integer ) {
+        if ( left.kind() == Integer || right.kind() == Integer ) {
             BigInteger leftValue = left.getValueAs(BigInteger.class);
             BigInteger rightValue = right.getValueAs(BigInteger.class);
 
@@ -94,19 +98,24 @@ public class GoAdditiveExpressionImpl extends GoBinaryExpressionImpl<Op> impleme
 
             switch (op()){
                 case Plus:
-                    return GoTypes.constant(GoTypeConstant.Kind.Integer, leftValue.add(rightValue));
+                    return GoTypes.constant(Integer, leftValue.add(rightValue));
                 case Minus:
-                    return GoTypes.constant(GoTypeConstant.Kind.Integer, leftValue.subtract(rightValue));
-                case BitAnd:
-                    return GoTypes.constant(GoTypeConstant.Kind.Integer, leftValue.and(rightValue));
+                    return GoTypes.constant(Integer, leftValue.subtract(rightValue));
+                case BitXor:
+                    return GoTypes.constant(Integer, leftValue.xor(rightValue));
                 case BitOr:
-                    return GoTypes.constant(GoTypeConstant.Kind.Integer, leftValue.or(rightValue));
+                    return GoTypes.constant(Integer, leftValue.or(rightValue));
                 default:
                     return GoType.Unknown;
             }
         }
 
         return GoType.Unknown;
+    }
+
+    @Override
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitAdditiveExpression(this);
     }
 }
 

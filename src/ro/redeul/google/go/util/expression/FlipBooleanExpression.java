@@ -85,6 +85,6 @@ public class FlipBooleanExpression {
     private static String flipRelational(GoRelationalExpression expr, GoRelationalExpression.Op op) {
         String lhs = expr.getLeftOperand().getText();
         String rhs = expr.getRightOperand().getText();
-        return lhs + " " + op.tokenText() + " " + rhs;
+        return lhs + " " + op.getText() + " " + rhs;
     }
 }

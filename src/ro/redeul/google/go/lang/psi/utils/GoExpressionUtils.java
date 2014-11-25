@@ -81,7 +81,7 @@ public class GoExpressionUtils {
         GoType[] expressionType = expr.getType();
         if (expressionType.length == 1 && expressionType[0] instanceof GoTypeConstant) {
             GoTypeConstant typeConstant = (GoTypeConstant) expressionType[0];
-            switch (typeConstant.getKind()) {
+            switch (typeConstant.kind()) {
                 case Rune:
                     Character value = typeConstant.getValueAs(Character.class);
                     return value != null ? BigInteger.valueOf(value) : null;

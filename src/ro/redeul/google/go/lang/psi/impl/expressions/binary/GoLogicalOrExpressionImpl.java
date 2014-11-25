@@ -8,6 +8,9 @@ import ro.redeul.google.go.lang.psi.expressions.binary.GoLogicalOrExpression;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypeConstant;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
+import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+
+import static ro.redeul.google.go.lang.psi.typing.GoTypeConstant.Kind.Boolean;
 
 public class GoLogicalOrExpressionImpl extends GoBinaryExpressionImpl<GoLogicalOrExpression.Op>
     implements GoLogicalOrExpression
@@ -36,7 +39,7 @@ public class GoLogicalOrExpressionImpl extends GoBinaryExpressionImpl<GoLogicalO
 
         GoType builtinBool = GoTypes.getInstance(getProject()).getBuiltin(GoTypes.Builtin.Bool);
 
-        if ( left.getKind() != GoTypeConstant.Kind.Boolean || right.getKind() != GoTypeConstant.Kind.Boolean)
+        if ( left.kind() != Boolean || right.kind() != Boolean)
             return builtinBool;
 
         Boolean leftValue = left.getValueAs(Boolean.class);
@@ -46,7 +49,12 @@ public class GoLogicalOrExpressionImpl extends GoBinaryExpressionImpl<GoLogicalO
         if ( leftValue != null && rightValue != null )
             value = leftValue || rightValue;
 
-        return GoTypes.constant(GoTypeConstant.Kind.Boolean, value, builtinBool);
+        return GoTypes.constant(Boolean, value, builtinBool);
+    }
+
+    @Override
+    public void accept(GoElementVisitor visitor) {
+        visitor.visitLogicalOrExpression(this);
     }
 }
 

@@ -12,9 +12,7 @@ import ro.redeul.google.go.lang.psi.impl.expressions.GoExpressionBase;
 import ro.redeul.google.go.lang.psi.typing.*;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
-public abstract class GoBinaryExpressionImpl<Op extends Enum<Op>>
-        extends GoExpressionBase
-        implements GoBinaryExpression<Op> {
+public abstract class GoBinaryExpressionImpl<Op extends Enum<Op> & GoBinaryExpression.BinaryOp> extends GoExpressionBase implements GoBinaryExpression<Op> {
 
     GoBinaryExpressionImpl(@NotNull ASTNode node) {
         super(node);
