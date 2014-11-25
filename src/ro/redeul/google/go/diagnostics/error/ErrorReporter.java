@@ -16,6 +16,8 @@
 
 package ro.redeul.google.go.diagnostics.error;
 
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 import com.intellij.diagnostic.IdeErrorsDialog;
 import com.intellij.diagnostic.LogMessageEx;
 import com.intellij.diagnostic.ReportMessages;
@@ -47,6 +49,7 @@ import ro.redeul.google.go.GoBundle;
 
 import java.awt.*;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Sends crash reports to Github.
@@ -109,13 +112,21 @@ public class ErrorReporter extends ErrorReportSubmitter {
 
     Consumer<String> successCallback = new Consumer<String>() {
       @Override
-      public void consume(String token) {
-        final SubmittedReportInfo reportInfo = new SubmittedReportInfo(
-          null, "Issue " + token, SubmittedReportInfo.SubmissionStatus.NEW_ISSUE);
+      public void consume(String response) {
+        java.lang.reflect.Type mapType = new TypeToken<Map<String, Object>>(){}.getType();
+        Gson gson = new Gson();
+        Map<String, Object> apiResponse = gson.fromJson(response, mapType );
+
+        final SubmittedReportInfo reportInfo;
+        reportInfo = new SubmittedReportInfo(
+                (String) apiResponse.get("html_url"),
+                Integer.valueOf((String) apiResponse.get("number")).toString(),
+                SubmittedReportInfo.SubmissionStatus.NEW_ISSUE);
+
         callback.consume(reportInfo);
 
         ReportMessages.GROUP.createNotification(ReportMessages.ERROR_REPORT,
-                                                "Submitted",
+                                                computeSubmittedText(reportInfo),
                                                 NotificationType.INFORMATION,
                                                 null).setImportant(false).notify(project);
       }
@@ -139,5 +150,10 @@ public class ErrorReporter extends ErrorReportSubmitter {
       ProgressManager.getInstance().run(task);
     }
     return true;
+  }
+
+  @NotNull
+  private static String computeSubmittedText(SubmittedReportInfo reportInfo) {
+    return "<html>Submitted <a href='" + reportInfo.getURL() + "'>issue "+ reportInfo.getLinkText() +"</a> on Github issue tracker.</html>";
   }
 }

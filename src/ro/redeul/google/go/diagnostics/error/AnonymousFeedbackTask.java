@@ -58,8 +58,8 @@ public class AnonymousFeedbackTask extends Task.Backgroundable {
   public void run(@NotNull ProgressIndicator indicator) {
     indicator.setIndeterminate(true);
     try {
-      String token = sendFeedback(new ProxyHttpConnectionFactory(), myParams);
-      myCallback.consume(token);
+      String response = sendFeedback(new ProxyHttpConnectionFactory(), myParams);
+      myCallback.consume(response);
     }
     catch (Exception e) {
       myErrorCallback.consume(e);
