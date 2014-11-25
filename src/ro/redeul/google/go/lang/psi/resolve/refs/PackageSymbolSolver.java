@@ -28,7 +28,7 @@ public class PackageSymbolSolver extends VisitingReferenceSolver<PackageSymbolRe
 
             @Override
             public void visitMethodDeclaration(GoMethodDeclaration declaration) {
-                visitFunctionDeclaration(declaration);
+//                visitFunctionDeclaration(declaration);
             }
 
             @Override

@@ -141,6 +141,21 @@ public class GoResolveCallsTest extends GoPsiResolveTestCase {
         doTest();
     }
 
+    public void testCallToFunctionWithSameNameAsMethod() throws Exception {
+        doTest();
+    }
+
+    public void testCallToMethodWithTheSameNameAsFunction() throws Exception {
+        doTest();
+    }
+
+    public void testCallToFunctionWithSameNameAsMethodAcrossPackages() throws Exception {
+        doTest();
+    }
+
+    public void testCallToMethodWithTheSameNameAsFunctionAcrossPackages() throws Exception {
+        doTest();
+    }
 //    public void testConversionToLocallyImportedType() throws Exception {
 //        _testSingleCompletion();
 //    }

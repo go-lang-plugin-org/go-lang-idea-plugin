@@ -22,6 +22,11 @@ public class FunctionOrTypeNameSolver extends VisitingReferenceSolver<FunctionOr
                     addTarget(declaration);
             }
 
+            @Override
+            public void visitMethodDeclaration(GoMethodDeclaration declaration) {
+                //
+            }
+
             private boolean isReferenceTo(GoFunctionDeclaration declaration) {
                 return matchNames(reference.name(), declaration.getFunctionName());
             }
