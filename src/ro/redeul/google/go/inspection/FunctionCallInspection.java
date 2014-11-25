@@ -4,7 +4,9 @@ import com.intellij.codeInspection.ProblemHighlightType;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.inspection.fix.CastTypeFix;
+import ro.redeul.google.go.lang.packages.GoPackages;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallOrConversionExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
@@ -38,12 +40,32 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
                     String functionName = getFunctionName(callType);
                     GoFunctions.Builtin builtin = GoFunctions.getFunction(functionName);
 
-                    if (validateBuiltinCall(builtin, callType, expression, file, result))
+                    if (validateBuiltinCall(builtin, callType, expression, file, result) && validateUnsafeCall(callType, expression, file, result))
                         validateCallArguments(callType, expression, file, result);
                 }
             }
 
         }.visitFile(file);
+    }
+
+    private boolean validateUnsafeCall(GoTypeFunction callType, GoCallOrConvExpression expression, GoFile file, InspectionResult problems) {
+        GoPackage callPackage = GoPackages.getPackageFor(callType.getPsiType());
+        if (!callPackage.getName().equals("unsafe"))
+            return true;
+
+        String functionName = getFunctionName(callType);
+        if ( functionName.equals("Sizeof") ) {
+            GoExpr args[] = expression.getArguments();
+            if (args.length == 0)
+                problems.addProblem(expression, GoBundle.message("error.call.missing.arg", "Sizeof"));
+
+            for (int i = 1; i < args.length; i++)
+                problems.addProblem(args[i], GoBundle.message("error.call.extra.arg", "len"));
+
+            return false;
+        }
+
+        return true;
     }
 
     private boolean validateBuiltinCall(GoFunctions.Builtin builtin, GoTypeFunction callType,
@@ -70,6 +92,12 @@ public class FunctionCallInspection extends AbstractWholeGoFileInspection {
                 return validateCloseCall(expression, args, file, result);
             case Len:
                 return validateLenCall(expression, args, file, result);
+            case Real: case Imag:
+                // TODO: finish this implementation
+                return false;
+            case Complex:
+                // TODO: finish this implementation
+                return false;
             default:
                 return true;
         }

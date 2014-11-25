@@ -24,6 +24,7 @@ import ro.redeul.google.go.lang.psi.typing.GoTypePrimitive;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.typing.TypeVisitor;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
+import ro.redeul.google.go.util.GoNumber;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.string;
@@ -71,9 +72,13 @@ public class GoBuiltinCallOrConversionExpressionImpl extends GoCallOrConvExpress
         GoExpr[] args = getArguments();
         GoType[] argumentType = GoType.EMPTY_ARRAY;
 
+        GoType myType = null;
         switch (getBuiltinKind()) {
             case None:
                 return super.computeCallType(type);
+
+            case Len:
+                return new GoType[]{GoTypes.constant(GoTypeConstant.Kind.Integer, 0)};
 
             case New:
                 return new GoType[]{GoTypes.makePointer(getTypeArgument())};
@@ -98,26 +103,51 @@ public class GoBuiltinCallOrConversionExpressionImpl extends GoCallOrConvExpress
                 if( args.length < 2)
                     return new GoType[] { types().getBuiltin(Complex128) };
 
+                GoType arg1Type = GoTypes.get(args[0].getType());
+                GoType arg2Type = GoTypes.get(args[1].getType());
+
                 GoTypes.Builtin firstFloatSize = findFloatSize(args[0]);
                 GoTypes.Builtin secondFloatSize = findFloatSize(args[1]);
-                if ( firstFloatSize == Float32  && secondFloatSize == Float32)
-                    return new GoType[] { types().getBuiltin(Complex64)};
 
-                return new GoType[] { types().getBuiltin(Complex128) };
+                myType = types().getBuiltin(Complex128);
+
+                if ( firstFloatSize == Float32  && secondFloatSize == Float32)
+                    myType = types().getBuiltin(Complex64);
+
+                if ( arg1Type instanceof GoTypeConstant && arg2Type instanceof GoTypeConstant ) {
+                    myType = GoTypes.constant(GoTypeConstant.Kind.Complex, GoNumber.ZERO, myType);
+                }
+
+                return new GoType[] { myType };
             case Real:
             case Imag:
                 if( args.length < 1)
                     return new GoType[] { types().getBuiltin(Float64) };
 
-                GoTypes.Builtin complexSize = findComplexSize(args[0]);
+                GoType argType = GoTypes.get(args[0].getType());
+                GoTypeConstant constArg = null;
+                if ( argType instanceof GoTypeConstant )
+                    constArg = (GoTypeConstant) argType;
 
-                switch (complexSize) {
+                myType = null;
+                switch (findComplexSize(args[0])) {
                     case Complex128:
-                        return new GoType[]{types().getBuiltin(Float64)};
+                        myType = types().getBuiltin(Float64);
+                        break;
                     case Complex64:
-                        return new GoType[]{types().getBuiltin(Float32)};
+                        myType = types().getBuiltin(Float32);
+                        break;
                 }
 
+                if (constArg != null) {
+                    GoNumber numberValue = constArg.getValueAs(GoNumber.class);
+                    if ( numberValue == null )
+                        numberValue = GoNumber.ZERO;
+
+                    myType = GoTypes.constant(GoTypeConstant.Kind.Float, numberValue.getReal(), myType);
+                }
+
+                return myType != null ? new GoType[]{myType} : GoType.EMPTY_ARRAY;
             default:
                 return GoType.EMPTY_ARRAY;
         }
