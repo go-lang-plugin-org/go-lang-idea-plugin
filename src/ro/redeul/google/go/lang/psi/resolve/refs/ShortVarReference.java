@@ -3,12 +3,14 @@ package ro.redeul.google.go.lang.psi.resolve.refs;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.processors.ResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.ReferenceWithSolver;
 import ro.redeul.google.go.lang.psi.statements.GoBlockStatement;
 import ro.redeul.google.go.lang.psi.statements.GoShortVarDeclaration;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getAs;
@@ -61,11 +63,19 @@ public class ShortVarReference extends ReferenceWithSolver<GoLiteralIdentifier, 
 
     @Override
     protected void walkSolver(ShortVarSolver solver) {
-        GoShortVarDeclaration varDeclaration = getAs(GoShortVarDeclaration.class, getElement().getParent());
+        GoShortVarDeclaration declaration = getAs(GoShortVarDeclaration.class, getElement().getParent());
 
-        GoBlockStatement blockStatement = getAs(GoBlockStatement.class, varDeclaration.getParent());
+        GoBlockStatement blockStatement = getAs(GoBlockStatement.class, declaration.getParent());
 
-        if ( blockStatement != null)
-            blockStatement.processDeclarations(solver, ResolveStates.initial(), varDeclaration, this.getElement());
+        if ( blockStatement != null ) {
+            if ( !blockStatement.processDeclarations(solver, ResolveStates.initial(), declaration, this.getElement()))
+                return;
+
+            if ( blockStatement.getParent() instanceof GoFunctionDeclaration ) {
+                GoFunctionDeclaration functionDeclaration = (GoFunctionDeclaration) blockStatement.getParent();
+
+                functionDeclaration.processDeclarations(solver, ResolveState.initial(), blockStatement, this.getElement());
+            }
+        }
     }
 }

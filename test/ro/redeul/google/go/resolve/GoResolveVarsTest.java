@@ -179,7 +179,6 @@ public class GoResolveVarsTest extends GoPsiResolveTestCase {
         doTest();
     }
 
-    @Ignore("short var resolution is broken")
     public void testShortAssignToReturnVar() throws Exception {
         doTest();
     }
