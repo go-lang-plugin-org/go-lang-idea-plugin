@@ -404,6 +404,11 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
+  public static GoType getGoType(@NotNull GoTypeSpec o) {
+    return o.getType();
+  }
+
+  @Nullable
   public static GoType getGoType(@NotNull GoVarDefinition o) {
     // see http://golang.org/ref/spec#RangeClause
     PsiElement parent = o.getParent();

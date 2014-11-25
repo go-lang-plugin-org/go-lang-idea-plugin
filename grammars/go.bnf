@@ -223,8 +223,8 @@ TypeDeclaration ::= 'type' ( TypeSpec | '(' TypeSpecs? ')' ) {pin(".*")=1}
 private TypeSpecs ::= TypeSpec (semi TypeSpec)* semi? {pin=1}
 TypeSpec ::= identifier Type {
   pin=1
+  methods=[getGoType getMethods]
   stubClass="com.goide.stubs.GoTypeSpecStub"
-  methods=[getMethods]
 }
 
 VarDeclaration ::= var ( VarSpec | '(' VarSpecs? ')' ) {pin=1}
