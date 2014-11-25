@@ -1105,7 +1105,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // else ( IfStatement | Block )
+  // else (IfStatement | Block)
   public static boolean ElseStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ElseStatement")) return false;
     if (!nextTokenIs(b, ELSE)) return false;
