@@ -87,7 +87,7 @@ public class GoApplicationConfigurationEditor extends SettingsEditor<GoApplicati
             throw new ConfigurationException("Please select the directory for the executable.");
         }
         if (!buildBeforeRunCheckBox.isSelected() && goPackageRadioButton.isSelected()) {
-            throw new ConfigurationException("A package has to be build before it can run. Please check the box buld-before-run or select a go gile to run instead of a package.");
+            throw new ConfigurationException("A package has to be built before it can be run. Please check the box build-before-run or select a go file to run instead of a package.");
         }
 
         configuration.scriptName = applicationName.getText();
