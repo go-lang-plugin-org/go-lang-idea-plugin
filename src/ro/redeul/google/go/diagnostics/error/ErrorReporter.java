@@ -39,8 +39,10 @@ import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.progress.EmptyProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.util.Consumer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoBundle;
 
 import java.awt.*;
@@ -59,7 +61,12 @@ public class ErrorReporter extends ErrorReportSubmitter {
   }
 
   @Override
-  public boolean submit(@NotNull IdeaLoggingEvent[] events, String additionalInfo, @NotNull Component parentComponent, @NotNull Consumer<SubmittedReportInfo> consumer) {
+  public boolean submit(@NotNull IdeaLoggingEvent[] events, @Nullable String additionalInfo, @NotNull Component parentComponent, @NotNull Consumer<SubmittedReportInfo> consumer) {
+    if (additionalInfo == null || additionalInfo.isEmpty() || additionalInfo.length() < 30) {
+      Messages.showErrorDialog("Please help us make the plugin better by submitting a proper description of the error.\nThank you.", "We've Seen Tweets Longer Than This");
+      return false;
+    }
+
     ErrorBean errorBean = new ErrorBean(events[0].getThrowable(), IdeaLogger.ourLastActionId);
     return doSubmit(events[0], parentComponent, consumer, errorBean, additionalInfo);
   }
