@@ -1,13 +1,58 @@
 # How to contribute
 
+## Reporting errors
+
+The simples way to contribute to the plugin is to report issues you encounter
+in your day to day use.
+
+As a rule of thumb, always keep in mind that we are developers just like you. So,
+whenever you are going to report an issue, think of how you'd like to receive issues
+for your projects. Also, we are doing this in our spare time, so the more information
+we have in the report, the faster we can replicate the problem and get on solving it
+rather that just doing a bunch of ping-pong in comments trying to extract the needed
+details from you.
+
+As of 0.9.16 release, the plugin has a way to catch the exceptions it generates
+and send them to us as an issue on Github but we still need to understand the
+context in which the error happens. As such, whenever you are using the builtin
+error reporting facility, be as descriptive as possible.
+
+This information applies also when you don't have an error that is caught by the
+builtin facility but it's something that happens and shouldn't happen (say for
+example, a formatting issue).
+
+First and foremost, we really need to know the following:
+- IDEA version
+- OS version
+- JDK version
+
+Also, everytime you can, submit the piece of code that's generating the issue.
+As it might be some prorietary code, take some time and write the smallest code
+sample that can reproduce it and paste it in the issue (or send it as a link to
+[Go Playground](http://play.golang.org/). Screenshots are useful, but, just like
+you, we can't copy paste code from screenshots either.
+
+Please ensure that the bug is not reported already, this helps us focusing on
+working on bug fixes not triage work.
+
+## Submitting test cases
+
+Submitting test cases is the next best thing you can do to developing on this
+project. In fact, you'll actually develop on it since the test code you are
+going to contribute is still code.
+
+Whenever your time or knowledge allows, submitting good test cases for either
+for existing issues or for issues that you come across will make a huge difference
+in the way we spend time to understand the problems and thus solve them.
+
 ## Setting up the working environment
 
 In order to be able to contribute to the plugin you need to:
 
-+ install java jdk. Version is java6 or java7 or java8.
-+ checkout and build the IntelliJ IDEA Community source code. Version is idea/139.144
++ install Java JDK. Supported versions are currently from 6 onwards.
++ checkout and build the IntelliJ IDEA Community source code. Preferred version is idea/139.223
 (so you can have access to the platform internals in debugging and understanding what goes wrong)
-+ checkout out and build a recent version of [Google Go](http://golang.org). Version is go1.3
++ checkout out and build a recent version of [Go](http://golang.org). Preferred version is go1.3.3
 + checkout and setup the plugin sources
 
 ### Checking out the IntellJ IDEA Platform sources.
@@ -18,7 +63,7 @@ used to build IDEA 14:
 ```bash
     git clone git@github.com:JetBrains/intellij-community.git idea
     cd idea
-    git checkout idea/139.144
+    git checkout idea/139.223
     # and we build it using ant
     ant
 ```
@@ -107,4 +152,7 @@ That's it. Enjoy your play time.
 
 ### Notice on run test cases
 * If you see a lot of java.io.FileNotFoundException when run test cases and those test cases
-are passed in Travis CI, you may need to try [#923](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/issues/923). Please look at the location: /Users/xxx/Library/Caches/IntelliJIdea14/plugins-sandbox/test and remove the test folder from there. This usually happens when you change the directory structure in one of the tests. The testing idea will not update it's caches properly.
+are passed in Travis CI, you may need to try [#923](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/issues/923).
+Please look at the location: ```/Users/xxx/Library/Caches/IntelliJIdea14/plugins-sandbox/test```
+and remove the test folder from there. This usually happens when you change the directory structure
+in one of the tests. The testing idea will not update it's caches properly.
