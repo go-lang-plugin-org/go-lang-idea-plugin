@@ -36,4 +36,6 @@ public class FunctionCallInspectionTest extends GoInspectionTestCase {
 
     // see #1037
     public void testDontCrashOnCast() throws Exception { doTest(); }
+
+    public void testTypeCast() throws Exception { doTest(); }
 }

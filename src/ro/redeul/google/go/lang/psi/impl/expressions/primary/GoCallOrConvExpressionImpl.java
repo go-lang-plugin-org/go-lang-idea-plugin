@@ -1,7 +1,9 @@
 package ro.redeul.google.go.lang.psi.impl.expressions.primary;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoParenthesizedExprOrType;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
@@ -31,6 +33,9 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase implements GoCa
     @NotNull
     @Override
     protected GoType[] resolveTypes() {
+        if ( getCastType() != null )
+            return computeConversionType(GoTypes.fromPsi(getCastType()));
+
         GoExpr baseExpression = getBaseExpression();
 
         boolean isType = baseExpression.accept(new GoElementVisitorWithData<Boolean>(false) {
@@ -82,6 +87,16 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase implements GoCa
     @Override
     public GoPrimaryExpression getBaseExpression() {
         return findChildByClass(GoPrimaryExpression.class);
+    }
+
+    @Nullable
+    @Override
+    public GoPsiType getCastType() {
+        PsiElement child = getFirstChild();
+        while ( child != null && !(child instanceof GoPsiType) && !(child instanceof GoPrimaryExpression))
+            child = child.getNextSibling();
+
+        return child != null && child instanceof GoPsiType ? (GoPsiType) child : null;
     }
 
     @Override
