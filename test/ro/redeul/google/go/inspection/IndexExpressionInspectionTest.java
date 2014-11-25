@@ -5,4 +5,7 @@ import org.junit.Ignore;
 public class IndexExpressionInspectionTest extends GoInspectionTestCase {
 
     public void testSimple() throws Exception{ doTest(); }
+
+    @Ignore("failing test")
+    public void testString() throws Exception{ doTest(); }
 }
