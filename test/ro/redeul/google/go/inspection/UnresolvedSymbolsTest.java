@@ -1,6 +1,5 @@
 package ro.redeul.google.go.inspection;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.internal.runners.JUnit38ClassRunner;
 import org.junit.runner.RunWith;
@@ -84,7 +83,6 @@ public class UnresolvedSymbolsTest extends GoInspectionTestCase {
         doTest();
     }
 
-    @Ignore("this requires dynamic typing support which is not going to happen in master")
     public void testError() throws Exception {
         doTest();
     }

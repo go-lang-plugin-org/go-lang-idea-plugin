@@ -132,17 +132,18 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
             compositeValue.getType();
 
             GoType enclosingType = compositeValue.getType();
-            List<Reference> references = enclosingType.underlyingType().accept(new UpdatingTypeVisitor<List<Reference>>() {
-                                                                                   @Override
-                                                                                   public void visitStruct(GoTypeStruct type, List<Reference> data, TypeVisitor<List<Reference>> visitor) {
-                                                                                       data.add(new StructFieldReference(identifier, type));
-                                                                                   }
+            List<Reference> references = enclosingType.underlyingType().accept(
+                    new UpdatingTypeVisitor<List<Reference>>() {
+                        @Override
+                        public void visitStruct(GoTypeStruct type, List<Reference> data, TypeVisitor<List<Reference>> visitor) {
+                            data.add(new StructFieldReference(identifier, type));
+                        }
 
-                                                                                   @Override
-                                                                                   public void visitMap(GoTypeMap type, List<Reference> data, TypeVisitor<List<Reference>> visitor) {
-                                                                                       data.add(new TypedConstReference(identifier, type.getKeyType()));
-                                                                                   }
-                                                                               }, new ArrayList<Reference>()
+                        @Override
+                        public void visitMap(GoTypeMap type, List<Reference> data, TypeVisitor<List<Reference>> visitor) {
+                            data.add(new TypedConstReference(identifier, type.getKeyType()));
+                        }
+                    }, new ArrayList<Reference>()
             );
 
             return references.toArray(new PsiReference[references.size()]);
@@ -188,6 +189,9 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
 
                             @Override
                             public void visitPrimitive(GoTypePrimitive type, List<Reference> data, TypeVisitor<List<Reference>> visitor) {
+                                if ( type.getType() == GoTypes.Builtin.Error )
+                                    data.add(new InterfaceMethodReference(ident, type));
+
                                 data.add(new MethodReference(ident, type));
                             }
 
