@@ -199,6 +199,12 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
                             public void visitStruct(GoTypeStruct type, List<Reference> data, TypeVisitor<List<Reference>> visitor) {
                                 data.add(new StructFieldReference(ident, type));
                             }
+
+                            @Override
+                            public void visitConstant(GoTypeConstant type, List<Reference> data, TypeVisitor<List<Reference>> visitor) {
+                                type.getType().accept(visitor);
+                            }
+
                         }, new ArrayList<Reference>()
                 );
 

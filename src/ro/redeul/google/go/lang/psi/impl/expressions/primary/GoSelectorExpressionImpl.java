@@ -71,22 +71,22 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
         }
 
         if (target instanceof GoLiteralIdentifier) {
+            GoLiteralIdentifier targetIdentifier = (GoLiteralIdentifier) target;
+
             GoFunctionDeclaration functionDeclaration = GoIdentifierUtils.getFunctionDeclaration(target);
             if (functionDeclaration != null) {
-                return new GoType[]{
-                        types().fromPsiType(functionDeclaration)
-                };
+                return new GoType[]{types().fromPsiType(functionDeclaration)};
             }
             if (target.getParent() instanceof GoVarDeclaration) {
                 GoVarDeclaration declaration = (GoVarDeclaration) target.getParent();
 
-                GoType output = declaration.getIdentifierType((GoLiteralIdentifier) target);
+                GoType output = declaration.getIdentifierType(targetIdentifier);
                 return output == null ? GoType.EMPTY_ARRAY : new GoType[]{output};
             }
 
             if (target.getParent() instanceof GoConstDeclaration) {
                 GoConstDeclaration constDeclaration = (GoConstDeclaration) target.getParent();
-                GoExpr expression = constDeclaration.getExpression((GoLiteralIdentifier) target);
+                GoExpr expression = constDeclaration.getExpression(targetIdentifier);
                 return expression != null ? expression.getType() : GoType.EMPTY_ARRAY;
             }
         }
@@ -139,71 +139,19 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
             ownerType = (GoPsiType) structField.getParent();
         }
 
-        if (ownerType == null) {
+        if (ownerType == null)
             return builder;
-        }
 
         return builder
                 .bold()
-                .withTailText(String.format(" (defined by: %s)",
-                        ownerType.getName()))
+                .withTailText(String.format(" (defined by: %s)", ownerType.getName()))
                 .withTypeText("<field>", ownerType != type);
     }
 
     @NotNull
     @Override
     public PsiReference[] defineReferences() {
-        // TODO understand if this can be removed.
-        GoPrimaryExpression baseExpression = getBaseExpression();
-
-        if (baseExpression == null) {
-            return PsiReference.EMPTY_ARRAY;
-        }
-
-        GoType[] baseTypes = baseExpression.getType();
-        if (baseTypes.length == 0) {
-            return PsiReference.EMPTY_ARRAY;
-        }
-
-        GoType type = baseTypes[0];
-
-//        if (type instanceof GoTypePackage) {
-//            GoPackage goPackage = ((GoTypePackage) type).getPackage();
-//            return getIdentifier() != null
-//                    ? new PsiReference[]{new PackageSymbolReference(getIdentifier(), goPackage)}
-//                    : PsiReference.EMPTY_ARRAY;
-//        }
-
-        if (type instanceof GoTypePointer)
-            type = ((GoTypePointer) type).getTargetType();
-
-        GoType x = type.underlyingType();
-
-//        if (x instanceof GoUnderlyingTypeInterface)
-//            return new PsiReference[]{new InterfaceMethodReference(this)};
-
-        if (x instanceof GoTypeStruct && getIdentifier() != null)
-            return new PsiReference[]{
-//                    new SelectorOfStructFieldReference(this),
-//                    new MethodReference(this)
-            };
-
-        if (x instanceof GoTypePointer) {
-            return new PsiReference[]{
-//                    new SelectorOfStructFieldReference(this),
-//                    new MethodReference(this)
-            };
-        }
-
-        if (type instanceof GoTypeName) {
-            return new PsiReference[]{
-//                    new MethodReference(this)
-            };
-        }
-
-//        if ( type instanceof GoPsiTypeStruct) {
-//            return new StructFieldReference(this);
-        return PsiReference.EMPTY_ARRAY;
+        return super.defineReferences();
     }
 }
 
