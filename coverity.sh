@@ -2,7 +2,11 @@
 
 ./fetchIdea.sh
 
-PLUGIN_COMMIT_VERSION=`git describe`
+PLUGIN_COMMIT_VERSION=`git name-rev --tags --name-only $(git rev-parse HEAD)`
+if [ ${PLUGIN_COMMIT_VERSION} == "undefined" ]; then
+    PLUGIN_COMMIT_VERSION=`git rev-parse HEAD`
+fi
+
 sed -i "s/<\/version/-${PLUGIN_COMMIT_VERSION}<\/version/g" src/META-INF/plugin.xml
 
 # Run the tests
