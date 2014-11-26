@@ -7,7 +7,9 @@ import com.intellij.psi.PsiReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
+import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
+import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.GoPrimaryExpression;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
@@ -75,14 +77,17 @@ public class GoSelectorExpressionImpl extends GoExpressionBase implements GoSele
                         types().fromPsiType(functionDeclaration)
                 };
             }
-            if (target.getParent() instanceof GoVarDeclaration){
-                GoType output = ((GoVarDeclaration)target.getParent()).getIdentifierType((GoLiteralIdentifier)target);
-                if (output==null){
-                    return GoType.EMPTY_ARRAY;
-                }
-                return new GoType[]{
-                        output
-                };
+            if (target.getParent() instanceof GoVarDeclaration) {
+                GoVarDeclaration declaration = (GoVarDeclaration) target.getParent();
+
+                GoType output = declaration.getIdentifierType((GoLiteralIdentifier) target);
+                return output == null ? GoType.EMPTY_ARRAY : new GoType[]{output};
+            }
+
+            if (target.getParent() instanceof GoConstDeclaration) {
+                GoConstDeclaration constDeclaration = (GoConstDeclaration) target.getParent();
+                GoExpr expression = constDeclaration.getExpression((GoLiteralIdentifier) target);
+                return expression != null ? expression.getType() : GoType.EMPTY_ARRAY;
             }
         }
 

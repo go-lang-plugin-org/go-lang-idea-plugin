@@ -38,4 +38,6 @@ public class FunctionCallInspectionTest extends GoInspectionTestCase {
     public void testDontCrashOnCast() throws Exception { doTest(); }
 
     public void testTypeCast() throws Exception { doTest(); }
+
+    public void testConstFromPackage() throws Exception { doTest(); }
 }

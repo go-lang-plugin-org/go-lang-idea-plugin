@@ -47,19 +47,19 @@ public class GoCallOrConvExpressionImpl extends GoExpressionBase implements GoCa
 
         if (isType)
             return computeConversionType(GoTypes.fromPsi((GoPsiTypeParenthesized) baseExpression));
-        else {
-            return GoTypes.get(getBaseExpression().getType()).accept(new TypeVisitor<GoType[]>(GoType.EMPTY_ARRAY) {
-                @Override
-                public GoType[] visitFunction(GoTypeFunction type) {
-                    return computeCallType(type);
-                }
 
-                @Override
-                public GoType[] visitName(GoTypeName type) {
-                    return computeConversionType(type);
-                }
-            });
-        }
+
+        return GoTypes.get(getBaseExpression().getType()).accept(new TypeVisitor<GoType[]>(GoType.EMPTY_ARRAY) {
+            @Override
+            public GoType[] visitFunction(GoTypeFunction type) {
+                return computeCallType(type);
+            }
+
+            @Override
+            public GoType[] visitName(GoTypeName type) {
+                return computeConversionType(type);
+            }
+        });
     }
 
     protected GoType[] computeCallType(GoTypeFunction type) {
