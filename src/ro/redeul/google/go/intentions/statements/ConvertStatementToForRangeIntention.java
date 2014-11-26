@@ -4,7 +4,6 @@ import com.intellij.codeInsight.template.impl.TemplateImpl;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiWhiteSpace;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.editor.TemplateUtil;
 import ro.redeul.google.go.intentions.Intention;
@@ -20,27 +19,16 @@ import ro.redeul.google.go.util.GoUtil;
 
 import java.util.ArrayList;
 
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
-
 public class ConvertStatementToForRangeIntention extends Intention {
-
-    private GoExpressionStatement statement;
-    private GoExpr expr;
 
     @Override
     protected boolean satisfiedBy(PsiElement element) {
-        PsiElement node = element;
+        GoExpressionStatement statement = getParentAs(element, GoExpressionStatement.class);
 
-        if (node == null)
+        if ( statement == null)
             return false;
 
-        if (node instanceof PsiWhiteSpace)
-            node = node.getPrevSibling();
-
-        statement = findParentOfType(node, GoExpressionStatement.class);
-        if (statement == null) return false;
-
-        expr = statement.getExpression();
+        GoExpr expr = statement.getExpression();
         if (expr == null) return false;
 
         GoType[] types = expr.getType();
@@ -73,6 +61,14 @@ public class ConvertStatementToForRangeIntention extends Intention {
     protected void processIntention(@NotNull PsiElement element, Editor editor)
             throws IntentionExecutionException {
 
+        GoExpressionStatement statement = getParentAs(element, GoExpressionStatement.class);
+
+        if ( statement == null )
+            return;
+
+        GoExpr expr = statement.getExpression();
+        if ( expr == null )
+            return;
 
         TextRange textRange = statement.getTextRange();
         ArrayList<String> arguments = new ArrayList<String>();

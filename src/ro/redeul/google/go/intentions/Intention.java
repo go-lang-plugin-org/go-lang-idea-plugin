@@ -8,9 +8,13 @@ import com.intellij.openapi.vfs.ReadonlyStatusHandler;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.lang.psi.GoPsiElement;
+
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 
 public abstract class Intention implements IntentionAction {
 
@@ -88,6 +92,18 @@ public abstract class Intention implements IntentionAction {
             }
         }
         return buffer.toString();
+    }
+
+    @Nullable
+    protected <T extends GoPsiElement> T getParentAs(@Nullable PsiElement element, Class<T> parentClass) {
+        PsiElement node = element;
+
+        if (node == null) return null;
+
+        if (node instanceof PsiWhiteSpace)
+            node = node.getPrevSibling();
+
+        return findParentOfType(node, parentClass);
     }
 
     @NotNull

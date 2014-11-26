@@ -3,7 +3,6 @@ package ro.redeul.google.go.intentions.statements;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiWhiteSpace;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.editor.TemplateUtil;
 import ro.redeul.google.go.intentions.Intention;
@@ -13,31 +12,19 @@ import ro.redeul.google.go.lang.psi.statements.GoExpressionStatement;
 import ro.redeul.google.go.lang.psi.typing.GoType;
 import ro.redeul.google.go.lang.psi.typing.GoTypePrimitive;
 import ro.redeul.google.go.lang.psi.typing.GoTypes;
-import ro.redeul.google.go.lang.psi.typing.TypeVisitor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
-
 public class CheckErrorIntention extends Intention {
-
-    protected GoExpressionStatement statement;
-    protected GoExpr expr;
 
     @Override
     protected boolean satisfiedBy(PsiElement element) {
 
-        PsiElement node = element;
-        if (node == null) return false;
-
-        if (node instanceof PsiWhiteSpace)
-            node = node.getPrevSibling();
-
-        statement = findParentOfType(node, GoExpressionStatement.class);
+        GoExpressionStatement statement = getParentAs(element, GoExpressionStatement.class);
         if (statement == null) return false;
 
-        expr = statement.getExpression();
+        GoExpr expr = statement.getExpression();
         if (expr == null) return false;
 
         for (GoType type : expr.getType()) {
@@ -50,12 +37,17 @@ public class CheckErrorIntention extends Intention {
 
     @Override
     protected void processIntention(@NotNull PsiElement element, Editor editor) throws IntentionExecutionException {
+        GoExpressionStatement statement = getParentAs(element, GoExpressionStatement.class);
+        if (statement == null) return;
+
         TextRange textRange = statement.getTextRange();
 
         StringBuilder varListString = new StringBuilder();
         StringBuilder checkString = new StringBuilder();
         List<String> varNames = new ArrayList<String>();
 
+        GoExpr expr = statement.getExpression();
+        if (expr == null) return;
 
         GoType[] types = expr.getType();
 
