@@ -17,19 +17,27 @@
 package com.goide;
 
 import com.goide.sdk.GoSdkType;
+import com.goide.psi.GoFile;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.projectRoots.ProjectJdkTable;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkModificator;
 import com.intellij.openapi.projectRoots.impl.ProjectJdkImpl;
 import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.vfs.VfsUtil;
+import com.intellij.openapi.vfs.VfsUtilCore;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiFile;
 import com.intellij.testFramework.fixtures.DefaultLightProjectDescriptor;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
 
 abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsightFixtureTestCase {
+
   @Override
   protected String getTestDataPath() {
     return new File("testData/" + getBasePath()).getAbsolutePath();
@@ -67,5 +75,40 @@ abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsi
     sdkModificator.commitChanges();
     instance.setupSdkPaths(sdk);
     return sdk;
+  }
+
+  protected GoFile[] addPackage(String importPath, String... fileNames) {
+
+    GoFile[] files = new GoFile[fileNames.length];
+
+    for (int i = 0; i < fileNames.length; i++) {
+      VirtualFile virtualFile;
+      String fileName = fileNames[i];
+
+      virtualFile = VfsUtil.findFileByIoFile(new File(getTestDataPath() + "/" + getTestName(true) + "/" + fileName), true);
+
+      if (virtualFile == null) {
+        virtualFile = VfsUtil.findFileByIoFile(new File(getTestDataPath() + "/" + fileName), true);
+      }
+
+      if (virtualFile == null) {
+        virtualFile = VfsUtil.findFileByIoFile(new File(fileName), true);
+      }
+
+      if (virtualFile == null) {
+        continue;
+      }
+
+      try {
+        files[i] = (GoFile)myFixture.addFileToProject(
+          FileUtil.toCanonicalPath(importPath + "/" + virtualFile.getName()),
+          VfsUtilCore.loadText(virtualFile));
+      }
+      catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    }
+
+    return files;
   }
 }
