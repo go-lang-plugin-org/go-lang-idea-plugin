@@ -5,8 +5,7 @@ import com.intellij.ide.plugins.IdeaPluginDescriptorImpl;
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.extensions.PluginId;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -22,9 +21,7 @@ public class AnonymousFeedback {
             AnonymousFeedback.HttpConnectionFactory httpConnectionFactory,
             LinkedHashMap<String, String> environmentDetails) throws IOException {
 
-        sendFeedback(httpConnectionFactory, convertToGithubIssueFormat(environmentDetails));
-
-        return Long.toString(System.currentTimeMillis());
+        return sendFeedback(httpConnectionFactory, convertToGithubIssueFormat(environmentDetails));
     }
 
     private static byte[] convertToGithubIssueFormat(LinkedHashMap<String, String> environmentDetails) {
@@ -71,7 +68,7 @@ public class AnonymousFeedback {
         return result;
     }
 
-    private static void sendFeedback(AnonymousFeedback.HttpConnectionFactory httpConnectionFactory, byte[] payload) throws IOException {
+    private static String sendFeedback(HttpConnectionFactory httpConnectionFactory, byte[] payload) throws IOException {
         String url = "https://github-intellij-plugin.appspot.com/go-lang-plugin-org/go-lang-idea-plugin/submitError";
         String userAgent = "golang IntelliJ IDEA plugin";
 
@@ -82,23 +79,45 @@ public class AnonymousFeedback {
             userAgent = name + " (" + version + ")";
         }
 
-        HttpURLConnection httpURLConnection = connect(httpConnectionFactory, url);
-        httpURLConnection.setDoOutput(true);
-        httpURLConnection.setRequestMethod("POST");
-        httpURLConnection.setRequestProperty("User-Agent", userAgent);
-        httpURLConnection.setRequestProperty("Content-Type", "application/json");
-        OutputStream outputStream = httpURLConnection.getOutputStream();
+        HttpURLConnection httpConnection = connect(httpConnectionFactory, url);
+        httpConnection.setUseCaches(false);
+        httpConnection.setDoInput(true);
+        httpConnection.setDoOutput(true);
+        httpConnection.setInstanceFollowRedirects(true);
 
+        httpConnection.setRequestMethod("POST");
+        httpConnection.setRequestProperty("User-Agent", userAgent);
+        httpConnection.setRequestProperty("Content-Type", "application/json");
+        httpConnection.setRequestProperty("Charset", "utf-8");
+        httpConnection.setRequestProperty("Content-Length", "" + Integer.toString(payload.length));
+
+        OutputStream sendStream = httpConnection.getOutputStream();
         try {
-            outputStream.write(payload);
+            sendStream.write(payload);
+            sendStream.flush();
         } finally {
-            outputStream.close();
+            sendStream.close();
         }
 
-        int responseCode = httpURLConnection.getResponseCode();
+        int responseCode = httpConnection.getResponseCode();
         if (responseCode != 201) {
+            httpConnection.disconnect();
             throw new RuntimeException("Expected HTTP_CREATED (201), obtained " + responseCode);
         }
+
+        InputStream responseStream = httpConnection.getInputStream();
+        InputStreamReader responseReader = new InputStreamReader(responseStream);
+        BufferedReader bufferedResponseReader = new BufferedReader(responseReader);
+
+        String result = "";
+        String line;
+        while ((line = bufferedResponseReader.readLine()) != null) {
+            result+= line;
+        }
+        bufferedResponseReader.close();
+        httpConnection.disconnect();
+
+        return result;
     }
 
     private static HttpURLConnection connect(AnonymousFeedback.HttpConnectionFactory httpConnectionFactory, String url) throws IOException {

@@ -16,6 +16,8 @@
 
 package ro.redeul.google.go.diagnostics.error;
 
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 import com.intellij.diagnostic.IdeErrorsDialog;
 import com.intellij.diagnostic.LogMessageEx;
 import com.intellij.diagnostic.ReportMessages;
@@ -39,12 +41,15 @@ import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.progress.EmptyProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.util.Consumer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoBundle;
 
 import java.awt.*;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Sends crash reports to Github.
@@ -59,7 +64,12 @@ public class ErrorReporter extends ErrorReportSubmitter {
   }
 
   @Override
-  public boolean submit(@NotNull IdeaLoggingEvent[] events, String additionalInfo, @NotNull Component parentComponent, @NotNull Consumer<SubmittedReportInfo> consumer) {
+  public boolean submit(@NotNull IdeaLoggingEvent[] events, @Nullable String additionalInfo, @NotNull Component parentComponent, @NotNull Consumer<SubmittedReportInfo> consumer) {
+    if (additionalInfo == null || additionalInfo.isEmpty() || additionalInfo.length() < 30) {
+      Messages.showErrorDialog("Please help us make the plugin better by submitting a proper description of the error.\nThank you.", "We've Seen Tweets Longer Than This");
+      return false;
+    }
+
     ErrorBean errorBean = new ErrorBean(events[0].getThrowable(), IdeaLogger.ourLastActionId);
     return doSubmit(events[0], parentComponent, consumer, errorBean, additionalInfo);
   }
@@ -102,13 +112,21 @@ public class ErrorReporter extends ErrorReportSubmitter {
 
     Consumer<String> successCallback = new Consumer<String>() {
       @Override
-      public void consume(String token) {
-        final SubmittedReportInfo reportInfo = new SubmittedReportInfo(
-          null, "Issue " + token, SubmittedReportInfo.SubmissionStatus.NEW_ISSUE);
+      public void consume(String response) {
+        java.lang.reflect.Type mapType = new TypeToken<Map<String, Object>>(){}.getType();
+        Gson gson = new Gson();
+        Map<String, Object> apiResponse = gson.fromJson(response, mapType );
+
+        final SubmittedReportInfo reportInfo;
+        reportInfo = new SubmittedReportInfo(
+                (String) apiResponse.get("html_url"),
+                Integer.valueOf((String) apiResponse.get("number")).toString(),
+                SubmittedReportInfo.SubmissionStatus.NEW_ISSUE);
+
         callback.consume(reportInfo);
 
         ReportMessages.GROUP.createNotification(ReportMessages.ERROR_REPORT,
-                                                "Submitted",
+                                                computeSubmittedText(reportInfo),
                                                 NotificationType.INFORMATION,
                                                 null).setImportant(false).notify(project);
       }
@@ -132,5 +150,10 @@ public class ErrorReporter extends ErrorReportSubmitter {
       ProgressManager.getInstance().run(task);
     }
     return true;
+  }
+
+  @NotNull
+  private static String computeSubmittedText(SubmittedReportInfo reportInfo) {
+    return "<html>Submitted <a href='" + reportInfo.getURL() + "'>issue "+ reportInfo.getLinkText() +"</a> on Github issue tracker.</html>";
   }
 }
