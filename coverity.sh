@@ -19,7 +19,7 @@ stat=$?
 if [ "${TRAVIS}" != true ]; then
     ant -f build-package.xml -q clean
     rm -rf idea-IC
-    git checkout .
+    git checkout src/META-INF/plugin.xml
 fi
 
 # Return the build status
