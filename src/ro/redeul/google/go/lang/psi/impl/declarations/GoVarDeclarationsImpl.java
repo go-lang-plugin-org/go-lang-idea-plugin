@@ -4,11 +4,11 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.scope.util.PsiScopesUtil;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclarations;
 import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
+import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -32,6 +32,6 @@ public class GoVarDeclarationsImpl extends GoPsiElementBase implements GoVarDecl
                                        @NotNull ResolveState state,
                                        PsiElement lastParent,
                                        @NotNull PsiElement place) {
-        return  PsiScopesUtil.walkChildrenScopes(this, processor, state, lastParent, place);
+        return  GoPsiScopesUtil.walkChildrenScopes(this, processor, state, lastParent, place);
     }
 }
