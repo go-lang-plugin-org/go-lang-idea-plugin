@@ -37,14 +37,14 @@ public abstract class GoExpressionBase extends GoPsiElementBase implements GoExp
     @NotNull
     @Override
     public GoType[] getType() {
-//        return
-//            GoPsiManager.getInstance(getProject()).getType(this, new Function<GoExpressionBase, GoType[]>() {
-//            @Override
-//            public GoType[] fun(GoExpressionBase goExpressionBase) {
-//                return resolveTypes();
-//            }
-//        });
-        return resolveTypes();
+        return
+            GoPsiManager.getInstance(getProject()).getType(this, new Function<GoExpressionBase, GoType[]>() {
+            @Override
+            public GoType[] fun(GoExpressionBase goExpressionBase) {
+                return resolveTypes();
+            }
+        });
+//        return resolveTypes();
     }
 
     @Override
