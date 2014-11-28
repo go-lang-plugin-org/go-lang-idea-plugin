@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ public class GoUtil {
   public static final Set<CharSequence> LINUX = set("linux", "no", "unix", "posix", "notwin");
   public static final Set<CharSequence> MAC = set("darwin", "no", "unix", "posix", "notwin");
   public static final Set<CharSequence> WINDOWS = set("windows", "no");
-  public static final Set<CharSequence> OS = set("openbsd", "plan9", "unix", "linux", "netbsd", "darwin", "dragonfly", "bsd", "windows", 
+  public static final Set<CharSequence> OS = set("openbsd", "plan9", "unix", "linux", "netbsd", "darwin", "dragonfly", "bsd", "windows",
                                                  "posix", "freebsd", "notwin");
 
   public static boolean allowed(@NotNull PsiFile file) {
@@ -73,11 +73,9 @@ public class GoUtil {
   }
 
   public static void installFileChooser(@NotNull Project project, @NotNull TextFieldWithBrowseButton field, boolean directory) {
-    FileChooserDescriptor chooseDirectoryDescriptor =
-      directory ?
-      FileChooserDescriptorFactory.createSingleFolderDescriptor() :
-      FileChooserDescriptorFactory.createSingleLocalFileDescriptor()
-      ;
+    FileChooserDescriptor chooseDirectoryDescriptor = directory
+                                                      ? FileChooserDescriptorFactory.createSingleFolderDescriptor() 
+                                                      : FileChooserDescriptorFactory.createSingleLocalFileDescriptor();
     chooseDirectoryDescriptor.setRoots(project.getBaseDir());
     chooseDirectoryDescriptor.setShowFileSystemRoots(false);
     field.addBrowseFolderListener(new TextBrowseFolderListener(chooseDirectoryDescriptor));
