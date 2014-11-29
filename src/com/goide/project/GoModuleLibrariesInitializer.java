@@ -115,7 +115,9 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     }
   }
 
-  private LibraryOrderEntry createAndFillLibrary(ModifiableRootModel modifiableRootModel, Collection<VirtualFile> libraryRoots) {
+  @NotNull
+  private LibraryOrderEntry createAndFillLibrary(@NotNull ModifiableRootModel modifiableRootModel,
+                                                 @NotNull Collection<VirtualFile> libraryRoots) {
     ApplicationManager.getApplication().assertWriteAccessAllowed();
 
     final LibraryTable libraryTable = LibraryTablesRegistrar.getInstance().getLibraryTable(myModule.getProject());
@@ -172,7 +174,9 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     }
   }
 
-  private static void addRootsForGoPathFile(Collection<VirtualFile> libraryRoots, VirtualFile[] contentRoots, VirtualFile file) {
+  private static void addRootsForGoPathFile(@NotNull Collection<VirtualFile> libraryRoots,
+                                            @NotNull VirtualFile[] contentRoots,
+                                            @NotNull VirtualFile file) {
     for (VirtualFile contentRoot : contentRoots) {
       if (file.equals(contentRoot)) {
         LOG.info("The directory is project root, skipping: " + file.getPath());
