@@ -93,4 +93,15 @@ public class GoVarResolveTest extends GoCodeInsightFixtureTestCase {
            "    <usage>a := 1\n" +
            "}\n");
   }
+  
+  public void testDeclaredInForRange() {
+    doTest("package main\n" +
+           "const key = iota\n" +
+           "func main() {\n" +
+           "    key := 1\n" +
+           "    for <caret>key, val := range m {\n" +
+           "        y := <usage>key\n" +
+           "    }\n" +
+           "}");
+  }
 }
