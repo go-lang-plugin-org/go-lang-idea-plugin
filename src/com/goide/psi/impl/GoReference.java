@@ -25,6 +25,7 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.scope.BaseScopeProcessor;
@@ -264,16 +265,24 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     return true;
   }
 
+
+  @Nullable
+  private static String getPath(@Nullable PsiFile file) {
+    if (file == null) return null;
+    VirtualFile virtualFile = file.getOriginalFile().getVirtualFile();
+    return virtualFile == null ? null : virtualFile.getPath();
+  }
+
   protected static boolean processDirectory(@Nullable PsiDirectory dir,
                                             @Nullable GoFile file,
                                             @Nullable String packageName,
                                             @NotNull MyScopeProcessor processor,
                                             @NotNull ResolveState state,
                                             boolean localProcessing) {
-    String filePath = file != null ? file.getVirtualFile().getPath() : null;
+    String filePath = getPath(file);
     if (dir != null) {
       for (PsiFile psiFile : dir.getFiles()) {
-        if (psiFile instanceof GoFile && GoUtil.allowed(psiFile) && !Comparing.equal(psiFile.getVirtualFile().getPath(), filePath)) {
+        if (psiFile instanceof GoFile && GoUtil.allowed(psiFile) && !Comparing.equal(getPath(psiFile), filePath)) {
           if (packageName != null && !packageName.equals(((GoFile)psiFile).getPackageName())) continue;
           if (!processFileEntities((GoFile)psiFile, processor, state, localProcessing)) return false;
         }
