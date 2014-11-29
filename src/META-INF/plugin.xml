@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+  ~ Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -27,6 +27,12 @@
   <idea-version since-build="138.2210"/>
   <depends>com.intellij.modules.lang</depends>
   <depends optional="true" config-file="java-deps.xml">com.intellij.modules.java</depends>
+  
+  <module-components>
+    <component>
+      <implementation-class>com.goide.project.GoModuleLibrariesInitializer</implementation-class>
+    </component>
+  </module-components>
 
   <extensions defaultExtensionNs="com.intellij">
     <stubIndex implementation="com.goide.stubs.index.GoAllNamesIndex"/>
@@ -37,7 +43,9 @@
 
     <internalFileTemplate name="Go Application"/>
     <internalFileTemplate name="Go File"/>
-
+    
+    <moduleService serviceImplementation="com.goide.project.GoLibrariesService"/>
+    
     <defaultLiveTemplatesProvider implementation="com.goide.template.GoLiveTemplatesProvider"/>
     <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$GoEverywhereContextType"/>
     <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$GoFileContextType"/>
