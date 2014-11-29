@@ -1,6 +1,7 @@
 package main
 
 import "fmt"
+import "net/http"
 
 func main() {
 	b := 1
@@ -8,6 +9,8 @@ func main() {
 	fmt.Println(b, a)
 	c := simple(10)
 	fmt.Println(c)
+	
+        fmt.Println(http.ErrMissingFile)
 }
 
 func simple(a int) int {
