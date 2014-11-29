@@ -350,3 +350,13 @@ func <warning>name</warning>(col Color) string {
 
 var <error>Name11</error> string  = ""
 var <error>nmame11</error> string  = ""
+
+func <warning>testRedeclare</warning>() int {
+      y, z := 1,3
+      if y == z {}  // Just to avoid unused variable error
+      {
+              y, z := 1, 2 // Should not be an error for vars y and z shadow y and z from the outer scope
+              if y == z {}  // Just to avoid unused variable error
+      }
+      return 1
+}

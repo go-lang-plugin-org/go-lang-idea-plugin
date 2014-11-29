@@ -22,7 +22,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,10 +33,11 @@ public class GoVarReference extends PsiReferenceBase<GoVarDefinition> {
   @Nullable
   @Override
   public PsiElement resolve() {
-    GoScopeProcessorBase p = new GoVarProcessor(myElement.getText(), myElement, false);
-    ResolveUtil.treeWalkUp(myElement, p);
+    GoVarProcessor p = new GoVarProcessor(myElement.getText(), myElement, false);
     GoReference.processFunctionParameters(myElement, p);
-    return ContainerUtil.getLastItem(p.getVariants());
+    if (p.getResult() != null) return p.getResult();
+    ResolveUtil.treeWalkUp(myElement, p);
+    return p.getResult();
   }
 
   @NotNull

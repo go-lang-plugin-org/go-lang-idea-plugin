@@ -17,22 +17,44 @@
 package com.goide.psi.impl;
 
 import com.goide.psi.*;
+import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class GoVarProcessor extends GoScopeProcessorBase {
+  private final boolean myImShortVarDeclaration;
+  private final GoBlock myBlock;
+  
   public GoVarProcessor(String requestedName, PsiElement origin, boolean completion) {
     super(requestedName, origin, completion);
+    myImShortVarDeclaration = PsiTreeUtil.getParentOfType(origin, GoShortVarDeclaration.class) != null;
+    myBlock = PsiTreeUtil.getParentOfType(origin, GoBlock.class);
   }
 
   @Override
   protected boolean add(@NotNull GoNamedElement o) {
-    boolean add = super.add(o);
-    return PsiTreeUtil.getParentOfType(o, GoShortVarDeclaration.class) == null && add;
+    if (PsiTreeUtil.findCommonParent(o, myOrigin) instanceof GoRangeClause) return true;
+    boolean inVarOrRange = PsiTreeUtil.getParentOfType(o, GoVarDeclaration.class) != null || o.getParent() instanceof GoRangeClause;
+    boolean differentBlocks = differentBlocks(o);
+    boolean inShortVar = PsiTreeUtil.getParentOfType(o, GoShortVarDeclaration.class) != null;
+    if (inShortVar && differentBlocks && myImShortVarDeclaration) return true;
+    if (differentBlocks && inShortVar && !inVarOrRange && getResult() != null) return true;
+    return super.add(o) || !inVarOrRange;
+  }
+
+  private boolean differentBlocks(@Nullable GoNamedElement o) {
+    return !Comparing.equal(myBlock, PsiTreeUtil.getParentOfType(o, GoBlock.class));
+  }
+
+  @Nullable
+  @Override
+  public GoNamedElement getResult() {
+    return ContainerUtil.getLastItem(myResult);
   }
 
   @NotNull

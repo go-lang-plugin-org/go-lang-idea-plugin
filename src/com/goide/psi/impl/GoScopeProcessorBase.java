@@ -18,11 +18,9 @@ package com.goide.psi.impl;
 
 import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.goide.psi.GoNamedElement;
-import com.goide.psi.GoRangeClause;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.BaseScopeProcessor;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.OrderedSet;
 import org.jetbrains.annotations.NotNull;
@@ -33,8 +31,8 @@ import java.util.List;
 public abstract class GoScopeProcessorBase extends BaseScopeProcessor {
   @NotNull protected OrderedSet<GoNamedElement> myResult = new OrderedSet<GoNamedElement>();
 
+  protected final PsiElement myOrigin;
   private final String myRequestedName;
-  private final PsiElement myOrigin;
   private final boolean myIsCompletion;
 
   public GoScopeProcessorBase(String requestedName, PsiElement origin, boolean completion) {
@@ -47,18 +45,14 @@ public abstract class GoScopeProcessorBase extends BaseScopeProcessor {
   public boolean execute(@NotNull PsiElement psiElement, @NotNull ResolveState resolveState) {
     if (psiElement instanceof GoFunctionOrMethodDeclaration) return false;
     if (!(psiElement instanceof GoNamedElement)) return true;
-    if (condition(psiElement)) return true;
     if (!myIsCompletion && !myRequestedName.equals(((GoNamedElement)psiElement).getName())) return true;
+    if (condition(psiElement)) return true;
     if (psiElement.equals(myOrigin)) return true;
-    PsiElement commonParent = PsiTreeUtil.findCommonParent(psiElement, myOrigin);
-    if (commonParent instanceof GoRangeClause) return true;
-
-    boolean add = add((GoNamedElement)psiElement);
-    return myIsCompletion || !add;
+    return add((GoNamedElement)psiElement) || myIsCompletion;
   }
 
   protected boolean add(@NotNull GoNamedElement psiElement) {
-    return myResult.add(psiElement);
+    return !myResult.add(psiElement);
   }
 
   @Nullable
