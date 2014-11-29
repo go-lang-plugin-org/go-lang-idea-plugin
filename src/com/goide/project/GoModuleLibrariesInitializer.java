@@ -72,6 +72,8 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   }
 
   private void discoverAndAttachGoLibraries() {
+    ApplicationManager.getApplication().assertIsDispatchThread();
+    
     final Collection<VirtualFile> libraryRoots = ContainerUtil.newLinkedHashSet();
     VirtualFile[] contentRoots = ProjectRootManager.getInstance(myModule.getProject()).getContentRoots();
     
@@ -126,17 +128,18 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     ApplicationManager.getApplication().assertWriteAccessAllowed();
 
     final Library.ModifiableModel libraryModel = library.getModifiableModel();
-    for (String root : libraryModel.getUrls(OrderRootType.CLASSES)) {
-      libraryModel.removeRoot(root, OrderRootType.CLASSES);
+    for (String root : libraryModel.getUrls(OrderRootType.SOURCES)) {
+      libraryModel.removeRoot(root, OrderRootType.SOURCES);
     }
     for (VirtualFile libraryRoot : libraryRoots) {
-      libraryModel.addRoot(libraryRoot, OrderRootType.CLASSES);
+      libraryModel.addRoot(libraryRoot, OrderRootType.SOURCES);
     }
     libraryModel.commit();
   }
 
   private void removeLibraryIfNeeded() {
     ApplicationManager.getApplication().assertIsDispatchThread();
+    
     final ModifiableModelsProvider modelsProvider = ModifiableModelsProvider.SERVICE.getInstance();
     final ModifiableRootModel model = modelsProvider.getModuleModifiableModel(myModule);
     final LibraryOrderEntry goLibraryEntry = OrderEntryUtil.findLibraryOrderEntry(model, GO_LIB_NAME);
