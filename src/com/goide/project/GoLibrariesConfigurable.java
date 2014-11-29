@@ -26,6 +26,8 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 
 public class GoLibrariesConfigurable implements SearchableConfigurable {
+  public static final String DISPLAY_NAME = "Go Libraries";
+  
   private final Module myModule;
 
   public GoLibrariesConfigurable(Module module) {
@@ -47,7 +49,7 @@ public class GoLibrariesConfigurable implements SearchableConfigurable {
   @Nls
   @Override
   public String getDisplayName() {
-    return "Go Libraries";
+    return DISPLAY_NAME;
   }
 
   @Nullable

@@ -19,11 +19,18 @@ package com.goide.project;
 import com.goide.GoModuleType;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.ProjectTopics;
+import com.intellij.ide.util.PropertiesComponent;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationListener;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleComponent;
 import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.openapi.options.ShowSettingsUtil;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.*;
 import com.intellij.openapi.roots.impl.OrderEntryUtil;
 import com.intellij.openapi.roots.libraries.Library;
@@ -34,12 +41,14 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.event.HyperlinkEvent;
 import java.util.Collection;
 import java.util.List;
 
 public class GoModuleLibrariesInitializer implements ModuleComponent {
   private static final String GO_LIB_NAME = "GOPATH";
   private static final Logger LOG = Logger.getInstance(GoModuleLibrariesInitializer.class);
+  public static final String GO_LIBRARIES_NOTIFICATION_HAD_BEEN_SHOWN = "go.libraries.notification.had.been.shown";
 
   @NotNull private final Module myModule;
   @NotNull private final GoLibrariesService myLibrariesProvider;
@@ -97,6 +106,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
           modelsProvider.commitModuleModifiableModel(model);
         }
       });
+      showNotification(myModule.getProject());
     }
     else {
       removeLibraryIfNeeded();
@@ -179,6 +189,33 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
         LOG.info("Add directory to GOPATH library: " + file.getPath());
         libraryRoots.add(file);
       }
+    }
+  }
+
+  private static void showNotification(@NotNull final Project project) {
+    final PropertiesComponent propertiesComponent = PropertiesComponent.getInstance(project);
+    boolean shownAlready;
+    //noinspection SynchronizationOnLocalVariableOrMethodParameter
+    synchronized (propertiesComponent) {
+      shownAlready = propertiesComponent.getBoolean(GO_LIBRARIES_NOTIFICATION_HAD_BEEN_SHOWN, false);
+      if (!shownAlready) {
+        propertiesComponent.setValue(GO_LIBRARIES_NOTIFICATION_HAD_BEEN_SHOWN, String.valueOf(true));
+      }
+    }
+
+    if (!shownAlready) {
+      final Notification notification = new Notification("go", "GOPATH was detected",
+                                                         "We've been detected some libraries from your GOPATH.\n" +
+                                                         "You may want to add extra libraries in <a href='configure'>Go Libraries configuration</a>.",
+                                                         NotificationType.INFORMATION, new NotificationListener.Adapter() {
+        @Override
+        protected void hyperlinkActivated(@NotNull Notification notification, @NotNull HyperlinkEvent event) {
+          if (event.getDescription().equals("configure") && !project.isDisposed()) {
+            ShowSettingsUtil.getInstance().showSettingsDialog(project, GoLibrariesConfigurable.DISPLAY_NAME);
+          }
+        }
+      });
+      Notifications.Bus.notify(notification, project);
     }
   }
 
