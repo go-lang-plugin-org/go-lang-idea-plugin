@@ -117,21 +117,6 @@ public class GoSdkParsingHelper implements ApplicationComponent {
         return relativePath;
     }
 
-    private String getPackageImportPathFromProject(ProjectFileIndex projectIndex, VirtualFile virtualFile) {
-
-        VirtualFile contentRoot = projectIndex.getContentRootForFile(virtualFile);
-        if ( contentRoot == null ) {
-            return "";
-        }
-
-        String relativePath = VfsUtil.getRelativePath(virtualFile, contentRoot.getParent(), '/');
-        if ( relativePath == null ) {
-            return "";
-        }
-
-        return "";
-    }
-
     private Map<String, String> findPackageMappings(Sdk ownerSdk) {
         Map<String, String> result = new HashMap<String, String>();
 

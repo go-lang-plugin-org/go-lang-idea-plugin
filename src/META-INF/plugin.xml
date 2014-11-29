@@ -715,6 +715,8 @@
 
         <xdebugger.breakpointType implementation="uk.co.cwspencer.ideagdb.debug.breakpoints.GdbBreakpointType"/>
 
+        <library.type id="go.library.type" implementation="ro.redeul.google.go.library.GoLibraryType"/>
+
     </extensions>
 
 </idea-plugin>
