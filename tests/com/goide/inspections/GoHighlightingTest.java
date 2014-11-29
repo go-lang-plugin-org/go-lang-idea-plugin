@@ -51,6 +51,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testSlices()    { doTest(); }
   public void testShortVars() { doTest(); }
   public void testReturns()   { doTest(); }
+  public void testRequest()   { doTest(); }
   
   @Override
   protected LightProjectDescriptor getProjectDescriptor() {

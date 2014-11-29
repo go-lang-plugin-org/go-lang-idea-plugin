@@ -270,10 +270,10 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
                                             @NotNull MyScopeProcessor processor,
                                             @NotNull ResolveState state,
                                             boolean localProcessing) {
-    String fileName = file != null ? file.getName() : null;
+    String filePath = file != null ? file.getVirtualFile().getPath() : null;
     if (dir != null) {
       for (PsiFile psiFile : dir.getFiles()) {
-        if (psiFile instanceof GoFile && GoUtil.allowed(psiFile) && !psiFile.getName().equals(fileName)) {
+        if (psiFile instanceof GoFile && GoUtil.allowed(psiFile) && !Comparing.equal(psiFile.getVirtualFile().getPath(), filePath)) {
           if (packageName != null && !packageName.equals(((GoFile)psiFile).getPackageName())) continue;
           if (!processFileEntities((GoFile)psiFile, processor, state, localProcessing)) return false;
         }
