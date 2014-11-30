@@ -127,6 +127,13 @@
       <option name='GO' value='true'/>
     </context>
   </template>
+  <template description='Add return' id='go_lang_add_return' name='add_return' toReformat='true' toShortenFQNames='true'
+            value='return $VALUE$$END$&#10;'>
+    <variable alwaysStopAt='true' defaultValue='' expression='' name='VALUE'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
 
   <!-- TEST GENERATOR -->
   <template description='Test' id='go_lang_test' name='go_lang_test' toReformat='true' toShortenFQNames='true'

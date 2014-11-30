@@ -19,13 +19,23 @@ package com.goide.inspections;
 import com.goide.GoTypes;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
+import com.intellij.codeInsight.template.Template;
+import com.intellij.codeInsight.template.TemplateManager;
+import com.intellij.codeInsight.template.impl.TemplateSettings;
 import com.intellij.codeInspection.LocalInspectionToolSession;
+import com.intellij.codeInspection.LocalQuickFix;
+import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.ScrollType;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
 
 public class GoReturnInspection extends GoInspectionBase {
@@ -49,12 +59,11 @@ public class GoReturnInspection extends GoInspectionBase {
   private static void check(@Nullable GoSignature signature, @Nullable GoBlock block, @NotNull ProblemsHolder holder) {
     if (block == null) return;
     GoResult result = signature != null ? signature.getResult() : null;
-    if (result == null) return;
-    
-    if (!isTerminating(block)) {
-      PsiElement brace = block.getRbrace();
-      holder.registerProblem(brace == null ? block : brace, "Missing return at end of function");
-    }
+    if (result == null || isTerminating(block)) return;
+
+    PsiElement brace = block.getRbrace();
+    holder.registerProblem(brace == null ? block : brace, "Missing return at end of function",
+                           brace == null ? new LocalQuickFix[]{} : new LocalQuickFix[]{new AddReturnFix(block)});
   }
 
   private static boolean isTerminating(GoCompositeElement s) {
@@ -130,5 +139,43 @@ public class GoReturnInspection extends GoInspectionBase {
       return isTerminating(labeledStatement.getStatement());
     }
     return false;
+  }
+
+  public static class AddReturnFix extends LocalQuickFixAndIntentionActionOnPsiElement {
+    public AddReturnFix(@NotNull GoBlock block) {
+      super(block);
+    }
+
+    @NotNull
+    @Override
+    public String getText() {
+      return "Add return statement";
+    }
+
+    @NotNull
+    @Override
+    public String getFamilyName() {
+      return "Function Declaration";
+    }
+
+    @Override
+    public void invoke(@NotNull Project project, 
+                       @NotNull PsiFile file,
+                       @Nullable("is null when called from inspection") Editor editor,
+                       @NotNull PsiElement startElement, 
+                       @NotNull PsiElement endElement) {
+      if (!(file instanceof GoFile) || editor == null || !(startElement instanceof GoBlock)) return;
+
+      PsiElement brace = ((GoBlock)startElement).getRbrace();
+      if (brace == null) return;
+
+      Template template = TemplateSettings.getInstance().getTemplateById("go_lang_add_return");
+      if (template == null) return;
+      int start = brace.getTextRange().getStartOffset();
+      editor.getCaretModel().moveToOffset(start);
+      editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
+      template.setToReformat(true);
+      TemplateManager.getInstance(project).startTemplate(editor, template, true, Collections.<String, String>emptyMap(), null);
+    }
   }
 }
