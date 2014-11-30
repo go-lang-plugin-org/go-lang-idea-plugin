@@ -36,6 +36,7 @@ import com.intellij.openapi.roots.impl.OrderEntryUtil;
 import com.intellij.openapi.roots.impl.libraries.LibraryEx;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.roots.libraries.LibraryTable;
+import com.intellij.openapi.roots.libraries.LibraryTablesRegistrar;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.containers.ContainerUtil;
@@ -66,7 +67,12 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
 
       myModule.getMessageBus().connect().subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
         public void rootsChanged(final ModuleRootEvent event) {
-          discoverAndAttachGoLibraries();
+          ApplicationManager.getApplication().invokeLater(new Runnable() {
+            @Override
+            public void run() {
+              discoverAndAttachGoLibraries();
+            }
+          });
         }
       });
     }
@@ -96,27 +102,21 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     }
 
     if (!libraryRootUrls.isEmpty()) {
-      final ModifiableModelsProvider modelsProvider = ModifiableModelsProvider.SERVICE.getInstance();
-      final ModifiableRootModel model = modelsProvider.getModuleModifiableModel(myModule);
-      final LibraryOrderEntry goLibraryEntry = OrderEntryUtil.findLibraryOrderEntry(model, GO_LIB_NAME);
-
       ApplicationManager.getApplication().runWriteAction(new Runnable() {
         @Override
         public void run() {
+          final ModuleRootManager model = ModuleRootManager.getInstance(myModule);
+          final LibraryOrderEntry goLibraryEntry = OrderEntryUtil.findLibraryOrderEntry(model, GO_LIB_NAME);
+          
           if (goLibraryEntry != null && goLibraryEntry.isValid()) {
             final Library goLibrary = goLibraryEntry.getLibrary();
             if (goLibrary != null && !((LibraryEx)goLibrary).isDisposed()) {
               fillLibrary(goLibrary, libraryRootUrls);
             }
-            else {
-              model.removeOrderEntry(goLibraryEntry);
-              createAndFillLibrary(model, libraryRootUrls);
-            }
           }
           else {
-            createAndFillLibrary(model, libraryRootUrls);
+            createAndFillLibrary(libraryRootUrls);
           }
-          modelsProvider.commitModuleModifiableModel(model);
         }
       });
       showNotification(myModule.getProject());
@@ -126,12 +126,13 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     }
   }
 
-  private static void createAndFillLibrary(@NotNull ModifiableRootModel modifiableRootModel, @NotNull Set<String> libraryRootUrls) {
+  private void createAndFillLibrary(@NotNull Set<String> libraryRootUrls) {
     ApplicationManager.getApplication().assertWriteAccessAllowed();
-
-    final LibraryTable libraryTable = modifiableRootModel.getModuleLibraryTable();
+    
+    final LibraryTable libraryTable = LibraryTablesRegistrar.getInstance().getLibraryTable(myModule.getProject());
     final Library library = libraryTable.createLibrary(GO_LIB_NAME);
     fillLibrary(library, libraryRootUrls);
+    ModuleRootModificationUtil.addDependency(myModule, library);
   }
 
   private static void fillLibrary(@NotNull Library library, @NotNull Set<String> libraryRootUrls) {
