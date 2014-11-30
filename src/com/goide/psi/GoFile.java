@@ -70,7 +70,7 @@ public class GoFile extends PsiFileBase {
     }
     else {
       final String path = PathUtil.getParentPath(virtualFile.getPath());
-      final int srcFolder = path.indexOf("/src/");
+      final int srcFolder = path.lastIndexOf("/src/");
       if (srcFolder > -1) {
         return StringUtil.nullize(path.substring(srcFolder + 5));
       }
