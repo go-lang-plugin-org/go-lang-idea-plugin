@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -138,7 +138,7 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
                                            @NotNull final CompletionResultSet result) {
         final Module module = myComboModules.getSelectedModule();
         if (module != null) {
-          final GlobalSearchScope scope = GlobalSearchScope.moduleScope(module);
+          final GlobalSearchScope scope = GoUtil.moduleScope(module);
           StubIndex.getInstance().processAllKeys(GoPackagesIndex.KEY, new Processor<String>() {
             @Override
             public boolean process(@NotNull final String packageName) {

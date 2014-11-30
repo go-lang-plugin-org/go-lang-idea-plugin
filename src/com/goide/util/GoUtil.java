@@ -18,13 +18,17 @@ package com.goide.util;
 
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.TextBrowseFolderListener;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.text.CharSequenceHashingStrategy;
 import gnu.trove.THashSet;
@@ -79,5 +83,16 @@ public class GoUtil {
     chooseDirectoryDescriptor.setRoots(project.getBaseDir());
     chooseDirectoryDescriptor.setShowFileSystemRoots(false);
     field.addBrowseFolderListener(new TextBrowseFolderListener(chooseDirectoryDescriptor));
+  }
+
+  @NotNull
+  public static GlobalSearchScope moduleScope(@NotNull PsiElement element) {
+    Module module = ModuleUtilCore.findModuleForPsiElement(element);
+    return module != null ? moduleScope(module) : GlobalSearchScope.projectScope(element.getProject());
+  }
+
+  @NotNull
+  public static GlobalSearchScope moduleScope(@NotNull Module module) {
+    return GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module).uniteWith(module.getModuleContentWithDependenciesScope());
   }
 }

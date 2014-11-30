@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,6 @@ import com.intellij.patterns.ElementPattern;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.patterns.PsiFilePattern;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
@@ -196,7 +195,7 @@ public class GoCompletionContributor extends CompletionContributor implements Du
               Project project = parent.getProject();
               for (String name : StubIndex.getInstance().getAllKeys(GoFunctionIndex.KEY, project)) {
                 if (StringUtil.isCapitalized(name) && !StringUtil.startsWith(name, "Test") && !StringUtil.startsWith(name, "Benchmark")) {
-                  for (GoFunctionDeclaration declaration : GoFunctionIndex.find(name, project, GlobalSearchScope.allScope(project))) {
+                  for (GoFunctionDeclaration declaration : GoFunctionIndex.find(name, project, GoUtil.moduleScope(position))) {
                     if (!allowed(declaration)) continue;
                     result.addElement(GoPsiImplUtil.createFunctionOrMethodLookupElement(declaration, true, FUNC_INSERT_HANDLER));
                   }
@@ -212,7 +211,7 @@ public class GoCompletionContributor extends CompletionContributor implements Du
               Project project = parent.getProject();
               for (String name : StubIndex.getInstance().getAllKeys(GoTypesIndex.KEY, project)) {
                 if (StringUtil.isCapitalized(name)) {
-                  for (GoTypeSpec declaration : GoTypesIndex.find(name, project, GlobalSearchScope.allScope(project))) {
+                  for (GoTypeSpec declaration : GoTypesIndex.find(name, project, GoUtil.moduleScope(position))) {
                     if (declaration.getContainingFile() == parameters.getOriginalFile()) continue;
                     PsiReference reference = parent.getReference();
                     if (reference instanceof GoTypeReference && !((GoTypeReference)reference).allowed(declaration)) continue;

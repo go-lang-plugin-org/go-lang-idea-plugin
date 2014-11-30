@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import com.goide.psi.GoImportList;
 import com.goide.psi.GoReferenceExpression;
 import com.goide.psi.GoTypeReferenceExpression;
 import com.goide.stubs.index.GoPackagesIndex;
+import com.goide.util.GoUtil;
 import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.codeInsight.hint.QuestionAction;
 import com.intellij.codeInsight.intention.HighPriorityAction;
@@ -32,8 +33,6 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.keymap.KeymapUtil;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.util.TextRange;
@@ -168,7 +167,8 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
   @NotNull
   private Collection<String> getPackagesToImport(@NotNull PsiElement element) {
     if (myPackagesToImport == null) {
-      Collection<GoFile> es = StubIndex.getElements(GoPackagesIndex.KEY, myPackageName, element.getProject(), scope(element), GoFile.class);
+      final GlobalSearchScope scope = GoUtil.moduleScope(element);
+      Collection<GoFile> es = StubIndex.getElements(GoPackagesIndex.KEY, myPackageName, element.getProject(), scope, GoFile.class);
       myPackagesToImport = ContainerUtil.skipNulls(ContainerUtil.map2Set(es, new Function<GoFile, String>() {
                                                                            @Nullable
                                                                            @Override
@@ -180,15 +180,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
     }
     return myPackagesToImport;
   }
-
-  @NotNull
-  private static GlobalSearchScope scope(@NotNull PsiElement element) {
-    Module module = ModuleUtilCore.findModuleForPsiElement(element);
-    return module != null
-           ? GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module)
-           : GlobalSearchScope.projectScope(element.getProject());
-  }
-
+  
   private void applyFix(@NotNull final Collection<String> packagesToImport, @NotNull final PsiFile file, @Nullable Editor editor) {
     isPerformed = true;
     if (packagesToImport.size() > 1 && editor != null) {

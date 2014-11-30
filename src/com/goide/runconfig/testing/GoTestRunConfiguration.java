@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import com.goide.runconfig.GoRunConfigurationBase;
 import com.goide.runconfig.GoRunner;
 import com.goide.runconfig.testing.ui.GoTestRunConfigurationEditorForm;
 import com.goide.stubs.index.GoPackagesIndex;
+import com.goide.util.GoUtil;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.*;
@@ -100,7 +101,7 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
       case PACKAGE:
         Module module = configurationModule.getModule();
         assert module != null;
-        final GlobalSearchScope scope = GlobalSearchScope.moduleScope(module);
+        final GlobalSearchScope scope = GoUtil.moduleScope(module);
         String packageName = PathUtil.getFileName(myPackage);
         Collection<GoFile> files = StubIndex.getElements(GoPackagesIndex.KEY, packageName, getProject(), scope, GoFile.class);
         for (GoFile file : files) {
