@@ -22,7 +22,6 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateManager;
-import com.intellij.codeInsight.template.impl.TemplateManagerImpl;
 import com.intellij.codeInsight.template.impl.TemplateSettings;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorModificationUtil;
@@ -93,12 +92,11 @@ public class GoKeywordCompletionProvider extends CompletionProvider<CompletionPa
     return new InsertHandler<LookupElement>() {
       @Override
       public void handleInsert(@NotNull InsertionContext context, LookupElement item) {
-        TemplateManagerImpl templateManager = (TemplateManagerImpl)TemplateManager.getInstance(context.getProject());
         Template template = TemplateSettings.getInstance().getTemplateById(templateId);
         Editor editor = context.getEditor();
         if (template != null) {
           editor.getDocument().deleteString(context.getStartOffset(), context.getTailOffset());
-          templateManager.startTemplate(editor, template);
+          TemplateManager.getInstance(context.getProject()).startTemplate(editor, template);
         }
         else {
           final int currentOffset = editor.getCaretModel().getOffset();

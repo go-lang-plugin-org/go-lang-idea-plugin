@@ -23,7 +23,6 @@ import com.intellij.codeInsight.generation.actions.GenerateActionPopupTemplateIn
 import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateManager;
-import com.intellij.codeInsight.template.impl.TemplateManagerImpl;
 import com.intellij.codeInsight.template.impl.TemplateSettings;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.DataContext;
@@ -71,10 +70,9 @@ abstract public class GenerateTestActionBase extends CodeInsightAction implement
     public void invoke(@NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file) {
       if (!CommonRefactoringUtil.checkReadOnlyStatus(file)) return;
 
-      TemplateManagerImpl templateManager = (TemplateManagerImpl)TemplateManager.getInstance(project);
       Template template = TemplateSettings.getInstance().getTemplateById("go_lang_" + myType.name().toLowerCase());
       if (template != null) {
-        templateManager.startTemplate(editor, template);
+        TemplateManager.getInstance(project).startTemplate(editor, template);
       }
       else {
         HintManager.getInstance().showErrorHint(editor, "No template found for generator");
