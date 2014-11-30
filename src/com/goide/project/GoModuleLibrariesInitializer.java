@@ -64,41 +64,49 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
 
   @Override
   public void moduleAdded() {
-    if (ModuleUtil.getModuleType(myModule) == GoModuleType.getInstance()) {
+    if (isAppropriateModule()) {
       scheduleUpdate(0);
 
       myModule.getMessageBus().connect().subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
         public void rootsChanged(final ModuleRootEvent event) {
-          scheduleUpdate(UPDATE_DELAY);
+          scheduleUpdate();
         }
       });
     }
   }
+  
+  public void scheduleUpdate() {
+    scheduleUpdate(UPDATE_DELAY);
+  }
 
-  private void scheduleUpdate(int delay) {
+  public void scheduleUpdate(int delay) {
     myAlarm.addRequest(new Runnable() {
       public void run() {
-        final Set<String> libraryRootUrls = ContainerUtil.newLinkedHashSet();
-        VirtualFile[] contentRoots = ProjectRootManager.getInstance(myModule.getProject()).getContentRoots();
+        if (isAppropriateModule()) {
+          final Set<String> libraryRootUrls = ContainerUtil.newLinkedHashSet();
+          VirtualFile[] contentRoots = ProjectRootManager.getInstance(myModule.getProject()).getContentRoots();
 
-        final List<VirtualFile> candidates = GoSdkUtil.getGoPathsSources();
-        candidates.addAll(GoLibrariesService.getUserDefinedLibraries());
+          final List<VirtualFile> candidates = GoSdkUtil.getGoPathsSources();
+          candidates.addAll(GoLibrariesService.getUserDefinedLibraries(myModule));
 
-        for (VirtualFile file : candidates) {
-          addRootUrlsForGoPathFile(libraryRootUrls, contentRoots, file);
-        }
+          for (VirtualFile file : candidates) {
+            addRootUrlsForGoPathFile(libraryRootUrls, contentRoots, file);
+          }
 
-        synchronized (myLastHandledRoots) {
-          if (!myLastHandledRoots.equals(libraryRootUrls)) {
-            myLastHandledRoots.clear();
-            myLastHandledRoots.addAll(libraryRootUrls);
-
-            ApplicationManager.getApplication().invokeLater(new Runnable() {
-              @Override
-              public void run() {
-                attachLibraries(libraryRootUrls);
-              }
-            });
+          synchronized (myLastHandledRoots) {
+            if (!myLastHandledRoots.equals(libraryRootUrls)) {
+              myLastHandledRoots.clear();
+              myLastHandledRoots.addAll(libraryRootUrls);
+  
+              ApplicationManager.getApplication().invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                  if (isAppropriateModule()) {
+                    attachLibraries(libraryRootUrls);
+                  }
+                }
+              });
+            }
           }
         }
       }
@@ -107,6 +115,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
 
   private void attachLibraries(@NotNull final Set<String> libraryRootUrls) {
     ApplicationManager.getApplication().assertIsDispatchThread();
+    
     if (!libraryRootUrls.isEmpty()) {
       ApplicationManager.getApplication().runWriteAction(new Runnable() {
         @Override
@@ -238,6 +247,10 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
       });
       Notifications.Bus.notify(notification, project);
     }
+  }
+
+  private boolean isAppropriateModule() {
+    return !myModule.isDisposed() && ModuleUtil.getModuleType(myModule) == GoModuleType.getInstance();
   }
 
   @Override

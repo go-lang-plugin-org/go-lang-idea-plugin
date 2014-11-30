@@ -23,9 +23,12 @@ import com.intellij.openapi.components.StoragePathMacros;
 
 @State(
   name = "GoLibraries",
-  storages = @Storage(file = StoragePathMacros.APP_CONFIG)
+  storages = @Storage(file = StoragePathMacros.APP_CONFIG + "/goLibraries.xml")
 )
 public class GoApplicationLibrariesService extends GoLibrariesService {
+  public GoApplicationLibrariesService() {
+  }
+
   public static GoApplicationLibrariesService getInstance() {
     return ServiceManager.getService(GoApplicationLibrariesService.class);
   }

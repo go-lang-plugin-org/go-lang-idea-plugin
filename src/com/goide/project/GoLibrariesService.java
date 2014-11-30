@@ -28,38 +28,37 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.Set;
 
-public abstract class GoLibrariesService implements PersistentStateComponent<GoLibrariesService> {
-  @NotNull private Collection<String> myUrls = ContainerUtil.newArrayList();
+public abstract class GoLibrariesService implements PersistentStateComponent<GoLibrariesService.GoLibrariesState> {
+  private GoLibrariesState myState = new GoLibrariesState();
 
   @NotNull
   @Override
-  public GoLibrariesService getState() {
-    return this;
+  public GoLibrariesState getState() {
+    return myState;
   }
 
   @Override
-  public void loadState(GoLibrariesService state) {
-    XmlSerializerUtil.copyBean(state, this);
+  public void loadState(GoLibrariesState state) {
+    XmlSerializerUtil.copyBean(state, myState);
   }
-
-  @NotNull
-  public Collection<String> getUrls() {
-    return myUrls;
-  }
-
-  public void setUrls(@NotNull Collection<String> urls) {
-    myUrls = urls;
-  }
-
+  
   public static Collection<VirtualFile> getUserDefinedLibraries(@NotNull Module module) {
     final Set<VirtualFile> result = ContainerUtil.newHashSet();
-    result.addAll(filesFromUrls(GoModuleLibrariesService.getInstance(module).getUrls()));
+    result.addAll(filesFromUrls(GoModuleLibrariesService.getInstance(module).getLibraryRootUrls()));
     result.addAll(getUserDefinedLibraries());
     return result;
   }
 
+  public void setLibraryRootUrls(@NotNull Collection<String> libraryRootUrls) {
+    myState.setUrls(libraryRootUrls);
+  }
+
   public static Collection<? extends VirtualFile> getUserDefinedLibraries() {
-    return filesFromUrls(GoApplicationLibrariesService.getInstance().getUrls());
+    return filesFromUrls(GoApplicationLibrariesService.getInstance().getLibraryRootUrls());
+  }
+
+  public Collection<String> getLibraryRootUrls() {
+    return myState.getUrls();
   }
 
   private static Collection<? extends VirtualFile> filesFromUrls(Collection<String> urls) {
@@ -69,5 +68,18 @@ public abstract class GoLibrariesService implements PersistentStateComponent<GoL
         return VirtualFileManager.getInstance().findFileByUrl(url);
       }
     }));
+  }
+
+  public static class GoLibrariesState {
+    @NotNull private Collection<String> myUrls = ContainerUtil.newArrayList();
+
+    @NotNull
+    public Collection<String> getUrls() {
+      return myUrls;
+    }
+
+    public void setUrls(@NotNull Collection<String> urls) {
+      myUrls = urls;
+    }
   }
 }

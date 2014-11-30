@@ -28,12 +28,6 @@ import org.jetbrains.annotations.NotNull;
   storages = @Storage(file = StoragePathMacros.MODULE_FILE)
 )
 public class GoModuleLibrariesService extends GoLibrariesService {
-  @NotNull private final Module myModule;
-  
-  public GoModuleLibrariesService(@NotNull Module module) {
-    myModule = module;
-  }
-
   public static GoModuleLibrariesService getInstance(@NotNull Module module) {
     return ModuleServiceManager.getService(module, GoModuleLibrariesService.class);
   }

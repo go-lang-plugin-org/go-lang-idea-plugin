@@ -20,10 +20,7 @@ import com.goide.GoModuleType;
 import com.intellij.application.options.ModuleAwareProjectConfigurable;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
-import com.intellij.openapi.options.CompositeConfigurable;
-import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ConfigurableProvider;
-import com.intellij.openapi.options.UnnamedConfigurable;
+import com.intellij.openapi.options.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -62,10 +59,10 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
           final JPanel componentPanel = new JPanel(new BorderLayout());
           componentPanel.add(component, BorderLayout.CENTER);
           if (configurable instanceof ModuleAwareProjectConfigurable) {
-            componentPanel.setBorder(IdeBorderFactory.createTitledBorder("Module-specific Libraries"));
+            componentPanel.setBorder(IdeBorderFactory.createTitledBorder("Module-specific libraries"));
           }
           else {
-            componentPanel.setBorder(IdeBorderFactory.createTitledBorder("Application-wide Libraries"));
+            componentPanel.setBorder(IdeBorderFactory.createTitledBorder("Application-wide libraries"));
           }
           panel.add(componentPanel, new GridConstraints(i, 0, 1, 1, 0, GridConstraints.FILL_BOTH,
                                                         GridConstraints.SIZEPOLICY_CAN_GROW |
@@ -76,6 +73,14 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
         }
         panel.revalidate();
         return panel;
+      }
+
+      @Override
+      public void apply() throws ConfigurationException {
+        super.apply();
+        for (Module module : ModuleUtil.getModulesOfType(myProject, GoModuleType.getInstance())) {
+          module.getComponent(GoModuleLibrariesInitializer.class).scheduleUpdate();
+        }
       }
 
       @Nls

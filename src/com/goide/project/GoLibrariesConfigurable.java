@@ -16,38 +16,125 @@
 
 package com.goide.project;
 
+import com.intellij.openapi.fileChooser.FileChooserDialog;
+import com.intellij.openapi.fileChooser.FileChooserFactory;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.UnnamedConfigurable;
+import com.intellij.openapi.util.Iconable;
+import com.intellij.openapi.vfs.VfsUtilCore;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.ui.*;
+import com.intellij.ui.components.JBList;
+import com.intellij.util.IconUtil;
+import com.intellij.util.containers.ContainerUtil;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.awt.*;
+import java.util.List;
+
+import static com.intellij.openapi.fileChooser.FileChooserDescriptorFactory.createMultipleFoldersDescriptor;
 
 public class GoLibrariesConfigurable implements UnnamedConfigurable {
   private final GoLibrariesService myLibrariesService;
+  private final JPanel myPanel = new JPanel(new BorderLayout());
+  private final CollectionListModel<String> myListModel = new CollectionListModel<String>();
 
-  public GoLibrariesConfigurable(GoLibrariesService librariesService) {
+  public GoLibrariesConfigurable(@NotNull GoLibrariesService librariesService) {
     myLibrariesService = librariesService;
+
+    final JBList filesList = new JBList(myListModel);
+    filesList.setCellRenderer(new ColoredListCellRenderer() {
+      @Override
+      protected void customizeCellRenderer(JList list, Object value, int index, boolean selected, boolean hasFocus) {
+        final String url = value.toString();
+        final VirtualFile file = VirtualFileManager.getInstance().findFileByUrl(url);
+        if (file != null) {
+          append(file.getPath());
+          setIcon(IconUtil.getIcon(file, Iconable.ICON_FLAG_READ_STATUS, null));
+        }
+        else {
+          append(VfsUtilCore.urlToPath(url), SimpleTextAttributes.ERROR_ATTRIBUTES);
+        }
+      }
+    });
+
+    final ToolbarDecorator decorator = ToolbarDecorator.createDecorator(filesList)
+      .setAddAction(new AnActionButtonRunnable() {
+        @Override
+        public void run(AnActionButton button) {
+          final FileChooserDialog fileChooser = FileChooserFactory.getInstance()
+            .createFileChooser(createMultipleFoldersDescriptor(), null, filesList);
+
+          VirtualFile fileToSelect = null;
+          final String lastItem = ContainerUtil.getLastItem(myListModel.getItems());
+          if (lastItem != null) {
+            fileToSelect = VirtualFileManager.getInstance().findFileByUrl(lastItem);
+          }
+
+          final VirtualFile[] newDirectories = fileChooser.choose(null, fileToSelect);
+          if (newDirectories.length > 0) {
+            for (final VirtualFile newDirectory : newDirectories) {
+              final String newDirectoryUrl = newDirectory.getUrl();
+              boolean alreadyAdded = false;
+              List<String> items = myListModel.getItems();
+              for (String item : items) {
+                if (newDirectoryUrl.equals(item)) {
+                  filesList.clearSelection();
+                  filesList.setSelectedValue(item, true);
+                  scrollToSelection(filesList);
+                  alreadyAdded = true;
+                  break;
+                }
+              }
+              if (!alreadyAdded) {
+                myListModel.add(newDirectoryUrl);
+              }
+            }
+          }
+        }
+      })
+      .setRemoveAction(new AnActionButtonRunnable() {
+        @Override
+        public void run(AnActionButton button) {
+          for (Object selectedValue : filesList.getSelectedValues()) {
+            myListModel.remove(selectedValue.toString());
+          }
+        }
+      })
+      .disableUpDownActions();
+    myPanel.add(decorator.createPanel(), BorderLayout.CENTER);
+  }
+
+  private static void scrollToSelection(JList list) {
+    int selectedRow = list.getSelectedIndex();
+    if (selectedRow >= 0) {
+      list.scrollRectToVisible(list.getCellBounds(selectedRow, 0));
+    }
   }
 
   @Nullable
   @Override
   public JComponent createComponent() {
-    return new JPanel();
+    return myPanel;
   }
 
   @Override
   public boolean isModified() {
-    return false;
+    return !ContainerUtil.newHashSet(myListModel.getItems()).equals(ContainerUtil.newHashSet(myLibrariesService.getLibraryRootUrls()));
   }
 
   @Override
   public void apply() throws ConfigurationException {
-
+    myLibrariesService.setLibraryRootUrls(ContainerUtil.newHashSet(myListModel.getItems()));
   }
 
   @Override
   public void reset() {
-
+    myListModel.removeAll();
+    myListModel.add(ContainerUtil.newArrayList(myLibrariesService.getLibraryRootUrls()));
   }
 
   @Override
