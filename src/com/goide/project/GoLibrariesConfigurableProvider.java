@@ -20,14 +20,22 @@ import com.goide.GoModuleType;
 import com.intellij.application.options.ModuleAwareProjectConfigurable;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
-import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ConfigurableProvider;
-import com.intellij.openapi.options.UnnamedConfigurable;
+import com.intellij.openapi.options.*;
 import com.intellij.openapi.project.Project;
+import com.intellij.ui.IdeBorderFactory;
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.intellij.util.containers.ContainerUtil;
+import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
+
 public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
+  public static final String DISPLAY_NAME = "Go Libraries";
   @NotNull private final Project myProject;
 
   public GoLibrariesConfigurableProvider(@NotNull Project project) {
@@ -37,18 +45,95 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
   @Nullable
   @Override
   public Configurable createConfigurable() {
-    return new ModuleAwareProjectConfigurable(myProject, "Go Libraries", "Go Libraries") {
+    return new CompositeConfigurable<UnnamedConfigurable>() {
 
+      @Nullable
       @Override
-      protected boolean isSuitableForModule(@NotNull Module module) {
-        return ModuleUtil.getModuleType(module) == GoModuleType.getInstance();
+      public JComponent createComponent() {
+        final List<UnnamedConfigurable> configurables = getConfigurables();
+        JPanel panel = new JPanel(new GridLayoutManager(configurables.size(), 1, new Insets(0, 0, 10, 0), -1, -1));
+        for (int i = 0; i < configurables.size(); i++) {
+          UnnamedConfigurable configurable = configurables.get(i);
+          final JComponent component = configurable.createComponent();
+          assert component != null;
+          final JPanel componentPanel = new JPanel(new BorderLayout());
+          componentPanel.add(component, BorderLayout.CENTER);
+          if (configurable instanceof ModuleAwareProjectConfigurable) {
+            componentPanel.setBorder(IdeBorderFactory.createTitledBorder("Module Specific Libraries"));
+          }
+          else {
+            componentPanel.setBorder(IdeBorderFactory.createTitledBorder("Application Wide Libraries"));
+          }
+          panel.add(componentPanel, new GridConstraints(i, 0, 1, 1, 0, GridConstraints.FILL_BOTH,
+                                                        GridConstraints.SIZEPOLICY_CAN_GROW |
+                                                        GridConstraints.SIZEPOLICY_WANT_GROW |
+                                                        GridConstraints.SIZEPOLICY_CAN_SHRINK,
+                                                        GridConstraints.SIZEPOLICY_CAN_GROW | GridConstraints.SIZEPOLICY_CAN_SHRINK,
+                                                        new Dimension(-1, -1), new Dimension(-1, -1), new Dimension(-1, -1)));
+        }
+        panel.revalidate();
+        return panel;
       }
 
-      @NotNull
+      @Nls
       @Override
-      protected UnnamedConfigurable createModuleConfigurable(Module module) {
-        return new GoLibrariesConfigurable(module);
+      public String getDisplayName() {
+        return DISPLAY_NAME;
+      }
+
+      @Nullable
+      @Override
+      public String getHelpTopic() {
+        return null;
+      }
+
+      @Override
+      protected List<UnnamedConfigurable> createConfigurables() {
+        final List<UnnamedConfigurable> result = ContainerUtil.newArrayList();
+        result.add(new GoApplicationWideConfigurable());
+        result.add(new ModuleAwareProjectConfigurable(myProject, DISPLAY_NAME, DISPLAY_NAME) {
+
+          @Override
+          protected boolean isSuitableForModule(@NotNull Module module) {
+            return ModuleUtil.getModuleType(module) == GoModuleType.getInstance();
+          }
+
+          @NotNull
+          @Override
+          protected UnnamedConfigurable createModuleConfigurable(Module module) {
+            return new GoLibrariesConfigurable(module);
+          }
+        });
+        return result;
       }
     };
+  }
+
+  private static class GoApplicationWideConfigurable implements UnnamedConfigurable {
+    @Nullable
+    @Override
+    public JComponent createComponent() {
+      return new JPanel();
+    }
+
+    @Override
+    public boolean isModified() {
+      return false;
+    }
+
+    @Override
+    public void apply() throws ConfigurationException {
+
+    }
+
+    @Override
+    public void reset() {
+
+    }
+
+    @Override
+    public void disposeUIResources() {
+
+    }
   }
 }

@@ -18,44 +18,16 @@ package com.goide.project;
 
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.options.SearchableConfigurable;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.openapi.options.UnnamedConfigurable;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-public class GoLibrariesConfigurable implements SearchableConfigurable {
-  public static final String DISPLAY_NAME = "Go Libraries";
-  
+public class GoLibrariesConfigurable implements UnnamedConfigurable {
   private final Module myModule;
 
   public GoLibrariesConfigurable(Module module) {
     myModule = module;
-  }
-
-  @NotNull
-  @Override
-  public String getId() {
-    return "go.libraries.configurable";
-  }
-
-  @Nullable
-  @Override
-  public Runnable enableSearch(String s) {
-    return null;
-  }
-
-  @Nls
-  @Override
-  public String getDisplayName() {
-    return DISPLAY_NAME;
-  }
-
-  @Nullable
-  @Override
-  public String getHelpTopic() {
-    return null;
   }
 
   @Nullable

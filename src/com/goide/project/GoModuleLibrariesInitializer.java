@@ -234,7 +234,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
         @Override
         protected void hyperlinkActivated(@NotNull Notification notification, @NotNull HyperlinkEvent event) {
           if (event.getDescription().equals("configure") && !project.isDisposed()) {
-            ShowSettingsUtil.getInstance().showSettingsDialog(project, GoLibrariesConfigurable.DISPLAY_NAME);
+            ShowSettingsUtil.getInstance().showSettingsDialog(project, GoLibrariesConfigurableProvider.DISPLAY_NAME);
           }
         }
       });
