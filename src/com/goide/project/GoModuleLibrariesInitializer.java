@@ -39,6 +39,7 @@ import com.intellij.openapi.roots.libraries.LibraryTable;
 import com.intellij.openapi.roots.libraries.LibraryTablesRegistrar;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.util.Alarm;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,6 +51,8 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   private static final String GO_LIB_NAME = "GOPATH";
   private static final Logger LOG = Logger.getInstance(GoModuleLibrariesInitializer.class);
   private static final String GO_LIBRARIES_NOTIFICATION_HAD_BEEN_SHOWN = "go.libraries.notification.had.been.shown";
+  public static final int UPDATE_DELAY = 300;
+  private final Alarm myAlarm;
   
   @NotNull private final Set<String> myLastHandledRoots = ContainerUtil.newHashSet();
   @NotNull private final Module myModule;
@@ -58,56 +61,61 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   public GoModuleLibrariesInitializer(@NotNull Module module, @NotNull GoLibrariesService userDefinedLibrariesProvider) {
     myModule = module;
     myLibrariesProvider = userDefinedLibrariesProvider;
+    myAlarm = new Alarm(Alarm.ThreadToUse.POOLED_THREAD, myModule);
   }
 
   @Override
   public void moduleAdded() {
     if (ModuleUtil.getModuleType(myModule) == GoModuleType.getInstance()) {
-      discoverAndAttachGoLibraries();
+      scheduleUpdate(0);
 
       myModule.getMessageBus().connect().subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
         public void rootsChanged(final ModuleRootEvent event) {
-          ApplicationManager.getApplication().invokeLater(new Runnable() {
-            @Override
-            public void run() {
-              discoverAndAttachGoLibraries();
-            }
-          });
+          scheduleUpdate(UPDATE_DELAY);
         }
       });
     }
   }
 
-  private void discoverAndAttachGoLibraries() {
+  private void scheduleUpdate(int delay) {
+    myAlarm.addRequest(new Runnable() {
+      public void run() {
+        final Set<String> libraryRootUrls = ContainerUtil.newLinkedHashSet();
+        VirtualFile[] contentRoots = ProjectRootManager.getInstance(myModule.getProject()).getContentRoots();
+
+        final List<VirtualFile> candidates = GoSdkUtil.getGoPathsSources();
+        candidates.addAll(myLibrariesProvider.getUserDefinedLibraries());
+
+        for (VirtualFile file : candidates) {
+          addRootUrlsForGoPathFile(libraryRootUrls, contentRoots, file);
+        }
+
+        synchronized (myLastHandledRoots) {
+          if (!myLastHandledRoots.equals(libraryRootUrls)) {
+            myLastHandledRoots.clear();
+            myLastHandledRoots.addAll(libraryRootUrls);
+
+            ApplicationManager.getApplication().invokeLater(new Runnable() {
+              @Override
+              public void run() {
+                attachLibraries(libraryRootUrls);
+              }
+            });
+          }
+        }
+      }
+    }, delay);
+  }
+
+  private void attachLibraries(@NotNull final Set<String> libraryRootUrls) {
     ApplicationManager.getApplication().assertIsDispatchThread();
-
-    final Set<String> libraryRootUrls = ContainerUtil.newLinkedHashSet();
-    VirtualFile[] contentRoots = ProjectRootManager.getInstance(myModule.getProject()).getContentRoots();
-    
-    final List<VirtualFile> candidates = GoSdkUtil.getGoPathsSources();
-    candidates.addAll(myLibrariesProvider.getUserDefinedLibraries());
-    
-    for (VirtualFile file : candidates) {
-      addRootUrlsForGoPathFile(libraryRootUrls, contentRoots, file);
-    }
-
-    synchronized (myLastHandledRoots) {
-      if (!myLastHandledRoots.equals(libraryRootUrls)) {
-        myLastHandledRoots.clear();
-        myLastHandledRoots.addAll(libraryRootUrls);
-      }
-      else {
-        return;
-      }
-    }
-
     if (!libraryRootUrls.isEmpty()) {
       ApplicationManager.getApplication().runWriteAction(new Runnable() {
         @Override
         public void run() {
           final ModuleRootManager model = ModuleRootManager.getInstance(myModule);
-          final LibraryOrderEntry goLibraryEntry = OrderEntryUtil.findLibraryOrderEntry(model, GO_LIB_NAME);
-          
+          final LibraryOrderEntry goLibraryEntry = OrderEntryUtil.findLibraryOrderEntry(model, getLibraryName());
+
           if (goLibraryEntry != null && goLibraryEntry.isValid()) {
             final Library goLibrary = goLibraryEntry.getLibrary();
             if (goLibrary != null && !((LibraryEx)goLibrary).isDisposed()) {
@@ -115,7 +123,10 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
             }
           }
           else {
-            createAndFillLibrary(libraryRootUrls);
+            final LibraryTable libraryTable = LibraryTablesRegistrar.getInstance().getLibraryTable(myModule.getProject());
+            final Library library = libraryTable.createLibrary(getLibraryName());
+            fillLibrary(library, libraryRootUrls);
+            ModuleRootModificationUtil.addDependency(myModule, library);
           }
         }
       });
@@ -126,13 +137,8 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     }
   }
 
-  private void createAndFillLibrary(@NotNull Set<String> libraryRootUrls) {
-    ApplicationManager.getApplication().assertWriteAccessAllowed();
-    
-    final LibraryTable libraryTable = LibraryTablesRegistrar.getInstance().getLibraryTable(myModule.getProject());
-    final Library library = libraryTable.createLibrary(GO_LIB_NAME);
-    fillLibrary(library, libraryRootUrls);
-    ModuleRootModificationUtil.addDependency(myModule, library);
+  private String getLibraryName() {
+    return GO_LIB_NAME + " <" + myModule.getName() + ">";
   }
 
   private static void fillLibrary(@NotNull Library library, @NotNull Set<String> libraryRootUrls) {
