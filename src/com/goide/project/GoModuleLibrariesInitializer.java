@@ -51,7 +51,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   private static final String GO_LIB_NAME = "GOPATH";
   private static final Logger LOG = Logger.getInstance(GoModuleLibrariesInitializer.class);
   private static final String GO_LIBRARIES_NOTIFICATION_HAD_BEEN_SHOWN = "go.libraries.notification.had.been.shown";
-  public static final int UPDATE_DELAY = 300;
+  private static final int UPDATE_DELAY = 300;
   private final Alarm myAlarm;
   
   @NotNull private final Set<String> myLastHandledRoots = ContainerUtil.newHashSet();
