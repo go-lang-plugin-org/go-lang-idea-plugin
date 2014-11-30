@@ -16,7 +16,6 @@
 
 package com.goide.project;
 
-import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.UnnamedConfigurable;
 import org.jetbrains.annotations.Nullable;
@@ -24,10 +23,10 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 
 public class GoLibrariesConfigurable implements UnnamedConfigurable {
-  private final Module myModule;
+  private final GoLibrariesService myLibrariesService;
 
-  public GoLibrariesConfigurable(Module module) {
-    myModule = module;
+  public GoLibrariesConfigurable(GoLibrariesService librariesService) {
+    myLibrariesService = librariesService;
   }
 
   @Nullable

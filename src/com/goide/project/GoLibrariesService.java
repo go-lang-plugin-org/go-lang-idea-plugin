@@ -16,21 +16,58 @@
 
 package com.goide.project;
 
+import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleServiceManager;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.util.Function;
+import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.Set;
 
-public class GoLibrariesService {
-  public static GoLibrariesService getInstance(@NotNull Module module) {
-    return ModuleServiceManager.getService(module, GoLibrariesService.class);
+public abstract class GoLibrariesService implements PersistentStateComponent<GoLibrariesService> {
+  @NotNull private Collection<String> myUrls = ContainerUtil.newArrayList();
+
+  @NotNull
+  @Override
+  public GoLibrariesService getState() {
+    return this;
+  }
+
+  @Override
+  public void loadState(GoLibrariesService state) {
+    XmlSerializerUtil.copyBean(state, this);
   }
 
   @NotNull
-  public Collection<VirtualFile> getUserDefinedLibraries() {
-    return Collections.emptyList();
+  public Collection<String> getUrls() {
+    return myUrls;
+  }
+
+  public void setUrls(@NotNull Collection<String> urls) {
+    myUrls = urls;
+  }
+
+  public static Collection<VirtualFile> getUserDefinedLibraries(@NotNull Module module) {
+    final Set<VirtualFile> result = ContainerUtil.newHashSet();
+    result.addAll(filesFromUrls(GoModuleLibrariesService.getInstance(module).getUrls()));
+    result.addAll(getUserDefinedLibraries());
+    return result;
+  }
+
+  public static Collection<? extends VirtualFile> getUserDefinedLibraries() {
+    return filesFromUrls(GoApplicationLibrariesService.getInstance().getUrls());
+  }
+
+  private static Collection<? extends VirtualFile> filesFromUrls(Collection<String> urls) {
+    return ContainerUtil.skipNulls(ContainerUtil.map2Set(urls, new Function<String, VirtualFile>() {
+      @Override
+      public VirtualFile fun(String url) {
+        return VirtualFileManager.getInstance().findFileByUrl(url);
+      }
+    }));
   }
 }

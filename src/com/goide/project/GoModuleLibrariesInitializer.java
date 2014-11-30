@@ -56,11 +56,9 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   
   @NotNull private final Set<String> myLastHandledRoots = ContainerUtil.newHashSet();
   @NotNull private final Module myModule;
-  @NotNull private final GoLibrariesService myLibrariesProvider;
 
-  public GoModuleLibrariesInitializer(@NotNull Module module, @NotNull GoLibrariesService userDefinedLibrariesProvider) {
+  public GoModuleLibrariesInitializer(@NotNull Module module) {
     myModule = module;
-    myLibrariesProvider = userDefinedLibrariesProvider;
     myAlarm = new Alarm(Alarm.ThreadToUse.POOLED_THREAD, myModule);
   }
 
@@ -84,7 +82,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
         VirtualFile[] contentRoots = ProjectRootManager.getInstance(myModule.getProject()).getContentRoots();
 
         final List<VirtualFile> candidates = GoSdkUtil.getGoPathsSources();
-        candidates.addAll(myLibrariesProvider.getUserDefinedLibraries());
+        candidates.addAll(GoLibrariesService.getUserDefinedLibraries());
 
         for (VirtualFile file : candidates) {
           addRootUrlsForGoPathFile(libraryRootUrls, contentRoots, file);

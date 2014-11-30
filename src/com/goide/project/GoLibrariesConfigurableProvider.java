@@ -20,7 +20,10 @@ import com.goide.GoModuleType;
 import com.intellij.application.options.ModuleAwareProjectConfigurable;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
-import com.intellij.openapi.options.*;
+import com.intellij.openapi.options.CompositeConfigurable;
+import com.intellij.openapi.options.Configurable;
+import com.intellij.openapi.options.ConfigurableProvider;
+import com.intellij.openapi.options.UnnamedConfigurable;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -59,10 +62,10 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
           final JPanel componentPanel = new JPanel(new BorderLayout());
           componentPanel.add(component, BorderLayout.CENTER);
           if (configurable instanceof ModuleAwareProjectConfigurable) {
-            componentPanel.setBorder(IdeBorderFactory.createTitledBorder("Module Specific Libraries"));
+            componentPanel.setBorder(IdeBorderFactory.createTitledBorder("Module-specific Libraries"));
           }
           else {
-            componentPanel.setBorder(IdeBorderFactory.createTitledBorder("Application Wide Libraries"));
+            componentPanel.setBorder(IdeBorderFactory.createTitledBorder("Application-wide Libraries"));
           }
           panel.add(componentPanel, new GridConstraints(i, 0, 1, 1, 0, GridConstraints.FILL_BOTH,
                                                         GridConstraints.SIZEPOLICY_CAN_GROW |
@@ -90,7 +93,7 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
       @Override
       protected List<UnnamedConfigurable> createConfigurables() {
         final List<UnnamedConfigurable> result = ContainerUtil.newArrayList();
-        result.add(new GoApplicationWideConfigurable());
+        result.add(new GoLibrariesConfigurable(GoApplicationLibrariesService.getInstance()));
         result.add(new ModuleAwareProjectConfigurable(myProject, DISPLAY_NAME, DISPLAY_NAME) {
 
           @Override
@@ -101,39 +104,11 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
           @NotNull
           @Override
           protected UnnamedConfigurable createModuleConfigurable(Module module) {
-            return new GoLibrariesConfigurable(module);
+            return new GoLibrariesConfigurable(GoModuleLibrariesService.getInstance(module));
           }
         });
         return result;
       }
     };
-  }
-
-  private static class GoApplicationWideConfigurable implements UnnamedConfigurable {
-    @Nullable
-    @Override
-    public JComponent createComponent() {
-      return new JPanel();
-    }
-
-    @Override
-    public boolean isModified() {
-      return false;
-    }
-
-    @Override
-    public void apply() throws ConfigurationException {
-
-    }
-
-    @Override
-    public void reset() {
-
-    }
-
-    @Override
-    public void disposeUIResources() {
-
-    }
   }
 }

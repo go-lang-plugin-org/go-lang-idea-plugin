@@ -45,7 +45,8 @@
     <internalFileTemplate name="Go File"/>
     
     <!-- project -->
-    <moduleService serviceImplementation="com.goide.project.GoLibrariesService"/>
+    <applicationService serviceImplementation="com.goide.project.GoApplicationLibrariesService"/>
+    <moduleService serviceImplementation="com.goide.project.GoModuleLibrariesService"/>
     <projectConfigurable groupId="language" provider="com.goide.project.GoLibrariesConfigurableProvider" nonDefaultProject="true"/>
     
     <defaultLiveTemplatesProvider implementation="com.goide.template.GoLiveTemplatesProvider"/>
