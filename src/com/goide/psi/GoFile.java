@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,6 +66,13 @@ public class GoFile extends PsiFileBase {
       String fullPackageName = FileUtil.getRelativePath(root.getPath(), virtualFile.getPath(), '/');
       if (fullPackageName != null && StringUtil.containsChar(fullPackageName, '/')) {
         return PathUtil.getParentPath(fullPackageName);
+      }
+    }
+    else {
+      final String path = PathUtil.getParentPath(virtualFile.getPath());
+      final int srcFolder = path.indexOf("/src/");
+      if (srcFolder > -1) {
+        return StringUtil.nullize(path.substring(srcFolder + 5));
       }
     }
     return null;
