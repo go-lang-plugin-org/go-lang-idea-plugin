@@ -28,9 +28,11 @@ import java.util.List;
 import static com.intellij.util.containers.ContainerUtil.newArrayList;
 
 public class GoVarResolveTest extends GoCodeInsightFixtureTestCase {
+  private static final String USAGE = "/*usage*/";
+
   private void doTest(String text) {
-    List<Integer> offsets = allOccurrences(StringUtil.replace(text, "<caret>", ""), "<usage>");
-    String replace = StringUtil.replace(text, "<usage>", "");
+    List<Integer> offsets = allOccurrences(StringUtil.replace(text, "<caret>", ""), USAGE);
+    String replace = StringUtil.replace(text, USAGE, "");
     myFixture.configureByText("a.go", replace);
     PsiElement atCaret = myFixture.getElementAtCaret();
     List<Integer> actual = ContainerUtil.map(myFixture.findUsages(atCaret), new Function<UsageInfo, Integer>() {
@@ -59,7 +61,7 @@ public class GoVarResolveTest extends GoCodeInsightFixtureTestCase {
            "    y := 1\n" +
            "    {\n" +
            "        <caret>y, _ := 10, 1\n" +
-           "        fmt.Println(<usage>y)\n" +
+           "        fmt.Println(/*usage*/y)\n" +
            "    }\n" +
            "}\n");
   }
@@ -68,9 +70,9 @@ public class GoVarResolveTest extends GoCodeInsightFixtureTestCase {
     doTest("package p\n" +
            "func test2() {\n" +
            "    <caret>y := 1\n" +
-           "    <usage>y, _ := 10, 1\n" +
-           "    <usage>y, x := 10, 1\n" +
-           "    fmt.Println(<usage>y)\n" +
+           "    /*usage*/y, _ := 10, 1\n" +
+           "    /*usage*/y, x := 10, 1\n" +
+           "    fmt.Println(/*usage*/y)\n" +
            "}\n");
   }
 
@@ -88,9 +90,9 @@ public class GoVarResolveTest extends GoCodeInsightFixtureTestCase {
   public void testFunctionParam() {
     doTest("package p\n" +
            "func aaa(<caret>a int) {\n" +
-           "    <usage>a\n" +
+           "    /*usage*/a\n" +
            "    var a int\n" +
-           "    <usage>a := 1\n" +
+           "    /*usage*/a := 1\n" +
            "}\n");
   }
   
@@ -100,7 +102,7 @@ public class GoVarResolveTest extends GoCodeInsightFixtureTestCase {
            "func main() {\n" +
            "    key := 1\n" +
            "    for <caret>key, val := range m {\n" +
-           "        y := <usage>key\n" +
+           "        y := /*usage*/key\n" +
            "    }\n" +
            "}");
   }
