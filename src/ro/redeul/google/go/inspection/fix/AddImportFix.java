@@ -19,6 +19,7 @@ import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.autoImport.GoReferenceImporter;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPackage;
@@ -42,7 +43,7 @@ public class AddImportFix extends LocalQuickFixAndIntentionActionOnPsiElement im
     public static final ListCellRendererWrapper<String> ImportPathCellRenderer = new ListCellRendererWrapper<String>() {
         @Override
         public void customize(JList list, String value, int index, boolean selected, boolean hasFocus) {
-            setText("import \"" + value + "\"");
+            setText(GoBundle.message("fix.add.import.text", value));
             setIcon(AllIcons.Nodes.Package);
         }
     };
@@ -99,7 +100,7 @@ public class AddImportFix extends LocalQuickFixAndIntentionActionOnPsiElement im
 
         if (editor != null)
             new PopupChooserBuilder(list)
-                    .setTitle("Choose package path")
+                    .setTitle(GoBundle.message("fix.add.import.choose.package.path"))
                     .setItemChoosenCallback(importCreatorRunnable)
                     .createPopup()
                     .showInBestPositionFor(editor);
@@ -110,13 +111,13 @@ public class AddImportFix extends LocalQuickFixAndIntentionActionOnPsiElement im
     @NotNull
     @Override
     public String getText() {
-        return "import package \"" + getStartElement().getText() + "\"";
+        return GoBundle.message("fix.add.import.text", getStartElement().getText());
     }
 
     @NotNull
     @Override
     public String getFamilyName() {
-        return "Add imports for package references";
+        return GoBundle.message("fix.add.import.family.name");
     }
 
     @Nullable
@@ -140,7 +141,7 @@ public class AddImportFix extends LocalQuickFixAndIntentionActionOnPsiElement im
 
         HintManager.getInstance().showQuestionHint(
                 editor,
-                "import package: \"" + importPaths.get(0) + "\"",
+                GoBundle.message("fix.add.import.text", importPaths.get(0)),
                 element.getTextOffset(),
                 element.getTextOffset() + element.getTextLength(),
                 this);
