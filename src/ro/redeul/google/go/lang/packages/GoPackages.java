@@ -182,7 +182,7 @@ public class GoPackages extends AbstractProjectComponent {
 
         GoPackage targetPackage = getPackageFor(target);
 
-        if (targetPackage != null && !sourcePackage.equals(targetPackage)) {
+        if (!sourcePackage.equals(targetPackage)) {
             GoPackage builtin = GoPackages.getInstance(target.getProject()).getBuiltinPackage();
 
             if ( !builtin.equals(targetPackage))

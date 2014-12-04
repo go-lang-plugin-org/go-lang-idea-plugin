@@ -1,8 +1,5 @@
 package ro.redeul.google.go;
 
-import java.io.IOException;
-import java.util.List;
-
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -14,6 +11,9 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.util.GoTestUtils;
+
+import java.io.IOException;
+import java.util.List;
 
 @Ignore
 public abstract class GoEditorAwareTestCase extends GoLightCodeInsightFixtureTestCase {
@@ -66,23 +66,27 @@ public abstract class GoEditorAwareTestCase extends GoLightCodeInsightFixtureTes
                 .substring(caretOffset);
     }
 
-    private GoFile createGoFile(String fileText) {
+    private GoFile createGoFile(String text) {
         GoFile goFile;
+        String fileText = text;
+
         int startOffset = fileText.indexOf(GoTestUtils.MARKER_BEGIN);
-        if (startOffset != -1) {
-            fileText = GoTestUtils.removeBeginMarker(fileText);
-            int endOffset = fileText.indexOf(GoTestUtils.MARKER_END);
-            fileText = GoTestUtils.removeEndMarker(fileText);
-            goFile = (GoFile) myFixture.configureByText(GoFileType.INSTANCE,
-                    fileText);
-            myFixture.getEditor()
-                    .getSelectionModel()
-                    .setSelection(startOffset, endOffset);
-            myFixture.getEditor().getCaretModel().moveToOffset(endOffset);
-        } else {
-            goFile = (GoFile) myFixture.configureByText(GoFileType.INSTANCE,
-                    fileText);
+        if (startOffset == -1) {
+            return (GoFile) myFixture.configureByText(GoFileType.INSTANCE, fileText);
         }
+
+        fileText = GoTestUtils.removeBeginMarker(fileText);
+        int endOffset = fileText.indexOf(GoTestUtils.MARKER_END);
+        fileText = GoTestUtils.removeEndMarker(fileText);
+
+        goFile = (GoFile) myFixture.configureByText(GoFileType.INSTANCE, fileText);
+
+        myFixture.getEditor().getCaretModel().moveToOffset(endOffset);
+
+        myFixture.getEditor()
+                .getSelectionModel()
+                .setSelection(startOffset, endOffset);
+
         return goFile;
     }
 

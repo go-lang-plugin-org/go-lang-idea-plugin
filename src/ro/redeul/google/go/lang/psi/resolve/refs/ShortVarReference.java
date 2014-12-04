@@ -1,8 +1,6 @@
 package ro.redeul.google.go.lang.psi.resolve.refs;
 
 import com.intellij.patterns.ElementPattern;
-import com.intellij.patterns.PsiElementPattern;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
@@ -29,7 +27,6 @@ public class ShortVarReference extends ReferenceWithSolver<GoLiteralIdentifier, 
                     .withParent(
                             psiElement(GoShortVarDeclaration.class)
                     );
-    public static final PsiElementPattern.Capture<PsiElement> SHORT_VAR_DECLARATION = psiElement().withParent(psiElement(GoShortVarDeclaration.class));
 
     public ShortVarReference(@NotNull GoLiteralIdentifier element) {
         super(element);

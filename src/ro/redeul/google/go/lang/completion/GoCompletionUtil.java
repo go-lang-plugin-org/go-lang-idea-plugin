@@ -201,8 +201,7 @@ public class GoCompletionUtil {
         return LookupElementBuilder.create(packageName)
                 .withIcon(PlatformIcons.PACKAGE_ICON)
                 .withTypeText(" (" + tailText + ")", true)
-                .withInsertHandler(
-                        new AutoImportInsertHandler())
+                .withInsertHandler(new AutoImportInsertHandler())
                 .withTypeText("package");
     }
 

@@ -5,13 +5,10 @@ import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiFile;
-import ro.redeul.google.go.inspection.fix.AddImportFix;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.utils.GoFileUtils;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
-
-import java.util.Collections;
 
 public class AutoImportInsertHandler implements InsertHandler<LookupElement> {
     @Override
@@ -33,5 +30,6 @@ public class AutoImportInsertHandler implements InsertHandler<LookupElement> {
 //        List<String> sdkPackages = getPackagesByName(namesCache.getSdkPackages(), packageName);
 //        List<String> projectPackages = getPackagesByName(namesCache.getProjectPackages(), packageName);
         // new AddImportFix().applyFix();
+        // TODO: check to see if this is needed.
     }
 }

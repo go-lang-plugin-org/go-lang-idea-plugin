@@ -6,7 +6,6 @@ import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.GoQualifiedNameElement;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
-import ro.redeul.google.go.lang.psi.impl.expressions.literals.GoLiteralIdentifierImpl;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

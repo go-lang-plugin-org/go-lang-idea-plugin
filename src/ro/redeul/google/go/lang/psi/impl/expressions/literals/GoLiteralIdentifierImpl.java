@@ -10,7 +10,6 @@ import com.intellij.psi.search.SearchScope;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import ro.redeul.google.go.lang.lexer.GoElementType;
 import ro.redeul.google.go.lang.packages.GoPackages;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoPackage;
@@ -33,10 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getAs;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getGlobalElementSearchScope;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getLocalElementSearchScope;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.*;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -148,7 +144,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
         if (FunctionOrTypeNameReference.MATCHER.accepts(this))
             return new PsiReference[]{new FunctionOrTypeNameReference(this)};
 
-        if (ShortVarReference.SHORT_VAR_DECLARATION.accepts(this))
+        if (ShortVarReference.MATCHER.accepts(this))
             return new PsiReference[]{new ShortVarReference(this)};
 
         if (TypeNameReference.MATCHER.accepts(this)) {
@@ -269,6 +265,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
     @NotNull
     @Override
     public SearchScope getUseScope() {
+
         if (GoElementPatterns.GLOBAL_CONST_DECL.accepts(this) ||
                 GoElementPatterns.GLOBAL_VAR_DECL.accepts(this) ||
                 GoElementPatterns.FUNCTION_DECLARATION.accepts(this) ||

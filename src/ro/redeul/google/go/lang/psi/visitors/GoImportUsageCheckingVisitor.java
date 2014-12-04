@@ -9,10 +9,7 @@ import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.resolve.refs.PackageReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
-import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 
-import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**

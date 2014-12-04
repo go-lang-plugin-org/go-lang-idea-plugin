@@ -71,6 +71,7 @@ public class AddImportFix extends LocalQuickFixAndIntentionActionOnPsiElement im
 
         List<String> importPaths = findPotentialImports(startElement);
         final JList list = new JBList(importPaths);
+        //noinspection unchecked
         list.setCellRenderer(ImportPathCellRenderer);
         list.setSelectedIndex(0);
 
