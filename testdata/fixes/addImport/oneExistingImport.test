@@ -3,16 +3,16 @@ package main
 import "fmt"
 
 func Foo() {
-    println(/*begin*/io/*end*/)
+    println(/*begin*/p1/*end*/)
 }
 -----
 package main
 
 import (
 	"fmt"
-	"io"
+	"p1"
 )
 
 func Foo() {
-    println(io)
+    println(p1)
 }

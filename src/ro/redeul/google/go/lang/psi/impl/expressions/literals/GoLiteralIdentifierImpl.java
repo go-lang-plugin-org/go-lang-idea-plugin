@@ -10,6 +10,7 @@ import com.intellij.psi.search.SearchScope;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.lexer.GoElementType;
 import ro.redeul.google.go.lang.packages.GoPackages;
 import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoPackage;
@@ -20,15 +21,8 @@ import ro.redeul.google.go.lang.psi.impl.GoPsiElementBase;
 import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoLiteralExpressionImpl;
 import ro.redeul.google.go.lang.psi.patterns.GoElementPatterns;
 import ro.redeul.google.go.lang.psi.resolve.Reference;
-import ro.redeul.google.go.lang.psi.resolve.refs.FunctionOrTypeNameReference;
-import ro.redeul.google.go.lang.psi.resolve.refs.InterfaceMethodReference;
-import ro.redeul.google.go.lang.psi.resolve.refs.MethodReference;
-import ro.redeul.google.go.lang.psi.resolve.refs.PackageReference;
-import ro.redeul.google.go.lang.psi.resolve.refs.PackageSymbolReference;
-import ro.redeul.google.go.lang.psi.resolve.refs.ShortVarReference;
-import ro.redeul.google.go.lang.psi.resolve.refs.StructFieldReference;
-import ro.redeul.google.go.lang.psi.resolve.refs.TypedConstReference;
-import ro.redeul.google.go.lang.psi.resolve.refs.VarOrConstReference;
+import ro.redeul.google.go.lang.psi.resolve.refs.*;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.typing.*;
 import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
@@ -39,8 +33,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getAs;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getGlobalElementSearchScope;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getLocalElementSearchScope;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveSafely;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -155,6 +151,29 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
         if (ShortVarReference.SHORT_VAR_DECLARATION.accepts(this))
             return new PsiReference[]{new ShortVarReference(this)};
 
+        if (TypeNameReference.MATCHER.accepts(this)) {
+            GoPsiTypeName typeName = (GoPsiTypeName) getParent();
+
+            if ( typeName.isQualified() ) {
+                if ( typeName.getQualifier() == this )
+                    return new PsiReference[]{new PackageReference(this)};
+
+                if ( typeName.getIdentifier() == this ) {
+                    GoLiteralIdentifier packageQualifier = typeName.getQualifier();
+
+                    GoImportDeclaration importDeclaration = getAs(GoImportDeclaration.class, resolveSafely(packageQualifier));
+
+                    if (importDeclaration != null && importDeclaration.getPackage() != GoPackages.C)
+                        return new PsiReference[]{new TypeNameReference(this, importDeclaration.getPackage())};
+
+
+                    return PsiReference.EMPTY_ARRAY;
+                }
+            }
+
+            return new PsiReference[] { new TypeNameReference(this) };
+        }
+
         if (SELECTOR_MATCHER.accepts(this)) {
             GoSelectorExpression selectorExpression = (GoSelectorExpression) getParent();
 
@@ -214,8 +233,22 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
         if (VarOrConstReference.MATCHER.accepts(this))
             return new PsiReference[]{new VarOrConstReference(this), new PackageReference(this)};
 
-        if (psiElement(GoLiteralIdentifier.class).insideStarting(psiElement(GoPsiTypeName.class)).accepts(this))
-            return new PsiReference[]{new PackageReference(this)};
+
+//        if (NIL_TYPE.accepts(this))
+//            return PsiReference.EMPTY_ARRAY;
+//
+//        GoPackage goPackage = null;
+//        if (findChildByType(GoTokenTypes.oDOT) != null) {
+//            GoLiteralIdentifier identifiers[] = findChildrenByClass(GoLiteralIdentifier.class);
+//            GoImportDeclaration importDeclaration = GoPsiUtils.resolveSafely(identifiers[0], GoImportDeclaration.class);
+//            goPackage = importDeclaration != null ? importDeclaration.getPackage() : null;
+//        }
+//
+//        if ( goPackage != null && goPackage == GoPackages.C )
+//            return PsiReference.EMPTY_ARRAY;
+//
+//        return new PsiReference[] { goPackage != null ? new TypeNameReference(this, goPackage) : new TypeNameReference(this) };
+//
 
         return PsiReference.EMPTY_ARRAY;
     }

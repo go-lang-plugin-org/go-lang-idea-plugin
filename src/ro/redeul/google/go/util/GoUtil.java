@@ -13,18 +13,15 @@ import ro.redeul.google.go.lang.psi.GoPsiElement;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclaration;
 import ro.redeul.google.go.lang.psi.declarations.GoConstDeclarations;
 import ro.redeul.google.go.lang.psi.declarations.GoVarDeclaration;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteral;
-import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralFunction;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoCallOrConvExpression;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
-import ro.redeul.google.go.lang.psi.expressions.primary.GoParenthesisedExpression;
 import ro.redeul.google.go.lang.psi.processors.ResolveStates;
-import ro.redeul.google.go.lang.psi.toplevel.*;
-import ro.redeul.google.go.lang.psi.types.*;
-import ro.redeul.google.go.lang.psi.typing.*;
+import ro.redeul.google.go.lang.psi.toplevel.GoFunctionParameter;
+import ro.redeul.google.go.lang.psi.types.GoPsiType;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeFunction;
+import ro.redeul.google.go.lang.psi.typing.GoType;
+import ro.redeul.google.go.lang.psi.typing.GoTypes;
 import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
-import ro.redeul.google.go.lang.psi.utils.GoTypeUtils;
 
 import java.io.File;
 import java.net.URI;
@@ -34,8 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static ro.redeul.google.go.lang.psi.utils.GoIdentifierUtils.getFunctionDeclaration;
-import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.*;
+import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.findParentOfType;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

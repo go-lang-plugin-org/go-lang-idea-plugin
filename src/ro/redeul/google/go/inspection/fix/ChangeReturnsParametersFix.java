@@ -131,10 +131,7 @@ public class ChangeReturnsParametersFix extends LocalQuickFixAndIntentionActionO
             );
         }
 
-        if (editor != null) {
-            int line = doc.getLineNumber(startOffset);
-            reformatLines(file, editor, line, line);
-        }
-
+        int line = doc.getLineNumber(startOffset);
+        reformatLines(file, doc, line, line);
     }
 }

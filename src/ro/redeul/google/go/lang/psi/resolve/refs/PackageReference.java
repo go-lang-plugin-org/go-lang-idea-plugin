@@ -46,7 +46,6 @@ public class PackageReference extends ReferenceWithSolver<GoLiteralIdentifier, P
 
     @Override
     public boolean isReferenceTo(PsiElement element) {
-        return false;
+        return super.isReferenceTo(element);
     }
-
 }

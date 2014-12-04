@@ -148,11 +148,6 @@
 
         <!-- Add your project components here -->
         <component>
-            <implementation-class>
-                ro.redeul.google.go.imports.AutoImportHighlightingPassFactory
-            </implementation-class>
-        </component>
-        <component>
             <implementation-class>ro.redeul.google.go.components.ProjectSdkValidator</implementation-class>
         </component>
 
@@ -375,6 +370,8 @@
                                  implementationClass="ro.redeul.google.go.findUsages.GoFindUsagesProvider"/>
         <lang.refactoringSupport language="Google Go"
                                  implementationClass="ro.redeul.google.go.refactoring.GoRefactoringSupportProvider"/>
+
+        <referenceImporter implementation="ro.redeul.google.go.autoImport.GoReferenceImporter" />
 
         <inlineActionHandler
                 implementation="ro.redeul.google.go.refactoring.inline.InlineLocalVariableActionHandler"/>

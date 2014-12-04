@@ -80,10 +80,8 @@ public class CastTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement {
             castString = String.format("%s(%s)", typeDescription, startElement.getText());
 
         doc.replaceString(textRange.getStartOffset(), textRange.getEndOffset(), castString);
-        if (editor != null) {
-            int line = doc.getLineNumber(textRange.getStartOffset());
-            reformatLines(file, editor, line, line);
-            //reformatPositions(element);
-        }
+        int line = doc.getLineNumber(textRange.getStartOffset());
+        reformatLines(file, doc, line, line);
+        //reformatPositions(element);
     }
 }

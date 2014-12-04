@@ -29,6 +29,6 @@ public interface GoImportDeclaration extends GoPsiElement, PsiNamedElement {
 
     boolean isValidImport();
 
-    @Nullable
+    @NotNull
     GoPackage getPackage();
 }

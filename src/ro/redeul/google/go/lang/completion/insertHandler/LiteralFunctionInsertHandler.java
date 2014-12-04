@@ -10,6 +10,7 @@ import static ro.redeul.google.go.util.EditorUtil.pressEnterAtLineEnd;
 import static ro.redeul.google.go.util.EditorUtil.reformatLines;
 
 public class LiteralFunctionInsertHandler implements InsertHandler<LookupElement> {
+
     @Override
     public void handleInsert(InsertionContext context, LookupElement item) {
         int offset = context.getTailOffset();
@@ -18,7 +19,7 @@ public class LiteralFunctionInsertHandler implements InsertHandler<LookupElement
         Editor editor = context.getEditor();
 
         int line = doc.getLineNumber(offset);
-        reformatLines(context.getFile(), editor, line, line + 1);
+        reformatLines(context.getFile(), doc, line, line + 1);
         pressEnterAtLineEnd(editor);
     }
 }

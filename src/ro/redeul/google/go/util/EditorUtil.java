@@ -31,8 +31,7 @@ public class EditorUtil {
         enterHandler.execute(editor, editor.getCaretModel().getCurrentCaret(), dc);
     }
 
-    public static void reformatLines(@NotNull PsiFile file, Editor editor, int startLine, int endLine) {
-        Document doc = editor.getDocument();
+    public static void reformatLines(@NotNull PsiFile file, @NotNull Document doc, int startLine, int endLine) {
         int start = doc.getLineStartOffset(startLine);
         int end = doc.getLineEndOffset(endLine);
         reformatPositions(file, start, end);

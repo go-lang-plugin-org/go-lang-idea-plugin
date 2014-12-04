@@ -4,7 +4,7 @@ import "fmt"
 import "strings"
 
 func Foo() {
-    println(/*begin*/io/*end*/)
+    println(/*begin*/p1/*end*/)
 }
 -----
 package main
@@ -12,9 +12,9 @@ package main
 import "fmt"
 import (
 	"strings"
-	"io"
+	"p1"
 )
 
 func Foo() {
-    println(io)
+    println(p1)
 }

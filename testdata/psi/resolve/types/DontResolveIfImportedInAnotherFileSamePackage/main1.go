@@ -1,3 +1,3 @@
 package main
 
-type t imported./*ref*/Type
+type t imported./*no ref*/Type

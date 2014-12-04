@@ -251,7 +251,7 @@ public class GoTypes extends AbstractProjectComponent {
 
         @Override
         public void visitTypeName(GoPsiTypeName psiType) {
-            GoTypeNameDeclaration declaration = GoPsiUtils.resolveSafely(psiType, GoTypeNameDeclaration.class);
+            GoTypeNameDeclaration declaration = GoPsiUtils.resolveSafely(psiType.getIdentifier(), GoTypeNameDeclaration.class);
             if (declaration != null)
                 data = declaration.accept(this);
         }

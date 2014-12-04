@@ -11,9 +11,7 @@ import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.utils.GoFileUtils;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
-import java.util.List;
-
-import static ro.redeul.google.go.imports.AutoImportHighlightingPass.getPackagesByName;
+import java.util.Collections;
 
 public class AutoImportInsertHandler implements InsertHandler<LookupElement> {
     @Override
@@ -32,8 +30,8 @@ public class AutoImportInsertHandler implements InsertHandler<LookupElement> {
 
         GoFile goFile = (GoFile) file;
         GoNamesCache namesCache = GoNamesCache.getInstance(context.getProject());
-        List<String> sdkPackages = getPackagesByName(namesCache.getSdkPackages(), packageName);
-        List<String> projectPackages = getPackagesByName(namesCache.getProjectPackages(), packageName);
-        new AddImportFix(sdkPackages, projectPackages, goFile, context.getEditor()).execute();
+//        List<String> sdkPackages = getPackagesByName(namesCache.getSdkPackages(), packageName);
+//        List<String> projectPackages = getPackagesByName(namesCache.getProjectPackages(), packageName);
+        // new AddImportFix().applyFix();
     }
 }

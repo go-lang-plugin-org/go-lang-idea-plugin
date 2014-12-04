@@ -16,8 +16,7 @@ import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.util.GoTestUtils;
 
 @Ignore
-public abstract class GoEditorAwareTestCase
-        extends GoLightCodeInsightFixtureTestCase {
+public abstract class GoEditorAwareTestCase extends GoLightCodeInsightFixtureTestCase {
 
     protected void doTest() throws Exception {
         List<String> data = GoTestUtils.readInput(getTestFileName());

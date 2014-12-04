@@ -558,7 +558,7 @@ public class GoPsiUtils {
     }
 
     @Nullable
-    public static GoFile getContainingGoFile(GoPsiElementBase goPsiElement) {
+    public static GoFile getContainingGoFile(GoPsiElement goPsiElement) {
         PsiFile file = goPsiElement.getContainingFile();
 
         return  (file != null && psiIsA(file, GoFile.class)) ? (GoFile) file : null;

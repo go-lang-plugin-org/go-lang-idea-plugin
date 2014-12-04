@@ -7,8 +7,11 @@ import com.intellij.psi.PsiReference;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.lang.lexer.GoElementType;
 import ro.redeul.google.go.lang.lexer.GoTokenTypes;
 import ro.redeul.google.go.lang.packages.GoPackages;
+import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.GoPackageReference;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
@@ -38,27 +41,13 @@ public class GoPsiTypeNameImpl extends GoPsiElementBase implements GoPsiTypeName
     @Override
     @NotNull
     public String getName() {
-        GoLiteralIdentifier identifiers[] =
-                findChildrenByClass(GoLiteralIdentifier.class);
-
-        String name = null;
-        if ( identifiers.length > 0)
-            name = identifiers[identifiers.length - 1].getName();
-
-        return name != null ? name : getText();
+        return getIdentifier().getName();
     }
 
     @NotNull
     @Override
     public PsiElement getNavigationElement() {
-        GoLiteralIdentifier identifiers[] =
-                findChildrenByClass(GoLiteralIdentifier.class);
-
-        GoLiteralIdentifier identifier = null;
-        if (identifiers.length > 0)
-            identifier = identifiers[identifiers.length - 1];
-
-        return identifier == null ? this : identifier;
+        return getIdentifier();
     }
 
     @Override
@@ -77,42 +66,35 @@ public class GoPsiTypeNameImpl extends GoPsiElementBase implements GoPsiTypeName
 
     @Override
     protected PsiReference[] defineReferences() {
-        if (NIL_TYPE.accepts(this))
-            return PsiReference.EMPTY_ARRAY;
-
-        GoPackage goPackage = null;
-        if (findChildByType(GoTokenTypes.oDOT) != null) {
-            GoLiteralIdentifier identifiers[] = findChildrenByClass(GoLiteralIdentifier.class);
-            GoImportDeclaration importDeclaration = GoPsiUtils.resolveSafely(identifiers[0], GoImportDeclaration.class);
-            goPackage = importDeclaration != null ? importDeclaration.getPackage() : null;
-        }
-
-        if ( goPackage != null && goPackage == GoPackages.C )
-            return PsiReference.EMPTY_ARRAY;
-
-        return new PsiReference[] { goPackage != null ? new TypeNameReference(this, goPackage) : new TypeNameReference(this) };
+        return super.defineReferences();
     }
 
     public void accept(GoElementVisitor visitor) {
         visitor.visitTypeName(this);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @NotNull
     @Override
-    @SuppressWarnings("ConstantConditions")
     public GoLiteralIdentifier getIdentifier() {
-        // we cannot parse a type name unless we really have an identifier so this should always return something
-        return findChildByClass(GoLiteralIdentifier.class);
-    }
-
-    @Override
-    public boolean isReference() {
-        return findChildByType(GoTokenTypes.oMUL) != null;
+        return (GoLiteralIdentifier) findLastChildByType(GoElementTypes.LITERAL_IDENTIFIER);
     }
 
     @Override
     public boolean isPrimitive() {
         return GoTypes.PRIMITIVE_TYPES_PATTERN.matcher(getText()).matches();
+    }
+
+    @Override
+    public boolean isQualified() {
+        return findChildByType(GoTokenTypes.oDOT) != null;
+    }
+
+    @Nullable
+    @Override
+    public GoLiteralIdentifier getQualifier() {
+        GoLiteralIdentifier[] childIdentifiers = findChildrenByClass(GoLiteralIdentifier.class);
+        return childIdentifiers.length == 2 ? childIdentifiers[0] : null;
     }
 
     @Override

@@ -1,13 +1,13 @@
 package main
 
 func Foo() {
-    println(/*begin*/fmt/*end*/)
+    println(/*begin*/p1/*end*/)
 }
 -----
 package main
 
-import "fmt"
+import "p1"
 
 func Foo() {
-    println(fmt)
+    println(p1)
 }

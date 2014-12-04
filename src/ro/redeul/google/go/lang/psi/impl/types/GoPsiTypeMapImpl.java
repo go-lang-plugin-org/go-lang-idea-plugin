@@ -4,11 +4,9 @@ import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
-import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.childAt;
-import static ro.redeul.google.go.lang.psi.utils.GoTypeUtils.resolveToFinalType;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>

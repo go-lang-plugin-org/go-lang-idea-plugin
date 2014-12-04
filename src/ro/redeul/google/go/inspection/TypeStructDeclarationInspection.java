@@ -18,8 +18,8 @@ import java.util.Set;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.resolveTypeSpec;
 
-public class TypeStructDeclarationInspection
-    extends AbstractWholeGoFileInspection {
+public class TypeStructDeclarationInspection extends AbstractWholeGoFileInspection {
+
     @Nls
     @NotNull
     @Override
@@ -33,7 +33,6 @@ public class TypeStructDeclarationInspection
             @Override
             public void visitStructType(GoPsiTypeStruct type) {
                 super.visitStructType(type);
-
                 checkFields(type, result);
             }
         }.visitFile(file);

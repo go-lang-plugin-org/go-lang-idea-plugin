@@ -1,0 +1,5 @@
+package main
+
+import "io"
+
+const X io.ByteReader

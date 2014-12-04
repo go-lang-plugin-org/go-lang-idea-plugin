@@ -23,7 +23,7 @@ class FixerUtil {
             int line = doc.getLineNumber(offset);
             doc.insertString(offset, content);
             editor.getCaretModel().moveToOffset(offset);
-            reformatLines(lastChild.getContainingFile(), editor, line, line + 1);
+            reformatLines(lastChild.getContainingFile(), doc, line, line + 1);
             pressEnterAtLineEnd(editor);
         }
     }

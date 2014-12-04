@@ -6,8 +6,16 @@ import com.google.common.collect.Sets;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.roots.ProjectFileIndex;
+import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.vfs.VfsUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
+import com.intellij.util.AdapterProcessor;
+import com.intellij.util.CommonProcessors;
+import com.intellij.util.Function;
+import com.intellij.util.Processor;
 import com.intellij.util.containers.HashSet;
 import org.apache.commons.lang.ArrayUtils;
 import org.jetbrains.annotations.NonNls;
@@ -15,17 +23,16 @@ import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.config.sdk.GoSdkData;
 import ro.redeul.google.go.config.sdk.GoTargetArch;
 import ro.redeul.google.go.config.sdk.GoTargetOs;
+import ro.redeul.google.go.lang.packages.GoPackages;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.stubs.index.GoPackageImportPath;
 import ro.redeul.google.go.lang.psi.stubs.index.GoPackageName;
 import ro.redeul.google.go.lang.psi.stubs.index.GoTypeName;
 import ro.redeul.google.go.lang.psi.toplevel.GoTypeNameDeclaration;
 import ro.redeul.google.go.sdk.GoSdkUtil;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Author: Toader Mihai Claudiu <mtoader@gmail.com>
@@ -121,7 +128,7 @@ public class GoNamesCache {
         if (sdkData == null) {
             Sdk sdk = GoSdkUtil.getGoogleGoSdkForProject(project);
             if (sdk != null) {
-                sdkData = (GoSdkData)sdk.getSdkAdditionalData();
+                sdkData = (GoSdkData) sdk.getSdkAdditionalData();
             }
         }
         return new GoNamesCache(project);
@@ -170,6 +177,33 @@ public class GoNamesCache {
         return packagesCollection;
     }
 
+    public Collection<GoPackage> getPackagesByName(String name) {
+        StubIndex index = StubIndex.getInstance();
+
+        final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
+
+        CommonProcessors.CollectUniquesProcessor<GoPackage> uniquePackages = new CommonProcessors.CollectUniquesProcessor<GoPackage>();
+        final GoPackages packages = GoPackages.getInstance(project);
+        index.processElements(GoPackageName.KEY, name, project, GlobalSearchScope.allScope(project), GoFile.class,
+                new AdapterProcessor<GoFile, String>(
+                        new CommonProcessors.UniqueProcessor<String>(
+                                new AdapterProcessor<String, GoPackage>(uniquePackages, new Function<String, GoPackage>() {
+                                    @Override
+                                    public GoPackage fun(String s) {
+                                        return packages.getPackage(s, false);
+                                    }
+                                })),
+                        new Function<GoFile, String>() {
+                            @Override
+                            public String fun(GoFile goFile) {
+                                return goFile.getPackageImportPath();
+                            }
+                        }
+                ));
+
+        return uniquePackages.getResults();
+    }
+
     public Collection<GoFile> getBuiltinPackageFiles() {
         return getFilesByPackageName("builtin");
     }
@@ -193,17 +227,17 @@ public class GoNamesCache {
         return files;
     }
 
-    public boolean isPackageImportPathExist(String importPath){
+    public boolean isPackageImportPathExist(String importPath) {
         Collection<GoFile> files = StubIndex.getElements(GoPackageImportPath.KEY,
                 importPath, project, GlobalSearchScope.allScope(project), GoFile.class);
-        return files.size()>0;
+        return files.size() > 0;
     }
 
     private GlobalSearchScope getSearchScope(boolean allScope) {
         return
-            allScope
-                ? GlobalSearchScope.allScope(project)
-                : GlobalSearchScope.projectScope(project);
+                allScope
+                        ? GlobalSearchScope.allScope(project)
+                        : GlobalSearchScope.projectScope(project);
     }
 
     @NotNull
@@ -216,13 +250,39 @@ public class GoNamesCache {
         GlobalSearchScope scope = getSearchScope(includeNonProjectItems);
         Collection<NavigationItem> items = new ArrayList<NavigationItem>();
         for (GoTypeNameDeclaration type : StubIndex.getElements(GoTypeName.KEY, name,
-                                                    project, scope, GoTypeNameDeclaration.class)) {
+                project, scope, GoTypeNameDeclaration.class)) {
             if (type instanceof NavigationItem) {
                 items.add((NavigationItem) type);
             }
         }
 
         return items.toArray(new NavigationItem[items.size()]);
+    }
+
+    public Map<String, Collection<String>> getPackagesByImports() {
+        final StubIndex stubIndex = StubIndex.getInstance();
+
+        final Map<String, Collection<String>> results = new HashMap<String, Collection<String>>();
+
+        stubIndex.processAllKeys(GoPackageImportPath.KEY, project, new Processor<String>() {
+            @Override
+            public boolean process(String importPath) {
+                CommonProcessors.CollectUniquesProcessor<String> p =
+                        new CommonProcessors.CollectUniquesProcessor<String>();
+
+                stubIndex.processElements(GoPackageImportPath.KEY, importPath, project, getSearchScope(true), GoFile.class, new AdapterProcessor<GoFile, String>(p, new Function<GoFile, String>() {
+                    @Override
+                    public String fun(GoFile file) {
+                        return file.getPackageName();
+                    }
+                }));
+
+                results.put(importPath, p.getResults());
+                return true;
+            }
+        });
+
+        return results;
     }
 
     @NotNull
@@ -267,9 +327,9 @@ public class GoNamesCache {
         }
         Collection<String> excludeOsNames = getExcludeOsNames(getGoTargetOs());
         Collection<GoFile> osExcluded = new ArrayList<GoFile>();
-        for (GoFile file:files) {
+        for (GoFile file : files) {
             String filename = file.getName();
-            for (String excludeName:excludeOsNames) {
+            for (String excludeName : excludeOsNames) {
                 if (filename.contains(excludeName)) {
                     osExcluded.add(file);
                 }
@@ -279,9 +339,9 @@ public class GoNamesCache {
 
         Collection<String> excludeArchNames = getExcludeArchNames(getGoTargetArch());
         Collection<GoFile> archExcluded = new ArrayList<GoFile>();
-        for (GoFile file:files) {
+        for (GoFile file : files) {
             String filename = file.getName();
-            for (String excludeName:excludeArchNames) {
+            for (String excludeName : excludeArchNames) {
                 if (filename.contains(excludeName)) {
                     archExcluded.add(file);
                 }
@@ -335,4 +395,5 @@ public class GoNamesCache {
                 return Collections.emptySet();
         }
     }
+
 }

@@ -30,7 +30,7 @@ public abstract class GoLightCodeInsightFixtureTestCase extends LightCodeInsight
         return (GoFile) myFixture.configureByText(GoFileType.INSTANCE, fileText);
     }
 
-    protected void addPackage(String importPath, String ... files) throws IOException {
+    protected void addPackage(String importPath, String ... files) {
         for (String file : files) {
             VirtualFile virtualFile = VfsUtil.findFileByIoFile(new File(getBasePath() + "/" + file), true);
             if (virtualFile == null) {
@@ -40,9 +40,14 @@ public abstract class GoLightCodeInsightFixtureTestCase extends LightCodeInsight
             if ( virtualFile == null)
                 continue;
 
-            myFixture.addFileToProject(
-                    FileUtil.toCanonicalPath(importPath + "/" + virtualFile.getName()),
-                    VfsUtil.loadText(virtualFile));
+            try {
+                myFixture.addFileToProject(
+                        FileUtil.toCanonicalPath(importPath + "/" + virtualFile.getName()),
+                        VfsUtil.loadText(virtualFile));
+            } catch (IOException e) {
+                fail("Could not add file to test project");
+                throw new RuntimeException(e);
+            }
         }
     }
 

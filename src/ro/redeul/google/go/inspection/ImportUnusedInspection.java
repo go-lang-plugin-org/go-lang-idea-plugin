@@ -24,8 +24,7 @@ public class ImportUnusedInspection extends AbstractWholeGoFileInspection {
     }
 
     @Override
-    protected void doCheckFile(@NotNull GoFile file,
-                               @NotNull final InspectionResult result) {
+    protected void doCheckFile(@NotNull GoFile file, @NotNull final InspectionResult result) {
         Project project = file.getProject();
 
         PsiDocumentManager pdm = PsiDocumentManager.getInstance(project);
@@ -43,7 +42,7 @@ public class ImportUnusedInspection extends AbstractWholeGoFileInspection {
 
             result.addProblem(
                     unused,
-                    message("warning.unused.import", unused.getImportPath().getValue()),
+                    message("warning.unused.import", unused.getImportPath().getValue()) + "xxx",
                     ProblemHighlightType.LIKE_UNUSED_SYMBOL,
                     new RemoveImportFix(unused));
         }

@@ -18,12 +18,9 @@ public class GoImportOptimizerTest extends GoEditorAwareTestCase {
 
     @Override
     protected void invoke(Project project, Editor editor, GoFile file) {
-        try {
-            addPackage("p1", "p1/p1.go");
-            addPackage("p2", "p2/p2.go");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        addPackage("p1", "p1/p1.go");
+        addPackage("p2", "p2/p2.go");
+
         new GoImportOptimizer().processFile(file).run();
     }
 

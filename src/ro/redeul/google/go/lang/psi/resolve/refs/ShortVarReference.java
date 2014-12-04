@@ -31,26 +31,6 @@ public class ShortVarReference extends ReferenceWithSolver<GoLiteralIdentifier, 
                     );
     public static final PsiElementPattern.Capture<PsiElement> SHORT_VAR_DECLARATION = psiElement().withParent(psiElement(GoShortVarDeclaration.class));
 
-//    private static final ResolveCache.AbstractResolver<ShortVarReference, ResolvingCache.Result> RESOLVER =
-//            new ResolveCache.AbstractResolver<ShortVarReference, ResolvingCache.Result>() {
-//                @Override
-//                public ResolvingCache.Result resolve(@NotNull ShortVarReference reference, boolean incompleteCode) {
-//                    GoLiteralIdentifier element = reference.getElement();
-//                    PsiElement parent = element.getParent();
-//                    if (!(parent instanceof GoShortVarDeclaration)) {
-//                        return ResolvingCache.Result.NULL;
-//                    }
-//
-//                    GoLiteralIdentifier identifier = reference.getElement();
-//                    PsiElement resolve = ShortVarSolver.resolve(identifier);
-//                    if (resolve == null) {
-//                        return ResolvingCache.Result.NULL;
-//                    }
-//                    return ResolvingCache.Result.fromElement(resolve);
-//                }
-//            };
-//
-
     public ShortVarReference(@NotNull GoLiteralIdentifier element) {
         super(element);
     }
@@ -77,5 +57,10 @@ public class ShortVarReference extends ReferenceWithSolver<GoLiteralIdentifier, 
                 functionDeclaration.processDeclarations(solver, ResolveState.initial(), blockStatement, this.getElement());
             }
         }
+    }
+
+    @Override
+    public boolean isSoft() {
+        return true;
     }
 }

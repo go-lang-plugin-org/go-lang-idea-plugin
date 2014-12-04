@@ -50,8 +50,7 @@ public abstract class GoPsiResolveTestCase extends GoFileBasedPsiTestCase {
     }
 
     private void assertIfNoReference() {
-        assertNull("This should not resolve as reference",
-                   noRefFile.findReferenceAt(noRefPosition));
+        assertNull("This should not resolve as reference", noRefFile.findReferenceAt(noRefPosition));
     }
 
     private void getDefinition(PsiFile psiFile, String fileContent) {

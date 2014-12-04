@@ -130,7 +130,9 @@ public class GoPackages extends AbstractProjectComponent {
         if ( path.equals(C.getImportPath()))
             return C;
 
-        VirtualFile sourceRoots[] = ProjectRootManagerEx.getInstanceEx(myProject).getContentSourceRoots();
+        ProjectRootManagerEx rootManager = ProjectRootManagerEx.getInstanceEx(myProject);
+
+        VirtualFile sourceRoots[] = rootManager.getContentSourceRoots();
 
         for (VirtualFile sourceRoot : sourceRoots) {
             VirtualFile packagePath = sourceRoot.findFileByRelativePath(path);
@@ -139,7 +141,7 @@ public class GoPackages extends AbstractProjectComponent {
             }
         }
 
-        Sdk projectSdk = ProjectRootManagerEx.getInstanceEx(myProject).getProjectSdk();
+        Sdk projectSdk = rootManager.getProjectSdk();
         if ( projectSdk == null )
             return null;
 

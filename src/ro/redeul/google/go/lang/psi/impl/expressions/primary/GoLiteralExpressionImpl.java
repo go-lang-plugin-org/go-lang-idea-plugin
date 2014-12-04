@@ -174,6 +174,7 @@ public class GoLiteralExpressionImpl extends GoExpressionBase implements GoLiter
                             TextRange clauseTextRange = clause.getTextRange();
                             if (clauseTextRange.contains(litRange)) {
                                 setData(GoTypes.fromPsiType(clause.getTypes()));
+                                return;
                             }
                         }
                     }
