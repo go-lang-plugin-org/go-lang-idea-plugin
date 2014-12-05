@@ -6,3 +6,5 @@ config-test/
 idea-IC/
 build/
 build_test/
+
+.idea/workspace.xml
