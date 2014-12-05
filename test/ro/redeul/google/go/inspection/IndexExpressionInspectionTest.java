@@ -6,6 +6,6 @@ public class IndexExpressionInspectionTest extends GoInspectionTestCase {
 
     public void testSimple() throws Exception{ doTest(); }
 
-    @Ignore("failing test")
+    @Ignore("failing test because len(constant) is not returning proper values")
     public void testString() throws Exception{ doTest(); }
 }

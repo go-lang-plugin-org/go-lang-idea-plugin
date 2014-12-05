@@ -60,8 +60,9 @@ public class IndexExpressionInspection extends AbstractWholeGoFileInspection {
             }
 
             @Override
-            public void visitSlice(GoTypeSlice type, InspectionResult result, TypeVisitor<InspectionResult> visitor) {
-                checkUnsignedIntegerConstantInRange(indexExpr, indexType, Integer.MAX_VALUE, "slice", result);
+            public void visitSlice(GoTypeSlice type, InspectionResult problems, TypeVisitor<InspectionResult> visitor) {
+                if ( checkUnsignedIntegerType(indexExpr, indexType, "slice", problems) )
+                    checkUnsignedIntegerConstantInRange(indexExpr, indexType, Integer.MAX_VALUE, "slice", problems);
             }
 
             @Override
@@ -114,6 +115,34 @@ public class IndexExpressionInspection extends AbstractWholeGoFileInspection {
             }
 
         }, result);
+    }
+
+
+    private boolean checkUnsignedIntegerType(GoExpr indexExpr, GoType indexType, String type, InspectionResult problems) {
+        boolean validIndexType = indexType.accept(new TypeVisitor<Boolean>(false) {
+            @Override
+            public Boolean visitPrimitive(GoTypePrimitive type) {
+                switch (type.getType()) {
+                    case uInt: case uInt16: case uInt32: case uInt64: case Rune: case Byte:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
+            @Override
+            public Boolean visitConstant(GoTypeConstant constant) {
+              return true;
+            }
+        });
+
+        if ( !validIndexType ) {
+            problems.addProblem(
+                    indexExpr,
+                    GoBundle.message("warn.index.invalid.index.type", type, indexExpr.getText()));
+        }
+
+        return indexType instanceof GoTypeConstant && validIndexType;
     }
 
     private void checkUnsignedIntegerConstantInRange(GoExpr indexExpr, GoType indexType, int length, String type, InspectionResult result) {

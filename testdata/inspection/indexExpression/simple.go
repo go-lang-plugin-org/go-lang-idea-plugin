@@ -51,3 +51,10 @@ func main() {
 
 	/*begin*/int("")[100]/*end.invalid operation: int("")[100] (type int does not support indexing)*/
 }
+
+func testGlitch(b []byte) {
+	for i := range b {
+		if i < 0 && b[i] == ' ' {
+		}
+	}
+}

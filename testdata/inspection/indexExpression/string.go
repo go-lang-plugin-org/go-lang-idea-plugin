@@ -1,7 +1,7 @@
-package indexExpression
+package main
 
-func f1(){
-	a:="abc"
-	end:=len(a)
-	a[end-1]
+func main() {
+	a := "abc"
+	end := len(a)
+	_ = a[end - 1]
 }
