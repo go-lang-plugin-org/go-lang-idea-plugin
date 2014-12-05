@@ -32,6 +32,9 @@
         <option name="FORMATTER_TAGS_ENABLED" value="true" />
         <option name="LINE_COMMENT_AT_FIRST_COLUMN" value="false" />
         <option name="BLOCK_COMMENT_AT_FIRST_COLUMN" value="false" />
+        <JavaCodeStyleSettings>
+          <option name="LEGACY_SETTING_USE_FQ_CLASS_NAMES_IN_JAVADOC_IMPORTED" value="true" />
+        </JavaCodeStyleSettings>
         <XML>
           <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
         </XML>
@@ -224,4 +227,3 @@
     <option name="USE_PER_PROJECT_SETTINGS" value="true" />
   </component>
 </project>
-
