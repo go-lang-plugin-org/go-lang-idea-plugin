@@ -66,7 +66,8 @@ public class GoBuiltinCallOrConversionExpressionImpl extends GoCallOrConvExpress
         GoExpr[] args = getArguments();
         GoType[] argumentType = GoType.EMPTY_ARRAY;
 
-        GoType myType = null;
+        GoType myType;
+
         switch (getBuiltinKind()) {
             case None:
                 return super.computeCallType(type);
