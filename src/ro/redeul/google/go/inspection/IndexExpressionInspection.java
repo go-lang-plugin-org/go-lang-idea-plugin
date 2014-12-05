@@ -123,7 +123,8 @@ public class IndexExpressionInspection extends AbstractWholeGoFileInspection {
             @Override
             public Boolean visitPrimitive(GoTypePrimitive type) {
                 switch (type.getType()) {
-                    case uInt: case uInt16: case uInt32: case uInt64: case Rune: case Byte:
+                    case uInt: case uInt8: case uInt16: case uInt32: case uInt64: case Rune: case Byte:
+                    case Int: case Int8: case Int16: case Int32: case Int64:
                         return true;
                     default:
                         return false;
