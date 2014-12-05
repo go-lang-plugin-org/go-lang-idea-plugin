@@ -79,8 +79,8 @@ public abstract class GoPsiResolveTestCase extends GoFileBasedPsiTestCase {
     }
 
     private void getNoReferencePosition(PsiFile psiFile, String fileContent) {
-        noRefPosition = fileContent.indexOf(NON_REF_MARKER);
-        if (noRefPosition != -1) {
+        int position = fileContent.indexOf(NON_REF_MARKER);
+        if (position != -1) {
             noRefPosition += NON_REF_MARKER.length();
             noRefFile = psiFile;
         }
