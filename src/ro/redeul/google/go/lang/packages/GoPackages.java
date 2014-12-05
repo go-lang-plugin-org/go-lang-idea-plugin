@@ -163,7 +163,7 @@ public class GoPackages extends AbstractProjectComponent {
 
     @NotNull
     public static GoPackage getPackageFor(@Nullable PsiElement element) {
-        if ( element == null )
+        if ( element == null || !(element.isValid()))
             return GoPackages.Invalid;
 
         GoPackages goPackages = getInstance(element.getProject());

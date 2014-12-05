@@ -79,7 +79,7 @@ public class GoPsiElementBase extends ASTWrapperPsiElement
     @Override
     final public PsiReference[] getReferences() {
 //        System.out.println("" + hashCode() + ", refs: " + myReferences + " text: " + getText() + " ");
-//        if (myReferences == null)
+        if (myReferences == null)
             myReferences = defineReferences();
 
         return myReferences;

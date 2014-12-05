@@ -45,6 +45,7 @@ public class ShortVarReference extends ReferenceWithSolver<GoLiteralIdentifier, 
         GoBlockStatement blockStatement = getAs(GoBlockStatement.class, declaration.getParent());
 
         if ( blockStatement != null ) {
+//            System.out.println(blockStatement.getText());
             if ( !blockStatement.processDeclarations(solver, ResolveStates.initial(), declaration, this.getElement()))
                 return;
 

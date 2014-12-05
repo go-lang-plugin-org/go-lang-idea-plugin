@@ -3,6 +3,8 @@ package ro.redeul.google.go.lang.psi.resolve.refs;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import ro.redeul.google.go.lang.packages.GoPackages;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
@@ -43,6 +45,12 @@ public class PackageReference extends ReferenceWithSolver<GoLiteralIdentifier, P
                 ResolveStates.initial());
     }
 
+    @Nullable
+    @Override
+    public PsiElement resolve() {
+        PsiElement resolved = super.resolve();
+        return resolved == GoPackages.Invalid ? null : resolved;
+    }
 
     @Override
     public boolean isReferenceTo(PsiElement element) {

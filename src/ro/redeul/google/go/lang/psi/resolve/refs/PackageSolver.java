@@ -1,5 +1,8 @@
 package ro.redeul.google.go.lang.psi.resolve.refs;
 
+import com.intellij.psi.PsiElement;
+import org.jetbrains.annotations.NotNull;
+import ro.redeul.google.go.lang.packages.GoPackages;
 import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.GoPackageReference;
 import ro.redeul.google.go.lang.psi.resolve.ReferenceSolvingVisitor;
@@ -27,11 +30,17 @@ public class PackageSolver extends VisitingReferenceSolver<PackageReference, Pac
                     packageName = packageReference.getString();
                 else {
                     GoPackage goPackage = importDeclaration.getPackage();
-                    packageName = goPackage != null ? goPackage.getName() : "";
+                    packageName = goPackage.getName();
                 }
 
                 return packageName != null && matchNames(reference.name(), packageName);
             }
         });
+    }
+
+    @Override
+    public PsiElement resolve(@NotNull PackageReference reference, boolean incompleteCode) {
+        PsiElement resolve = super.resolve(reference, incompleteCode);
+        return resolve == null ? GoPackages.Invalid : resolve;
     }
 }

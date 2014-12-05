@@ -123,6 +123,9 @@ public class GoMultiplicativeExpressionImpl extends GoBinaryExpressionImpl<Op> i
 
                     return GoTypes.constant(Integer, leftValue.divide(rightValue));
                 case Remainder:
+                    if ( rightValue.compareTo(BigInteger.ZERO) == 0 )
+                        return GoType.Unknown;
+
                     return GoTypes.constant(Integer, leftValue.divideAndRemainder(rightValue)[1]);
                 case BitAnd:
                     return GoTypes.constant(Integer, leftValue.and(rightValue));
