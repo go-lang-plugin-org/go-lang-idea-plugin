@@ -16,10 +16,9 @@
 
 package com.goide.psi;
 
-import com.goide.GoResolvingTestCase;
+import com.goide.GoLegacyResolveTestBase;
 
-public class ResolveVarsTest extends GoResolvingTestCase {
-
+public class GoResolveVarsTest extends GoLegacyResolveTestBase {
   @Override
   protected String getBasePath() {
     return "psi/resolve/vars";
