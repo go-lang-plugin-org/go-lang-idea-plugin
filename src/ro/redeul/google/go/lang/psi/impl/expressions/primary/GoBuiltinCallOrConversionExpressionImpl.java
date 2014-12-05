@@ -7,7 +7,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.expressions.GoExpr;
 import ro.redeul.google.go.lang.psi.expressions.primary.GoBuiltinCallOrConversionExpression;
@@ -15,16 +14,11 @@ import ro.redeul.google.go.lang.psi.toplevel.GoFunctionDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoPackageDeclaration;
 import ro.redeul.google.go.lang.psi.types.GoPsiType;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeMap;
-import ro.redeul.google.go.lang.psi.typing.GoFunctions;
-import ro.redeul.google.go.lang.psi.typing.GoType;
-import ro.redeul.google.go.lang.psi.typing.GoTypeConstant;
-import ro.redeul.google.go.lang.psi.typing.GoTypeFunction;
-import ro.redeul.google.go.lang.psi.typing.GoTypeMap;
-import ro.redeul.google.go.lang.psi.typing.GoTypePrimitive;
-import ro.redeul.google.go.lang.psi.typing.GoTypes;
-import ro.redeul.google.go.lang.psi.typing.TypeVisitor;
+import ro.redeul.google.go.lang.psi.typing.*;
 import ro.redeul.google.go.lang.psi.visitors.GoElementVisitor;
 import ro.redeul.google.go.util.GoNumber;
+
+import java.math.BigInteger;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.string;
@@ -78,7 +72,7 @@ public class GoBuiltinCallOrConversionExpressionImpl extends GoCallOrConvExpress
                 return super.computeCallType(type);
 
             case Len:
-                return new GoType[]{GoTypes.constant(GoTypeConstant.Kind.Integer, 0)};
+                return new GoType[]{GoTypes.constant(GoTypeConstant.Kind.Integer, BigInteger.ZERO)};
 
             case New:
                 return new GoType[]{GoTypes.makePointer(getTypeArgument())};

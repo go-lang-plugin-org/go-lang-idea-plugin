@@ -14,4 +14,8 @@ public class FunctionReturnParameterInspectionTest extends GoInspectionTestCase 
     public void testIssue989() throws Exception{
         doTest();
     }
+
+    public void testLen() throws Exception {
+        doTest();
+    }
 }
