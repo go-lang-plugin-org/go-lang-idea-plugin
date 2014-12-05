@@ -1,11 +1,18 @@
 package ro.redeul.google.go.lang.psi.impl.toplevel;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleManager;
+import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.openapi.roots.ModuleFileIndex;
+import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.util.IncorrectOperationException;
+import org.apache.log4j.lf5.viewer.configure.MRUFileManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.lang.packages.GoPackages;
@@ -156,6 +163,11 @@ public class GoImportDeclarationImpl extends GoPsiElementBase implements GoImpor
             }
         }
 
-        return GoPackages.getInstance(getProject()).getPackage(importPath, testPackage);
+        Module myModule = ModuleUtil.findModuleForPsiElement(this);
+
+        if ( myModule == null )
+            return GoPackages.Invalid;
+
+        return GoPackages.getInstance(myModule).getPackage(importPath, testPackage);
     }
 }

@@ -4,6 +4,8 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VfsUtil;
@@ -14,6 +16,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.indexing.IndexingDataKeys;
+import org.apache.velocity.runtime.parser.node.MathUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoFileType;
@@ -243,15 +246,18 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
         }
 
         if ( ResolveStates.get(state, ResolveStates.Key.IsOriginalFile)) {
-            GoPackages packages = GoPackages.getInstance(getProject());
+            Module myModule = ModuleUtil.findModuleForPsiElement(this);
+            if ( myModule != null ) {
+                GoPackages packages = GoPackages.getInstance(myModule);
 
-            GoPackage myPackage = packages.getPackage(getPackageImportPath(), isTestFile());
-            if (!myPackage.processDeclarations(processor, ResolveStates.currentPackage(), this.getOriginalFile(), place))
-                return false;
+                GoPackage myPackage = packages.getPackage(getPackageImportPath(), isTestFile());
+                if (!myPackage.processDeclarations(processor, ResolveStates.currentPackage(), this.getOriginalFile(), place))
+                    return false;
 
-            GoPackage builtinPackage = packages.getBuiltinPackage();
-            if ( builtinPackage != null )
-                return builtinPackage.processDeclarations(processor, ResolveStates.builtins(), lastParent, place);
+                GoPackage builtinPackage = packages.getBuiltinPackage();
+                if (builtinPackage != null)
+                    return builtinPackage.processDeclarations(processor, ResolveStates.builtins(), lastParent, place);
+            }
         }
 
         return true;

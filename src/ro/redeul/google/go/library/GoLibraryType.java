@@ -56,11 +56,18 @@ public class GoLibraryType extends LibraryType<GoLibraryProperties> implements G
         if (files.length == 0) {
             return null;
         }
-        return new NewLibraryConfiguration("Go package", this, new GoLibraryProperties()) {
+        return new NewLibraryConfiguration("<choose the go name>", this, new GoLibraryProperties()) {
             @Override
             public void addRoots(@NotNull LibraryEditor editor) {
                 for (VirtualFile file : files) {
-                    editor.addRoot(file, OrderRootType.CLASSES);
+                    VirtualFile libraryFolder = file.findChild("pkg");
+                    if (libraryFolder == null || !libraryFolder.isDirectory()) continue;
+
+                    VirtualFile srcFolder = file.findChild("src");
+                    if ( srcFolder == null || !srcFolder.isDirectory()) continue;
+
+                    editor.addRoot(libraryFolder, OrderRootType.CLASSES);
+                    editor.addRoot(srcFolder, OrderRootType.SOURCES);
                 }
             }
         };

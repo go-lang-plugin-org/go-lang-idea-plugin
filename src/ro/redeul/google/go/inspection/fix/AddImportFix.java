@@ -8,6 +8,7 @@ import com.intellij.icons.AllIcons;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.PopupChooserBuilder;
 import com.intellij.psi.PsiDocumentManager;
@@ -179,7 +180,7 @@ public class AddImportFix extends LocalQuickFixAndIntentionActionOnPsiElement im
 
         String packageName = element.getText();
 
-        Collection<GoPackage> packages = GoNamesCache.getInstance(element.getProject()).getPackagesByName(packageName);
+        Collection<GoPackage> packages = GoNamesCache.getInstance(element.getProject()).getPackagesByName(packageName, ModuleUtil.findModuleForPsiElement(element));
         return ContainerUtil.map(packages, new Function<GoPackage, String>() {
             @Override
             public String fun(GoPackage myPackage) {

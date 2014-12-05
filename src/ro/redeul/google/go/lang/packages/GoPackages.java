@@ -1,12 +1,10 @@
 package ro.redeul.google.go.lang.packages;
 
-import com.intellij.openapi.components.AbstractProjectComponent;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.OrderRootType;
-import com.intellij.openapi.roots.ex.ProjectRootManagerEx;
-import com.intellij.openapi.util.NotNullLazyKey;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleComponent;
+import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.roots.OrderEnumerator;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
@@ -26,9 +24,9 @@ import java.util.concurrent.ConcurrentMap;
 
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getAs;
 
-public class GoPackages extends AbstractProjectComponent {
+public class GoPackages implements ModuleComponent {
 
-    private static final NotNullLazyKey<GoPackages, Project> INSTANCE_KEY = ServiceManager.createLazyKey(GoPackages.class);
+    private final Module myModule;
 
     private volatile SoftReference<ConcurrentMap<Pair<String, Boolean>, GoPackage>> packagesCache;
 
@@ -92,8 +90,33 @@ public class GoPackages extends AbstractProjectComponent {
         }
     };
 
-    public GoPackages(Project project) {
-        super(project);
+    public GoPackages(Module module) {
+        this.myModule = module;
+    }
+
+    @Override
+    public void projectOpened() {
+
+    }
+
+    @Override
+    public void projectClosed() {
+
+    }
+
+    @Override
+    public void moduleAdded() {
+
+    }
+
+    @Override
+    public void initComponent() {
+
+    }
+
+    @Override
+    public void disposeComponent() {
+
     }
 
     @NotNull
@@ -102,8 +125,8 @@ public class GoPackages extends AbstractProjectComponent {
         return "GoPackages";
     }
 
-    public static GoPackages getInstance(Project project) {
-        return INSTANCE_KEY.getValue(project);
+    public static GoPackages getInstance(@NotNull Module module) {
+        return module.getComponent(GoPackages.class);
     }
 
     /**
@@ -130,30 +153,38 @@ public class GoPackages extends AbstractProjectComponent {
         if ( path.equals(C.getImportPath()))
             return C;
 
-        ProjectRootManagerEx rootManager = ProjectRootManagerEx.getInstanceEx(myProject);
+//        myProjectFileIndex = ProjectRootManager.getInstance(module.getProject()).getFileIndex();
 
-        VirtualFile sourceRoots[] = rootManager.getContentSourceRoots();
+        OrderEnumerator en = ModuleRootManager.getInstance(myModule).orderEntries().recursively();
+        VirtualFile sourceRoots[] = en.sources().getRoots();
+
+        ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(myModule);
+//        ProjectRootManagerEx rootManager = ProjectRootManagerEx.getInstanceEx(myProject);
+
+//        ModuleRootManager moduleRootManager = ModuleRootManager.getInstance();
+//
+//        VirtualFile sourceRoots[] = rootManager.getContentSourceRoots();
 
         for (VirtualFile sourceRoot : sourceRoots) {
             VirtualFile packagePath = sourceRoot.findFileByRelativePath(path);
             if (packagePath != null && packagePath.isDirectory()) {
-                return new GoPackageImpl(packagePath, sourceRoot, PsiManager.getInstance(myProject), testPackage);
+                return new GoPackageImpl(packagePath, sourceRoot, PsiManager.getInstance(myModule.getProject()), testPackage);
             }
         }
 
-        Sdk projectSdk = rootManager.getProjectSdk();
-        if ( projectSdk == null )
-            return null;
-
-        VirtualFile[] sdkSourceRoots = projectSdk.getRootProvider().getFiles(OrderRootType.SOURCES);
-
-        for (VirtualFile sourceRoot : sdkSourceRoots) {
-            VirtualFile packagePath = sourceRoot.findFileByRelativePath(path);
-            if ( packagePath != null && packagePath.isDirectory()) {
-                return new GoPackageImpl(packagePath, sourceRoot, PsiManager.getInstance(myProject), testPackage);
-            }
-        }
-
+//        Sdk projectSdk = rootManager.getProjectSdk();
+//        if ( projectSdk == null )
+//            return null;
+//
+//        VirtualFile[] sdkSourceRoots = projectSdk.getRootProvider().getFiles(OrderRootType.SOURCES);
+//
+//        for (VirtualFile sourceRoot : sdkSourceRoots) {
+//            VirtualFile packagePath = sourceRoot.findFileByRelativePath(path);
+//            if ( packagePath != null && packagePath.isDirectory()) {
+//                return new GoPackageImpl(packagePath, sourceRoot, PsiManager.getInstance(myModule.getProject()), testPackage);
+//            }
+//        }
+//
         return null;
     }
 
@@ -166,7 +197,12 @@ public class GoPackages extends AbstractProjectComponent {
         if ( element == null || !(element.isValid()))
             return GoPackages.Invalid;
 
-        GoPackages goPackages = getInstance(element.getProject());
+        Module module = ModuleUtil.findModuleForPsiElement(element);
+
+        if ( module == null )
+            return Invalid;
+
+        GoPackages goPackages = getInstance(module);
 
         GoFile goFile = getAs(GoFile.class, element.getContainingFile());
 
@@ -183,10 +219,13 @@ public class GoPackages extends AbstractProjectComponent {
         GoPackage targetPackage = getPackageFor(target);
 
         if (!sourcePackage.equals(targetPackage)) {
-            GoPackage builtin = GoPackages.getInstance(target.getProject()).getBuiltinPackage();
+            Module targetModule = ModuleUtil.findModuleForPsiElement(target);
+            if ( targetModule != null ) {
+                GoPackage builtin = GoPackages.getInstance(targetModule).getBuiltinPackage();
 
-            if ( !builtin.equals(targetPackage))
-                return targetPackage;
+                if (!builtin.equals(targetPackage))
+                    return targetPackage;
+            }
         }
 
         return null;

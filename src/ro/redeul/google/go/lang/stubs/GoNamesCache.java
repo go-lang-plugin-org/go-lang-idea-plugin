@@ -4,6 +4,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.intellij.navigation.NavigationItem;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ProjectFileIndex;
@@ -175,13 +176,16 @@ public class GoNamesCache {
         return packagesCollection;
     }
 
-    public Collection<GoPackage> getPackagesByName(String name) {
+    public Collection<GoPackage> getPackagesByName(String name, Module module) {
+        if ( module == null )
+            return Collections.emptyList();
+
         StubIndex index = StubIndex.getInstance();
 
         final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
 
         CommonProcessors.CollectUniquesProcessor<GoPackage> uniquePackages = new CommonProcessors.CollectUniquesProcessor<GoPackage>();
-        final GoPackages packages = GoPackages.getInstance(project);
+        final GoPackages packages = GoPackages.getInstance(module);
         index.processElements(GoPackageName.KEY, name, project, GlobalSearchScope.allScope(project), GoFile.class,
                 new AdapterProcessor<GoFile, String>(
                         new CommonProcessors.UniqueProcessor<String>(
