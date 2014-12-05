@@ -9,7 +9,7 @@ const (
 	bit3, mask3                           // bit3 == 8, mask3 == 7
 )
 
-var v = /*begin*/iota/*end.Unresolved symbol: 'iota'|CreateGlobalVariableFix*/
+var v = /*begin*/iota/*end.Unresolved symbol: 'iota'|CreateGlobalVariableFix|AddImportFix*/
 
 func foo(a, iota int) int {
     return a + 1
@@ -17,6 +17,6 @@ func foo(a, iota int) int {
 
 func main() {
     k := 5
-    println(true, false, /*begin*/iota/*end.Unresolved symbol: 'iota'|CreateLocalVariableFix|CreateGlobalVariableFix|CreateFunctionFix|CreateClosureFunctionFix*/)
+    println(true, false, /*begin*/iota/*end.Unresolved symbol: 'iota'|CreateLocalVariableFix|CreateGlobalVariableFix|CreateFunctionFix|CreateClosureFunctionFix|AddImportFix*/)
     println(bit0, bit1, bit3, mask0, mask1, mask3)
 }
