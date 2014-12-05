@@ -29,23 +29,24 @@ public abstract class GoPsiResolveTestCase extends GoFileBasedPsiTestCase {
     }
 
     protected void assertTest() {
-        if (noRefPosition != -1 ) {
+        if (noRefFile != null) {
             assertIfNoReference();
-        } else {
-            assertNotNull("Source position is not at a reference", ref);
+            return;
+        }
 
-            PsiElement resolvedDefinition = ref.resolve();
-            if (def != null) {
-                assertNotNull("The resolving should have been been a success",
-                              resolvedDefinition);
-                while (resolvedDefinition.getStartOffsetInParent() == 0) {
-                    resolvedDefinition = resolvedDefinition.getParent();
-                }
+        assertNotNull("Source position is not at a reference", ref);
 
-                assertSame(def.getNavigationElement(), resolvedDefinition.getNavigationElement());
-            } else {
-                assertNull("The resolving should have failed", resolvedDefinition);
+        PsiElement resolvedDefinition = ref.resolve();
+        if (def != null) {
+            assertNotNull("The resolving should have been been a success",
+                    resolvedDefinition);
+            while (resolvedDefinition.getStartOffsetInParent() == 0) {
+                resolvedDefinition = resolvedDefinition.getParent();
             }
+
+            assertSame(def.getNavigationElement(), resolvedDefinition.getNavigationElement());
+        } else {
+            assertNull("The resolving should have failed", resolvedDefinition);
         }
     }
 
