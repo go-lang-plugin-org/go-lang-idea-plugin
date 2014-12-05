@@ -1,8 +1,8 @@
 package main
 
 import (
-    "a"
-    b "b"
+    a "p1"
+    b "p2"
 )
 
 var a = []struct {
@@ -21,8 +21,8 @@ func main() {
 package main
 
 import (
-    "a"
-    b "b"
+    a "p1"
+    b "p2"
 )
 
 var a = []struct {

@@ -8,7 +8,9 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import ro.redeul.google.go.imports.UnusedImportsFinder;
 import ro.redeul.google.go.inspection.fix.RemoveImportFix;
+import ro.redeul.google.go.lang.packages.GoPackages;
 import ro.redeul.google.go.lang.psi.GoFile;
+import ro.redeul.google.go.lang.psi.GoPackageReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 
 import java.util.Collection;
@@ -16,6 +18,7 @@ import java.util.Collection;
 import static ro.redeul.google.go.GoBundle.message;
 
 public class ImportUnusedInspection extends AbstractWholeGoFileInspection {
+
     @Nls
     @NotNull
     @Override
@@ -36,13 +39,17 @@ public class ImportUnusedInspection extends AbstractWholeGoFileInspection {
         Collection<GoImportDeclaration> unusedImports = UnusedImportsFinder.findUnusedImports(file);
 
         for (GoImportDeclaration unused : unusedImports) {
-            if (!unused.isValidImport() || unused.getImportPath() == null) {
+            if (!unused.isValidImport() || unused.getImportPath() == null) continue;
+
+            GoPackageReference packageReference = unused.getPackageReference();
+            if ( packageReference != null && (packageReference.isBlank() || packageReference.isLocal()) ) return;
+
+            if ( unused.getPackage() == GoPackages.C )
                 continue;
-            }
 
             result.addProblem(
                     unused,
-                    message("warning.unused.import", unused.getImportPath().getValue()) + "xxx",
+                    message("warning.unused.import", unused.getImportPath().getValue()),
                     ProblemHighlightType.LIKE_UNUSED_SYMBOL,
                     new RemoveImportFix(unused));
         }
