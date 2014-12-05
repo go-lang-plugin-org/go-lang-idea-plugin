@@ -78,14 +78,15 @@ public class GoPsiManager {
         if (type == null) {
             RecursionGuard.StackStamp stamp = outSecondGuard.markStack();
             type = valueCalculator.fun(element);
-            if ( type != null ) {
-                if (stamp.mayCacheNow()) {
-                    type = ConcurrencyUtil.cacheOrGet(myComputedType, element, type);
-                } else {
-                    final GoType alreadyInferred = myComputedType.get(element);
-                    if (alreadyInferred != null) {
-                        type = alreadyInferred;
-                    }
+            if ( type == null )
+                type = GoType.Unknown;
+
+            if (stamp.mayCacheNow()) {
+                type = ConcurrencyUtil.cacheOrGet(myComputedType, element, type);
+            } else {
+                final GoType alreadyInferred = myComputedType.get(element);
+                if (alreadyInferred != null) {
+                    type = alreadyInferred;
                 }
             }
         }

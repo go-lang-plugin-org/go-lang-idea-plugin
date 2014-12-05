@@ -38,7 +38,7 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
     }
 
     @Override
-    protected void doCheckFile(@NotNull GoFile file,
+    protected void doCheckFile(@NotNull final GoFile file,
                                @NotNull final InspectionResult result) {
         new GoRecursiveElementVisitor() {
             @Override
@@ -60,24 +60,21 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
                                             boolean hasPackageReference = false;
                                             boolean hasVarReferences = false;
                                             for (PsiReference ref : refs) {
-                                                if (ref instanceof PackageReference)
-                                                    hasPackageReference = true;
+                                                if (ref instanceof PackageReference) {
+                                                    getData().add(new AddImportFix(identifier));
+                                                }
 
                                                 if (ref instanceof VarOrConstReference)
-                                                    hasVarReferences = true;
-                                            }
+                                                    if (isGlobalVariableIdentifier(identifier))
+                                                        getData().add(new CreateGlobalVariableFix(identifier));
+                                                    else
+                                                        getData()
+                                                                .add(new CreateLocalVariableFix(identifier))
+                                                                .add(new CreateGlobalVariableFix(identifier))
+                                                                .add(new CreateFunctionFix(identifier))
+                                                                .add(new CreateClosureFunctionFix(identifier));
 
-                                            if ( hasVarReferences )
-                                                if ( isGlobalVariableIdentifier(identifier) )
-                                                    getData().add(new CreateGlobalVariableFix(identifier));
-                                                else
-                                                    getData()
-                                                            .add(new CreateLocalVariableFix(identifier))
-                                                            .add(new CreateGlobalVariableFix(identifier))
-                                                            .add(new CreateFunctionFix(identifier))
-                                                            .add(new CreateClosureFunctionFix(identifier));
-                                            else if ( hasPackageReference )
-                                                getData().add(new AddImportFix(identifier));
+                                            }
 
                                             ((GoPsiElement) identifier.getParent()).accept(this);
                                         }
@@ -113,7 +110,7 @@ public class UnresolvedSymbols extends AbstractWholeGoFileInspection {
 
     private static boolean isGlobalVariableIdentifier(GoLiteralIdentifier ident) {
         return findParentOfType(ident, GoSelectorExpression.class) == null &&
-               findParentOfType(ident, GoFunctionDeclaration.class) == null &&
-               findParentOfType(ident, GoVarDeclarations.class) != null;
+                findParentOfType(ident, GoFunctionDeclaration.class) == null &&
+                findParentOfType(ident, GoVarDeclarations.class) != null;
     }
 }

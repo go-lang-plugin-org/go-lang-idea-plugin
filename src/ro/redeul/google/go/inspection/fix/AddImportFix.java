@@ -169,7 +169,7 @@ public class AddImportFix extends LocalQuickFixAndIntentionActionOnPsiElement im
     @Override
     public boolean isAvailable(@NotNull Project project, @NotNull PsiFile file, @NotNull PsiElement startElement, @NotNull PsiElement endElement) {
         PackageReference reference = GoReferenceImporter.getPackageReferenceAt(file, startElement.getTextOffset());
-        return reference != null && reference.resolve() == null;
+        return reference != null && reference.resolve() == null && findPotentialImports(startElement).size() > 0;
     }
 
     @NotNull
