@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package com.goide.psi.impl;
 
 import com.goide.GoIcons;
-import com.goide.completion.GoCompletionContributor;
+import com.goide.completion.GoCompletionUtil;
 import com.goide.psi.*;
 import com.goide.psi.impl.imports.GoImportReferenceSet;
 import com.goide.stubs.GoNamedStub;
@@ -181,7 +181,7 @@ public class GoPsiImplUtil {
         .withLookupString(StringUtil.notNullize(f.getName(), "").toLowerCase())
         .withLookupString(pkg + f.getName())
         .withPresentableText(pkg + f.getName() + paramText),
-      showPkg ? GoCompletionContributor.FUNCTION_WITH_PACKAGE_PRIORITY : GoCompletionContributor.FUNCTION_PRIORITY
+      showPkg ? GoCompletionUtil.FUNCTION_WITH_PACKAGE_PRIORITY : GoCompletionUtil.FUNCTION_PRIORITY
     );
   }
 
@@ -221,13 +221,13 @@ public class GoPsiImplUtil {
         .withPresentableText(pkg + t.getName())
         .withInsertHandler(handler)
         .withIcon(GoIcons.TYPE),
-      GoCompletionContributor.TYPE_PRIORITY);
+      GoCompletionUtil.TYPE_PRIORITY);
   }
 
   @NotNull
   public static LookupElement createLabelLookupElement(@NotNull GoLabelDefinition l) {
     return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(l).withIcon(GoIcons.LABEL),
-                                                 GoCompletionContributor.LABEL_PRIORITY);
+                                                 GoCompletionUtil.LABEL_PRIORITY);
   }
 
   @NotNull
@@ -237,7 +237,7 @@ public class GoPsiImplUtil {
         .create(t)
         .withLookupString(StringUtil.notNullize(t.getName(), "").toLowerCase())
         .withInsertHandler(ParenthesesInsertHandler.WITH_PARAMETERS).withIcon(GoIcons.TYPE),
-      GoCompletionContributor.TYPE_CONVERSION);
+      GoCompletionUtil.TYPE_CONVERSION);
   }
 
   @NotNull
@@ -257,7 +257,7 @@ public class GoPsiImplUtil {
         .withLookupString(StringUtil.notNullize(v.getName(), "").toLowerCase())
         .withIcon(icon)
         .withTypeText(text, true),
-      GoCompletionContributor.VAR_PRIORITY);
+      GoCompletionUtil.VAR_PRIORITY);
   }
 
   @Nullable
@@ -270,7 +270,7 @@ public class GoPsiImplUtil {
   public static LookupElement createPackageLookupElement(@NotNull String str, boolean forType) {
     return PrioritizedLookupElement.withPriority(
       LookupElementBuilder.create(str).withIcon(GoIcons.PACKAGE).withInsertHandler(forType ? Lazy.PACKAGE_INSERT_HANDLER : null),
-      GoCompletionContributor.PACKAGE_PRIORITY);
+      GoCompletionUtil.PACKAGE_PRIORITY);
   }
 
   @NotNull
