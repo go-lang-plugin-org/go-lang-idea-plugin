@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader
+  ~ Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -15,14 +15,25 @@
   -->
 
 <idea-plugin version="2">
-  <id>com.goide</id>
-  <name>Go</name>
+  <id>ro.redeul.google.go</id>
+  <name>Go language (golang.org) support plugin</name>
   <version>1.0</version>
-  <vendor>Oh ltd.</vendor>
+  <vendor url="https://github.com/go-lang-plugin-org/go-lang-idea-plugin"/>
+  <category>Custom Languages</category>
 
-  <description><![CDATA[]]></description>
+  <description>
+    <![CDATA[<h2>Support for Go programming language.</h2>
+    ]]>
+  </description>
 
-  <change-notes><![CDATA[]]></change-notes>
+  <change-notes>
+    <![CDATA[
+    <h3>1.0.0 changes:</h3>
+        <ul>
+            <li>[improvement] Fully reworked insternals</li>
+        </ul>
+    ]]>
+  </change-notes>
 
   <idea-version since-build="138.2210"/>
   <depends>com.intellij.modules.lang</depends>
