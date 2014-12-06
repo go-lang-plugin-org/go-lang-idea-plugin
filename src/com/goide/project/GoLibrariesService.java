@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader
+ * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.goide.project;
 
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.util.Function;
@@ -45,6 +46,7 @@ public abstract class GoLibrariesService implements PersistentStateComponent<GoL
   public static Collection<VirtualFile> getUserDefinedLibraries(@NotNull Module module) {
     final Set<VirtualFile> result = ContainerUtil.newHashSet();
     result.addAll(filesFromUrls(GoModuleLibrariesService.getInstance(module).getLibraryRootUrls()));
+    result.addAll(getUserDefinedLibraries(module.getProject()));
     result.addAll(getUserDefinedLibraries());
     return result;
   }
@@ -53,6 +55,10 @@ public abstract class GoLibrariesService implements PersistentStateComponent<GoL
     myState.setUrls(libraryRootUrls);
   }
 
+  public static Collection<? extends VirtualFile> getUserDefinedLibraries(@NotNull Project project) {
+    return filesFromUrls(GoProjectLibrariesService.getInstance(project).getLibraryRootUrls());
+  }
+  
   public static Collection<? extends VirtualFile> getUserDefinedLibraries() {
     return filesFromUrls(GoApplicationLibrariesService.getInstance().getLibraryRootUrls());
   }
