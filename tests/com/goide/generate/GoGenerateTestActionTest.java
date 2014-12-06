@@ -4,7 +4,7 @@ import com.goide.GoCodeInsightFixtureTestCase;
 import com.intellij.testFramework.PlatformTestUtil;
 import org.jetbrains.annotations.NotNull;
 
-public class GenerateTestActionTest extends GoCodeInsightFixtureTestCase {
+public class GoGenerateTestActionTest extends GoCodeInsightFixtureTestCase {
   public void testTest() {
     doTest("GoGenerateTest", "package test\n" +
                              "func TestName(t *testing.T) {\n" +
