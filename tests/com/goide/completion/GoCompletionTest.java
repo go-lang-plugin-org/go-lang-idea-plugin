@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,6 +83,11 @@ public class GoCompletionTest extends GoCompletionTestBase {
   }
 
   public void testBlockKeywords() {
+    myFixture.testCompletionVariants(getTestName(true) + ".go", "for", "const", "var", "return", "if", "switch", "go", "defer", "select",
+                                     "fallthrough", "goto", "main");
+  }
+  
+  public void testBlockKeywordsInsideOneLineFunction() {
     myFixture.testCompletionVariants(getTestName(true) + ".go", "for", "const", "var", "return", "if", "switch", "go", "defer", "select",
                                      "fallthrough", "goto", "main");
   }

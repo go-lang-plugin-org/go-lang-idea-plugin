@@ -39,6 +39,7 @@ import com.intellij.patterns.PsiElementPattern;
 import com.intellij.patterns.PsiFilePattern;
 import com.intellij.psi.*;
 import com.intellij.psi.stubs.StubIndex;
+import com.intellij.psi.tree.IElementType;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -67,20 +68,20 @@ public class GoCompletionContributor extends CompletionContributor implements Du
                                                                                    AutoCompletionPolicy.ALWAYS_AUTOCOMPLETE, "package"));
     extend(CompletionType.BASIC, importPattern(), new GoKeywordCompletionProvider(KEYWORD_PRIORITY, "import"));
     extend(CompletionType.BASIC, topLevelPattern(), new GoKeywordCompletionProvider(KEYWORD_PRIORITY, "const", "var", "func", "type"));
-    extend(CompletionType.BASIC, insideBlockPattern(), new GoKeywordCompletionProvider(KEYWORD_PRIORITY, "for", "const", "var", "return",
-                                                                                       "if", "switch", "go", "defer", "goto"));
-    extend(CompletionType.BASIC, insideBlockPattern(), new GoKeywordCompletionProvider(KEYWORD_PRIORITY, EMPTY_INSERT_HANDLER,
-                                                                                       "fallthrough"));
-    extend(CompletionType.BASIC, insideBlockPattern(), new GoKeywordCompletionProvider(KEYWORD_PRIORITY, ADD_BRACES_INSERT_HANDLER,
-                                                                                       "select"));
+    extend(CompletionType.BASIC, insideBlockPattern(GoTypes.IDENTIFIER),
+           new GoKeywordCompletionProvider(KEYWORD_PRIORITY, "for", "const", "var", "return", "if", "switch", "go", "defer", "goto"));
+    extend(CompletionType.BASIC, insideBlockPattern(GoTypes.IDENTIFIER),
+           new GoKeywordCompletionProvider(KEYWORD_PRIORITY, EMPTY_INSERT_HANDLER, "fallthrough"));
+    extend(CompletionType.BASIC, insideBlockPattern(GoTypes.IDENTIFIER),
+           new GoKeywordCompletionProvider(KEYWORD_PRIORITY, ADD_BRACES_INSERT_HANDLER, "select"));
     extend(CompletionType.BASIC, typeDeclaration(), new GoKeywordCompletionProvider(KEYWORD_PRIORITY, new AddBracesInsertHandler(),
                                                                                     "interface", "struct"));
-    extend(CompletionType.BASIC, insideForStatement(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, EMPTY_INSERT_HANDLER,
-                                                                                       "break", "continue"));
+    extend(CompletionType.BASIC, insideForStatement(GoTypes.IDENTIFIER),
+           new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, EMPTY_INSERT_HANDLER, "break", "continue"));
     extend(CompletionType.BASIC, typeExpression(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, "chan"));
     extend(CompletionType.BASIC, typeExpression(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, ADD_BRACKETS_INSERT_HANDLER,
                                                                                    "map"));
-    extend(CompletionType.BASIC, afterIfBlock(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, "else"));
+    extend(CompletionType.BASIC, afterIfBlock(GoTypes.IDENTIFIER), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, "else"));
     extend(CompletionType.BASIC, afterElseKeyword(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, "if"));
     //extend(CompletionType.BASIC, insideSwitchStatement(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, "case", "default"));
     //  todo: "case", "default", "range" 
@@ -89,30 +90,30 @@ public class GoCompletionContributor extends CompletionContributor implements Du
   @Override
   public void fillCompletionVariants(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
     super.fillCompletionVariants(parameters, result);
-    if (insideGoOrDeferStatements().accepts(parameters.getPosition())) {
+    if (insideGoOrDeferStatements(GoTypes.IDENTIFIER).accepts(parameters.getPosition())) {
       InsertHandler<LookupElement> insertHandler = GoKeywordCompletionProvider.createTemplateBasedInsertHandler("go_lang_anonymous_func");
       result.addElement(GoKeywordCompletionProvider.createKeywordLookupElement("func", CONTEXT_KEYWORD_PRIORITY, insertHandler));
     }
   }
 
-  private static ElementPattern<? extends PsiElement> afterIfBlock() {
-    return psiElement().withParent(
+  private static ElementPattern<? extends PsiElement> afterIfBlock(@NotNull IElementType tokenType) {
+    return psiElement(tokenType).withParent(
       psiElement(GoExpression.class).withParent(psiElement(GoStatement.class)
                                                   .afterSiblingSkipping(psiElement().whitespaceCommentEmptyOrError(),
                                                                         psiElement(GoIfStatement.class))))
-      .andNot(afterElseKeyword()).andNot(onNewLine());
+      .andNot(afterElseKeyword()).andNot(onStatementBeginning(tokenType));
   }
 
   private static ElementPattern<? extends PsiElement> afterElseKeyword() {
-    return psiElement().afterLeafSkipping(psiElement().whitespaceCommentEmptyOrError(), psiElement(GoTypes.ELSE));
+    return psiElement(GoTypes.IDENTIFIER).afterLeafSkipping(psiElement().whitespaceCommentEmptyOrError(), psiElement(GoTypes.ELSE));
   }
 
-  private static ElementPattern<? extends PsiElement> insideForStatement() {
-    return insideBlockPattern().inside(GoForStatement.class);
+  private static ElementPattern<? extends PsiElement> insideForStatement(@NotNull IElementType tokenType) {
+    return insideBlockPattern(tokenType).inside(GoForStatement.class);
   }
 
   private static ElementPattern<? extends PsiElement> typeExpression() {
-    return psiElement().withParent(GoTypeReferenceExpression.class);
+    return psiElement(GoTypes.IDENTIFIER).withParent(GoTypeReferenceExpression.class);
   }
 
   //private static ElementPattern<? extends PsiElement> insideSwitchStatement() {
@@ -120,17 +121,18 @@ public class GoCompletionContributor extends CompletionContributor implements Du
   //}
 
   private static ElementPattern<? extends PsiElement> typeDeclaration() {
-    return psiElement().withParent(
-      psiElement(GoTypeReferenceExpression.class).withParent(psiElement(GoType.class).withParent(GoTypeSpec.class)));
+    return psiElement(GoTypes.IDENTIFIER)
+      .withParent(psiElement(GoTypeReferenceExpression.class).withParent(psiElement(GoType.class).withParent(GoTypeSpec.class)));
   }
 
-  private static PsiElementPattern.Capture<PsiElement> insideGoOrDeferStatements() {
-    return psiElement()
+  private static PsiElementPattern.Capture<PsiElement> insideGoOrDeferStatements(@NotNull IElementType tokenType) {
+    return psiElement(tokenType)
       .withParent(psiElement(GoExpression.class).withParent(or(psiElement(GoDeferStatement.class), psiElement(GoGoStatement.class))));
   }
 
-  private static PsiElementPattern.Capture<PsiElement> insideBlockPattern() {
-    return onNewLine().withParent(psiElement(GoExpression.class).withParent(psiElement(GoStatement.class).withParent(GoBlock.class)));
+  private static PsiElementPattern.Capture<PsiElement> insideBlockPattern(@NotNull IElementType tokenType) {
+    return onStatementBeginning(tokenType)
+      .withParent(psiElement(GoExpression.class).withParent(psiElement(GoStatement.class).withParent(GoBlock.class)));
   }
 
   private static PsiElementPattern.Capture<PsiElement> inGoFile() {
@@ -138,21 +140,24 @@ public class GoCompletionContributor extends CompletionContributor implements Du
   }
 
   private static PsiElementPattern.Capture<PsiElement> topLevelPattern() {
-    return onNewLine().withParent(psiElement(PsiErrorElement.class).withParent(goFileWithPackage()));
+    return onStatementBeginning(GoTypes.IDENTIFIER).withParent(psiElement(PsiErrorElement.class).withParent(goFileWithPackage()));
   }
 
   private static PsiElementPattern.Capture<PsiElement> importPattern() {
-    return onNewLine().withParent(psiElement(PsiErrorElement.class).afterSiblingSkipping(psiElement().whitespace(),
-                                                                                         psiElement(GoImportList.class)));
+    return onStatementBeginning(GoTypes.IDENTIFIER)
+      .withParent(psiElement(PsiErrorElement.class).afterSiblingSkipping(psiElement().whitespace(),
+                                                                         psiElement(GoImportList.class)));
   }
 
   private static PsiElementPattern.Capture<PsiElement> packagePattern() {
-    return psiElement().withParent(psiElement(PsiErrorElement.class).withParent(goFileWithoutPackage()).isFirstAcceptedChild(psiElement()));
+    return psiElement(GoTypes.IDENTIFIER)
+      .withParent(psiElement(PsiErrorElement.class).withParent(goFileWithoutPackage()).isFirstAcceptedChild(psiElement()));
   }
 
-  private static PsiElementPattern.Capture<PsiElement> onNewLine() {
-    return psiElement().afterLeafSkipping(psiElement().whitespaceCommentEmptyOrError().withoutText(string().containsChars("\n")),
-                                          or(psiElement(GoTypes.SEMICOLON), psiElement().withText(string().containsChars("\n"))));
+  private static PsiElementPattern.Capture<PsiElement> onStatementBeginning(@NotNull IElementType tokenType) {
+    return psiElement(tokenType).afterLeafSkipping(psiElement().whitespaceCommentEmptyOrError().withoutText(string().containsChars("\n")),
+                                                   or(psiElement(GoTypes.SEMICOLON), psiElement(GoTypes.LBRACE),
+                                                      psiElement().withText(string().containsChars("\n"))));
   }
 
   private static PsiFilePattern.Capture<GoFile> goFileWithPackage() {
