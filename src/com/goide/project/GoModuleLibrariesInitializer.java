@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader
+ * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,9 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleComponent;
 import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ShowSettingsUtil;
+import com.intellij.openapi.options.ex.ConfigurableExtensionPointUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.*;
 import com.intellij.openapi.roots.impl.OrderEntryUtil;
@@ -233,7 +235,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
       }
     }
 
-    if (!shownAlready) {
+    if (shownAlready) {
       final Notification notification = new Notification("go", "GOPATH was detected",
                                                          "We've been detected some libraries from your GOPATH.\n" +
                                                          "You may want to add extra libraries in <a href='configure'>Go Libraries configuration</a>.",
@@ -241,7 +243,10 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
         @Override
         protected void hyperlinkActivated(@NotNull Notification notification, @NotNull HyperlinkEvent event) {
           if (event.getDescription().equals("configure") && !project.isDisposed()) {
-            ShowSettingsUtil.getInstance().showSettingsDialog(project, GoLibrariesConfigurableProvider.DISPLAY_NAME);
+            final Configurable configurable = ConfigurableExtensionPointUtil.createProjectConfigurableForProvider(project, GoLibrariesConfigurableProvider.class);
+            if (configurable != null) {
+              ShowSettingsUtil.getInstance().editConfigurable(project, configurable);
+            }
           }
         }
       });

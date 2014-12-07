@@ -40,7 +40,6 @@ import java.util.List;
 import java.util.Locale;
 
 public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
-  @NotNull public static final String DISPLAY_NAME = "Go Libraries";
   @NotNull private final Project myProject;
 
   public GoLibrariesConfigurableProvider(@NotNull Project project) {
@@ -121,7 +120,7 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
       @Nls
       @Override
       public String getDisplayName() {
-        return DISPLAY_NAME;
+        return "Go Libraries";
       }
 
       @Nullable
