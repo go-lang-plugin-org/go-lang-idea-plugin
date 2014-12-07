@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader
+ * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,8 @@ package com.goide.project;
 
 import com.intellij.openapi.fileChooser.FileChooserDialog;
 import com.intellij.openapi.fileChooser.FileChooserFactory;
+import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.options.UnnamedConfigurable;
 import com.intellij.openapi.util.Iconable;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -28,6 +28,7 @@ import com.intellij.ui.*;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.IconUtil;
 import com.intellij.util.containers.ContainerUtil;
+import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,12 +38,14 @@ import java.util.List;
 
 import static com.intellij.openapi.fileChooser.FileChooserDescriptorFactory.createMultipleFoldersDescriptor;
 
-public class GoLibrariesConfigurable implements UnnamedConfigurable {
+public class GoLibrariesConfigurable implements Configurable {
+  @NotNull private final String myDisplayName;
   private final GoLibrariesService myLibrariesService;
   private final JPanel myPanel = new JPanel(new BorderLayout());
   private final CollectionListModel<String> myListModel = new CollectionListModel<String>();
 
-  public GoLibrariesConfigurable(@NotNull GoLibrariesService librariesService) {
+  public GoLibrariesConfigurable(@NotNull String displayName, @NotNull GoLibrariesService librariesService) {
+    myDisplayName = displayName;
     myLibrariesService = librariesService;
 
     final JBList filesList = new JBList(myListModel);
@@ -140,5 +143,18 @@ public class GoLibrariesConfigurable implements UnnamedConfigurable {
   @Override
   public void disposeUIResources() {
 
+  }
+
+  @NotNull
+  @Nls
+  @Override
+  public String getDisplayName() {
+    return myDisplayName;
+  }
+
+  @Nullable
+  @Override
+  public String getHelpTopic() {
+    return null;
   }
 }
