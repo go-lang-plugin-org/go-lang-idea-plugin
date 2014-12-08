@@ -293,6 +293,7 @@ public class GoVisitor extends PsiElementVisitor {
 
   public void visitReferenceExpression(@NotNull GoReferenceExpression o) {
     visitExpression(o);
+    // visitReferenceExpressionBase(o);
   }
 
   public void visitResult(@NotNull GoResult o) {
@@ -372,7 +373,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitTypeReferenceExpression(@NotNull GoTypeReferenceExpression o) {
-    visitCompositeElement(o);
+    visitReferenceExpressionBase(o);
   }
 
   public void visitTypeSpec(@NotNull GoTypeSpec o) {
@@ -424,6 +425,10 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitNamedSignatureOwner(@NotNull GoNamedSignatureOwner o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitReferenceExpressionBase(@NotNull GoReferenceExpressionBase o) {
     visitCompositeElement(o);
   }
 

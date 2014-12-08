@@ -254,6 +254,15 @@ public class GoCompletionTest extends GoCompletionTestBase {
     assertSize(1, ContainerUtil.filter(stringList, new TreePrintCondition.Include("a")));
   }
 
+  public void testTypeCastAsVar() throws Exception {
+    doTestInclude("package main\n" +
+                  "var fooVar int = 1\n" +
+                  "func main() {\n" +
+                  "    for _, v := range (*<caret>) {\n" +
+                  "    }\n" +
+                  "}", "fooVar");
+  }
+
   private void doTestCompletion() {
     myFixture.testCompletion(getTestName(true) + ".go", getTestName(true) + "_after.go");
   }

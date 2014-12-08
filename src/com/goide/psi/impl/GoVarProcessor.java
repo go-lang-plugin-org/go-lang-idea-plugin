@@ -28,12 +28,12 @@ import java.util.List;
 
 public class GoVarProcessor extends GoScopeProcessorBase {
   private final boolean myImShortVarDeclaration;
-  private final GoBlock myBlock;
+  private final GoCompositeElement myScope;
   
   public GoVarProcessor(String requestedName, PsiElement origin, boolean completion) {
     super(requestedName, origin, completion);
     myImShortVarDeclaration = PsiTreeUtil.getParentOfType(origin, GoShortVarDeclaration.class) != null;
-    myBlock = PsiTreeUtil.getParentOfType(origin, GoBlock.class);
+    myScope = getScope(origin);
   }
 
   @Override
@@ -41,14 +41,21 @@ public class GoVarProcessor extends GoScopeProcessorBase {
     if (PsiTreeUtil.findCommonParent(o, myOrigin) instanceof GoRangeClause) return true;
     boolean inVarOrRange = PsiTreeUtil.getParentOfType(o, GoVarDeclaration.class) != null || o.getParent() instanceof GoRangeClause;
     boolean differentBlocks = differentBlocks(o);
-    boolean inShortVar = PsiTreeUtil.getParentOfType(o, GoShortVarDeclaration.class) != null;
+    boolean inShortVar = PsiTreeUtil.getParentOfType(o, GoShortVarDeclaration.class, GoRecvStatement.class) != null;
     if (inShortVar && differentBlocks && myImShortVarDeclaration) return true;
     if (differentBlocks && inShortVar && !inVarOrRange && getResult() != null) return true;
     return super.add(o) || !inVarOrRange;
   }
 
   private boolean differentBlocks(@Nullable GoNamedElement o) {
-    return !Comparing.equal(myBlock, PsiTreeUtil.getParentOfType(o, GoBlock.class));
+    return !Comparing.equal(myScope, getScope(o));
+  }
+
+  @Nullable
+  private static GoCompositeElement getScope(@Nullable PsiElement o) {
+    GoForStatement forStatement = PsiTreeUtil.getParentOfType(o, GoForStatement.class);
+    if (forStatement != null) return forStatement.getBlock();
+    return PsiTreeUtil.getParentOfType(o, GoBlock.class);
   }
 
   @Nullable

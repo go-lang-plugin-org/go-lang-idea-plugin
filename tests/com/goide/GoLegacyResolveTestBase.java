@@ -17,12 +17,20 @@
 package com.goide;
 
 import com.goide.psi.GoFile;
+import com.intellij.openapi.util.Condition;
+import com.intellij.openapi.vfs.LocalFileSystem;
+import com.intellij.openapi.vfs.VfsUtilCore;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.FilteringProcessor;
+import com.intellij.util.Processor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+import java.io.File;
 
 public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCase {
   @NotNull public String REF_MARK = "/*ref*/";
@@ -50,30 +58,35 @@ public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCa
     super.tearDown();
   }
 
-  protected void doResolveTest() {
-    doResolveTest(getTestName(true) + ".go");
+  protected void doResolveTest(boolean lowercase) {
+    doResolveTest(getTestName(lowercase) + ".go");
+  }
+  
+  protected void doDirTest() {
+    String testDataPath = getTestDataPath();
+    File fromFile = new File(testDataPath + "/" + getTestName(false));
+    if (fromFile.isDirectory()) {
+      VirtualFile dir = LocalFileSystem.getInstance().findFileByPath(fromFile.getPath());
+      try {
+        assert dir != null;
+        doDirectoryTest(dir);
+      }
+      catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+    }
   }
 
-  private void doResolveTest(@NotNull String referenceFile) {
-    processPsiFile((GoFile)myFixture.configureByFile(referenceFile));
+  private void doResolveTest(@NotNull String filePath) {
+    processPsiFile((GoFile)myFixture.configureByFile(filePath));
     if (myReference == null) fail("no reference defined in test case");
     PsiElement resolve = myReference.resolve();
     if (resolve != null && myDefinition == null) fail("element resolved but it shouldn't have");
     if (resolve == null && myDefinition != null) fail("element didn't resolve when it should have");
     if (resolve != null) {
-      while (!myDefinition.getNavigationElement().isEquivalentTo(resolve.getNavigationElement()) && myDefinition.getStartOffsetInParent() == 0) {
-        myDefinition = myDefinition.getParent();
-      }
-      assertSame(myDefinition.getNavigationElement(), resolve.getNavigationElement());
+      PsiElement def = PsiTreeUtil.getParentOfType(myDefinition, resolve.getClass(), false);
+      assertSame(def, resolve);
     }
-  }
-
-  @NotNull
-  @Override
-  protected List<GoFile> addPackage(@NotNull String importPath, @NotNull String... fileNames) {
-    List<GoFile> files = super.addPackage(importPath, fileNames);
-    for (GoFile file : files) processPsiFile(file);
-    return files;
   }
 
   private void processPsiFile(@NotNull GoFile file) {
@@ -94,5 +107,28 @@ public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCa
       myDefinition = file.findElementAt(offset);
       if (myDefinition == null) fail("no definition was found where marked in file: " + file + ", offset: " + offset);
     }
+  }
+
+  private void doDirectoryTest(@NotNull final VirtualFile file) throws Exception {
+    VfsUtilCore.processFilesRecursively(
+      file,
+      new FilteringProcessor<VirtualFile>(
+        new Condition<VirtualFile>() {
+          @Override
+          public boolean value(VirtualFile virtualFile) {
+            return !virtualFile.isDirectory() && virtualFile.getName().endsWith(".go");
+          }
+        },
+        new Processor<VirtualFile>() {
+          @Override
+          public boolean process(VirtualFile virtualFile) {
+            PsiFile goFile = myFixture.getPsiManager().findFile(virtualFile);
+            assert goFile instanceof GoFile;
+            processPsiFile((GoFile)goFile);
+            return true;
+          }
+        }
+      )
+    );
   }
 }

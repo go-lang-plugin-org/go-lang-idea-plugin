@@ -73,6 +73,7 @@
   implements("MethodSpec")="com.goide.psi.GoNamedSignatureOwner"
   implements("(Function|Method)Declaration")="com.goide.psi.GoFunctionOrMethodDeclaration"
   implements("(Const|Type|Var)Declaration")="com.goide.psi.GoTopLevelDeclaration"
+  implements(".*ReferenceExpression")="com.goide.psi.GoReferenceExpressionBase"
   extends("(Function|Method)Declaration")="com.goide.psi.impl.GoFunctionOrMethodDeclarationImpl<?>"
   extends("(Type|Import|Method)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver")="com.goide.psi.impl.GoNamedElementImpl<?>"
   extends("Parameters|Signature|ParameterDeclaration|Result")="com.goide.psi.impl.GoStubbedElementImpl<?>"
@@ -366,15 +367,15 @@ private SimpleStatementOpt ::= [SimpleStatement ';'?] // todo: remove ?
 ExprCaseClause ::= ExprSwitchCase ':' Statements?
 ExprSwitchCase ::= case ExpressionList | default {pin(".*")=1}
 left TypeSwitchStatement ::= (TypeSwitchGuard | SimpleStatement ';'? TypeSwitchGuard) '{' ( TypeCaseClause )* '}' {pin=1 extends=SwitchStatement}
-TypeSwitchGuard ::= [ identifier ':=' ] Expression '.' '(' 'type' ')' {pin=5}
+TypeSwitchGuard ::= [ VarDefinition ':=' ] Expression '.' '(' 'type' ')' {pin=5}
 TypeCaseClause ::= TypeSwitchCase ':' Statements?
 TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
 TypeList ::= Type ( ',' Type )* {extends=Type}
 TypeListNoPin ::= Type ( ',' Type )* {elementType=TypeList}
-ForStatement ::= for (ForOrRangeClause Block | Block | ExpressionNoLiteral Block) {pin(".*")="ForOrRangeClause"}
+ForStatement ::= for (ForOrRangeClause Block | Block | ExpressionNoLiteral Block) {pin(".*")="for|ForOrRangeClause"}
 private ForOrRangeClause ::= ForClause | RangeClause
 private ExpressionNoLiteral ::= <<enterMode "NO_EMPTY_LITERAL">> (Expression <<exitMode "NO_EMPTY_LITERAL">> | <<exitMode "NO_EMPTY_LITERAL">>)
-ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement?
+ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement? {methods=[processDeclarations]}
 RangeClause ::= ExpressionsOrVariables? range ExpressionNoLiteral {pin=2}
 private ExpressionsOrVariables ::= ExpressionList '=' | VarDefinitionList ':='
 GoStatement ::= go Expression

@@ -45,7 +45,7 @@ import java.util.Set;
 
 import static com.goide.psi.impl.GoPsiImplUtil.*;
 
-public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpression> {
+public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressionBase> {
   public static final Key<List<PsiElement>> IMPORT_USERS = Key.create("IMPORT_USERS");
 
   private static final Set<String> BUILTIN_PRINT_FUNCTIONS = ContainerUtil.newHashSet("print", "println");
@@ -60,7 +60,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     };
   public static final Key<String > ACTUAL_NAME = Key.create("ACTUAL_NAME");
 
-  public GoReference(@NotNull GoReferenceExpression o) {
+  public GoReference(@NotNull GoReferenceExpressionBase o) {
     super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(), o.getIdentifier().getTextLength()));
   }
 
@@ -160,7 +160,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     PsiFile file = myElement.getContainingFile();
     if (!(file instanceof GoFile)) return false;
     ResolveState state = ResolveState.initial();
-    GoReferenceExpression qualifier = myElement.getQualifier();
+    GoReferenceExpressionBase qualifier = myElement.getQualifier();
     if (qualifier != null) {
       return processQualifierExpression(((GoFile)file), qualifier, processor, state);
     }
@@ -168,10 +168,11 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   }
 
   private boolean processQualifierExpression(@NotNull GoFile file,
-                                             @NotNull GoReferenceExpression qualifier,
+                                             @NotNull GoReferenceExpressionBase qualifier,
                                              @NotNull MyScopeProcessor processor,
                                              @NotNull ResolveState state) {
-    PsiElement target = qualifier.getReference().resolve();
+    PsiReference reference = qualifier.getReference();
+    PsiElement target = reference != null ? reference.resolve() : null;
     if (target == null || target == qualifier) return false;
     if (target instanceof GoImportSpec) target = ((GoImportSpec)target).getImportString().resolve();
     if (target instanceof PsiDirectory) {

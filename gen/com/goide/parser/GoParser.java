@@ -1580,12 +1580,13 @@ public class GoParser implements PsiParser {
   public static boolean ForStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForStatement")) return false;
     if (!nextTokenIs(b, FOR)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeToken(b, FOR);
+    p = r; // pin = for|ForOrRangeClause
     r = r && ForStatement_1(b, l + 1);
-    exit_section_(b, m, FOR_STATEMENT, r);
-    return r;
+    exit_section_(b, l, m, FOR_STATEMENT, r, p, null);
+    return r || p;
   }
 
   // ForOrRangeClause Block | Block | ExpressionNoLiteral Block
@@ -1606,7 +1607,7 @@ public class GoParser implements PsiParser {
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, null);
     r = ForOrRangeClause(b, l + 1);
-    p = r; // pin = ForOrRangeClause
+    p = r; // pin = for|ForOrRangeClause
     r = r && Block(b, l + 1);
     exit_section_(b, l, m, null, r, p, null);
     return r || p;
@@ -3465,7 +3466,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // [ identifier ':=' ] Expression '.' '(' 'type' ')'
+  // [ VarDefinition ':=' ] Expression '.' '(' 'type' ')'
   public static boolean TypeSwitchGuard(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeSwitchGuard")) return false;
     boolean r, p;
@@ -3481,19 +3482,19 @@ public class GoParser implements PsiParser {
     return r || p;
   }
 
-  // [ identifier ':=' ]
+  // [ VarDefinition ':=' ]
   private static boolean TypeSwitchGuard_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeSwitchGuard_0")) return false;
     TypeSwitchGuard_0_0(b, l + 1);
     return true;
   }
 
-  // identifier ':='
+  // VarDefinition ':='
   private static boolean TypeSwitchGuard_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeSwitchGuard_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, IDENTIFIER);
+    r = VarDefinition(b, l + 1);
     r = r && consumeToken(b, VAR_ASSIGN);
     exit_section_(b, m, null, r);
     return r;

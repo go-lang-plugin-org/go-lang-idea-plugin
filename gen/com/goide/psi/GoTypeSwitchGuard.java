@@ -10,6 +10,9 @@ public interface GoTypeSwitchGuard extends GoCompositeElement {
   @NotNull
   GoExpression getExpression();
 
+  @Nullable
+  GoVarDefinition getVarDefinition();
+
   @NotNull
   PsiElement getDot();
 
@@ -24,8 +27,5 @@ public interface GoTypeSwitchGuard extends GoCompositeElement {
 
   @Nullable
   PsiElement getVarAssign();
-
-  @Nullable
-  PsiElement getIdentifier();
 
 }

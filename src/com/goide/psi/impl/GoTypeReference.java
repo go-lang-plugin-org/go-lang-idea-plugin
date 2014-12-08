@@ -56,6 +56,14 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
     String identifierText = getName();
     Collection<ResolveResult> result = new OrderedSet<ResolveResult>();
     processResolveVariants(GoReference.createResolveProcessor(identifierText, result, myElement));
+    
+    if (result.isEmpty() && myElement.getParent() instanceof GoReceiverType) {
+      PsiElement resolve = new GoReference(myElement).resolve();
+      if (resolve != null) {
+        return PsiElementResolveResult.createResults(resolve);
+      }
+    }
+    
     return result.toArray(new ResolveResult[result.size()]);
   }
 
@@ -83,7 +91,11 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
         return element != spec;
       }
     }));
-    return ArrayUtil.toObjectArray(variants);
+    Object[] array = ArrayUtil.toObjectArray(variants);
+    if (myElement.getParent() instanceof GoReceiverType) {
+      return ArrayUtil.mergeArrays(array, new GoReference(myElement).getVariants());
+    }
+    return array;
   }
 
   private boolean processResolveVariants(@NotNull GoReference.MyScopeProcessor processor) {

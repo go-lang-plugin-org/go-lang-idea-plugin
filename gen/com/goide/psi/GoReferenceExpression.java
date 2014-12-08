@@ -6,7 +6,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.goide.psi.impl.GoReference;
 
-public interface GoReferenceExpression extends GoExpression {
+public interface GoReferenceExpression extends GoExpression, GoReferenceExpressionBase {
 
   @NotNull
   PsiElement getIdentifier();

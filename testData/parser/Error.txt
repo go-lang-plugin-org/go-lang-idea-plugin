@@ -584,7 +584,8 @@ GO_FILE
         SWITCH_START
           PsiElement(switch)('switch')
         TYPE_SWITCH_GUARD
-          PsiElement(identifier)('v')
+          VAR_DEFINITION
+            PsiElement(identifier)('v')
           PsiElement(:=)(':=')
           REFERENCE_EXPRESSION
             PsiElement(identifier)('i')
