@@ -131,4 +131,6 @@ public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCa
       )
     );
   }
+
+  protected void doTest() { doResolveTest(false); }
 }

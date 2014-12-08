@@ -21,8 +21,7 @@ import com.goide.GoLegacyResolveTestBase;
 public class GoLegacyResolveVarsTest extends GoLegacyResolveTestBase {
   @Override
   protected String getBasePath() { return "psi/resolve/vars"; }
-  private void doTest() { doResolveTest(false); }
-  
+
   public void testAnonymousFunctionInvocation()                     { doTest(); } 
   public void testDeclaredInForRange1()                             { doTest(); }
   public void testDeclaredInForRange2()                             { doTest(); }
