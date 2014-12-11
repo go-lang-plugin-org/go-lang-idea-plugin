@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package com.goide.psi;
-
-import com.goide.GoLegacyResolveTestBase;
+package com.goide.psi.legacy;
 
 public class GoLegacyResolveStructTest extends GoLegacyResolveTestBase {
   @Override

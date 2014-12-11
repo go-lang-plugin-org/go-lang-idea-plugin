@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.goide;
+package com.goide.psi.legacy;
 
+import com.goide.GoCodeInsightFixtureTestCase;
 import com.goide.psi.GoFile;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.vfs.LocalFileSystem;
