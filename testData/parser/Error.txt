@@ -590,9 +590,10 @@ GO_FILE
           REFERENCE_EXPRESSION
             PsiElement(identifier)('i')
           PsiElement(.)('.')
-          PsiElement(()('(')
-          PsiElement(type)('type')
-          PsiElement())(')')
+          TYPE_GUARD
+            PsiElement(()('(')
+            PsiElement(type)('type')
+            PsiElement())(')')
         PsiElement({)('{')
         TYPE_CASE_CLAUSE
           TYPE_SWITCH_CASE

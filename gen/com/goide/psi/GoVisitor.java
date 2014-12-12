@@ -368,6 +368,10 @@ public class GoVisitor extends PsiElementVisitor {
     visitTopLevelDeclaration(o);
   }
 
+  public void visitTypeGuard(@NotNull GoTypeGuard o) {
+    visitCompositeElement(o);
+  }
+
   public void visitTypeList(@NotNull GoTypeList o) {
     visitType(o);
   }

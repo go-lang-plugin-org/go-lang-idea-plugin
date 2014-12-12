@@ -101,6 +101,7 @@ public interface GoTypes {
   IElementType TYPE_ASSERTION_EXPR = new GoCompositeElementType("TYPE_ASSERTION_EXPR");
   IElementType TYPE_CASE_CLAUSE = new GoCompositeElementType("TYPE_CASE_CLAUSE");
   IElementType TYPE_DECLARATION = new GoCompositeElementType("TYPE_DECLARATION");
+  IElementType TYPE_GUARD = new GoCompositeElementType("TYPE_GUARD");
   IElementType TYPE_LIST = new GoCompositeElementType("TYPE_LIST");
   IElementType TYPE_REFERENCE_EXPRESSION = new GoCompositeElementType("TYPE_REFERENCE_EXPRESSION");
   IElementType TYPE_SPEC = GoStubElementTypeFactory.factory("TYPE_SPEC");
@@ -470,6 +471,9 @@ public interface GoTypes {
       }
       else if (type == TYPE_DECLARATION) {
         return new GoTypeDeclarationImpl(node);
+      }
+      else if (type == TYPE_GUARD) {
+        return new GoTypeGuardImpl(node);
       }
       else if (type == TYPE_LIST) {
         return new GoTypeListImpl(node);

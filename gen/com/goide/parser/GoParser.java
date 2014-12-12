@@ -289,6 +289,9 @@ public class GoParser implements PsiParser {
     else if (t == TYPE_DECLARATION) {
       r = TypeDeclaration(b, 0);
     }
+    else if (t == TYPE_GUARD) {
+      r = TypeGuard(b, 0);
+    }
     else if (t == TYPE_LIST) {
       r = TypeList(b, 0);
     }
@@ -3255,6 +3258,21 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // '(' 'type' ')'
+  public static boolean TypeGuard(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TypeGuard")) return false;
+    if (!nextTokenIs(b, LPAREN)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = consumeToken(b, LPAREN);
+    r = r && consumeToken(b, TYPE_);
+    p = r; // pin = 2
+    r = r && consumeToken(b, RPAREN);
+    exit_section_(b, l, m, TYPE_GUARD, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
   // Type ( ',' Type )*
   public static boolean TypeList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeList")) return false;
@@ -3466,20 +3484,17 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // [ VarDefinition ':=' ] Expression '.' '(' 'type' ')'
+  // [ VarDefinition ':=' ] Expression '.' TypeGuard
   public static boolean TypeSwitchGuard(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeSwitchGuard")) return false;
-    boolean r, p;
+    boolean r;
     Marker m = enter_section_(b, l, _NONE_, "<type switch guard>");
     r = TypeSwitchGuard_0(b, l + 1);
     r = r && Expression(b, l + 1, -1);
     r = r && consumeToken(b, DOT);
-    r = r && consumeToken(b, LPAREN);
-    r = r && consumeToken(b, TYPE_);
-    p = r; // pin = 5
-    r = r && consumeToken(b, RPAREN);
-    exit_section_(b, l, m, TYPE_SWITCH_GUARD, r, p, null);
-    return r || p;
+    r = r && TypeGuard(b, l + 1);
+    exit_section_(b, l, m, TYPE_SWITCH_GUARD, r, false, null);
+    return r;
   }
 
   // [ VarDefinition ':=' ]

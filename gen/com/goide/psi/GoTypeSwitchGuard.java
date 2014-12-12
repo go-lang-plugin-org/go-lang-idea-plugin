@@ -10,20 +10,14 @@ public interface GoTypeSwitchGuard extends GoCompositeElement {
   @NotNull
   GoExpression getExpression();
 
+  @NotNull
+  GoTypeGuard getTypeGuard();
+
   @Nullable
   GoVarDefinition getVarDefinition();
 
   @NotNull
   PsiElement getDot();
-
-  @NotNull
-  PsiElement getLparen();
-
-  @Nullable
-  PsiElement getRparen();
-
-  @NotNull
-  PsiElement getType();
 
   @Nullable
   PsiElement getVarAssign();
