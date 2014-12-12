@@ -132,7 +132,6 @@ public class GoPsiImplUtil {
 
     if (o instanceof GoBlock ||
         o instanceof GoIfStatement ||
-        //o instanceof GoSwitchStatement ||
         o instanceof GoForStatement ||
         o instanceof GoCommClause ||
         o instanceof GoFunctionLit ||
