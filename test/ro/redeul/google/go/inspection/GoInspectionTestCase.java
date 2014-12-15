@@ -71,7 +71,14 @@ public abstract class GoInspectionTestCase extends GoLightCodeInsightFixtureTest
         List<String> fileNames = ContainerUtil.map(files, new Function<File, String>() {
             @Override
             public String fun(File file) {
-                return FileUtil.getRelativePath(folder, file);
+                // NOTE: configureFromTempProjectFile needs '/' as the path separator
+                //       (but FileUtil.getRelativePath(File, File) uses File.pathSeparator
+                //        by default, which is equal to '\\' on Windows).
+                final String filePath = FileUtil.getRelativePath(folder, file);
+                if (filePath == null) {
+                    return null;
+                }
+                return FileUtil.toSystemIndependentName(filePath);
             }
         });
 
