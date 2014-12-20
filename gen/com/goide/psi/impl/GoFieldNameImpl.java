@@ -27,4 +27,9 @@ public class GoFieldNameImpl extends GoCompositeElementImpl implements GoFieldNa
     return findNotNullChildByType(IDENTIFIER);
   }
 
+  @NotNull
+  public GoFieldNameReference getReference() {
+    return GoPsiImplUtil.getReference(this);
+  }
+
 }

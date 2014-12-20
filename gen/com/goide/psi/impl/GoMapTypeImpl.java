@@ -45,4 +45,18 @@ public class GoMapTypeImpl extends GoTypeImpl implements GoMapType {
     return findNotNullChildByType(MAP);
   }
 
+  @Override
+  @Nullable
+  public GoType getKeyType() {
+    List<GoType> p1 = getTypeList();
+    return p1.size() < 1 ? null : p1.get(0);
+  }
+
+  @Override
+  @Nullable
+  public GoType getValueType() {
+    List<GoType> p1 = getTypeList();
+    return p1.size() < 2 ? null : p1.get(1);
+  }
+
 }

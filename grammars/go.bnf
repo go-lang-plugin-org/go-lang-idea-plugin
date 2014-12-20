@@ -166,7 +166,13 @@ MethodSpec ::= TypeName &(!'(') | identifier Signature {
   methods=[getGoType getName]
 }
 
-MapType ::= map '[' Type ']' Type {pin=1}
+MapType ::= map '[' Type ']' Type {
+  pin=1
+  methods = [
+    keyType="Type[0]"
+    valueType="Type[1]"
+  ]
+}
 ChannelType ::= ChanTypePrefix Type {pin=1}
 private ChanTypePrefix ::= chan '<-'? | '<-' chan {pin(".*")=1}
 
@@ -283,8 +289,10 @@ LiteralTypeExpr ::=
 LiteralValue ::= <<isModeOff "NO_EMPTY_LITERAL">> '{' '}' | '{' ElementList '}' // todo: not a smart solution
 private ElementList  ::= Element ( ',' Element? )*
 Element ::= [ Key ':' ] Value
-Key ::= FieldName & ':' | ElementIndex
-FieldName ::= identifier
+Key ::= FieldName &':' | ElementIndex
+FieldName ::= identifier {
+  methods=[getReference]
+}
 ElementIndex ::= Expression
 Value ::= Expression | LiteralValue
 

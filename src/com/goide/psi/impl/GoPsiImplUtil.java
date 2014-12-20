@@ -112,6 +112,11 @@ public class GoPsiImplUtil {
   public static GoReference getReference(@NotNull final GoReferenceExpression o) {
     return new GoReference(o);
   }
+  
+  @NotNull
+  public static GoFieldNameReference getReference(@NotNull GoFieldName o) {
+    return new GoFieldNameReference(o);
+  }
 
   @NotNull
   public static PsiReference[] getReferences(@NotNull GoImportString o) {

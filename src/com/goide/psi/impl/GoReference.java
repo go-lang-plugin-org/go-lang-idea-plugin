@@ -181,6 +181,13 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     else if (target instanceof GoTypeOwner) {
       GoType type = ((GoTypeOwner)target).getGoType();
       if (type != null) processGoType(type, processor, state);
+      PsiElement parent = target.getParent();
+      if (target instanceof GoVarDefinition && parent instanceof GoTypeSwitchGuard) {
+        GoTypeCaseClause typeCase = PsiTreeUtil.getParentOfType(myElement, GoTypeCaseClause.class);
+        GoTypeSwitchCase switchCase = typeCase != null ? typeCase.getTypeSwitchCase() : null;
+        GoType caseType = switchCase != null ? switchCase.getType() : null;
+        if (caseType != null) processGoType(caseType, processor, state);
+      }
     }
     return false;
   }

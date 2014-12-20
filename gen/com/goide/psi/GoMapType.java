@@ -19,4 +19,10 @@ public interface GoMapType extends GoType {
   @NotNull
   PsiElement getMap();
 
+  @Nullable
+  GoType getKeyType();
+
+  @Nullable
+  GoType getValueType();
+
 }

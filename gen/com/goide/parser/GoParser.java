@@ -1915,7 +1915,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // FieldName & ':' | ElementIndex
+  // FieldName &':' | ElementIndex
   public static boolean Key(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Key")) return false;
     boolean r;
@@ -1926,7 +1926,7 @@ public class GoParser implements PsiParser {
     return r;
   }
 
-  // FieldName & ':'
+  // FieldName &':'
   private static boolean Key_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Key_0")) return false;
     boolean r;
@@ -1937,7 +1937,7 @@ public class GoParser implements PsiParser {
     return r;
   }
 
-  // & ':'
+  // &':'
   private static boolean Key_0_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Key_0_1")) return false;
     boolean r;
