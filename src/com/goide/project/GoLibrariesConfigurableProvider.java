@@ -17,6 +17,7 @@
 package com.goide.project;
 
 import com.goide.GoModuleType;
+import com.goide.sdk.GoSdkUtil;
 import com.intellij.application.options.ModuleAwareProjectConfigurable;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.module.Module;
@@ -24,10 +25,12 @@ import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.options.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.HideableDecorator;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -99,7 +102,15 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
       @Override
       protected List<UnnamedConfigurable> createConfigurables() {
         final List<UnnamedConfigurable> result = ContainerUtil.newArrayList();
-        result.add(new GoLibrariesConfigurable("Global libraries", GoApplicationLibrariesService.getInstance()));
+        
+        final String[] urlsFromEnv = ContainerUtil.map2Array(GoSdkUtil.getGoPathsSources(), String.class,
+                                                             new Function<VirtualFile, String>() {
+                                                               @Override
+                                                               public String fun(VirtualFile file) {
+                                                                 return file.getUrl();
+                                                               }
+                                                             });
+        result.add(new GoLibrariesConfigurable("Global libraries", GoApplicationLibrariesService.getInstance(), urlsFromEnv));
         result.add(new GoLibrariesConfigurable("Project libraries", GoProjectLibrariesService.getInstance(myProject)));
         result.add(new ModuleAwareProjectConfigurable(myProject, "Module libraries", "Module libraries") {
           @Override
