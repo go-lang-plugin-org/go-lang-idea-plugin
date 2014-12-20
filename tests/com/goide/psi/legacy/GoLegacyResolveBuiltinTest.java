@@ -29,8 +29,8 @@ public class GoLegacyResolveBuiltinTest extends GoLegacyResolveTestBase {
   }
 
   @Override
-  protected boolean assertNullDefinition() {
-    return false;
+  protected boolean allowNullDefinition() {
+    return true;
   }
 
   @Override
@@ -47,6 +47,6 @@ public class GoLegacyResolveBuiltinTest extends GoLegacyResolveTestBase {
 
   @Override
   protected void processNullResolve() {
-    assert false : "Reference " + myReference + " should be resolved";
+    fail("Reference " + myReference + " should be resolved");
   }
 }

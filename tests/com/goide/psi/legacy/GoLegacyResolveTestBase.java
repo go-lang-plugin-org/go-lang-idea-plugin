@@ -82,10 +82,10 @@ public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCa
     processPsiFile((GoFile)myFixture.configureByFile(filePath));
     if (myReference == null) fail("no reference defined in test case");
     PsiElement resolve = myReference.resolve();
-    if (resolve != null && myDefinition == null && assertNullDefinition()) fail("element resolved but it shouldn't have");
+    if (resolve != null && myDefinition == null && !allowNullDefinition()) fail("element resolved but it shouldn't have");
     if (resolve == null && myDefinition != null) fail("element didn't resolve when it should have");
     if (resolve != null) {
-      if (assertNullDefinition()) {
+      if (!allowNullDefinition()) {
         PsiElement def = PsiTreeUtil.getParentOfType(myDefinition, resolve.getClass(), false);
         assertSame(def, resolve);
       }
@@ -95,8 +95,8 @@ public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCa
     }
   }
 
-  protected boolean assertNullDefinition() {
-    return true;
+  protected boolean allowNullDefinition() {
+    return false;
   }
 
   protected void processNullResolve() {
