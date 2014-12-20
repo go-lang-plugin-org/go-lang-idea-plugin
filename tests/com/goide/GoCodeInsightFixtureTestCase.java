@@ -16,7 +16,6 @@
 
 package com.goide;
 
-import com.goide.psi.GoFile;
 import com.goide.sdk.GoSdkType;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.projectRoots.ProjectJdkTable;
@@ -24,20 +23,14 @@ import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkModificator;
 import com.intellij.openapi.projectRoots.impl.ProjectJdkImpl;
 import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiFile;
 import com.intellij.testFramework.fixtures.DefaultLightProjectDescriptor;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
-import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsightFixtureTestCase {
   @Override
@@ -78,24 +71,6 @@ abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsi
     instance.setupSdkPaths(sdk);
     return sdk;
   }
-  
-  @NotNull
-  protected List<GoFile> addPackage(@NotNull String importPath, @NotNull String... fileNames) {
-    List<GoFile> files = ContainerUtil.newArrayListWithCapacity(fileNames.length);
-    for (String fileName : fileNames) {
-      VirtualFile virtualFile = getFile(fileName);
-      assertNotNull(virtualFile);
-      String text = loadText(virtualFile);
-      PsiFile file = myFixture.addFileToProject(FileUtil.toCanonicalPath(importPath + "/" + virtualFile.getName()), text);
-      if (file instanceof GoFile) {
-        files.add((GoFile)file);
-      }
-      else {
-        throw new RuntimeException("Can't create a new go file by the virtual one: " + virtualFile);
-      }
-    }
-    return files;
-  }
 
   @NotNull
   protected static String loadText(@NotNull VirtualFile file) {
@@ -105,14 +80,5 @@ abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsi
     catch (IOException e) {
       throw new RuntimeException(e);
     }
-  }
-
-  @Nullable
-  private VirtualFile getFile(@NotNull String fileName) {
-    VirtualFile file = VfsUtil.findFileByIoFile(new File(getTestDataPath() + "/" + getTestName(true) + "/" + fileName), true);
-    if (file != null) return file;
-    file = VfsUtil.findFileByIoFile(new File(getTestDataPath() + "/" + fileName), true);
-    if (file != null) return file;
-    return VfsUtil.findFileByIoFile(new File(fileName), true);
   }
 }
