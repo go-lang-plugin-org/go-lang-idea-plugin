@@ -37,8 +37,8 @@ public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCa
   @NotNull public String REF_MARK = "/*ref*/";
   @NotNull public String DEF_MARK = "/*def*/";
 
-  @Nullable PsiReference myReference;
-  @Nullable PsiElement myDefinition;
+  @Nullable protected PsiReference myReference;
+  @Nullable protected PsiElement myDefinition;
 
   @Override
   protected String getBasePath() {
@@ -82,12 +82,24 @@ public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCa
     processPsiFile((GoFile)myFixture.configureByFile(filePath));
     if (myReference == null) fail("no reference defined in test case");
     PsiElement resolve = myReference.resolve();
-    if (resolve != null && myDefinition == null) fail("element resolved but it shouldn't have");
+    if (resolve != null && myDefinition == null && assertNullDefinition()) fail("element resolved but it shouldn't have");
     if (resolve == null && myDefinition != null) fail("element didn't resolve when it should have");
     if (resolve != null) {
-      PsiElement def = PsiTreeUtil.getParentOfType(myDefinition, resolve.getClass(), false);
-      assertSame(def, resolve);
+      if (assertNullDefinition()) {
+        PsiElement def = PsiTreeUtil.getParentOfType(myDefinition, resolve.getClass(), false);
+        assertSame(def, resolve);
+      }
     }
+    else {
+      processNullResolve();
+    }
+  }
+
+  protected boolean assertNullDefinition() {
+    return true;
+  }
+
+  protected void processNullResolve() {
   }
 
   private void processPsiFile(@NotNull GoFile file) {
