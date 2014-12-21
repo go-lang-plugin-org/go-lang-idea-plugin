@@ -4,6 +4,10 @@ import "fmt"
 
 func main() {
     fmt.Println(test())
+    
+    y := 1
+    <error>y, _</error> := 10, 1
+    fmt.Println(y)
 }
 
 func f1() int {return 1}
@@ -13,8 +17,8 @@ func test() int {
     x := f1()
     y, z := f2()
 
-    <error>x</error> := f1() // Should be error: "no new variables on left side of :="
-    <error>y,   z</error>     := f2() // Should be error: "no new variables on left side of :="
+    <error>x</error> := f1()
+    <error>y,   z</error>     := f2()
 
     x, a := f2() // Ok: `x` is reused and `a` is new
     b, x := f2() // Ok: `b` is new and `x` is reused

@@ -19,6 +19,7 @@ package com.goide.inspections;
 import com.goide.psi.GoShortVarDeclaration;
 import com.goide.psi.GoVarDefinition;
 import com.goide.psi.GoVisitor;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.util.TextRange;
@@ -49,6 +50,7 @@ public class GoNoNewVariablesInspection extends GoInspectionBase {
         int end = last.getStartOffsetInParent() + last.getTextLength();
 
         for (GoVarDefinition def : list) {
+          if (GoPsiImplUtil.isBlank(def)) continue;
           PsiReference reference = def.getReference();
           PsiElement resolve = reference != null ? reference.resolve() : null;
           if (resolve == null) return;
