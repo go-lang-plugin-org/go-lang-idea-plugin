@@ -5,10 +5,10 @@ import <fold text='...'>(
   "fmt"
 )</fold>
 
-func test() <fold text='{ ... }'>{
+func test() <fold text='{...}'>{
   return 1
 }</fold>
 
-func (i int) test() <fold text='{ ... }'>{
+func (i int) test() <fold text='{...}'>{
   return 1
 }</fold>
