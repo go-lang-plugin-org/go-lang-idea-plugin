@@ -35,7 +35,6 @@ import java.io.File;
 
 public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCase {
   @NotNull public static final String REF_MARK = "/*ref*/";
-  @NotNull public static final String NO_REF_MARK = "/*no ref*/";
   @NotNull public static final String DEF_MARK = "/*def*/";
 
   @Nullable protected PsiReference myReference;
