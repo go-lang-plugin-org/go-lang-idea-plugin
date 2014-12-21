@@ -29,6 +29,7 @@ public class GoLegacyResolveCompositeTest extends GoLegacyResolveTestBase {
   public void testTypeNameMap()             { doTest(); } 
   public void testTypeNameSlice()           { doTest(); } 
   public void testNestedStruct()            { doTest(); } 
+  public void testNestedNamedStruct()       { doTest(); } 
   public void testKeyAsConstantExpression() { doTest(); } 
   public void testExpressionKey()           { doTest(); } 
   public void testPromotedAnonymousField1() { doTest(); } 
