@@ -45,20 +45,6 @@ public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCa
     return "psi/resolve";
   }
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    myReference = null;
-    myDefinition = null;
-  }
-
-  @Override
-  protected void tearDown() throws Exception {
-    myReference = null;
-    myDefinition = null;
-    super.tearDown();
-  }
-
   protected void doResolveTest(boolean lowercase) {
     doResolveTest(getTestName(lowercase) + ".go");
   }
