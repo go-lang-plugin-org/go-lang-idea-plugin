@@ -360,3 +360,7 @@ func <warning>testRedeclare</warning>() int {
       }
       return 1
 }
+
+func init() {
+    
+}

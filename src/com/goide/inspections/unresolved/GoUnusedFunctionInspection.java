@@ -43,6 +43,7 @@ public class GoUnusedFunctionInspection extends GoInspectionBase {
         GoFile file = o.getContainingFile();
         String name = o.getName();
         if ("main".equals(file.getPackageName()) && "main".equals(name)) return;
+        if ("init".equals(name)) return;
         if (GoTestFinder.isTestFile(file) && name != null && (name.startsWith("Test") || name.startsWith("Benchmark"))) return;
         Query<PsiReference> search = ReferencesSearch.search(o, o.getUseScope());
         if (search.findFirst() == null) {
