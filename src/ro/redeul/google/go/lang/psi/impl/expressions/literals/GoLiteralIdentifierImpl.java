@@ -71,10 +71,14 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
     }
 
     @Override
-    public boolean isIota() { return isIota; }
+    public boolean isIota() {
+        return isIota;
+    }
 
     @Override
-    public boolean isNil() { return getText().equals("nil"); }
+    public boolean isNil() {
+        return getText().equals("nil");
+    }
 
     @NotNull
     @Override
@@ -150,24 +154,15 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
         if (TypeNameReference.MATCHER.accepts(this)) {
             GoPsiTypeName typeName = (GoPsiTypeName) getParent();
 
-            if ( typeName.isQualified() ) {
-                if ( typeName.getQualifier() == this )
+            if (typeName.isQualified()) {
+                if (typeName.getQualifier() == this)
                     return new PsiReference[]{new PackageReference(this)};
 
-                if ( typeName.getIdentifier() == this ) {
-                    GoLiteralIdentifier packageQualifier = typeName.getQualifier();
-
-                    GoImportDeclaration importDeclaration = getAs(GoImportDeclaration.class, resolveSafely(packageQualifier));
-
-                    if (importDeclaration != null && importDeclaration.getPackage() != GoPackages.C)
-                        return new PsiReference[]{new TypeNameReference(this, importDeclaration.getPackage())};
-
-
-                    return PsiReference.EMPTY_ARRAY;
-                }
+                if (typeName.getIdentifier() == this)
+                    return new PsiReference[]{new TypeNameReference(this)};
             }
 
-            return new PsiReference[] { new TypeNameReference(this) };
+            return new PsiReference[]{new TypeNameReference(this)};
         }
 
         if (SELECTOR_MATCHER.accepts(this)) {
@@ -204,7 +199,7 @@ public class GoLiteralIdentifierImpl extends GoPsiElementBase implements GoLiter
 
                             @Override
                             public void visitPrimitive(GoTypePrimitive type, List<Reference> data, TypeVisitor<List<Reference>> visitor) {
-                                if ( type.getType() == GoTypes.Builtin.Error )
+                                if (type.getType() == GoTypes.Builtin.Error)
                                     data.add(new InterfaceMethodReference(ident, type));
 
                                 data.add(new MethodReference(ident, type));

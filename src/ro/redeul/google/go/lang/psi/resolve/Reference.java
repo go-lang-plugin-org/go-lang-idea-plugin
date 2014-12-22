@@ -52,7 +52,7 @@ public abstract class Reference<
 
     @Override
     public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
-        return null;
+        return element;
     }
 
     @Override

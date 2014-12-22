@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLock;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
+import com.intellij.psi.impl.source.resolve.reference.impl.PsiMultiReference;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NonNls;
@@ -72,13 +73,20 @@ public class GoPsiElementBase extends ASTWrapperPsiElement
      */
     @Override
     final public PsiReference getReference() {
+//        PsiReference references[] = getReferences();
+//        if (references.length == 0)
+//            return null;
+//
+//        if (references.length == 1)
+//            return references[0];
+//
+//        return new PsiMultiReference(references, this);
         return null;
     }
 
     @NotNull
     @Override
     final public PsiReference[] getReferences() {
-//        System.out.println("" + hashCode() + ", refs: " + myReferences + " text: " + getText() + " ");
         if (myReferences == null)
             myReferences = defineReferences();
 
@@ -153,5 +161,10 @@ public class GoPsiElementBase extends ASTWrapperPsiElement
 
         return clone;
 
+    }
+
+    @Override
+    public void resetReferences() {
+        myReferences = null;
     }
 }

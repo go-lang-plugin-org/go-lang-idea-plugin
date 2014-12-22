@@ -292,4 +292,8 @@ public class GoFileImpl extends PsiFileBase implements GoFile {
 
     @Override
     public GoPsiElement getReferenceContext() { return this; }
+
+    @Override
+    public void resetReferences() {
+    }
 }

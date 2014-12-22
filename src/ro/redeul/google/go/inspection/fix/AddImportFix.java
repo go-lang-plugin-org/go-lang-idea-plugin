@@ -22,12 +22,18 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ro.redeul.google.go.GoBundle;
 import ro.redeul.google.go.autoImport.GoReferenceImporter;
+import ro.redeul.google.go.lang.parser.GoElementTypes;
 import ro.redeul.google.go.lang.psi.GoFile;
 import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoLiteralExpression;
+import ro.redeul.google.go.lang.psi.expressions.primary.GoSelectorExpression;
+import ro.redeul.google.go.lang.psi.impl.expressions.primary.GoLiteralExpressionImpl;
 import ro.redeul.google.go.lang.psi.resolve.refs.PackageReference;
+import ro.redeul.google.go.lang.psi.resolve.refs.TypeNameReference;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclarations;
+import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.stubs.GoNamesCache;
 
 import javax.swing.*;
@@ -35,6 +41,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static ro.redeul.google.go.lang.psi.utils.GoPsiUtils.getPrevSiblingIfItsWhiteSpaceOrComment;
 import static ro.redeul.google.go.util.EditorUtil.reformatLines;
 import static ro.redeul.google.go.util.EditorUtil.reformatPositions;
@@ -60,7 +67,7 @@ public class AddImportFix extends LocalQuickFixAndIntentionActionOnPsiElement im
     }
 
     protected boolean _invoke(@NotNull Project project, @NotNull final PsiFile psiFile, @Nullable Editor editor,
-                              @NotNull PsiElement startElement, @NotNull PsiElement endElement) {
+                              @NotNull final PsiElement startElement, @NotNull PsiElement endElement) {
         final Document document = PsiDocumentManager.getInstance(project).getDocument(psiFile);
 
         if (document == null)
@@ -88,6 +95,8 @@ public class AddImportFix extends LocalQuickFixAndIntentionActionOnPsiElement im
                         @Override
                         protected void run() throws Throwable {
                             addImportDeclaration(importPath, file, document);
+                            if ( startElement instanceof GoLiteralIdentifier )
+                                resetReferences((GoLiteralIdentifier) startElement);
                         }
                     }.execute();
                 }
@@ -107,6 +116,24 @@ public class AddImportFix extends LocalQuickFixAndIntentionActionOnPsiElement im
                     .showInBestPositionFor(editor);
 
         return false;
+    }
+
+    private void resetReferences(GoLiteralIdentifier identifier) {
+        identifier.resetReferences();
+        if (TypeNameReference.PACKAGE_QUALIFIER.accepts(identifier)) {
+            GoPsiTypeName typeName = (GoPsiTypeName) identifier.getParent();
+            typeName.getIdentifier().resetReferences();
+            return;
+        }
+
+        if ( psiElement(GoLiteralIdentifier.class).withParent(
+                psiElement(GoLiteralExpression.class).withParent(psiElement(GoSelectorExpression.class))
+                    .beforeLeaf(psiElement(GoElementTypes.oDOT))).accepts(identifier)) {
+            GoSelectorExpression expression = (GoSelectorExpression) identifier.getParent().getParent();
+            if (expression.getIdentifier() != null) {
+                expression.getIdentifier().resetReferences();
+            }
+        }
     }
 
     @NotNull

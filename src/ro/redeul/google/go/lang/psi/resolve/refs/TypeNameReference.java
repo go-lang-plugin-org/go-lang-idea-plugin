@@ -8,10 +8,12 @@ import ro.redeul.google.go.lang.psi.GoPackage;
 import ro.redeul.google.go.lang.psi.expressions.literals.GoLiteralIdentifier;
 import ro.redeul.google.go.lang.psi.processors.ResolveStates;
 import ro.redeul.google.go.lang.psi.resolve.ReferenceWithSolver;
+import ro.redeul.google.go.lang.psi.toplevel.GoImportDeclaration;
 import ro.redeul.google.go.lang.psi.toplevel.GoMethodReceiver;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypeName;
 import ro.redeul.google.go.lang.psi.types.GoPsiTypePointer;
 import ro.redeul.google.go.lang.psi.utils.GoPsiScopesUtil;
+import ro.redeul.google.go.lang.psi.utils.GoPsiUtils;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.or;
@@ -32,13 +34,9 @@ public class TypeNameReference extends ReferenceWithSolver<GoLiteralIdentifier, 
 
     public static final ElementPattern<GoLiteralIdentifier> QUALIFIED_NAME =
             psiElement(GoLiteralIdentifier.class)
-                    .withParent(psiElement(GoPsiTypeName.class))
                     .afterSibling(
-                            psiElement(GoTokenTypes.oDOT)
-                                    .afterSibling(
-                                            psiElement(GoLiteralIdentifier.class)
-                                                    .afterSibling(
-                                                            psiElement().isNull())));
+                            psiElement(GoLiteralIdentifier.class)
+                                    .atStartOf(psiElement(GoPsiTypeName.class)));
 
     @SuppressWarnings("unchecked")
     private static final ElementPattern<GoLiteralIdentifier> TYPE_IN_METHOD_RECEIVER =
@@ -51,16 +49,10 @@ public class TypeNameReference extends ReferenceWithSolver<GoLiteralIdentifier, 
                                     )
                             ));
 
-    private final GoPackage goPackage;
     private final GoPackage srcPackage;
 
     public TypeNameReference(GoLiteralIdentifier element) {
-        this(element, GoPackages.getPackageFor(element));
-    }
-
-    public TypeNameReference(GoLiteralIdentifier element, GoPackage goPackage) {
         super(element);
-        this.goPackage = goPackage;
         this.srcPackage = GoPackages.getPackageFor(element);
     }
 
@@ -76,9 +68,19 @@ public class TypeNameReference extends ReferenceWithSolver<GoLiteralIdentifier, 
 
     @Override
     public void walkSolver(TypeNameSolver solver) {
-        if (srcPackage == goPackage)
+        if ( QUALIFIED_NAME.accepts(getElement()) ) {
+            GoPsiTypeName psiTypeName = (GoPsiTypeName) getElement().getParent();
+            GoLiteralIdentifier qualifier = psiTypeName.getQualifier();
+            GoImportDeclaration importDeclaration = GoPsiUtils.resolveSafely(qualifier, GoImportDeclaration.class);
+            if (importDeclaration != null) {
+                GoPackage targetPackage = importDeclaration.getPackage();
+                if ( srcPackage == targetPackage )
+                    GoPsiScopesUtil.treeWalkUp(solver, getElement(), null, ResolveStates.initial());
+                else
+                    GoPsiScopesUtil.walkPackageExports(solver, getElement(), targetPackage);
+            }
+        } else {
             GoPsiScopesUtil.treeWalkUp(solver, getElement(), null, ResolveStates.initial());
-        else
-            GoPsiScopesUtil.walkPackageExports(solver, getElement(), goPackage);
+        }
     }
 }

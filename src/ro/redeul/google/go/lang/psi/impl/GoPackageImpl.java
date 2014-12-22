@@ -58,6 +58,10 @@ public class GoPackageImpl extends PsiElementBase implements GoPackage {
     }
 
     @Override
+    public void resetReferences() {
+    }
+
+    @Override
     @Nullable
     public LookupElementBuilder getLookupPresentation() {
         return LookupElementUtil.createLookupElement(this);

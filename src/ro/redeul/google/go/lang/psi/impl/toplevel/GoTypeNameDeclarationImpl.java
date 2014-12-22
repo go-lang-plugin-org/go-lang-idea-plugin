@@ -134,6 +134,8 @@ public class GoTypeNameDeclarationImpl
     }
 
     @Override
+    public void resetReferences() { }
+    @Override
     public boolean isPrimitive() {
         return GoTypes.PRIMITIVE_TYPES_PATTERN.matcher(getText()).matches();
     }

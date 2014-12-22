@@ -35,5 +35,7 @@ public interface GoPsiElement extends PsiElement {
     String getLookupTypeText();
 
     GoPsiElement getReferenceContext();
+
+    void resetReferences();
 }
 
