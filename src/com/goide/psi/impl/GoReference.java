@@ -392,9 +392,10 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
   static boolean processNamedElements(@NotNull PsiScopeProcessor processor,
                                       @NotNull ResolveState state,
-                                      @NotNull Collection<? extends GoNamedElement> elements, boolean localResolve) {
+                                      @NotNull Collection<? extends GoNamedElement> elements, 
+                                      boolean localResolve) {
     for (GoNamedElement definition : elements) {
-      if ((definition.isPublic() || localResolve) && !processor.execute(definition, state)) return false;
+      if ((localResolve || definition.isPublic()) && !processor.execute(definition, state)) return false;
     }
     return true;
   }
