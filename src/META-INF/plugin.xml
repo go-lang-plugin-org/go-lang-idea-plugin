@@ -136,6 +136,8 @@
 
     <checkinHandlerFactory implementation="com.goide.actions.fmt.GoFmtCheckinFactory" order="last"/>
 
+    <editorNotificationProvider implementation="com.goide.inspections.SetupSDKNotificationProvider"/>
+    
     <lang.inspectionSuppressor language="go" implementationClass="com.goide.inspections.suppression.GoInspectionSuppressor"/>
     
     <localInspection language="go" displayName="Unresolved reference inspection"
