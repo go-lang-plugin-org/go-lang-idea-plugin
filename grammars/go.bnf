@@ -176,7 +176,7 @@ MapType ::= map '[' Type ']' Type {
 ChannelType ::= ChanTypePrefix Type {pin=1}
 private ChanTypePrefix ::= chan '<-'? | '<-' chan {pin(".*")=1}
 
-Block ::= '{' ('}' | Statements '}') {pin=1 methods=[processDeclarations]}
+Block ::= '{' ('}' | Statements '}') {pin(".*")=1 methods=[processDeclarations]}
 private Statements ::= StatementWithSemi* {pin=1}
 
 private StatementWithSemi ::= Statement (semi|&'}') { pin=1 recoverWhile=StatementRecover }

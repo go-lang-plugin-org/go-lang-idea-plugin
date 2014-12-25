@@ -493,12 +493,13 @@ public class GoParser implements PsiParser {
   // Statements '}'
   private static boolean Block_1_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Block_1_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
     r = Statements(b, l + 1);
+    p = r; // pin = 1
     r = r && consumeToken(b, RBRACE);
-    exit_section_(b, m, null, r);
-    return r;
+    exit_section_(b, l, m, null, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
