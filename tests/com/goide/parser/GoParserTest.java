@@ -38,19 +38,19 @@ public class GoParserTest extends ParsingTestCase {
       Extensions.getRootArea(), "com.intellij.lang.braceMatcher", LanguageExtensionPoint.class);
   }
 
-  public void testSimple()      { doTest(true);  }
-  public void testError()       { doTest(true);  }
-  public void testWriter()      { doTest(true);  }
-  public void testPrimer()      { doTest(true);  }
-  public void testTypes()       { doTest(true);  }
-  public void testStr2Num()     { doTest(true);  }
-  public void testCars()        { doTest(true);  }
-  public void testIfWithNew()   { doTest(true);  }
-  public void testRanges()      { doTest(true);  }
-  public void testRecover()     { doTest(false); }
-  public void testRecover2()    { doTest(false); }
-  public void testMethodExpr()  { doTest(false); }
-  public void testLabels()      { doTest(false); }
-  public void testBlockRecover(){ doTest(false); }
-  public void testMethodWithoutReceiverIdentifier()  { doTest(false); }
+  public void testSimple()                          { doTest(true);  }
+  public void testError()                           { doTest(true);  }
+  public void testWriter()                          { doTest(true);  }
+  public void testPrimer()                          { doTest(true);  }
+  public void testTypes()                           { doTest(true);  }
+  public void testStr2Num()                         { doTest(true);  }
+  public void testCars()                            { doTest(true);  }
+  public void testIfWithNew()                       { doTest(true);  }
+  public void testRanges()                          { doTest(true);  }
+  public void testRecover()                         { doTest(false); }
+  public void testRecover2()                        { doTest(false); }
+  public void testMethodExpr()                      { doTest(false); }
+  public void testLabels()                          { doTest(false); }
+  public void testBlockRecover()                    { doTest(false); }
+  public void testMethodWithoutReceiverIdentifier() { doTest(false); }
 }
