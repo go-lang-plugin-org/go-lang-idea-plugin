@@ -44,14 +44,26 @@ public class GoUnusedVariableInspection extends GoInspectionBase {
           PsiReference reference = o.getReference();
           PsiElement resolve = reference != null ? reference.resolve() : null;
           if (resolve != null) return;
-          Query<PsiReference> search = ReferencesSearch.search(o, o.getUseScope());
-          if (search.findFirst() == null) {
-            boolean globalVar = decl != null && decl.getParent() instanceof GoFile;
-            holder.registerProblem(o, "Unused variable " + "'" + o.getText() + "'",
-                                   globalVar
-                                   ? ProblemHighlightType.LIKE_UNUSED_SYMBOL
-                                   : ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+          Query<PsiReference> query = ReferencesSearch.search(o, o.getUseScope());
+          for (PsiReference ref : query) {
+            PsiElement element = ref.getElement();
+            if (element == null) continue;
+            PsiElement parent = element.getParent();
+            if (parent instanceof GoAssignmentStatement) {
+              int op = ((GoAssignmentStatement)parent).getAssignOp().getStartOffsetInParent();
+              if (element.getStartOffsetInParent() < op) continue;
+            }
+            if (parent instanceof GoShortVarDeclaration) {
+              int op = ((GoShortVarDeclaration)parent).getVarAssign().getStartOffsetInParent();
+              if (element.getStartOffsetInParent() < op) continue;
+            }
+            return;
           }
+          boolean globalVar = decl != null && decl.getParent() instanceof GoFile;
+          holder.registerProblem(o, "Unused variable " + "'" + o.getText() + "'",
+                                 globalVar
+                                 ? ProblemHighlightType.LIKE_UNUSED_SYMBOL
+                                 : ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
         }
       }
     };
