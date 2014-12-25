@@ -17,6 +17,8 @@
 package com.goide.refactor;
 
 import com.goide.psi.*;
+import com.intellij.codeInsight.highlighting.HighlightUsagesDescriptionLocation;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.ElementDescriptionLocation;
 import com.intellij.psi.ElementDescriptionProvider;
 import com.intellij.psi.PsiElement;
@@ -32,11 +34,13 @@ public class GoDescriptionProvider implements ElementDescriptionProvider {
   @Override
   public String getElementDescription(@NotNull PsiElement o, @NotNull ElementDescriptionLocation location) {
     if (o instanceof GoNamedElement && location == UsageViewNodeTextLocation.INSTANCE) {
-      return getElementDescription(o, UsageViewTypeLocation.INSTANCE) + " " +
-             "'" + getElementDescription(o, UsageViewShortNameLocation.INSTANCE) + "'";
+      return getDescription(o, false);
     }
     if (o instanceof GoNamedElement && (location == UsageViewShortNameLocation.INSTANCE || location == UsageViewLongNameLocation.INSTANCE)) {
       return ((GoNamedElement)o).getName();
+    }
+    if (location == HighlightUsagesDescriptionLocation.INSTANCE) {
+      return getDescription(o, true);
     }
     if (location == UsageViewTypeLocation.INSTANCE) {
       if (o instanceof GoMethodDeclaration) return "Method";
@@ -53,5 +57,11 @@ public class GoDescriptionProvider implements ElementDescriptionProvider {
       if (o instanceof GoLabelDefinition) return "Label";
     }
     return null;
+  }
+
+  @NotNull
+  private String getDescription(@NotNull PsiElement o, boolean lowercase) {
+    String type = getElementDescription(o, UsageViewTypeLocation.INSTANCE);
+    return (lowercase ? StringUtil.toLowerCase(type) : type) + " '" + getElementDescription(o, UsageViewShortNameLocation.INSTANCE) + "'";
   }
 }
