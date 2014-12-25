@@ -227,6 +227,10 @@ public class GoCompletionTest extends GoCompletionTestBase {
   public void testLabel() {
     doTestInclude("package foo; func main() { goto <caret>; Label1: 1}", "Label1");
   }
+  
+  public void testNoMainAnymore() {
+    doTestExclude("package foo; func mai<caret> { }", "main");
+  }
 
   public void testPackageBeforeDot() {
     doCheckResult("package foo; import imp \"\"; func foo(a im<caret>.SomeType) {}",
