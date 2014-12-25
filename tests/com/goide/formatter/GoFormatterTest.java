@@ -4,23 +4,21 @@ import com.goide.GoCodeInsightFixtureTestCase;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 
-import java.io.IOException;
-
 public class GoFormatterTest extends GoCodeInsightFixtureTestCase {
   @Override
   protected String getBasePath() {
     return "formatting";
   }
 
-  public void testSimple() throws Exception {
+  public void testSimple() {
     doTest();
   }
 
-  public void doTest() throws Exception {
+  public void doTest() {
     doTest(true);
   }
 
-  public void doTest(boolean format) throws Exception {
+  public void doTest(boolean format) {
     String testName = getTestName(true);
     myFixture.configureByFile(testName + ".go");
     String after = doTest(format, testName);

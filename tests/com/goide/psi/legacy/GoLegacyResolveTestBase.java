@@ -54,13 +54,8 @@ public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCa
     File fromFile = new File(testDataPath + "/" + getTestName(false));
     if (fromFile.isDirectory()) {
       VirtualFile dir = LocalFileSystem.getInstance().findFileByPath(fromFile.getPath());
-      try {
-        assert dir != null;
-        doDirectoryTest(dir);
-      }
-      catch (Exception e) {
-        throw new RuntimeException(e);
-      }
+      assert dir != null;
+      doDirectoryTest(dir);
     }
   }
 
@@ -108,7 +103,7 @@ public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCa
     }
   }
 
-  private void doDirectoryTest(@NotNull final VirtualFile file) throws Exception {
+  private void doDirectoryTest(@NotNull final VirtualFile file) {
     VfsUtilCore.processFilesRecursively(
       file,
       new FilteringProcessor<VirtualFile>(
