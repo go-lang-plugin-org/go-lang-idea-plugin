@@ -19,10 +19,7 @@ package com.goide.template;
 import com.goide.GoLanguage;
 import com.goide.GoTypes;
 import com.goide.highlighting.GoSyntaxHighlighter;
-import com.goide.psi.GoBlock;
-import com.goide.psi.GoFile;
-import com.goide.psi.GoSimpleStatement;
-import com.goide.psi.GoTopLevelDeclaration;
+import com.goide.psi.*;
 import com.intellij.codeInsight.template.EverywhereContextType;
 import com.intellij.codeInsight.template.TemplateContextType;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
@@ -87,6 +84,17 @@ abstract public class GoLiveTemplateContextType extends TemplateContextType {
     @Override
     protected boolean isInContext(@NotNull PsiElement element) {
       return element.getParent() instanceof GoFile && !(element instanceof GoTopLevelDeclaration);
+    }
+  }
+  
+  public static class GoTypeContextType extends GoLiveTemplateContextType {
+    protected GoTypeContextType() {
+      super("GO_TYPE", "Go type", EverywhereContextType.class);
+    }
+  
+    @Override
+    protected boolean isInContext(@NotNull PsiElement element) {
+      return element instanceof GoType;
     }
   }
   

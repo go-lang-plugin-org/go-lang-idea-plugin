@@ -229,7 +229,7 @@ public class GoCompletionTest extends GoCompletionTestBase {
   }
   
   public void testNoMainAnymore() {
-    doTestExclude("package foo; func mai<caret> { }", "main");
+    doTestEquals("package foo; func ma<caret> { }");
   }
 
   public void testPackageBeforeDot() {

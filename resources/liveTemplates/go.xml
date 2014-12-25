@@ -147,7 +147,7 @@
     <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='KEY_TYPE'/>
     <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='VALUE_TYPE'/>
     <context>
-      <option name='GO' value='true'/>
+      <option name='GO_TYPE' value='true'/>
     </context>
   </template>
   <template description='Variable declaration :=' name=':' toReformat='true' toShortenFQNames='true'
