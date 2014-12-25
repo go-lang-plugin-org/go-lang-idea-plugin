@@ -29,8 +29,10 @@ import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.light.LightElement;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
@@ -38,6 +40,7 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileRefe
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.GlobalSearchScopesCore;
+import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -68,6 +71,21 @@ public class GoPsiImplUtil {
       return StringUtil.equals(file.getPackageName(), "builtin") && StringUtil.equals(file.getName(), "builtin.go");
     }
     return false;
+  }
+
+  @NotNull
+  public static SearchScope cretePackageScope(@NotNull GoFile file) {
+    String name = file.getPackageName();
+    PsiDirectory parent = file.getParent();
+    if (parent == null || StringUtil.isEmpty(name)) return GlobalSearchScope.fileScope(file);
+    PsiElement[] children = parent.getChildren();
+    List<VirtualFile> files = ContainerUtil.newArrayListWithCapacity(children.length);
+    for (PsiElement element : children) {
+       if (element instanceof GoFile && Comparing.equal(((GoFile)element).getPackageName(), name)) {
+         files.add(((GoFile)element).getVirtualFile());
+       }
+    }
+    return GlobalSearchScope.filesScope(file.getProject(), files);
   }
 
   private static class Lazy {
