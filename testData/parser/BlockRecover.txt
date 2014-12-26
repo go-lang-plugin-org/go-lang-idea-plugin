@@ -21,12 +21,12 @@ GO_FILE
             PsiElement(()('(')
             REFERENCE_EXPRESSION
               PsiElement(identifier)('name')
-            PsiErrorElement:'!=', '%', '&', '&^', '(', ')', '*', '+', ',', '-', '.', '...', '/', <, <-, <<, <=, <assign op>, <literal value>, '==', '>', '>=', '>>', '^' or '|' expected, got 'name'
+            PsiErrorElement:')', ',' or '...' expected, got 'name'
               <empty list>
       SIMPLE_STATEMENT
         REFERENCE_EXPRESSION
           PsiElement(identifier)('name')
-      PsiErrorElement:'!=', '%', '&', '&^', '(', '*', '+', '++', ',', '-', '--', '.', '/', ':', ':=', ';', <, <-, <<, <=, <NL>, <assign op>, <literal value>, '==', '>', '>=', '>>', '^', '|' or '}' expected, got ')'
+      PsiErrorElement:'!=', '%', '&', '&^', '(', '*', '+', '++', ',', '-', '--', '.', '/', ':=', ';', <, <-, <<, <=, <NL>, <assign op>, <literal value>, '==', '>', '>=', '>>', '^', '|' or '}' expected, got ')'
         <empty list>
   PsiElement())(')')
   PsiElement(})('}')
