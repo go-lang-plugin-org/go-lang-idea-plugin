@@ -34,9 +34,9 @@ public class GoArgumentListImpl extends GoCompositeElementImpl implements GoArgu
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getRparen() {
-    return findNotNullChildByType(RPAREN);
+    return findChildByType(RPAREN);
   }
 
   @Override

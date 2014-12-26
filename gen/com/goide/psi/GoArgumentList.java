@@ -13,7 +13,7 @@ public interface GoArgumentList extends GoCompositeElement {
   @NotNull
   PsiElement getLparen();
 
-  @NotNull
+  @Nullable
   PsiElement getRparen();
 
   @Nullable

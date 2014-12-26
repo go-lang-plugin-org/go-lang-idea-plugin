@@ -46,9 +46,9 @@ public class GoBuiltinCallExprImpl extends GoExpressionImpl implements GoBuiltin
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getRparen() {
-    return findNotNullChildByType(RPAREN);
+    return findChildByType(RPAREN);
   }
 
 }

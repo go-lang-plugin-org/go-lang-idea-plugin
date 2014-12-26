@@ -383,13 +383,14 @@ public class GoParser implements PsiParser {
   public static boolean ArgumentList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ArgumentList")) return false;
     if (!nextTokenIs(b, LPAREN)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeToken(b, LPAREN);
-    r = r && ArgumentList_1(b, l + 1);
-    r = r && consumeToken(b, RPAREN);
-    exit_section_(b, m, ARGUMENT_LIST, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, ArgumentList_1(b, l + 1));
+    r = p && consumeToken(b, RPAREN) && r;
+    exit_section_(b, l, m, ARGUMENT_LIST, r, p, null);
+    return r || p;
   }
 
   // [ ExpressionList '...'? ]

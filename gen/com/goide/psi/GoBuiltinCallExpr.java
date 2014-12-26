@@ -19,7 +19,7 @@ public interface GoBuiltinCallExpr extends GoExpression {
   @NotNull
   PsiElement getLparen();
 
-  @NotNull
+  @Nullable
   PsiElement getRparen();
 
 }

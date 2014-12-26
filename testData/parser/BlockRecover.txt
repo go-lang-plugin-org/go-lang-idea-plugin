@@ -14,17 +14,15 @@ GO_FILE
     BLOCK
       PsiElement({)('{')
       SIMPLE_STATEMENT
-        REFERENCE_EXPRESSION
-          PsiElement(identifier)('Println')
-      PsiErrorElement:'!=', '%', '%=', '&', '&=', '&^', '&^=', '(', '*', '*=', '+', '++', '+=', ',', '-', '--', '-=', '.', '/', '/=', ':', ':=', ';', <, <-, <<, <<=, <=, <NL>, <literal value>, '=', '==', '>', '>=', '>>', '>>=', '^', '^=', '{', '|', '|=' or '}' expected, got '('
-        <empty list>
-      SIMPLE_STATEMENT
-        PARENTHESES_EXPR
-          PsiElement(()('(')
+        CALL_EXPR
           REFERENCE_EXPRESSION
-            PsiElement(identifier)('name')
-          PsiErrorElement:'!=', '%', '&', '&^', '(', ')', '*', '+', ',', '-', '.', '/', <, <-, <<, <=, <assign op>, <literal value>, '==', '>', '>=', '>>', '^' or '|' expected, got 'name'
-            <empty list>
+            PsiElement(identifier)('Println')
+          ARGUMENT_LIST
+            PsiElement(()('(')
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('name')
+            PsiErrorElement:'!=', '%', '&', '&^', '(', ')', '*', '+', ',', '-', '.', '...', '/', <, <-, <<, <=, <assign op>, <literal value>, '==', '>', '>=', '>>', '^' or '|' expected, got 'name'
+              <empty list>
       SIMPLE_STATEMENT
         REFERENCE_EXPRESSION
           PsiElement(identifier)('name')
