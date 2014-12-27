@@ -21,7 +21,7 @@ func (b *Boom) Run(a aaa) (r1 aaa, r2 aaa) {
    b.err + a + r1 + r2
 <error>}</error>
 
-func <warning>foo</warning>() {
+func <error>foo</error>() {
     i := 1
     for (i) {return 0}
     if (i) {return <error>j</error>}

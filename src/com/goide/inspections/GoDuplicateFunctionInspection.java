@@ -19,6 +19,7 @@ package com.goide.inspections;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoFunctionDeclaration;
 import com.goide.psi.GoRecursiveVisitor;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.containers.MultiMap;
@@ -30,10 +31,12 @@ import java.util.List;
 public class GoDuplicateFunctionInspection extends GoInspectionBase {
   @Override
   protected void checkFile(@NotNull GoFile file, @NotNull final ProblemsHolder problemsHolder) {
-    List<GoFunctionDeclaration> functions = file.getFunctions();
     final MultiMap<String, GoFunctionDeclaration> map = new MultiMap<String, GoFunctionDeclaration>();
-    for (GoFunctionDeclaration function : functions) {
-      map.putValue(function.getName(), function);
+    List<GoFile> files = GoPsiImplUtil.getAllPackageFiles(file);
+    for (GoFile goFile : files) {
+      for (GoFunctionDeclaration function : goFile.getFunctions()) {
+        map.putValue(function.getName(), function);
+      }
     }
 
     file.accept(new GoRecursiveVisitor() {
@@ -43,7 +46,6 @@ public class GoDuplicateFunctionInspection extends GoInspectionBase {
         if (name == null) return;
         Collection<GoFunctionDeclaration> byKey = map.get(name);
         if (byKey.size() > 1) {
-          if (o.equals(byKey.iterator().next())) return;
           PsiElement identifier = o.getNameIdentifier();
           problemsHolder.registerProblem(identifier == null ? o : identifier, "Duplicate function name");
         }

@@ -44,6 +44,7 @@ import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.NotNull;
@@ -75,17 +76,28 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static SearchScope cretePackageScope(@NotNull GoFile file) {
+    List<GoFile> files = getAllPackageFiles(file);
+    return GlobalSearchScope.filesScope(file.getProject(), ContainerUtil.map(files, new Function<GoFile, VirtualFile>() {
+      @Override
+      public VirtualFile fun(GoFile file) {
+        return file.getVirtualFile();
+      }
+    }));
+  }
+  
+  @NotNull
+  public static List<GoFile> getAllPackageFiles(@NotNull GoFile file) {
     String name = file.getPackageName();
     PsiDirectory parent = file.getParent();
-    if (parent == null || StringUtil.isEmpty(name)) return GlobalSearchScope.fileScope(file);
+    if (parent == null || StringUtil.isEmpty(name)) return ContainerUtil.list(file);
     PsiElement[] children = parent.getChildren();
-    List<VirtualFile> files = ContainerUtil.newArrayListWithCapacity(children.length);
+    List<GoFile> files = ContainerUtil.newArrayListWithCapacity(children.length);
     for (PsiElement element : children) {
-       if (element instanceof GoFile && Comparing.equal(((GoFile)element).getPackageName(), name)) {
-         files.add(((GoFile)element).getVirtualFile());
-       }
+      if (element instanceof GoFile && Comparing.equal(((GoFile)element).getPackageName(), name)) {
+        files.add(((GoFile)element));
+      }
     }
-    return GlobalSearchScope.filesScope(file.getProject(), files);
+    return files;
   }
 
   private static class Lazy {
