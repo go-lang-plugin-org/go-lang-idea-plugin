@@ -1,5 +1,11 @@
 package main
 
 func main() {
-  Println(name name)
+  test( asd  asd)
+  test()
+  asd)
+  test()
+}
+
+func test() {
 }

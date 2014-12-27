@@ -16,17 +16,45 @@ GO_FILE
       SIMPLE_STATEMENT
         CALL_EXPR
           REFERENCE_EXPRESSION
-            PsiElement(identifier)('Println')
+            PsiElement(identifier)('test')
           ARGUMENT_LIST
             PsiElement(()('(')
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('name')
-            PsiErrorElement:')', ',' or '...' expected, got 'name'
+              PsiElement(identifier)('asd')
+            PsiErrorElement:')', ',' or '...' expected, got 'asd'
               <empty list>
       SIMPLE_STATEMENT
         REFERENCE_EXPRESSION
-          PsiElement(identifier)('name')
+          PsiElement(identifier)('asd')
       PsiErrorElement:'!=', '%', '&', '&^', '(', '*', '+', '++', ',', '-', '--', '.', '/', ':=', ';', <, <-, <<, <=, <NL>, <assign op>, <literal value>, '==', '>', '>=', '>>', '^', '|' or '}' expected, got ')'
-        <empty list>
-  PsiElement())(')')
-  PsiElement(})('}')
+        PsiElement())(')')
+      SIMPLE_STATEMENT
+        CALL_EXPR
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('test')
+          ARGUMENT_LIST
+            PsiElement(()('(')
+            PsiElement())(')')
+      SIMPLE_STATEMENT
+        REFERENCE_EXPRESSION
+          PsiElement(identifier)('asd')
+      PsiErrorElement:'!=', '%', '&', '&^', '(', '*', '+', '++', ',', '-', '--', '.', '/', ':=', ';', <, <-, <<, <=, <NL>, <assign op>, <literal value>, '==', '>', '>=', '>>', '^', '|' or '}' expected, got ')'
+        PsiElement())(')')
+      SIMPLE_STATEMENT
+        CALL_EXPR
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('test')
+          ARGUMENT_LIST
+            PsiElement(()('(')
+            PsiElement())(')')
+      PsiElement(})('}')
+  FUNCTION_DECLARATION
+    PsiElement(func)('func')
+    PsiElement(identifier)('test')
+    SIGNATURE
+      PARAMETERS
+        PsiElement(()('(')
+        PsiElement())(')')
+    BLOCK
+      PsiElement({)('{')
+      PsiElement(})('}')
