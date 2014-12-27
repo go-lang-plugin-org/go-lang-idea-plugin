@@ -45,6 +45,7 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
   }
 
   public boolean isPublic() {
+    if (GoPsiImplUtil.builtin(this)) return true;
     T stub = getStub();
     return stub != null ? stub.isPublic() : StringUtil.isCapitalized(getName());
   }
