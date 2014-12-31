@@ -28,13 +28,13 @@ import java.util.List;
 
 public class GoVarProcessor extends GoScopeProcessorBase {
   private final boolean myImShortVarDeclaration;
-  private final GoCompositeElement myScope;
+  @Nullable private final GoCompositeElement myScope;
   
-  public GoVarProcessor(String requestedName, PsiElement origin, boolean completion) {
+  public GoVarProcessor(@NotNull String requestedName, @NotNull PsiElement origin, boolean completion) {
     this(requestedName, origin, completion, false);
   }
 
-  public GoVarProcessor(String requestedName, PsiElement origin, boolean completion, boolean delegate) {
+  public GoVarProcessor(@NotNull String requestedName, @NotNull PsiElement origin, boolean completion, boolean delegate) {
     super(requestedName, origin, completion);
     myImShortVarDeclaration = PsiTreeUtil.getParentOfType(origin, GoShortVarDeclaration.class) != null && !delegate;
     myScope = getScope(origin);

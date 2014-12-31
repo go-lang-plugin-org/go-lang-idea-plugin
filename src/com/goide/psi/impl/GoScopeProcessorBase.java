@@ -31,11 +31,11 @@ import java.util.List;
 public abstract class GoScopeProcessorBase extends BaseScopeProcessor {
   @NotNull protected OrderedSet<GoNamedElement> myResult = new OrderedSet<GoNamedElement>();
 
-  protected final PsiElement myOrigin;
-  private final String myRequestedName;
+  @NotNull protected final PsiElement myOrigin;
+  @NotNull private final String myRequestedName;
   private final boolean myIsCompletion;
 
-  public GoScopeProcessorBase(String requestedName, PsiElement origin, boolean completion) {
+  public GoScopeProcessorBase(@NotNull String requestedName, @NotNull PsiElement origin, boolean completion) {
     myRequestedName = requestedName;
     myOrigin = origin;
     myIsCompletion = completion;
