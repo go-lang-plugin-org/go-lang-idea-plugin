@@ -31,8 +31,12 @@ public class GoVarProcessor extends GoScopeProcessorBase {
   private final GoCompositeElement myScope;
   
   public GoVarProcessor(String requestedName, PsiElement origin, boolean completion) {
+    this(requestedName, origin, completion, false);
+  }
+
+  public GoVarProcessor(String requestedName, PsiElement origin, boolean completion, boolean delegate) {
     super(requestedName, origin, completion);
-    myImShortVarDeclaration = PsiTreeUtil.getParentOfType(origin, GoShortVarDeclaration.class) != null;
+    myImShortVarDeclaration = PsiTreeUtil.getParentOfType(origin, GoShortVarDeclaration.class) != null && !delegate;
     myScope = getScope(origin);
   }
 

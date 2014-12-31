@@ -376,7 +376,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
   @NotNull
   private GoVarProcessor createDelegate(@NotNull MyScopeProcessor processor) {
-    return new GoVarProcessor(getName(), myElement, processor.isCompletion());
+    return new GoVarProcessor(getName(), myElement, processor.isCompletion(), true);
   }
 
   private static boolean processFileEntities(@NotNull GoFile file,
