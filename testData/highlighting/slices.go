@@ -15,4 +15,16 @@ func bar() int {
 
 func main() {
     fmt.Println(bar())
+    main2()
+}
+
+type Foo2 struct {
+    Test int
+}
+
+func main2() {
+    var a *[]Foo2
+    a[0].Test
+    var b *[]Foo2
+    b[0].Test
 }

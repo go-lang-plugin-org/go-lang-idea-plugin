@@ -415,7 +415,8 @@ public class GoPsiImplUtil {
           return list.get(1);
         }
       }
-      else if (type instanceof GoArrayOrSliceType) {
+      type = type instanceof GoPointerType ? type.getType() : type;
+      if (type instanceof GoArrayOrSliceType) {
         return type.getType();
       }
     }
