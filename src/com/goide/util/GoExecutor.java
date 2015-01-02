@@ -40,6 +40,7 @@ import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.Ref;
+import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.openapi.vfs.VfsUtilCore;
@@ -208,7 +209,8 @@ public class GoExecutor {
         public void processTerminated(@NotNull ProcessEvent event) {
           super.processTerminated(event);
           final boolean success = event.getExitCode() == 0 && myProcessOutput.getStderr().isEmpty();
-          final boolean cancelledByUser = event.getExitCode() == PtyHelpers.SIGINT && myProcessOutput.getStderr().isEmpty();
+          boolean nothingToShow = myProcessOutput.getStdout().isEmpty() && myProcessOutput.getStderr().isEmpty();
+          final boolean cancelledByUser = (SystemInfo.isWindows || event.getExitCode() == PtyHelpers.SIGINT) && nothingToShow;
           result.set(success);
           if (success && myShowNotificationsOnSuccess) {
             showNotification("Finished successfully", NotificationType.INFORMATION);
