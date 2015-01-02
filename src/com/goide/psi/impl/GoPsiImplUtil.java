@@ -366,6 +366,7 @@ public class GoPsiImplUtil {
       if (expression != null) {
         GoType type = expression.getGoType();
         if (type instanceof GoChannelType && ((GoUnaryExpr)o).getSendChannel() != null) return type.getType();
+        if (type instanceof GoPointerType && ((GoUnaryExpr)o).getMul() != null) return type.getType();
         return type;
       }
       return null;
@@ -415,7 +416,6 @@ public class GoPsiImplUtil {
           return list.get(1);
         }
       }
-      type = type instanceof GoPointerType ? type.getType() : type;
       if (type instanceof GoArrayOrSliceType) {
         return type.getType();
       }

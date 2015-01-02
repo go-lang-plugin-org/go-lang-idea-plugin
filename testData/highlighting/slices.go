@@ -24,7 +24,17 @@ type Foo2 struct {
 
 func main2() {
     var a *[]Foo2
-    a[0].Test
+    (*a)[0].Test
     var b *[]Foo2
-    b[0].Test
+    b[0].<error>Test</error>
+
+    test(a)
+}
+
+func test(a *[]Foo2) {
+    fmt.Println((*a)[0].Test)
+
+    for _, c := range *a {
+        fmt.Println(c.Test)
+    }
 }
