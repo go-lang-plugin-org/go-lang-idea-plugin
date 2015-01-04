@@ -49,4 +49,20 @@ public final class ResolveUtil {
     }
     return true;
   }
+
+  public static boolean processChildrenFromTop(@NotNull PsiElement element,
+                                               @NotNull PsiScopeProcessor processor,
+                                               @NotNull ResolveState substitutor,
+                                               @Nullable PsiElement lastParent,
+                                               @NotNull PsiElement place) {
+    PsiElement run = element.getFirstChild();
+    while (run != null) {
+      if (run.isEquivalentTo(lastParent)) return true;
+      if (PsiTreeUtil.findCommonParent(place, run) != run && !run.processDeclarations(processor, substitutor, null, place)) {
+        return false;
+      }
+      run = run.getNextSibling();
+    }
+    return true;
+  }
 }

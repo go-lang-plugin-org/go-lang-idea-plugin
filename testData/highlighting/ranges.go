@@ -43,7 +43,7 @@ func main() {
          println(v[1].Likes)
     }
 
-    var people []*Person
+    var <error descr="Unused variable 'people'">people</error> []*Person // todo: should be redeclared
     for a, p := range people {
         println(p.Likes)
     }

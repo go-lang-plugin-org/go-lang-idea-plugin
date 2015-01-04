@@ -16,6 +16,7 @@
 
 package com.goide.psi.impl;
 
+import com.goide.psi.GoBlock;
 import com.goide.psi.GoCompositeElement;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
@@ -48,6 +49,10 @@ public class GoCompositeElementImpl extends ASTWrapperPsiElement implements GoCo
                                                   @NotNull ResolveState state,
                                                   @Nullable PsiElement lastParent,
                                                   @NotNull PsiElement place) {
-    return processor.execute(o, state) && ResolveUtil.processChildren(o, processor, state, lastParent, place);
+    return processor.execute(o, state) && 
+           o instanceof GoBlock ? 
+           ResolveUtil.processChildrenFromTop(o, processor, state, lastParent, place) :
+           ResolveUtil.processChildren(o, processor, state, lastParent, place)
+      ;
   }
 }

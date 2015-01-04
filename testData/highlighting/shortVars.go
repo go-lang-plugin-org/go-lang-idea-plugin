@@ -46,7 +46,7 @@ func Test2() (err error) {
     if err := bar(); err != nil {
         return err
     } else {
-        <error>err</error> := bar()
+        err := bar()
         return err
     }
     return err

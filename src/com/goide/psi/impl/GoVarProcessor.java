@@ -20,11 +20,8 @@ import com.goide.psi.*;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class GoVarProcessor extends GoScopeProcessorBase {
   private final boolean myImShortVarDeclaration;
@@ -64,18 +61,6 @@ public class GoVarProcessor extends GoScopeProcessorBase {
     GoElseStatement elseStatement = PsiTreeUtil.getParentOfType(o, GoElseStatement.class);
     if (elseStatement != null) return elseStatement.getBlock();
     return PsiTreeUtil.getParentOfType(o, GoBlock.class);
-  }
-
-  @Nullable
-  @Override
-  public GoNamedElement getResult() {
-    return ContainerUtil.getLastItem(myResult);
-  }
-
-  @NotNull
-  @Override
-  public List<GoNamedElement> getVariants() {
-    return ContainerUtil.reverse(myResult);
   }
 
   protected boolean condition(@NotNull PsiElement psiElement) {
