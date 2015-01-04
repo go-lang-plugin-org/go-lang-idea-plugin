@@ -20,9 +20,34 @@ func test() int {
     <error>x</error> := f1()
     <error>y,   z</error>     := f2()
 
+    fmt.Println(test21313())
+    fmt.Println(Test2())
+
     x, a := f2() // Ok: `x` is reused and `a` is new
     b, x := f2() // Ok: `b` is new and `x` is reused
 
     return x + y + z + a + b // Just to avoid unused variable error
 }
 
+func test21313() (err int) {
+    {
+        err := 1
+        return err
+    }
+    return 1
+}
+
+func bar() error {
+    return nil
+}
+
+func Test2() (err error) {
+    <error>err</error> := bar()
+    if err := bar(); err != nil {
+        return err
+    } else {
+        <error>err</error> := bar()
+        return err
+    }
+    return err
+}

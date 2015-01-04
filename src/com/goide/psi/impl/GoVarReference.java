@@ -16,35 +16,52 @@
 
 package com.goide.psi.impl;
 
+import com.goide.psi.GoBlock;
+import com.goide.psi.GoFunctionOrMethodDeclaration;
+import com.goide.psi.GoStatement;
 import com.goide.psi.GoVarDefinition;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReferenceBase;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoVarReference extends PsiReferenceBase<GoVarDefinition> {
+  private final GoBlock myPotentialStopBlock;
+
   public GoVarReference(@NotNull GoVarDefinition element) {
     super(element, TextRange.from(0, element.getTextLength()));
+    myPotentialStopBlock = PsiTreeUtil.getParentOfType(element, GoBlock.class);
   }
 
   @Nullable
   @Override
   public PsiElement resolve() {
     GoVarProcessor p = new GoVarProcessor(myElement.getText(), myElement, false);
-    GoReference.processFunctionParameters(myElement, p);
-    if (p.getResult() != null) return p.getResult();
-    ResolveUtil.treeWalkUp(myElement, p);
+    if (myPotentialStopBlock != null) {
+      if (myPotentialStopBlock.getParent() instanceof GoFunctionOrMethodDeclaration) {
+        GoReference.processFunctionParameters(myElement, p);
+        if (p.getResult() != null) return p.getResult();
+      }
+      myPotentialStopBlock.processDeclarations(p, ResolveState.initial(), PsiTreeUtil.getParentOfType(myElement, GoStatement.class), myElement);
+    }
     return p.getResult();
   }
 
   @NotNull
   @Override
   public Object[] getVariants() {
-    GoScopeProcessorBase p = new GoVarProcessor(myElement.getText(), myElement, true);
-    ResolveUtil.treeWalkUp(myElement, p);
+    GoVarProcessor p = new GoVarProcessor(myElement.getText(), myElement, false);
+    if (myPotentialStopBlock != null) {
+      if (myPotentialStopBlock.getParent() instanceof GoFunctionOrMethodDeclaration) {
+        GoReference.processFunctionParameters(myElement, p);
+      }
+      myPotentialStopBlock.processDeclarations(p, ResolveState.initial(), PsiTreeUtil.getParentOfType(myElement, GoStatement.class), myElement);
+    }
     return ArrayUtil.toObjectArray(p.getVariants());
   }
   

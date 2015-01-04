@@ -59,6 +59,10 @@ public class GoVarProcessor extends GoScopeProcessorBase {
   private static GoCompositeElement getScope(@Nullable PsiElement o) {
     GoForStatement forStatement = PsiTreeUtil.getParentOfType(o, GoForStatement.class);
     if (forStatement != null) return forStatement.getBlock();
+    GoIfStatement ifStatement = PsiTreeUtil.getParentOfType(o, GoIfStatement.class);
+    if (ifStatement != null) return ifStatement.getBlock();
+    GoElseStatement elseStatement = PsiTreeUtil.getParentOfType(o, GoElseStatement.class);
+    if (elseStatement != null) return elseStatement.getBlock();
     return PsiTreeUtil.getParentOfType(o, GoBlock.class);
   }
 

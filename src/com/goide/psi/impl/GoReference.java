@@ -319,10 +319,11 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
     GoScopeProcessorBase delegate = createDelegate(processor);
     ResolveUtil.treeWalkUp(myElement, delegate);
+    if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
     processReceiver(delegate);
+    if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
     processFunctionParameters(myElement, delegate);
-    Collection<? extends GoNamedElement> result = delegate.getVariants();
-    if (!processNamedElements(processor, state, result, localResolve)) return false;
+    if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
     if (!processFileEntities(file, processor, state, localResolve)) return false;
     if (!processDirectory(file.getOriginalFile().getParent(), file, file.getPackageName(), processor, state, true)) return false;
     if (processImports(file, processor, state, myElement)) return false;
