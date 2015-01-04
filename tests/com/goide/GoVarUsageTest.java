@@ -27,7 +27,7 @@ import java.util.List;
 
 import static com.intellij.util.containers.ContainerUtil.newArrayList;
 
-public class GoVarResolveTest extends GoCodeInsightFixtureTestCase {
+public class GoVarUsageTest extends GoCodeInsightFixtureTestCase {
   private static final String USAGE = "/*usage*/";
 
   private void doTest(String text) {
