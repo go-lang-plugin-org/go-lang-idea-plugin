@@ -52,7 +52,7 @@ public class GoKeywordCompletionContributor extends CompletionContributor {
     extend(CompletionType.BASIC, insideBlockPattern(GoTypes.IDENTIFIER),
            new GoKeywordCompletionProvider(GoCompletionUtil.KEYWORD_PRIORITY, ADD_BRACES_INSERT_HANDLER, "select"));
     extend(CompletionType.BASIC, typeDeclaration(),
-           new GoKeywordCompletionProvider(GoCompletionUtil.KEYWORD_PRIORITY, new AddBracesInsertHandler(),
+           new GoKeywordCompletionProvider(GoCompletionUtil.KEYWORD_PRIORITY, ADD_BRACES_INSERT_HANDLER,
                                            "interface", "struct"));
     extend(CompletionType.BASIC, insideForStatement(GoTypes.IDENTIFIER),
            new GoKeywordCompletionProvider(GoCompletionUtil.CONTEXT_KEYWORD_PRIORITY, EMPTY_INSERT_HANDLER, "break", "continue"));
