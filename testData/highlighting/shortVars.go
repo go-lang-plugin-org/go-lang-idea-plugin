@@ -49,5 +49,20 @@ func Test2() (err error) {
         err := bar()
         return err
     }
+    
+    switch err := bar(); {  // missing switch expression means "true"
+        case err != nil: return -err
+        default: return err
+    }
+    
+    var c chan int
+    // todo: fix inspection
+    //noinspection GoVarDeclaration
+    select {
+    case err, ok := (<-c):
+        println(err)
+        println(ok)
+    }
+    
     return err
 }

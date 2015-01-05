@@ -136,7 +136,8 @@ public class GoPsiImplUtil {
   @Nullable
   public static PsiReference getReference(@NotNull GoVarDefinition o) {
     GoShortVarDeclaration shortDeclaration = PsiTreeUtil.getParentOfType(o, GoShortVarDeclaration.class);
-    boolean createRef = PsiTreeUtil.getParentOfType(shortDeclaration, GoBlock.class, GoIfStatement.class) instanceof GoBlock;
+    boolean createRef = PsiTreeUtil.getParentOfType(shortDeclaration, GoBlock.class, 
+                                                    GoIfStatement.class, GoSwitchStatement.class, GoSelectStatement.class) instanceof GoBlock;
     return createRef ? new GoVarReference(o) : null;
   }
 
