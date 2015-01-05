@@ -35,7 +35,7 @@ import static com.intellij.patterns.PlatformPatterns.psiFile;
 import static com.intellij.patterns.StandardPatterns.*;
 
 public class GoKeywordCompletionContributor extends CompletionContributor {
-  private static final AddBracesInsertHandler ADD_BRACES_INSERT_HANDLER = new AddBracesInsertHandler();
+  private static final BracesInsertHandler ADD_BRACES_INSERT_HANDLER = new BracesInsertHandler();
   private static final InsertHandler<LookupElement> ADD_BRACKETS_INSERT_HANDLER = new AddBracketsInsertHandler();
 
   public GoKeywordCompletionContributor() {

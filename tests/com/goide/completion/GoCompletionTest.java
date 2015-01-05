@@ -267,6 +267,16 @@ public class GoCompletionTest extends GoCompletionTestBase {
                   "}", "fooVar");
   }
 
+  public void testStructConstructions() throws Exception {
+    doCheckResult("package main; func main() {WaitGr<caret>}; type WaitGroup struct {sema *uint32}", 
+                  "package main; func main() {WaitGroup{<caret>}}; type WaitGroup struct {sema *uint32}");
+  }
+
+  public void testIntConversion() throws Exception {
+    doCheckResult("package main; func main() {int<caret>}; type int int",
+                  "package main; func main() {int(<caret>)}; type int int");
+  }
+
   private void doTestCompletion() {
     myFixture.testCompletion(getTestName(true) + ".go", getTestName(true) + "_after.go");
   }

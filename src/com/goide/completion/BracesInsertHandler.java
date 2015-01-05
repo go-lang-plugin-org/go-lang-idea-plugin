@@ -30,7 +30,19 @@ import com.intellij.openapi.editor.ex.EditorEx;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 
-public class AddBracesInsertHandler implements InsertHandler<LookupElement> {
+public class BracesInsertHandler implements InsertHandler<LookupElement> {
+  public static final BracesInsertHandler ONE_LINER = new BracesInsertHandler(true);
+  
+  private final boolean myOneLine;
+
+  public BracesInsertHandler(boolean oneLine) {
+    myOneLine = oneLine;
+  }
+
+  public BracesInsertHandler() {
+    this(false);
+  }
+
   @Override
   public void handleInsert(InsertionContext context, LookupElement item) {
     final Editor editor = context.getEditor();
@@ -38,7 +50,7 @@ public class AddBracesInsertHandler implements InsertHandler<LookupElement> {
     int offset = skipWhiteSpaces(editor.getCaretModel().getOffset(), documentText);
     if (documentText.charAt(offset) != '{') {
       Project project = context.getProject();
-      Template template = TemplateManager.getInstance(project).createTemplate("braces", "go", " {\n$END$\n}");
+      Template template = TemplateManager.getInstance(project).createTemplate("braces", "go", myOneLine ? "{$END$}" : " {\n$END$\n}");
       template.setToReformat(true);
       TemplateManager.getInstance(project).startTemplate(editor, template);
     }

@@ -17,6 +17,7 @@
 package com.goide.psi.impl;
 
 import com.goide.GoIcons;
+import com.goide.completion.BracesInsertHandler;
 import com.goide.completion.GoCompletionUtil;
 import com.goide.psi.*;
 import com.goide.psi.impl.imports.GoImportReferenceSet;
@@ -136,8 +137,7 @@ public class GoPsiImplUtil {
   @Nullable
   public static PsiReference getReference(@NotNull GoVarDefinition o) {
     GoShortVarDeclaration shortDeclaration = PsiTreeUtil.getParentOfType(o, GoShortVarDeclaration.class);
-    boolean createRef = PsiTreeUtil.getParentOfType(shortDeclaration, GoBlock.class, 
-                                                    GoIfStatement.class, GoSwitchStatement.class, GoSelectStatement.class) instanceof GoBlock;
+    boolean createRef = PsiTreeUtil.getParentOfType(shortDeclaration, GoBlock.class, GoIfStatement.class, GoSwitchStatement.class, GoSelectStatement.class) instanceof GoBlock;
     return createRef ? new GoVarReference(o) : null;
   }
 
@@ -269,11 +269,15 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static LookupElement createTypeConversionLookupElement(@NotNull GoTypeSpec t) {
+    InsertHandler<LookupElement> handler = t.getType() instanceof GoStructType ? 
+                                           BracesInsertHandler.ONE_LINER : 
+                                           ParenthesesInsertHandler.WITH_PARAMETERS; // todo: check context and place caret in or outside {}
     return PrioritizedLookupElement.withPriority(
       LookupElementBuilder
         .create(t)
         .withLookupString(StringUtil.notNullize(t.getName(), "").toLowerCase())
-        .withInsertHandler(ParenthesesInsertHandler.WITH_PARAMETERS).withIcon(GoIcons.TYPE),
+        .withInsertHandler(handler)
+        .withIcon(GoIcons.TYPE),
       GoCompletionUtil.TYPE_CONVERSION);
   }
 

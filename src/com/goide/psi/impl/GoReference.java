@@ -104,7 +104,8 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   }
 
   @NotNull
-  static MyScopeProcessor createCompletionProcessor(@NotNull final Collection<LookupElement> variants, final boolean forTypes,
+  static MyScopeProcessor createCompletionProcessor(@NotNull final Collection<LookupElement> variants, 
+                                                    final boolean forTypes,
                                                     @NotNull final Condition<PsiElement> filter) {
     return new MyScopeProcessor() {
       @Override
@@ -124,7 +125,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
       private LookupElement createLookup(@NotNull PsiElement element) {
         // @formatter:off
         if (element instanceof GoNamedSignatureOwner)return createFunctionOrMethodLookupElement((GoNamedSignatureOwner)element);
-        else if (element instanceof GoTypeSpec)      return forTypes ? createTypeLookupElement((GoTypeSpec)element) :createTypeConversionLookupElement((GoTypeSpec)element);
+        else if (element instanceof GoTypeSpec)      return forTypes ? createTypeLookupElement((GoTypeSpec)element) : createTypeConversionLookupElement((GoTypeSpec)element);
         else if (element instanceof GoImportSpec)    return createPackageLookupElement(((GoImportSpec)element));
         else if (element instanceof PsiDirectory)    return createPackageLookupElement(((PsiDirectory)element).getName(), true);
         else if (element instanceof GoNamedElement)  return createVariableLikeLookupElement((GoNamedElement)element);
