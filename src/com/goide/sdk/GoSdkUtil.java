@@ -17,6 +17,7 @@
 package com.goide.sdk;
 
 import com.goide.psi.GoFile;
+import com.google.common.collect.Lists;
 import com.intellij.openapi.application.PathMacros;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -42,28 +43,32 @@ public class GoSdkUtil {
   public static final String GOPATH = "GOPATH";
 
   @Nullable
-  public static VirtualFile getSdkHome(@NotNull PsiElement context) {
-    Module module = ModuleUtilCore.findModuleForPsiElement(context);
-    Sdk sdk = module == null ? null : ModuleRootManager.getInstance(module).getSdk();
-    VirtualFile result = sdk == null ? null : LocalFileSystem.getInstance().findFileByPath(sdk.getHomePath() + "/src/pkg");
-    return result != null ? result : guessSkdHome(context);
+  public static VirtualFile getSdkSrcDir(@NotNull PsiElement context) {
+    final Module module = ModuleUtilCore.findModuleForPsiElement(context);
+    if (module == null) {
+      return null;
+    }
+    final Sdk sdk = ModuleRootManager.getInstance(module).getSdk();
+    if (sdk == null || sdk.getVersionString() == null) {
+      return null;
+    }
+    final File sdkSrcDirFile = new File(sdk.getHomePath(), getSrcLocation(sdk.getVersionString()));
+    final VirtualFile sdkSrcDir = LocalFileSystem.getInstance().findFileByIoFile(sdkSrcDirFile);
+    return sdkSrcDir != null ? sdkSrcDir : guessSkdSrcDir(context);
   }
 
   @Nullable
   public static GoFile findBuiltinFile(@NotNull PsiElement context) {
-    VirtualFile home = getSdkHome(context);
-    VirtualFile vBuiltin = home != null ? home.findFileByRelativePath("builtin/builtin.go") : null;
-    if (vBuiltin != null) {
-      PsiFile psiBuiltin = context.getManager().findFile(vBuiltin);
-      if (psiBuiltin instanceof GoFile) return ((GoFile)psiBuiltin);
+    final VirtualFile sdkSrcDir = getSdkSrcDir(context);
+    if (sdkSrcDir == null) {
+      return null;
     }
-    return null;
-  }
-
-  @Nullable
-  private static VirtualFile guessSkdHome(@NotNull PsiElement context) {
-    VirtualFile virtualFile = context.getContainingFile().getOriginalFile().getVirtualFile();
-    return ProjectRootManager.getInstance(context.getProject()).getFileIndex().getClassRootForFile(virtualFile);
+    final VirtualFile vBuiltin = sdkSrcDir.findFileByRelativePath("builtin/builtin.go");
+    if (vBuiltin == null) {
+      return null;
+    }
+    final PsiFile psiBuiltin = context.getManager().findFile(vBuiltin);
+    return (psiBuiltin instanceof GoFile) ? (GoFile)psiBuiltin : null;
   }
 
   @NotNull
@@ -88,5 +93,42 @@ public class GoSdkUtil {
   public static String retrieveGoPath() {
     String path = EnvironmentUtil.getValue(GOPATH);
     return path != null ? path : PathMacros.getInstance().getValue(GOPATH);
+  }
+
+  @NotNull
+  public static String getSrcLocation(@NotNull String version) {
+    if (compareVersions(version, "1.4") < 0) {
+      return "src/pkg";
+    }
+    return "src";
+  }
+
+  public static int compareVersions(@NotNull String lhs, @NotNull String rhs) {
+    final List<Integer> lhsParts = parseVersionString(lhs);
+    final List<Integer> rhsParts = parseVersionString(rhs);
+    final int commonParts = Math.min(lhsParts.size(), rhsParts.size());
+    for (int i = 0; i < commonParts; i++) {
+      final int partResult = lhsParts.get(i).compareTo(rhsParts.get(i));
+      if (partResult != 0) {
+        return partResult;
+      }
+    }
+    return Integer.valueOf(lhsParts.size()).compareTo(Integer.valueOf(rhsParts.size()));
+  }
+
+  @NotNull
+  private static List<Integer> parseVersionString(@NotNull String versionStr) {
+    final String[] strParts = versionStr.split("\\.");
+    final List<Integer> parts = Lists.newArrayListWithExpectedSize(strParts.length);
+    for (String strPart : strParts) {
+      parts.add(Integer.valueOf(strPart));
+    }
+    return parts;
+  }
+
+  @Nullable
+  private static VirtualFile guessSkdSrcDir(@NotNull PsiElement context) {
+    VirtualFile virtualFile = context.getContainingFile().getOriginalFile().getVirtualFile();
+    return ProjectRootManager.getInstance(context.getProject()).getFileIndex().getClassRootForFile(virtualFile);
   }
 }

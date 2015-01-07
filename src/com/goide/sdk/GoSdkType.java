@@ -27,7 +27,6 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.containers.ContainerUtil;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -36,9 +35,12 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GoSdkType extends SdkType {
+  private static final Pattern RE_GO_VERSION = Pattern.compile("theVersion\\s*=\\s*`go(.*)`");
+
   public GoSdkType() {
     super(JpsGoModelSerializerExtension.GO_SDK_TYPE_ID);
   }
@@ -121,22 +123,27 @@ public class GoSdkType extends SdkType {
   @NotNull
   @Override
   public String suggestSdkName(@Nullable String currentSdkName, @NotNull String sdkHome) {
-    String version = getVersionString(sdkHome);
-    if (version == null) return "Unknown Go version at " + sdkHome;
+    final String version = getVersionString(sdkHome);
+    if (version == null) {
+      return "Unknown Go version at " + sdkHome;
+    }
     return "Go " + version;
   }
 
   @Nullable
   @Override
   public String getVersionString(@NotNull String sdkHome) {
-    // todo
     sdkHome = adjustSdkPath(sdkHome);
     try {
-      String s = FileUtil.loadFile(new File(sdkHome, "src/pkg/runtime/zversion.go"));
-      List<String> split = StringUtil.split(s, " ");
-      String lastItem = ContainerUtil.getLastItem(split);
-      if (lastItem == null) return null;
-      return lastItem.replace("go", "").replaceAll("`", "").replaceAll("\\(", "").replaceAll("\\)", "");
+      final String oldStylePath = new File(sdkHome, "src/pkg/runtime/zversion.go").getPath();
+      final String newStylePath = new File(sdkHome, "src/runtime/zversion.go").getPath();
+      final File zVersionGo = FileUtil.findFirstThatExist(oldStylePath, newStylePath);
+      final String text = FileUtil.loadFile(zVersionGo);
+      final Matcher matcher = RE_GO_VERSION.matcher(text);
+      if (!matcher.find()) {
+        return null;
+      }
+      return matcher.group(1);
     }
     catch (IOException ignore) {
     }
@@ -168,12 +175,19 @@ public class GoSdkType extends SdkType {
 
   @Override
   public void setupSdkPaths(@NotNull Sdk sdk) {
-    SdkModificator modificator = sdk.getSdkModificator();
+    if (sdk.getVersionString() == null) {
+      throw new RuntimeException("SDK version is not defined");
+    }
+    final SdkModificator modificator = sdk.getSdkModificator();
     String path = sdk.getHomePath();
-    if (path == null) return;
+    if (path == null) {
+      return;
+    }
     path = adjustSdkPath(path);
     modificator.setHomePath(path);
-    add(modificator, new File(path, "src/pkg")); // scr/pkg is enough at the moment, possible process binaries from pkg
+    final String srcPath = GoSdkUtil.getSrcLocation(sdk.getVersionString());
+    // scr is enough at the moment, possible process binaries from pkg
+    add(modificator, new File(path, srcPath));
     modificator.commitChanges();
   }
 

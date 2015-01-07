@@ -66,7 +66,7 @@ abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsi
     Sdk sdk = new ProjectJdkImpl(release, instance);
     SdkModificator sdkModificator = sdk.getSdkModificator();
     sdkModificator.setHomePath(sdkHome);
-    sdkModificator.setVersionString(release); // must be set after home path, otherwise setting home path clears the version string
+    sdkModificator.setVersionString(version); // must be set after home path, otherwise setting home path clears the version string
     sdkModificator.commitChanges();
     instance.setupSdkPaths(sdk);
     return sdk;
