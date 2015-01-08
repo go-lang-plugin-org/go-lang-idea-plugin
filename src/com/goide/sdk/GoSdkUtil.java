@@ -39,44 +39,35 @@ import java.io.File;
 import java.util.List;
 
 public class GoSdkUtil {
-
   public static final String GOPATH = "GOPATH";
 
   @Nullable
   public static VirtualFile getSdkSrcDir(@NotNull PsiElement context) {
-    final Module module = ModuleUtilCore.findModuleForPsiElement(context);
-    if (module == null) {
-      return null;
-    }
-    final Sdk sdk = ModuleRootManager.getInstance(module).getSdk();
-    if (sdk == null || sdk.getVersionString() == null) {
-      return null;
-    }
-    final File sdkSrcDirFile = new File(sdk.getHomePath(), getSrcLocation(sdk.getVersionString()));
-    final VirtualFile sdkSrcDir = LocalFileSystem.getInstance().findFileByIoFile(sdkSrcDirFile);
+    Module module = ModuleUtilCore.findModuleForPsiElement(context);
+    if (module == null) return null;
+    Sdk sdk = ModuleRootManager.getInstance(module).getSdk();
+    if (sdk == null || sdk.getVersionString() == null) return null;
+    File sdkSrcDirFile = new File(sdk.getHomePath(), getSrcLocation(sdk.getVersionString()));
+    VirtualFile sdkSrcDir = LocalFileSystem.getInstance().findFileByIoFile(sdkSrcDirFile);
     return sdkSrcDir != null ? sdkSrcDir : guessSkdSrcDir(context);
   }
 
   @Nullable
   public static GoFile findBuiltinFile(@NotNull PsiElement context) {
-    final VirtualFile sdkSrcDir = getSdkSrcDir(context);
-    if (sdkSrcDir == null) {
-      return null;
-    }
-    final VirtualFile vBuiltin = sdkSrcDir.findFileByRelativePath("builtin/builtin.go");
-    if (vBuiltin == null) {
-      return null;
-    }
-    final PsiFile psiBuiltin = context.getManager().findFile(vBuiltin);
+    VirtualFile sdkSrcDir = getSdkSrcDir(context);
+    if (sdkSrcDir == null) return null;
+    VirtualFile vBuiltin = sdkSrcDir.findFileByRelativePath("builtin/builtin.go");
+    if (vBuiltin == null) return null;
+    PsiFile psiBuiltin = context.getManager().findFile(vBuiltin);
     return (psiBuiltin instanceof GoFile) ? (GoFile)psiBuiltin : null;
   }
 
   @NotNull
   public static List<VirtualFile> getGoPathsSources() {
     List<VirtualFile> result = ContainerUtil.newArrayList();
-    String gopath = retrieveGoPath();
-    if (gopath != null) {
-      List<String> split = StringUtil.split(gopath, File.pathSeparator);
+    String goPath = retrieveGoPath();
+    if (goPath != null) {
+      List<String> split = StringUtil.split(goPath, File.pathSeparator);
       String home = SystemProperties.getUserHome();
       for (String s : split) {
         if (home != null) {
@@ -104,11 +95,11 @@ public class GoSdkUtil {
   }
 
   public static int compareVersions(@NotNull String lhs, @NotNull String rhs) {
-    final List<Integer> lhsParts = parseVersionString(lhs);
-    final List<Integer> rhsParts = parseVersionString(rhs);
-    final int commonParts = Math.min(lhsParts.size(), rhsParts.size());
+    List<Integer> lhsParts = parseVersionString(lhs);
+    List<Integer> rhsParts = parseVersionString(rhs);
+    int commonParts = Math.min(lhsParts.size(), rhsParts.size());
     for (int i = 0; i < commonParts; i++) {
-      final int partResult = lhsParts.get(i).compareTo(rhsParts.get(i));
+      int partResult = lhsParts.get(i).compareTo(rhsParts.get(i));
       if (partResult != 0) {
         return partResult;
       }
@@ -118,8 +109,8 @@ public class GoSdkUtil {
 
   @NotNull
   private static List<Integer> parseVersionString(@NotNull String versionStr) {
-    final String[] strParts = versionStr.split("\\.");
-    final List<Integer> parts = Lists.newArrayListWithExpectedSize(strParts.length);
+    String[] strParts = versionStr.split("\\.");
+    List<Integer> parts = Lists.newArrayListWithExpectedSize(strParts.length);
     for (String strPart : strParts) {
       parts.add(Integer.valueOf(strPart));
     }

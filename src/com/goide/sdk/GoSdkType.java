@@ -111,19 +111,17 @@ public class GoSdkType extends SdkType {
 
   @NotNull
   public static String adjustSdkPath(@NotNull String path) {
-    if (isAppEngine(path)) path = path + "/" + "goroot";
-    return path;
+    return isAppEngine(path) ? path + "/" + "goroot" : path;
   }
 
   private static boolean isAppEngine(@Nullable String path) {
-    if (path == null) return false;
-    return new File(path, "appcfg.py").exists();
+    return path != null && new File(path, "appcfg.py").exists();
   }
 
   @NotNull
   @Override
   public String suggestSdkName(@Nullable String currentSdkName, @NotNull String sdkHome) {
-    final String version = getVersionString(sdkHome);
+    String version = getVersionString(sdkHome);
     if (version == null) {
       return "Unknown Go version at " + sdkHome;
     }
@@ -135,15 +133,14 @@ public class GoSdkType extends SdkType {
   public String getVersionString(@NotNull String sdkHome) {
     sdkHome = adjustSdkPath(sdkHome);
     try {
-      final String oldStylePath = new File(sdkHome, "src/pkg/runtime/zversion.go").getPath();
-      final String newStylePath = new File(sdkHome, "src/runtime/zversion.go").getPath();
-      final File zVersionGo = FileUtil.findFirstThatExist(oldStylePath, newStylePath);
-      final String text = FileUtil.loadFile(zVersionGo);
-      final Matcher matcher = RE_GO_VERSION.matcher(text);
-      if (!matcher.find()) {
-        return null;
-      }
-      return matcher.group(1);
+      String path = "runtime/zversion.go";
+      String oldStylePath = new File(sdkHome, "src/pkg/" + path).getPath();
+      String newStylePath = new File(sdkHome, "src/" + path).getPath();
+      File zVersion = FileUtil.findFirstThatExist(oldStylePath, newStylePath);
+      if (zVersion == null) return null;
+      String text = FileUtil.loadFile(zVersion);
+      Matcher matcher = RE_GO_VERSION.matcher(text);
+      return !matcher.find() ? null : matcher.group(1);
     }
     catch (IOException ignore) {
     }
@@ -175,17 +172,13 @@ public class GoSdkType extends SdkType {
 
   @Override
   public void setupSdkPaths(@NotNull Sdk sdk) {
-    if (sdk.getVersionString() == null) {
-      throw new RuntimeException("SDK version is not defined");
-    }
-    final SdkModificator modificator = sdk.getSdkModificator();
+    if (sdk.getVersionString() == null) throw new RuntimeException("SDK version is not defined");
+    SdkModificator modificator = sdk.getSdkModificator();
     String path = sdk.getHomePath();
-    if (path == null) {
-      return;
-    }
+    if (path == null) return;
     path = adjustSdkPath(path);
     modificator.setHomePath(path);
-    final String srcPath = GoSdkUtil.getSrcLocation(sdk.getVersionString());
+    String srcPath = GoSdkUtil.getSrcLocation(sdk.getVersionString());
     // scr is enough at the moment, possible process binaries from pkg
     add(modificator, new File(path, srcPath));
     modificator.commitChanges();
