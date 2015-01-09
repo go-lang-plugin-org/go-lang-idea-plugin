@@ -88,10 +88,7 @@ public class GoSdkUtil {
 
   @NotNull
   public static String getSrcLocation(@NotNull String version) {
-    if (compareVersions(version, "1.4") < 0) {
-      return "src/pkg";
-    }
-    return "src";
+    return compareVersions(version, "1.4") < 0 ? "src/pkg" : "src";
   }
 
   public static int compareVersions(@NotNull String lhs, @NotNull String rhs) {
