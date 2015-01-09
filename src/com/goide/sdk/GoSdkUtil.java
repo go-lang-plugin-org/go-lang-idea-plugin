@@ -106,10 +106,10 @@ public class GoSdkUtil {
 
   @NotNull
   private static List<Integer> parseVersionString(@NotNull String versionStr) {
-    String[] strParts = versionStr.split("\\.");
+    String[] strParts = StringUtil.trim(versionStr).split("\\.");
     List<Integer> parts = Lists.newArrayListWithExpectedSize(strParts.length);
     for (String strPart : strParts) {
-      parts.add(Integer.valueOf(strPart));
+      parts.add(StringUtil.parseInt(strPart, 0));
     }
     return parts;
   }

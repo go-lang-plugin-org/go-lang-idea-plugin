@@ -21,7 +21,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class GoSdkUtilTest {
-
   @Test
   public void testCompareVersions() throws Exception {
     assertEquals(-1, GoSdkUtil.compareVersions("1.1.2", "1.1.3"));
@@ -36,6 +35,7 @@ public class GoSdkUtilTest {
     assertEquals(1, GoSdkUtil.compareVersions("1.3.3", "1.2.4"));
     assertEquals(1, GoSdkUtil.compareVersions("2.2.3", "1.4.4"));
     assertEquals(1, GoSdkUtil.compareVersions("1.2.1", "1.2"));
+    assertEquals(0, GoSdkUtil.compareVersions("1.2.1", "1.2.1"));
   }
 
   @Test

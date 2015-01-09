@@ -140,7 +140,7 @@ public class GoSdkType extends SdkType {
       if (zVersion == null) return null;
       String text = FileUtil.loadFile(zVersion);
       Matcher matcher = RE_GO_VERSION.matcher(text);
-      return !matcher.find() ? null : matcher.group(1);
+      return matcher.find() ? matcher.group(1) : null;
     }
     catch (IOException ignore) {
     }
