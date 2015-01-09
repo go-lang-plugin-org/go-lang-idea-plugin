@@ -41,6 +41,7 @@ import com.intellij.openapi.roots.libraries.LibraryTable;
 import com.intellij.openapi.roots.libraries.LibraryTablesRegistrar;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileVisitor;
 import com.intellij.util.Alarm;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
@@ -55,7 +56,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   private static final String GO_LIBRARIES_NOTIFICATION_HAD_BEEN_SHOWN = "go.libraries.notification.had.been.shown";
   private static final int UPDATE_DELAY = 300;
   private final Alarm myAlarm;
-  
+
   @NotNull private final Set<String> myLastHandledRoots = ContainerUtil.newHashSet();
   @NotNull private final Module myModule;
 
@@ -76,7 +77,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
       });
     }
   }
-  
+
   public void scheduleUpdate() {
     scheduleUpdate(UPDATE_DELAY);
   }
@@ -99,7 +100,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
             if (!myLastHandledRoots.equals(libraryRootUrls)) {
               myLastHandledRoots.clear();
               myLastHandledRoots.addAll(libraryRootUrls);
-  
+
               ApplicationManager.getApplication().invokeLater(new Runnable() {
                 @Override
                 public void run() {
@@ -117,7 +118,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
 
   private void attachLibraries(@NotNull final Set<String> libraryRootUrls) {
     ApplicationManager.getApplication().assertIsDispatchThread();
-    
+
     if (!libraryRootUrls.isEmpty()) {
       ApplicationManager.getApplication().runWriteAction(new Runnable() {
         @Override
@@ -165,7 +166,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
 
   private void removeLibraryIfNeeded() {
     ApplicationManager.getApplication().assertIsDispatchThread();
-    
+
     final ModifiableModelsProvider modelsProvider = ModifiableModelsProvider.SERVICE.getInstance();
     final ModifiableRootModel model = modelsProvider.getModuleModifiableModel(myModule);
     final LibraryOrderEntry goLibraryEntry = OrderEntryUtil.findLibraryOrderEntry(model, GO_LIB_NAME);
@@ -198,30 +199,34 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     }
   }
 
-  private static void addRootUrlsForGoPathFile(@NotNull Set<String> libraryRootUrls,
-                                               @NotNull VirtualFile[] contentRoots,
+  private static void addRootUrlsForGoPathFile(@NotNull final Set<String> libraryRootUrls,
+                                               @NotNull final VirtualFile[] contentRoots,
                                                @NotNull VirtualFile file) {
-    for (VirtualFile contentRoot : contentRoots) {
-      if (file.equals(contentRoot)) {
-        LOG.info("The directory is project root, skipping: " + file.getPath());
-        libraryRootUrls.remove(contentRoot.getUrl());
-        return;
-      }
-      else if (VfsUtilCore.isAncestor(file, contentRoot, true)) {
-        LOG.info("The directory is ancestor of project root, looking deeper: " + file.getPath());
-        libraryRootUrls.remove(contentRoot.getUrl());
-        final VirtualFile contentRootParent = contentRoot.getParent();
-        assert contentRootParent != null;
-        //noinspection UnsafeVfsRecursion
-        for (VirtualFile virtualFile : contentRootParent.getChildren()) {
-          addRootUrlsForGoPathFile(libraryRootUrls, contentRoots, virtualFile);
+
+    VfsUtilCore.visitChildrenRecursively(file, new VirtualFileVisitor() {
+      @NotNull
+      @Override
+      public Result visitFileEx(@NotNull VirtualFile file) {
+        for (VirtualFile contentRoot : contentRoots) {
+          if (file.equals(contentRoot)) {
+            LOG.info("The directory is project root, skipping: " + file.getPath());
+            libraryRootUrls.remove(contentRoot.getUrl());
+            return SKIP_CHILDREN;
+          }
+          else if (VfsUtilCore.isAncestor(file, contentRoot, true)) {
+            LOG.info("The directory is ancestor of project root, looking deeper: " + file.getPath());
+            libraryRootUrls.remove(contentRoot.getUrl());
+            return CONTINUE;
+          }
+          else {
+            LOG.info("Add directory to GOPATH library: " + file.getPath());
+            libraryRootUrls.add(file.getUrl());
+            
+          }
         }
+        return SKIP_CHILDREN;
       }
-      else {
-        LOG.info("Add directory to GOPATH library: " + file.getPath());
-        libraryRootUrls.add(file.getUrl());
-      }
-    }
+    });
   }
 
   private static void showNotification(@NotNull final Project project) {
@@ -235,7 +240,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
       }
     }
 
-    if (shownAlready) {
+    if (!shownAlready) {
       final Notification notification = new Notification("go", "GOPATH was detected",
                                                          "We've been detected some libraries from your GOPATH.\n" +
                                                          "You may want to add extra libraries in <a href='configure'>Go Libraries configuration</a>.",
