@@ -6,3 +6,8 @@ func serve() {
     foo(
     if 1 {}
 }
+
+func foo() {
+    bar(,)
+    doo()
+}

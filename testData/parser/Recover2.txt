@@ -57,3 +57,30 @@ GO_FILE
           PsiElement({)('{')
           PsiElement(})('}')
       PsiElement(})('}')
+  FUNCTION_DECLARATION
+    PsiElement(func)('func')
+    PsiElement(identifier)('foo')
+    SIGNATURE
+      PARAMETERS
+        PsiElement(()('(')
+        PsiElement())(')')
+    BLOCK
+      PsiElement({)('{')
+      SIMPLE_STATEMENT
+        CALL_EXPR
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('bar')
+          ARGUMENT_LIST
+            PsiElement(()('(')
+            PsiErrorElement:'!=', '%', '&', '&^', '(', ')', '*', '+', '-', '/', <, <-, <<, <=, <expression>, '==', '>', '>=', '>>', '^' or '|' expected, got ','
+              <empty list>
+      PsiElement(,)(',')
+      PsiElement())(')')
+      SIMPLE_STATEMENT
+        CALL_EXPR
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('doo')
+          ARGUMENT_LIST
+            PsiElement(()('(')
+            PsiElement())(')')
+      PsiElement(})('}')
