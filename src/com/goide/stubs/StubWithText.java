@@ -26,12 +26,7 @@ import org.jetbrains.annotations.Nullable;
 abstract public class StubWithText<T extends PsiElement> extends StubBase<T> implements TextHolder {
   @Nullable protected final StringRef myText;
 
-  protected StubWithText(StubElement parent, IStubElementType elementType) {
-    super(parent, elementType);
-    myText = null;
-  }
-
-  protected StubWithText(StubElement parent, IStubElementType elementType, StringRef ref) {
+  protected StubWithText(StubElement parent, IStubElementType elementType, @Nullable StringRef ref) {
     super(parent, elementType);
     myText = ref;
   }

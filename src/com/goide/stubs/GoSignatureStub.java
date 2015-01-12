@@ -19,9 +19,14 @@ package com.goide.stubs;
 import com.goide.psi.GoSignature;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.stubs.StubElement;
+import com.intellij.util.io.StringRef;
 
 public class GoSignatureStub extends StubWithText<GoSignature> {
-  public GoSignatureStub(StubElement parent, IStubElementType elementType) {
-    super(parent, elementType);
+  public GoSignatureStub(StubElement parent, IStubElementType elementType, StringRef ref) {
+    super(parent, elementType, ref);
+  }
+
+  public GoSignatureStub(StubElement parent, IStubElementType elementType, String text) {
+    this(parent, elementType, StringRef.fromString(text));
   }
 }

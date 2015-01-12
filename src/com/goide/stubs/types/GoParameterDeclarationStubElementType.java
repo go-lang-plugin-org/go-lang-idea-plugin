@@ -40,16 +40,17 @@ public class GoParameterDeclarationStubElementType extends GoStubElementType<GoP
   @NotNull
   @Override
   public GoParameterDeclarationStub createStub(@NotNull GoParameterDeclaration psi, StubElement parentStub) {
-    return new GoParameterDeclarationStub(parentStub, this);
+    return new GoParameterDeclarationStub(parentStub, this, psi.getText());
   }
 
   @Override
   public void serialize(@NotNull GoParameterDeclarationStub stub, @NotNull StubOutputStream dataStream) throws IOException {
+    dataStream.writeName(stub.getText());
   }
 
   @NotNull
   @Override
   public GoParameterDeclarationStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException {
-    return new GoParameterDeclarationStub(parentStub, this);
+    return new GoParameterDeclarationStub(parentStub, this, dataStream.readName());
   }
 }

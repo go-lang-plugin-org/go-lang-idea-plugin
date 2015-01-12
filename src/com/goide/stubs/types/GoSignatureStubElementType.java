@@ -40,16 +40,17 @@ public class GoSignatureStubElementType extends GoStubElementType<GoSignatureStu
   @NotNull
   @Override
   public GoSignatureStub createStub(@NotNull GoSignature psi, StubElement parentStub) {
-    return new GoSignatureStub(parentStub, this);
+    return new GoSignatureStub(parentStub, this, psi.getText());
   }
 
   @Override
   public void serialize(@NotNull GoSignatureStub stub, @NotNull StubOutputStream dataStream) throws IOException {
+    dataStream.writeName(stub.getText());
   }
 
   @NotNull
   @Override
   public GoSignatureStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException {
-    return new GoSignatureStub(parentStub, this);
+    return new GoSignatureStub(parentStub, this, dataStream.readName());
   }
 }

@@ -19,9 +19,14 @@ package com.goide.stubs;
 import com.goide.psi.GoParameterDeclaration;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.stubs.StubElement;
+import com.intellij.util.io.StringRef;
 
 public class GoParameterDeclarationStub extends StubWithText<GoParameterDeclaration> {
-  public GoParameterDeclarationStub(StubElement parent, IStubElementType elementType) {
-    super(parent, elementType);
+  public GoParameterDeclarationStub(StubElement parent, IStubElementType elementType, StringRef ref) {
+    super(parent, elementType, ref);
+  }
+
+  public GoParameterDeclarationStub(StubElement parent, IStubElementType elementType, String text) {
+    this(parent, elementType, StringRef.fromString(text));
   }
 }
