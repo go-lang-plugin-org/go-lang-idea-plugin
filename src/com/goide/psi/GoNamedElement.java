@@ -29,4 +29,6 @@ public interface GoNamedElement extends GoCompositeElement, GoTypeOwner, PsiName
 
   @NotNull
   GoFile getContainingFile();
+
+  boolean isBlank();
 }

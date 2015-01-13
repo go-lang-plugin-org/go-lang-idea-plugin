@@ -127,4 +127,9 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
   public SearchScope getUseScope() {
     return isPublic() ? super.getUseScope() : GoPsiImplUtil.cretePackageScope(getContainingFile());
   }
+
+  @Override
+  public boolean isBlank() {
+    return StringUtil.equals(getName(), "_");
+  }
 }

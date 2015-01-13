@@ -18,7 +18,6 @@ package com.goide.inspections.unresolved;
 
 import com.goide.inspections.GoInspectionBase;
 import com.goide.psi.*;
-import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
@@ -37,7 +36,7 @@ public class GoUnusedVariableInspection extends GoInspectionBase {
     return new GoVisitor() {
       @Override
       public void visitVarDefinition(@NotNull GoVarDefinition o) {
-        if (GoPsiImplUtil.isBlank(o.getIdentifier())) return;
+        if (o.isBlank()) return;
         GoVarSpec shortDecl = PsiTreeUtil.getParentOfType(o, GoShortVarDeclaration.class, GoRecvStatement.class);
         GoVarDeclaration decl = PsiTreeUtil.getParentOfType(o, GoVarDeclaration.class);
         if (shortDecl != null || decl != null) {

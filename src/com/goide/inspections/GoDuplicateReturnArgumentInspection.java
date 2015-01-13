@@ -17,10 +17,9 @@
 package com.goide.inspections;
 
 import com.goide.psi.*;
-import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.psi.PsiElement;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,14 +39,13 @@ public class GoDuplicateReturnArgumentInspection extends GoDuplicateArgumentInsp
     List<GoParameterDeclaration> list = parameters.getParameterDeclarationList();
     for (GoParameterDeclaration declaration : list) {
       for (GoParamDefinition parameter : declaration.getParamDefinitionList()) {
-        PsiElement identifier = parameter.getIdentifier();
-        if(GoPsiImplUtil.isBlank(identifier)) continue;
-        String text = identifier.getText();
-        if (names.contains(text)) {
-          holder.registerProblem(parameter, errorText(text), ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+        if (parameter.isBlank()) continue;
+        String name = parameter.getName();
+        if (name != null && names.contains(name)) {
+          holder.registerProblem(parameter, errorText(name), ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
         }
         else {
-          names.add(text);
+          names.add(name);
         }
       }
     }
@@ -59,9 +57,8 @@ public class GoDuplicateReturnArgumentInspection extends GoDuplicateArgumentInsp
     Set<String> names = new LinkedHashSet<String>();
     for (GoParameterDeclaration fp : params) {
       for (GoParamDefinition parameter : fp.getParamDefinitionList()) {
-        PsiElement identifier = parameter.getIdentifier();
-        if (GoPsiImplUtil.isBlank(identifier)) continue;
-        names.add(identifier.getText());
+        if (parameter.isBlank()) continue;
+        ContainerUtil.addIfNotNull(names, parameter.getName());
       }
     }
     return names;

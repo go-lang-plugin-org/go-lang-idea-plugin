@@ -17,11 +17,9 @@
 package com.goide.inspections;
 
 import com.goide.psi.*;
-import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,14 +48,13 @@ public class GoDuplicateArgumentInspection extends GoInspectionBase {
     Set<String> parameters = new LinkedHashSet<String>();
     for (GoParameterDeclaration fp : params) {
       for (GoParamDefinition parameter : fp.getParamDefinitionList()) {
-        PsiElement identifier = parameter.getIdentifier();
-        if (GoPsiImplUtil.isBlank(identifier)) continue;
-        String text = identifier.getText();
-        if (parameters.contains(text)) {
-          holder.registerProblem(parameter, errorText(text), ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+        if (parameter.isBlank()) continue;
+        String name = parameter.getName();
+        if (name != null && parameters.contains(name)) {
+          holder.registerProblem(parameter, errorText(name), ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
         }
         else {
-          parameters.add(text);
+          parameters.add(name);
         }
       }
     }

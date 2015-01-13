@@ -16,7 +16,7 @@
 
 package com.goide.completion;
 
-import com.goide.psi.impl.GoPsiImplUtil;
+import com.goide.psi.GoNamedElement;
 import com.intellij.codeInsight.completion.CompletionConfidence;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 public class GoCompletionConfidence extends CompletionConfidence {
   @NotNull
   @Override
-  public ThreeState shouldSkipAutopopup(@NotNull PsiElement contextElement, @NotNull PsiFile psiFile, int offset) {
-    return GoPsiImplUtil.isBlank(contextElement) ? ThreeState.YES : ThreeState.UNSURE;
+  public ThreeState shouldSkipAutopopup(@NotNull PsiElement context, @NotNull PsiFile psiFile, int offset) {
+    return context instanceof GoNamedElement && ((GoNamedElement)context).isBlank() ? ThreeState.YES : ThreeState.UNSURE;
   }
 }
