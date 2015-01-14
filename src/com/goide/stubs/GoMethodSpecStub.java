@@ -22,11 +22,19 @@ import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.io.StringRef;
 
 public class GoMethodSpecStub extends GoNamedStub<GoMethodSpec> {
-  public GoMethodSpecStub(StubElement parent, IStubElementType elementType, StringRef name, boolean isPublic) {
+  private final int myArity;
+
+  public GoMethodSpecStub(StubElement parent, IStubElementType elementType, StringRef name, boolean isPublic, int arity) {
     super(parent, elementType, name, isPublic);
+    myArity = arity;
   }
 
-  public GoMethodSpecStub(StubElement parent, IStubElementType elementType, String name, boolean isPublic) {
+  public GoMethodSpecStub(StubElement parent, IStubElementType elementType, String name, boolean isPublic, int arity) {
     super(parent, elementType, name, isPublic);
+    myArity = arity;
+  }
+
+  public int getArity() {
+    return myArity;
   }
 }

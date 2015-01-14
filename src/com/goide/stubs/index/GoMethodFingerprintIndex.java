@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,31 @@
 
 package com.goide.stubs.index;
 
-import com.goide.psi.GoNamedElement;
+import com.goide.psi.GoMethodSpec;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StringStubIndexExtension;
+import com.intellij.psi.stubs.StubIndex;
 import com.intellij.psi.stubs.StubIndexKey;
 import org.jetbrains.annotations.NotNull;
 
-public class GoAllNamesIndex extends StringStubIndexExtension<GoNamedElement> {
-  public static final StubIndexKey<String, GoNamedElement> ALL_NAMES = StubIndexKey.createIndexKey("go.all.name");
+import java.util.Collection;
+
+public class GoMethodFingerprintIndex extends StringStubIndexExtension<GoMethodSpec> {
+  public static final StubIndexKey<String, GoMethodSpec> KEY = StubIndexKey.createIndexKey("go.method.fingerprint");
 
   @Override
   public int getVersion() {
-    return 17;
+    return 1;
   }
 
   @NotNull
   @Override
-  public StubIndexKey<String, GoNamedElement> getKey() {
-    return ALL_NAMES;
+  public StubIndexKey<String, GoMethodSpec> getKey() {
+    return KEY;
+  }
+
+  public static Collection<GoMethodSpec> find(@NotNull String name, @NotNull Project project, GlobalSearchScope scope) {
+    return StubIndex.getElements(KEY, name, project, scope, GoMethodSpec.class);
   }
 }

@@ -51,6 +51,7 @@
     <stubIndex implementation="com.goide.stubs.index.GoTypesIndex"/>
     <stubIndex implementation="com.goide.stubs.index.GoPackagesIndex"/>
     <stubIndex implementation="com.goide.stubs.index.GoMethodIndex"/>
+    <stubIndex implementation="com.goide.stubs.index.GoMethodFingerprintIndex"/>
 
     <internalFileTemplate name="Go Application"/>
     <internalFileTemplate name="Go File"/>

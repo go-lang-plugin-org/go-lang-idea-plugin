@@ -17,29 +17,34 @@
 package com.goide.stubs.types;
 
 import com.goide.psi.GoMethodSpec;
+import com.goide.psi.GoParameterDeclaration;
+import com.goide.psi.GoParameters;
+import com.goide.psi.GoSignature;
 import com.goide.psi.impl.GoMethodSpecImpl;
 import com.goide.stubs.GoMethodSpecStub;
+import com.goide.stubs.index.GoMethodFingerprintIndex;
+import com.intellij.psi.stubs.IndexSink;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
-import com.intellij.util.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.List;
 
 public class GoMethodSpecStubElementType extends GoNamedStubElementType<GoMethodSpecStub, GoMethodSpec> {
-  public static final GoMethodSpec[] EMPTY_ARRAY = new GoMethodSpec[0];
-
-  public static final ArrayFactory<GoMethodSpec> ARRAY_FACTORY = new ArrayFactory<GoMethodSpec>() {
-    @NotNull
-    @Override
-    public GoMethodSpec[] create(final int count) {
-      return count == 0 ? EMPTY_ARRAY : new GoMethodSpec[count];
-    }
-  };
-
   public GoMethodSpecStubElementType(@NotNull String name) {
     super(name);
+  }
+
+  @Override
+  public void indexStub(@NotNull GoMethodSpecStub stub, @NotNull IndexSink sink) {
+    super.indexStub(stub, sink);
+    String name = stub.getName();
+    int arity = stub.getArity();
+    if (name != null && arity >= 0) {
+      sink.occurrence(GoMethodFingerprintIndex.KEY, name + "/" + arity);
+    }
   }
 
   @NotNull
@@ -51,18 +56,23 @@ public class GoMethodSpecStubElementType extends GoNamedStubElementType<GoMethod
   @NotNull
   @Override
   public GoMethodSpecStub createStub(@NotNull GoMethodSpec psi, StubElement parentStub) {
-    return new GoMethodSpecStub(parentStub, this, psi.getName(), psi.isPublic());
+    GoSignature signature = psi.getSignature();
+    GoParameters parameters = signature != null ? signature.getParameters() : null;
+    List<GoParameterDeclaration> list = parameters != null ? parameters.getParameterDeclarationList() : null;
+    int arity = list != null ? list.size() : -1;
+    return new GoMethodSpecStub(parentStub, this, psi.getName(), psi.isPublic(), arity);
   }
 
   @Override
   public void serialize(@NotNull GoMethodSpecStub stub, @NotNull StubOutputStream dataStream) throws IOException {
     dataStream.writeName(stub.getName());
     dataStream.writeBoolean(stub.isPublic());
+    dataStream.writeVarInt(stub.getArity());
   }
 
   @NotNull
   @Override
   public GoMethodSpecStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException {
-    return new GoMethodSpecStub(parentStub, this, dataStream.readName(), dataStream.readBoolean());
+    return new GoMethodSpecStub(parentStub, this, dataStream.readName(), dataStream.readBoolean(), dataStream.readVarInt());
   }
 }
