@@ -115,7 +115,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
       List<TreeElement> result = ContainerUtil.newArrayList();
       if (myElement instanceof GoFile) {
         for (GoTypeSpec o : ((GoFile)myElement).getTypes()) result.add(new Element(o));
-        for (GoConstDefinition o : ((GoFile)myElement).getConsts()) result.add(new Element(o));
+        for (GoConstDefinition o : ((GoFile)myElement).getConstants()) result.add(new Element(o));
         for (GoVarDefinition o : ((GoFile)myElement).getVars()) result.add(new Element(o));
         for (GoFunctionDeclaration o : ((GoFile)myElement).getFunctions()) result.add(new Element(o));
         for (GoMethodDeclaration o : ((GoFile)myElement).getMethods()) result.add(new Element(o));

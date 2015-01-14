@@ -8,14 +8,20 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
+import com.goide.stubs.GoVarSpecStub;
 import com.goide.psi.*;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.stubs.IStubElementType;
 
-public class GoVarSpecImpl extends GoCompositeElementImpl implements GoVarSpec {
+public class GoVarSpecImpl extends GoStubbedElementImpl<GoVarSpecStub> implements GoVarSpec {
 
   public GoVarSpecImpl(ASTNode node) {
     super(node);
+  }
+
+  public GoVarSpecImpl(GoVarSpecStub stub, IStubElementType nodeType) {
+    super(stub, nodeType);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -32,13 +38,13 @@ public class GoVarSpecImpl extends GoCompositeElementImpl implements GoVarSpec {
   @Override
   @Nullable
   public GoType getType() {
-    return findChildByClass(GoType.class);
+    return findChildByClass(GoType.class, com.goide.stubs.GoTypeStub.class);
   }
 
   @Override
   @NotNull
   public List<GoVarDefinition> getVarDefinitionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoVarDefinition.class);
+    return findChildrenByClass(GoVarDefinition.class, com.goide.stubs.GoVarDefinitionStub.class);
   }
 
   @Override

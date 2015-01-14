@@ -76,8 +76,8 @@
   implements(".*ReferenceExpression")="com.goide.psi.GoReferenceExpressionBase"
   extends("(Function|Method)Declaration")="com.goide.psi.impl.GoFunctionOrMethodDeclarationImpl<?>"
   extends("(Type|Import|Method)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver")="com.goide.psi.impl.GoNamedElementImpl<?>"
-  extends("Parameters|Signature|ParameterDeclaration|Result|Type")="com.goide.psi.impl.GoStubbedElementImpl<?>"
-  elementTypeFactory("(Function|Method|Parameter)Declaration|(Type|Import|Method)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver|Parameters|Signature|Result|.*Type|TypeList.*")='com.goide.stubs.GoStubElementTypeFactory.factory'
+  extends("Parameters|Signature|ParameterDeclaration|Result|Type|(Const|Var)Spec")="com.goide.psi.impl.GoStubbedElementImpl<?>"
+  elementTypeFactory("(Function|Method|Parameter)Declaration|(Type|Import|Method|Const|Var)Spec|RecvStatement|ShortVarDeclaration|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver|Parameters|Signature|Result|.*Type|TypeList.*")='com.goide.stubs.GoStubElementTypeFactory.factory'
   pin(".*Statement")=1
   extends(".*Statement")=Statement
   extends(".*Type|TypeList")=Type
@@ -218,7 +218,7 @@ private TopLevelDeclarationRecover ::= !(';' |'type' | const | func | var)
 
 ConstDeclaration ::= const ( ConstSpec | '(' ConstSpecs? ')' ) {pin(".*")=1}
 private ConstSpecs ::= ConstSpec (semi ConstSpec)* semi? {pin=1}
-ConstSpec ::= ConstDefinitionList [ ('=' ExpressionList | Type '=' ExpressionList) ] {pin(".*")=1}
+ConstSpec ::= ConstDefinitionList [ ('=' ExpressionList | Type '=' ExpressionList) ] {pin(".*")=1 stubClass="com.goide.stubs.GoConstSpecStub"}
 private ConstDefinitionList ::= ConstDefinition ( ',' ConstDefinition )*
 ConstDefinition ::= identifier {
   stubClass="com.goide.stubs.GoConstDefinitionStub"
@@ -240,6 +240,7 @@ VarDeclaration ::= var ( VarSpec | '(' VarSpecs? ')' ) {pin=1}
 private VarSpecs ::= VarSpec (semi VarSpec)* semi? {pin=1}
 VarSpec ::= VarDefinitionList ( Type [ '=' ExpressionList ] | '=' ExpressionList ) {
   methods=[processDeclarations]
+  stubClass="com.goide.stubs.GoVarSpecStub"
 }
 private VarDefinitionList ::= VarDefinition ( ',' VarDefinition )*
 VarDefinition ::= identifier {

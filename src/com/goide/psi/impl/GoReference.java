@@ -386,7 +386,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
                                              @NotNull MyScopeProcessor processor,
                                              @NotNull ResolveState state,
                                              boolean localProcessing) {
-    if (!processNamedElements(processor, state, file.getConsts(), localProcessing)) return false;
+    if (!processNamedElements(processor, state, file.getConstants(), localProcessing)) return false;
     if (!processNamedElements(processor, state, file.getVars(), localProcessing)) return false;
     if (!processNamedElements(processor, state, file.getFunctions(), localProcessing)) return false;
     if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;

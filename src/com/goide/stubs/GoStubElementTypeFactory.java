@@ -17,6 +17,7 @@
 package com.goide.stubs;
 
 import com.goide.psi.GoType;
+import com.goide.psi.GoVarSpec;
 import com.goide.psi.impl.*;
 import com.goide.stubs.types.*;
 import com.intellij.psi.stubs.IStubElementType;
@@ -36,6 +37,22 @@ public class GoStubElementTypeFactory {
     if (name.equals("RECEIVER")) return new GoReceiverStubElementType(name);
     if (name.equals("TYPE_SPEC")) return new GoTypeSpecStubElementType(name);
     if (name.equals("METHOD_SPEC")) return new GoMethodSpecStubElementType(name);
+    if (name.equals("CONST_SPEC")) return new GoConstSpecStubElementType(name);
+    if (name.equals("VAR_SPEC")) return new GoVarSpecStubElementType(name);
+    if (name.equals("SHORT_VAR_DECLARATION")) return new GoVarSpecStubElementType(name) {
+      @NotNull
+      @Override
+      public GoVarSpec createPsi(@NotNull GoVarSpecStub stub) {
+        return new GoShortVarDeclarationImpl(stub, this);
+      }
+    };
+    if (name.equals("RECV_STATEMENT")) return new GoVarSpecStubElementType(name) {
+      @NotNull
+      @Override
+      public GoVarSpec createPsi(@NotNull GoVarSpecStub stub) {
+        return new GoRecvStatementImpl(stub, this);
+      }
+    };
     if (name.equals("VAR_DEFINITION")) return new GoVarDefinitionStubElementType(name);
     if (name.equals("LABEL_DEFINITION")) return new GoLabelDefinitionStubElementType(name);
     if (name.equals("PARAMETERS")) return new GoParametersStubElementType(name);

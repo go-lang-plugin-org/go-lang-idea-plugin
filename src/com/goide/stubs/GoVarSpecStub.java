@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,24 +14,15 @@
  * limitations under the License.
  */
 
-package com.goide.psi;
+package com.goide.stubs;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiNameIdentifierOwner;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.goide.psi.GoVarSpec;
+import com.intellij.psi.stubs.IStubElementType;
+import com.intellij.psi.stubs.StubBase;
+import com.intellij.psi.stubs.StubElement;
 
-public interface GoNamedElement extends GoCompositeElement, GoTypeOwner, PsiNameIdentifierOwner {
-  boolean isPublic();
-
-  @Nullable
-  PsiElement getIdentifier();
-
-  @NotNull
-  GoFile getContainingFile();
-
-  @Nullable
-  GoType findSiblingType();
-
-  boolean isBlank();
+public class GoVarSpecStub extends StubBase<GoVarSpec> {
+  public GoVarSpecStub(StubElement parent, IStubElementType elementType) {
+    super(parent, elementType);
+  }
 }

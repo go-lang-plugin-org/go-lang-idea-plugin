@@ -8,12 +8,18 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
+import com.goide.stubs.GoConstSpecStub;
 import com.goide.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
 
-public class GoConstSpecImpl extends GoCompositeElementImpl implements GoConstSpec {
+public class GoConstSpecImpl extends GoStubbedElementImpl<GoConstSpecStub> implements GoConstSpec {
 
   public GoConstSpecImpl(ASTNode node) {
     super(node);
+  }
+
+  public GoConstSpecImpl(GoConstSpecStub stub, IStubElementType nodeType) {
+    super(stub, nodeType);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -24,7 +30,7 @@ public class GoConstSpecImpl extends GoCompositeElementImpl implements GoConstSp
   @Override
   @NotNull
   public List<GoConstDefinition> getConstDefinitionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoConstDefinition.class);
+    return findChildrenByClass(GoConstDefinition.class, com.goide.stubs.GoConstDefinitionStub.class);
   }
 
   @Override
@@ -36,7 +42,7 @@ public class GoConstSpecImpl extends GoCompositeElementImpl implements GoConstSp
   @Override
   @Nullable
   public GoType getType() {
-    return findChildByClass(GoType.class);
+    return findChildByClass(GoType.class, com.goide.stubs.GoTypeStub.class);
   }
 
   @Override

@@ -4,10 +4,12 @@ package com.goide.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.StubBasedPsiElement;
+import com.goide.stubs.GoVarSpecStub;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 
-public interface GoVarSpec extends GoCompositeElement {
+public interface GoVarSpec extends GoCompositeElement, StubBasedPsiElement<GoVarSpecStub> {
 
   @NotNull
   List<GoExpression> getExpressionList();

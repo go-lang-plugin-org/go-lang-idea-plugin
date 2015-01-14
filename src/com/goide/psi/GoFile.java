@@ -20,7 +20,9 @@ import com.goide.GoFileType;
 import com.goide.GoLanguage;
 import com.goide.GoTypes;
 import com.goide.psi.impl.GoElementFactory;
+import com.goide.stubs.GoConstSpecStub;
 import com.goide.stubs.GoFileStub;
+import com.goide.stubs.GoVarSpecStub;
 import com.goide.stubs.types.*;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
@@ -202,7 +204,16 @@ public class GoFile extends PsiFileBase {
   @NotNull
   public List<GoVarDefinition> getVars() {
     StubElement<GoFile> stub = getStub();
-    if (stub != null) return getChildrenByType(stub, GoTypes.VAR_DEFINITION, GoVarDefinitionStubElementType.ARRAY_FACTORY);
+    if (stub != null) {
+      List<GoVarDefinition> result = ContainerUtil.newArrayList();
+      List<GoVarSpec> varSpecs = getChildrenByType(stub, GoTypes.VAR_SPEC, GoVarSpecStubElementType.ARRAY_FACTORY);
+      for (GoVarSpec spec : varSpecs) {
+        GoVarSpecStub specStub = spec.getStub();
+        if (specStub == null) continue;
+        result.addAll(getChildrenByType(specStub, GoTypes.VAR_DEFINITION, GoVarDefinitionStubElementType.ARRAY_FACTORY));
+      }
+      return result;
+    }
     return CachedValuesManager.getCachedValue(this, new CachedValueProvider<List<GoVarDefinition>>() {
       @Override
       public Result<List<GoVarDefinition>> compute() {
@@ -212,9 +223,18 @@ public class GoFile extends PsiFileBase {
   }
 
   @NotNull
-  public List<GoConstDefinition> getConsts() {
+  public List<GoConstDefinition> getConstants() {
     StubElement<GoFile> stub = getStub();
-    if (stub != null) return getChildrenByType(stub, GoTypes.CONST_DEFINITION, GoConstDefinitionStubElementType.ARRAY_FACTORY);
+    if (stub != null) {
+      List<GoConstDefinition> result = ContainerUtil.newArrayList();
+      List<GoConstSpec> constSpecs = getChildrenByType(stub, GoTypes.CONST_SPEC, GoConstSpecStubElementType.ARRAY_FACTORY);
+      for (GoConstSpec spec : constSpecs) {
+        GoConstSpecStub specStub = spec.getStub();
+        if (specStub == null) continue;
+        result.addAll(getChildrenByType(specStub, GoTypes.CONST_DEFINITION, GoConstDefinitionStubElementType.ARRAY_FACTORY));
+      }
+      return result;
+    }
     return CachedValuesManager.getCachedValue(this, new CachedValueProvider<List<GoConstDefinition>>() {
       @Override
       public Result<List<GoConstDefinition>> compute() {

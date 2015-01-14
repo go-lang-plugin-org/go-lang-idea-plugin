@@ -30,7 +30,7 @@ public interface GoTypes {
   IElementType CONDITIONAL_EXPR = new GoCompositeElementType("CONDITIONAL_EXPR");
   IElementType CONST_DECLARATION = new GoCompositeElementType("CONST_DECLARATION");
   IElementType CONST_DEFINITION = GoStubElementTypeFactory.factory("CONST_DEFINITION");
-  IElementType CONST_SPEC = new GoCompositeElementType("CONST_SPEC");
+  IElementType CONST_SPEC = GoStubElementTypeFactory.factory("CONST_SPEC");
   IElementType CONTINUE_STATEMENT = new GoCompositeElementType("CONTINUE_STATEMENT");
   IElementType CONVERSION_EXPR = new GoCompositeElementType("CONVERSION_EXPR");
   IElementType DEFER_STATEMENT = new GoCompositeElementType("DEFER_STATEMENT");
@@ -81,14 +81,14 @@ public interface GoTypes {
   IElementType RANGE_CLAUSE = new GoCompositeElementType("RANGE_CLAUSE");
   IElementType RECEIVER = GoStubElementTypeFactory.factory("RECEIVER");
   IElementType RECEIVER_TYPE = GoStubElementTypeFactory.factory("RECEIVER_TYPE");
-  IElementType RECV_STATEMENT = new GoCompositeElementType("RECV_STATEMENT");
+  IElementType RECV_STATEMENT = GoStubElementTypeFactory.factory("RECV_STATEMENT");
   IElementType REFERENCE_EXPRESSION = new GoCompositeElementType("REFERENCE_EXPRESSION");
   IElementType RESULT = GoStubElementTypeFactory.factory("RESULT");
   IElementType RETURN_STATEMENT = new GoCompositeElementType("RETURN_STATEMENT");
   IElementType SELECTOR_EXPR = new GoCompositeElementType("SELECTOR_EXPR");
   IElementType SELECT_STATEMENT = new GoCompositeElementType("SELECT_STATEMENT");
   IElementType SEND_STATEMENT = new GoCompositeElementType("SEND_STATEMENT");
-  IElementType SHORT_VAR_DECLARATION = new GoCompositeElementType("SHORT_VAR_DECLARATION");
+  IElementType SHORT_VAR_DECLARATION = GoStubElementTypeFactory.factory("SHORT_VAR_DECLARATION");
   IElementType SIGNATURE = GoStubElementTypeFactory.factory("SIGNATURE");
   IElementType SIMPLE_STATEMENT = new GoCompositeElementType("SIMPLE_STATEMENT");
   IElementType SLICE_EXPR = new GoCompositeElementType("SLICE_EXPR");
@@ -112,7 +112,7 @@ public interface GoTypes {
   IElementType VALUE = new GoCompositeElementType("VALUE");
   IElementType VAR_DECLARATION = new GoCompositeElementType("VAR_DECLARATION");
   IElementType VAR_DEFINITION = GoStubElementTypeFactory.factory("VAR_DEFINITION");
-  IElementType VAR_SPEC = new GoCompositeElementType("VAR_SPEC");
+  IElementType VAR_SPEC = GoStubElementTypeFactory.factory("VAR_SPEC");
 
   IElementType ASSIGN = new GoTokenType("=");
   IElementType BIT_AND = new GoTokenType("&");

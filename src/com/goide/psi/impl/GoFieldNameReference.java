@@ -71,7 +71,7 @@ public class GoFieldNameReference extends PsiReferenceBase<GoFieldName> {
     if (type instanceof GoStructType && !type.processDeclarations(processor, ResolveState.initial(), null, myElement)) return true;
 
     PsiFile file = myElement.getContainingFile();
-    if (file instanceof GoFile && !GoReference.processNamedElements(processor, ResolveState.initial(), ((GoFile)file).getConsts(), true)) return true;
+    if (file instanceof GoFile && !GoReference.processNamedElements(processor, ResolveState.initial(), ((GoFile)file).getConstants(), true)) return true;
 
     return false;
   }

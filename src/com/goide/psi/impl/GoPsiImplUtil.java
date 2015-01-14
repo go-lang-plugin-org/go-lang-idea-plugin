@@ -466,7 +466,7 @@ public class GoPsiImplUtil {
     if (literal != null) {
       return literal.getLiteralTypeExpr().getType();
     }
-    return GoNamedElementImpl.getType(o);
+    return o.findSiblingType();
   }
 
   @Nullable

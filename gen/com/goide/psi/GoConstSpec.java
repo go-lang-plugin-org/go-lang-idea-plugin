@@ -4,8 +4,10 @@ package com.goide.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.StubBasedPsiElement;
+import com.goide.stubs.GoConstSpecStub;
 
-public interface GoConstSpec extends GoCompositeElement {
+public interface GoConstSpec extends GoCompositeElement, StubBasedPsiElement<GoConstSpecStub> {
 
   @NotNull
   List<GoConstDefinition> getConstDefinitionList();

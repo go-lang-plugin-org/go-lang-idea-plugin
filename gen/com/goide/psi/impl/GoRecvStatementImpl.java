@@ -9,11 +9,16 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
 
 public class GoRecvStatementImpl extends GoVarSpecImpl implements GoRecvStatement {
 
   public GoRecvStatementImpl(ASTNode node) {
     super(node);
+  }
+
+  public GoRecvStatementImpl(com.goide.stubs.GoVarSpecStub stub, IStubElementType nodeType) {
+    super(stub, nodeType);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
