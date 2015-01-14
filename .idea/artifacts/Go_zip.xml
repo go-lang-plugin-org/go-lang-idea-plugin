@@ -6,9 +6,7 @@
         <element id="directory" name="lib">
           <element id="artifact" artifact-name="intellij-go.jar" />
           <element id="directory" name="jps">
-            <element id="archive" name="jps-plugin.jar">
-              <element id="module-output" name="jps-plugin" />
-            </element>
+            <element id="artifact" artifact-name="jps-plugin.jar" />
           </element>
         </element>
       </element>
