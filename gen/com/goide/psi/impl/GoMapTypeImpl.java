@@ -9,11 +9,16 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
 
 public class GoMapTypeImpl extends GoTypeImpl implements GoMapType {
 
   public GoMapTypeImpl(ASTNode node) {
     super(node);
+  }
+
+  public GoMapTypeImpl(com.goide.stubs.GoTypeStub stub, IStubElementType nodeType) {
+    super(stub, nodeType);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

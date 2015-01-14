@@ -76,12 +76,12 @@
   implements(".*ReferenceExpression")="com.goide.psi.GoReferenceExpressionBase"
   extends("(Function|Method)Declaration")="com.goide.psi.impl.GoFunctionOrMethodDeclarationImpl<?>"
   extends("(Type|Import|Method)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver")="com.goide.psi.impl.GoNamedElementImpl<?>"
-  extends("Parameters|Signature|ParameterDeclaration|Result")="com.goide.psi.impl.GoStubbedElementImpl<?>"
-  elementTypeFactory("(Function|Method|Parameter)Declaration|(Type|Import|Method)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver|Parameters|Signature|Result")='com.goide.stubs.GoStubElementTypeFactory.factory'
-
+  extends("Parameters|Signature|ParameterDeclaration|Result|Type")="com.goide.psi.impl.GoStubbedElementImpl<?>"
+  elementTypeFactory("(Function|Method|Parameter)Declaration|(Type|Import|Method)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver|Parameters|Signature|Result|.*Type|TypeList.*")='com.goide.stubs.GoStubElementTypeFactory.factory'
   pin(".*Statement")=1
   extends(".*Statement")=Statement
-  extends(".*Type")=Type
+  extends(".*Type|TypeList")=Type
+  
   pin('.*List(?:_\d.*)?')=1
 
   generateTokenAccessors=true
@@ -105,7 +105,7 @@ ImportSpec ::= [ '.' | identifier ] ImportString {
 }
 ImportString ::= string {methods=[getReferences resolve]}
 
-Type ::= TypeName | TypeLit | '(' Type ')'
+Type ::= TypeName | TypeLit | '(' Type ')' {stubClass="com.goide.stubs.GoTypeStub"}
 private TypeName ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
 TypeReferenceExpression ::= identifier { methods=[getReference getQualifier] }
 left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
@@ -381,7 +381,7 @@ TypeSwitchGuard ::= [ VarDefinition ':=' ] Expression '.' TypeGuard
 TypeGuard ::= '(' 'type' ')' {pin=2}
 TypeCaseClause ::= TypeSwitchCase ':' Statements?
 TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
-TypeList ::= Type ( ',' Type )* {extends=Type}
+TypeList ::= Type ( ',' Type )*
 TypeListNoPin ::= Type ( ',' Type )* {elementType=TypeList}
 ForStatement ::= for (ForOrRangeClause Block | Block | ExpressionNoLiteral Block) {pin(".*")="for|ForOrRangeClause"}
 private ForOrRangeClause ::= ForClause | RangeClause

@@ -9,11 +9,16 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
 
 public class GoArrayOrSliceTypeImpl extends GoTypeImpl implements GoArrayOrSliceType {
 
   public GoArrayOrSliceTypeImpl(ASTNode node) {
     super(node);
+  }
+
+  public GoArrayOrSliceTypeImpl(com.goide.stubs.GoTypeStub stub, IStubElementType nodeType) {
+    super(stub, nodeType);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

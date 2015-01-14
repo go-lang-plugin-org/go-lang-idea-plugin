@@ -36,7 +36,7 @@ public class GoParameterDeclarationImpl extends GoStubbedElementImpl<GoParameter
   @Override
   @NotNull
   public GoType getType() {
-    return findNotNullChildByClass(GoType.class);
+    return findNotNullChildByClass(GoType.class, com.goide.stubs.GoTypeStub.class);
   }
 
   @Override

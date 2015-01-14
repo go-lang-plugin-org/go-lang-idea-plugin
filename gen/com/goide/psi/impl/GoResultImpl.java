@@ -36,7 +36,7 @@ public class GoResultImpl extends GoStubbedElementImpl<GoResultStub> implements 
   @Override
   @Nullable
   public GoType getType() {
-    return findChildByClass(GoType.class);
+    return findChildByClass(GoType.class, com.goide.stubs.GoTypeStub.class);
   }
 
   @Override

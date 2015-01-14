@@ -16,8 +16,11 @@
 
 package com.goide.stubs;
 
+import com.goide.psi.GoType;
+import com.goide.psi.impl.*;
 import com.goide.stubs.types.*;
 import com.intellij.psi.stubs.IStubElementType;
+import org.apache.xmlbeans.impl.common.NameUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class GoStubElementTypeFactory {
@@ -40,6 +43,113 @@ public class GoStubElementTypeFactory {
     if (name.equals("PARAMETER_DECLARATION")) return new GoParameterDeclarationStubElementType(name);
     if (name.equals("RESULT")) return new GoResultStubElementType(name);
 
+    if (name.equals("ARRAY_OR_SLICE_TYPE")) {
+      return new GoTypeStubElementType(name) {
+        @NotNull
+        @Override
+        public GoType createPsi(@NotNull GoTypeStub stub) {
+          return new GoArrayOrSliceTypeImpl(stub, this);
+        }
+      };
+    }
+    if (name.equals("CHANNEL_TYPE")) {
+      return new GoTypeStubElementType(name) {
+        @NotNull
+        @Override
+        public GoType createPsi(@NotNull GoTypeStub stub) {
+          return new GoChannelTypeImpl(stub, this);
+        }
+      };
+    }
+    if (name.equals("FUNCTION_TYPE")) {
+      return new GoTypeStubElementType(name) {
+        @NotNull
+        @Override
+        public GoType createPsi(@NotNull GoTypeStub stub) {
+          return new GoFunctionTypeImpl(stub, this);
+        }
+      };
+    }
+    if (name.equals("INTERFACE_TYPE")) {
+      return new GoTypeStubElementType(name) {
+        @NotNull
+        @Override
+        public GoType createPsi(@NotNull GoTypeStub stub) {
+          return new GoInterfaceTypeImpl(stub, this);
+        }
+      };
+    }
+    if (name.equals("MAP_TYPE")) {
+      return new GoTypeStubElementType(name) {
+        @NotNull
+        @Override
+        public GoType createPsi(@NotNull GoTypeStub stub) {
+          return new GoMapTypeImpl(stub, this);
+        }
+      };
+    }
+    if (name.equals("POINTER_TYPE")) {
+      return new GoTypeStubElementType(name) {
+        @NotNull
+        @Override
+        public GoType createPsi(@NotNull GoTypeStub stub) {
+          return new GoPointerTypeImpl(stub, this);
+        }
+      };
+    }
+    if (name.equals("RECEIVER_TYPE")) {
+      return new GoTypeStubElementType(name) {
+        @NotNull
+        @Override
+        public GoType createPsi(@NotNull GoTypeStub stub) {
+          return new GoReceiverTypeImpl(stub, this);
+        }
+      };
+    }
+    if (name.equals("STRUCT_TYPE")) {
+      return new GoTypeStubElementType(name) {
+        @NotNull
+        @Override
+        public GoType createPsi(@NotNull GoTypeStub stub) {
+          return new GoStructTypeImpl(stub, this);
+        }
+      };
+    }
+    if (name.equals("TYPE")) {
+      return new GoTypeStubElementType(name) {
+        @NotNull
+        @Override
+        public GoType createPsi(@NotNull GoTypeStub stub) {
+          return new GoTypeImpl(stub, this);
+        }
+      };
+    }
+    if (name.equals("TYPE_LIST")) {
+      return new GoTypeStubElementType(name) {
+        @NotNull
+        @Override
+        public GoType createPsi(@NotNull GoTypeStub stub) {
+          return new GoTypeListImpl(stub, this);
+        }
+      };
+    }
+
     throw new RuntimeException("Unknown element type: " + name);
+  }
+  
+  @SuppressWarnings({"unused", "UseOfSystemOutOrSystemErr"})
+  private static void generateTypes(@NotNull String name) {
+    if (name.contains("TYPE")) {
+      String s = NameUtil.upperCamelCase(name.toLowerCase(), true);
+      System.out.println("if (name.equals(\"" + name + "\")) {\n" +
+                         "      return new GoTypeStubElementType(name) {\n" +
+                         "        @NotNull\n" +
+                         "        @Override\n" +
+                         "        public GoType createPsi(@NotNull GoTypeStub stub) {\n" +
+                         "          return new Go" + s + "Impl(stub, this);\n" +
+                         "        }\n" +
+                         "      };\n" +
+                         "    }");
+    }
   }
 }

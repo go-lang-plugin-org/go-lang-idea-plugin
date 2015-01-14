@@ -22,6 +22,7 @@ import com.goide.completion.GoCompletionUtil;
 import com.goide.psi.*;
 import com.goide.psi.impl.imports.GoImportReferenceSet;
 import com.goide.stubs.GoNamedStub;
+import com.goide.stubs.GoTypeStub;
 import com.goide.stubs.index.GoMethodIndex;
 import com.goide.util.SingleCharInsertHandler;
 import com.intellij.codeInsight.completion.InsertHandler;
@@ -42,6 +43,7 @@ import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.GlobalSearchScopesCore;
 import com.intellij.psi.search.SearchScope;
+import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -654,6 +656,16 @@ public class GoPsiImplUtil {
           @Override
           public PsiElement getNavigationElement() {
             return parameters;
+          }
+
+          @Override
+          public IStubElementType getElementType() {
+            return null;
+          }
+
+          @Override
+          public GoTypeStub getStub() {
+            return null;
           }
         }
         return new MyGoTypeList(composite);

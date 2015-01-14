@@ -90,7 +90,7 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
   }
 
   @Nullable
-  public static GoType getType(GoNamedElement o) {
+  public static GoType getType(GoNamedElement o) { // todo: use stubs
     return PsiTreeUtil.getNextSiblingOfType(o, GoType.class);
   }
   
