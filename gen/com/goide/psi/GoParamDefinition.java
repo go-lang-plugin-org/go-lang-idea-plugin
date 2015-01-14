@@ -12,4 +12,7 @@ public interface GoParamDefinition extends GoNamedElement, StubBasedPsiElement<G
   @NotNull
   PsiElement getIdentifier();
 
+  @NotNull
+  boolean isVariadic();
+
 }

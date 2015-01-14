@@ -17,6 +17,7 @@
 package com.goide.psi.impl;
 
 import com.goide.GoIcons;
+import com.goide.GoTypes;
 import com.goide.completion.BracesInsertHandler;
 import com.goide.completion.GoCompletionUtil;
 import com.goide.psi.*;
@@ -87,7 +88,7 @@ public class GoPsiImplUtil {
       }
     }));
   }
-  
+
   @NotNull
   public static List<GoFile> getAllPackageFiles(@NotNull GoFile file) {
     String name = file.getPackageName();
@@ -147,7 +148,7 @@ public class GoPsiImplUtil {
   public static GoReference getReference(@NotNull final GoReferenceExpression o) {
     return new GoReference(o);
   }
-  
+
   @NotNull
   public static GoFieldNameReference getReference(@NotNull GoFieldName o) {
     return new GoFieldNameReference(o);
@@ -271,8 +272,8 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static LookupElement createTypeConversionLookupElement(@NotNull GoTypeSpec t) {
-    InsertHandler<LookupElement> handler = t.getType() instanceof GoStructType ? 
-                                           BracesInsertHandler.ONE_LINER : 
+    InsertHandler<LookupElement> handler = t.getType() instanceof GoStructType ?
+                                           BracesInsertHandler.ONE_LINER :
                                            ParenthesesInsertHandler.WITH_PARAMETERS; // todo: check context and place caret in or outside {}
     return PrioritizedLookupElement.withPriority(
       LookupElementBuilder
@@ -419,6 +420,11 @@ public class GoPsiImplUtil {
     else if (o instanceof GoIndexExpr) {
       GoExpression first = ContainerUtil.getFirstItem(((GoIndexExpr)o).getExpressionList());
       GoType type = first == null ? null : getGoType(first);
+      PsiReference reference = first.getReference();
+      PsiElement resolvedElement = reference == null ? null : reference.resolve();
+      if (resolvedElement instanceof GoParamDefinition && ((GoParamDefinition)resolvedElement).isVariadic()) {
+        return type;
+      }
       if (type instanceof GoMapType) {
         List<GoType> list = ((GoMapType)type).getTypeList();
         if (list.size() == 2) {
@@ -445,6 +451,11 @@ public class GoPsiImplUtil {
     PsiElement resolve = reference != null ? reference.resolve() : null;
     if (resolve instanceof GoTypeSpec) return ((GoTypeSpec)resolve).getType();
     return null;
+  }
+
+  @NotNull
+  public static boolean isVariadic(@NotNull final GoParamDefinition o) {
+    return o.getParent().getNode().findChildByType(GoTypes.TRIPLE_DOT) != null;
   }
 
   @Nullable

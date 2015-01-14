@@ -154,6 +154,7 @@ ParameterDeclaration ::= ParamDefinitionListNoPin? '...'? Type | Type { stubClas
 private ParamDefinitionListNoPin ::= ParamDefinition &(!('.' | ')')) (',' ParamDefinition)* // todo
 ParamDefinition ::= identifier {
   stubClass="com.goide.stubs.GoParamDefinitionStub"
+  methods = [isVariadic]
 }
 
 InterfaceType ::= interface '{' MethodSpecs? '}' {
