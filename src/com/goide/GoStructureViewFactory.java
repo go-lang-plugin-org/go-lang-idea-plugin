@@ -100,6 +100,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
     @Nullable
     @Override
     public String getName() {
+      if (myElement instanceof GoNamedElement) return ((GoNamedElement)myElement).getName();
       return myElement.getText();
     }
 
@@ -157,7 +158,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
         String appendix = type instanceof GoStructType || type instanceof GoInterfaceType ?
                           "" :
                           (type != null ? separator + GoPsiImplUtil.getText(type) : "");
-        return ((GoTypeSpec)myElement).getIdentifier().getText() + appendix;
+        return ((GoTypeSpec)myElement).getName() + appendix;
       }
       else if (myElement instanceof GoNamedElement) {
         GoType type = ((GoNamedElement)myElement).getGoType();
