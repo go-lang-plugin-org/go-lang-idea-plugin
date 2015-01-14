@@ -4,4 +4,4 @@ intellij-go
 ===========
 
 ## Grammar-Kit
-[Download](https://www.dropbox.com/s/u0vfkfm4zurkyou/GrammarKit-24-11-2014.zip?dl=0) the right version of Grammar-Kit.
+[Download](https://www.dropbox.com/s/tqmj3urcnmt22a2/GrammarKit-14-01-2015.zip?dl=0) the right version of Grammar-Kit.
