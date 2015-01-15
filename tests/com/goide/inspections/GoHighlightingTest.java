@@ -56,6 +56,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testStop()      { doTest(); }
   public void testVarBlocks() { doTest(); }
   public void testBlankImport() { doTest(); }
+  public void testVariadic()  { doTest(); }
   
   public void testLocalScope() {
     myFixture.configureByText("a.go", "package foo; func bar() {}");

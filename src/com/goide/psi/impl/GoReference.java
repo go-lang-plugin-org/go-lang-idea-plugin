@@ -59,6 +59,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
       }
     };
   public static final Key<String > ACTUAL_NAME = Key.create("ACTUAL_NAME");
+  public static final Key<Object> POINTER = Key.create("POINTER");
 
   public GoReference(@NotNull GoReferenceExpressionBase o) {
     super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(), o.getIdentifier().getTextLength()));
@@ -181,7 +182,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
       processDirectory((PsiDirectory)target, file, null, processor, state, false);
     }
     else if (target instanceof GoTypeOwner) {
-      GoType type = ((GoTypeOwner)target).getGoType();
+      GoType type = parameterType((GoTypeOwner)target);
       if (type != null) processGoType(type, processor, state);
       PsiElement parent = target.getParent();
       if (target instanceof GoVarDefinition && parent instanceof GoTypeSwitchGuard) {
@@ -197,16 +198,16 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   private boolean processGoType(@NotNull GoType type, @NotNull MyScopeProcessor processor, @NotNull ResolveState state) {
     if (!processExistingType(type, processor, state)) return false;
     if (type instanceof GoPointerType) {
-      if (!processPointer(type, processor, state)) return false;
+      if (!processPointer((GoPointerType)type, processor, state.put(POINTER, Boolean.TRUE))) return false;
       GoType pointer = type.getType();
       if (pointer instanceof GoPointerType) {
-        return processPointer(pointer, processor, state);
+        return processPointer((GoPointerType)pointer, processor, state.put(POINTER, Boolean.TRUE));
       }
     }
     return processTypeRef(type, processor, state);
   }
 
-  private boolean processPointer(@NotNull GoType type, @NotNull MyScopeProcessor processor, @NotNull ResolveState state) {
+  private boolean processPointer(@NotNull GoPointerType type, @NotNull MyScopeProcessor processor, @NotNull ResolveState state) {
     GoType pointer = type.getType();
     return !(pointer != null && !processExistingType(pointer, processor, state)) && processTypeRef(pointer, processor, state);
   }
@@ -215,7 +216,10 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     return processInTypeRef(getTypeReference(type), type, processor, state);
   }
 
-  private boolean processExistingType(@NotNull GoType type, @NotNull MyScopeProcessor processor, @NotNull ResolveState state) {
+  private boolean processExistingType(@NotNull GoType type,
+                                      @NotNull MyScopeProcessor processor,
+                                      @NotNull ResolveState state
+                                      ) {
     PsiFile file = type.getContainingFile();
     if (!(file instanceof GoFile)) return true;
     PsiFile myFile = myElement.getContainingFile();
@@ -237,7 +241,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
       });
       if (!processCollectedRefs(type, refs, processor, state)) return false;
     }
-    else if (type instanceof GoInterfaceType) {
+    else if (state.get(POINTER) == null && type instanceof GoInterfaceType) {
       if (!processNamedElements(processor, state, ((GoInterfaceType)type).getMethods(), localResolve)) return false;
       if (!processCollectedRefs(type, ((GoInterfaceType)type).getBaseTypesReferences(), processor, state)) return false;
     }

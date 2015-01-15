@@ -17,7 +17,6 @@
 package com.goide.psi.impl;
 
 import com.goide.GoIcons;
-import com.goide.GoTypes;
 import com.goide.completion.BracesInsertHandler;
 import com.goide.completion.GoCompletionUtil;
 import com.goide.psi.*;
@@ -370,7 +369,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType getGoType(@NotNull GoExpression o) {
+  public static GoType getGoType(@NotNull final GoExpression o) {
     if (o instanceof GoUnaryExpr) {
       GoExpression expression = ((GoUnaryExpr)o).getExpression();
       if (expression != null) {
@@ -405,9 +404,7 @@ public class GoPsiImplUtil {
     else if (o instanceof GoReferenceExpression) {
       PsiReference reference = o.getReference();
       PsiElement resolve = reference != null ? reference.resolve() : null;
-      if (resolve instanceof GoTypeOwner) {
-        return ((GoTypeOwner)resolve).getGoType();
-      }
+      if (resolve instanceof GoTypeOwner) return getTypeFromTypeOwner((GoTypeOwner)resolve);
     }
     else if (o instanceof GoParenthesesExpr) {
       GoExpression expression = ((GoParenthesesExpr)o).getExpression();
@@ -420,11 +417,6 @@ public class GoPsiImplUtil {
     else if (o instanceof GoIndexExpr) {
       GoExpression first = ContainerUtil.getFirstItem(((GoIndexExpr)o).getExpressionList());
       GoType type = first == null ? null : getGoType(first);
-      PsiReference reference = first.getReference();
-      PsiElement resolvedElement = reference == null ? null : reference.resolve();
-      if (resolvedElement instanceof GoParamDefinition && ((GoParamDefinition)resolvedElement).isVariadic()) {
-        return type;
-      }
       if (type instanceof GoMapType) {
         List<GoType> list = ((GoMapType)type).getTypeList();
         if (list.size() == 2) {
@@ -445,6 +437,96 @@ public class GoPsiImplUtil {
     return null;
   }
 
+  private static GoType getTypeFromTypeOwner(@NotNull GoTypeOwner resolve) {
+    return parameterType(resolve);
+  }
+
+  @Nullable
+  public static GoType parameterType(@NotNull final GoTypeOwner resolve) {
+    GoType type = resolve.getGoType();
+    if (resolve instanceof GoParamDefinition && ((GoParamDefinition)resolve).isVariadic()) {
+      class MyArrayType extends LightElement implements GoArrayOrSliceType {
+        private GoType myType;
+
+        protected MyArrayType(GoType type) {
+          super(resolve.getManager(), resolve.getLanguage());
+          myType = type;
+        }
+
+        @Override
+        public String getText() {
+          return myType != null ? ("[]" + myType.getText()) : null;
+        }
+
+        @Nullable
+        @Override
+        public GoExpression getExpression() {
+          return null;
+        }
+
+        @Nullable
+        @Override
+        public GoType getType() {
+          return myType;
+        }
+
+        @Nullable
+        @Override
+        public GoTypeReferenceExpression getTypeReferenceExpression() {
+          return null;
+        }
+
+        @Nullable
+        @Override
+        public PsiElement getLparen() {
+          return null;
+        }
+
+        @Nullable
+        @Override
+        public PsiElement getRparen() {
+          return null;
+        }
+
+        @NotNull
+        @Override
+        public PsiElement getLbrack() {
+          //noinspection ConstantConditions
+          return null; // todo: mock?
+        }
+
+        @Nullable
+        @Override
+        public PsiElement getRbrack() {
+          return null;
+        }
+
+        @Nullable
+        @Override
+        public PsiElement getTripleDot() {
+          return null;
+        }
+
+        @Override
+        public String toString() {
+          return null;
+        }
+
+        @Override
+        public IStubElementType getElementType() {
+          return null;
+        }
+
+        @Override
+        public GoTypeStub getStub() {
+          return null;
+        }
+      }
+      return new MyArrayType(type);
+    }
+    return type;
+  }
+
   @Nullable
   private static GoType getType(@Nullable GoTypeReferenceExpression expression) {
     PsiReference reference = expression != null ? expression.getReference() : null;
@@ -453,9 +535,9 @@ public class GoPsiImplUtil {
     return null;
   }
 
-  @NotNull
-  public static boolean isVariadic(@NotNull final GoParamDefinition o) {
-    return o.getParent().getNode().findChildByType(GoTypes.TRIPLE_DOT) != null;
+  public static boolean isVariadic(@NotNull GoParamDefinition o) {
+    PsiElement parent = o.getParent();
+    return parent instanceof GoParameterDeclaration && ((GoParameterDeclaration)parent).getTripleDot() != null;
   }
 
   @Nullable

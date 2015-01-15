@@ -9,6 +9,6 @@ type Swan interface {
 	Swim()
 }
 
-func Play(x *Swan) {
+func Play(x Swan) {
 	x./*ref*/Fly()
 }
