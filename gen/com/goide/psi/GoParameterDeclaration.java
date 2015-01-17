@@ -18,4 +18,6 @@ public interface GoParameterDeclaration extends GoCompositeElement, StubBasedPsi
   @Nullable
   PsiElement getTripleDot();
 
+  boolean isVariadic();
+
 }

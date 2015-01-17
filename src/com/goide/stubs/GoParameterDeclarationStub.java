@@ -22,11 +22,18 @@ import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.io.StringRef;
 
 public class GoParameterDeclarationStub extends StubWithText<GoParameterDeclaration> {
-  public GoParameterDeclarationStub(StubElement parent, IStubElementType elementType, StringRef ref) {
+  private boolean myVariadic;
+
+  public GoParameterDeclarationStub(StubElement parent, IStubElementType elementType, StringRef ref, boolean variadic) {
     super(parent, elementType, ref);
+    myVariadic = variadic;
   }
 
-  public GoParameterDeclarationStub(StubElement parent, IStubElementType elementType, String text) {
-    this(parent, elementType, StringRef.fromString(text));
+  public GoParameterDeclarationStub(StubElement parent, IStubElementType elementType, String text, boolean variadic) {
+    this(parent, elementType, StringRef.fromString(text), variadic);
+  }
+
+  public boolean isVariadic() {
+    return myVariadic;
   }
 }

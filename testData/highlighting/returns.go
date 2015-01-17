@@ -2,7 +2,7 @@ package main
 
 func main() {
     Ok1() + 
-    Ok2() +
+    Ok2<error>()</error> +
     Ok3() +
     Ok4() +
     Ok5() +
@@ -11,14 +11,14 @@ func main() {
     Ok8() +
     NoReturn1() +
     NoReturn2() +
-    NoReturn3() +
-    NoReturn4() +
-    NoReturn5() +
-    NoReturn6() +
-    NoReturn65() +
-    NoReturn7() +
-    NoReturn8() +
-    NoReturn9() 
+    NoReturn3(1) +
+    NoReturn4(1) +
+    NoReturn5(1) +
+    NoReturn6(1) +
+    NoReturn65(1) +
+    NoReturn7(1) +
+    NoReturn8(1) +
+    NoReturn9(1) 
     
     func() int {
     <error>}</error>

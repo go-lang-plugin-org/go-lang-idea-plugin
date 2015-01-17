@@ -181,6 +181,9 @@
     <localInspection language="go" displayName="Missing return at end of function"
                      groupName="Go" enabledByDefault="true" level="ERROR" 
                      implementationClass="com.goide.inspections.GoReturnInspection"/>
+    <localInspection language="go" displayName="Function call inspection"
+                     groupName="Go" enabledByDefault="true" level="ERROR" 
+                     implementationClass="com.goide.inspections.GoFunctionCallInspection"/>
   </extensions>
   <actions>
     <action id="Go.NewGoFile" class="com.goide.actions.GoCreateFileAction"

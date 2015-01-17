@@ -40,17 +40,18 @@ public class GoParameterDeclarationStubElementType extends GoStubElementType<GoP
   @NotNull
   @Override
   public GoParameterDeclarationStub createStub(@NotNull GoParameterDeclaration psi, StubElement parentStub) {
-    return new GoParameterDeclarationStub(parentStub, this, psi.getText());
+    return new GoParameterDeclarationStub(parentStub, this, psi.getText(), psi.isVariadic());
   }
 
   @Override
   public void serialize(@NotNull GoParameterDeclarationStub stub, @NotNull StubOutputStream dataStream) throws IOException {
     dataStream.writeName(stub.getText());
+    dataStream.writeBoolean(stub.isVariadic());
   }
 
   @NotNull
   @Override
   public GoParameterDeclarationStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException {
-    return new GoParameterDeclarationStub(parentStub, this, dataStream.readName());
+    return new GoParameterDeclarationStub(parentStub, this, dataStream.readName(), dataStream.readBoolean());
   }
 }

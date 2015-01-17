@@ -150,7 +150,10 @@ Parameters ::= '(' [ (ParameterList ','?| TypeListNoPin) ] ')' {
   stubClass="com.goide.stubs.GoParametersStub"
 }
 private ParameterList ::= ParameterDeclaration ( ',' ParameterDeclaration )*
-ParameterDeclaration ::= ParamDefinitionListNoPin? '...'? Type | Type { stubClass="com.goide.stubs.GoParameterDeclarationStub" }
+ParameterDeclaration ::= ParamDefinitionListNoPin? '...'? Type | Type {
+  stubClass="com.goide.stubs.GoParameterDeclarationStub"
+  methods = [isVariadic]
+}
 private ParamDefinitionListNoPin ::= ParamDefinition &(!('.' | ')')) (',' ParamDefinition)* // todo
 ParamDefinition ::= identifier {
   stubClass="com.goide.stubs.GoParamDefinitionStub"

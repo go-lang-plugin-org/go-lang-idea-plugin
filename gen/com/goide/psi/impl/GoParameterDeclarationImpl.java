@@ -45,4 +45,8 @@ public class GoParameterDeclarationImpl extends GoStubbedElementImpl<GoParameter
     return findChildByType(TRIPLE_DOT);
   }
 
+  public boolean isVariadic() {
+    return GoPsiImplUtil.isVariadic(this);
+  }
+
 }

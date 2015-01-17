@@ -50,7 +50,7 @@ var t T
 
 func <warning>bar</warning>() {
     t.Mv(7)
-    T.Mv(t, 7)
+    T.Mv<error>(t, 7)</error>
     (T).Mv(t, 7)
     f1 := T.Mv; f1(t, 7)
     f2 := (T).Mv; f2(t, 7)
@@ -206,7 +206,7 @@ func (h Header) Add(key, value string) { }
 
 func (r Response) AddHeader(header string, value string) Response {
 	rr := r.Header()
-	rr.Add()
+	rr.Add("", "")
 	r.Header().Add(header, value)
 	return r
 }
@@ -218,7 +218,7 @@ type RouteBuilder struct { bool }
 func (w *WebService) Route(builder *RouteBuilder) *WebService { return w }
 func <warning>WebServiceTest</warning>() {
 	ws1 := new(WebService).Path("/")
-	ws1.GET().bool
+	ws1.GET("").bool
 	ws1.Route(ws1.GET("/{type}/{id}"))
 }
 

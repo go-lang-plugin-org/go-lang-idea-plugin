@@ -33,7 +33,6 @@ public class GoParamDefinitionImpl extends GoNamedElementImpl<GoParamDefinitionS
     return findNotNullChildByType(IDENTIFIER);
   }
 
-  @NotNull
   public boolean isVariadic() {
     return GoPsiImplUtil.isVariadic(this);
   }

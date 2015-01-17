@@ -22,6 +22,7 @@ import com.goide.completion.GoCompletionUtil;
 import com.goide.psi.*;
 import com.goide.psi.impl.imports.GoImportReferenceSet;
 import com.goide.stubs.GoNamedStub;
+import com.goide.stubs.GoParameterDeclarationStub;
 import com.goide.stubs.GoTypeStub;
 import com.goide.stubs.index.GoMethodIndex;
 import com.goide.util.SingleCharInsertHandler;
@@ -537,7 +538,12 @@ public class GoPsiImplUtil {
 
   public static boolean isVariadic(@NotNull GoParamDefinition o) {
     PsiElement parent = o.getParent();
-    return parent instanceof GoParameterDeclaration && ((GoParameterDeclaration)parent).getTripleDot() != null;
+    return parent instanceof GoParameterDeclaration && ((GoParameterDeclaration)parent).isVariadic();
+  }
+  
+  public static boolean isVariadic(@NotNull GoParameterDeclaration o) {
+    GoParameterDeclarationStub stub = o.getStub();
+    return stub != null ? stub.isVariadic() : o.getTripleDot() != null;
   }
 
   @Nullable
