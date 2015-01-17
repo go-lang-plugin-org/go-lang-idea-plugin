@@ -66,7 +66,7 @@ public class GoReturnInspection extends GoInspectionBase {
                            brace == null ? new LocalQuickFix[]{} : new LocalQuickFix[]{new AddReturnFix(block)});
   }
 
-  private static boolean isTerminating(GoCompositeElement s) {
+  private static boolean isTerminating(@Nullable GoCompositeElement s) {
     if (s instanceof GoReturnStatement || s instanceof GoGoStatement) {
       return true;
     }
@@ -137,6 +137,9 @@ public class GoReturnInspection extends GoInspectionBase {
     else if (s instanceof GoLabeledStatement) {
       GoLabeledStatement labeledStatement = (GoLabeledStatement)s;
       return isTerminating(labeledStatement.getStatement());
+    }
+    else if (s instanceof GoStatement && ((GoStatement)s).getBlock() != null) {
+      return isTerminating(((GoStatement)s).getBlock());
     }
     return false;
   }

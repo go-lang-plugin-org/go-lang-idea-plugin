@@ -364,3 +364,9 @@ func <warning>testRedeclare</warning>() int {
 func init() {
     
 }
+
+func <warning>nestedReturn</warning>() int {
+    {
+        return 1
+    }
+}
