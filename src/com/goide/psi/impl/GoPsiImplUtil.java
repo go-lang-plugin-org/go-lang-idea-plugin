@@ -435,6 +435,9 @@ public class GoPsiImplUtil {
     else if (o instanceof GoTypeAssertionExpr) {
       return ((GoTypeAssertionExpr)o).getType();
     }
+    else if (o instanceof GoConversionExpr) {
+      return ((GoConversionExpr)o).getType().getType();
+    }
     return null;
   }
 
