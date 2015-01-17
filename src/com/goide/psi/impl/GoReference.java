@@ -17,6 +17,7 @@
 package com.goide.psi.impl;
 
 import com.goide.psi.*;
+import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.sdk.GoSdkUtil;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -293,13 +294,14 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
                                             @NotNull MyScopeProcessor processor,
                                             @NotNull ResolveState state,
                                             boolean localProcessing) {
+    if (dir == null) return true;
     String filePath = getPath(file);
-    if (dir != null) {
-      for (PsiFile psiFile : dir.getFiles()) {
-        if (psiFile instanceof GoFile && GoUtil.allowed(psiFile) && !Comparing.equal(getPath(psiFile), filePath)) {
-          if (packageName != null && !packageName.equals(((GoFile)psiFile).getPackageName())) continue;
-          if (!processFileEntities((GoFile)psiFile, processor, state, localProcessing)) return false;
-        }
+    boolean isTesting = GoTestFinder.isTestFile(file);
+    for (PsiFile f : dir.getFiles()) {
+      if (f instanceof GoFile && GoUtil.allowed(f) && !Comparing.equal(getPath(f), filePath)) {
+        if (GoTestFinder.isTestFile(f) && !isTesting) continue;
+        if (packageName != null && !packageName.equals(((GoFile)f).getPackageName())) continue;
+        if (!processFileEntities((GoFile)f, processor, state, localProcessing)) return false;
       }
     }
     return true;
