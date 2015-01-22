@@ -4,6 +4,7 @@ import com.goide.jps.builder.GoCompilerError;
 import com.intellij.openapi.compiler.CompilerMessageCategory;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.testFramework.UsefulTestCase;
+import com.intellij.util.PathUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,11 +35,13 @@ public class GoCompilerErrorTest extends UsefulTestCase {
     assertNotNull(error);
     assertEquals(expectedMessage, error.getErrorMessage());
     assertEquals(expectedCategory, error.getCategory());
+    String url = error.getUrl();
     if (expectedPath == null) {
-      assertNull(error.getUrl());
+      assertNull(url);
     }
     else {
-      assertEquals(VfsUtilCore.pathToUrl(expectedPath), error.getUrl());
+      String expected = VfsUtilCore.pathToUrl(expectedPath);
+      assertEquals(PathUtil.toSystemIndependentName(expected), PathUtil.toSystemIndependentName(url));
     }
     assertEquals(expectedLine, error.getLine());
   }

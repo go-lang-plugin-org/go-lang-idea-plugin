@@ -21,6 +21,8 @@ public class GoBuilderTest extends JpsBuildTestCase {
   public static final String GO_MAC_SDK_PATH = "/usr/local/go";
 
   public void testSimple() throws Exception {
+    if (!SystemInfo.isMac && !SystemInfo.isLinux) return;
+
     String depFile = createFile("simple/simple.go", "package main\nimport \"fmt\"\nfunc main() {\n\tfmt.Printf(\"Hello\\n\");\n}");
     String moduleName = "m";
     addModule(moduleName, PathUtilRt.getParentPath(depFile));
@@ -29,6 +31,8 @@ public class GoBuilderTest extends JpsBuildTestCase {
   }
   
   public void testDependentFiles() throws Exception {
+    if (!SystemInfo.isMac && !SystemInfo.isLinux) return;
+
     String mainFile = createFile("simple/simple.go", "package main\nfunc main() {\n\tSayHello();\n}");
     createFile("simple/depFile.go", "package main\nimport \"fmt\"\nfunc SayHello() {\n\tfmt.Printf(\"Hello\\n\");\n}");
     String moduleName = "m";
@@ -38,6 +42,8 @@ public class GoBuilderTest extends JpsBuildTestCase {
   }
 
   public void testCompilerErrors() {
+    if (!SystemInfo.isMac && !SystemInfo.isLinux) return;
+
     String depFile = createFile("simple/errors.go", "package main\nimport \"fmt\"\nfunc main() {\n\tfmt.Printf(\"Hello\\n);\n}");
     String moduleName = "m";
     addModule(moduleName, PathUtilRt.getParentPath(depFile));
