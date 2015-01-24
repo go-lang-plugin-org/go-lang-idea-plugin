@@ -73,6 +73,8 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureByText("b.go", "package foo; func <error>bar</error>() {}");
     myFixture.checkHighlighting();
   }
+
+  public void testFuncCall(){ doTest(); }
   
   @Override
   protected LightProjectDescriptor getProjectDescriptor() {

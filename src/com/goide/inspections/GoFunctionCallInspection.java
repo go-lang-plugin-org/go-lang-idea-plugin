@@ -32,7 +32,7 @@ public class GoFunctionCallInspection extends LocalInspectionTool {
       @Override
       public void visitCallExpr(@NotNull GoCallExpr o) {
         super.visitCallExpr(o);
-        
+
         GoExpression expression = o.getExpression();
         if (expression instanceof GoReferenceExpression) {
           PsiReference reference = expression.getReference();
@@ -47,15 +47,16 @@ public class GoFunctionCallInspection extends LocalInspectionTool {
             GoParameters parameters = signature.getParameters();
             for (GoParameterDeclaration declaration : parameters.getParameterDeclarationList()) {
               if (declaration.isVariadic() && actualSize >= expectedSize) return;
-              expectedSize += declaration.getParamDefinitionList().size();
+              expectedSize += declaration.getParamDefinitionList().size() == 0 ? 1 : declaration.getParamDefinitionList().size();
             }
-  
+
             if (expectedSize != actualSize) {
               String tail = " arguments in call to " + expression.getText();
               holder.registerProblem(o.getArgumentList(), actualSize > expectedSize ? "too many" + tail : "not enough" + tail);
             }
           }
-      }}
+        }
+      }
     };
   }
 }
