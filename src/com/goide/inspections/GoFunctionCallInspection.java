@@ -47,7 +47,8 @@ public class GoFunctionCallInspection extends LocalInspectionTool {
             GoParameters parameters = signature.getParameters();
             for (GoParameterDeclaration declaration : parameters.getParameterDeclarationList()) {
               if (declaration.isVariadic() && actualSize >= expectedSize) return;
-              expectedSize += declaration.getParamDefinitionList().size() == 0 ? 1 : declaration.getParamDefinitionList().size();
+              int size = declaration.getParamDefinitionList().size();
+              expectedSize += size == 0 ? 1 : size;
             }
 
             if (expectedSize != actualSize) {

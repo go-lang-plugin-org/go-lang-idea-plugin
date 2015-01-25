@@ -43,24 +43,24 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     return false;
   }
 
-  public void testSimple()    { doTest(); }
-  public void testStruct()    { doTest(); }
-  public void testBoxes()     { doTest(); }
-  public void testRanges()    { doTest(); }
-  public void testVars()      { doTest(); }
-  public void testRecv()      { doTest(); }
-  public void testPointers()  { doTest(); }
-  public void testSlices()    { doTest(); }
-  public void testShortVars() { doTest(); }
-  public void testReturns()   { doTest(); }
-  public void testRequest()   { doTest(); }
-  public void testStop()      { doTest(); }
-  public void testVarBlocks() { doTest(); }
+  public void testSimple()      { doTest(); }
+  public void testStruct()      { doTest(); }
+  public void testBoxes()       { doTest(); }
+  public void testRanges()      { doTest(); }
+  public void testVars()        { doTest(); }
+  public void testRecv()        { doTest(); }
+  public void testPointers()    { doTest(); }
+  public void testSlices()      { doTest(); }
+  public void testShortVars()   { doTest(); }
+  public void testReturns()     { doTest(); }
+  public void testRequest()     { doTest(); }
+  public void testStop()        { doTest(); }
+  public void testVarBlocks()   { doTest(); }
   public void testBlankImport() { doTest(); }
-  public void testVariadic()  { doTest(); }
-  
+  public void testVariadic()    { doTest(); }
   public void testCheck()       { doTest(); }
   public void testCheck_test()  { doTest(); }
+  public void testFuncCall()    { doTest(); }
   
   public void testLocalScope() {
     myFixture.configureByText("a.go", "package foo; func bar() {}");
@@ -73,8 +73,6 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureByText("b.go", "package foo; func <error>bar</error>() {}");
     myFixture.checkHighlighting();
   }
-
-  public void testFuncCall(){ doTest(); }
   
   @Override
   protected LightProjectDescriptor getProjectDescriptor() {
