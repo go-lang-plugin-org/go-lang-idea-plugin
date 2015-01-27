@@ -87,19 +87,20 @@ public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCa
     String fileContent = loadText(file.getVirtualFile());
     
     int refIndex = fileContent.indexOf(REF_MARK);
+    String fileName = file.getName();
     if (refIndex != -1) {
-      if (myReference != null) fail("only once reference should be declared in a test case, see file: " + file);
+      if (myReference != null) fail("only once reference should be declared in a test case, see file: " + fileName);
       int offset = refIndex + REF_MARK.length();
       myReference = file.findReferenceAt(offset);
-      if (myReference == null) fail("no reference was found as marked in file: " + file + ", offset: " + offset);
+      if (myReference == null) fail("no reference was found as marked in file: " + fileName + ", offset: " + offset);
     }
 
     int defIndex = fileContent.indexOf(DEF_MARK);
     if (defIndex != -1) {
-      if (myDefinition != null) fail("only one definition should be allowed in a resolve test case, see file: " + file);
+      if (myDefinition != null) fail("only one definition should be allowed in a resolve test case, see file: " + fileName);
       int offset = defIndex + DEF_MARK.length();
       myDefinition = file.findElementAt(offset);
-      if (myDefinition == null) fail("no definition was found where marked in file: " + file + ", offset: " + offset);
+      if (myDefinition == null) fail("no definition was found where marked in file: " + fileName + ", offset: " + offset);
     }
   }
 
