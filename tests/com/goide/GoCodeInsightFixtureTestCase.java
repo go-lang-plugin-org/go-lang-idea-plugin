@@ -23,6 +23,7 @@ import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkModificator;
 import com.intellij.openapi.projectRoots.impl.ProjectJdkImpl;
 import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.fixtures.DefaultLightProjectDescriptor;
@@ -75,7 +76,7 @@ abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsi
   @NotNull
   protected static String loadText(@NotNull VirtualFile file) {
     try {
-      return VfsUtilCore.loadText(file);
+      return StringUtil.convertLineSeparators(VfsUtilCore.loadText(file));
     }
     catch (IOException e) {
       throw new RuntimeException(e);
