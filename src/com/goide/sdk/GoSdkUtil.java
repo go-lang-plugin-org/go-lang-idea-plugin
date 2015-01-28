@@ -46,9 +46,13 @@ public class GoSdkUtil {
   @Nullable
   public static VirtualFile getSdkSrcDir(@NotNull PsiElement context) {
     Module module = ModuleUtilCore.findModuleForPsiElement(context);
-    if (module == null) return null;
+    if (module == null) {
+      return guessSkdSrcDir(context);
+    }
     Sdk sdk = ModuleRootManager.getInstance(module).getSdk();
-    if (sdk == null || sdk.getVersionString() == null) return null;
+    if (sdk == null || sdk.getVersionString() == null) {
+      return null;
+    }
     File sdkSrcDirFile = new File(sdk.getHomePath(), getSrcLocation(sdk.getVersionString()));
     VirtualFile sdkSrcDir = LocalFileSystem.getInstance().findFileByIoFile(sdkSrcDirFile);
     return sdkSrcDir != null ? sdkSrcDir : guessSkdSrcDir(context);
