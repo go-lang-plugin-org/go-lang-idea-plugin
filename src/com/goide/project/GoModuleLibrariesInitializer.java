@@ -261,7 +261,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   }
 
   private boolean isAppropriateModule() {
-    return !myModule.isDisposed() && (PlatformUtils.isIntelliJ() || ModuleUtil.getModuleType(myModule) == GoModuleType.getInstance());
+    return !myModule.isDisposed() && (!PlatformUtils.isIntelliJ() || ModuleUtil.getModuleType(myModule) == GoModuleType.getInstance());
   }
 
   @Override
