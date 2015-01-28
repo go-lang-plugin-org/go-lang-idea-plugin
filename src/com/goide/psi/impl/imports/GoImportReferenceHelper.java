@@ -17,11 +17,15 @@
 package com.goide.psi.impl.imports;
 
 import com.goide.codeInsight.imports.GoGetPackageFix;
+import com.goide.project.GoLibrariesService;
 import com.goide.psi.GoFile;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.codeInsight.daemon.quickFix.CreateFileFix;
 import com.intellij.codeInspection.LocalQuickFix;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
@@ -38,6 +42,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public class GoImportReferenceHelper extends FileReferenceHelper {
   @NotNull
@@ -98,11 +103,26 @@ public class GoImportReferenceHelper extends FileReferenceHelper {
   }
 
   @NotNull
-  private static List<VirtualFile> getPathsToLookup(@NotNull PsiElement element) {
-    List<VirtualFile> result = ContainerUtil.newArrayList();
-    VirtualFile sdkSrcDir = GoSdkUtil.getSdkSrcDir(element);
-    ContainerUtil.addIfNotNull(result, sdkSrcDir);
-    result.addAll(GoSdkUtil.getGoPathsSources());
+  private static Collection<? extends VirtualFile> getPathsToLookup(@NotNull PsiElement element) {
+    Set<VirtualFile> result = ContainerUtil.newLinkedHashSet();
+    ContainerUtil.addIfNotNull(result, GoSdkUtil.getSdkSrcDir(element));
+
+    final Module module = ModuleUtilCore.findModuleForPsiElement(element);
+    addSourceDirectories(result, GoSdkUtil.getGoPathsSources());
+    addSourceDirectories(result, module != null
+                                 ? GoLibrariesService.getUserDefinedLibraries(module)
+                                 : GoLibrariesService.getUserDefinedLibraries(element.getProject()));
     return result;
+  }
+
+  private static void addSourceDirectories(Collection<VirtualFile> result, Collection<? extends VirtualFile> files) {
+    for (VirtualFile file : files) {
+      if (FileUtil.namesEqual("src", file.getName())) {
+        result.add(file);
+      }
+      else {
+        ContainerUtil.addIfNotNull(result, file.findChild("src"));
+      }
+    }
   }
 }

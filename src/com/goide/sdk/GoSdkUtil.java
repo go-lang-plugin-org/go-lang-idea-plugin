@@ -16,6 +16,7 @@
 
 package com.goide.sdk;
 
+import com.goide.project.GoLibrariesService;
 import com.goide.psi.GoFile;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.application.PathMacros;
@@ -63,6 +64,12 @@ public class GoSdkUtil {
     return (psiBuiltin instanceof GoFile) ? (GoFile)psiBuiltin : null;
   }
 
+  /**
+   * @return root directories from GOPATH env-variable
+   * 
+   * Additional to this method consider using {@link GoLibrariesService#getUserDefinedLibraries()} 
+   * in order to retrieve user defined paths. 
+   */
   @NotNull
   public static List<VirtualFile> getGoPathsSources() {
     List<VirtualFile> result = ContainerUtil.newArrayList();
@@ -74,13 +81,18 @@ public class GoSdkUtil {
         if (home != null) {
           s = s.replaceAll("\\$HOME", home);
         }
-        VirtualFile path = LocalFileSystem.getInstance().findFileByPath(s + "/src");
-        ContainerUtil.addIfNotNull(result, path);
+        ContainerUtil.addIfNotNull(result, LocalFileSystem.getInstance().findFileByPath(s));
       }
     }
     return result;
   }
 
+  /**
+   * @return GOPATH variable value from environment or PathMacros.
+   * 
+   * Additional to this method consider using {@link GoLibrariesService#getUserDefinedLibraries()} 
+   * in order to retrieve user defined paths. 
+   */
   @Nullable
   public static String retrieveGoPath() {
     String path = EnvironmentUtil.getValue(GOPATH);
