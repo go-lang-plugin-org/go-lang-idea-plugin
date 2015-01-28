@@ -24,6 +24,7 @@ import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -96,12 +97,12 @@ public class GoSdkUtil {
     List<Integer> rhsParts = parseVersionString(rhs);
     int commonParts = Math.min(lhsParts.size(), rhsParts.size());
     for (int i = 0; i < commonParts; i++) {
-      int partResult = lhsParts.get(i).compareTo(rhsParts.get(i));
+      int partResult = Comparing.compare(lhsParts.get(i), rhsParts.get(i));
       if (partResult != 0) {
         return partResult;
       }
     }
-    return Integer.valueOf(lhsParts.size()).compareTo(Integer.valueOf(rhsParts.size()));
+    return Comparing.compare(lhsParts.size(), rhsParts.size());
   }
 
   @NotNull
