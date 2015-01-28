@@ -19,12 +19,12 @@ package com.goide;
 import com.goide.psi.GoFile;
 import com.goide.stubs.GoFileStub;
 import com.goide.stubs.index.GoPackagesIndex;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.StubBuilder;
 import com.intellij.psi.stubs.*;
 import com.intellij.psi.tree.IStubFileElementType;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.generate.tostring.util.StringUtil;
 
 import java.io.IOException;
 
@@ -45,6 +45,7 @@ public class GoFileElementType extends IStubFileElementType<GoFileStub> {
   @Override
   public StubBuilder getBuilder() {
     return new DefaultStubBuilder() {
+      @NotNull
       @Override
       protected StubElement createStubForFile(@NotNull PsiFile file) {
         if (file instanceof GoFile) {

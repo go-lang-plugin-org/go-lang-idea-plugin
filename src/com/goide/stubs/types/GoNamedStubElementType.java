@@ -19,13 +19,13 @@ package com.goide.stubs.types;
 import com.goide.psi.GoNamedElement;
 import com.goide.stubs.index.GoAllNamesIndex;
 import com.intellij.lang.ASTNode;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.stubs.IndexSink;
 import com.intellij.psi.stubs.NamedStubBase;
 import com.intellij.psi.stubs.StubIndexKey;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.generate.tostring.util.StringUtil;
 
 import java.util.Collection;
 import java.util.Collections;
