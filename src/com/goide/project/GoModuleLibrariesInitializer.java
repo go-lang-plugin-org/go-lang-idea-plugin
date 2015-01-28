@@ -43,6 +43,7 @@ import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileVisitor;
 import com.intellij.util.Alarm;
+import com.intellij.util.PlatformUtils;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -260,7 +261,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   }
 
   private boolean isAppropriateModule() {
-    return !myModule.isDisposed() && ModuleUtil.getModuleType(myModule) == GoModuleType.getInstance();
+    return !myModule.isDisposed() && (PlatformUtils.isIntelliJ() || ModuleUtil.getModuleType(myModule) == GoModuleType.getInstance());
   }
 
   @Override
