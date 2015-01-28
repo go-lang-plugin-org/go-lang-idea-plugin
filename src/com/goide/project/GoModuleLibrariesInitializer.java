@@ -39,12 +39,11 @@ import com.intellij.openapi.roots.impl.libraries.LibraryEx;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.roots.libraries.LibraryTable;
 import com.intellij.openapi.roots.libraries.LibraryTablesRegistrar;
-import com.intellij.openapi.vfs.VfsUtilCore;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileVisitor;
+import com.intellij.openapi.vfs.*;
 import com.intellij.util.Alarm;
 import com.intellij.util.PlatformUtils;
 import com.intellij.util.containers.ContainerUtil;
+import io.netty.util.internal.ConcurrentSet;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.event.HyperlinkEvent;
@@ -56,10 +55,41 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   private static final Logger LOG = Logger.getInstance(GoModuleLibrariesInitializer.class);
   private static final String GO_LIBRARIES_NOTIFICATION_HAD_BEEN_SHOWN = "go.libraries.notification.had.been.shown";
   private static final int UPDATE_DELAY = 300;
+
+  private ConcurrentSet<VirtualFile> myFilesToWatch = new ConcurrentSet<VirtualFile>();
   private final Alarm myAlarm;
 
   @NotNull private final Set<String> myLastHandledRoots = ContainerUtil.newHashSet();
   @NotNull private final Module myModule;
+  @NotNull private VirtualFileAdapter myFilesListener = new VirtualFileAdapter() {
+    @Override
+    public void fileCreated(@NotNull VirtualFileEvent event) {
+      handleEvent(event);
+    }
+
+    @Override
+    public void fileDeleted(@NotNull VirtualFileEvent event) {
+      handleEvent(event);
+    }
+
+    @Override
+    public void fileMoved(@NotNull VirtualFileMoveEvent event) {
+      handleEvent(event);
+    }
+
+    private void handleEvent(VirtualFileEvent event) {
+      if (myFilesToWatch.contains(event.getFile())) {
+        scheduleUpdate();
+      }
+      else {
+        for (VirtualFile file : myFilesToWatch) {
+          if (VfsUtilCore.isAncestor(file, event.getFile(), true)) {
+            scheduleUpdate();
+          }
+        }
+      }
+    }
+  };
 
   public GoModuleLibrariesInitializer(@NotNull Module module) {
     myModule = module;
@@ -76,6 +106,8 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
           scheduleUpdate();
         }
       });
+
+      VirtualFileManager.getInstance().addVirtualFileListener(myFilesListener);
     }
   }
 
@@ -91,9 +123,11 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
           VirtualFile[] contentRoots = ProjectRootManager.getInstance(myModule.getProject()).getContentRoots();
 
           final Collection<VirtualFile> candidates = GoSdkUtil.getGoPathsSources(myModule);
+          myFilesToWatch.clear();
           for (VirtualFile file : candidates) {
             addRootUrlsForGoPathFile(libraryRootUrls, contentRoots, file);
           }
+          myFilesToWatch.addAll(candidates);
 
           synchronized (myLastHandledRoots) {
             if (!myLastHandledRoots.equals(libraryRootUrls)) {
@@ -269,7 +303,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
 
   @Override
   public void disposeComponent() {
-
+    VirtualFileManager.getInstance().removeVirtualFileListener(myFilesListener);
   }
 
   @Override
@@ -279,7 +313,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
 
   @Override
   public void projectClosed() {
-
+    VirtualFileManager.getInstance().removeVirtualFileListener(myFilesListener);
   }
 
   @NotNull
