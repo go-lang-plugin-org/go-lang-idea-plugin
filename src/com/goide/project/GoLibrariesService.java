@@ -45,7 +45,7 @@ public abstract class GoLibrariesService implements PersistentStateComponent<GoL
 
   @NotNull
   public static Collection<? extends VirtualFile> getUserDefinedLibraries(@NotNull Module module) {
-    final Set<VirtualFile> result = ContainerUtil.newHashSet();
+    final Set<VirtualFile> result = ContainerUtil.newLinkedHashSet();
     result.addAll(filesFromUrls(GoModuleLibrariesService.getInstance(module).getLibraryRootUrls()));
     result.addAll(getUserDefinedLibraries(module.getProject()));
     result.addAll(getUserDefinedLibraries());
@@ -71,8 +71,9 @@ public abstract class GoLibrariesService implements PersistentStateComponent<GoL
     return myState.getUrls();
   }
 
+  @NotNull
   private static Collection<? extends VirtualFile> filesFromUrls(Collection<String> urls) {
-    return ContainerUtil.skipNulls(ContainerUtil.map2Set(urls, new Function<String, VirtualFile>() {
+    return ContainerUtil.skipNulls(ContainerUtil.map(urls, new Function<String, VirtualFile>() {
       @Override
       public VirtualFile fun(String url) {
         return VirtualFileManager.getInstance().findFileByUrl(url);
