@@ -95,7 +95,7 @@ public class GoTestRunningState extends GoRunningState {
   }
 
   private void fillCommandLineWithParameters(@NotNull GeneralCommandLine commandLine) {
-    commandLine.setWorkDirectory(myConfiguration.getWorkingDirectory());
+    commandLine.withWorkDirectory(myConfiguration.getWorkingDirectory());
     switch (myConfiguration.getKind()) {
       case DIRECTORY:
         String relativePath = FileUtil.getRelativePath(myConfiguration.getWorkingDirectory(),
@@ -111,7 +111,7 @@ public class GoTestRunningState extends GoRunningState {
         }
         else {
           commandLine.addParameter("./...");
-          commandLine.setWorkDirectory(myConfiguration.getDirectoryPath());
+          commandLine.withWorkDirectory(myConfiguration.getDirectoryPath());
         }
         break;
       case PACKAGE:

@@ -50,7 +50,7 @@ public class GoApplicationRunningState extends GoRunningState {
     String executable = FileUtil.toSystemDependentName(JpsGoSdkType.getBinaryPathByModulePath(modulePath, outputDirectory));
     commandLine.setExePath(executable);
     commandLine.getParametersList().addParametersString(myConfiguration.getParams());
-    commandLine.setWorkDirectory(PathUtil.getParentPath(executable));
+    commandLine.withWorkDirectory(PathUtil.getParentPath(executable));
     TextConsoleBuilder consoleBuilder = TextConsoleBuilderFactory.getInstance().createBuilder(myModule.getProject());
     setConsoleBuilder(consoleBuilder);
     return commandLine;
