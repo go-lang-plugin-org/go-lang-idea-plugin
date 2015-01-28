@@ -48,7 +48,7 @@ import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.event.HyperlinkEvent;
-import java.util.List;
+import java.util.Collection;
 import java.util.Set;
 
 public class GoModuleLibrariesInitializer implements ModuleComponent {
@@ -90,9 +90,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
           final Set<String> libraryRootUrls = ContainerUtil.newLinkedHashSet();
           VirtualFile[] contentRoots = ProjectRootManager.getInstance(myModule.getProject()).getContentRoots();
 
-          final List<VirtualFile> candidates = GoSdkUtil.getGoPathsSources();
-          candidates.addAll(GoLibrariesService.getUserDefinedLibraries(myModule));
-
+          final Collection<VirtualFile> candidates = GoSdkUtil.getGoPathsSources(myModule);
           for (VirtualFile file : candidates) {
             addRootUrlsForGoPathFile(libraryRootUrls, contentRoots, file);
           }

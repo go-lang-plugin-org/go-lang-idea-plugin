@@ -22,23 +22,28 @@ import com.google.common.collect.Lists;
 import com.intellij.openapi.application.PathMacros;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Comparing;
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.EnvironmentUtil;
+import com.intellij.util.Function;
 import com.intellij.util.SystemProperties;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public class GoSdkUtil {
   public static final String GOPATH = "GOPATH";
@@ -67,38 +72,66 @@ public class GoSdkUtil {
     PsiFile psiBuiltin = context.getManager().findFile(vBuiltin);
     return (psiBuiltin instanceof GoFile) ? (GoFile)psiBuiltin : null;
   }
-
+  
+  @NotNull
+  public static Collection<VirtualFile> getGoPathsSources(@NotNull Module module) {
+    final Collection<VirtualFile> result = getGoPathsSourcesFromEnvironment();
+    for (VirtualFile file : GoLibrariesService.getUserDefinedLibraries(module)) {
+      ContainerUtil.addIfNotNull(result, findSourceDirectory(file));
+    }
+    return result;
+  }
+  
+  @NotNull
+  public static Collection<VirtualFile> getGoPathsSources(@NotNull Project project) {
+    final Collection<VirtualFile> result = getGoPathsSourcesFromEnvironment();
+    for (VirtualFile file : GoLibrariesService.getUserDefinedLibraries(project)) {
+      ContainerUtil.addIfNotNull(result, findSourceDirectory(file));
+    }
+    return result;
+  }
+  
   /**
-   * @return root directories from GOPATH env-variable
-   * 
-   * Additional to this method consider using {@link GoLibrariesService#getUserDefinedLibraries()} 
-   * in order to retrieve user defined paths. 
+   * Retrieves source directories from GOPATH env-variable. 
+   * This method doesn't consider user defined libraries, 
+   * for that case use {@link this#getGoPathsSources(Module)} or {@link this#getGoPathsSources(Project)}
    */
   @NotNull
-  public static List<VirtualFile> getGoPathsSources() {
-    List<VirtualFile> result = ContainerUtil.newArrayList();
-    String goPath = retrieveGoPath();
+  public static Collection<VirtualFile> getGoPathsSourcesFromEnvironment() {
+    Set<VirtualFile> result = ContainerUtil.newLinkedHashSet();
+    String goPath = retrieveGoPathFromEnvironment();
     if (goPath != null) {
-      List<String> split = StringUtil.split(goPath, File.pathSeparator);
       String home = SystemProperties.getUserHome();
-      for (String s : split) {
+      for (String s : StringUtil.split(goPath, File.pathSeparator)) {
         if (home != null) {
           s = s.replaceAll("\\$HOME", home);
         }
-        ContainerUtil.addIfNotNull(result, LocalFileSystem.getInstance().findFileByPath(s));
+        ContainerUtil.addIfNotNull(result, findSourceDirectory(LocalFileSystem.getInstance().findFileByPath(s)));
       }
     }
     return result;
   }
-
-  /**
-   * @return GOPATH variable value from environment or PathMacros.
-   * 
-   * Additional to this method consider using {@link GoLibrariesService#getUserDefinedLibraries()} 
-   * in order to retrieve user defined paths. 
-   */
+  
   @Nullable
-  public static String retrieveGoPath() {
+  private static VirtualFile findSourceDirectory(VirtualFile file) {
+    return FileUtil.namesEqual("src", file.getName()) ? file : file.findChild("src");
+  }
+
+  @NotNull
+  public static String retrieveGoPath(@NotNull Module module) {
+    Collection<String> parts = ContainerUtil.newLinkedHashSet();
+    ContainerUtil.addIfNotNull(parts, retrieveGoPathFromEnvironment());
+    ContainerUtil.addAll(parts, ContainerUtil.map(GoLibrariesService.getUserDefinedLibraries(module), new Function<VirtualFile, String>() {
+      @Override
+      public String fun(VirtualFile file) {
+        return file.getPath();
+      }
+    }));
+    return StringUtil.join(parts, File.pathSeparator);
+  }
+  
+  @Nullable
+  private static String retrieveGoPathFromEnvironment() {
     String path = EnvironmentUtil.getValue(GOPATH);
     return path != null ? path : PathMacros.getInstance().getValue(GOPATH);
   }

@@ -28,7 +28,6 @@ import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.util.PathUtil;
-import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class GoRunFileRunningState extends GoRunningState {
@@ -46,7 +45,7 @@ public class GoRunFileRunningState extends GoRunningState {
     String homePath = sdk.getHomePath();
     assert homePath != null;
     String executable = JpsGoSdkType.getGoExecutableFile(homePath).getAbsolutePath();
-    ContainerUtil.putIfNotNull(GoSdkUtil.GOPATH, GoSdkUtil.retrieveGoPath(), commandLine.getEnvironment());
+    commandLine.getEnvironment().put(GoSdkUtil.GOPATH, GoSdkUtil.retrieveGoPath(myModule));
     commandLine.setExePath(executable);
     ParametersList list = commandLine.getParametersList();
     list.add("run");

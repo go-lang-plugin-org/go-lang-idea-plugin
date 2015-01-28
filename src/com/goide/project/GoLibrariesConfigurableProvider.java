@@ -103,7 +103,7 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
       protected List<UnnamedConfigurable> createConfigurables() {
         final List<UnnamedConfigurable> result = ContainerUtil.newArrayList();
         
-        final String[] urlsFromEnv = ContainerUtil.map2Array(GoSdkUtil.getGoPathsSources(), String.class,
+        final String[] urlsFromEnv = ContainerUtil.map2Array(GoSdkUtil.getGoPathsSourcesFromEnvironment(), String.class,
                                                              new Function<VirtualFile, String>() {
                                                                @Override
                                                                public String fun(VirtualFile file) {

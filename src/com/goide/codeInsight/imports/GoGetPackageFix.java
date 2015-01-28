@@ -47,7 +47,6 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -60,18 +59,19 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
     myPackage = packageName;
   }
 
-  @Nullable
-  private static String getSdkPath(@NotNull PsiElement element) {
-    Module module = ModuleUtilCore.findModuleForPsiElement(element);
-    Sdk sdk = module == null ? null : ModuleRootManager.getInstance(module).getSdk();
-    return sdk != null ? sdk.getHomePath() : null;
-  }
-
   @Override
   public void applyFix(@NotNull final Project project, @NotNull ProblemDescriptor descriptor) {
     PsiElement element = descriptor.getPsiElement();
-    final String path = getSdkPath(element);
-    if (path == null) return;
+    final Module module = ModuleUtilCore.findModuleForPsiElement(element);
+    if (module == null) {
+      return;
+    }
+
+    Sdk sdk = ModuleRootManager.getInstance(module).getSdk();
+    final String sdkPath = sdk != null ? sdk.getHomePath() : null;
+    if (sdkPath == null) {
+      return;
+    }
 
     final Task task = new Task.Backgroundable(project, "Go get '" + myPackage + "'", true, PerformInBackgroundOption.ALWAYS_BACKGROUND) {
       private OSProcessHandler myHandler;
@@ -88,10 +88,10 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
 
       public void run(@NotNull final ProgressIndicator indicator) {
         indicator.setIndeterminate(true);
-        String executable = JpsGoSdkType.getGoExecutableFile(path).getAbsolutePath();
+        String executable = JpsGoSdkType.getGoExecutableFile(sdkPath).getAbsolutePath();
 
         final GeneralCommandLine install = new GeneralCommandLine();
-        ContainerUtil.putIfNotNull(GoSdkUtil.GOPATH, GoSdkUtil.retrieveGoPath(), install.getEnvironment());
+        ContainerUtil.putIfNotNull(GoSdkUtil.GOPATH, GoSdkUtil.retrieveGoPath(module), install.getEnvironment());
         install.setExePath(executable);
         install.addParameter("get");
         install.addParameter(myPackage);
