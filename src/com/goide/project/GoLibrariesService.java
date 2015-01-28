@@ -42,8 +42,9 @@ public abstract class GoLibrariesService implements PersistentStateComponent<GoL
   public void loadState(GoLibrariesState state) {
     XmlSerializerUtil.copyBean(state, myState);
   }
-  
-  public static Collection<VirtualFile> getUserDefinedLibraries(@NotNull Module module) {
+
+  @NotNull
+  public static Collection<? extends VirtualFile> getUserDefinedLibraries(@NotNull Module module) {
     final Set<VirtualFile> result = ContainerUtil.newHashSet();
     result.addAll(filesFromUrls(GoModuleLibrariesService.getInstance(module).getLibraryRootUrls()));
     result.addAll(getUserDefinedLibraries(module.getProject()));
@@ -51,18 +52,21 @@ public abstract class GoLibrariesService implements PersistentStateComponent<GoL
     return result;
   }
 
-  public void setLibraryRootUrls(@NotNull Collection<String> libraryRootUrls) {
-    myState.setUrls(libraryRootUrls);
-  }
-
+  @NotNull
   public static Collection<? extends VirtualFile> getUserDefinedLibraries(@NotNull Project project) {
     return filesFromUrls(GoProjectLibrariesService.getInstance(project).getLibraryRootUrls());
   }
-  
+
+  @NotNull
   public static Collection<? extends VirtualFile> getUserDefinedLibraries() {
     return filesFromUrls(GoApplicationLibrariesService.getInstance().getLibraryRootUrls());
   }
 
+  public void setLibraryRootUrls(@NotNull Collection<String> libraryRootUrls) {
+    myState.setUrls(libraryRootUrls);
+  }
+
+  @NotNull
   public Collection<String> getLibraryRootUrls() {
     return myState.getUrls();
   }
