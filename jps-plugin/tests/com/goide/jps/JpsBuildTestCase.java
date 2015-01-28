@@ -63,8 +63,7 @@ public abstract class JpsBuildTestCase extends UsefulTestCase {
 
   protected static void rename(@NotNull String path, @NotNull String newName) {
     try {
-      File file = new File(FileUtil.toSystemDependentName(path));
-      assertTrue("File " + file.getAbsolutePath() + " doesn't exist", file.exists());
+      File file = newFile(path);
       final File tempFile = new File(file.getParentFile(), "__" + newName);
       FileUtil.rename(file, tempFile);
       File newFile = new File(file.getParentFile(), newName);
@@ -109,8 +108,7 @@ public abstract class JpsBuildTestCase extends UsefulTestCase {
 
   protected static void change(@NotNull String filePath, final @Nullable String newContent) {
     try {
-      File file = new File(FileUtil.toSystemDependentName(filePath));
-      assertTrue("File " + file.getAbsolutePath() + " doesn't exist", file.exists());
+      File file = newFile(filePath);
       if (newContent != null) {
         FileUtil.writeToFile(file, newContent);
       }
@@ -132,6 +130,13 @@ public abstract class JpsBuildTestCase extends UsefulTestCase {
     catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  @NotNull
+  private static File newFile(@NotNull String filePath) {
+    File file = new File(FileUtil.toSystemDependentName(filePath));
+    assertTrue("File " + file.getAbsolutePath() + " doesn't exist", file.exists());
+    return file;
   }
 
   protected static void sleepUntil(long time) {
