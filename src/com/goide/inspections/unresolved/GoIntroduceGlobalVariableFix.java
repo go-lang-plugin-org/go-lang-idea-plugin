@@ -44,8 +44,7 @@ public class GoIntroduceGlobalVariableFix extends GoUnresolvedFixBase {
     if (decl == null || editor == null) return;
     Template template = TemplateSettings.getInstance().getTemplateById("go_lang_global_var_qf");
     if (template != null) {
-      int start = decl.getTextRange().getStartOffset();
-      editor.getCaretModel().moveToOffset(start);
+      editor.getCaretModel().moveToOffset(decl.getTextRange().getStartOffset());
       template.setToReformat(true);
       TemplateManager.getInstance(project).startTemplate(editor, template, true, ContainerUtil.stringMap("NAME", myName), null);
     }

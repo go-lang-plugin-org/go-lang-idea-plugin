@@ -40,12 +40,11 @@ public class GoIntroduceGlobalConstantFix extends GoUnresolvedFixBase {
                      @Nullable("is null when called from inspection") Editor editor,
                      @NotNull PsiElement startElement,
                      @NotNull PsiElement endElement) {
-    GoTopLevelDeclaration decl = GoPsiImplUtil.getTopLevelDeclaration(startElement);
-    if (decl == null || editor == null) return;
+    GoTopLevelDeclaration declaration = GoPsiImplUtil.getTopLevelDeclaration(startElement);
+    if (declaration == null || editor == null) return;
     Template template = TemplateSettings.getInstance().getTemplateById("go_lang_global_const_qf");
     if (template != null) {
-      int start = decl.getTextRange().getStartOffset();
-      editor.getCaretModel().moveToOffset(start);
+      editor.getCaretModel().moveToOffset(declaration.getTextRange().getStartOffset());
       template.setToReformat(true);
       TemplateManager.getInstance(project).startTemplate(editor, template, true, ContainerUtil.stringMap("NAME", myName), null);
     }
