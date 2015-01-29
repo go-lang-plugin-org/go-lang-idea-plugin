@@ -17,6 +17,7 @@
 package com.goide.inspections.unresolved;
 
 import com.goide.psi.GoTopLevelDeclaration;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateManager;
 import com.intellij.codeInsight.template.impl.TemplateSettings;
@@ -39,7 +40,7 @@ public class GoIntroduceTypeFix extends GoUnresolvedFixBase {
                      @Nullable("is null when called from inspection") Editor editor,
                      @NotNull PsiElement startElement,
                      @NotNull PsiElement endElement) {
-    GoTopLevelDeclaration decl = getTopLevelDeclaration(startElement);
+    GoTopLevelDeclaration decl = GoPsiImplUtil.getTopLevelDeclaration(startElement);
     if (decl == null || editor == null) return;
     Template template = TemplateSettings.getInstance().getTemplateById("go_lang_type_qf");
     if (template != null) {

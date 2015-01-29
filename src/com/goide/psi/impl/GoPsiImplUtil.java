@@ -104,6 +104,13 @@ public class GoPsiImplUtil {
     return files;
   }
 
+  @Nullable
+  public static GoTopLevelDeclaration getTopLevelDeclaration(@Nullable PsiElement startElement) {
+    GoTopLevelDeclaration declaration = PsiTreeUtil.getTopmostParentOfType(startElement, GoTopLevelDeclaration.class);
+    if (declaration == null || !(declaration.getParent() instanceof GoFile)) return null;
+    return declaration;
+  }
+
   private static class Lazy {
     private static final SingleCharInsertHandler DIR_INSERT_HANDLER = new SingleCharInsertHandler('/');
     private static final SingleCharInsertHandler PACKAGE_INSERT_HANDLER = new SingleCharInsertHandler('.');
