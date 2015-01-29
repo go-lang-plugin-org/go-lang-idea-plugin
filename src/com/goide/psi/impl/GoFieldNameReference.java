@@ -19,7 +19,10 @@ package com.goide.psi.impl;
 import com.goide.psi.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiReferenceBase;
+import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
@@ -63,7 +66,7 @@ public class GoFieldNameReference extends PsiReferenceBase<GoFieldName> {
 
     GoType type = expr.getType();
     if (type == null) {
-      type = getTypeFromReference(expr.getTypeReferenceExpression());
+      type = GoPsiImplUtil.getType(expr.getTypeReferenceExpression());
     }
 
     type = getType(type);
@@ -74,16 +77,6 @@ public class GoFieldNameReference extends PsiReferenceBase<GoFieldName> {
     if (file instanceof GoFile && !GoReference.processNamedElements(processor, ResolveState.initial(), ((GoFile)file).getConstants(), true)) return true;
 
     return false;
-  }
-
-  @Nullable
-  private static GoType getTypeFromReference(@Nullable GoTypeReferenceExpression expression) {
-    PsiReference reference = expression != null ? expression.getReference() : null;
-    PsiElement resolve = reference != null ? reference.resolve() : null;
-    if (resolve instanceof GoTypeSpec) {
-      return ((GoTypeSpec)resolve).getType();
-    }
-    return null;
   }
 
   @Nullable
@@ -103,7 +96,7 @@ public class GoFieldNameReference extends PsiReferenceBase<GoFieldName> {
     }
 
     if (type != null && type.getTypeReferenceExpression() != null) {
-      type = getTypeFromReference(type.getTypeReferenceExpression());
+      type = GoPsiImplUtil.getType(type.getTypeReferenceExpression());
     }
 
     return type;

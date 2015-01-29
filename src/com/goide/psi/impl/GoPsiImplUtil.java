@@ -539,11 +539,10 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  private static GoType getType(@Nullable GoTypeReferenceExpression expression) {
+  public static GoType getType(@Nullable GoTypeReferenceExpression expression) {
     PsiReference reference = expression != null ? expression.getReference() : null;
     PsiElement resolve = reference != null ? reference.resolve() : null;
-    if (resolve instanceof GoTypeSpec) return ((GoTypeSpec)resolve).getType();
-    return null;
+    return resolve instanceof GoTypeSpec ? ((GoTypeSpec)resolve).getType() : null;
   }
 
   public static boolean isVariadic(@NotNull GoParamDefinition o) {
