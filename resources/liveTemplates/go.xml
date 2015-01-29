@@ -84,7 +84,7 @@
     </context>
   </template>
   <template description='If error' name='err' toReformat='true' toShortenFQNames='true'
-            value='if err != null {&#10;	$END$&#10;}'>
+            value='if err != nil {&#10;	$END$&#10;}'>
     <context>
       <option name='GO_BLOCK' value='true'/>
     </context>
