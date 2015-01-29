@@ -24,14 +24,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 public class GoDuplicateArgumentInspection extends GoInspectionBase {
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder,
-                                     @SuppressWarnings({"UnusedParameters", "For future"}) @NotNull LocalInspectionToolSession session) {
+  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
       public void visitCompositeElement(@NotNull GoCompositeElement o) {
@@ -44,17 +42,21 @@ public class GoDuplicateArgumentInspection extends GoInspectionBase {
 
   public void check(@Nullable GoSignature o, @NotNull ProblemsHolder holder) {
     if (o == null) return;
-    List<GoParameterDeclaration> params = o.getParameters().getParameterDeclarationList();
-    Set<String> parameters = new LinkedHashSet<String>();
-    for (GoParameterDeclaration fp : params) {
+    checkParameters(holder, o.getParameters(), new LinkedHashSet<String>());
+  }
+
+  protected static void checkParameters(@NotNull ProblemsHolder holder,
+                                        @NotNull GoParameters parameters,
+                                        @NotNull Set<String> parameterNames) {
+    for (GoParameterDeclaration fp : parameters.getParameterDeclarationList()) {
       for (GoParamDefinition parameter : fp.getParamDefinitionList()) {
         if (parameter.isBlank()) continue;
         String name = parameter.getName();
-        if (name != null && parameters.contains(name)) {
+        if (name != null && parameterNames.contains(name)) {
           holder.registerProblem(parameter, errorText(name), ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
         }
         else {
-          parameters.add(name);
+          parameterNames.add(name);
         }
       }
     }

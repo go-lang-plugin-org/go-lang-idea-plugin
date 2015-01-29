@@ -17,7 +17,6 @@
 package com.goide.inspections;
 
 import com.goide.psi.*;
-import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
@@ -36,19 +35,8 @@ public class GoDuplicateReturnArgumentInspection extends GoDuplicateArgumentInsp
     if (result == null) return;
     GoParameters parameters = result.getParameters();
     if (parameters == null) return;
-    List<GoParameterDeclaration> list = parameters.getParameterDeclarationList();
-    for (GoParameterDeclaration declaration : list) {
-      for (GoParamDefinition parameter : declaration.getParamDefinitionList()) {
-        if (parameter.isBlank()) continue;
-        String name = parameter.getName();
-        if (name != null && names.contains(name)) {
-          holder.registerProblem(parameter, errorText(name), ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
-        }
-        else {
-          names.add(name);
-        }
-      }
-    }
+
+    checkParameters(holder, parameters, names);
   }
 
   @NotNull
