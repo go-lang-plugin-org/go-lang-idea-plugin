@@ -16,26 +16,33 @@
 
 package com.goide.inspections;
 
-import com.goide.psi.GoParameterDeclaration;
-import com.goide.psi.GoParameters;
-import com.goide.psi.GoResult;
-import com.goide.psi.GoSignature;
+import com.goide.psi.*;
+import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class GoFunctionVariadicParameterInspection extends GoDuplicateArgumentInspection {
+public class GoFunctionVariadicParameterInspection extends GoInspectionBase {
   public static final GoDeleteQuickFix DELETE_QUICK_FIX = new GoDeleteQuickFix("Delete ...");
 
+  @NotNull
   @Override
-  public void check(@Nullable GoSignature o, @NotNull ProblemsHolder holder) {
-    if (o == null) return;
-    checkResult(o, holder);
-    checkParameters(o, holder);
+  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
+    return new GoVisitor() {
+      @Override
+      public void visitCompositeElement(@NotNull GoCompositeElement o) {
+        if (o instanceof GoSignatureOwner) {
+          GoSignature signature = ((GoSignatureOwner)o).getSignature();
+          if (signature != null) {
+            checkResult(signature, holder);
+            checkParameters(signature, holder);
+          }
+        }
+      }
+    };
   }
 
   private static void checkResult(@NotNull GoSignature o, @NotNull ProblemsHolder holder) {
