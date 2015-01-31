@@ -615,6 +615,9 @@ public class GoPsiImplUtil {
       int i = varList.indexOf(o);
       i = i == -1 ? 0 : i;
       GoType type = last.getGoType();
+      if (type instanceof GoChannelType) {
+        return type.getType();
+      }
       GoTypeReferenceExpression typeRef = type != null ? type.getTypeReferenceExpression() : null;
       if (typeRef != null) {
         PsiElement resolve = typeRef.getReference().resolve();

@@ -54,3 +54,13 @@ type Params []Param
 func <warning>hola2</warning>(params []Param) {
     params[0].Id  // the inspector find the Id field
 }
+
+type File struct {
+    Contents string
+}
+
+func <warning>sourceReader</warning>(files <-chan *File) {
+    for file := range files {
+        file.Contents
+    }
+}
