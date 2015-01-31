@@ -425,13 +425,17 @@ public class GoPsiImplUtil {
     else if (o instanceof GoIndexExpr) {
       GoExpression first = ContainerUtil.getFirstItem(((GoIndexExpr)o).getExpressionList());
       GoType type = first == null ? null : getGoType(first);
+      GoTypeReferenceExpression typeRef = getTypeReference(type);
+      if (typeRef != null) {
+        type = getType(type.getTypeReferenceExpression());
+      }
       if (type instanceof GoMapType) {
         List<GoType> list = ((GoMapType)type).getTypeList();
         if (list.size() == 2) {
           return list.get(1);
         }
       }
-      if (type instanceof GoArrayOrSliceType) {
+      else if (type instanceof GoArrayOrSliceType) {
         return type.getType();
       }
     }

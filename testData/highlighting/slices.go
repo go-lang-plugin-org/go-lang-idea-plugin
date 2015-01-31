@@ -38,3 +38,19 @@ func test(a *[]Foo2) {
         fmt.Println(c.Test)
     }
 }
+
+type Param struct {
+    Id string
+}
+
+type Params []Param
+
+func <warning>hola</warning>(params Params) {
+    params[0].Id
+}
+
+type Params []Param
+
+func <warning>hola2</warning>(params []Param) {
+    params[0].Id  // the inspector find the Id field
+}
