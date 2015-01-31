@@ -427,7 +427,7 @@ public class GoPsiImplUtil {
       GoType type = first == null ? null : getGoType(first);
       GoTypeReferenceExpression typeRef = getTypeReference(type);
       if (typeRef != null) {
-        type = getType(type.getTypeReferenceExpression());
+        type = getType(typeRef);
       }
       if (type instanceof GoMapType) {
         List<GoType> list = ((GoMapType)type).getTypeList();
