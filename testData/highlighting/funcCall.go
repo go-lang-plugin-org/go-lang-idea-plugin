@@ -18,3 +18,22 @@ func <warning>main1</warning>(err error) {
         case nil: return
     }
 }
+
+type advSearch struct {
+    Genres struct {
+        Generals  []string
+        Thematics struct {
+            Genres  []string
+            Missing bool
+        }
+        Demographics struct {
+            Genres  []string
+            Missing bool
+        }
+    }
+}
+
+func <warning>search</warning>() bool {
+    m := advSearch{}
+    return m.Genres.Demographics.Missing
+}

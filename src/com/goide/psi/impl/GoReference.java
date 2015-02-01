@@ -227,9 +227,11 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     if (type instanceof GoStructType) {
       GoScopeProcessorBase delegate = createDelegate(processor);
       type.processDeclarations(delegate, ResolveState.initial(), null, myElement);
-      Collection<? extends GoNamedElement> result = delegate.getVariants();
-      if (!processNamedElements(processor, state, result, localResolve)) return false;
-
+      for (GoFieldDeclaration delc : ((GoStructType)type).getFieldDeclarationList()) {
+        if (!processNamedElements(processor, state, delc.getFieldDefinitionList(), localResolve)) return false;
+        GoAnonymousFieldDefinition anon = delc.getAnonymousFieldDefinition();
+        if (!processNamedElements(processor, state, ContainerUtil.createMaybeSingletonList(anon), localResolve)) return false;
+      }
       final List<GoTypeReferenceExpression> refs = ContainerUtil.newArrayList();
       type.accept(new GoRecursiveVisitor() {
         @Override
