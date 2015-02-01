@@ -2427,7 +2427,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // ParameterDeclaration ( ',' ParameterDeclaration )*
+  // ParameterDeclaration (',' (ParameterDeclaration | &')'))*
   static boolean ParameterList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ParameterList")) return false;
     boolean r, p;
@@ -2439,7 +2439,7 @@ public class GoParser implements PsiParser {
     return r || p;
   }
 
-  // ( ',' ParameterDeclaration )*
+  // (',' (ParameterDeclaration | &')'))*
   private static boolean ParameterList_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ParameterList_1")) return false;
     int c = current_position_(b);
@@ -2451,16 +2451,37 @@ public class GoParser implements PsiParser {
     return true;
   }
 
-  // ',' ParameterDeclaration
+  // ',' (ParameterDeclaration | &')')
   private static boolean ParameterList_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ParameterList_1_0")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeToken(b, COMMA);
     p = r; // pin = 1
-    r = r && ParameterDeclaration(b, l + 1);
+    r = r && ParameterList_1_0_1(b, l + 1);
     exit_section_(b, l, m, null, r, p, null);
     return r || p;
+  }
+
+  // ParameterDeclaration | &')'
+  private static boolean ParameterList_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ParameterList_1_0_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = ParameterDeclaration(b, l + 1);
+    if (!r) r = ParameterList_1_0_1_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // &')'
+  private static boolean ParameterList_1_0_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ParameterList_1_0_1_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _AND_, null);
+    r = consumeToken(b, RPAREN);
+    exit_section_(b, l, m, null, r, false, null);
+    return r;
   }
 
   /* ********************************************************** */

@@ -133,3 +133,12 @@ func foo() {
     func () {
     }()
 }
+
+func hello( id string,
+) error {
+    return nil
+}
+
+func hello( id string, ) error {
+    return nil
+}
