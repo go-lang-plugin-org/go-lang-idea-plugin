@@ -165,10 +165,9 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     if (!(file instanceof GoFile)) return false;
     ResolveState state = ResolveState.initial();
     GoReferenceExpressionBase qualifier = myElement.getQualifier();
-    if (qualifier != null) {
-      return processQualifierExpression(((GoFile)file), qualifier, processor, state);
-    }
-    return processUnqualifiedResolve(((GoFile)file), processor, state, true);
+    return qualifier != null
+           ? processQualifierExpression(((GoFile)file), qualifier, processor, state)
+           : processUnqualifiedResolve(((GoFile)file), processor, state, true);
   }
 
   private boolean processQualifierExpression(@NotNull GoFile file,
@@ -179,21 +178,19 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     PsiElement target = reference != null ? reference.resolve() : null;
     if (target == null || target == qualifier) return false;
     if (target instanceof GoImportSpec) target = ((GoImportSpec)target).getImportString().resolve();
-    if (target instanceof PsiDirectory) {
-      processDirectory((PsiDirectory)target, file, null, processor, state, false);
-    }
-    else if (target instanceof GoTypeOwner) {
+    if (target instanceof PsiDirectory && !processDirectory((PsiDirectory)target, file, null, processor, state, false)) return false;
+    if (target instanceof GoTypeOwner) {
       GoType type = parameterType((GoTypeOwner)target);
-      if (type != null) processGoType(type, processor, state);
+      if (type != null && !processGoType(type, processor, state)) return false;
       PsiElement parent = target.getParent();
       if (target instanceof GoVarDefinition && parent instanceof GoTypeSwitchGuard) {
         GoTypeCaseClause typeCase = PsiTreeUtil.getParentOfType(myElement, GoTypeCaseClause.class);
         GoTypeSwitchCase switchCase = typeCase != null ? typeCase.getTypeSwitchCase() : null;
         GoType caseType = switchCase != null ? switchCase.getType() : null;
-        if (caseType != null) processGoType(caseType, processor, state);
+        if (caseType != null && !processGoType(caseType, processor, state)) return false;
       }
     }
-    return false;
+    return true;
   }
 
   private boolean processGoType(@NotNull GoType type, @NotNull MyScopeProcessor processor, @NotNull ResolveState state) {
