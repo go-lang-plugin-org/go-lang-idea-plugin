@@ -27,7 +27,6 @@ import java.util.List;
 import static com.goide.inspections.GoInspectionUtil.*;
 
 public class GoVarDeclarationInspection extends GoInspectionBase {
-
   @NotNull
   @Override
   protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder,
@@ -35,44 +34,39 @@ public class GoVarDeclarationInspection extends GoInspectionBase {
     return new GoVisitor() {
       @Override
       public void visitVarSpec(@NotNull GoVarSpec o) {
-        List<GoExpression> exprs = o.getExpressionList();
+        List<GoExpression> list = o.getExpressionList();
         List<GoVarDefinition> vars = o.getVarDefinitionList();
 
-        if (exprs.size() == vars.size()) {
-          checkExpressionShouldReturnOneResult(exprs, holder);
+        if (list.size() == vars.size()) {
+          checkExpressionShouldReturnOneResult(list, holder);
           return;
         }
 
-        if (exprs.size() == 0 && !(o instanceof GoShortVarDeclaration)) {
-          return;
-        }
-
+        if (list.size() == 0 && !(o instanceof GoShortVarDeclaration)) return;
         checkVar(o, holder);
       }
     };
   }
 
-  public static void checkVar(GoVarSpec varDeclaration, ProblemsHolder holder) {
+  public static void checkVar(@NotNull GoVarSpec varDeclaration, @NotNull ProblemsHolder holder) {
     List<GoVarDefinition> ids = varDeclaration.getVarDefinitionList();
-    List<GoExpression> exprs = varDeclaration.getExpressionList();
-    if (ids.size() == exprs.size()) {
-      checkExpressionShouldReturnOneResult(exprs, holder);
+    List<GoExpression> list = varDeclaration.getExpressionList();
+    if (ids.size() == list.size()) {
+      checkExpressionShouldReturnOneResult(list, holder);
       return;
     }
 
     // var declaration could has no initialization expression, but short var declaration couldn't
-    if (exprs.size() == 0 && !(varDeclaration instanceof GoShortVarDeclaration)) {
+    if (list.size() == 0 && !(varDeclaration instanceof GoShortVarDeclaration)) {
       return;
     }
 
     int idCount = ids.size();
-    int exprCount = exprs.size();
+    int exprCount = list.size();
 
-    if (exprs.size() == 1) {
-      exprCount = getExpressionResultCount(exprs.get(0));
-      if (exprCount == UNKNOWN_COUNT || exprCount == idCount) {
-        return;
-      }
+    if (list.size() == 1) {
+      exprCount = getExpressionResultCount(list.get(0));
+      if (exprCount == UNKNOWN_COUNT || exprCount == idCount) return;
     }
 
     String msg = String.format("Assignment count mismatch: %d = %d", idCount, exprCount);
