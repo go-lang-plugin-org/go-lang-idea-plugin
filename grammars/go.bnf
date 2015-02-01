@@ -119,7 +119,7 @@ private TypeLit ::=
   | MapType
   | ChannelType
 
-ArrayOrSliceType ::= '[' ('...'|Expression?) ']' Type {pin=1}
+ArrayOrSliceType ::= '[' ('...'|Expression?) ']' <<exitModeSafe "NO_EMPTY_LITERAL">> Type {pin=1}
 
 StructType ::= struct '{' Fields? '}' {pin=1}
 private Fields ::= FieldDeclaration (semi FieldDeclaration)* semi? {pin=1}
@@ -286,7 +286,7 @@ OperandName ::= ReferenceExpression QualifiedReferenceExpression? {elementType=R
 left QualifiedReferenceExpression ::= '.' identifier {elementType=ReferenceExpression}
 ReferenceExpression ::= identifier { methods=[getReference getQualifier] extends=Expression}
 
-CompositeLit ::= (LiteralTypeExpr LiteralValue)
+CompositeLit ::= (LiteralTypeExpr LiteralValue) // the brackets are valuable
 LiteralTypeExpr ::=
     StructType
   | ArrayOrSliceType
@@ -376,7 +376,7 @@ SwitchStatement ::= SwitchStart (TypeSwitchStatement | ExprSwitchStatement)
 SwitchStart ::= switch
 left ExprSwitchStatement ::= Condition '{' ( ExprCaseClause )* '}' {pin=2 extends=SwitchStatement}
 
-private Condition ::= <<enterMode "NO_EMPTY_LITERAL">> SimpleStatementOpt Expression? <<exitMode "NO_EMPTY_LITERAL">>
+private Condition ::= <<enterMode "NO_EMPTY_LITERAL">> SimpleStatementOpt Expression? <<exitModeSafe "NO_EMPTY_LITERAL">>
 private SimpleStatementOpt ::= [SimpleStatement ';'?] // todo: remove ?
 
 ExprCaseClause ::= ExprSwitchCase ':' Statements?
@@ -390,7 +390,7 @@ TypeList ::= Type ( ',' Type )*
 TypeListNoPin ::= Type ( ',' Type )* {elementType=TypeList}
 ForStatement ::= for (ForOrRangeClause Block | Block | ExpressionNoLiteral Block) {pin(".*")="for|ForOrRangeClause"}
 private ForOrRangeClause ::= ForClause | RangeClause
-private ExpressionNoLiteral ::= <<enterMode "NO_EMPTY_LITERAL">> (Expression <<exitMode "NO_EMPTY_LITERAL">> | <<exitMode "NO_EMPTY_LITERAL">>)
+private ExpressionNoLiteral ::= <<enterMode "NO_EMPTY_LITERAL">> (Expression <<exitModeSafe "NO_EMPTY_LITERAL">> | <<exitModeSafe "NO_EMPTY_LITERAL">>)
 ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement? {methods=[processDeclarations]}
 RangeClause ::= ExpressionsOrVariables? range ExpressionNoLiteral {pin=2}
 private ExpressionsOrVariables ::= ExpressionList '=' | VarDefinitionList ':='

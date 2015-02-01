@@ -419,7 +419,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // '[' ('...'|Expression?) ']' Type
+  // '[' ('...'|Expression?) ']' <<exitModeSafe "NO_EMPTY_LITERAL">> Type
   public static boolean ArrayOrSliceType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ArrayOrSliceType")) return false;
     if (!nextTokenIs(b, LBRACK)) return false;
@@ -429,6 +429,7 @@ public class GoParser implements PsiParser {
     p = r; // pin = 1
     r = r && report_error_(b, ArrayOrSliceType_1(b, l + 1));
     r = p && report_error_(b, consumeToken(b, RBRACK)) && r;
+    r = p && report_error_(b, exitModeSafe(b, l + 1, "NO_EMPTY_LITERAL")) && r;
     r = p && Type(b, l + 1) && r;
     exit_section_(b, l, m, ARRAY_OR_SLICE_TYPE, r, p, null);
     return r || p;
@@ -708,7 +709,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // <<enterMode "NO_EMPTY_LITERAL">> SimpleStatementOpt Expression? <<exitMode "NO_EMPTY_LITERAL">>
+  // <<enterMode "NO_EMPTY_LITERAL">> SimpleStatementOpt Expression? <<exitModeSafe "NO_EMPTY_LITERAL">>
   static boolean Condition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Condition")) return false;
     boolean r;
@@ -716,7 +717,7 @@ public class GoParser implements PsiParser {
     r = enterMode(b, l + 1, "NO_EMPTY_LITERAL");
     r = r && SimpleStatementOpt(b, l + 1);
     r = r && Condition_2(b, l + 1);
-    r = r && exitMode(b, l + 1, "NO_EMPTY_LITERAL");
+    r = r && exitModeSafe(b, l + 1, "NO_EMPTY_LITERAL");
     exit_section_(b, m, null, r);
     return r;
   }
@@ -1376,7 +1377,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // <<enterMode "NO_EMPTY_LITERAL">> (Expression <<exitMode "NO_EMPTY_LITERAL">> | <<exitMode "NO_EMPTY_LITERAL">>)
+  // <<enterMode "NO_EMPTY_LITERAL">> (Expression <<exitModeSafe "NO_EMPTY_LITERAL">> | <<exitModeSafe "NO_EMPTY_LITERAL">>)
   static boolean ExpressionNoLiteral(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExpressionNoLiteral")) return false;
     boolean r;
@@ -1387,24 +1388,24 @@ public class GoParser implements PsiParser {
     return r;
   }
 
-  // Expression <<exitMode "NO_EMPTY_LITERAL">> | <<exitMode "NO_EMPTY_LITERAL">>
+  // Expression <<exitModeSafe "NO_EMPTY_LITERAL">> | <<exitModeSafe "NO_EMPTY_LITERAL">>
   private static boolean ExpressionNoLiteral_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExpressionNoLiteral_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = ExpressionNoLiteral_1_0(b, l + 1);
-    if (!r) r = exitMode(b, l + 1, "NO_EMPTY_LITERAL");
+    if (!r) r = exitModeSafe(b, l + 1, "NO_EMPTY_LITERAL");
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // Expression <<exitMode "NO_EMPTY_LITERAL">>
+  // Expression <<exitModeSafe "NO_EMPTY_LITERAL">>
   private static boolean ExpressionNoLiteral_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExpressionNoLiteral_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = Expression(b, l + 1, -1);
-    r = r && exitMode(b, l + 1, "NO_EMPTY_LITERAL");
+    r = r && exitModeSafe(b, l + 1, "NO_EMPTY_LITERAL");
     exit_section_(b, m, null, r);
     return r;
   }

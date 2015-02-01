@@ -142,3 +142,22 @@ func hello( id string,
 func hello( id string, ) error {
     return nil
 }
+
+func sourceReader(files <-chan *File) {
+    for _, page := range []*File{} {
+        if page.Contents == "" {
+            break
+        }
+    }
+
+}
+
+func sourceReader1() {
+    for _, page := range []*File{} {
+    }
+}
+
+func sourceReader1() {
+    for _, page := range *File{} { // error as expected
+    }
+}

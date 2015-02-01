@@ -38,7 +38,6 @@ public class GoParserTest extends ParsingTestCase {
       Extensions.getRootArea(), "com.intellij.lang.braceMatcher", LanguageExtensionPoint.class);
   }
 
-  public void testSimple()                          { doTest(true);  }
   public void testError()                           { doTest(true);  }
   public void testWriter()                          { doTest(true);  }
   public void testPrimer()                          { doTest(true);  }
@@ -47,6 +46,7 @@ public class GoParserTest extends ParsingTestCase {
   public void testCars()                            { doTest(true);  }
   public void testIfWithNew()                       { doTest(true);  }
   public void testRanges()                          { doTest(true);  }
+  public void testSimple()                          { doTest(false); }
   public void testRecover()                         { doTest(false); }
   public void testRecover2()                        { doTest(false); }
   public void testMethodExpr()                      { doTest(false); }

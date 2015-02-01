@@ -33,7 +33,7 @@ import java.util.List;
 public class GoParserUtil extends GeneratedParserUtilBase {
   private static final Key<TObjectIntHashMap<String>> MODES_KEY = Key.create("MODES_KEY");
 
-  @Nullable
+  @NotNull
   private static TObjectIntHashMap<String> getParsingModes(@NotNull PsiBuilder builder_) {
     TObjectIntHashMap<String> flags = builder_.getUserDataUnprotected(MODES_KEY);
     if (flags == null) builder_.putUserDataUnprotected(MODES_KEY, flags = new TObjectIntHashMap<String>());
@@ -62,13 +62,21 @@ public class GoParserUtil extends GeneratedParserUtilBase {
     return true;
   }
 
-  public static boolean exitMode(@NotNull PsiBuilder builder_, @SuppressWarnings("UnusedParameters") int level, String mode) {
+  public static boolean exitMode(@NotNull PsiBuilder builder_, @SuppressWarnings("UnusedParameters") int level, String mode, boolean safe) {
     TObjectIntHashMap<String> flags = getParsingModes(builder_);
     int count = flags.get(mode);
     if (count == 1) flags.remove(mode);
-    else if (count > 1) flags.put(mode, count -1 );
-    else builder_.error("Could not exit inactive '" + mode + "' mode at offset " + builder_.getCurrentOffset());
+    else if (count > 1) flags.put(mode, count - 1);
+    else if (!safe) builder_.error("Could not exit inactive '" + mode + "' mode at offset " + builder_.getCurrentOffset());
     return true;
+  }
+
+  public static boolean exitMode(@NotNull PsiBuilder builder_, @SuppressWarnings("UnusedParameters") int level, String mode) {
+    return exitMode(builder_, level,mode, false);
+  }
+  
+  public static boolean exitModeSafe(@NotNull PsiBuilder builder_, @SuppressWarnings("UnusedParameters") int level, String mode) {
+    return exitMode(builder_, level,mode, true);
   }
 
   public static boolean isBuiltin(@NotNull PsiBuilder builder_, @SuppressWarnings("UnusedParameters") int level) {
