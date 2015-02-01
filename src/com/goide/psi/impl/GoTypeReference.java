@@ -135,6 +135,17 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
     if (!GoReference.processDirectory(dir, file, file.getPackageName(), processor, state, true)) return false;
     if (GoReference.processImports(file, processor, state, myElement)) return false;
     if (processBuiltin(processor, state, myElement)) return false;
+    if (PsiTreeUtil.getParentOfType(myElement, GoTypeSwitchCase.class) != null && "nil".equals(getName())) {
+      GoFile builtinFile = GoSdkUtil.findBuiltinFile(myElement);
+      if (builtinFile == null) return false;
+      GoVarDefinition nil = ContainerUtil.find(builtinFile.getVars(), new Condition<GoVarDefinition>() {
+        @Override
+        public boolean value(GoVarDefinition v) {
+          return "nil".equals(v.getName());
+        }
+      });
+      if (nil != null && !processor.execute(nil, state)) return false;
+    }
     return true;
   }
 

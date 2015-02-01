@@ -12,3 +12,9 @@ func <warning descr="Unused function 'Collection'">Collection</warning>(parent i
      }
      return nil
 }
+
+func <warning>main1</warning>(err error) {
+    switch err.(type) {
+        case nil: return
+    }
+}
