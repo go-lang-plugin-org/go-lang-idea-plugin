@@ -103,7 +103,7 @@ private ImportSpecs ::= ImportSpec (semi ImportSpec)* semi? {pin=1}
 ImportSpec ::= [ '.' | identifier ] ImportString {
   stubClass="com.goide.stubs.GoImportSpecStub"
 }
-ImportString ::= string {methods=[getReferences resolve]}
+ImportString ::= string {methods=[getReferences resolve getPath getPathTextRange]}
 
 Type ::= TypeName | TypeLit | '(' Type ')' {stubClass="com.goide.stubs.GoTypeStub"}
 private TypeName ::= TypeReferenceExpression QualifiedTypeReferenceExpression?

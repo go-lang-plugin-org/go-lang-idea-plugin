@@ -9,6 +9,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiReference;
 
@@ -37,6 +38,14 @@ public class GoImportStringImpl extends GoCompositeElementImpl implements GoImpo
   @Nullable
   public PsiDirectory resolve() {
     return GoPsiImplUtil.resolve(this);
+  }
+
+  public String getPath() {
+    return GoPsiImplUtil.getPath(this);
+  }
+
+  public TextRange getPathTextRange() {
+    return GoPsiImplUtil.getPathTextRange(this);
   }
 
 }

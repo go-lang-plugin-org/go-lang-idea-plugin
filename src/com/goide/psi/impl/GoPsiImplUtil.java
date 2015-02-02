@@ -34,6 +34,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Condition;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
@@ -553,7 +554,7 @@ public class GoPsiImplUtil {
     PsiElement parent = o.getParent();
     return parent instanceof GoParameterDeclaration && ((GoParameterDeclaration)parent).isVariadic();
   }
-  
+
   public static boolean isVariadic(@NotNull GoParameterDeclaration o) {
     GoParameterDeclarationStub stub = o.getStub();
     return stub != null ? stub.isVariadic() : o.getTripleDot() != null;
@@ -833,5 +834,23 @@ public class GoPsiImplUtil {
     assert rParen != null;
     declaration.addBefore(GoElementFactory.createNewLine(declaration.getProject()), rParen);
     return (GoImportSpec)declaration.addBefore(GoElementFactory.createImportSpec(declaration.getProject(), packagePath, alias), rParen);
+  }
+
+  public static String getPath(@NotNull GoImportString importString) {
+    String text = importString.getText();
+    if (!text.isEmpty()) {
+      char quote = text.charAt(0);
+      return isQuote(quote) ? StringUtil.unquoteString(text, quote) : text;
+    }
+    return "";
+  }
+
+  public static TextRange getPathTextRange(@NotNull GoImportString importString) {
+    String text = importString.getText();
+    return !text.isEmpty() && isQuote(text.charAt(0)) ? TextRange.create(1, text.length() - 1) : TextRange.EMPTY_RANGE;
+  }
+
+  public static boolean isQuote(char ch) {
+    return ch == '"' || ch == '\'' || ch == '`';
   }
 }
