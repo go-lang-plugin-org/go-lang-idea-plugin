@@ -382,6 +382,7 @@ public class GoPsiImplUtil {
     GoType sibling = o.findSiblingType();
     if (sibling != null) return sibling;
     
+    // todo: stubs 
     GoType fromSpec = findTypeInConstSpec(o);
     if (fromSpec != null) return fromSpec;
 
