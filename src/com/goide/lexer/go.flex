@@ -56,11 +56,7 @@ NL = [\r\n] | \r\n      // NewLine
 WS = [ \t\f]            // Whitespaces
 
 
-//C_STYLE_COMMENT="/*" [^"*/"]* "*/"
-//COMMENT_TAIL=( [^"*"]* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")?
-
 LINE_COMMENT = "//" [^\r\n]*
-//MULTILINE_COMMENT = "/*" "*"
 
 LETTER = [:letter:] | "_"
 DIGIT =  [:digit:]
@@ -77,56 +73,13 @@ FLOAT_EXPONENT = [eE] [+-]? {DIGIT}+
 NUM_FLOAT = ( ( ({DIGIT}+ "." {DIGIT}*) | ({DIGIT}* "." {DIGIT}+) ) {FLOAT_EXPONENT}?) | ({DIGIT}+ {FLOAT_EXPONENT})
 
 IDENT = {LETTER} ({LETTER} | {DIGIT} )*
-//IDENT_NOBUCKS = {LETTER} ({LETTER} | {DIGIT})*
 
 STR =      "\""
 ESCAPES = [abfnrtv]
 
-//STRING_NL = {ONE_NL}
-//STRING_ESC = \\ [^]
-//REGEX_ESC = \\ n | \\ r | \\ t | \\ b | \\ f | "\\" "\\" | \\ "$" | \\ \" | \\ \' | "\\""u"{HEX_DIGIT}{4} | "\\" [0..3] ([0..7] ([0..7])?)? | "\\" [4..7] ([0..7])? | "\\" {ONE_NL}
-
-/// Regexes ////////////////////////////////////////////////////////////////
-
-//ESCAPPED_REGEX_SEP = \\ "/"
-//REGEX_BEGIN = "/""$" |  "/" ([^"/""$"] | {REGEX_ESC} | {ESCAPPED_REGEX_SEP})? {REGEX_CONTENT}"$"
-//REGEX_CONTENT = ({REGEX_ESC}    | {ESCAPPED_REGEX_SEP} | [^"/"\r\n"$"])*
-
-//REGEX_LITERAL = "/" ([^"/"\n\r"$"] | {REGEX_ESC} | {ESCAPPED_REGEX_SEP})? {REGEX_CONTENT} ("$""/" | "/")
-
-////////////////////////////////////////////////////////////////////////////
-
-//SINGLE_QUOTED_STRING_BEGIN = "\'" ( {STRING_ESC} | "\""  | [^\\\'\r\n] | "$" )*
-//SINGLE_QUOTED_STRING = {SINGLE_QUOTED_STRING_BEGIN} \'
-//TRIPLE_QUOTED_STRING = "\'\'\'" ({STRING_ESC} | \" | "$" | [^\'] | {STRING_NL} | \'(\')?[^\'] )* (\'\'\' | \\)?
-
-//STRING_LITERAL = {TRIPLE_QUOTED_STRING} | {SINGLE_QUOTED_STRING}
-
-
-// Single-double-quoted GStrings
-//GSTRING_SINGLE_CONTENT = ({STRING_ESC} | [^\\\"\r\n"$"] | "\'" )+
-
-// Triple-double-quoted GStrings
-//GSTRING_TRIPLE_CONTENT = ({STRING_ESC} | \' | \" (\")? [^\""$"] | [^\\\""$"] | {STRING_NL})+
-
-
-//GSTRING_TRIPLE_CTOR_END = {GSTRING_TRIPLE_CONTENT} \"\"\"
-
-
-//GSTRING_LITERAL = \"\" | \" ([^\\\"\n\r"$"] | {STRING_ESC})? {GSTRING_SINGLE_CONTENT} \" | \"\"\" {GSTRING_TRIPLE_CTOR_END}
-
-
-// %state IN_COMMENT
 %state MAYBE_SEMICOLON
 
 %%
-
-//<IN_COMMENT> {
-//!"*/"+                                      {}
-//
-//"*/"                                        { yybegin(YYINITIAL); return MULTILINE_COMMENT; }
-//<<EOF>>                                     { yybegin(YYINITIAL); return MULTILINE_COMMENT; }
-//}
 
 <YYINITIAL> {
 "|"                                       { return BIT_OR; }
@@ -135,10 +88,8 @@ ESCAPES = [abfnrtv]
 {NL}+                                    { return NLS; }
 
 {LINE_COMMENT}                             { return LINE_COMMENT; }
-//{MULTILINE_COMMENT}                             { return MULTILINE_COMMENT; }
 "/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")? { return MULTILINE_COMMENT; }
 
-//([^"*/"] | [\r\n])+ "*/"?
 
 "..."                                     { return TRIPLE_DOT; }
 "."                                       { return DOT; }
@@ -217,7 +168,6 @@ ESCAPES = [abfnrtv]
 ">"                                       { return GREATER; }
 
 ":="                                      { return VAR_ASSIGN; }
-
 
 "break"                                   { yybegin(MAYBE_SEMICOLON); return BREAK;  }
 "fallthrough"                             { yybegin(MAYBE_SEMICOLON); return FALLTHROUGH; }
