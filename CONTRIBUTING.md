@@ -3,7 +3,7 @@
 1. Checkout plugin repo and open the project
 1. Setup [IDEA SDK](http://confluence.jetbrains.net/display/IDEADEV/Getting+Started+with+Plugin+Development#GettingStartedwithPluginDevelopment-anchor2):
 select the IDEA installation directory as SDK root (should be named ```IDEA sdk```)
-1. Setup the right version of [Grammar-Kit](README.md#grammar-kit) plugin
+1. Setup the right version of [Grammar-Kit](https://www.dropbox.com/s/tqmj3urcnmt22a2/GrammarKit-14-01-2015.zip?dl=0) plugin
 1. Run the **Go** run configuration
 
 Note: if you'd like to build only artifact please run ```Build > Build Artifacts...``` action.
