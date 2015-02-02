@@ -17,10 +17,7 @@
 package com.goide;
 
 import com.goide.highlighting.GoSyntaxHighlightingColors;
-import com.goide.psi.GoImportSpec;
-import com.goide.psi.GoReferenceExpression;
-import com.goide.psi.GoTypeReferenceExpression;
-import com.goide.psi.GoTypeSpec;
+import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.psi.impl.GoReference;
 import com.intellij.lang.annotation.AnnotationHolder;
@@ -52,6 +49,9 @@ public class GoAnnotator implements Annotator {
     else if (o instanceof GoTypeSpec) {
       setHighlighting(((GoTypeSpec)o).getIdentifier(), holder, GoSyntaxHighlightingColors.TYPE_SPECIFICATION);
     }
+    else if (o instanceof GoConstDefinition) {
+      setHighlighting(((GoConstDefinition)o).getIdentifier(), holder, GoSyntaxHighlightingColors.CONSTANT);
+    }
   }
 
   private static void highlightAsTypeRefIfNeeded(@NotNull PsiElement o, @Nullable PsiElement resolve, @NotNull AnnotationHolder holder) {
@@ -60,6 +60,9 @@ public class GoAnnotator implements Annotator {
                               ? GoSyntaxHighlightingColors.BUILTIN_TYPE_REFERENCE
                               : GoSyntaxHighlightingColors.TYPE_REFERENCE;
       setHighlighting(o, holder, key);
+    }
+    else if (resolve instanceof GoConstDefinition) {
+      setHighlighting(o, holder, GoSyntaxHighlightingColors.CONSTANT);
     }
   }
 
