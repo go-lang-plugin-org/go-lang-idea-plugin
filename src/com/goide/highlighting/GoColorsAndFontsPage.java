@@ -52,6 +52,7 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
     new AttributesDescriptor("Builtin type", BUILTIN_TYPE_REFERENCE),
     new AttributesDescriptor("Constant", CONSTANT),
     new AttributesDescriptor("Function declaration", FUNCTION_DECLARATION),
+    new AttributesDescriptor("Global variable", GLOBAL_VARIABLE),
   };
   private static final Map<String, TextAttributesKey> ATTRIBUTES_KEY_MAP = ContainerUtil.newTroveMap();
   static {
@@ -60,6 +61,7 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
     ATTRIBUTES_KEY_MAP.put("bt", BUILTIN_TYPE_REFERENCE);
     ATTRIBUTES_KEY_MAP.put("c", CONSTANT);
     ATTRIBUTES_KEY_MAP.put("f", FUNCTION_DECLARATION);
+    ATTRIBUTES_KEY_MAP.put("g", GLOBAL_VARIABLE);
   }
 
   @NotNull
@@ -100,6 +102,8 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
            "}\n" +
            "\n" +
            "const <c>Constance</c> = 1\n" +
+           "\n" +
+           "var <g>GlobalVar</g> = 1\n" +
            "\n" +
            "func <f>main</f>() {\n" +
            "    var a <tr>Abser</tr>;\n" +
