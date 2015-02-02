@@ -40,11 +40,11 @@ public class GoAnnotator implements Annotator {
     }
     else if (o instanceof GoReferenceExpression) {
       PsiElement resolve = ((GoReferenceExpression)o).getReference().resolve();
-      highlightAsTypeRefIfNeeded(o, resolve, holder);      
+      highlightAsTypeRefIfNeeded((GoReferenceExpression)o, resolve, holder);      
     }
     else if (o instanceof GoTypeReferenceExpression) {
       PsiElement resolve = ((GoTypeReferenceExpression)o).getReference().resolve();
-      highlightAsTypeRefIfNeeded(o, resolve, holder);
+      highlightAsTypeRefIfNeeded((GoTypeReferenceExpression)o, resolve, holder);
     }
     else if (o instanceof GoTypeSpec) {
       setHighlighting(((GoTypeSpec)o).getIdentifier(), holder, GoSyntaxHighlightingColors.TYPE_SPECIFICATION);
@@ -60,15 +60,15 @@ public class GoAnnotator implements Annotator {
     }
   }
 
-  private static void highlightAsTypeRefIfNeeded(@NotNull PsiElement o, @Nullable PsiElement resolve, @NotNull AnnotationHolder holder) {
+  private static void highlightAsTypeRefIfNeeded(@NotNull GoReferenceExpressionBase o, @Nullable PsiElement resolve, @NotNull AnnotationHolder holder) {
     if (resolve instanceof GoTypeSpec) {
       TextAttributesKey key = GoPsiImplUtil.builtin(resolve)
                               ? GoSyntaxHighlightingColors.BUILTIN_TYPE_REFERENCE
                               : GoSyntaxHighlightingColors.TYPE_REFERENCE;
-      setHighlighting(o, holder, key);
+      setHighlighting(o.getIdentifier(), holder, key);
     }
     else if (resolve instanceof GoConstDefinition) {
-      setHighlighting(o, holder, GoSyntaxHighlightingColors.CONSTANT);
+      setHighlighting(o.getIdentifier(), holder, GoSyntaxHighlightingColors.CONSTANT);
     }
   }
 
