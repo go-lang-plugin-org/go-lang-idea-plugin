@@ -41,8 +41,10 @@ public class GoImportStringManipulator extends AbstractElementManipulator<GoImpo
   }
 
   private static void checkQuoted(@NotNull GoImportString element) {
-    if (!StringUtil.isQuotedString(element.getText())) {
-      throw new IllegalStateException("import string should be quoted, given: " + element.getText());
+    String text = element.getText();
+    if (!StringUtil.isQuotedString(text) &&
+        (text.length() < 2 || !StringUtil.startsWithChar(text, '\'') || !StringUtil.endsWithChar(text, '\''))) {
+      throw new IllegalStateException("import string should be quoted, given: " + text);
     }
   }
 }
