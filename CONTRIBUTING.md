@@ -1,10 +1,10 @@
 ## Getting started with the plugin development
 1. [Download](http://www.jetbrains.com/idea/download/) the latest 14 IntelliJ IDEA build and install it
-2. Checkout plugin repo and open the project
-3. Setup [IDEA SDK](http://confluence.jetbrains.net/display/IDEADEV/Getting+Started+with+Plugin+Development#GettingStartedwithPluginDevelopment-anchor2):
+1. Checkout plugin repo and open the project
+1. Setup [IDEA SDK](http://confluence.jetbrains.net/display/IDEADEV/Getting+Started+with+Plugin+Development#GettingStartedwithPluginDevelopment-anchor2):
 select the IDEA installation directory as SDK root (should be named ```IDEA sdk```)
-4. Setup the right version of [Grammar-Kit](README.md#grammar-kit) plugin
-5. Run the **Go** run configuration
+1. Setup the right version of [Grammar-Kit](README.md#grammar-kit) plugin
+1. Run the **Go** run configuration
 
 Note: if you'd like to build only artifact please run ```Build > Build Artifacts...``` action.
 
