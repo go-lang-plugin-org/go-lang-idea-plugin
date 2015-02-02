@@ -52,6 +52,12 @@ public class GoAnnotator implements Annotator {
     else if (o instanceof GoConstDefinition) {
       setHighlighting(((GoConstDefinition)o).getIdentifier(), holder, GoSyntaxHighlightingColors.CONSTANT);
     }
+    else if (o instanceof GoNamedSignatureOwner) {
+      PsiElement identifier = ((GoNamedSignatureOwner)o).getIdentifier();
+      if (identifier != null) {
+        setHighlighting(identifier, holder, GoSyntaxHighlightingColors.FUNCTION_DECLARATION);
+      }
+    }
   }
 
   private static void highlightAsTypeRefIfNeeded(@NotNull PsiElement o, @Nullable PsiElement resolve, @NotNull AnnotationHolder holder) {

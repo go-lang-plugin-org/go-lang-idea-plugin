@@ -51,6 +51,7 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
     new AttributesDescriptor("Type reference", TYPE_REFERENCE),
     new AttributesDescriptor("Builtin type", BUILTIN_TYPE_REFERENCE),
     new AttributesDescriptor("Constant", CONSTANT),
+    new AttributesDescriptor("Function declaration", FUNCTION_DECLARATION),
   };
   private static final Map<String, TextAttributesKey> ATTRIBUTES_KEY_MAP = ContainerUtil.newTroveMap();
   static {
@@ -58,6 +59,7 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
     ATTRIBUTES_KEY_MAP.put("ts", TYPE_SPECIFICATION);
     ATTRIBUTES_KEY_MAP.put("bt", BUILTIN_TYPE_REFERENCE);
     ATTRIBUTES_KEY_MAP.put("c", CONSTANT);
+    ATTRIBUTES_KEY_MAP.put("f", FUNCTION_DECLARATION);
   }
 
   @NotNull
@@ -99,7 +101,7 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
            "\n" +
            "const <c>Constance</c> = 1\n" +
            "\n" +
-           "func main() {\n" +
+           "func <f>main</f>() {\n" +
            "    var a <tr>Abser</tr>;\n" +
            "    f := <tr>MyFloat</tr>(-math.<c>Sqrt2</c>);\n" +
            "    v := <tr>Vertex</tr>{3, 4};\n" +
@@ -114,7 +116,7 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
            "\n" +
            "type <ts>MyFloat</ts> <bt>float64</bt>\n" +
            "\n" +
-           "func (f <tr>MyFloat</tr>) Abs() <bt>float64</bt> {\n" +
+           "func (f <tr>MyFloat</tr>) <f>Abs</f>() <bt>float64</bt> {\n" +
            "    if f < 0 {\n" +
            "        return <bt>float64</bt>(-f)\n" +
            "    }\n" +
@@ -125,7 +127,7 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
            "    X, Y <bt>float64</bt>\n" +
            "}\n" +
            "\n" +
-           "func (v *<tr>Vertex</tr>) Abs() <bt>float64</bt> {\n" +
+           "func (v *<tr>Vertex</tr>) <f>Abs</f>() <bt>float64</bt> {\n" +
            "    return math.Sqrt(v.X*v.X + v.Y*v.Y)\n" +
            "}";
   }
