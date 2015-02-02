@@ -226,6 +226,7 @@ ConstSpec ::= ConstDefinitionList [ ('=' ExpressionList | Type '=' ExpressionLis
 private ConstDefinitionList ::= ConstDefinition ( ',' ConstDefinition )*
 ConstDefinition ::= identifier {
   stubClass="com.goide.stubs.GoConstDefinitionStub"
+  methods=[getGoType]
 }
 
 private ExpressionList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &')'))* {pin(".*")=1}

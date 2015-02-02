@@ -378,6 +378,41 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
+  public static GoType getGoType(@NotNull GoConstDefinition o) {
+    GoType sibling = o.findSiblingType();
+    if (sibling != null) return sibling;
+    
+    GoType fromSpec = findTypeInConstSpec(o);
+    if (fromSpec != null) return fromSpec;
+
+    GoConstSpec prev = PsiTreeUtil.getPrevSiblingOfType(o.getParent(), GoConstSpec.class);
+    while (prev != null) {
+      GoType type = prev.getType();
+      if (type != null) return type;
+      GoExpression expr = ContainerUtil.getFirstItem(prev.getExpressionList()); // not sure about first
+      if (expr != null) return expr.getGoType();
+      prev = PsiTreeUtil.getPrevSiblingOfType(o.getParent(), GoConstSpec.class);
+    }
+    
+    return null;
+  }
+
+  @Nullable
+  private static GoType findTypeInConstSpec(@NotNull GoConstDefinition o) {
+    PsiElement parent = o.getParent();
+    if (!(parent instanceof GoConstSpec)) return null;
+    GoConstSpec spec = (GoConstSpec)parent;
+    GoType commonType = spec.getType();
+    if (commonType != null) return commonType;
+    List<GoConstDefinition> varList = spec.getConstDefinitionList();
+    int i = varList.indexOf(o);
+    i = i == -1 ? 0 : i;
+    List<GoExpression> exprs = spec.getExpressionList();
+    if (exprs.size() <= i) return null;
+    return exprs.get(i).getGoType();
+  }
+
+  @Nullable
   public static GoType getGoType(@NotNull final GoExpression o) {
     if (o instanceof GoUnaryExpr) {
       GoExpression expression = ((GoUnaryExpr)o).getExpression();
@@ -573,7 +608,7 @@ public class GoPsiImplUtil {
       return processRangeClause(o, (GoRangeClause)parent);
     }
     if (parent instanceof GoVarSpec) {
-      return processVarSpec(o, (GoVarSpec)parent);
+      return findTypeInVarSpec(o);
     }
     GoCompositeLit literal = PsiTreeUtil.getNextSiblingOfType(o, GoCompositeLit.class);
     if (literal != null) {
@@ -583,7 +618,8 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  private static GoType processVarSpec(GoVarDefinition o, @NotNull GoVarSpec parent) {
+  private static GoType findTypeInVarSpec(@NotNull GoVarDefinition o) {
+    GoVarSpec parent = (GoVarSpec)o.getParent();
     GoType commonType = parent.getType();
     if (commonType != null) return commonType;
     List<GoVarDefinition> varList = parent.getVarDefinitionList();

@@ -33,4 +33,9 @@ public class GoConstDefinitionImpl extends GoNamedElementImpl<GoConstDefinitionS
     return findNotNullChildByType(IDENTIFIER);
   }
 
+  @Nullable
+  public GoType getGoType() {
+    return GoPsiImplUtil.getGoType(this);
+  }
+
 }
