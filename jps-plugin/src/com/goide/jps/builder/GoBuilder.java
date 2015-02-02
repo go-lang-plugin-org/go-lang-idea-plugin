@@ -60,7 +60,7 @@ public class GoBuilder extends TargetBuilder<GoSourceRootDescriptor, GoTarget> {
     for (String contentRootUrl : module.getContentRootsList().getUrls()) {
       String contentRootPath = new URL(contentRootUrl).getPath();
       GeneralCommandLine commandLine = new GeneralCommandLine();
-      commandLine.setWorkDirectory(contentRootPath);
+      commandLine.withWorkDirectory(contentRootPath);
       commandLine.setExePath(executable.getAbsolutePath());
       commandLine.addParameter("build");
       commandLine.addParameters("-o", JpsGoSdkType.getBinaryPathByModulePath(contentRootPath, outputDirectory.getAbsolutePath()));
