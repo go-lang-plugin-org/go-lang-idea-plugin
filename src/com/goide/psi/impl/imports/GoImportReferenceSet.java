@@ -25,12 +25,21 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferen
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static com.intellij.openapi.util.text.StringUtil.stripQuotesAroundValue;
+import static com.intellij.openapi.util.text.StringUtil.endsWithChar;
+import static com.intellij.openapi.util.text.StringUtil.startsWithChar;
 
 public class GoImportReferenceSet extends FileReferenceSet {
   public GoImportReferenceSet(@NotNull PsiElement element) {
     super(stripQuotesAroundValue(element.getText()), element, 1, null, true);
   }
+
+  @NotNull
+  public static String stripQuotesAroundValue(@NotNull String text) {
+    if (startsWithChar(text, '\"') || startsWithChar(text, '\'') || startsWithChar(text, '`')) text = text.substring(1);
+    if (endsWithChar(text, '\"') || endsWithChar(text, '\'') || endsWithChar(text, '`')) text = text.substring(0, text.length() - 1);
+    return text;
+  }
+
 
   @Override
   protected Condition<PsiFileSystemItem> getReferenceCompletionFilter() {
