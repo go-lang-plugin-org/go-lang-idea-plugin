@@ -849,7 +849,11 @@ public class GoPsiImplUtil {
     String text = importString.getText();
     return !text.isEmpty() && isQuote(text.charAt(0)) ? TextRange.create(1, text.length() - 1) : TextRange.EMPTY_RANGE;
   }
-
+  
+  public static boolean isQuotedImportString(@NotNull String s) {
+    return s.length() > 1 && isQuote(s.charAt(0)) && s.charAt(0) == s.charAt(s.length() - 1);
+  }
+  
   public static boolean isQuote(char ch) {
     return ch == '"' || ch == '\'' || ch == '`';
   }

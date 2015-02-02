@@ -53,7 +53,7 @@ public class GoElementFactory {
   @NotNull
   public static GoImportDeclaration createImportDeclaration(@NotNull Project project, @NotNull String importString,
                                                             @Nullable String alias, boolean withParens) {
-    importString = StringUtil.isQuotedString(importString) ? importString : StringUtil.wrapWithDoubleQuote(importString);
+    importString = GoPsiImplUtil.isQuotedImportString(importString) ? importString : StringUtil.wrapWithDoubleQuote(importString);
     alias = alias != null ? alias + " " : "";
     GoFile file = withParens
                   ? createFileFromText(project, "package main\nimport (\n" + alias + importString + "\n)")
