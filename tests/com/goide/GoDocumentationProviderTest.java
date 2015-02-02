@@ -26,13 +26,18 @@ public class GoDocumentationProviderTest extends GoCodeInsightFixtureTestCase {
     );
   }
 
-  public void testPackage() {
+  public void testPackageWithDoc() {
     doTest("package a; import \"fm<caret>t\"", 
-           "<pre> Copyright 2009 The Go Authors. All rights reserved.<br/> Use of this source code is governed by a BSD-style<br/> license that can be found in the LICENSE file.<br/>\n" +
+           "<pre>\n" +
            "Package fmt implements formatted I/O with functions analogous\n" +
            "to C's printf and scanf.  The format 'verbs' are derived from C's but\n" +
            "are simpler.\n" +
            "</pre>");
+  }
+  
+  public void testPackage() {
+    doTest("package a; import \"io<caret>\"",
+           "<pre> Package io provides basic interfaces to I/O primitives.<br/> Its primary job is to wrap existing implementations of such primitives,<br/> such as those in package os, into shared public interfaces that<br/> abstract the functionality, plus some other related primitives.<br/><br/> Because these interfaces and primitives wrap lower-level operations with<br/> various implementations, unless otherwise informed clients should not<br/> assume they are safe for parallel execution.</pre>");
   }
 
   private void doTest(@NotNull String text, @NotNull String expected) {
