@@ -46,7 +46,7 @@ public class GoRunFileConfiguration extends GoRunConfigurationWithMain<GoRunFile
   @NotNull
   @Override
   public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-    return new GoRunConfigurationEditorForm(getProject(), false);
+    return new GoRunConfigurationEditorForm(getProject());
   }
 
   @Override

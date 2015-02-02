@@ -46,7 +46,7 @@ public class GoApplicationConfiguration extends GoRunConfigurationWithMain<GoApp
   @NotNull
   @Override
   public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-    return new GoRunConfigurationEditorForm(getProject(), true);
+    return new GoRunConfigurationEditorForm(getProject());
   }
 
   @Override

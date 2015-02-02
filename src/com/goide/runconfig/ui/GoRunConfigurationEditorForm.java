@@ -37,12 +37,11 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoRunConfigurat
   private RawCommandLineEditor myParamsField;
   private TextFieldWithBrowseButton myFilePathField;
 
-  public GoRunConfigurationEditorForm(@NotNull Project project, boolean showPath) {
+  public GoRunConfigurationEditorForm(@NotNull Project project) {
     super(null);
     FileChooserDescriptor chooseFileDescriptor = FileChooserDescriptorFactory.createSingleLocalFileDescriptor();
     chooseFileDescriptor.setRoots(project.getBaseDir());
     chooseFileDescriptor.setShowFileSystemRoots(false);
-    myParamsField.setVisible(showPath);
     myFilePathField.addBrowseFolderListener(new TextBrowseFolderListener(chooseFileDescriptor));
   }
 
