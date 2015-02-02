@@ -18,7 +18,6 @@ package com.goide;
 
 import com.goide.psi.*;
 import com.intellij.lang.documentation.AbstractDocumentationProvider;
-import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
@@ -29,7 +28,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -58,26 +56,14 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
 
   @Nullable
   private static String getPackageComment(@Nullable PsiFile file) {
-    final HashSet<String> copyright = ContainerUtil.newHashSet(
-      "// Copyright 2009 The Go Authors. All rights reserved.",
-      "// Use of this source code is governed by a BSD-style",
-      "// license that can be found in the LICENSE file.");
     if (file instanceof GoFile) {
       // todo: remove after correct stubbing (comments needed in stubs)
       GoPackageClause pack = PsiTreeUtil.findChildOfType(file, GoPackageClause.class);
-      List<PsiComment> comments = ContainerUtil.filter(getPreviousNonWsComment(pack), new Condition<PsiComment>() {
-        @Override
-        public boolean value(PsiComment comment) {
-          return !copyright.contains(comment.getText());
-        }
-      });
+      List<PsiComment> comments = getPreviousNonWsComment(pack);
       if (!comments.isEmpty()) return getCommentText(comments);
     }
     return null;
   }
-
-  
-
 
   @NotNull
   private static List<PsiComment> getPreviousNonWsComment(@Nullable PsiElement element) {
@@ -85,7 +71,10 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
     List<PsiComment> result = ContainerUtil.newArrayList();
     PsiElement e;
     for (e = element.getPrevSibling(); e != null; e = e.getPrevSibling()) {
-      if (e instanceof PsiWhiteSpace) continue;
+      if (e instanceof PsiWhiteSpace) {
+        if (e.getText().contains("\n\n")) return result;
+        continue;
+      }
       if (e instanceof PsiComment) {
         result.add(0, (PsiComment)e);
       }

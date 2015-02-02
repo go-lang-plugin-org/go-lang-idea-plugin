@@ -18,6 +18,11 @@ public class GoDocumentationProviderTest extends GoCodeInsightFixtureTestCase {
            " It returns the number of bytes written and any write error encountered.</pre>");
   }
   
+  public void testFprintln() {
+    doTest("package a; import \"fmt\"; func foo() {fmt.Fprintl<caret>n(\"Hello\")}", 
+    "<pre> Fprintln formats using the default formats for its operands and writes to w.<br/> Spaces are always added between operands and a newline is appended.<br/> It returns the number of bytes written and any write error encountered.</pre>");
+  }
+  
   public void testVariable() {
     doTest("package a; \n" +
            "// test\n" +
