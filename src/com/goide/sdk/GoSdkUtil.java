@@ -16,11 +16,13 @@
 
 package com.goide.sdk;
 
+import com.goide.GoModuleType;
 import com.goide.project.GoLibrariesService;
 import com.goide.psi.GoFile;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.application.PathMacros;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -35,6 +37,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.EnvironmentUtil;
 import com.intellij.util.Function;
+import com.intellij.util.PlatformUtils;
 import com.intellij.util.SystemProperties;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
@@ -168,5 +171,9 @@ public class GoSdkUtil {
   private static VirtualFile guessSkdSrcDir(@NotNull PsiElement context) {
     VirtualFile virtualFile = context.getContainingFile().getOriginalFile().getVirtualFile();
     return ProjectRootManager.getInstance(context.getProject()).getFileIndex().getClassRootForFile(virtualFile);
+  }
+
+  public static boolean isAppropriateModule(@NotNull Module module) {
+    return !module.isDisposed() && (!PlatformUtils.isIntelliJ() || ModuleUtil.getModuleType(module) == GoModuleType.getInstance());
   }
 }

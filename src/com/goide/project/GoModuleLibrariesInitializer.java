@@ -16,7 +16,6 @@
 
 package com.goide.project;
 
-import com.goide.GoModuleType;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.ProjectTopics;
 import com.intellij.ide.util.PropertiesComponent;
@@ -28,7 +27,6 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleComponent;
-import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.options.ex.ConfigurableExtensionPointUtil;
@@ -41,7 +39,6 @@ import com.intellij.openapi.roots.libraries.LibraryTable;
 import com.intellij.openapi.roots.libraries.LibraryTablesRegistrar;
 import com.intellij.openapi.vfs.*;
 import com.intellij.util.Alarm;
-import com.intellij.util.PlatformUtils;
 import com.intellij.util.containers.ContainerUtil;
 import io.netty.util.internal.ConcurrentSet;
 import org.jetbrains.annotations.NotNull;
@@ -98,7 +95,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
 
   @Override
   public void moduleAdded() {
-    if (isAppropriateModule()) {
+    if (GoSdkUtil.isAppropriateModule(myModule)) {
       scheduleUpdate(0);
 
       myModule.getMessageBus().connect().subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
@@ -118,7 +115,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   public void scheduleUpdate(int delay) {
     myAlarm.addRequest(new Runnable() {
       public void run() {
-        if (isAppropriateModule()) {
+        if (GoSdkUtil.isAppropriateModule(GoModuleLibrariesInitializer.this.myModule)) {
           final Set<String> libraryRootUrls = ContainerUtil.newLinkedHashSet();
           VirtualFile[] contentRoots = ProjectRootManager.getInstance(myModule.getProject()).getContentRoots();
 
@@ -137,7 +134,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
               ApplicationManager.getApplication().invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                  if (isAppropriateModule()) {
+                  if (GoSdkUtil.isAppropriateModule(GoModuleLibrariesInitializer.this.myModule)) {
                     attachLibraries(libraryRootUrls);
                   }
                 }
@@ -290,10 +287,6 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
       });
       Notifications.Bus.notify(notification, project);
     }
-  }
-
-  private boolean isAppropriateModule() {
-    return !myModule.isDisposed() && (!PlatformUtils.isIntelliJ() || ModuleUtil.getModuleType(myModule) == GoModuleType.getInstance());
   }
 
   @Override

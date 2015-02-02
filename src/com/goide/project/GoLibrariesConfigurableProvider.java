@@ -21,6 +21,7 @@ import com.goide.sdk.GoSdkUtil;
 import com.intellij.application.options.ModuleAwareProjectConfigurable;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.options.*;
 import com.intellij.openapi.project.Project;
@@ -31,6 +32,7 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import com.intellij.util.Function;
+import com.intellij.util.PlatformUtils;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -93,7 +95,10 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
       @Override
       public void apply() throws ConfigurationException {
         super.apply();
-        for (Module module : ModuleUtil.getModulesOfType(myProject, GoModuleType.getInstance())) {
+        final Collection<Module> modules = PlatformUtils.isIntelliJ()
+                                           ? ModuleUtil.getModulesOfType(myProject, GoModuleType.getInstance())
+                                           : ContainerUtil.newArrayList(ModuleManager.getInstance(myProject).getModules());
+        for (Module module : modules) {
           module.getComponent(GoModuleLibrariesInitializer.class).scheduleUpdate();
         }
       }
@@ -115,7 +120,7 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
         result.add(new ModuleAwareProjectConfigurable(myProject, "Module libraries", "Module libraries") {
           @Override
           protected boolean isSuitableForModule(@NotNull Module module) {
-            return ModuleUtil.getModuleType(module) == GoModuleType.getInstance();
+            return GoSdkUtil.isAppropriateModule(module);
           }
 
           @NotNull
