@@ -33,6 +33,9 @@ public class GoImportOptimizerTest extends GoCodeInsightFixtureTestCase {
   public void testUnusedDuplicatedImports() { doTest(); }
   public void testImportWithSameIdentifier() { doTest(); }
   public void testImportPackageWithMainFiles() { doTest(); }
+  public void testImportDirectoryWithoutPackages() {
+    doTest(); 
+  }
 
   @Override
   protected boolean isWriteActionRequired() {

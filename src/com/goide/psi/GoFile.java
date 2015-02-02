@@ -51,6 +51,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class GoFile extends PsiFileBase {
@@ -184,8 +185,9 @@ public class GoFile extends PsiFileBase {
         continue;
       }
       PsiDirectory dir = string.resolve();
-      if (dir != null) {
-        for (String packageNames : getAllPackagesInDirectory(dir)) {
+      final Collection<String> packagesInDirectory = getAllPackagesInDirectory(dir);
+      if (!packagesInDirectory.isEmpty()) {
+        for (String packageNames : packagesInDirectory) {
           if (!StringUtil.isEmpty(packageNames)) {
             map.putValue(packageNames, spec);
           }
@@ -243,7 +245,10 @@ public class GoFile extends PsiFileBase {
     });
   }
 
-  private static Collection<String> getAllPackagesInDirectory(@NotNull final PsiDirectory dir) {
+  private static Collection<String> getAllPackagesInDirectory(@Nullable final PsiDirectory dir) {
+    if (dir == null) {
+      return Collections.emptyList();
+    }
     return CachedValuesManager.getCachedValue(dir, new CachedValueProvider<Collection<String>>() {
       @Nullable
       @Override
