@@ -43,4 +43,9 @@ public class JpsGoSdkType extends JpsSdkType<JpsDummyElement> implements JpsElem
   private static File getExecutable(@NotNull String path, @NotNull String command) {
     return new File(path, getBinaryFileNameForPath(command));
   }
+
+  @NotNull
+  public static File getExecutableFileFromEnv(String command) {
+    return PathEnvironmentVariableUtil.findInPath(command);
+  }
 }

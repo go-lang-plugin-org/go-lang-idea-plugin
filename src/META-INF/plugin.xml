@@ -216,6 +216,10 @@
       <add-to-group group-id="CodeMenu" anchor="last"/>
       <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt P"/>
     </action>
+    <action id="GoImportsFileAction" class="com.goide.actions.fmt.GoImportsFileAction" text="Goimports file"
+            description="Optimizes imports for selected file with goimports util">
+      <add-to-group group-id="CodeMenu" anchor="last"/>
+    </action>
   </actions>
 
 </idea-plugin>
