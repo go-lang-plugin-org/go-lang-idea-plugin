@@ -8,3 +8,5 @@ build/
 build_test/
 
 .idea/workspace.xml
+
+intellij-go.jar
