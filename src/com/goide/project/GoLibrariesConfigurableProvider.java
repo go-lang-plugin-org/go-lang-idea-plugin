@@ -116,19 +116,21 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
                                                                }
                                                              });
         result.add(new GoLibrariesConfigurable("Global libraries", GoApplicationLibrariesService.getInstance(), urlsFromEnv));
-        result.add(new GoLibrariesConfigurable("Project libraries", GoProjectLibrariesService.getInstance(myProject)));
-        result.add(new ModuleAwareProjectConfigurable(myProject, "Module libraries", "Module libraries") {
-          @Override
-          protected boolean isSuitableForModule(@NotNull Module module) {
-            return GoSdkUtil.isAppropriateModule(module);
-          }
+        if (!myProject.isDefault()) {
+          result.add(new GoLibrariesConfigurable("Project libraries", GoProjectLibrariesService.getInstance(myProject)));
+          result.add(new ModuleAwareProjectConfigurable(myProject, "Module libraries", "Module libraries") {
+            @Override
+            protected boolean isSuitableForModule(@NotNull Module module) {
+              return GoSdkUtil.isAppropriateModule(module);
+            }
 
-          @NotNull
-          @Override
-          protected UnnamedConfigurable createModuleConfigurable(@NotNull Module module) {
-            return new GoLibrariesConfigurable("Module libraries", GoModuleLibrariesService.getInstance(module));
-          }
-        });
+            @NotNull
+            @Override
+            protected UnnamedConfigurable createModuleConfigurable(@NotNull Module module) {
+              return new GoLibrariesConfigurable("Module libraries", GoModuleLibrariesService.getInstance(module));
+            }
+          });
+        }
         return result;
       }
 

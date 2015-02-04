@@ -60,7 +60,7 @@
     <applicationService serviceImplementation="com.goide.project.GoApplicationLibrariesService"/>
     <projectService serviceImplementation="com.goide.project.GoProjectLibrariesService"/>
     <moduleService serviceImplementation="com.goide.project.GoModuleLibrariesService"/>
-    <projectConfigurable groupId="language" provider="com.goide.project.GoLibrariesConfigurableProvider" nonDefaultProject="true"/>
+    <projectConfigurable groupId="language" provider="com.goide.project.GoLibrariesConfigurableProvider"/>
     
     <defaultLiveTemplatesProvider implementation="com.goide.template.GoLiveTemplatesProvider"/>
     <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$GoEverywhereContextType"/>
