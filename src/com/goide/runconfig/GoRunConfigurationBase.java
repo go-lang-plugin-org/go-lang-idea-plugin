@@ -32,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.Collection;
 
+// TODO IDEA 15: reimplement storing configurations with SmartSerializer
 public abstract class GoRunConfigurationBase<RunningState extends GoRunningState>
   extends ModuleBasedConfiguration<GoModuleBasedConfiguration> implements RunConfigurationWithSuppressedDefaultRunAction {
   @NotNull protected String myParams = "";
