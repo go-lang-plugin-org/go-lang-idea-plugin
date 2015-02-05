@@ -75,7 +75,7 @@ public class GoFmtCheckinFactory extends CheckinHandlerFactory {
           FileDocumentManager.getInstance().saveAllDocuments();
           for (PsiFile file : getPsiFiles()) {
             try {
-              GoFmtFileAction.doFmt(file, file.getProject(), file.getVirtualFile(), null);
+              new GoFmtFileAction().doSomething(file, file.getProject(), file.getVirtualFile(), "");
             }
             catch (ExecutionException ignored) {
             }
