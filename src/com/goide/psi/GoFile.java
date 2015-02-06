@@ -194,7 +194,7 @@ public class GoFile extends PsiFileBase {
         }
       }
       else {
-        String key = PathUtil.getFileName(string.getPath());
+        String key = spec.getLocalPackageName();
         if (!StringUtil.isEmpty(key)) {
           map.putValue(key, spec);
         }

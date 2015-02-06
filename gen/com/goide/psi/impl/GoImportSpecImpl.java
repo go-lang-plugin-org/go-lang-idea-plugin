@@ -49,4 +49,8 @@ public class GoImportSpecImpl extends GoNamedElementImpl<GoImportSpecStub> imple
     return GoPsiImplUtil.getAlias(this);
   }
 
+  public String getLocalPackageName() {
+    return GoPsiImplUtil.getLocalPackageName(this);
+  }
+
 }

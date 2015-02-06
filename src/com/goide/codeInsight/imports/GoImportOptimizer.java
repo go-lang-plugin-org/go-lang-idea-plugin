@@ -26,7 +26,6 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.PathUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
 import org.jetbrains.annotations.NotNull;
@@ -82,8 +81,7 @@ public class GoImportOptimizer implements ImportOptimizer {
     for (PsiElement importEntry : importMap.values()) {
       GoImportSpec importSpec = getImportSpec(importEntry);
       if (importSpec != null) {
-        String importText = importSpec.getImportString().getText();
-        String localPackageName = PathUtil.getFileName(StringUtil.unquoteString(importText));
+        String localPackageName = importSpec.getLocalPackageName();
         if (!StringUtil.isEmpty(localPackageName)) {
           PsiElement identifier = importSpec.getIdentifier();
           if (identifier != null) {

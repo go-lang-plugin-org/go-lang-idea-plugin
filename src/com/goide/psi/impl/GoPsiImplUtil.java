@@ -50,6 +50,7 @@ import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Function;
+import com.intellij.util.PathUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.NotNull;
@@ -198,7 +199,7 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoNamedSignatureOwner f,
-                                                                  boolean showPkg,
+                                                                  boolean showPackage,
                                                                   @Nullable InsertHandler<LookupElement> h) {
     Icon icon = f instanceof GoMethodDeclaration || f instanceof GoMethodSpec ? GoIcons.METHOD : GoIcons.FUNCTION;
     GoSignature signature = f.getSignature();
@@ -216,7 +217,7 @@ public class GoPsiImplUtil {
                                            paramsCount == 0
                                            ? ParenthesesInsertHandler.NO_PARAMETERS
                                            : ParenthesesInsertHandler.WITH_PARAMETERS;
-    String pkg = showPkg ? StringUtil.notNullize(f.getContainingFile().getPackageName()) : "";
+    String pkg = showPackage ? StringUtil.notNullize(f.getContainingFile().getPackageName()) : "";
     pkg = pkg.isEmpty() ? pkg : pkg + ".";
     return PrioritizedLookupElement.withPriority(
       LookupElementBuilder
@@ -229,7 +230,7 @@ public class GoPsiImplUtil {
         .withLookupString(StringUtil.notNullize(f.getName(), "").toLowerCase())
         .withLookupString(pkg + f.getName())
         .withPresentableText(pkg + f.getName() + paramText),
-      showPkg ? GoCompletionUtil.FUNCTION_WITH_PACKAGE_PRIORITY : GoCompletionUtil.FUNCTION_PRIORITY
+      showPackage ? GoCompletionUtil.FUNCTION_WITH_PACKAGE_PRIORITY : GoCompletionUtil.FUNCTION_PRIORITY
     );
   }
 
@@ -256,9 +257,9 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static LookupElement createTypeLookupElement(@NotNull GoTypeSpec t,
-                                                      boolean showPkg,
+                                                      boolean showPackage,
                                                       @Nullable InsertHandler<LookupElement> handler) {
-    String pkg = showPkg ? StringUtil.notNullize(t.getContainingFile().getPackageName()) : "";
+    String pkg = showPackage ? StringUtil.notNullize(t.getContainingFile().getPackageName()) : "";
     pkg = pkg.isEmpty() ? pkg : pkg + ".";
     return PrioritizedLookupElement.withPriority(
       LookupElementBuilder.
@@ -269,7 +270,7 @@ public class GoPsiImplUtil {
         .withPresentableText(pkg + t.getName())
         .withInsertHandler(handler)
         .withIcon(GoIcons.TYPE),
-      GoCompletionUtil.TYPE_PRIORITY);
+      showPackage ? GoCompletionUtil.TYPE_WITHOUT_PACKAGE_PRIORITY : GoCompletionUtil.TYPE_PRIORITY);
   }
 
   @NotNull
@@ -875,6 +876,14 @@ public class GoPsiImplUtil {
     assert rParen != null;
     declaration.addBefore(GoElementFactory.createNewLine(declaration.getProject()), rParen);
     return (GoImportSpec)declaration.addBefore(GoElementFactory.createImportSpec(declaration.getProject(), packagePath, alias), rParen);
+  }
+
+  public static String getLocalPackageName(@NotNull GoImportSpec importSpec) {
+    return getLocalPackageName(importSpec.getImportString().getPath());
+  }
+  
+  public static String getLocalPackageName(@NotNull String importPath) {
+    return PathUtil.getFileName(importPath);
   }
 
   public static String getAlias(@NotNull GoImportSpec importSpec) {

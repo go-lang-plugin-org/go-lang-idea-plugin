@@ -19,9 +19,10 @@ package com.goide.completion;
 public class GoCompletionUtil {
   public static final int KEYWORD_PRIORITY = 20;
   public static final int CONTEXT_KEYWORD_PRIORITY = 25;
-  public static final int FUNCTION_PRIORITY = 10;
   public static final int FUNCTION_WITH_PACKAGE_PRIORITY = 0;
-  public static final int TYPE_PRIORITY = 15;
+  public static final int FUNCTION_PRIORITY = FUNCTION_WITH_PACKAGE_PRIORITY + 10;
+  public static final int TYPE_WITHOUT_PACKAGE_PRIORITY = 5;
+  public static final int TYPE_PRIORITY = TYPE_WITHOUT_PACKAGE_PRIORITY + 10;
   public static final int TYPE_CONVERSION = 15;
   public static final int VAR_PRIORITY = 15;
   public static final int LABEL_PRIORITY = 15;

@@ -17,6 +17,7 @@
 package com.goide.runconfig.testing;
 
 import com.goide.psi.GoFile;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.runconfig.GoModuleBasedConfiguration;
 import com.goide.runconfig.GoRunConfigurationBase;
 import com.goide.runconfig.GoRunner;
@@ -102,7 +103,7 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
         Module module = configurationModule.getModule();
         assert module != null;
         final GlobalSearchScope scope = GoUtil.moduleScope(module);
-        String packageName = PathUtil.getFileName(myPackage);
+        String packageName = GoPsiImplUtil.getLocalPackageName(myPackage);
         Collection<GoFile> files = StubIndex.getElements(GoPackagesIndex.KEY, packageName, getProject(), scope, GoFile.class);
         for (GoFile file : files) {
           if (file != null && file.getFullPackageName() != null) return;
