@@ -166,20 +166,21 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
     Editor editor = context.getEditor();
     Document document = editor.getDocument();
 
-    String packageToInsert = element.getContainingFile().getPackageName();
-    String full = element.getContainingFile().getFullPackageName();
-    if (packageToInsert == null || full == null) return;
+    String fullPackageName = element.getContainingFile().getFullPackageName();
+    if (StringUtil.isEmpty(fullPackageName)) return;
     
-    GoImportSpec existingImport = ((GoFile)file).getImportedPackagesMap().get(full);
-    if (existingImport != null) {
-      packageToInsert = existingImport.getDot() == null ? existingImport.getLocalPackageName(true) : null;
-    }
+    GoImportSpec existingImport = ((GoFile)file).getImportedPackagesMap().get(fullPackageName);
+    String packageToInsert = existingImport == null 
+                             ? element.getContainingFile().getPackageName() 
+                             : existingImport.getLocalPackageName(true);
 
+    if (StringUtil.isEmpty(packageToInsert)) return;
+    
     document.insertString(context.getStartOffset(), packageToInsert + ".");
     PsiDocumentManager.getInstance(context.getProject()).commitDocument(document);
 
     if (existingImport == null) {
-      ((GoFile)file).addImport(full, null);
+      ((GoFile)file).addImport(fullPackageName, null);
     }
   }
 }
