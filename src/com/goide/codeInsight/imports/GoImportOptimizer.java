@@ -186,7 +186,7 @@ public class GoImportOptimizer implements ImportOptimizer {
     for (PsiElement duplicateCandidate : importsWithSameName) {
       GoImportSpec importSpec = getImportSpec(duplicateCandidate);
       if (importSpec != null) {
-        importsWithSameString.putValue(importSpec.getImportString().getText(), importSpec);
+        importsWithSameString.putValue(importSpec.getImportString().getPath(), importSpec);
       }
     }
     return importsWithSameString;

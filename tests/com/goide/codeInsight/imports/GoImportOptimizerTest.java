@@ -28,6 +28,7 @@ public class GoImportOptimizerTest extends GoCodeInsightFixtureTestCase {
   public void testUnusedImplicitImports() { doTest(); }
   public void testUsedImplicitImports() { doTest(); }
   public void testUsedDuplicatedImports() { doTest(); } 
+  public void testDuplicatedImportsWithSameStringAndDifferentQuotes() { doTest(); } 
   public void testDuplicatedImportsWithSameString() { doTest(); } 
   public void testDuplicatedImportsWithDifferentString() { doTest(); } 
   public void testUnusedDuplicatedImports() { doTest(); }
