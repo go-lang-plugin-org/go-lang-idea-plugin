@@ -80,7 +80,7 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
               ProblemHighlightType type = reference.getRangeInElement().isEmpty() ? GENERIC_ERROR_OR_WARNING : LIKE_UNKNOWN_SYMBOL;
               holder.registerProblem(reference, ProblemsHolder.unresolvedReferenceMessage(reference), type);
             }
-            else if (resolveResults.length > 1) {
+            else if (resolveResults.length > 1 && ((FileReference)reference).isLast()) {
               holder.registerProblem(reference, "Resolved to several targets", GENERIC_ERROR_OR_WARNING);
             }
           }

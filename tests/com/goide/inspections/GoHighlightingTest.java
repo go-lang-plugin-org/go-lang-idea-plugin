@@ -5,7 +5,13 @@ import com.goide.inspections.unresolved.GoAssignmentToConstantInspection;
 import com.goide.inspections.unresolved.GoUnresolvedReferenceInspection;
 import com.goide.inspections.unresolved.GoUnusedFunctionInspection;
 import com.goide.inspections.unresolved.GoUnusedVariableInspection;
+import com.goide.project.GoModuleLibrariesService;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.LightProjectDescriptor;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   @Override
@@ -63,6 +69,18 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testFuncCall()    { doTest(); }
   public void testBackticks()   { doTest(); }
   public void testConsts()      { doTest(); }
+  
+  public void testDoNotReportNonLastMultiResolvedImport() throws IOException {
+    final VirtualFile root1 = myFixture.getTempDirFixture().findOrCreateDir("root1");
+    final VirtualFile root2 = myFixture.getTempDirFixture().findOrCreateDir("root2");
+    final List<String> rootUrls = Arrays.asList(root1.getUrl(), root2.getUrl());
+    
+    myFixture.getTempDirFixture().findOrCreateDir("root1/src/to_import/unique");
+    myFixture.getTempDirFixture().findOrCreateDir("root1/src/to_import/shared");
+    myFixture.getTempDirFixture().findOrCreateDir("root2/src/to_import/shared");
+    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(rootUrls);
+    doTest();
+  }
   
   public void testLocalScope() {
     myFixture.configureByText("a.go", "package foo; func bar() {}");
