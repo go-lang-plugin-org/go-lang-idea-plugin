@@ -18,7 +18,6 @@ package com.goide.codeInsight.imports;
 
 import com.goide.GoIcons;
 import com.goide.psi.GoFile;
-import com.goide.psi.GoImportList;
 import com.goide.psi.GoReferenceExpression;
 import com.goide.psi.GoTypeReferenceExpression;
 import com.goide.stubs.index.GoPackagesIndex;
@@ -218,10 +217,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
 
   private static void perform(@NotNull PsiFile file, @Nullable String firstItem) {
     if (file instanceof GoFile && firstItem != null) {
-      GoImportList importList = ((GoFile)file).getImportList();
-      if (importList != null) {
-        importList.addImport(firstItem, null);
-      }
+      ((GoFile)file).addImport(firstItem, null);
     }
   }
 }

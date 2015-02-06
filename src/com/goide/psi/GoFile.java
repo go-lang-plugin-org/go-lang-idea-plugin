@@ -166,6 +166,14 @@ public class GoFile extends PsiFileBase {
       }
     });
   }
+  
+  public GoImportSpec addImport(String path, String alias) {
+    GoImportList importList = getImportList();
+    if (importList != null) {
+      return importList.addImport(path, alias);
+    }
+    return null;
+  }
 
   /**
    * @return map like { full package name -> import spec } for file

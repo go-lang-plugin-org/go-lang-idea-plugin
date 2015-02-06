@@ -180,10 +180,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
     PsiDocumentManager.getInstance(context.getProject()).commitDocument(document);
 
     if (existingImport == null) {
-      GoImportList list = ((GoFile)file).getImportList();
-      if (list != null) {
-        list.addImport(full, null);
-      }
+      ((GoFile)file).addImport(full, null);
     }
   }
 }

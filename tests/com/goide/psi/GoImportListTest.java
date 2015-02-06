@@ -12,8 +12,7 @@ public class GoImportListTest extends GoCodeInsightFixtureTestCase {
   
   private void doAddImportTest() {
     myFixture.configureByFile(getTestName(true) + ".go");
-    //noinspection ConstantConditions
-    ((GoFile)myFixture.getFile()).getImportList().addImport("package/path", null);
+    ((GoFile)myFixture.getFile()).addImport("package/path", null);
     myFixture.checkResultByFile(getTestName(true) + "_after.go");
   }
 
