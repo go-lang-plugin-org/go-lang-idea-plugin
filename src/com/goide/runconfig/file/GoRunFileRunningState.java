@@ -27,7 +27,6 @@ import com.intellij.execution.filters.TextConsoleBuilder;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.util.PathUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,11 +40,9 @@ public class GoRunFileRunningState extends GoRunningState {
 
   @NotNull
   @Override
-  protected GeneralCommandLine getCommand(@NotNull Sdk sdk) throws ExecutionException {
+  protected GeneralCommandLine getCommand(String sdkHomePath) throws ExecutionException {
     GeneralCommandLine commandLine = new GeneralCommandLine();
-    String sdkHome = sdk.getHomePath();
-    assert sdkHome != null;
-    String executable = GoEnvironmentUtil.getExecutableForSdk(sdkHome).getAbsolutePath();
+    String executable = GoEnvironmentUtil.getExecutableForSdk(sdkHomePath).getAbsolutePath();
     commandLine.getEnvironment().put(GoConstants.GO_PATH, GoSdkUtil.retrieveGoPath(myModule));
     commandLine.setExePath(executable);
     ParametersList list = commandLine.getParametersList();

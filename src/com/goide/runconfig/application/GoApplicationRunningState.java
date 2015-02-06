@@ -25,8 +25,8 @@ import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.compiler.CompilerPaths;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.PathUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,12 +40,13 @@ public class GoApplicationRunningState extends GoRunningState {
 
   @NotNull
   @Override
-  protected GeneralCommandLine getCommand(@NotNull Sdk sdk) throws ExecutionException {
+  protected GeneralCommandLine getCommand(@NotNull String sdkHomePath) throws ExecutionException {
     GeneralCommandLine commandLine = new GeneralCommandLine();
-    String homePath = sdk.getHomePath();
-    assert homePath != null;
     String outputDirectory = CompilerPaths.getModuleOutputPath(myModule, false);
-    assert outputDirectory != null;
+    if (StringUtil.isEmpty(outputDirectory)) {
+      throw new ExecutionException("Output directory is not set for module " + myModule.getName());
+    }
+    
     String modulePath = PathUtil.getParentPath(myModule.getModuleFilePath());
     String executable = FileUtil.toSystemDependentName(GoEnvironmentUtil.getExecutableResultForModule(modulePath, outputDirectory));
     commandLine.setExePath(executable);

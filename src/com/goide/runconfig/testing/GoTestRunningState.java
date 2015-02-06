@@ -32,7 +32,6 @@ import com.intellij.execution.testframework.autotest.ToggleAutoTestAction;
 import com.intellij.execution.testframework.sm.SMTestRunnerConnectionUtil;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFileManager;
@@ -66,11 +65,8 @@ public class GoTestRunningState extends GoRunningState {
 
   @NotNull
   @Override
-  protected GeneralCommandLine getCommand(@NotNull Sdk sdk) throws ExecutionException {
-    String homePath = sdk.getHomePath();
-    assert homePath != null;
-
-    String executable = GoEnvironmentUtil.getExecutableForSdk(sdk.getHomePath()).getAbsolutePath();
+  protected GeneralCommandLine getCommand(String sdkHomePath) throws ExecutionException {
+    String executable = GoEnvironmentUtil.getExecutableForSdk(sdkHomePath).getAbsolutePath();
 
     GeneralCommandLine installDependencies = new GeneralCommandLine();
     installDependencies.setExePath(executable);

@@ -25,6 +25,7 @@ import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.util.text.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class GoRunningState extends CommandLineState {
@@ -39,11 +40,19 @@ public abstract class GoRunningState extends CommandLineState {
   @Override
   protected ProcessHandler startProcess() throws ExecutionException {
     Sdk sdk = ModuleRootManager.getInstance(myModule).getSdk();
-    assert sdk != null;
-    GeneralCommandLine commandLine = getCommand(sdk);
+    if (sdk == null) {
+      throw new ExecutionException("Sdk is not set for module " + myModule.getName());
+    }
+    
+    final String sdkHomePath = sdk.getHomePath();
+    if (StringUtil.isEmpty(sdkHomePath)) {
+      throw new ExecutionException("Sdk home path is empty for module " + myModule.getName());
+    }
+    
+    GeneralCommandLine commandLine = getCommand(sdkHomePath);
     return new OSProcessHandler(commandLine.createProcess(), commandLine.getCommandLineString());
   }
 
   @NotNull
-  protected abstract GeneralCommandLine getCommand(@NotNull Sdk sdk) throws ExecutionException;
+  protected abstract GeneralCommandLine getCommand(String sdkHomePath) throws ExecutionException;
 }
