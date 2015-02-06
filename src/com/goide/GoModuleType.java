@@ -29,15 +29,13 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 
 public class GoModuleType extends ModuleType<GoModuleBuilder> {
-  public static final String MODULE_TYPE_ID = "GO_MODULE";
-
   public GoModuleType() {
-    super(MODULE_TYPE_ID);
+    super(GoConstants.MODULE_TYPE_ID);
   }
 
   @NotNull
   public static GoModuleType getInstance() {
-    return (GoModuleType)ModuleTypeManager.getInstance().findByID(MODULE_TYPE_ID);
+    return (GoModuleType)ModuleTypeManager.getInstance().findByID(GoConstants.MODULE_TYPE_ID);
   }
 
   @NotNull

@@ -1,5 +1,6 @@
 package com.goide.jps.model;
 
+import com.goide.GoConstants;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,13 +15,10 @@ import java.util.Collections;
 import java.util.List;
 
 public class JpsGoModelSerializerExtension extends JpsModelSerializerExtension {
-  public static final String GO_SDK_TYPE_ID = "Go SDK";
-  private static final String GO_MODULE_TYPE_ID = "GO_MODULE";
-
   @NotNull
   @Override
   public List<? extends JpsModulePropertiesSerializer<?>> getModulePropertiesSerializers() {
-    return Collections.singletonList(new JpsModulePropertiesSerializer<JpsDummyElement>(JpsGoModuleType.INSTANCE, GO_MODULE_TYPE_ID, null) {
+    return Collections.singletonList(new JpsModulePropertiesSerializer<JpsDummyElement>(JpsGoModuleType.INSTANCE, GoConstants.MODULE_TYPE_ID, null) {
       @NotNull
       @Override
       public JpsDummyElement loadProperties(@Nullable Element componentElement) {
@@ -36,7 +34,7 @@ public class JpsGoModelSerializerExtension extends JpsModelSerializerExtension {
   @NotNull
   @Override
   public List<? extends JpsSdkPropertiesSerializer<?>> getSdkPropertiesSerializers() {
-    return Collections.singletonList(new JpsSdkPropertiesSerializer<JpsDummyElement>(GO_SDK_TYPE_ID, JpsGoSdkType.INSTANCE) {
+    return Collections.singletonList(new JpsSdkPropertiesSerializer<JpsDummyElement>(GoConstants.SDK_TYPE_ID, JpsGoSdkType.INSTANCE) {
       @NotNull
       @Override
       public JpsDummyElement loadProperties(@Nullable Element propertiesElement) {

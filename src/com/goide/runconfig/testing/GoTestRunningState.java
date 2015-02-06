@@ -16,7 +16,7 @@
 
 package com.goide.runconfig.testing;
 
-import com.goide.jps.model.JpsGoSdkType;
+import com.goide.GoEnvironmentUtil;
 import com.goide.runconfig.GoRunningState;
 import com.intellij.execution.DefaultExecutionResult;
 import com.intellij.execution.ExecutionException;
@@ -70,7 +70,7 @@ public class GoTestRunningState extends GoRunningState {
     String homePath = sdk.getHomePath();
     assert homePath != null;
 
-    String executable = JpsGoSdkType.getGoExecutableFile(sdk.getHomePath()).getAbsolutePath();
+    String executable = GoEnvironmentUtil.getExecutableForSdk(sdk.getHomePath()).getAbsolutePath();
 
     GeneralCommandLine installDependencies = new GeneralCommandLine();
     installDependencies.setExePath(executable);

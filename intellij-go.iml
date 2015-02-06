@@ -13,7 +13,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="jps-plugin" />
+    <orderEntry type="module" module-name="utils" />
   </component>
 </module>
 

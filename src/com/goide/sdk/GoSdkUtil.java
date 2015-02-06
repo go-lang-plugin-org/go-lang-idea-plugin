@@ -16,6 +16,7 @@
 
 package com.goide.sdk;
 
+import com.goide.GoConstants;
 import com.goide.GoModuleType;
 import com.goide.project.GoLibrariesService;
 import com.goide.psi.GoFile;
@@ -49,7 +50,6 @@ import java.util.List;
 import java.util.Set;
 
 public class GoSdkUtil {
-  public static final String GOPATH = "GOPATH";
 
   @Nullable
   public static VirtualFile getSdkSrcDir(@NotNull PsiElement context) {
@@ -135,8 +135,8 @@ public class GoSdkUtil {
   
   @Nullable
   private static String retrieveGoPathFromEnvironment() {
-    String path = EnvironmentUtil.getValue(GOPATH);
-    return path != null ? path : PathMacros.getInstance().getValue(GOPATH);
+    String path = EnvironmentUtil.getValue(GoConstants.GO_PATH);
+    return path != null ? path : PathMacros.getInstance().getValue(GoConstants.GO_PATH);
   }
 
   @NotNull

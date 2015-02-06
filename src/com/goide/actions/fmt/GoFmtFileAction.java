@@ -16,7 +16,7 @@
 
 package com.goide.actions.fmt;
 
-import com.goide.jps.model.JpsGoSdkType;
+import com.goide.GoEnvironmentUtil;
 import com.goide.sdk.GoSdkType;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
@@ -62,7 +62,7 @@ public class GoFmtFileAction extends GoExternalToolsAction {
       return true;
     }
 
-    File executable = JpsGoSdkType.getGoExecutableFile(sdkHome);
+    File executable = GoEnvironmentUtil.getExecutableForSdk(sdkHome);
 
     commandLine.setExePath(executable.getAbsolutePath());
     commandLine.addParameters("fmt", filePath);

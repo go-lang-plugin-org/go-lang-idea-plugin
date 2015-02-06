@@ -16,7 +16,7 @@
 
 package com.goide.runconfig.application;
 
-import com.goide.jps.model.JpsGoSdkType;
+import com.goide.GoEnvironmentUtil;
 import com.goide.runconfig.GoRunningState;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
@@ -47,7 +47,7 @@ public class GoApplicationRunningState extends GoRunningState {
     String outputDirectory = CompilerPaths.getModuleOutputPath(myModule, false);
     assert outputDirectory != null;
     String modulePath = PathUtil.getParentPath(myModule.getModuleFilePath());
-    String executable = FileUtil.toSystemDependentName(JpsGoSdkType.getBinaryPathByModulePath(modulePath, outputDirectory));
+    String executable = FileUtil.toSystemDependentName(GoEnvironmentUtil.getExecutableResultForModule(modulePath, outputDirectory));
     commandLine.setExePath(executable);
     commandLine.getParametersList().addParametersString(myConfiguration.getParams());
     commandLine.withWorkDirectory(PathUtil.getParentPath(executable));

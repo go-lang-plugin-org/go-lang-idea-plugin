@@ -1,5 +1,6 @@
 package com.goide.jps.builder;
 
+import com.goide.GoEnvironmentUtil;
 import com.goide.jps.model.JpsGoModuleType;
 import com.goide.jps.model.JpsGoSdkType;
 import com.intellij.execution.ExecutionException;
@@ -53,8 +54,7 @@ public class GoBuilder extends TargetBuilder<GoSourceRootDescriptor, GoTarget> {
 
     JpsModule module = target.getModule();
     JpsSdk<JpsDummyElement> sdk = getSdk(context, module);
-    File executable = JpsGoSdkType.getGoExecutableFile(sdk.getHomePath());
-
+    File executable = GoEnvironmentUtil.getExecutableForSdk(sdk.getHomePath());
     File outputDirectory = getBuildOutputDirectory(module, target.isTests(), context);
 
     for (String contentRootUrl : module.getContentRootsList().getUrls()) {
@@ -63,7 +63,7 @@ public class GoBuilder extends TargetBuilder<GoSourceRootDescriptor, GoTarget> {
       commandLine.withWorkDirectory(contentRootPath);
       commandLine.setExePath(executable.getAbsolutePath());
       commandLine.addParameter("build");
-      commandLine.addParameters("-o", JpsGoSdkType.getBinaryPathByModulePath(contentRootPath, outputDirectory.getAbsolutePath()));
+      commandLine.addParameters("-o", FileUtil.toSystemDependentName(GoEnvironmentUtil.getExecutableResultForModule(contentRootPath, outputDirectory.getAbsolutePath())));
       runBuildProcess(context, commandLine, contentRootPath);
     }
   }

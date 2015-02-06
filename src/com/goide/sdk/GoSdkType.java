@@ -16,9 +16,9 @@
 
 package com.goide.sdk;
 
+import com.goide.GoConstants;
+import com.goide.GoEnvironmentUtil;
 import com.goide.GoIcons;
-import com.goide.jps.model.JpsGoModelSerializerExtension;
-import com.goide.jps.model.JpsGoSdkType;
 import com.intellij.execution.configurations.PathEnvironmentVariableUtil;
 import com.intellij.openapi.projectRoots.*;
 import com.intellij.openapi.roots.OrderRootType;
@@ -42,12 +42,14 @@ public class GoSdkType extends SdkType {
   private static final Pattern RE_GO_VERSION = Pattern.compile("theVersion\\s*=\\s*`go(.*)`");
 
   public GoSdkType() {
-    super(JpsGoModelSerializerExtension.GO_SDK_TYPE_ID);
+    super(GoConstants.SDK_TYPE_ID);
   }
 
   @NotNull
   public static GoSdkType getInstance() {
-    return SdkType.findInstance(GoSdkType.class);
+    final GoSdkType instance = SdkType.findInstance(GoSdkType.class);
+    assert instance != null;
+    return instance;
   }
 
   @NotNull
@@ -106,7 +108,7 @@ public class GoSdkType extends SdkType {
   @Override
   public boolean isValidSdkHome(@NotNull String path) {
     path = adjustSdkPath(path);
-    return JpsGoSdkType.getGoExecutableFile(path).canExecute();
+    return GoEnvironmentUtil.getExecutableForSdk(path).canExecute();
   }
 
   @NotNull

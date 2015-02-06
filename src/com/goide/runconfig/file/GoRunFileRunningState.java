@@ -16,7 +16,8 @@
 
 package com.goide.runconfig.file;
 
-import com.goide.jps.model.JpsGoSdkType;
+import com.goide.GoConstants;
+import com.goide.GoEnvironmentUtil;
 import com.goide.runconfig.GoRunningState;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.execution.ExecutionException;
@@ -42,10 +43,10 @@ public class GoRunFileRunningState extends GoRunningState {
   @Override
   protected GeneralCommandLine getCommand(@NotNull Sdk sdk) throws ExecutionException {
     GeneralCommandLine commandLine = new GeneralCommandLine();
-    String homePath = sdk.getHomePath();
-    assert homePath != null;
-    String executable = JpsGoSdkType.getGoExecutableFile(homePath).getAbsolutePath();
-    commandLine.getEnvironment().put(GoSdkUtil.GOPATH, GoSdkUtil.retrieveGoPath(myModule));
+    String sdkHome = sdk.getHomePath();
+    assert sdkHome != null;
+    String executable = GoEnvironmentUtil.getExecutableForSdk(sdkHome).getAbsolutePath();
+    commandLine.getEnvironment().put(GoConstants.GO_PATH, GoSdkUtil.retrieveGoPath(myModule));
     commandLine.setExePath(executable);
     ParametersList list = commandLine.getParametersList();
     list.add("run");
