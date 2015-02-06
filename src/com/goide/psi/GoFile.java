@@ -189,16 +189,16 @@ public class GoFile extends PsiFileBase {
   public MultiMap<String, GoImportSpec> getImportMap() {
     MultiMap<String, GoImportSpec> map = MultiMap.create();
     for (GoImportSpec spec : getImports()) {
-      GoImportString string = spec.getImportString();
-      PsiElement identifier = spec.getIdentifier();
-      if (identifier != null) {
-        map.putValue(identifier.getText(), spec);
+      String alias = spec.getAlias();
+      if (alias != null) {
+        map.putValue(alias, spec);
         continue;
       }
       if (spec.getDot() != null) {
         map.putValue(".", spec);
         continue;
       }
+      GoImportString string = spec.getImportString();
       PsiDirectory dir = string.resolve();
       final Collection<String> packagesInDirectory = getAllPackagesInDirectory(dir);
       if (!packagesInDirectory.isEmpty()) {
@@ -209,7 +209,7 @@ public class GoFile extends PsiFileBase {
         }
       }
       else {
-        String key = spec.getLocalPackageName();
+        String key = spec.getLocalPackageName(false);
         if (!StringUtil.isEmpty(key)) {
           map.putValue(key, spec);
         }

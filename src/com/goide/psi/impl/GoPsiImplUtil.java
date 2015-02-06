@@ -878,7 +878,13 @@ public class GoPsiImplUtil {
     return (GoImportSpec)declaration.addBefore(GoElementFactory.createImportSpec(declaration.getProject(), packagePath, alias), rParen);
   }
 
-  public static String getLocalPackageName(@NotNull GoImportSpec importSpec) {
+  public static String getLocalPackageName(@NotNull GoImportSpec importSpec, boolean treatAliasAsLocalName) {
+    if (treatAliasAsLocalName) {
+      final String alias = importSpec.getAlias();
+      if (alias != null) {
+        return alias;
+      }
+    }
     return getLocalPackageName(importSpec.getImportString().getPath());
   }
   
