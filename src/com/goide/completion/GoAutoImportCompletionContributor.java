@@ -172,7 +172,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
     
     GoImportSpec existingImport = ((GoFile)file).getImportedPackagesMap().get(full);
     if (existingImport != null) {
-      packageToInsert = existingImport.getDot() == null ? existingImport.getLocalPackageName(false) : null;
+      packageToInsert = existingImport.getDot() == null ? existingImport.getLocalPackageName(true) : null;
     }
 
     document.insertString(context.getStartOffset(), packageToInsert + ".");
