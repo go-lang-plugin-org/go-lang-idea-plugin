@@ -16,6 +16,7 @@
 
 package com.goide.psi.impl;
 
+import com.goide.completion.GoCompletionUtil;
 import com.goide.psi.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.util.TextRange;
@@ -119,7 +120,7 @@ public class GoFieldNameReference extends PsiReferenceBase<GoFieldName> {
     if (variants.isEmpty()) return EMPTY_ARRAY;
     Collection<LookupElement> result = ContainerUtil.newArrayList();
     for (GoNamedElement element : variants) {
-      result.add(GoPsiImplUtil.createVariableLikeLookupElement(element));
+      result.add(GoCompletionUtil.createVariableLikeLookupElement(element));
     }
     return ArrayUtil.toObjectArray(result);
   }

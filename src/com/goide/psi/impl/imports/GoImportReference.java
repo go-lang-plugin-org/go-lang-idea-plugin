@@ -16,7 +16,7 @@
 
 package com.goide.psi.impl.imports;
 
-import com.goide.psi.impl.GoPsiImplUtil;
+import com.goide.completion.GoCompletionUtil;
 import com.intellij.codeInsight.completion.CompletionUtil;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.TextRange;
@@ -40,7 +40,7 @@ public class GoImportReference extends FileReference {
   @Override
   protected Object createLookupItem(PsiElement candidate) {
     if (candidate instanceof PsiDirectory) {
-      return GoPsiImplUtil.createDirectoryLookupElement((PsiDirectory)candidate);
+      return GoCompletionUtil.createDirectoryLookupElement((PsiDirectory)candidate);
     }
     return super.createLookupItem(candidate);
   }

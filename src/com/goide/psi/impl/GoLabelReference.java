@@ -16,6 +16,7 @@
 
 package com.goide.psi.impl;
 
+import com.goide.completion.GoCompletionUtil;
 import com.goide.psi.GoBlock;
 import com.goide.psi.GoLabelDefinition;
 import com.goide.psi.GoLabelRef;
@@ -66,7 +67,7 @@ public class GoLabelReference extends PsiReferenceBase<GoLabelRef> {
   public Object[] getVariants() {
     Collection<LookupElement> result = ContainerUtil.newArrayList();
     for (GoLabelDefinition element : getLabelDefinitions()) {
-      result.add(GoPsiImplUtil.createLabelLookupElement(element));
+      result.add(GoCompletionUtil.createLabelLookupElement(element));
     }
     return ArrayUtil.toObjectArray(result);
   }

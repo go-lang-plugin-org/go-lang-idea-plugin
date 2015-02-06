@@ -17,7 +17,6 @@
 package com.goide.completion;
 
 import com.goide.psi.*;
-import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.psi.impl.GoTypeReference;
 import com.goide.stubs.index.GoFunctionIndex;
 import com.goide.stubs.index.GoTypesIndex;
@@ -82,7 +81,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
                   if (existingImport != null && existingImport.getDot() != null) {
                     continue;
                   }
-                  result.addElement(GoPsiImplUtil.createFunctionOrMethodLookupElement(declaration, true, FUNC_INSERT_HANDLER));
+                  result.addElement(GoCompletionUtil.createFunctionOrMethodLookupElement(declaration, true, FUNC_INSERT_HANDLER));
                 }
               }
             }
@@ -106,7 +105,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
                   if (existingImport != null && existingImport.getDot() != null) {
                     continue;
                   }
-                  result.addElement(GoPsiImplUtil.createTypeLookupElement(declaration, true, TYPE_INSERT_HANDLER));
+                  result.addElement(GoCompletionUtil.createTypeLookupElement(declaration, true, TYPE_INSERT_HANDLER));
                 }
               }
             }

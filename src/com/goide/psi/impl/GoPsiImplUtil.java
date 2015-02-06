@@ -16,21 +16,12 @@
 
 package com.goide.psi.impl;
 
-import com.goide.GoIcons;
-import com.goide.completion.BracesInsertHandler;
-import com.goide.completion.GoCompletionUtil;
 import com.goide.psi.*;
 import com.goide.psi.impl.imports.GoImportReferenceSet;
 import com.goide.stubs.GoNamedStub;
 import com.goide.stubs.GoParameterDeclarationStub;
 import com.goide.stubs.GoTypeStub;
 import com.goide.stubs.index.GoMethodIndex;
-import com.goide.util.SingleCharInsertHandler;
-import com.intellij.codeInsight.completion.InsertHandler;
-import com.intellij.codeInsight.completion.PrioritizedLookupElement;
-import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Condition;
@@ -52,11 +43,9 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Function;
 import com.intellij.util.PathUtil;
 import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -111,11 +100,6 @@ public class GoPsiImplUtil {
     GoTopLevelDeclaration declaration = PsiTreeUtil.getTopmostParentOfType(startElement, GoTopLevelDeclaration.class);
     if (declaration == null || !(declaration.getParent() instanceof GoFile)) return null;
     return declaration;
-  }
-
-  private static class Lazy {
-    private static final SingleCharInsertHandler DIR_INSERT_HANDLER = new SingleCharInsertHandler('/');
-    private static final SingleCharInsertHandler PACKAGE_INSERT_HANDLER = new SingleCharInsertHandler('.');
   }
 
   @Nullable
@@ -190,146 +174,6 @@ public class GoPsiImplUtil {
       return processor.execute(o, state);
     }
     return GoCompositeElementImpl.precessDeclarationDefault(o, processor, state, lastParent, place);
-  }
-
-  @NotNull
-  public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoNamedSignatureOwner f) {
-    return createFunctionOrMethodLookupElement(f, false, null);
-  }
-
-  @NotNull
-  public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoNamedSignatureOwner f,
-                                                                  boolean showPackage,
-                                                                  @Nullable InsertHandler<LookupElement> h) {
-    Icon icon = f instanceof GoMethodDeclaration || f instanceof GoMethodSpec ? GoIcons.METHOD : GoIcons.FUNCTION;
-    GoSignature signature = f.getSignature();
-    int paramsCount = 0;
-    String typeText = "";
-    String paramText = "";
-    if (signature != null) {
-      paramsCount = signature.getParameters().getParameterDeclarationList().size();
-      GoResult result = signature.getResult();
-      paramText = signature.getParameters().getText();
-      if (result != null) typeText = result.getText();
-    }
-
-    InsertHandler<LookupElement> handler = h != null ? h :
-                                           paramsCount == 0
-                                           ? ParenthesesInsertHandler.NO_PARAMETERS
-                                           : ParenthesesInsertHandler.WITH_PARAMETERS;
-    String pkg = showPackage ? StringUtil.notNullize(f.getContainingFile().getPackageName()) : "";
-    pkg = pkg.isEmpty() ? pkg : pkg + ".";
-    return PrioritizedLookupElement.withPriority(
-      LookupElementBuilder
-        .create(f)
-        .withIcon(icon)
-        .withInsertHandler(handler)
-        .withTypeText(typeText, true)
-        .withTailText(calcTailText(f), true)
-        .withLookupString(pkg)
-        .withLookupString(StringUtil.notNullize(f.getName(), "").toLowerCase())
-        .withLookupString(pkg + f.getName())
-        .withPresentableText(pkg + f.getName() + paramText),
-      showPackage ? GoCompletionUtil.FUNCTION_WITH_PACKAGE_PRIORITY : GoCompletionUtil.FUNCTION_PRIORITY
-    );
-  }
-
-  @Nullable
-  private static String calcTailText(GoSignatureOwner m) {
-    String text = "";
-    if (m instanceof GoMethodDeclaration) {
-      text = getText(((GoMethodDeclaration)m).getReceiver().getType());
-    }
-    else if (m instanceof GoMethodSpec) {
-      PsiElement parent = m.getParent();
-      if (parent instanceof GoInterfaceType) {
-        text = getText((GoInterfaceType)parent);
-      }
-    }
-    if (!StringUtil.isEmpty(text)) return " " + UIUtil.rightArrow() + " " + text;
-    return null;
-  }
-
-  @NotNull
-  public static LookupElement createTypeLookupElement(@NotNull GoTypeSpec t) {
-    return createTypeLookupElement(t, false, null);
-  }
-
-  @NotNull
-  public static LookupElement createTypeLookupElement(@NotNull GoTypeSpec t,
-                                                      boolean showPackage,
-                                                      @Nullable InsertHandler<LookupElement> handler) {
-    String pkg = showPackage ? StringUtil.notNullize(t.getContainingFile().getPackageName()) : "";
-    pkg = pkg.isEmpty() ? pkg : pkg + ".";
-    return PrioritizedLookupElement.withPriority(
-      LookupElementBuilder.
-        create(t)
-        .withLookupString(pkg)
-        .withLookupString(StringUtil.notNullize(t.getName(), "").toLowerCase())
-        .withLookupString(pkg + t.getName())
-        .withPresentableText(pkg + t.getName())
-        .withInsertHandler(handler)
-        .withIcon(GoIcons.TYPE),
-      showPackage ? GoCompletionUtil.TYPE_WITHOUT_PACKAGE_PRIORITY : GoCompletionUtil.TYPE_PRIORITY);
-  }
-
-  @NotNull
-  public static LookupElement createLabelLookupElement(@NotNull GoLabelDefinition l) {
-    return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(l).withIcon(GoIcons.LABEL),
-                                                 GoCompletionUtil.LABEL_PRIORITY);
-  }
-
-  @NotNull
-  public static LookupElement createTypeConversionLookupElement(@NotNull GoTypeSpec t) {
-    InsertHandler<LookupElement> handler = t.getType() instanceof GoStructType ?
-                                           BracesInsertHandler.ONE_LINER :
-                                           ParenthesesInsertHandler.WITH_PARAMETERS; // todo: check context and place caret in or outside {}
-    return PrioritizedLookupElement.withPriority(
-      LookupElementBuilder
-        .create(t)
-        .withLookupString(StringUtil.notNullize(t.getName(), "").toLowerCase())
-        .withInsertHandler(handler)
-        .withIcon(GoIcons.TYPE),
-      GoCompletionUtil.TYPE_CONVERSION);
-  }
-
-  @NotNull
-  public static LookupElement createVariableLikeLookupElement(@NotNull GoNamedElement v) {
-    Icon icon = v instanceof GoVarDefinition ? GoIcons.VARIABLE :
-                v instanceof GoParamDefinition ? GoIcons.PARAMETER :
-                v instanceof GoFieldDefinition ? GoIcons.FIELD :
-                v instanceof GoReceiver ? GoIcons.RECEIVER :
-                v instanceof GoConstDefinition ? GoIcons.CONST :
-                v instanceof GoAnonymousFieldDefinition ? GoIcons.FIELD :
-                null;
-    GoType type = v.getGoType();
-    String text = getText(type);
-    return PrioritizedLookupElement.withPriority(
-      LookupElementBuilder
-        .create(v)
-        .withLookupString(StringUtil.notNullize(v.getName(), "").toLowerCase())
-        .withIcon(icon)
-        .withTypeText(text, true),
-      GoCompletionUtil.VAR_PRIORITY);
-  }
-
-  @Nullable
-  public static LookupElement createPackageLookupElement(@NotNull GoImportSpec spec) {
-    PsiElement id = spec.getIdentifier();
-    return id != null ? createPackageLookupElement(id.getText(), true) : null;
-  }
-
-  @NotNull
-  public static LookupElement createPackageLookupElement(@NotNull String str, boolean forType) {
-    return PrioritizedLookupElement.withPriority(
-      LookupElementBuilder.create(str).withIcon(GoIcons.PACKAGE).withInsertHandler(forType ? Lazy.PACKAGE_INSERT_HANDLER : null),
-      GoCompletionUtil.PACKAGE_PRIORITY);
-  }
-
-  @NotNull
-  public static LookupElementBuilder createDirectoryLookupElement(@NotNull PsiDirectory dir) {
-    int files = dir.getFiles().length;
-    return LookupElementBuilder.create(dir).withIcon(GoIcons.PACKAGE).withInsertHandler(files == 0 ? Lazy.DIR_INSERT_HANDLER : null);
   }
 
   @Nullable

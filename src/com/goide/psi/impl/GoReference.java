@@ -16,6 +16,7 @@
 
 package com.goide.psi.impl;
 
+import com.goide.completion.GoCompletionUtil;
 import com.goide.psi.*;
 import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.sdk.GoSdkUtil;
@@ -127,11 +128,11 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
       @Nullable
       private LookupElement createLookup(@NotNull PsiElement element) {
         // @formatter:off
-        if (element instanceof GoNamedSignatureOwner)return createFunctionOrMethodLookupElement((GoNamedSignatureOwner)element);
-        else if (element instanceof GoTypeSpec)      return forTypes ? createTypeLookupElement((GoTypeSpec)element) : createTypeConversionLookupElement((GoTypeSpec)element);
-        else if (element instanceof GoImportSpec)    return createPackageLookupElement(((GoImportSpec)element));
-        else if (element instanceof PsiDirectory)    return createPackageLookupElement(((PsiDirectory)element).getName(), true);
-        else if (element instanceof GoNamedElement)  return createVariableLikeLookupElement((GoNamedElement)element);
+        if (element instanceof GoNamedSignatureOwner)return GoCompletionUtil.createFunctionOrMethodLookupElement((GoNamedSignatureOwner)element);
+        else if (element instanceof GoTypeSpec)      return forTypes ? GoCompletionUtil.createTypeLookupElement((GoTypeSpec)element) : GoCompletionUtil.createTypeConversionLookupElement((GoTypeSpec)element);
+        else if (element instanceof GoImportSpec)    return GoCompletionUtil.createPackageLookupElement(((GoImportSpec)element));
+        else if (element instanceof PsiDirectory)    return GoCompletionUtil.createPackageLookupElement(((PsiDirectory)element).getName(), true);
+        else if (element instanceof GoNamedElement)  return GoCompletionUtil.createVariableLikeLookupElement((GoNamedElement)element);
         else if (element instanceof PsiNamedElement) return LookupElementBuilder.create((PsiNamedElement)element);
         // @formatter:on
         return null;

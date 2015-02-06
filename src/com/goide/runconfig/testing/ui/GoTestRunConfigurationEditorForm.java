@@ -17,8 +17,8 @@
 package com.goide.runconfig.testing.ui;
 
 import com.goide.GoModuleType;
+import com.goide.completion.GoCompletionUtil;
 import com.goide.psi.GoFile;
-import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.runconfig.testing.GoTestRunConfiguration;
 import com.goide.stubs.index.GoPackagesIndex;
 import com.goide.util.GoUtil;
@@ -147,7 +147,7 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
                 public boolean process(@NotNull GoFile file) {
                   String fullPackageName = file.getFullPackageName();
                   if (fullPackageName != null) {
-                    result.addElement(GoPsiImplUtil.createPackageLookupElement(fullPackageName, false));
+                    result.addElement(GoCompletionUtil.createPackageLookupElement(fullPackageName, false));
                   }
                   return true;
                 }
