@@ -37,6 +37,8 @@ import com.intellij.psi.stubs.StubIndex;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
+
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public class GoAutoImportCompletionContributor extends CompletionContributor {
@@ -60,6 +62,12 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         PsiElement position = parameters.getPosition();
         PsiElement parent = position.getParent();
         if (parent.getParent() instanceof GoSelectorExpr) return;
+
+        final PsiFile file = parameters.getOriginalFile();
+        if (!(file instanceof GoFile)) return;
+
+        final Map<String, GoImportSpec> importedPackages = ((GoFile)file).getImportedPackagesMap();
+        
         if (parent instanceof GoReferenceExpression) {
           GoReferenceExpression qualifier = ((GoReferenceExpression)parent).getQualifier();
           if (qualifier == null || qualifier.getReference().resolve() == null) {
@@ -69,6 +77,11 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
               if (StringUtil.isCapitalized(name) && !StringUtil.startsWith(name, "Test") && !StringUtil.startsWith(name, "Benchmark")) {
                 for (GoFunctionDeclaration declaration : GoFunctionIndex.find(name, project, GoUtil.moduleScope(position))) {
                   if (!allowed(declaration)) continue;
+                  
+                  GoImportSpec existingImport = importedPackages.get(declaration.getContainingFile().getFullPackageName());
+                  if (existingImport != null && existingImport.getDot() != null) {
+                    continue;
+                  }
                   result.addElement(GoPsiImplUtil.createFunctionOrMethodLookupElement(declaration, true, FUNC_INSERT_HANDLER));
                 }
               }
@@ -84,10 +97,15 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
             for (String name : StubIndex.getInstance().getAllKeys(GoTypesIndex.KEY, project)) {
               if (StringUtil.isCapitalized(name)) {
                 for (GoTypeSpec declaration : GoTypesIndex.find(name, project, GoUtil.moduleScope(position))) {
-                  if (declaration.getContainingFile() == parameters.getOriginalFile()) continue;
+                  if (declaration.getContainingFile() == file) continue;
                   PsiReference reference = parent.getReference();
                   if (reference instanceof GoTypeReference && !((GoTypeReference)reference).allowed(declaration)) continue;
                   if (!allowed(declaration)) continue;
+                  
+                  GoImportSpec existingImport = importedPackages.get(declaration.getContainingFile().getFullPackageName());
+                  if (existingImport != null && existingImport.getDot() != null) {
+                    continue;
+                  }
                   result.addElement(GoPsiImplUtil.createTypeLookupElement(declaration, true, TYPE_INSERT_HANDLER));
                 }
               }
@@ -144,19 +162,28 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
   }
 
   private static void autoImport(@NotNull InsertionContext context, @NotNull GoNamedElement element) {
-    Editor editor = context.getEditor();
-    Document document = editor.getDocument();
-    String name = element.getContainingFile().getPackageName();
-    String full = element.getContainingFile().getFullPackageName();
-    if (name == null || full == null) return;
-    document.insertString(context.getStartOffset(), name + ".");
-    PsiDocumentManager.getInstance(context.getProject()).commitDocument(document);
     PsiFile file = context.getFile();
     if (!(file instanceof GoFile)) return;
-    if (!((GoFile)file).getImportMap().get(name).isEmpty()) return;
-    GoImportList list = ((GoFile)file).getImportList();
-    if (list != null) {
-      list.addImport(full, null);
+    Editor editor = context.getEditor();
+    Document document = editor.getDocument();
+
+    String packageToInsert = element.getContainingFile().getPackageName();
+    String full = element.getContainingFile().getFullPackageName();
+    if (packageToInsert == null || full == null) return;
+    
+    GoImportSpec existingImport = ((GoFile)file).getImportedPackagesMap().get(full);
+    if (existingImport != null) {
+      packageToInsert = existingImport.getDot() == null ? existingImport.getLocalPackageName() : null;
+    }
+
+    document.insertString(context.getStartOffset(), packageToInsert + ".");
+    PsiDocumentManager.getInstance(context.getProject()).commitDocument(document);
+
+    if (existingImport == null) {
+      GoImportList list = ((GoFile)file).getImportList();
+      if (list != null) {
+        list.addImport(full, null);
+      }
     }
   }
 }

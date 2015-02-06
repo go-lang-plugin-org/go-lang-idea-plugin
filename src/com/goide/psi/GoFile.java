@@ -49,10 +49,7 @@ import com.intellij.util.containers.MultiMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class GoFile extends PsiFileBase {
   private static final String MAIN_FUNCTION_NAME = "main";
@@ -166,6 +163,24 @@ public class GoFile extends PsiFileBase {
       @Override
       public Result<List<GoImportSpec>> compute() {
         return Result.create(calcImports(), GoFile.this);
+      }
+    });
+  }
+
+  /**
+   * @return map like { full package name -> import spec } for file
+   */
+  @NotNull
+  public Map<String, GoImportSpec> getImportedPackagesMap() {
+    return CachedValuesManager.getCachedValue(this, new CachedValueProvider<Map<String, GoImportSpec>>() {
+      @Nullable
+      @Override
+      public Result<Map<String, GoImportSpec>> compute() {
+        Map<String, GoImportSpec> map = ContainerUtil.newHashMap();
+        for (GoImportSpec spec : getImports()) {
+          map.put(spec.getImportString().getPath(), spec);
+        }
+        return Result.create(map, GoFile.this);
       }
     });
   }

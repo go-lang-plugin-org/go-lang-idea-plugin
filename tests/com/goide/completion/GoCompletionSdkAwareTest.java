@@ -27,6 +27,25 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "func test(){fmt.Fprintln(<caret>)}");
   }
 
+  public void testAutoImportWithAlias() {
+    doCheckResult("package main; \n" +
+                  "import alias `fmt`\n" +
+                  "func test(){Fprintl<caret>}",
+                  "package main; \n" +
+                  "import alias `fmt`\n" +
+                  "func test(){alias.Fprintln()}");
+  }
+
+  public void testAutoImportWithDotAlias() {
+    doCheckResult("package main; \n" +
+                  "import . `fmt`\n" +
+                  "func test(){Fprintl<caret>}",
+                  "package main; \n" +
+                  "import . `fmt`\n" +
+                  "func test(){Fprintln()}");
+  }
+
+
   public void testDoNothingInsideSelector() {
     doTestVariants(
       "package main\n" +
