@@ -17,10 +17,8 @@
 package com.goide.editor;
 
 import com.goide.GoParserDefinition;
-import com.goide.psi.GoBlock;
-import com.goide.psi.GoFile;
-import com.goide.psi.GoFunctionOrMethodDeclaration;
-import com.goide.psi.GoImportDeclaration;
+import com.goide.GoTypes;
+import com.goide.psi.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.folding.FoldingBuilderEx;
 import com.intellij.lang.folding.FoldingDescriptor;
@@ -28,6 +26,7 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.search.PsiElementProcessor;
 import com.intellij.psi.tree.IElementType;
@@ -48,17 +47,19 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
     GoFile file = (GoFile)root;
     if (!file.isContentsLoaded()) return FoldingDescriptor.EMPTY;
     final Set<PsiElement> processedComments = new HashSet<PsiElement>();
-
-
     final List<FoldingDescriptor> result = ContainerUtil.newArrayList();
 
-    GoImportDeclaration[] imports = PsiTreeUtil.getChildrenOfType(file.getImportList(), GoImportDeclaration.class);
-    if (imports != null) {
-      for (GoImportDeclaration imp : imports) {
-        PsiElement l = imp.getLparen();
-        PsiElement r = imp.getRparen();
-        if (l != null && r != null) {
-          result.add(new FoldingDescriptor(imp, TextRange.create(l.getTextRange().getStartOffset(), r.getTextRange().getEndOffset())));
+    GoImportList importList = ((GoFile)root).getImportList();
+    if (importList != null) {
+      GoImportDeclaration firstImport = ContainerUtil.getFirstItem(importList.getImportDeclarationList());
+      if (firstImport != null) {
+        PsiElement importKeyword = firstImport.getImport();
+        final int startOffset = importKeyword.getNextSibling() instanceof PsiWhiteSpace
+                                ? importKeyword.getTextRange().getEndOffset() + 1
+                                : importKeyword.getTextRange().getEndOffset();
+        TextRange range = TextRange.create(startOffset, importList.getTextRange().getEndOffset());
+        if (!range.isEmpty()) {
+          result.add(new FoldingDescriptor(importList, range));
         }
       }
     }
@@ -126,6 +127,6 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
 
   @Override
   public boolean isCollapsedByDefault(@NotNull ASTNode node) {
-    return false;
+    return node.getElementType() == GoTypes.IMPORT_LIST;
   }
 }
