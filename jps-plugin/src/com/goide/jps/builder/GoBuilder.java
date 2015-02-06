@@ -63,7 +63,8 @@ public class GoBuilder extends TargetBuilder<GoSourceRootDescriptor, GoTarget> {
       commandLine.withWorkDirectory(contentRootPath);
       commandLine.setExePath(executable.getAbsolutePath());
       commandLine.addParameter("build");
-      commandLine.addParameters("-o", FileUtil.toSystemDependentName(GoEnvironmentUtil.getExecutableResultForModule(contentRootPath, outputDirectory.getAbsolutePath())));
+      String outExecutable = GoEnvironmentUtil.getExecutableResultForModule(contentRootPath, outputDirectory.getAbsolutePath());
+      commandLine.addParameters("-o", FileUtil.toSystemDependentName(outExecutable));
       runBuildProcess(context, commandLine, contentRootPath);
     }
   }
