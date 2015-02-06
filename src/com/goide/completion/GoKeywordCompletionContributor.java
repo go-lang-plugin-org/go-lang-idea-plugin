@@ -22,11 +22,13 @@ import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.patterns.ElementPattern;
+import com.intellij.patterns.PatternCondition;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.patterns.PsiFilePattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 
 import static com.goide.completion.GoKeywordCompletionProvider.EMPTY_INSERT_HANDLER;
@@ -94,7 +96,13 @@ public class GoKeywordCompletionContributor extends CompletionContributor {
   }
 
   private static ElementPattern<? extends PsiElement> typeExpression() {
-    return psiElement(GoTypes.IDENTIFIER).withParent(GoTypeReferenceExpression.class);
+    return psiElement(GoTypes.IDENTIFIER).with(new PatternCondition<PsiElement>("non qualified type") {
+      @Override
+      public boolean accepts(@NotNull PsiElement element, ProcessingContext context) {
+        PsiElement parent = element.getParent();
+        return parent instanceof GoTypeReferenceExpression && ((GoTypeReferenceExpression)parent).getQualifier() == null;
+      }
+    });
   }
 
   //private static ElementPattern<? extends PsiElement> insideSwitchStatement() {

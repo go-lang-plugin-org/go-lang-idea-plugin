@@ -231,6 +231,10 @@ public class GoCompletionTest extends GoCompletionTestBase {
   public void testNoMainAnymore() {
     doTestEquals("package foo; func ma<caret> { }");
   }
+  
+  public void testNoChanOrMap() {
+    doTestEquals("package foo; func ma(f int.<caret>) { }");
+  }
 
   public void testPackageBeforeDot() {
     doCheckResult("package foo; import imp \"\"; func foo(a im<caret>.SomeType) {}",
