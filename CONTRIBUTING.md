@@ -62,7 +62,7 @@ in the way we spend time to understand the problems and thus solve them.
 1. Checkout plugin repo and open the project
 1. Setup [IDEA SDK](http://confluence.jetbrains.net/display/IDEADEV/Getting+Started+with+Plugin+Development#GettingStartedwithPluginDevelopment-anchor2):
 select the IDEA installation directory as SDK root (should be named ```IDEA sdk```)
-1.1. If you want to run Go Plugin in WebStorm or in IDEA EAP setup corresponding additional SDKs (should be named  ```WebStorm 9 sdk``` and ```IDEA 14.1 sdk```)
+1. If you want to run Go Plugin in WebStorm or in IDEA EAP setup corresponding additional SDKs (should be named  ```WebStorm 9 sdk``` and ```IDEA 14.1 sdk```)
 1. Setup the right version of [Grammar-Kit](https://www.dropbox.com/s/tqmj3urcnmt22a2/GrammarKit-14-01-2015.zip?dl=0) plugin
 1. Run the **Go** run configuration
 
