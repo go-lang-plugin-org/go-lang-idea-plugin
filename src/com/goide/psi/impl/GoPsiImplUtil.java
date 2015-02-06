@@ -835,11 +835,15 @@ public class GoPsiImplUtil {
     if (lastImportDeclaration != null) {
       List<GoImportSpec> importSpecList = lastImportDeclaration.getImportSpecList();
       if (lastImportDeclaration.getRparen() == null && importSpecList.size() == 1) {
-        return addImportDeclaration(importList, newDeclaration, lastImportDeclaration);
+        GoImportSpec firstItem = ContainerUtil.getFirstItem(importSpecList);
+        assert firstItem != null;
+        String path = firstItem.getImportString().getPath();
+        String oldAlias = firstItem.getAlias();
+        
+        GoImportDeclaration importWithParens = GoElementFactory.createImportDeclaration(project, path, oldAlias, true);
+        lastImportDeclaration = (GoImportDeclaration)lastImportDeclaration.replace(importWithParens);
       }
-      else {
-        return lastImportDeclaration.addImportSpec(packagePath, alias);
-      }
+      return lastImportDeclaration.addImportSpec(packagePath, alias);
     }
     else {
       return addImportDeclaration(importList, newDeclaration, null);
@@ -871,6 +875,18 @@ public class GoPsiImplUtil {
     assert rParen != null;
     declaration.addBefore(GoElementFactory.createNewLine(declaration.getProject()), rParen);
     return (GoImportSpec)declaration.addBefore(GoElementFactory.createImportSpec(declaration.getProject(), packagePath, alias), rParen);
+  }
+
+  public static String getAlias(@NotNull GoImportSpec importSpec) {
+    final PsiElement identifier = importSpec.getIdentifier();
+    if (identifier != null) {
+      return identifier.getText();
+    }
+    final PsiElement dot = importSpec.getDot();
+    if (dot != null) {
+      return ".";
+    }
+    return null;
   }
 
   public static String getPath(@NotNull GoImportString importString) {

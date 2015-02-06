@@ -1,7 +1,8 @@
 package test
 
-import "test"
-import "package/path"
+import (
+"test"
+"package/path")
 
 func hello() string {
   return "hello"

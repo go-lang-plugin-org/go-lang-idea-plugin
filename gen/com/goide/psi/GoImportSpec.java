@@ -18,4 +18,6 @@ public interface GoImportSpec extends GoNamedElement, StubBasedPsiElement<GoImpo
   @Nullable
   PsiElement getIdentifier();
 
+  String getAlias();
+
 }

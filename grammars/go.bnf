@@ -102,6 +102,7 @@ ImportDeclaration ::= import ( ImportSpec | '(' ImportSpecs? ')' ) {
 private ImportSpecs ::= ImportSpec (semi ImportSpec)* semi? {pin=1}
 ImportSpec ::= [ '.' | identifier ] ImportString {
   stubClass="com.goide.stubs.GoImportSpecStub"
+  methods=[getAlias]
 }
 ImportString ::= string {methods=[getReferences resolve getPath getPathTextRange]}
 

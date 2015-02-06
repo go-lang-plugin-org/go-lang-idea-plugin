@@ -45,4 +45,8 @@ public class GoImportSpecImpl extends GoNamedElementImpl<GoImportSpecStub> imple
     return findChildByType(IDENTIFIER);
   }
 
+  public String getAlias() {
+    return GoPsiImplUtil.getAlias(this);
+  }
+
 }
