@@ -8,6 +8,7 @@
     <property name="src" location="${basedir}/src"/>
     <property name="gen" location="${basedir}/gen"/>
     <property name="jps" location="${basedir}/jps-plugin"/>
+    <property name="utils" location="${basedir}/utils"/>
     <property name="test.src" location="${basedir}/tests"/>
     <property name="build" location="build"/>
     <property name="test.build" location="build_test"/>
@@ -92,7 +93,8 @@
             <javac2 destdir="@{dest}" classpathref="classpath" verbose="false" debug="true" source="1.6" target="1.6" includeantruntime="false">
                 <src path="${src}"/>
                 <src path="${gen}"/>
-                <src path="${jps}"/>
+                <src path="${utils}/src"/>
+                <src path="${jps}/src"/>
                 <src path="${test.src}"/>
             </javac2>
 
