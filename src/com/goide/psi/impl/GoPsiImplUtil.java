@@ -237,7 +237,7 @@ public class GoPsiImplUtil {
       if (type != null) return type;
       GoExpression expr = ContainerUtil.getFirstItem(prev.getExpressionList()); // not sure about first
       if (expr != null) return expr.getGoType();
-      prev = PsiTreeUtil.getPrevSiblingOfType(o.getParent(), GoConstSpec.class);
+      prev = PsiTreeUtil.getPrevSiblingOfType(prev, GoConstSpec.class);
     }
     
     return null;
