@@ -4251,7 +4251,7 @@ public class GoParser implements PsiParser {
     return r;
   }
 
-  // '.' &(!('(' 'type'))
+  // '.' !('(' 'type')
   private static boolean SelectorExpr_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SelectorExpr_0")) return false;
     boolean r;
@@ -4262,29 +4262,19 @@ public class GoParser implements PsiParser {
     return r;
   }
 
-  // &(!('(' 'type'))
+  // !('(' 'type')
   private static boolean SelectorExpr_0_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SelectorExpr_0_1")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _AND_, null);
-    r = SelectorExpr_0_1_0(b, l + 1);
-    exit_section_(b, l, m, null, r, false, null);
-    return r;
-  }
-
-  // !('(' 'type')
-  private static boolean SelectorExpr_0_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SelectorExpr_0_1_0")) return false;
-    boolean r;
     Marker m = enter_section_(b, l, _NOT_, null);
-    r = !SelectorExpr_0_1_0_0(b, l + 1);
+    r = !SelectorExpr_0_1_0(b, l + 1);
     exit_section_(b, l, m, null, r, false, null);
     return r;
   }
 
   // '(' 'type'
-  private static boolean SelectorExpr_0_1_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SelectorExpr_0_1_0_0")) return false;
+  private static boolean SelectorExpr_0_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SelectorExpr_0_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeTokenSmart(b, LPAREN);

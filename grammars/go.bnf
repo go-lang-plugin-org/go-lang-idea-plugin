@@ -352,7 +352,7 @@ private unary_op ::= '+' | '-' | '!' | '^' | '*' | '&' | '<-'
 
 MethodExpr ::= ReceiverType '.' identifier
 ReceiverType ::= TypeName | '(' '*' TypeName ')' | '(' ReceiverType ')'
-SelectorExpr ::= Expression '.' &(!('(' 'type')) Expression
+SelectorExpr ::= Expression '.' !('(' 'type') Expression
 IndexExpr ::= Expression '[' IndexExprBody ']'
 SliceExpr ::= Expression '[' SliceExprBody ']'
 private IndexExprBody ::= Expression
