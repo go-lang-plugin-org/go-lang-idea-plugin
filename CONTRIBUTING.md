@@ -156,7 +156,7 @@ Going to ``` Run -> Run... ``` will provide you with the following run configura
 
 + `Go` will spawn a new IDEA with the latest version of the plugin enabled
 + `Go in WebStorm` will spawn a new WebStorm with the latest version of the plugin enabled (requires SDK named ```WebStorm 9 sdk```)
-+ `Go in IDEA 14.1` will spawn a new IDEA 14.1 with the latest version of the plugin enabled (requires SDK named ```IDEA 14.1 sdk```)
++ `Go in IDEA EAP` will spawn a new unstable IDEA with the latest version of the plugin enabled (requires SDK named ```IDEA 14.1 sdk```)
 + `All in intellij-go` will run all the test cases available in the project. Please make 
 sure that all the test cases pass before committing anything (or making a pull request).
 
