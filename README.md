@@ -1,6 +1,8 @@
 # Go plugin for IntelliJ
 [![Build Status](https://travis-ci.org/go-lang-plugin-org/go-lang-idea-plugin.png?branch=v1.0.0-alpha0)](https://travis-ci.org/go-lang-plugin-org/go-lang-idea-plugin)
 
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/go-lang-plugin-org/go-lang-idea-plugin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ## Pre-release builds
 You can manually set up the latest plugin version from the [releases page](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/releases).
 
