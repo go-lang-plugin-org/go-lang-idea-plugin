@@ -45,7 +45,22 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "func test(){Fprintln()}");
   }
 
+  public void testImportedFunctionsPriority() {
+    myFixture.configureByText("a.go", "package main; \n" +
+                                      "import `io`\n" +
+                                      "func test(){ReadA<caret>}");
+    myFixture.completeBasic();
+    myFixture.assertPreferredCompletionItems(0, "ReadAtLeast", "ReadAtLeastCustom");
+  }
 
+  public void testImportedTypesPriority() {
+    myFixture.configureByText("a.go", "package main; \n" +
+                                      "import `io`\n" +
+                                      "func test(ReadWriteSeeke<caret>){}");
+    myFixture.completeBasic();
+    myFixture.assertPreferredCompletionItems(0, "ReadWriteSeeker", "ReadWriteSeekerCustom");
+  }
+  
   public void testDoNothingInsideSelector() {
     doTestVariants(
       "package main\n" +

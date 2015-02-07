@@ -58,6 +58,7 @@ public class GoFile extends PsiFileBase {
     super(viewProvider, GoLanguage.INSTANCE);
   }
 
+  // todo: optimize + use go libraries urls instead of source roots + cache
   @Nullable
   public String getFullPackageName() {
     VirtualFile virtualFile = getOriginalFile().getVirtualFile();

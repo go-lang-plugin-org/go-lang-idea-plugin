@@ -37,10 +37,10 @@ import javax.swing.*;
 public class GoCompletionUtil {
   public static final int KEYWORD_PRIORITY = 20;
   public static final int CONTEXT_KEYWORD_PRIORITY = 25;
-  public static final int FUNCTION_WITH_PACKAGE_PRIORITY = 0;
-  public static final int FUNCTION_PRIORITY = FUNCTION_WITH_PACKAGE_PRIORITY + 10;
-  public static final int TYPE_WITHOUT_PACKAGE_PRIORITY = 5;
-  public static final int TYPE_PRIORITY = TYPE_WITHOUT_PACKAGE_PRIORITY + 10;
+  public static final int NOT_IMPORTED_FUNCTION_PRIORITY = 0;
+  public static final int FUNCTION_PRIORITY = NOT_IMPORTED_FUNCTION_PRIORITY + 10;
+  public static final int NOT_IMPORTED_TYPE_PRIORITY = 5;
+  public static final int TYPE_PRIORITY = NOT_IMPORTED_TYPE_PRIORITY + 10;
   public static final int TYPE_CONVERSION = 15;
   public static final int VAR_PRIORITY = 15;
   public static final int LABEL_PRIORITY = 15;
@@ -57,13 +57,14 @@ public class GoCompletionUtil {
 
   @NotNull
   public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoNamedSignatureOwner f) {
-    return createFunctionOrMethodLookupElement(f, false, null);
+    return createFunctionOrMethodLookupElement(f, false, null, FUNCTION_PRIORITY);
   }
 
   @NotNull
   public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoNamedSignatureOwner f,
                                                                   boolean showPackage,
-                                                                  @Nullable InsertHandler<LookupElement> h) {
+                                                                  @Nullable InsertHandler<LookupElement> h, 
+                                                                  double priority) {
     Icon icon = f instanceof GoMethodDeclaration || f instanceof GoMethodSpec ? GoIcons.METHOD : GoIcons.FUNCTION;
     GoSignature signature = f.getSignature();
     int paramsCount = 0;
@@ -92,9 +93,7 @@ public class GoCompletionUtil {
         .withLookupString(pkg)
         .withLookupString(StringUtil.notNullize(f.getName(), "").toLowerCase())
         .withLookupString(pkg + f.getName())
-        .withPresentableText(pkg + f.getName() + paramText),
-      showPackage ? FUNCTION_WITH_PACKAGE_PRIORITY : FUNCTION_PRIORITY
-    );
+        .withPresentableText(pkg + f.getName() + paramText), priority);
   }
 
   @Nullable
@@ -115,13 +114,14 @@ public class GoCompletionUtil {
 
   @NotNull
   public static LookupElement createTypeLookupElement(@NotNull GoTypeSpec t) {
-    return createTypeLookupElement(t, false, null);
+    return createTypeLookupElement(t, false, null, TYPE_PRIORITY);
   }
 
   @NotNull
   public static LookupElement createTypeLookupElement(@NotNull GoTypeSpec t,
                                                       boolean showPackage,
-                                                      @Nullable InsertHandler<LookupElement> handler) {
+                                                      @Nullable InsertHandler<LookupElement> handler, 
+                                                      double priority) {
     String pkg = showPackage ? StringUtil.notNullize(t.getContainingFile().getPackageName()) : "";
     pkg = pkg.isEmpty() ? pkg : pkg + ".";
     return PrioritizedLookupElement.withPriority(
@@ -132,8 +132,7 @@ public class GoCompletionUtil {
         .withLookupString(pkg + t.getName())
         .withPresentableText(pkg + t.getName())
         .withInsertHandler(handler)
-        .withIcon(GoIcons.TYPE),
-      showPackage ? TYPE_WITHOUT_PACKAGE_PRIORITY : TYPE_PRIORITY);
+        .withIcon(GoIcons.TYPE), priority);
   }
 
   @NotNull

@@ -76,12 +76,16 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
               if (StringUtil.isCapitalized(name) && !StringUtil.startsWith(name, "Test") && !StringUtil.startsWith(name, "Benchmark")) {
                 for (GoFunctionDeclaration declaration : GoFunctionIndex.find(name, project, GoUtil.moduleScope(position))) {
                   if (!allowed(declaration)) continue;
-                  
+
+                  double priority = GoCompletionUtil.NOT_IMPORTED_FUNCTION_PRIORITY;
                   GoImportSpec existingImport = importedPackages.get(declaration.getContainingFile().getFullPackageName());
-                  if (existingImport != null && existingImport.getDot() != null) {
-                    continue;
+                  if (existingImport != null) {
+                    if (existingImport.getDot() != null) {
+                      continue;
+                    }
+                    priority = GoCompletionUtil.FUNCTION_PRIORITY;
                   }
-                  result.addElement(GoCompletionUtil.createFunctionOrMethodLookupElement(declaration, true, FUNC_INSERT_HANDLER));
+                  result.addElement(GoCompletionUtil.createFunctionOrMethodLookupElement(declaration, true, FUNC_INSERT_HANDLER, priority));
                 }
               }
             }
@@ -100,12 +104,16 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
                   PsiReference reference = parent.getReference();
                   if (reference instanceof GoTypeReference && !((GoTypeReference)reference).allowed(declaration)) continue;
                   if (!allowed(declaration)) continue;
-                  
+
+                  double priority = GoCompletionUtil.NOT_IMPORTED_TYPE_PRIORITY;
                   GoImportSpec existingImport = importedPackages.get(declaration.getContainingFile().getFullPackageName());
-                  if (existingImport != null && existingImport.getDot() != null) {
-                    continue;
+                  if (existingImport != null) {
+                    if (existingImport.getDot() != null) {
+                      continue;
+                    }
+                    priority = GoCompletionUtil.TYPE_PRIORITY;
                   }
-                  result.addElement(GoCompletionUtil.createTypeLookupElement(declaration, true, TYPE_INSERT_HANDLER));
+                  result.addElement(GoCompletionUtil.createTypeLookupElement(declaration, true, TYPE_INSERT_HANDLER, priority));
                 }
               }
             }
