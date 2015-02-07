@@ -6,11 +6,11 @@
 + [Reporting errors](#reporting-errors)
 + [Submitting test cases](#submitting-test-cases)
 + [Getting started with the plugin development](#getting-started-with-the-plugin-development)
-+ [Checking out the IntellJ IDEA Platform sources](#checking-out-the-intellj-idea-platform-sources)
++ [Checking out the IntellJ IDEA Platform sources](#checking-out-the-intellij-idea-platform-sources)
 + [Checking out and building Google Go](#checking-out-and-building-google-go)
 + [Checking out the plugin sources](#checking-out-the-plugin-sources)
 + [Building and running the unit tests](#building-and-running-the-unit-tests)
-+ [Profit](#bugs)
++ [Profit](#profit)
 + [Useful links](#useful-links)
 
 ### Reporting errors
@@ -74,6 +74,20 @@ Please don't use class comments with information about author or date and time c
 
 You can also have a look at some [useful links](#useful-links) for getting started with
 plugin development on IntelliJ IDEA platform.
+
+#### IMPORTANT: MacOS X users note
+
+You might get the following error ```Unsupported major.minor version 52```` in the 
+logs or the plugin might not work at all.
+
+Check the version of Java your IDE is running on. Since in 99.9% of the cases it will
+be Java 6, this means that you compiled the plugin with a different version of Java, 
+for example Java 8.
+
+To fix the error, please use Java JDK 6 to compile the plugin and everything should work.
+
+To get the log files, you can go to ```Help | Show Log in File Manager``` and then the
+log will be displayed to you.
 
 ### Checking out the IntelliJ IDEA Platform sources
 
