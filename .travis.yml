@@ -1,7 +1,6 @@
 language: java
 jdk:
   - oraclejdk8
-  - oraclejdk6
 script: "./travis.sh"
 cache:
   directories:
