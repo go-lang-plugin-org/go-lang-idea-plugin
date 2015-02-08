@@ -179,6 +179,7 @@ public class GoImportOptimizer implements ImportOptimizer {
           endElementToDelete = nextSibling;
         }
       }
+      // todo: delete after proper formatter implementation
       PsiElement nextSibling = endElementToDelete.getNextSibling();
       if (nextSibling instanceof PsiWhiteSpace && nextSibling.textContains('\n')) {
         endElementToDelete = nextSibling;
