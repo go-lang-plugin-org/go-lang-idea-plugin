@@ -9,6 +9,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
+import com.intellij.psi.PsiReference;
 
 public class GoFieldNameImpl extends GoCompositeElementImpl implements GoFieldName {
 
@@ -28,8 +29,13 @@ public class GoFieldNameImpl extends GoCompositeElementImpl implements GoFieldNa
   }
 
   @NotNull
-  public GoFieldNameReference getReference() {
+  public PsiReference getReference() {
     return GoPsiImplUtil.getReference(this);
+  }
+
+  @Nullable
+  public GoReferenceExpression getQualifier() {
+    return GoPsiImplUtil.getQualifier(this);
   }
 
 }

@@ -73,7 +73,7 @@
   implements("MethodSpec")="com.goide.psi.GoNamedSignatureOwner"
   implements("(Function|Method)Declaration")="com.goide.psi.GoFunctionOrMethodDeclaration"
   implements("(Const|Type|Var)Declaration")="com.goide.psi.GoTopLevelDeclaration"
-  implements(".*ReferenceExpression")="com.goide.psi.GoReferenceExpressionBase"
+  implements(".*ReferenceExpression|FieldName")="com.goide.psi.GoReferenceExpressionBase"
   extends("(Function|Method)Declaration")="com.goide.psi.impl.GoFunctionOrMethodDeclarationImpl<?>"
   extends("(Type|Import|Method)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver")="com.goide.psi.impl.GoNamedElementImpl<?>"
   extends("Parameters|Signature|ParameterDeclaration|Result|Type|(Const|Var)Spec")="com.goide.psi.impl.GoStubbedElementImpl<?>"
@@ -300,7 +300,7 @@ private ElementList  ::= Element ( ',' Element? )*
 Element ::= [ Key ':' ] Value
 Key ::= FieldName &':' | ElementIndex
 FieldName ::= identifier {
-  methods=[getReference]
+  methods=[getReference getQualifier]
 }
 ElementIndex ::= Expression
 Value ::= Expression | LiteralValue

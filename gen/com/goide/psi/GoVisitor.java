@@ -139,7 +139,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitFieldName(@NotNull GoFieldName o) {
-    visitCompositeElement(o);
+    visitReferenceExpressionBase(o);
   }
 
   public void visitForClause(@NotNull GoForClause o) {

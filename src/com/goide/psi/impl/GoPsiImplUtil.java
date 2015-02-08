@@ -30,6 +30,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.light.LightElement;
+import com.intellij.psi.impl.source.resolve.reference.impl.PsiMultiReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileReference;
 import com.intellij.psi.scope.PsiScopeProcessor;
@@ -143,8 +144,13 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
-  public static GoFieldNameReference getReference(@NotNull GoFieldName o) {
-    return new GoFieldNameReference(o);
+  public static PsiReference getReference(@NotNull GoFieldName o) {
+    return new PsiMultiReference(new PsiReference[]{ new GoFieldNameReference(o), new GoReference(o)}, o);
+  }
+
+  @Nullable
+  public static GoReferenceExpression getQualifier(@SuppressWarnings("UnusedParameters") @NotNull GoFieldName o) {
+    return null;
   }
 
   @NotNull

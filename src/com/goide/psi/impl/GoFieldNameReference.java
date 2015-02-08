@@ -21,7 +21,7 @@ import com.goide.psi.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -42,8 +42,7 @@ public class GoFieldNameReference extends PsiReferenceBase<GoFieldName> {
     return new GoScopeProcessorBase(myElement.getText(), myElement, completion) {
       @Override
       protected boolean condition(@NotNull PsiElement element) {
-        return !(element instanceof GoFieldDefinition) &&
-               !(element instanceof GoConstDefinition);
+        return !(element instanceof GoFieldDefinition);
       }
     };
   }
@@ -74,9 +73,6 @@ public class GoFieldNameReference extends PsiReferenceBase<GoFieldName> {
 
     if (type instanceof GoStructType && !type.processDeclarations(processor, ResolveState.initial(), null, myElement)) return true;
 
-    PsiFile file = myElement.getContainingFile();
-    if (file instanceof GoFile && !GoReference.processNamedElements(processor, ResolveState.initial(), ((GoFile)file).getConstants(), true)) return true;
-
     return false;
   }
 
@@ -89,7 +85,7 @@ public class GoFieldNameReference extends PsiReferenceBase<GoFieldName> {
     else if (inValue && type instanceof GoStructType) {
       GoKey key = PsiTreeUtil.getPrevSiblingOfType(myValue, GoKey.class);
       GoFieldName field = key != null ? key.getFieldName() : null;
-      GoFieldNameReference reference = field != null ? field.getReference() : null;
+      PsiReference reference = field != null ? field.getReference() : null;
       PsiElement resolve = reference != null ? reference.resolve() : null;
       if (resolve instanceof GoFieldDefinition) {
         type = PsiTreeUtil.getNextSiblingOfType(resolve, GoType.class);
