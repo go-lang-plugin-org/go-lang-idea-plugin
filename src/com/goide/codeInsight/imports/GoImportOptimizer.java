@@ -25,6 +25,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
@@ -167,16 +168,22 @@ public class GoImportOptimizer implements ImportOptimizer {
   private static void deleteImportSpec(@Nullable GoImportSpec importSpec) {
     GoImportDeclaration importDeclaration = PsiTreeUtil.getParentOfType(importSpec, GoImportDeclaration.class);
     if (importSpec != null && importDeclaration != null) {
+      PsiElement startElementToDelete = importSpec;
+      PsiElement endElementToDelete = importSpec;
       if (importDeclaration.getImportSpecList().size() == 1) {
-        PsiElement nextSibling = importDeclaration.getNextSibling();
+        startElementToDelete = importDeclaration;
+        endElementToDelete = importDeclaration;
+        
+        PsiElement nextSibling = endElementToDelete.getNextSibling();
         if (nextSibling != null && nextSibling.getNode().getElementType() == GoTypes.SEMICOLON) {
-          nextSibling.delete();
+          endElementToDelete = nextSibling;
         }
-        importDeclaration.delete();
       }
-      else {
-        importSpec.delete();
+      PsiElement nextSibling = endElementToDelete.getNextSibling();
+      if (nextSibling instanceof PsiWhiteSpace && nextSibling.textContains('\n')) {
+        endElementToDelete = nextSibling;
       }
+      startElementToDelete.getParent().deleteChildRange(startElementToDelete, endElementToDelete);
     }
   }
 
