@@ -96,13 +96,13 @@ public class GoKeywordCompletionContributor extends CompletionContributor {
   }
 
   private static ElementPattern<? extends PsiElement> typeExpression() {
-    return psiElement(GoTypes.IDENTIFIER).with(new PatternCondition<PsiElement>("non qualified type") {
-      @Override
-      public boolean accepts(@NotNull PsiElement element, ProcessingContext context) {
-        PsiElement parent = element.getParent();
-        return parent instanceof GoTypeReferenceExpression && ((GoTypeReferenceExpression)parent).getQualifier() == null;
-      }
-    });
+    return psiElement(GoTypes.IDENTIFIER).withParent(
+      psiElement(GoTypeReferenceExpression.class).with(new PatternCondition<GoTypeReferenceExpression>("non qualified type") {
+        @Override
+        public boolean accepts(@NotNull GoTypeReferenceExpression element, ProcessingContext context) {
+          return element.getQualifier() == null;
+        }
+      }));
   }
 
   //private static ElementPattern<? extends PsiElement> insideSwitchStatement() {
