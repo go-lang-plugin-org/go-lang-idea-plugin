@@ -37,3 +37,15 @@ func <warning>search</warning>() bool {
     m := advSearch{}
     return m.Genres.Demographics.Missing
 }
+
+
+func g(a, b, c int) (int, int) {
+    return a, b
+}
+
+func f(a, b int) {
+}
+
+func <warning>test</warning>() {
+    f(g(1, 2, 3))
+}

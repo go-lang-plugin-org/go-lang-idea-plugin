@@ -22,7 +22,10 @@ import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiReference;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class GoFunctionCallInspection extends LocalInspectionTool {
   @NotNull
@@ -39,7 +42,8 @@ public class GoFunctionCallInspection extends LocalInspectionTool {
           PsiElement resolve = reference != null ? reference.resolve() : null;
           if (resolve == null) return;
 
-          int actualSize = o.getArgumentList().getExpressionList().size();
+          List<GoExpression> list = o.getArgumentList().getExpressionList();
+          int actualSize = list.size();
           if (resolve instanceof GoSignatureOwner) {
             GoSignature signature = ((GoSignatureOwner)resolve).getSignature();
             if (signature == null) return;
@@ -52,6 +56,16 @@ public class GoFunctionCallInspection extends LocalInspectionTool {
             }
 
             if (expectedSize != actualSize) {
+              if (actualSize == 1) {
+                GoExpression first = ContainerUtil.getFirstItem(list);
+                PsiReference firstRef = first instanceof GoCallExpr ? ((GoCallExpr)first).getExpression().getReference() : null;
+                PsiElement firstResolve = firstRef != null ? firstRef.resolve() : null;
+                if (firstResolve instanceof GoFunctionOrMethodDeclaration) {
+                  int resultCount = GoInspectionUtil.getFunctionResultCount((GoFunctionOrMethodDeclaration)firstResolve);
+                  if (resultCount == expectedSize) return;
+                }
+              }
+
               String tail = " arguments in call to " + expression.getText();
               holder.registerProblem(o.getArgumentList(), actualSize > expectedSize ? "too many" + tail : "not enough" + tail);
             }
