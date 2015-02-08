@@ -68,21 +68,19 @@ public class GoSdkType extends SdkType {
   @Override
   public String suggestHomePath() {
     if (SystemInfo.isWindows) {
-      return "C:\\cygwin\\bin";
+      String defaultPath = "C:\\Go";
+      if (new File(defaultPath).exists()) return defaultPath;
+      return "C:\\cygwin";
     }
-    else {
-      if (SystemInfo.isMac) {
-        String fromEnv = findPathInEnvironment();
-        if (fromEnv != null) return fromEnv;
-        String defaultPath = "/usr/local/go";
-        if (new File(defaultPath).exists()) return defaultPath;
-        String macPorts = "/opt/local/lib/go";
-        if (new File(macPorts).exists()) return macPorts;
-        return null;
-      }
-      else if (SystemInfo.isLinux) {
-        return "/usr/lib/go";
-      }
+    if (SystemInfo.isMac || SystemInfo.isLinux) {
+      String fromEnv = findPathInEnvironment();
+      if (fromEnv != null) return fromEnv;
+      String defaultPath = "/usr/local/go";
+      if (new File(defaultPath).exists()) return defaultPath;
+    }
+    if (SystemInfo.isMac) {
+      String macPorts = "/opt/local/lib/go";
+      if (new File(macPorts).exists()) return macPorts;
     }
     return null;
   }

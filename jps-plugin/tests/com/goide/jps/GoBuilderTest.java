@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GoBuilderTest extends JpsBuildTestCase {
-  public static final String GO_LINUX_SDK_PATH = "/usr/lib/go";
+  public static final String GO_LINUX_SDK_PATH = "/usr/local/go";
   public static final String GO_MAC_SDK_PATH = "/usr/local/go";
 
   public void testSimple() throws Exception {
@@ -29,7 +29,7 @@ public class GoBuilderTest extends JpsBuildTestCase {
     rebuildAll();
     assertCompiled(moduleName, "simple");
   }
-  
+
   public void testDependentFiles() throws Exception {
     if (!SystemInfo.isMac && !SystemInfo.isLinux) return;
 
@@ -49,13 +49,13 @@ public class GoBuilderTest extends JpsBuildTestCase {
     addModule(moduleName, PathUtilRt.getParentPath(depFile));
     BuildResult result = doBuild(CompileScopeTestBuilder.rebuild().all());
     result.assertFailed();
-    
+
     List<BuildMessage> errors = result.getMessages(BuildMessage.Kind.ERROR);
     assertEquals(2, errors.size());
-    
+
     assertEquals("newline in string", errors.get(0).getMessageText());
     assertEquals(BuildMessage.Kind.ERROR, errors.get(0).getKind());
-    
+
     assertEquals("syntax error: unexpected }, expecting )", errors.get(1).getMessageText());
     assertEquals(BuildMessage.Kind.ERROR, errors.get(1).getKind());
   }
