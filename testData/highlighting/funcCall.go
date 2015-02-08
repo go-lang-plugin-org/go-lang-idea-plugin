@@ -49,3 +49,19 @@ func f(a, b int) {
 func <warning>test</warning>() {
     f(g(1, 2, 3))
 }
+
+func <warning>test2</warning>() (bool, string) {
+    ch := make(chan string)
+    var str string
+    var isOpen bool
+    select {
+    case str = <-ch :
+    case str, isOpen = <-ch:
+    case s, ok := <-ch:
+        str = s
+        isOpen = ok
+    case s := <-ch:
+        str = s
+    }
+    return isOpen, str
+}

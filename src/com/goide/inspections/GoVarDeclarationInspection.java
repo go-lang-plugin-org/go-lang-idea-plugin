@@ -20,6 +20,9 @@ import com.goide.psi.*;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.openapi.util.Pair;
+import com.intellij.psi.PsiElement;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -49,27 +52,48 @@ public class GoVarDeclarationInspection extends GoInspectionBase {
   }
 
   public static void checkVar(@NotNull GoVarSpec varDeclaration, @NotNull ProblemsHolder holder) {
-    List<GoVarDefinition> ids = varDeclaration.getVarDefinitionList();
-    List<GoExpression> list = varDeclaration.getExpressionList();
-    if (ids.size() == list.size()) {
+    Pair<? extends List<? extends GoCompositeElement>, List<GoExpression>> p = getPair(varDeclaration);
+    List<GoExpression> list = p.second;
+    int idCount = p.first.size();
+    int expressionsSize = list.size();
+    if (idCount == expressionsSize) {
       checkExpressionShouldReturnOneResult(list, holder);
       return;
     }
 
     // var declaration could has no initialization expression, but short var declaration couldn't
-    if (list.size() == 0 && !(varDeclaration instanceof GoShortVarDeclaration)) {
+    if (expressionsSize == 0 && !(varDeclaration instanceof GoShortVarDeclaration)) {
       return;
     }
 
-    int idCount = ids.size();
-    int exprCount = list.size();
+    int exprCount = expressionsSize;
 
-    if (list.size() == 1) {
+    if (expressionsSize == 1) {
       exprCount = getExpressionResultCount(list.get(0));
       if (exprCount == UNKNOWN_COUNT || exprCount == idCount) return;
     }
 
     String msg = String.format("Assignment count mismatch: %d = %d", idCount, exprCount);
     holder.registerProblem(varDeclaration, msg, ProblemHighlightType.GENERIC_ERROR);
+  }
+
+  @NotNull
+  private static Pair<List<? extends GoCompositeElement>, List<GoExpression>> getPair(@NotNull GoVarSpec varDeclaration) {
+    PsiElement assign = varDeclaration.getAssign();
+    if (varDeclaration instanceof GoRecvStatement && assign != null) {
+      List<GoCompositeElement> v= ContainerUtil.newArrayList();
+      List<GoExpression> e = ContainerUtil.newArrayList();
+      for (PsiElement c : varDeclaration.getChildren()) {
+        if (!(c instanceof GoCompositeElement)) continue;
+        if (c.getTextOffset() < assign.getTextOffset()) {
+          v.add(((GoCompositeElement)c));
+        }
+        else if (c instanceof GoExpression) {
+          e.add(((GoExpression)c));
+        }
+      }
+      return Pair.<List<? extends GoCompositeElement>, List<GoExpression>>create(v, e);
+    }
+    return Pair.<List<? extends GoCompositeElement>, List<GoExpression>>create(varDeclaration.getVarDefinitionList(), varDeclaration.getExpressionList());
   }
 }
