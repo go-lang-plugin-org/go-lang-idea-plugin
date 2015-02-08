@@ -45,6 +45,7 @@ public class GoVarProcessor extends GoScopeProcessorBase {
     boolean inShortVar = PsiTreeUtil.getParentOfType(o, GoShortVarDeclaration.class, GoRecvStatement.class) != null;
     if (inShortVar && differentBlocks && myImShortVarDeclaration) return true;
     if (differentBlocks && inShortVar && !inVarOrRange && getResult() != null) return true;
+    if (inShortVar && myScope instanceof GoExprCaseClause && !PsiTreeUtil.isAncestor(getScope(o), myOrigin, false)) return true;
     return super.add(o) || !inVarOrRange;
   }
 
@@ -60,6 +61,8 @@ public class GoVarProcessor extends GoScopeProcessorBase {
     if (ifStatement != null) return ifStatement.getBlock();
     GoElseStatement elseStatement = PsiTreeUtil.getParentOfType(o, GoElseStatement.class);
     if (elseStatement != null) return elseStatement.getBlock();
+    GoExprCaseClause exprCaseClause = PsiTreeUtil.getParentOfType(o, GoExprCaseClause.class);
+    if (exprCaseClause != null) return exprCaseClause;
     return PsiTreeUtil.getParentOfType(o, GoBlock.class);
   }
 

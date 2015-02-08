@@ -1,5 +1,7 @@
 package mongo
 
+import "fmt"
+
 type Collection struct{}
 type CollectionLoaderInterface interface {
     MangoCollection(string) *Collection
@@ -64,4 +66,31 @@ func <warning>test2</warning>() (bool, string) {
         str = s
     }
     return isOpen, str
+}
+
+
+func <warning>Test23</warning>() (err error) {
+    var c chan int
+    select {
+    case err := (<-c): // err declared and not used
+    }
+    return err
+}
+
+func Demo() error {
+    return fmt.Errorf("err")
+}
+
+func <warning>main</warning>() {
+    var err error
+
+    switch  {
+    case 1==2:
+        err := Demo()
+        panic(err)
+    default:
+        err = Demo()
+        panic(err)
+    }
+    //panic(err)
 }
