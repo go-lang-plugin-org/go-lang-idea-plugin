@@ -45,8 +45,13 @@ public class GoVarProcessor extends GoScopeProcessorBase {
     boolean inShortVar = PsiTreeUtil.getParentOfType(o, GoShortVarDeclaration.class, GoRecvStatement.class) != null;
     if (inShortVar && differentBlocks && myImShortVarDeclaration) return true;
     if (differentBlocks && inShortVar && !inVarOrRange && getResult() != null) return true;
-    if (inShortVar && myScope instanceof GoExprCaseClause && !PsiTreeUtil.isAncestor(getScope(o), myOrigin, false)) return true;
+    if (inShortVar && fromNotAncestorBlock(o)) return true;
     return super.add(o) || !inVarOrRange;
+  }
+
+  private boolean fromNotAncestorBlock(@NotNull GoNamedElement o) {
+    return (myScope instanceof GoExprCaseClause || myScope instanceof GoCommClause) &&
+           !PsiTreeUtil.isAncestor(getScope(o), myOrigin, false);
   }
 
   private boolean differentBlocks(@Nullable GoNamedElement o) {
@@ -63,6 +68,8 @@ public class GoVarProcessor extends GoScopeProcessorBase {
     if (elseStatement != null) return elseStatement.getBlock();
     GoExprCaseClause exprCaseClause = PsiTreeUtil.getParentOfType(o, GoExprCaseClause.class);
     if (exprCaseClause != null) return exprCaseClause;
+    GoCommClause commClause = PsiTreeUtil.getParentOfType(o, GoCommClause.class);
+    if (commClause != null) return commClause;
     return PsiTreeUtil.getParentOfType(o, GoBlock.class);
   }
 

@@ -94,3 +94,24 @@ func <warning>main</warning>() {
     }
     //panic(err)
 }
+
+func <warning>main2</warning>() {
+    ch := make(chan string, 2)
+    ch <- "first"
+    ch <- "second"
+
+    select {
+    case a := <-ch:
+        println(a)
+    }
+
+    var (
+        a int // marked as unused variable `a`
+    )
+
+    select {
+    case a = <-ch:
+        println(a)
+    }
+    println(a)
+}
