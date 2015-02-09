@@ -339,8 +339,7 @@ private MaxGroup ::=
   | TypeAssertionExpr
   | SelectorExpr
   | MethodExpr
-  | SliceExpr
-  | IndexExpr
+  | IndexOrSliceExpr
   | Literal
   | LiteralTypeExpr
   | FunctionLit
@@ -353,10 +352,10 @@ private unary_op ::= '+' | '-' | '!' | '^' | '*' | '&' | '<-'
 MethodExpr ::= ReceiverType '.' identifier
 ReceiverType ::= TypeName | '(' '*' TypeName ')' | '(' ReceiverType ')'
 SelectorExpr ::= Expression '.' !('(' 'type') Expression
-IndexExpr ::= Expression '[' IndexExprBody ']'
-SliceExpr ::= Expression '[' SliceExprBody ']'
-private IndexExprBody ::= Expression
-private SliceExprBody ::= (Expression? ':' Expression ':' Expression) | (Expression? ':' Expression?)
+IndexOrSliceExpr ::= Expression '[' (SliceExprBody | IndexExprBody) ']'
+private IndexExprBody ::= Expression SliceExprBodyInner?
+private inner SliceExprBodyInner ::= SliceExprBody
+private SliceExprBody ::= &':' (':' Expression ':' Expression) | (':' Expression?)
 TypeAssertionExpr ::= Expression '.' '(' &(!'type') Type ')'
 CallExpr ::= Expression ArgumentList
 ArgumentList ::= '(' [ ExpressionList '...'? ] ')' {pin=1}

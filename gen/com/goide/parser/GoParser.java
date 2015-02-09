@@ -157,7 +157,7 @@ public class GoParser implements PsiParser {
     else if (t == IMPORT_STRING) {
       r = ImportString(b, 0);
     }
-    else if (t == INDEX_EXPR) {
+    else if (t == INDEX_OR_SLICE_EXPR) {
       r = Expression(b, 0, 6);
     }
     else if (t == INTERFACE_TYPE) {
@@ -259,9 +259,6 @@ public class GoParser implements PsiParser {
     else if (t == SIMPLE_STATEMENT) {
       r = SimpleStatement(b, 0);
     }
-    else if (t == SLICE_EXPR) {
-      r = Expression(b, 0, 6);
-    }
     else if (t == STATEMENT) {
       r = Statement(b, 0);
     }
@@ -352,10 +349,9 @@ public class GoParser implements PsiParser {
       STATEMENT, SWITCH_STATEMENT, TYPE_SWITCH_STATEMENT),
     create_token_set_(ADD_EXPR, AND_EXPR, BUILTIN_CALL_EXPR, CALL_EXPR,
       COMPOSITE_LIT, CONDITIONAL_EXPR, CONVERSION_EXPR, EXPRESSION,
-      FUNCTION_LIT, INDEX_EXPR, LITERAL, LITERAL_TYPE_EXPR,
+      FUNCTION_LIT, INDEX_OR_SLICE_EXPR, LITERAL, LITERAL_TYPE_EXPR,
       METHOD_EXPR, MUL_EXPR, OR_EXPR, PARENTHESES_EXPR,
-      REFERENCE_EXPRESSION, SELECTOR_EXPR, SLICE_EXPR, TYPE_ASSERTION_EXPR,
-      UNARY_EXPR),
+      REFERENCE_EXPRESSION, SELECTOR_EXPR, TYPE_ASSERTION_EXPR, UNARY_EXPR),
   };
 
   /* ********************************************************** */
@@ -2000,9 +1996,22 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // Expression
+  // Expression SliceExprBody2?
   static boolean IndexExprBody(PsiBuilder b, int l) {
-    return Expression(b, l + 1, -1);
+    if (!recursion_guard_(b, l, "IndexExprBody")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Expression(b, l + 1, -1);
+    r = r && IndexExprBody_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // SliceExprBody2?
+  private static boolean IndexExprBody_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IndexExprBody_1")) return false;
+    SliceExprBody2(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */
@@ -2943,9 +2952,10 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (Expression? ':' Expression ':' Expression) | (Expression? ':' Expression?)
+  // &':' (':' Expression ':' Expression) | (':' Expression?)
   static boolean SliceExprBody(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SliceExprBody")) return false;
+    if (!nextTokenIs(b, COLON)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = SliceExprBody_0(b, l + 1);
@@ -2954,13 +2964,33 @@ public class GoParser implements PsiParser {
     return r;
   }
 
-  // Expression? ':' Expression ':' Expression
+  // &':' (':' Expression ':' Expression)
   private static boolean SliceExprBody_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SliceExprBody_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = SliceExprBody_0_0(b, l + 1);
-    r = r && consumeToken(b, COLON);
+    r = r && SliceExprBody_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // &':'
+  private static boolean SliceExprBody_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SliceExprBody_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _AND_, null);
+    r = consumeToken(b, COLON);
+    exit_section_(b, l, m, null, r, false, null);
+    return r;
+  }
+
+  // ':' Expression ':' Expression
+  private static boolean SliceExprBody_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SliceExprBody_0_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COLON);
     r = r && Expression(b, l + 1, -1);
     r = r && consumeToken(b, COLON);
     r = r && Expression(b, l + 1, -1);
@@ -2968,37 +2998,28 @@ public class GoParser implements PsiParser {
     return r;
   }
 
-  // Expression?
-  private static boolean SliceExprBody_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SliceExprBody_0_0")) return false;
-    Expression(b, l + 1, -1);
-    return true;
-  }
-
-  // Expression? ':' Expression?
+  // ':' Expression?
   private static boolean SliceExprBody_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SliceExprBody_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = SliceExprBody_1_0(b, l + 1);
-    r = r && consumeToken(b, COLON);
-    r = r && SliceExprBody_1_2(b, l + 1);
+    r = consumeToken(b, COLON);
+    r = r && SliceExprBody_1_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // Expression?
-  private static boolean SliceExprBody_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SliceExprBody_1_0")) return false;
+  private static boolean SliceExprBody_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SliceExprBody_1_1")) return false;
     Expression(b, l + 1, -1);
     return true;
   }
 
-  // Expression?
-  private static boolean SliceExprBody_1_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SliceExprBody_1_2")) return false;
-    Expression(b, l + 1, -1);
-    return true;
+  /* ********************************************************** */
+  // SliceExprBody
+  static boolean SliceExprBody2(PsiBuilder b, int l) {
+    return SliceExprBody(b, l + 1);
   }
 
   /* ********************************************************** */
@@ -4037,7 +4058,7 @@ public class GoParser implements PsiParser {
   // 4: BINARY(MulExpr)
   // 5: PREFIX(UnaryExpr)
   // 6: ATOM(ConversionExpr)
-  // 7: ATOM(CompositeLit) ATOM(OperandName) POSTFIX(BuiltinCallExpr) POSTFIX(CallExpr) POSTFIX(TypeAssertionExpr) BINARY(SelectorExpr) ATOM(MethodExpr) POSTFIX(SliceExpr) POSTFIX(IndexExpr) ATOM(Literal) ATOM(LiteralTypeExpr) ATOM(FunctionLit)
+  // 7: ATOM(CompositeLit) ATOM(OperandName) POSTFIX(BuiltinCallExpr) POSTFIX(CallExpr) POSTFIX(TypeAssertionExpr) BINARY(SelectorExpr) ATOM(MethodExpr) POSTFIX(IndexOrSliceExpr) ATOM(Literal) ATOM(LiteralTypeExpr) ATOM(FunctionLit)
   // 8: PREFIX(ParenthesesExpr)
   public static boolean Expression(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "Expression")) return false;
@@ -4100,13 +4121,9 @@ public class GoParser implements PsiParser {
         r = Expression(b, l, 7);
         exit_section_(b, l, m, SELECTOR_EXPR, r, true, null);
       }
-      else if (g < 7 && SliceExpr_0(b, l + 1)) {
+      else if (g < 7 && IndexOrSliceExpr_0(b, l + 1)) {
         r = true;
-        exit_section_(b, l, m, SLICE_EXPR, r, true, null);
-      }
-      else if (g < 7 && IndexExpr_0(b, l + 1)) {
-        r = true;
-        exit_section_(b, l, m, INDEX_EXPR, r, true, null);
+        exit_section_(b, l, m, INDEX_OR_SLICE_EXPR, r, true, null);
       }
       else {
         exit_section_(b, l, m, null, false, false, null);
@@ -4296,26 +4313,25 @@ public class GoParser implements PsiParser {
     return r;
   }
 
-  // '[' SliceExprBody ']'
-  private static boolean SliceExpr_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SliceExpr_0")) return false;
+  // '[' (SliceExprBody | IndexExprBody) ']'
+  private static boolean IndexOrSliceExpr_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IndexOrSliceExpr_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeTokenSmart(b, LBRACK);
-    r = r && SliceExprBody(b, l + 1);
+    r = r && IndexOrSliceExpr_0_1(b, l + 1);
     r = r && consumeToken(b, RBRACK);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // '[' IndexExprBody ']'
-  private static boolean IndexExpr_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "IndexExpr_0")) return false;
+  // SliceExprBody | IndexExprBody
+  private static boolean IndexOrSliceExpr_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IndexOrSliceExpr_0_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokenSmart(b, LBRACK);
-    r = r && IndexExprBody(b, l + 1);
-    r = r && consumeToken(b, RBRACK);
+    r = SliceExprBody(b, l + 1);
+    if (!r) r = IndexExprBody(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }

@@ -57,7 +57,7 @@ public interface GoTypes {
   IElementType IMPORT_LIST = new GoCompositeElementType("IMPORT_LIST");
   IElementType IMPORT_SPEC = GoStubElementTypeFactory.factory("IMPORT_SPEC");
   IElementType IMPORT_STRING = new GoCompositeElementType("IMPORT_STRING");
-  IElementType INDEX_EXPR = new GoCompositeElementType("INDEX_EXPR");
+  IElementType INDEX_OR_SLICE_EXPR = new GoCompositeElementType("INDEX_OR_SLICE_EXPR");
   IElementType INTERFACE_TYPE = GoStubElementTypeFactory.factory("INTERFACE_TYPE");
   IElementType KEY = new GoCompositeElementType("KEY");
   IElementType LABELED_STATEMENT = new GoCompositeElementType("LABELED_STATEMENT");
@@ -91,7 +91,6 @@ public interface GoTypes {
   IElementType SHORT_VAR_DECLARATION = GoStubElementTypeFactory.factory("SHORT_VAR_DECLARATION");
   IElementType SIGNATURE = GoStubElementTypeFactory.factory("SIGNATURE");
   IElementType SIMPLE_STATEMENT = new GoCompositeElementType("SIMPLE_STATEMENT");
-  IElementType SLICE_EXPR = new GoCompositeElementType("SLICE_EXPR");
   IElementType STATEMENT = new GoCompositeElementType("STATEMENT");
   IElementType STRUCT_TYPE = GoStubElementTypeFactory.factory("STRUCT_TYPE");
   IElementType SWITCH_START = new GoCompositeElementType("SWITCH_START");
@@ -340,8 +339,8 @@ public interface GoTypes {
       else if (type == IMPORT_STRING) {
         return new GoImportStringImpl(node);
       }
-      else if (type == INDEX_EXPR) {
-        return new GoIndexExprImpl(node);
+      else if (type == INDEX_OR_SLICE_EXPR) {
+        return new GoIndexOrSliceExprImpl(node);
       }
       else if (type == INTERFACE_TYPE) {
         return new GoInterfaceTypeImpl(node);
@@ -441,9 +440,6 @@ public interface GoTypes {
       }
       else if (type == SIMPLE_STATEMENT) {
         return new GoSimpleStatementImpl(node);
-      }
-      else if (type == SLICE_EXPR) {
-        return new GoSliceExprImpl(node);
       }
       else if (type == STATEMENT) {
         return new GoStatementImpl(node);

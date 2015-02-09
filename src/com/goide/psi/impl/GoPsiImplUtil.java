@@ -16,6 +16,7 @@
 
 package com.goide.psi.impl;
 
+import com.goide.GoTypes;
 import com.goide.psi.*;
 import com.goide.psi.impl.imports.GoImportReferenceSet;
 import com.goide.stubs.GoNamedStub;
@@ -310,9 +311,10 @@ public class GoPsiImplUtil {
       GoExpression item = ContainerUtil.getLastItem(((GoSelectorExpr)o).getExpressionList());
       return item != null ? item.getGoType() : null;
     }
-    else if (o instanceof GoIndexExpr) {
-      GoExpression first = ContainerUtil.getFirstItem(((GoIndexExpr)o).getExpressionList());
+    else if (o instanceof GoIndexOrSliceExpr) {
+      GoExpression first = ContainerUtil.getFirstItem(((GoIndexOrSliceExpr)o).getExpressionList());
       GoType type = first == null ? null : getGoType(first);
+      if (o.getNode().findChildByType(GoTypes.COLON) != null) return type; // means slice expression, todo: extract if needed
       GoTypeReferenceExpression typeRef = getTypeReference(type);
       if (typeRef != null) {
         type = getType(typeRef);
@@ -326,10 +328,6 @@ public class GoPsiImplUtil {
       else if (type instanceof GoArrayOrSliceType) {
         return type.getType();
       }
-    }
-    else if (o instanceof GoSliceExpr) {
-      GoExpression first = ContainerUtil.getFirstItem(((GoSliceExpr)o).getExpressionList());
-      return first == null ? null : getGoType(first);
     }
     else if (o instanceof GoTypeAssertionExpr) {
       return ((GoTypeAssertionExpr)o).getType();
