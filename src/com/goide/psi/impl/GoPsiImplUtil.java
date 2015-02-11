@@ -723,7 +723,9 @@ public class GoPsiImplUtil {
     PsiElement rParen = declaration.getRparen();
     assert rParen != null;
     declaration.addBefore(GoElementFactory.createNewLine(declaration.getProject()), rParen);
-    return (GoImportSpec)declaration.addBefore(GoElementFactory.createImportSpec(declaration.getProject(), packagePath, alias), rParen);
+    GoImportSpec spec = (GoImportSpec)declaration.addBefore(GoElementFactory.createImportSpec(declaration.getProject(), packagePath, alias), rParen);
+    declaration.addBefore(GoElementFactory.createNewLine(declaration.getProject()), rParen);
+    return spec;
   }
 
   public static String getLocalPackageName(@NotNull GoImportSpec importSpec, boolean treatAliasAsLocalName) {
