@@ -47,14 +47,12 @@ public class GoImportOptimizer implements ImportOptimizer {
   public Runnable processFile(@NotNull final PsiFile file) {
     commit(file);
     assert file instanceof GoFile;
-    final MultiMap<String, GoImportSpec> importMap = ((GoFile)file).getImportMap();
+    MultiMap<String, GoImportSpec> importMap = ((GoFile)file).getImportMap();
     final List<PsiElement> importEntriesToDelete = ContainerUtil.newArrayList();
     final List<PsiElement> importIdentifiersToDelete = findRedundantImportIdentifiers(importMap);
 
     importEntriesToDelete.addAll(findDuplicatedEntries(importMap));
-
-    filterUnusedImports(file, importMap);
-    importEntriesToDelete.addAll(importMap.values());
+    importEntriesToDelete.addAll(filterUnusedImports(file, importMap).values());
 
     return new Runnable() {
       @Override
@@ -97,8 +95,12 @@ public class GoImportOptimizer implements ImportOptimizer {
     return importIdentifiersToDelete;
   }
 
-  public static void filterUnusedImports(@NotNull PsiFile file, @NotNull final MultiMap<String, GoImportSpec> importMap) {
-    Collection<GoImportSpec> implicitImports = ContainerUtil.newArrayList(importMap.get("."));
+  public static MultiMap<String, GoImportSpec> filterUnusedImports(@NotNull PsiFile file, 
+                                                                   @NotNull final MultiMap<String, GoImportSpec> importMap) {
+    final MultiMap<String, GoImportSpec> result = MultiMap.create();
+    result.putAllValues(importMap);
+    
+    Collection<GoImportSpec> implicitImports = ContainerUtil.newArrayList(result.get("."));
     for (GoImportSpec importEntry : implicitImports) {
       GoImportSpec spec = getImportSpec(importEntry);
       if (spec != null && spec.getDot() != null) {
@@ -106,7 +108,7 @@ public class GoImportOptimizer implements ImportOptimizer {
         if (list != null) {
           for (PsiElement e : list) {
             if (e.isValid()) {
-              importMap.remove(".", importEntry);
+              result.remove(".", importEntry);
             }
           }
         }
@@ -114,8 +116,6 @@ public class GoImportOptimizer implements ImportOptimizer {
     }
     
     file.accept(new GoRecursiveVisitor() {
-      private final MultiMap<String, GoImportSpec> myImportMap = importMap;
-
       @Override
       public void visitTypeReferenceExpression(@NotNull GoTypeReferenceExpression o) {
         GoTypeReferenceExpression lastQualifier = o.getQualifier();
@@ -141,9 +141,10 @@ public class GoImportOptimizer implements ImportOptimizer {
       }
 
       private void markAsUsed(@NotNull PsiElement qualifier) {
-        myImportMap.remove(qualifier.getText());
+        result.remove(qualifier.getText());
       }
     });
+    return result;
   }
 
   @NotNull

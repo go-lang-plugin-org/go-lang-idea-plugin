@@ -60,9 +60,8 @@ public class GoUnusedImportDeclaration extends GoInspectionBase {
     for (GoImportSpec duplicatedImportSpec : GoImportOptimizer.findDuplicatedEntries(importMap)) {
       problemsHolder.registerProblem(duplicatedImportSpec, "Redeclared import", ProblemHighlightType.GENERIC_ERROR, OPTIMIZE_QUICK_FIX);
     }
-
-    GoImportOptimizer.filterUnusedImports(file, importMap);
-    for (PsiElement importEntry : importMap.values()) {
+    
+    for (PsiElement importEntry : GoImportOptimizer.filterUnusedImports(file, importMap).values()) {
       GoImportSpec spec = GoImportOptimizer.getImportSpec(importEntry);
       if (spec != null && !spec.isBlank()) {
         if (spec.getImportString().resolve() != null) {
