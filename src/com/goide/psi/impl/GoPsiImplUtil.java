@@ -283,6 +283,11 @@ public class GoPsiImplUtil {
       GoTypeReferenceExpression expression = ((GoCompositeLit)o).getLiteralTypeExpr().getTypeReferenceExpression();
       return getType(expression);
     }
+    else if (o instanceof GoFunctionLit) {
+      GoSignature signature = ((GoFunctionLit)o).getSignature();
+      GoResult result = signature != null ? signature.getResult() : null;
+      return result != null ? result.getType() : null;
+    }
     else if (o instanceof GoBuiltinCallExpr) {
       String text = ((GoBuiltinCallExpr)o).getReferenceExpression().getText();
       if ("new".equals(text) || "make".equals(text)) {
