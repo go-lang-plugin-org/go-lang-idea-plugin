@@ -161,3 +161,12 @@ func sourceReader1() {
     for _, page := range *File{} { // error as expected
     }
 }
+
+func main() {
+    a := []byte{}
+    b := append(
+    []byte("demo"),
+    a..., // example fails here
+)
+    _ = b
+}

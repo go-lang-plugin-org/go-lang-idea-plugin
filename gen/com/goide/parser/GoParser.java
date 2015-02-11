@@ -375,7 +375,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // '(' [ ExpressionList '...'? ] ')'
+  // '(' [ ExpressionList '...'? ','? ] ')'
   public static boolean ArgumentList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ArgumentList")) return false;
     if (!nextTokenIs(b, LPAREN)) return false;
@@ -389,20 +389,21 @@ public class GoParser implements PsiParser {
     return r || p;
   }
 
-  // [ ExpressionList '...'? ]
+  // [ ExpressionList '...'? ','? ]
   private static boolean ArgumentList_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ArgumentList_1")) return false;
     ArgumentList_1_0(b, l + 1);
     return true;
   }
 
-  // ExpressionList '...'?
+  // ExpressionList '...'? ','?
   private static boolean ArgumentList_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ArgumentList_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = ExpressionList(b, l + 1);
     r = r && ArgumentList_1_0_1(b, l + 1);
+    r = r && ArgumentList_1_0_2(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -411,6 +412,13 @@ public class GoParser implements PsiParser {
   private static boolean ArgumentList_1_0_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ArgumentList_1_0_1")) return false;
     consumeToken(b, TRIPLE_DOT);
+    return true;
+  }
+
+  // ','?
+  private static boolean ArgumentList_1_0_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ArgumentList_1_0_2")) return false;
+    consumeToken(b, COMMA);
     return true;
   }
 
@@ -1996,7 +2004,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // Expression SliceExprBody2?
+  // Expression SliceExprBodyInner?
   static boolean IndexExprBody(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IndexExprBody")) return false;
     boolean r;
@@ -2007,10 +2015,10 @@ public class GoParser implements PsiParser {
     return r;
   }
 
-  // SliceExprBody2?
+  // SliceExprBodyInner?
   private static boolean IndexExprBody_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IndexExprBody_1")) return false;
-    SliceExprBody2(b, l + 1);
+    SliceExprBodyInner(b, l + 1);
     return true;
   }
 
@@ -3018,7 +3026,7 @@ public class GoParser implements PsiParser {
 
   /* ********************************************************** */
   // SliceExprBody
-  static boolean SliceExprBody2(PsiBuilder b, int l) {
+  static boolean SliceExprBodyInner(PsiBuilder b, int l) {
     return SliceExprBody(b, l + 1);
   }
 
