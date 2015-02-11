@@ -116,8 +116,8 @@ public class GoSdkUtil {
   }
   
   @Nullable
-  private static VirtualFile findSourceDirectory(VirtualFile file) {
-    return FileUtil.namesEqual("src", file.getName()) ? file : file.findChild("src");
+  private static VirtualFile findSourceDirectory(@Nullable VirtualFile file) {
+    return file == null || FileUtil.namesEqual("src", file.getName()) ? file : file.findChild("src");
   }
 
   @NotNull
