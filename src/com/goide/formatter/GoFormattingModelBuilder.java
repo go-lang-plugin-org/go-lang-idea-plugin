@@ -68,6 +68,8 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       .beforeInside(RPAREN, PARAMETERS).none()
       .afterInside(LPAREN, RESULT).none()
       .beforeInside(RPAREN, RESULT).none()
+      .afterInside(LPAREN, IMPORT_DECLARATION).lineBreakInCode()
+      .beforeInside(RPAREN, IMPORT_DECLARATION).lineBreakInCode()
       .between(PARAMETERS, RESULT).spaces(1)
       .before(BLOCK).spaces(1)
       .after(FUNC).spaces(1)

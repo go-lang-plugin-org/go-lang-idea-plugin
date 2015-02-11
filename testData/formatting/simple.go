@@ -3,10 +3,8 @@ package   main
     import  "os"
           import   .  "database/sql"
           
-          import (
-          "aaa"
-          "bbb"
-          )
+          import ("aaa"
+          "bbb")
     
     
         const (
