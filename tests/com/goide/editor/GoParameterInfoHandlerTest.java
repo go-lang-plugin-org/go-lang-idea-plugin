@@ -72,13 +72,13 @@ public class GoParameterInfoHandlerTest extends GoCodeInsightFixtureTestCase {
     doTest(5, "<html>num int, text string, <b>more ...int</b></html>");
   }
 
-  private void doTest(final int expectedParamIdx, final String expectedPresentation) throws IOException {
+  private void doTest(int expectedParamIdx, String expectedPresentation) throws IOException {
     // Given
     myFixture.configureByFile(getTestName(true) + ".go");
     // When
-    final Object[] itemsToShow = getItemsToShow();
-    final int paramIdx = getHighlightedItem();
-    final String presentation = getPresentation(itemsToShow, paramIdx);
+    Object[] itemsToShow = getItemsToShow();
+    int paramIdx = getHighlightedItem();
+    String presentation = getPresentation(itemsToShow, paramIdx);
     // Then
     assertEquals(1, itemsToShow.length);
     assertEquals(expectedParamIdx, paramIdx);
@@ -86,26 +86,23 @@ public class GoParameterInfoHandlerTest extends GoCodeInsightFixtureTestCase {
   }
 
   private Object[] getItemsToShow() {
-    final CreateParameterInfoContext createCtx = new MockCreateParameterInfoContext(
-      myFixture.getEditor(), myFixture.getFile());
-    final GoArgumentList psiElement = myParameterInfoHandler.findElementForParameterInfo(createCtx);
+    CreateParameterInfoContext createCtx = new MockCreateParameterInfoContext(myFixture.getEditor(), myFixture.getFile());
+    GoArgumentList psiElement = myParameterInfoHandler.findElementForParameterInfo(createCtx);
     assertNotNull(psiElement);
     myParameterInfoHandler.showParameterInfo(psiElement, createCtx);
     return createCtx.getItemsToShow();
   }
 
   private int getHighlightedItem() {
-    final MockUpdateParameterInfoContext updateCtx = new MockUpdateParameterInfoContext(
-      myFixture.getEditor(), myFixture.getFile());
-    final GoArgumentList psiElement = myParameterInfoHandler.findElementForUpdatingParameterInfo(updateCtx);
+    MockUpdateParameterInfoContext updateCtx = new MockUpdateParameterInfoContext(myFixture.getEditor(), myFixture.getFile());
+    GoArgumentList psiElement = myParameterInfoHandler.findElementForUpdatingParameterInfo(updateCtx);
     assertNotNull(psiElement);
     myParameterInfoHandler.updateParameterInfo(psiElement, updateCtx);
     return updateCtx.getCurrentParameter();
   }
 
-  private String getPresentation(final Object[] itemsToShow, final int paramIdx) {
-    final ParameterInfoUIContextEx uiCtx = ParameterInfoComponent.createContext(
-      itemsToShow, myFixture.getEditor(), myParameterInfoHandler, paramIdx);
+  private String getPresentation(Object[] itemsToShow, int paramIdx) {
+    ParameterInfoUIContextEx uiCtx = ParameterInfoComponent.createContext(itemsToShow, myFixture.getEditor(), myParameterInfoHandler, paramIdx);
     return myParameterInfoHandler.updatePresentation(itemsToShow[0], uiCtx);
   }
 

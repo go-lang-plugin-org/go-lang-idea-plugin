@@ -18,7 +18,6 @@ package com.goide.editor;
 
 import com.goide.GoTypes;
 import com.goide.psi.*;
-import com.google.common.collect.Lists;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.lang.parameterInfo.*;
 import com.intellij.openapi.project.DumbAware;
@@ -150,28 +149,23 @@ public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabAction
       context.setUIComponentEnabled(false);
       return null;
     }
-    if (!(p instanceof GoSignatureOwner)) {
-      return null;
-    }
-    final GoSignature signature = ((GoSignatureOwner)p).getSignature();
-    if (signature == null) {
-      return null;
-    }
+    GoSignature signature = p instanceof GoSignatureOwner ? ((GoSignatureOwner)p).getSignature() : null;
+    if (signature == null) return null;
     // Create a list of parameter presentations. For clarity we expand
-    // parameters declared as `a, b, c in` into `a int, b int, c int`.
-    final List<GoParameterDeclaration> paramDeclarations = signature.getParameters().getParameterDeclarationList();
-    final List<String> paramPresentations = Lists.newArrayListWithExpectedSize(2 * paramDeclarations.size());
+    // parameters declared as `a, b, c int` into `a int, b int, c int`.
+    List<GoParameterDeclaration> paramDeclarations = signature.getParameters().getParameterDeclarationList();
+    List<String> paramPresentations = ContainerUtil.newArrayListWithCapacity(2 * paramDeclarations.size());
     boolean isVariadic = false;
     for (GoParameterDeclaration paramDeclaration : paramDeclarations) {
       isVariadic = paramDeclaration.isVariadic();
       for (GoParamDefinition paramDefinition : paramDeclaration.getParamDefinitionList()) {
-        final String separator = isVariadic ? " ..." : " ";
+        String separator = isVariadic ? " ..." : " ";
         paramPresentations.add(paramDefinition.getText() + separator + paramDeclaration.getType().getText());
       }
     }
     // Figure out what particular presentation is actually selected. Take in
     // account possibility of the last variadic parameter.
-    final int selected;
+    int selected;
     if (isVariadic) {
       selected = Math.min(context.getCurrentParameterIndex(), paramPresentations.size() - 1);
     }
@@ -179,7 +173,7 @@ public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabAction
       selected = context.getCurrentParameterIndex();
     }
     // Build the parameter presentation string.
-    final StringBuilder builder = new StringBuilder();
+    StringBuilder builder = new StringBuilder();
     int start = 0;
     int end = 0;
     for (int i = 0; i < paramPresentations.size(); ++i) {
