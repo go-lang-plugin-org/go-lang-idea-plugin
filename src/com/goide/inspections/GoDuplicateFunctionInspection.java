@@ -19,9 +19,13 @@ package com.goide.inspections;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoFunctionDeclaration;
 import com.goide.psi.GoRecursiveVisitor;
+import com.goide.psi.GoSignature;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.openapi.util.Comparing;
+import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiElement;
+import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,14 +45,27 @@ public class GoDuplicateFunctionInspection extends GoInspectionBase {
 
     file.accept(new GoRecursiveVisitor() {
       @Override
-      public void visitFunctionDeclaration(@NotNull GoFunctionDeclaration o) {
+      public void visitFunctionDeclaration(@NotNull final GoFunctionDeclaration o) {
         String name = o.getName();
         if (name == null) return;
         Collection<GoFunctionDeclaration> byKey = map.get(name);
+        if ("init".equals(o.getName()) && zeroArity(o)) {
+          byKey = ContainerUtil.filter(byKey, new Condition<GoFunctionDeclaration>() {
+            @Override
+            public boolean value(GoFunctionDeclaration declaration) {
+              return Comparing.equal(declaration.getContainingFile(), o.getContainingFile());
+            }
+          });
+        }
         if (byKey.size() > 1) {
           PsiElement identifier = o.getNameIdentifier();
           problemsHolder.registerProblem(identifier == null ? o : identifier, "Duplicate function name");
         }
+      }
+
+      private boolean zeroArity(@NotNull GoFunctionDeclaration o) {
+        GoSignature signature = o.getSignature();
+        return signature == null || signature.getParameters().getParameterDeclarationList().isEmpty();
       }
     });
   }
