@@ -238,8 +238,8 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
       @Override
       public Result visitFileEx(@NotNull VirtualFile file) {
         for (VirtualFile contentRoot : contentRoots) {
-          if (file.equals(contentRoot)) {
-            LOG.info("The directory is project root, skipping: " + file.getPath());
+          if (VfsUtilCore.isAncestor(contentRoot, file, false)) {
+            LOG.info("The directory is child of project root, skipping: " + file.getPath());
             libraryRootUrls.remove(contentRoot.getUrl());
             return SKIP_CHILDREN;
           }
