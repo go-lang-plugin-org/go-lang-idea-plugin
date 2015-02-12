@@ -73,12 +73,12 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testDoNotReportNonLastMultiResolvedImport() throws IOException {
     final VirtualFile root1 = myFixture.getTempDirFixture().findOrCreateDir("root1");
     final VirtualFile root2 = myFixture.getTempDirFixture().findOrCreateDir("root2");
-    final List<String> rootUrls = Arrays.asList(root1.getPath(), root2.getPath());
+    final List<String> rootUrls = Arrays.asList(root1.getUrl(), root2.getUrl());
     
     myFixture.getTempDirFixture().findOrCreateDir("root1/src/to_import/unique");
     myFixture.getTempDirFixture().findOrCreateDir("root1/src/to_import/shared");
     myFixture.getTempDirFixture().findOrCreateDir("root2/src/to_import/shared");
-    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootPaths(rootUrls);
+    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(rootUrls);
     doTest();
   }
   

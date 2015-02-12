@@ -20,11 +20,11 @@ import com.goide.GoLibrariesState;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -41,20 +41,13 @@ public abstract class GoLibrariesService implements PersistentStateComponent<GoL
 
   @Override
   public void loadState(GoLibrariesState state) {
-    // todo: delete after 1.0
-    //XmlSerializerUtil.copyBean(state, myState);
-    myState.setPaths(ContainerUtil.map(state.getPaths(), new Function<String, String>() {
-      @Override
-      public String fun(String url) {
-        return VfsUtilCore.urlToPath(url);
-      }
-    }));
+    XmlSerializerUtil.copyBean(state, myState);
   }
 
   @NotNull
   public static Collection<? extends VirtualFile> getUserDefinedLibraries(@NotNull Module module) {
     final Set<VirtualFile> result = ContainerUtil.newLinkedHashSet();
-    result.addAll(filesFromPaths(GoModuleLibrariesService.getInstance(module).getLibraryRootPaths()));
+    result.addAll(filesFromUrls(GoModuleLibrariesService.getInstance(module).getLibraryRootUrls()));
     result.addAll(getUserDefinedLibraries(module.getProject()));
     result.addAll(getUserDefinedLibraries());
     return result;
@@ -62,29 +55,29 @@ public abstract class GoLibrariesService implements PersistentStateComponent<GoL
 
   @NotNull
   public static Collection<? extends VirtualFile> getUserDefinedLibraries(@NotNull Project project) {
-    return filesFromPaths(GoProjectLibrariesService.getInstance(project).getLibraryRootPaths());
+    return filesFromUrls(GoProjectLibrariesService.getInstance(project).getLibraryRootUrls());
   }
 
   @NotNull
   public static Collection<? extends VirtualFile> getUserDefinedLibraries() {
-    return filesFromPaths(GoApplicationLibrariesService.getInstance().getLibraryRootPaths());
+    return filesFromUrls(GoApplicationLibrariesService.getInstance().getLibraryRootUrls());
   }
 
-  public void setLibraryRootPaths(@NotNull Collection<String> libraryRootPaths) {
-    myState.setPaths(libraryRootPaths);
-  }
-
-  @NotNull
-  public Collection<String> getLibraryRootPaths() {
-    return myState.getPaths();
+  public void setLibraryRootUrls(@NotNull Collection<String> libraryRootUrl) {
+    myState.setUrls(libraryRootUrl);
   }
 
   @NotNull
-  public static Collection<? extends VirtualFile> filesFromPaths(@NotNull Collection<String> paths) {
-    return ContainerUtil.skipNulls(ContainerUtil.map(paths, new Function<String, VirtualFile>() {
+  public Collection<String> getLibraryRootUrls() {
+    return myState.getUrls();
+  }
+
+  @NotNull
+  public static Collection<? extends VirtualFile> filesFromUrls(@NotNull Collection<String> urls) {
+    return ContainerUtil.skipNulls(ContainerUtil.map(urls, new Function<String, VirtualFile>() {
       @Override
-      public VirtualFile fun(String path) {
-        return VirtualFileManager.getInstance().findFileByUrl(VfsUtilCore.pathToUrl(path));
+      public VirtualFile fun(String url) {
+        return VirtualFileManager.getInstance().findFileByUrl(url);
       }
     }));
   }

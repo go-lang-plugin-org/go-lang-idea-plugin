@@ -3,6 +3,8 @@ package com.goide.jps.model;
 import com.goide.GoEnvironmentUtil;
 import com.goide.GoLibrariesState;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VfsUtilCore;
+import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -59,9 +61,19 @@ public class JpsGoLibrariesExtensionServiceImpl extends JpsGoLibrariesExtensionS
   public String retrieveGoPath(@NotNull JpsTypedModule<JpsSimpleElement<JpsGoModuleProperties>> module) {
     Collection<String> parts = ContainerUtil.newLinkedHashSet();
     ContainerUtil.addIfNotNull(parts, GoEnvironmentUtil.retrieveGoPathFromEnvironment());
-    ContainerUtil.addAllNotNull(parts, getModuleLibrariesState(module.getProperties()).getPaths());
-    ContainerUtil.addAllNotNull(parts, getProjectLibrariesState(module.getProject()).getPaths());
-    ContainerUtil.addAllNotNull(parts, getApplicationLibrariesState(module.getProject().getModel().getGlobal()).getPaths());
+    ContainerUtil.addAllNotNull(parts, urlsToPaths(getModuleLibrariesState(module.getProperties()).getUrls()));
+    ContainerUtil.addAllNotNull(parts, urlsToPaths(getProjectLibrariesState(module.getProject()).getUrls()));
+    ContainerUtil.addAllNotNull(parts, urlsToPaths(getApplicationLibrariesState(module.getProject().getModel().getGlobal()).getUrls()));
     return StringUtil.join(parts, File.pathSeparator);
+  }
+
+  @NotNull
+  private static Collection<String> urlsToPaths(@NotNull Collection<String> urls) {
+    return ContainerUtil.map(urls, new Function<String, String>() {
+      @Override
+      public String fun(String s) {
+        return VfsUtilCore.urlToPath(String.valueOf(s));
+      }
+    });
   }
 }
