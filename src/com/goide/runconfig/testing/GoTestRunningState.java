@@ -71,7 +71,8 @@ public class GoTestRunningState extends GoRunningState {
     String executable = GoEnvironmentUtil.getExecutableForSdk(sdkHomePath).getAbsolutePath();
 
     GeneralCommandLine installDependencies = new GeneralCommandLine();
-    installDependencies.getEnvironment().put(GoConstants.GO_PATH, GoSdkUtil.retrieveGoPath(myModule));
+    final String goPath = GoSdkUtil.retrieveGoPath(myModule);
+    installDependencies.getEnvironment().put(GoConstants.GO_PATH, goPath);
     installDependencies.setExePath(executable);
     installDependencies.addParameter("test");
     installDependencies.addParameter("-i");
@@ -85,7 +86,7 @@ public class GoTestRunningState extends GoRunningState {
     }
 
     GeneralCommandLine runTests = new GeneralCommandLine();
-    runTests.getEnvironment().put(GoConstants.GO_PATH, GoSdkUtil.retrieveGoPath(myModule));
+    runTests.getEnvironment().put(GoConstants.GO_PATH, goPath);
     runTests.setExePath(executable);
     runTests.addParameter("test");
     runTests.addParameter("-v");
