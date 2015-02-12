@@ -348,8 +348,8 @@ func <warning>name</warning>(col Color) string {
     Println(testdata.a)
 <error>}</error>
 
-var <error>Name11</error> string  = ""
-var <error>nmame11</error> string  = ""
+var <warning>Name11</warning> string  = ""
+var <warning>nmame11</warning> string  = ""
 
 func <warning>testRedeclare</warning>() int {
       y, z := 1,3

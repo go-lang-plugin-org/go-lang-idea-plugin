@@ -1,10 +1,7 @@
 package com.goide.inspections;
 
 import com.goide.GoCodeInsightFixtureTestCase;
-import com.goide.inspections.unresolved.GoAssignmentToConstantInspection;
-import com.goide.inspections.unresolved.GoUnresolvedReferenceInspection;
-import com.goide.inspections.unresolved.GoUnusedFunctionInspection;
-import com.goide.inspections.unresolved.GoUnusedVariableInspection;
+import com.goide.inspections.unresolved.*;
 import com.goide.project.GoModuleLibrariesService;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.LightProjectDescriptor;
@@ -22,6 +19,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       GoUnresolvedReferenceInspection.class,
       GoDuplicateFieldsOrMethodsInspection.class,
       GoUnusedVariableInspection.class,
+      GoUnusedGlobalVariableInspection.class,
       GoUnusedFunctionInspection.class,
       GoAssignmentToConstantInspection.class,
       GoDuplicateFunctionInspection.class,

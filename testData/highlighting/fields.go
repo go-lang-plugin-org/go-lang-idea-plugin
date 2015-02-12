@@ -1,5 +1,7 @@
 package main
 
+var <warning>unused</warning> int = 1
+
 var langId = "es"
 func main() {
     lId := "es"

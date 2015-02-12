@@ -29,6 +29,7 @@ import com.intellij.util.Query;
 import org.jetbrains.annotations.NotNull;
 
 public class GoUnusedVariableInspection extends GoInspectionBase {
+
   @NotNull
   @Override
   protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder,
@@ -59,12 +60,20 @@ public class GoUnusedVariableInspection extends GoInspectionBase {
             return;
           }
           boolean globalVar = decl != null && decl.getParent() instanceof GoFile;
-          holder.registerProblem(o, "Unused variable " + "'" + o.getText() + "'",
-                                 globalVar
-                                 ? ProblemHighlightType.LIKE_UNUSED_SYMBOL
-                                 : ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+          if (globalVar) {
+            if (!checkGlobal()) return;
+            holder.registerProblem(o, "Unused variable " + "'" + o.getText() + "'", ProblemHighlightType.LIKE_UNUSED_SYMBOL);
+          }
+          else {
+            if (checkGlobal()) return;
+            holder.registerProblem(o, "Unused variable " + "'" + o.getText() + "'", ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+          }
         }
       }
     };
+  }
+
+  protected boolean checkGlobal() {
+    return false;
   }
 }
