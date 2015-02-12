@@ -49,6 +49,7 @@ public class GoRunFileRunningState extends GoRunningState {
     list.add("run");
     String filePath = myConfiguration.getFilePath();
     list.addParametersString(filePath);
+    list.addParametersString(myConfiguration.getParams());
     commandLine.withWorkDirectory(PathUtil.getParentPath(filePath));
     TextConsoleBuilder consoleBuilder = TextConsoleBuilderFactory.getInstance().createBuilder(myModule.getProject());
     setConsoleBuilder(consoleBuilder);
