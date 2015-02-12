@@ -19,6 +19,7 @@ package com.goide.editor;
 import com.goide.GoParserDefinition;
 import com.goide.GoTypes;
 import com.goide.psi.*;
+import com.intellij.codeInsight.folding.CodeFoldingSettings;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.folding.FoldingBuilderEx;
 import com.intellij.lang.folding.FoldingDescriptor;
@@ -127,6 +128,15 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
 
   @Override
   public boolean isCollapsedByDefault(@NotNull ASTNode node) {
-    return node.getElementType() == GoTypes.IMPORT_LIST;
+    IElementType type = node.getElementType();
+    if (type == GoParserDefinition.LINE_COMMENT || type == GoParserDefinition.MULTILINE_COMMENT) {
+      return CodeFoldingSettings.getInstance().COLLAPSE_DOC_COMMENTS;
+    }
+    if (type == GoTypes.BLOCK && CodeFoldingSettings.getInstance().COLLAPSE_METHODS) {
+      ASTNode parent = node.getTreeParent();
+      return parent != null && parent.getPsi() instanceof GoFunctionOrMethodDeclaration;
+    }
+    return CodeFoldingSettings.getInstance().COLLAPSE_IMPORTS && node.getElementType() == GoTypes.IMPORT_LIST;
+      
   }
 }
