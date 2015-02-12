@@ -8,6 +8,7 @@
     <method>
       <option name="BuildArtifacts" enabled="true">
         <artifact name="jps-plugin.jar" />
+        <artifact name="utils.jar" />
       </option>
     </method>
   </configuration>
