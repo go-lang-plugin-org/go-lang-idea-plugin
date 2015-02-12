@@ -37,7 +37,7 @@ public class GoTarget extends ModuleBasedTarget<GoSourceRootDescriptor> {
     List<BuildTarget<?>> dependencies = new ArrayList<BuildTarget<?>>();
     Set<JpsModule> modules = JpsJavaExtensionService.dependencies(myModule).includedIn(JpsJavaClasspathKind.compile(isTests())).getModules();
     for (JpsModule module : modules) {
-      if (module.getModuleType().equals(JpsGoModuleType.INSTANCE)) {
+      if (module.getModuleType() == JpsGoModuleType.INSTANCE) {
         dependencies.add(new GoTarget(module, getGoTargetType()));
       }
     }

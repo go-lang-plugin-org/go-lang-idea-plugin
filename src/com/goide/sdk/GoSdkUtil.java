@@ -16,12 +16,11 @@
 
 package com.goide.sdk;
 
-import com.goide.GoConstants;
+import com.goide.GoEnvironmentUtil;
 import com.goide.GoModuleType;
 import com.goide.project.GoLibrariesService;
 import com.goide.psi.GoFile;
 import com.google.common.collect.Lists;
-import com.intellij.openapi.application.PathMacros;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -36,7 +35,6 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.util.EnvironmentUtil;
 import com.intellij.util.Function;
 import com.intellij.util.PlatformUtils;
 import com.intellij.util.SystemProperties;
@@ -102,7 +100,7 @@ public class GoSdkUtil {
   @NotNull
   public static Collection<VirtualFile> getGoPathsSourcesFromEnvironment() {
     Set<VirtualFile> result = ContainerUtil.newLinkedHashSet();
-    String goPath = retrieveGoPathFromEnvironment();
+    String goPath = GoEnvironmentUtil.retrieveGoPathFromEnvironment();
     if (goPath != null) {
       String home = SystemProperties.getUserHome();
       for (String s : StringUtil.split(goPath, File.pathSeparator)) {
@@ -123,7 +121,7 @@ public class GoSdkUtil {
   @NotNull
   public static String retrieveGoPath(@NotNull Module module) {
     Collection<String> parts = ContainerUtil.newLinkedHashSet();
-    ContainerUtil.addIfNotNull(parts, retrieveGoPathFromEnvironment());
+    ContainerUtil.addIfNotNull(parts, GoEnvironmentUtil.retrieveGoPathFromEnvironment());
     ContainerUtil.addAll(parts, ContainerUtil.map(GoLibrariesService.getUserDefinedLibraries(module), new Function<VirtualFile, String>() {
       @Override
       public String fun(VirtualFile file) {
@@ -131,12 +129,6 @@ public class GoSdkUtil {
       }
     }));
     return StringUtil.join(parts, File.pathSeparator);
-  }
-  
-  @Nullable
-  private static String retrieveGoPathFromEnvironment() {
-    String path = EnvironmentUtil.getValue(GoConstants.GO_PATH);
-    return path != null ? path : PathMacros.getInstance().getValue(GoConstants.GO_PATH);
   }
 
   @NotNull

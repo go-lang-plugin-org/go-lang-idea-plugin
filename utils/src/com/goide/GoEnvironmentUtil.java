@@ -1,10 +1,13 @@
 package com.goide;
 
 import com.intellij.execution.configurations.PathEnvironmentVariableUtil;
+import com.intellij.openapi.application.PathMacros;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.util.EnvironmentUtil;
 import com.intellij.util.PathUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 
@@ -35,5 +38,11 @@ public class GoEnvironmentUtil {
   @NotNull
   private static File getExecutable(@NotNull String path, @NotNull String command) {
     return new File(path, getBinaryFileNameForPath(command));
+  }
+
+  @Nullable
+  public static String retrieveGoPathFromEnvironment() {
+    String path = EnvironmentUtil.getValue(GoConstants.GO_PATH);
+    return path != null ? path : PathMacros.getInstance().getValue(GoConstants.GO_PATH);
   }
 }

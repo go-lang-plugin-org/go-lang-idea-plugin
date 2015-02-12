@@ -231,7 +231,7 @@ public abstract class JpsBuildTestCase extends UsefulTestCase {
                                                        @Nullable String outputPath,
                                                        @Nullable String testOutputPath,
                                                        @NotNull JpsSdk<T> sdk) {
-    JpsModule module = myProject.addModule(moduleName, JpsGoModuleType.INSTANCE);
+    final JpsModule module = myProject.addModule(moduleName, JpsGoModuleType.INSTANCE);
     final JpsSdkType<T> sdkType = sdk.getSdkType();
     final JpsSdkReferencesTable sdkTable = module.getSdkReferencesTable();
     sdkTable.setSdkReference(sdkType, sdk.createReference());

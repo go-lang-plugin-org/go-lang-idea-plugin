@@ -1,6 +1,9 @@
 package com.goide.jps.builder;
 
+import com.goide.GoConstants;
 import com.goide.GoEnvironmentUtil;
+import com.goide.jps.model.JpsGoLibrariesExtensionService;
+import com.goide.jps.model.JpsGoModuleProperties;
 import com.goide.jps.model.JpsGoModuleType;
 import com.goide.jps.model.JpsGoSdkType;
 import com.intellij.execution.ExecutionException;
@@ -20,9 +23,11 @@ import org.jetbrains.jps.incremental.messages.CompilerMessage;
 import org.jetbrains.jps.incremental.resources.ResourcesBuilder;
 import org.jetbrains.jps.incremental.resources.StandardResourceBuilderEnabler;
 import org.jetbrains.jps.model.JpsDummyElement;
+import org.jetbrains.jps.model.JpsSimpleElement;
 import org.jetbrains.jps.model.java.JpsJavaExtensionService;
 import org.jetbrains.jps.model.library.sdk.JpsSdk;
 import org.jetbrains.jps.model.module.JpsModule;
+import org.jetbrains.jps.model.module.JpsTypedModule;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +44,7 @@ public class GoBuilder extends TargetBuilder<GoSourceRootDescriptor, GoTarget> {
     ResourcesBuilder.registerEnabler(new StandardResourceBuilderEnabler() {
       @Override
       public boolean isResourceProcessingEnabled(@NotNull JpsModule module) {
-        return !(module.getModuleType() instanceof JpsGoModuleType);
+        return module.getModuleType() != JpsGoModuleType.INSTANCE;
       }
     });
   }
@@ -52,7 +57,11 @@ public class GoBuilder extends TargetBuilder<GoSourceRootDescriptor, GoTarget> {
     LOG.debug(target.getPresentableName());
     if (!holder.hasDirtyFiles() && !holder.hasRemovedFiles()) return;
 
-    JpsModule module = target.getModule();
+    JpsModule jpsModule = target.getModule();
+    if (jpsModule.getModuleType() != JpsGoModuleType.INSTANCE) return;
+    
+    JpsTypedModule<JpsSimpleElement<JpsGoModuleProperties>> module = jpsModule.asTyped(JpsGoModuleType.INSTANCE);
+    assert module != null;
     JpsSdk<JpsDummyElement> sdk = getSdk(context, module);
     File executable = GoEnvironmentUtil.getExecutableForSdk(sdk.getHomePath());
     File outputDirectory = getBuildOutputDirectory(module, target.isTests(), context);
@@ -60,6 +69,7 @@ public class GoBuilder extends TargetBuilder<GoSourceRootDescriptor, GoTarget> {
     for (String contentRootUrl : module.getContentRootsList().getUrls()) {
       String contentRootPath = new URL(contentRootUrl).getPath();
       GeneralCommandLine commandLine = new GeneralCommandLine();
+      commandLine.getEnvironment().put(GoConstants.GO_PATH, JpsGoLibrariesExtensionService.getInstance().retrieveGoPath(module));
       commandLine.withWorkDirectory(contentRootPath);
       commandLine.setExePath(executable.getAbsolutePath());
       commandLine.addParameter("build");

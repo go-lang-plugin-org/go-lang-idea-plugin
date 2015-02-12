@@ -56,17 +56,17 @@ public class GoLibrariesConfigurable implements Configurable {
       @Override
       protected void customizeCellRenderer(JList list, Object value, int index, boolean selected, boolean hasFocus) {
         final ListItem item = (ListItem)value;
-        final String url = item.url;
+        final String path = item.path;
         if (item.readOnly) {
           append("[GOPATH] ", SimpleTextAttributes.GRAY_ATTRIBUTES);
         }
-        final VirtualFile file = VirtualFileManager.getInstance().findFileByUrl(url);
+        final VirtualFile file = VirtualFileManager.getInstance().findFileByUrl(VfsUtilCore.pathToUrl(path));
         if (file != null) {
           append(file.getPath(), item.readOnly ? SimpleTextAttributes.GRAY_ATTRIBUTES : SimpleTextAttributes.REGULAR_ATTRIBUTES);
           setIcon(IconUtil.getIcon(file, Iconable.ICON_FLAG_READ_STATUS, null));
         }
         else {
-          append(VfsUtilCore.urlToPath(url), SimpleTextAttributes.ERROR_ATTRIBUTES);
+          append(path, SimpleTextAttributes.ERROR_ATTRIBUTES);
         }
       }
     });
@@ -81,16 +81,16 @@ public class GoLibrariesConfigurable implements Configurable {
           VirtualFile fileToSelect = null;
           final ListItem lastItem = ContainerUtil.getLastItem(myListModel.getItems());
           if (lastItem != null) {
-            fileToSelect = VirtualFileManager.getInstance().findFileByUrl(lastItem.url);
+            fileToSelect = VirtualFileManager.getInstance().findFileByUrl(VfsUtilCore.pathToUrl(lastItem.path));
           }
 
           final VirtualFile[] newDirectories = fileChooser.choose(null, fileToSelect);
           if (newDirectories.length > 0) {
             for (final VirtualFile newDirectory : newDirectories) {
-              final String newDirectoryUrl = newDirectory.getUrl();
+              final String newDirectoryPath = newDirectory.getPath();
               boolean alreadyAdded = false;
               for (ListItem item : myListModel.getItems()) {
-                if (newDirectoryUrl.equals(item.url) && !item.readOnly) {
+                if (newDirectoryPath.equals(item.path) && !item.readOnly) {
                   filesList.clearSelection();
                   filesList.setSelectedValue(item, true);
                   scrollToSelection(filesList);
@@ -99,7 +99,7 @@ public class GoLibrariesConfigurable implements Configurable {
                 }
               }
               if (!alreadyAdded) {
-                myListModel.add(new ListItem(newDirectoryUrl, false));
+                myListModel.add(new ListItem(newDirectoryPath, false));
               }
             }
           }
@@ -143,22 +143,22 @@ public class GoLibrariesConfigurable implements Configurable {
 
   @Override
   public boolean isModified() {
-    return !getUserDefinedUrls().equals(ContainerUtil.newHashSet(myLibrariesService.getLibraryRootUrls()));
+    return !getUserDefinedPaths().equals(ContainerUtil.newHashSet(myLibrariesService.getLibraryRootPaths()));
   }
 
   @Override
   public void apply() throws ConfigurationException {
-    myLibrariesService.setLibraryRootUrls(getUserDefinedUrls());
+    myLibrariesService.setLibraryRootPaths(getUserDefinedPaths());
   }
 
   @Override
   public void reset() {
     myListModel.removeAll();
-    for (String url : myReadOnlyPaths) {
-      myListModel.add(new ListItem(url, true));
+    for (String path : myReadOnlyPaths) {
+      myListModel.add(new ListItem(path, true));
     }
-    for (String url : myLibrariesService.getLibraryRootUrls()) {
-      myListModel.add(new ListItem(url, false));
+    for (String path : myLibrariesService.getLibraryRootPaths()) {
+      myListModel.add(new ListItem(path, false));
     }
   }
 
@@ -181,23 +181,23 @@ public class GoLibrariesConfigurable implements Configurable {
   }
 
   @NotNull
-  private Set<String> getUserDefinedUrls() {
-    final Set<String> libraryUrls = ContainerUtil.newHashSet();
+  private Set<String> getUserDefinedPaths() {
+    final Set<String> libraryPaths = ContainerUtil.newHashSet();
     for (ListItem item : myListModel.getItems()) {
       if (!item.readOnly) {
-        libraryUrls.add(item.url);
+        libraryPaths.add(item.path);
       }
     }
-    return libraryUrls;
+    return libraryPaths;
   }
   
   private static class ListItem {
     final boolean readOnly;
-    final String url;
+    final String path;
 
-    public ListItem(String url, boolean readOnly) {
+    public ListItem(String path, boolean readOnly) {
       this.readOnly = readOnly;
-      this.url = url;
+      this.path = path;
     }
   }
 }

@@ -108,14 +108,14 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
       protected List<UnnamedConfigurable> createConfigurables() {
         final List<UnnamedConfigurable> result = ContainerUtil.newArrayList();
         
-        final String[] urlsFromEnv = ContainerUtil.map2Array(GoSdkUtil.getGoPathsSourcesFromEnvironment(), String.class,
-                                                             new Function<VirtualFile, String>() {
-                                                               @Override
-                                                               public String fun(VirtualFile file) {
-                                                                 return file.getUrl();
-                                                               }
-                                                             });
-        result.add(new GoLibrariesConfigurable("Global libraries", GoApplicationLibrariesService.getInstance(), urlsFromEnv));
+        final String[] pathsFromEnv = ContainerUtil.map2Array(GoSdkUtil.getGoPathsSourcesFromEnvironment(), String.class,
+                                                              new Function<VirtualFile, String>() {
+                                                                @Override
+                                                                public String fun(VirtualFile file) {
+                                                                  return file.getPath();
+                                                                }
+                                                              });
+        result.add(new GoLibrariesConfigurable("Global libraries", GoApplicationLibrariesService.getInstance(), pathsFromEnv));
         if (!myProject.isDefault()) {
           result.add(new GoLibrariesConfigurable("Project libraries", GoProjectLibrariesService.getInstance(myProject)));
           result.add(new ModuleAwareProjectConfigurable(myProject, "Module libraries", "Module libraries") {

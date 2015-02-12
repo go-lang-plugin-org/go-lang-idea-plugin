@@ -16,14 +16,15 @@
 
 package com.goide.project;
 
+import com.goide.GoConstants;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.components.StoragePathMacros;
 
 @State(
-  name = "GoLibraries",
-  storages = @Storage(file = StoragePathMacros.APP_CONFIG + "/goLibraries.xml")
+  name = GoConstants.GO_LIBRARIES_SERVICE_NAME,
+  storages = @Storage(file = StoragePathMacros.APP_CONFIG + "/" + GoConstants.GO_LIBRARIES_CONFIG_FILE)
 )
 public class GoApplicationLibrariesService extends GoLibrariesService {
   public GoApplicationLibrariesService() {

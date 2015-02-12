@@ -16,20 +16,21 @@
 
 package com.goide.project;
 
+import com.goide.GoLibrariesState;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Set;
 
-public abstract class GoLibrariesService implements PersistentStateComponent<GoLibrariesService.GoLibrariesState> {
+public abstract class GoLibrariesService implements PersistentStateComponent<GoLibrariesState> {
   private GoLibrariesState myState = new GoLibrariesState();
 
   @NotNull
@@ -40,13 +41,20 @@ public abstract class GoLibrariesService implements PersistentStateComponent<GoL
 
   @Override
   public void loadState(GoLibrariesState state) {
-    XmlSerializerUtil.copyBean(state, myState);
+    // todo: delete after 1.0
+    //XmlSerializerUtil.copyBean(state, myState);
+    myState.setPaths(ContainerUtil.map(state.getPaths(), new Function<String, String>() {
+      @Override
+      public String fun(String url) {
+        return VfsUtilCore.urlToPath(url);
+      }
+    }));
   }
 
   @NotNull
   public static Collection<? extends VirtualFile> getUserDefinedLibraries(@NotNull Module module) {
     final Set<VirtualFile> result = ContainerUtil.newLinkedHashSet();
-    result.addAll(filesFromUrls(GoModuleLibrariesService.getInstance(module).getLibraryRootUrls()));
+    result.addAll(filesFromPaths(GoModuleLibrariesService.getInstance(module).getLibraryRootPaths()));
     result.addAll(getUserDefinedLibraries(module.getProject()));
     result.addAll(getUserDefinedLibraries());
     return result;
@@ -54,43 +62,30 @@ public abstract class GoLibrariesService implements PersistentStateComponent<GoL
 
   @NotNull
   public static Collection<? extends VirtualFile> getUserDefinedLibraries(@NotNull Project project) {
-    return filesFromUrls(GoProjectLibrariesService.getInstance(project).getLibraryRootUrls());
+    return filesFromPaths(GoProjectLibrariesService.getInstance(project).getLibraryRootPaths());
   }
 
   @NotNull
   public static Collection<? extends VirtualFile> getUserDefinedLibraries() {
-    return filesFromUrls(GoApplicationLibrariesService.getInstance().getLibraryRootUrls());
+    return filesFromPaths(GoApplicationLibrariesService.getInstance().getLibraryRootPaths());
   }
 
-  public void setLibraryRootUrls(@NotNull Collection<String> libraryRootUrls) {
-    myState.setUrls(libraryRootUrls);
-  }
-
-  @NotNull
-  public Collection<String> getLibraryRootUrls() {
-    return myState.getUrls();
+  public void setLibraryRootPaths(@NotNull Collection<String> libraryRootPaths) {
+    myState.setPaths(libraryRootPaths);
   }
 
   @NotNull
-  private static Collection<? extends VirtualFile> filesFromUrls(Collection<String> urls) {
-    return ContainerUtil.skipNulls(ContainerUtil.map(urls, new Function<String, VirtualFile>() {
+  public Collection<String> getLibraryRootPaths() {
+    return myState.getPaths();
+  }
+
+  @NotNull
+  public static Collection<? extends VirtualFile> filesFromPaths(@NotNull Collection<String> paths) {
+    return ContainerUtil.skipNulls(ContainerUtil.map(paths, new Function<String, VirtualFile>() {
       @Override
-      public VirtualFile fun(String url) {
-        return VirtualFileManager.getInstance().findFileByUrl(url);
+      public VirtualFile fun(String path) {
+        return VirtualFileManager.getInstance().findFileByUrl(VfsUtilCore.pathToUrl(path));
       }
     }));
-  }
-
-  public static class GoLibrariesState {
-    @NotNull private Collection<String> myUrls = ContainerUtil.newArrayList();
-
-    @NotNull
-    public Collection<String> getUrls() {
-      return myUrls;
-    }
-
-    public void setUrls(@NotNull Collection<String> urls) {
-      myUrls = urls;
-    }
   }
 }
