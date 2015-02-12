@@ -29,6 +29,10 @@ public class GoUnitTestEventsConverterTest extends GoCodeInsightFixtureTestCase 
   public void testMultipleTestsOk() throws Exception {
     doTest();
   }
+  
+  public void testSkipTest() throws Exception {
+    doTest();
+  }
 
   @Override
   protected String getBasePath() {
@@ -104,6 +108,9 @@ public class GoUnitTestEventsConverterTest extends GoCodeInsightFixtureTestCase 
     @Override
     public void visitTestIgnored(@NotNull TestIgnored testIgnored) {
       append("ignored_test", testIgnored.getTestName());
+      increaseIndent();
+      append(testIgnored.getIgnoreComment().trim());
+      decreaseIndent();
     }
 
     @Override

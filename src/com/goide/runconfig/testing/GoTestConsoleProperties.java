@@ -58,10 +58,12 @@ public class GoTestConsoleProperties extends TestConsoleProperties implements SM
   public static class GoOutputToGeneralTestEventsConverter extends OutputToGeneralTestEventsConverter {
     private static final Pattern RUN = Pattern.compile("^=== RUN (.+)");
     private static final Pattern PASSED = Pattern.compile("^--- PASS: ([^( ]+)");
+    private static final Pattern SKIP = Pattern.compile("^--- SKIP: ([^( ]+)");
     private static final Pattern FAILED = Pattern.compile("^--- FAIL: ([^( ]+)");
     private static final Pattern FINISHED = Pattern.compile("^(PASS)|(FAIL)$");
 
     private boolean myFailed = false;
+    private boolean mySkipped = false;
     @NotNull private StringBuilder myStdOut = new StringBuilder();
     @NotNull private String myCurrentTest = "<test>";
 
@@ -84,6 +86,12 @@ public class GoTestConsoleProperties extends TestConsoleProperties implements SM
         String testName = StringUtil.notNullize(matcher.group(1), "<test>");
         return processNotFinishedMessage(ServiceMessageBuilder.testFinished(testName).toString(), outputType, visitor);
       }
+      
+      if ((matcher = SKIP.matcher(text)).find()) {
+        mySkipped = true;
+        myCurrentTest = StringUtil.notNullize(matcher.group(1), "<test>");
+        return true;
+      }
 
       if ((matcher = FAILED.matcher(text)).find()) {
         myFailed = true;
@@ -91,7 +99,7 @@ public class GoTestConsoleProperties extends TestConsoleProperties implements SM
         return true;
       }
 
-      if (myFailed) {
+      if (myFailed || mySkipped) {
         if (!StringUtil.isEmptyOrSpaces(text) && !FINISHED.matcher(text).find()) {
           myStdOut.append(text);
           return true;
@@ -105,17 +113,22 @@ public class GoTestConsoleProperties extends TestConsoleProperties implements SM
     }
 
     private boolean processNotFinishedMessage(String message, Key outputType, ServiceMessageVisitor visitor) throws ParseException {
-      if (myFailed) {
+      if (myFailed || mySkipped) {
         processFailedMessage(outputType, visitor);
       }
       return super.processServiceMessages(message, outputType, visitor);
     }
 
     private boolean processFailedMessage(Key outputType, ServiceMessageVisitor visitor) throws ParseException {
-      String failedMessage = ServiceMessageBuilder.testFailed(myCurrentTest).addAttribute("message", myStdOut.toString()).toString();
+      ServiceMessageBuilder builder = myFailed 
+                                      ? ServiceMessageBuilder.testFailed(myCurrentTest) 
+                                      : ServiceMessageBuilder.testIgnored(myCurrentTest);
+      String message = builder.addAttribute("message", myStdOut.toString().trim()).toString();
+      
       myFailed = false;
+      mySkipped = false;
       myStdOut = new StringBuilder();
-      return super.processServiceMessages(failedMessage, outputType, visitor)
+      return super.processServiceMessages(message, outputType, visitor)
              && super.processServiceMessages(ServiceMessageBuilder.testFinished(myCurrentTest).toString(), outputType, visitor);
     }
   }
