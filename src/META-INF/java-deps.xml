@@ -3,6 +3,7 @@
     <moduleType id="GO_MODULE" implementationClass="com.goide.GoModuleType"/>
     <moduleConfigurationEditorProvider implementation="com.goide.configuration.GoModuleEditorsProvider" order="first"/>
     <compileServer.plugin classpath="utils.jar;jps/jps-plugin.jar"/>
+    <editorNotificationProvider implementation="com.goide.inspections.WrongModuleTypeNotificationProvider"/>
 
     <projectStructureDetector implementation="com.goide.project.GoProjectStructureDetector"/>
   </extensions>
