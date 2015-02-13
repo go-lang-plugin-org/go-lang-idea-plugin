@@ -1,6 +1,12 @@
 <component name="ArtifactManager">
   <artifact type="jar" build-on-make="true" name="intellij-go.jar">
     <output-path>$PROJECT_DIR$/bin</output-path>
+    <properties id="ant-postprocessing">
+      <options enabled="true">
+        <file>file://$PROJECT_DIR$/patch-plugin-version.xml</file>
+        <target>patch-version</target>
+      </options>
+    </properties>
     <root id="archive" name="intellij-go.jar">
       <element id="module-output" name="intellij-go" />
     </root>

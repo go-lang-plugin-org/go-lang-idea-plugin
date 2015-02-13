@@ -1,0 +1,21 @@
+<project name="Plugin version patcher" default="patch-version" basedir=".">
+  <property name="unzip.path" value="${artifact.output.path}/intellij-go-tmp"/>
+
+  <target name="clean">
+    <delete dir="${unzip.path}" failonerror="false"/>
+  </target>
+
+  <target name="patch-version" depends="clean" if="build.number">
+    <unzip dest="${unzip.path}">
+      <fileset dir="${artifact.output.path}" includes="intellij-go.jar"/>
+    </unzip>
+
+    <replace file="${unzip.path}/META-INF/plugin.xml"
+        token="&lt;version&gt;1.0&lt;/version&gt;"
+        value="&lt;version&gt;1.0.${build.number}&lt;/version&gt;"/>
+
+    <zip destfile="${artifact.output.path}/intellij-go.jar">
+      <fileset dir="${unzip.path}" includes="**"/>
+    </zip>
+  </target>
+</project>
