@@ -33,6 +33,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.*;
 import com.intellij.psi.stubs.StubIndex;
+import com.intellij.util.ObjectUtils;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -175,14 +176,13 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
     Document document = editor.getDocument();
 
     String fullPackageName = element.getContainingFile().getFullPackageName();
-    if (StringUtil.isEmpty(fullPackageName)) return;
+    String packageToInsert = element.getContainingFile().getPackageName();
+    if (StringUtil.isEmpty(packageToInsert) || StringUtil.isEmpty(fullPackageName)) return;
     
     GoImportSpec existingImport = ((GoFile)file).getImportedPackagesMap().get(fullPackageName);
-    String packageToInsert = existingImport == null 
-                             ? element.getContainingFile().getPackageName() 
-                             : existingImport.getLocalPackageName(true);
-
-    if (StringUtil.isEmpty(packageToInsert)) return;
+    if (existingImport != null) {
+      packageToInsert = ObjectUtils.notNull(existingImport.getAlias(), packageToInsert);
+    }
     
     document.insertString(context.getStartOffset(), packageToInsert + ".");
     PsiDocumentManager.getInstance(context.getProject()).commitDocument(document);

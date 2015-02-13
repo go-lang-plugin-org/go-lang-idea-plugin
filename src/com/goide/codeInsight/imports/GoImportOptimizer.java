@@ -80,7 +80,7 @@ public class GoImportOptimizer implements ImportOptimizer {
     for (PsiElement importEntry : importMap.values()) {
       GoImportSpec importSpec = getImportSpec(importEntry);
       if (importSpec != null) {
-        String localPackageName = importSpec.getLocalPackageName(false);
+        String localPackageName = importSpec.getLocalPackageName();
         if (!StringUtil.isEmpty(localPackageName)) {
           PsiElement identifier = importSpec.getIdentifier();
           if (identifier != null) {

@@ -68,8 +68,7 @@ public class GoProjectStructureDetector extends ProjectStructureDetector {
       if (modules.isEmpty()) {
         modules = new ArrayList<ModuleDescriptor>();
         for (DetectedProjectRoot root : roots) {
-          modules
-            .add(new ModuleDescriptor(root.getDirectory(), GoModuleType.getInstance(), ContainerUtil.<DetectedSourceRoot>emptyList()));
+          modules.add(new ModuleDescriptor(root.getDirectory(), GoModuleType.getInstance(), ContainerUtil.<DetectedSourceRoot>emptyList()));
         }
         projectDescriptor.setModules(modules);
       }

@@ -44,6 +44,51 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "import . `fmt`\n" +
                   "func test(){Fprintln()}");
   }
+  
+  public void testUseImportPathInsteadOfPackageNameForAutoImport() {
+    doCheckResult("package main\n" +
+                  "\n" +
+                  "import (\n" +
+                  "    \"fmt\"\n" +
+                  ")\n" +
+                  "\n" +
+                  "func main() {\n" +
+                  "    fmt.Printf(FunctionInPackageThatDoesNotMatchDirectory<caret>);\n" +
+                  "}", 
+                  "package main\n" +
+                  "\n" +
+                  "import (\n" +
+                  "    \"fmt\"\n" +
+                  "    \"dirName\"\n" +
+                  ")\n" +
+                  "\n" +
+                  "func main() {\n" +
+                  "    fmt.Printf(otherPackage.FunctionInPackageThatDoesNotMatchDirectoryName());\n" +
+                  "}");
+  }
+  
+  public void testUsePackageNameInsteadOfImportPathIfPackageIsImported() {
+    doCheckResult("package main\n" +
+                  "\n" +
+                  "import (\n" +
+                  "    \"fmt\"\n" +
+                  "    \"dirName\"\n" +
+                  ")\n" +
+                  "\n" +
+                  "func main() {\n" +
+                  "    fmt.Printf(FunctionInPackageThatDoesNotMatchDirectory<caret>);\n" +
+                  "}",
+                  "package main\n" +
+                  "\n" +
+                  "import (\n" +
+                  "    \"fmt\"\n" +
+                  "    \"dirName\"\n" +
+                  ")\n" +
+                  "\n" +
+                  "func main() {\n" +
+                  "    fmt.Printf(otherPackage.FunctionInPackageThatDoesNotMatchDirectoryName());\n" +
+                  "}");
+  }
 
   public void testImportedFunctionsPriority() {
     myFixture.configureByText("a.go", "package main; \n" +

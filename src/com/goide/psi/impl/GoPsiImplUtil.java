@@ -733,13 +733,7 @@ public class GoPsiImplUtil {
     return spec;
   }
 
-  public static String getLocalPackageName(@NotNull GoImportSpec importSpec, boolean treatAliasAsLocalName) {
-    if (treatAliasAsLocalName) {
-      final String alias = importSpec.getAlias();
-      if (alias != null) {
-        return alias;
-      }
-    }
+  public static String getLocalPackageName(@NotNull GoImportSpec importSpec) {
     return getLocalPackageName(importSpec.getImportString().getPath());
   }
   

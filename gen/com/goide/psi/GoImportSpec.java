@@ -20,6 +20,6 @@ public interface GoImportSpec extends GoNamedElement, StubBasedPsiElement<GoImpo
 
   String getAlias();
 
-  String getLocalPackageName(boolean treatAliasAsLocalName);
+  String getLocalPackageName();
 
 }
