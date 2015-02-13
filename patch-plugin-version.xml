@@ -1,11 +1,11 @@
 <project name="Plugin version patcher" default="patch-version" basedir=".">
   <property name="unzip.path" value="${artifact.output.path}/intellij-go-tmp"/>
 
-  <target name="clean">
+  <target name="clean" if="artifact.output.path">
     <delete dir="${unzip.path}" failonerror="false"/>
   </target>
 
-  <target name="patch-version" depends="clean" if="build.number">
+  <target name="patch-version" depends="clean" if="build.number,artifact.output.path">
     <unzip dest="${unzip.path}">
       <fileset dir="${artifact.output.path}" includes="intellij-go.jar"/>
     </unzip>
