@@ -1,11 +1,20 @@
 <project name="Plugin version patcher" default="patch-version" basedir=".">
   <property name="unzip.path" value="${artifact.output.path}/intellij-go-tmp"/>
 
-  <target name="clean" if="artifact.output.path">
+  <target name="checkVariables">
+    <condition property="${variables.are.set}">
+      <and>
+        <isset property="build.number"/>
+        <isset property="artifact.output.path"/>
+      </and>
+    </condition>
+  </target>
+
+  <target name="clean">
     <delete dir="${unzip.path}" failonerror="false"/>
   </target>
 
-  <target name="patch-version" depends="clean" if="build.number,artifact.output.path">
+  <target name="patch-version" depends="checkVariables,clean" if="${variables.are.set}">
     <unzip dest="${unzip.path}">
       <fileset dir="${artifact.output.path}" includes="intellij-go.jar"/>
     </unzip>
