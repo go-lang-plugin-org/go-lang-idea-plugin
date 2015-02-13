@@ -16,7 +16,7 @@
 
 <idea-plugin version="2">
   <id>ro.redeul.google.go</id>
-  <name>Go language (golang.org) support plugin</name>
+  <name>Go</name>
   <version>1.0</version>
   <vendor url="https://github.com/go-lang-plugin-org/go-lang-idea-plugin"/>
   <category>Custom Languages</category>
