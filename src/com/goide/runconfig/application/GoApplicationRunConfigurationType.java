@@ -17,7 +17,7 @@
 package com.goide.runconfig.application;
 
 import com.goide.GoIcons;
-import com.intellij.execution.configurations.ConfigurationFactory;
+import com.goide.runconfig.GoConfigurationFactoryBase;
 import com.intellij.execution.configurations.ConfigurationTypeBase;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.openapi.extensions.Extensions;
@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 public class GoApplicationRunConfigurationType extends ConfigurationTypeBase {
   public GoApplicationRunConfigurationType() {
     super("GoApplicationRunConfiguration", "Go Application", "Go application run configuration", GoIcons.APPLICATION_RUN);
-    addFactory(new ConfigurationFactory(this) {
+    addFactory(new GoConfigurationFactoryBase(this) {
       @NotNull
       public RunConfiguration createTemplateConfiguration(Project project) {
         return new GoApplicationConfiguration(project, "Go", getInstance());
