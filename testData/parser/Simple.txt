@@ -1324,3 +1324,46 @@ GO_FILE
         REFERENCE_EXPRESSION
           PsiElement(identifier)('b')
       PsiElement(})('}')
+  FUNCTION_DECLARATION
+    PsiElement(func)('func')
+    PsiElement(identifier)('main')
+    SIGNATURE
+      PARAMETERS
+        PsiElement(()('(')
+        PsiElement())(')')
+    BLOCK
+      PsiElement({)('{')
+      FOR_STATEMENT
+        PsiElement(for)('for')
+        FOR_CLAUSE
+          SIMPLE_STATEMENT
+            SHORT_VAR_DECLARATION
+              VAR_DEFINITION
+                PsiElement(identifier)('a')
+              PsiElement(:=)(':=')
+              LITERAL
+                PsiElement(int)('1')
+          PsiElement(;)(';')
+          CONDITIONAL_EXPR
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('a')
+            PsiElement(<)('<')
+            LITERAL
+              PsiElement(int)('10')
+          PsiElement(;)(';')
+          SIMPLE_STATEMENT
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('a')
+            PsiElement(++)('++')
+        BLOCK
+          PsiElement({)('{')
+          GOTO_STATEMENT
+            PsiElement(goto)('goto')
+            LABEL_REF
+              PsiElement(identifier)('err')
+          PsiElement(})('}')
+      LABELED_STATEMENT
+        LABEL_DEFINITION
+          PsiElement(identifier)('err')
+        PsiElement(:)(':')
+      PsiElement(})('}')

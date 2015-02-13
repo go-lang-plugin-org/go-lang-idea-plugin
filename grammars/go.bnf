@@ -364,7 +364,7 @@ private ConversionPredicate ::= ConversionStart | '(' ConversionStart
 private ConversionTail ::= '(' Expression ','? ')' {pin=1}
 private ConversionStart ::= '*' | '<-' | '[' | chan | func | interface | map | struct
 
-LabeledStatement ::= LabelDefinition ':' Statement {pin=2}
+LabeledStatement ::= LabelDefinition ':' Statement? {pin=2}
 LabelDefinition ::= identifier {
   stubClass="com.goide.stubs.GoLabelDefinitionStub"
 }

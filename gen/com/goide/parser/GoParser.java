@@ -2103,7 +2103,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // LabelDefinition ':' Statement
+  // LabelDefinition ':' Statement?
   public static boolean LabeledStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LabeledStatement")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
@@ -2112,9 +2112,16 @@ public class GoParser implements PsiParser {
     r = LabelDefinition(b, l + 1);
     r = r && consumeToken(b, COLON);
     p = r; // pin = 2
-    r = r && Statement(b, l + 1);
+    r = r && LabeledStatement_2(b, l + 1);
     exit_section_(b, l, m, LABELED_STATEMENT, r, p, null);
     return r || p;
+  }
+
+  // Statement?
+  private static boolean LabeledStatement_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LabeledStatement_2")) return false;
+    Statement(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */

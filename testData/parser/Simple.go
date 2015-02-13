@@ -170,3 +170,10 @@ func main() {
 )
     _ = b
 }
+
+func main() {
+    for a:= 1; a<10; a++ {
+        goto err
+    }
+    err:
+}
