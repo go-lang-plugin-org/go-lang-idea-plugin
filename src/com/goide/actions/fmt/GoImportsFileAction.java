@@ -40,6 +40,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 
 public class GoImportsFileAction extends GoExternalToolsAction {
+
   @NotNull
   @Override
   protected String getWarningTitle() {
@@ -76,12 +77,7 @@ public class GoImportsFileAction extends GoExternalToolsAction {
       return true;
     }
 
-    File executable;
-    if (SystemUtils.IS_OS_WINDOWS) {
-      executable = PathEnvironmentVariableUtil.findInPath("goimports.exe");
-    } else {
-      executable = PathEnvironmentVariableUtil.findInPath("goimports");
-    }
+    File executable = PathEnvironmentVariableUtil.findInPath("goimports" + (SystemUtils.IS_OS_WINDOWS ? ".exe" : ""));
 
     if (executable == null) {
       warning(project, groupId, "Looks like you haven't any goimports executable in your PATH");
