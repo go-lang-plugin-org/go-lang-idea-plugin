@@ -26,13 +26,22 @@ import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.projectRoots.SdkTypeId;
 import com.intellij.openapi.roots.ModifiableRootModel;
+import com.intellij.openapi.util.Pair;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class GoModuleBuilder extends JavaModuleBuilder implements SourcePathsBuilder, ModuleBuilderListener {
   @Override
   public void setupRootModel(ModifiableRootModel modifiableRootModel) throws ConfigurationException {
     addListener(this);
     super.setupRootModel(modifiableRootModel);
+  }
+
+  @Override
+  public List<Pair<String, String>> getSourcePaths() {
+    return ContainerUtil.emptyList();
   }
 
   @NotNull
