@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package com.goide;
+package com.goide.tree;
 
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.ide.structureView.*;
+import com.intellij.ide.util.treeView.smartTree.Sorter;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.lang.PsiStructureViewFactory;
 import com.intellij.navigation.ItemPresentation;
@@ -55,7 +56,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
   public static class Model extends StructureViewModelBase implements StructureViewModel.ElementInfoProvider {
     public Model(@NotNull PsiFile psiFile) {
       super(psiFile, new Element(psiFile));
-      withSuitableClasses(GoFile.class);
+      withSuitableClasses(GoFile.class).withSorters(ExportabilitySorter.INSTANCE, Sorter.ALPHA_SORTER);
     }
 
     @Override
@@ -78,7 +79,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
 
     @NotNull
     @Override
-    public Object getValue() {
+    public PsiElement getValue() {
       return myElement;
     }
 

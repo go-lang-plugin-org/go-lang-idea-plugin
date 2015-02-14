@@ -16,9 +16,9 @@
 
 package com.goide.go;
 
-import com.goide.GoStructureViewFactory;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoNamedElement;
+import com.goide.tree.GoStructureViewFactory;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;
