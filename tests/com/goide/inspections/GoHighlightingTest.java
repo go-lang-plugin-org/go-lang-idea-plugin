@@ -29,7 +29,8 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       GoVarDeclarationInspection.class,
       GoNoNewVariablesInspection.class,
       GoReturnInspection.class,
-      GoFunctionCallInspection.class
+      GoFunctionCallInspection.class,
+      GoDeferGoInspection.class
     );
   }
 

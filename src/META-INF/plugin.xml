@@ -187,6 +187,9 @@
     <localInspection language="go" displayName="Function call inspection"
                      groupName="Go" enabledByDefault="true" level="ERROR" 
                      implementationClass="com.goide.inspections.GoFunctionCallInspection"/>
+    <localInspection language="go" displayName="Defer/go statements check"
+                     groupName="Go" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoDeferGoInspection"/>
   </extensions>
   <actions>
     <action id="Go.NewGoFile" class="com.goide.actions.GoCreateFileAction"

@@ -370,3 +370,11 @@ func <warning>nestedReturn</warning>() int {
         return 1
     }
 }
+
+func <warning>defer_go</warning>() {
+    defer <error>(func(){}())</error>
+    defer <error>1</error>
+    go <error>func(){}</error>
+    defer func(){}()
+    go func(){}()
+}
