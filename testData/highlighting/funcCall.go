@@ -115,3 +115,23 @@ func <warning>main2</warning>() {
     }
     println(a)
 }
+
+type d struct{
+    A string
+}
+
+func (a *d) Func() (*d, error) {
+    return a, nil
+}
+
+func de(x string) *d {
+    return &d{A: x}
+}
+
+func demo23(a *d, err error) string {
+    return a.A
+}
+
+func <warning>main23</warning>() {
+    _ = demo23(de("1").Func())
+}

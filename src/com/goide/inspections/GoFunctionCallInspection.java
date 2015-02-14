@@ -22,8 +22,10 @@ import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -58,7 +60,7 @@ public class GoFunctionCallInspection extends LocalInspectionTool {
             if (expectedSize != actualSize) {
               if (actualSize == 1) {
                 GoExpression first = ContainerUtil.getFirstItem(list);
-                PsiReference firstRef = first instanceof GoCallExpr ? ((GoCallExpr)first).getExpression().getReference() : null;
+                PsiReference firstRef = getCallReference(first);
                 PsiElement firstResolve = firstRef != null ? firstRef.resolve() : null;
                 if (firstResolve instanceof GoFunctionOrMethodDeclaration) {
                   int resultCount = GoInspectionUtil.getFunctionResultCount((GoFunctionOrMethodDeclaration)firstResolve);
@@ -71,6 +73,14 @@ public class GoFunctionCallInspection extends LocalInspectionTool {
             }
           }
         }
+      }
+
+      @Nullable
+      private PsiReference getCallReference(@Nullable GoExpression first) {
+        if (!(first instanceof GoCallExpr)) return null;
+        GoExpression e = ((GoCallExpr)first).getExpression();
+        GoReferenceExpression r = PsiTreeUtil.getChildOfType(e, GoReferenceExpression.class);
+        return (r != null ? r : e).getReference();
       }
     };
   }
