@@ -33,6 +33,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
+import org.apache.commons.lang.SystemUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -75,7 +76,12 @@ public class GoImportsFileAction extends GoExternalToolsAction {
       return true;
     }
 
-    File executable = PathEnvironmentVariableUtil.findInPath("goimports");
+    File executable;
+    if (SystemUtils.IS_OS_WINDOWS) {
+      executable = PathEnvironmentVariableUtil.findInPath("goimports.exe");
+    } else {
+      executable = PathEnvironmentVariableUtil.findInPath("goimports");
+    }
 
     if (executable == null) {
       warning(project, groupId, "Looks like you haven't any goimports executable in your PATH");
