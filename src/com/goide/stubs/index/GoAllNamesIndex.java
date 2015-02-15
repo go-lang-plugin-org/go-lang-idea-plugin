@@ -26,7 +26,7 @@ public class GoAllNamesIndex extends StringStubIndexExtension<GoNamedElement> {
 
   @Override
   public int getVersion() {
-    return 18;
+    return 19;
   }
 
   @NotNull

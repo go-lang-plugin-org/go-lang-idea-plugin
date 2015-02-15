@@ -19,6 +19,8 @@ package com.goide.stubs.types;
 import com.goide.psi.GoReceiver;
 import com.goide.psi.impl.GoReceiverImpl;
 import com.goide.stubs.GoReceiverStub;
+import com.intellij.lang.ASTNode;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
@@ -31,6 +33,11 @@ public class GoReceiverStubElementType extends GoNamedStubElementType<GoReceiver
     super(name);
   }
 
+  @Override
+  public boolean shouldCreateStub(@NotNull ASTNode node) {
+    return true;
+  }
+
   @NotNull
   @Override
   public GoReceiver createPsi(@NotNull GoReceiverStub stub) {
@@ -40,7 +47,7 @@ public class GoReceiverStubElementType extends GoNamedStubElementType<GoReceiver
   @NotNull
   @Override
   public GoReceiverStub createStub(@NotNull GoReceiver psi, StubElement parentStub) {
-    return new GoReceiverStub(parentStub, this, psi.getName(), psi.isPublic());
+    return new GoReceiverStub(parentStub, this, StringUtil.notNullize(psi.getName()), psi.isPublic());
   }
 
   @Override
