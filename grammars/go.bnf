@@ -295,7 +295,7 @@ LiteralTypeExpr ::=
   | MapType
   | TypeName
 
-LiteralValue ::= <<isModeOff "NO_EMPTY_LITERAL">> '{' '}' | '{' ElementList '}' // todo: not a smart solution
+LiteralValue ::= (<<isModeOff "NO_EMPTY_LITERAL">> | <<isModeOn "PAR">>) '{' '}' | '{' ElementList '}' // todo: not a smart solution
 private ElementList  ::= Element ( ',' Element? )*
 Element ::= [ Key ':' ] Value
 Key ::= FieldName &':' | ElementIndex
@@ -326,7 +326,7 @@ UnaryExpr ::=  unary_op Expression
 ConditionalExpr ::= Expression rel_op Expression
 AddExpr ::= Expression add_op Expression
 MulExpr ::= Expression mul_op Expression
-ParenthesesExpr ::= '(' Expression ')'
+ParenthesesExpr ::= '(' <<enterMode "PAR">> Expression <<exitMode "PAR">>')' {pin=1}
 
 BuiltinCallExpr ::= ReferenceExpression <<isBuiltin>> '(' [ BuiltinArgs ','? ] ')' {pin=3}
 BuiltinArgs ::= Type [ ',' ExpressionList '...'? ] | ExpressionList '...'?
@@ -358,7 +358,7 @@ private inner SliceExprBodyInner ::= SliceExprBody
 private SliceExprBody ::= &':' (':' Expression ':' Expression) | (':' Expression?)
 TypeAssertionExpr ::= Expression '.' '(' &(!'type') Type ')'
 CallExpr ::= Expression ArgumentList
-ArgumentList ::= '(' [ ExpressionList '...'? ','? ] ')' {pin=1}
+ArgumentList ::= '(' <<enterMode "PAR">> [ ExpressionList '...'? ','? ] <<exitMode "PAR">>')' {pin=1}
 ConversionExpr ::= &ConversionPredicate Type ConversionTail
 private ConversionPredicate ::= ConversionStart | '(' ConversionStart
 private ConversionTail ::= '(' Expression ','? ')' {pin=1}
@@ -389,7 +389,8 @@ TypeCaseClause ::= TypeSwitchCase ':' Statements?
 TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
 TypeList ::= Type ( ',' Type )*
 TypeListNoPin ::= Type ( ',' Type )* {elementType=TypeList}
-ForStatement ::= for (ForOrRangeClause Block | Block | ExpressionNoLiteral Block) {pin(".*")="for|ForOrRangeClause"}
+ForStatement ::= for <<enterMode "NO_EMPTY_LITERAL">> (ForOrRangeClause ForBlock | ForBlock | Expression ForBlock) <<exitModeSafe "NO_EMPTY_LITERAL">> {pin(".*")="for|ForOrRangeClause"}
+private ForBlock ::= <<exitModeSafe "NO_EMPTY_LITERAL">> Block
 private ForOrRangeClause ::= ForClause | RangeClause
 private ExpressionNoLiteral ::= <<enterMode "NO_EMPTY_LITERAL">> (Expression <<exitModeSafe "NO_EMPTY_LITERAL">> | <<exitModeSafe "NO_EMPTY_LITERAL">>)
 ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement? {methods=[processDeclarations]}

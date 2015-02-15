@@ -177,3 +177,20 @@ func main() {
     }
     err:
 }
+
+func main() {
+    if err := foo(demo{}); err!= nil {
+        panic(err)
+    }
+
+    if err := (demo{}); err!= nil {
+        panic(err)
+    }
+    for b, i := M{}, 10; i < 10; i++ { // error
+        fmt.Println(v)
+    }
+    for b, i := (M{}), 10; i < 10; i++ {
+        fmt.Println(v)
+    }
+}
+
