@@ -48,20 +48,23 @@ import java.util.List;
 import java.util.Set;
 
 public class GoSdkUtil {
-
   @Nullable
   public static VirtualFile getSdkSrcDir(@NotNull PsiElement context) {
-    Module module = ModuleUtilCore.findModuleForPsiElement(context);
-    if (module == null) {
-      return guessSkdSrcDir(context);
-    }
-    Sdk sdk = ModuleRootManager.getInstance(module).getSdk();
-    if (sdk == null || sdk.getVersionString() == null) {
-      return null;
-    }
+    Sdk sdk = getSdk(context);
+    if (sdk == null || sdk.getVersionString() == null) return guessSkdSrcDir(context);
     File sdkSrcDirFile = new File(sdk.getHomePath(), getSrcLocation(sdk.getVersionString()));
     VirtualFile sdkSrcDir = LocalFileSystem.getInstance().findFileByIoFile(sdkSrcDirFile);
     return sdkSrcDir != null ? sdkSrcDir : guessSkdSrcDir(context);
+  }
+
+  @Nullable
+  public static Sdk getSdk(@NotNull PsiElement context) {
+    Module module = ModuleUtilCore.findModuleForPsiElement(context);
+    Sdk sdk = module == null ? null : ModuleRootManager.getInstance(module).getSdk();
+    sdk = sdk == null ? ProjectRootManager.getInstance(context.getProject()).getProjectSdk() : sdk;
+    if (sdk == null || sdk.getVersionString() == null) return null;
+    if (sdk.getSdkType() instanceof GoSdkType) return sdk;
+    return null;
   }
 
   @Nullable
@@ -73,7 +76,7 @@ public class GoSdkUtil {
     PsiFile psiBuiltin = context.getManager().findFile(vBuiltin);
     return (psiBuiltin instanceof GoFile) ? (GoFile)psiBuiltin : null;
   }
-  
+
   @NotNull
   public static Collection<VirtualFile> getGoPathsSources(@NotNull Module module) {
     final Collection<VirtualFile> result = getGoPathsSourcesFromEnvironment();
@@ -82,7 +85,7 @@ public class GoSdkUtil {
     }
     return result;
   }
-  
+
   @NotNull
   public static Collection<VirtualFile> getGoPathsSources(@NotNull Project project) {
     final Collection<VirtualFile> result = getGoPathsSourcesFromEnvironment();
@@ -91,7 +94,7 @@ public class GoSdkUtil {
     }
     return result;
   }
-  
+
   /**
    * Retrieves source directories from GOPATH env-variable. 
    * This method doesn't consider user defined libraries, 
@@ -112,7 +115,7 @@ public class GoSdkUtil {
     }
     return result;
   }
-  
+
   @Nullable
   private static VirtualFile findSourceDirectory(@Nullable VirtualFile file) {
     return file == null || FileUtil.namesEqual("src", file.getName()) ? file : file.findChild("src");
