@@ -246,6 +246,12 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
       if (!processNamedElements(processor, state, ((GoInterfaceType)type).getMethods(), localResolve)) return false;
       if (!processCollectedRefs(type, ((GoInterfaceType)type).getBaseTypesReferences(), processor, state)) return false;
     }
+    else if (type instanceof GoFunctionType) {
+      GoSignature signature = ((GoFunctionType)type).getSignature();
+      GoResult result = signature != null ? signature.getResult() : null;
+      GoType resultType = result != null ? result.getType() : null;
+      if (resultType != null && !processGoType(resultType, processor, state)) return false;
+    }
 
     PsiElement parent = type.getParent();
     if (parent instanceof GoTypeSpec && !processNamedElements(processor, state, ((GoTypeSpec)parent).getMethods(), localResolve)) {
