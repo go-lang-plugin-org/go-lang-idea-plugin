@@ -1383,40 +1383,6 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // <<enterMode "NO_EMPTY_LITERAL">> (Expression <<exitModeSafe "NO_EMPTY_LITERAL">> | <<exitModeSafe "NO_EMPTY_LITERAL">>)
-  static boolean ExpressionNoLiteral(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ExpressionNoLiteral")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = enterMode(b, l + 1, "NO_EMPTY_LITERAL");
-    r = r && ExpressionNoLiteral_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // Expression <<exitModeSafe "NO_EMPTY_LITERAL">> | <<exitModeSafe "NO_EMPTY_LITERAL">>
-  private static boolean ExpressionNoLiteral_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ExpressionNoLiteral_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = ExpressionNoLiteral_1_0(b, l + 1);
-    if (!r) r = exitModeSafe(b, l + 1, "NO_EMPTY_LITERAL");
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // Expression <<exitModeSafe "NO_EMPTY_LITERAL">>
-  private static boolean ExpressionNoLiteral_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ExpressionNoLiteral_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = Expression(b, l + 1, -1);
-    r = r && exitModeSafe(b, l + 1, "NO_EMPTY_LITERAL");
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  /* ********************************************************** */
   // Expression
   static boolean ExpressionWithRecover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExpressionWithRecover")) return false;
@@ -2628,7 +2594,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // ExpressionsOrVariables? range ExpressionNoLiteral
+  // ExpressionsOrVariables? range Expression
   public static boolean RangeClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RangeClause")) return false;
     boolean r, p;
@@ -2636,7 +2602,7 @@ public class GoParser implements PsiParser {
     r = RangeClause_0(b, l + 1);
     r = r && consumeToken(b, RANGE);
     p = r; // pin = 2
-    r = r && ExpressionNoLiteral(b, l + 1);
+    r = r && Expression(b, l + 1, -1);
     exit_section_(b, l, m, RANGE_CLAUSE, r, p, null);
     return r || p;
   }
