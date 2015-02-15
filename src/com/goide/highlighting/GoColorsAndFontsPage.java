@@ -50,18 +50,51 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
     new AttributesDescriptor("Type specification", TYPE_SPECIFICATION),
     new AttributesDescriptor("Type reference", TYPE_REFERENCE),
     new AttributesDescriptor("Builtin type", BUILTIN_TYPE_REFERENCE),
-    new AttributesDescriptor("Constant", CONSTANT),
-    new AttributesDescriptor("Function declaration", FUNCTION_DECLARATION),
-    new AttributesDescriptor("Global variable", GLOBAL_VARIABLE),
+    new AttributesDescriptor("Package exported interface", PACKAGE_EXPORTED_INTERFACE),
+    new AttributesDescriptor("Package exported struct", PACKAGE_EXPORTED_STRUCT),
+    new AttributesDescriptor("Package exported constant", PACKAGE_EXPORTED_CONSTANT),
+    new AttributesDescriptor("Package exported variable", PACKAGE_EXPORTED_VARIABLE),
+    new AttributesDescriptor("Package exported function", PACKAGE_EXPORTED_FUNCTION),
+    new AttributesDescriptor("Package local interface", PACKAGE_LOCAL_INTERFACE),
+    new AttributesDescriptor("Package local struct", PACKAGE_LOCAL_STRUCT),
+    new AttributesDescriptor("Package local constant", PACKAGE_LOCAL_CONSTANT),
+    new AttributesDescriptor("Package local variable", PACKAGE_LOCAL_VARIABLE),
+    new AttributesDescriptor("Package local function", PACKAGE_LOCAL_FUNCTION),
+    new AttributesDescriptor("Struct exported member", STRUCT_EXPORTED_MEMBER),
+    new AttributesDescriptor("Struct exported method", STRUCT_EXPORTED_METHOD),
+    new AttributesDescriptor("Struct local member", STRUCT_LOCAL_MEMBER),
+    new AttributesDescriptor("Struct local method", STRUCT_LOCAL_METHOD),
+    new AttributesDescriptor("Method receiver", METHOD_RECEIVER),
+    new AttributesDescriptor("Function parameter", FUNCTION_PARAMETER),
+    new AttributesDescriptor("Local constant", LOCAL_CONSTANT),
+    new AttributesDescriptor("Local variable", LOCAL_VARIABLE),
+    new AttributesDescriptor("Scope declared variable", SCOPE_VARIABLE),
   };
   private static final Map<String, TextAttributesKey> ATTRIBUTES_KEY_MAP = ContainerUtil.newTroveMap();
   static {
     ATTRIBUTES_KEY_MAP.put("tr", TYPE_REFERENCE);
     ATTRIBUTES_KEY_MAP.put("ts", TYPE_SPECIFICATION);
     ATTRIBUTES_KEY_MAP.put("bt", BUILTIN_TYPE_REFERENCE);
-    ATTRIBUTES_KEY_MAP.put("c", CONSTANT);
-    ATTRIBUTES_KEY_MAP.put("f", FUNCTION_DECLARATION);
-    ATTRIBUTES_KEY_MAP.put("g", GLOBAL_VARIABLE);
+    ATTRIBUTES_KEY_MAP.put("kw", KEYWORD);
+    ATTRIBUTES_KEY_MAP.put("pei", PACKAGE_EXPORTED_INTERFACE);
+    ATTRIBUTES_KEY_MAP.put("pes", PACKAGE_EXPORTED_STRUCT);
+    ATTRIBUTES_KEY_MAP.put("pec", PACKAGE_EXPORTED_CONSTANT);
+    ATTRIBUTES_KEY_MAP.put("pev", PACKAGE_EXPORTED_VARIABLE);
+    ATTRIBUTES_KEY_MAP.put("pef", PACKAGE_EXPORTED_FUNCTION);
+    ATTRIBUTES_KEY_MAP.put("pli", PACKAGE_LOCAL_INTERFACE);
+    ATTRIBUTES_KEY_MAP.put("pls", PACKAGE_LOCAL_STRUCT);
+    ATTRIBUTES_KEY_MAP.put("plc", PACKAGE_LOCAL_CONSTANT);
+    ATTRIBUTES_KEY_MAP.put("plv", PACKAGE_LOCAL_VARIABLE);
+    ATTRIBUTES_KEY_MAP.put("plf", PACKAGE_LOCAL_FUNCTION);
+    ATTRIBUTES_KEY_MAP.put("sem", STRUCT_EXPORTED_MEMBER);
+    ATTRIBUTES_KEY_MAP.put("sef", STRUCT_EXPORTED_METHOD);
+    ATTRIBUTES_KEY_MAP.put("slm", STRUCT_LOCAL_MEMBER);
+    ATTRIBUTES_KEY_MAP.put("slf", STRUCT_LOCAL_METHOD);
+    ATTRIBUTES_KEY_MAP.put("mr", METHOD_RECEIVER);
+    ATTRIBUTES_KEY_MAP.put("fp", FUNCTION_PARAMETER);
+    ATTRIBUTES_KEY_MAP.put("lc", LOCAL_CONSTANT);
+    ATTRIBUTES_KEY_MAP.put("lv", LOCAL_VARIABLE);
+    ATTRIBUTES_KEY_MAP.put("sv", SCOPE_VARIABLE);
   }
 
   @NotNull
@@ -90,50 +123,119 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
 
   @NotNull
   public String getDemoText() {
-    return "package main\n" +
+    return "/*\n" +
+           " * Go highlight sample \n" +
+           " */\n" +
            "\n" +
-           "import (\n" +
-           "    \"fmt\"\n" +
-           "    \"math\"\n" +
+           "// Package main\n"+
+           "package main\n" +
+           "\n" +
+           "import \"fmt\"\n" +
+           "\n" +
+           "type (\n" +
+           "    <pei>PublicInterface</pei> interface {\n" +
+           "        <pef>PublicFunc</pef>() <bt>int</bt>\n" +
+           "        <plf>privateFunc</plf>() <bt>int</bt>\n" +
+           "    }\n" +
+           "\n" +
+           "    <pli>private</pli> interface {\n" +
+           "        <pef>PublicFunc</pef>() <bt>int</bt>\n" +
+           "        <plf>privateFunc</plf>() <bt>int</bt>\n" +
+           "    }\n" +
+           "\n" +
+           "    <pes>PublicStruct</pes> struct {\n" +
+           "        <sem>PublicField</sem>  <bt>int</bt>\n" +
+           "        <slm>privateField</slm> <bt>int</bt>\n" +
+           "    }\n" +
+           "\n" +
+           "    <pls>privateStruct</pls> struct {\n" +
+           "        <sem>PublicField</sem>  <bt>int</bt>\n" +
+           "        <slm>privateField</slm> <bt>int</bt>\n" +
+           "    }\n" +
+           "\n" +
+           "    <ts>demoInt</ts> <bt>int</bt>\n" +
            ")\n" +
            "\n" +
-           "type <ts>Abser</ts> interface {\n" +
-           "    Abs() <bt>float64</bt>\n" +
+           "const (\n" +
+           "    <pec>PublicConst</pec>  = 1\n" +
+           "    <plc>privateConst</plc> = 2\n" +
+           ")\n" +
+           "\n" +
+           "var (\n" +
+           "    <pev>PublicVar</pev>  = 1\n" +
+           "    <plv>privateVar</plv> = 2\n" +
+           ")\n" +
+           "\n" +
+           "func PublicFunc() <bt>int</bt> {\n" +
+           "    const <lc>LocalConst</lc> = 1\n" +
+           "    <lv>localVar</lv> := <pev>PublicVar</pev>\n" +
+           "    return <lv>localVar</lv>\n" +
            "}\n" +
            "\n" +
-           "const <c>Constance</c> = 1\n" +
-           "\n" +
-           "var <g>GlobalVar</g> = 1\n" +
-           "\n" +
-           "func <f>main</f>() {\n" +
-           "    var a <tr>Abser</tr>;\n" +
-           "    f := <tr>MyFloat</tr>(-math.<c>Sqrt2</c>);\n" +
-           "    v := <tr>Vertex</tr>{3, 4};\n" +
-           "\n" +
-           "    a = f  // a MyFloat implements Abser\n" +
-           "    a = &v // a *Vertex implements Abser\n" +
-           "    a = v  // a Vertex, does NOT\n" +
-           "    // implement Abser\n" +
-           "\n" +
-           "    fmt.Println(a.Abs())\n" +
+           "func privateFunc() (<bt>int</bt>, <bt>int</bt>) {\n" +
+           "    const <lc>localConst</lc> = 2\n" +
+           "    <lv>LocalVar</lv> := <plv>privateVar</plv>\n" +
+           "    return <lv>LocalVar</lv>, <pev>PublicVar</pev>\n" +
            "}\n" +
            "\n" +
-           "type <ts>MyFloat</ts> <bt>float64</bt>\n" +
+           "func (<mr>ps</mr> <tr>PublicStruct</tr>) <pef>PublicFunc</pef>() <bt>int</bt> {\n" +
+           "    return <mr>ps</mr>.<slf>privateField<slf>\n" +
+           "}\n" +
            "\n" +
-           "func (f <tr>MyFloat</tr>) <f>Abs</f>() <bt>float64</bt> {\n" +
-           "    if f < 0 {\n" +
-           "        return <bt>float64</bt>(-f)\n" +
+           "func (<mr>ps</mr> <tr>PublicStruct</tr>) <plf>privateFunc</plf>() {\n" +
+           "    return <mr>ps</mr>.<sef>PublicField</sef>\n" +
+           "}\n" +
+           "\n" +
+           "func (<mr>ps</mr> <tr>privateStruct</tr>) <pef>PublicFunc</pef>() <bt>int</bt> {\n" +
+           "    return <mr>ps</mr>.<slf>privateField</slf>\n" +
+           "}\n" +
+           "\n" +
+           "func (<mr>ps</mr> <tr>privateStruct</tr>) <plf>privateFunc</plf>() {\n" +
+           "    return <mr>ps</mr>.<sef>PublicField</sef>\n" +
+           "}\n" +
+           "\n" +
+           "func <plf>variableFunc</plf>(<fp>demo1</fp> <bt>int</bt>) {\n" +
+           "    <fp>demo1</fpm> = 3\n" +
+           "    <lv>a</lv> := <tr>PublicStruct</tr>{}\n" +
+           "    <lv>a</lv>.<slf>privateFunc</slf>()\n" +
+           "    <lv>demo2</lv> := 4\n" +
+           "    if <sv>demo1</sv>, <sv>demo2</sv> := <plf>privateFunc</plf>(); <pv>demo1</pv> != 3 {\n" +
+           "        _ = <sv>demo1</sv>\n" +
+           "        _ = <sv>demo2</sv>\n" +
+           "        return\n" +
            "    }\n" +
-           "    return <bt>float64</bt>(f)\n" +
+           "\n" +
+           "    for <sv>demo1</sv> := range []<bt>int</bt>{1, 2, 3, 4} {\n" +
+           "        _ = <sv>demo1</sv>\n" +
+           "    }\n" +
+           "\n" +
+           "    switch {\n" +
+           "    case 1 == 2:\n" +
+           "        <sv>demo1</sv>, <sv>demo2</sv> := <plf>privateFunc</plf>()\n" +
+           "        _ = <sv>demo1</sv>\n" +
+           "        _ = <sv>demo2</sv>\n" +
+           "    default:\n" +
+           "        _ = <fp>demo1</fp>\n" +
+           "    }\n" +
+           "\n" +
+           "    <lv>b</lv> := func() <bt>int</bt> {\n" +
+           "        return 1\n" +
+           "    }\n" +
+           "    _ = <lv>b</lv>()\n" +
+           "    _ = <pef>PublicFunc</pef>()\n" +
+           "    _ = <plf>variableFunc</plf>(1)\n" +
+           "    _ = <fp>demo1</fp>\n" +
+           "    _ = <lv>demo2</lv>\n" +
+           "\n" +
            "}\n" +
            "\n" +
-           "type <ts>Vertex</ts> struct {\n" +
-           "    X, Y <bt>float64</bt>\n" +
-           "}\n" +
-           "\n" +
-           "func (v *<tr>Vertex</tr>) <f>Abs</f>() <bt>float64</bt> {\n" +
-           "    return math.Sqrt(v.X*v.X + v.Y*v.Y)\n" +
-           "}";
+           "func main() {\n" +
+           "    fmt.<pef>Println</pef>(\"demo\")\n" +
+           "    <plf>variableFunc</plf>(1)\n" +
+           "    <lv>c</lv> := <bt>bt</bt>\n" +
+           "    <lv>d</lv> := <bt>nil</bt>\n" +
+           "    _, _ = <lv>c</lv>, <lv>d</lv>\n" +
+           "}\n";
   }
 
   @NotNull
