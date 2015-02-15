@@ -48,23 +48,20 @@ import java.util.List;
 import java.util.Set;
 
 public class GoSdkUtil {
+
   @Nullable
   public static VirtualFile getSdkSrcDir(@NotNull PsiElement context) {
-    Sdk sdk = getSdk(context);
-    if (sdk == null || sdk.getVersionString() == null) return guessSkdSrcDir(context);
+    Module module = ModuleUtilCore.findModuleForPsiElement(context);
+    if (module == null) {
+      return guessSkdSrcDir(context);
+    }
+    Sdk sdk = ModuleRootManager.getInstance(module).getSdk();
+    if (sdk == null || sdk.getVersionString() == null) {
+      return null;
+    }
     File sdkSrcDirFile = new File(sdk.getHomePath(), getSrcLocation(sdk.getVersionString()));
     VirtualFile sdkSrcDir = LocalFileSystem.getInstance().findFileByIoFile(sdkSrcDirFile);
     return sdkSrcDir != null ? sdkSrcDir : guessSkdSrcDir(context);
-  }
-  
-  @Nullable
-  public static Sdk getSdk(@NotNull PsiElement context) {
-    Module module = ModuleUtilCore.findModuleForPsiElement(context);
-    Sdk sdk = module == null ? null : ModuleRootManager.getInstance(module).getSdk();
-    sdk = sdk == null ? ProjectRootManager.getInstance(context.getProject()).getProjectSdk() : null;
-    if (sdk == null || sdk.getVersionString() == null) return null;
-    if (sdk.getSdkType() instanceof GoSdkType) return sdk;
-    return null;
   }
 
   @Nullable
