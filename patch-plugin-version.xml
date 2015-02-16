@@ -21,7 +21,7 @@
 
     <replace file="${unzip.path}/META-INF/plugin.xml"
         token="&lt;version&gt;1.0&lt;/version&gt;"
-        value="&lt;version&gt;1.0.${build.number}&lt;/version&gt;"/>
+        value="&lt;version&gt;1.0.0.${build.number}&lt;/version&gt;"/>
 
     <zip destfile="${artifact.output.path}/intellij-go.jar">
       <fileset dir="${unzip.path}" includes="**"/>
