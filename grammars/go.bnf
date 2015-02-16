@@ -281,8 +281,13 @@ Literal ::=
   | oct
   | imaginary
   | rune
-  | string
+  | StringLiteral
   | char
+
+StringLiteral ::= string {
+  implements = "com.intellij.psi.PsiLanguageInjectionHost"
+  methods = [isValidHost updateText createLiteralTextEscaper]
+}
 OperandName ::= ReferenceExpression QualifiedReferenceExpression? {elementType=ReferenceExpression}
 
 left QualifiedReferenceExpression ::= '.' identifier {elementType=ReferenceExpression}

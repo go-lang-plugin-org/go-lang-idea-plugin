@@ -25,6 +25,6 @@ GO_FILE
       PsiElement({)('{')
       RETURN_STATEMENT
         PsiElement(return)('return')
-        LITERAL
+        STRING_LITERAL
           PsiElement(string)('"x509: invalid signature: parent certificate cannot sign this kind of certificate"')
       PsiElement(})('}')

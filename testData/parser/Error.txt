@@ -118,7 +118,7 @@ GO_FILE
             REFERENCE_EXPRESSION
               PsiElement(identifier)('inter')
             PsiElement(==)('==')
-            LITERAL
+            STRING_LITERAL
               PsiElement(string)('""')
         BLOCK
           PsiElement({)('{')
@@ -127,7 +127,7 @@ GO_FILE
               PsiElement(identifier)('inter')
             ASSIGN_OP
               PsiElement(=)('=')
-            LITERAL
+            STRING_LITERAL
               PsiElement(string)('"interface"')
           PsiElement(})('}')
       IF_STATEMENT
@@ -140,7 +140,7 @@ GO_FILE
               PsiElement(.)('.')
               PsiElement(identifier)('concreteString')
             PsiElement(==)('==')
-            LITERAL
+            STRING_LITERAL
               PsiElement(string)('""')
         BLOCK
           PsiElement({)('{')
@@ -149,13 +149,13 @@ GO_FILE
             ADD_EXPR
               ADD_EXPR
                 ADD_EXPR
-                  LITERAL
+                  STRING_LITERAL
                     PsiElement(string)('"interface conversion: "')
                   PsiElement(+)('+')
                   REFERENCE_EXPRESSION
                     PsiElement(identifier)('inter')
                 PsiElement(+)('+')
-                LITERAL
+                STRING_LITERAL
                   PsiElement(string)('" is nil, not "')
               PsiElement(+)('+')
               REFERENCE_EXPRESSION
@@ -174,7 +174,7 @@ GO_FILE
               PsiElement(.)('.')
               PsiElement(identifier)('missingMethod')
             PsiElement(==)('==')
-            LITERAL
+            STRING_LITERAL
               PsiElement(string)('""')
         BLOCK
           PsiElement({)('{')
@@ -185,13 +185,13 @@ GO_FILE
                 ADD_EXPR
                   ADD_EXPR
                     ADD_EXPR
-                      LITERAL
+                      STRING_LITERAL
                         PsiElement(string)('"interface conversion: "')
                       PsiElement(+)('+')
                       REFERENCE_EXPRESSION
                         PsiElement(identifier)('inter')
                     PsiElement(+)('+')
-                    LITERAL
+                    STRING_LITERAL
                       PsiElement(string)('" is "')
                   PsiElement(+)('+')
                   REFERENCE_EXPRESSION
@@ -200,7 +200,7 @@ GO_FILE
                     PsiElement(.)('.')
                     PsiElement(identifier)('concreteString')
                 PsiElement(+)('+')
-                LITERAL
+                STRING_LITERAL
                   PsiElement(string)('", not "')
               PsiElement(+)('+')
               REFERENCE_EXPRESSION
@@ -216,7 +216,7 @@ GO_FILE
             ADD_EXPR
               ADD_EXPR
                 ADD_EXPR
-                  LITERAL
+                  STRING_LITERAL
                     PsiElement(string)('"interface conversion: "')
                   PsiElement(+)('+')
                   REFERENCE_EXPRESSION
@@ -225,7 +225,7 @@ GO_FILE
                     PsiElement(.)('.')
                     PsiElement(identifier)('concreteString')
                 PsiElement(+)('+')
-                LITERAL
+                STRING_LITERAL
                   PsiElement(string)('" is not "')
               PsiElement(+)('+')
               REFERENCE_EXPRESSION
@@ -234,7 +234,7 @@ GO_FILE
                 PsiElement(.)('.')
                 PsiElement(identifier)('assertedString')
             PsiElement(+)('+')
-            LITERAL
+            STRING_LITERAL
               PsiElement(string)('": missing method "')
           PsiElement(+)('+')
           REFERENCE_EXPRESSION
@@ -472,7 +472,7 @@ GO_FILE
       RETURN_STATEMENT
         PsiElement(return)('return')
         ADD_EXPR
-          LITERAL
+          STRING_LITERAL
             PsiElement(string)('"runtime error: "')
           PsiElement(+)('+')
           CALL_EXPR
@@ -608,7 +608,7 @@ GO_FILE
                 PsiElement(identifier)('print')
               ARGUMENT_LIST
                 PsiElement(()('(')
-                LITERAL
+                STRING_LITERAL
                   PsiElement(string)('"nil"')
                 PsiElement())(')')
         TYPE_CASE_CLAUSE
@@ -699,7 +699,7 @@ GO_FILE
                 PsiElement(identifier)('print')
               ARGUMENT_LIST
                 PsiElement(()('(')
-                LITERAL
+                STRING_LITERAL
                   PsiElement(string)('"("')
                 PsiElement(,)(',')
                 CALL_EXPR
@@ -711,7 +711,7 @@ GO_FILE
                       PsiElement(identifier)('i')
                     PsiElement())(')')
                 PsiElement(,)(',')
-                LITERAL
+                STRING_LITERAL
                   PsiElement(string)('") "')
                 PsiElement(,)(',')
                 REFERENCE_EXPRESSION
@@ -755,31 +755,31 @@ GO_FILE
                       ADD_EXPR
                         ADD_EXPR
                           ADD_EXPR
-                            LITERAL
+                            STRING_LITERAL
                               PsiElement(string)('"value method "')
                             PsiElement(+)('+')
                             REFERENCE_EXPRESSION
                               PsiElement(identifier)('pkg')
                           PsiElement(+)('+')
-                          LITERAL
+                          STRING_LITERAL
                             PsiElement(string)('"."')
                         PsiElement(+)('+')
                         REFERENCE_EXPRESSION
                           PsiElement(identifier)('typ')
                       PsiElement(+)('+')
-                      LITERAL
+                      STRING_LITERAL
                         PsiElement(string)('"."')
                     PsiElement(+)('+')
                     REFERENCE_EXPRESSION
                       PsiElement(identifier)('meth')
                   PsiElement(+)('+')
-                  LITERAL
+                  STRING_LITERAL
                     PsiElement(string)('" called using nil *"')
                 PsiElement(+)('+')
                 REFERENCE_EXPRESSION
                   PsiElement(identifier)('typ')
               PsiElement(+)('+')
-              LITERAL
+              STRING_LITERAL
                 PsiElement(string)('" pointer"')
             PsiElement())(')')
       PsiElement(})('}')

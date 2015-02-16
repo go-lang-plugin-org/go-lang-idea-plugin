@@ -121,7 +121,7 @@ GO_FILE
                     PsiElement(identifier)('printf')
                   ARGUMENT_LIST
                     PsiElement(()('(')
-                    LITERAL
+                    STRING_LITERAL
                       PsiElement(string)('"%d %s\n"')
                     PsiElement(,)(',')
                     REFERENCE_EXPRESSION
@@ -141,7 +141,7 @@ GO_FILE
             PsiElement(identifier)('closure')
           ARGUMENT_LIST
             PsiElement(()('(')
-            LITERAL
+            STRING_LITERAL
               PsiElement(string)('"A Message"')
             PsiElement())(')')
       SIMPLE_STATEMENT
@@ -150,7 +150,7 @@ GO_FILE
             PsiElement(identifier)('closure')
           ARGUMENT_LIST
             PsiElement(()('(')
-            LITERAL
+            STRING_LITERAL
               PsiElement(string)('"Another Message"')
             PsiElement())(')')
       PsiElement(})('}')
@@ -190,7 +190,7 @@ GO_FILE
                 PsiElement(identifier)('Printf')
               ARGUMENT_LIST
                 PsiElement(()('(')
-                LITERAL
+                STRING_LITERAL
                   PsiElement(string)('"\nNumber of loops?\n"')
                 PsiElement())(')')
           SIMPLE_STATEMENT
@@ -202,7 +202,7 @@ GO_FILE
                 PsiElement(identifier)('Scanf')
               ARGUMENT_LIST
                 PsiElement(()('(')
-                LITERAL
+                STRING_LITERAL
                   PsiElement(string)('"%d"')
                 PsiElement(,)(',')
                 UNARY_EXPR
@@ -244,7 +244,7 @@ GO_FILE
                     PsiElement(identifier)('Printf')
                   ARGUMENT_LIST
                     PsiElement(()('(')
-                    LITERAL
+                    STRING_LITERAL
                       PsiElement(string)('"%d "')
                     PsiElement(,)(',')
                     REFERENCE_EXPRESSION
@@ -381,7 +381,7 @@ GO_FILE
             PsiElement(identifier)('Printf')
           ARGUMENT_LIST
             PsiElement(()('(')
-            LITERAL
+            STRING_LITERAL
               PsiElement(string)('"%d\n"')
             PsiElement(,)(',')
             REFERENCE_EXPRESSION
@@ -422,7 +422,7 @@ GO_FILE
             PsiElement(identifier)('Printf')
           ARGUMENT_LIST
             PsiElement(()('(')
-            LITERAL
+            STRING_LITERAL
               PsiElement(string)('"%d %s\n"')
             PsiElement(,)(',')
             REFERENCE_EXPRESSION
@@ -641,7 +641,7 @@ GO_FILE
             PsiElement(identifier)('Printf')
           ARGUMENT_LIST
             PsiElement(()('(')
-            LITERAL
+            STRING_LITERAL
               PsiElement(string)('"(%f, %f)\n"')
             PsiElement(,)(',')
             REFERENCE_EXPRESSION
@@ -682,7 +682,7 @@ GO_FILE
             PsiElement(identifier)('Printf')
           ARGUMENT_LIST
             PsiElement(()('(')
-            LITERAL
+            STRING_LITERAL
               PsiElement(string)('"(%f, %f ◦ )\n"')
             PsiElement(,)(',')
             REFERENCE_EXPRESSION

@@ -23,6 +23,7 @@ import com.goide.stubs.GoNamedStub;
 import com.goide.stubs.GoParameterDeclarationStub;
 import com.goide.stubs.GoTypeStub;
 import com.goide.stubs.index.GoMethodIndex;
+import com.goide.util.GoStringLiteralEscaper;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Condition;
@@ -773,5 +774,19 @@ public class GoPsiImplUtil {
   
   public static boolean isQuote(char ch) {
     return ch == '"' || ch == '\'' || ch == '`';
+  }
+
+  public static boolean isValidHost(GoStringLiteral o) {
+      return true;
+  }
+
+  public static GoStringLiteralImpl updateText(GoStringLiteral o, @NotNull String text) {
+    final GoExpression expression = GoElementFactory.createExpressionFromText(o.getProject(), text);
+    return (GoStringLiteralImpl)o.replace(expression);
+  }
+
+  @NotNull
+  public static GoStringLiteralEscaper createLiteralTextEscaper(GoStringLiteral o) {
+    return new GoStringLiteralEscaper(o);
   }
 }

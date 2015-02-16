@@ -54,7 +54,7 @@ GO_FILE
           PsiElement(identifier)('New')
         ARGUMENT_LIST
           PsiElement(()('(')
-          LITERAL
+          STRING_LITERAL
             PsiElement(string)('"archive/tar: write too long"')
           PsiElement())(')')
     VAR_SPEC
@@ -69,7 +69,7 @@ GO_FILE
           PsiElement(identifier)('New')
         ARGUMENT_LIST
           PsiElement(()('(')
-          LITERAL
+          STRING_LITERAL
             PsiElement(string)('"archive/tar: header field too long"')
           PsiElement())(')')
     VAR_SPEC
@@ -84,7 +84,7 @@ GO_FILE
           PsiElement(identifier)('New')
         ARGUMENT_LIST
           PsiElement(()('(')
-          LITERAL
+          STRING_LITERAL
             PsiElement(string)('"archive/tar: write after close"')
           PsiElement())(')')
     VAR_SPEC
@@ -99,7 +99,7 @@ GO_FILE
           PsiElement(identifier)('New')
         ARGUMENT_LIST
           PsiElement(()('(')
-          LITERAL
+          STRING_LITERAL
             PsiElement(string)('"archive/tar: name too long"')
           PsiElement())(')')
     PsiElement())(')')
@@ -254,7 +254,7 @@ GO_FILE
                 PsiElement(identifier)('Errorf')
               ARGUMENT_LIST
                 PsiElement(()('(')
-                LITERAL
+                STRING_LITERAL
                   PsiElement(string)('"archive/tar: missed writing %d bytes"')
                 PsiElement(,)(',')
                 REFERENCE_EXPRESSION
@@ -646,7 +646,7 @@ GO_FILE
             ASSIGN_OP
               PsiElement(=)('=')
             ADD_EXPR
-              LITERAL
+              STRING_LITERAL
                 PsiElement(string)('"0"')
               PsiElement(+)('+')
               REFERENCE_EXPRESSION
@@ -1025,7 +1025,7 @@ GO_FILE
           VAR_DEFINITION
             PsiElement(identifier)('prefix')
           PsiElement(:=)(':=')
-          LITERAL
+          STRING_LITERAL
             PsiElement(string)('""')
       IF_STATEMENT
         PsiElement(if)('if')
@@ -1594,7 +1594,7 @@ GO_FILE
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(identifier)('byte')
               PsiElement(()('(')
-              LITERAL
+              STRING_LITERAL
                 PsiElement(string)('"ustar\x0000"')
               PsiElement())(')')
             PsiElement())(')')
@@ -1772,7 +1772,7 @@ GO_FILE
                       TYPE_REFERENCE_EXPRESSION
                         PsiElement(identifier)('byte')
                   PsiElement(()('(')
-                  LITERAL
+                  STRING_LITERAL
                     PsiElement(string)('"ustar  \x00"')
                   PsiElement())(')')
                 PsiElement())(')')
@@ -1820,7 +1820,7 @@ GO_FILE
                       TYPE_REFERENCE_EXPRESSION
                         PsiElement(identifier)('byte')
                   PsiElement(()('(')
-                  LITERAL
+                  STRING_LITERAL
                     PsiElement(string)('"ustar\000"')
                   PsiElement())(')')
                 PsiElement())(')')
@@ -2071,7 +2071,7 @@ GO_FILE
                   PsiElement(identifier)('length')
                 PsiElement(])(']')
               PsiElement(,)(',')
-              LITERAL
+              STRING_LITERAL
                 PsiElement(string)('"/"')
               PsiElement())(')')
       SIMPLE_STATEMENT
@@ -2295,7 +2295,7 @@ GO_FILE
                   PsiElement(identifier)('Sprintf')
                 ARGUMENT_LIST
                   PsiElement(()('(')
-                  LITERAL
+                  STRING_LITERAL
                     PsiElement(string)('"PaxHeaders.%d"')
                   PsiElement(,)(',')
                   REFERENCE_EXPRESSION
@@ -2365,7 +2365,7 @@ GO_FILE
                   ARGUMENT_LIST
                     PsiElement(()('(')
                     ADD_EXPR
-                      LITERAL
+                      STRING_LITERAL
                         PsiElement(string)('"path="')
                       PsiElement(+)('+')
                       REFERENCE_EXPRESSION
@@ -2416,7 +2416,7 @@ GO_FILE
                   ARGUMENT_LIST
                     PsiElement(()('(')
                     ADD_EXPR
-                      LITERAL
+                      STRING_LITERAL
                         PsiElement(string)('"linkpath="')
                       PsiElement(+)('+')
                       REFERENCE_EXPRESSION
@@ -2647,7 +2647,7 @@ GO_FILE
               PsiElement(identifier)('Sprintf')
             ARGUMENT_LIST
               PsiElement(()('(')
-              LITERAL
+              STRING_LITERAL
                 PsiElement(string)('"%d %s\n"')
               PsiElement(,)(',')
               REFERENCE_EXPRESSION
@@ -2701,7 +2701,7 @@ GO_FILE
                 PsiElement(identifier)('Sprintf')
               ARGUMENT_LIST
                 PsiElement(()('(')
-                LITERAL
+                STRING_LITERAL
                   PsiElement(string)('"%d %s\n"')
                 PsiElement(,)(',')
                 REFERENCE_EXPRESSION
