@@ -194,3 +194,6 @@ func main() {
     }
 }
 
+type name struct {
+    foo string `xml:""`
+}

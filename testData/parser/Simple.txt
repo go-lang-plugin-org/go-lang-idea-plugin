@@ -1557,3 +1557,19 @@ GO_FILE
                 PsiElement())(')')
           PsiElement(})('}')
       PsiElement(})('}')
+  TYPE_DECLARATION
+    PsiElement(type)('type')
+    TYPE_SPEC
+      PsiElement(identifier)('name')
+      STRUCT_TYPE
+        PsiElement(struct)('struct')
+        PsiElement({)('{')
+        FIELD_DECLARATION
+          FIELD_DEFINITION
+            PsiElement(identifier)('foo')
+          TYPE
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('string')
+          TAG
+            PsiElement(raw_string)('`xml:""`')
+        PsiElement(})('}')

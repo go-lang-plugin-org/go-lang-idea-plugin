@@ -22,9 +22,15 @@ public class GoTagImpl extends GoCompositeElementImpl implements GoTag {
   }
 
   @Override
-  @NotNull
+  @Nullable
+  public PsiElement getRawString() {
+    return findChildByType(RAW_STRING);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getString() {
-    return findNotNullChildByType(STRING);
+    return findChildByType(STRING);
   }
 
 }
