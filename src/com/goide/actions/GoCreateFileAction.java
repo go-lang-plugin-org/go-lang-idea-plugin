@@ -42,7 +42,7 @@ public class GoCreateFileAction extends CreateFileFromTemplateAction implements 
 
   @Override
   protected PsiFile createFile(String name, @NotNull String templateName, @NotNull PsiDirectory dir) {
-    FileTemplate template = FileTemplateManager.getInstance().getInternalTemplate(templateName);
+    FileTemplate template = FileTemplateManager.getDefaultInstance().getInternalTemplate(templateName);
     Properties properties = new Properties();
     properties.setProperty(PACKAGE, ContainerUtil.getLastItem(StringUtil.split(dir.getName(), "-")));
     try {
@@ -64,10 +64,10 @@ public class GoCreateFileAction extends CreateFileFromTemplateAction implements 
   protected void buildDialog(final Project project, PsiDirectory directory, @NotNull CreateFileFromTemplateDialog.Builder builder) {
     // todo: check that file already exists
     builder.
-      setTitle(NEW_GO_FILE).
-      addKind("Empty file", GoIcons.ICON, "Go File").
-      addKind("Simple Application", GoIcons.ICON, "Go Application").
-      setValidator(new InputValidatorEx() {
+      setTitle(NEW_GO_FILE)
+      .addKind("Empty file", GoIcons.ICON, "Go File")
+      .addKind("Simple Application", GoIcons.ICON, "Go Application")
+      .setValidator(new InputValidatorEx() {
         @Override
         public boolean checkInput(String inputString) {
           return true;
@@ -79,15 +79,13 @@ public class GoCreateFileAction extends CreateFileFromTemplateAction implements 
         }
 
         @Override
-        public String getErrorText(@NotNull String inputString) {
+        public String getErrorText(@NotNull String s) {
           String error = " is not a valid Go file name";
-          if (StringUtil.isEmpty(inputString)) return null;
-          boolean ok = new GoNamesValidator().isIdentifier(inputString, project);
-            if (ok && FileUtil.sanitizeFileName(inputString).equals(inputString)) {
-              return null;
-            }
-
-          return "'" + inputString + "'" + error;
+          if (StringUtil.isEmpty(s)) return null;
+          String name = FileUtil.getNameWithoutExtension(s);
+          return new GoNamesValidator().isIdentifier(name, project) && FileUtil.sanitizeFileName(name).equals(name) 
+                 ? null 
+                 : "'" + s + "'" + error;
         }
       })
     ;
