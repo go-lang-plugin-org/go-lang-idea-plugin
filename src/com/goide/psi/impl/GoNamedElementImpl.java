@@ -88,7 +88,7 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
 
   @Nullable
   @Override
-  public GoType getGoType() {
+  public GoType getGoType(ResolveState context) {
     return findSiblingType();
   }
 

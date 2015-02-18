@@ -62,6 +62,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     };
   public static final Key<String > ACTUAL_NAME = Key.create("ACTUAL_NAME");
   public static final Key<Object> POINTER = Key.create("POINTER");
+  public static final Key<SmartPsiElementPointer<GoReferenceExpressionBase>> CONTEXT = Key.create("CONTEXT");
 
   public GoReference(@NotNull GoReferenceExpressionBase o) {
     super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(), o.getIdentifier().getTextLength()));
@@ -181,7 +182,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     if (target instanceof GoImportSpec) target = ((GoImportSpec)target).getImportString().resolve();
     if (target instanceof PsiDirectory && !processDirectory((PsiDirectory)target, file, null, processor, state, false)) return false;
     if (target instanceof GoTypeOwner) {
-      GoType type = parameterType((GoTypeOwner)target);
+      GoType type = typeOrParameterType((GoTypeOwner)target, createContext());
       if (type != null && !processGoType(type, processor, state)) return false;
       PsiElement parent = target.getParent();
       if (target instanceof GoVarDefinition && parent instanceof GoTypeSwitchGuard) {
@@ -383,10 +384,15 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
                                   @Nullable PsiElement another) {
     List<GoExpression> list = parent.getExpressionList();
     if (list.size() > 1 && list.get(1).isEquivalentTo(another)) {
-      GoType type = list.get(0).getGoType();
+      GoType type = list.get(0).getGoType(createContext());
       if (type != null && !processGoType(type, processor, state)) return false;
     }
     return true;
+  }
+
+  @NotNull
+  public ResolveState createContext() {
+    return ResolveState.initial().put(CONTEXT, SmartPointerManager.getInstance(myElement.getProject()).createSmartPsiElementPointer(myElement));
   }
 
   @NotNull

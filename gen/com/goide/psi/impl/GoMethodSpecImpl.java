@@ -10,6 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.stubs.GoMethodSpecStub;
 import com.goide.psi.*;
+import com.intellij.psi.ResolveState;
 import com.intellij.psi.stubs.IStubElementType;
 
 public class GoMethodSpecImpl extends GoNamedElementImpl<GoMethodSpecStub> implements GoMethodSpec {
@@ -46,8 +47,8 @@ public class GoMethodSpecImpl extends GoNamedElementImpl<GoMethodSpecStub> imple
   }
 
   @Nullable
-  public GoType getGoType() {
-    return GoPsiImplUtil.getGoType(this);
+  public GoType getGoType(ResolveState context) {
+    return GoPsiImplUtil.getGoType(this, context);
   }
 
   @Nullable

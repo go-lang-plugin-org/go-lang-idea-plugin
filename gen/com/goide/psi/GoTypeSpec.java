@@ -6,6 +6,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import com.goide.stubs.GoTypeSpecStub;
+import com.intellij.psi.ResolveState;
 
 public interface GoTypeSpec extends GoNamedElement, StubBasedPsiElement<GoTypeSpecStub> {
 
@@ -16,7 +17,7 @@ public interface GoTypeSpec extends GoNamedElement, StubBasedPsiElement<GoTypeSp
   PsiElement getIdentifier();
 
   @Nullable
-  GoType getGoType();
+  GoType getGoType(ResolveState context);
 
   @NotNull
   List<GoMethodDeclaration> getMethods();

@@ -10,6 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.stubs.GoTypeSpecStub;
 import com.goide.psi.*;
+import com.intellij.psi.ResolveState;
 import com.intellij.psi.stubs.IStubElementType;
 
 public class GoTypeSpecImpl extends GoNamedElementImpl<GoTypeSpecStub> implements GoTypeSpec {
@@ -40,8 +41,8 @@ public class GoTypeSpecImpl extends GoNamedElementImpl<GoTypeSpecStub> implement
   }
 
   @Nullable
-  public GoType getGoType() {
-    return GoPsiImplUtil.getGoType(this);
+  public GoType getGoType(ResolveState context) {
+    return GoPsiImplUtil.getGoType(this, context);
   }
 
   @NotNull

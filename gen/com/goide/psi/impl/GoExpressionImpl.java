@@ -9,6 +9,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
+import com.intellij.psi.ResolveState;
 
 public class GoExpressionImpl extends GoCompositeElementImpl implements GoExpression {
 
@@ -22,8 +23,8 @@ public class GoExpressionImpl extends GoCompositeElementImpl implements GoExpres
   }
 
   @Nullable
-  public GoType getGoType() {
-    return GoPsiImplUtil.getGoType(this);
+  public GoType getGoType(ResolveState context) {
+    return GoPsiImplUtil.getGoType(this, context);
   }
 
 }

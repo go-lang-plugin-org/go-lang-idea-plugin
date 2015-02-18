@@ -20,6 +20,7 @@ import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.goide.psi.GoType;
 import com.goide.stubs.GoFunctionOrMethodDeclarationStub;
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.ResolveState;
 import com.intellij.psi.stubs.IStubElementType;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,7 +34,7 @@ abstract public class GoFunctionOrMethodDeclarationImpl<T extends GoFunctionOrMe
     super(node);
   }
 
-  public GoType getGoType() {
-    return GoPsiImplUtil.getGoType(this);
+  public GoType getGoType(ResolveState context) {
+    return GoPsiImplUtil.getGoType(this, context);
   }
 }

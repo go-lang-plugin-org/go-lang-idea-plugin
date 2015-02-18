@@ -10,6 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.stubs.GoConstDefinitionStub;
 import com.goide.psi.*;
+import com.intellij.psi.ResolveState;
 import com.intellij.psi.stubs.IStubElementType;
 
 public class GoConstDefinitionImpl extends GoNamedElementImpl<GoConstDefinitionStub> implements GoConstDefinition {
@@ -34,8 +35,8 @@ public class GoConstDefinitionImpl extends GoNamedElementImpl<GoConstDefinitionS
   }
 
   @Nullable
-  public GoType getGoType() {
-    return GoPsiImplUtil.getGoType(this);
+  public GoType getGoType(ResolveState context) {
+    return GoPsiImplUtil.getGoType(this, context);
   }
 
 }

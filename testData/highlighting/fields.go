@@ -14,3 +14,20 @@ func main() {
 func foo1() {
 
 }
+
+type Par []struct{
+    Key   string
+    Value string
+}
+
+func <warning>main1</warning>(i interface{}) {
+    // it works
+    t := i.(Par)
+    _ = t[0].Key
+
+    // it fails
+    switch t := i.(type) {
+        case Par:
+        _ = t[0].Key
+    }
+}

@@ -10,6 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.stubs.GoAnonymousFieldDefinitionStub;
 import com.goide.psi.*;
+import com.intellij.psi.ResolveState;
 import com.intellij.psi.stubs.IStubElementType;
 
 public class GoAnonymousFieldDefinitionImpl extends GoNamedElementImpl<GoAnonymousFieldDefinitionStub> implements GoAnonymousFieldDefinition {
@@ -54,8 +55,8 @@ public class GoAnonymousFieldDefinitionImpl extends GoNamedElementImpl<GoAnonymo
   }
 
   @Nullable
-  public GoType getGoType() {
-    return GoPsiImplUtil.getGoType(this);
+  public GoType getGoType(ResolveState context) {
+    return GoPsiImplUtil.getGoType(this, context);
   }
 
 }

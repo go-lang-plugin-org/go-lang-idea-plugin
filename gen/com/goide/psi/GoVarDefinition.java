@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import com.goide.stubs.GoVarDefinitionStub;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.ResolveState;
 
 public interface GoVarDefinition extends GoNamedElement, StubBasedPsiElement<GoVarDefinitionStub> {
 
@@ -14,7 +15,7 @@ public interface GoVarDefinition extends GoNamedElement, StubBasedPsiElement<GoV
   PsiElement getIdentifier();
 
   @Nullable
-  GoType getGoType();
+  GoType getGoType(ResolveState context);
 
   @Nullable
   PsiReference getReference();

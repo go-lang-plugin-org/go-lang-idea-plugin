@@ -6,6 +6,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import com.goide.stubs.GoConstDefinitionStub;
+import com.intellij.psi.ResolveState;
 
 public interface GoConstDefinition extends GoNamedElement, StubBasedPsiElement<GoConstDefinitionStub> {
 
@@ -13,6 +14,6 @@ public interface GoConstDefinition extends GoNamedElement, StubBasedPsiElement<G
   PsiElement getIdentifier();
 
   @Nullable
-  GoType getGoType();
+  GoType getGoType(ResolveState context);
 
 }

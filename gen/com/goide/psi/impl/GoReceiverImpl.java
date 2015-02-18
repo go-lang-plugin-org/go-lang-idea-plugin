@@ -10,6 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.stubs.GoReceiverStub;
 import com.goide.psi.*;
+import com.intellij.psi.ResolveState;
 import com.intellij.psi.stubs.IStubElementType;
 
 public class GoReceiverImpl extends GoNamedElementImpl<GoReceiverStub> implements GoReceiver {
@@ -58,8 +59,8 @@ public class GoReceiverImpl extends GoNamedElementImpl<GoReceiverStub> implement
   }
 
   @Nullable
-  public GoType getGoType() {
-    return GoPsiImplUtil.getGoType(this);
+  public GoType getGoType(ResolveState context) {
+    return GoPsiImplUtil.getGoType(this, context);
   }
 
 }

@@ -11,6 +11,7 @@ import static com.goide.GoTypes.*;
 import com.goide.stubs.GoVarDefinitionStub;
 import com.goide.psi.*;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.ResolveState;
 import com.intellij.psi.stubs.IStubElementType;
 
 public class GoVarDefinitionImpl extends GoNamedElementImpl<GoVarDefinitionStub> implements GoVarDefinition {
@@ -35,8 +36,8 @@ public class GoVarDefinitionImpl extends GoNamedElementImpl<GoVarDefinitionStub>
   }
 
   @Nullable
-  public GoType getGoType() {
-    return GoPsiImplUtil.getGoType(this);
+  public GoType getGoType(ResolveState context) {
+    return GoPsiImplUtil.getGoType(this, context);
   }
 
   @Nullable

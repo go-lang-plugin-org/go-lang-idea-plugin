@@ -39,7 +39,7 @@ public class GoShowTypeInternalAction extends SelectionBasedPsiElementInternalAc
   @Nullable
   @Override
   protected String getInformationHint(@NotNull GoExpression element) {
-    GoType type = element.getGoType();
+    GoType type = element.getGoType(null);
     return type != null ? type.getText() : "<null>";
   }
 

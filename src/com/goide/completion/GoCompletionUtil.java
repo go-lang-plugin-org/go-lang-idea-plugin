@@ -164,7 +164,7 @@ public class GoCompletionUtil {
                 v instanceof GoConstDefinition ? GoIcons.CONST :
                 v instanceof GoAnonymousFieldDefinition ? GoIcons.FIELD :
                 null;
-    GoType type = v.getGoType();
+    GoType type = v.getGoType(null);
     String text = GoPsiImplUtil.getText(type);
     return PrioritizedLookupElement.withPriority(
       LookupElementBuilder

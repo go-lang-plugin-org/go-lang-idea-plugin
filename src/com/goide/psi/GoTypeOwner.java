@@ -16,9 +16,10 @@
 
 package com.goide.psi;
 
+import com.intellij.psi.ResolveState;
 import org.jetbrains.annotations.Nullable;
 
 public interface GoTypeOwner extends GoCompositeElement {
   @Nullable
-  GoType getGoType();
+  GoType getGoType(@Nullable ResolveState context);
 }
