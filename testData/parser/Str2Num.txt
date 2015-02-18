@@ -47,7 +47,7 @@ GO_FILE
             PsiElement())(')')
           ARGUMENT_LIST
             PsiElement(()('(')
-            LITERAL
+            STRING_LITERAL
               PsiElement(string)('"Hello\n"')
             PsiElement(,)(',')
             LITERAL
@@ -65,7 +65,7 @@ GO_FILE
             PsiElement())(')')
           ARGUMENT_LIST
             PsiElement(()('(')
-            LITERAL
+            STRING_LITERAL
               PsiElement(string)('"Hello\n"')
             PsiElement(,)(',')
             LITERAL
@@ -77,7 +77,7 @@ GO_FILE
             PsiElement(identifier)('p')
           ARGUMENT_LIST
             PsiElement(()('(')
-            LITERAL
+            STRING_LITERAL
               PsiElement(string)('"Hello\n"')
             PsiElement(,)(',')
             LITERAL
@@ -113,7 +113,7 @@ GO_FILE
                 PsiElement(identifier)('p')
               ARGUMENT_LIST
                 PsiElement(()('(')
-                LITERAL
+                STRING_LITERAL
                   PsiElement(string)('""')
                 PsiElement(,)(',')
                 REFERENCE_EXPRESSION
@@ -154,7 +154,7 @@ GO_FILE
             PsiElement(identifier)('f')
           ARGUMENT_LIST
             PsiElement(()('(')
-            LITERAL
+            STRING_LITERAL
               PsiElement(string)('"%d"')
             PsiElement(,)(',')
             UNARY_EXPR
@@ -221,7 +221,7 @@ GO_FILE
             PsiElement(identifier)('Printf')
           ARGUMENT_LIST
             PsiElement(()('(')
-            LITERAL
+            STRING_LITERAL
               PsiElement(string)('"%d\n"')
             PsiElement(,)(',')
             REFERENCE_EXPRESSION

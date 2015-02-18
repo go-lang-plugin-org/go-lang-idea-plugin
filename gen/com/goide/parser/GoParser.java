@@ -262,6 +262,9 @@ public class GoParser implements PsiParser {
     else if (t == STATEMENT) {
       r = Statement(b, 0);
     }
+    else if (t == STRING_LITERAL) {
+      r = StringLiteral(b, 0);
+    }
     else if (t == STRUCT_TYPE) {
       r = StructType(b, 0);
     }
@@ -351,7 +354,8 @@ public class GoParser implements PsiParser {
       COMPOSITE_LIT, CONDITIONAL_EXPR, CONVERSION_EXPR, EXPRESSION,
       FUNCTION_LIT, INDEX_OR_SLICE_EXPR, LITERAL, LITERAL_TYPE_EXPR,
       METHOD_EXPR, MUL_EXPR, OR_EXPR, PARENTHESES_EXPR,
-      REFERENCE_EXPRESSION, SELECTOR_EXPR, TYPE_ASSERTION_EXPR, UNARY_EXPR),
+      REFERENCE_EXPRESSION, SELECTOR_EXPR, STRING_LITERAL, TYPE_ASSERTION_EXPR,
+      UNARY_EXPR),
   };
 
   /* ********************************************************** */
@@ -1974,14 +1978,15 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // string
+  // string | raw_string
   public static boolean ImportString(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ImportString")) return false;
-    if (!nextTokenIs(b, STRING)) return false;
+    if (!nextTokenIs(b, "<import string>", RAW_STRING, STRING)) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, "<import string>");
     r = consumeToken(b, STRING);
-    exit_section_(b, m, IMPORT_STRING, r);
+    if (!r) r = consumeToken(b, RAW_STRING);
+    exit_section_(b, l, m, IMPORT_STRING, r, false, null);
     return r;
   }
 
@@ -3217,6 +3222,19 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // string | raw_string
+  public static boolean StringLiteral(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "StringLiteral")) return false;
+    if (!nextTokenIs(b, "<string literal>", RAW_STRING, STRING)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, "<string literal>");
+    r = consumeToken(b, STRING);
+    if (!r) r = consumeToken(b, RAW_STRING);
+    exit_section_(b, l, m, STRING_LITERAL, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
   // struct '{' Fields? '}'
   public static boolean StructType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StructType")) return false;
@@ -4352,12 +4370,12 @@ public class GoParser implements PsiParser {
   //   | oct
   //   | imaginary
   //   | rune
-  //   | string
+  //   | StringLiteral
   //   | char
   public static boolean Literal(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Literal")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, "<literal>");
+    Marker m = enter_section_(b, l, _COLLAPSE_, "<literal>");
     r = consumeTokenSmart(b, INT);
     if (!r) r = consumeTokenSmart(b, FLOAT);
     if (!r) r = consumeTokenSmart(b, FLOATI);
@@ -4366,7 +4384,7 @@ public class GoParser implements PsiParser {
     if (!r) r = consumeTokenSmart(b, OCT);
     if (!r) r = consumeTokenSmart(b, IMAGINARY);
     if (!r) r = consumeTokenSmart(b, RUNE);
-    if (!r) r = consumeTokenSmart(b, STRING);
+    if (!r) r = StringLiteral(b, l + 1);
     if (!r) r = consumeTokenSmart(b, CHAR);
     exit_section_(b, l, m, LITERAL, r, false, null);
     return r;

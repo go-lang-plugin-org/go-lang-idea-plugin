@@ -86,6 +86,7 @@
     <lang.braceMatcher language="go" implementationClass="com.goide.editor.GoBraceMatcher"/>
     <quoteHandler fileType="Go" className="com.goide.editor.GoQuoteHandler"/>
     <lang.commenter language="go" implementationClass="com.goide.GoCommenter"/>
+    <lang.elementManipulator forClass="com.goide.psi.impl.GoStringLiteralImpl" implementationClass="com.goide.editor.GoStringManipulator"/>
     <completion.contributor language="go" implementationClass="com.goide.completion.GoKeywordCompletionContributor"/>
     <completion.contributor language="go" order="last" implementationClass="com.goide.completion.GoAutoImportCompletionContributor"/>
     <completion.confidence language="go" order="last" implementationClass="com.goide.completion.GoCompletionConfidence"/>

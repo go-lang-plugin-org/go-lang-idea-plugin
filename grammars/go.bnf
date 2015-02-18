@@ -104,7 +104,7 @@ ImportSpec ::= [ '.' | identifier ] ImportString {
   stubClass="com.goide.stubs.GoImportSpecStub"
   methods=[getAlias getLocalPackageName]
 }
-ImportString ::= string {methods=[getReferences resolve getPath getPathTextRange]}
+ImportString ::= string | raw_string {methods=[getReferences resolve getPath getPathTextRange]}
 
 Type ::= TypeName | TypeLit | '(' Type ')' {stubClass="com.goide.stubs.GoTypeStub"}
 private TypeName ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
@@ -281,8 +281,13 @@ Literal ::=
   | oct
   | imaginary
   | rune
-  | string
+  | StringLiteral
   | char
+
+StringLiteral ::= string | raw_string {
+  implements = "com.intellij.psi.PsiLanguageInjectionHost"
+  methods = [isValidHost updateText createLiteralTextEscaper]
+}
 OperandName ::= ReferenceExpression QualifiedReferenceExpression? {elementType=ReferenceExpression}
 
 left QualifiedReferenceExpression ::= '.' identifier {elementType=ReferenceExpression}

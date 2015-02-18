@@ -9,18 +9,16 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiReference;
+import com.goide.util.GoStringLiteralEscaper;
 
-public class GoImportStringImpl extends GoCompositeElementImpl implements GoImportString {
+public class GoStringLiteralImpl extends GoExpressionImpl implements GoStringLiteral {
 
-  public GoImportStringImpl(ASTNode node) {
+  public GoStringLiteralImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitImportString(this);
+    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitStringLiteral(this);
     else super.accept(visitor);
   }
 
@@ -36,22 +34,18 @@ public class GoImportStringImpl extends GoCompositeElementImpl implements GoImpo
     return findChildByType(STRING);
   }
 
+  public boolean isValidHost() {
+    return GoPsiImplUtil.isValidHost(this);
+  }
+
   @NotNull
-  public PsiReference[] getReferences() {
-    return GoPsiImplUtil.getReferences(this);
+  public GoStringLiteralImpl updateText(String text) {
+    return GoPsiImplUtil.updateText(this, text);
   }
 
-  @Nullable
-  public PsiDirectory resolve() {
-    return GoPsiImplUtil.resolve(this);
-  }
-
-  public String getPath() {
-    return GoPsiImplUtil.getPath(this);
-  }
-
-  public TextRange getPathTextRange() {
-    return GoPsiImplUtil.getPathTextRange(this);
+  @NotNull
+  public GoStringLiteralEscaper createLiteralTextEscaper() {
+    return GoPsiImplUtil.createLiteralTextEscaper(this);
   }
 
 }
