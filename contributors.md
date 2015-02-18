@@ -11,6 +11,7 @@ This is a list of all the people we'd like to thank for helping us with active d
 - [@horkhe](https://github.com/horkhe) 
 - [@kokizzu](https://github.com/kokizzu)
 - [@linniksa](https://github.com/linniksa)
+- [@stuartcarnie](https://github.com/stuartcarnie)
 
 
 If your name is not here, just ping us (or send a PR ;) )
