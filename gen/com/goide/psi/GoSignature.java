@@ -15,4 +15,6 @@ public interface GoSignature extends GoCompositeElement, StubBasedPsiElement<GoS
   @Nullable
   GoResult getResult();
 
+  boolean shouldGoDeeper();
+
 }

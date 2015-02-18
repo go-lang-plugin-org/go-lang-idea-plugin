@@ -418,20 +418,25 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   // todo: return boolean for better performance 
   public static void processFunctionParameters(@NotNull GoCompositeElement e, @NotNull GoScopeProcessorBase processor) {
     GoSignatureOwner signatureOwner = PsiTreeUtil.getParentOfType(e, GoSignatureOwner.class);
-    while (signatureOwner != null && processSignatureOwner(e, signatureOwner, processor)) {
+    while (signatureOwner != null && processSignatureOwner(signatureOwner, processor)) {
       signatureOwner = PsiTreeUtil.getParentOfType(signatureOwner, GoSignatureOwner.class);
     }
   }
 
-  private static boolean processSignatureOwner(@NotNull GoCompositeElement e,
-                                               @NotNull GoSignatureOwner o,
-                                               @NotNull GoScopeProcessorBase processor) {
+  private static boolean processSignatureOwner(@NotNull GoSignatureOwner o, @NotNull GoScopeProcessorBase processor) {
     GoSignature signature = o.getSignature();
     if (signature == null) return true;
-    if (!signature.getParameters().processDeclarations(processor, ResolveState.initial(), null, e)) return false;
+    if (!processParameters(processor, signature.getParameters())) return false;
     GoResult result = signature.getResult();
     GoParameters resultParameters = result != null ? result.getParameters() : null;
-    if (resultParameters != null) return resultParameters.processDeclarations(processor, ResolveState.initial(), null, e);
+    return !(resultParameters != null && !processParameters(processor, resultParameters));
+  }
+
+  private static boolean processParameters(@NotNull GoScopeProcessorBase processor, @NotNull GoParameters parameters) {
+    for (GoParameterDeclaration declaration : parameters.getParameterDeclarationList()) {
+      List<GoParamDefinition> list = declaration.getParamDefinitionList();
+      if (!processNamedElements(processor, ResolveState.initial(), list, true)) return false;
+    }
     return true;
   }
 

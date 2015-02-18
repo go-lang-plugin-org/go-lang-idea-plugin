@@ -145,4 +145,9 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
   public boolean isBlank() {
     return StringUtil.equals(getName(), "_");
   }
+
+  @Override
+  public boolean shouldGoDeeper() {
+    return true;
+  }
 }

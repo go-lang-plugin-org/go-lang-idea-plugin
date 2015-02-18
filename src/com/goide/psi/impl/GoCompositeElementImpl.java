@@ -49,10 +49,16 @@ public class GoCompositeElementImpl extends ASTWrapperPsiElement implements GoCo
                                                   @NotNull ResolveState state,
                                                   @Nullable PsiElement lastParent,
                                                   @NotNull PsiElement place) {
+    if (!o.shouldGoDeeper()) return processor.execute(o, state);
     return processor.execute(o, state) && 
            o instanceof GoBlock ? 
            ResolveUtil.processChildrenFromTop(o, processor, state, lastParent, place) :
            ResolveUtil.processChildren(o, processor, state, lastParent, place)
       ;
+  }
+
+  @Override
+  public boolean shouldGoDeeper() {
+    return true;
   }
 }

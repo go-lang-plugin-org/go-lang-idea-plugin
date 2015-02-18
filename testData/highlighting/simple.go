@@ -378,3 +378,7 @@ func <warning>defer_go</warning>() {
     defer func(){}()
     go func(){}()
 }
+
+func <warning>foo_bar_</warning>(bar func(baz    int)) {
+      <error>baz</error>
+}

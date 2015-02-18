@@ -430,6 +430,11 @@ public class GoPsiImplUtil {
         public GoTypeStub getStub() {
           return null;
         }
+
+        @Override
+        public boolean shouldGoDeeper() {
+          return false;
+        }
       }
       return new MyArrayType(type);
     }
@@ -677,6 +682,11 @@ public class GoPsiImplUtil {
           public GoTypeStub getStub() {
             return null;
           }
+
+          @Override
+          public boolean shouldGoDeeper() {
+            return false;
+          }
         }
         return new MyGoTypeList(composite);
       }
@@ -805,4 +815,9 @@ public class GoPsiImplUtil {
   public static GoStringLiteralEscaper createLiteralTextEscaper(@NotNull GoStringLiteral o) {
     return new GoStringLiteralEscaper(o);
   }
+
+  public static boolean shouldGoDeeper(@SuppressWarnings("UnusedParameters") GoSignature o) {
+    return false;
+  }
+
 }

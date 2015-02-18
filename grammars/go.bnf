@@ -142,6 +142,7 @@ FunctionType ::= func Signature {pin=1}
 Signature ::= Parameters Result? {
   pin=1
   stubClass="com.goide.stubs.GoSignatureStub"
+  methods=[shouldGoDeeper]
 }
 Result ::= '(' TypeListNoPin ')' | Type | Parameters {
   stubClass="com.goide.stubs.GoResultStub"

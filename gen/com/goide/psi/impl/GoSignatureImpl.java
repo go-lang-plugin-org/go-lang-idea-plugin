@@ -39,4 +39,8 @@ public class GoSignatureImpl extends GoStubbedElementImpl<GoSignatureStub> imple
     return findChildByClass(GoResult.class, com.goide.stubs.GoResultStub.class);
   }
 
+  public boolean shouldGoDeeper() {
+    return GoPsiImplUtil.shouldGoDeeper(this);
+  }
+
 }

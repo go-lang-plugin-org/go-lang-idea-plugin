@@ -108,4 +108,9 @@ public abstract class GoStubbedElementImpl<T extends StubBase<?>> extends StubBa
   public GoFile getContainingFile() {
     return (GoFile)super.getContainingFile();
   }
+
+  @Override
+  public boolean shouldGoDeeper() {
+    return true;
+  }
 }
