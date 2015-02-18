@@ -34,7 +34,4 @@ public interface GoLiteral extends GoExpression {
   @Nullable
   PsiElement getRune();
 
-  @Nullable
-  PsiElement getString();
-
 }

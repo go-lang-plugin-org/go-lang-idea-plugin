@@ -10,7 +10,10 @@ import com.intellij.psi.PsiReference;
 
 public interface GoImportString extends GoCompositeElement {
 
-  @NotNull
+  @Nullable
+  PsiElement getRawString();
+
+  @Nullable
   PsiElement getString();
 
   @NotNull

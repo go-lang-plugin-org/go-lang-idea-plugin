@@ -23,6 +23,8 @@ import com.goide.stubs.GoNamedStub;
 import com.goide.stubs.GoParameterDeclarationStub;
 import com.goide.stubs.GoTypeStub;
 import com.goide.stubs.index.GoMethodIndex;
+import com.goide.util.GoStringLiteralEscaper;
+import com.intellij.lang.ASTNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Condition;
@@ -34,6 +36,7 @@ import com.intellij.psi.impl.light.LightElement;
 import com.intellij.psi.impl.source.resolve.reference.impl.PsiMultiReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileReference;
+import com.intellij.psi.impl.source.tree.LeafElement;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.GlobalSearchScopesCore;
@@ -773,5 +776,33 @@ public class GoPsiImplUtil {
   
   public static boolean isQuote(char ch) {
     return ch == '"' || ch == '\'' || ch == '`';
+  }
+
+  public static boolean isValidHost(@NotNull GoStringLiteral o) {
+      return true;
+  }
+
+  @NotNull
+  public static GoStringLiteralImpl updateText(@NotNull GoStringLiteral o, @NotNull String text) {
+    if (text.length() > 2) {
+      if (o.getString() != null) {
+        StringBuilder outChars = new StringBuilder();
+        GoStringLiteralEscaper.escapeString(text.substring(1, text.length()-1), outChars);
+        outChars.insert(0, '"');
+        outChars.append('"');
+        text = outChars.toString();
+      }
+    }
+
+    ASTNode valueNode = o.getNode().getFirstChildNode();
+    assert valueNode instanceof LeafElement;
+
+    ((LeafElement)valueNode).replaceWithText(text);
+    return (GoStringLiteralImpl)o;
+  }
+
+  @NotNull
+  public static GoStringLiteralEscaper createLiteralTextEscaper(@NotNull GoStringLiteral o) {
+    return new GoStringLiteralEscaper(o);
   }
 }

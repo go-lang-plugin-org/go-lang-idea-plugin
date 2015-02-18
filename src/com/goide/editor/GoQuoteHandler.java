@@ -24,7 +24,7 @@ import com.intellij.psi.TokenType;
 
 public class GoQuoteHandler extends SimpleTokenSetQuoteHandler {
   public GoQuoteHandler() {
-    super(GoTypes.STRING, GoTypes.CHAR, TokenType.BAD_CHARACTER);
+    super(GoTypes.STRING, GoTypes.RAW_STRING, GoTypes.CHAR, TokenType.BAD_CHARACTER);
   }
 
   @Override

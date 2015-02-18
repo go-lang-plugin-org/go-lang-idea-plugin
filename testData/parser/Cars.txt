@@ -87,7 +87,7 @@ GO_FILE
             PsiElement(identifier)('Println')
           ARGUMENT_LIST
             PsiElement(()('(')
-            LITERAL
+            STRING_LITERAL
               PsiElement(string)('"Hi Schumacher!"')
             PsiElement())(')')
       PsiElement(})('}')
@@ -128,7 +128,7 @@ GO_FILE
             PsiElement(identifier)('Println')
           ARGUMENT_LIST
             PsiElement(()('(')
-            LITERAL
+            STRING_LITERAL
               PsiElement(string)('"Hi Bond, James Bond!"')
             PsiElement())(')')
       PsiElement(})('}')
@@ -175,7 +175,7 @@ GO_FILE
             PsiElement(identifier)('Println')
           ARGUMENT_LIST
             PsiElement(()('(')
-            LITERAL
+            STRING_LITERAL
               PsiElement(string)('"A Ferrari has this many wheels: "')
             PsiElement(,)(',')
             CALL_EXPR
@@ -234,7 +234,7 @@ GO_FILE
             PsiElement(identifier)('Println')
           ARGUMENT_LIST
             PsiElement(()('(')
-            LITERAL
+            STRING_LITERAL
               PsiElement(string)('"An Aston Martin has this many wheels: "')
             PsiElement(,)(',')
             CALL_EXPR

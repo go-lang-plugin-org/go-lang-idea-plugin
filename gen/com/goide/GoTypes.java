@@ -92,6 +92,7 @@ public interface GoTypes {
   IElementType SIGNATURE = GoStubElementTypeFactory.factory("SIGNATURE");
   IElementType SIMPLE_STATEMENT = new GoCompositeElementType("SIMPLE_STATEMENT");
   IElementType STATEMENT = new GoCompositeElementType("STATEMENT");
+  IElementType STRING_LITERAL = new GoCompositeElementType("STRING_LITERAL");
   IElementType STRUCT_TYPE = GoStubElementTypeFactory.factory("STRUCT_TYPE");
   IElementType SWITCH_START = new GoCompositeElementType("SWITCH_START");
   IElementType SWITCH_STATEMENT = new GoCompositeElementType("SWITCH_STATEMENT");
@@ -175,6 +176,7 @@ public interface GoTypes {
   IElementType QUOTIENT = new GoTokenType("/");
   IElementType QUOTIENT_ASSIGN = new GoTokenType("/=");
   IElementType RANGE = new GoTokenType("range");
+  IElementType RAW_STRING = new GoTokenType("raw_string");
   IElementType RBRACE = new GoTokenType("}");
   IElementType RBRACK = new GoTokenType("]");
   IElementType REMAINDER = new GoTokenType("%");
@@ -443,6 +445,9 @@ public interface GoTypes {
       }
       else if (type == STATEMENT) {
         return new GoStatementImpl(node);
+      }
+      else if (type == STRING_LITERAL) {
+        return new GoStringLiteralImpl(node);
       }
       else if (type == STRUCT_TYPE) {
         return new GoStructTypeImpl(node);

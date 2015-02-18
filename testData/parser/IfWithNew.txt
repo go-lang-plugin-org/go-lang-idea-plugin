@@ -72,7 +72,7 @@ GO_FILE
                 PsiElement(.)('.')
                 PsiElement(identifier)('RequestURI')
               PsiElement(==)('==')
-              LITERAL
+              STRING_LITERAL
                 PsiElement(string)('"*"')
             PsiElement(&&)('&&')
             CONDITIONAL_EXPR
@@ -82,7 +82,7 @@ GO_FILE
                 PsiElement(.)('.')
                 PsiElement(identifier)('Method')
               PsiElement(==)('==')
-              LITERAL
+              STRING_LITERAL
                 PsiElement(string)('"OPTIONS"')
         BLOCK
           PsiElement({)('{')

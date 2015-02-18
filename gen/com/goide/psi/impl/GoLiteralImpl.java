@@ -75,10 +75,4 @@ public class GoLiteralImpl extends GoExpressionImpl implements GoLiteral {
     return findChildByType(RUNE);
   }
 
-  @Override
-  @Nullable
-  public PsiElement getString() {
-    return findChildByType(STRING);
-  }
-
 }

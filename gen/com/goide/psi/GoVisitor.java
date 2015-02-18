@@ -3,6 +3,7 @@ package com.goide.psi;
 
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiLanguageInjectionHost;
 
 public class GoVisitor extends PsiElementVisitor {
 
@@ -330,6 +331,11 @@ public class GoVisitor extends PsiElementVisitor {
 
   public void visitStatement(@NotNull GoStatement o) {
     visitCompositeElement(o);
+  }
+
+  public void visitStringLiteral(@NotNull GoStringLiteral o) {
+    visitExpression(o);
+    // visitPsiLanguageInjectionHost(o);
   }
 
   public void visitStructType(@NotNull GoStructType o) {
