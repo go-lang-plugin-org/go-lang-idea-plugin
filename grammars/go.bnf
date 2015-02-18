@@ -104,7 +104,7 @@ ImportSpec ::= [ '.' | identifier ] ImportString {
   stubClass="com.goide.stubs.GoImportSpecStub"
   methods=[getAlias getLocalPackageName]
 }
-ImportString ::= string {methods=[getReferences resolve getPath getPathTextRange]}
+ImportString ::= string | raw_string {methods=[getReferences resolve getPath getPathTextRange]}
 
 Type ::= TypeName | TypeLit | '(' Type ')' {stubClass="com.goide.stubs.GoTypeStub"}
 private TypeName ::= TypeReferenceExpression QualifiedTypeReferenceExpression?

@@ -1978,14 +1978,15 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // string
+  // string | raw_string
   public static boolean ImportString(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ImportString")) return false;
-    if (!nextTokenIs(b, STRING)) return false;
+    if (!nextTokenIs(b, "<import string>", RAW_STRING, STRING)) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, "<import string>");
     r = consumeToken(b, STRING);
-    exit_section_(b, m, IMPORT_STRING, r);
+    if (!r) r = consumeToken(b, RAW_STRING);
+    exit_section_(b, l, m, IMPORT_STRING, r, false, null);
     return r;
   }
 
