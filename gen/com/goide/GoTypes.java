@@ -176,6 +176,7 @@ public interface GoTypes {
   IElementType QUOTIENT = new GoTokenType("/");
   IElementType QUOTIENT_ASSIGN = new GoTokenType("/=");
   IElementType RANGE = new GoTokenType("range");
+  IElementType RAW_STRING = new GoTokenType("raw_string");
   IElementType RBRACE = new GoTokenType("}");
   IElementType RBRACK = new GoTokenType("]");
   IElementType REMAINDER = new GoTokenType("%");

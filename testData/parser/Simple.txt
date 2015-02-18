@@ -793,7 +793,7 @@ GO_FILE
           PsiElement(,)(',')
           PsiComment(GO_LINE_COMMENT)('// "&#34;" is shorter than "&quot;".')
           STRING_LITERAL
-            PsiElement(string)('`"`')
+            PsiElement(raw_string)('`"`')
           PsiElement(,)(',')
           STRING_LITERAL
             PsiElement(string)('"&#34;"')

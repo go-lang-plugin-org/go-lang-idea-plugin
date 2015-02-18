@@ -3221,14 +3221,15 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // string
+  // string | raw_string
   public static boolean StringLiteral(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StringLiteral")) return false;
-    if (!nextTokenIs(b, STRING)) return false;
+    if (!nextTokenIs(b, "<string literal>", RAW_STRING, STRING)) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, "<string literal>");
     r = consumeToken(b, STRING);
-    exit_section_(b, m, STRING_LITERAL, r);
+    if (!r) r = consumeToken(b, RAW_STRING);
+    exit_section_(b, l, m, STRING_LITERAL, r, false, null);
     return r;
   }
 

@@ -105,7 +105,7 @@ ESCAPES = [abfnrtv]
 "'\\U" {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} "'"
                                                         { yybegin(MAYBE_SEMICOLON); return CHAR; }
 
-"`" [^`]* "`"?                            { yybegin(MAYBE_SEMICOLON); return STRING; }
+"`" [^`]* "`"?                            { yybegin(MAYBE_SEMICOLON); return RAW_STRING; }
 {STR} ( [^\"\\\n\r] | "\\" ("\\" | {STR} | {ESCAPES} | [0-8xuU] ) )* {STR}? { yybegin(MAYBE_SEMICOLON); return STRING; }
 "{"                                       { return LBRACE; }
 "}"                                       { yybegin(MAYBE_SEMICOLON); return RBRACE; }

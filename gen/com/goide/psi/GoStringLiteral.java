@@ -10,11 +10,15 @@ import com.goide.util.GoStringLiteralEscaper;
 
 public interface GoStringLiteral extends GoExpression, PsiLanguageInjectionHost {
 
-  @NotNull
+  @Nullable
+  PsiElement getRawString();
+
+  @Nullable
   PsiElement getString();
 
   boolean isValidHost();
 
+  @NotNull
   GoStringLiteralImpl updateText(String text);
 
   @NotNull
