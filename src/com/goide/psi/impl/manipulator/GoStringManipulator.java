@@ -22,15 +22,7 @@ import com.intellij.psi.AbstractElementManipulator;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * @author stuartcarnie
- */
 public class GoStringManipulator extends AbstractElementManipulator<GoStringLiteralImpl> {
-  @NotNull
-  public static TextRange getStringTokenRange(final GoStringLiteralImpl element) {
-    return TextRange.from(1, element.getTextLength() - 2);
-  }
-
   @Override
   public GoStringLiteralImpl handleContentChange(@NotNull GoStringLiteralImpl literal, @NotNull TextRange range, String newContent)
     throws IncorrectOperationException {
@@ -42,6 +34,6 @@ public class GoStringManipulator extends AbstractElementManipulator<GoStringLite
   @NotNull
   @Override
   public TextRange getRangeInElement(@NotNull final GoStringLiteralImpl element) {
-    return getStringTokenRange(element);
+    return element.getTextLength() > 2 ? TextRange.from(1, element.getTextLength() - 2) : TextRange.EMPTY_RANGE;
   }
 }
