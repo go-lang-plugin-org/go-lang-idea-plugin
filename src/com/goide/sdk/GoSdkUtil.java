@@ -168,6 +168,9 @@ public class GoSdkUtil {
     return ProjectRootManager.getInstance(context.getProject()).getFileIndex().getClassRootForFile(virtualFile);
   }
 
+  /**
+   * Use this method in order to check whether the method is appropriate for providing Go-specific code insight
+   */
   public static boolean isAppropriateModule(@NotNull Module module) {
     return !module.isDisposed() && (!PlatformUtils.isIntelliJ() || ModuleUtil.getModuleType(module) == GoModuleType.getInstance());
   }
