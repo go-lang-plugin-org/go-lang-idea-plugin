@@ -42,7 +42,7 @@ public class GoCreateFileAction extends CreateFileFromTemplateAction implements 
 
   @Override
   protected PsiFile createFile(String name, @NotNull String templateName, @NotNull PsiDirectory dir) {
-    FileTemplate template = FileTemplateManager.getDefaultInstance().getInternalTemplate(templateName);
+    FileTemplate template = FileTemplateManager.getInstance().getInternalTemplate(templateName);
     Properties properties = new Properties();
     properties.setProperty(PACKAGE, ContainerUtil.getLastItem(StringUtil.split(dir.getName(), "-")));
     try {
