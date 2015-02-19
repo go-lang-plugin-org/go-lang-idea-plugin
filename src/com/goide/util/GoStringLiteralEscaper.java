@@ -22,6 +22,8 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.LiteralTextEscaper;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Locale;
+
 public class GoStringLiteralEscaper extends LiteralTextEscaper<GoStringLiteral> {
 
   private int[] outSourceOffsets;
@@ -298,7 +300,7 @@ public class GoStringLiteralEscaper extends LiteralTextEscaper<GoStringLiteral> 
             case Character.PRIVATE_USE:
             case Character.UNASSIGNED:
               outChars.append("\\u");
-              outChars.append(String.format("%04X", c));
+              outChars.append(String.format(Locale.US, "%04X", c));
               break;
 
             default:
