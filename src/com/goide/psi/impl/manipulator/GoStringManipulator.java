@@ -26,8 +26,7 @@ public class GoStringManipulator extends AbstractElementManipulator<GoStringLite
   @Override
   public GoStringLiteralImpl handleContentChange(@NotNull GoStringLiteralImpl literal, @NotNull TextRange range, String newContent)
     throws IncorrectOperationException {
-    final String oldText = literal.getText();
-    final String newText = oldText.substring(0, range.getStartOffset()) + newContent + oldText.substring(range.getEndOffset());
+    final String newText = range.replace(literal.getText(), newContent);
     return literal.updateText(newText);
   }
 
