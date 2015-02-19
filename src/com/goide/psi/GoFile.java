@@ -32,8 +32,8 @@ import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiDirectory;
@@ -70,19 +70,25 @@ public class GoFile extends PsiFileBase {
         String importPath = null;
         Collection<Object> dependencies = ContainerUtil.<Object>newArrayList(GoFile.this);
         VirtualFile virtualFile = getVirtualFile();
+        VirtualFile parentDirectory = virtualFile != null ? virtualFile.getParent() : null;
         if (virtualFile != null) {
-
           Module module = ModuleUtilCore.findModuleForFile(virtualFile, getProject());
-          Collection<VirtualFile> roots = module != null ? GoSdkUtil.getGoPathsSources(module) : GoSdkUtil.getGoPathsSources(getProject());
+          
+          VirtualFile sdkSourceDir = GoSdkUtil.getSdkSrcDir(GoFile.this);
+          Collection<VirtualFile> roots = ContainerUtil.newLinkedHashSet();
+          roots.addAll(module != null ? GoSdkUtil.getGoPathsSources(module) : GoSdkUtil.getGoPathsSources(getProject()));
+          ContainerUtil.addIfNotNull(roots, sdkSourceDir);
+
           for (VirtualFile root : roots) {
-            String relativePath = FileUtil.getRelativePath(root.getPath(), virtualFile.getPath(), '/');
-            if (StringUtil.isNotEmpty(relativePath) && StringUtil.containsChar(relativePath, '/')) {
+            String relativePath = VfsUtilCore.getRelativePath(parentDirectory, root, '/');
+            if (StringUtil.isNotEmpty(relativePath)) {
               importPath = relativePath;
               break;
             }
           }
 
           dependencies.add(virtualFile);
+          ContainerUtil.addIfNotNull(dependencies, sdkSourceDir);
           Collections.addAll(dependencies, module != null
                                            ? GoLibrariesService.getModificationTrackers(module)
                                            : GoLibrariesService.getModificationTrackers(getProject()));
