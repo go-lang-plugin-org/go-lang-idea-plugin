@@ -153,6 +153,10 @@ public class GoCompletionTest extends GoCompletionTestBase {
     doTestCompletion();
   }
   
+  public void testElseKeywordRegression() {
+    doTestEmptyCompletion();
+  }
+  
   public void testIfKeywordAfterElse() {
     doTestCompletion();
   }
@@ -287,5 +291,9 @@ public class GoCompletionTest extends GoCompletionTestBase {
 
   private void doTestCompletion() {
     myFixture.testCompletion(getTestName(true) + ".go", getTestName(true) + "_after.go");
+  }
+  
+  private void doTestEmptyCompletion() {
+    myFixture.testCompletionVariants(getTestName(true) + ".go");
   }
 }

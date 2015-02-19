@@ -81,9 +81,10 @@ public class GoKeywordCompletionContributor extends CompletionContributor {
 
   private static ElementPattern<? extends PsiElement> afterIfBlock(@NotNull IElementType tokenType) {
     return psiElement(tokenType).withParent(
-      psiElement(GoExpression.class).withParent(psiElement(GoStatement.class)
-                                                  .afterSiblingSkipping(psiElement().whitespaceCommentEmptyOrError(),
-                                                                        psiElement(GoIfStatement.class))))
+      psiElement(GoReferenceExpressionBase.class).with(new GoNonQualifiedReference()).withParent(psiElement(GoStatement.class)
+                                                                                      .afterSiblingSkipping(
+                                                                                        psiElement().whitespaceCommentEmptyOrError(),
+                                                                                        psiElement(GoIfStatement.class))))
       .andNot(afterElseKeyword()).andNot(onStatementBeginning(tokenType));
   }
 
@@ -97,12 +98,7 @@ public class GoKeywordCompletionContributor extends CompletionContributor {
 
   private static ElementPattern<? extends PsiElement> typeExpression() {
     return psiElement(GoTypes.IDENTIFIER).withParent(
-      psiElement(GoTypeReferenceExpression.class).with(new PatternCondition<GoTypeReferenceExpression>("non qualified type") {
-        @Override
-        public boolean accepts(@NotNull GoTypeReferenceExpression element, ProcessingContext context) {
-          return element.getQualifier() == null;
-        }
-      }));
+      psiElement(GoTypeReferenceExpression.class).with(new GoNonQualifiedReference()));
   }
 
   //private static ElementPattern<? extends PsiElement> insideSwitchStatement() {
@@ -155,5 +151,16 @@ public class GoKeywordCompletionContributor extends CompletionContributor {
     return psiFile(GoFile.class).withChildren(collection(PsiElement.class).filter(not(psiElement().whitespaceCommentEmptyOrError()),
                                                                                   collection(PsiElement.class).first(
                                                                                     not(psiElement(GoTypes.PACKAGE_CLAUSE)))));
+  }
+
+  private static class GoNonQualifiedReference extends PatternCondition<GoReferenceExpressionBase> {
+    public GoNonQualifiedReference() {
+      super("non qualified type");
+    }
+
+    @Override
+    public boolean accepts(@NotNull GoReferenceExpressionBase element, ProcessingContext context) {
+      return element.getQualifier() == null;
+    }
   }
 }
