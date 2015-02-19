@@ -25,11 +25,6 @@ import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Tests for GoStringLiteralEscaper#escapeString
- *
- * @author stuartcarnie
- */
 @RunWith(Parameterized.class)
 public class GoStringLiteralEscaperEscapeStringTest {
 

@@ -22,9 +22,6 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.LiteralTextEscaper;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * @author stuartcarnie
- */
 public class GoStringLiteralEscaper extends LiteralTextEscaper<GoStringLiteral> {
 
   private int[] outSourceOffsets;
