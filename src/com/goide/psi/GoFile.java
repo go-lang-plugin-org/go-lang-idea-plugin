@@ -19,7 +19,9 @@ package com.goide.psi;
 import com.goide.GoFileType;
 import com.goide.GoLanguage;
 import com.goide.GoTypes;
+import com.goide.project.GoLibrariesService;
 import com.goide.psi.impl.GoElementFactory;
+import com.goide.sdk.GoSdkUtil;
 import com.goide.stubs.GoConstSpecStub;
 import com.goide.stubs.GoFileStub;
 import com.goide.stubs.GoVarSpecStub;
@@ -27,7 +29,8 @@ import com.goide.stubs.types.*;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
 import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.roots.impl.ProjectFileIndexImpl;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
@@ -42,7 +45,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.util.ArrayFactory;
-import com.intellij.util.PathUtil;
+import com.intellij.util.ArrayUtil;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
@@ -58,25 +61,35 @@ public class GoFile extends PsiFileBase {
     super(viewProvider, GoLanguage.INSTANCE);
   }
 
-  // todo: optimize + use go libraries urls instead of source roots + cache
   @Nullable
   public String getFullPackageName() {
-    VirtualFile virtualFile = getOriginalFile().getVirtualFile();
-    VirtualFile root = ProjectFileIndexImpl.SERVICE.getInstance(getProject()).getSourceRootForFile(virtualFile);
-    if (root != null) {
-      String fullPackageName = FileUtil.getRelativePath(root.getPath(), virtualFile.getPath(), '/');
-      if (fullPackageName != null && StringUtil.containsChar(fullPackageName, '/')) {
-        return PathUtil.getParentPath(fullPackageName);
+    return CachedValuesManager.getCachedValue(this, new CachedValueProvider<String>() {
+      @Nullable
+      @Override
+      public Result<String> compute() {
+        String importPath = null;
+        Collection<Object> dependencies = ContainerUtil.<Object>newArrayList(GoFile.this);
+        VirtualFile virtualFile = getVirtualFile();
+        if (virtualFile != null) {
+
+          Module module = ModuleUtilCore.findModuleForFile(virtualFile, getProject());
+          Collection<VirtualFile> roots = module != null ? GoSdkUtil.getGoPathsSources(module) : GoSdkUtil.getGoPathsSources(getProject());
+          for (VirtualFile root : roots) {
+            String relativePath = FileUtil.getRelativePath(root.getPath(), virtualFile.getPath(), '/');
+            if (StringUtil.isNotEmpty(relativePath) && StringUtil.containsChar(relativePath, '/')) {
+              importPath = relativePath;
+              break;
+            }
+          }
+
+          dependencies.add(virtualFile);
+          Collections.addAll(dependencies, module != null
+                                           ? GoLibrariesService.getModificationTrackers(module)
+                                           : GoLibrariesService.getModificationTrackers(getProject()));
+        }
+        return Result.create(importPath, ArrayUtil.toObjectArray(dependencies));
       }
-    }
-    else {
-      final String path = PathUtil.getParentPath(virtualFile.getPath());
-      final int srcFolder = path.lastIndexOf("/src/");
-      if (srcFolder > -1) {
-        return StringUtil.nullize(path.substring(srcFolder + 5));
-      }
-    }
-    return null;
+    });
   }
 
   @Nullable
