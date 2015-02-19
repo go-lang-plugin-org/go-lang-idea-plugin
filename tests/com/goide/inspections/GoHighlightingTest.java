@@ -8,6 +8,7 @@ import com.intellij.testFramework.LightProjectDescriptor;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
@@ -81,7 +82,12 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.getTempDirFixture().findOrCreateDir("root1/src/to_import/shared");
     myFixture.getTempDirFixture().findOrCreateDir("root2/src/to_import/shared");
     GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(rootUrls);
-    doTest();
+    try {
+      doTest();
+    }
+    finally {
+      GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(Collections.<String>emptyList());
+    }
   }
   
   public void testLocalScope() {
