@@ -1,13 +1,26 @@
 package com.goide.completion;
 
+import com.goide.project.GoModuleLibrariesService;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.testFramework.LightProjectDescriptor;
+
+import java.io.IOException;
+import java.util.Collections;
 
 public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
   @Override
   public void setUp() throws Exception {
     super.setUp();
     setUpProjectSdk();
+    
+    String url = myFixture.getTempDirFixture().getFile("..").getUrl();
+    GoModuleLibrariesService.getInstance(myModule).setLibraryRootUrls(Collections.singleton(url));
+  }
+
+  @Override
+  protected void tearDown() throws Exception {
+    GoModuleLibrariesService.getInstance(myModule).setLibraryRootUrls(Collections.<String>emptyList());
+    super.tearDown();
   }
 
   @Override
@@ -100,6 +113,16 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "func main() {\n" +
                   "    fmt.Printf(otherPackage.FunctionInPackageThatDoesNotMatchDirectoryName());\n" +
                   "}");
+  }
+  
+  public void testDoNotImportLocallyImportedPackage() throws IOException {
+    myFixture.getTempDirFixture().createFile("imported/imported.go", "package imported\n" +
+                                                                     "func LocallyImported() {}");
+    doCheckResult("package main; \n" +
+                  "import `./imported`\n" +
+                  "func test(){LocallyImport<caret>}", "package main; \n" +
+                                                       "import `./imported`\n" +
+                                                       "func test(){imported.LocallyImported()}");
   }
 
   public void testImportedFunctionsPriority() {

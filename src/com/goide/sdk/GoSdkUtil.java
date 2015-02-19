@@ -32,6 +32,7 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
+import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -166,6 +167,23 @@ public class GoSdkUtil {
   private static VirtualFile guessSkdSrcDir(@NotNull PsiElement context) {
     VirtualFile virtualFile = context.getContainingFile().getOriginalFile().getVirtualFile();
     return ProjectRootManager.getInstance(context.getProject()).getFileIndex().getClassRootForFile(virtualFile);
+  }
+
+  @Nullable
+  public static String getPathRelativeToSdkAndLibraries(@NotNull VirtualFile file, @NotNull PsiElement context) {
+    Module module = ModuleUtilCore.findModuleForPsiElement(context);      
+    VirtualFile sdkSourceDir = getSdkSrcDir(context);
+    Collection<VirtualFile> roots = ContainerUtil.newLinkedHashSet();
+    roots.addAll(module != null ? getGoPathsSources(module) : getGoPathsSources(context.getProject()));
+    ContainerUtil.addIfNotNull(roots, sdkSourceDir);
+    
+    for (VirtualFile root : roots) {
+      String relativePath = VfsUtilCore.getRelativePath(file, root, '/');
+      if (StringUtil.isNotEmpty(relativePath)) {
+        return relativePath;
+      }
+    }
+    return null;
   }
 
   /**
