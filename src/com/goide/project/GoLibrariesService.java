@@ -20,6 +20,8 @@ import com.goide.GoLibrariesState;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.ModificationTracker;
+import com.intellij.openapi.util.SimpleModificationTracker;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.util.Function;
@@ -30,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.Set;
 
-public abstract class GoLibrariesService implements PersistentStateComponent<GoLibrariesState> {
+public abstract class GoLibrariesService extends SimpleModificationTracker implements PersistentStateComponent<GoLibrariesState> {
   private GoLibrariesState myState = new GoLibrariesState();
 
   @NotNull
@@ -63,7 +65,22 @@ public abstract class GoLibrariesService implements PersistentStateComponent<GoL
     return filesFromUrls(GoApplicationLibrariesService.getInstance().getLibraryRootUrls());
   }
 
+  @NotNull
+  public static ModificationTracker[] getModificationTrackers(@NotNull Project project) {
+    return new ModificationTracker[]{GoProjectLibrariesService.getInstance(project), GoApplicationLibrariesService.getInstance()};
+  }
+
+  @NotNull
+  public static ModificationTracker[] getModificationTrackers(@NotNull Module module) {
+    return new ModificationTracker[]{GoModuleLibrariesService.getInstance(module),
+      GoProjectLibrariesService.getInstance(module.getProject()),
+      GoApplicationLibrariesService.getInstance()};
+  }
+
   public void setLibraryRootUrls(@NotNull Collection<String> libraryRootUrl) {
+    if (!myState.getUrls().equals(libraryRootUrl)) {
+      incModificationCount();
+    }
     myState.setUrls(libraryRootUrl);
   }
 
