@@ -63,7 +63,7 @@ public class GoUnusedImportDeclaration extends GoInspectionBase {
     
     for (PsiElement importEntry : GoImportOptimizer.filterUnusedImports(file, importMap).values()) {
       GoImportSpec spec = GoImportOptimizer.getImportSpec(importEntry);
-      if (spec != null && !spec.isBlank()) {
+      if (spec != null) {
         if (spec.getImportString().resolve() != null) {
           problemsHolder.registerProblem(spec, "Unused import", ProblemHighlightType.GENERIC_ERROR, OPTIMIZE_QUICK_FIX);
         }

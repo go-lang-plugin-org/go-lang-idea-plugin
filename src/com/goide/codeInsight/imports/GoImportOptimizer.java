@@ -99,6 +99,7 @@ public class GoImportOptimizer implements ImportOptimizer {
                                                                    @NotNull final MultiMap<String, GoImportSpec> importMap) {
     final MultiMap<String, GoImportSpec> result = MultiMap.create();
     result.putAllValues(importMap);
+    result.remove("_"); // imports for side effects are always used
     
     Collection<GoImportSpec> implicitImports = ContainerUtil.newArrayList(result.get("."));
     for (GoImportSpec importEntry : implicitImports) {

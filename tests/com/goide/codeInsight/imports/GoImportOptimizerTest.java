@@ -40,6 +40,9 @@ public class GoImportOptimizerTest extends GoCodeInsightFixtureTestCase {
   public void testUnusedImportsWithBacktick() {
     doTest(); 
   }
+  public void testDoNotOptimizeSideEffectImports() {
+    doTest(); 
+  }
 
   @Override
   protected boolean isWriteActionRequired() {
