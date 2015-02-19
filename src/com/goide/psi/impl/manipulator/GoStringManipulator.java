@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.goide.editor;
+package com.goide.psi.impl.manipulator;
 
 import com.goide.psi.impl.GoStringLiteralImpl;
 import com.intellij.openapi.util.TextRange;

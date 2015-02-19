@@ -75,9 +75,11 @@
     <errorHandler implementation="com.intellij.diagnostic.ITNReporter"/>
     <extendWordSelectionHandler implementation="com.goide.editor.GoWordSelectioner"/>
     <annotator language="go" implementationClass="com.goide.GoAnnotator"/>
+    
     <lang.importOptimizer language="go" implementationClass="com.goide.codeInsight.imports.GoImportOptimizer"/>
     <psi.fileReferenceHelper implementation="com.goide.psi.impl.imports.GoImportReferenceHelper"/>
     <fileContextProvider implementation="com.goide.psi.impl.imports.GoFileContextProvider"/>
+    
     <lang.parserDefinition language="go" implementationClass="com.goide.GoParserDefinition"/>
     <fileTypeFactory implementation="com.goide.GoFileTypeFactory"/>
     <lang.syntaxHighlighterFactory key="go" implementationClass="com.goide.highlighting.GoSyntaxHighlighterFactory"/>
@@ -86,7 +88,7 @@
     <lang.braceMatcher language="go" implementationClass="com.goide.editor.GoBraceMatcher"/>
     <quoteHandler fileType="Go" className="com.goide.editor.GoQuoteHandler"/>
     <lang.commenter language="go" implementationClass="com.goide.GoCommenter"/>
-    <lang.elementManipulator forClass="com.goide.psi.impl.GoStringLiteralImpl" implementationClass="com.goide.editor.GoStringManipulator"/>
+    <lang.elementManipulator forClass="com.goide.psi.impl.GoStringLiteralImpl" implementationClass="com.goide.psi.impl.manipulator.GoStringManipulator"/>
     <completion.contributor language="go" implementationClass="com.goide.completion.GoKeywordCompletionContributor"/>
     <completion.contributor language="go" order="last" implementationClass="com.goide.completion.GoAutoImportCompletionContributor"/>
     <completion.confidence language="go" order="last" implementationClass="com.goide.completion.GoCompletionConfidence"/>
