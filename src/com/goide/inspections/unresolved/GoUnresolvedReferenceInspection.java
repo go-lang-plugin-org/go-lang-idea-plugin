@@ -72,6 +72,7 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
       @Override
       public void visitImportString(@NotNull GoImportString o) {
         if (o.getTextLength() < 2) return;
+        if ("C".equals(o.getPath())) return; 
         PsiReference[] references = o.getReferences();
         for (final PsiReference reference : references) {
           if (reference instanceof FileReference) {
