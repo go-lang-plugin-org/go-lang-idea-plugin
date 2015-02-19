@@ -24,6 +24,7 @@ public class GoLegacyResolveTypesTest extends GoLegacyResolveTestBase {
   public void testFromMethodReceiver()                            { doTest(); } 
   public void testResolveTypeNameInTypeSpec()                     { doTest(); } 
   public void testResolveTypeInCast()                             { doTest(); } 
+  public void testMethodsOrder()                                  { doTest(); } 
   public void testFromDefaultImportedPackage()                    { doDirTest(); } 
   public void testFromInjectedPackage()                           { doDirTest(); } 
   public void testFromCustomImportedPackage()                     { doDirTest(); } 

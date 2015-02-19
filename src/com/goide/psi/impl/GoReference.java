@@ -219,6 +219,9 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     if (!(myFile instanceof GoFile)) return true;
     boolean localResolve = Comparing.equal(((GoFile)myFile).getImportPath(), ((GoFile)file).getImportPath());
 
+    PsiElement parent = type.getParent();
+    if (parent instanceof GoTypeSpec && !processNamedElements(processor, state, ((GoTypeSpec)parent).getMethods(), localResolve)) return false;
+    
     if (type instanceof GoStructType) {
       GoScopeProcessorBase delegate = createDelegate(processor);
       type.processDeclarations(delegate, ResolveState.initial(), null, myElement);
@@ -245,11 +248,6 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
       GoResult result = signature != null ? signature.getResult() : null;
       GoType resultType = result != null ? result.getType() : null;
       if (resultType != null && !processGoType(resultType, processor, state)) return false;
-    }
-
-    PsiElement parent = type.getParent();
-    if (parent instanceof GoTypeSpec && !processNamedElements(processor, state, ((GoTypeSpec)parent).getMethods(), localResolve)) {
-      return false;
     }
     return true;
   }
