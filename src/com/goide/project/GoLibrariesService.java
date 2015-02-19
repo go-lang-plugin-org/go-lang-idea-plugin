@@ -51,13 +51,15 @@ public abstract class GoLibrariesService extends SimpleModificationTracker imple
     final Set<VirtualFile> result = ContainerUtil.newLinkedHashSet();
     result.addAll(filesFromUrls(GoModuleLibrariesService.getInstance(module).getLibraryRootUrls()));
     result.addAll(getUserDefinedLibraries(module.getProject()));
-    result.addAll(getUserDefinedLibraries());
     return result;
   }
 
   @NotNull
   public static Collection<? extends VirtualFile> getUserDefinedLibraries(@NotNull Project project) {
-    return filesFromUrls(GoProjectLibrariesService.getInstance(project).getLibraryRootUrls());
+    final Set<VirtualFile> result = ContainerUtil.newLinkedHashSet();
+    result.addAll(filesFromUrls(GoProjectLibrariesService.getInstance(project).getLibraryRootUrls()));
+    result.addAll(getUserDefinedLibraries());
+    return result;
   }
 
   @NotNull
