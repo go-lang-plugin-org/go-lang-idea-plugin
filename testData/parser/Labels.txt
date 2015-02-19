@@ -131,14 +131,13 @@ GO_FILE
             PsiElement(switch)('switch')
           PsiElement({)('{')
           EXPR_CASE_CLAUSE
-            EXPR_SWITCH_CASE
-              PsiElement(case)('case')
-              CONDITIONAL_EXPR
-                REFERENCE_EXPRESSION
-                  PsiElement(identifier)('x')
-                PsiElement(>)('>')
-                LITERAL
-                  PsiElement(int)('10')
+            PsiElement(case)('case')
+            CONDITIONAL_EXPR
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('x')
+              PsiElement(>)('>')
+              LITERAL
+                PsiElement(int)('10')
             PsiElement(:)(':')
             IF_STATEMENT
               PsiElement(if)('if')

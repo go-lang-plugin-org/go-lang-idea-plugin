@@ -115,10 +115,6 @@ public class GoVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitExprSwitchCase(@NotNull GoExprSwitchCase o) {
-    visitCompositeElement(o);
-  }
-
   public void visitExprSwitchStatement(@NotNull GoExprSwitchStatement o) {
     visitSwitchStatement(o);
   }

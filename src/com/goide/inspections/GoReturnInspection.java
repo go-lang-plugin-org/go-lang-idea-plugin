@@ -99,8 +99,8 @@ public class GoReturnInspection extends GoInspectionBase {
       boolean hasDefault = false;
       List<GoExprCaseClause> list = ((GoExprSwitchStatement)s).getExprCaseClauseList();
       for (GoExprCaseClause clause : list) {
-        PsiElement child = clause.getExprSwitchCase().getFirstChild();
-        if (child != null && child.getNode().getElementType() == GoTypes.DEFAULT) {
+        PsiElement child = clause.getDefault();
+        if (child != null) {
           hasDefault = true;
         }
         GoStatement last = ContainerUtil.getLastItem(clause.getStatementList());
@@ -158,7 +158,7 @@ public class GoReturnInspection extends GoInspectionBase {
     @NotNull
     @Override
     public String getFamilyName() {
-      return "Function Declaration";
+      return "Function declaration";
     }
 
     @Override

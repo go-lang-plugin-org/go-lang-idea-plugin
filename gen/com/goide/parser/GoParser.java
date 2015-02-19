@@ -100,9 +100,6 @@ public class GoParser implements PsiParser {
     else if (t == EXPR_CASE_CLAUSE) {
       r = ExprCaseClause(b, 0);
     }
-    else if (t == EXPR_SWITCH_CASE) {
-      r = ExprSwitchCase(b, 0);
-    }
     else if (t == EXPR_SWITCH_STATEMENT) {
       r = ExprSwitchStatement(b, 0);
     }
@@ -1169,14 +1166,14 @@ public class GoParser implements PsiParser {
 
   /* ********************************************************** */
   // case ExpressionList | default
-  public static boolean ExprSwitchCase(PsiBuilder b, int l) {
+  static boolean ExprSwitchCase(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExprSwitchCase")) return false;
-    if (!nextTokenIs(b, "<expr switch case>", CASE, DEFAULT)) return false;
+    if (!nextTokenIs(b, "", CASE, DEFAULT)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, "<expr switch case>");
+    Marker m = enter_section_(b);
     r = ExprSwitchCase_0(b, l + 1);
     if (!r) r = consumeToken(b, DEFAULT);
-    exit_section_(b, l, m, EXPR_SWITCH_CASE, r, false, null);
+    exit_section_(b, m, null, r);
     return r;
   }
 

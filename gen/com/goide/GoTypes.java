@@ -39,7 +39,6 @@ public interface GoTypes {
   IElementType ELSE_STATEMENT = new GoCompositeElementType("ELSE_STATEMENT");
   IElementType EXPRESSION = new GoCompositeElementType("EXPRESSION");
   IElementType EXPR_CASE_CLAUSE = new GoCompositeElementType("EXPR_CASE_CLAUSE");
-  IElementType EXPR_SWITCH_CASE = new GoCompositeElementType("EXPR_SWITCH_CASE");
   IElementType EXPR_SWITCH_STATEMENT = new GoCompositeElementType("EXPR_SWITCH_STATEMENT");
   IElementType FALLTHROUGH_STATEMENT = new GoCompositeElementType("FALLTHROUGH_STATEMENT");
   IElementType FIELD_DECLARATION = new GoCompositeElementType("FIELD_DECLARATION");
@@ -286,9 +285,6 @@ public interface GoTypes {
       }
       else if (type == EXPR_CASE_CLAUSE) {
         return new GoExprCaseClauseImpl(node);
-      }
-      else if (type == EXPR_SWITCH_CASE) {
-        return new GoExprSwitchCaseImpl(node);
       }
       else if (type == EXPR_SWITCH_STATEMENT) {
         return new GoExprSwitchStatementImpl(node);

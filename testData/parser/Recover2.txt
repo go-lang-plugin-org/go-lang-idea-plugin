@@ -101,9 +101,8 @@ GO_FILE
             PsiElement(identifier)('expr')
         PsiElement({)('{')
         EXPR_CASE_CLAUSE
-          EXPR_SWITCH_CASE
-            PsiElement(case)('case')
-            PsiErrorElement:<expression> expected, got '}'
-              <empty list>
+          PsiElement(case)('case')
+          PsiErrorElement:<expression> expected, got '}'
+            <empty list>
         PsiElement(})('}')
       PsiElement(})('}')

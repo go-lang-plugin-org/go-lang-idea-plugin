@@ -23,8 +23,8 @@ public class GoExprCaseClauseImpl extends GoCompositeElementImpl implements GoEx
 
   @Override
   @NotNull
-  public GoExprSwitchCase getExprSwitchCase() {
-    return findNotNullChildByClass(GoExprSwitchCase.class);
+  public List<GoExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
   @Override
@@ -37,6 +37,18 @@ public class GoExprCaseClauseImpl extends GoCompositeElementImpl implements GoEx
   @Nullable
   public PsiElement getColon() {
     return findChildByType(COLON);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getCase() {
+    return findChildByType(CASE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getDefault() {
+    return findChildByType(DEFAULT);
   }
 
 }
