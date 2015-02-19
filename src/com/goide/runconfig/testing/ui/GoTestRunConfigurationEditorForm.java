@@ -145,7 +145,7 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
               StubIndex.getInstance().processElements(GoPackagesIndex.KEY, packageName, myProject, scope, GoFile.class, new Processor<GoFile>() {
                 @Override
                 public boolean process(@NotNull GoFile file) {
-                  String fullPackageName = file.getFullPackageName();
+                  String fullPackageName = file.getImportPath();
                   if (fullPackageName != null) {
                     result.addElement(GoCompletionUtil.createPackageLookupElement(fullPackageName, false));
                   }

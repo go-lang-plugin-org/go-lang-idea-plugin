@@ -172,7 +172,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
                                                                            @Nullable
                                                                            @Override
                                                                            public String fun(@NotNull GoFile file) {
-            return file.getFullPackageName();
+            return file.getImportPath();
           }
         }
       ));

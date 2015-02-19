@@ -224,7 +224,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     if (!(file instanceof GoFile)) return true;
     PsiFile myFile = myElement.getContainingFile();
     if (!(myFile instanceof GoFile)) return true;
-    boolean localResolve = Comparing.equal(((GoFile)myFile).getFullPackageName(), ((GoFile)file).getFullPackageName());
+    boolean localResolve = Comparing.equal(((GoFile)myFile).getImportPath(), ((GoFile)file).getImportPath());
 
     if (type instanceof GoStructType) {
       GoScopeProcessorBase delegate = createDelegate(processor);

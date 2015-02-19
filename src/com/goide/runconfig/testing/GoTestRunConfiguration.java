@@ -106,7 +106,7 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
         String packageName = GoPsiImplUtil.getLocalPackageName(myPackage);
         Collection<GoFile> files = StubIndex.getElements(GoPackagesIndex.KEY, packageName, getProject(), scope, GoFile.class);
         for (GoFile file : files) {
-          if (file != null && file.getFullPackageName() != null) return;
+          if (file != null && file.getImportPath() != null) return;
         }
         throw new RuntimeConfigurationError("Cannot find package '" + myPackage + "'");
       case FILE:

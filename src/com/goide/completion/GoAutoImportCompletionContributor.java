@@ -79,7 +79,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
                   if (!allowed(declaration)) continue;
 
                   double priority = GoCompletionUtil.NOT_IMPORTED_FUNCTION_PRIORITY;
-                  GoImportSpec existingImport = importedPackages.get(declaration.getContainingFile().getFullPackageName());
+                  GoImportSpec existingImport = importedPackages.get(declaration.getContainingFile().getImportPath());
                   if (existingImport != null) {
                     if (existingImport.getDot() != null) {
                       continue;
@@ -107,7 +107,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
                   if (!allowed(declaration)) continue;
 
                   double priority = GoCompletionUtil.NOT_IMPORTED_TYPE_PRIORITY;
-                  GoImportSpec existingImport = importedPackages.get(declaration.getContainingFile().getFullPackageName());
+                  GoImportSpec existingImport = importedPackages.get(declaration.getContainingFile().getImportPath());
                   if (existingImport != null) {
                     if (existingImport.getDot() != null) {
                       continue;
@@ -175,7 +175,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
     Editor editor = context.getEditor();
     Document document = editor.getDocument();
 
-    String fullPackageName = element.getContainingFile().getFullPackageName();
+    String fullPackageName = element.getContainingFile().getImportPath();
     String packageToInsert = element.getContainingFile().getPackageName();
     if (StringUtil.isEmpty(packageToInsert) || StringUtil.isEmpty(fullPackageName)) return;
     

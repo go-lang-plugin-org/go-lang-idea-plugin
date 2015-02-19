@@ -46,7 +46,7 @@ public class GoGotoUtil {
         @Override
         public String getLocationString() {
           GoFile file = element.getContainingFile();
-          return "(in " + ObjectUtils.notNull(file.getFullPackageName(), ObjectUtils.notNull(file.getPackageName(), file.getName())) + ")";
+          return "(in " + ObjectUtils.notNull(file.getImportPath(), ObjectUtils.notNull(file.getPackageName(), file.getName())) + ")";
         }
       });
     }

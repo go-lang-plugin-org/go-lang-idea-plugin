@@ -62,7 +62,7 @@ public class GoFile extends PsiFileBase {
   }
 
   @Nullable
-  public String getFullPackageName() {
+  public String getImportPath() {
     return CachedValuesManager.getCachedValue(this, new CachedValueProvider<String>() {
       @Nullable
       @Override
