@@ -1150,13 +1150,14 @@ public class GoParser implements PsiParser {
   public static boolean ExprCaseClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExprCaseClause")) return false;
     if (!nextTokenIs(b, "<expr case clause>", CASE, DEFAULT)) return false;
-    boolean r;
+    boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, "<expr case clause>");
     r = ExprSwitchCase(b, l + 1);
-    r = r && consumeToken(b, COLON);
-    r = r && ExprCaseClause_2(b, l + 1);
-    exit_section_(b, l, m, EXPR_CASE_CLAUSE, r, false, null);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, consumeToken(b, COLON));
+    r = p && ExprCaseClause_2(b, l + 1) && r;
+    exit_section_(b, l, m, EXPR_CASE_CLAUSE, r, p, null);
+    return r || p;
   }
 
   // Statements?
@@ -1192,7 +1193,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // Condition '{' ( ExprCaseClause )* '}'
+  // Condition '{' ExprCaseClause* '}'
   public static boolean ExprSwitchStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExprSwitchStatement")) return false;
     boolean r, p;
@@ -1206,26 +1207,16 @@ public class GoParser implements PsiParser {
     return r || p;
   }
 
-  // ( ExprCaseClause )*
+  // ExprCaseClause*
   private static boolean ExprSwitchStatement_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExprSwitchStatement_2")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!ExprSwitchStatement_2_0(b, l + 1)) break;
+      if (!ExprCaseClause(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "ExprSwitchStatement_2", c)) break;
       c = current_position_(b);
     }
     return true;
-  }
-
-  // ( ExprCaseClause )
-  private static boolean ExprSwitchStatement_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ExprSwitchStatement_2_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = ExprCaseClause(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   /* ********************************************************** */

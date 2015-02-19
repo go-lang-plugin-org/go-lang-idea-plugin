@@ -381,12 +381,12 @@ IfStatement ::= if Condition Block ElseStatement?
 ElseStatement ::= else (IfStatement | Block)
 SwitchStatement ::= SwitchStart (TypeSwitchStatement | ExprSwitchStatement)
 SwitchStart ::= switch
-left ExprSwitchStatement ::= Condition '{' ( ExprCaseClause )* '}' {pin=2 extends=SwitchStatement}
+left ExprSwitchStatement ::= Condition '{' ExprCaseClause* '}' {pin=2 extends=SwitchStatement}
 
 private Condition ::= <<enterMode "NO_EMPTY_LITERAL">> SimpleStatementOpt Expression? <<exitModeSafe "NO_EMPTY_LITERAL">>
 private SimpleStatementOpt ::= [SimpleStatement ';'?] // todo: remove ?
 
-ExprCaseClause ::= ExprSwitchCase ':' Statements?
+ExprCaseClause ::= ExprSwitchCase ':' Statements? {pin=1}
 ExprSwitchCase ::= case ExpressionList | default {pin(".*")=1}
 left TypeSwitchStatement ::= (TypeSwitchGuard | SimpleStatement ';'? TypeSwitchGuard) '{' ( TypeCaseClause )* '}' {pin=1 extends=SwitchStatement}
 TypeSwitchGuard ::= [ VarDefinition ':=' ] Expression '.' TypeGuard

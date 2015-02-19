@@ -84,3 +84,26 @@ GO_FILE
             PsiElement(()('(')
             PsiElement())(')')
       PsiElement(})('}')
+  FUNCTION_DECLARATION
+    PsiElement(func)('func')
+    PsiElement(identifier)('main')
+    SIGNATURE
+      PARAMETERS
+        PsiElement(()('(')
+        PsiElement())(')')
+    BLOCK
+      PsiElement({)('{')
+      EXPR_SWITCH_STATEMENT
+        SWITCH_START
+          PsiElement(switch)('switch')
+        SIMPLE_STATEMENT
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('expr')
+        PsiElement({)('{')
+        EXPR_CASE_CLAUSE
+          EXPR_SWITCH_CASE
+            PsiElement(case)('case')
+            PsiErrorElement:<expression> expected, got '}'
+              <empty list>
+        PsiElement(})('}')
+      PsiElement(})('}')

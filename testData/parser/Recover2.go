@@ -11,3 +11,9 @@ func foo() {
     bar(,)
     doo()
 }
+
+func main() {
+    switch expr {
+        case
+    }
+}

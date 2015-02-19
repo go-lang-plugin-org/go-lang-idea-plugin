@@ -34,9 +34,9 @@ public class GoExprCaseClauseImpl extends GoCompositeElementImpl implements GoEx
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getColon() {
-    return findNotNullChildByType(COLON);
+    return findChildByType(COLON);
   }
 
 }

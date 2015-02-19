@@ -13,7 +13,7 @@ public interface GoExprCaseClause extends GoCompositeElement {
   @NotNull
   List<GoStatement> getStatementList();
 
-  @NotNull
+  @Nullable
   PsiElement getColon();
 
 }
