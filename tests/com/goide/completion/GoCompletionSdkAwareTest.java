@@ -26,6 +26,18 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "import \"fmt\"\n" +
                   "func test(){fmt.Fprintln(<caret>)}");
   }
+  
+  public void testForceAutoImportBlankImports() {
+    doCheckResult("package main; \n" +
+                  "import _ \"fmt\"\n" +
+                  "func test(){Fprintl<caret>}",
+                  "package main;\n" +
+                  "import (\n" +
+                  "    _ \"fmt\"\n" +
+                  "    \"fmt\"\n" +
+                  ")\n" +
+                  "func test(){fmt.Fprintln()}");
+  }
 
   public void testAutoImportWithAlias() {
     doCheckResult("package main; \n" +

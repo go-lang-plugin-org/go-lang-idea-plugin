@@ -206,7 +206,9 @@ public class GoFile extends PsiFileBase {
       public Result<Map<String, GoImportSpec>> compute() {
         Map<String, GoImportSpec> map = ContainerUtil.newHashMap();
         for (GoImportSpec spec : getImports()) {
-          map.put(spec.getImportString().getPath(), spec);
+          if (!spec.isBlank()) {
+            map.put(spec.getImportString().getPath(), spec);
+          }
         }
         return Result.create(map, GoFile.this);
       }
