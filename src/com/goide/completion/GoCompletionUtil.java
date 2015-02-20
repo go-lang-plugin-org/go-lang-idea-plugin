@@ -116,23 +116,25 @@ public class GoCompletionUtil {
 
   @NotNull
   public static LookupElement createTypeLookupElement(@NotNull GoTypeSpec t) {
-    return createTypeLookupElement(t, false, null, TYPE_PRIORITY);
+    return createTypeLookupElement(t, t.getName(), false, null, TYPE_PRIORITY);
   }
 
   @NotNull
   public static LookupElement createTypeLookupElement(@NotNull GoTypeSpec t,
+                                                      @Nullable String name,
                                                       boolean showPackage,
                                                       @Nullable InsertHandler<LookupElement> handler, 
                                                       double priority) {
     String pkg = showPackage ? StringUtil.notNullize(t.getContainingFile().getPackageName()) : "";
     pkg = pkg.isEmpty() ? pkg : pkg + ".";
+    name = StringUtil.notNullize(name);
     return PrioritizedLookupElement.withPriority(
       LookupElementBuilder.
-        create(t)
+        create(t, name)
         .withLookupString(pkg)
-        .withLookupString(StringUtil.notNullize(t.getName(), "").toLowerCase())
-        .withLookupString(pkg + t.getName())
-        .withPresentableText(pkg + t.getName())
+        .withLookupString(StringUtil.notNullize(name, "").toLowerCase())
+        .withLookupString(pkg + name)
+        .withPresentableText(pkg + name)
         .withInsertHandler(handler)
         .withIcon(GoIcons.TYPE), priority);
   }

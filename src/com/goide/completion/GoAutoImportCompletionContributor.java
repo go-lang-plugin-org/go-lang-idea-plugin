@@ -114,7 +114,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
                     }
                     priority = GoCompletionUtil.TYPE_PRIORITY;
                   }
-                  result.addElement(GoCompletionUtil.createTypeLookupElement(declaration, true, TYPE_INSERT_HANDLER, priority));
+                  result.addElement(GoCompletionUtil.createTypeLookupElement(declaration, name, true, TYPE_INSERT_HANDLER, priority));
                 }
               }
             }
