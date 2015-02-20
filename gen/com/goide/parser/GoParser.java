@@ -426,7 +426,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // '[' ('...'|Expression?) ']' <<exitModeSafe "NO_EMPTY_LITERAL">> Type
+  // '[' ('...'|Expression?) ']' <<exitModeSafe "BLOCK?">> Type
   public static boolean ArrayOrSliceType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ArrayOrSliceType")) return false;
     if (!nextTokenIs(b, LBRACK)) return false;
@@ -436,7 +436,7 @@ public class GoParser implements PsiParser {
     p = r; // pin = 1
     r = r && report_error_(b, ArrayOrSliceType_1(b, l + 1));
     r = p && report_error_(b, consumeToken(b, RBRACK)) && r;
-    r = p && report_error_(b, exitModeSafe(b, l + 1, "NO_EMPTY_LITERAL")) && r;
+    r = p && report_error_(b, exitModeSafe(b, l + 1, "BLOCK?")) && r;
     r = p && Type(b, l + 1) && r;
     exit_section_(b, l, m, ARRAY_OR_SLICE_TYPE, r, p, null);
     return r || p;
@@ -716,15 +716,15 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // <<enterMode "NO_EMPTY_LITERAL">> SimpleStatementOpt Expression? <<exitModeSafe "NO_EMPTY_LITERAL">>
+  // <<enterMode "BLOCK?">> SimpleStatementOpt Expression? <<exitModeSafe "BLOCK?">>
   static boolean Condition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Condition")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = enterMode(b, l + 1, "NO_EMPTY_LITERAL");
+    r = enterMode(b, l + 1, "BLOCK?");
     r = r && SimpleStatementOpt(b, l + 1);
     r = r && Condition_2(b, l + 1);
-    r = r && exitModeSafe(b, l + 1, "NO_EMPTY_LITERAL");
+    r = r && exitModeSafe(b, l + 1, "BLOCK?");
     exit_section_(b, m, null, r);
     return r;
   }
@@ -1610,12 +1610,12 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // <<exitModeSafe "NO_EMPTY_LITERAL">> Block
+  // <<exitModeSafe "BLOCK?">> Block
   static boolean ForBlock(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForBlock")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = exitModeSafe(b, l + 1, "NO_EMPTY_LITERAL");
+    r = exitModeSafe(b, l + 1, "BLOCK?");
     r = r && Block(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -1670,7 +1670,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // for <<enterMode "NO_EMPTY_LITERAL">> (ForOrRangeClause ForBlock | ForBlock | Expression ForBlock) <<exitModeSafe "NO_EMPTY_LITERAL">>
+  // for <<enterMode "BLOCK?">> (ForOrRangeClause ForBlock | ForBlock | Expression ForBlock) <<exitModeSafe "BLOCK?">>
   public static boolean ForStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForStatement")) return false;
     if (!nextTokenIs(b, FOR)) return false;
@@ -1678,9 +1678,9 @@ public class GoParser implements PsiParser {
     Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeToken(b, FOR);
     p = r; // pin = for|ForOrRangeClause
-    r = r && report_error_(b, enterMode(b, l + 1, "NO_EMPTY_LITERAL"));
+    r = r && report_error_(b, enterMode(b, l + 1, "BLOCK?"));
     r = p && report_error_(b, ForStatement_2(b, l + 1)) && r;
-    r = p && exitModeSafe(b, l + 1, "NO_EMPTY_LITERAL") && r;
+    r = p && exitModeSafe(b, l + 1, "BLOCK?") && r;
     exit_section_(b, l, m, FOR_STATEMENT, r, p, null);
     return r || p;
   }
@@ -2101,7 +2101,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (<<isModeOff "NO_EMPTY_LITERAL">> | <<isModeOn "PAR">>) '{' '}' | '{' ElementList '}'
+  // (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">>) '{' '}' | '{' ElementList '}'
   public static boolean LiteralValue(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LiteralValue")) return false;
     boolean r;
@@ -2112,7 +2112,7 @@ public class GoParser implements PsiParser {
     return r;
   }
 
-  // (<<isModeOff "NO_EMPTY_LITERAL">> | <<isModeOn "PAR">>) '{' '}'
+  // (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">>) '{' '}'
   private static boolean LiteralValue_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LiteralValue_0")) return false;
     boolean r;
@@ -2124,12 +2124,12 @@ public class GoParser implements PsiParser {
     return r;
   }
 
-  // <<isModeOff "NO_EMPTY_LITERAL">> | <<isModeOn "PAR">>
+  // <<isModeOff "BLOCK?">> | <<isModeOn "PAR">>
   private static boolean LiteralValue_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LiteralValue_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = isModeOff(b, l + 1, "NO_EMPTY_LITERAL");
+    r = isModeOff(b, l + 1, "BLOCK?");
     if (!r) r = isModeOn(b, l + 1, "PAR");
     exit_section_(b, m, null, r);
     return r;

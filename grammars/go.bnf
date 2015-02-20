@@ -120,7 +120,7 @@ private TypeLit ::=
   | MapType
   | ChannelType
 
-ArrayOrSliceType ::= '[' ('...'|Expression?) ']' <<exitModeSafe "NO_EMPTY_LITERAL">> Type {pin=1}
+ArrayOrSliceType ::= '[' ('...'|Expression?) ']' <<exitModeSafe "BLOCK?">> Type {pin=1}
 
 StructType ::= struct '{' Fields? '}' {pin=1}
 private Fields ::= FieldDeclaration (semi FieldDeclaration)* semi? {pin=1}
@@ -301,7 +301,7 @@ LiteralTypeExpr ::=
   | MapType
   | TypeName
 
-LiteralValue ::= (<<isModeOff "NO_EMPTY_LITERAL">> | <<isModeOn "PAR">>) '{' '}' | '{' ElementList '}' // todo: not a smart solution
+LiteralValue ::= (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">>) '{' '}' | '{' ElementList '}' // todo: not a smart solution
 private ElementList  ::= Element ( ',' Element? )*
 Element ::= [ Key ':' ] Value
 Key ::= FieldName &':' | ElementIndex
@@ -383,7 +383,7 @@ SwitchStatement ::= SwitchStart (TypeSwitchStatement | ExprSwitchStatement)
 SwitchStart ::= switch
 left ExprSwitchStatement ::= Condition '{' ExprCaseClause* '}' {pin=2 extends=SwitchStatement}
 
-private Condition ::= <<enterMode "NO_EMPTY_LITERAL">> SimpleStatementOpt Expression? <<exitModeSafe "NO_EMPTY_LITERAL">>
+private Condition ::= <<enterMode "BLOCK?">> SimpleStatementOpt Expression? <<exitModeSafe "BLOCK?">>
 private SimpleStatementOpt ::= [SimpleStatement ';'?] // todo: remove ?
 
 ExprCaseClause ::= ExprSwitchCase ':' Statements? {pin=1}
@@ -395,8 +395,8 @@ TypeCaseClause ::= TypeSwitchCase ':' Statements?
 TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
 TypeList ::= Type ( ',' Type )*
 TypeListNoPin ::= Type ( ',' Type )* {elementType=TypeList}
-ForStatement ::= for <<enterMode "NO_EMPTY_LITERAL">> (ForOrRangeClause ForBlock | ForBlock | Expression ForBlock) <<exitModeSafe "NO_EMPTY_LITERAL">> {pin(".*")="for|ForOrRangeClause"}
-private ForBlock ::= <<exitModeSafe "NO_EMPTY_LITERAL">> Block
+ForStatement ::= for <<enterMode "BLOCK?">> (ForOrRangeClause ForBlock | ForBlock | Expression ForBlock) <<exitModeSafe "BLOCK?">> {pin(".*")="for|ForOrRangeClause"}
+private ForBlock ::= <<exitModeSafe "BLOCK?">> Block
 private ForOrRangeClause ::= ForClause | RangeClause
 ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement? {methods=[processDeclarations]}
 RangeClause ::= ExpressionsOrVariables? range Expression {pin=2}
