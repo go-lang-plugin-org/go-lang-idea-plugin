@@ -57,11 +57,12 @@ public class GoCompletionUtil {
 
   @NotNull
   public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoNamedSignatureOwner f) {
-    return createFunctionOrMethodLookupElement(f, false, null, FUNCTION_PRIORITY);
+    return createFunctionOrMethodLookupElement(f, f.getName(), false, null, FUNCTION_PRIORITY);
   }
 
   @NotNull
   public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoNamedSignatureOwner f,
+                                                                  @Nullable String name, // for performance
                                                                   boolean showPackage,
                                                                   @Nullable InsertHandler<LookupElement> h, 
                                                                   double priority) {
@@ -83,17 +84,18 @@ public class GoCompletionUtil {
                                            : ParenthesesInsertHandler.WITH_PARAMETERS;
     String pkg = showPackage ? StringUtil.notNullize(f.getContainingFile().getPackageName()) : "";
     pkg = pkg.isEmpty() ? pkg : pkg + ".";
+    name = StringUtil.notNullize(name);
     return PrioritizedLookupElement.withPriority(
       LookupElementBuilder
-        .create(f)
+        .create(f, name)
         .withIcon(icon)
         .withInsertHandler(handler)
         .withTypeText(typeText, true)
         .withTailText(calcTailText(f), true)
         .withLookupString(pkg)
-        .withLookupString(StringUtil.notNullize(f.getName(), "").toLowerCase())
-        .withLookupString(pkg + f.getName())
-        .withPresentableText(pkg + f.getName() + paramText), priority);
+        .withLookupString(name.toLowerCase())
+        .withLookupString(pkg + name)
+        .withPresentableText(pkg + name + paramText), priority);
   }
 
   @Nullable
