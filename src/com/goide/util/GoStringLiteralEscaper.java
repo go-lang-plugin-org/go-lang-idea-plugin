@@ -118,7 +118,12 @@ public class GoStringLiteralEscaper extends LiteralTextEscaper<GoStringLiteral> 
             case Character.CONTROL:
             case Character.PRIVATE_USE:
             case Character.UNASSIGNED:
-              outChars.append("\\U").append(String.format(Locale.US, "%08X", c));
+              if (c <= 0xffff) {
+                outChars.append("\\u").append(String.format(Locale.US, "%04X", c));
+              } else {
+                outChars.append("\\U").append(String.format(Locale.US, "%08X", c));
+              }
+
               break;
 
             default:
