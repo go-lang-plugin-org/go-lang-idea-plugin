@@ -85,10 +85,12 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
   public Object[] getVariants() {
     List<LookupElement> variants = ContainerUtil.newArrayList();
     final PsiElement spec = PsiTreeUtil.getParentOfType(myElement, GoFieldDeclaration.class, GoTypeSpec.class);
+    final boolean insideParameter = PsiTreeUtil.getParentOfType(myElement, GoParameterDeclaration.class) != null;
     processResolveVariants(GoReference.createCompletionProcessor(variants, true, new Condition<PsiElement>() {
       @Override
-      public boolean value(PsiElement element) {
-        return element != spec;
+      public boolean value(PsiElement e) {
+        return e != spec && 
+               !(insideParameter && (e instanceof GoNamedSignatureOwner || e instanceof GoVarDefinition || e instanceof GoConstDefinition));
       }
     }));
     Object[] array = ArrayUtil.toObjectArray(variants);

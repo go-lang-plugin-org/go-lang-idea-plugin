@@ -211,6 +211,10 @@ public class GoCompletionTest extends GoCompletionTestBase {
   public void testInterfaceTypesNoStruct() {
     doTestExclude("package foo; type E struct {}; type B interface {<caret>}", "E");
   }
+  
+  public void testOnlyTypesInParameters() {
+    doTestExclude("package foo; const a int = 1; var b = 2; func main(<caret>) {}", "a", "b", "main");
+  }
 
   public void testInnerTypes() {
     doTestInclude("package foo; func foo() {type innerType struct {}; var i <caret>}", "innerType");
