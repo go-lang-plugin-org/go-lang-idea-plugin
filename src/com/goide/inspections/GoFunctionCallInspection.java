@@ -79,7 +79,7 @@ public class GoFunctionCallInspection extends LocalInspectionTool {
       private PsiReference getCallReference(@Nullable GoExpression first) {
         if (!(first instanceof GoCallExpr)) return null;
         GoExpression e = ((GoCallExpr)first).getExpression();
-        GoReferenceExpression r = PsiTreeUtil.getChildOfType(e, GoReferenceExpression.class);
+        GoReferenceExpression r = e instanceof GoReferenceExpression ? ((GoReferenceExpression)e) : PsiTreeUtil.getChildOfType(e, GoReferenceExpression.class);
         return (r != null ? r : e).getReference();
       }
     };
