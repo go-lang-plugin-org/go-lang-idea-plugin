@@ -86,8 +86,6 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
                     }
                     priority = GoCompletionUtil.FUNCTION_PRIORITY;
                   }
-                  //result.addElement(PrioritizedLookupElement.withPriority(LookupElementBuilder.create(name).withLookupString("a" + name).withInsertHandler(FUNC_INSERT_HANDLER), priority));
-
                   result.addElement(GoCompletionUtil.createFunctionOrMethodLookupElement(declaration, name, true, FUNC_INSERT_HANDLER, priority));
                 }
               }
