@@ -64,7 +64,7 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
                                     new GoIntroduceGlobalVariableFix(id, name),
                                     new GoIntroduceGlobalConstantFix(id, name),
                                   } :
-                                  new LocalQuickFix[]{new GoImportPackageQuickFix(reference)};
+                                  createImportPackageFixes(o, reference);
           holder.registerProblem(id, "Unresolved reference " + "'" + name + "'", LIKE_UNKNOWN_SYMBOL, fixes);
         }
       }
@@ -109,13 +109,21 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
           PsiElement id = o.getIdentifier();
           String name = id.getText();
           boolean isProhibited = isProhibited(o, qualifier);
-          LocalQuickFix[] fixes = isProhibited
-                                  ? new LocalQuickFix[]{new GoImportPackageQuickFix(reference)}
+          LocalQuickFix[] fixes = isProhibited 
+                                  ? createImportPackageFixes(o, reference) 
                                   : new LocalQuickFix[]{new GoIntroduceTypeFix(id, name)};
           holder.registerProblem(id, "Unresolved type " + "'" + name + "'", LIKE_UNKNOWN_SYMBOL, fixes);
         }
       }
     };
+  }
+
+  @NotNull
+  private static LocalQuickFix[] createImportPackageFixes(@NotNull PsiElement target, @NotNull PsiReference reference) {
+    GoImportPackageQuickFix importFix = new GoImportPackageQuickFix(reference);
+    return importFix.isAvailable(target.getProject(), target.getContainingFile(), target, target)
+           ? new LocalQuickFix[]{importFix}
+           : LocalQuickFix.EMPTY_ARRAY;
   }
 
   private static boolean isProhibited(@NotNull GoCompositeElement o, @Nullable GoCompositeElement qualifier) {

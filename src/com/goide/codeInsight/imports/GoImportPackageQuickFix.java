@@ -153,8 +153,9 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
                              @NotNull PsiFile file,
                              @NotNull PsiElement startElement,
                              @NotNull PsiElement endElement) {
-    return !isPerformed && file instanceof GoFile && file.getManager().isInProject(file) && !getPackagesToImport(startElement).isEmpty()
-           && notQualified(startElement);
+    return !isPerformed && file instanceof GoFile && file.getManager().isInProject(file) && myReference.resolve() == null
+           && !myPackageName.endsWith("_test")
+           && !getPackagesToImport(startElement).isEmpty() && notQualified(startElement);
   }
 
   private static boolean notQualified(@Nullable PsiElement startElement) {
