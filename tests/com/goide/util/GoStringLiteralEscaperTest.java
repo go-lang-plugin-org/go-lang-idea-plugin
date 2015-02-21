@@ -139,51 +139,51 @@ public class GoStringLiteralEscaperTest extends GoCodeInsightFixtureTestCase {
     final GoStringLiteral expr = createStringFromText("\\t\\n\\b");
     assertNotNull(expr);
     String a = decodeRange(expr, TextRange.create(1, 7));
-    assertEquals(a, "\t\n\b");
+    assertEquals("\t\n\b", a);
   }
 
   public void testDecodeEscapedVerticalTabString() {
     final GoStringLiteral expr = createStringFromText("\\v");
     assertNotNull(expr);
     String a = decodeRange(expr, TextRange.create(1, 3));
-    assertEquals(a, "\013");
+    assertEquals("\013", a);
   }
 
   public void testDecodeEscapedBellString() {
     final GoStringLiteral expr = createStringFromText("\\a");
     assertNotNull(expr);
     String a = decodeRange(expr, TextRange.create(1, 3));
-    assertEquals(a, "\007");
+    assertEquals("\007", a);
   }
 
   public void testDecodeOctalCharString() {
     final GoStringLiteral expr = createStringFromText("\\011");
     assertNotNull(expr);
     String a = decodeRange(expr, TextRange.create(1, 5));
-    assertEquals(a, "\t");
+    assertEquals("\t", a);
   }
 
   public void testDecodeHexCharString() {
     final GoStringLiteral expr = createStringFromText("\\x41");
     assertNotNull(expr);
     String a = decodeRange(expr, TextRange.create(1, 5));
-    assertEquals(a, "A");
+    assertEquals("A", a);
   }
 
   public void testDecodeShortUnicodeCharString() {
     final GoStringLiteral expr = createStringFromText("\\u8a9e");
     assertNotNull(expr);
     String a = decodeRange(expr, TextRange.create(1, 7));
-    assertEquals(a, "語");
+    assertEquals("語", a);
   }
 
   public void testDecodeLongUnicodeCharString() {
     final GoStringLiteral expr = createStringFromText("\\U00008a9e");
     assertNotNull(expr);
     String a = decodeRange(expr, TextRange.create(1, 11));
-    assertEquals(a, "語");
+    assertEquals("語", a);
   }
-
+  
   // endregion
 
   @NotNull
