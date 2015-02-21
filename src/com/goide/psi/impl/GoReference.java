@@ -48,7 +48,7 @@ import java.util.Set;
 import static com.goide.psi.impl.GoPsiImplUtil.*;
 
 public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressionBase> {
-  public static final Key<List<PsiElement>> IMPORT_USERS = Key.create("IMPORT_USERS");
+  public static final Key<List<? extends PsiElement>> IMPORT_USERS = Key.create("IMPORT_USERS");
 
   private static final Set<String> BUILTIN_PRINT_FUNCTIONS = ContainerUtil.newHashSet("print", "println");
 
@@ -450,9 +450,11 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   }
 
   static void putIfAbsent(@NotNull PsiElement importElement, @NotNull PsiElement usage) {
-    List<PsiElement> list = importElement.getUserData(IMPORT_USERS);
-    if (list == null) list = ContainerUtil.newArrayListWithCapacity(1);
-    list.add(usage);
-    importElement.putUserData(IMPORT_USERS, list);
+    List<PsiElement> newList = ContainerUtil.newSmartList(usage);
+    List<? extends PsiElement> list = importElement.getUserData(IMPORT_USERS);
+    if (list != null) {
+      newList.addAll(list);
+    }
+    importElement.putUserData(IMPORT_USERS, newList);
   }
 }

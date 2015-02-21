@@ -105,7 +105,7 @@ public class GoImportOptimizer implements ImportOptimizer {
     for (GoImportSpec importEntry : implicitImports) {
       GoImportSpec spec = getImportSpec(importEntry);
       if (spec != null && spec.getDot() != null) {
-        List<PsiElement> list = spec.getUserData(GoReference.IMPORT_USERS);
+        List<? extends PsiElement> list = spec.getUserData(GoReference.IMPORT_USERS);
         if (list != null) {
           for (PsiElement e : list) {
             if (e.isValid()) {
