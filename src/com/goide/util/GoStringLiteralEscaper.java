@@ -17,7 +17,6 @@
 package com.goide.util;
 
 import com.goide.psi.GoStringLiteral;
-import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.LiteralTextEscaper;
 import org.jetbrains.annotations.NotNull;
@@ -40,14 +39,10 @@ public class GoStringLiteralEscaper extends LiteralTextEscaper<GoStringLiteral> 
 
     if (myHost.getRawString() != null) {
       outChars.append(subText);
-    }
-    else {
-      Ref<int[]> sourceOffsetsRef = new Ref<int[]>();
-      parseStringCharacters(subText, outChars, sourceOffsetsRef);
-      outSourceOffsets = sourceOffsetsRef.get();
+      return true;
     }
 
-    return true;
+    return parseStringCharacters(subText, outChars);
   }
 
   @Override
@@ -57,9 +52,7 @@ public class GoStringLiteralEscaper extends LiteralTextEscaper<GoStringLiteral> 
     if (myHost.getRawString() != null) {
       int offset = offsetInDecoded;
       offset += rangeInsideHost.getStartOffset();
-      if (offset < rangeInsideHost.getStartOffset()) offset = rangeInsideHost.getStartOffset();
-      if (offset > rangeInsideHost.getEndOffset()) offset = rangeInsideHost.getEndOffset();
-      return offset;
+      return offset > rangeInsideHost.getEndOffset() ? -1 : offset;
     }
 
     int result = offsetInDecoded < outSourceOffsets.length ? outSourceOffsets[offsetInDecoded] : -1;
@@ -67,14 +60,89 @@ public class GoStringLiteralEscaper extends LiteralTextEscaper<GoStringLiteral> 
     return (result <= rangeInsideHost.getLength() ? result : rangeInsideHost.getLength()) + rangeInsideHost.getStartOffset();
   }
 
-  public static boolean parseStringCharacters(String chars, StringBuilder outChars, Ref<int[]> sourceOffsetsRef) {
-    int[] sourceOffsets = new int[chars.length() + 1];
-    sourceOffsetsRef.set(sourceOffsets);
+  /**
+   * Escapes the specified string in accordance with https://golang.org/ref/spec#Rune_literals
+   *
+   * @param chars
+   * @param outChars
+   */
+  public static void escapeString(@NotNull String chars, @NotNull StringBuilder outChars) {
+    int index = 0;
+
+    while (index < chars.length()) {
+      int c = chars.codePointAt(index);
+
+      switch (c) {
+        case (char)7:
+          outChars.append("\\a");
+          break;
+
+        case '\b':
+          outChars.append("\\b");
+          break;
+
+        case '\f':
+          outChars.append("\\f");
+          break;
+
+        case '\n':
+          outChars.append("\\n");
+          break;
+
+        case '\r':
+          outChars.append("\\r");
+          break;
+
+        case '\t':
+          outChars.append("\\t");
+          break;
+
+        case (char)0x0b:
+          outChars.append("\\v");
+          break;
+
+        case '\\':
+          outChars.append("\\\\");
+          break;
+
+        case '\'':
+          outChars.append("\\'");
+          break;
+
+        case '"':
+          outChars.append("\\\"");
+          break;
+
+        default:
+          switch (Character.getType(c)) {
+            case Character.CONTROL:
+            case Character.PRIVATE_USE:
+            case Character.UNASSIGNED:
+              if (c <= 0xffff) {
+                outChars.append("\\u").append(String.format(Locale.US, "%04X", c));
+              } else {
+                outChars.append("\\U").append(String.format(Locale.US, "%08X", c));
+              }
+
+              break;
+
+            default:
+              outChars.appendCodePoint(c);
+          }
+      }
+
+      index += Character.charCount(c);
+    }
+  }
+
+  private boolean parseStringCharacters(String chars, StringBuilder outChars) {
+    outSourceOffsets = new int[chars.length() + 1];
+    outSourceOffsets[chars.length()] = -1;
 
     if (chars.indexOf('\\') < 0) {
       outChars.append(chars);
-      for (int i = 0; i < sourceOffsets.length; i++) {
-        sourceOffsets[i] = i;
+      for (int i = 0; i < outSourceOffsets.length; i++) {
+        outSourceOffsets[i] = i;
       }
       return true;
     }
@@ -83,8 +151,8 @@ public class GoStringLiteralEscaper extends LiteralTextEscaper<GoStringLiteral> 
     while (index < chars.length()) {
       char c = chars.charAt(index++);
 
-      sourceOffsets[outChars.length()] = index - 1;
-      sourceOffsets[outChars.length() + 1] = index;
+      outSourceOffsets[outChars.length()] = index - 1;
+      outSourceOffsets[outChars.length() + 1] = index;
 
       if (c != '\\') {
         outChars.append(c);
@@ -195,8 +263,6 @@ public class GoStringLiteralEscaper extends LiteralTextEscaper<GoStringLiteral> 
           if (index + 4 <= chars.length()) {
             try {
               int v = Integer.parseInt(chars.substring(index, index + 4), 16);
-              //line separators are invalid here
-              if (v == 0x000a || v == 0x000d) return false;
               c = chars.charAt(index);
               if (c == '+' || c == '-') return false;
               outChars.append((char)v);
@@ -216,12 +282,10 @@ public class GoStringLiteralEscaper extends LiteralTextEscaper<GoStringLiteral> 
           if (index + 8 <= chars.length()) {
             try {
               int v = Integer.parseInt(chars.substring(index, index + 8), 16);
-              //line separators are invalid here
-              if (v == 0x0000000a || v == 0x0000000d) return false;
               c = chars.charAt(index);
               if (c == '+' || c == '-') return false;
               outChars.append((char)v);
-              index += 4;
+              index += 8;
             }
             catch (Exception e) {
               return false;
@@ -236,78 +300,9 @@ public class GoStringLiteralEscaper extends LiteralTextEscaper<GoStringLiteral> 
           return false;
       }
 
-      sourceOffsets[outChars.length()] = index;
+      outSourceOffsets[outChars.length()] = index;
     }
     return true;
-  }
-
-  /**
-   * Escapes the specified string in accordance with https://golang.org/ref/spec#Rune_literals
-   * @param chars
-   * @param outChars
-   */
-  public static void escapeString(@NotNull String chars, @NotNull StringBuilder outChars) {
-    int index = 0;
-
-    while (index < chars.length()) {
-      int c = chars.codePointAt(index);
-
-      switch (c) {
-        case (char)7:
-          outChars.append("\\a");
-          break;
-
-        case '\b':
-          outChars.append("\\b");
-          break;
-
-        case '\f':
-          outChars.append("\\f");
-          break;
-
-        case '\n':
-          outChars.append("\\n");
-          break;
-
-        case '\r':
-          outChars.append("\\r");
-          break;
-
-        case '\t':
-          outChars.append("\\t");
-          break;
-
-        case (char)0x0b:
-          outChars.append("\\v");
-          break;
-
-        case '\\':
-          outChars.append("\\\\");
-          break;
-
-        case '\'':
-          outChars.append("\\'");
-          break;
-
-        case '"':
-          outChars.append("\\\"");
-          break;
-
-        default:
-          switch (Character.getType(c)) {
-            case Character.CONTROL:
-            case Character.PRIVATE_USE:
-            case Character.UNASSIGNED:
-              outChars.append("\\u").append(String.format(Locale.US, "%04X", c));
-              break;
-
-            default:
-              outChars.appendCodePoint(c);
-          }
-      }
-
-      index += Character.charCount(c);
-    }
   }
 
   @Override

@@ -87,4 +87,10 @@ public class GoElementFactory {
   public static GoBlock createBlock(@NotNull Project project) {
     return createFileFromText(project, "package a; func t() {\n}").getFunctions().get(0).getBlock();
   }
+
+  @NotNull
+  public static GoStringLiteral createStringLiteral(@NotNull Project project, @NotNull String stringLiteral) {
+    GoFile f = createFileFromText(project, "package a; var b = " + stringLiteral);
+    return PsiTreeUtil.getNextSiblingOfType(f.getVars().get(0), GoStringLiteral.class);
+  }
 }
