@@ -319,6 +319,8 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
     PsiElement grandPa = parent.getParent();
     if (grandPa instanceof GoSelectorExpr && !processSelector((GoSelectorExpr)grandPa, processor, state, parent)) return false;
+    
+    if (prevDot(parent)) return false;
 
     GoScopeProcessorBase delegate = createDelegate(processor);
     ResolveUtil.treeWalkUp(myElement, delegate);

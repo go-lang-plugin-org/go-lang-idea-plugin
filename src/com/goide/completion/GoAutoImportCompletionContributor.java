@@ -39,6 +39,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
+import static com.goide.psi.impl.GoPsiImplUtil.prevDot;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public class GoAutoImportCompletionContributor extends CompletionContributor {
@@ -61,7 +62,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
                                     @NotNull CompletionResultSet result) {
         PsiElement position = parameters.getPosition();
         PsiElement parent = position.getParent();
-        if (parent.getParent() instanceof GoSelectorExpr) return;
+        if (prevDot(parent)) return;
 
         final PsiFile file = parameters.getOriginalFile();
         if (!(file instanceof GoFile)) return;
