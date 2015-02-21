@@ -17,15 +17,14 @@
 package com.goide.inspections;
 
 import com.goide.psi.*;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -60,7 +59,7 @@ public class GoFunctionCallInspection extends LocalInspectionTool {
             if (expectedSize != actualSize) {
               if (actualSize == 1) {
                 GoExpression first = ContainerUtil.getFirstItem(list);
-                PsiReference firstRef = getCallReference(first);
+                PsiReference firstRef = GoPsiImplUtil.getCallReference(first);
                 PsiElement firstResolve = firstRef != null ? firstRef.resolve() : null;
                 if (firstResolve instanceof GoFunctionOrMethodDeclaration) {
                   int resultCount = GoInspectionUtil.getFunctionResultCount((GoFunctionOrMethodDeclaration)firstResolve);
@@ -75,13 +74,6 @@ public class GoFunctionCallInspection extends LocalInspectionTool {
         }
       }
 
-      @Nullable
-      private PsiReference getCallReference(@Nullable GoExpression first) {
-        if (!(first instanceof GoCallExpr)) return null;
-        GoExpression e = ((GoCallExpr)first).getExpression();
-        GoReferenceExpression r = e instanceof GoReferenceExpression ? ((GoReferenceExpression)e) : PsiTreeUtil.getChildOfType(e, GoReferenceExpression.class);
-        return (r != null ? r : e).getReference();
-      }
     };
   }
 }

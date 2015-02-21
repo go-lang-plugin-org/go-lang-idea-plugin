@@ -829,4 +829,12 @@ public class GoPsiImplUtil {
     PsiElement prev = parent == null ? null : PsiTreeUtil.prevLeaf(parent);
     return prev instanceof LeafElement && ((LeafElement)prev).getElementType() == GoTypes.DOT;
   }
+
+  @Nullable
+  public static PsiReference getCallReference(@Nullable GoExpression first) {
+    if (!(first instanceof GoCallExpr)) return null;
+    GoExpression e = ((GoCallExpr)first).getExpression();
+    GoReferenceExpression r = e instanceof GoReferenceExpression ? ((GoReferenceExpression)e) : PsiTreeUtil.getChildOfType(e, GoReferenceExpression.class);
+    return (r != null ? r : e).getReference();
+  }
 }

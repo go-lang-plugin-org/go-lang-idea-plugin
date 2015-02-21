@@ -24,8 +24,6 @@ import com.intellij.lang.parameterInfo.ParameterInfoUIContextEx;
 import com.intellij.testFramework.utils.parameterInfo.MockCreateParameterInfoContext;
 import com.intellij.testFramework.utils.parameterInfo.MockUpdateParameterInfoContext;
 
-import java.io.IOException;
-
 
 public class GoParameterInfoHandlerTest extends GoCodeInsightFixtureTestCase {
   private GoParameterInfoHandler myParameterInfoHandler;
@@ -36,43 +34,18 @@ public class GoParameterInfoHandlerTest extends GoCodeInsightFixtureTestCase {
     myParameterInfoHandler = new GoParameterInfoHandler();
   }
 
-  public void testFuncParam() throws IOException {
-    doTest(1, "<html>num int, <b>text string</b></html>");
-  }
-
-  public void testFuncParamMulti() throws IOException {
-    doTest(4, "<html>a int, b int, c int, d string, <b>e string</b>, f string</html>");
-  }
-
-  public void testFuncParamNone() throws IOException {
-    doTest(0, "");
-  }
-
-  public void testFuncParamEllipsis() throws IOException {
-    doTest(5, "<html>num int, text string, <b>more ...int</b></html>");
-  }
-
-  public void testFuncEmbedInner() throws IOException {
-    doTest(1, "<html>num int, <b>text string</b></html>");
-  }
-
-  public void testFuncEmbedOuter() throws IOException {
-    doTest(2, "<html>a int, b int, <b>c int</b>, d int</html>");
-  }
-
-  public void testMethParam() throws IOException {
-    doTest(1, "<html>num int, <b>text string</b></html>");
-  }
-
-  public void testMethParamNone() throws IOException {
-    doTest(0, "");
-  }
-
-  public void testMethParamEllipsis() throws IOException {
-    doTest(5, "<html>num int, text string, <b>more ...int</b></html>");
-  }
-
-  private void doTest(int expectedParamIdx, String expectedPresentation) throws IOException {
+  public void testFuncParam()         { doTest(1, "<html>num int, <b>text string</b></html>"); } 
+  public void testFuncParamMulti()    { doTest(4, "<html>a int, b int, c int, d string, <b>e string</b>, f string</html>"); } 
+  public void testFuncParamNone()     { doTest(0, ""); } 
+  public void testChainedCall()       { doTest(0, "<html><b>param1 string</b>, param2 int</html>"); } 
+  public void testFuncParamEllipsis() { doTest(5, "<html>num int, text string, <b>more ...int</b></html>"); } 
+  public void testFuncEmbedInner()    { doTest(1, "<html>num int, <b>text string</b></html>"); } 
+  public void testFuncEmbedOuter()    { doTest(2, "<html>a int, b int, <b>c int</b>, d int</html>"); } 
+  public void testMethParam()         { doTest(1, "<html>num int, <b>text string</b></html>"); } 
+  public void testMethParamNone()     { doTest(0, ""); } 
+  public void testMethParamEllipsis() { doTest(5, "<html>num int, text string, <b>more ...int</b></html>"); }
+  
+  private void doTest(int expectedParamIdx, String expectedPresentation) {
     // Given
     myFixture.configureByFile(getTestName(true) + ".go");
     // When

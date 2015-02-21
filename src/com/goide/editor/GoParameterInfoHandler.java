@@ -18,6 +18,7 @@ package com.goide.editor;
 
 import com.goide.GoTypes;
 import com.goide.psi.*;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.lang.parameterInfo.*;
 import com.intellij.openapi.project.DumbAware;
@@ -105,15 +106,11 @@ public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabAction
     PsiElement parent = argList.getParent();
     if (!(parent instanceof GoCallExpr)) return;
 
-    GoExpression expression = ((GoCallExpr)parent).getExpression();
-    if (expression instanceof GoReferenceExpression) {
-      PsiReference reference = expression.getReference();
-      PsiElement resolve = reference != null ? reference.resolve() : null;
-
-      if (resolve instanceof GoSignatureOwner) {
-        context.setItemsToShow(new Object[]{resolve});
-        context.showHint(argList, argList.getTextRange().getStartOffset(), this);
-      }
+    PsiReference ref = GoPsiImplUtil.getCallReference((GoCallExpr)parent);
+    PsiElement resolve = ref != null ? ref.resolve() : null;
+    if (resolve instanceof GoSignatureOwner) {
+      context.setItemsToShow(new Object[]{resolve});
+      context.showHint(argList, argList.getTextRange().getStartOffset(), this);
     }
   }
 
