@@ -47,7 +47,7 @@ public class GoElementFactory {
   @NotNull
   public static PsiElement createVarDefinitionFromText(@NotNull Project project, String text) {
     GoFile file = createFileFromText(project, "package p; var " + text + " = 1");
-    return file.getVars().get(0);
+    return ContainerUtil.getFirstItem(file.getVars());
   }
 
   @NotNull
@@ -85,12 +85,14 @@ public class GoElementFactory {
 
   @NotNull
   public static GoBlock createBlock(@NotNull Project project) {
-    return createFileFromText(project, "package a; func t() {\n}").getFunctions().get(0).getBlock();
+    GoFunctionDeclaration function = ContainerUtil.getFirstItem(createFileFromText(project, "package a; func t() {\n}").getFunctions());
+    assert function != null : "Impossible situation! Parser is broken.";
+    return function.getBlock();
   }
 
   @NotNull
   public static GoStringLiteral createStringLiteral(@NotNull Project project, @NotNull String stringLiteral) {
     GoFile f = createFileFromText(project, "package a; var b = " + stringLiteral);
-    return PsiTreeUtil.getNextSiblingOfType(f.getVars().get(0), GoStringLiteral.class);
+    return PsiTreeUtil.getNextSiblingOfType(ContainerUtil.getFirstItem(f.getVars()), GoStringLiteral.class);
   }
 }
