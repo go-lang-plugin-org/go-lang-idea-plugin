@@ -101,19 +101,14 @@ public class GoStringLiteralEscaperTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testEscaperOffsetInSingleCharString() {
-    final GoStringLiteral expr = createStringFromText("c");
-    assertNotNull(expr);
-    final LiteralTextEscaper<? extends PsiLanguageInjectionHost> escaper = expr.createLiteralTextEscaper();
-    final TextRange range = TextRange.create(1, 2);
-    escaper.decode(range, new StringBuilder());
-    assertEquals(1, escaper.getOffsetInHost(0, range));
-    assertEquals(2, escaper.getOffsetInHost(1, range));
-    assertEquals(-1, escaper.getOffsetInHost(2, range));
+    doSingleCharTest(createStringFromText("c"));
   }
 
   public void testEscaperOffsetInSingleCharRawString() {
-    final GoStringLiteral expr = createRawStringFromText("c");
-    assertNotNull(expr);
+    doSingleCharTest(createRawStringFromText("c"));
+  }
+
+  private static void doSingleCharTest(@NotNull GoStringLiteral expr) {
     final LiteralTextEscaper<? extends PsiLanguageInjectionHost> escaper = expr.createLiteralTextEscaper();
     final TextRange range = TextRange.create(1, 2);
     escaper.decode(range, new StringBuilder());
@@ -183,7 +178,13 @@ public class GoStringLiteralEscaperTest extends GoCodeInsightFixtureTestCase {
     String a = decodeRange(expr, TextRange.create(1, 11));
     assertEquals("語", a);
   }
-  
+
+  public void testQuote() {
+    final GoStringLiteral expr = createStringFromText("import \\\"fmt\\\"");
+    assertNotNull(expr);
+    assertEquals("\"fmt\"", decodeRange(expr, TextRange.create(8, 15)));
+  }
+
   // endregion
 
   @NotNull
