@@ -211,8 +211,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
   private boolean processExistingType(@NotNull GoType type,
                                       @NotNull MyScopeProcessor processor,
-                                      @NotNull ResolveState state
-                                      ) {
+                                      @NotNull ResolveState state) {
     PsiFile file = type.getContainingFile();
     if (!(file instanceof GoFile)) return true;
     PsiFile myFile = myElement.getContainingFile();
