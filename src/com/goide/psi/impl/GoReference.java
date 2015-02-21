@@ -234,7 +234,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
           if (!processNamedElements(processor, state, ContainerUtil.createMaybeSingletonList(anon), localResolve)) return false;
         }
       }
-      if (!processCollectedRefs(type, refs, processor, state)) return false;
+      if (!processCollectedRefs(type, refs, processor, state.put(POINTER, null))) return false;
     }
     else if (state.get(POINTER) == null && type instanceof GoInterfaceType) {
       if (!processNamedElements(processor, state, ((GoInterfaceType)type).getMethods(), localResolve)) return false;

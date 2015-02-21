@@ -1,5 +1,34 @@
 package main
 
+import "fmt"
+
+type Closer interface {
+    Close()
+}
+
+type CloseImpl struct {}
+
+func (impl *CloseImpl) Close() {
+    fmt.Println("closed")
+}
+
+type File struct {
+    name string
+    Closer
+}
+
+func getFile() *File {
+    return &File{"hello", &CloseImpl{}}
+}
+
+func main() {
+    f1 := &File{"hello", &CloseImpl{}}
+    f1.Close()
+
+    f2 := getFile()
+    f2.Close() // Unresolved reference Close
+}
+
 type User interface {
     Name() string
 }
