@@ -24,6 +24,8 @@ import com.intellij.psi.LiteralTextEscaper;
 import com.intellij.psi.PsiLanguageInjectionHost;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Locale;
+
 public class GoStringLiteralEscaperTest extends GoCodeInsightFixtureTestCase {
 
   private static String decodeRange(GoStringLiteral expr, TextRange range) {
@@ -189,11 +191,11 @@ public class GoStringLiteralEscaperTest extends GoCodeInsightFixtureTestCase {
 
   @NotNull
   private GoStringLiteral createStringFromText(@NotNull final String text) {
-    return GoElementFactory.createStringLiteral(myFixture.getProject(), String.format("\"%s\"", text));
+    return GoElementFactory.createStringLiteral(myFixture.getProject(), String.format(Locale.US, "\"%s\"", text));
   }
 
   @NotNull
   private GoStringLiteral createRawStringFromText(@NotNull final String text) {
-    return GoElementFactory.createStringLiteral(myFixture.getProject(), String.format("`%s`", text));
+    return GoElementFactory.createStringLiteral(myFixture.getProject(), String.format(Locale.US, "`%s`", text));
   }
 }
