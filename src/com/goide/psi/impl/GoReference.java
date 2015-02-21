@@ -202,7 +202,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
   private boolean processPointer(@NotNull GoPointerType type, @NotNull MyScopeProcessor processor, @NotNull ResolveState state) {
     GoType pointer = type.getType();
-    return !(pointer != null && !processExistingType(pointer, processor, state)) && processTypeRef(pointer, processor, state);
+    return pointer == null || processExistingType(pointer, processor, state) && processTypeRef(pointer, processor, state);
   }
 
   private boolean processTypeRef(@Nullable GoType type, @NotNull MyScopeProcessor processor, @NotNull ResolveState state) {
@@ -225,18 +225,15 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     if (type instanceof GoStructType) {
       GoScopeProcessorBase delegate = createDelegate(processor);
       type.processDeclarations(delegate, ResolveState.initial(), null, myElement);
-      for (GoFieldDeclaration delc : ((GoStructType)type).getFieldDeclarationList()) {
-        if (!processNamedElements(processor, state, delc.getFieldDefinitionList(), localResolve)) return false;
-        GoAnonymousFieldDefinition anon = delc.getAnonymousFieldDefinition();
-        if (!processNamedElements(processor, state, ContainerUtil.createMaybeSingletonList(anon), localResolve)) return false;
-      }
       final List<GoTypeReferenceExpression> refs = ContainerUtil.newArrayList();
-      type.accept(new GoRecursiveVisitor() {
-        @Override
-        public void visitAnonymousFieldDefinition(@NotNull GoAnonymousFieldDefinition o) {
-          refs.add(o.getTypeReferenceExpression());
+      for (GoFieldDeclaration d : ((GoStructType)type).getFieldDeclarationList()) {
+        if (!processNamedElements(processor, state, d.getFieldDefinitionList(), localResolve)) return false;
+        GoAnonymousFieldDefinition anon = d.getAnonymousFieldDefinition();
+        if (anon != null) {
+          refs.add(anon.getTypeReferenceExpression());
+          if (!processNamedElements(processor, state, ContainerUtil.createMaybeSingletonList(anon), localResolve)) return false;
         }
-      });
+      }
       if (!processCollectedRefs(type, refs, processor, state)) return false;
     }
     else if (state.get(POINTER) == null && type instanceof GoInterfaceType) {
