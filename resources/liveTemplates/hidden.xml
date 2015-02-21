@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<templateSet group="Go">
+<templateSet group="GoHiddenTemplate">
   <!-- KEYWORDS -->
   <template description='Package declaration' id='go_lang_package' name='go_lang_package' toReformat='true' toShortenFQNames='true'
             value='package $NAME$'>

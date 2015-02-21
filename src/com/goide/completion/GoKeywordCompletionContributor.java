@@ -21,15 +21,14 @@ import com.goide.psi.*;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.patterns.ElementPattern;
-import com.intellij.patterns.PatternCondition;
-import com.intellij.patterns.PsiElementPattern;
-import com.intellij.patterns.PsiFilePattern;
+import com.intellij.patterns.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
 
 import static com.goide.completion.GoKeywordCompletionProvider.EMPTY_INSERT_HANDLER;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
@@ -142,15 +141,18 @@ public class GoKeywordCompletionContributor extends CompletionContributor {
   }
 
   private static PsiFilePattern.Capture<GoFile> goFileWithPackage() {
-    return psiFile(GoFile.class).withChildren(collection(PsiElement.class).filter(not(psiElement().whitespaceCommentEmptyOrError()),
-                                                                                  collection(PsiElement.class)
-                                                                                    .first(psiElement(GoTypes.PACKAGE_CLAUSE))));
+    CollectionPattern<PsiElement> collection = collection(PsiElement.class);
+    CollectionPattern<PsiElement> packageIsFirst = collection.first(psiElement(GoTypes.PACKAGE_CLAUSE));
+    return psiFile(GoFile.class).withChildren(collection.filter(not(psiElement().whitespaceCommentEmptyOrError()),
+                                                                packageIsFirst));
   }
 
   private static PsiFilePattern.Capture<GoFile> goFileWithoutPackage() {
-    return psiFile(GoFile.class).withChildren(collection(PsiElement.class).filter(not(psiElement().whitespaceCommentEmptyOrError()),
-                                                                                  collection(PsiElement.class).first(
-                                                                                    not(psiElement(GoTypes.PACKAGE_CLAUSE)))));
+    CollectionPattern<PsiElement> collection = collection(PsiElement.class);
+    ElementPattern<Collection<PsiElement>> emptyOrPackageIsNotFirst = or(collection.empty(),
+                                                                         collection.first(not(psiElement(GoTypes.PACKAGE_CLAUSE))));
+    return psiFile(GoFile.class).withChildren(collection.filter(not(psiElement().whitespaceCommentEmptyOrError()),
+                                                                emptyOrPackageIsNotFirst));
   }
 
   private static class GoNonQualifiedReference extends PatternCondition<GoReferenceExpressionBase> {

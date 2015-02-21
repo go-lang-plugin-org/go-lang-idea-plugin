@@ -176,6 +176,10 @@ public class GoCompletionTest extends GoCompletionTestBase {
   public void testPackageKeyword() {
     doTestCompletion();
   }
+  
+  public void testPackageKeywordInEmptyFile() {
+    doTestCompletion();
+  }
 
   public void testMethods() {
     doTestEquals("package foo; type T interface{}; func (t T) f() {t.<caret>}", "f");
