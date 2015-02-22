@@ -176,7 +176,7 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
                 processHandler.startNotify();
                 ExecutionHelper.executeExternalProcess(project, processHandler, new ExecutionModes.SameThreadMode(60), commandLine);
 
-                ExecutionHelper.showOutput(project, processAdapter.getOutput(), "Executing `" + task.toString() + "`", null, true);
+                ExecutionHelper.showOutput(project, processAdapter.getOutput(), "Executing `" + task.toString() + "`", null, !result.get());
               }
               catch (ExecutionException e) {
                 exceptions.add(e);
