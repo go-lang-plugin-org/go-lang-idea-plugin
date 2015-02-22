@@ -21,6 +21,7 @@ import com.goide.GoFileType;
 import com.goide.psi.GoFile;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -38,6 +39,10 @@ public class GoTestFinder implements TestFinder {
 
   public static boolean isTestFile(@Nullable PsiFile file) {
     return file != null && file instanceof GoFile && file.getName().endsWith(GoConstants.TEST_SUFFIX_WITH_EXTENSION);
+  }
+
+  public static boolean isTestFile(@Nullable VirtualFile file) {
+    return file != null && file.getFileType() == GoFileType.INSTANCE && file.getNameWithoutExtension().endsWith(GoConstants.TEST_SUFFIX);
   }
 
   @Nullable
