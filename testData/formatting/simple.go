@@ -18,7 +18,7 @@ package   main
             ErrNegativeCount = errors.New("bufio: negative count")
     )
     
-    func   main   (aaa string, rd io.Reader, error  )    ( ok ,  ok) {
+    func   main   (aaa string, rd io.Reader, err     error  )    ( ok ,  ok) {
     
     b,  ok  :=    rd . ( *   Reader )
     
@@ -30,8 +30,8 @@ package   main
             var  bbb    = iota
             
             
-             switch name {
-             
+             switch  {
+                 case 1    ==2    : return        1      , 1
                  }
                  
                  go     foo()

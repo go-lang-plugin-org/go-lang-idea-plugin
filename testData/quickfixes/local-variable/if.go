@@ -1,7 +1,7 @@
 package foo
 
 func main() {
-    if a<caret> {
-        return 1
-    }
+	if a<caret> {
+		return 1
+	}
 }

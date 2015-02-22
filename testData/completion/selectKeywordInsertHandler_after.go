@@ -1,7 +1,7 @@
 package foo
 
 func bar() {
-  select {
-    <caret>
-    }
+	select {
+	<caret>
+	}
 }

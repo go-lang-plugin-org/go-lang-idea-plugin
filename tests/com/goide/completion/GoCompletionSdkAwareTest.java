@@ -28,7 +28,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "import \"text/template\"\n" +
                   "func test(){template.Template{<caret>}}");
   }
-  
+
   public void testTypeAutoImportOnQualifiedName() {
     doCheckResult("package main; \n" +
                   "func test(){template.Templat<caret>}",
@@ -36,7 +36,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "import \"text/template\"\n" +
                   "func test(){template.Template{<caret>}}" );
   }
-  
+
   public void testAutoImport() {
     doCheckResult("package main; \n" +
                   "func test(){Fprintl<caret>}",
@@ -44,15 +44,15 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "import \"fmt\"\n" +
                   "func test(){fmt.Fprintln(<caret>)}");
   }
-  
+
   public void testForceAutoImportBlankImports() {
     doCheckResult("package main; \n" +
                   "import _ \"fmt\"\n" +
                   "func test(){Fprintl<caret>}",
                   "package main;\n" +
                   "import (\n" +
-                  "    _ \"fmt\"\n" +
-                  "    \"fmt\"\n" +
+                  "\t_ \"fmt\"\n" +
+                  "\t\"fmt\"\n" +
                   ")\n" +
                   "func test(){fmt.Fprintln()}");
   }
@@ -74,52 +74,52 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "import . `fmt`\n" +
                   "func test(){Fprintln()}");
   }
-  
+
   public void testUseImportPathInsteadOfPackageNameForAutoImport() {
     doCheckResult("package main\n" +
                   "\n" +
                   "import (\n" +
-                  "    \"fmt\"\n" +
+                  "\t\"fmt\"\n" +
                   ")\n" +
                   "\n" +
                   "func main() {\n" +
-                  "    fmt.Printf(FunctionInPackageThatDoesNotMatchDirectory<caret>);\n" +
-                  "}", 
-                  "package main\n" +
-                  "\n" +
-                  "import (\n" +
-                  "    \"fmt\"\n" +
-                  "    \"dirName\"\n" +
-                  ")\n" +
-                  "\n" +
-                  "func main() {\n" +
-                  "    fmt.Printf(otherPackage.FunctionInPackageThatDoesNotMatchDirectoryName());\n" +
-                  "}");
-  }
-  
-  public void testUsePackageNameInsteadOfImportPathIfPackageIsImported() {
-    doCheckResult("package main\n" +
-                  "\n" +
-                  "import (\n" +
-                  "    \"fmt\"\n" +
-                  "    \"dirName\"\n" +
-                  ")\n" +
-                  "\n" +
-                  "func main() {\n" +
-                  "    fmt.Printf(FunctionInPackageThatDoesNotMatchDirectory<caret>);\n" +
+                  "\tfmt.Printf(FunctionInPackageThatDoesNotMatchDirectory<caret>);\n" +
                   "}",
                   "package main\n" +
                   "\n" +
                   "import (\n" +
-                  "    \"fmt\"\n" +
-                  "    \"dirName\"\n" +
+                  "\t\"fmt\"\n" +
+                  "\t\"dirName\"\n" +
                   ")\n" +
                   "\n" +
                   "func main() {\n" +
-                  "    fmt.Printf(otherPackage.FunctionInPackageThatDoesNotMatchDirectoryName());\n" +
+                  "\tfmt.Printf(otherPackage.FunctionInPackageThatDoesNotMatchDirectoryName());\n" +
                   "}");
   }
-  
+
+  public void testUsePackageNameInsteadOfImportPathIfPackageIsImported() {
+    doCheckResult("package main\n" +
+                  "\n" +
+                  "import (\n" +
+                  "\t\"fmt\"\n" +
+                  "\t\"dirName\"\n" +
+                  ")\n" +
+                  "\n" +
+                  "func main() {\n" +
+                  "\tfmt.Printf(FunctionInPackageThatDoesNotMatchDirectory<caret>);\n" +
+                  "}",
+                  "package main\n" +
+                  "\n" +
+                  "import (\n" +
+                  "\t\"fmt\"\n" +
+                  "\t\"dirName\"\n" +
+                  ")\n" +
+                  "\n" +
+                  "func main() {\n" +
+                  "\tfmt.Printf(otherPackage.FunctionInPackageThatDoesNotMatchDirectoryName());\n" +
+                  "}");
+  }
+
   public void testDoNotImportLocallyImportedPackage() throws IOException {
     myFixture.getTempDirFixture().createFile("imported/imported.go", "package imported\n" +
                                                                      "func LocallyImported() {}");
@@ -147,7 +147,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
     myFixture.completeBasic();
     myFixture.assertPreferredCompletionItems(0, "ReadWriteSeeker", "ReadWriteSeekerCustom");
   }
-  
+
   public void testDoNothingInsideSelector() {
     doTestVariants(
       "package main\n" +
@@ -174,7 +174,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
     doCheckResult("package main; import \"fmt\"; func test(fmt.form<caret>}",
                   "package main; import \"fmt\"; func test(fmt.Formatter<caret>}");
   }
-  
+
   public void testPrintlnBuiltin() {
     doTestInclude("package main; func test(){pr<caret>}", "print", "println");
   }
@@ -189,7 +189,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "func main() {\n" +
                   "    f.fprintl<caret>\n" +
                   "}",
-                  "package main\n" +
+                  "package main\n\n" +
                   "import \"fmt\"\n" +
                   "func main() {\n" +
                   "    fmt.Fprintln()\n" +

@@ -14,6 +14,107 @@ public class GoFormatterTest extends GoCodeInsightFixtureTestCase {
     doTest();
   }
 
+  public void testComments() {
+    doTest();
+  }
+
+  public void testComposites() {
+    doTest();
+  }
+
+  public void testCrlf() {
+    doTest();
+  }
+
+  public void testEmptydecl() {
+    doTest();
+  }
+
+  public void testImport() {
+    doTest();
+  }
+
+  public void testOld() {
+    doTest();
+  }
+
+  public void testRanges() {
+    doTest();
+  }
+
+  public void testRewrite1() {
+    doTest();
+  }
+
+  public void testRewrite2() {
+    doTest();
+  }
+
+  public void testRewrite3() {
+    doTest();
+  }
+
+  public void testRewrite4() {
+    doTest();
+  }
+
+  public void testRewrite5() {
+    doTest();
+  }
+
+  public void testRewrite6() {
+    doTest();
+  }
+
+  public void testRewrite7() {
+    doTest();
+  }
+
+  public void testRewrite8() {
+    doTest();
+  }
+
+  public void testSlices1() {
+    doTest();
+  }
+
+  public void testSlices2() {
+    doTest();
+  }
+
+  public void testStdin1() {
+    doTest();
+  }
+
+  public void testStdin2() {
+    doTest();
+  }
+
+  public void testStdin3() {
+    doTest();
+  }
+
+  public void testStdin4() {
+    doTest();
+  }
+
+  public void testStdin5() {
+    doTest();
+  }
+
+  public void testStdin6() {
+    doTest();
+  }
+
+  public void testStdin7() {
+    doTest();
+  }
+
+  public void testTypeswitch() {
+    doTest();
+  }
+
+
   public void doTest() {
     doTest(true);
   }
