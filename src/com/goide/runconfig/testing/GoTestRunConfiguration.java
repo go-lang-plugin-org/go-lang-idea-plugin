@@ -16,14 +16,12 @@
 
 package com.goide.runconfig.testing;
 
-import com.goide.psi.GoFile;
-import com.goide.psi.impl.GoPsiImplUtil;
+import com.goide.GoFileType;
 import com.goide.runconfig.GoModuleBasedConfiguration;
 import com.goide.runconfig.GoRunConfigurationBase;
 import com.goide.runconfig.GoRunner;
 import com.goide.runconfig.testing.ui.GoTestRunConfigurationEditorForm;
-import com.goide.stubs.index.GoPackagesIndex;
-import com.goide.util.GoUtil;
+import com.goide.sdk.GoSdkUtil;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.*;
@@ -36,12 +34,8 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.stubs.StubIndex;
 import com.intellij.util.PathUtil;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
 
 public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunningState> {
   @NotNull private String myPackage = "";
@@ -102,13 +96,17 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
       case PACKAGE:
         Module module = configurationModule.getModule();
         assert module != null;
-        final GlobalSearchScope scope = GoUtil.moduleScope(module);
-        String packageName = GoPsiImplUtil.getLocalPackageName(myPackage);
-        Collection<GoFile> files = StubIndex.getElements(GoPackagesIndex.KEY, packageName, getProject(), scope, GoFile.class);
-        for (GoFile file : files) {
-          if (file != null && file.getImportPath() != null) return;
+
+        VirtualFile packageDirectory = GoSdkUtil.findDirectoryByImportPath(myPackage, module);
+        if (packageDirectory == null) {
+          throw new RuntimeConfigurationError("Cannot find package '" + myPackage + "'");
         }
-        throw new RuntimeConfigurationError("Cannot find package '" + myPackage + "'");
+        for (VirtualFile file : packageDirectory.getChildren()) {
+          if (file.getFileType() == GoFileType.INSTANCE && file.getNameWithoutExtension().endsWith("_test")) {
+            return;
+          }
+        }
+        throw new RuntimeConfigurationError("Cannot find Go test files in '" + myPackage + "'");
       case FILE:
         VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByPath(myFilePath);
         if (virtualFile == null) {

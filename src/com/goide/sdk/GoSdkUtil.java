@@ -177,6 +177,17 @@ public class GoSdkUtil {
     VirtualFile virtualFile = context.getContainingFile().getOriginalFile().getVirtualFile();
     return ProjectRootManager.getInstance(context.getProject()).getFileIndex().getClassRootForFile(virtualFile);
   }
+  
+  @Nullable
+  public static VirtualFile findDirectoryByImportPath(@NotNull String importPath, @NotNull Module module) {
+    for (VirtualFile root : getGoPathsSources(module)) {
+      VirtualFile directory = root.findFileByRelativePath(importPath);
+      if (directory != null && directory.isDirectory()) {
+        return directory;
+      }
+    }
+    return null;
+  }
 
   @Nullable
   public static String getPathRelativeToSdkAndLibraries(@NotNull VirtualFile file, @NotNull PsiElement context) {
