@@ -16,6 +16,7 @@
 
 package com.goide.runconfig.testing;
 
+import com.goide.GoConstants;
 import com.goide.GoFileType;
 import com.goide.runconfig.GoModuleBasedConfiguration;
 import com.goide.runconfig.GoRunConfigurationBase;
@@ -102,7 +103,7 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
           throw new RuntimeConfigurationError("Cannot find package '" + myPackage + "'");
         }
         for (VirtualFile file : packageDirectory.getChildren()) {
-          if (file.getFileType() == GoFileType.INSTANCE && file.getNameWithoutExtension().endsWith("_test")) {
+          if (file.getFileType() == GoFileType.INSTANCE && file.getNameWithoutExtension().endsWith(GoConstants.TEST_SUFFIX)) {
             return;
           }
         }

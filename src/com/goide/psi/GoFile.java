@@ -16,6 +16,7 @@
 
 package com.goide.psi;
 
+import com.goide.GoConstants;
 import com.goide.GoFileType;
 import com.goide.GoLanguage;
 import com.goide.GoTypes;
@@ -55,8 +56,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class GoFile extends PsiFileBase {
-  private static final String MAIN_FUNCTION_NAME = "main";
-
   public GoFile(@NotNull FileViewProvider viewProvider) {
     super(viewProvider, GoLanguage.INSTANCE);
   }
@@ -276,8 +275,8 @@ public class GoFile extends PsiFileBase {
         for (PsiFile file : dir.getFiles()) {
           if (file instanceof GoFile) {
             String name = ((GoFile)file).getPackageName();
-            if (name != null && !"main".equals(name)) {
-              set.add(StringUtil.trimEnd(name, "_test"));
+            if (name != null && !GoConstants.MAIN.equals(name)) {
+              set.add(StringUtil.trimEnd(name, GoConstants.TEST_SUFFIX));
             }
           }
         }
@@ -380,7 +379,7 @@ public class GoFile extends PsiFileBase {
   public GoFunctionDeclaration findMainFunction() { // todo create a map for faster search
     List<GoFunctionDeclaration> functions = getFunctions();
     for (GoFunctionDeclaration function : functions) {
-      if (MAIN_FUNCTION_NAME.equals(function.getName())) {
+      if (GoConstants.MAIN.equals(function.getName())) {
         return function;
       }
     }

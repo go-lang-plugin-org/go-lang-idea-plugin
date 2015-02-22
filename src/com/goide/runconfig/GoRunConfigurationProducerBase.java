@@ -16,6 +16,7 @@
 
 package com.goide.runconfig;
 
+import com.goide.GoConstants;
 import com.goide.psi.GoFile;
 import com.intellij.execution.actions.ConfigurationContext;
 import com.intellij.execution.actions.RunConfigurationProducer;
@@ -37,7 +38,7 @@ public class GoRunConfigurationProducerBase<T extends GoRunConfigurationWithMain
   protected boolean setupConfigurationFromContext(@NotNull T configuration, @NotNull ConfigurationContext context, Ref<PsiElement> sourceElement) {
     PsiFile file = getFileFromContext(context);
     if (file != null) {
-      if ("main".equals(((GoFile)file).getPackageName()) && ((GoFile)file).findMainFunction() != null) {
+      if (GoConstants.MAIN.equals(((GoFile)file).getPackageName()) && ((GoFile)file).findMainFunction() != null) {
         setConfigurationName(configuration, file);
         configuration.setFilePath(file.getVirtualFile().getPath());
         Module module = context.getModule();

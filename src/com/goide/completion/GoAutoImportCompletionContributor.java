@@ -16,6 +16,7 @@
 
 package com.goide.completion;
 
+import com.goide.GoConstants;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoTypeReference;
 import com.goide.stubs.index.GoFunctionIndex;
@@ -133,8 +134,8 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         }
 
         String packageName = file.getPackageName();
-        if (packageName != null && StringUtil.endsWith(packageName, "_test")) return false;
-        if (StringUtil.equals(packageName, "main")) return false;
+        if (packageName != null && StringUtil.endsWith(packageName, GoConstants.TEST_SUFFIX)) return false;
+        if (StringUtil.equals(packageName, GoConstants.MAIN)) return false;
         return true;
       }
 

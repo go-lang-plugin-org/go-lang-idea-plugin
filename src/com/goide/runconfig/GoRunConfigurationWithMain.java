@@ -16,6 +16,7 @@
 
 package com.goide.runconfig;
 
+import com.goide.GoConstants;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoFunctionDeclaration;
 import com.intellij.execution.configurations.ConfigurationFactory;
@@ -52,7 +53,7 @@ public abstract class GoRunConfigurationWithMain<T extends GoRunningState> exten
     if (psiFile == null || !(psiFile instanceof GoFile)) {
       throw new RuntimeConfigurationError("Main file is invalid");
     }
-    if (!"main".equals(((GoFile)psiFile).getPackageName())) {
+    if (!GoConstants.MAIN.equals(((GoFile)psiFile).getPackageName())) {
       throw new RuntimeConfigurationError("Main file has non-main package");
     }
     GoFunctionDeclaration mainFunction = ((GoFile)psiFile).findMainFunction();

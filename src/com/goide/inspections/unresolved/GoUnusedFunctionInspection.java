@@ -16,6 +16,7 @@
 
 package com.goide.inspections.unresolved;
 
+import com.goide.GoConstants;
 import com.goide.inspections.GoDeleteQuickFix;
 import com.goide.inspections.GoInspectionBase;
 import com.goide.psi.GoFile;
@@ -42,8 +43,8 @@ public class GoUnusedFunctionInspection extends GoInspectionBase {
       public void visitFunctionDeclaration(@NotNull GoFunctionDeclaration o) {
         GoFile file = o.getContainingFile();
         String name = o.getName();
-        if ("main".equals(file.getPackageName()) && "main".equals(name)) return;
-        if ("init".equals(name)) return;
+        if (GoConstants.MAIN.equals(file.getPackageName()) && GoConstants.MAIN.equals(name)) return;
+        if (GoConstants.INIT.equals(name)) return;
         if (GoTestFinder.isTestFile(file) && name != null && (name.startsWith("Test") || name.startsWith("Benchmark"))) return;
         Query<PsiReference> search = ReferencesSearch.search(o, o.getUseScope());
         if (search.findFirst() == null) {

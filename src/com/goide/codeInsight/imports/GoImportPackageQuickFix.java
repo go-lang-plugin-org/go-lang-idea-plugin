@@ -16,6 +16,7 @@
 
 package com.goide.codeInsight.imports;
 
+import com.goide.GoConstants;
 import com.goide.GoIcons;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoReferenceExpression;
@@ -154,7 +155,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
                              @NotNull PsiElement startElement,
                              @NotNull PsiElement endElement) {
     return !isPerformed && file instanceof GoFile && file.getManager().isInProject(file) && myReference.resolve() == null
-           && !myPackageName.endsWith("_test")
+           && !myPackageName.endsWith(GoConstants.TEST_SUFFIX)
            && !getPackagesToImport(startElement).isEmpty() && notQualified(startElement);
   }
 

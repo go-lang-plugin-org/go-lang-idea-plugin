@@ -16,6 +16,7 @@
 
 package com.goide.runconfig.testing;
 
+import com.goide.GoConstants;
 import com.goide.GoFileType;
 import com.goide.psi.GoFile;
 import com.intellij.openapi.util.io.FileUtil;
@@ -33,12 +34,10 @@ import java.util.Collection;
 import java.util.Collections;
 
 public class GoTestFinder implements TestFinder {
-
-  private static final String TEST_SUFFIX = "_test.go";
   private static final String EXTENSION = "." + GoFileType.INSTANCE.getDefaultExtension();
 
   public static boolean isTestFile(@Nullable PsiFile file) {
-    return file != null && file instanceof GoFile && file.getName().endsWith(TEST_SUFFIX);
+    return file != null && file instanceof GoFile && file.getName().endsWith(GoConstants.TEST_SUFFIX_WITH_EXTENSION);
   }
 
   @Nullable
@@ -53,7 +52,7 @@ public class GoTestFinder implements TestFinder {
     PsiFile file = InjectedLanguageUtil.getTopLevelFile(element);
     if (file instanceof GoFile) {
       PsiDirectory directory = file.getContainingDirectory();
-      PsiFile testFile = directory.findFile(FileUtil.getNameWithoutExtension(file.getName()) + TEST_SUFFIX);
+      PsiFile testFile = directory.findFile(FileUtil.getNameWithoutExtension(file.getName()) + GoConstants.TEST_SUFFIX_WITH_EXTENSION);
       if (testFile != null) {
         return new SmartList<PsiElement>(testFile);
       }
@@ -67,7 +66,7 @@ public class GoTestFinder implements TestFinder {
     PsiFile testFile = InjectedLanguageUtil.getTopLevelFile(element);
     if (testFile instanceof GoFile) {
       PsiDirectory directory = testFile.getContainingDirectory();
-      PsiFile sourceFile = directory.findFile(StringUtil.trimEnd(testFile.getName(), TEST_SUFFIX) + EXTENSION);
+      PsiFile sourceFile = directory.findFile(StringUtil.trimEnd(testFile.getName(), GoConstants.TEST_SUFFIX_WITH_EXTENSION) + EXTENSION);
       if (sourceFile != null) {
         return new SmartList<PsiElement>(sourceFile);
       }

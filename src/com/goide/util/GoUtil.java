@@ -16,6 +16,7 @@
 
 package com.goide.util;
 
+import com.goide.GoConstants;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.module.Module;
@@ -48,7 +49,7 @@ public class GoUtil {
                                                  "posix", "freebsd", "notwin");
 
   public static boolean allowed(@NotNull PsiFile file) {
-    String name = StringUtil.trimEnd(FileUtil.getNameWithoutExtension(file.getName()), "_test");
+    String name = StringUtil.trimEnd(FileUtil.getNameWithoutExtension(file.getName()), GoConstants.TEST_SUFFIX);
     Matcher matcher = FULL.matcher(name);
     if (matcher.matches()) {
       String os = matcher.group(1);
