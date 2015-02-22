@@ -41,10 +41,25 @@ public class GoSyntaxHighlightingColors {
   public static final TextAttributesKey TYPE_SPECIFICATION = createTextAttributesKey("GO_TYPE_SPECIFICATION", DefaultLanguageHighlighterColors.CLASS_NAME);
   public static final TextAttributesKey TYPE_REFERENCE = createTextAttributesKey("GO_TYPE_REFERENCE", DefaultLanguageHighlighterColors.CLASS_REFERENCE);
   public static final TextAttributesKey BUILTIN_TYPE_REFERENCE = createTextAttributesKey("GO_BUILTIN_TYPE_REFERENCE", DefaultLanguageHighlighterColors.CLASS_REFERENCE);
-  public static final TextAttributesKey CONSTANT = createTextAttributesKey("GO_CONSTANT", DefaultLanguageHighlighterColors.CONSTANT);
-  public static final TextAttributesKey FUNCTION_DECLARATION = createTextAttributesKey("GO_FUNCTION_DECLARATION", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
-  public static final TextAttributesKey GLOBAL_VARIABLE = createTextAttributesKey("GO_GLOBAL_VARIABLE", DefaultLanguageHighlighterColors.GLOBAL_VARIABLE);
-
+  public static final TextAttributesKey PACKAGE_EXPORTED_INTERFACE = createTextAttributesKey("GO_PACKAGE_EXPORTED_INTERFACE", DefaultLanguageHighlighterColors.INTERFACE_NAME);
+  public static final TextAttributesKey PACKAGE_EXPORTED_STRUCT = createTextAttributesKey("GO_PACKAGE_EXPORTED_STRUCT", DefaultLanguageHighlighterColors.CLASS_NAME);
+  public static final TextAttributesKey PACKAGE_EXPORTED_CONSTANT = createTextAttributesKey("GO_PACKAGE_EXPORTED_CONSTANT", DefaultLanguageHighlighterColors.CONSTANT);
+  public static final TextAttributesKey PACKAGE_EXPORTED_VARIABLE = createTextAttributesKey("GO_PACKAGE_EXPORTED_VARIABLE", DefaultLanguageHighlighterColors.GLOBAL_VARIABLE);
+  public static final TextAttributesKey PACKAGE_EXPORTED_FUNCTION = createTextAttributesKey("GO_EXPORTED_FUNCTION", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
+  public static final TextAttributesKey PACKAGE_LOCAL_INTERFACE = createTextAttributesKey("GO_PACKAGE_LOCAL_INTERFACE", DefaultLanguageHighlighterColors.INTERFACE_NAME);
+  public static final TextAttributesKey PACKAGE_LOCAL_STRUCT = createTextAttributesKey("GO_PACKAGE_LOCAL_STRUCT", DefaultLanguageHighlighterColors.CLASS_NAME);
+  public static final TextAttributesKey PACKAGE_LOCAL_CONSTANT = createTextAttributesKey("GO_PACKAGE_LOCAL_CONSTANT", DefaultLanguageHighlighterColors.CONSTANT);
+  public static final TextAttributesKey PACKAGE_LOCAL_VARIABLE = createTextAttributesKey("GO_PACKAGE_LOCAL_VARIABLE", DefaultLanguageHighlighterColors.LOCAL_VARIABLE);
+  public static final TextAttributesKey PACKAGE_LOCAL_FUNCTION = createTextAttributesKey("GO_LOCAL_FUNCTION", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
+  public static final TextAttributesKey STRUCT_EXPORTED_MEMBER = createTextAttributesKey("GO_STRUCT_EXPORTED_MEMBER", DefaultLanguageHighlighterColors.GLOBAL_VARIABLE);
+  public static final TextAttributesKey STRUCT_EXPORTED_METHOD = createTextAttributesKey("GO_STRUCT_EXPORTED_METHOD", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
+  public static final TextAttributesKey STRUCT_LOCAL_MEMBER = createTextAttributesKey("GO_STRUCT_LOCAL_MEMBER", DefaultLanguageHighlighterColors.LOCAL_VARIABLE);
+  public static final TextAttributesKey STRUCT_LOCAL_METHOD = createTextAttributesKey("GO_STRUCT_LOCAL_METHOD", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
+  public static final TextAttributesKey METHOD_RECEIVER = createTextAttributesKey("GO_METHOD_RECEIVER", DefaultLanguageHighlighterColors.LOCAL_VARIABLE);
+  public static final TextAttributesKey FUNCTION_PARAMETER = createTextAttributesKey("GO_FUNCTION_PARAMETER", DefaultLanguageHighlighterColors.LOCAL_VARIABLE);
+  public static final TextAttributesKey LOCAL_CONSTANT = createTextAttributesKey("GO_LOCAL_CONSTANT", DefaultLanguageHighlighterColors.CONSTANT);
+  public static final TextAttributesKey LOCAL_VARIABLE = createTextAttributesKey("GO_LOCAL_VARIABLE", DefaultLanguageHighlighterColors.LOCAL_VARIABLE);
+  public static final TextAttributesKey SCOPE_VARIABLE = createTextAttributesKey("GO_SCOPE_VARIABLE", DefaultLanguageHighlighterColors.LOCAL_VARIABLE);
   private GoSyntaxHighlightingColors() {
   }
 }

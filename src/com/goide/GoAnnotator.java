@@ -25,6 +25,7 @@ import com.intellij.lang.annotation.Annotator;
 import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.editor.markup.TextAttributes;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
@@ -48,25 +49,29 @@ public class GoAnnotator implements Annotator {
       highlightRefIfNeeded((GoTypeReferenceExpression)o, resolve, holder);
     }
     else if (o instanceof GoTypeSpec) {
-      setHighlighting(((GoTypeSpec)o).getIdentifier(), holder, GoSyntaxHighlightingColors.TYPE_SPECIFICATION);
+      setHighlighting(((GoTypeSpec)o).getIdentifier(), holder, getColor((GoTypeSpec)o));
     }
     else if (o instanceof GoConstDefinition) {
-      setHighlighting(((GoConstDefinition)o).getIdentifier(), holder, GoSyntaxHighlightingColors.CONSTANT);
+      setHighlighting(o, holder, getColor((GoConstDefinition)o));
     }
-    else if (o instanceof GoVarDefinition && isGlobal((GoVarDefinition)o)) {
-      setHighlighting(((GoVarDefinition)o).getIdentifier(), holder, GoSyntaxHighlightingColors.GLOBAL_VARIABLE);
+    else if (o instanceof GoVarDefinition) {
+      setHighlighting(o, holder, getColor((GoVarDefinition)o));
+    }
+    else if (o instanceof GoFieldDefinition) {
+      setHighlighting(o, holder, getColor((GoFieldDefinition)o));
+    }
+    else if (o instanceof GoParamDefinition) {
+      setHighlighting(o, holder, getColor((GoParamDefinition)o));
+    }
+    else if (o instanceof GoReceiver) {
+      setHighlighting(o, holder, getColor((GoReceiver)o));
     }
     else if (o instanceof GoNamedSignatureOwner) {
       PsiElement identifier = ((GoNamedSignatureOwner)o).getIdentifier();
       if (identifier != null) {
-        setHighlighting(identifier, holder, GoSyntaxHighlightingColors.FUNCTION_DECLARATION);
+        setHighlighting(identifier, holder, getColor((GoNamedSignatureOwner)o));
       }
     }
-  }
-
-  private static boolean isGlobal(@NotNull GoVarDefinition o) {
-    GoVarDeclaration declaration = PsiTreeUtil.getParentOfType(o, GoVarDeclaration.class);
-    return declaration != null && declaration.getParent() instanceof GoFile;
   }
 
   private static void highlightRefIfNeeded(@NotNull GoReferenceExpressionBase o,
@@ -75,20 +80,125 @@ public class GoAnnotator implements Annotator {
     if (resolve instanceof GoTypeSpec) {
       TextAttributesKey key = GoPsiImplUtil.builtin(resolve)
                               ? GoSyntaxHighlightingColors.BUILTIN_TYPE_REFERENCE
-                              : GoSyntaxHighlightingColors.TYPE_REFERENCE;
+                              : getColor((GoTypeSpec)resolve);
       setHighlighting(o.getIdentifier(), holder, key);
     }
     else if (resolve instanceof GoConstDefinition) {
-      setHighlighting(o.getIdentifier(), holder, GoSyntaxHighlightingColors.CONSTANT);
+      TextAttributesKey color = GoPsiImplUtil.builtin(resolve)
+                              ? GoSyntaxHighlightingColors.BUILTIN_TYPE_REFERENCE
+                              : getColor((GoConstDefinition)resolve);
+      setHighlighting(o.getIdentifier(), holder, color);
     }
-    else if (resolve instanceof GoVarDefinition && isGlobal((GoVarDefinition)resolve)) {
-      setHighlighting(o.getIdentifier(), holder, GoSyntaxHighlightingColors.GLOBAL_VARIABLE);
+    else if (resolve instanceof GoVarDefinition) {
+      TextAttributesKey color = GoPsiImplUtil.builtin(resolve)
+                              ? GoSyntaxHighlightingColors.BUILTIN_TYPE_REFERENCE
+                              : getColor((GoVarDefinition)resolve);
+
+      setHighlighting(o.getIdentifier(), holder, color);
     }
+    else if (resolve instanceof GoFieldDefinition) {
+      setHighlighting(o.getIdentifier(), holder, getColor((GoFieldDefinition)resolve));
+    }
+    else if (resolve instanceof GoFunctionDeclaration) {
+      setHighlighting(o.getIdentifier(), holder, getColor((GoNamedSignatureOwner)resolve));
+    }
+    else if (resolve instanceof GoMethodDeclaration) {
+      setHighlighting(o.getIdentifier(), holder, getColor((GoNamedSignatureOwner)resolve));
+    }
+    else if (resolve instanceof GoReceiver) {
+      setHighlighting(o.getIdentifier(), holder, getColor((GoReceiver)resolve));
+    }
+    else if (resolve instanceof GoParamDefinition) {
+      setHighlighting(o.getIdentifier(), holder, getColor((GoParamDefinition)resolve));
+    }
+  }
+
+  private static TextAttributesKey getColor(GoConstDefinition o) {
+    if (isPackageWide(o)) {
+      return o.isPublic()
+              ? GoSyntaxHighlightingColors.PACKAGE_EXPORTED_CONSTANT
+              : GoSyntaxHighlightingColors.PACKAGE_LOCAL_CONSTANT;
+    }
+
+    return GoSyntaxHighlightingColors.LOCAL_CONSTANT;
+  }
+
+  private static TextAttributesKey getColor(GoFieldDefinition o) {
+    return o.isPublic()
+              ? GoSyntaxHighlightingColors.STRUCT_EXPORTED_MEMBER
+              : GoSyntaxHighlightingColors.STRUCT_LOCAL_MEMBER;
+  }
+
+  private static TextAttributesKey getColor(GoVarDefinition o) {
+    if (PsiTreeUtil.getParentOfType(o, GoForStatement.class) != null ||
+        PsiTreeUtil.getParentOfType(o, GoIfStatement.class) != null ||
+         PsiTreeUtil.getParentOfType(o, GoSwitchStatement.class) != null) {
+      return GoSyntaxHighlightingColors.SCOPE_VARIABLE;
+    }
+
+    if (isPackageWide(o)) {
+      return o.isPublic()
+              ? GoSyntaxHighlightingColors.PACKAGE_EXPORTED_VARIABLE
+              : GoSyntaxHighlightingColors.PACKAGE_LOCAL_VARIABLE;
+    }
+
+    return GoSyntaxHighlightingColors.LOCAL_VARIABLE;
+  }
+
+  private static TextAttributesKey getColor(GoNamedSignatureOwner o) {
+    boolean isPublic = o.isPublic();
+
+    if (o instanceof GoMethodDeclaration) {
+      return isPublic
+              ? GoSyntaxHighlightingColors.STRUCT_EXPORTED_METHOD
+              : GoSyntaxHighlightingColors.STRUCT_LOCAL_METHOD;
+    }
+
+    return isPublic
+            ? GoSyntaxHighlightingColors.PACKAGE_EXPORTED_FUNCTION
+            : GoSyntaxHighlightingColors.PACKAGE_LOCAL_FUNCTION;
+  }
+
+  private static TextAttributesKey getColor(GoParamDefinition o) {
+    return GoSyntaxHighlightingColors.FUNCTION_PARAMETER;
+  }
+
+  private static TextAttributesKey getColor(GoReceiver o) {
+    return GoSyntaxHighlightingColors.METHOD_RECEIVER;
+  }
+
+  private static TextAttributesKey getColor(GoTypeSpec o) {
+    if (o == null || o.getGoType(null) == null) {
+      return GoSyntaxHighlightingColors.TYPE_SPECIFICATION;
+    }
+
+    if (o.getGoType(null) instanceof GoInterfaceType) {
+      return StringUtil.isCapitalized(o.getText())
+             ? GoSyntaxHighlightingColors.PACKAGE_EXPORTED_INTERFACE
+             : GoSyntaxHighlightingColors.PACKAGE_LOCAL_INTERFACE;
+    }
+    else if (o.getGoType(null) instanceof GoStructType) {
+      return StringUtil.isCapitalized(o.getText())
+             ? GoSyntaxHighlightingColors.PACKAGE_EXPORTED_STRUCT
+             : GoSyntaxHighlightingColors.PACKAGE_LOCAL_STRUCT;
+    }
+
+    return GoSyntaxHighlightingColors.TYPE_SPECIFICATION;
   }
 
   private static void setHighlighting(@NotNull PsiElement element, @NotNull AnnotationHolder holder, @NotNull TextAttributesKey key) {
     holder.createInfoAnnotation(element, null).setEnforcedTextAttributes(TextAttributes.ERASE_MARKER);
     TextAttributes attributes = EditorColorsManager.getInstance().getGlobalScheme().getAttributes(key);
     holder.createInfoAnnotation(element, null).setEnforcedTextAttributes(attributes);
+  }
+
+  private static boolean isPackageWide(@NotNull GoVarDefinition o) {
+    GoVarDeclaration declaration = PsiTreeUtil.getParentOfType(o, GoVarDeclaration.class);
+    return declaration != null && declaration.getParent() instanceof GoFile;
+  }
+
+  private static boolean isPackageWide(@NotNull GoConstDefinition o) {
+    GoConstDeclaration declaration = PsiTreeUtil.getParentOfType(o, GoConstDeclaration.class);
+    return declaration != null && declaration.getParent() instanceof GoFile;
   }
 }
