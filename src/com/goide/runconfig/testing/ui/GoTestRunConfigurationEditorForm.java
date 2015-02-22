@@ -139,22 +139,19 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
         final Module module = myComboModules.getSelectedModule();
         if (module != null) {
           final GlobalSearchScope scope = GoUtil.moduleScope(module);
-          StubIndex.getInstance().processAllKeys(GoPackagesIndex.KEY, new Processor<String>() {
-            @Override
-            public boolean process(@NotNull final String packageName) {
-              StubIndex.getInstance().processElements(GoPackagesIndex.KEY, packageName, myProject, scope, GoFile.class, new Processor<GoFile>() {
-                @Override
-                public boolean process(@NotNull GoFile file) {
-                  String fullPackageName = file.getImportPath();
-                  if (fullPackageName != null) {
-                    result.addElement(GoCompletionUtil.createPackageLookupElement(fullPackageName, false));
-                  }
-                  return true;
-                }
-              });
-              return true;
-            }
-          }, scope, null);
+          for (String packageName : GoPackagesIndex.getAllPackages(myProject)) {
+            StubIndex.getInstance().processElements(GoPackagesIndex.KEY, packageName, myProject, scope, GoFile.class,
+                                                    new Processor<GoFile>() {
+                                                      @Override
+                                                      public boolean process(@NotNull GoFile file) {
+                                                        String fullPackageName = file.getImportPath();
+                                                        if (fullPackageName != null) {
+                                                          result.addElement(GoCompletionUtil.createPackageLookupElement(fullPackageName, false));
+                                                        }
+                                                        return true;
+                                                      }
+                                                    });
+          }
         }
       }
     }.createEditor(myProject);
