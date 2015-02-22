@@ -1,6 +1,5 @@
 package com.goide;
 
-import com.intellij.execution.configurations.PathEnvironmentVariableUtil;
 import com.intellij.openapi.application.PathMacros;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
@@ -13,15 +12,18 @@ import java.io.File;
 
 public class GoEnvironmentUtil {
   public static final String GO_EXECUTABLE_NAME = "go";
-  
+  public static final String GAE_EXECUTABLE_NAME = "goapp";
+
   private GoEnvironmentUtil() {
   }
 
   @NotNull
   public static File getExecutableForSdk(@NotNull String sdkHome) {
-    File fromSdkPath = getExecutable(new File(sdkHome, "bin").getAbsolutePath(), GO_EXECUTABLE_NAME);
-    File fromEnvironment = PathEnvironmentVariableUtil.findInPath(GO_EXECUTABLE_NAME);
-    return fromSdkPath.canExecute() || fromEnvironment == null ? fromSdkPath : fromEnvironment;
+    File goFromSdkPath = getExecutable(new File(sdkHome, "bin").getAbsolutePath(), GO_EXECUTABLE_NAME);
+    File gaeFromSdkPath = getExecutable(new File(sdkHome, "bin").getAbsolutePath(), GAE_EXECUTABLE_NAME);
+    // TODO Readd this if it's needed but it shouldn't be used in the SDK detection part
+    //File fromEnvironment = PathEnvironmentVariableUtil.findInPath(GO_EXECUTABLE_NAME);
+    return gaeFromSdkPath.canExecute() ? gaeFromSdkPath : goFromSdkPath;
   }
 
   @NotNull
