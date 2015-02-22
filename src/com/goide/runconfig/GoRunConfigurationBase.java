@@ -16,6 +16,7 @@
 
 package com.goide.runconfig;
 
+import com.goide.sdk.GoSdkUtil;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.ModuleBasedConfiguration;
@@ -23,13 +24,14 @@ import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.RunConfigurationWithSuppressedDefaultRunAction;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
+import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
+import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.xmlb.XmlSerializer;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.Collection;
 
 // TODO IDEA 15: reimplement storing configurations with SmartSerializer
@@ -40,11 +42,11 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
   public GoRunConfigurationBase(String name, GoModuleBasedConfiguration configurationModule, ConfigurationFactory factory) {
     super(name, configurationModule, factory);
     
-    final Module module = configurationModule.getModule();
+    Module module = configurationModule.getModule();
     if (module == null) {
-      Module[] modules = ModuleManager.getInstance(configurationModule.getProject()).getModules();
-      if (modules.length == 1) {
-        getConfigurationModule().setModule(modules[0]);
+      Collection<Module> modules = getValidModules();
+      if (modules.size() == 1) {
+        getConfigurationModule().setModule(ContainerUtil.getFirstItem(modules));
       }
     }
   }
@@ -52,7 +54,12 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
   @NotNull
   @Override
   public Collection<Module> getValidModules() {
-    return Arrays.asList(ModuleManager.getInstance(getProject()).getModules());
+    return ContainerUtil.filter(ModuleManager.getInstance(getProject()).getModules(), new Condition<Module>() {
+      @Override
+      public boolean value(Module module) {
+        return GoSdkUtil.isAppropriateModule(module);
+      }
+    });
   }
 
   @Override
