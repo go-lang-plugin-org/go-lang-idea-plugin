@@ -40,6 +40,7 @@ import java.util.regex.Pattern;
 
 public class GoSdkType extends SdkType {
   private static final Pattern RE_GO_VERSION = Pattern.compile("theVersion\\s*=\\s*`go(.*)`");
+  private static final Pattern RE_GOTIP_VERSION = Pattern.compile("theVersion\\s*=\\s*`devel(.*)`");
 
   public GoSdkType() {
     super(GoConstants.SDK_TYPE_ID);
@@ -140,7 +141,12 @@ public class GoSdkType extends SdkType {
       if (zVersion == null) return null;
       String text = FileUtil.loadFile(zVersion);
       Matcher matcher = RE_GO_VERSION.matcher(text);
-      return matcher.find() ? matcher.group(1) : null;
+      if (matcher.find()) {
+        return matcher.group(1);
+      }
+
+      matcher = RE_GOTIP_VERSION.matcher(text);
+      return matcher.find() ? "devel" + matcher.group(1) : null;
     }
     catch (IOException ignore) {
     }
