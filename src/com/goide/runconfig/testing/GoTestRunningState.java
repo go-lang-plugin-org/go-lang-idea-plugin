@@ -71,8 +71,7 @@ public class GoTestRunningState extends GoRunningState {
     GeneralCommandLine runTests = new GeneralCommandLine();
     runTests.getEnvironment().put(GoConstants.GO_PATH, GoSdkUtil.retrieveGoPath(myModule));
     runTests.setExePath(executable);
-    runTests.addParameter("test");
-    runTests.addParameter("-v");
+    runTests.addParameters("test", "-v");
     fillCommandLineWithParameters(runTests);
     runTests.getParametersList().addParametersString(myConfiguration.getParams());
     return runTests;

@@ -60,19 +60,24 @@ public class GoTestRunConfigurationProducer extends RunConfigurationProducer<GoT
       PsiFile file = contextElement.getContainingFile();
       if (GoTestFinder.isTestFile(file)) {
         if (isPackageContext(contextElement)) {
-          String packageName = StringUtil.notNullize(((GoFile)file).getPackageName());
+          String packageName = StringUtil.notNullize(((GoFile)file).getImportPath());
           configuration.setKind(GoTestRunConfiguration.Kind.PACKAGE);
           configuration.setPackage(packageName);
           configuration.setName("All in '" + packageName + "'");
         }
         else {
-          configuration.setName(file.getName());
-          configuration.setKind(GoTestRunConfiguration.Kind.FILE);
-          configuration.setFilePath(file.getVirtualFile().getPath());
           String functionNameFromContext = findFunctionNameFromContext(contextElement);
           if (functionNameFromContext != null) {
             configuration.setName(functionNameFromContext + " in " + file.getName());
             configuration.setPattern("^" + functionNameFromContext + "$");
+
+            configuration.setKind(GoTestRunConfiguration.Kind.PACKAGE);
+            configuration.setPackage(StringUtil.notNullize(((GoFile)file).getImportPath()));
+          }
+          else {
+            configuration.setName(file.getName());
+            configuration.setKind(GoTestRunConfiguration.Kind.FILE);
+            configuration.setFilePath(file.getVirtualFile().getPath());
           }
         }
         return true;
@@ -103,16 +108,16 @@ public class GoTestRunConfigurationProducer extends RunConfigurationProducer<GoT
                  FileUtil.pathsEqual(configuration.getWorkingDirectory(), directoryPath);
         }
       case PACKAGE:
-        return isPackageContext(contextElement) && 
-               StringUtil.notNullize(((GoFile)file).getPackageName()).equals(configuration.getPackage());
-      case FILE:
-        if (file == null || !FileUtil.pathsEqual(configuration.getFilePath(), file.getVirtualFile().getPath())) {
-          return false;
-        }
+        if (file == null || !Comparing.equal(((GoFile)file).getImportPath(), configuration.getPackage())) return false;
+        if (isPackageContext(contextElement) && configuration.getPattern().isEmpty()) return true;
+        
         String functionNameFromContext = findFunctionNameFromContext(contextElement);
         return functionNameFromContext != null 
                ? configuration.getPattern().equals("^" + functionNameFromContext + "$") 
                : configuration.getPattern().isEmpty();
+      case FILE:
+        return file != null && FileUtil.pathsEqual(configuration.getFilePath(), file.getVirtualFile().getPath()) &&
+          findFunctionNameFromContext(contextElement) == null;
     }
     return false;
   }
