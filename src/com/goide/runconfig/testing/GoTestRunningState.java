@@ -103,12 +103,7 @@ public class GoTestRunningState extends GoRunningState {
                                                        myConfiguration.getDirectoryPath(),
                                                        File.separatorChar);
         if (relativePath != null) {
-          if (".".equals(relativePath)) {
-            commandLine.addParameter("./...");
-          }
-          else {
-            commandLine.addParameter("./" + relativePath);
-          }
+          commandLine.addParameter(relativePath + "/...");
         }
         else {
           commandLine.addParameter("./...");
@@ -123,7 +118,7 @@ public class GoTestRunningState extends GoRunningState {
         break;
     }
     String pattern = myConfiguration.getPattern();
-    if (!StringUtil.isEmpty(pattern)) {
+    if (StringUtil.isNotEmpty(pattern)) {
       commandLine.addParameter("--run='" + pattern + "'");
     }
   }

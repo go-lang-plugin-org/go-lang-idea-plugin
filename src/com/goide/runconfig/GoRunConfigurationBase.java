@@ -97,4 +97,6 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
   public void setParams(@NotNull String params) {
     myParams = params;
   }
+  
+  public abstract String getWorkingDirectory();
 }

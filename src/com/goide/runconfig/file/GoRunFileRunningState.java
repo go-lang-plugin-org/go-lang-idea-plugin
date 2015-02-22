@@ -27,7 +27,6 @@ import com.intellij.execution.filters.TextConsoleBuilder;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
-import com.intellij.util.PathUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class GoRunFileRunningState extends GoRunningState {
@@ -50,7 +49,7 @@ public class GoRunFileRunningState extends GoRunningState {
     String filePath = myConfiguration.getFilePath();
     list.addParametersString(filePath);
     list.addParametersString(myConfiguration.getParams());
-    commandLine.withWorkDirectory(PathUtil.getParentPath(filePath));
+    commandLine.withWorkDirectory(myConfiguration.getWorkingDirectory());
     TextConsoleBuilder consoleBuilder = TextConsoleBuilderFactory.getInstance().createBuilder(myModule.getProject());
     setConsoleBuilder(consoleBuilder);
     return commandLine;

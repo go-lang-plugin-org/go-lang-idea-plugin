@@ -27,6 +27,7 @@ import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
+import com.intellij.util.PathUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -38,6 +39,11 @@ public abstract class GoRunConfigurationWithMain<T extends GoRunningState> exten
                                     GoModuleBasedConfiguration configurationModule,
                                     ConfigurationFactory factory) {
     super(name, configurationModule, factory);
+  }
+
+  @Override
+  public String getWorkingDirectory() {
+    return PathUtil.getParentPath(myFilePath);
   }
 
   @Override

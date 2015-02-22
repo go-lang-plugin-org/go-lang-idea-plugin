@@ -117,6 +117,7 @@
 
     <sdkType implementation="com.goide.sdk.GoSdkType"/>
 
+    <stepsBeforeRunProvider implementation="com.goide.runconfig.before.GoBeforeRunTaskProvider"/>
     <!-- run single file -->
     <configurationType implementation="com.goide.runconfig.file.GoRunFileConfigurationType"/>
     <runConfigurationProducer implementation="com.goide.runconfig.file.GoRunFileConfigurationProducer"/>

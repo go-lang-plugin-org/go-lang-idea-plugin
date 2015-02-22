@@ -207,7 +207,8 @@ public class GoSdkUtil {
   /**
    * Use this method in order to check whether the method is appropriate for providing Go-specific code insight
    */
-  public static boolean isAppropriateModule(@NotNull Module module) {
-    return !module.isDisposed() && (!PlatformUtils.isIntelliJ() || ModuleUtil.getModuleType(module) == GoModuleType.getInstance());
+  public static boolean isAppropriateModule(@Nullable Module module) {
+    return module != null && !module.isDisposed() && 
+           (!PlatformUtils.isIntelliJ() || ModuleUtil.getModuleType(module) == GoModuleType.getInstance());
   }
 }

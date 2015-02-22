@@ -18,10 +18,14 @@ package com.goide.runconfig.testing;
 
 import com.goide.GoIcons;
 import com.goide.runconfig.GoConfigurationFactoryBase;
+import com.goide.runconfig.before.GoBeforeRunTaskProvider;
+import com.goide.runconfig.before.GoCommandBeforeRunTask;
+import com.intellij.execution.BeforeRunTask;
 import com.intellij.execution.configurations.ConfigurationTypeBase;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Key;
 import org.jetbrains.annotations.NotNull;
 
 public class GoTestRunConfigurationType extends ConfigurationTypeBase {
@@ -32,6 +36,16 @@ public class GoTestRunConfigurationType extends ConfigurationTypeBase {
       @NotNull
       public RunConfiguration createTemplateConfiguration(@NotNull Project project) {
         return new GoTestRunConfiguration(project, "Go Test", getInstance());
+      }
+
+      @Override
+      public void configureBeforeRunTaskDefaults(Key<? extends BeforeRunTask> providerID, BeforeRunTask task) {
+        super.configureBeforeRunTaskDefaults(providerID, task);
+        if (providerID == GoBeforeRunTaskProvider.ID && task instanceof GoCommandBeforeRunTask 
+            && ((GoCommandBeforeRunTask)task).getCommand() == null) {
+          task.setEnabled(true);
+          ((GoCommandBeforeRunTask)task).setCommand("test -i");
+        }
       }
     });
   }
