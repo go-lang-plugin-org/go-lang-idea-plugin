@@ -17,6 +17,9 @@
 package com.goide.util;
 
 import com.goide.GoConstants;
+import com.intellij.ide.plugins.IdeaPluginDescriptor;
+import com.intellij.ide.plugins.PluginManager;
+import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.module.Module;
@@ -40,6 +43,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GoUtil {
+  public static final String PLUGIN_ID = "ro.redeul.google.go";
+  public static final String PLUGIN_VERSION = getPlugin().getVersion();
+
   public static final Pattern FULL = Pattern.compile("\\w+_(\\w+)_(\\w+)");
   public static final Pattern SHORT = Pattern.compile("\\w+_(\\w+)");
   public static final Set<CharSequence> LINUX = set("linux", "no", "unix", "posix", "notwin");
@@ -95,5 +101,9 @@ public class GoUtil {
   @NotNull
   public static GlobalSearchScope moduleScope(@NotNull Module module) {
     return GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module).uniteWith(module.getModuleContentWithDependenciesScope());
+  }
+
+  public static IdeaPluginDescriptor getPlugin() {
+    return PluginManager.getPlugin(PluginId.getId(PLUGIN_ID));
   }
 }
