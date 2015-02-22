@@ -36,7 +36,6 @@ import com.intellij.execution.ui.ConsoleView;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFileManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -69,24 +68,8 @@ public class GoTestRunningState extends GoRunningState {
   @Override
   protected GeneralCommandLine getCommand(String sdkHomePath) throws ExecutionException {
     String executable = GoEnvironmentUtil.getExecutableForSdk(sdkHomePath).getAbsolutePath();
-
-    GeneralCommandLine installDependencies = new GeneralCommandLine();
-    final String goPath = GoSdkUtil.retrieveGoPath(myModule);
-    installDependencies.getEnvironment().put(GoConstants.GO_PATH, goPath);
-    installDependencies.setExePath(executable);
-    installDependencies.addParameter("test");
-    installDependencies.addParameter("-i");
-    fillCommandLineWithParameters(installDependencies);
-    try {
-      installDependencies.createProcess().waitFor();
-      VirtualFileManager.getInstance().syncRefresh();
-    }
-    catch (InterruptedException ignore) {
-      Thread.currentThread().interrupt();
-    }
-
     GeneralCommandLine runTests = new GeneralCommandLine();
-    runTests.getEnvironment().put(GoConstants.GO_PATH, goPath);
+    runTests.getEnvironment().put(GoConstants.GO_PATH, GoSdkUtil.retrieveGoPath(myModule));
     runTests.setExePath(executable);
     runTests.addParameter("test");
     runTests.addParameter("-v");
