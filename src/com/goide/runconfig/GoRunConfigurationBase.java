@@ -39,6 +39,14 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
 
   public GoRunConfigurationBase(String name, GoModuleBasedConfiguration configurationModule, ConfigurationFactory factory) {
     super(name, configurationModule, factory);
+    
+    final Module module = configurationModule.getModule();
+    if (module == null) {
+      Module[] modules = ModuleManager.getInstance(configurationModule.getProject()).getModules();
+      if (modules.length == 1) {
+        getConfigurationModule().setModule(modules[0]);
+      }
+    }
   }
 
   @NotNull
