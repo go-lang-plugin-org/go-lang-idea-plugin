@@ -21,7 +21,7 @@ public class GoCommandConfigureDialog extends DialogWrapper {
     super(project);
     setTitle("Edit Go Command Task");
     setModal(true);
-    myCommandTextField = TextFieldWithAutoCompletion.create(project, PREDEFINED_COMMANDS, true, null);
+    myCommandTextField = TextFieldWithAutoCompletion.create(project, PREDEFINED_COMMANDS, false, null);
     init();
   }
 
