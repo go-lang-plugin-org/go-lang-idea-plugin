@@ -17,6 +17,7 @@
 package com.goide.project;
 
 import com.goide.GoModuleType;
+import com.goide.sdk.GoSdkService;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.application.options.ModuleAwareProjectConfigurable;
 import com.intellij.ide.util.PropertiesComponent;
@@ -121,7 +122,7 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
           result.add(new ModuleAwareProjectConfigurable(myProject, "Module libraries", "Module libraries") {
             @Override
             protected boolean isSuitableForModule(@NotNull Module module) {
-              return GoSdkUtil.isAppropriateModule(module);
+              return GoSdkService.getInstance().isGoModule(module);
             }
 
             @NotNull

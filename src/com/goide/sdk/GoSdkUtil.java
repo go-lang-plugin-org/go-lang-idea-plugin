@@ -17,16 +17,12 @@
 package com.goide.sdk;
 
 import com.goide.GoEnvironmentUtil;
-import com.goide.GoModuleType;
 import com.goide.project.GoLibrariesService;
 import com.goide.psi.GoFile;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.io.FileUtil;
@@ -37,7 +33,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.Function;
-import com.intellij.util.PlatformUtils;
 import com.intellij.util.SystemProperties;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
@@ -51,23 +46,27 @@ import java.util.Set;
 public class GoSdkUtil {
   @Nullable
   public static VirtualFile getSdkSrcDir(@NotNull PsiElement context) {
-    Sdk sdk = getSdk(context);
-    if (sdk == null || sdk.getVersionString() == null) return guessSkdSrcDir(context);
-    File sdkSrcDirFile = new File(sdk.getHomePath(), getSrcLocation(sdk.getVersionString()));
+    Module module = ModuleUtilCore.findModuleForPsiElement(context);
+    String sdkHomePath = getSdkHomePath(context.getProject(), module);
+    String sdkVersionString = getSdkVersionString(context.getProject(), module);
+    if (sdkHomePath == null || sdkVersionString == null) return guessSkdSrcDir(context);
+    File sdkSrcDirFile = new File(sdkHomePath, getSrcLocation(sdkVersionString));
     VirtualFile sdkSrcDir = LocalFileSystem.getInstance().findFileByIoFile(sdkSrcDirFile);
     return sdkSrcDir != null ? sdkSrcDir : guessSkdSrcDir(context);
   }
 
   @Nullable
-  public static Sdk getSdk(@NotNull PsiElement context) {
-    Module module = ModuleUtilCore.findModuleForPsiElement(context);
-    Sdk sdk = module == null ? null : ModuleRootManager.getInstance(module).getSdk();
-    sdk = sdk == null ? ProjectRootManager.getInstance(context.getProject()).getProjectSdk() : sdk;
-    if (sdk == null || sdk.getVersionString() == null) return null;
-    if (sdk.getSdkType() instanceof GoSdkType) return sdk;
-    return null;
+  private static String getSdkHomePath(@NotNull Project project, @Nullable Module module) {
+    String sdk = module == null ? null : GoSdkService.getInstance().getSdkHomePath(module);
+    return sdk != null ? sdk : GoSdkService.getInstance().getSdkHomePath(project);
   }
 
+  @Nullable
+  private static String getSdkVersionString(@NotNull Project project, @Nullable Module module) {
+    String sdk = module == null ? null : GoSdkService.getInstance().getSdkVersion(module);
+    return sdk != null ? sdk : GoSdkService.getInstance().getSdkVersion(project);
+  }
+  
   @Nullable
   public static GoFile findBuiltinFile(@NotNull PsiElement context) {
     VirtualFile sdkSrcDir = getSdkSrcDir(context);
@@ -202,13 +201,5 @@ public class GoSdkUtil {
       }
     }
     return null;
-  }
-
-  /**
-   * Use this method in order to check whether the method is appropriate for providing Go-specific code insight
-   */
-  public static boolean isAppropriateModule(@Nullable Module module) {
-    return module != null && !module.isDisposed() && 
-           (!PlatformUtils.isIntelliJ() || ModuleUtil.getModuleType(module) == GoModuleType.getInstance());
   }
 }

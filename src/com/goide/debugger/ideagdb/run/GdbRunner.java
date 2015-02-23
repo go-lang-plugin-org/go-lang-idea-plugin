@@ -18,6 +18,7 @@ package com.goide.debugger.ideagdb.run;
 
 import com.goide.debugger.gdb.Gdb;
 import com.goide.debugger.ideagdb.debug.GdbDebugProcess;
+import com.goide.sdk.GoSdkService;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
 import com.intellij.execution.Executor;
@@ -29,9 +30,8 @@ import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.SystemInfo;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.xdebugger.XDebugProcess;
 import com.intellij.xdebugger.XDebugProcessStarter;
 import com.intellij.xdebugger.XDebugSession;
@@ -79,8 +79,9 @@ public class GdbRunner extends DefaultProgramRunner {
       }
     });
 
-    Sdk sdk = ProjectRootManager.getInstance(project).getProjectSdk();
-    if (sdk == null) {
+    
+    String sdkHomePath = GoSdkService.getInstance().getSdkHomePath(project);
+    if (StringUtil.isEmpty(sdkHomePath)) {
       debugSession.stop();
       return null;
     }
@@ -88,8 +89,7 @@ public class GdbRunner extends DefaultProgramRunner {
     GdbDebugProcess debugProcess = ((GdbDebugProcess)debugSession.getDebugProcess());
 
     Gdb gdb = debugProcess.getGdb();
-    String sdkHomePath = sdk.getHomePath();
-    if (sdkHomePath != null) gdb.sendCommand(SET_AUTO_LOAD_SAFE_PATH + sdkHomePath);
+    gdb.sendCommand(SET_AUTO_LOAD_SAFE_PATH + sdkHomePath);
     if (SystemInfo.isLinux) gdb.sendCommand(SET_AUTO_LOAD_SAFE_PATH + "/usr/share/go");
     gdb.sendCommand("file " + ((GdbExecutionResult)result).getConfiguration().APP_PATH);
     debugSession.initBreakpoints();

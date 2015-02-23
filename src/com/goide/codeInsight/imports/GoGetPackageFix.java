@@ -18,6 +18,7 @@ package com.goide.codeInsight.imports;
 
 import com.goide.GoConstants;
 import com.goide.GoEnvironmentUtil;
+import com.goide.sdk.GoSdkService;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInspection.LocalQuickFixBase;
@@ -40,8 +41,6 @@ import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
@@ -68,9 +67,8 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
       return;
     }
 
-    Sdk sdk = ModuleRootManager.getInstance(module).getSdk();
-    final String sdkPath = sdk != null ? sdk.getHomePath() : null;
-    if (sdkPath == null) {
+    final String sdkPath = GoSdkService.getInstance().getSdkHomePath(module);
+    if (StringUtil.isEmpty(sdkPath)) {
       return;
     }
 

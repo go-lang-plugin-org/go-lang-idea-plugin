@@ -16,7 +16,7 @@
 
 package com.goide.runconfig;
 
-import com.goide.sdk.GoSdkUtil;
+import com.goide.sdk.GoSdkService;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.ModuleBasedConfiguration;
@@ -57,7 +57,7 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
     return ContainerUtil.filter(ModuleManager.getInstance(getProject()).getModules(), new Condition<Module>() {
       @Override
       public boolean value(Module module) {
-        return GoSdkUtil.isAppropriateModule(module);
+        return GoSdkService.getInstance().isGoModule(module);
       }
     });
   }

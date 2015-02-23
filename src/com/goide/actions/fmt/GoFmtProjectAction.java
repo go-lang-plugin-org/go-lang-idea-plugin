@@ -17,7 +17,7 @@
 package com.goide.actions.fmt;
 
 import com.goide.GoEnvironmentUtil;
-import com.goide.sdk.GoSdkType;
+import com.goide.sdk.GoSdkService;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.process.ProcessAdapter;
@@ -32,8 +32,6 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.util.ExceptionUtil;
@@ -59,14 +57,8 @@ public class GoFmtProjectAction extends AnAction implements DumbAware {
     final String groupId = e.getPresentation().getText();
     try {
       GeneralCommandLine commandLine = new GeneralCommandLine();
-      Sdk sdk = ProjectRootManager.getInstance(project).getProjectSdk();
-
-      String sdkHome = sdk != null ? sdk.getHomePath() : null;
+      String sdkHome = GoSdkService.getInstance().getSdkHomePath(project);
       if (StringUtil.isEmpty(sdkHome)) {
-        warning(project, groupId, "Project sdk is empty");
-        return;
-      }
-      if (!(sdk.getSdkType() instanceof GoSdkType)) {
         warning(project, groupId, "Project sdk is not valid");
         return;
       }

@@ -18,7 +18,7 @@ package com.goide.inspections;
 
 import com.goide.GoFileType;
 import com.goide.GoModuleType;
-import com.goide.sdk.GoSdkUtil;
+import com.goide.sdk.GoSdkService;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.module.Module;
@@ -56,7 +56,7 @@ public class WrongModuleTypeNotificationProvider extends EditorNotifications.Pro
   public EditorNotificationPanel createNotificationPanel(@NotNull VirtualFile file, @NotNull FileEditor fileEditor) {
     if (file.getFileType() != GoFileType.INSTANCE) return null;
     Module module = ModuleUtilCore.findModuleForFile(file, myProject);
-    return module == null || GoSdkUtil.isAppropriateModule(module) || getIgnoredModules(myProject).contains(module.getName()) 
+    return module == null || GoSdkService.getInstance().isGoModule(module) || getIgnoredModules(myProject).contains(module.getName()) 
            ? null
            : createPanel(myProject, module);
   }

@@ -16,6 +16,7 @@
 
 package com.goide.runconfig;
 
+import com.goide.sdk.GoSdkService;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.CommandLineState;
 import com.intellij.execution.configurations.GeneralCommandLine;
@@ -23,8 +24,6 @@ import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.text.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,16 +38,11 @@ public abstract class GoRunningState extends CommandLineState {
   @NotNull
   @Override
   protected ProcessHandler startProcess() throws ExecutionException {
-    Sdk sdk = ModuleRootManager.getInstance(myModule).getSdk();
-    if (sdk == null) {
-      throw new ExecutionException("Sdk is not set for module " + myModule.getName());
-    }
-    
-    final String sdkHomePath = sdk.getHomePath();
+    String sdkHomePath = GoSdkService.getInstance().getSdkHomePath(myModule);
     if (StringUtil.isEmpty(sdkHomePath)) {
-      throw new ExecutionException("Sdk home path is empty for module " + myModule.getName());
+      throw new ExecutionException("Sdk is not set or Sdk home path is empty for module " + myModule.getName());
     }
-    
+
     GeneralCommandLine commandLine = getCommand(sdkHomePath);
     return new OSProcessHandler(commandLine.createProcess(), commandLine.getCommandLineString());
   }

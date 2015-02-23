@@ -18,20 +18,17 @@ package com.goide.inspections;
 
 import com.goide.GoFileType;
 import com.goide.GoLanguage;
+import com.goide.sdk.GoSdkService;
 import com.intellij.ProjectTopics;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectBundle;
-import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ModuleRootAdapter;
 import com.intellij.openapi.roots.ModuleRootEvent;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.ModuleRootModificationUtil;
-import com.intellij.openapi.roots.ui.configuration.ProjectSettingsService;
 import com.intellij.openapi.util.Key;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
@@ -73,8 +70,8 @@ public class SetupSDKNotificationProvider extends EditorNotifications.Provider<E
     Module module = ModuleUtilCore.findModuleForPsiElement(psiFile);
     if (module == null) return null;
 
-    Sdk sdk = ModuleRootManager.getInstance(module).getSdk();
-    if (sdk != null) return null;
+    String sdkHomePath = GoSdkService.getInstance().getSdkHomePath(module);
+    if (StringUtil.isNotEmpty(sdkHomePath)) return null;
 
     return createPanel(myProject, psiFile);
   }
@@ -86,17 +83,7 @@ public class SetupSDKNotificationProvider extends EditorNotifications.Provider<E
     panel.createActionLabel(ProjectBundle.message("project.sdk.setup"), new Runnable() {
       @Override
       public void run() {
-        Sdk projectSdk = ProjectSettingsService.getInstance(project).chooseAndSetSdk();
-        if (projectSdk == null) return;
-        ApplicationManager.getApplication().runWriteAction(new Runnable() {
-          @Override
-          public void run() {
-            Module module = ModuleUtilCore.findModuleForPsiElement(file);
-            if (module != null) {
-              ModuleRootModificationUtil.setSdkInherited(module);
-            }
-          }
-        });
+        GoSdkService.getInstance().chooseAndSetSdk(project, ModuleUtilCore.findModuleForPsiElement(file));
       }
     });
     return panel;

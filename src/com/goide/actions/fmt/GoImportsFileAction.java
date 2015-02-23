@@ -16,7 +16,7 @@
 
 package com.goide.actions.fmt;
 
-import com.goide.sdk.GoSdkType;
+import com.goide.sdk.GoSdkService;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.PathEnvironmentVariableUtil;
@@ -27,8 +27,6 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
@@ -65,14 +63,8 @@ public class GoImportsFileAction extends GoExternalToolsAction {
     assert filePath != null;
 
     GeneralCommandLine commandLine = new GeneralCommandLine();
-    Sdk sdk = ProjectRootManager.getInstance(project).getProjectSdk();
-
-    String sdkHome = sdk != null ? sdk.getHomePath() : null;
+    String sdkHome = GoSdkService.getInstance().getSdkHomePath(project);
     if (StringUtil.isEmpty(sdkHome)) {
-      warning(project, groupId, "Project sdk is empty");
-      return true;
-    }
-    if (!(sdk.getSdkType() instanceof GoSdkType)) {
       warning(project, groupId, "Project sdk is not valid");
       return true;
     }
