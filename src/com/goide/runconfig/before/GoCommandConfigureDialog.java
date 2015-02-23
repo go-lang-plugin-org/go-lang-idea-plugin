@@ -22,7 +22,6 @@ public class GoCommandConfigureDialog extends DialogWrapper {
     setTitle("Edit Go Command Task");
     setModal(true);
     myCommandTextField = TextFieldWithAutoCompletion.create(project, PREDEFINED_COMMANDS, true, null);
-    myCommandTextField.setPreferredSize(new Dimension(250, 30));
     init();
   }
 
@@ -49,7 +48,7 @@ public class GoCommandConfigureDialog extends DialogWrapper {
   @Override
   protected JComponent createCenterPanel() {
     final JPanel panel = new JPanel(new BorderLayout());
-    panel.add(myCommandTextField, BorderLayout.CENTER);
+    panel.add(myCommandTextField, BorderLayout.NORTH);
     return panel;
   }
 
