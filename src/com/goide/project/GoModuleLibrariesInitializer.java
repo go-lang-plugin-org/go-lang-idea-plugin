@@ -16,6 +16,7 @@
 
 package com.goide.project;
 
+import com.goide.GoConstants;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.ProjectTopics;
 import com.intellij.ide.util.PropertiesComponent;
@@ -271,7 +272,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     }
 
     if (!shownAlready) {
-      final Notification notification = new Notification("go", "GOPATH was detected",
+      final Notification notification = new Notification(GoConstants.GO_NOTIFICATION_GROUP, "GOPATH was detected",
                                                          "We've been detected some libraries from your GOPATH.\n" +
                                                          "You may want to add extra libraries in <a href='configure'>Go Libraries configuration</a>.",
                                                          NotificationType.INFORMATION, new NotificationListener.Adapter() {

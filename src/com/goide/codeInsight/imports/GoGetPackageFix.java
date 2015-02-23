@@ -112,7 +112,8 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
               int code = event.getExitCode();
               if (code == 0) return;
               String message = StringUtil.join(out.size() > 1 ? ContainerUtil.subList(out, 1) : out, "\n");
-              Notifications.Bus.notify(new Notification("Go", TITLE, message, NotificationType.WARNING), project);
+              Notifications.Bus.notify(new Notification(GoConstants.GO_NOTIFICATION_GROUP, TITLE, message, NotificationType.WARNING), 
+                                       project);
             }
           });
           ProcessTerminatedListener.attach(myHandler);
@@ -121,7 +122,8 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
           indicator.setText2("Refreshing");
         }
         catch (ExecutionException e) {
-          Notifications.Bus.notify(new Notification("Go", TITLE, StringUtil.notNullize(e.getMessage()), NotificationType.WARNING), project);
+          Notifications.Bus.notify(new Notification(GoConstants.GO_NOTIFICATION_GROUP, TITLE, StringUtil.notNullize(e.getMessage()), 
+                                                    NotificationType.WARNING), project);
         }
       }
     };

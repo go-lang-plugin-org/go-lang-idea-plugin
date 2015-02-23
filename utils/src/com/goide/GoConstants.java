@@ -11,6 +11,8 @@ public class GoConstants {
   public static final String TEST_SUFFIX_WITH_EXTENSION = "_test.go";
   public static final String MAIN = "main";
   public static final String INIT = "init";
+  
+  public static final String GO_NOTIFICATION_GROUP = "Go plugin notifications";
 
   private GoConstants() {
     

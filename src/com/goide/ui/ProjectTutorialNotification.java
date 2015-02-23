@@ -16,9 +16,13 @@
 
 package com.goide.ui;
 
+import com.goide.GoConstants;
 import com.intellij.ide.util.PropertiesComponent;
-import com.intellij.notification.*;
-import com.intellij.openapi.components.*;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationListener;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
+import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.util.text.VersionComparatorUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,7 +48,7 @@ public class ProjectTutorialNotification implements ApplicationComponent {
     }
 
     Notifications.Bus.notify(new Notification(
-      "Go plugin notifications", "Learn how to setup a new Go project",
+      GoConstants.GO_NOTIFICATION_GROUP, "Learn how to setup a new Go project",
       "Please visit our " +
       "<a href=\"https://github.com/go-lang-plugin-org/go-lang-idea-plugin/wiki/v1.0.0-Setup-initial-project\">wiki page<a/>" +
       " to learn how to setup a new Go project",
