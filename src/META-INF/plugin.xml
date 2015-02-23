@@ -55,7 +55,7 @@
 
     <internalFileTemplate name="Go Application"/>
     <internalFileTemplate name="Go File"/>
-    
+
     <!-- project -->
     <applicationService serviceImplementation="com.goide.project.GoApplicationLibrariesService"/>
     <projectService serviceImplementation="com.goide.project.GoProjectLibrariesService"/>
@@ -233,4 +233,9 @@
     </action>
   </actions>
 
+  <application-components>
+    <component>
+      <implementation-class>com.goide.ui.ProjectTutorialNotification</implementation-class>
+    </component>
+  </application-components>
 </idea-plugin>
