@@ -16,6 +16,7 @@
 
 package com.goide.actions.fmt;
 
+import com.goide.GoEnvironmentUtil;
 import com.goide.sdk.GoSdkService;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
@@ -31,7 +32,6 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
-import org.apache.commons.lang.SystemUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -69,7 +69,7 @@ public class GoImportsFileAction extends GoExternalToolsAction {
       return true;
     }
 
-    File executable = PathEnvironmentVariableUtil.findInPath("goimports" + (SystemUtils.IS_OS_WINDOWS ? ".exe" : ""));
+    File executable = PathEnvironmentVariableUtil.findInPath(GoEnvironmentUtil.getBinaryFileNameForPath("goimports"));
 
     if (executable == null) {
       warning(project, groupId, "Looks like you haven't any goimports executable in your PATH");
