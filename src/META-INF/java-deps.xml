@@ -6,5 +6,10 @@
     <editorNotificationProvider implementation="com.goide.inspections.WrongModuleTypeNotificationProvider"/>
 
     <projectStructureDetector implementation="com.goide.project.GoProjectStructureDetector"/>
+
+    <applicationService serviceInterface="com.goide.sdk.GoSdkService"
+                        serviceImplementation="com.goide.sdk.GoIdeaSdkService"
+                        overrides="true"/>
+
   </extensions>
 </idea-plugin>

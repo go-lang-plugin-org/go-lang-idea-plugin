@@ -46,6 +46,10 @@
   </module-components>
 
   <extensions defaultExtensionNs="com.intellij">
+    <applicationService serviceInterface="com.goide.sdk.GoSdkService"
+                        serviceImplementation="com.goide.sdk.GoSmallIDEsSdkService"
+                        overrides="false"/>
+
     <stubIndex implementation="com.goide.stubs.index.GoAllNamesIndex"/>
     <stubIndex implementation="com.goide.stubs.index.GoFunctionIndex"/>
     <stubIndex implementation="com.goide.stubs.index.GoTypesIndex"/>
