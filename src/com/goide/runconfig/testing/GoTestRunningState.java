@@ -101,7 +101,8 @@ public class GoTestRunningState extends GoRunningState {
     }
     String pattern = myConfiguration.getPattern();
     if (StringUtil.isNotEmpty(pattern)) {
-      commandLine.addParameter("--run='" + pattern + "'");
+      commandLine.addParameter("-run");
+      commandLine.addParameter(pattern);
     }
   }
 }
