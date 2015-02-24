@@ -26,10 +26,7 @@ import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Platform;
 import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.process.OSProcessHandler;
-import com.intellij.execution.process.ProcessAdapter;
-import com.intellij.execution.process.ProcessEvent;
-import com.intellij.execution.process.ProcessTerminatedListener;
+import com.intellij.execution.process.*;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
@@ -95,7 +92,7 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
         install.addParameter("get");
         install.addParameter(myPackage);
         try {
-          myHandler = new OSProcessHandler(install.createProcess(), install.getPreparedCommandLine(Platform.current()));
+          myHandler = new KillableColoredProcessHandler(install.createProcess(), install.getPreparedCommandLine(Platform.current()));
           final List<String> out = ContainerUtil.newArrayList();
           myHandler.addProcessListener(new ProcessAdapter() {
             @Override

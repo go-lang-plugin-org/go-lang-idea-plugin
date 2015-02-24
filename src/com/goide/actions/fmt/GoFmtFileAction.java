@@ -20,6 +20,7 @@ import com.goide.GoEnvironmentUtil;
 import com.goide.sdk.GoSdkService;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
+import com.intellij.execution.process.KillableColoredProcessHandler;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.process.ProcessAdapter;
 import com.intellij.execution.process.ProcessEvent;
@@ -63,7 +64,7 @@ public class GoFmtFileAction extends GoExternalToolsAction {
     FileDocumentManager.getInstance().saveDocument(document);
 
     String commandLineString = commandLine.getCommandLineString();
-    OSProcessHandler handler = new OSProcessHandler(commandLine.createProcess(), commandLineString);
+    OSProcessHandler handler = new KillableColoredProcessHandler(commandLine.createProcess(), commandLineString);
     handler.addProcessListener(new ProcessAdapter() {
       @Override
       public void processTerminated(ProcessEvent event) {

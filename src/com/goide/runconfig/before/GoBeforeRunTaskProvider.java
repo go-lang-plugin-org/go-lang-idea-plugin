@@ -13,6 +13,7 @@ import com.intellij.execution.ExecutionModes;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.execution.process.CapturingProcessAdapter;
+import com.intellij.execution.process.KillableColoredProcessHandler;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.process.ProcessEvent;
 import com.intellij.execution.runners.ExecutionEnvironment;
@@ -149,7 +150,7 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
               commandLine.getParametersList().addParametersString(task.getCommand());
 
               try {
-                final OSProcessHandler processHandler = new OSProcessHandler(commandLine);
+                final OSProcessHandler processHandler = new KillableColoredProcessHandler(commandLine);
                 final CapturingProcessAdapter processAdapter = new CapturingProcessAdapter() {
                   @Override
                   public void processTerminated(@NotNull ProcessEvent event) {

@@ -20,7 +20,7 @@ import com.goide.sdk.GoSdkService;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.CommandLineState;
 import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.process.OSProcessHandler;
+import com.intellij.execution.process.KillableColoredProcessHandler;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
@@ -44,7 +44,7 @@ public abstract class GoRunningState extends CommandLineState {
     }
 
     GeneralCommandLine commandLine = getCommand(sdkHomePath);
-    return new OSProcessHandler(commandLine.createProcess(), commandLine.getCommandLineString());
+    return new KillableColoredProcessHandler(commandLine.createProcess(), commandLine.getCommandLineString());
   }
 
   @NotNull
