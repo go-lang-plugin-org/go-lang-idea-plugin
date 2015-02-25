@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.goide.project;
+package com.goide.configuration;
 
+import com.goide.project.GoLibrariesService;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.fileChooser.FileChooserDialog;
 import com.intellij.openapi.fileChooser.FileChooserFactory;

@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
-package com.goide.project;
+package com.goide.configuration;
 
 import com.goide.GoModuleType;
+import com.goide.project.GoApplicationLibrariesService;
+import com.goide.project.GoModuleLibrariesInitializer;
+import com.goide.project.GoModuleLibrariesService;
+import com.goide.project.GoProjectLibrariesService;
 import com.goide.sdk.GoSdkService;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.application.options.ModuleAwareProjectConfigurable;

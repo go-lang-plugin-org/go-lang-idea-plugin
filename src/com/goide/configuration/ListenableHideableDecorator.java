@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.goide.project;
+package com.goide.configuration;
 
 import com.intellij.ui.HideableDecorator;
 import com.intellij.util.containers.ContainerUtil;
