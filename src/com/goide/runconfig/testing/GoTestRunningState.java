@@ -70,6 +70,8 @@ public class GoTestRunningState extends GoRunningState {
     String executable = GoEnvironmentUtil.getExecutableForSdk(sdkHomePath).getAbsolutePath();
     GeneralCommandLine runTests = new GeneralCommandLine();
     runTests.getEnvironment().put(GoConstants.GO_PATH, GoSdkUtil.retrieveGoPath(myModule));
+    runTests.getEnvironment().putAll(myConfiguration.getCustomEnvironment());
+    runTests.setPassParentEnvironment(myConfiguration.isPassParentEnvironment());
     runTests.setExePath(executable);
     runTests.addParameters("test", "-v");
     fillCommandLineWithParameters(runTests);

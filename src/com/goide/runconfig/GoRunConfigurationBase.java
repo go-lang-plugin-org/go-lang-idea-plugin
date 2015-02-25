@@ -18,6 +18,7 @@ package com.goide.runconfig;
 
 import com.goide.sdk.GoSdkService;
 import com.intellij.execution.ExecutionException;
+import com.intellij.execution.configuration.EnvironmentVariablesComponent;
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.ModuleBasedConfiguration;
 import com.intellij.execution.runners.ExecutionEnvironment;
@@ -26,18 +27,25 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.InvalidDataException;
+import com.intellij.openapi.util.JDOMExternalizerUtil;
 import com.intellij.openapi.util.WriteExternalException;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.xmlb.XmlSerializer;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.Map;
 
-// TODO IDEA 15: reimplement storing configurations with SmartSerializer
 public abstract class GoRunConfigurationBase<RunningState extends GoRunningState>
   extends ModuleBasedConfiguration<GoModuleBasedConfiguration> implements RunConfigurationWithSuppressedDefaultRunAction {
-  @NotNull protected String myParams = "";
+
+  private static final String PARAMETERS_NAME = "parameters";
+  private static final String PASS_PARENT_ENV = "pass_parent_env";
+
+  @NotNull private String myParams = "";
+  @NotNull private Map<String, String> myCustomEnvironment = ContainerUtil.newHashMap();
+  private boolean myPassParentEnvironment = true;
 
   public GoRunConfigurationBase(String name, GoModuleBasedConfiguration configurationModule, ConfigurationFactory factory) {
     super(name, configurationModule, factory);
@@ -66,14 +74,26 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
   public void writeExternal(final Element element) throws WriteExternalException {
     super.writeExternal(element);
     writeModule(element);
-    XmlSerializer.serializeInto(this, element);
+    if (StringUtil.isNotEmpty(myParams)) {
+      JDOMExternalizerUtil.addElementWithValueAttribute(element, PARAMETERS_NAME, myParams);
+    }
+    if (!myCustomEnvironment.isEmpty()) {
+      EnvironmentVariablesComponent.writeExternal(element, myCustomEnvironment);
+    }
+    if (!myPassParentEnvironment) {
+      JDOMExternalizerUtil.addElementWithValueAttribute(element, PASS_PARENT_ENV, "false");
+    }
   }
 
   @Override
   public void readExternal(@NotNull final Element element) throws InvalidDataException {
     super.readExternal(element);
     readModule(element);
-    XmlSerializer.deserializeInto(this, element);
+    myParams = StringUtil.notNullize(JDOMExternalizerUtil.getFirstChildValueAttribute(element, PARAMETERS_NAME));
+    EnvironmentVariablesComponent.readExternal(element, myCustomEnvironment);
+    
+    String passEnvValue = JDOMExternalizerUtil.getFirstChildValueAttribute(element, PASS_PARENT_ENV);
+    myPassParentEnvironment = passEnvValue == null || Boolean.valueOf(passEnvValue);
   }
 
   @NotNull
@@ -98,5 +118,22 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
     myParams = params;
   }
   
+  @NotNull
+  public Map<String, String> getCustomEnvironment() {
+    return myCustomEnvironment;
+  }
+
+  public void setCustomEnvironment(@NotNull Map<String, String> customEnvironment) {
+    myCustomEnvironment = customEnvironment;
+  }
+
+  public void setPassParentEnvironment(boolean passParentEnvironment) {
+    myPassParentEnvironment = passParentEnvironment;
+  }
+
+  public boolean isPassParentEnvironment() {
+    return myPassParentEnvironment;
+  }
+
   public abstract String getWorkingDirectory();
 }

@@ -43,6 +43,8 @@ public class GoRunFileRunningState extends GoRunningState {
     GeneralCommandLine commandLine = new GeneralCommandLine();
     String executable = GoEnvironmentUtil.getExecutableForSdk(sdkHomePath).getAbsolutePath();
     commandLine.getEnvironment().put(GoConstants.GO_PATH, GoSdkUtil.retrieveGoPath(myModule));
+    commandLine.getEnvironment().putAll(myConfiguration.getCustomEnvironment());
+    commandLine.setPassParentEnvironment(myConfiguration.isPassParentEnvironment());
     commandLine.setExePath(executable);
     ParametersList list = commandLine.getParametersList();
     list.add("run");

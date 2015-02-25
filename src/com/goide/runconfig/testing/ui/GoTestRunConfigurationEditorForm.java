@@ -24,6 +24,7 @@ import com.goide.stubs.index.GoPackagesIndex;
 import com.goide.util.GoUtil;
 import com.intellij.application.options.ModulesComboBox;
 import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.execution.configuration.EnvironmentVariablesTextFieldWithBrowseButton;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
@@ -47,7 +48,7 @@ import java.awt.event.ActionListener;
 
 public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunConfiguration> {
   @NotNull private final Project myProject;
-  private JPanel component;
+  private JPanel myComponent;
   private ModulesComboBox myComboModules;
   private RawCommandLineEditor myParamsField;
   private EditorTextField myPatternEditor;
@@ -60,6 +61,7 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   private EditorTextField myPackageField;
   private JLabel myDirectoryLabel;
   private TextFieldWithBrowseButton myDirectoryField;
+  private EnvironmentVariablesTextFieldWithBrowseButton myEnvironmentField;
 
   public GoTestRunConfigurationEditorForm(@NotNull final Project project) {
     super(null);
@@ -102,6 +104,9 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
     myParamsField.setText(configuration.getParams());
     myPatternEditor.setText(configuration.getPattern());
     myWorkingDirectoryField.setText(configuration.getWorkingDirectory());
+    
+    myEnvironmentField.setEnvs(configuration.getCustomEnvironment());
+    myEnvironmentField.setPassParentEnvs(configuration.isPassParentEnvironment());
   }
 
   @Override
@@ -115,17 +120,20 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
     configuration.setParams(myParamsField.getText());
     configuration.setPattern(myPatternEditor.getText());
     configuration.setWorkingDirectory(myWorkingDirectoryField.getText());
+    
+    configuration.setCustomEnvironment(myEnvironmentField.getEnvs());
+    configuration.setPassParentEnvironment(myEnvironmentField.isPassParentEnvs());
   }
 
   @NotNull
   @Override
   protected JComponent createEditor() {
-    return component;
+    return myComponent;
   }
 
   @Override
   protected void disposeEditor() {
-    component.setVisible(false);
+    myComponent.setVisible(false);
   }
 
   private void createUIComponents() {
