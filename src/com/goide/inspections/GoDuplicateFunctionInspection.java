@@ -49,7 +49,7 @@ public class GoDuplicateFunctionInspection extends GoInspectionBase {
         String name = o.getName();
         if (name == null) return;
         Collection<GoFunctionDeclaration> byKey = map.get(name);
-        if ("init".equals(o.getName()) && zeroArity(o)) {
+        if (("init".equals(name) || "main".equals(name) && "main".equals(o.getContainingFile().getPackageName()) && zeroArity(o))) {
           byKey = ContainerUtil.filter(byKey, new Condition<GoFunctionDeclaration>() {
             @Override
             public boolean value(GoFunctionDeclaration declaration) {
