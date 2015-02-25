@@ -126,7 +126,8 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
   }
 
   public void setCustomEnvironment(@NotNull Map<String, String> customEnvironment) {
-    myCustomEnvironment = customEnvironment;
+    myCustomEnvironment.clear();
+    myCustomEnvironment.putAll(customEnvironment);
   }
 
   public void setPassParentEnvironment(boolean passParentEnvironment) {
