@@ -22,9 +22,9 @@ public class GoKeyImpl extends GoCompositeElementImpl implements GoKey {
   }
 
   @Override
-  @NotNull
+  @Nullable
   public GoFieldName getFieldName() {
-    return findNotNullChildByClass(GoFieldName.class);
+    return findChildByClass(GoFieldName.class);
   }
 
 }

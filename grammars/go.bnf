@@ -305,7 +305,7 @@ LiteralValue ::= '{' (ElementList | (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">>
 private ElementList  ::= Element ( ',' Element? )*
 Element ::= First [':' Value] 
 private First ::= Key | <<keyOrValueExpression>>
-Key ::= FieldName &':'
+Key ::= (FieldName &':') | !() // nullability hack for key without reference inside
 FieldName ::= identifier {
   methods=[getReference getQualifier]
 }

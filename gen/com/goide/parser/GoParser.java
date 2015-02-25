@@ -2020,26 +2020,52 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // FieldName &':'
+  // (FieldName &':') | !()
   public static boolean Key(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Key")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = FieldName(b, l + 1);
-    r = r && Key_1(b, l + 1);
+    r = Key_0(b, l + 1);
+    if (!r) r = Key_1(b, l + 1);
     exit_section_(b, m, KEY, r);
     return r;
   }
 
+  // FieldName &':'
+  private static boolean Key_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Key_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = FieldName(b, l + 1);
+    r = r && Key_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
   // &':'
-  private static boolean Key_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Key_1")) return false;
+  private static boolean Key_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Key_0_1")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _AND_, null);
     r = consumeToken(b, COLON);
     exit_section_(b, l, m, null, r, false, null);
     return r;
+  }
+
+  // !()
+  private static boolean Key_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Key_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NOT_, null);
+    r = !Key_1_0(b, l + 1);
+    exit_section_(b, l, m, null, r, false, null);
+    return r;
+  }
+
+  // ()
+  private static boolean Key_1_0(PsiBuilder b, int l) {
+    return true;
   }
 
   /* ********************************************************** */

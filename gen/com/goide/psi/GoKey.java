@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface GoKey extends GoCompositeElement {
 
-  @NotNull
+  @Nullable
   GoFieldName getFieldName();
 
 }
