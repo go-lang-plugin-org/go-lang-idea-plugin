@@ -32,6 +32,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.List;
 
+import static com.goide.GoConstants.INIT;
+import static com.goide.GoConstants.MAIN;
+
 public class GoDuplicateFunctionInspection extends GoInspectionBase {
   @Override
   protected void checkFile(@NotNull GoFile file, @NotNull final ProblemsHolder problemsHolder) {
@@ -49,7 +52,7 @@ public class GoDuplicateFunctionInspection extends GoInspectionBase {
         String name = o.getName();
         if (name == null) return;
         Collection<GoFunctionDeclaration> byKey = map.get(name);
-        if (("init".equals(name) || "main".equals(name) && "main".equals(o.getContainingFile().getPackageName()) && zeroArity(o))) {
+        if ((INIT.equals(name) || MAIN.equals(name) && MAIN.equals(o.getContainingFile().getPackageName()) && zeroArity(o))) {
           byKey = ContainerUtil.filter(byKey, new Condition<GoFunctionDeclaration>() {
             @Override
             public boolean value(GoFunctionDeclaration declaration) {
