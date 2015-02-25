@@ -27,12 +27,14 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.util.text.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class GoRunningState extends CommandLineState {
+public abstract class GoRunningState<T extends GoRunConfigurationBase> extends CommandLineState {
   @NotNull protected final Module myModule;
+  @NotNull protected final T myConfiguration;
 
-  public GoRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module) {
+  public GoRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module, @NotNull T configuration) {
     super(env);
     myModule = module;
+    myConfiguration = configuration;
   }
 
   @NotNull

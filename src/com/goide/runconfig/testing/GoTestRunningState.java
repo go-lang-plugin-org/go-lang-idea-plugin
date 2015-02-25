@@ -40,8 +40,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
-public class GoTestRunningState extends GoRunningState {
-  private final GoTestRunConfiguration myConfiguration;
+public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
+  public GoTestRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module, @NotNull GoTestRunConfiguration configuration) {
+    super(env, module, configuration);
+  }
 
   @NotNull
   @Override
@@ -57,11 +59,6 @@ public class GoTestRunningState extends GoRunningState {
     DefaultExecutionResult executionResult = new DefaultExecutionResult(consoleView, processHandler);
     executionResult.setRestartActions(new ToggleAutoTestAction(getEnvironment()));
     return executionResult;
-  }
-
-  public GoTestRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module, GoTestRunConfiguration configuration) {
-    super(env, module);
-    myConfiguration = configuration;
   }
 
   @NotNull

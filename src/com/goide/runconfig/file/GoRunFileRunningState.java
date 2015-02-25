@@ -29,12 +29,9 @@ import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
 import org.jetbrains.annotations.NotNull;
 
-public class GoRunFileRunningState extends GoRunningState {
-  private final GoRunFileConfiguration myConfiguration;
-
+public class GoRunFileRunningState extends GoRunningState<GoRunFileConfiguration> {
   public GoRunFileRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module, GoRunFileConfiguration configuration) {
-    super(env, module);
-    myConfiguration = configuration;
+    super(env, module, configuration);
   }
 
   @NotNull

@@ -30,12 +30,10 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.PathUtil;
 import org.jetbrains.annotations.NotNull;
 
-public class GoApplicationRunningState extends GoRunningState {
-  private final GoApplicationConfiguration myConfiguration;
-
-  public GoApplicationRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module, GoApplicationConfiguration configuration) {
-    super(env, module);
-    myConfiguration = configuration;
+public class GoApplicationRunningState extends GoRunningState<GoApplicationConfiguration> {
+  public GoApplicationRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module, 
+                                   @NotNull GoApplicationConfiguration configuration) {
+    super(env, module, configuration);
   }
 
   @NotNull
