@@ -279,15 +279,22 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
                                                          NotificationType.INFORMATION, new NotificationListener.Adapter() {
         @Override
         protected void hyperlinkActivated(@NotNull Notification notification, @NotNull HyperlinkEvent event) {
-          if (event.getDescription().equals("configure") && !project.isDisposed()) {
-            final Configurable configurable = ConfigurableExtensionPointUtil.createProjectConfigurableForProvider(project, GoLibrariesConfigurableProvider.class);
-            if (configurable != null) {
-              ShowSettingsUtil.getInstance().editConfigurable(project, configurable);
-            }
+          if (event.getDescription().equals("configure")) {
+            showModulesConfigurable(project);
           }
         }
       });
       Notifications.Bus.notify(notification, project);
+    }
+  }
+
+  public static void showModulesConfigurable(@NotNull Project project) {
+    ApplicationManager.getApplication().assertIsDispatchThread();
+    if (!project.isDisposed()) {
+      Configurable configurable = ConfigurableExtensionPointUtil.createProjectConfigurableForProvider(project, GoLibrariesConfigurableProvider.class);
+      if (configurable != null) {
+        ShowSettingsUtil.getInstance().editConfigurable(project, configurable);
+      }
     }
   }
 

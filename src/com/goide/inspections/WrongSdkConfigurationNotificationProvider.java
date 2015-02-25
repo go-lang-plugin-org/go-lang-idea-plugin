@@ -18,7 +18,9 @@ package com.goide.inspections;
 
 import com.goide.GoFileType;
 import com.goide.GoLanguage;
+import com.goide.project.GoModuleLibrariesInitializer;
 import com.goide.sdk.GoSdkService;
+import com.goide.sdk.GoSdkUtil;
 import com.intellij.ProjectTopics;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.module.Module;
@@ -35,14 +37,14 @@ import com.intellij.psi.PsiManager;
 import com.intellij.ui.EditorNotificationPanel;
 import com.intellij.ui.EditorNotifications;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-// todo: extract the common one
-public class SetupSDKNotificationProvider extends EditorNotifications.Provider<EditorNotificationPanel> {
+public class WrongSdkConfigurationNotificationProvider extends EditorNotifications.Provider<EditorNotificationPanel> {
   private static final Key<EditorNotificationPanel> KEY = Key.create("Setup Go SDK");
 
   private final Project myProject;
 
-  public SetupSDKNotificationProvider(Project project, final EditorNotifications notifications) {
+  public WrongSdkConfigurationNotificationProvider(Project project, final EditorNotifications notifications) {
     myProject = project;
     myProject.getMessageBus().connect(project).subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
       @Override
@@ -71,21 +73,42 @@ public class SetupSDKNotificationProvider extends EditorNotifications.Provider<E
     if (module == null) return null;
 
     String sdkHomePath = GoSdkService.getInstance().getSdkHomePath(module);
-    if (StringUtil.isNotEmpty(sdkHomePath)) return null;
+    if (StringUtil.isEmpty(sdkHomePath)) {
+      return createMissingSdkPanel(myProject, module);
+    }
 
-    return createPanel(myProject, psiFile);
+    String goPath = GoSdkUtil.retrieveGoPath(module);
+    if (StringUtil.isEmpty(goPath.trim())) {
+      return createEmptyGoPathPanel(myProject);
+    }
+
+    return null;
   }
 
   @NotNull
-  private static EditorNotificationPanel createPanel(@NotNull final Project project, @NotNull final PsiFile file) {
+  private static EditorNotificationPanel createMissingSdkPanel(@NotNull final Project project, @Nullable final Module module) {
     EditorNotificationPanel panel = new EditorNotificationPanel();
     panel.setText(ProjectBundle.message("project.sdk.not.defined"));
     panel.createActionLabel(ProjectBundle.message("project.sdk.setup"), new Runnable() {
       @Override
       public void run() {
-        GoSdkService.getInstance().chooseAndSetSdk(project, ModuleUtilCore.findModuleForPsiElement(file));
+        GoSdkService.getInstance().chooseAndSetSdk(project, module);
       }
     });
     return panel;
   }
+
+  @NotNull
+  private static EditorNotificationPanel createEmptyGoPathPanel(@NotNull final Project project) {
+    EditorNotificationPanel panel = new EditorNotificationPanel();
+    panel.setText("GOPATH is empty");
+    panel.createActionLabel("Configure Go Libraries", new Runnable() {
+      @Override
+      public void run() {
+        GoModuleLibrariesInitializer.showModulesConfigurable(project);
+      }
+    });
+    return panel;
+  }
+
 }
