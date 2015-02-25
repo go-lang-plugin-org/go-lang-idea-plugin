@@ -8,23 +8,24 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class GoSdkService {
-  public static GoSdkService getInstance() {
-    return ServiceManager.getService(GoSdkService.class);
+  @NotNull
+  protected final Project myProject;
+
+  protected GoSdkService(@NotNull Project project) {
+    myProject = project;
+  }
+
+  public static GoSdkService getInstance(@NotNull Project project) {
+    return ServiceManager.getService(project, GoSdkService.class);
   }
 
   @Nullable
-  public abstract String getSdkHomePath(@NotNull Module module);
-
-  @Nullable
-  public abstract String getSdkHomePath(@NotNull Project project);
+  public abstract String getSdkHomePath(@Nullable Module module);
   
   @Nullable
-  public abstract String getSdkVersion(@NotNull Module module);
-
-  @Nullable
-  public abstract String getSdkVersion(@NotNull Project project);
+  public abstract String getSdkVersion(@Nullable Module module);
   
-  public abstract void chooseAndSetSdk(@NotNull Project project, @Nullable Module module);
+  public abstract void chooseAndSetSdk(@Nullable Module module);
 
   /**
    * Use this method in order to check whether the method is appropriate for providing Go-specific code insight

@@ -72,7 +72,7 @@ public class WrongSdkConfigurationNotificationProvider extends EditorNotificatio
     Module module = ModuleUtilCore.findModuleForPsiElement(psiFile);
     if (module == null) return null;
 
-    String sdkHomePath = GoSdkService.getInstance().getSdkHomePath(module);
+    String sdkHomePath = GoSdkService.getInstance(myProject).getSdkHomePath(module);
     if (StringUtil.isEmpty(sdkHomePath)) {
       return createMissingSdkPanel(myProject, module);
     }
@@ -92,7 +92,7 @@ public class WrongSdkConfigurationNotificationProvider extends EditorNotificatio
     panel.createActionLabel(ProjectBundle.message("project.sdk.setup"), new Runnable() {
       @Override
       public void run() {
-        GoSdkService.getInstance().chooseAndSetSdk(project, module);
+        GoSdkService.getInstance(project).chooseAndSetSdk(module);
       }
     });
     return panel;

@@ -46,10 +46,6 @@
   </module-components>
 
   <extensions defaultExtensionNs="com.intellij">
-    <applicationService serviceInterface="com.goide.sdk.GoSdkService"
-                        serviceImplementation="com.goide.sdk.GoSmallIDEsSdkService"
-                        overrides="false"/>
-
     <stubIndex implementation="com.goide.stubs.index.GoAllNamesIndex"/>
     <stubIndex implementation="com.goide.stubs.index.GoFunctionIndex"/>
     <stubIndex implementation="com.goide.stubs.index.GoTypesIndex"/>
@@ -120,6 +116,9 @@
     <gotoClassContributor implementation="com.goide.go.GoTypeContributor"/>
 
     <sdkType implementation="com.goide.sdk.GoSdkType"/>
+    <projectService serviceInterface="com.goide.sdk.GoSdkService" serviceImplementation="com.goide.sdk.GoSmallIDEsSdkService"
+                    overrides="false"/>
+    <editorNotificationProvider implementation="com.goide.inspections.WrongSdkConfigurationNotificationProvider"/>
 
     <stepsBeforeRunProvider implementation="com.goide.runconfig.before.GoBeforeRunTaskProvider"/>
     <!-- run single file -->
@@ -146,8 +145,6 @@
     <programRunner implementation="com.goide.debugger.ideagdb.run.GdbRunner"/>
 
     <checkinHandlerFactory implementation="com.goide.actions.fmt.GoFmtCheckinFactory" order="last"/>
-
-    <editorNotificationProvider implementation="com.goide.inspections.WrongSdkConfigurationNotificationProvider"/>
     
     <lang.inspectionSuppressor language="go" implementationClass="com.goide.inspections.suppression.GoInspectionSuppressor"/>
     

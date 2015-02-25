@@ -122,7 +122,7 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
           result.add(new ModuleAwareProjectConfigurable(myProject, "Module libraries", "Module libraries") {
             @Override
             protected boolean isSuitableForModule(@NotNull Module module) {
-              return GoSdkService.getInstance().isGoModule(module);
+              return !myProject.isDisposed() && GoSdkService.getInstance(myProject).isGoModule(module);
             }
 
             @NotNull

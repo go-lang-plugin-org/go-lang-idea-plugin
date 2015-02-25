@@ -83,18 +83,19 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
 
   @Override
   public boolean configureTask(RunConfiguration configuration, GoCommandBeforeRunTask task) {
+    final Project project = configuration.getProject();
     if (!(configuration instanceof GoRunConfigurationBase)) {
-      showAddingTaskErrorMessage(configuration.getProject(), "Go Command task supports only Go Run Configurations");
+      showAddingTaskErrorMessage(project, "Go Command task supports only Go Run Configurations");
       return false;
     }
 
     Module module = ((GoRunConfigurationBase)configuration).getConfigurationModule().getModule();
-    if (!GoSdkService.getInstance().isGoModule(module)) {
-      showAddingTaskErrorMessage(configuration.getProject(), "Go Command task supports only Go Modules");
+    if (!GoSdkService.getInstance(project).isGoModule(module)) {
+      showAddingTaskErrorMessage(project, "Go Command task supports only Go Modules");
       return false;
     }
 
-    GoCommandConfigureDialog dialog = new GoCommandConfigureDialog(configuration.getProject());
+    GoCommandConfigureDialog dialog = new GoCommandConfigureDialog(project);
     if (dialog.showAndGet()) {
       task.setCommand(dialog.getCommand());
       return true;
@@ -106,8 +107,9 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
   public boolean canExecuteTask(RunConfiguration configuration, GoCommandBeforeRunTask task) {
     if (configuration instanceof GoRunConfigurationBase) {
       Module module = ((GoRunConfigurationBase)configuration).getConfigurationModule().getModule();
-      if (GoSdkService.getInstance().isGoModule(module)) {
-        return StringUtil.isNotEmpty(GoSdkService.getInstance().getSdkHomePath(module)) && StringUtil.isNotEmpty(task.getCommand());
+      GoSdkService sdkService = GoSdkService.getInstance(configuration.getProject());
+      if (sdkService.isGoModule(module)) {
+        return StringUtil.isNotEmpty(sdkService.getSdkHomePath(module)) && StringUtil.isNotEmpty(task.getCommand());
       }
     }
     return false;
@@ -130,9 +132,11 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
     UIUtil.invokeAndWaitIfNeeded(new Runnable() {
       public void run() {
         if (StringUtil.isEmpty(task.getCommand())) return;
-        if (project == null || project.isDisposed() || !GoSdkService.getInstance().isGoModule(module)) return;
+        if (project == null || project.isDisposed()) return;
+        GoSdkService sdkService = GoSdkService.getInstance(project);
+        if (!sdkService.isGoModule(module)) return;
 
-        final String sdkPath = GoSdkService.getInstance().getSdkHomePath(module);
+        final String sdkPath = sdkService.getSdkHomePath(module);
         if (StringUtil.isEmpty(sdkPath)) return;
 
         FileDocumentManager.getInstance().saveAllDocuments();

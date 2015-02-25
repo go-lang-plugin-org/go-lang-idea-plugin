@@ -42,7 +42,7 @@ public abstract class GoRunningState<T extends GoRunConfigurationBase> extends C
   @NotNull
   @Override
   protected ProcessHandler startProcess() throws ExecutionException {
-    String sdkHomePath = GoSdkService.getInstance().getSdkHomePath(myModule);
+    String sdkHomePath = GoSdkService.getInstance(myConfiguration.getProject()).getSdkHomePath(myModule);
     if (StringUtil.isEmpty(sdkHomePath)) {
       throw new ExecutionException("Sdk is not set or Sdk home path is empty for module " + myModule.getName());
     }

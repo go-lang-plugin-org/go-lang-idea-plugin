@@ -47,26 +47,14 @@ public class GoSdkUtil {
   @Nullable
   public static VirtualFile getSdkSrcDir(@NotNull PsiElement context) {
     Module module = ModuleUtilCore.findModuleForPsiElement(context);
-    String sdkHomePath = getSdkHomePath(context.getProject(), module);
-    String sdkVersionString = getSdkVersionString(context.getProject(), module);
+    String sdkHomePath = GoSdkService.getInstance(context.getProject()).getSdkHomePath(module);
+    String sdkVersionString = GoSdkService.getInstance(context.getProject()).getSdkVersion(module);
     if (sdkHomePath == null || sdkVersionString == null) return guessSkdSrcDir(context);
     File sdkSrcDirFile = new File(sdkHomePath, getSrcLocation(sdkVersionString));
     VirtualFile sdkSrcDir = LocalFileSystem.getInstance().findFileByIoFile(sdkSrcDirFile);
     return sdkSrcDir != null ? sdkSrcDir : guessSkdSrcDir(context);
   }
 
-  @Nullable
-  private static String getSdkHomePath(@NotNull Project project, @Nullable Module module) {
-    String sdk = module == null ? null : GoSdkService.getInstance().getSdkHomePath(module);
-    return sdk != null ? sdk : GoSdkService.getInstance().getSdkHomePath(project);
-  }
-
-  @Nullable
-  private static String getSdkVersionString(@NotNull Project project, @Nullable Module module) {
-    String sdk = module == null ? null : GoSdkService.getInstance().getSdkVersion(module);
-    return sdk != null ? sdk : GoSdkService.getInstance().getSdkVersion(project);
-  }
-  
   @Nullable
   public static GoFile findBuiltinFile(@NotNull PsiElement context) {
     VirtualFile sdkSrcDir = getSdkSrcDir(context);

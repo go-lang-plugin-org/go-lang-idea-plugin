@@ -28,6 +28,7 @@ import com.intellij.execution.process.ProcessEvent;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -64,7 +65,7 @@ public class GoImportsFileAction extends GoExternalToolsAction {
     assert filePath != null;
 
     GeneralCommandLine commandLine = new GeneralCommandLine();
-    String sdkHome = GoSdkService.getInstance().getSdkHomePath(project);
+    String sdkHome = GoSdkService.getInstance(project).getSdkHomePath(ModuleUtilCore.findModuleForPsiElement(file));
     if (StringUtil.isEmpty(sdkHome)) {
       warning(project, groupId, "Project sdk is not valid");
       return true;

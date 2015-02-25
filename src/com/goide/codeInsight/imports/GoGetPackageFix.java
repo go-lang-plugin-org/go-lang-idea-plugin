@@ -64,7 +64,7 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
       return;
     }
 
-    final String sdkPath = GoSdkService.getInstance().getSdkHomePath(module);
+    final String sdkPath = GoSdkService.getInstance(project).getSdkHomePath(module);
     if (StringUtil.isEmpty(sdkPath)) {
       return;
     }

@@ -97,7 +97,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
 
   @Override
   public void moduleAdded() {
-    if (GoSdkService.getInstance().isGoModule(myModule)) {
+    if (GoSdkService.getInstance(myModule.getProject()).isGoModule(myModule)) {
       scheduleUpdate(0);
 
       myModule.getMessageBus().connect().subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
@@ -117,7 +117,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   public void scheduleUpdate(int delay) {
     myAlarm.addRequest(new Runnable() {
       public void run() {
-        if (GoSdkService.getInstance().isGoModule(GoModuleLibrariesInitializer.this.myModule)) {
+        if (GoSdkService.getInstance(myModule.getProject()).isGoModule(GoModuleLibrariesInitializer.this.myModule)) {
           final Set<String> libraryRootUrls = ContainerUtil.newLinkedHashSet();
           VirtualFile[] contentRoots = ProjectRootManager.getInstance(myModule.getProject()).getContentRoots();
 
@@ -136,7 +136,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
               ApplicationManager.getApplication().invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                  if (GoSdkService.getInstance().isGoModule(GoModuleLibrariesInitializer.this.myModule)) {
+                  if (GoSdkService.getInstance(myModule.getProject()).isGoModule(GoModuleLibrariesInitializer.this.myModule)) {
                     attachLibraries(libraryRootUrls);
                   }
                 }

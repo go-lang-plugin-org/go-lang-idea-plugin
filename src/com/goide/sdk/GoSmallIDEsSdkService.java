@@ -6,31 +6,24 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoSmallIDEsSdkService extends GoSdkService {
+  public GoSmallIDEsSdkService(@NotNull Project project) {
+    super(project);
+  }
+
+  @Nullable
   @Override
-  public String getSdkHomePath(@NotNull Module module) {
+  public String getSdkHomePath(@Nullable Module module) {
     return null;
   }
 
   @Nullable
   @Override
-  public String getSdkHomePath(@NotNull Project project) {
-    return null;
-  }
-
-  @Nullable
-  @Override
-  public String getSdkVersion(@NotNull Module module) {
-    return null;
-  }
-
-  @Nullable
-  @Override
-  public String getSdkVersion(@NotNull Project project) {
+  public String getSdkVersion(@Nullable Module module) {
     return null;
   }
 
   @Override
-  public void chooseAndSetSdk(@NotNull Project project, @Nullable Module module) {
+  public void chooseAndSetSdk(@Nullable Module module) {
 
   }
 }

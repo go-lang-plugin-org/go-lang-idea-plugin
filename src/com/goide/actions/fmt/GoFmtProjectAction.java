@@ -58,7 +58,7 @@ public class GoFmtProjectAction extends AnAction implements DumbAware {
     final String groupId = e.getPresentation().getText();
     try {
       GeneralCommandLine commandLine = new GeneralCommandLine();
-      String sdkHome = GoSdkService.getInstance().getSdkHomePath(project);
+      String sdkHome = GoSdkService.getInstance(project).getSdkHomePath(null);
       if (StringUtil.isEmpty(sdkHome)) {
         warning(project, groupId, "Project sdk is not valid");
         return;
