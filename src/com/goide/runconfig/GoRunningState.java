@@ -16,7 +16,9 @@
 
 package com.goide.runconfig;
 
+import com.goide.GoConstants;
 import com.goide.sdk.GoSdkService;
+import com.goide.sdk.GoSdkUtil;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.CommandLineState;
 import com.intellij.execution.configurations.GeneralCommandLine;
@@ -46,6 +48,13 @@ public abstract class GoRunningState<T extends GoRunConfigurationBase> extends C
     }
 
     GeneralCommandLine commandLine = getCommand(sdkHomePath);
+    
+    commandLine.getParametersList().addParametersString(myConfiguration.getParams());
+    commandLine.getEnvironment().put(GoConstants.GO_PATH, GoSdkUtil.retrieveGoPath(myModule));
+    //noinspection unchecked
+    commandLine.getEnvironment().putAll(myConfiguration.getCustomEnvironment());
+    commandLine.setPassParentEnvironment(myConfiguration.isPassParentEnvironment());
+    
     return new KillableColoredProcessHandler(commandLine.createProcess(), commandLine.getCommandLineString());
   }
 

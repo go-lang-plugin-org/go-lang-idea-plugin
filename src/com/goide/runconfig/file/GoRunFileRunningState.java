@@ -16,10 +16,8 @@
 
 package com.goide.runconfig.file;
 
-import com.goide.GoConstants;
 import com.goide.GoEnvironmentUtil;
 import com.goide.runconfig.GoRunningState;
-import com.goide.sdk.GoSdkUtil;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.ParametersList;
@@ -39,15 +37,11 @@ public class GoRunFileRunningState extends GoRunningState<GoRunFileConfiguration
   protected GeneralCommandLine getCommand(String sdkHomePath) throws ExecutionException {
     GeneralCommandLine commandLine = new GeneralCommandLine();
     String executable = GoEnvironmentUtil.getExecutableForSdk(sdkHomePath).getAbsolutePath();
-    commandLine.getEnvironment().put(GoConstants.GO_PATH, GoSdkUtil.retrieveGoPath(myModule));
-    commandLine.getEnvironment().putAll(myConfiguration.getCustomEnvironment());
-    commandLine.setPassParentEnvironment(myConfiguration.isPassParentEnvironment());
     commandLine.setExePath(executable);
     ParametersList list = commandLine.getParametersList();
     list.add("run");
     String filePath = myConfiguration.getFilePath();
     list.addParametersString(filePath);
-    list.addParametersString(myConfiguration.getParams());
     commandLine.withWorkDirectory(myConfiguration.getWorkingDirectory());
     TextConsoleBuilder consoleBuilder = TextConsoleBuilderFactory.getInstance().createBuilder(myModule.getProject());
     setConsoleBuilder(consoleBuilder);

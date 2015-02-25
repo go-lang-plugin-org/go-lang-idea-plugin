@@ -48,7 +48,6 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
     String modulePath = PathUtil.getParentPath(myModule.getModuleFilePath());
     String executable = FileUtil.toSystemDependentName(GoEnvironmentUtil.getExecutableResultForModule(modulePath, outputDirectory));
     commandLine.setExePath(executable);
-    commandLine.getParametersList().addParametersString(myConfiguration.getParams());
     commandLine.withWorkDirectory(PathUtil.getParentPath(executable));
     TextConsoleBuilder consoleBuilder = TextConsoleBuilderFactory.getInstance().createBuilder(myModule.getProject());
     setConsoleBuilder(consoleBuilder);

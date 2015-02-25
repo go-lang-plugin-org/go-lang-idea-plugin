@@ -16,10 +16,8 @@
 
 package com.goide.runconfig.testing;
 
-import com.goide.GoConstants;
 import com.goide.GoEnvironmentUtil;
 import com.goide.runconfig.GoRunningState;
-import com.goide.sdk.GoSdkUtil;
 import com.intellij.execution.DefaultExecutionResult;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
@@ -66,13 +64,9 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
   protected GeneralCommandLine getCommand(String sdkHomePath) throws ExecutionException {
     String executable = GoEnvironmentUtil.getExecutableForSdk(sdkHomePath).getAbsolutePath();
     GeneralCommandLine runTests = new GeneralCommandLine();
-    runTests.getEnvironment().put(GoConstants.GO_PATH, GoSdkUtil.retrieveGoPath(myModule));
-    runTests.getEnvironment().putAll(myConfiguration.getCustomEnvironment());
-    runTests.setPassParentEnvironment(myConfiguration.isPassParentEnvironment());
     runTests.setExePath(executable);
     runTests.addParameters("test", "-v");
     fillCommandLineWithParameters(runTests);
-    runTests.getParametersList().addParametersString(myConfiguration.getParams());
     return runTests;
   }
 
