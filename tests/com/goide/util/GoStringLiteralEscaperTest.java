@@ -19,11 +19,13 @@ package com.goide.util;
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.goide.psi.GoStringLiteral;
 import com.goide.psi.impl.GoElementFactory;
+import com.intellij.idea.Bombed;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.LiteralTextEscaper;
 import com.intellij.psi.PsiLanguageInjectionHost;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Calendar;
 import java.util.Locale;
 
 public class GoStringLiteralEscaperTest extends GoCodeInsightFixtureTestCase {
@@ -167,6 +169,7 @@ public class GoStringLiteralEscaperTest extends GoCodeInsightFixtureTestCase {
     assertEquals("A", a);
   }
 
+  @Bombed(year = 2015, month = Calendar.MAY, day = 1, user = "zolotov")
   public void testDecodeShortUnicodeCharString() {
     final GoStringLiteral expr = createStringFromText("\\u8a9e");
     assertNotNull(expr);
@@ -174,6 +177,7 @@ public class GoStringLiteralEscaperTest extends GoCodeInsightFixtureTestCase {
     assertEquals("語", a);
   }
 
+  @Bombed(year = 2015, month = Calendar.MAY, day = 1, user = "zolotov")
   public void testDecodeLongUnicodeCharString() {
     final GoStringLiteral expr = createStringFromText("\\U00008a9e");
     assertNotNull(expr);
