@@ -224,16 +224,18 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     if (type instanceof GoStructType) {
       GoScopeProcessorBase delegate = createDelegate(processor);
       type.processDeclarations(delegate, ResolveState.initial(), null, myElement);
-      final List<GoTypeReferenceExpression> refs = ContainerUtil.newArrayList();
+      final List<GoTypeReferenceExpression> interfaceRefs = ContainerUtil.newArrayList();
+      final List<GoTypeReferenceExpression> structRefs = ContainerUtil.newArrayList();
       for (GoFieldDeclaration d : ((GoStructType)type).getFieldDeclarationList()) {
         if (!processNamedElements(processor, state, d.getFieldDefinitionList(), localResolve)) return false;
         GoAnonymousFieldDefinition anon = d.getAnonymousFieldDefinition();
         if (anon != null) {
-          refs.add(anon.getTypeReferenceExpression());
+          (anon.getMul() != null ? structRefs : interfaceRefs).add(anon.getTypeReferenceExpression());
           if (!processNamedElements(processor, state, ContainerUtil.createMaybeSingletonList(anon), localResolve)) return false;
         }
       }
-      if (!processCollectedRefs(type, refs, processor, state.put(POINTER, null))) return false;
+      if (!processCollectedRefs(type, interfaceRefs, processor, state.put(POINTER, null))) return false;
+      if (!processCollectedRefs(type, structRefs, processor, state)) return false;
     }
     else if (state.get(POINTER) == null && type instanceof GoInterfaceType) {
       if (!processNamedElements(processor, state, ((GoInterfaceType)type).getMethods(), localResolve)) return false;
