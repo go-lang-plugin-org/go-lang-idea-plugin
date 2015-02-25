@@ -26,7 +26,7 @@ GO_FILE
       SIMPLE_STATEMENT
         REFERENCE_EXPRESSION
           PsiElement(identifier)('asd')
-      PsiErrorElement:'!=', '%', '&', '&^', '(', '*', '+', '++', ',', '-', '--', '.', '/', ':=', ';', <, <-, <<, <=, <NL>, <assign op>, <literal value>, '==', '>', '>=', '>>', '^', '|' or '}' expected, got ')'
+      PsiErrorElement:'!=', '%', '&', '&^', '(', '*', '+', '++', ',', '-', '--', '.', '/', ':=', ';', <, <-, <<, <=, <NL>, <assign op>, '==', '>', '>=', '>>', '^', '{', '|' or '}' expected, got ')'
         PsiElement())(')')
       SIMPLE_STATEMENT
         CALL_EXPR
@@ -38,7 +38,7 @@ GO_FILE
       SIMPLE_STATEMENT
         REFERENCE_EXPRESSION
           PsiElement(identifier)('asd')
-      PsiErrorElement:'!=', '%', '&', '&^', '(', '*', '+', '++', ',', '-', '--', '.', '/', ':=', ';', <, <-, <<, <=, <NL>, <assign op>, <literal value>, '==', '>', '>=', '>>', '^', '|' or '}' expected, got ')'
+      PsiErrorElement:'!=', '%', '&', '&^', '(', '*', '+', '++', ',', '-', '--', '.', '/', ':=', ';', <, <-, <<, <=, <NL>, <assign op>, '==', '>', '>=', '>>', '^', '{', '|' or '}' expected, got ')'
         PsiElement())(')')
       SIMPLE_STATEMENT
         CALL_EXPR

@@ -2089,48 +2089,37 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">>) '{' '}' | '{' ElementList '}'
+  // '{' (ElementList | (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">>)) '}'
   public static boolean LiteralValue(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LiteralValue")) return false;
+    if (!nextTokenIs(b, LBRACE)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, "<literal value>");
-    r = LiteralValue_0(b, l + 1);
-    if (!r) r = LiteralValue_1(b, l + 1);
-    exit_section_(b, l, m, LITERAL_VALUE, r, false, null);
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LBRACE);
+    r = r && LiteralValue_1(b, l + 1);
+    r = r && consumeToken(b, RBRACE);
+    exit_section_(b, m, LITERAL_VALUE, r);
     return r;
   }
 
-  // (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">>) '{' '}'
-  private static boolean LiteralValue_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "LiteralValue_0")) return false;
+  // ElementList | (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">>)
+  private static boolean LiteralValue_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LiteralValue_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = LiteralValue_0_0(b, l + 1);
-    r = r && consumeToken(b, LBRACE);
-    r = r && consumeToken(b, RBRACE);
+    r = ElementList(b, l + 1);
+    if (!r) r = LiteralValue_1_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // <<isModeOff "BLOCK?">> | <<isModeOn "PAR">>
-  private static boolean LiteralValue_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "LiteralValue_0_0")) return false;
+  private static boolean LiteralValue_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LiteralValue_1_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = isModeOff(b, l + 1, "BLOCK?");
     if (!r) r = isModeOn(b, l + 1, "PAR");
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // '{' ElementList '}'
-  private static boolean LiteralValue_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "LiteralValue_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, LBRACE);
-    r = r && ElementList(b, l + 1);
-    r = r && consumeToken(b, RBRACE);
     exit_section_(b, m, null, r);
     return r;
   }

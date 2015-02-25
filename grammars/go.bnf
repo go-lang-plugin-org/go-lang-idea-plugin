@@ -301,7 +301,7 @@ LiteralTypeExpr ::=
   | MapType
   | TypeName
 
-LiteralValue ::= (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">>) '{' '}' | '{' ElementList '}' // todo: not a smart solution
+LiteralValue ::= '{' (ElementList | (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">>)) '}' // todo: not a smart solution
 private ElementList  ::= Element ( ',' Element? )*
 Element ::= First [':' Value] 
 private First ::= Key | <<keyOrValueExpression>>
