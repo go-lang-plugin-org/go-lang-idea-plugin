@@ -47,6 +47,7 @@ public class GoParserTest extends ParsingTestCase {
   public void testIfWithNew()                       { doTest(true);  }
   public void testRanges()                          { doTest(true);  }
   public void testTorture()                         { doTest(true);  }
+  public void testLiteralValues()                   { doTest(true);  }
   public void testSimple()                          { doTest(false); }
   public void testRecover()                         { doTest(false); }
   public void testRecover2()                        { doTest(false); }

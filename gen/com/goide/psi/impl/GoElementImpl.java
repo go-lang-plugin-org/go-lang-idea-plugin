@@ -28,9 +28,9 @@ public class GoElementImpl extends GoCompositeElementImpl implements GoElement {
   }
 
   @Override
-  @NotNull
+  @Nullable
   public GoValue getValue() {
-    return findNotNullChildByClass(GoValue.class);
+    return findChildByClass(GoValue.class);
   }
 
   @Override

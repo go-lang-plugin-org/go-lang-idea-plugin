@@ -931,12 +931,11 @@ GO_FILE
           PsiElement({)('{')
           ELEMENT
             KEY
-              ELEMENT_INDEX
+              REFERENCE_EXPRESSION
                 REFERENCE_EXPRESSION
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('pb')
-                  PsiElement(.)('.')
-                  PsiElement(identifier)('TaskQueueServiceError_TASK_ALREADY_EXISTS')
+                  PsiElement(identifier)('pb')
+                PsiElement(.)('.')
+                PsiElement(identifier)('TaskQueueServiceError_TASK_ALREADY_EXISTS')
             PsiElement(:)(':')
             VALUE
               REFERENCE_EXPRESSION
@@ -968,12 +967,11 @@ GO_FILE
           PsiElement({)('{')
           ELEMENT
             KEY
-              ELEMENT_INDEX
+              REFERENCE_EXPRESSION
                 REFERENCE_EXPRESSION
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('pb')
-                  PsiElement(.)('.')
-                  PsiElement(identifier)('TaskQueueServiceError_TASK_ALREADY_EXISTS')
+                  PsiElement(identifier)('pb')
+                PsiElement(.)('.')
+                PsiElement(identifier)('TaskQueueServiceError_TASK_ALREADY_EXISTS')
             PsiElement(:)(':')
             VALUE
               REFERENCE_EXPRESSION
@@ -981,12 +979,11 @@ GO_FILE
           PsiElement(,)(',')
           ELEMENT
             KEY
-              ELEMENT_INDEX
+              REFERENCE_EXPRESSION
                 REFERENCE_EXPRESSION
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('pb')
-                  PsiElement(.)('.')
-                  PsiElement(identifier)('TaskQueueServiceError_TOMBSTONED_TASK')
+                  PsiElement(identifier)('pb')
+                PsiElement(.)('.')
+                PsiElement(identifier)('TaskQueueServiceError_TOMBSTONED_TASK')
             PsiElement(:)(':')
             VALUE
               REFERENCE_EXPRESSION

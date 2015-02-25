@@ -10,7 +10,7 @@ public interface GoElement extends GoCompositeElement {
   @Nullable
   GoKey getKey();
 
-  @NotNull
+  @Nullable
   GoValue getValue();
 
   @Nullable

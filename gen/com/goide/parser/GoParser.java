@@ -91,9 +91,6 @@ public class GoParser implements PsiParser {
     else if (t == ELEMENT) {
       r = Element(b, 0);
     }
-    else if (t == ELEMENT_INDEX) {
-      r = ElementIndex(b, 0);
-    }
     else if (t == ELSE_STATEMENT) {
       r = ElseStatement(b, 0);
     }
@@ -1033,43 +1030,32 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // [ Key ':' ] Value
+  // First [':' Value]
   public static boolean Element(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Element")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, "<element>");
-    r = Element_0(b, l + 1);
-    r = r && Value(b, l + 1);
+    r = First(b, l + 1);
+    r = r && Element_1(b, l + 1);
     exit_section_(b, l, m, ELEMENT, r, false, null);
     return r;
   }
 
-  // [ Key ':' ]
-  private static boolean Element_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Element_0")) return false;
-    Element_0_0(b, l + 1);
+  // [':' Value]
+  private static boolean Element_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Element_1")) return false;
+    Element_1_0(b, l + 1);
     return true;
   }
 
-  // Key ':'
-  private static boolean Element_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Element_0_0")) return false;
+  // ':' Value
+  private static boolean Element_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Element_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = Key(b, l + 1);
-    r = r && consumeToken(b, COLON);
+    r = consumeToken(b, COLON);
+    r = r && Value(b, l + 1);
     exit_section_(b, m, null, r);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // Expression
-  public static boolean ElementIndex(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ElementIndex")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, "<element index>");
-    r = Expression(b, l + 1, -1);
-    exit_section_(b, l, m, ELEMENT_INDEX, r, false, null);
     return r;
   }
 
@@ -1610,6 +1596,18 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // Key | <<keyOrValueExpression>>
+  static boolean First(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "First")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Key(b, l + 1);
+    if (!r) r = keyOrValueExpression(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // <<exitModeSafe "BLOCK?">> Block
   static boolean ForBlock(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForBlock")) return false;
@@ -2022,31 +2020,21 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // FieldName &':' | ElementIndex
+  // FieldName &':'
   public static boolean Key(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Key")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, "<key>");
-    r = Key_0(b, l + 1);
-    if (!r) r = ElementIndex(b, l + 1);
-    exit_section_(b, l, m, KEY, r, false, null);
-    return r;
-  }
-
-  // FieldName &':'
-  private static boolean Key_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Key_0")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = FieldName(b, l + 1);
-    r = r && Key_0_1(b, l + 1);
-    exit_section_(b, m, null, r);
+    r = r && Key_1(b, l + 1);
+    exit_section_(b, m, KEY, r);
     return r;
   }
 
   // &':'
-  private static boolean Key_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Key_0_1")) return false;
+  private static boolean Key_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Key_1")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _AND_, null);
     r = consumeToken(b, COLON);

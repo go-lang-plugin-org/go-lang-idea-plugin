@@ -16,12 +16,14 @@
 
 package com.goide.parser;
 
+import com.goide.GoTypes;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.WhitespacesBinders;
 import com.intellij.lang.impl.PsiBuilderAdapter;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
 import com.intellij.openapi.util.Key;
+import com.intellij.psi.tree.IElementType;
 import com.intellij.util.containers.ContainerUtil;
 import gnu.trove.TObjectIntHashMap;
 import org.jetbrains.annotations.NotNull;
@@ -54,6 +56,15 @@ public class GoParserUtil extends GeneratedParserUtilBase {
 
   public static boolean isModeOff(@NotNull PsiBuilder builder_, @SuppressWarnings("UnusedParameters") int level, String mode) {
     return getParsingModes(builder_).get(mode) == 0;
+  }
+
+  public static boolean keyOrValueExpression(@NotNull PsiBuilder builder_, int level) {
+    PsiBuilder.Marker m = enter_section_(builder_);
+    boolean r = GoParser.Expression(builder_, level + 1, -1);
+    if (!r) r = GoParser.LiteralValue(builder_, level + 1);
+    IElementType type = r && builder_.getTokenType() == GoTypes.COLON ? GoTypes.KEY : GoTypes.VALUE;
+    exit_section_(builder_, m, type, r);
+    return r;
   }
 
   public static boolean enterMode(@NotNull PsiBuilder builder_, @SuppressWarnings("UnusedParameters") int level, String mode) {

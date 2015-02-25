@@ -303,12 +303,12 @@ LiteralTypeExpr ::=
 
 LiteralValue ::= (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">>) '{' '}' | '{' ElementList '}' // todo: not a smart solution
 private ElementList  ::= Element ( ',' Element? )*
-Element ::= [ Key ':' ] Value
-Key ::= FieldName &':' | ElementIndex
+Element ::= First [':' Value] 
+private First ::= Key | <<keyOrValueExpression>>
+Key ::= FieldName &':'
 FieldName ::= identifier {
   methods=[getReference getQualifier]
 }
-ElementIndex ::= Expression
 Value ::= Expression | LiteralValue
 
 FunctionLit ::= func Signature Block {pin=1 methods=[processDeclarations]}
