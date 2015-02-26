@@ -17,6 +17,8 @@
 package com.goide.runconfig.testing;
 
 import com.goide.GoEnvironmentUtil;
+import com.goide.psi.GoFile;
+import com.goide.psi.GoFunctionDeclaration;
 import com.goide.runconfig.GoRunningState;
 import com.intellij.execution.DefaultExecutionResult;
 import com.intellij.execution.ExecutionException;
@@ -34,9 +36,15 @@ import com.intellij.execution.ui.ConsoleView;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.LocalFileSystem;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.Collection;
 
 public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
   public GoTestRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module, @NotNull GoTestRunConfiguration configuration) {
@@ -47,7 +55,7 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
   @Override
   public ExecutionResult execute(@NotNull Executor executor, @NotNull ProgramRunner runner) throws ExecutionException {
     ProcessHandler processHandler = startProcess();
-    TextConsoleBuilder consoleBuilder = TextConsoleBuilderFactory.getInstance().createBuilder(myModule.getProject());
+    TextConsoleBuilder consoleBuilder = TextConsoleBuilderFactory.getInstance().createBuilder(myConfiguration.getProject());
     setConsoleBuilder(consoleBuilder);
 
     GoTestConsoleProperties consoleProperties = new GoTestConsoleProperties(myConfiguration, executor);
@@ -70,7 +78,7 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
     return runTests;
   }
 
-  private void fillCommandLineWithParameters(@NotNull GeneralCommandLine commandLine) {
+  private void fillCommandLineWithParameters(@NotNull GeneralCommandLine commandLine) throws ExecutionException {
     commandLine.withWorkDirectory(myConfiguration.getWorkingDirectory());
     switch (myConfiguration.getKind()) {
       case DIRECTORY:
@@ -89,10 +97,34 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
         commandLine.addParameter(myConfiguration.getPackage());
         break;
       case FILE:
-        commandLine.addParameter(myConfiguration.getFilePath());
+        String filePath = myConfiguration.getFilePath();
+        VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByPath(filePath);
+        if (virtualFile == null) {
+          throw new ExecutionException("Test file doesn't exist");
+        }
+        PsiFile file = PsiManager.getInstance(myConfiguration.getProject()).findFile(virtualFile);
+        if (file == null || !GoTestFinder.isTestFile(file)) {
+          throw new ExecutionException("File '" + filePath + "' is not test file");
+        }
+
+        String importPath = ((GoFile)file).getImportPath();
+        if (StringUtil.isEmpty(importPath)) {
+          throw new ExecutionException("Cannot find import path for " + filePath);
+        }
+        
+        commandLine.addParameter(importPath);
+        Collection<String> testNames = ContainerUtil.newLinkedHashSet();
+        for (GoFunctionDeclaration function : ((GoFile)file).getFunctions()) {
+          ContainerUtil.addIfNotNull(testNames, GoTestFinder.getTestFunctionName(function));
+        }
+        addFilterParameter(commandLine, "^" + StringUtil.join(testNames, "|") + "$");
         break;
     }
     String pattern = myConfiguration.getPattern();
+    addFilterParameter(commandLine, pattern);
+  }
+
+  private static void addFilterParameter(@NotNull GeneralCommandLine commandLine, String pattern) {
     if (StringUtil.isNotEmpty(pattern)) {
       commandLine.addParameters("-run", pattern);
     }

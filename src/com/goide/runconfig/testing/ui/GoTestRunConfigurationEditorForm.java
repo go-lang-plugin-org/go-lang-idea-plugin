@@ -62,6 +62,7 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   private JLabel myDirectoryLabel;
   private TextFieldWithBrowseButton myDirectoryField;
   private EnvironmentVariablesTextFieldWithBrowseButton myEnvironmentField;
+  private JLabel myPatternLabel;
 
   public GoTestRunConfigurationEditorForm(@NotNull final Project project) {
     super(null);
@@ -86,6 +87,8 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
     myDirectoryLabel.setVisible(allInDirectory);
     myFileField.setVisible(file);
     myFileLabel.setVisible(file);
+    myPatternEditor.setVisible(!file);
+    myPatternLabel.setVisible(!file);
   }
 
   @Override

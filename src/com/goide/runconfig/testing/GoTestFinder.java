@@ -19,6 +19,7 @@ package com.goide.runconfig.testing;
 import com.goide.GoConstants;
 import com.goide.GoFileType;
 import com.goide.psi.GoFile;
+import com.goide.psi.GoFunctionDeclaration;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -43,6 +44,15 @@ public class GoTestFinder implements TestFinder {
 
   public static boolean isTestFile(@Nullable VirtualFile file) {
     return file != null && file.getFileType() == GoFileType.INSTANCE && file.getNameWithoutExtension().endsWith(GoConstants.TEST_SUFFIX);
+  }
+  
+  @Nullable
+  public static String getTestFunctionName(@NotNull GoFunctionDeclaration function) {
+    String functionName = StringUtil.notNullize(function.getName());
+    if (functionName.startsWith("Test")) {
+      return functionName;
+    }
+    return null;
   }
 
   @Nullable

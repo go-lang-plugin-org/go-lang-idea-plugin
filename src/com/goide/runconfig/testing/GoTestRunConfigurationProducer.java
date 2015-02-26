@@ -141,12 +141,6 @@ public class GoTestRunConfigurationProducer extends RunConfigurationProducer<GoT
   @Nullable
   private static String findFunctionNameFromContext(PsiElement contextElement) {
     GoFunctionDeclaration function = PsiTreeUtil.getNonStrictParentOfType(contextElement, GoFunctionDeclaration.class);
-    if (function != null) {
-      String functionName = StringUtil.notNullize(function.getName());
-      if (functionName.startsWith("Test")) {
-        return functionName;
-      }
-    }
-    return null;
+    return function != null ? GoTestFinder.getTestFunctionName(function) : null;
   }
 }
