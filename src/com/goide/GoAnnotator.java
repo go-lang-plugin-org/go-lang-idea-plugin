@@ -41,7 +41,9 @@ public class GoAnnotator implements Annotator {
       }
     }
     else if (o instanceof GoLiteral) {
-      setHighlighting(o, holder, GoSyntaxHighlightingColors.NUMBER);
+      if (((GoLiteral)o).getHex() != null || ((GoLiteral)o).getOct() != null) {
+        setHighlighting(o, holder, GoSyntaxHighlightingColors.NUMBER);
+      }
     }
     else if (o instanceof GoReferenceExpression) {
       PsiElement resolve = ((GoReferenceExpression)o).getReference().resolve();
