@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface GoKey extends GoCompositeElement {
 
   @Nullable
+  GoExpression getExpression();
+
+  @Nullable
   GoFieldName getFieldName();
 
 }

@@ -2020,7 +2020,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (FieldName &':') | !()
+  // (FieldName &':') | !() Expression
   public static boolean Key(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Key")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
@@ -2053,18 +2053,29 @@ public class GoParser implements PsiParser {
     return r;
   }
 
-  // !()
+  // !() Expression
   private static boolean Key_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Key_1")) return false;
     boolean r;
+    Marker m = enter_section_(b);
+    r = Key_1_0(b, l + 1);
+    r = r && Expression(b, l + 1, -1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // !()
+  private static boolean Key_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Key_1_0")) return false;
+    boolean r;
     Marker m = enter_section_(b, l, _NOT_, null);
-    r = !Key_1_0(b, l + 1);
+    r = !Key_1_0_0(b, l + 1);
     exit_section_(b, l, m, null, r, false, null);
     return r;
   }
 
   // ()
-  private static boolean Key_1_0(PsiBuilder b, int l) {
+  private static boolean Key_1_0_0(PsiBuilder b, int l) {
     return true;
   }
 

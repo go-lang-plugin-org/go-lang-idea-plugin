@@ -23,6 +23,12 @@ public class GoKeyImpl extends GoCompositeElementImpl implements GoKey {
 
   @Override
   @Nullable
+  public GoExpression getExpression() {
+    return findChildByClass(GoExpression.class);
+  }
+
+  @Override
+  @Nullable
   public GoFieldName getFieldName() {
     return findChildByClass(GoFieldName.class);
   }
