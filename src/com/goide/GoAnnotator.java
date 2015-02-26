@@ -40,6 +40,9 @@ public class GoAnnotator implements Annotator {
         o.putUserData(GoReference.IMPORT_USERS, ContainerUtil.<PsiElement>newArrayListWithCapacity(0));
       }
     }
+    else if (o instanceof GoLiteral) {
+      setHighlighting(o, holder, GoSyntaxHighlightingColors.NUMBER);
+    }
     else if (o instanceof GoReferenceExpression) {
       PsiElement resolve = ((GoReferenceExpression)o).getReference().resolve();
       highlightRefIfNeeded((GoReferenceExpression)o, resolve, holder);      
