@@ -123,5 +123,6 @@ public class GoSdkType extends SdkType {
       modificator.addRoot(file, OrderRootType.CLASSES);
       modificator.addRoot(file, OrderRootType.SOURCES);
     }
+    modificator.commitChanges();
   }
 }
