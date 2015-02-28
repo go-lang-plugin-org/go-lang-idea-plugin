@@ -22,7 +22,6 @@ import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.psi.impl.GoReference;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
-import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.util.text.StringUtil;
@@ -42,7 +41,7 @@ public class GoAnnotator implements Annotator {
     }
     else if (o instanceof GoLiteral) {
       if (((GoLiteral)o).getHex() != null || ((GoLiteral)o).getOct() != null) {
-        setHighlighting(o, holder, GoSyntaxHighlightingColors.NUMBER);
+        setHighlighting(o, holder, GoSyntaxHighlightingColors.NUMBER, "hex_oct");
       }
     }
     else if (o instanceof GoReferenceExpression) {
@@ -54,27 +53,27 @@ public class GoAnnotator implements Annotator {
       highlightRefIfNeeded((GoTypeReferenceExpression)o, resolve, holder);
     }
     else if (o instanceof GoTypeSpec) {
-      setHighlighting(((GoTypeSpec)o).getIdentifier(), holder, getColor((GoTypeSpec)o));
+      setHighlighting(((GoTypeSpec)o).getIdentifier(), holder, getColor((GoTypeSpec)o), "type");
     }
     else if (o instanceof GoConstDefinition) {
-      setHighlighting(o, holder, getColor((GoConstDefinition)o));
+      setHighlighting(o, holder, getColor((GoConstDefinition)o), "const");
     }
     else if (o instanceof GoVarDefinition) {
-      setHighlighting(o, holder, getColor((GoVarDefinition)o));
+      setHighlighting(o, holder, getColor((GoVarDefinition)o), "var");
     }
     else if (o instanceof GoFieldDefinition) {
-      setHighlighting(o, holder, getColor((GoFieldDefinition)o));
+      setHighlighting(o, holder, getColor((GoFieldDefinition)o), "field");
     }
     else if (o instanceof GoParamDefinition) {
-      setHighlighting(o, holder, getColor((GoParamDefinition)o));
+      setHighlighting(o, holder, getFunctionParameterColor(), "param");
     }
     else if (o instanceof GoReceiver) {
-      setHighlighting(o, holder, getColor((GoReceiver)o));
+      setHighlighting(o, holder, getReceiverColor(), "receiver");
     }
     else if (o instanceof GoNamedSignatureOwner) {
       PsiElement identifier = ((GoNamedSignatureOwner)o).getIdentifier();
       if (identifier != null) {
-        setHighlighting(identifier, holder, getColor((GoNamedSignatureOwner)o));
+        setHighlighting(identifier, holder, getColor((GoNamedSignatureOwner)o), "signature_owner");
       }
     }
   }
@@ -86,35 +85,32 @@ public class GoAnnotator implements Annotator {
       TextAttributesKey key = GoPsiImplUtil.builtin(resolve)
                               ? GoSyntaxHighlightingColors.BUILTIN_TYPE_REFERENCE
                               : getColor((GoTypeSpec)resolve);
-      setHighlighting(o.getIdentifier(), holder, key);
+      setHighlighting(o.getIdentifier(), holder, key, "type");
     }
     else if (resolve instanceof GoConstDefinition) {
       TextAttributesKey color = GoPsiImplUtil.builtin(resolve)
                               ? GoSyntaxHighlightingColors.BUILTIN_TYPE_REFERENCE
                               : getColor((GoConstDefinition)resolve);
-      setHighlighting(o.getIdentifier(), holder, color);
+      setHighlighting(o.getIdentifier(), holder, color, "const");
     }
     else if (resolve instanceof GoVarDefinition) {
       TextAttributesKey color = GoPsiImplUtil.builtin(resolve)
                               ? GoSyntaxHighlightingColors.BUILTIN_TYPE_REFERENCE
                               : getColor((GoVarDefinition)resolve);
 
-      setHighlighting(o.getIdentifier(), holder, color);
+      setHighlighting(o.getIdentifier(), holder, color, "var");
     }
     else if (resolve instanceof GoFieldDefinition) {
-      setHighlighting(o.getIdentifier(), holder, getColor((GoFieldDefinition)resolve));
+      setHighlighting(o.getIdentifier(), holder, getColor((GoFieldDefinition)resolve), "field");
     }
-    else if (resolve instanceof GoFunctionDeclaration) {
-      setHighlighting(o.getIdentifier(), holder, getColor((GoNamedSignatureOwner)resolve));
-    }
-    else if (resolve instanceof GoMethodDeclaration) {
-      setHighlighting(o.getIdentifier(), holder, getColor((GoNamedSignatureOwner)resolve));
+    else if (resolve instanceof GoFunctionOrMethodDeclaration) {
+      setHighlighting(o.getIdentifier(), holder, getColor((GoNamedSignatureOwner)resolve), "func");
     }
     else if (resolve instanceof GoReceiver) {
-      setHighlighting(o.getIdentifier(), holder, getColor((GoReceiver)resolve));
+      setHighlighting(o.getIdentifier(), holder, getReceiverColor(), "receiver");
     }
     else if (resolve instanceof GoParamDefinition) {
-      setHighlighting(o.getIdentifier(), holder, getColor((GoParamDefinition)resolve));
+      setHighlighting(o.getIdentifier(), holder, getFunctionParameterColor(), "param");
     }
   }
 
@@ -164,11 +160,11 @@ public class GoAnnotator implements Annotator {
             : GoSyntaxHighlightingColors.PACKAGE_LOCAL_FUNCTION;
   }
 
-  private static TextAttributesKey getColor(GoParamDefinition o) {
+  private static TextAttributesKey getFunctionParameterColor() {
     return GoSyntaxHighlightingColors.FUNCTION_PARAMETER;
   }
 
-  private static TextAttributesKey getColor(GoReceiver o) {
+  private static TextAttributesKey getReceiverColor() {
     return GoSyntaxHighlightingColors.METHOD_RECEIVER;
   }
 
@@ -191,10 +187,12 @@ public class GoAnnotator implements Annotator {
     return GoSyntaxHighlightingColors.TYPE_SPECIFICATION;
   }
 
-  private static void setHighlighting(@NotNull PsiElement element, @NotNull AnnotationHolder holder, @NotNull TextAttributesKey key) {
+  private static void setHighlighting(@NotNull PsiElement element,
+                                      @NotNull AnnotationHolder holder,
+                                      @NotNull TextAttributesKey key,
+                                      @Nullable String description) {
     holder.createInfoAnnotation(element, null).setEnforcedTextAttributes(TextAttributes.ERASE_MARKER);
-    TextAttributes attributes = EditorColorsManager.getInstance().getGlobalScheme().getAttributes(key);
-    holder.createInfoAnnotation(element, null).setEnforcedTextAttributes(attributes);
+    holder.createInfoAnnotation(element, description).setTextAttributes(key);
   }
 
   private static boolean isPackageWide(@NotNull GoVarDefinition o) {
