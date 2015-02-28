@@ -103,10 +103,7 @@ public class GoHighlightingAnnotator implements Annotator {
     else if (resolve instanceof GoFieldDefinition) {
       setHighlighting(o.getIdentifier(), holder, getColor((GoFieldDefinition)resolve));
     }
-    else if (resolve instanceof GoFunctionDeclaration) {
-      setHighlighting(o.getIdentifier(), holder, getColor((GoNamedSignatureOwner)resolve));
-    }
-    else if (resolve instanceof GoMethodDeclaration) {
+    else if (resolve instanceof GoFunctionOrMethodDeclaration) {
       setHighlighting(o.getIdentifier(), holder, getColor((GoNamedSignatureOwner)resolve));
     }
     else if (resolve instanceof GoReceiver) {
