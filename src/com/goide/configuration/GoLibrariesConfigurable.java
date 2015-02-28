@@ -22,6 +22,7 @@ import com.intellij.openapi.fileChooser.FileChooserDialog;
 import com.intellij.openapi.fileChooser.FileChooserFactory;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.options.SearchableConfigurable;
 import com.intellij.openapi.util.Iconable;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -40,7 +41,7 @@ import java.util.Set;
 
 import static com.intellij.openapi.fileChooser.FileChooserDescriptorFactory.createMultipleFoldersDescriptor;
 
-public class GoLibrariesConfigurable implements Configurable {
+public class GoLibrariesConfigurable implements SearchableConfigurable, Configurable.NoScroll {
   @NotNull private final String myDisplayName;
   private final GoLibrariesService myLibrariesService;
   private final String[] myReadOnlyPaths;
@@ -191,7 +192,19 @@ public class GoLibrariesConfigurable implements Configurable {
     }
     return libraryUrls;
   }
-  
+
+  @NotNull
+  @Override
+  public String getId() {
+    return "go.libraries";
+  }
+
+  @Nullable
+  @Override
+  public Runnable enableSearch(String option) {
+    return null;
+  }
+
   private static class ListItem {
     final boolean readOnly;
     final String url;

@@ -19,39 +19,55 @@ package com.goide.sdk;
 import com.goide.GoEnvironmentUtil;
 import com.goide.project.GoLibrariesService;
 import com.goide.psi.GoFile;
+import com.goide.util.GoExecutor;
 import com.google.common.collect.Lists;
+import com.intellij.execution.configurations.PathEnvironmentVariableUtil;
+import com.intellij.execution.process.ProcessOutput;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Comparing;
+import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.Function;
+import com.intellij.util.ObjectUtils;
 import com.intellij.util.SystemProperties;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GoSdkUtil {
+
+  private static final String GO_VERSION_PATTERN = "go version go([\\d.]+)";
+  private static final String GO_DEVEL_VERSION_PATTERN = "go version (devel[\\d.]+)";
+
   @Nullable
   public static VirtualFile getSdkSrcDir(@NotNull PsiElement context) {
     Module module = ModuleUtilCore.findModuleForPsiElement(context);
     String sdkHomePath = GoSdkService.getInstance(context.getProject()).getSdkHomePath(module);
     String sdkVersionString = GoSdkService.getInstance(context.getProject()).getSdkVersion(module);
-    if (sdkHomePath == null || sdkVersionString == null) return guessSkdSrcDir(context);
-    File sdkSrcDirFile = new File(sdkHomePath, getSrcLocation(sdkVersionString));
-    VirtualFile sdkSrcDir = LocalFileSystem.getInstance().findFileByIoFile(sdkSrcDirFile);
+    VirtualFile sdkSrcDir = null;
+    if (sdkHomePath != null && sdkVersionString != null) {
+      File sdkSrcDirFile = new File(sdkHomePath, getSrcLocation(sdkVersionString));
+      sdkSrcDir = LocalFileSystem.getInstance().findFileByIoFile(sdkSrcDirFile);
+    }
     return sdkSrcDir != null ? sdkSrcDir : guessSkdSrcDir(context);
   }
 
@@ -64,7 +80,7 @@ public class GoSdkUtil {
     PsiFile psiBuiltin = context.getManager().findFile(vBuiltin);
     return (psiBuiltin instanceof GoFile) ? (GoFile)psiBuiltin : null;
   }
-  
+
   @NotNull
   public static Collection<VirtualFile> getGoPathsSources(@NotNull PsiElement context) {
     final Module module = ModuleUtilCore.findModuleForPsiElement(context);
@@ -90,8 +106,8 @@ public class GoSdkUtil {
   }
 
   /**
-   * Retrieves source directories from GOPATH env-variable. 
-   * This method doesn't consider user defined libraries, 
+   * Retrieves source directories from GOPATH env-variable.
+   * This method doesn't consider user defined libraries,
    * for that case use {@link this#getGoPathsSources(PsiElement)} or {@link this#getGoPathsSources(Module)} or {@link this#getGoPathsSources(Project)}
    */
   @NotNull
@@ -120,6 +136,19 @@ public class GoSdkUtil {
     Collection<String> parts = ContainerUtil.newLinkedHashSet();
     ContainerUtil.addIfNotNull(parts, GoEnvironmentUtil.retrieveGoPathFromEnvironment());
     ContainerUtil.addAll(parts, ContainerUtil.map(GoLibrariesService.getUserDefinedLibraries(module), new Function<VirtualFile, String>() {
+      @Override
+      public String fun(VirtualFile file) {
+        return file.getPath();
+      }
+    }));
+    return StringUtil.join(parts, File.pathSeparator);
+  }
+
+  @NotNull
+  public static String retrieveGoPath(@NotNull Project project) {
+    Collection<String> parts = ContainerUtil.newLinkedHashSet();
+    ContainerUtil.addIfNotNull(parts, GoEnvironmentUtil.retrieveGoPathFromEnvironment());
+    ContainerUtil.addAll(parts, ContainerUtil.map(GoLibrariesService.getUserDefinedLibraries(project), new Function<VirtualFile, String>() {
       @Override
       public String fun(VirtualFile file) {
         return file.getPath();
@@ -164,7 +193,7 @@ public class GoSdkUtil {
     VirtualFile virtualFile = context.getContainingFile().getOriginalFile().getVirtualFile();
     return ProjectRootManager.getInstance(context.getProject()).getFileIndex().getClassRootForFile(virtualFile);
   }
-  
+
   @Nullable
   public static VirtualFile findDirectoryByImportPath(@NotNull String importPath, @NotNull Module module) {
     for (VirtualFile root : getGoPathsSources(module)) {
@@ -181,7 +210,7 @@ public class GoSdkUtil {
     VirtualFile sdkSourceDir = getSdkSrcDir(context);
     Collection<VirtualFile> roots = ContainerUtil.newLinkedHashSet(getGoPathsSources(context));
     ContainerUtil.addIfNotNull(roots, sdkSourceDir);
-    
+
     for (VirtualFile root : roots) {
       String relativePath = VfsUtilCore.getRelativePath(file, root, '/');
       if (StringUtil.isNotEmpty(relativePath)) {
@@ -189,5 +218,79 @@ public class GoSdkUtil {
       }
     }
     return null;
+  }
+
+  @Nullable
+  public static VirtualFile suggestSdkDirectory() {
+    if (SystemInfo.isWindows) {
+      return ObjectUtils.chooseNotNull(LocalFileSystem.getInstance().findFileByPath("C:\\Go"),
+                                       LocalFileSystem.getInstance().findFileByPath("C:\\cygwin"));
+    }
+    if (SystemInfo.isMac || SystemInfo.isLinux) {
+      String fromEnv = suggestSdkDirectoryPathFromEnv();
+      if (fromEnv != null) {
+        return LocalFileSystem.getInstance().findFileByPath(fromEnv);
+      }
+      return LocalFileSystem.getInstance().findFileByPath("/usr/local/go");
+    }
+    if (SystemInfo.isMac) {
+      String macPorts = "/opt/local/lib/go";
+      return LocalFileSystem.getInstance().findFileByPath(macPorts);
+    }
+    return null;
+  }
+
+  @Nullable
+  private static String suggestSdkDirectoryPathFromEnv() {
+    File fileFromPath = PathEnvironmentVariableUtil.findInPath("go");
+    if (fileFromPath != null) {
+      File canonicalFile;
+      try {
+        canonicalFile = fileFromPath.getCanonicalFile();
+        String path = canonicalFile.getPath();
+        if (path.endsWith("bin/go")) {
+          return StringUtil.trimEnd(path, "bin/go");
+        }
+      }
+      catch (IOException ignore) {
+      }
+    }
+    return null;
+  }
+
+  @Nullable
+  public static String retrieveGoVersion(@NotNull final String sdkPath) {
+    ProcessOutput output = new ProcessOutput();
+    if (new GoExecutor().withGoRoot(sdkPath).withProcessOutput(output).execute(false, "version")) {
+      Matcher matcher = Pattern.compile(GO_VERSION_PATTERN).matcher(output.getStdout());
+      if (matcher.find()) {
+        return matcher.group(1);
+      }
+      matcher = Pattern.compile(GO_DEVEL_VERSION_PATTERN).matcher(output.getStdout());
+      if (matcher.find()) {
+        return matcher.group(1);
+      }
+    }
+    return null;
+  }
+
+  public static boolean isAppEngineSdkPath(@Nullable String path) {
+    return path != null && new File(path, "appcfg.py").exists();
+  }
+
+  @NotNull
+  public static String adjustSdkPath(@NotNull String path) {
+    return isAppEngineSdkPath(path) ? path + "/" + "goroot" : path;
+  }
+
+  @NotNull
+  public static Collection<VirtualFile> getSdkDirectoriesToAttach(@NotNull String sdkPath, @NotNull String versionString) {
+    String srcPath = getSrcLocation(versionString);
+    // scr is enough at the moment, possible process binaries from pkg
+    VirtualFile src = VirtualFileManager.getInstance().findFileByUrl(VfsUtilCore.pathToUrl(FileUtil.join(sdkPath, srcPath)));
+    if (src != null && src.isDirectory()) {
+      return Collections.singletonList(src);
+    }
+    return Collections.emptyList();
   }
 }

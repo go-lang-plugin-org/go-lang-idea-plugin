@@ -21,8 +21,6 @@ public class GoEnvironmentUtil {
   public static File getExecutableForSdk(@NotNull String sdkHome) {
     File goFromSdkPath = getExecutable(new File(sdkHome, "bin").getAbsolutePath(), GO_EXECUTABLE_NAME);
     File gaeFromSdkPath = getExecutable(new File(sdkHome, "bin").getAbsolutePath(), GAE_EXECUTABLE_NAME);
-    // TODO Readd this if it's needed but it shouldn't be used in the SDK detection part
-    //File fromEnvironment = PathEnvironmentVariableUtil.findInPath(GO_EXECUTABLE_NAME);
     return gaeFromSdkPath.canExecute() ? gaeFromSdkPath : goFromSdkPath;
   }
 

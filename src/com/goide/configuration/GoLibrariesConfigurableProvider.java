@@ -16,7 +16,6 @@
 
 package com.goide.configuration;
 
-import com.goide.GoModuleType;
 import com.goide.project.GoApplicationLibrariesService;
 import com.goide.project.GoModuleLibrariesInitializer;
 import com.goide.project.GoModuleLibrariesService;
@@ -27,7 +26,6 @@ import com.intellij.application.options.ModuleAwareProjectConfigurable;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
-import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.options.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
@@ -37,7 +35,6 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import com.intellij.util.Function;
-import com.intellij.util.PlatformUtils;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -55,10 +52,15 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
   public GoLibrariesConfigurableProvider(@NotNull Project project) {
     myProject = project;
   }
-
+  
   @Nullable
   @Override
   public Configurable createConfigurable() {
+    return createConfigurable(false);
+  }
+
+  @Nullable
+  public Configurable createConfigurable(final boolean dialogMode) {
     return new CompositeConfigurable<UnnamedConfigurable>() {
 
       @Nullable
@@ -93,6 +95,9 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
             decorator.setOn(isConfigurableExpanded(i, ((Configurable)configurable)));
           }
         }
+        if (dialogMode) {
+          rootPanel.setPreferredSize(new Dimension(400, -1));
+        }
         rootPanel.revalidate();
         return rootPanel;
       }
@@ -100,10 +105,7 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
       @Override
       public void apply() throws ConfigurationException {
         super.apply();
-        final Collection<Module> modules = PlatformUtils.isIntelliJ()
-                                           ? ModuleUtil.getModulesOfType(myProject, GoModuleType.getInstance())
-                                           : ContainerUtil.newArrayList(ModuleManager.getInstance(myProject).getModules());
-        for (Module module : modules) {
+        for (Module module : ModuleManager.getInstance(myProject).getModules()) {
           module.getComponent(GoModuleLibrariesInitializer.class).scheduleUpdate();
         }
       }

@@ -2,12 +2,14 @@ package com.goide.sdk;
 
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.SimpleModificationTracker;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class GoSdkService {
+public abstract class GoSdkService extends SimpleModificationTracker {
   @NotNull
   protected final Project myProject;
 
@@ -33,5 +35,10 @@ public abstract class GoSdkService {
   @Contract("null -> false")
   public boolean isGoModule(@Nullable Module module) {
     return module != null && !module.isDisposed();
+  }
+
+  @Nullable
+  public Configurable createSdkConfigurable() {
+    return null;
   }
 }

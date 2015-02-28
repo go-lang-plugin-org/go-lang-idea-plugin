@@ -32,7 +32,6 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleComponent;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ShowSettingsUtil;
-import com.intellij.openapi.options.ex.ConfigurableExtensionPointUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.*;
 import com.intellij.openapi.roots.impl.OrderEntryUtil;
@@ -292,7 +291,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   public static void showModulesConfigurable(@NotNull Project project) {
     ApplicationManager.getApplication().assertIsDispatchThread();
     if (!project.isDisposed()) {
-      Configurable configurable = ConfigurableExtensionPointUtil.createProjectConfigurableForProvider(project, GoLibrariesConfigurableProvider.class);
+      Configurable configurable = new GoLibrariesConfigurableProvider(project).createConfigurable(true);
       if (configurable != null) {
         ShowSettingsUtil.getInstance().editConfigurable(project, configurable);
       }

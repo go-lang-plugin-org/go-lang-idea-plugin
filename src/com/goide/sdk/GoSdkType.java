@@ -19,13 +19,8 @@ package com.goide.sdk;
 import com.goide.GoConstants;
 import com.goide.GoEnvironmentUtil;
 import com.goide.GoIcons;
-import com.intellij.execution.configurations.PathEnvironmentVariableUtil;
 import com.intellij.openapi.projectRoots.*;
 import com.intellij.openapi.roots.OrderRootType;
-import com.intellij.openapi.util.SystemInfo;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
@@ -33,14 +28,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.io.File;
-import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class GoSdkType extends SdkType {
-  private static final Pattern RE_GO_VERSION = Pattern.compile("theVersion\\s*=\\s*`go(.*)`");
-  private static final Pattern RE_GOTIP_VERSION = Pattern.compile("theVersion\\s*=\\s*`devel(.*)`");
 
   public GoSdkType() {
     super(GoConstants.SDK_TYPE_ID);
@@ -68,55 +57,18 @@ public class GoSdkType extends SdkType {
   @Nullable
   @Override
   public String suggestHomePath() {
-    if (SystemInfo.isWindows) {
-      String defaultPath = "C:\\Go";
-      if (new File(defaultPath).exists()) return defaultPath;
-      return "C:\\cygwin";
-    }
-    if (SystemInfo.isMac || SystemInfo.isLinux) {
-      String fromEnv = findPathInEnvironment();
-      if (fromEnv != null) return fromEnv;
-      String defaultPath = "/usr/local/go";
-      if (new File(defaultPath).exists()) return defaultPath;
-    }
-    if (SystemInfo.isMac) {
-      String macPorts = "/opt/local/lib/go";
-      if (new File(macPorts).exists()) return macPorts;
-    }
-    return null;
-  }
-
-  @Nullable
-  private static String findPathInEnvironment() {
-    File fileFromPath = PathEnvironmentVariableUtil.findInPath("go");
-    if (fileFromPath != null) {
-      File canonicalFile;
-      try {
-        canonicalFile = fileFromPath.getCanonicalFile();
-        String path = canonicalFile.getPath();
-        if (path.endsWith("bin/go")) {
-          return StringUtil.trimEnd(path, "bin/go");
-        }
-      }
-      catch (IOException ignore) {
-      }
-    }
-    return null;
+    VirtualFile suggestSdkDirectory = GoSdkUtil.suggestSdkDirectory();
+    return suggestSdkDirectory != null ? suggestSdkDirectory.getPath() : null;
   }
 
   @Override
   public boolean isValidSdkHome(@NotNull String path) {
-    path = adjustSdkPath(path);
     return GoEnvironmentUtil.getExecutableForSdk(path).canExecute();
   }
 
-  @NotNull
-  public static String adjustSdkPath(@NotNull String path) {
-    return isAppEngine(path) ? path + "/" + "goroot" : path;
-  }
-
-  private static boolean isAppEngine(@Nullable String path) {
-    return path != null && new File(path, "appcfg.py").exists();
+  @Override
+  public String adjustSelectedSdkHome(String homePath) {
+    return GoSdkUtil.adjustSdkPath(homePath);
   }
 
   @NotNull
@@ -132,25 +84,7 @@ public class GoSdkType extends SdkType {
   @Nullable
   @Override
   public String getVersionString(@NotNull String sdkHome) {
-    sdkHome = adjustSdkPath(sdkHome);
-    try {
-      String path = "runtime/zversion.go";
-      String oldStylePath = new File(sdkHome, "src/pkg/" + path).getPath();
-      String newStylePath = new File(sdkHome, "src/" + path).getPath();
-      File zVersion = FileUtil.findFirstThatExist(oldStylePath, newStylePath);
-      if (zVersion == null) return null;
-      String text = FileUtil.loadFile(zVersion);
-      Matcher matcher = RE_GO_VERSION.matcher(text);
-      if (matcher.find()) {
-        return matcher.group(1);
-      }
-
-      matcher = RE_GOTIP_VERSION.matcher(text);
-      return matcher.find() ? "devel" + matcher.group(1) : null;
-    }
-    catch (IOException ignore) {
-    }
-    return null;
+    return GoSdkUtil.retrieveGoVersion(sdkHome);
   }
 
   @Nullable
@@ -178,29 +112,16 @@ public class GoSdkType extends SdkType {
 
   @Override
   public void setupSdkPaths(@NotNull Sdk sdk) {
-    if (sdk.getVersionString() == null) throw new RuntimeException("SDK version is not defined");
+    String versionString = sdk.getVersionString();
+    if (versionString == null) throw new RuntimeException("SDK version is not defined");
     SdkModificator modificator = sdk.getSdkModificator();
     String path = sdk.getHomePath();
     if (path == null) return;
-    path = adjustSdkPath(path);
     modificator.setHomePath(path);
-    String srcPath = GoSdkUtil.getSrcLocation(sdk.getVersionString());
-    // scr is enough at the moment, possible process binaries from pkg
-    add(modificator, new File(path, srcPath));
-    modificator.commitChanges();
-  }
 
-  private static void add(@NotNull SdkModificator modificator, @NotNull File file) {
-    if (file.isDirectory()) {
-      VirtualFile dir = LocalFileSystem.getInstance().findFileByIoFile(file);
-      add(modificator, dir);
-    }
-  }
-
-  private static void add(@NotNull SdkModificator modificator, @Nullable VirtualFile dir) {
-    if (dir != null && dir.isDirectory()) {
-      modificator.addRoot(dir, OrderRootType.CLASSES);
-      modificator.addRoot(dir, OrderRootType.SOURCES);
+    for (VirtualFile file : GoSdkUtil.getSdkDirectoriesToAttach(path, versionString)) {
+      modificator.addRoot(file, OrderRootType.CLASSES);
+      modificator.addRoot(file, OrderRootType.SOURCES);
     }
   }
 }
