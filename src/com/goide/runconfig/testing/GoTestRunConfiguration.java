@@ -18,11 +18,8 @@ package com.goide.runconfig.testing;
 
 import com.goide.runconfig.GoModuleBasedConfiguration;
 import com.goide.runconfig.GoRunConfigurationBase;
-import com.goide.runconfig.GoRunner;
 import com.goide.runconfig.testing.ui.GoTestRunConfigurationEditorForm;
 import com.goide.sdk.GoSdkUtil;
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
@@ -61,11 +58,6 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
   @Override
   public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
     return new GoTestRunConfigurationEditorForm(getProject());
-  }
-
-  @Override
-  public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env) throws ExecutionException {
-    return GoRunner.EMPTY_RUN_STATE;
   }
 
   @NotNull

@@ -21,12 +21,14 @@ import com.goide.sdk.GoSdkService;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.CommandLineState;
+import com.intellij.execution.configurations.EncodingEnvironmentUtil;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.KillableColoredProcessHandler;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.CharsetToolkit;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class GoRunningState<T extends GoRunConfigurationBase> extends CommandLineState {
@@ -54,6 +56,8 @@ public abstract class GoRunningState<T extends GoRunConfigurationBase> extends C
     //noinspection unchecked
     commandLine.getEnvironment().putAll(myConfiguration.getCustomEnvironment());
     commandLine.setPassParentEnvironment(myConfiguration.isPassParentEnvironment());
+    commandLine.withCharset(CharsetToolkit.UTF8_CHARSET);
+    EncodingEnvironmentUtil.setLocaleEnvironmentIfMac(commandLine);
     
     return new KillableColoredProcessHandler(commandLine.createProcess(), commandLine.getCommandLineString());
   }
