@@ -58,6 +58,7 @@ public class GoSdkUtil {
   private static final String GO_VERSION_PATTERN = "go version go([\\d.]+)";
   private static final String GO_DEVEL_VERSION_PATTERN = "go version (devel[\\d.]+)";
 
+  // todo: caching
   @Nullable
   public static VirtualFile getSdkSrcDir(@NotNull PsiElement context) {
     Module module = ModuleUtilCore.findModuleForPsiElement(context);
@@ -71,6 +72,7 @@ public class GoSdkUtil {
     return sdkSrcDir != null ? sdkSrcDir : guessSkdSrcDir(context);
   }
 
+  // todo: caching
   @Nullable
   public static GoFile findBuiltinFile(@NotNull PsiElement context) {
     VirtualFile sdkSrcDir = getSdkSrcDir(context);
@@ -158,14 +160,14 @@ public class GoSdkUtil {
   }
 
   @NotNull
-  public static String getSrcLocation(@NotNull String version) {
+  static String getSrcLocation(@NotNull String version) {
     if (version.contains("devel")) {
       return "src";
     }
     return compareVersions(version, "1.4") < 0 ? "src/pkg" : "src";
   }
 
-  public static int compareVersions(@NotNull String lhs, @NotNull String rhs) {
+  static int compareVersions(@NotNull String lhs, @NotNull String rhs) {
     List<Integer> lhsParts = parseVersionString(lhs);
     List<Integer> rhsParts = parseVersionString(rhs);
     int commonParts = Math.min(lhsParts.size(), rhsParts.size());
