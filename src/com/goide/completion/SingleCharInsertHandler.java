@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.goide.util;
+package com.goide.completion;
 
 import com.intellij.codeInsight.AutoPopupController;
 import com.intellij.codeInsight.completion.BasicInsertHandler;
