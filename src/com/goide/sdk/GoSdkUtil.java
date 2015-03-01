@@ -20,14 +20,12 @@ import com.goide.GoEnvironmentUtil;
 import com.goide.project.GoLibrariesService;
 import com.goide.psi.GoFile;
 import com.goide.util.GoExecutor;
-import com.google.common.collect.Lists;
 import com.intellij.execution.configurations.PathEnvironmentVariableUtil;
 import com.intellij.execution.process.ProcessOutput;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
@@ -41,6 +39,7 @@ import com.intellij.util.Function;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.SystemProperties;
 import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.text.VersionComparatorUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,7 +47,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -161,33 +159,14 @@ public class GoSdkUtil {
 
   @NotNull
   static String getSrcLocation(@NotNull String version) {
-    if (version.contains("devel")) {
+    if (version.startsWith("devel")) {
       return "src";
     }
     return compareVersions(version, "1.4") < 0 ? "src/pkg" : "src";
   }
 
   static int compareVersions(@NotNull String lhs, @NotNull String rhs) {
-    List<Integer> lhsParts = parseVersionString(lhs);
-    List<Integer> rhsParts = parseVersionString(rhs);
-    int commonParts = Math.min(lhsParts.size(), rhsParts.size());
-    for (int i = 0; i < commonParts; i++) {
-      int partResult = Comparing.compare(lhsParts.get(i), rhsParts.get(i));
-      if (partResult != 0) {
-        return partResult;
-      }
-    }
-    return Comparing.compare(lhsParts.size(), rhsParts.size());
-  }
-
-  @NotNull
-  private static List<Integer> parseVersionString(@NotNull String versionStr) {
-    String[] strParts = StringUtil.trim(versionStr).split("\\.");
-    List<Integer> parts = Lists.newArrayListWithExpectedSize(strParts.length);
-    for (String strPart : strParts) {
-      parts.add(StringUtil.parseInt(strPart, 0));
-    }
-    return parts;
+    return VersionComparatorUtil.compare(lhs, rhs);
   }
 
   @Nullable
