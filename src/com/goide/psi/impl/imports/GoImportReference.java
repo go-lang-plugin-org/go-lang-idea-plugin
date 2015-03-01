@@ -83,8 +83,8 @@ public class GoImportReference extends FileReference {
       return true;
     }
 
-    if (element instanceof PsiPackage) {
-      for (PsiDirectory directory : ((PsiPackage)element).getDirectories()) {
+    if (element instanceof PsiDirectoryContainer) {
+      for (PsiDirectory directory : ((PsiDirectoryContainer)element).getDirectories()) {
         if (super.isReferenceTo(directory)) {
           return true;
         }
