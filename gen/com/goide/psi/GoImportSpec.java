@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import com.goide.stubs.GoImportSpecStub;
 
-public interface GoImportSpec extends GoNamedElement, StubBasedPsiElement<GoImportSpecStub> {
+public interface GoImportSpec extends GoCompositeElement, StubBasedPsiElement<GoImportSpecStub> {
 
   @NotNull
   GoImportString getImportString();
@@ -21,5 +21,9 @@ public interface GoImportSpec extends GoNamedElement, StubBasedPsiElement<GoImpo
   String getAlias();
 
   String getLocalPackageName();
+
+  boolean shouldGoDeeper();
+
+  boolean isForSideEffects();
 
 }

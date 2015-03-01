@@ -751,12 +751,12 @@ public class GoPsiImplUtil {
     return spec;
   }
 
-  public static String getLocalPackageName(@NotNull GoImportSpec importSpec) {
-    return getLocalPackageName(importSpec.getImportString().getPath());
-  }
-  
   public static String getLocalPackageName(@NotNull String importPath) {
     return PathUtil.getFileName(importPath);
+  }
+
+  public static String getLocalPackageName(@NotNull GoImportSpec importSpec) {
+    return getLocalPackageName(importSpec.getImportString().getPath());
   }
 
   public static String getAlias(@NotNull GoImportSpec importSpec) {
@@ -769,6 +769,14 @@ public class GoPsiImplUtil {
       return ".";
     }
     return null;
+  }
+  
+  public static boolean shouldGoDeeper(@SuppressWarnings("UnusedParameters") GoImportSpec o) {
+    return false;
+  }
+
+  public static boolean isForSideEffects(@NotNull GoImportSpec o) {
+    return "_".equals(o.getAlias());
   }
 
   public static String getPath(@NotNull GoImportString importString) {

@@ -174,7 +174,7 @@ public class GoFile extends PsiFileBase {
         Collection<PsiDirectory> extraDeps = ContainerUtil.newHashSet();
         Map<String, GoImportSpec> map = ContainerUtil.newHashMap();
         for (GoImportSpec spec : getImports()) {
-          if (!spec.isBlank()) {
+          if (!spec.isForSideEffects()) {
             PsiDirectory resolve = spec.getImportString().resolve();
             extraDeps.add(resolve);
             String path = getImportPath(resolve, GoFile.this);
