@@ -16,6 +16,7 @@
 
 package com.goide.stubs.index;
 
+import com.goide.GoFileElementType;
 import com.goide.psi.GoMethodSpec;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -31,7 +32,7 @@ public class GoMethodFingerprintIndex extends StringStubIndexExtension<GoMethodS
 
   @Override
   public int getVersion() {
-    return 1;
+    return GoFileElementType.VERSION + 1;
   }
 
   @NotNull

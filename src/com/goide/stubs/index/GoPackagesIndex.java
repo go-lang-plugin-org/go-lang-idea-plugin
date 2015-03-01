@@ -16,6 +16,7 @@
 
 package com.goide.stubs.index;
 
+import com.goide.GoFileElementType;
 import com.goide.psi.GoFile;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
@@ -32,7 +33,7 @@ public class GoPackagesIndex extends StringStubIndexExtension<GoFile> {
 
   @Override
   public int getVersion() {
-    return 2;
+    return GoFileElementType.VERSION + 2;
   }
 
   @NotNull

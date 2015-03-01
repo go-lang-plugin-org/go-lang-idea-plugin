@@ -16,6 +16,7 @@
 
 package com.goide.stubs.index;
 
+import com.goide.GoFileElementType;
 import com.goide.psi.GoFunctionDeclaration;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -31,7 +32,7 @@ public class GoFunctionIndex extends StringStubIndexExtension<GoFunctionDeclarat
 
   @Override
   public int getVersion() {
-    return 3;
+    return GoFileElementType.VERSION + 3;
   }
 
   @NotNull

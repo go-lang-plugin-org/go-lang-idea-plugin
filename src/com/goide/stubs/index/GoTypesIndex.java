@@ -16,6 +16,7 @@
 
 package com.goide.stubs.index;
 
+import com.goide.GoFileElementType;
 import com.goide.psi.GoTypeSpec;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -31,7 +32,7 @@ public class GoTypesIndex extends StringStubIndexExtension<GoTypeSpec> {
 
   @Override
   public int getVersion() {
-    return 2;
+    return GoFileElementType.VERSION + 2;
   }
 
   @NotNull
