@@ -22,6 +22,10 @@ import com.intellij.util.containers.ContainerUtil;
 import java.util.List;
 
 public class GoCompletionTest extends GoCompletionTestBase {
+  public void testPackageWithoutAlias() {
+    doTestInclude("package foo; import `fmt`; func main(){<caret>}", "fmt");
+  }
+  
   public void testLocalFunction() {
     doTestInclude("package foo; func foo() {}; func main() {<caret>}", "foo", "main");
   }

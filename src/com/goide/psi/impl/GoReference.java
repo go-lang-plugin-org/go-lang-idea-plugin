@@ -116,7 +116,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
         if (o instanceof GoNamedElement && !((GoNamedElement)o).isBlank() && !printOrPrintln(o) ||
             o instanceof GoImportSpec && !((GoImportSpec)o).isDot()) {
           if (filter.value(o)) {
-            ContainerUtil.addIfNotNull(variants, createLookup(o));
+            ContainerUtil.addIfNotNull(variants, createLookup(o, state));
           }
           return true;
         }
@@ -128,14 +128,16 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
       }
 
       @Nullable
-      private LookupElement createLookup(@NotNull PsiElement element) {
+      private LookupElement createLookup(@NotNull PsiElement element, @NotNull ResolveState state) {
         // @formatter:off
         if (element instanceof GoNamedSignatureOwner)return GoCompletionUtil.createFunctionOrMethodLookupElement((GoNamedSignatureOwner)element);
         else if (element instanceof GoTypeSpec)      return forTypes ? GoCompletionUtil.createTypeLookupElement((GoTypeSpec)element) : GoCompletionUtil.createTypeConversionLookupElement((GoTypeSpec)element);
-        else if (element instanceof GoImportSpec)    return GoCompletionUtil.createPackageLookupElement(((GoImportSpec)element));
         else if (element instanceof PsiDirectory)    return GoCompletionUtil.createPackageLookupElement(((PsiDirectory)element).getName(), true);
         else if (element instanceof GoNamedElement)  return GoCompletionUtil.createVariableLikeLookupElement((GoNamedElement)element);
         else if (element instanceof PsiNamedElement) return LookupElementBuilder.create((PsiNamedElement)element);
+        else if (element instanceof GoImportSpec)    {
+          return GoCompletionUtil.createPackageLookupElement(((GoImportSpec)element));
+        }
         // @formatter:on
         return null;
       }
@@ -350,6 +352,8 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
                                 @NotNull GoCompositeElement element) {
     for (Map.Entry<String, Collection<GoImportSpec>> entry : file.getImportMap().entrySet()) {
       for (GoImportSpec o : entry.getValue()) {
+        if (o.isForSideEffects()) continue;
+        
         GoImportString importString = o.getImportString();
         if (o.isDot()) {
           PsiDirectory implicitDir = importString.resolve();

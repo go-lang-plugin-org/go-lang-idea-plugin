@@ -199,8 +199,7 @@ public class GoCompletionUtil {
 
   @Nullable
   public static LookupElement createPackageLookupElement(@NotNull GoImportSpec spec) {
-    String alias = spec.getAlias();
-    return StringUtil.isNotEmpty(alias) ? createPackageLookupElement(alias, true) : null;
+    return createPackageLookupElement(ObjectUtils.notNull(spec.getAlias(), spec.getLocalPackageName()), true);
   }
 
   @NotNull
