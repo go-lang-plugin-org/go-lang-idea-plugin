@@ -16,41 +16,63 @@
 
 package com.goide.runconfig.application;
 
-import com.goide.GoEnvironmentUtil;
 import com.goide.runconfig.GoRunningState;
+import com.goide.util.GoExecutor;
 import com.intellij.execution.ExecutionException;
-import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.filters.TextConsoleBuilder;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
+import com.intellij.execution.process.ProcessHandler;
+import com.intellij.execution.process.ProcessOutput;
 import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.openapi.compiler.CompilerPaths;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.util.PathUtil;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.IOException;
+
 public class GoApplicationRunningState extends GoRunningState<GoApplicationConfiguration> {
-  public GoApplicationRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module, 
+  private File myTempFile;
+
+  public GoApplicationRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module,
                                    @NotNull GoApplicationConfiguration configuration) {
     super(env, module, configuration);
   }
 
   @NotNull
   @Override
-  protected GeneralCommandLine getCommand(@NotNull String sdkHomePath) throws ExecutionException {
-    GeneralCommandLine commandLine = new GeneralCommandLine();
-    String outputDirectory = CompilerPaths.getModuleOutputPath(myModule, false);
-    if (StringUtil.isEmpty(outputDirectory)) {
-      throw new ExecutionException("Output directory is not set for module " + myModule.getName());
+  protected ProcessHandler startProcess() throws ExecutionException {
+    setConsoleBuilder(TextConsoleBuilderFactory.getInstance().createBuilder(myModule.getProject()));
+    try {
+      myTempFile = FileUtil.createTempFile(myConfiguration.getName(), "go", true);
+      //noinspection ResultOfMethodCallIgnored
+      myTempFile.setExecutable(true);
     }
-    
-    String modulePath = PathUtil.getParentPath(myModule.getModuleFilePath());
-    String executable = FileUtil.toSystemDependentName(GoEnvironmentUtil.getExecutableResultForModule(modulePath, outputDirectory));
-    commandLine.setExePath(executable);
-    commandLine.withWorkDirectory(PathUtil.getParentPath(executable));
-    TextConsoleBuilder consoleBuilder = TextConsoleBuilderFactory.getInstance().createBuilder(myModule.getProject());
-    setConsoleBuilder(consoleBuilder);
-    return commandLine;
+    catch (IOException e) {
+      throw new ExecutionException("Can't create temporary output file", e);
+    }
+    try {
+      ProcessOutput processOutput = new ProcessOutput();
+      boolean success = GoExecutor.in(myModule)
+        .addParameters("build", "-o", myTempFile.getAbsolutePath(), myConfiguration.getFilePath())
+        .withProcessOutput(processOutput)
+        .showOutputOnError()
+        .execute();
+
+      if (!success) {
+        throw new ExecutionException("Build failure. `go build` is finished with exit code " + processOutput.getExitCode());
+      }
+
+      return super.startProcess();
+    }
+    finally {
+      //noinspection ResultOfMethodCallIgnored
+      myTempFile.delete();
+    }
+  }
+
+
+  @Override
+  protected GoExecutor patchExecutor(@NotNull GoExecutor executor) throws ExecutionException {
+    return executor.withExePath(myTempFile.getAbsolutePath());
   }
 }

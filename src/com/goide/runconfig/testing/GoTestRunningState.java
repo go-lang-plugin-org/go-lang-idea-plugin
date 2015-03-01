@@ -16,15 +16,14 @@
 
 package com.goide.runconfig.testing;
 
-import com.goide.GoEnvironmentUtil;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoFunctionDeclaration;
 import com.goide.runconfig.GoRunningState;
+import com.goide.util.GoExecutor;
 import com.intellij.execution.DefaultExecutionResult;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
 import com.intellij.execution.Executor;
-import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.filters.TextConsoleBuilder;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.process.ProcessHandler;
@@ -67,34 +66,24 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
     return executionResult;
   }
 
-  @NotNull
   @Override
-  protected GeneralCommandLine getCommand(String sdkHomePath) throws ExecutionException {
-    String executable = GoEnvironmentUtil.getExecutableForSdk(sdkHomePath).getAbsolutePath();
-    GeneralCommandLine runTests = new GeneralCommandLine();
-    runTests.setExePath(executable);
-    runTests.addParameters("test", "-v");
-    fillCommandLineWithParameters(runTests);
-    return runTests;
-  }
-
-  private void fillCommandLineWithParameters(@NotNull GeneralCommandLine commandLine) throws ExecutionException {
-    commandLine.withWorkDirectory(myConfiguration.getWorkingDirectory());
+  protected GoExecutor patchExecutor(@NotNull GoExecutor executor) throws ExecutionException {
+    executor.addParameters("test", "-v");
     switch (myConfiguration.getKind()) {
       case DIRECTORY:
         String relativePath = FileUtil.getRelativePath(myConfiguration.getWorkingDirectory(),
                                                        myConfiguration.getDirectoryPath(),
                                                        File.separatorChar);
         if (relativePath != null) {
-          commandLine.addParameter(relativePath + "/...");
+          executor.addParameters(relativePath + "/...");
         }
         else {
-          commandLine.addParameter("./...");
-          commandLine.withWorkDirectory(myConfiguration.getDirectoryPath());
+          executor.addParameters("./...");
+          executor.withWorkDirectory(myConfiguration.getDirectoryPath());
         }
         break;
       case PACKAGE:
-        commandLine.addParameter(myConfiguration.getPackage());
+        executor.addParameters(myConfiguration.getPackage());
         break;
       case FILE:
         String filePath = myConfiguration.getFilePath();
@@ -111,22 +100,23 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
         if (StringUtil.isEmpty(importPath)) {
           throw new ExecutionException("Cannot find import path for " + filePath);
         }
-        
-        commandLine.addParameter(importPath);
+
+        executor.addParameters(importPath);
         Collection<String> testNames = ContainerUtil.newLinkedHashSet();
         for (GoFunctionDeclaration function : ((GoFile)file).getFunctions()) {
           ContainerUtil.addIfNotNull(testNames, GoTestFinder.getTestFunctionName(function));
         }
-        addFilterParameter(commandLine, "^" + StringUtil.join(testNames, "|") + "$");
+        addFilterParameter(executor, "^" + StringUtil.join(testNames, "|") + "$");
         break;
     }
     String pattern = myConfiguration.getPattern();
-    addFilterParameter(commandLine, pattern);
+    addFilterParameter(executor, pattern);
+    return executor;
   }
 
-  private static void addFilterParameter(@NotNull GeneralCommandLine commandLine, String pattern) {
+  private static void addFilterParameter(@NotNull GoExecutor executor, String pattern) {
     if (StringUtil.isNotEmpty(pattern)) {
-      commandLine.addParameters("-run", pattern);
+      executor.addParameters("-run", pattern);
     }
   }
 }

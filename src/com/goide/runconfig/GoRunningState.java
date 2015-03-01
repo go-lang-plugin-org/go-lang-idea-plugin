@@ -16,22 +16,17 @@
 
 package com.goide.runconfig;
 
-import com.goide.GoConstants;
-import com.goide.sdk.GoSdkService;
-import com.goide.sdk.GoSdkUtil;
+import com.goide.util.GoExecutor;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.CommandLineState;
-import com.intellij.execution.configurations.EncodingEnvironmentUtil;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.KillableColoredProcessHandler;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.CharsetToolkit;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class GoRunningState<T extends GoRunConfigurationBase> extends CommandLineState {
+public abstract class GoRunningState<T extends GoRunConfigurationBase<?>> extends CommandLineState {
   @NotNull protected final Module myModule;
   @NotNull protected final T myConfiguration;
 
@@ -44,24 +39,19 @@ public abstract class GoRunningState<T extends GoRunConfigurationBase> extends C
   @NotNull
   @Override
   protected ProcessHandler startProcess() throws ExecutionException {
-    String sdkHomePath = GoSdkService.getInstance(myConfiguration.getProject()).getSdkHomePath(myModule);
-    if (StringUtil.isEmpty(sdkHomePath)) {
-      throw new ExecutionException("Sdk is not set or Sdk home path is empty for module " + myModule.getName());
-    }
-
-    GeneralCommandLine commandLine = getCommand(sdkHomePath);
-    
-    commandLine.getParametersList().addParametersString(myConfiguration.getParams());
-    commandLine.getEnvironment().put(GoConstants.GO_PATH, GoSdkUtil.retrieveGoPath(myModule));
-    //noinspection unchecked
-    commandLine.getEnvironment().putAll(myConfiguration.getCustomEnvironment());
-    commandLine.setPassParentEnvironment(myConfiguration.isPassParentEnvironment());
-    commandLine.withCharset(CharsetToolkit.UTF8_CHARSET);
-    EncodingEnvironmentUtil.setLocaleEnvironmentIfMac(commandLine);
-    
+    GeneralCommandLine commandLine = createExecutor().createCommandLine();
     return new KillableColoredProcessHandler(commandLine.createProcess(), commandLine.getCommandLineString());
   }
 
   @NotNull
-  protected abstract GeneralCommandLine getCommand(String sdkHomePath) throws ExecutionException;
+  private GoExecutor createExecutor() throws ExecutionException {
+    return patchExecutor(GoExecutor.in(myModule).withWorkDirectory(myConfiguration.getWorkingDirectory()))
+      .withExtraEnvironment(myConfiguration.getCustomEnvironment())
+      .withPassParentEnvironment(myConfiguration.isPassParentEnvironment())
+      .addParameterString(myConfiguration.getParams());
+  }
+
+  protected GoExecutor patchExecutor(@NotNull GoExecutor executor) throws ExecutionException {
+    return executor;
+  }
 }

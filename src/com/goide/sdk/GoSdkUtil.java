@@ -242,7 +242,7 @@ public class GoSdkUtil {
   @Nullable
   public static String retrieveGoVersion(@NotNull final String sdkPath) {
     ProcessOutput output = new ProcessOutput();
-    if (new GoExecutor().withGoRoot(sdkPath).withProcessOutput(output).execute(false, "version")) {
+    if (GoExecutor.empty().withGoRoot(sdkPath).withProcessOutput(output).addParameters("version").executeSilent()) {
       Matcher matcher = Pattern.compile(GO_VERSION_PATTERN).matcher(output.getStdout());
       if (matcher.find()) {
         return matcher.group(1);

@@ -16,13 +16,11 @@
 
 package com.goide.runconfig.file;
 
-import com.goide.GoEnvironmentUtil;
 import com.goide.runconfig.GoRunningState;
+import com.goide.util.GoExecutor;
 import com.intellij.execution.ExecutionException;
-import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.configurations.ParametersList;
-import com.intellij.execution.filters.TextConsoleBuilder;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
+import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
 import org.jetbrains.annotations.NotNull;
@@ -34,17 +32,13 @@ public class GoRunFileRunningState extends GoRunningState<GoRunFileConfiguration
 
   @NotNull
   @Override
-  protected GeneralCommandLine getCommand(String sdkHomePath) throws ExecutionException {
-    GeneralCommandLine commandLine = new GeneralCommandLine();
-    String executable = GoEnvironmentUtil.getExecutableForSdk(sdkHomePath).getAbsolutePath();
-    commandLine.setExePath(executable);
-    ParametersList list = commandLine.getParametersList();
-    list.add("run");
-    String filePath = myConfiguration.getFilePath();
-    list.addParametersString(filePath);
-    commandLine.withWorkDirectory(myConfiguration.getWorkingDirectory());
-    TextConsoleBuilder consoleBuilder = TextConsoleBuilderFactory.getInstance().createBuilder(myModule.getProject());
-    setConsoleBuilder(consoleBuilder);
-    return commandLine;
+  protected ProcessHandler startProcess() throws ExecutionException {
+    setConsoleBuilder(TextConsoleBuilderFactory.getInstance().createBuilder(myModule.getProject()));
+    return super.startProcess();
+  }
+
+  @Override
+  protected GoExecutor patchExecutor(@NotNull GoExecutor executor) throws ExecutionException {
+    return executor.addParameters("run", myConfiguration.getFilePath());
   }
 }

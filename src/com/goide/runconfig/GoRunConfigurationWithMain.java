@@ -38,7 +38,7 @@ import org.jetbrains.annotations.NotNull;
 public abstract class GoRunConfigurationWithMain<T extends GoRunningState> extends GoRunConfigurationBase<T> {
   private static final String FILE_PATH_NAME = "file_path";
   
-  @NotNull protected String myFilePath = "";
+  @NotNull private String myFilePath = "";
 
   public GoRunConfigurationWithMain(String name, GoModuleBasedConfiguration configurationModule, ConfigurationFactory factory) {
     super(name, configurationModule, factory);
