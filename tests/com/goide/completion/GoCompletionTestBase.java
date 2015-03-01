@@ -2,6 +2,8 @@ package com.goide.completion;
 
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.intellij.codeInsight.completion.CompletionType;
+import com.intellij.openapi.vfs.VirtualFileFilter;
+import com.intellij.psi.impl.PsiManagerImpl;
 import com.intellij.testFramework.UsefulTestCase;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,9 +18,8 @@ public abstract class GoCompletionTestBase extends GoCodeInsightFixtureTestCase 
   protected String getBasePath() {
     return "completion";
   }
-
+  
   protected enum CheckType {EQUALS, INCLUDES, EXCLUDES}
-
   protected void doTestVariantsInner(CompletionType type, int count, CheckType checkType, String... variants) {
     myFixture.complete(type, count);
     List<String> stringList = myFixture.getLookupElementStrings();
@@ -44,6 +45,7 @@ public abstract class GoCompletionTestBase extends GoCodeInsightFixtureTestCase 
 
   protected void doTestVariants(String txt, CompletionType type, int count, CheckType checkType, String... variants) {
     myFixture.configureByText("a.go", txt);
+    //failOnFileLoading();
     doTestVariantsInner(type, count, checkType, variants);
   }
 
@@ -63,8 +65,13 @@ public abstract class GoCompletionTestBase extends GoCodeInsightFixtureTestCase 
 
   protected void doCheckResult(@NotNull String before, @NotNull String after, @Nullable Character c) {
     myFixture.configureByText("a.go", before);
+    //failOnFileLoading();
     myFixture.completeBasic();
     if (c != null) myFixture.type(c);
     myFixture.checkResult(after);
+  }
+
+  protected void failOnFileLoading() {
+    ((PsiManagerImpl)myFixture.getPsiManager()).setAssertOnFileLoadingFilter(VirtualFileFilter.ALL, getTestRootDisposable());
   }
 }

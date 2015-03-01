@@ -137,6 +137,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
     myFixture.configureByText("a.go", "package main; \n" +
                                       "import `io`\n" +
                                       "func test(){ReadA<caret>}");
+    //failOnFileLoading();
     myFixture.completeBasic();
     myFixture.assertPreferredCompletionItems(0, "ReadAtLeast", "ReaderAt", "ReadAtLeastCustom", "ReaderAtCustom");
   }
@@ -145,6 +146,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
     myFixture.configureByText("a.go", "package main; \n" +
                                       "import `io`\n" +
                                       "func test(ReadWriteSeeke<caret>){}");
+    //failOnFileLoading();
     myFixture.completeBasic();
     myFixture.assertPreferredCompletionItems(0, "ReadWriteSeeker", "ReadWriteSeekerCustom");
   }
