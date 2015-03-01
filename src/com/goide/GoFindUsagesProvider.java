@@ -16,12 +16,15 @@
 
 package com.goide;
 
+import com.goide.lexer.GoLexer;
 import com.goide.psi.GoNamedElement;
 import com.intellij.lang.HelpID;
+import com.intellij.lang.cacheBuilder.DefaultWordsScanner;
 import com.intellij.lang.cacheBuilder.WordsScanner;
 import com.intellij.lang.findUsages.FindUsagesProvider;
 import com.intellij.psi.ElementDescriptionUtil;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.tree.TokenSet;
 import com.intellij.usageView.UsageViewLongNameLocation;
 import com.intellij.usageView.UsageViewNodeTextLocation;
 import com.intellij.usageView.UsageViewTypeLocation;
@@ -32,7 +35,8 @@ public class GoFindUsagesProvider implements FindUsagesProvider {
   @Nullable
   @Override
   public WordsScanner getWordsScanner() {
-    return null;
+    return new DefaultWordsScanner(new GoLexer(), TokenSet.create(GoTypes.IDENTIFIER),
+                                   GoParserDefinition.COMMENTS, GoParserDefinition.STRING_LITERALS);
   }
 
   @Override
