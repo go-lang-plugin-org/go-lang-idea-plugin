@@ -17,6 +17,7 @@
 package com.goide.util;
 
 import com.goide.GoConstants;
+import com.goide.psi.*;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.extensions.PluginId;
@@ -105,5 +106,51 @@ public class GoUtil {
 
   public static IdeaPluginDescriptor getPlugin() {
     return PluginManager.getPlugin(PluginId.getId(PLUGIN_ID));
+  }
+
+  /**
+   * isReferenceTo optimization. Before complex checking via resolve we can say for sure that it can't be reference to given element
+   * in following cases:
+   * - GoFieldName can't be resolved to anything but GoFieldDefinition
+   * - GoVarSpec can't be resolved to anything but GoVarDefinition, GoParamDefinition, GoReceiver, GoFieldDefinition, GoAnonymousFieldDefinition, GoConstDefinition
+   * - GoLabelRef can't be resolved to anything but GoLabelDefinition
+   * - GoTypeReferenceExpression can't be resolved to anything but GoTypeSpec
+   * <p/>
+   * - definition is private and reference in different package
+   * - definition is public, reference in different package and reference containing file doesn't have an import of definition package
+   */
+  public static boolean couldBeReferenceTo(@NotNull PsiElement definition, @NotNull PsiElement reference) {
+    if (reference instanceof GoFieldName && !(definition instanceof GoFieldDefinition)) return false;
+    if (reference instanceof GoLabelRef && !(definition instanceof GoLabelDefinition)) return false;
+    if (reference instanceof GoTypeReferenceExpression && !(definition instanceof GoTypeSpec)) return false;
+    if (reference instanceof GoVarSpec && !(definition instanceof GoVarDefinition ||
+                                            definition instanceof GoParamDefinition ||
+                                            definition instanceof GoReceiver ||
+                                            definition instanceof GoTypeSpec ||
+                                            definition instanceof GoFieldDefinition ||
+                                            definition instanceof GoAnonymousFieldDefinition ||
+                                            definition instanceof GoConstDefinition)) {
+      return false;
+    }
+
+    PsiFile definitionFile = definition.getContainingFile();
+    PsiFile referenceFile = reference.getContainingFile();
+    if (!(definitionFile instanceof GoFile) || !(referenceFile instanceof GoFile)) {
+      return false;
+    }
+
+    String referencePackage = ((GoFile)referenceFile).getPackageName();
+    String definitionPackage = ((GoFile)definitionFile).getPackageName();
+    boolean inSamePackage = referencePackage != null && referencePackage.equals(definitionPackage);
+
+    if (!inSamePackage) {
+      if (reference instanceof GoNamedElement && !((GoNamedElement)reference).isPublic()) {
+        return false;
+      }
+      if (!((GoFile)referenceFile).getImportedPackagesMap().containsKey(((GoFile)definitionFile).getImportPath())) {
+        return false;
+      }
+    }
+    return true;
   }
 }

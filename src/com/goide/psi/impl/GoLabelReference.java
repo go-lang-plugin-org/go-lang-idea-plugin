@@ -20,6 +20,7 @@ import com.goide.completion.GoCompletionUtil;
 import com.goide.psi.GoBlock;
 import com.goide.psi.GoLabelDefinition;
 import com.goide.psi.GoLabelRef;
+import com.goide.util.GoUtil;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
@@ -78,4 +79,8 @@ public class GoLabelReference extends PsiReferenceBase<GoLabelRef> {
     return myElement;
   }
   
+  @Override
+  public boolean isReferenceTo(PsiElement element) {
+    return GoUtil.couldBeReferenceTo(element, myElement) && super.isReferenceTo(element);
+  }
 }

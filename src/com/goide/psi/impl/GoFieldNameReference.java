@@ -18,6 +18,7 @@ package com.goide.psi.impl;
 
 import com.goide.completion.GoCompletionUtil;
 import com.goide.psi.*;
+import com.goide.util.GoUtil;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
@@ -125,5 +126,10 @@ public class GoFieldNameReference extends PsiReferenceBase<GoFieldName> {
   public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
     myElement.replace(GoElementFactory.createIdentifierFromText(myElement.getProject(), newElementName));
     return myElement;
+  }
+  
+  @Override
+  public boolean isReferenceTo(PsiElement element) {
+    return GoUtil.couldBeReferenceTo(element, myElement) && super.isReferenceTo(element);
   }
 }

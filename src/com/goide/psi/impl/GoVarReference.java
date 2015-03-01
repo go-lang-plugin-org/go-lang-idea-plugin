@@ -20,6 +20,7 @@ import com.goide.psi.GoBlock;
 import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.goide.psi.GoStatement;
 import com.goide.psi.GoVarDefinition;
+import com.goide.util.GoUtil;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReferenceBase;
@@ -37,7 +38,7 @@ public class GoVarReference extends PsiReferenceBase<GoVarDefinition> {
     super(element, TextRange.from(0, element.getTextLength()));
     myPotentialStopBlock = PsiTreeUtil.getParentOfType(element, GoBlock.class);
   }
-
+  
   @Nullable
   @Override
   public PsiElement resolve() {
@@ -64,10 +65,15 @@ public class GoVarReference extends PsiReferenceBase<GoVarDefinition> {
     }
     return ArrayUtil.toObjectArray(p.getVariants());
   }
-  
+
   @Override
   public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
     myElement.replace(GoElementFactory.createVarDefinitionFromText(myElement.getProject(), newElementName));
     return myElement;
+  }
+
+  @Override
+  public boolean isReferenceTo(PsiElement element) {
+    return GoUtil.couldBeReferenceTo(element, myElement) && super.isReferenceTo(element);
   }
 }

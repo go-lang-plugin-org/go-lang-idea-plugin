@@ -18,6 +18,7 @@ package com.goide.psi.impl;
 
 import com.goide.psi.*;
 import com.goide.sdk.GoSdkUtil;
+import com.goide.util.GoUtil;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.TextRange;
@@ -65,6 +66,11 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
     }
     
     return result.toArray(new ResolveResult[result.size()]);
+  }
+  
+  @Override
+  public boolean isReferenceTo(PsiElement element) {
+    return GoUtil.couldBeReferenceTo(element, myElement) && super.isReferenceTo(element);
   }
 
   private String getName() {

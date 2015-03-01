@@ -68,13 +68,18 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   public GoReference(@NotNull GoReferenceExpressionBase o) {
     super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(), o.getIdentifier().getTextLength()));
   }
-
+  
   @NotNull
   private ResolveResult[] resolveInner() {
     String identifierText = getName();
     Collection<ResolveResult> result = new OrderedSet<ResolveResult>();
     processResolveVariants(createResolveProcessor(identifierText, result, myElement));
     return result.toArray(new ResolveResult[result.size()]);
+  }
+  
+  @Override
+  public boolean isReferenceTo(PsiElement element) {
+    return GoUtil.couldBeReferenceTo(element, myElement) && super.isReferenceTo(element);
   }
 
   private String getName() {
