@@ -16,7 +16,6 @@
 
 package com.goide.runconfig.ui;
 
-import com.goide.GoModuleType;
 import com.goide.runconfig.GoRunConfigurationWithMain;
 import com.intellij.application.options.ModulesComboBox;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
@@ -47,7 +46,7 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoRunConfigurat
 
   @Override
   protected void resetEditorFrom(@NotNull GoRunConfigurationWithMain configuration) {
-    myComboModules.fillModules(configuration.getProject(), GoModuleType.getInstance());
+    myComboModules.setModules(configuration.getValidModules());
     myComboModules.setSelectedModule(configuration.getConfigurationModule().getModule());
     myParamsField.setText(configuration.getParams());
     String filepath = configuration.getFilePath();

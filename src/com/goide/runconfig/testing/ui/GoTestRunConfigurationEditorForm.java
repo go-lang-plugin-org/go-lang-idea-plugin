@@ -16,7 +16,6 @@
 
 package com.goide.runconfig.testing.ui;
 
-import com.goide.GoModuleType;
 import com.goide.completion.GoCompletionUtil;
 import com.goide.psi.GoFile;
 import com.goide.runconfig.testing.GoTestRunConfiguration;
@@ -102,7 +101,7 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
     String filePath = configuration.getFilePath();
     myFileField.setText(filePath.isEmpty() ? configuration.getProject().getBasePath() : filePath);
 
-    myComboModules.fillModules(configuration.getProject(), GoModuleType.getInstance());
+    myComboModules.setModules(configuration.getValidModules());
     myComboModules.setSelectedModule(configuration.getConfigurationModule().getModule());
     myParamsField.setText(configuration.getParams());
     myPatternEditor.setText(configuration.getPattern());
