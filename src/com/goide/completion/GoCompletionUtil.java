@@ -198,8 +198,9 @@ public class GoCompletionUtil {
   }
 
   @Nullable
-  public static LookupElement createPackageLookupElement(@NotNull GoImportSpec spec) {
-    return createPackageLookupElement(ObjectUtils.notNull(spec.getAlias(), spec.getLocalPackageName()), true);
+  public static LookupElement createPackageLookupElement(@NotNull GoImportSpec spec, @Nullable String name) {
+    name = name != null ? name : ObjectUtils.notNull(spec.getAlias(), spec.getLocalPackageName());
+    return createPackageLookupElement(name, true);
   }
 
   @NotNull

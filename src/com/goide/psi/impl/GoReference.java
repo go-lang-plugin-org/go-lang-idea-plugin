@@ -135,9 +135,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
         else if (element instanceof PsiDirectory)    return GoCompletionUtil.createPackageLookupElement(((PsiDirectory)element).getName(), true);
         else if (element instanceof GoNamedElement)  return GoCompletionUtil.createVariableLikeLookupElement((GoNamedElement)element);
         else if (element instanceof PsiNamedElement) return LookupElementBuilder.create((PsiNamedElement)element);
-        else if (element instanceof GoImportSpec)    {
-          return GoCompletionUtil.createPackageLookupElement(((GoImportSpec)element));
-        }
+        else if (element instanceof GoImportSpec)    return GoCompletionUtil.createPackageLookupElement(((GoImportSpec)element), state.get(ACTUAL_NAME));
         // @formatter:on
         return null;
       }
