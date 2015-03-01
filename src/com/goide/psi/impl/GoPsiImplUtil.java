@@ -19,6 +19,7 @@ package com.goide.psi.impl;
 import com.goide.GoTypes;
 import com.goide.psi.*;
 import com.goide.psi.impl.imports.GoImportReferenceSet;
+import com.goide.stubs.GoImportSpecStub;
 import com.goide.stubs.GoNamedStub;
 import com.goide.stubs.GoParameterDeclarationStub;
 import com.goide.stubs.GoTypeStub;
@@ -709,7 +710,7 @@ public class GoPsiImplUtil {
       if (lastImportDeclaration.getRparen() == null && importSpecList.size() == 1) {
         GoImportSpec firstItem = ContainerUtil.getFirstItem(importSpecList);
         assert firstItem != null;
-        String path = firstItem.getImportString().getPath();
+        String path = firstItem.getPath();
         String oldAlias = firstItem.getAlias();
         
         GoImportDeclaration importWithParens = GoElementFactory.createImportDeclaration(project, path, oldAlias, true);
@@ -756,19 +757,31 @@ public class GoPsiImplUtil {
   }
 
   public static String getLocalPackageName(@NotNull GoImportSpec importSpec) {
-    return getLocalPackageName(importSpec.getImportString().getPath());
+    return getLocalPackageName(importSpec.getPath());
+  }
+  
+  public static boolean isDot(@NotNull GoImportSpec importSpec) {
+    GoImportSpecStub stub = importSpec.getStub();
+    return stub != null ? stub.isDot() : importSpec.getDot() != null;
+  }
+  
+  @NotNull
+  public static String getPath(@NotNull GoImportSpec importSpec) {
+    GoImportSpecStub stub = importSpec.getStub();
+    return stub != null ? stub.getPath() : importSpec.getImportString().getPath();
   }
 
   public static String getAlias(@NotNull GoImportSpec importSpec) {
+    GoImportSpecStub stub = importSpec.getStub();
+    if (stub != null) {
+      return stub.getAlias();
+    }
+    
     final PsiElement identifier = importSpec.getIdentifier();
     if (identifier != null) {
       return identifier.getText();
     }
-    final PsiElement dot = importSpec.getDot();
-    if (dot != null) {
-      return ".";
-    }
-    return null;
+    return importSpec.isDot() ? "." : null;
   }
   
   public static boolean shouldGoDeeper(@SuppressWarnings("UnusedParameters") GoImportSpec o) {
@@ -779,6 +792,7 @@ public class GoPsiImplUtil {
     return "_".equals(o.getAlias());
   }
 
+  @NotNull
   public static String getPath(@NotNull GoImportString importString) {
     String text = importString.getText();
     if (!text.isEmpty()) {
@@ -788,6 +802,7 @@ public class GoPsiImplUtil {
     return "";
   }
 
+  @NotNull
   public static TextRange getPathTextRange(@NotNull GoImportString importString) {
     String text = importString.getText();
     return !text.isEmpty() && isQuote(text.charAt(0)) ? TextRange.create(1, text.length() - 1) : TextRange.EMPTY_RANGE;

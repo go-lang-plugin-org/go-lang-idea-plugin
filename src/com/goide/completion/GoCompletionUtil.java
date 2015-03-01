@@ -199,8 +199,8 @@ public class GoCompletionUtil {
 
   @Nullable
   public static LookupElement createPackageLookupElement(@NotNull GoImportSpec spec) {
-    PsiElement id = spec.getIdentifier();
-    return id != null ? createPackageLookupElement(id.getText(), true) : null;
+    String alias = spec.getAlias();
+    return StringUtil.isNotEmpty(alias) ? createPackageLookupElement(alias, true) : null;
   }
 
   @NotNull

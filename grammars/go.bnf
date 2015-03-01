@@ -78,7 +78,7 @@
   implements(".*ReferenceExpression|FieldName")="com.goide.psi.GoReferenceExpressionBase"
   extends("(Function|Method)Declaration")="com.goide.psi.impl.GoFunctionOrMethodDeclarationImpl<?>"
   extends("(Type|Method)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver")="com.goide.psi.impl.GoNamedElementImpl<?>"
-  extends("Parameters|Signature|ParameterDeclaration|Result|Type|(Const|Var)Spec")="com.goide.psi.impl.GoStubbedElementImpl<?>"
+  extends("Parameters|Signature|ParameterDeclaration|Result|Type|(Const|Var|Import)Spec")="com.goide.psi.impl.GoStubbedElementImpl<?>"
   elementTypeFactory("(Function|Method|Parameter)Declaration|(Type|Import|Method|Const|Var)Spec|RecvStatement|ShortVarDeclaration|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver|Parameters|Signature|Result|.*Type|TypeList.*")='com.goide.stubs.GoStubElementTypeFactory.factory'
   pin(".*Statement")=1
   extends(".*Statement")=Statement
@@ -104,7 +104,7 @@ ImportDeclaration ::= import ( ImportSpec | '(' ImportSpecs? ')' ) {
 private ImportSpecs ::= ImportSpec (semi ImportSpec)* semi? {pin=1}
 ImportSpec ::= [ '.' | identifier ] ImportString {
   stubClass="com.goide.stubs.GoImportSpecStub"
-  methods=[getAlias getLocalPackageName shouldGoDeeper isForSideEffects]
+  methods=[getAlias getLocalPackageName shouldGoDeeper isForSideEffects isDot getPath]
 }
 ImportString ::= string | raw_string {methods=[getReferences resolve getPath getPathTextRange]}
 

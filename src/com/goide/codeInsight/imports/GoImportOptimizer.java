@@ -104,7 +104,7 @@ public class GoImportOptimizer implements ImportOptimizer {
     Collection<GoImportSpec> implicitImports = ContainerUtil.newArrayList(result.get("."));
     for (GoImportSpec importEntry : implicitImports) {
       GoImportSpec spec = getImportSpec(importEntry);
-      if (spec != null && spec.getDot() != null) {
+      if (spec != null && spec.isDot()) {
         List<? extends PsiElement> list = spec.getUserData(GoReference.IMPORT_USERS);
         if (list != null) {
           for (PsiElement e : list) {
@@ -196,7 +196,7 @@ public class GoImportOptimizer implements ImportOptimizer {
     for (PsiElement duplicateCandidate : importsWithSameName) {
       GoImportSpec importSpec = getImportSpec(duplicateCandidate);
       if (importSpec != null) {
-        importsWithSameString.putValue(importSpec.getImportString().getPath(), importSpec);
+        importsWithSameString.putValue(importSpec.getPath(), importSpec);
       }
     }
     return importsWithSameString;

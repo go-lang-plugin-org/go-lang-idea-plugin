@@ -19,14 +19,25 @@ package com.goide.stubs.types;
 import com.goide.psi.GoImportSpec;
 import com.goide.psi.impl.GoImportSpecImpl;
 import com.goide.stubs.GoImportSpecStub;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
+import com.intellij.util.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-public class GoImportSpecStubElementType extends GoNamedStubElementType<GoImportSpecStub, GoImportSpec> {
+public class GoImportSpecStubElementType extends GoStubElementType<GoImportSpecStub, GoImportSpec> {
+  public static final GoImportSpec[] EMPTY_ARRAY = new GoImportSpec[0];
+  public static final ArrayFactory<GoImportSpec> ARRAY_FACTORY = new ArrayFactory<GoImportSpec>() {
+    @NotNull
+    @Override
+    public GoImportSpec[] create(final int count) {
+      return count == 0 ? EMPTY_ARRAY : new GoImportSpec[count];
+    }
+  };
+
   public GoImportSpecStubElementType(@NotNull String name) {
     super(name);
   }
@@ -40,18 +51,20 @@ public class GoImportSpecStubElementType extends GoNamedStubElementType<GoImport
   @NotNull
   @Override
   public GoImportSpecStub createStub(@NotNull GoImportSpec psi, StubElement parentStub) {
-    return new GoImportSpecStub(parentStub, this, psi.getName(), psi.isPublic());
+    return new GoImportSpecStub(parentStub, this, psi.getAlias(), psi.getPath(), psi.isDot());
   }
 
   @Override
   public void serialize(@NotNull GoImportSpecStub stub, @NotNull StubOutputStream dataStream) throws IOException {
-    dataStream.writeName(stub.getName());
-    dataStream.writeBoolean(stub.isPublic());
+    dataStream.writeUTFFast(StringUtil.notNullize(stub.getAlias()));
+    dataStream.writeUTFFast(stub.getPath());
+    dataStream.writeBoolean(stub.isDot());
   }
 
   @NotNull
   @Override
   public GoImportSpecStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException {
-    return new GoImportSpecStub(parentStub, this, dataStream.readName(), dataStream.readBoolean());
+    return new GoImportSpecStub(parentStub, this, StringUtil.nullize(dataStream.readUTFFast()), 
+                                dataStream.readUTFFast(), dataStream.readBoolean());
   }
 }

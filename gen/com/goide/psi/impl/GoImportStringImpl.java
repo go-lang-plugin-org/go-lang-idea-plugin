@@ -46,10 +46,12 @@ public class GoImportStringImpl extends GoCompositeElementImpl implements GoImpo
     return GoPsiImplUtil.resolve(this);
   }
 
+  @NotNull
   public String getPath() {
     return GoPsiImplUtil.getPath(this);
   }
 
+  @NotNull
   public TextRange getPathTextRange() {
     return GoPsiImplUtil.getPathTextRange(this);
   }

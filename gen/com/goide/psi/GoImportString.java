@@ -22,8 +22,10 @@ public interface GoImportString extends GoCompositeElement {
   @Nullable
   PsiDirectory resolve();
 
+  @NotNull
   String getPath();
 
+  @NotNull
   TextRange getPathTextRange();
 
 }

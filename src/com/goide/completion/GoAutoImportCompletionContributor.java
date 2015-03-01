@@ -98,7 +98,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
                   double priority = GoCompletionUtil.NOT_IMPORTED_FUNCTION_PRIORITY;
                   GoImportSpec existingImport = importedPackages.get(declaration.getContainingFile().getImportPath());
                   if (existingImport != null) {
-                    if (existingImport.getDot() != null) {
+                    if (existingImport.isDot()) {
                       continue;
                     }
                     priority = GoCompletionUtil.FUNCTION_PRIORITY;
@@ -125,7 +125,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
                   String importPath = declaration.getContainingFile().getImportPath();
                   GoImportSpec existingImport = importedPackages.get(importPath);
                   if (existingImport != null) {
-                    if (existingImport.getDot() != null) {
+                    if (existingImport.isDot()) {
                       continue;
                     }
                     priority = forTypes ? GoCompletionUtil.TYPE_PRIORITY : GoCompletionUtil.TYPE_CONVERSION;

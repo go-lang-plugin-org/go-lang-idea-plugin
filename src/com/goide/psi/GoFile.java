@@ -145,7 +145,7 @@ public class GoFile extends PsiFileBase {
   @NotNull
   public List<GoImportSpec> getImports() {
     StubElement<GoFile> stub = getStub();
-    if (stub != null) return ContainerUtil.emptyList();
+    if (stub != null) return getChildrenByType(stub, GoTypes.IMPORT, GoImportSpecStubElementType.ARRAY_FACTORY);
     return CachedValuesManager.getCachedValue(this, new CachedValueProvider<List<GoImportSpec>>() {
       @Override
       public Result<List<GoImportSpec>> compute() {
@@ -197,7 +197,7 @@ public class GoFile extends PsiFileBase {
         map.putValue(alias, spec);
         continue;
       }
-      if (spec.getDot() != null) {
+      if (spec.isDot()) {
         map.putValue(".", spec);
         continue;
       }

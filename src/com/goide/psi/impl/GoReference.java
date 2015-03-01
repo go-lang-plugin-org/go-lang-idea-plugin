@@ -35,6 +35,7 @@ import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
+import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.OrderedSet;
 import org.jetbrains.annotations.NotNull;
@@ -88,13 +89,11 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
       @Override
       public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state) {
         if (element.equals(o)) return !result.add(new PsiElementResolveResult(element));
-        if (element instanceof PsiNamedElement) {
-          String actualName = state.get(ACTUAL_NAME);
-          String name = actualName != null ? actualName : ((PsiNamedElement)element).getName();
-          if (text.equals(name)) {
-            result.add(new PsiElementResolveResult(element));
-            return false;
-          }
+        String name = ObjectUtils.chooseNotNull(state.get(ACTUAL_NAME), 
+                                                element instanceof PsiNamedElement ? ((PsiNamedElement)element).getName() : null);
+        if (text.equals(name)) {
+          result.add(new PsiElementResolveResult(element));
+          return false;
         }
         return true;
       }
@@ -114,10 +113,12 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     return new MyScopeProcessor() {
       @Override
       public boolean execute(@NotNull PsiElement o, @NotNull ResolveState state) {
-        if (!(o instanceof GoNamedElement)) return true;
-        if (((GoNamedElement)o).isBlank() || printOrPrintln(o)) return true;
-        if (filter.value(o)) {
-          ContainerUtil.addIfNotNull(variants, createLookup(o));
+        if (o instanceof GoNamedElement && !((GoNamedElement)o).isBlank() && !printOrPrintln(o) ||
+            o instanceof GoImportSpec && !((GoImportSpec)o).isDot()) {
+          if (filter.value(o)) {
+            ContainerUtil.addIfNotNull(variants, createLookup(o));
+          }
+          return true;
         }
         return true;
       }
@@ -350,7 +351,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     for (Map.Entry<String, Collection<GoImportSpec>> entry : file.getImportMap().entrySet()) {
       for (GoImportSpec o : entry.getValue()) {
         GoImportString importString = o.getImportString();
-        if (o.getDot() != null) {
+        if (o.isDot()) {
           PsiDirectory implicitDir = importString.resolve();
           boolean resolved = !processDirectory(implicitDir, file, null, processor, state, false);
           if (resolved && !processor.isCompletion()) {
@@ -362,7 +363,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
           PsiDirectory resolve = importString.resolve();
           // todo: multi-resolve into appropriate package clauses
           if (resolve != null && !processor.execute(resolve, state.put(ACTUAL_NAME, entry.getKey()))) return true; 
-          if (!processor.execute(o, state)) return true;
+          if (!processor.execute(o, state.put(ACTUAL_NAME, entry.getKey()))) return true;
         }
       }
     }

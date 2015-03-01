@@ -26,4 +26,9 @@ public interface GoImportSpec extends GoCompositeElement, StubBasedPsiElement<Go
 
   boolean isForSideEffects();
 
+  boolean isDot();
+
+  @NotNull
+  String getPath();
+
 }

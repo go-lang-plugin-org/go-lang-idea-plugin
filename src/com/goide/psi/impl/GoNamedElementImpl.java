@@ -106,11 +106,6 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
     }
     return PsiTreeUtil.getNextSiblingOfType(this, GoType.class);
   }
-  
-  @Override
-  public String toString() {
-    return getNode().getElementType().toString();
-  }
 
   @Override
   public boolean processDeclarations(@NotNull PsiScopeProcessor processor,

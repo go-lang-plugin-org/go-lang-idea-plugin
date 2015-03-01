@@ -18,15 +18,37 @@ package com.goide.stubs;
 
 import com.goide.psi.GoImportSpec;
 import com.intellij.psi.stubs.IStubElementType;
+import com.intellij.psi.stubs.StubBase;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.io.StringRef;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class GoImportSpecStub extends GoNamedStub<GoImportSpec> {
-  public GoImportSpecStub(StubElement parent, IStubElementType elementType, StringRef name, boolean isPublic) {
-    super(parent, elementType, name, isPublic);
+public class GoImportSpecStub extends StubBase<GoImportSpec> {
+  @Nullable
+  private final StringRef myAliasRef;
+  @NotNull
+  private final StringRef myPathRef;
+  private final boolean myIsDot;
+
+  public GoImportSpecStub(StubElement parent, IStubElementType elementType, @Nullable String alias, @NotNull String path, boolean isDot) {
+    super(parent, elementType);
+    myAliasRef = StringRef.fromString(alias);
+    myPathRef = StringRef.fromString(path);
+    myIsDot = isDot;
   }
 
-  public GoImportSpecStub(StubElement parent, IStubElementType elementType, String name, boolean isPublic) {
-    super(parent, elementType, name, isPublic);
+  @Nullable
+  public String getAlias() {
+    return myAliasRef != null ? myAliasRef.getString() : null;
+  }
+
+  @NotNull
+  public String getPath() {
+    return myPathRef.getString();
+  }
+
+  public boolean isDot() {
+    return myIsDot;
   }
 }
