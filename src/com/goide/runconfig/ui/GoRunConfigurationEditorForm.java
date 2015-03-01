@@ -29,15 +29,14 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 
 public class GoRunConfigurationEditorForm extends SettingsEditor<GoRunConfigurationWithMain<?>> {
-  @NotNull private final Project myProject;
   private JPanel myComponent;
   private TextFieldWithBrowseButton myFilePathField;
-  private GoCommonSettingsPanel myCommonSettings;
-  @SuppressWarnings("unused") private JPanel myCommonSettingsPanel;
+  private GoCommonSettingsPanel myCommonSettingsPanel;
+
 
   public GoRunConfigurationEditorForm(@NotNull Project project) {
     super(null);
-    myProject = project;
+    myCommonSettingsPanel.init(project);
     FileChooserDescriptor chooseFileDescriptor = FileChooserDescriptorFactory.createSingleLocalFileDescriptor();
     chooseFileDescriptor.setRoots(project.getBaseDir());
     chooseFileDescriptor.setShowFileSystemRoots(false);
@@ -47,13 +46,13 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoRunConfigurat
   @Override
   protected void resetEditorFrom(@NotNull GoRunConfigurationWithMain<?> configuration) {
     myFilePathField.setText(configuration.getFilePath());
-    myCommonSettings.resetEditorFrom(configuration);
+    myCommonSettingsPanel.resetEditorFrom(configuration);
   }
 
   @Override
   protected void applyEditorTo(@NotNull GoRunConfigurationWithMain<?> configuration) throws ConfigurationException {
     configuration.setFilePath(myFilePathField.getText());
-    myCommonSettings.applyEditorTo(configuration);
+    myCommonSettingsPanel.applyEditorTo(configuration);
   }
 
   @NotNull
@@ -65,12 +64,5 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoRunConfigurat
   @Override
   protected void disposeEditor() {
     myComponent.setVisible(false);
-    myCommonSettingsPanel = null;
-    myCommonSettings = null;
-  }
-
-  private void createUIComponents() {
-    myCommonSettings = new GoCommonSettingsPanel(myProject);
-    myCommonSettingsPanel = myCommonSettings.getPanel();
   }
 }

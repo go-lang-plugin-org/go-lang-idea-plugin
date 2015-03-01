@@ -9,19 +9,17 @@ import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.ui.RawCommandLineEditor;
+import com.intellij.ui.components.JBPanel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
-
-public class GoCommonSettingsPanel {
-  private JPanel myPanel;
+public class GoCommonSettingsPanel extends JBPanel {
   private RawCommandLineEditor myParamsField;
   private TextFieldWithBrowseButton myWorkingDirectoryField;
   private EnvironmentVariablesTextFieldWithBrowseButton myEnvironmentField;
   private ModulesComboBox myModulesComboBox;
 
-  public GoCommonSettingsPanel(@NotNull Project project) {
+  public void init(@NotNull Project project) {
     GoUtil.installFileChooser(project, myWorkingDirectoryField, true);
   }
 
@@ -40,11 +38,6 @@ public class GoCommonSettingsPanel {
     configuration.setWorkingDirectory(myWorkingDirectoryField.getText());
     configuration.setCustomEnvironment(myEnvironmentField.getEnvs());
     configuration.setPassParentEnvironment(myEnvironmentField.isPassParentEnvs());
-  }
-
-  @NotNull
-  public JPanel getPanel() {
-    return myPanel;
   }
 
   @Nullable
