@@ -39,4 +39,9 @@ public class GoLanguage extends Language {
   public LanguageFileType getAssociatedFileType() {
     return GoFileType.INSTANCE;
   }
+
+  @Override
+  public boolean isCaseSensitive() {
+    return true;
+  }
 }
