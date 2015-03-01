@@ -122,7 +122,8 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
                   if (!allowed(declaration)) continue;
 
                   double priority = forTypes ? GoCompletionUtil.NOT_IMPORTED_TYPE_PRIORITY : GoCompletionUtil.NOT_IMPORTED_TYPE_CONVERSION;
-                  GoImportSpec existingImport = importedPackages.get(declaration.getContainingFile().getImportPath());
+                  String importPath = declaration.getContainingFile().getImportPath();
+                  GoImportSpec existingImport = importedPackages.get(importPath);
                   if (existingImport != null) {
                     if (existingImport.getDot() != null) {
                       continue;
@@ -130,11 +131,13 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
                     priority = forTypes ? GoCompletionUtil.TYPE_PRIORITY : GoCompletionUtil.TYPE_CONVERSION;
                   }
                   if (forTypes) {
-                    result.addElement(GoCompletionUtil.createTypeLookupElement(declaration, name, true, TYPE_INSERT_HANDLER, priority));
+                    result.addElement(GoCompletionUtil.createTypeLookupElement(declaration, name, true, TYPE_INSERT_HANDLER, 
+                                                                               importPath, priority));
                   }
                   else {
                     result.addElement(GoCompletionUtil.createTypeConversionLookupElement(declaration, name, true,
-                                                                                         TYPE_CONVERSION_INSERT_HANDLER, priority));
+                                                                                         TYPE_CONVERSION_INSERT_HANDLER, importPath,
+                                                                                         priority));
                   }
                 }
               }

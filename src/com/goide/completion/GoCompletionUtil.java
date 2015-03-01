@@ -117,26 +117,27 @@ public class GoCompletionUtil {
 
   @NotNull
   public static LookupElement createTypeLookupElement(@NotNull GoTypeSpec t) {
-    return createTypeLookupElement(t, StringUtil.notNullize(t.getName()), false, null, TYPE_PRIORITY);
+    return createTypeLookupElement(t, StringUtil.notNullize(t.getName()), false, null, null, TYPE_PRIORITY);
   }
 
   @NotNull
   public static LookupElement createTypeLookupElement(@NotNull GoTypeSpec t,
                                                       @NotNull String name,
                                                       boolean showPackage,
-                                                      @Nullable InsertHandler<LookupElement> handler, 
+                                                      @Nullable InsertHandler<LookupElement> handler,
+                                                      @Nullable String importPath,
                                                       double priority) {
     String pkg = showPackage ? StringUtil.notNullize(t.getContainingFile().getPackageName()) : "";
     pkg = pkg.isEmpty() ? pkg : pkg + ".";
-    return PrioritizedLookupElement.withPriority(
-      LookupElementBuilder.
-        create(t, name)
-        .withLookupString(pkg.toLowerCase())
-        .withLookupString(name.toLowerCase())
-        .withLookupString((pkg + name).toLowerCase())
-        .withPresentableText(pkg + name)
-        .withInsertHandler(handler)
-        .withIcon(GoIcons.TYPE), priority);
+    LookupElementBuilder builder = LookupElementBuilder.create(t, name)
+      .withLookupString(pkg.toLowerCase())
+      .withLookupString(name.toLowerCase())
+      .withLookupString((pkg + name).toLowerCase())
+      .withPresentableText(pkg + name)
+      .withInsertHandler(handler)
+      .withIcon(GoIcons.TYPE);
+    if (importPath != null) builder = builder.withTailText(" " + importPath, true);
+    return PrioritizedLookupElement.withPriority(builder, priority);
   }
 
   @NotNull
@@ -146,7 +147,7 @@ public class GoCompletionUtil {
 
   @NotNull
   public static LookupElement createTypeConversionLookupElement(@NotNull GoTypeSpec t) {
-    return createTypeConversionLookupElement(t, StringUtil.notNullize(t.getName()), false, null, TYPE_CONVERSION);
+    return createTypeConversionLookupElement(t, StringUtil.notNullize(t.getName()), false, null, null, TYPE_CONVERSION);
   }
 
   @NotNull
@@ -154,21 +155,21 @@ public class GoCompletionUtil {
                                                                 @NotNull String name,
                                                                 boolean showPackage,
                                                                 @Nullable InsertHandler<LookupElement> insertHandler,
+                                                                @Nullable String importPath,
                                                                 double priority) {
     String pkg = showPackage ? StringUtil.notNullize(t.getContainingFile().getPackageName()) : "";
     pkg = pkg.isEmpty() ? pkg : pkg + ".";
     // todo: check context and place caret in or outside {}
-    InsertHandler<LookupElement> handler = ObjectUtils.notNull(insertHandler, getTypeConversionInsertHandler(t)); 
-    return PrioritizedLookupElement.withPriority(
-      LookupElementBuilder
-        .create(t, name)
-        .withLookupString(pkg.toLowerCase())
-        .withLookupString(name.toLowerCase())
-        .withLookupString((pkg + name).toLowerCase())
-        .withPresentableText(pkg + name)
-        .withInsertHandler(handler)
-        .withIcon(GoIcons.TYPE),
-      priority);
+    InsertHandler<LookupElement> handler = ObjectUtils.notNull(insertHandler, getTypeConversionInsertHandler(t));
+    LookupElementBuilder builder = LookupElementBuilder.create(t, name)
+      .withLookupString(pkg.toLowerCase())
+      .withLookupString(name.toLowerCase())
+      .withLookupString((pkg + name).toLowerCase())
+      .withPresentableText(pkg + name)
+      .withInsertHandler(handler)
+      .withIcon(GoIcons.TYPE);
+    if (importPath != null) builder = builder.withTailText(" " + importPath, true);
+    return PrioritizedLookupElement.withPriority(builder, priority);
   }
 
   @NotNull
