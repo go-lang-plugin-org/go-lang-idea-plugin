@@ -157,19 +157,9 @@ public class GoCompletionUtil {
                                                                 @Nullable InsertHandler<LookupElement> insertHandler,
                                                                 @Nullable String importPath,
                                                                 double priority) {
-    String pkg = showPackage ? StringUtil.notNullize(t.getContainingFile().getPackageName()) : "";
-    pkg = pkg.isEmpty() ? pkg : pkg + ".";
     // todo: check context and place caret in or outside {}
     InsertHandler<LookupElement> handler = ObjectUtils.notNull(insertHandler, getTypeConversionInsertHandler(t));
-    LookupElementBuilder builder = LookupElementBuilder.create(t, name)
-      .withLookupString(pkg.toLowerCase())
-      .withLookupString(name.toLowerCase())
-      .withLookupString((pkg + name).toLowerCase())
-      .withPresentableText(pkg + name)
-      .withInsertHandler(handler)
-      .withIcon(GoIcons.TYPE);
-    if (importPath != null) builder = builder.withTailText(" " + importPath, true);
-    return PrioritizedLookupElement.withPriority(builder, priority);
+    return createTypeLookupElement(t, name, showPackage, handler, importPath, priority);
   }
 
   @NotNull
