@@ -109,10 +109,9 @@ public class GoUtil {
   }
 
   /**
-   * isReferenceTo optimization. Before complex checking via resolve we can say for sure that it can't be reference to given element
-   * in following cases:
-   * - GoFieldName can't be resolved to anything but GoFieldDefinition
-   * - GoVarSpec can't be resolved to anything but GoVarDefinition, GoParamDefinition, GoReceiver, GoFieldDefinition, GoAnonymousFieldDefinition, GoConstDefinition
+   * isReferenceTo optimization. Before complex checking via resolve we can say for sure that element 
+   * can't be a reference to given declaration in following cases:
+   *
    * - GoLabelRef can't be resolved to anything but GoLabelDefinition
    * - GoTypeReferenceExpression can't be resolved to anything but GoTypeSpec
    * <p/>
@@ -120,18 +119,8 @@ public class GoUtil {
    * - definition is public, reference in different package and reference containing file doesn't have an import of definition package
    */
   public static boolean couldBeReferenceTo(@NotNull PsiElement definition, @NotNull PsiElement reference) {
-    if (reference instanceof GoFieldName && !(definition instanceof GoFieldDefinition)) return false;
     if (reference instanceof GoLabelRef && !(definition instanceof GoLabelDefinition)) return false;
     if (reference instanceof GoTypeReferenceExpression && !(definition instanceof GoTypeSpec)) return false;
-    if (reference instanceof GoVarSpec && !(definition instanceof GoVarDefinition ||
-                                            definition instanceof GoParamDefinition ||
-                                            definition instanceof GoReceiver ||
-                                            definition instanceof GoTypeSpec ||
-                                            definition instanceof GoFieldDefinition ||
-                                            definition instanceof GoAnonymousFieldDefinition ||
-                                            definition instanceof GoConstDefinition)) {
-      return false;
-    }
 
     PsiFile definitionFile = definition.getContainingFile();
     PsiFile referenceFile = reference.getContainingFile();
@@ -139,16 +128,19 @@ public class GoUtil {
       return false;
     }
 
-    String referencePackage = ((GoFile)referenceFile).getPackageName();
-    String definitionPackage = ((GoFile)definitionFile).getPackageName();
-    boolean inSamePackage = referencePackage != null && referencePackage.equals(definitionPackage);
+    boolean inSameFile = definitionFile.isEquivalentTo(referenceFile);
+    if (!inSameFile) {
+      String referencePackage = ((GoFile)referenceFile).getPackageName();
+      String definitionPackage = ((GoFile)definitionFile).getPackageName();
+      boolean inSamePackage = referencePackage != null && referencePackage.equals(definitionPackage);
 
-    if (!inSamePackage) {
-      if (reference instanceof GoNamedElement && !((GoNamedElement)reference).isPublic()) {
-        return false;
-      }
-      if (!((GoFile)referenceFile).getImportedPackagesMap().containsKey(((GoFile)definitionFile).getImportPath())) {
-        return false;
+      if (!inSamePackage) {
+        if (reference instanceof GoNamedElement && !((GoNamedElement)reference).isPublic()) {
+          return false;
+        }
+        if (!((GoFile)referenceFile).getImportedPackagesMap().containsKey(((GoFile)definitionFile).getImportPath())) {
+          return false;
+        }
       }
     }
     return true;
