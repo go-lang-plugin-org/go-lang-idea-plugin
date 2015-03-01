@@ -30,7 +30,6 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
-import com.intellij.util.PathUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunningState> {
@@ -39,13 +38,10 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
   @NotNull private String myDirectoryPath = "";
 
   @NotNull private String myPattern = "";
-  private String myWorkingDirectory;
   @NotNull private Kind myKind = Kind.DIRECTORY;
 
   public GoTestRunConfiguration(@NotNull Project project, String name, @NotNull ConfigurationType configurationType) {
     super(name, new GoModuleBasedConfiguration(project), configurationType.getConfigurationFactories()[0]);
-    Module module = getConfigurationModule().getModule();
-    myWorkingDirectory = module != null ? PathUtil.getParentPath(module.getModuleFilePath()) : project.getBasePath();
   }
 
   @NotNull
@@ -70,13 +66,9 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
   public void checkConfiguration() throws RuntimeConfigurationException {
     super.checkConfiguration();
     GoModuleBasedConfiguration configurationModule = getConfigurationModule();
-    if (myWorkingDirectory.isEmpty()) {
-      throw new RuntimeConfigurationError("Working directory is not specified");
-    }
-
     switch (myKind) {
       case DIRECTORY:
-        if (!FileUtil.isAncestor(myWorkingDirectory, myDirectoryPath, false)) {
+        if (!FileUtil.isAncestor(getWorkingDirectory(), myDirectoryPath, false)) {
           throw new RuntimeConfigurationError("Working directory should be ancestor of testing directory");
         }
         VirtualFile testingDirectory = LocalFileSystem.getInstance().findFileByPath(myDirectoryPath);
@@ -119,16 +111,7 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
   public void setPattern(@NotNull String pattern) {
     myPattern = pattern;
   }
-
-  @NotNull
-  public String getWorkingDirectory() {
-    return myWorkingDirectory;
-  }
-
-  public void setWorkingDirectory(@NotNull String workingDirectory) {
-    myWorkingDirectory = workingDirectory;
-  }
-
+  
   @NotNull
   public Kind getKind() {
     return myKind;

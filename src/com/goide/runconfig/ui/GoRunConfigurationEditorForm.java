@@ -17,7 +17,6 @@
 package com.goide.runconfig.ui;
 
 import com.goide.runconfig.GoRunConfigurationWithMain;
-import com.intellij.application.options.ModulesComboBox;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.options.ConfigurationException;
@@ -25,19 +24,20 @@ import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.TextBrowseFolderListener;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
-import com.intellij.ui.RawCommandLineEditor;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
-public class GoRunConfigurationEditorForm extends SettingsEditor<GoRunConfigurationWithMain> {
-  private JPanel component;
-  private ModulesComboBox myComboModules;
-  private RawCommandLineEditor myParamsField;
+public class GoRunConfigurationEditorForm extends SettingsEditor<GoRunConfigurationWithMain<?>> {
+  @NotNull private final Project myProject;
+  private JPanel myComponent;
   private TextFieldWithBrowseButton myFilePathField;
+  private GoCommonSettingsPanel myCommonSettings;
+  @SuppressWarnings("unused") private JPanel myCommonSettingsPanel;
 
   public GoRunConfigurationEditorForm(@NotNull Project project) {
     super(null);
+    myProject = project;
     FileChooserDescriptor chooseFileDescriptor = FileChooserDescriptorFactory.createSingleLocalFileDescriptor();
     chooseFileDescriptor.setRoots(project.getBaseDir());
     chooseFileDescriptor.setShowFileSystemRoots(false);
@@ -45,32 +45,32 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoRunConfigurat
   }
 
   @Override
-  protected void resetEditorFrom(@NotNull GoRunConfigurationWithMain configuration) {
-    myComboModules.setModules(configuration.getValidModules());
-    myComboModules.setSelectedModule(configuration.getConfigurationModule().getModule());
-    myParamsField.setText(configuration.getParams());
-    String filepath = configuration.getFilePath();
-    if (filepath.isEmpty()) {
-      filepath = configuration.getProject().getBasePath();
-    }
-    myFilePathField.setText(filepath);
+  protected void resetEditorFrom(@NotNull GoRunConfigurationWithMain<?> configuration) {
+    myFilePathField.setText(configuration.getFilePath());
+    myCommonSettings.resetEditorFrom(configuration);
   }
 
   @Override
-  protected void applyEditorTo(@NotNull GoRunConfigurationWithMain configuration) throws ConfigurationException {
-    configuration.setModule(myComboModules.getSelectedModule());
-    configuration.setParams(myParamsField.getText());
+  protected void applyEditorTo(@NotNull GoRunConfigurationWithMain<?> configuration) throws ConfigurationException {
     configuration.setFilePath(myFilePathField.getText());
+    myCommonSettings.applyEditorTo(configuration);
   }
 
   @NotNull
   @Override
   protected JComponent createEditor() {
-    return component;
+    return myComponent;
   }
 
   @Override
   protected void disposeEditor() {
-    component.setVisible(false);
+    myComponent.setVisible(false);
+    myCommonSettingsPanel = null;
+    myCommonSettings = null;
+  }
+
+  private void createUIComponents() {
+    myCommonSettings = new GoCommonSettingsPanel(myProject);
+    myCommonSettingsPanel = myCommonSettings.getPanel();
   }
 }

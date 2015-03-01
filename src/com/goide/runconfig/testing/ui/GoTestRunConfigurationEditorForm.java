@@ -19,11 +19,10 @@ package com.goide.runconfig.testing.ui;
 import com.goide.completion.GoCompletionUtil;
 import com.goide.psi.GoFile;
 import com.goide.runconfig.testing.GoTestRunConfiguration;
+import com.goide.runconfig.ui.GoCommonSettingsPanel;
 import com.goide.stubs.index.GoPackagesIndex;
 import com.goide.util.GoUtil;
-import com.intellij.application.options.ModulesComboBox;
 import com.intellij.codeInsight.completion.CompletionResultSet;
-import com.intellij.execution.configuration.EnvironmentVariablesTextFieldWithBrowseButton;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
@@ -34,7 +33,6 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.ui.EditorTextField;
 import com.intellij.ui.ListCellRendererWrapper;
-import com.intellij.ui.RawCommandLineEditor;
 import com.intellij.util.Processor;
 import com.intellij.util.TextFieldCompletionProvider;
 import org.intellij.lang.regexp.RegExpLanguage;
@@ -47,11 +45,11 @@ import java.awt.event.ActionListener;
 
 public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunConfiguration> {
   @NotNull private final Project myProject;
+
+  private GoCommonSettingsPanel myCommonSettings;
+  
   private JPanel myComponent;
-  private ModulesComboBox myComboModules;
-  private RawCommandLineEditor myParamsField;
   private EditorTextField myPatternEditor;
-  private TextFieldWithBrowseButton myWorkingDirectoryField;
 
   private JComboBox myTestKindComboBox;
   private JLabel myFileLabel;
@@ -60,8 +58,8 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   private EditorTextField myPackageField;
   private JLabel myDirectoryLabel;
   private TextFieldWithBrowseButton myDirectoryField;
-  private EnvironmentVariablesTextFieldWithBrowseButton myEnvironmentField;
   private JLabel myPatternLabel;
+  @SuppressWarnings("unused") private JPanel myCommonSettingsPanel;
 
   public GoTestRunConfigurationEditorForm(@NotNull final Project project) {
     super(null);
@@ -101,14 +99,9 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
     String filePath = configuration.getFilePath();
     myFileField.setText(filePath.isEmpty() ? configuration.getProject().getBasePath() : filePath);
 
-    myComboModules.setModules(configuration.getValidModules());
-    myComboModules.setSelectedModule(configuration.getConfigurationModule().getModule());
-    myParamsField.setText(configuration.getParams());
     myPatternEditor.setText(configuration.getPattern());
-    myWorkingDirectoryField.setText(configuration.getWorkingDirectory());
-    
-    myEnvironmentField.setEnvs(configuration.getCustomEnvironment());
-    myEnvironmentField.setPassParentEnvs(configuration.isPassParentEnvironment());
+
+    myCommonSettings.resetEditorFrom(configuration);
   }
 
   @Override
@@ -117,14 +110,9 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
     configuration.setPackage(myPackageField.getText());
     configuration.setDirectoryPath(myDirectoryField.getText());
     configuration.setFilePath(myFileField.getText());
-
-    configuration.setModule(myComboModules.getSelectedModule());
-    configuration.setParams(myParamsField.getText());
     configuration.setPattern(myPatternEditor.getText());
-    configuration.setWorkingDirectory(myWorkingDirectoryField.getText());
-    
-    configuration.setCustomEnvironment(myEnvironmentField.getEnvs());
-    configuration.setPassParentEnvironment(myEnvironmentField.isPassParentEnvs());
+
+    myCommonSettings.applyEditorTo(configuration);
   }
 
   @NotNull
@@ -136,9 +124,13 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   @Override
   protected void disposeEditor() {
     myComponent.setVisible(false);
+    myCommonSettings = null;
+    myCommonSettingsPanel = null;
   }
 
   private void createUIComponents() {
+    myCommonSettings = new GoCommonSettingsPanel(myProject);
+    myCommonSettingsPanel = myCommonSettings.getPanel();
     myPatternEditor = new EditorTextField("", null, RegExpLanguage.INSTANCE.getAssociatedFileType());
     myPackageField = new TextFieldCompletionProvider() {
       @Override
@@ -146,7 +138,7 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
                                            int offset,
                                            @NotNull String prefix,
                                            @NotNull final CompletionResultSet result) {
-        final Module module = myComboModules.getSelectedModule();
+        final Module module = myCommonSettings.getSelectedModule();
         if (module != null) {
           final GlobalSearchScope scope = GoUtil.moduleScope(module);
           for (String packageName : GoPackagesIndex.getAllPackages(myProject)) {
@@ -183,7 +175,6 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   private void installFileChoosers(@NotNull Project project) {
     GoUtil.installFileChooser(project, myFileField, false);
     GoUtil.installFileChooser(project, myDirectoryField, true);
-    GoUtil.installFileChooser(project, myWorkingDirectoryField, true);
   }
 
   private void installTestKindComboBox() {

@@ -43,9 +43,11 @@ import java.util.Map;
 public abstract class GoRunConfigurationBase<RunningState extends GoRunningState>
   extends ModuleBasedConfiguration<GoModuleBasedConfiguration> implements RunConfigurationWithSuppressedDefaultRunAction {
 
+  private static final String WORKING_DIRECTORY_NAME = "working_directory";
   private static final String PARAMETERS_NAME = "parameters";
   private static final String PASS_PARENT_ENV = "pass_parent_env";
 
+  @NotNull private String myWorkingDirectory = "";
   @NotNull private String myParams = "";
   @NotNull private Map<String, String> myCustomEnvironment = ContainerUtil.newHashMap();
   private boolean myPassParentEnvironment = true;
@@ -57,9 +59,13 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
     if (module == null) {
       Collection<Module> modules = getValidModules();
       if (modules.size() == 1) {
-        getConfigurationModule().setModule(ContainerUtil.getFirstItem(modules));
+        module = ContainerUtil.getFirstItem(modules);
+        getConfigurationModule().setModule(module);
       }
     }
+    
+    
+    //myWorkingDirectory = module != null ? PathUtil.getParentPath(module.getModuleFilePath()) : project.getBasePath();
   }
 
   @Nullable
@@ -81,21 +87,6 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
   }
 
   @Override
-  public void writeExternal(final Element element) throws WriteExternalException {
-    super.writeExternal(element);
-    writeModule(element);
-    if (StringUtil.isNotEmpty(myParams)) {
-      JDOMExternalizerUtil.addElementWithValueAttribute(element, PARAMETERS_NAME, myParams);
-    }
-    if (!myCustomEnvironment.isEmpty()) {
-      EnvironmentVariablesComponent.writeExternal(element, myCustomEnvironment);
-    }
-    if (!myPassParentEnvironment) {
-      JDOMExternalizerUtil.addElementWithValueAttribute(element, PASS_PARENT_ENV, "false");
-    }
-  }
-
-  @Override
   public void checkConfiguration() throws RuntimeConfigurationException {
     final GoModuleBasedConfiguration configurationModule = getConfigurationModule();
     final Module module = configurationModule.getModule();
@@ -111,6 +102,27 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
       }
       throw new RuntimeConfigurationError(ExecutionBundle.message("module.not.specified.error.text"));
     }
+    if (myWorkingDirectory.isEmpty()) {
+      throw new RuntimeConfigurationError("Working directory is not specified");
+    }
+  }
+
+  @Override
+  public void writeExternal(final Element element) throws WriteExternalException {
+    super.writeExternal(element);
+    writeModule(element);
+    if (StringUtil.isNotEmpty(myWorkingDirectory)) {
+      JDOMExternalizerUtil.addElementWithValueAttribute(element, WORKING_DIRECTORY_NAME, myWorkingDirectory);
+    }
+    if (StringUtil.isNotEmpty(myParams)) {
+      JDOMExternalizerUtil.addElementWithValueAttribute(element, PARAMETERS_NAME, myParams);
+    }
+    if (!myCustomEnvironment.isEmpty()) {
+      EnvironmentVariablesComponent.writeExternal(element, myCustomEnvironment);
+    }
+    if (!myPassParentEnvironment) {
+      JDOMExternalizerUtil.addElementWithValueAttribute(element, PASS_PARENT_ENV, "false");
+    }
   }
 
   @Override
@@ -118,6 +130,7 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
     super.readExternal(element);
     readModule(element);
     myParams = StringUtil.notNullize(JDOMExternalizerUtil.getFirstChildValueAttribute(element, PARAMETERS_NAME));
+    myWorkingDirectory = StringUtil.notNullize(JDOMExternalizerUtil.getFirstChildValueAttribute(element, WORKING_DIRECTORY_NAME));
     EnvironmentVariablesComponent.readExternal(element, myCustomEnvironment);
     
     String passEnvValue = JDOMExternalizerUtil.getFirstChildValueAttribute(element, PASS_PARENT_ENV);
@@ -164,5 +177,12 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
     return myPassParentEnvironment;
   }
 
-  public abstract String getWorkingDirectory();
+  @NotNull
+  public String getWorkingDirectory() {
+    return myWorkingDirectory;
+  }
+
+  public void setWorkingDirectory(@NotNull String workingDirectory) {
+    myWorkingDirectory = workingDirectory;
+  }
 }
