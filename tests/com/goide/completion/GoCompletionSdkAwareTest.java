@@ -32,6 +32,14 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
     doTestInclude("package main; import . \"fmt\"; type alias <caret>", "Formatter");
   }
 
+  public void testTypeAutoImport() {
+    doCheckResult("package main; \n" +
+                  "func test(){Templat<caret>}",
+                  "package main;\n" +
+                  "import \"text/template\"\n" +
+                  "func test(){template.Template{<caret>}}" );
+  }
+  
   public void testAutoImport() {
     doCheckResult("package main; \n" +
                   "func test(){Fprintl<caret>}",
@@ -130,7 +138,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                                       "import `io`\n" +
                                       "func test(){ReadA<caret>}");
     myFixture.completeBasic();
-    myFixture.assertPreferredCompletionItems(0, "ReadAtLeast", "ReadAtLeastCustom");
+    myFixture.assertPreferredCompletionItems(0, "ReadAtLeast", "ReaderAt", "ReadAtLeastCustom", "ReaderAtCustom");
   }
 
   public void testImportedTypesPriority() {

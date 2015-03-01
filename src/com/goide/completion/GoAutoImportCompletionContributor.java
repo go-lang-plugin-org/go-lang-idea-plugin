@@ -33,6 +33,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.*;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.ProcessingContext;
@@ -54,6 +55,19 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
       }
     }
   };
+  private static final InsertHandler<LookupElement> TYPE_CONVERSION_INSERT_HANDLER = new InsertHandler<LookupElement>() {
+    @Override
+    public void handleInsert(InsertionContext context, LookupElement item) {
+      PsiElement element = item.getPsiElement();
+      if (element instanceof GoNamedElement) {
+        if (element instanceof GoTypeSpec) {
+          GoCompletionUtil.getTypeConversionInsertHandler(((GoTypeSpec)element)).handleInsert(context, item);
+        }
+        autoImport(context, (GoNamedElement)element);
+      }
+    }
+  };
+
 
   public GoAutoImportCompletionContributor() {
     extend(CompletionType.BASIC, inGoFile(), new CompletionProvider<CompletionParameters>() {
@@ -69,15 +83,16 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         if (!(file instanceof GoFile)) return;
 
         final Map<String, GoImportSpec> importedPackages = ((GoFile)file).getImportedPackagesMap();
-        
+
+        Project project = position.getProject();
+        GlobalSearchScope scope = GoUtil.moduleScope(position);
         if (parent instanceof GoReferenceExpression) {
           GoReferenceExpression qualifier = ((GoReferenceExpression)parent).getQualifier();
           if (qualifier == null || qualifier.getReference().resolve() == null) {
             result = adjustMatcher(parameters, result, parent);
-            Project project = parent.getProject();
             for (String name : StubIndex.getInstance().getAllKeys(GoFunctionIndex.KEY, project)) {
               if (StringUtil.isCapitalized(name) && !StringUtil.startsWith(name, "Test") && !StringUtil.startsWith(name, "Benchmark")) {
-                for (GoFunctionDeclaration declaration : GoFunctionIndex.find(name, project, GoUtil.moduleScope(position))) {
+                for (GoFunctionDeclaration declaration : GoFunctionIndex.find(name, project, scope)) {
                   if (!allowed(declaration)) continue;
 
                   double priority = GoCompletionUtil.NOT_IMPORTED_FUNCTION_PRIORITY;
@@ -94,29 +109,33 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
             }
           }
         }
-
-        if (parent instanceof GoTypeReferenceExpression) {
-          GoTypeReferenceExpression qualifier = ((GoTypeReferenceExpression)parent).getQualifier();
-          if (qualifier == null || qualifier.getReference().resolve() == null) {
-            result = adjustMatcher(parameters, result, parent);
-            Project project = parent.getProject();
+        if (parent instanceof GoReferenceExpression || parent instanceof GoTypeReferenceExpression) {
+          GoReferenceExpressionBase qualifier = ((GoReferenceExpressionBase)parent).getQualifier();
+          if (qualifier == null || qualifier.getReference() == null || qualifier.getReference().resolve() == null) {
+            boolean forTypes = parent instanceof GoTypeReferenceExpression;
             for (String name : StubIndex.getInstance().getAllKeys(GoTypesIndex.KEY, project)) {
               if (StringUtil.isCapitalized(name)) {
-                for (GoTypeSpec declaration : GoTypesIndex.find(name, project, GoUtil.moduleScope(position))) {
+                for (GoTypeSpec declaration : GoTypesIndex.find(name, project, scope)) {
                   if (declaration.getContainingFile() == file) continue;
                   PsiReference reference = parent.getReference();
                   if (reference instanceof GoTypeReference && !((GoTypeReference)reference).allowed(declaration)) continue;
                   if (!allowed(declaration)) continue;
 
-                  double priority = GoCompletionUtil.NOT_IMPORTED_TYPE_PRIORITY;
+                  double priority = forTypes ? GoCompletionUtil.NOT_IMPORTED_TYPE_PRIORITY : GoCompletionUtil.NOT_IMPORTED_TYPE_CONVERSION;
                   GoImportSpec existingImport = importedPackages.get(declaration.getContainingFile().getImportPath());
                   if (existingImport != null) {
                     if (existingImport.getDot() != null) {
                       continue;
                     }
-                    priority = GoCompletionUtil.TYPE_PRIORITY;
+                    priority = forTypes ? GoCompletionUtil.TYPE_PRIORITY : GoCompletionUtil.TYPE_CONVERSION;
                   }
-                  result.addElement(GoCompletionUtil.createTypeLookupElement(declaration, name, true, TYPE_INSERT_HANDLER, priority));
+                  if (forTypes) {
+                    result.addElement(GoCompletionUtil.createTypeLookupElement(declaration, name, true, TYPE_INSERT_HANDLER, priority));
+                  }
+                  else {
+                    result.addElement(GoCompletionUtil.createTypeConversionLookupElement(declaration, name, true,
+                                                                                         TYPE_CONVERSION_INSERT_HANDLER, priority));
+                  }
                 }
               }
             }

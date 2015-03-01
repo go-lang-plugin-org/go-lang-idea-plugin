@@ -27,6 +27,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
+import com.intellij.util.ObjectUtils;
 import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,11 +37,12 @@ import javax.swing.*;
 public class GoCompletionUtil {
   public static final int KEYWORD_PRIORITY = 20;
   public static final int CONTEXT_KEYWORD_PRIORITY = 25;
-  public static final int NOT_IMPORTED_FUNCTION_PRIORITY = 0;
+  public static final int NOT_IMPORTED_FUNCTION_PRIORITY = 3;
   public static final int FUNCTION_PRIORITY = NOT_IMPORTED_FUNCTION_PRIORITY + 10;
   public static final int NOT_IMPORTED_TYPE_PRIORITY = 5;
   public static final int TYPE_PRIORITY = NOT_IMPORTED_TYPE_PRIORITY + 10;
-  public static final int TYPE_CONVERSION = 15;
+  public static final int NOT_IMPORTED_TYPE_CONVERSION = 1;
+  public static final int TYPE_CONVERSION = NOT_IMPORTED_TYPE_CONVERSION + 10;
   public static final int VAR_PRIORITY = 15;
   public static final int LABEL_PRIORITY = 15;
   public static final int PACKAGE_PRIORITY = 5;
@@ -91,9 +93,9 @@ public class GoCompletionUtil {
         .withInsertHandler(handler)
         .withTypeText(typeText, true)
         .withTailText(calcTailText(f), true)
-        .withLookupString(pkg)
+        .withLookupString(pkg.toLowerCase())
         .withLookupString(name.toLowerCase())
-        .withLookupString(pkg + name)
+        .withLookupString((pkg + name).toLowerCase())
         .withPresentableText(pkg + name + paramText), priority);
   }
 
@@ -115,24 +117,23 @@ public class GoCompletionUtil {
 
   @NotNull
   public static LookupElement createTypeLookupElement(@NotNull GoTypeSpec t) {
-    return createTypeLookupElement(t, t.getName(), false, null, TYPE_PRIORITY);
+    return createTypeLookupElement(t, StringUtil.notNullize(t.getName()), false, null, TYPE_PRIORITY);
   }
 
   @NotNull
   public static LookupElement createTypeLookupElement(@NotNull GoTypeSpec t,
-                                                      @Nullable String name,
+                                                      @NotNull String name,
                                                       boolean showPackage,
                                                       @Nullable InsertHandler<LookupElement> handler, 
                                                       double priority) {
     String pkg = showPackage ? StringUtil.notNullize(t.getContainingFile().getPackageName()) : "";
     pkg = pkg.isEmpty() ? pkg : pkg + ".";
-    name = StringUtil.notNullize(name);
     return PrioritizedLookupElement.withPriority(
       LookupElementBuilder.
         create(t, name)
-        .withLookupString(pkg)
-        .withLookupString(StringUtil.notNullize(name, "").toLowerCase())
-        .withLookupString(pkg + name)
+        .withLookupString(pkg.toLowerCase())
+        .withLookupString(name.toLowerCase())
+        .withLookupString((pkg + name).toLowerCase())
         .withPresentableText(pkg + name)
         .withInsertHandler(handler)
         .withIcon(GoIcons.TYPE), priority);
@@ -140,22 +141,39 @@ public class GoCompletionUtil {
 
   @NotNull
   public static LookupElement createLabelLookupElement(@NotNull GoLabelDefinition l) {
-    return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(l).withIcon(GoIcons.LABEL),
-                                                 LABEL_PRIORITY);
+    return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(l).withIcon(GoIcons.LABEL), LABEL_PRIORITY);
   }
 
   @NotNull
   public static LookupElement createTypeConversionLookupElement(@NotNull GoTypeSpec t) {
-    InsertHandler<LookupElement> handler = t.getType() instanceof GoStructType ?
-                                           BracesInsertHandler.ONE_LINER :
-                                           ParenthesesInsertHandler.WITH_PARAMETERS; // todo: check context and place caret in or outside {}
+    return createTypeConversionLookupElement(t, StringUtil.notNullize(t.getName()), false, null, TYPE_CONVERSION);
+  }
+
+  @NotNull
+  public static LookupElement createTypeConversionLookupElement(@NotNull GoTypeSpec t, 
+                                                                @NotNull String name,
+                                                                boolean showPackage,
+                                                                @Nullable InsertHandler<LookupElement> insertHandler,
+                                                                double priority) {
+    String pkg = showPackage ? StringUtil.notNullize(t.getContainingFile().getPackageName()) : "";
+    pkg = pkg.isEmpty() ? pkg : pkg + ".";
+    // todo: check context and place caret in or outside {}
+    InsertHandler<LookupElement> handler = ObjectUtils.notNull(insertHandler, getTypeConversionInsertHandler(t)); 
     return PrioritizedLookupElement.withPriority(
       LookupElementBuilder
-        .create(t)
-        .withLookupString(StringUtil.notNullize(t.getName(), "").toLowerCase())
+        .create(t, name)
+        .withLookupString(pkg.toLowerCase())
+        .withLookupString(name.toLowerCase())
+        .withLookupString((pkg + name).toLowerCase())
+        .withPresentableText(pkg + name)
         .withInsertHandler(handler)
         .withIcon(GoIcons.TYPE),
-      TYPE_CONVERSION);
+      priority);
+  }
+
+  @NotNull
+  public static InsertHandler<LookupElement> getTypeConversionInsertHandler(@NotNull GoTypeSpec t) {
+    return t.getType() instanceof GoStructType ? BracesInsertHandler.ONE_LINER : ParenthesesInsertHandler.WITH_PARAMETERS;
   }
 
   @NotNull

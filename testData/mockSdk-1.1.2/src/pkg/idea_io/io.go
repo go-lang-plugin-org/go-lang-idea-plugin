@@ -187,7 +187,7 @@ type WriterTo interface {
 //
 // Clients of ReadAt can execute parallel ReadAt calls on the
 // same input source.
-type ReaderAt interface {
+type ReaderAtCustom interface {
 	ReadAt(p []byte, off int64) (n int, err error)
 }
 
