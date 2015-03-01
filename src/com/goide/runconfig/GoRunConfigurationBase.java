@@ -32,6 +32,7 @@ import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizerUtil;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.util.PathUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
@@ -63,9 +64,14 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
         getConfigurationModule().setModule(module);
       }
     }
-    
-    
-    //myWorkingDirectory = module != null ? PathUtil.getParentPath(module.getModuleFilePath()) : project.getBasePath();
+
+
+    if (module != null) {
+      myWorkingDirectory = StringUtil.trimEnd(PathUtil.getParentPath(module.getModuleFilePath()), ".idea");
+    }
+    else {
+      myWorkingDirectory = configurationModule.getProject().getBasePath();
+    }
   }
 
   @Nullable
@@ -130,7 +136,11 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
     super.readExternal(element);
     readModule(element);
     myParams = StringUtil.notNullize(JDOMExternalizerUtil.getFirstChildValueAttribute(element, PARAMETERS_NAME));
-    myWorkingDirectory = StringUtil.notNullize(JDOMExternalizerUtil.getFirstChildValueAttribute(element, WORKING_DIRECTORY_NAME));
+    
+    String workingDirectoryValue = JDOMExternalizerUtil.getFirstChildValueAttribute(element, WORKING_DIRECTORY_NAME);
+    if (workingDirectoryValue != null) {
+      myWorkingDirectory = workingDirectoryValue;
+    }
     EnvironmentVariablesComponent.readExternal(element, myCustomEnvironment);
     
     String passEnvValue = JDOMExternalizerUtil.getFirstChildValueAttribute(element, PASS_PARENT_ENV);
