@@ -182,4 +182,16 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
     doTestEquals("package foo; type E struct {}; type B struct {E}; func (e E) foo() {}; func boo() {}" +
                   "func main() {B{}.E..<caret>foo()}", "foo");
   }
+
+  public void testCompleteWithUnfinishedPackage() {
+    doCheckResult("package main\n" +
+                  "func main() {\n" +
+                  "    f.fprintl<caret>\n" +
+                  "}",
+                  "package main\n" +
+                  "import \"fmt\"\n" +
+                  "func main() {\n" +
+                  "    fmt.Fprintln()\n" +
+                  "}");
+  }
 }
