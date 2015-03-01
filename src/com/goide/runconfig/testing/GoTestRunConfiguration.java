@@ -68,8 +68,8 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
 
   @Override
   public void checkConfiguration() throws RuntimeConfigurationException {
+    super.checkConfiguration();
     GoModuleBasedConfiguration configurationModule = getConfigurationModule();
-    configurationModule.checkForWarning();
     if (myWorkingDirectory.isEmpty()) {
       throw new RuntimeConfigurationError("Working directory is not specified");
     }

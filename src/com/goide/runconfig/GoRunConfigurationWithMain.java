@@ -48,9 +48,9 @@ public abstract class GoRunConfigurationWithMain<T extends GoRunningState> exten
 
   @Override
   public void checkConfiguration() throws RuntimeConfigurationException {
+    super.checkConfiguration();
+    
     GoModuleBasedConfiguration configurationModule = getConfigurationModule();
-    configurationModule.checkForWarning();
-
     Module module = configurationModule.getModule();
     if (module == null) return;
     VirtualFile file = VfsUtil.findFileByIoFile(new File(getFilePath()), false);

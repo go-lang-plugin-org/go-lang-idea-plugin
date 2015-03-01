@@ -17,12 +17,11 @@
 package com.goide.runconfig;
 
 import com.goide.sdk.GoSdkService;
+import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
 import com.intellij.execution.configuration.EnvironmentVariablesComponent;
-import com.intellij.execution.configurations.ConfigurationFactory;
-import com.intellij.execution.configurations.ModuleBasedConfiguration;
-import com.intellij.execution.configurations.RunProfileState;
+import com.intellij.execution.configurations.*;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.RunConfigurationWithSuppressedDefaultRunAction;
 import com.intellij.openapi.module.Module;
@@ -93,6 +92,24 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
     }
     if (!myPassParentEnvironment) {
       JDOMExternalizerUtil.addElementWithValueAttribute(element, PASS_PARENT_ENV, "false");
+    }
+  }
+
+  @Override
+  public void checkConfiguration() throws RuntimeConfigurationException {
+    final GoModuleBasedConfiguration configurationModule = getConfigurationModule();
+    final Module module = configurationModule.getModule();
+    if (module != null) {
+      if (GoSdkService.getInstance(module.getProject()).getSdkHomePath(module) == null) {
+        throw new RuntimeConfigurationWarning("Go SDK is not specified for module '" + module.getName() + "'");
+      }
+    }
+    else {
+      final String moduleName = configurationModule.getModuleName();
+      if (moduleName != null) {
+        throw new RuntimeConfigurationError(ExecutionBundle.message("module.doesn.t.exist.in.project.error.text", moduleName));
+      }
+      throw new RuntimeConfigurationError(ExecutionBundle.message("module.not.specified.error.text"));
     }
   }
 
