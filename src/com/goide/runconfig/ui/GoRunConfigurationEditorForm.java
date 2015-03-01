@@ -16,14 +16,19 @@
 
 package com.goide.runconfig.ui;
 
+import com.goide.GoConstants;
+import com.goide.GoFileType;
+import com.goide.psi.GoFile;
 import com.goide.runconfig.GoRunConfigurationWithMain;
-import com.intellij.openapi.fileChooser.FileChooserDescriptor;
-import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
+import com.goide.util.GoUtil;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.TextBrowseFolderListener;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import com.intellij.openapi.util.Condition;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -34,13 +39,22 @@ public class GoRunConfigurationEditorForm extends SettingsEditor<GoRunConfigurat
   private GoCommonSettingsPanel myCommonSettingsPanel;
 
 
-  public GoRunConfigurationEditorForm(@NotNull Project project) {
+  public GoRunConfigurationEditorForm(@NotNull final Project project) {
     super(null);
     myCommonSettingsPanel.init(project);
-    FileChooserDescriptor chooseFileDescriptor = FileChooserDescriptorFactory.createSingleLocalFileDescriptor();
-    chooseFileDescriptor.setRoots(project.getBaseDir());
-    chooseFileDescriptor.setShowFileSystemRoots(false);
-    myFilePathField.addBrowseFolderListener(new TextBrowseFolderListener(chooseFileDescriptor));
+    GoUtil.installFileChooser(project, myFilePathField, false, new Condition<VirtualFile>() {
+      @Override
+      public boolean value(VirtualFile file) {
+        if (file.getFileType() != GoFileType.INSTANCE) {
+          return false;
+        }
+        final PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
+        if (psiFile != null && psiFile instanceof GoFile) {
+          return GoConstants.MAIN.equals(((GoFile)psiFile).getPackageName()) && ((GoFile)psiFile).findMainFunction() != null;
+        }
+        return false;
+      }
+    });
   }
 
   @Override

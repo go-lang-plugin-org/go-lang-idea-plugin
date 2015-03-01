@@ -28,9 +28,11 @@ import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.TextBrowseFolderListener;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -38,6 +40,7 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.text.CharSequenceHashingStrategy;
 import gnu.trove.THashSet;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -84,12 +87,22 @@ public class GoUtil {
     return ContainerUtil.newTroveSet(CharSequenceHashingStrategy.CASE_INSENSITIVE, strings);
   }
 
-  public static void installFileChooser(@NotNull Project project, @NotNull TextFieldWithBrowseButton field, boolean directory) {
+  public static void installFileChooser(@NotNull Project project,
+                                        @NotNull TextFieldWithBrowseButton field,
+                                        boolean directory) {
+    installFileChooser(project, field, directory, null);
+  }
+
+  public static void installFileChooser(@NotNull Project project,
+                                        @NotNull TextFieldWithBrowseButton field,
+                                        boolean directory,
+                                        @Nullable Condition<VirtualFile> fileFilter) {
     FileChooserDescriptor chooseDirectoryDescriptor = directory
                                                       ? FileChooserDescriptorFactory.createSingleFolderDescriptor() 
                                                       : FileChooserDescriptorFactory.createSingleLocalFileDescriptor();
     chooseDirectoryDescriptor.setRoots(project.getBaseDir());
     chooseDirectoryDescriptor.setShowFileSystemRoots(false);
+    chooseDirectoryDescriptor.withFileFilter(fileFilter);
     field.addBrowseFolderListener(new TextBrowseFolderListener(chooseDirectoryDescriptor));
   }
 

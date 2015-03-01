@@ -13,11 +13,14 @@ import com.intellij.ui.components.JBPanel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
+
 public class GoCommonSettingsPanel extends JBPanel {
   private RawCommandLineEditor myParamsField;
   private TextFieldWithBrowseButton myWorkingDirectoryField;
   private EnvironmentVariablesTextFieldWithBrowseButton myEnvironmentField;
   private ModulesComboBox myModulesComboBox;
+  @SuppressWarnings("unused") private JPanel myRoot;
 
   public void init(@NotNull Project project) {
     GoUtil.installFileChooser(project, myWorkingDirectoryField, true);
