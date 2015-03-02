@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 ideaVersion="139.1038.6"
 
