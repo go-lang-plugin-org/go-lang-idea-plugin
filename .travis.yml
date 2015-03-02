@@ -2,6 +2,7 @@ language: java
 jdk:
   - oraclejdk8
 script: "./travis.sh"
+sudo: false
 cache:
   directories:
   - idea-IC
