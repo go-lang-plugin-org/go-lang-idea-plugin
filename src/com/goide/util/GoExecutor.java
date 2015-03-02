@@ -184,6 +184,7 @@ public class GoExecutor {
     String executable = GoEnvironmentUtil.getExecutableForSdk(myGoRoot).getAbsolutePath();
     GeneralCommandLine commandLine = new GeneralCommandLine();
     commandLine.setExePath(ObjectUtils.notNull(myExePath, executable));
+    commandLine.getEnvironment().putAll(myExtraEnvironment);
     commandLine.getEnvironment().put(GoConstants.GO_ROOT, StringUtil.notNullize(myGoRoot));
     commandLine.getEnvironment().put(GoConstants.GO_PATH, StringUtil.notNullize(myGoPath));
     commandLine.withWorkDirectory(myWorkDirectory);
