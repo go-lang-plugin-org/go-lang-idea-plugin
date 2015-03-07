@@ -184,7 +184,9 @@ public class GoSdkConfigurable implements SearchableConfigurable, Configurable.N
           ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
-              setVersion(version);
+              if (!Disposer.isDisposed(myDisposable)) {
+                setVersion(version);
+              }
             }
           }, ModalityState.any());
         }
