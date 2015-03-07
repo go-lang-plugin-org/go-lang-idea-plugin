@@ -115,9 +115,10 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   public void scheduleUpdate(int delay) {
     myAlarm.addRequest(new Runnable() {
       public void run() {
-        if (GoSdkService.getInstance(myModule.getProject()).isGoModule(GoModuleLibrariesInitializer.this.myModule)) {
+        final Project project = myModule.getProject();
+        if (GoSdkService.getInstance(project).isGoModule(GoModuleLibrariesInitializer.this.myModule)) {
           final Set<String> libraryRootUrls = ContainerUtil.newLinkedHashSet();
-          VirtualFile[] contentRoots = ProjectRootManager.getInstance(myModule.getProject()).getContentRoots();
+          VirtualFile[] contentRoots = ProjectRootManager.getInstance(project).getContentRoots();
 
           final Collection<VirtualFile> candidates = GoSdkUtil.getGoPathsSources(myModule);
           myFilesToWatch.clear();
@@ -134,7 +135,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
               ApplicationManager.getApplication().invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                  if (GoSdkService.getInstance(myModule.getProject()).isGoModule(GoModuleLibrariesInitializer.this.myModule)) {
+                  if (!project.isDisposed() && GoSdkService.getInstance(project).isGoModule(GoModuleLibrariesInitializer.this.myModule)) {
                     attachLibraries(libraryRootUrls);
                   }
                 }
@@ -146,7 +147,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
           ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
-              if (!GoSdkService.getInstance(myModule.getProject()).isGoModule(GoModuleLibrariesInitializer.this.myModule)) {
+              if (!project.isDisposed() && !GoSdkService.getInstance(project).isGoModule(GoModuleLibrariesInitializer.this.myModule)) {
                 removeLibraryIfNeeded();
               }
             }
