@@ -19,9 +19,7 @@ package com.goide.sdk;
 import com.goide.GoEnvironmentUtil;
 import com.goide.project.GoLibrariesService;
 import com.goide.psi.GoFile;
-import com.goide.util.GoExecutor;
 import com.intellij.execution.configurations.PathEnvironmentVariableUtil;
-import com.intellij.execution.process.ProcessOutput;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
@@ -52,9 +50,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GoSdkUtil {
-
-  private static final String GO_VERSION_PATTERN = "go version go([\\d.]+)";
-  private static final String GO_DEVEL_VERSION_PATTERN = "go version (devel[\\d.]+)";
+  private static final String GO_VERSION_PATTERN = "theVersion\\s*=\\s*`go([\\d.]+)`";
+  private static final String GO_DEVEL_VERSION_PATTERN = "theVersion\\s*=\\s*`(devel[\\d.]+)`";
 
   // todo: caching
   @Nullable
@@ -241,16 +238,24 @@ public class GoSdkUtil {
 
   @Nullable
   public static String retrieveGoVersion(@NotNull final String sdkPath) {
-    ProcessOutput output = new ProcessOutput();
-    if (GoExecutor.empty().withGoRoot(sdkPath).withProcessOutput(output).addParameters("version").executeSilent()) {
-      Matcher matcher = Pattern.compile(GO_VERSION_PATTERN).matcher(output.getStdout());
+    try {
+      String path = "runtime/zversion.go";
+      String oldStylePath = new File(sdkPath, "src/pkg/" + path).getPath();
+      String newStylePath = new File(sdkPath, "src/" + path).getPath();
+      File zVersionFile = FileUtil.findFirstThatExist(oldStylePath, newStylePath);
+      if (zVersionFile == null) return null;
+      String text = FileUtil.loadFile(zVersionFile);
+      Matcher matcher = Pattern.compile(GO_VERSION_PATTERN).matcher(text);
       if (matcher.find()) {
         return matcher.group(1);
       }
-      matcher = Pattern.compile(GO_DEVEL_VERSION_PATTERN).matcher(output.getStdout());
+      matcher = Pattern.compile(GO_DEVEL_VERSION_PATTERN).matcher(text);
       if (matcher.find()) {
         return matcher.group(1);
       }
+    }
+    catch (IOException e) {
+      return null;
     }
     return null;
   }
