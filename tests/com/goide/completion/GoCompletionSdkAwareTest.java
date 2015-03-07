@@ -37,6 +37,14 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "func test(){Templat<caret>}",
                   "package main;\n" +
                   "import \"text/template\"\n" +
+                  "func test(){template.Template{<caret>}}");
+  }
+  
+  public void testTypeAutoImportOnQualifiedName() {
+    doCheckResult("package main; \n" +
+                  "func test(){template.Templat<caret>}",
+                  "package main;\n" +
+                  "import \"text/template\"\n" +
                   "func test(){template.Template{<caret>}}" );
   }
   

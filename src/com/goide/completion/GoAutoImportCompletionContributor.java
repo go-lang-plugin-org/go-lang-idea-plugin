@@ -78,7 +78,8 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         PsiElement position = parameters.getPosition();
         PsiElement parent = position.getParent();
         if (prevDot(parent)) return;
-
+        result = adjustMatcher(parameters, result, parent);
+        
         final PsiFile file = parameters.getOriginalFile();
         if (!(file instanceof GoFile)) return;
 
@@ -89,7 +90,6 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         if (parent instanceof GoReferenceExpression) {
           GoReferenceExpression qualifier = ((GoReferenceExpression)parent).getQualifier();
           if (qualifier == null || qualifier.getReference().resolve() == null) {
-            result = adjustMatcher(parameters, result, parent);
             for (String name : StubIndex.getInstance().getAllKeys(GoFunctionIndex.KEY, project)) {
               if (StringUtil.isCapitalized(name) && !StringUtil.startsWith(name, "Test") && !StringUtil.startsWith(name, "Benchmark")) {
                 for (GoFunctionDeclaration declaration : GoFunctionIndex.find(name, project, scope)) {
