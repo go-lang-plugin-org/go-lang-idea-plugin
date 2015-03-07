@@ -116,9 +116,11 @@
     <gotoSymbolContributor implementation="com.goide.go.GoSymbolContributor"/>
     <gotoClassContributor implementation="com.goide.go.GoTypeContributor"/>
 
+    <!-- sdk -->
     <sdkType implementation="com.goide.sdk.GoSdkType"/>
     <projectService serviceInterface="com.goide.sdk.GoSdkService" serviceImplementation="com.goide.sdk.GoSmallIDEsSdkService"
                     overrides="false"/>
+    <library.presentationProvider implementation="com.goide.sdk.GoSdkLibraryPresentationProvider"/>
     <editorNotificationProvider implementation="com.goide.inspections.WrongSdkConfigurationNotificationProvider"/>
 
     <stepsBeforeRunProvider implementation="com.goide.runconfig.before.GoBeforeRunTaskProvider"/>

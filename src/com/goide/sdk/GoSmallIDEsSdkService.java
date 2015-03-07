@@ -13,9 +13,9 @@ import com.intellij.openapi.roots.libraries.LibraryTablesRegistrar;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.util.ArrayUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,12 +34,16 @@ public class GoSmallIDEsSdkService extends GoSdkService {
       @Override
       public String compute() {
         LibraryTable table = LibraryTablesRegistrar.getInstance().getLibraryTable(myProject);
-        Library lib = table.getLibraryByName(LIBRARY_NAME);
-        String[] urls = lib == null ? ArrayUtil.EMPTY_STRING_ARRAY : lib.getUrls(OrderRootType.CLASSES);
-        String firstElement = ArrayUtil.getFirstElement(urls);
-        if (firstElement != null) {
-          firstElement = StringUtil.trimEnd(StringUtil.trimEnd(firstElement, "src/pkg"), "src");
-          return VfsUtilCore.urlToPath(firstElement);
+        for (Library library : table.getLibraries()) {
+          final String libraryName = library.getName();
+          if (libraryName != null && libraryName.startsWith(LIBRARY_NAME)) {
+            for (final VirtualFile root : library.getFiles(OrderRootType.CLASSES)) {
+              if (isGoSdkLibRoot(root)) {
+                String result = StringUtil.trimEnd(StringUtil.trimEnd(root.getUrl(), "src/pkg"), "src");
+                return VfsUtilCore.urlToPath(result);
+              }
+            }
+          }
         }
         return null;
       }
@@ -72,5 +76,9 @@ public class GoSmallIDEsSdkService extends GoSdkService {
   @Override
   public Configurable createSdkConfigurable() {
     return !myProject.isDefault() ? new GoSdkConfigurable(myProject, false) : null;
+  }
+
+  public static boolean isGoSdkLibRoot(@NotNull VirtualFile root) {
+    return root.isInLocalFileSystem() && root.isDirectory() && VfsUtilCore.findRelativeFile(GoSdkUtil.GO_VERSION_FILE_PATH, root) != null;
   }
 }

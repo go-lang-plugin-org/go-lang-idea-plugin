@@ -50,6 +50,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GoSdkUtil {
+  public static final String GO_VERSION_FILE_PATH = "runtime/zversion.go";
   private static final String GO_VERSION_PATTERN = "theVersion\\s*=\\s*`go([\\d.]+)`";
   private static final String GO_DEVEL_VERSION_PATTERN = "theVersion\\s*=\\s*`(devel[\\d.]+)`";
 
@@ -239,9 +240,8 @@ public class GoSdkUtil {
   @Nullable
   public static String retrieveGoVersion(@NotNull final String sdkPath) {
     try {
-      String path = "runtime/zversion.go";
-      String oldStylePath = new File(sdkPath, "src/pkg/" + path).getPath();
-      String newStylePath = new File(sdkPath, "src/" + path).getPath();
+      String oldStylePath = new File(sdkPath, "src/pkg/" + GO_VERSION_FILE_PATH).getPath();
+      String newStylePath = new File(sdkPath, "src/" + GO_VERSION_FILE_PATH).getPath();
       File zVersionFile = FileUtil.findFirstThatExist(oldStylePath, newStylePath);
       if (zVersionFile == null) return null;
       String text = FileUtil.loadFile(zVersionFile);
