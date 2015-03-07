@@ -78,6 +78,11 @@ public class GoSmallIDEsSdkService extends GoSdkService {
     return !myProject.isDefault() ? new GoSdkConfigurable(myProject, false) : null;
   }
 
+  @Override
+  public boolean isGoModule(@Nullable Module module) {
+    return super.isGoModule(module) && getSdkHomePath(module) != null;
+  }
+
   public static boolean isGoSdkLibRoot(@NotNull VirtualFile root) {
     return root.isInLocalFileSystem() && root.isDirectory() && VfsUtilCore.findRelativeFile(GoSdkUtil.GO_VERSION_FILE_PATH, root) != null;
   }
