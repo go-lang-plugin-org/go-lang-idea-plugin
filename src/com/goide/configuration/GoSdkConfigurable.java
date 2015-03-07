@@ -1,8 +1,13 @@
 package com.goide.configuration;
 
+import com.goide.GoConstants;
 import com.goide.sdk.GoSdkService;
 import com.goide.sdk.GoSdkUtil;
 import com.goide.sdk.GoSmallIDEsSdkService;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
@@ -20,6 +25,7 @@ import com.intellij.openapi.roots.libraries.LibraryTablesRegistrar;
 import com.intellij.openapi.ui.ComponentWithBrowseButton;
 import com.intellij.openapi.ui.TextComponentAccessor;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -28,6 +34,7 @@ import com.intellij.ui.JBCardLayout;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBPanel;
+import com.intellij.util.Alarm;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.ui.AsyncProcessIcon;
@@ -38,12 +45,18 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class GoSdkConfigurable implements SearchableConfigurable, Configurable.NoScroll {
   private static final String VERSION_GETTING = "VERSION_GETTING_CARD";
   private static final String VERSION_RESULT = "VERSION_RESULT_CARD";
 
   @NotNull private final Project myProject;
+  @NotNull private final Disposable myDisposable = Disposer.newDisposable();
+  @NotNull private final Alarm myAlarm = new Alarm(Alarm.ThreadToUse.POOLED_THREAD, myDisposable);
   private JPanel myComponent;
   private TextFieldWithBrowseButton mySdkPathField;
   private JPanel myVersionPanel;
@@ -79,28 +92,48 @@ public class GoSdkConfigurable implements SearchableConfigurable, Configurable.N
           libraryModel.removeRoot(libUrl, OrderRootType.CLASSES);
         }
 
-        String sdkPath = GoSdkUtil.adjustSdkPath(mySdkPathField.getText());
-        String versionString = GoSdkUtil.retrieveGoVersion(sdkPath);
-        boolean toRemove = StringUtil.isEmpty(sdkPath) || versionString == null;
+        final String sdkPath = GoSdkUtil.adjustSdkPath(mySdkPathField.getText());
+        String versionString = null;
+        try {
+          versionString = ApplicationManager.getApplication().executeOnPooledThread(new Callable<String>() {
+            @Override
+            public String call() {
+              return GoSdkUtil.retrieveGoVersion(sdkPath);
+            }
+          }).get(2000, TimeUnit.MILLISECONDS);
+        }
+        catch (InterruptedException e) {
+          Thread.currentThread().interrupt();
+          notifyAboutGoVersionError();
+        }
+        catch (ExecutionException e) {
+          notifyAboutGoVersionError();
+        }
+        catch (TimeoutException e) {
+          notifyAboutGoVersionError();
+        }
+        finally {
+          boolean toRemove = StringUtil.isEmpty(sdkPath) || versionString == null;
 
-        if (!toRemove) {
-          for (VirtualFile file : GoSdkUtil.getSdkDirectoriesToAttach(sdkPath, versionString)) {
-            libraryModel.addRoot(file, OrderRootType.CLASSES);
+          if (!toRemove) {
+            for (VirtualFile file : GoSdkUtil.getSdkDirectoriesToAttach(sdkPath, versionString)) {
+              libraryModel.addRoot(file, OrderRootType.CLASSES);
+            }
           }
-        }
-        libraryModel.commit();
+          libraryModel.commit();
 
-        if (toRemove) {
-          updateModules(myProject, lib, true);
-          table.removeLibrary(lib);
-        }
+          if (toRemove) {
+            updateModules(myProject, lib, true);
+            table.removeLibrary(lib);
+          }
 
-        table.getModifiableModel().commit();
+          table.getModifiableModel().commit();
 
-        if (!toRemove) {
-          updateModules(myProject, lib, false);
+          if (!toRemove) {
+            updateModules(myProject, lib, false);
+          }
+          GoSdkService.getInstance(myProject).incModificationCount();
         }
-        GoSdkService.getInstance(myProject).incModificationCount();
       }
     });
   }
@@ -146,6 +179,11 @@ public class GoSdkConfigurable implements SearchableConfigurable, Configurable.N
     return myComponent;
   }
 
+  private static void notifyAboutGoVersionError() {
+    Notifications.Bus.notify(new Notification(GoConstants.GO_NOTIFICATION_GROUP, "Error", "Can't retrieve go version",
+                                              NotificationType.ERROR));
+  }
+
   private static void updateModules(@NotNull Project project, @NotNull Library lib, boolean remove) {
     Module[] modules = ModuleManager.getInstance(project).getModules();
     for (Module module : modules) {
@@ -170,18 +208,21 @@ public class GoSdkConfigurable implements SearchableConfigurable, Configurable.N
     ApplicationManager.getApplication().assertIsDispatchThread();
     ((CardLayout)myVersionPanel.getLayout()).show(myVersionPanel, VERSION_GETTING);
 
-    ApplicationManager.getApplication().executeOnPooledThread(new Runnable() {
-      @Override
-      public void run() {
-        final String version = GoSdkUtil.retrieveGoVersion(GoSdkUtil.adjustSdkPath(sdkPath));
-        ApplicationManager.getApplication().invokeLater(new Runnable() {
-          @Override
-          public void run() {
-            setVersion(version);
-          }
-        }, ModalityState.any());
-      }
-    });
+    if (!myAlarm.isDisposed()) {
+      myAlarm.cancelAllRequests();
+      myAlarm.addRequest(new Runnable() {
+        @Override
+        public void run() {
+          final String version = GoSdkUtil.retrieveGoVersion(GoSdkUtil.adjustSdkPath(sdkPath));
+          ApplicationManager.getApplication().invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                  setVersion(version);
+                }
+            }, ModalityState.any());
+        }
+      }, 100);
+    }
   }
 
   private void setVersion(@Nullable String version) {
@@ -217,6 +258,7 @@ public class GoSdkConfigurable implements SearchableConfigurable, Configurable.N
     myVersionLabel = null;
     myVersionPanel = null;
     myDefaultLabelColor = null;
+    Disposer.dispose(myDisposable);
   }
 
   private class MyBrowseFolderListener extends ComponentWithBrowseButton.BrowseFolderActionListener<JTextField> {

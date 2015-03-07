@@ -12,6 +12,7 @@ import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.ParametersList;
 import com.intellij.execution.process.*;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Ref;
@@ -141,6 +142,8 @@ public class GoExecutor {
   }
 
   public boolean execute() throws ExecutionException {
+    Logger.getInstance(getClass()).assertTrue(!ApplicationManager.getApplication().isDispatchThread(),
+                                              "It's bad idea to run external tool on EDT");
     GeneralCommandLine commandLine = createCommandLine();
 
     final Ref<Boolean> result = Ref.create(false);

@@ -19,6 +19,9 @@ import com.intellij.util.ArrayUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+
 public class GoSmallIDEsSdkService extends GoSdkService {
   public static final String LIBRARY_NAME = "Go SDK";
 
@@ -54,9 +57,23 @@ public class GoSmallIDEsSdkService extends GoSdkService {
       @Override
       public Result<String> compute() {
         String result = null;
-        String sdkHomePath = getSdkHomePath(module);
+        final String sdkHomePath = getSdkHomePath(module);
         if (sdkHomePath != null) {
-          result = GoSdkUtil.retrieveGoVersion(sdkHomePath);
+          try {
+            result = ApplicationManager.getApplication().executeOnPooledThread(new Callable<String>() {
+              @Override
+              public String call() throws Exception {
+                return GoSdkUtil.retrieveGoVersion(sdkHomePath);
+              }
+            }).get();
+          }
+          catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            result = null;
+          }
+          catch (ExecutionException e) {
+            result = null;
+          }
         }
         return Result.create(result, GoSmallIDEsSdkService.this);
       }
