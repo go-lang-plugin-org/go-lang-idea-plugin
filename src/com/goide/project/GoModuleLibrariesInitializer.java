@@ -97,17 +97,15 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
 
   @Override
   public void moduleAdded() {
-    if (GoSdkService.getInstance(myModule.getProject()).isGoModule(myModule)) {
-      scheduleUpdate(0);
+    scheduleUpdate(0);
 
-      myModule.getMessageBus().connect().subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
-        public void rootsChanged(final ModuleRootEvent event) {
-          scheduleUpdate();
-        }
-      });
+    myModule.getMessageBus().connect().subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
+      public void rootsChanged(final ModuleRootEvent event) {
+        scheduleUpdate();
+      }
+    });
 
-      VirtualFileManager.getInstance().addVirtualFileListener(myFilesListener);
-    }
+    VirtualFileManager.getInstance().addVirtualFileListener(myFilesListener);
   }
 
   public void scheduleUpdate() {
@@ -143,6 +141,16 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
               });
             }
           }
+        }
+        else {
+          ApplicationManager.getApplication().invokeLater(new Runnable() {
+            @Override
+            public void run() {
+              if (!GoSdkService.getInstance(myModule.getProject()).isGoModule(GoModuleLibrariesInitializer.this.myModule)) {
+                removeLibraryIfNeeded();
+              }
+            }
+          });
         }
       }
     }, delay);
@@ -201,7 +209,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
 
     final ModifiableModelsProvider modelsProvider = ModifiableModelsProvider.SERVICE.getInstance();
     final ModifiableRootModel model = modelsProvider.getModuleModifiableModel(myModule);
-    final LibraryOrderEntry goLibraryEntry = OrderEntryUtil.findLibraryOrderEntry(model, GO_LIB_NAME);
+    final LibraryOrderEntry goLibraryEntry = OrderEntryUtil.findLibraryOrderEntry(model, getLibraryName());
     if (goLibraryEntry != null) {
       ApplicationManager.getApplication().runWriteAction(new Runnable() {
         @Override
