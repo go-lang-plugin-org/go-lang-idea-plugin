@@ -24,6 +24,10 @@ import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.process.ProcessOutput;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.progress.ProgressIndicator;
+import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.progress.Task;
+import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.io.FileUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,15 +54,35 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
     catch (IOException e) {
       throw new ExecutionException("Can't create temporary output file", e);
     }
+    
+    final ProcessOutput processOutput = new ProcessOutput();
+    final Ref<ExecutionException> buildException = Ref.create();
+    final Ref<Boolean> success = Ref.create(false);
+    
     try {
-      ProcessOutput processOutput = new ProcessOutput();
-      boolean success = GoExecutor.in(myModule)
-        .addParameters("build", "-o", myTempFile.getAbsolutePath(), myConfiguration.getFilePath())
-        .withProcessOutput(processOutput)
-        .showOutputOnError()
-        .execute();
+      ProgressManager.getInstance().run(new Task.Modal(myModule.getProject(), "go build", true) {
+        public void run(@NotNull ProgressIndicator indicator) {
+          if (myProject == null || myProject.isDisposed()) {
+            return;
+          }
+          try {
+            success.set(GoExecutor.in(myModule)
+                          .addParameters("build", "-o", myTempFile.getAbsolutePath(), myConfiguration.getFilePath())
+                          .withProcessOutput(processOutput)
+                          .showOutputOnError()
+                          .execute());
+          }
+          catch (ExecutionException e) {
+            buildException.set(e);
+          }
+        }
+      });
 
-      if (!success) {
+      if (!buildException.isNull()) {
+        throw buildException.get();
+      }
+
+      if (!success.get()) {
         throw new ExecutionException("Build failure. `go build` is finished with exit code " + processOutput.getExitCode());
       }
 
