@@ -19,6 +19,7 @@ package com.goide.runconfig.testing;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoFunctionDeclaration;
 import com.goide.psi.GoPackageClause;
+import com.goide.sdk.GoSdkService;
 import com.intellij.execution.actions.ConfigurationContext;
 import com.intellij.execution.actions.RunConfigurationProducer;
 import com.intellij.openapi.module.Module;
@@ -47,7 +48,12 @@ public class GoTestRunConfigurationProducer extends RunConfigurationProducer<GoT
       return false;
     }
 
-    configuration.setModule(ModuleUtilCore.findModuleForPsiElement(contextElement));
+    Module module = ModuleUtilCore.findModuleForPsiElement(contextElement);
+    if (module == null || !GoSdkService.getInstance(configuration.getProject()).isGoModule(module)) {
+      return false;
+    }
+    
+    configuration.setModule(module);
     if (contextElement instanceof PsiDirectory) {
       configuration.setName("All in '" + ((PsiDirectory)contextElement).getName() + "'");
       configuration.setKind(GoTestRunConfiguration.Kind.DIRECTORY);
