@@ -52,6 +52,7 @@ import java.util.regex.Pattern;
 public class GoSdkUtil {
   public static final String GO_VERSION_FILE_PATH = "runtime/zversion.go";
   private static final String GO_VERSION_PATTERN = "theVersion\\s*=\\s*`go([\\d.]+)`";
+  private static final String GAE_VERSION_PATTERN = "theVersion\\s*=\\s*`go([\\d.]+)( \\(appengine-[\\d.]+\\))?`";
   private static final String GO_DEVEL_VERSION_PATTERN = "theVersion\\s*=\\s*`(devel[\\d.]+)`";
 
   // todo: caching
@@ -248,6 +249,10 @@ public class GoSdkUtil {
       Matcher matcher = Pattern.compile(GO_VERSION_PATTERN).matcher(text);
       if (matcher.find()) {
         return matcher.group(1);
+      }
+      matcher = Pattern.compile(GAE_VERSION_PATTERN).matcher(text);
+      if (matcher.find()) {
+        return matcher.group(1) + matcher.group(2);
       }
       matcher = Pattern.compile(GO_DEVEL_VERSION_PATTERN).matcher(text);
       if (matcher.find()) {
