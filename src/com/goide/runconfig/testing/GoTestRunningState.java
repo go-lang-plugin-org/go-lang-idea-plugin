@@ -18,6 +18,7 @@ package com.goide.runconfig.testing;
 
 import com.goide.psi.GoFile;
 import com.goide.psi.GoFunctionDeclaration;
+import com.goide.runconfig.GoConsoleFilter;
 import com.goide.runconfig.GoRunningState;
 import com.goide.util.GoExecutor;
 import com.intellij.execution.DefaultExecutionResult;
@@ -59,7 +60,7 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
 
     GoTestConsoleProperties consoleProperties = new GoTestConsoleProperties(myConfiguration, executor);
     ConsoleView consoleView = SMTestRunnerConnectionUtil.createAndAttachConsole("Go", processHandler, consoleProperties, getEnvironment());
-    consoleView.addMessageFilter(new GoTestConsoleFilter(myModule, myConfiguration.getWorkingDirectory()));
+    consoleView.addMessageFilter(new GoConsoleFilter(myConfiguration.getProject(), myModule, myConfiguration.getWorkingDirectory()));
 
     DefaultExecutionResult executionResult = new DefaultExecutionResult(consoleView, processHandler);
     executionResult.setRestartActions(new ToggleAutoTestAction(getEnvironment()));

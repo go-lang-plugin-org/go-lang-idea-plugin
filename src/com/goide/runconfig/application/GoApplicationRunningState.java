@@ -66,7 +66,7 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
             return;
           }
           try {
-            success.set(GoExecutor.in(myModule)
+            success.set(GoExecutor.in(myModule).withPresentableName("go build")
                           .addParameters("build", "-o", myTempFile.getAbsolutePath(), myConfiguration.getFilePath())
                           .withProcessOutput(processOutput)
                           .showOutputOnError()
