@@ -44,7 +44,9 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       Collection<PsiElement> children = PsiTreeUtil.findChildrenOfType(topLevel, element.getClass());
       boolean alone = children.size() == 1 && children.iterator().next().equals(element);
       List<PsiComment> comments = getPreviousNonWsComment(alone ? topLevel : element);
-      if (!comments.isEmpty()) return getCommentText(comments);
+      String result = getSignature(element);
+      if (!comments.isEmpty()) result += getCommentText(comments);
+      return result.length() > 0 ? "<pre>" + result + "</pre>" : "";
     }
     else if (element instanceof PsiDirectory) {
       String comments = getPackageComment(((PsiDirectory)element).findFile("doc.go"));
@@ -60,7 +62,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       // todo: remove after correct stubbing (comments needed in stubs)
       GoPackageClause pack = PsiTreeUtil.findChildOfType(file, GoPackageClause.class);
       List<PsiComment> comments = getPreviousNonWsComment(pack);
-      if (!comments.isEmpty()) return getCommentText(comments);
+      if (!comments.isEmpty()) return "<pre>" + getCommentText(comments) + "</pre>";
     }
     return null;
   }
@@ -87,7 +89,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
 
   @NotNull
   private static String getCommentText(@NotNull List<PsiComment> comments) {
-    return "<pre>" + StringUtil.join(ContainerUtil.map(comments, new Function<PsiComment, String>() {
+    return StringUtil.join(ContainerUtil.map(comments, new Function<PsiComment, String>() {
       @Override
       public String fun(@NotNull PsiComment c) {
         IElementType type = c.getTokenType();
@@ -102,6 +104,78 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
         }
         return text;
       }
-    }), "<br/>") + "</pre>";
+    }), "<br/>");
+  }
+
+  @NotNull
+  private static String getSignature(PsiElement element) {
+    if (!(element instanceof GoSignatureOwner)) {
+      return "";
+    }
+
+    PsiElement identifier = null;
+    if (element instanceof GoNamedSignatureOwner) {
+      identifier = ((GoNamedSignatureOwner)element).getIdentifier();
+    }
+    GoSignature signature = ((GoSignatureOwner)element).getSignature();
+
+    if (identifier == null && signature == null) {
+      return "";
+    }
+
+    String result = " <b>func " + (identifier != null ? identifier.getText() : "") + "(";
+
+    if (signature != null) {
+      result += getParametersAsString(signature.getParameters());
+    }
+
+    result += ")";
+
+    if (signature != null && signature.getResult() != null) {
+      GoResult signatureResult = signature.getResult();
+      if (signatureResult.getParameters() != null){
+        String signatureParameters = getParametersAsString(signatureResult.getParameters());
+
+        if (signatureParameters.length() > 0) {
+          result += " (" + signatureParameters + ")";
+        }
+      }
+      else if (signatureResult.getType() != null) {
+        GoType signatureResultType = signatureResult.getType();
+        if (signatureResultType instanceof GoTypeList) {
+          result += " (" + signatureResult.getType().getText() + ")";
+        } else {
+          result += " " + signatureResult.getType().getText();
+        }
+      }
+    }
+
+    return result + "</b><br/>";
+  }
+
+  private static String getParametersAsString(@NotNull GoParameters parameters) {
+    List<GoParameterDeclaration> paramDeclarations = parameters.getParameterDeclarationList();
+    List<String> paramPresentations = ContainerUtil.newArrayListWithCapacity(2 * paramDeclarations.size());
+    boolean isVariadic;
+    for (GoParameterDeclaration paramDeclaration : paramDeclarations) {
+      isVariadic = paramDeclaration.isVariadic();
+      for (GoParamDefinition paramDefinition : paramDeclaration.getParamDefinitionList()) {
+        String separator = isVariadic ? " ..." : " ";
+        paramPresentations.add(paramDefinition.getText() + separator + paramDeclaration.getType().getText());
+      }
+      if (paramDeclaration.getParamDefinitionList().size() == 0) {
+        paramPresentations.add(paramDeclaration.getType().getText());
+      }
+    }
+
+    StringBuilder builder = new StringBuilder();
+    for (int i = 0; i < paramPresentations.size(); ++i) {
+      if (i != 0) {
+        builder.append(", ");
+      }
+      builder.append(paramPresentations.get(i));
+    }
+
+    return builder.toString();
   }
 }

@@ -12,17 +12,21 @@ public class GoDocumentationProviderTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testPrintln() {
-    doTest("package a; import \"fmt\"; func foo() {fmt.Printl<caret>n}", 
-           "<pre> Println formats using the default formats for its operands and writes to standard output.<br/>" +
+    doTest("package a; import \"fmt\"; func foo() {fmt.Printl<caret>n}",
+           "<pre> <b>func Println(a ...interface{}) (n int, err error)</b><br/>" +
+           " Println formats using the default formats for its operands and writes to standard output.<br/>" +
            " Spaces are always added between operands and a newline is appended.<br/>" +
            " It returns the number of bytes written and any write error encountered.</pre>");
   }
-  
+
   public void testFprintln() {
-    doTest("package a; import \"fmt\"; func foo() {fmt.Fprintl<caret>n(\"Hello\")}", 
-    "<pre> Fprintln formats using the default formats for its operands and writes to w.<br/> Spaces are always added between operands and a newline is appended.<br/> It returns the number of bytes written and any write error encountered.</pre>");
+    doTest("package a; import \"fmt\"; func foo() {fmt.Fprintl<caret>n(\"Hello\")}",
+    "<pre> <b>func Fprintln(w io.Writer, a ...interface{}) (n int, err error)</b><br/>" +
+    " Fprintln formats using the default formats for its operands and writes to w.<br/>" +
+    " Spaces are always added between operands and a newline is appended.<br/>" +
+    " It returns the number of bytes written and any write error encountered.</pre>");
   }
-  
+
   public void testVariable() {
     doTest("package a; \n" +
            "// test\n" +
@@ -32,17 +36,35 @@ public class GoDocumentationProviderTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testPackageWithDoc() {
-    doTest("package a; import \"fm<caret>t\"", 
+    doTest("package a; import \"fm<caret>t\"",
            "<pre>\n" +
            "Package fmt implements formatted I/O with functions analogous\n" +
            "to C's printf and scanf.  The format 'verbs' are derived from C's but\n" +
            "are simpler.\n" +
            "</pre>");
   }
-  
+
   public void testPackage() {
     doTest("package a; import \"io<caret>\"",
-           "<pre> Package io provides basic interfaces to I/O primitives.<br/> Its primary job is to wrap existing implementations of such primitives,<br/> such as those in package os, into shared public interfaces that<br/> abstract the functionality, plus some other related primitives.<br/><br/> Because these interfaces and primitives wrap lower-level operations with<br/> various implementations, unless otherwise informed clients should not<br/> assume they are safe for parallel execution.</pre>");
+           "<pre> Package io provides basic interfaces to I/O primitives.<br/>" +
+           " Its primary job is to wrap existing implementations of such primitives,<br/>" +
+           " such as those in package os, into shared public interfaces that<br/>" +
+           " abstract the functionality, plus some other related primitives.<br/><br/>" +
+           " Because these interfaces and primitives wrap lower-level operations with<br/>" +
+           " various implementations, unless otherwise informed clients should not<br/>" +
+           " assume they are safe for parallel execution.</pre>");
+  }
+
+  public void testTypeResultDefinition() {
+    doTest("package a; import \"docs\"; func foo() {docs.Type<caret>Result()}",
+           "<pre> <b>func TypeResult(s string) string</b><br/>" +
+           " TypeResult func comment</pre>");
+  }
+
+  public void testMultilineTypeListDefinition() {
+    doTest("package a; import \"docs\"; func foo() {docs.Multi<caret>Type()}",
+           "<pre> <b>func MultiType(demo interface{}, err error) ([]interface{}, error)</b><br/>" +
+           " MultiType is a function like all other functions</pre>");
   }
 
   private void doTest(@NotNull String text, @NotNull String expected) {
