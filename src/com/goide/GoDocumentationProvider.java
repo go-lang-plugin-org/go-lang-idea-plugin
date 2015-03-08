@@ -46,7 +46,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       List<PsiComment> comments = getPreviousNonWsComment(alone ? topLevel : element);
       String result = getSignature(element);
       if (!comments.isEmpty()) result += getCommentText(comments);
-      return result.length() > 0 ? "<pre>" + result + "</pre>" : "";
+      return !result.isEmpty() ? "<pre>" + result + "</pre>" : "";
     }
     else if (element instanceof PsiDirectory) {
       String comments = getPackageComment(((PsiDirectory)element).findFile("doc.go"));
@@ -123,59 +123,49 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       return "";
     }
 
-    String result = " <b>func " + (identifier != null ? identifier.getText() : "") + "(";
-
+    StringBuilder result = new StringBuilder(" <b>func ").append(identifier != null ? identifier.getText() : "").append('(');
     if (signature != null) {
-      result += getParametersAsString(signature.getParameters());
+      result.append(getParametersAsString(signature.getParameters()));
     }
-
-    result += ")";
+    result.append(')');
 
     if (signature != null && signature.getResult() != null) {
       GoResult signatureResult = signature.getResult();
       if (signatureResult.getParameters() != null){
         String signatureParameters = getParametersAsString(signatureResult.getParameters());
 
-        if (signatureParameters.length() > 0) {
-          result += " (" + signatureParameters + ")";
+        if (!signatureParameters.isEmpty()) {
+          result.append(" (").append(signatureParameters).append(')');
         }
       }
       else if (signatureResult.getType() != null) {
         GoType signatureResultType = signatureResult.getType();
         if (signatureResultType instanceof GoTypeList) {
-          result += " (" + signatureResult.getType().getText() + ")";
+          result.append(" (").append(signatureResult.getType().getText()).append(')');
         } else {
-          result += " " + signatureResult.getType().getText();
+          result.append(' ').append(signatureResult.getType().getText());
         }
       }
     }
 
-    return result + "</b><br/>";
+    return result.append("</b><br/>").toString();
   }
 
+  @NotNull
   private static String getParametersAsString(@NotNull GoParameters parameters) {
     List<GoParameterDeclaration> paramDeclarations = parameters.getParameterDeclarationList();
     List<String> paramPresentations = ContainerUtil.newArrayListWithCapacity(2 * paramDeclarations.size());
-    boolean isVariadic;
     for (GoParameterDeclaration paramDeclaration : paramDeclarations) {
-      isVariadic = paramDeclaration.isVariadic();
+      boolean isVariadic = paramDeclaration.isVariadic();
       for (GoParamDefinition paramDefinition : paramDeclaration.getParamDefinitionList()) {
         String separator = isVariadic ? " ..." : " ";
         paramPresentations.add(paramDefinition.getText() + separator + paramDeclaration.getType().getText());
       }
-      if (paramDeclaration.getParamDefinitionList().size() == 0) {
+      if (paramDeclaration.getParamDefinitionList().isEmpty()) {
         paramPresentations.add(paramDeclaration.getType().getText());
       }
     }
 
-    StringBuilder builder = new StringBuilder();
-    for (int i = 0; i < paramPresentations.size(); ++i) {
-      if (i != 0) {
-        builder.append(", ");
-      }
-      builder.append(paramPresentations.get(i));
-    }
-
-    return builder.toString();
+    return StringUtil.join(paramPresentations, ", ");
   }
 }
