@@ -64,7 +64,7 @@ public class GoLibrariesConfigurable implements SearchableConfigurable, Configur
         }
         final VirtualFile file = VirtualFileManager.getInstance().findFileByUrl(url);
         if (file != null) {
-          append(file.getPath(), item.readOnly ? SimpleTextAttributes.GRAY_ATTRIBUTES : SimpleTextAttributes.REGULAR_ATTRIBUTES);
+          append(file.getPresentableUrl(), item.readOnly ? SimpleTextAttributes.GRAY_ATTRIBUTES : SimpleTextAttributes.REGULAR_ATTRIBUTES);
           setIcon(IconUtil.getIcon(file, Iconable.ICON_FLAG_READ_STATUS, null));
         }
         else {
