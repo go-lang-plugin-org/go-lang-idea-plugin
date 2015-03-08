@@ -68,6 +68,10 @@ public class GoVarDeclarationInspection extends GoInspectionBase {
 
     int exprCount = expressionsSize;
 
+    if (varDeclaration instanceof GoRangeClause && idCount == 2) {
+      // range clause can be assigned to two variables
+      return;  
+    }
     if (expressionsSize == 1) {
       exprCount = getExpressionResultCount(list.get(0));
       if (exprCount == UNKNOWN_COUNT || exprCount == idCount) return;

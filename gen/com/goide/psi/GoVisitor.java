@@ -269,7 +269,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitRangeClause(@NotNull GoRangeClause o) {
-    visitCompositeElement(o);
+    visitVarSpec(o);
   }
 
   public void visitReceiver(@NotNull GoReceiver o) {

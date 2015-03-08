@@ -44,7 +44,7 @@ func main() {
     }
 
     var <error descr="Unused variable 'people'">people</error> []*Person // todo: should be redeclared
-    for a, p := range people {
+    for <error descr="Unused variable 'a'">a</error>, p := range people {
         println(p.Likes)
     }
 
@@ -57,7 +57,7 @@ func main() {
         println(p.path)
     }
     
-    for _, d := range <error>d</error>.Packets {
+    for _, <error descr="Unused variable 'd'">d</error> := range <error descr="Unresolved reference 'd'">d</error>.Packets {
     }
 }
 func create() []*Person {return make([]*Person, 0)}

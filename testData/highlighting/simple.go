@@ -106,7 +106,7 @@ func new(o interface{}) {
 func <warning>concurrently</warning>(integers []int) []int {
   ch := make(chan int)
   <error>responses</error> := []int{}
-  for _, i := range integers {
+  for _, <error descr="Unused variable 'i'">i</error> := range integers {
       go func(j int) {
           ch <- j * j
       }(<error>j</error>)
@@ -266,7 +266,7 @@ var tempregexs = []struct {
     {"/{a}/{b}/{c-d-e}/", "^/([^/]+?)/([^/]+?)/([^/]+?)(/.*)?$", 0, 3},
     {"/{p}/abcde", "^/([^/]+?)/abcde(/.*)?$", 5, 1},
 }
-    for i, fixture := range tempregexs {
+    for <error descr="Unused variable 'i'">i</error>, fixture := range tempregexs {
           fixture.regex
     }
 }

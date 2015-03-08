@@ -53,6 +53,13 @@ public class GoStubElementTypeFactory {
         return new GoRecvStatementImpl(stub, this);
       }
     };
+    if (name.equals("RANGE_CLAUSE")) return new GoVarSpecStubElementType(name) {
+      @NotNull
+      @Override
+      public GoVarSpec createPsi(@NotNull GoVarSpecStub stub) {
+        return new GoRangeClauseImpl(stub, this);
+      }
+    };
     if (name.equals("VAR_DEFINITION")) return new GoVarDefinitionStubElementType(name);
     if (name.equals("LABEL_DEFINITION")) return new GoLabelDefinitionStubElementType(name);
     if (name.equals("PARAMETERS")) return new GoParametersStubElementType(name);

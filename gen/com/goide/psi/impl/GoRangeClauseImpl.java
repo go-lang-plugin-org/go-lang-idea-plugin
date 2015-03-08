@@ -9,11 +9,16 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
 
-public class GoRangeClauseImpl extends GoCompositeElementImpl implements GoRangeClause {
+public class GoRangeClauseImpl extends GoVarSpecImpl implements GoRangeClause {
 
   public GoRangeClauseImpl(ASTNode node) {
     super(node);
+  }
+
+  public GoRangeClauseImpl(com.goide.stubs.GoVarSpecStub stub, IStubElementType nodeType) {
+    super(stub, nodeType);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

@@ -79,7 +79,7 @@
   extends("(Function|Method)Declaration")="com.goide.psi.impl.GoFunctionOrMethodDeclarationImpl<?>"
   extends("(Type|Method)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver")="com.goide.psi.impl.GoNamedElementImpl<?>"
   extends("Parameters|Signature|ParameterDeclaration|Result|Type|(Const|Var|Import)Spec")="com.goide.psi.impl.GoStubbedElementImpl<?>"
-  elementTypeFactory("(Function|Method|Parameter)Declaration|(Type|Import|Method|Const|Var)Spec|RecvStatement|ShortVarDeclaration|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver|Parameters|Signature|Result|.*Type|TypeList.*")='com.goide.stubs.GoStubElementTypeFactory.factory'
+  elementTypeFactory("(Function|Method|Parameter)Declaration|(Type|Import|Method|Const|Var)Spec|RangeClause|RecvStatement|ShortVarDeclaration|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver|Parameters|Signature|Result|.*Type|TypeList.*")='com.goide.stubs.GoStubElementTypeFactory.factory'
   pin(".*Statement")=1
   extends(".*Statement")=Statement
   extends(".*Type|TypeList")=Type
@@ -401,7 +401,7 @@ ForStatement ::= for <<enterMode "BLOCK?">> (ForOrRangeClause ForBlock | ForBloc
 private ForBlock ::= <<exitModeSafe "BLOCK?">> Block
 private ForOrRangeClause ::= ForClause | RangeClause
 ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement? {methods=[processDeclarations]}
-RangeClause ::= ExpressionsOrVariables? range Expression {pin=2}
+RangeClause ::= ExpressionsOrVariables? range Expression {pin=2 extends=VarSpec}
 private ExpressionsOrVariables ::= ExpressionList '=' | VarDefinitionList ':='
 GoStatement ::= go Expression
 SelectStatement ::= select '{' ( CommClause )* '}'

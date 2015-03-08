@@ -76,7 +76,7 @@ public interface GoTypes {
   IElementType PARAM_DEFINITION = GoStubElementTypeFactory.factory("PARAM_DEFINITION");
   IElementType PARENTHESES_EXPR = new GoCompositeElementType("PARENTHESES_EXPR");
   IElementType POINTER_TYPE = GoStubElementTypeFactory.factory("POINTER_TYPE");
-  IElementType RANGE_CLAUSE = new GoCompositeElementType("RANGE_CLAUSE");
+  IElementType RANGE_CLAUSE = GoStubElementTypeFactory.factory("RANGE_CLAUSE");
   IElementType RECEIVER = GoStubElementTypeFactory.factory("RECEIVER");
   IElementType RECEIVER_TYPE = GoStubElementTypeFactory.factory("RECEIVER_TYPE");
   IElementType RECV_STATEMENT = GoStubElementTypeFactory.factory("RECV_STATEMENT");

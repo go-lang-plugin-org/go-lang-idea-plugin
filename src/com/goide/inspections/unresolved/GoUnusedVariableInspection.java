@@ -38,9 +38,9 @@ public class GoUnusedVariableInspection extends GoInspectionBase {
       @Override
       public void visitVarDefinition(@NotNull GoVarDefinition o) {
         if (o.isBlank()) return;
-        GoVarSpec shortDecl = PsiTreeUtil.getParentOfType(o, GoShortVarDeclaration.class, GoRecvStatement.class);
+        GoVarSpec varSpec = PsiTreeUtil.getParentOfType(o, GoVarSpec.class);
         GoVarDeclaration decl = PsiTreeUtil.getParentOfType(o, GoVarDeclaration.class);
-        if (shortDecl != null || decl != null) {
+        if (varSpec != null || decl != null) {
           PsiReference reference = o.getReference();
           PsiElement resolve = reference != null ? reference.resolve() : null;
           if (resolve != null) return;
