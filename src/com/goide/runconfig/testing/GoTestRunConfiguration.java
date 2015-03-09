@@ -25,14 +25,25 @@ import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.InvalidDataException;
+import com.intellij.openapi.util.JDOMExternalizerUtil;
+import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
+import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 
 public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunningState> {
+  private static final String PATTERN_ATTRIBUTE_NAME = "pattern";
+  private static final String FILE_PATH_ATTRIBUTE_NAME = "filePath";
+  private static final String DIRECTORY_ATTRIBUTE_NAME = "directory";
+  private static final String PACKAGE_ATTRIBUTE_NAME = "package";
+  private static final String KIND_ATTRIBUTE_NAME = "kind";
+  
   @NotNull private String myPackage = "";
   @NotNull private String myFilePath = "";
   @NotNull private String myDirectoryPath = "";
@@ -101,6 +112,40 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
         }
         break;
     }
+  }
+
+  @Override
+  public void writeExternal(Element element) throws WriteExternalException {
+    super.writeExternal(element);
+    JDOMExternalizerUtil.addElementWithValueAttribute(element, KIND_ATTRIBUTE_NAME, myKind.name());
+    if (!myPackage.isEmpty()) {
+      JDOMExternalizerUtil.addElementWithValueAttribute(element, PACKAGE_ATTRIBUTE_NAME, myPackage);
+    }
+    if (!myDirectoryPath.isEmpty()) {
+      JDOMExternalizerUtil.addElementWithValueAttribute(element, DIRECTORY_ATTRIBUTE_NAME, myDirectoryPath);
+    }
+    if (!myFilePath.isEmpty()) {
+      JDOMExternalizerUtil.addElementWithValueAttribute(element, FILE_PATH_ATTRIBUTE_NAME, myFilePath);
+    }
+    if (!myPattern.isEmpty()) {
+      JDOMExternalizerUtil.addElementWithValueAttribute(element, PATTERN_ATTRIBUTE_NAME, myPattern);
+    }
+  }
+
+  @Override
+  public void readExternal(@NotNull Element element) throws InvalidDataException {
+    super.readExternal(element);
+    try {
+      String kindName = JDOMExternalizerUtil.getFirstChildValueAttribute(element, KIND_ATTRIBUTE_NAME);
+      myKind = kindName != null ? Kind.valueOf(kindName) : Kind.DIRECTORY; 
+    }
+    catch (IllegalArgumentException e) {
+      myKind = Kind.DIRECTORY;
+    }
+    myPackage = StringUtil.notNullize(JDOMExternalizerUtil.getFirstChildValueAttribute(element, PACKAGE_ATTRIBUTE_NAME));
+    myDirectoryPath = StringUtil.notNullize(JDOMExternalizerUtil.getFirstChildValueAttribute(element, DIRECTORY_ATTRIBUTE_NAME));
+    myFilePath = StringUtil.notNullize(JDOMExternalizerUtil.getFirstChildValueAttribute(element, FILE_PATH_ATTRIBUTE_NAME));
+    myPattern = StringUtil.notNullize(JDOMExternalizerUtil.getFirstChildValueAttribute(element, PATTERN_ATTRIBUTE_NAME));
   }
 
   @NotNull
