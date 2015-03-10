@@ -63,7 +63,7 @@ public class GoSdkType extends SdkType {
 
   @Override
   public boolean isValidSdkHome(@NotNull String path) {
-    return GoEnvironmentUtil.getExecutableForSdk(path).canExecute();
+    return GoEnvironmentUtil.getExecutableForSdk(path).canExecute() && getVersionString(path) != null;
   }
 
   @Override
