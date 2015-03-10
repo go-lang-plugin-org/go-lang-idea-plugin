@@ -16,20 +16,12 @@
 
 package com.goide.codeInsight.imports;
 
-import com.goide.GoConstants;
-import com.goide.GoEnvironmentUtil;
 import com.goide.sdk.GoSdkService;
-import com.goide.sdk.GoSdkUtil;
+import com.goide.util.GoExecutor;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInspection.LocalQuickFixBase;
 import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.Platform;
-import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.process.*;
-import com.intellij.notification.Notification;
-import com.intellij.notification.NotificationType;
-import com.intellij.notification.Notifications;
+import com.intellij.execution.process.ProcessHandler;
 import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -38,14 +30,9 @@ import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.psi.PsiElement;
-import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAction {
   private static final String TITLE = "Something went wrong with `go get`";
@@ -64,61 +51,38 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
       return;
     }
 
+    applyFix(project, module, myPackage);
+  }
+
+  public static void applyFix(@NotNull final Project project, @NotNull final Module module, final String packageName) {
     final String sdkPath = GoSdkService.getInstance(project).getSdkHomePath(module);
     if (StringUtil.isEmpty(sdkPath)) {
       return;
     }
 
-    final Task task = new Task.Backgroundable(project, "Go get '" + myPackage + "'", true, PerformInBackgroundOption.ALWAYS_BACKGROUND) {
-      private OSProcessHandler myHandler;
+    final Task task = new Task.Backgroundable(project, "Go get '" + packageName + "'", true, PerformInBackgroundOption.ALWAYS_BACKGROUND) {
+      GoExecutor executor;
+      volatile boolean doNotStart = false;
 
       @Override
       public void onCancel() {
-        if (myHandler != null) myHandler.destroyProcess();
-      }
-
-      @Override
-      public void onSuccess() {
-        LocalFileSystem.getInstance().refresh(false);
+        doNotStart = true;
+        if (executor != null) {
+          ProcessHandler handler = executor.getProcessHandler();
+          if (handler != null) {
+            handler.destroyProcess();
+          }
+        }
       }
 
       public void run(@NotNull final ProgressIndicator indicator) {
-        indicator.setIndeterminate(true);
-        String executable = GoEnvironmentUtil.getExecutableForSdk(sdkPath).getAbsolutePath();
-
-        final GeneralCommandLine install = new GeneralCommandLine();
-        ContainerUtil.putIfNotNull(GoConstants.GO_PATH, GoSdkUtil.retrieveGoPath(module), install.getEnvironment());
-        install.setExePath(executable);
-        install.addParameter("get");
-        install.addParameter(myPackage);
-        try {
-          myHandler = new KillableColoredProcessHandler(install.createProcess(), install.getPreparedCommandLine(Platform.current()));
-          final List<String> out = ContainerUtil.newArrayList();
-          myHandler.addProcessListener(new ProcessAdapter() {
-            @Override
-            public void onTextAvailable(@NotNull ProcessEvent event, Key outputType) {
-              String text = event.getText();
-              out.add(text);
-              //indicator.setText2(text); // todo: look ugly
-            }
-
-            @Override
-            public void processTerminated(@NotNull ProcessEvent event) {
-              int code = event.getExitCode();
-              if (code == 0) return;
-              String message = StringUtil.join(out.size() > 1 ? ContainerUtil.subList(out, 1) : out, "\n");
-              Notifications.Bus.notify(new Notification(GoConstants.GO_NOTIFICATION_GROUP, TITLE, message, NotificationType.WARNING), 
-                                       project);
-            }
-          });
-          ProcessTerminatedListener.attach(myHandler);
-          myHandler.startNotify();
-          myHandler.waitFor();
-          indicator.setText2("Refreshing");
-        }
-        catch (ExecutionException e) {
-          Notifications.Bus.notify(new Notification(GoConstants.GO_NOTIFICATION_GROUP, TITLE, StringUtil.notNullize(e.getMessage()), 
-                                                    NotificationType.WARNING), project);
+        if (!module.isDisposed()) {
+          indicator.setIndeterminate(true);
+          executor = GoExecutor.in(module).withPresentableName("go get " + packageName)
+            .withParameters("get", packageName).showNotificationOnError().showOutputOnError();
+          if (!doNotStart) {
+            executor.execute();
+          }
         }
       }
     };

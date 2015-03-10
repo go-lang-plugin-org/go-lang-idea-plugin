@@ -16,6 +16,7 @@
 
 package com.goide.runconfig;
 
+import com.goide.codeInsight.imports.GoGetPackageFix;
 import com.intellij.execution.filters.Filter;
 import com.intellij.execution.filters.HyperlinkInfo;
 import com.intellij.execution.filters.OpenFileHyperlinkInfo;
@@ -32,6 +33,7 @@ import java.util.regex.Pattern;
 
 public class GoConsoleFilter implements Filter {
   private static final Pattern MESSAGE_PATTERN = Pattern.compile("^[ \t]*(\\S+\\.\\w+):(\\d+)[:\\s].*\n?$");
+  private static final Pattern GO_GET_MESSAGE_PATTERN = Pattern.compile("^[ \t]*(go get (.*))\n?$");
 
   @NotNull private final Project myProject;
   @Nullable private final Module myModule;
@@ -45,6 +47,18 @@ public class GoConsoleFilter implements Filter {
 
   @Override
   public Result applyFilter(@NotNull String line, int entireLength) {
+    Matcher goGetMatcher = GO_GET_MESSAGE_PATTERN.matcher(line);
+    if (goGetMatcher.matches() && myModule != null) {
+      final String packageName = goGetMatcher.group(2).trim();
+      HyperlinkInfo hyperlinkInfo = new HyperlinkInfo() {
+        @Override
+        public void navigate(Project project) {
+          GoGetPackageFix.applyFix(project, myModule, packageName);
+        }
+      };
+      int lineStart = entireLength - line.length();
+      return new Result(lineStart + goGetMatcher.start(1), lineStart + goGetMatcher.end(2), hyperlinkInfo);
+    }
     Matcher matcher = MESSAGE_PATTERN.matcher(line);
     if (!matcher.matches()) {
       return null;

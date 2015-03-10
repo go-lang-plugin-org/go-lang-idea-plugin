@@ -13,6 +13,9 @@ import com.intellij.execution.configurations.EncodingEnvironmentUtil;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.ParametersList;
 import com.intellij.execution.process.*;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
@@ -29,12 +32,11 @@ import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class GoExecutor {
-  private static final ExecutionModes.SameThreadMode EXECUTION_MODE = new ExecutionModes.SameThreadMode(true);
-
   @NotNull private final Map<String, String> myExtraEnvironment = ContainerUtil.newHashMap();
   @NotNull private final ParametersList myParameterList = new ParametersList();
   @NotNull private ProcessOutput myProcessOutput = new ProcessOutput();
@@ -44,9 +46,11 @@ public class GoExecutor {
   @Nullable private String myGoPath;
   @Nullable private String myWorkDirectory;
   private boolean myShowOutputOnError = false;
+  private boolean myShowNotificationOnError = false;
   private boolean myPassParentEnvironment = true;
   @Nullable private String myExePath = null;
   @Nullable private String myPresentableName;
+  private OSProcessHandler myProcessHandler;
 
   private GoExecutor(@NotNull Project project, @Nullable Module module) {
     myProject = project;
@@ -117,13 +121,13 @@ public class GoExecutor {
   }
 
   @NotNull
-  public GoExecutor addParameterString(@NotNull String parameterString) {
+  public GoExecutor withParameterString(@NotNull String parameterString) {
     myParameterList.addParametersString(parameterString);
     return this;
   }
 
   @NotNull
-  public GoExecutor addParameters(@NotNull String... parameters) {
+  public GoExecutor withParameters(@NotNull String... parameters) {
     myParameterList.addAll(parameters);
     return this;
   }
@@ -133,56 +137,93 @@ public class GoExecutor {
     myShowOutputOnError = true;
     return this;
   }
+  
+  @NotNull
+  public GoExecutor showNotificationOnError() {
+    myShowNotificationOnError = true;
+    return this;
+  }
 
-  public boolean execute() throws ExecutionException {
+  public boolean execute() {
     Logger.getInstance(getClass()).assertTrue(!ApplicationManager.getApplication().isDispatchThread(),
                                               "It's bad idea to run external tool on EDT");
-    GeneralCommandLine commandLine = createCommandLine();
-
+    Logger.getInstance(getClass()).assertTrue(myProcessHandler == null, "Proccess already run with this executor instance");
     final Ref<Boolean> result = Ref.create(false);
-    final OSProcessHandler processHandler = new KillableColoredProcessHandler(commandLine);
-    final HistoryProcessListener historyProcessListener = new HistoryProcessListener();
-    processHandler.addProcessListener(historyProcessListener);
+    try {
+      GeneralCommandLine commandLine = createCommandLine();
 
-    final CapturingProcessAdapter processAdapter = new CapturingProcessAdapter(myProcessOutput) {
-      @Override
-      public void processTerminated(@NotNull final ProcessEvent event) {
-        super.processTerminated(event);
-        result.set(event.getExitCode() == 0);
-        ApplicationManager.getApplication().invokeLater(new Runnable() {
-          @Override
-          public void run() {
-            if (event.getExitCode() != 0) {
-              showOutput(processHandler, historyProcessListener);
-            }
-            ApplicationManager.getApplication().runWriteAction(new Runnable() {
-              @Override
-              public void run() {
-                VirtualFileManager.getInstance().syncRefresh();
+
+      myProcessHandler = new KillableColoredProcessHandler(commandLine);
+      final HistoryProcessListener historyProcessListener = new HistoryProcessListener();
+      myProcessHandler.addProcessListener(historyProcessListener);
+
+      final CapturingProcessAdapter processAdapter = new CapturingProcessAdapter(myProcessOutput) {
+        @Override
+        public void processTerminated(@NotNull final ProcessEvent event) {
+          super.processTerminated(event);
+          result.set(event.getExitCode() == 0);
+          ApplicationManager.getApplication().invokeLater(new Runnable() {
+            @Override
+            public void run() {
+              if (event.getExitCode() != 0) {
+                showOutput(myProcessHandler, historyProcessListener);
               }
-            });
-          }
-        });
+              ApplicationManager.getApplication().runWriteAction(new Runnable() {
+                @Override
+                public void run() {
+                  VirtualFileManager.getInstance().syncRefresh();
+                }
+              });
+            }
+          });
+        }
+      };
+
+      myProcessHandler.addProcessListener(processAdapter);
+      myProcessHandler.startNotify();
+      ExecutionHelper.executeExternalProcess(myProject, myProcessHandler, new ExecutionModes.SameThreadMode(getPresentableName()),
+                                             commandLine);
+      return result.get();
+    }
+    catch (final ExecutionException e) {
+      if (myShowOutputOnError) {
+        ExecutionHelper.showErrors(myProject, Collections.singletonList(e), getPresentableName(), null);
       }
-    };
+      if (myShowNotificationOnError) {
+        showNotification(StringUtil.notNullize(e.getMessage()));
+      }
+      return false;
+    }
+  }
 
-    processHandler.addProcessListener(processAdapter);
-    processHandler.startNotify();
-    ExecutionHelper.executeExternalProcess(myProject, processHandler, EXECUTION_MODE, commandLine);
+  @Nullable
+  public ProcessHandler getProcessHandler() {
+    return myProcessHandler;
+  }
 
-    return result.get();
+  private void showNotification(@NotNull final String message) {
+    ApplicationManager.getApplication().invokeLater(new Runnable() {
+      @Override
+      public void run() {
+        Notifications.Bus.notify(new Notification(GoConstants.GO_NOTIFICATION_GROUP, "Failed to run `" + getPresentableName() + "`",
+                                                  message, NotificationType.WARNING), myProject);
+      }
+    });
   }
 
   private void showOutput(@NotNull OSProcessHandler originalHandler, @NotNull HistoryProcessListener historyProcessListener) {
     if (myShowOutputOnError) {
       BaseOSProcessHandler outputHandler = new ColoredProcessHandler(originalHandler.getProcess(), null);
       RunContentExecutor runContentExecutor = new RunContentExecutor(myProject, outputHandler)
-        .withTitle(ObjectUtils.notNull(myPresentableName, "go"))
+        .withTitle(getPresentableName())
         .withActivateToolWindow(myShowOutputOnError)
         .withFilter(new GoConsoleFilter(myProject, myModule, StringUtil.notNullize(myWorkDirectory)));
       Disposer.register(myProject, runContentExecutor);
       runContentExecutor.run();
       historyProcessListener.apply(outputHandler);
+    }
+    if (myShowNotificationOnError) {
+      showNotification("");
     }
   }
 
@@ -206,6 +247,10 @@ public class GoExecutor {
     return commandLine;
   }
 
+  @NotNull
+  private String getPresentableName() {
+    return ObjectUtils.notNull(myPresentableName, "go");
+  }
 
   private static class HistoryProcessListener extends ProcessAdapter {
     private ConcurrentLinkedQueue<Pair<ProcessEvent, Key>> myHistory = new ConcurrentLinkedQueue<Pair<ProcessEvent, Key>>();

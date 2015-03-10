@@ -39,6 +39,6 @@ public class GoRunFileRunningState extends GoRunningState<GoRunFileConfiguration
 
   @Override
   protected GoExecutor patchExecutor(@NotNull GoExecutor executor) throws ExecutionException {
-    return executor.addParameters("run", myConfiguration.getFilePath());
+    return executor.withParameters("run", myConfiguration.getFilePath());
   }
 }

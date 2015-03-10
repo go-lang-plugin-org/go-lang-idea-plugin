@@ -54,27 +54,33 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
     catch (IOException e) {
       throw new ExecutionException("Can't create temporary output file", e);
     }
-    
+
     final ProcessOutput processOutput = new ProcessOutput();
     final Ref<ExecutionException> buildException = Ref.create();
     final Ref<Boolean> success = Ref.create(false);
-    
+
     try {
       ProgressManager.getInstance().run(new Task.Modal(myModule.getProject(), "go build", true) {
+        private GoExecutor myExecutor;
+
+        @Override
+        public void onCancel() {
+          if (myExecutor != null) {
+            ProcessHandler handler = myExecutor.getProcessHandler();
+            if (handler != null) {
+              handler.destroyProcess();
+            }
+          }
+        }
+
         public void run(@NotNull ProgressIndicator indicator) {
           if (myProject == null || myProject.isDisposed()) {
             return;
           }
-          try {
-            success.set(GoExecutor.in(myModule).withPresentableName("go build")
-                          .addParameters("build", "-o", myTempFile.getAbsolutePath(), myConfiguration.getFilePath())
-                          .withProcessOutput(processOutput)
-                          .showOutputOnError()
-                          .execute());
-          }
-          catch (ExecutionException e) {
-            buildException.set(e);
-          }
+          myExecutor = GoExecutor.in(myModule).withPresentableName("go build")
+            .withParameters("build", "-o", myTempFile.getAbsolutePath(), myConfiguration.getFilePath())
+            .withProcessOutput(processOutput).showOutputOnError();
+          success.set(myExecutor.execute());
         }
       });
 
