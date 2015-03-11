@@ -53,7 +53,7 @@ public class GoConsoleFilter implements Filter {
       HyperlinkInfo hyperlinkInfo = new HyperlinkInfo() {
         @Override
         public void navigate(Project project) {
-          GoGetPackageFix.applyFix(project, myModule, packageName);
+          GoGetPackageFix.applyFix(project, myModule, packageName, false);
         }
       };
       int lineStart = entireLength - line.length();

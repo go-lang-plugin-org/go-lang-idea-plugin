@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class GoExecutor {
+  private static final Logger LOGGER = Logger.getInstance(GoExecutor.class);
   @NotNull private final Map<String, String> myExtraEnvironment = ContainerUtil.newHashMap();
   @NotNull private final ParametersList myParameterList = new ParametersList();
   @NotNull private ProcessOutput myProcessOutput = new ProcessOutput();
@@ -46,7 +47,7 @@ public class GoExecutor {
   @Nullable private String myGoPath;
   @Nullable private String myWorkDirectory;
   private boolean myShowOutputOnError = false;
-  private boolean myShowNotificationOnError = false;
+  private boolean myShowNotifications = false;
   private boolean myPassParentEnvironment = true;
   @Nullable private String myExePath = null;
   @Nullable private String myPresentableName;
@@ -137,10 +138,10 @@ public class GoExecutor {
     myShowOutputOnError = true;
     return this;
   }
-  
+
   @NotNull
-  public GoExecutor showNotificationOnError() {
-    myShowNotificationOnError = true;
+  public GoExecutor showNotifications() {
+    myShowNotifications = true;
     return this;
   }
 
@@ -149,9 +150,9 @@ public class GoExecutor {
                                               "It's bad idea to run external tool on EDT");
     Logger.getInstance(getClass()).assertTrue(myProcessHandler == null, "Proccess already run with this executor instance");
     final Ref<Boolean> result = Ref.create(false);
+    GeneralCommandLine commandLine = null;
     try {
-      GeneralCommandLine commandLine = createCommandLine();
-
+      commandLine = createCommandLine();
 
       myProcessHandler = new KillableColoredProcessHandler(commandLine);
       final HistoryProcessListener historyProcessListener = new HistoryProcessListener();
@@ -161,11 +162,15 @@ public class GoExecutor {
         @Override
         public void processTerminated(@NotNull final ProcessEvent event) {
           super.processTerminated(event);
-          result.set(event.getExitCode() == 0);
+          final boolean success = event.getExitCode() == 0;
+          result.set(success);
+          if (success && myShowNotifications) {
+            showNotification("Finished successfuly", NotificationType.INFORMATION);
+          }
           ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
-              if (event.getExitCode() != 0) {
+              if (!success) {
                 showOutput(myProcessHandler, historyProcessListener);
               }
               ApplicationManager.getApplication().runWriteAction(new Runnable() {
@@ -181,17 +186,21 @@ public class GoExecutor {
 
       myProcessHandler.addProcessListener(processAdapter);
       myProcessHandler.startNotify();
-      ExecutionHelper.executeExternalProcess(myProject, myProcessHandler, new ExecutionModes.SameThreadMode(getPresentableName()),
-                                             commandLine);
+      ExecutionModes.SameThreadMode sameThreadMode = new ExecutionModes.SameThreadMode(getPresentableName());
+      ExecutionHelper.executeExternalProcess(myProject, myProcessHandler, sameThreadMode, commandLine);
+      
+      LOGGER.debug("Finished `" + getPresentableName() + "` with result: " + result.get());
       return result.get();
     }
     catch (final ExecutionException e) {
       if (myShowOutputOnError) {
         ExecutionHelper.showErrors(myProject, Collections.singletonList(e), getPresentableName(), null);
       }
-      if (myShowNotificationOnError) {
-        showNotification(StringUtil.notNullize(e.getMessage()));
+      if (myShowNotifications) {
+        showNotification(StringUtil.notNullize(e.getMessage(), "Unknown error, see logs for details"), NotificationType.ERROR);
       }
+      String commandLineInfo = commandLine != null ? commandLine.getCommandLineString() : "not constructed";
+      LOGGER.debug("Finished `" + getPresentableName() + "` with an exception. Commandline: " + commandLineInfo, e);
       return false;
     }
   }
@@ -201,12 +210,11 @@ public class GoExecutor {
     return myProcessHandler;
   }
 
-  private void showNotification(@NotNull final String message) {
+  private void showNotification(@NotNull final String message, final NotificationType type) {
     ApplicationManager.getApplication().invokeLater(new Runnable() {
       @Override
       public void run() {
-        Notifications.Bus.notify(new Notification(GoConstants.GO_NOTIFICATION_GROUP, "Failed to run `" + getPresentableName() + "`",
-                                                  message, NotificationType.WARNING), myProject);
+        Notifications.Bus.notify(new Notification(GoConstants.GO_NOTIFICATION_GROUP, getPresentableName(), message, type), myProject);
       }
     });
   }
@@ -222,8 +230,8 @@ public class GoExecutor {
       runContentExecutor.run();
       historyProcessListener.apply(outputHandler);
     }
-    if (myShowNotificationOnError) {
-      showNotification("");
+    if (myShowNotifications) {
+      showNotification("Failed to run", NotificationType.ERROR);
     }
   }
 

@@ -51,10 +51,13 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
       return;
     }
 
-    applyFix(project, module, myPackage);
+    applyFix(project, module, myPackage, true);
   }
 
-  public static void applyFix(@NotNull final Project project, @NotNull final Module module, final String packageName) {
+  public static void applyFix(@NotNull final Project project,
+                              @NotNull final Module module,
+                              final String packageName,
+                              final boolean startInBackground) {
     final String sdkPath = GoSdkService.getInstance(project).getSdkHomePath(module);
     if (StringUtil.isEmpty(sdkPath)) {
       return;
@@ -75,11 +78,16 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
         }
       }
 
+      @Override
+      public boolean shouldStartInBackground() {
+        return startInBackground;
+      }
+
       public void run(@NotNull final ProgressIndicator indicator) {
         if (!module.isDisposed()) {
           indicator.setIndeterminate(true);
           executor = GoExecutor.in(module).withPresentableName("go get " + packageName)
-            .withParameters("get", packageName).showNotificationOnError().showOutputOnError();
+            .withParameters("get", packageName).showNotifications().showOutputOnError();
           if (!doNotStart) {
             executor.execute();
           }
