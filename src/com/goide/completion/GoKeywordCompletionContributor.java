@@ -21,6 +21,7 @@ import com.goide.psi.*;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.openapi.project.DumbAware;
 import com.intellij.patterns.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
@@ -35,7 +36,7 @@ import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static com.intellij.patterns.PlatformPatterns.psiFile;
 import static com.intellij.patterns.StandardPatterns.*;
 
-public class GoKeywordCompletionContributor extends CompletionContributor {
+public class GoKeywordCompletionContributor extends CompletionContributor implements DumbAware {
   private static final BracesInsertHandler ADD_BRACES_INSERT_HANDLER = new BracesInsertHandler();
   private static final InsertHandler<LookupElement> ADD_BRACKETS_INSERT_HANDLER = new AddBracketsInsertHandler();
 
