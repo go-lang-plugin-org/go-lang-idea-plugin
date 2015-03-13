@@ -46,7 +46,7 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
 
   private void doInspectionTest(@NotNull InspectionProfileEntry tool, int expected) {
     if (!new File(myFixture.getTestDataPath(), "docker").exists()) {
-      System.err.println("For performance tests you need to have a docker project inside testData directory");
+      System.err.println("For performance tests you need to have a docker project inside testData/" + getBasePath() + " directory");
       return;
     }
 
