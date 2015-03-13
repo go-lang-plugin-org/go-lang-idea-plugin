@@ -65,6 +65,7 @@
     DOT                  =  '.'
     SEMICOLON_SYNTHETIC  = '<NL>'
     TYPE_                = 'type'
+    raw_string           = 'raw_string'
   ]
 
   extends("(Or|Add|Conversion|Mul)Expr")=BinaryExpr
