@@ -27,6 +27,7 @@ import com.goide.stubs.GoConstSpecStub;
 import com.goide.stubs.GoFileStub;
 import com.goide.stubs.GoVarSpecStub;
 import com.goide.stubs.types.*;
+import com.goide.util.GoUtil;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
 import com.intellij.openapi.fileTypes.FileType;
@@ -38,7 +39,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubTree;
 import com.intellij.psi.tree.IElementType;
@@ -203,7 +203,7 @@ public class GoFile extends PsiFileBase {
       }
       GoImportString string = spec.getImportString();
       PsiDirectory dir = string.resolve();
-      final Collection<String> packagesInDirectory = getAllPackagesInDirectory(dir);
+      Collection<String> packagesInDirectory = GoUtil.getAllPackagesInDirectory(dir);
       if (!packagesInDirectory.isEmpty()) {
         for (String packageNames : packagesInDirectory) {
           if (!StringUtil.isEmpty(packageNames)) {
@@ -259,28 +259,6 @@ public class GoFile extends PsiFileBase {
       @Override
       public Result<List<GoConstDefinition>> compute() {
         return Result.create(calcConsts(), GoFile.this);
-      }
-    });
-  }
-
-  private static Collection<String> getAllPackagesInDirectory(@Nullable final PsiDirectory dir) {
-    if (dir == null) {
-      return Collections.emptyList();
-    }
-    return CachedValuesManager.getCachedValue(dir, new CachedValueProvider<Collection<String>>() {
-      @Nullable
-      @Override
-      public Result<Collection<String>> compute() {
-        Collection<String> set = ContainerUtil.newLinkedHashSet();
-        for (PsiFile file : dir.getFiles()) {
-          if (file instanceof GoFile) {
-            String name = ((GoFile)file).getPackageName();
-            if (name != null && !GoConstants.MAIN.equals(name)) {
-              set.add(StringUtil.trimEnd(name, GoConstants.TEST_SUFFIX));
-            }
-          }
-        }
-        return Result.create(set, dir);
       }
     });
   }

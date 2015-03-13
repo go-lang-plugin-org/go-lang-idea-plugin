@@ -24,7 +24,7 @@
   </template>
   <template description='Package declaration' name='p' toReformat='true' toShortenFQNames='true'
             value='package $NAME$'>
-    <variable alwaysStopAt='true' defaultValue='' expression='directoryName()' name='NAME'/>
+    <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='NAME'/>
     <context>
       <option name='GO_FILE' value='true'/>
     </context>

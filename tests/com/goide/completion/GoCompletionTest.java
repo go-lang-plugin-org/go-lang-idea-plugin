@@ -16,16 +16,19 @@
 
 package com.goide.completion;
 
+import com.intellij.openapi.vfs.VfsUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.TreePrintCondition;
 import com.intellij.util.containers.ContainerUtil;
 
+import java.io.IOException;
 import java.util.List;
 
 public class GoCompletionTest extends GoCompletionTestBase {
   public void testPackageWithoutAlias() {
     doTestInclude("package foo; import `fmt`; func main(){<caret>}", "fmt");
   }
-  
+
   public void testLocalFunction() {
     doTestInclude("package foo; func foo() {}; func main() {<caret>}", "foo", "main");
   }
@@ -90,7 +93,7 @@ public class GoCompletionTest extends GoCompletionTestBase {
     myFixture.testCompletionVariants(getTestName(true) + ".go", "for", "const", "var", "return", "if", "switch", "go", "defer", "select",
                                      "fallthrough", "goto", "main");
   }
-  
+
   public void testBlockKeywordsInsideOneLineFunction() {
     myFixture.testCompletionVariants(getTestName(true) + ".go", "for", "const", "var", "return", "if", "switch", "go", "defer", "select",
                                      "fallthrough", "goto", "main");
@@ -152,15 +155,15 @@ public class GoCompletionTest extends GoCompletionTestBase {
   public void testMapKeywordInsertHandlerDoNotInsertBrackets() {
     doTestCompletion();
   }
-  
+
   public void testElseKeyword() {
     doTestCompletion();
   }
-  
+
   public void testElseKeywordRegression() {
     doTestEmptyCompletion();
   }
-  
+
   public void testIfKeywordAfterElse() {
     doTestCompletion();
   }
@@ -180,7 +183,7 @@ public class GoCompletionTest extends GoCompletionTestBase {
   public void testPackageKeyword() {
     doTestCompletion();
   }
-  
+
   public void testPackageKeywordInEmptyFile() {
     doTestCompletion();
   }
@@ -219,7 +222,7 @@ public class GoCompletionTest extends GoCompletionTestBase {
   public void testInterfaceTypesNoStruct() {
     doTestExclude("package foo; type E struct {}; type B interface {<caret>}", "E");
   }
-  
+
   public void testOnlyTypesInParameters() {
     doTestExclude("package foo; const a int = 1; var b = 2; func main(<caret>) {}", "a", "b", "main");
   }
@@ -243,15 +246,15 @@ public class GoCompletionTest extends GoCompletionTestBase {
   public void testLabel() {
     doTestInclude("package foo; func main() { goto <caret>; Label1: 1}", "Label1");
   }
-  
+
   public void testNoMainAnymore() {
     doTestEquals("package foo; func ma<caret> { }");
   }
-  
+
   public void testNoChanOrMap() {
     doTestEquals("package foo; func ma(f int.<caret>) { }");
   }
-  
+
   public void testOnTopLevel() {
     doTestEquals("package foo; func ma() { }\n<caret>", "var", "const", "func", "type");
   }
@@ -282,7 +285,7 @@ public class GoCompletionTest extends GoCompletionTestBase {
     assertSize(1, ContainerUtil.filter(stringList, new TreePrintCondition.Include("a")));
   }
 
-  public void testTypeCastAsVar() throws Exception {
+  public void testTypeCastAsVar() {
     doTestInclude("package main\n" +
                   "var fooVar int = 1\n" +
                   "func main() {\n" +
@@ -291,20 +294,39 @@ public class GoCompletionTest extends GoCompletionTestBase {
                   "}", "fooVar");
   }
 
-  public void testStructConstructions() throws Exception {
-    doCheckResult("package main; func main() {WaitGr<caret>}; type WaitGroup struct {sema *uint32}", 
+  public void testStructConstructions() {
+    doCheckResult("package main; func main() {WaitGr<caret>}; type WaitGroup struct {sema *uint32}",
                   "package main; func main() {WaitGroup{<caret>}}; type WaitGroup struct {sema *uint32}");
   }
 
-  public void testIntConversion() throws Exception {
+  public void testIntConversion() {
     doCheckResult("package main; func main() {int<caret>}; type int int",
                   "package main; func main() {int(<caret>)}; type int int");
+  }
+
+  @SuppressWarnings("ConstantConditions")
+  public void testPackageNames() {
+    myFixture.configureByText("test_test.go", "package fromTest_test");
+    myFixture.configureByText("test_file.go", "package fromFile");
+    myFixture.configureByText("test.go", "package <caret>");
+    myFixture.completeBasic();
+    assertSameElements(myFixture.getLookupElementStrings(), "fromTest", "fromFile", "main");
+  }
+
+  @SuppressWarnings("ConstantConditions")
+  public void testPackageNamesInEmptyDirectory() throws IOException {
+    VirtualFile dir = myFixture.getTempDirFixture().findOrCreateDir("directory-name");
+    VirtualFile file = dir.createChildData(this, "test.go");
+    VfsUtil.saveText(file, "package <caret>");
+    myFixture.configureFromExistingVirtualFile(file);
+    myFixture.completeBasic();
+    assertSameElements(myFixture.getLookupElementStrings(), "directory_name", "main");
   }
 
   private void doTestCompletion() {
     myFixture.testCompletion(getTestName(true) + ".go", getTestName(true) + "_after.go");
   }
-  
+
   private void doTestEmptyCompletion() {
     myFixture.testCompletionVariants(getTestName(true) + ".go");
   }

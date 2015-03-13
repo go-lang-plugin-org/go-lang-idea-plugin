@@ -3,7 +3,7 @@
   <!-- KEYWORDS -->
   <template description='Package declaration' id='go_lang_package' name='go_lang_package' toReformat='true' toShortenFQNames='true'
             value='package $NAME$'>
-    <variable alwaysStopAt='true' defaultValue='' expression='directoryName()' name='NAME'/>
+    <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='NAME'/>
     <context>
       <option name='GO' value='true'/>
     </context>

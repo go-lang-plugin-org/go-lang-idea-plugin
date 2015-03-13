@@ -1,4 +1,4 @@
-package src<caret>
+package <caret>
 
 func main() {
     

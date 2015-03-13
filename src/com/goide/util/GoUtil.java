@@ -33,15 +33,20 @@ import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.util.CachedValueProvider;
+import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.text.CharSequenceHashingStrategy;
 import gnu.trove.THashSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -157,5 +162,28 @@ public class GoUtil {
       }
     }
     return true;
+  }
+
+  @NotNull
+  public static Collection<String> getAllPackagesInDirectory(@Nullable final PsiDirectory dir) {
+    if (dir == null) {
+      return Collections.emptyList();
+    }
+    return CachedValuesManager.getCachedValue(dir, new CachedValueProvider<Collection<String>>() {
+      @Nullable
+      @Override
+      public Result<Collection<String>> compute() {
+        Collection<String> set = ContainerUtil.newLinkedHashSet();
+        for (PsiFile file : dir.getFiles()) {
+          if (file instanceof GoFile) {
+            String name = ((GoFile)file).getPackageName();
+            if (name != null && !GoConstants.MAIN.equals(name)) {
+              set.add(StringUtil.trimEnd(name, GoConstants.TEST_SUFFIX));
+            }
+          }
+        }
+        return Result.create(set, dir);
+      }
+    });
   }
 }
