@@ -17,7 +17,6 @@
 package com.goide.actions;
 
 import com.goide.GoIcons;
-import com.goide.GoNamesValidator;
 import com.intellij.ide.actions.CreateFileFromTemplateAction;
 import com.intellij.ide.actions.CreateFileFromTemplateDialog;
 import com.intellij.ide.fileTemplates.FileTemplate;
@@ -25,8 +24,6 @@ import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.ide.fileTemplates.FileTemplateUtil;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.InputValidatorEx;
-import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
@@ -63,32 +60,9 @@ public class GoCreateFileAction extends CreateFileFromTemplateAction implements 
   @Override
   protected void buildDialog(final Project project, PsiDirectory directory, @NotNull CreateFileFromTemplateDialog.Builder builder) {
     // todo: check that file already exists
-    builder.
-      setTitle(NEW_GO_FILE)
+    builder.setTitle(NEW_GO_FILE)
       .addKind("Empty file", GoIcons.ICON, "Go File")
-      .addKind("Simple Application", GoIcons.ICON, "Go Application")
-      .setValidator(new InputValidatorEx() {
-        @Override
-        public boolean checkInput(String inputString) {
-          return true;
-        }
-
-        @Override
-        public boolean canClose(@NotNull String inputString) {
-          return !StringUtil.isEmptyOrSpaces(inputString) && getErrorText(inputString) == null;
-        }
-
-        @Override
-        public String getErrorText(@NotNull String s) {
-          String error = " is not a valid Go file name";
-          if (StringUtil.isEmpty(s)) return null;
-          String name = FileUtil.getNameWithoutExtension(s);
-          return new GoNamesValidator().isIdentifier(name, project) && FileUtil.sanitizeFileName(name).equals(name) 
-                 ? null 
-                 : "'" + s + "'" + error;
-        }
-      })
-    ;
+      .addKind("Simple Application", GoIcons.ICON, "Go Application");
   }
 
   @NotNull
