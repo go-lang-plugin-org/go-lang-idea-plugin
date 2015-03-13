@@ -80,10 +80,9 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
   @Override
   @NotNull
   public ResolveResult[] multiResolve(final boolean incompleteCode) {
-    if (!myElement.isValid()) {
-      return ResolveResult.EMPTY_ARRAY;
-    }
-    return ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, MY_RESOLVER, false, false);
+    return myElement.isValid()
+           ? ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, MY_RESOLVER, false, false)
+           : ResolveResult.EMPTY_ARRAY;
   }
 
   @NotNull
