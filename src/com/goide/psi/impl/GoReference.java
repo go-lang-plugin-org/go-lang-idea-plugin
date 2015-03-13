@@ -44,15 +44,15 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static com.goide.psi.impl.GoPsiImplUtil.*;
 
 public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressionBase> {
   public static final Key<List<? extends PsiElement>> IMPORT_USERS = Key.create("IMPORT_USERS");
-
-  private static final Set<String> BUILTIN_PRINT_FUNCTIONS = ContainerUtil.newHashSet("print", "println");
-
+  public static final Key<String > ACTUAL_NAME = Key.create("ACTUAL_NAME");
+  public static final Key<Object> POINTER = Key.create("POINTER");
+  public static final Key<SmartPsiElementPointer<GoReferenceExpressionBase>> CONTEXT = Key.create("CONTEXT");
+  
   private static final ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase> MY_RESOLVER =
     new ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase>() {
       @NotNull
@@ -61,9 +61,6 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
         return ((GoReference)psiPolyVariantReferenceBase).resolveInner();
       }
     };
-  public static final Key<String > ACTUAL_NAME = Key.create("ACTUAL_NAME");
-  public static final Key<Object> POINTER = Key.create("POINTER");
-  public static final Key<SmartPsiElementPointer<GoReferenceExpressionBase>> CONTEXT = Key.create("CONTEXT");
 
   public GoReference(@NotNull GoReferenceExpressionBase o) {
     super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(), o.getIdentifier().getTextLength()));
@@ -118,7 +115,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     return new MyScopeProcessor() {
       @Override
       public boolean execute(@NotNull PsiElement o, @NotNull ResolveState state) {
-        if (o instanceof GoNamedElement && !((GoNamedElement)o).isBlank() && !printOrPrintln(o) ||
+        if (o instanceof GoNamedElement && !((GoNamedElement)o).isBlank() ||
             o instanceof GoImportSpec && !((GoImportSpec)o).isDot()) {
           if (filter.value(o)) {
             ContainerUtil.addIfNotNull(variants, createLookup(o, state));
@@ -128,10 +125,6 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
         return true;
       }
       
-      private boolean printOrPrintln(@NotNull PsiElement o) {
-        return o instanceof GoFunctionDeclaration && BUILTIN_PRINT_FUNCTIONS.contains(((GoFunctionDeclaration)o).getName()) && builtin(o);
-      }
-
       @Nullable
       private LookupElement createLookup(@NotNull PsiElement element, @NotNull ResolveState state) {
         // @formatter:off

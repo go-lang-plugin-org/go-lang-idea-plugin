@@ -185,6 +185,10 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
     doCheckResult("package main; import \"fmt\"; func test(fmt.form<caret>}",
                   "package main; import \"fmt\"; func test(fmt.Formatter<caret>}");
   }
+  
+  public void testPrintlnBuiltin() {
+    doTestInclude("package main; func test(){pr<caret>}", "print", "println");
+  }
 
   public void testNothingUnrelatedInsideSelector() {
     doTestEquals("package foo; type E struct {}; type B struct {E}; func (e E) foo() {}; func boo() {}" +
