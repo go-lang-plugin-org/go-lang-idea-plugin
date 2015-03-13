@@ -25,6 +25,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.ResolveState;
+import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
@@ -59,6 +60,14 @@ public class GoFieldNameReference extends PsiReferenceBase<GoFieldName> {
       }
     }
   }
+
+  private static final ResolveCache.AbstractResolver<PsiReferenceBase, PsiElement> MY_RESOLVER =
+    new ResolveCache.AbstractResolver<PsiReferenceBase, PsiElement>() {
+      @Override
+      public PsiElement resolve(@NotNull PsiReferenceBase base, boolean b) {
+        return ((GoFieldNameReference)base).resolveInner();
+      }
+    };
 
   private boolean processFields(@NotNull GoScopeProcessorBase processor) {
     GoCompositeLit lit = PsiTreeUtil.getParentOfType(myElement, GoCompositeLit.class);
@@ -103,6 +112,13 @@ public class GoFieldNameReference extends PsiReferenceBase<GoFieldName> {
   @Nullable
   @Override
   public PsiElement resolve() {
+    return myElement.isValid()
+           ? ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, MY_RESOLVER, false, false)
+           : null;
+  }
+
+  @Nullable
+  public PsiElement resolveInner() {
     GoScopeProcessorBase p = getProcessor(false);
     processFields(p);
     return p.getResult();
