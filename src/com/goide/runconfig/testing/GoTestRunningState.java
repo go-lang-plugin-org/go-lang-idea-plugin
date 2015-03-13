@@ -47,6 +47,8 @@ import java.io.File;
 import java.util.Collection;
 
 public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
+  private String myCoverageFilePath;
+
   public GoTestRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module, @NotNull GoTestRunConfiguration configuration) {
     super(env, module, configuration);
   }
@@ -69,22 +71,22 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
 
   @Override
   protected GoExecutor patchExecutor(@NotNull GoExecutor executor) throws ExecutionException {
-    executor.addParameters("test", "-v");
+    executor.withParameters("test", "-v");
     switch (myConfiguration.getKind()) {
       case DIRECTORY:
         String relativePath = FileUtil.getRelativePath(myConfiguration.getWorkingDirectory(),
                                                        myConfiguration.getDirectoryPath(),
                                                        File.separatorChar);
         if (relativePath != null) {
-          executor.addParameters(relativePath + "/...");
+          executor.withParameters(relativePath + "/...");
         }
         else {
-          executor.addParameters("./...");
+          executor.withParameters("./...");
           executor.withWorkDirectory(myConfiguration.getDirectoryPath());
         }
         break;
       case PACKAGE:
-        executor.addParameters(myConfiguration.getPackage());
+        executor.withParameters(myConfiguration.getPackage());
         break;
       case FILE:
         String filePath = myConfiguration.getFilePath();
@@ -102,7 +104,7 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
           throw new ExecutionException("Cannot find import path for " + filePath);
         }
 
-        executor.addParameters(importPath);
+        executor.withParameters(importPath);
         Collection<String> testNames = ContainerUtil.newLinkedHashSet();
         for (GoFunctionDeclaration function : ((GoFile)file).getFunctions()) {
           ContainerUtil.addIfNotNull(testNames, GoTestFinder.getTestFunctionName(function));
@@ -112,12 +114,20 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
     }
     String pattern = myConfiguration.getPattern();
     addFilterParameter(executor, pattern);
+
+    if (myCoverageFilePath != null) {
+      executor.withParameters("-coverprofile=" + myCoverageFilePath, "-covermode=count");
+    }
     return executor;
   }
 
   private static void addFilterParameter(@NotNull GoExecutor executor, String pattern) {
     if (StringUtil.isNotEmpty(pattern)) {
-      executor.addParameters("-run", pattern);
+      executor.withParameters("-run", pattern);
     }
+  }
+
+  public void setCoverageFilePath(String coverageFile) {
+    myCoverageFilePath = coverageFile;
   }
 }
