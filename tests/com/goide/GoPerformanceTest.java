@@ -74,4 +74,9 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
   protected String getBasePath() {
     return "performance";
   }
+
+  @Override
+  protected boolean isWriteActionRequired() {
+    return false;
+  }
 }
