@@ -38,14 +38,14 @@ public class GoInspectionSuppressor implements InspectionSuppressor {
   }
 
   @Override
-  public SuppressQuickFix[] getSuppressActions(PsiElement element, String toolShortName) {
+  public SuppressQuickFix[] getSuppressActions(PsiElement element, String toolId) {
     return new SuppressQuickFix[]{
       new GoSuppressInspectionFix("Suppress all inspections for function", GoFunctionOrMethodDeclaration.class),
-      new GoSuppressInspectionFix(toolShortName, "Suppress for function", GoFunctionOrMethodDeclaration.class),
+      new GoSuppressInspectionFix(toolId, "Suppress for function", GoFunctionOrMethodDeclaration.class),
       new GoSuppressInspectionFix("Suppress all inspections for statement", GoStatement.class),
-      new GoSuppressInspectionFix(toolShortName, "Suppress for statement", GoStatement.class),
+      new GoSuppressInspectionFix(toolId, "Suppress for statement", GoStatement.class),
       new GoSuppressInspectionFix("Suppress all inspections for import", GoImportDeclaration.class),
-      new GoSuppressInspectionFix(toolShortName, "Suppress for import", GoImportDeclaration.class),
+      new GoSuppressInspectionFix(toolId, "Suppress for import", GoImportDeclaration.class),
     };
   }
 
