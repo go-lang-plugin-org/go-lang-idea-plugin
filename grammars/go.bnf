@@ -405,7 +405,7 @@ ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement? {methods=[pr
 RangeClause ::= ExpressionsOrVariables? range Expression {pin=2 extends=VarSpec}
 private ExpressionsOrVariables ::= ExpressionList '=' | VarDefinitionList ':='
 GoStatement ::= go Expression
-SelectStatement ::= select '{' ( CommClause )* '}'
+SelectStatement ::= select '{' CommClause* '}'
 CommClause ::= CommCase ':' Statements? {pin=1}
 CommCase ::= case ( SendStatement | RecvStatement ) | default {pin(".*")=1}
 RecvStatement ::= ExpressionsOrVariables? Expression {pin=0 extends=VarSpec}

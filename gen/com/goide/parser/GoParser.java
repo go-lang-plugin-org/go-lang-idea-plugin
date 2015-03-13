@@ -2808,7 +2808,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // select '{' ( CommClause )* '}'
+  // select '{' CommClause* '}'
   public static boolean SelectStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SelectStatement")) return false;
     if (!nextTokenIs(b, SELECT)) return false;
@@ -2823,26 +2823,16 @@ public class GoParser implements PsiParser {
     return r || p;
   }
 
-  // ( CommClause )*
+  // CommClause*
   private static boolean SelectStatement_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SelectStatement_2")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!SelectStatement_2_0(b, l + 1)) break;
+      if (!CommClause(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "SelectStatement_2", c)) break;
       c = current_position_(b);
     }
     return true;
-  }
-
-  // ( CommClause )
-  private static boolean SelectStatement_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SelectStatement_2_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = CommClause(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   /* ********************************************************** */
