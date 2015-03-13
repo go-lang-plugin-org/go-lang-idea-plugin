@@ -25,6 +25,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.ResolveState;
+import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
@@ -38,10 +39,25 @@ public class GoVarReference extends PsiReferenceBase<GoVarDefinition> {
     super(element, TextRange.from(0, element.getTextLength()));
     myPotentialStopBlock = PsiTreeUtil.getParentOfType(element, GoBlock.class);
   }
-  
+
   @Nullable
   @Override
   public PsiElement resolve() {
+    return myElement.isValid()
+           ? ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, MY_RESOLVER, false, false)
+           : null;
+  }
+
+  private static final ResolveCache.AbstractResolver<PsiReferenceBase, PsiElement> MY_RESOLVER =
+    new ResolveCache.AbstractResolver<PsiReferenceBase, PsiElement>() {
+      @Override
+      public PsiElement resolve(@NotNull PsiReferenceBase base, boolean b) {
+        return ((GoVarReference)base).resolveInner();
+      }
+    };
+
+  @Nullable
+  public PsiElement resolveInner() {
     GoVarProcessor p = new GoVarProcessor(myElement.getText(), myElement, false);
     if (myPotentialStopBlock != null) {
       if (myPotentialStopBlock.getParent() instanceof GoFunctionOrMethodDeclaration) {
