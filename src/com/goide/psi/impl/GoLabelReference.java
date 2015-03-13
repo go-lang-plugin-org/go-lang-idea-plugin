@@ -26,6 +26,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.ResolveState;
+import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
@@ -47,6 +48,14 @@ public class GoLabelReference extends PsiReferenceBase<GoLabelRef> {
     super(element, TextRange.from(0, element.getTextLength()));
   }
 
+  private static final ResolveCache.AbstractResolver<PsiReferenceBase, PsiElement> MY_RESOLVER =
+    new ResolveCache.AbstractResolver<PsiReferenceBase, PsiElement>() {
+      @Override
+      public PsiElement resolve(@NotNull PsiReferenceBase base, boolean b) {
+        return ((GoLabelReference)base).resolveInner();
+      }
+    };
+
   @NotNull
   private Collection<GoLabelDefinition> getLabelDefinitions() {
     GoBlock block = PsiTreeUtil.getTopmostParentOfType(myElement, GoBlock.class);
@@ -56,6 +65,13 @@ public class GoLabelReference extends PsiReferenceBase<GoLabelRef> {
   @Nullable
   @Override
   public PsiElement resolve() {
+    return myElement.isValid()
+           ? ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, MY_RESOLVER, false, false)
+           : null;
+  }
+
+  @Nullable
+  private PsiElement resolveInner() {
     Collection<GoLabelDefinition> defs = getLabelDefinitions();
     for (GoLabelDefinition def : defs) {
       if (!myProcessor.execute(def, ResolveState.initial())) return def;
@@ -72,13 +88,13 @@ public class GoLabelReference extends PsiReferenceBase<GoLabelRef> {
     }
     return ArrayUtil.toObjectArray(result);
   }
-  
+
   @Override
   public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
     myElement.replace(GoElementFactory.createIdentifierFromText(myElement.getProject(), newElementName));
     return myElement;
   }
-  
+
   @Override
   public boolean isReferenceTo(PsiElement element) {
     return GoUtil.couldBeReferenceTo(element, myElement) && super.isReferenceTo(element);
