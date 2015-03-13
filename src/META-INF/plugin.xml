@@ -68,7 +68,6 @@
     <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$GoFileContextType"/>
     <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$GoBlockContextType"/>
     <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$GoTypeContextType"/>
-    <liveTemplateMacro implementation="com.goide.template.DirectoryNameMacro"/>
 
     <lang.elementManipulator forClass="com.goide.psi.GoImportString"
                              implementationClass="com.goide.psi.impl.manipulator.GoImportStringManipulator"/>
