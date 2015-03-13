@@ -22,11 +22,8 @@ import com.goide.psi.GoLabelDefinition;
 import com.goide.psi.GoLabelRef;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.ResolveState;
-import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
@@ -36,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public class GoLabelReference extends PsiReferenceBase<GoLabelRef> {
+public class GoLabelReference extends GoCachedReference<GoLabelRef> {
   private final GoScopeProcessorBase myProcessor = new GoScopeProcessorBase(myElement.getText(), myElement, false) {
     @Override
     protected boolean condition(@NotNull PsiElement element) {
@@ -45,16 +42,8 @@ public class GoLabelReference extends PsiReferenceBase<GoLabelRef> {
   };
 
   public GoLabelReference(@NotNull GoLabelRef element) {
-    super(element, TextRange.from(0, element.getTextLength()));
+    super(element);
   }
-
-  private static final ResolveCache.AbstractResolver<PsiReferenceBase, PsiElement> MY_RESOLVER =
-    new ResolveCache.AbstractResolver<PsiReferenceBase, PsiElement>() {
-      @Override
-      public PsiElement resolve(@NotNull PsiReferenceBase base, boolean b) {
-        return ((GoLabelReference)base).resolveInner();
-      }
-    };
 
   @NotNull
   private Collection<GoLabelDefinition> getLabelDefinitions() {
@@ -64,14 +53,7 @@ public class GoLabelReference extends PsiReferenceBase<GoLabelRef> {
 
   @Nullable
   @Override
-  public PsiElement resolve() {
-    return myElement.isValid()
-           ? ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, MY_RESOLVER, false, false)
-           : null;
-  }
-
-  @Nullable
-  private PsiElement resolveInner() {
+  protected PsiElement resolveInner() {
     Collection<GoLabelDefinition> defs = getLabelDefinitions();
     for (GoLabelDefinition def : defs) {
       if (!myProcessor.execute(def, ResolveState.initial())) return def;

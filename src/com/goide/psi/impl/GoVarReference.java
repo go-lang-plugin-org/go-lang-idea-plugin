@@ -21,42 +21,24 @@ import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.goide.psi.GoStatement;
 import com.goide.psi.GoVarDefinition;
 import com.goide.util.GoUtil;
-import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.ResolveState;
-import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class GoVarReference extends PsiReferenceBase<GoVarDefinition> {
+public class GoVarReference extends GoCachedReference<GoVarDefinition> {
   private final GoBlock myPotentialStopBlock;
 
   public GoVarReference(@NotNull GoVarDefinition element) {
-    super(element, TextRange.from(0, element.getTextLength()));
+    super(element);
     myPotentialStopBlock = PsiTreeUtil.getParentOfType(element, GoBlock.class);
   }
 
   @Nullable
   @Override
-  public PsiElement resolve() {
-    return myElement.isValid()
-           ? ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, MY_RESOLVER, false, false)
-           : null;
-  }
-
-  private static final ResolveCache.AbstractResolver<PsiReferenceBase, PsiElement> MY_RESOLVER =
-    new ResolveCache.AbstractResolver<PsiReferenceBase, PsiElement>() {
-      @Override
-      public PsiElement resolve(@NotNull PsiReferenceBase base, boolean b) {
-        return ((GoVarReference)base).resolveInner();
-      }
-    };
-
-  @Nullable
   public PsiElement resolveInner() {
     GoVarProcessor p = new GoVarProcessor(myElement.getText(), myElement, false);
     if (myPotentialStopBlock != null) {
@@ -64,7 +46,8 @@ public class GoVarReference extends PsiReferenceBase<GoVarDefinition> {
         GoReference.processFunctionParameters(myElement, p);
         if (p.getResult() != null) return p.getResult();
       }
-      myPotentialStopBlock.processDeclarations(p, ResolveState.initial(), PsiTreeUtil.getParentOfType(myElement, GoStatement.class), myElement);
+      myPotentialStopBlock.processDeclarations(p, ResolveState.initial(), PsiTreeUtil.getParentOfType(myElement, GoStatement.class),
+                                               myElement);
     }
     return p.getResult();
   }
@@ -77,7 +60,8 @@ public class GoVarReference extends PsiReferenceBase<GoVarDefinition> {
       if (myPotentialStopBlock.getParent() instanceof GoFunctionOrMethodDeclaration) {
         GoReference.processFunctionParameters(myElement, p);
       }
-      myPotentialStopBlock.processDeclarations(p, ResolveState.initial(), PsiTreeUtil.getParentOfType(myElement, GoStatement.class), myElement);
+      myPotentialStopBlock.processDeclarations(p, ResolveState.initial(), PsiTreeUtil.getParentOfType(myElement, GoStatement.class),
+                                               myElement);
     }
     return ArrayUtil.toObjectArray(p.getVariants());
   }
