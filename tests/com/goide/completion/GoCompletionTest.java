@@ -246,6 +246,10 @@ public class GoCompletionTest extends GoCompletionTestBase {
   public void testLabel() {
     doTestInclude("package foo; func main() { goto <caret>; Label1: 1}", "Label1");
   }
+  
+  public void testNestedBlocks() {
+    doTestInclude("package main; func main() {def := 1; abc := 0; {<caret>}}", "abc", "def");
+  }
 
   public void testNoMainAnymore() {
     doTestEquals("package foo; func ma<caret> { }");

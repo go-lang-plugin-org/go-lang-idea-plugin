@@ -33,7 +33,7 @@ public abstract class GoScopeProcessorBase extends BaseScopeProcessor {
 
   @NotNull protected final PsiElement myOrigin;
   @NotNull private final String myRequestedName;
-  private final boolean myIsCompletion;
+  protected final boolean myIsCompletion;
 
   public GoScopeProcessorBase(@NotNull String requestedName, @NotNull PsiElement origin, boolean completion) {
     myRequestedName = requestedName;

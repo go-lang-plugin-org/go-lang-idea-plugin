@@ -44,7 +44,7 @@ public class GoVarProcessor extends GoScopeProcessorBase {
     boolean differentBlocks = differentBlocks(o);
     boolean inShortVar = PsiTreeUtil.getParentOfType(o, GoShortVarDeclaration.class, GoRecvStatement.class) != null;
     if (inShortVar && differentBlocks && myImShortVarDeclaration) return true;
-    if (differentBlocks && inShortVar && !inVarOrRange && getResult() != null) return true;
+    if (differentBlocks && inShortVar && !inVarOrRange && getResult() != null && !myIsCompletion) return true;
     if (inShortVar && fromNotAncestorBlock(o)) return true;
     return super.add(o) || !inVarOrRange;
   }
