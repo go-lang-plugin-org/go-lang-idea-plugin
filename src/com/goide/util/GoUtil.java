@@ -138,7 +138,11 @@ public class GoUtil {
    */
   public static boolean couldBeReferenceTo(@NotNull PsiElement definition, @NotNull PsiElement reference) {
     if (reference instanceof GoLabelRef && !(definition instanceof GoLabelDefinition)) return false;
-    if (reference instanceof GoTypeReferenceExpression && !(definition instanceof GoTypeSpec)) return false;
+    if (reference instanceof GoTypeReferenceExpression &&
+        !(reference.getParent() instanceof GoReceiverType) &&
+        !(definition instanceof GoTypeSpec)) {
+      return false;
+    }
 
     PsiFile definitionFile = definition.getContainingFile();
     PsiFile referenceFile = reference.getContainingFile();

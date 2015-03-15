@@ -31,3 +31,13 @@ func <warning>main1</warning>(i interface{}) {
         _ = t[0].Key
     }
 }
+
+type Some struct {
+    field int
+}
+
+func <warning>prtMain</warning>() {
+    ptr := &Some{1}
+    _ = (*ptr).field
+}
+
