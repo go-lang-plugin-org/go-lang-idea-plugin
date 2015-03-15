@@ -36,7 +36,6 @@ import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -47,7 +46,6 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
     if (!(root instanceof GoFile)) return FoldingDescriptor.EMPTY;
     GoFile file = (GoFile)root;
     if (!file.isContentsLoaded()) return FoldingDescriptor.EMPTY;
-    final Set<PsiElement> processedComments = new HashSet<PsiElement>();
     final List<FoldingDescriptor> result = ContainerUtil.newArrayList();
 
     GoImportList importList = ((GoFile)root).getImportList();
@@ -55,9 +53,8 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
       GoImportDeclaration firstImport = ContainerUtil.getFirstItem(importList.getImportDeclarationList());
       if (firstImport != null) {
         PsiElement importKeyword = firstImport.getImport();
-        final int startOffset = importKeyword.getNextSibling() instanceof PsiWhiteSpace
-                                ? importKeyword.getTextRange().getEndOffset() + 1
-                                : importKeyword.getTextRange().getEndOffset();
+        int offset = importKeyword.getTextRange().getEndOffset();
+        int startOffset = importKeyword.getNextSibling() instanceof PsiWhiteSpace ? offset + 1 : offset;
         TextRange range = TextRange.create(startOffset, importList.getTextRange().getEndOffset());
         if (!range.isEmpty()) {
           result.add(new FoldingDescriptor(importList, range));
@@ -71,6 +68,7 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
     }
 
     if (!quick) {
+      final Set<PsiElement> processedComments = ContainerUtil.newHashSet();
       PsiTreeUtil.processElements(file, new PsiElementProcessor() {
         @Override
         public boolean execute(@NotNull PsiElement element) {
