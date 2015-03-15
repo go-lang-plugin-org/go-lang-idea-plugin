@@ -2126,39 +2126,35 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // '{' (ElementList | (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">>)) '}'
+  // (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">>) '{' ElementList? '}'
   public static boolean LiteralValue(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LiteralValue")) return false;
-    if (!nextTokenIs(b, LBRACE)) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, LBRACE);
-    r = r && LiteralValue_1(b, l + 1);
+    Marker m = enter_section_(b, l, _NONE_, "<literal value>");
+    r = LiteralValue_0(b, l + 1);
+    r = r && consumeToken(b, LBRACE);
+    r = r && LiteralValue_2(b, l + 1);
     r = r && consumeToken(b, RBRACE);
-    exit_section_(b, m, LITERAL_VALUE, r);
-    return r;
-  }
-
-  // ElementList | (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">>)
-  private static boolean LiteralValue_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "LiteralValue_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = ElementList(b, l + 1);
-    if (!r) r = LiteralValue_1_1(b, l + 1);
-    exit_section_(b, m, null, r);
+    exit_section_(b, l, m, LITERAL_VALUE, r, false, null);
     return r;
   }
 
   // <<isModeOff "BLOCK?">> | <<isModeOn "PAR">>
-  private static boolean LiteralValue_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "LiteralValue_1_1")) return false;
+  private static boolean LiteralValue_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LiteralValue_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = isModeOff(b, l + 1, "BLOCK?");
     if (!r) r = isModeOn(b, l + 1, "PAR");
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  // ElementList?
+  private static boolean LiteralValue_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LiteralValue_2")) return false;
+    ElementList(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */
