@@ -147,7 +147,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                                       "func test(){ReadA<caret>}");
     failOnFileLoading();
     myFixture.completeBasic();
-    myFixture.assertPreferredCompletionItems(0, "ReadAtLeast", "ReadAtLeastCustom", "ReaderAt", "ReaderAtCustom");
+    myFixture.assertPreferredCompletionItems(0, "ReadAtLeast", "ReaderAt", "ReadAtLeastCustom", "ReaderAtCustom");
   }
 
   public void testImportedTypesPriority() {
