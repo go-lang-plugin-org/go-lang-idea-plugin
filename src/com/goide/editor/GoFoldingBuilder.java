@@ -67,6 +67,10 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
       if (block != null && block.getTextRange().getLength() > 1) result.add(new FoldingDescriptor(block, block.getTextRange()));
     }
 
+    for (GoTypeSpec type : file.getTypes()) {
+      foldTypes(type.getType(), result);
+    }
+
     if (!quick) {
       final Set<PsiElement> processedComments = ContainerUtil.newHashSet();
       PsiTreeUtil.processElements(file, new PsiElementProcessor() {
@@ -79,23 +83,30 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
           if (type == GoParserDefinition.LINE_COMMENT) {
             addCommentFolds(element, processedComments, result);
           }
-          if (element instanceof GoStructType) {
-            addTypeBlock(element, ((GoStructType)element).getLbrace(), ((GoStructType)element).getRbrace());
-          }
-          if (element instanceof GoInterfaceType) {
-            addTypeBlock(element, ((GoInterfaceType)element).getLbrace(), ((GoInterfaceType)element).getRbrace());
-          }
+          foldTypes(element, result); // folding for inner types
           return true;
-        }
-
-        private void addTypeBlock(@NotNull PsiElement element, @Nullable PsiElement l, @Nullable PsiElement r) {
-          if (l != null && r != null) {
-            result.add(new FoldingDescriptor(element, TextRange.create(l.getTextRange().getStartOffset(), r.getTextRange().getEndOffset())));
-          }
         }
       });
     }
     return result.toArray(new FoldingDescriptor[result.size()]);
+  }
+
+  private static void foldTypes(@Nullable PsiElement element, List<FoldingDescriptor> result) {
+    if (element instanceof GoStructType) {
+      addTypeBlock(element, ((GoStructType)element).getLbrace(), ((GoStructType)element).getRbrace(), result);
+    }
+    if (element instanceof GoInterfaceType) {
+      addTypeBlock(element, ((GoInterfaceType)element).getLbrace(), ((GoInterfaceType)element).getRbrace(), result);
+    }
+  }
+
+  private static void addTypeBlock(@NotNull PsiElement element,
+                                   @Nullable PsiElement l,
+                                   @Nullable PsiElement r,
+                                   @NotNull List<FoldingDescriptor> result) {
+    if (l != null && r != null) {
+      result.add(new FoldingDescriptor(element, TextRange.create(l.getTextRange().getStartOffset(), r.getTextRange().getEndOffset())));
+    }
   }
 
   // com.intellij.codeInsight.folding.impl.JavaFoldingBuilderBase.addCodeBlockFolds()
