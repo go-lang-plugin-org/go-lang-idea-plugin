@@ -23,13 +23,8 @@ import com.goide.stubs.index.GoFunctionIndex;
 import com.goide.stubs.index.GoTypesIndex;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.completion.*;
-import com.intellij.codeInsight.completion.impl.DispreferLiveTemplates;
-import com.intellij.codeInsight.completion.impl.PreferStartMatching;
-import com.intellij.codeInsight.completion.impl.RealPrefixMatchingWeigher;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementWeigher;
-import com.intellij.codeInsight.lookup.LookupItem;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -85,19 +80,6 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         if (prevDot(parent)) return;
         result = adjustMatcher(parameters, result, parent);
 
-        result = result.withRelevanceSorter(
-          CompletionSorter.emptySorter().weigh(new DispreferLiveTemplates()).weigh(new PreferStartMatching())
-            .weigh(new RealPrefixMatchingWeigher())
-            .weigh(new LookupElementWeigher("priority") {
-              @NotNull
-              @Override
-              public Double weigh(@NotNull LookupElement element) {
-                return element instanceof LookupItem ? -((LookupItem)element).getPriority() :
-                       element instanceof PrioritizedLookupElement ? -((PrioritizedLookupElement)element).getPriority() :
-                       -0.0;
-              }
-            }));
-        
         final PsiFile file = parameters.getOriginalFile();
         if (!(file instanceof GoFile)) return;
 
