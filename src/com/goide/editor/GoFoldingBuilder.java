@@ -79,7 +79,19 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
           if (type == GoParserDefinition.LINE_COMMENT) {
             addCommentFolds(element, processedComments, result);
           }
+          if (element instanceof GoStructType) {
+            addTypeBlock(element, ((GoStructType)element).getLbrace(), ((GoStructType)element).getRbrace());
+          }
+          if (element instanceof GoInterfaceType) {
+            addTypeBlock(element, ((GoInterfaceType)element).getLbrace(), ((GoInterfaceType)element).getRbrace());
+          }
           return true;
+        }
+
+        private void addTypeBlock(@NotNull PsiElement element, @Nullable PsiElement l, @Nullable PsiElement r) {
+          if (l != null && r != null) {
+            result.add(new FoldingDescriptor(element, TextRange.create(l.getTextRange().getStartOffset(), r.getTextRange().getEndOffset())));
+          }
         }
       });
     }
@@ -111,13 +123,12 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
     }
   }
   
-  
   @Nullable
   @Override
   public String getPlaceholderText(@NotNull ASTNode node) {
     PsiElement psi = node.getPsi();
     IElementType type = node.getElementType();
-    if (psi instanceof GoBlock) return "{...}";
+    if (psi instanceof GoBlock || psi instanceof GoStructType || psi instanceof GoInterfaceType) return "{...}";
     if (psi instanceof GoImportDeclaration) return "...";
     if (GoParserDefinition.LINE_COMMENT == type) return "/.../";
     if (GoParserDefinition.MULTILINE_COMMENT == type) return "/*...*/";
@@ -135,6 +146,5 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
       return parent != null && parent.getPsi() instanceof GoFunctionOrMethodDeclaration;
     }
     return CodeFoldingSettings.getInstance().COLLAPSE_IMPORTS && node.getElementType() == GoTypes.IMPORT_LIST;
-      
   }
 }
