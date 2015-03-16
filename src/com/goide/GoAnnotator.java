@@ -169,16 +169,17 @@ public class GoAnnotator implements Annotator {
   }
 
   private static TextAttributesKey getColor(GoTypeSpec o) {
-    if (o == null || o.getGoType(null) == null) {
+    GoType type = o == null ? null : o.getGoType(null);
+    if (type == null) {
       return GoSyntaxHighlightingColors.TYPE_SPECIFICATION;
     }
 
-    if (o.getGoType(null) instanceof GoInterfaceType) {
+    if (type instanceof GoInterfaceType) {
       return StringUtil.isCapitalized(o.getText())
              ? GoSyntaxHighlightingColors.PACKAGE_EXPORTED_INTERFACE
              : GoSyntaxHighlightingColors.PACKAGE_LOCAL_INTERFACE;
     }
-    else if (o.getGoType(null) instanceof GoStructType) {
+    else if (type instanceof GoStructType) {
       return StringUtil.isCapitalized(o.getText())
              ? GoSyntaxHighlightingColors.PACKAGE_EXPORTED_STRUCT
              : GoSyntaxHighlightingColors.PACKAGE_LOCAL_STRUCT;
