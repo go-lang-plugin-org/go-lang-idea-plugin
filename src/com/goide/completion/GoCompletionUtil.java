@@ -93,7 +93,6 @@ public class GoCompletionUtil {
         .withInsertHandler(handler)
         .withTypeText(typeText, true)
         .withTailText(calcTailText(f), true)
-        .withLookupString(pkg.toLowerCase())
         .withLookupString(name.toLowerCase())
         .withLookupString((pkg + name).toLowerCase())
         .withPresentableText(pkg + name + paramText), priority);
@@ -130,7 +129,6 @@ public class GoCompletionUtil {
     String pkg = showPackage ? StringUtil.notNullize(t.getContainingFile().getPackageName()) : "";
     pkg = pkg.isEmpty() ? pkg : pkg + ".";
     LookupElementBuilder builder = LookupElementBuilder.create(t, name)
-      .withLookupString(pkg.toLowerCase())
       .withLookupString(name.toLowerCase())
       .withLookupString((pkg + name).toLowerCase())
       .withPresentableText(pkg + name)
@@ -178,10 +176,10 @@ public class GoCompletionUtil {
                 null;
     GoType type = v.getGoType(null);
     String text = GoPsiImplUtil.getText(type);
+    String name = StringUtil.notNullize(v.getName());
     return PrioritizedLookupElement.withPriority(
-      LookupElementBuilder
-        .create(v)
-        .withLookupString(StringUtil.notNullize(v.getName(), "").toLowerCase())
+      LookupElementBuilder.create(v, name)
+        .withLookupString(name.toLowerCase())
         .withIcon(icon)
         .withTypeText(text, true),
       VAR_PRIORITY);
