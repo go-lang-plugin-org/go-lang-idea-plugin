@@ -18,12 +18,13 @@ package com.goide.codeInsight.imports;
 
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.intellij.codeInsight.actions.OptimizeImportsAction;
+import com.intellij.codeInsight.daemon.DaemonAnalyzerTestCase;
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.testFramework.LightProjectDescriptor;
 
+@DaemonAnalyzerTestCase.CanChangeDocumentDuringHighlighting
 public class GoImportOptimizerTest extends GoCodeInsightFixtureTestCase {
-
   public void testUnusedImports() { doTest(); }
   public void testUnusedImportsWithSemicolon() { doTest(); }
   public void testUnusedImplicitImports() { doTest(); }
