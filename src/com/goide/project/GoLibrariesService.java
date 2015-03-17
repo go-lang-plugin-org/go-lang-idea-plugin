@@ -17,6 +17,7 @@
 package com.goide.project;
 
 import com.goide.GoLibrariesState;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
@@ -26,6 +27,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.messages.Topic;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,6 +35,7 @@ import java.util.Collection;
 import java.util.Set;
 
 public abstract class GoLibrariesService extends SimpleModificationTracker implements PersistentStateComponent<GoLibrariesState> {
+  public static final Topic<LibrariesListener> LIBRARIES_TOPIC = new Topic<LibrariesListener>("libraries changes", LibrariesListener.class);
   private GoLibrariesState myState = new GoLibrariesState();
 
   @NotNull
@@ -82,6 +85,7 @@ public abstract class GoLibrariesService extends SimpleModificationTracker imple
   public void setLibraryRootUrls(@NotNull Collection<String> libraryRootUrl) {
     if (!myState.getUrls().equals(libraryRootUrl)) {
       incModificationCount();
+      ApplicationManager.getApplication().getMessageBus().syncPublisher(LIBRARIES_TOPIC).librariesChanged(libraryRootUrl);
     }
     myState.setUrls(libraryRootUrl);
   }
@@ -99,5 +103,9 @@ public abstract class GoLibrariesService extends SimpleModificationTracker imple
         return VirtualFileManager.getInstance().findFileByUrl(url);
       }
     }));
+  }
+
+  public interface LibrariesListener {
+    void librariesChanged(@NotNull Collection<String> newRootUrls);
   }
 }

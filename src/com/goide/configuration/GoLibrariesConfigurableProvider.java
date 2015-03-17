@@ -17,7 +17,6 @@
 package com.goide.configuration;
 
 import com.goide.project.GoApplicationLibrariesService;
-import com.goide.project.GoModuleLibrariesInitializer;
 import com.goide.project.GoModuleLibrariesService;
 import com.goide.project.GoProjectLibrariesService;
 import com.goide.sdk.GoSdkService;
@@ -25,8 +24,10 @@ import com.goide.sdk.GoSdkUtil;
 import com.intellij.application.options.ModuleAwareProjectConfigurable;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleManager;
-import com.intellij.openapi.options.*;
+import com.intellij.openapi.options.CompositeConfigurable;
+import com.intellij.openapi.options.Configurable;
+import com.intellij.openapi.options.ConfigurableProvider;
+import com.intellij.openapi.options.UnnamedConfigurable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -100,14 +101,6 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
         }
         rootPanel.revalidate();
         return rootPanel;
-      }
-
-      @Override
-      public void apply() throws ConfigurationException {
-        super.apply();
-        for (Module module : ModuleManager.getInstance(myProject).getModules()) {
-          module.getComponent(GoModuleLibrariesInitializer.class).scheduleUpdate();
-        }
       }
 
       @NotNull

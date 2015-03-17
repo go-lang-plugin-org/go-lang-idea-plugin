@@ -104,15 +104,21 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
         scheduleUpdate();
       }
     });
+    myModule.getMessageBus().connect().subscribe(GoLibrariesService.LIBRARIES_TOPIC, new GoLibrariesService.LibrariesListener() {
+      @Override
+      public void librariesChanged(@NotNull Collection<String> newRootUrls) {
+        scheduleUpdate();
+      }
+    });
 
     VirtualFileManager.getInstance().addVirtualFileListener(myFilesListener);
   }
 
-  public void scheduleUpdate() {
+  private void scheduleUpdate() {
     scheduleUpdate(UPDATE_DELAY);
   }
 
-  public void scheduleUpdate(int delay) {
+  private void scheduleUpdate(int delay) {
     myAlarm.addRequest(new Runnable() {
       public void run() {
         final Project project = myModule.getProject();
