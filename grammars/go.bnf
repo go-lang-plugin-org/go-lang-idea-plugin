@@ -185,7 +185,7 @@ MapType ::= map '[' Type ']' Type {
 ChannelType ::= ChanTypePrefix Type {pin=1}
 private ChanTypePrefix ::= chan '<-'? | '<-' chan {pin(".*")=1}
 
-Block ::= <<consumeBlock>> | '{' ('}' | Statements '}') {pin(".*")=1 methods=[processDeclarations]}
+Block ::= <<consumeBlock>> | '{' <<exitModeSafe "PAR">> ('}' | Statements '}') {pin(".*")=1 methods=[processDeclarations]}
 private Statements ::= StatementWithSemi*
 
 private StatementWithSemi ::= Statement (semi|&'}') { pin=1 recoverWhile=StatementRecover }
@@ -335,7 +335,7 @@ UnaryExpr ::=  unary_op Expression
 ConditionalExpr ::= Expression rel_op Expression
 AddExpr ::= Expression add_op Expression
 MulExpr ::= Expression mul_op Expression
-ParenthesesExpr ::= '(' <<enterMode "PAR">> Expression <<exitMode "PAR">>')' {pin=1}
+ParenthesesExpr ::= '(' <<enterMode "PAR">> Expression <<exitModeSafe "PAR">>')' {pin=1}
 
 BuiltinCallExpr ::= ReferenceExpression <<isBuiltin>> '(' [ BuiltinArgs ','? ] ')' {pin=3}
 BuiltinArgs ::= Type [ ',' ExpressionList '...'? ] | ExpressionList '...'?
@@ -367,7 +367,7 @@ private inner SliceExprBodyInner ::= SliceExprBody
 private SliceExprBody ::= &':' (':' Expression ':' Expression) | (':' Expression?)
 TypeAssertionExpr ::= Expression '.' '(' &(!'type') Type ')'
 CallExpr ::= Expression ArgumentList
-ArgumentList ::= '(' <<enterMode "PAR">> [ ExpressionList '...'? ','? ] <<exitMode "PAR">>')' {pin=1}
+ArgumentList ::= '(' <<enterMode "PAR">> [ ExpressionList '...'? ','? ] <<exitModeSafe "PAR">>')' {pin=1}
 ConversionExpr ::= &ConversionPredicate Type ConversionTail
 private ConversionPredicate ::= ConversionStart | '(' ConversionStart
 private ConversionTail ::= '(' Expression ','? ')' {pin=1}

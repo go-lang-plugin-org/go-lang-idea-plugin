@@ -373,7 +373,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // '(' <<enterMode "PAR">> [ ExpressionList '...'? ','? ] <<exitMode "PAR">>')'
+  // '(' <<enterMode "PAR">> [ ExpressionList '...'? ','? ] <<exitModeSafe "PAR">>')'
   public static boolean ArgumentList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ArgumentList")) return false;
     if (!nextTokenIs(b, LPAREN)) return false;
@@ -383,7 +383,7 @@ public class GoParser implements PsiParser {
     p = r; // pin = 1
     r = r && report_error_(b, enterMode(b, l + 1, "PAR"));
     r = p && report_error_(b, ArgumentList_2(b, l + 1)) && r;
-    r = p && report_error_(b, exitMode(b, l + 1, "PAR")) && r;
+    r = p && report_error_(b, exitModeSafe(b, l + 1, "PAR")) && r;
     r = p && consumeToken(b, RPAREN) && r;
     exit_section_(b, l, m, ARGUMENT_LIST, r, p, null);
     return r || p;
@@ -472,7 +472,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // <<consumeBlock>> | '{' ('}' | Statements '}')
+  // <<consumeBlock>> | '{' <<exitModeSafe "PAR">> ('}' | Statements '}')
   public static boolean Block(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Block")) return false;
     boolean r;
@@ -483,32 +483,33 @@ public class GoParser implements PsiParser {
     return r;
   }
 
-  // '{' ('}' | Statements '}')
+  // '{' <<exitModeSafe "PAR">> ('}' | Statements '}')
   private static boolean Block_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Block_1")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeToken(b, LBRACE);
     p = r; // pin = 1
-    r = r && Block_1_1(b, l + 1);
+    r = r && report_error_(b, exitModeSafe(b, l + 1, "PAR"));
+    r = p && Block_1_2(b, l + 1) && r;
     exit_section_(b, l, m, null, r, p, null);
     return r || p;
   }
 
   // '}' | Statements '}'
-  private static boolean Block_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Block_1_1")) return false;
+  private static boolean Block_1_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Block_1_2")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, RBRACE);
-    if (!r) r = Block_1_1_1(b, l + 1);
+    if (!r) r = Block_1_2_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // Statements '}'
-  private static boolean Block_1_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Block_1_1_1")) return false;
+  private static boolean Block_1_2_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Block_1_2_1")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, null);
     r = Statements(b, l + 1);
@@ -4421,7 +4422,7 @@ public class GoParser implements PsiParser {
     return r || p;
   }
 
-  // '(' <<enterMode "PAR">> Expression <<exitMode "PAR">>')'
+  // '(' <<enterMode "PAR">> Expression <<exitModeSafe "PAR">>')'
   public static boolean ParenthesesExpr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ParenthesesExpr")) return false;
     if (!nextTokenIsFast(b, LPAREN)) return false;
@@ -4431,7 +4432,7 @@ public class GoParser implements PsiParser {
     p = r; // pin = 1
     r = r && report_error_(b, enterMode(b, l + 1, "PAR"));
     r = p && report_error_(b, Expression(b, l + 1, -1)) && r;
-    r = p && report_error_(b, exitMode(b, l + 1, "PAR")) && r;
+    r = p && report_error_(b, exitModeSafe(b, l + 1, "PAR")) && r;
     r = p && consumeToken(b, RPAREN) && r;
     exit_section_(b, l, m, PARENTHESES_EXPR, r, p, null);
     return r || p;

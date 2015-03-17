@@ -197,3 +197,28 @@ func main() {
 type name struct {
     foo string `xml:""`
 }
+
+func TestFor() {
+    type name1234 interface {
+
+    }
+    var v []int
+    call(func() {
+        for range v { // v is not resolved here
+        }
+    })
+}
+
+func TestIf() {
+    var v string
+    call(func() {
+        if v == "" {
+        }
+        if "" == v {  // v is not resolved here
+        }
+    })
+}
+
+func call(f func()) {
+    f()
+}
