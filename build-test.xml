@@ -20,7 +20,7 @@
         <fileset dir="${idea.community.build}/lib">
             <include name="*.jar"/>
         </fileset>
-        <fileset dir="${idea.community.build}/plugins/coverage">
+        <fileset dir="${idea.community.build}/plugins/coverage/lib">
             <include name="coverage*.jar"/>
         </fileset>
     </path>
