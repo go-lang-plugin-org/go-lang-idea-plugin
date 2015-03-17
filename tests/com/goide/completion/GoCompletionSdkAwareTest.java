@@ -1,26 +1,15 @@
 package com.goide.completion;
 
-import com.goide.project.GoModuleLibrariesService;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.testFramework.LightProjectDescriptor;
 
 import java.io.IOException;
-import java.util.Collections;
 
 public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
   @Override
   public void setUp() throws Exception {
     super.setUp();
     setUpProjectSdk();
-    
-    String url = myFixture.getTempDirFixture().getFile("..").getUrl();
-    GoModuleLibrariesService.getInstance(myModule).setLibraryRootUrls(Collections.singleton(url));
-  }
-
-  @Override
-  protected void tearDown() throws Exception {
-    GoModuleLibrariesService.getInstance(myModule).setLibraryRootUrls(Collections.<String>emptyList());
-    super.tearDown();
   }
 
   @Override

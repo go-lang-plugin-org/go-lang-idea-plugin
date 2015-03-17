@@ -37,6 +37,13 @@ public class GoCompletionTest extends GoCompletionTestBase {
     doTestInclude("package foo; type (T struct {}; T2 struct{}); func main(){var i <caret>}", "T", "T2");
   }
 
+  public void testLocalFunctionInDifferentFiles() {
+    myFixture.copyFileToProject(getTestName(true) + "_context.go", "importPath/context.go");
+    myFixture.configureFromExistingVirtualFile(myFixture.copyFileToProject(getTestName(true) + ".go", "importPath/main.go"));
+    myFixture.completeBasic();
+    myFixture.checkResultByFile(getTestName(true) + "_after.go");
+  }
+
   public void testLocalVar() {
     doTestInclude("package foo; func main(){var i, j int; <caret>}", "i", "j");
   }
@@ -246,7 +253,7 @@ public class GoCompletionTest extends GoCompletionTestBase {
   public void testLabel() {
     doTestInclude("package foo; func main() { goto <caret>; Label1: 1}", "Label1");
   }
-  
+
   public void testNestedBlocks() {
     doTestInclude("package main; func main() {def := 1; abc := 0; {<caret>}}", "abc", "def");
   }
