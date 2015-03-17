@@ -28,6 +28,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ObjectUtils;
+import com.intellij.util.PlatformIcons;
 import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -201,6 +202,7 @@ public class GoCompletionUtil {
   @NotNull
   public static LookupElementBuilder createDirectoryLookupElement(@NotNull PsiDirectory dir) {
     int files = dir.getFiles().length;
-    return LookupElementBuilder.create(dir).withIcon(GoIcons.PACKAGE).withInsertHandler(files == 0 ? Lazy.DIR_INSERT_HANDLER : null);
+    return LookupElementBuilder.create(dir).withIcon(PlatformIcons.DIRECTORY_CLOSED_ICON)
+      .withInsertHandler(files == 0 ? Lazy.DIR_INSERT_HANDLER : null);
   }
 }

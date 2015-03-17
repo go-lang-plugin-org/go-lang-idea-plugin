@@ -43,6 +43,35 @@ public class GoCompletionTest extends GoCompletionTestBase {
     myFixture.completeBasic();
     myFixture.checkResultByFile(getTestName(true) + "_after.go");
   }
+  
+  public void testImportPackages() throws IOException {
+    myFixture.getTempDirFixture().createFile("package1/pack/test.go", "package foo");
+    myFixture.getTempDirFixture().createFile("package2/pack/test.go", "package bar");
+    myFixture.configureByText("test.go", "package foo; import `pack<caret>`");
+    myFixture.completeBasic();
+    List<String> lookupElementStrings = myFixture.getLookupElementStrings();
+    assertNotNull(lookupElementStrings);
+    assertSameElements(lookupElementStrings, "package1", "package1/pack", "package2", "package2/pack");
+  }
+
+  public void testDoNotCompleteFullPackagesForRelativeImports() throws IOException {
+    myFixture.getTempDirFixture().createFile("package1/pack/test.go", "package foo");
+    myFixture.getTempDirFixture().createFile("package2/pack/test.go", "package bar");
+    myFixture.configureByText("test.go", "package foo; import `./pack<caret>`");
+    myFixture.completeBasic();
+    List<String> lookupElementStrings = myFixture.getLookupElementStrings();
+    assertNotNull(lookupElementStrings);
+    assertSameElements(lookupElementStrings, "package1", "package2");
+  }
+  
+  public void testDoNotHidePopupOnSlash() throws IOException {
+    myFixture.getTempDirFixture().createFile("package1/pack/test.go", "package foo");
+    myFixture.getTempDirFixture().createFile("package2/pack/test.go", "package bar");
+    myFixture.configureByText("test.go", "package foo; import `<caret>`");
+    myFixture.completeBasic();
+    myFixture.type("package1/\n");
+    myFixture.checkResult("package foo; import `package1/pack<caret>`");
+  }
 
   public void testLocalVar() {
     doTestInclude("package foo; func main(){var i, j int; <caret>}", "i", "j");

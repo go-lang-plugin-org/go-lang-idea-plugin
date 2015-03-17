@@ -16,24 +16,18 @@
 
 package com.goide.runconfig.testing.ui;
 
-import com.goide.completion.GoCompletionUtil;
-import com.goide.psi.GoFile;
+import com.goide.completion.GoImportPathsCompletionProvider;
 import com.goide.runconfig.testing.GoTestRunConfiguration;
 import com.goide.runconfig.ui.GoCommonSettingsPanel;
-import com.goide.stubs.index.GoPackagesIndex;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.completion.CompletionResultSet;
-import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.stubs.StubIndex;
 import com.intellij.ui.EditorTextField;
 import com.intellij.ui.ListCellRendererWrapper;
-import com.intellij.util.Processor;
 import com.intellij.util.TextFieldCompletionProvider;
 import org.intellij.lang.regexp.RegExpLanguage;
 import org.jetbrains.annotations.NotNull;
@@ -132,23 +126,7 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
                                            int offset,
                                            @NotNull String prefix,
                                            @NotNull final CompletionResultSet result) {
-        final Module module = myCommonSettingsPanel.getSelectedModule();
-        if (module != null) {
-          final GlobalSearchScope scope = GoUtil.moduleScope(module);
-          for (String packageName : GoPackagesIndex.getAllPackages(myProject)) {
-            StubIndex.getInstance().processElements(GoPackagesIndex.KEY, packageName, myProject, scope, GoFile.class,
-                                                    new Processor<GoFile>() {
-                                                      @Override
-                                                      public boolean process(@NotNull GoFile file) {
-                                                        String fullPackageName = file.getImportPath();
-                                                        if (fullPackageName != null) {
-                                                          result.addElement(GoCompletionUtil.createPackageLookupElement(fullPackageName, false));
-                                                        }
-                                                        return true;
-                                                      }
-                                                    });
-          }
-        }
+        GoImportPathsCompletionProvider.addCompletions(result, myCommonSettingsPanel.getSelectedModule());
       }
     }.createEditor(myProject);
   }

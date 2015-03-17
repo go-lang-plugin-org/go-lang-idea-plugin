@@ -89,10 +89,13 @@
     <quoteHandler fileType="Go" className="com.goide.editor.GoQuoteHandler"/>
     <lang.commenter language="go" implementationClass="com.goide.GoCommenter"/>
     <lang.elementManipulator forClass="com.goide.psi.impl.GoStringLiteralImpl" implementationClass="com.goide.psi.impl.manipulator.GoStringManipulator"/>
+    
     <completion.contributor language="go" implementationClass="com.goide.completion.GoCompletionContributor"/>
     <completion.contributor language="go" implementationClass="com.goide.completion.GoKeywordCompletionContributor"/>
     <completion.contributor language="go" order="last" implementationClass="com.goide.completion.GoAutoImportCompletionContributor"/>
     <completion.confidence language="go" order="last" implementationClass="com.goide.completion.GoCompletionConfidence"/>
+    <lookup.charFilter implementation="com.goide.completion.GoCharFilter"/>
+    
     <lang.refactoringSupport language="go" implementationClass="com.goide.refactor.GoRefactoringSupportProvider"/>
     <spellchecker.support language="go" implementationClass="com.goide.inspections.GoSpellcheckingStrategy"/>
     <elementDescriptionProvider implementation="com.goide.refactor.GoDescriptionProvider"/>
