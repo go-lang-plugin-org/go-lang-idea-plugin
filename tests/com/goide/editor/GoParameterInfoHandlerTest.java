@@ -34,6 +34,8 @@ public class GoParameterInfoHandlerTest extends GoCodeInsightFixtureTestCase {
     myParameterInfoHandler = new GoParameterInfoHandler();
   }
 
+  public void testUnnamedAndNamedParameters() { doTest(0, "<html><b>a string</b>, interface{}</html>"); }
+  public void testUnnamedParameters() { doTest(0, "<html><b>string</b>, interface{}</html>"); } 
   public void testFuncParam()         { doTest(1, "<html>num int, <b>text string</b></html>"); } 
   public void testFuncParamMulti()    { doTest(4, "<html>a int, b int, c int, d string, <b>e string</b>, f string</html>"); } 
   public void testFuncParamNone()     { doTest(0, ""); } 

@@ -155,9 +155,14 @@ public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabAction
     boolean isVariadic = false;
     for (GoParameterDeclaration paramDeclaration : paramDeclarations) {
       isVariadic = paramDeclaration.isVariadic();
-      for (GoParamDefinition paramDefinition : paramDeclaration.getParamDefinitionList()) {
+      final List<GoParamDefinition> paramDefinitionList = paramDeclaration.getParamDefinitionList();
+      for (GoParamDefinition paramDefinition : paramDefinitionList) {
         String separator = isVariadic ? " ..." : " ";
         paramPresentations.add(paramDefinition.getText() + separator + paramDeclaration.getType().getText());
+      }
+      if (paramDefinitionList.isEmpty()) {
+        String separator = isVariadic ? "..." : "";
+        paramPresentations.add(separator + paramDeclaration.getType().getText());
       }
     }
     // Figure out what particular presentation is actually selected. Take in
