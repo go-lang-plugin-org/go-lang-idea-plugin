@@ -38,7 +38,7 @@ public abstract class GoNamedStubElementType<S extends NamedStubBase<T>, T exten
   @Override
   public boolean shouldCreateStub(@NotNull ASTNode node) {
     PsiElement psi = node.getPsi();
-    return psi instanceof GoNamedElement && StringUtil.isNotEmpty(((GoNamedElement)psi).getName());
+    return super.shouldCreateStub(node) && psi instanceof GoNamedElement && StringUtil.isNotEmpty(((GoNamedElement)psi).getName());
   }
 
   public void indexStub(@NotNull final S stub, @NotNull final IndexSink sink) {

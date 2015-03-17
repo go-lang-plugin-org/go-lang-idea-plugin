@@ -19,6 +19,7 @@ package com.goide.stubs.types;
 import com.goide.psi.GoLabelDefinition;
 import com.goide.psi.impl.GoLabelDefinitionImpl;
 import com.goide.stubs.GoLabelDefinitionStub;
+import com.intellij.lang.ASTNode;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
@@ -47,6 +48,11 @@ public class GoLabelDefinitionStubElementType extends GoNamedStubElementType<GoL
   public void serialize(@NotNull GoLabelDefinitionStub stub, @NotNull StubOutputStream dataStream) throws IOException {
     dataStream.writeName(stub.getName());
     dataStream.writeBoolean(stub.isPublic());
+  }
+
+  @Override
+  public boolean shouldCreateStub(@NotNull ASTNode node) {
+    return false; // todo
   }
 
   @NotNull

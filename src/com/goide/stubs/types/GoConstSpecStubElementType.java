@@ -17,11 +17,14 @@
 package com.goide.stubs.types;
 
 import com.goide.psi.GoConstSpec;
+import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.goide.psi.impl.GoConstSpecImpl;
 import com.goide.stubs.GoConstSpecStub;
+import com.intellij.lang.ASTNode;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 
@@ -56,6 +59,11 @@ public class GoConstSpecStubElementType extends GoStubElementType<GoConstSpecStu
 
   @Override
   public void serialize(@NotNull GoConstSpecStub stub, @NotNull StubOutputStream dataStream) throws IOException {
+  }
+
+  @Override
+  public boolean shouldCreateStub(ASTNode node) {
+    return super.shouldCreateStub(node) && PsiTreeUtil.getParentOfType(node.getPsi(), GoFunctionOrMethodDeclaration.class) == null;
   }
 
   @NotNull

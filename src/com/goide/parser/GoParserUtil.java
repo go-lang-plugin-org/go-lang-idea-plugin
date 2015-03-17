@@ -23,8 +23,12 @@ import com.intellij.lang.WhitespacesBinders;
 import com.intellij.lang.impl.PsiBuilderAdapter;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
 import com.intellij.openapi.util.Key;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.impl.source.resolve.FileContextUtil;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.indexing.IndexingDataKeys;
 import gnu.trove.TObjectIntHashMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,6 +46,29 @@ public class GoParserUtil extends GeneratedParserUtilBase {
     return flags;
   }
 
+  public static boolean consumeBlock(PsiBuilder builder_, @SuppressWarnings("UnusedParameters") int level) {
+    PsiFile file = builder_.getUserDataUnprotected(FileContextUtil.CONTAINING_FILE_KEY);
+    if (file == null) return false;
+    VirtualFile data = file.getUserData(IndexingDataKeys.VIRTUAL_FILE);
+    if (data == null) return false;
+    int i = 0;
+    PsiBuilder.Marker m = builder_.mark();
+    do {
+      IElementType type = builder_.getTokenType();
+      i += type == GoTypes.LBRACE ? 1 : type == GoTypes.RBRACE ? -1 : 0;  
+      builder_.advanceLexer();
+    }
+    while (i != 0 && !builder_.eof());
+    boolean result = i == 0;
+    if (result) {
+      m.drop();
+    }
+    else {
+      m.rollbackTo();
+    }
+    return result;  
+  }
+  
   public static boolean emptyImportList(PsiBuilder builder_, @SuppressWarnings("UnusedParameters") int level) {
     PsiBuilder.Marker marker = getCurrentMarker(builder_ instanceof PsiBuilderAdapter ? ((PsiBuilderAdapter)builder_).getDelegate() : builder_);
     if (marker != null) {

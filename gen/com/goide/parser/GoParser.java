@@ -472,33 +472,43 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // '{' ('}' | Statements '}')
+  // <<consumeBlock>> | '{' ('}' | Statements '}')
   public static boolean Block(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Block")) return false;
-    if (!nextTokenIs(b, LBRACE)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, "<block>");
+    r = consumeBlock(b, l + 1);
+    if (!r) r = Block_1(b, l + 1);
+    exit_section_(b, l, m, BLOCK, r, false, null);
+    return r;
+  }
+
+  // '{' ('}' | Statements '}')
+  private static boolean Block_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Block_1")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeToken(b, LBRACE);
     p = r; // pin = 1
-    r = r && Block_1(b, l + 1);
-    exit_section_(b, l, m, BLOCK, r, p, null);
+    r = r && Block_1_1(b, l + 1);
+    exit_section_(b, l, m, null, r, p, null);
     return r || p;
   }
 
   // '}' | Statements '}'
-  private static boolean Block_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Block_1")) return false;
+  private static boolean Block_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Block_1_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, RBRACE);
-    if (!r) r = Block_1_1(b, l + 1);
+    if (!r) r = Block_1_1_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // Statements '}'
-  private static boolean Block_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Block_1_1")) return false;
+  private static boolean Block_1_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Block_1_1_1")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, null);
     r = Statements(b, l + 1);

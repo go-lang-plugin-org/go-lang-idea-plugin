@@ -16,12 +16,16 @@
 
 package com.goide.stubs.types;
 
+import com.goide.GoTypes;
+import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.goide.psi.GoVarSpec;
 import com.goide.psi.impl.GoVarSpecImpl;
 import com.goide.stubs.GoVarSpecStub;
+import com.intellij.lang.ASTNode;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 
@@ -52,6 +56,13 @@ public class GoVarSpecStubElementType extends GoStubElementType<GoVarSpecStub, G
   @Override
   public GoVarSpecStub createStub(@NotNull GoVarSpec psi, StubElement parentStub) {
     return new GoVarSpecStub(parentStub, this);
+  }
+
+  @Override
+  public boolean shouldCreateStub(ASTNode node) {
+    return super.shouldCreateStub(node) &&
+           node.getElementType() == GoTypes.VAR_SPEC &&
+           PsiTreeUtil.getParentOfType(node.getPsi(), GoFunctionOrMethodDeclaration.class) == null;
   }
 
   @Override

@@ -17,10 +17,13 @@
 package com.goide.stubs.types;
 
 import com.goide.GoLanguage;
+import com.goide.psi.GoBlock;
 import com.goide.psi.GoCompositeElement;
+import com.intellij.lang.ASTNode;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.stubs.IndexSink;
 import com.intellij.psi.stubs.StubBase;
+import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,5 +38,10 @@ public abstract class GoStubElementType<S extends StubBase<T>, T extends GoCompo
   }
 
   public void indexStub(@NotNull final S stub, @NotNull final IndexSink sink) {
+  }
+
+  @Override
+  public boolean shouldCreateStub(ASTNode node) {
+    return super.shouldCreateStub(node) && PsiTreeUtil.getParentOfType(node.getPsi(), GoBlock.class) == null;
   }
 }

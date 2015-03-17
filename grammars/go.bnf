@@ -185,7 +185,7 @@ MapType ::= map '[' Type ']' Type {
 ChannelType ::= ChanTypePrefix Type {pin=1}
 private ChanTypePrefix ::= chan '<-'? | '<-' chan {pin(".*")=1}
 
-Block ::= '{' ('}' | Statements '}') {pin(".*")=1 methods=[processDeclarations]}
+Block ::= <<consumeBlock>> | '{' ('}' | Statements '}') {pin(".*")=1 methods=[processDeclarations]}
 private Statements ::= StatementWithSemi*
 
 private StatementWithSemi ::= Statement (semi|&'}') { pin=1 recoverWhile=StatementRecover }
@@ -375,7 +375,7 @@ private ConversionStart ::= '*' | '<-' | '[' | chan | func | interface | map | s
 
 LabeledStatement ::= LabelDefinition ':' Statement? {pin=2}
 LabelDefinition ::= identifier {
-  stubClass="com.goide.stubs.GoLabelDefinitionStub"
+  stubClass="com.goide.stubs.GoLabelDefinitionStub" // todo: remove when you'll have some spare time 
 }
 SendStatement ::= Expression '<-' Expression {pin=2}
 AssignmentStatement ::= ExpressionList assign_op ExpressionList {pin=2}
