@@ -64,7 +64,7 @@
                          bundle="do.not.touch.this.attribute" />
     
     <defaultLiveTemplatesProvider implementation="com.goide.template.GoLiveTemplatesProvider"/>
-    <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$GoEverywhereContextType"/>
+    <liveTemplateContext implementation="com.goide.template.GoEverywhereContextType"/>
     <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$GoFileContextType"/>
     <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$GoBlockContextType"/>
     <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$GoTypeContextType"/>

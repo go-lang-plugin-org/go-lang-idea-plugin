@@ -20,7 +20,6 @@ import com.goide.GoLanguage;
 import com.goide.GoTypes;
 import com.goide.highlighting.GoSyntaxHighlighter;
 import com.goide.psi.*;
-import com.intellij.codeInsight.template.EverywhereContextType;
 import com.intellij.codeInsight.template.TemplateContextType;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.psi.PsiComment;
@@ -64,21 +63,9 @@ abstract public class GoLiveTemplateContextType extends TemplateContextType {
     return new GoSyntaxHighlighter();
   }
 
-  public static class GoEverywhereContextType extends GoLiveTemplateContextType {
-    protected GoEverywhereContextType() {
-      super("GO", "Go", EverywhereContextType.class);
-    }
-  
-    @Override
-    protected boolean isInContext(@NotNull PsiElement element) {
-      return !(element instanceof PsiComment ||
-               element instanceof LeafPsiElement && ((LeafPsiElement)element).getElementType() == GoTypes.STRING);
-    }
-  }
-  
   public static class GoFileContextType extends GoLiveTemplateContextType {
     protected GoFileContextType() {
-      super("GO_FILE", "Go file", EverywhereContextType.class);
+      super("GO_FILE", "Go file", GoEverywhereContextType.class);
     }
   
     @Override
@@ -89,7 +76,7 @@ abstract public class GoLiveTemplateContextType extends TemplateContextType {
   
   public static class GoTypeContextType extends GoLiveTemplateContextType {
     protected GoTypeContextType() {
-      super("GO_TYPE", "Go type", EverywhereContextType.class);
+      super("GO_TYPE", "Go type", GoEverywhereContextType.class);
     }
   
     @Override
@@ -100,7 +87,7 @@ abstract public class GoLiveTemplateContextType extends TemplateContextType {
   
   public static class GoBlockContextType extends GoLiveTemplateContextType {
     protected GoBlockContextType() {
-      super("GO_BLOCK", "Go block", EverywhereContextType.class);
+      super("GO_BLOCK", "Go block", GoEverywhereContextType.class);
     }
   
     @Override
