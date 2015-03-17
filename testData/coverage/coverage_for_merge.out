@@ -1,0 +1,6 @@
+mode: count
+merging.go:20.56,21.14 1 1
+merging.go:24.2,24.50 2 0
+merging.go:21.14,23.3 1 1
+merging.go:29.23,30.19 1 0
+merging.go:31.23,32.19 1 0

@@ -1,0 +1,14 @@
+mode: count
+coverage.go:20.56,21.14 1 1
+coverage.go:24.2,24.50 1 1
+coverage.go:21.14,23.3 1 0
+coverage.go:29.23,30.19 1 9
+coverage2.go:33.2,39.10 3 9
+coverage2.go:30.19,32.3 1 0
+coverage2.go:43.56,45.14 2 1
+withoutHits.go:30.19,32.3 1 0
+
+merging.go:20.56,21.14 1 1
+merging.go:24.2,24.50 1 1
+merging.go:21.14,23.3 1 0
+merging.go:29.23,30.19 1 9

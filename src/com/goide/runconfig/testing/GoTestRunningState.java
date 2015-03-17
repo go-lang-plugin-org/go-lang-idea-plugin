@@ -42,6 +42,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.Collection;
@@ -127,7 +128,7 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
     }
   }
 
-  public void setCoverageFilePath(String coverageFile) {
+  public void setCoverageFilePath(@Nullable String coverageFile) {
     myCoverageFilePath = coverageFile;
   }
 }
