@@ -18,6 +18,7 @@ package com.goide.inspections;
 
 import com.goide.GoFileType;
 import com.goide.GoLanguage;
+import com.goide.project.GoLibrariesService;
 import com.goide.project.GoModuleLibrariesInitializer;
 import com.goide.sdk.GoSdkService;
 import com.goide.sdk.GoSdkUtil;
@@ -39,6 +40,8 @@ import com.intellij.ui.EditorNotifications;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 public class WrongSdkConfigurationNotificationProvider extends EditorNotifications.Provider<EditorNotificationPanel> {
   private static final Key<EditorNotificationPanel> KEY = Key.create("Setup Go SDK");
 
@@ -49,6 +52,12 @@ public class WrongSdkConfigurationNotificationProvider extends EditorNotificatio
     myProject.getMessageBus().connect(project).subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
       @Override
       public void rootsChanged(ModuleRootEvent event) {
+        notifications.updateAllNotifications();
+      }
+    });
+    myProject.getMessageBus().connect(project).subscribe(GoLibrariesService.LIBRARIES_TOPIC, new GoLibrariesService.LibrariesListener() {
+      @Override
+      public void librariesChanged(@NotNull Collection<String> newRootUrls) {
         notifications.updateAllNotifications();
       }
     });
@@ -110,5 +119,4 @@ public class WrongSdkConfigurationNotificationProvider extends EditorNotificatio
     });
     return panel;
   }
-
 }
