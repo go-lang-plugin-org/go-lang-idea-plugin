@@ -31,6 +31,7 @@ import com.intellij.util.messages.Topic;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;
 
@@ -81,13 +82,17 @@ public abstract class GoLibrariesService extends SimpleModificationTracker imple
       GoProjectLibrariesService.getInstance(module.getProject()),
       GoApplicationLibrariesService.getInstance()};
   }
-
-  public void setLibraryRootUrls(@NotNull Collection<String> libraryRootUrl) {
-    if (!myState.getUrls().equals(libraryRootUrl)) {
+  
+  public void setLibraryRootUrls(@NotNull String... libraryRootUrls) {
+    setLibraryRootUrls(Arrays.asList(libraryRootUrls));
+  }
+  
+  public void setLibraryRootUrls(@NotNull Collection<String> libraryRootUrls) {
+    if (!myState.getUrls().equals(libraryRootUrls)) {
       incModificationCount();
-      ApplicationManager.getApplication().getMessageBus().syncPublisher(LIBRARIES_TOPIC).librariesChanged(libraryRootUrl);
+      ApplicationManager.getApplication().getMessageBus().syncPublisher(LIBRARIES_TOPIC).librariesChanged(libraryRootUrls);
     }
-    myState.setUrls(libraryRootUrl);
+    myState.setUrls(libraryRootUrls);
   }
 
   @NotNull

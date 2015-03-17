@@ -186,6 +186,18 @@ public class GoSdkUtil {
   }
 
   @Nullable
+  public static VirtualFile findFileByRelativeToLibrariesPath(@NotNull String path, @NotNull Project project, @Nullable Module module) {
+    Collection<VirtualFile> roots = module != null ? getGoPathsSources(module) : getGoPathsSources(project);
+    for (VirtualFile root : roots) {
+      VirtualFile file = root.findFileByRelativePath(path);
+      if (file != null) {
+        return file;
+      }
+    }
+    return null;
+  }
+
+  @Nullable
   public static String getPathRelativeToSdkAndLibraries(@NotNull VirtualFile file, @NotNull PsiElement context) {
     VirtualFile sdkSourceDir = getSdkSrcDir(context);
     Collection<VirtualFile> roots = ContainerUtil.newLinkedHashSet(getGoPathsSources(context));
@@ -277,7 +289,10 @@ public class GoSdkUtil {
 
   @NotNull
   public static String adjustSdkPath(@NotNull String path) {
-    return isAppEngineSdkPath(path) ? path + "/" + "goroot" : path;
+    if (new File(path, "libexec").exists()) {
+      path += File.separatorChar + "libexec";
+    }
+    return isAppEngineSdkPath(path) ? path + File.separatorChar + "goroot" : path;
   }
 
   @NotNull

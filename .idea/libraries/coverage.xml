@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="coverage">
+    <CLASSES>
+      <root url="jar://$APPLICATION_HOME_DIR$/plugins/coverage/lib/coverage-agent.jar!/" />
+      <root url="jar://$APPLICATION_HOME_DIR$/plugins/coverage/lib/coverage-report-idea.jar!/" />
+      <root url="jar://$APPLICATION_HOME_DIR$/plugins/coverage/lib/coverage-report.jar!/" />
+      <root url="jar://$APPLICATION_HOME_DIR$/plugins/coverage/lib/coverage-util.jar!/" />
+      <root url="jar://$APPLICATION_HOME_DIR$/plugins/coverage/lib/coverage.jar!/" />
+      <root url="jar://$APPLICATION_HOME_DIR$/plugins/coverage/lib/coverage_rt.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
