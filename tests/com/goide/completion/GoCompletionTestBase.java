@@ -7,10 +7,7 @@ import com.intellij.testFramework.UsefulTestCase;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public abstract class GoCompletionTestBase extends GoCodeInsightFixtureTestCase {
 
@@ -18,12 +15,12 @@ public abstract class GoCompletionTestBase extends GoCodeInsightFixtureTestCase 
   protected void setUp() throws Exception {
     super.setUp();
     String url = myFixture.getTempDirFixture().getFile("..").getUrl();
-    GoModuleLibrariesService.getInstance(myModule).setLibraryRootUrls(url);
+    GoModuleLibrariesService.getInstance(myModule).setLibraryRootUrls(Collections.singleton(url));
   }
 
   @Override
   protected void tearDown() throws Exception {
-    GoModuleLibrariesService.getInstance(myModule).setLibraryRootUrls();
+    GoModuleLibrariesService.getInstance(myModule).setLibraryRootUrls(Collections.<String>emptyList());
     super.tearDown();
   }
 

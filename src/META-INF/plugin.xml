@@ -38,8 +38,6 @@
   <idea-version since-build="139.1111"/>
   <depends>com.intellij.modules.lang</depends>
   <depends optional="true" config-file="java-deps.xml">com.intellij.modules.java</depends>
-  <depends optional="true" config-file="coverage.xml">Coverage</depends>
-  <depends optional="true" config-file="coverage.xml">com.intellij.modules.coverage</depends>
   
   <module-components>
     <component>

@@ -1,9 +1,0 @@
-<idea-plugin version="2">
-  <extensions defaultExtensionNs="com.intellij">
-    <programRunner implementation="com.goide.runconfig.testing.coverage.GoCoverageProgramRunner"/>
-    <coverageEngine implementation="com.goide.runconfig.testing.coverage.GoCoverageEngine"/>
-    <coverageRunner implementation="com.goide.runconfig.testing.coverage.GoCoverageRunner"/>
-    <projectService serviceImplementation="com.goide.runconfig.testing.coverage.GoCoverageAnnotator"/>
-  </extensions>
-</idea-plugin>
-

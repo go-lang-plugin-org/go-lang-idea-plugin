@@ -7,6 +7,9 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.LightProjectDescriptor;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   @Override
@@ -75,16 +78,17 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testDoNotReportNonLastMultiResolvedImport() throws IOException {
     final VirtualFile root1 = myFixture.getTempDirFixture().findOrCreateDir("root1");
     final VirtualFile root2 = myFixture.getTempDirFixture().findOrCreateDir("root2");
+    final List<String> rootUrls = Arrays.asList(root1.getUrl(), root2.getUrl());
     
     myFixture.getTempDirFixture().findOrCreateDir("root1/src/to_import/unique");
     myFixture.getTempDirFixture().findOrCreateDir("root1/src/to_import/shared");
     myFixture.getTempDirFixture().findOrCreateDir("root2/src/to_import/shared");
-    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(root1.getUrl(), root2.getUrl());
+    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(rootUrls);
     try {
       doTest();
     }
     finally {
-      GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls();
+      GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(Collections.<String>emptyList());
     }
   }
   
