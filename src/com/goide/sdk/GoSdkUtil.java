@@ -197,6 +197,12 @@ public class GoSdkUtil {
         return relativePath;
       }
     }
+    
+    String filePath = file.getPath();
+    int src = filePath.lastIndexOf("/src/");
+    if (src > -1) {
+      return filePath.substring(src + 5);
+    }
     return null;
   }
 
