@@ -30,7 +30,9 @@ import com.goide.util.GoUtil;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
 import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.FileViewProvider;
@@ -42,7 +44,6 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.util.ArrayFactory;
-import com.intellij.util.ArrayUtil;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
@@ -62,7 +63,7 @@ public class GoFile extends PsiFileBase {
 
   @Nullable
   public String getImportPath() {
-    return getImportPath(getParent(), this);
+    return getImportPath(getParent());
   }
   
   @Nullable
@@ -177,16 +178,14 @@ public class GoFile extends PsiFileBase {
           if (!spec.isForSideEffects()) {
             PsiDirectory resolve = spec.getImportString().resolve();
             extraDeps.add(resolve);
-            String path = getImportPath(resolve, GoFile.this);
+            String path = getImportPath(resolve);
             if (StringUtil.isNotEmpty(path)) {
               map.put(path, spec);
             }
           }
         }
-        Collection<Object> dependencies = GoSdkUtil.getSdkAndLibrariesCacheDependencies(getProject(),
-                                                                                        ModuleUtilCore.findModuleForPsiElement(GoFile.this));
-        dependencies.add(GoFile.this);
-        return Result.create(map, ArrayUtil.toObjectArray(dependencies));
+        Module module = ModuleUtilCore.findModuleForPsiElement(GoFile.this);
+        return Result.create(map, GoSdkUtil.getSdkAndLibrariesCacheDependencies(getProject(), module, GoFile.this));
       }
     });
   }
@@ -421,12 +420,20 @@ public class GoFile extends PsiFileBase {
   }
   
   @Nullable
-  @Contract("null, _ -> null")
-  private static String getImportPath(@Nullable final PsiDirectory psiDirectory, @NotNull final PsiElement context) {
+  @Contract("null -> null")
+  private static String getImportPath(@Nullable final PsiDirectory psiDirectory) {
     if (psiDirectory == null) {
       return null;
     }
-    return GoSdkUtil.getPathRelativeToSdkAndLibraries(psiDirectory.getVirtualFile(), context.getProject(),
-                                                      ModuleUtilCore.findModuleForPsiElement(context));
+    return CachedValuesManager.getCachedValue(psiDirectory, new CachedValueProvider<String>() {
+      @Nullable
+      @Override
+      public Result<String> compute() {
+        Project project = psiDirectory.getProject();      
+        Module module = ModuleUtilCore.findModuleForPsiElement(psiDirectory);
+        String path = GoSdkUtil.getPathRelativeToSdkAndLibraries(psiDirectory.getVirtualFile(), project, module);
+        return Result.create(path, GoSdkUtil.getSdkAndLibrariesCacheDependencies(project, module, psiDirectory));
+      }
+    });
   }
 }

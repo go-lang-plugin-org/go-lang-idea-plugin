@@ -30,6 +30,7 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.messages.Topic;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -72,15 +73,10 @@ public abstract class GoLibrariesService extends SimpleModificationTracker imple
   }
 
   @NotNull
-  public static ModificationTracker[] getModificationTrackers(@NotNull Project project) {
-    return new ModificationTracker[]{GoProjectLibrariesService.getInstance(project), GoApplicationLibrariesService.getInstance()};
-  }
-
-  @NotNull
-  public static ModificationTracker[] getModificationTrackers(@NotNull Module module) {
-    return new ModificationTracker[]{GoModuleLibrariesService.getInstance(module),
-      GoProjectLibrariesService.getInstance(module.getProject()),
-      GoApplicationLibrariesService.getInstance()};
+  public static ModificationTracker[] getModificationTrackers(@NotNull Project project, @Nullable Module module) {
+    return module != null
+           ? new ModificationTracker[]{GoModuleLibrariesService.getInstance(module), GoProjectLibrariesService.getInstance(module.getProject()), GoApplicationLibrariesService.getInstance()}
+           : new ModificationTracker[]{GoProjectLibrariesService.getInstance(project), GoApplicationLibrariesService.getInstance()};
   }
   
   public void setLibraryRootUrls(@NotNull String... libraryRootUrls) {

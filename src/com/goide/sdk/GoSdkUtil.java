@@ -205,38 +205,25 @@ public class GoSdkUtil {
   }
 
   @Nullable
-  public static String getPathRelativeToSdkAndLibraries(@NotNull final VirtualFile file,
-                                                        @NotNull final Project project,
-                                                        @Nullable final Module module) {
-    return CachedValuesManager.getManager(project).getCachedValue(file, new CachedValueProvider<String>() {
-      @Nullable
-      @Override
-      public Result<String> compute() {
-        String importPath = null;
-        VirtualFile sdkSourceDir = getSdkSrcDir(project, module);
+  public static String getPathRelativeToSdkAndLibraries(@NotNull VirtualFile file, @NotNull Project project, @Nullable Module module) {
+    VirtualFile sdkSourceDir = getSdkSrcDir(project, module);
+    Collection<VirtualFile> roots = ContainerUtil.newLinkedHashSet();
+    roots.addAll(module != null ? getGoPathsSources(module) : getGoPathsSources(project));
+    ContainerUtil.addIfNotNull(roots, sdkSourceDir);
 
-        Collection<VirtualFile> roots = ContainerUtil.newLinkedHashSet();
-        roots.addAll(module != null ? getGoPathsSources(module) : getGoPathsSources(project));
-        ContainerUtil.addIfNotNull(roots, sdkSourceDir);
-
-        for (VirtualFile root : roots) {
-          String relativePath = VfsUtilCore.getRelativePath(file, root, '/');
-          if (StringUtil.isNotEmpty(relativePath)) {
-            importPath = relativePath;
-            break;
-          }
-        }
-
-        if (importPath == null) {
-          String filePath = file.getPath();
-          int src = filePath.lastIndexOf("/src/");
-          if (src > -1) {
-            importPath = filePath.substring(src + 5);
-          }
-        }
-        return Result.create(importPath, getSdkAndLibrariesCacheDependencies(project, module, file));
+    for (VirtualFile root : roots) {
+      String relativePath = VfsUtilCore.getRelativePath(file, root, '/');
+      if (StringUtil.isNotEmpty(relativePath)) {
+        return relativePath;
       }
-    });
+    }
+
+    String filePath = file.getPath();
+    int src = filePath.lastIndexOf("/src/");
+    if (src > -1) {
+      return filePath.substring(src + 5);
+    }
+    return null;
   }
 
   @Nullable
@@ -328,16 +315,10 @@ public class GoSdkUtil {
   }
 
   @NotNull
-  public static Collection<Object> getSdkAndLibrariesCacheDependencies(@NotNull Project project,
-                                                                       @Nullable Module module,
-                                                                       Object... extraDeps) {
-    Collection<Object> dependencies = ContainerUtil.newArrayList();
+  public static Collection<Object> getSdkAndLibrariesCacheDependencies(@NotNull Project project, @Nullable Module module, Object... extra) {
+    Collection<Object> dependencies = ContainerUtil.<Object>newArrayList(GoLibrariesService.getModificationTrackers(project, module));
     ContainerUtil.addAllNotNull(dependencies, GoSdkService.getInstance(project));
-    ContainerUtil.addAllNotNull(dependencies, extraDeps);
-    ContainerUtil.addIfNotNull(dependencies, getSdkSrcDir(project, module));
-    Collections.addAll(dependencies, module != null
-                                     ? GoLibrariesService.getModificationTrackers(module)
-                                     : GoLibrariesService.getModificationTrackers(project));
+    ContainerUtil.addAllNotNull(dependencies, extra);
     return dependencies;
   }
 }
