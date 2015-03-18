@@ -16,6 +16,7 @@
 
 package com.goide;
 
+import com.goide.editor.GoParameterInfoHandler;
 import com.goide.psi.*;
 import com.intellij.lang.documentation.AbstractDocumentationProvider;
 import com.intellij.openapi.util.text.StringUtil;
@@ -153,19 +154,6 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
 
   @NotNull
   private static String getParametersAsString(@NotNull GoParameters parameters) {
-    List<GoParameterDeclaration> paramDeclarations = parameters.getParameterDeclarationList();
-    List<String> paramPresentations = ContainerUtil.newArrayListWithCapacity(2 * paramDeclarations.size());
-    for (GoParameterDeclaration paramDeclaration : paramDeclarations) {
-      boolean isVariadic = paramDeclaration.isVariadic();
-      for (GoParamDefinition paramDefinition : paramDeclaration.getParamDefinitionList()) {
-        String separator = isVariadic ? " ..." : " ";
-        paramPresentations.add(paramDefinition.getText() + separator + paramDeclaration.getType().getText());
-      }
-      if (paramDeclaration.getParamDefinitionList().isEmpty()) {
-        paramPresentations.add(paramDeclaration.getType().getText());
-      }
-    }
-
-    return StringUtil.join(paramPresentations, ", ");
+    return StringUtil.join(GoParameterInfoHandler.getParameterPresentations(parameters), ", ");
   }
 }

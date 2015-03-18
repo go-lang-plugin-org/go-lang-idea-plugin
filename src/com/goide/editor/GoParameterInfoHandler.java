@@ -148,13 +148,42 @@ public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabAction
     }
     GoSignature signature = p instanceof GoSignatureOwner ? ((GoSignatureOwner)p).getSignature() : null;
     if (signature == null) return null;
-    // Create a list of parameter presentations. For clarity we expand
-    // parameters declared as `a, b, c int` into `a int, b int, c int`.
-    List<GoParameterDeclaration> paramDeclarations = signature.getParameters().getParameterDeclarationList();
+    GoParameters parameters = signature.getParameters();
+    List<String> parametersPresentations = getParameterPresentations(parameters);
+    // Figure out what particular presentation is actually selected. Take in
+    // account possibility of the last variadic parameter.
+    int selected = isLastParameterVariadic(parameters.getParameterDeclarationList()) 
+                   ? Math.min(context.getCurrentParameterIndex(), parametersPresentations.size() - 1)
+                   : context.getCurrentParameterIndex();
+    // Build the parameter presentation string.
+    StringBuilder builder = new StringBuilder();
+    int start = 0;
+    int end = 0;
+    for (int i = 0; i < parametersPresentations.size(); ++i) {
+      if (i != 0) {
+        builder.append(", ");
+      }
+      if (i == selected) {
+        start = builder.length();
+      }
+      builder.append(parametersPresentations.get(i));
+
+      if (i == selected) {
+        end = builder.length();
+      }
+    }
+    return context.setupUIComponentPresentation(builder.toString(), start, end, false, false, false, context.getDefaultParameterColor());
+  }
+
+  /**
+   * Creates a list of parameter presentations. For clarity we expand parameters declared as `a, b, c int` into `a int, b int, c int`.
+   */
+  @NotNull
+  public static List<String> getParameterPresentations(@NotNull GoParameters parameters) {
+    List<GoParameterDeclaration> paramDeclarations = parameters.getParameterDeclarationList();
     List<String> paramPresentations = ContainerUtil.newArrayListWithCapacity(2 * paramDeclarations.size());
-    boolean isVariadic = false;
     for (GoParameterDeclaration paramDeclaration : paramDeclarations) {
-      isVariadic = paramDeclaration.isVariadic();
+      boolean isVariadic = paramDeclaration.isVariadic();
       final List<GoParamDefinition> paramDefinitionList = paramDeclaration.getParamDefinitionList();
       for (GoParamDefinition paramDefinition : paramDefinitionList) {
         String separator = isVariadic ? " ..." : " ";
@@ -165,32 +194,11 @@ public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabAction
         paramPresentations.add(separator + paramDeclaration.getType().getText());
       }
     }
-    // Figure out what particular presentation is actually selected. Take in
-    // account possibility of the last variadic parameter.
-    int selected;
-    if (isVariadic) {
-      selected = Math.min(context.getCurrentParameterIndex(), paramPresentations.size() - 1);
-    }
-    else {
-      selected = context.getCurrentParameterIndex();
-    }
-    // Build the parameter presentation string.
-    StringBuilder builder = new StringBuilder();
-    int start = 0;
-    int end = 0;
-    for (int i = 0; i < paramPresentations.size(); ++i) {
-      if (i != 0) {
-        builder.append(", ");
-      }
-      if (i == selected) {
-        start = builder.length();
-      }
-      builder.append(paramPresentations.get(i));
+    return paramPresentations;
+  }
 
-      if (i == selected) {
-        end = builder.length();
-      }
-    }
-    return context.setupUIComponentPresentation(builder.toString(), start, end, false, false, false, context.getDefaultParameterColor());
+  private static boolean isLastParameterVariadic(@NotNull List<GoParameterDeclaration> declarations) {
+    GoParameterDeclaration lastItem = ContainerUtil.getLastItem(declarations);
+    return lastItem != null && lastItem.isVariadic();
   }
 }
