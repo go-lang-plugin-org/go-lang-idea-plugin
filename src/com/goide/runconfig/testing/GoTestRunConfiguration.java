@@ -91,8 +91,8 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
         Module module = configurationModule.getModule();
         assert module != null;
 
-        VirtualFile packageDirectory = GoSdkUtil.findDirectoryByImportPath(myPackage, module);
-        if (packageDirectory == null) {
+        VirtualFile packageDirectory = GoSdkUtil.findFileByRelativeToLibrariesPath(myPackage, module.getProject(), module);
+        if (packageDirectory == null || !packageDirectory.isDirectory()) {
           throw new RuntimeConfigurationError("Cannot find package '" + myPackage + "'");
         }
         for (VirtualFile file : packageDirectory.getChildren()) {

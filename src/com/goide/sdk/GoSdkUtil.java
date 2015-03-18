@@ -193,17 +193,6 @@ public class GoSdkUtil {
   }
 
   @Nullable
-  public static VirtualFile findDirectoryByImportPath(@NotNull String importPath, @NotNull Module module) {
-    for (VirtualFile root : getGoPathsSources(module)) {
-      VirtualFile directory = root.findFileByRelativePath(importPath);
-      if (directory != null && directory.isDirectory()) {
-        return directory;
-      }
-    }
-    return null;
-  }
-
-  @Nullable
   public static VirtualFile findFileByRelativeToLibrariesPath(@NotNull String path, @NotNull Project project, @Nullable Module module) {
     Collection<VirtualFile> roots = module != null ? getGoPathsSources(module) : getGoPathsSources(project);
     for (VirtualFile root : roots) {
