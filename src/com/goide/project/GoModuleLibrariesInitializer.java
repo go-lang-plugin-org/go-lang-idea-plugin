@@ -55,12 +55,12 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   private static final String GO_LIBRARIES_NOTIFICATION_HAD_BEEN_SHOWN = "go.libraries.notification.had.been.shown";
   private static final int UPDATE_DELAY = 300;
 
-  private Set<VirtualFile> myFilesToWatch = new ConcurrentHashSet<VirtualFile>(); // replace with ContainerUtil after 14.1
+  private final Set<VirtualFile> myFilesToWatch = new ConcurrentHashSet<VirtualFile>(); // replace with ContainerUtil after 14.1
   private final Alarm myAlarm;
 
   @NotNull private final Set<String> myLastHandledRoots = ContainerUtil.newHashSet();
   @NotNull private final Module myModule;
-  @NotNull private VirtualFileAdapter myFilesListener = new VirtualFileAdapter() {
+  @NotNull private final VirtualFileAdapter myFilesListener = new VirtualFileAdapter() {
     @Override
     public void fileCreated(@NotNull VirtualFileEvent event) {
       handleEvent(event);

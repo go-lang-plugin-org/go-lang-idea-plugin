@@ -22,16 +22,16 @@ import com.intellij.psi.stubs.PsiFileStubImpl;
 import com.intellij.psi.tree.IStubFileElementType;
 import com.intellij.util.io.StringRef;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class GoFileStub extends PsiFileStubImpl<GoFile> {
   private final StringRef myPackageName;
 
   public GoFileStub(@NotNull GoFile file) {
-    super(file);
-    myPackageName = StringRef.fromNullableString(file.getPackageName());
+    this(file, StringRef.fromNullableString(file.getPackageName()));
   }
 
-  public GoFileStub(GoFile file, StringRef packageName) {
+  public GoFileStub(@Nullable GoFile file, StringRef packageName) {
     super(file);
     myPackageName = packageName;
   }

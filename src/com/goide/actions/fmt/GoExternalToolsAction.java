@@ -82,8 +82,8 @@ public abstract class GoExternalToolsAction extends AnAction implements DumbAwar
     }
   }
 
-  public abstract boolean doSomething(@NotNull PsiFile file,
-                                      @NotNull Project project,
-                                      @Nullable VirtualFile virtualFile,
-                                      @NotNull String groupId) throws ExecutionException;
+  protected abstract boolean doSomething(@NotNull PsiFile file,
+                                         @NotNull Project project,
+                                         @Nullable VirtualFile virtualFile,
+                                         @NotNull String groupId) throws ExecutionException;
 }

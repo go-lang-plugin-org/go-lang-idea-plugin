@@ -5,7 +5,6 @@ import com.goide.util.GoUtil;
 import com.intellij.application.options.ModulesComboBox;
 import com.intellij.execution.configuration.EnvironmentVariablesTextFieldWithBrowseButton;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.ui.RawCommandLineEditor;
@@ -35,7 +34,7 @@ public class GoCommonSettingsPanel extends JBPanel {
     myEnvironmentField.setPassParentEnvs(configuration.isPassParentEnvironment());
   }
 
-  public void applyEditorTo(@NotNull GoRunConfigurationBase<?> configuration) throws ConfigurationException {
+  public void applyEditorTo(@NotNull GoRunConfigurationBase<?> configuration) {
     configuration.setModule(myModulesComboBox.getSelectedModule());
     configuration.setParams(myParamsField.getText());
     configuration.setWorkingDirectory(myWorkingDirectoryField.getText());

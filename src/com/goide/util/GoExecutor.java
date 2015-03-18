@@ -41,7 +41,7 @@ public class GoExecutor {
   @NotNull private final Map<String, String> myExtraEnvironment = ContainerUtil.newHashMap();
   @NotNull private final ParametersList myParameterList = new ParametersList();
   @NotNull private ProcessOutput myProcessOutput = new ProcessOutput();
-  @NotNull private Project myProject;
+  @NotNull private final Project myProject;
   @Nullable private final Module myModule;
   @Nullable private String myGoRoot;
   @Nullable private String myGoPath;
@@ -148,7 +148,7 @@ public class GoExecutor {
   public boolean execute() {
     Logger.getInstance(getClass()).assertTrue(!ApplicationManager.getApplication().isDispatchThread(),
                                               "It's bad idea to run external tool on EDT");
-    Logger.getInstance(getClass()).assertTrue(myProcessHandler == null, "Proccess already run with this executor instance");
+    Logger.getInstance(getClass()).assertTrue(myProcessHandler == null, "Process has already run with this executor instance");
     final Ref<Boolean> result = Ref.create(false);
     GeneralCommandLine commandLine = null;
     try {
@@ -165,7 +165,7 @@ public class GoExecutor {
           final boolean success = event.getExitCode() == 0;
           result.set(success);
           if (success && myShowNotifications) {
-            showNotification("Finished successfuly", NotificationType.INFORMATION);
+            showNotification("Finished successfully", NotificationType.INFORMATION);
           }
           ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
@@ -261,7 +261,7 @@ public class GoExecutor {
   }
 
   private static class HistoryProcessListener extends ProcessAdapter {
-    private ConcurrentLinkedQueue<Pair<ProcessEvent, Key>> myHistory = new ConcurrentLinkedQueue<Pair<ProcessEvent, Key>>();
+    private final ConcurrentLinkedQueue<Pair<ProcessEvent, Key>> myHistory = new ConcurrentLinkedQueue<Pair<ProcessEvent, Key>>();
 
     @Override
     public void onTextAvailable(ProcessEvent event, Key outputType) {

@@ -40,7 +40,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class GoFmtCheckinFactory extends CheckinHandlerFactory {
-  public static final String GO_FMT = "GO_FMT";
+  private static final String GO_FMT = "GO_FMT";
 
   @NotNull
   public CheckinHandler createHandler(@NotNull final CheckinProjectPanel panel, @NotNull CommitContext commitContext) {

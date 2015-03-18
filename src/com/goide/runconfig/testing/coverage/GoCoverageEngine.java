@@ -81,8 +81,7 @@ public class GoCoverageEngine extends CoverageEngine {
                                            @NotNull final CoverageFileProvider coverageDataFileProvider,
                                            @NotNull final CoverageEnabledConfiguration config) {
     if (config instanceof GoCoverageEnabledConfiguration) {
-      return new GoCoverageSuite(name, coverageDataFileProvider, new Date().getTime(), false, false, false, runner,
-                                 config.getConfiguration().getProject());
+      return new GoCoverageSuite(name, coverageDataFileProvider, new Date().getTime(), runner, config.getConfiguration().getProject());
     }
     return null;
   }

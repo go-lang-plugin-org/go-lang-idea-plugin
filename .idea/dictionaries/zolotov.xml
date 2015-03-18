@@ -1,12 +1,22 @@
 <component name="ProjectDictionaryState">
   <dictionary name="zolotov">
     <words>
+      <w>covermode</w>
+      <w>coverprofile</w>
       <w>devel</w>
+      <w>goide</w>
+      <w>goimports</w>
       <w>gopath</w>
       <w>goroot</w>
+      <w>gotest</w>
+      <w>hgap</w>
       <w>netbsd</w>
       <w>notwin</w>
       <w>openbsd</w>
+      <w>redeclared</w>
+      <w>runconfig</w>
+      <w>vgap</w>
+      <w>vspacer</w>
     </words>
   </dictionary>
 </component>

@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class GoCachedReference<T extends PsiElement> extends PsiReferenceBase<T> {
-  public GoCachedReference(@NotNull T element) {
+  protected GoCachedReference(@NotNull T element) {
     super(element, TextRange.from(0, element.getTextLength()));
   }
 

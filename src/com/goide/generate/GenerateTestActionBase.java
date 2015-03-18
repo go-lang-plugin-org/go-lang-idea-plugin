@@ -36,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
 abstract public class GenerateTestActionBase extends CodeInsightAction implements GenerateActionPopupTemplateInjector {
   @NotNull private final GenerateTestHandler myHandler;
 
-  public GenerateTestActionBase(GenerateTestHandler.Type functionType) {
+  protected GenerateTestActionBase(GenerateTestHandler.Type functionType) {
     myHandler = new GenerateTestHandler(functionType);
   }
 

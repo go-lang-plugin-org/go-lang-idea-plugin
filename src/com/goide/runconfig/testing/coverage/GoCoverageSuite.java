@@ -15,12 +15,9 @@ public class GoCoverageSuite extends BaseCoverageSuite {
   public GoCoverageSuite(final String name,
                          @Nullable final CoverageFileProvider fileProvider,
                          final long lastCoverageTimeStamp,
-                         final boolean coverageByTestEnabled,
-                         final boolean tracingEnabled,
-                         final boolean trackTestFolders,
                          final CoverageRunner coverageRunner,
                          final Project project) {
-    super(name, fileProvider, lastCoverageTimeStamp, coverageByTestEnabled, tracingEnabled, trackTestFolders, coverageRunner, project);
+    super(name, fileProvider, lastCoverageTimeStamp, false, false, false, coverageRunner, project);
   }
 
   @NotNull

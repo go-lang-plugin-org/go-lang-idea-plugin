@@ -24,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
 public class GoLanguage extends Language {
   public static final Language INSTANCE = new GoLanguage();
 
-  protected GoLanguage() {
+  private GoLanguage() {
     super("go", "text/go", "text/x-go", "application/x-go");
   }
 

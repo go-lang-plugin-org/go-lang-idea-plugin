@@ -122,8 +122,8 @@ public class GoInspectionUtil {
     return count;
   }
 
-  public static void checkExpressionShouldReturnOneResult(@NotNull List<GoExpression> exprs, @NotNull ProblemsHolder result) {
-    for (GoExpression expr : exprs) {
+  public static void checkExpressionShouldReturnOneResult(@NotNull List<GoExpression> expressions, @NotNull ProblemsHolder result) {
+    for (GoExpression expr : expressions) {
       int count = getExpressionResultCount(expr);
       if (count != UNKNOWN_COUNT && count != 1) {
         String text = expr.getText();

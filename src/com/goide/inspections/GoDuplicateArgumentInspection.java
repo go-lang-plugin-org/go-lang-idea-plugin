@@ -40,7 +40,7 @@ public class GoDuplicateArgumentInspection extends GoInspectionBase {
     };
   }
 
-  public void check(@Nullable GoSignature o, @NotNull ProblemsHolder holder) {
+  protected void check(@Nullable GoSignature o, @NotNull ProblemsHolder holder) {
     if (o == null) return;
     checkParameters(holder, o.getParameters(), new LinkedHashSet<String>());
   }
@@ -62,7 +62,7 @@ public class GoDuplicateArgumentInspection extends GoInspectionBase {
     }
   }
 
-  protected static String errorText(@NotNull String name) {
+  private static String errorText(@NotNull String name) {
     return "Duplicate argument " + "'" + name + "'";
   }
 }

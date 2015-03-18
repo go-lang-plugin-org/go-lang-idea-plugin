@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Comparator;
 
 public class ExportabilityComparator implements Comparator {
-  public static Comparator INSTANCE = new ExportabilityComparator();
+  public static final Comparator INSTANCE = new ExportabilityComparator();
 
   @Override
   public int compare(@NotNull Object descriptor1, @NotNull Object descriptor2) {

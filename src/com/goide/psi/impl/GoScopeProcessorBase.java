@@ -29,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public abstract class GoScopeProcessorBase extends BaseScopeProcessor {
-  @NotNull protected OrderedSet<GoNamedElement> myResult = new OrderedSet<GoNamedElement>();
+  @NotNull protected final OrderedSet<GoNamedElement> myResult = new OrderedSet<GoNamedElement>();
 
   @NotNull protected final PsiElement myOrigin;
   @NotNull private final String myRequestedName;

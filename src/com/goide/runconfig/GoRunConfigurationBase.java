@@ -50,7 +50,7 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
 
   @NotNull private String myWorkingDirectory = "";
   @NotNull private String myParams = "";
-  @NotNull private Map<String, String> myCustomEnvironment = ContainerUtil.newHashMap();
+  @NotNull private final Map<String, String> myCustomEnvironment = ContainerUtil.newHashMap();
   private boolean myPassParentEnvironment = true;
 
   public GoRunConfigurationBase(String name, GoModuleBasedConfiguration configurationModule, ConfigurationFactory factory) {

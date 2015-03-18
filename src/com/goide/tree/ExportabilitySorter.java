@@ -46,7 +46,7 @@ public class ExportabilitySorter implements Sorter {
       return AllIcons.ObjectBrowser.VisibilitySort;
     }
   };
-  @NonNls public static final String ID = "EXPORTABILITY_SORTER";
+  @NonNls private static final String ID = "EXPORTABILITY_SORTER";
 
   @Override
   @NotNull

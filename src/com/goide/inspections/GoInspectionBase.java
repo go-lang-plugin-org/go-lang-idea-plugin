@@ -32,7 +32,7 @@ abstract public class GoInspectionBase extends LocalInspectionTool {
   @Override
   public final PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly, @NotNull LocalInspectionToolSession session) {
     GoFile file = ObjectUtils.tryCast(session.getFile(), GoFile.class);
-    return file != null && canRunOn(file) ? buildGoVisitor(holder, session) : DUMMY_VISITOR;
+    return file != null ? buildGoVisitor(holder, session) : DUMMY_VISITOR;
   }
 
   @NotNull
@@ -45,10 +45,6 @@ abstract public class GoInspectionBase extends LocalInspectionTool {
   @Override
   public final ProblemDescriptor[] checkFile(@NotNull PsiFile file, @NotNull InspectionManager manager, boolean isOnTheFly) {
     throw new IllegalStateException();
-  }
-
-  protected boolean canRunOn(@SuppressWarnings({"UnusedParameters", "For future"}) @NotNull GoFile file) {
-    return true;
   }
 
   @NotNull

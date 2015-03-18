@@ -38,7 +38,7 @@ import java.util.Set;
 
 public abstract class GoLibrariesService extends SimpleModificationTracker implements PersistentStateComponent<GoLibrariesState> {
   public static final Topic<LibrariesListener> LIBRARIES_TOPIC = new Topic<LibrariesListener>("libraries changes", LibrariesListener.class);
-  private GoLibrariesState myState = new GoLibrariesState();
+  private final GoLibrariesState myState = new GoLibrariesState();
 
   @NotNull
   @Override
@@ -97,7 +97,7 @@ public abstract class GoLibrariesService extends SimpleModificationTracker imple
   }
 
   @NotNull
-  public static Collection<? extends VirtualFile> filesFromUrls(@NotNull Collection<String> urls) {
+  private static Collection<? extends VirtualFile> filesFromUrls(@NotNull Collection<String> urls) {
     return ContainerUtil.skipNulls(ContainerUtil.map(urls, new Function<String, VirtualFile>() {
       @Override
       public VirtualFile fun(String url) {

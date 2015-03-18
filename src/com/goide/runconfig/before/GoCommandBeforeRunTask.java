@@ -4,7 +4,6 @@ import com.intellij.execution.BeforeRunTask;
 import com.intellij.openapi.util.text.StringUtil;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
 
 public class GoCommandBeforeRunTask extends BeforeRunTask<GoCommandBeforeRunTask> {
   @NonNls
@@ -13,12 +12,7 @@ public class GoCommandBeforeRunTask extends BeforeRunTask<GoCommandBeforeRunTask
   private String myCommand;
 
   public GoCommandBeforeRunTask() {
-    this(null);
-  }
-
-  public GoCommandBeforeRunTask(@Nullable String command) {
     super(GoBeforeRunTaskProvider.ID);
-    myCommand = command;
   }
 
   public String getCommand() {

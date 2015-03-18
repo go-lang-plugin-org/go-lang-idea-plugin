@@ -722,15 +722,13 @@ public class GoPsiImplUtil {
       return lastImportDeclaration.addImportSpec(packagePath, alias);
     }
     else {
-      return addImportDeclaration(importList, newDeclaration, null);
+      return addImportDeclaration(importList, newDeclaration);
     }
   }
 
   @NotNull
-  private static GoImportSpec addImportDeclaration(@NotNull GoImportList importList,
-                                                   @NotNull GoImportDeclaration newImportDeclaration,
-                                                   @Nullable PsiElement anchor) {
-    GoImportDeclaration importDeclaration = (GoImportDeclaration)importList.addAfter(newImportDeclaration, anchor);
+  private static GoImportSpec addImportDeclaration(@NotNull GoImportList importList, @NotNull GoImportDeclaration newImportDeclaration) {
+    GoImportDeclaration importDeclaration = (GoImportDeclaration)importList.addAfter(newImportDeclaration, null);
     final PsiElement importListNextSibling = importList.getNextSibling();
     if (!(importListNextSibling instanceof PsiWhiteSpace)) {
       importList.addAfter(GoElementFactory.createNewLine(importList.getProject()), importDeclaration);
