@@ -21,6 +21,8 @@ import com.goide.psi.GoFile;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.codeInsight.daemon.quickFix.CreateFileFix;
 import com.intellij.codeInspection.LocalQuickFix;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
@@ -100,7 +102,8 @@ public class GoImportReferenceHelper extends FileReferenceHelper {
 
   @NotNull
   private static Collection<? extends VirtualFile> getPathsToLookup(@NotNull PsiElement element) {
-    Set<VirtualFile> result = ContainerUtil.newLinkedHashSet(GoSdkUtil.getGoPathsSources(element));
+    Module module = ModuleUtilCore.findModuleForPsiElement(element);
+    Set<VirtualFile> result = ContainerUtil.newLinkedHashSet(GoSdkUtil.getGoPathsSources(element.getProject(), module));
     ContainerUtil.addIfNotNull(result, GoSdkUtil.getSdkSrcDir(element));
     return result;
   }

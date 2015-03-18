@@ -99,33 +99,21 @@ public class GoSdkUtil {
   }
 
   @NotNull
-  public static Collection<VirtualFile> getGoPathsSources(@NotNull PsiElement context) {
-    final Module module = ModuleUtilCore.findModuleForPsiElement(context);
-    return module != null ? getGoPathsSources(module) : getGoPathsSources(context.getProject());
-  }
-
-  @NotNull
-  public static Collection<VirtualFile> getGoPathsSources(@NotNull Module module) {
-    final Collection<VirtualFile> result = getGoPathsSourcesFromEnvironment();
-    for (VirtualFile file : GoLibrariesService.getUserDefinedLibraries(module)) {
+  public static Collection<VirtualFile> getGoPathsSources(@NotNull Project project, @Nullable Module module) {
+    Collection<VirtualFile> result = getGoPathsSourcesFromEnvironment();
+    Collection<? extends VirtualFile> userDefinedLibraries = module != null
+                                                             ? GoLibrariesService.getUserDefinedLibraries(module)
+                                                             : GoLibrariesService.getUserDefinedLibraries(project);
+    for (VirtualFile file : userDefinedLibraries) {
       ContainerUtil.addIfNotNull(result, findSourceDirectory(file));
     }
     return result;
   }
-
-  @NotNull
-  public static Collection<VirtualFile> getGoPathsSources(@NotNull Project project) {
-    final Collection<VirtualFile> result = getGoPathsSourcesFromEnvironment();
-    for (VirtualFile file : GoLibrariesService.getUserDefinedLibraries(project)) {
-      ContainerUtil.addIfNotNull(result, findSourceDirectory(file));
-    }
-    return result;
-  }
-
+  
   /**
    * Retrieves source directories from GOPATH env-variable.
    * This method doesn't consider user defined libraries,
-   * for that case use {@link this#getGoPathsSources(PsiElement)} or {@link this#getGoPathsSources(Module)} or {@link this#getGoPathsSources(Project)}
+   * for that case use {@link {@link this#getGoPathsSources(Project, Module)}
    */
   @NotNull
   public static Collection<VirtualFile> getGoPathsSourcesFromEnvironment() {
@@ -194,8 +182,7 @@ public class GoSdkUtil {
 
   @Nullable
   public static VirtualFile findFileByRelativeToLibrariesPath(@NotNull String path, @NotNull Project project, @Nullable Module module) {
-    Collection<VirtualFile> roots = module != null ? getGoPathsSources(module) : getGoPathsSources(project);
-    for (VirtualFile root : roots) {
+    for (VirtualFile root : getGoPathsSources(project, module)) {
       VirtualFile file = root.findFileByRelativePath(path);
       if (file != null) {
         return file;
@@ -206,11 +193,9 @@ public class GoSdkUtil {
 
   @Nullable
   public static String getPathRelativeToSdkAndLibraries(@NotNull VirtualFile file, @NotNull Project project, @Nullable Module module) {
-    VirtualFile sdkSourceDir = getSdkSrcDir(project, module);
-    Collection<VirtualFile> roots = ContainerUtil.newLinkedHashSet();
-    roots.addAll(module != null ? getGoPathsSources(module) : getGoPathsSources(project));
-    ContainerUtil.addIfNotNull(roots, sdkSourceDir);
-
+    Collection<VirtualFile> roots = ContainerUtil.newLinkedHashSet(getGoPathsSources(project, module));
+    ContainerUtil.addIfNotNull(roots, getSdkSrcDir(project, module));
+    
     for (VirtualFile root : roots) {
       String relativePath = VfsUtilCore.getRelativePath(file, root, '/');
       if (StringUtil.isNotEmpty(relativePath)) {
@@ -314,6 +299,11 @@ public class GoSdkUtil {
     return Collections.emptyList();
   }
 
+  @NotNull
+  public static Collection<Object> getSdkAndLibrariesCacheDependencies(@NotNull PsiElement context, Object... extra) {
+    return getSdkAndLibrariesCacheDependencies(context.getProject(), ModuleUtilCore.findModuleForPsiElement(context), extra);
+  }
+  
   @NotNull
   public static Collection<Object> getSdkAndLibrariesCacheDependencies(@NotNull Project project, @Nullable Module module, Object... extra) {
     Collection<Object> dependencies = ContainerUtil.<Object>newArrayList(GoLibrariesService.getModificationTrackers(project, module));

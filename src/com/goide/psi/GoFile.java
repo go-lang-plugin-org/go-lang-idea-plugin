@@ -184,8 +184,7 @@ public class GoFile extends PsiFileBase {
             }
           }
         }
-        Module module = ModuleUtilCore.findModuleForPsiElement(GoFile.this);
-        return Result.create(map, GoSdkUtil.getSdkAndLibrariesCacheDependencies(getProject(), module, GoFile.this));
+        return Result.create(map, GoSdkUtil.getSdkAndLibrariesCacheDependencies(GoFile.this));
       }
     });
   }
@@ -432,7 +431,7 @@ public class GoFile extends PsiFileBase {
         Project project = psiDirectory.getProject();      
         Module module = ModuleUtilCore.findModuleForPsiElement(psiDirectory);
         String path = GoSdkUtil.getPathRelativeToSdkAndLibraries(psiDirectory.getVirtualFile(), project, module);
-        return Result.create(path, GoSdkUtil.getSdkAndLibrariesCacheDependencies(project, module, psiDirectory));
+        return Result.create(path, GoSdkUtil.getSdkAndLibrariesCacheDependencies(psiDirectory));
       }
     });
   }

@@ -126,7 +126,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
           final Set<String> libraryRootUrls = ContainerUtil.newLinkedHashSet();
           VirtualFile[] contentRoots = ProjectRootManager.getInstance(project).getContentRoots();
 
-          final Collection<VirtualFile> candidates = GoSdkUtil.getGoPathsSources(myModule);
+          final Collection<VirtualFile> candidates = GoSdkUtil.getGoPathsSources(project, myModule);
           myFilesToWatch.clear();
           for (VirtualFile file : candidates) {
             addRootUrlsForGoPathFile(libraryRootUrls, contentRoots, file);
