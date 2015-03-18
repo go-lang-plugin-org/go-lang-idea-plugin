@@ -16,6 +16,7 @@
 
 package com.goide.sdk;
 
+import com.goide.GoConstants;
 import com.goide.GoEnvironmentUtil;
 import com.goide.project.GoLibrariesService;
 import com.goide.psi.GoFile;
@@ -53,7 +54,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GoSdkUtil {
-  public static final String GO_VERSION_FILE_PATH = "runtime/zversion.go";
   private static final String GO_VERSION_PATTERN = "theVersion\\s*=\\s*`go([\\d.]+)`";
   private static final String GAE_VERSION_PATTERN = "theVersion\\s*=\\s*`go([\\d.]+)( \\(appengine-[\\d.]+\\))?`";
   private static final String GO_DEVEL_VERSION_PATTERN = "theVersion\\s*=\\s*`(devel[\\d.]+)`";
@@ -88,7 +88,7 @@ public class GoSdkUtil {
       @Override
       public Result<VirtualFile> compute() {
         VirtualFile sdkSrcDir = getSdkSrcDir(project, module);
-        VirtualFile result = sdkSrcDir != null ? sdkSrcDir.findFileByRelativePath("builtin/builtin.go") : null;
+        VirtualFile result = sdkSrcDir != null ? sdkSrcDir.findFileByRelativePath(GoConstants.BUILTIN_FILE_PATH) : null;
         return Result.create(result, getSdkAndLibrariesCacheDependencies(project, module, result));
       }
     });
@@ -252,8 +252,8 @@ public class GoSdkUtil {
   @Nullable
   public static String retrieveGoVersion(@NotNull final String sdkPath) {
     try {
-      String oldStylePath = new File(sdkPath, "src/pkg/" + GO_VERSION_FILE_PATH).getPath();
-      String newStylePath = new File(sdkPath, "src/" + GO_VERSION_FILE_PATH).getPath();
+      String oldStylePath = new File(sdkPath, "src/pkg/" + GoConstants.GO_VERSION_FILE_PATH).getPath();
+      String newStylePath = new File(sdkPath, "src/" + GoConstants.GO_VERSION_FILE_PATH).getPath();
       File zVersionFile = FileUtil.findFirstThatExist(oldStylePath, newStylePath);
       if (zVersionFile == null) return null;
       String text = FileUtil.loadFile(zVersionFile);
@@ -277,15 +277,15 @@ public class GoSdkUtil {
   }
 
   public static boolean isAppEngineSdkPath(@Nullable String path) {
-    return path != null && new File(path, "appcfg.py").exists();
+    return path != null && new File(path, GoConstants.APP_ENGINE_MARKER_FILE).exists();
   }
 
   @NotNull
   public static String adjustSdkPath(@NotNull String path) {
-    if (new File(path, "libexec").exists()) {
-      path += File.separatorChar + "libexec";
+    if (new File(path, GoConstants.LIB_EXEC_DIRECTORY).exists()) {
+      path += File.separatorChar + GoConstants.LIB_EXEC_DIRECTORY;
     }
-    return isAppEngineSdkPath(path) ? path + File.separatorChar + "goroot" : path;
+    return isAppEngineSdkPath(path) ? path + File.separatorChar + GoConstants.APP_ENGINE_GO_ROOT_DIRECTORY : path;
   }
 
   @NotNull

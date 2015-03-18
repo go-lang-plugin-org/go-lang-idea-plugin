@@ -1,5 +1,6 @@
 package com.goide.sdk;
 
+import com.goide.GoConstants;
 import com.goide.configuration.GoSdkConfigurable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
@@ -84,6 +85,6 @@ public class GoSmallIDEsSdkService extends GoSdkService {
   }
 
   public static boolean isGoSdkLibRoot(@NotNull VirtualFile root) {
-    return root.isInLocalFileSystem() && root.isDirectory() && VfsUtilCore.findRelativeFile(GoSdkUtil.GO_VERSION_FILE_PATH, root) != null;
+    return root.isInLocalFileSystem() && root.isDirectory() && VfsUtilCore.findRelativeFile(GoConstants.GO_VERSION_FILE_PATH, root) != null;
   }
 }

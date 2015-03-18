@@ -1,5 +1,7 @@
 package com.goide;
 
+import org.jetbrains.annotations.NonNls;
+
 public class GoConstants {
   public static final String MODULE_TYPE_ID = "GO_MODULE";
   public static final String SDK_TYPE_ID = "Go SDK";
@@ -12,8 +14,15 @@ public class GoConstants {
   public static final String TEST_SUFFIX_WITH_EXTENSION = "_test.go";
   public static final String MAIN = "main";
   public static final String INIT = "init";
-  
+
   public static final String GO_NOTIFICATION_GROUP = "Go plugin notifications";
+  
+  @NonNls public static final String LIB_EXEC_DIRECTORY = "libexec";
+  @NonNls public static final String GO_VERSION_FILE_PATH = "runtime/zversion.go";
+  public static final String BUILTIN_FILE_PATH = "builtin/builtin.go";
+  
+  @NonNls public static final String APP_ENGINE_MARKER_FILE = "appcfg.py";
+  @NonNls public static final String APP_ENGINE_GO_ROOT_DIRECTORY = "goroot";
 
   private GoConstants() {
     
