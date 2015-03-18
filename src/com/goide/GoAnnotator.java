@@ -22,6 +22,7 @@ import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.psi.impl.GoReference;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.util.text.StringUtil;
@@ -193,7 +194,7 @@ public class GoAnnotator implements Annotator {
                                       @NotNull TextAttributesKey key,
                                       @Nullable String description) {
     holder.createInfoAnnotation(element, null).setEnforcedTextAttributes(TextAttributes.ERASE_MARKER);
-    holder.createInfoAnnotation(element, description).setTextAttributes(key);
+    holder.createInfoAnnotation(element, ApplicationManager.getApplication().isUnitTestMode() ? description : null).setTextAttributes(key);
   }
 
   private static boolean isPackageWide(@NotNull GoVarDefinition o) {
