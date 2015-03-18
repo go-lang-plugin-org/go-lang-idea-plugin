@@ -4,6 +4,9 @@
       <w>devel</w>
       <w>gopath</w>
       <w>goroot</w>
+      <w>netbsd</w>
+      <w>notwin</w>
+      <w>openbsd</w>
     </words>
   </dictionary>
 </component>

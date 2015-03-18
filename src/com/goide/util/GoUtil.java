@@ -52,15 +52,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GoUtil {
-  public static final String PLUGIN_ID = "ro.redeul.google.go";
   public static final String PLUGIN_VERSION = getPlugin().getVersion();
-
-  public static final Pattern FULL = Pattern.compile("\\w+_(\\w+)_(\\w+)");
-  public static final Pattern SHORT = Pattern.compile("\\w+_(\\w+)");
-  public static final Set<CharSequence> LINUX = set("linux", "no", "unix", "posix", "notwin");
-  public static final Set<CharSequence> MAC = set("darwin", "no", "unix", "posix", "notwin");
-  public static final Set<CharSequence> WINDOWS = set("windows", "no");
-  public static final Set<CharSequence> OS = set("openbsd", "plan9", "unix", "linux", "netbsd", "darwin", "dragonfly", "bsd", "windows",
+  
+  private static final String PLUGIN_ID = "ro.redeul.google.go";
+  private static final Pattern FULL = Pattern.compile("\\w+_(\\w+)_(\\w+)");
+  private static final Pattern SHORT = Pattern.compile("\\w+_(\\w+)");
+  private static final Set<CharSequence> LINUX = set("linux", "no", "unix", "posix", "notwin");
+  private static final Set<CharSequence> MAC = set("darwin", "no", "unix", "posix", "notwin");
+  private static final Set<CharSequence> WINDOWS = set("windows", "no");
+  private static final Set<CharSequence> OS = set("openbsd", "plan9", "unix", "linux", "netbsd", "darwin", "dragonfly", "bsd", "windows",
                                                  "posix", "freebsd", "notwin");
 
   public static boolean allowed(@NotNull PsiFile file) {
