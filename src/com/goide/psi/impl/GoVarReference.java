@@ -55,7 +55,7 @@ public class GoVarReference extends GoCachedReference<GoVarDefinition> {
   @NotNull
   @Override
   public Object[] getVariants() {
-    GoVarProcessor p = new GoVarProcessor(myElement.getText(), myElement, false);
+    GoVarProcessor p = new GoVarProcessor(myElement.getText(), myElement, true);
     if (myPotentialStopBlock != null) {
       if (myPotentialStopBlock.getParent() instanceof GoFunctionOrMethodDeclaration) {
         GoReference.processFunctionParameters(myElement, p);
