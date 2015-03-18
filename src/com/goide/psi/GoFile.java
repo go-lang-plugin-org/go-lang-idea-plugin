@@ -20,7 +20,6 @@ import com.goide.GoConstants;
 import com.goide.GoFileType;
 import com.goide.GoLanguage;
 import com.goide.GoTypes;
-import com.goide.project.GoLibrariesService;
 import com.goide.psi.impl.GoElementFactory;
 import com.goide.sdk.GoSdkUtil;
 import com.goide.stubs.GoConstSpecStub;
@@ -31,11 +30,9 @@ import com.goide.util.GoUtil;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
 import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
@@ -53,7 +50,10 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 public class GoFile extends PsiFileBase {
   public GoFile(@NotNull FileViewProvider viewProvider) {
@@ -183,7 +183,10 @@ public class GoFile extends PsiFileBase {
             }
           }
         }
-        return Result.create(map, getSdkAndLibrariesDependencies(GoFile.this, ArrayUtil.toObjectArray(extraDeps)));
+        Collection<Object> dependencies = GoSdkUtil.getSdkAndLibrariesCacheDependencies(getProject(),
+                                                                                        ModuleUtilCore.findModuleForPsiElement(GoFile.this));
+        dependencies.add(GoFile.this);
+        return Result.create(map, ArrayUtil.toObjectArray(dependencies));
       }
     });
   }
@@ -423,26 +426,7 @@ public class GoFile extends PsiFileBase {
     if (psiDirectory == null) {
       return null;
     }
-    return CachedValuesManager.getCachedValue(psiDirectory, new CachedValueProvider<String>() {
-      @Nullable
-      @Override
-      public Result<String> compute() {
-        VirtualFile virtualFile = psiDirectory.getVirtualFile();
-        String importPath = GoSdkUtil.getPathRelativeToSdkAndLibraries(virtualFile, context);
-        return Result.create(importPath, getSdkAndLibrariesDependencies(context, virtualFile));
-      }
-    });
-  }
-  
-  @NotNull
-  private static Object[] getSdkAndLibrariesDependencies(@NotNull PsiElement context, Object... extraDeps) {
-    Collection<Object> dependencies = ContainerUtil.<Object>newArrayList(context);
-    ContainerUtil.addAllNotNull(dependencies, extraDeps);
-    ContainerUtil.addIfNotNull(dependencies, GoSdkUtil.getSdkSrcDir(context));
-    Module module = ModuleUtilCore.findModuleForPsiElement(context);
-    Collections.addAll(dependencies, module != null
-                                     ? GoLibrariesService.getModificationTrackers(module)
-                                     : GoLibrariesService.getModificationTrackers(context.getProject()));
-    return ArrayUtil.toObjectArray(dependencies); 
+    return GoSdkUtil.getPathRelativeToSdkAndLibraries(psiDirectory.getVirtualFile(), context.getProject(),
+                                                      ModuleUtilCore.findModuleForPsiElement(context));
   }
 }

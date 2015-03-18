@@ -33,6 +33,8 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.util.CachedValueProvider;
+import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.util.Function;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.SystemProperties;
@@ -59,14 +61,20 @@ public class GoSdkUtil {
   @Nullable
   public static VirtualFile getSdkSrcDir(@NotNull PsiElement context) {
     Module module = ModuleUtilCore.findModuleForPsiElement(context);
-    String sdkHomePath = GoSdkService.getInstance(context.getProject()).getSdkHomePath(module);
-    String sdkVersionString = GoSdkService.getInstance(context.getProject()).getSdkVersion(module);
+    VirtualFile sdkSrcDir = getSdkSrcDir(context.getProject(), module);
+    return sdkSrcDir != null ? sdkSrcDir : guessSkdSrcDir(context);
+  }
+
+  @Nullable
+  private static VirtualFile getSdkSrcDir(@NotNull Project project, @Nullable Module module) {
+    String sdkHomePath = GoSdkService.getInstance(project).getSdkHomePath(module);
+    String sdkVersionString = GoSdkService.getInstance(project).getSdkVersion(module);
     VirtualFile sdkSrcDir = null;
     if (sdkHomePath != null && sdkVersionString != null) {
       File sdkSrcDirFile = new File(sdkHomePath, getSrcLocation(sdkVersionString));
       sdkSrcDir = LocalFileSystem.getInstance().findFileByIoFile(sdkSrcDirFile);
     }
-    return sdkSrcDir != null ? sdkSrcDir : guessSkdSrcDir(context);
+    return sdkSrcDir;
   }
 
   // todo: caching
@@ -198,24 +206,38 @@ public class GoSdkUtil {
   }
 
   @Nullable
-  public static String getPathRelativeToSdkAndLibraries(@NotNull VirtualFile file, @NotNull PsiElement context) {
-    VirtualFile sdkSourceDir = getSdkSrcDir(context);
-    Collection<VirtualFile> roots = ContainerUtil.newLinkedHashSet(getGoPathsSources(context));
-    ContainerUtil.addIfNotNull(roots, sdkSourceDir);
+  public static String getPathRelativeToSdkAndLibraries(@NotNull final VirtualFile file,
+                                                        @NotNull final Project project,
+                                                        @Nullable final Module module) {
+    return CachedValuesManager.getManager(project).getCachedValue(file, new CachedValueProvider<String>() {
+      @Nullable
+      @Override
+      public Result<String> compute() {
+        String importPath = null;
+        VirtualFile sdkSourceDir = getSdkSrcDir(project, module);
 
-    for (VirtualFile root : roots) {
-      String relativePath = VfsUtilCore.getRelativePath(file, root, '/');
-      if (StringUtil.isNotEmpty(relativePath)) {
-        return relativePath;
+        Collection<VirtualFile> roots = ContainerUtil.newLinkedHashSet();
+        roots.addAll(module != null ? getGoPathsSources(module) : getGoPathsSources(project));
+        ContainerUtil.addIfNotNull(roots, sdkSourceDir);
+
+        for (VirtualFile root : roots) {
+          String relativePath = VfsUtilCore.getRelativePath(file, root, '/');
+          if (StringUtil.isNotEmpty(relativePath)) {
+            importPath = relativePath;
+            break;
+          }
+        }
+
+        if (importPath == null) {
+          String filePath = file.getPath();
+          int src = filePath.lastIndexOf("/src/");
+          if (src > -1) {
+            importPath = filePath.substring(src + 5);
+          }
+        }
+        return Result.create(importPath, getSdkAndLibrariesCacheDependencies(project, module, file));
       }
-    }
-    
-    String filePath = file.getPath();
-    int src = filePath.lastIndexOf("/src/");
-    if (src > -1) {
-      return filePath.substring(src + 5);
-    }
-    return null;
+    });
   }
 
   @Nullable
@@ -304,5 +326,18 @@ public class GoSdkUtil {
       return Collections.singletonList(src);
     }
     return Collections.emptyList();
+  }
+
+  @NotNull
+  public static Collection<Object> getSdkAndLibrariesCacheDependencies(@NotNull Project project,
+                                                                       @Nullable Module module,
+                                                                       Object... extraDeps) {
+    Collection<Object> dependencies = ContainerUtil.newArrayList();
+    ContainerUtil.addAllNotNull(dependencies, extraDeps);
+    ContainerUtil.addIfNotNull(dependencies, getSdkSrcDir(project, module));
+    Collections.addAll(dependencies, module != null
+                                     ? GoLibrariesService.getModificationTrackers(module)
+                                     : GoLibrariesService.getModificationTrackers(project));
+    return dependencies;
   }
 }
