@@ -20,7 +20,7 @@ import com.goide.GoTypes;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInsight.highlighting.HighlightUsagesHandlerBase;
-import com.intellij.codeInsight.highlighting.HighlightUsagesHandlerFactory;
+import com.intellij.codeInsight.highlighting.HighlightUsagesHandlerFactoryBase;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -33,11 +33,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class GoHighlightExitPointsHandlerFactory implements HighlightUsagesHandlerFactory {
+public class GoHighlightExitPointsHandlerFactory extends HighlightUsagesHandlerFactoryBase {
+  @Nullable
   @Override
-  public HighlightUsagesHandlerBase createHighlightUsagesHandler(@NotNull Editor editor, @NotNull PsiFile file) {
-    int offset = editor.getCaretModel().getOffset();
-    PsiElement target = file.findElementAt(offset);
+  public HighlightUsagesHandlerBase createHighlightUsagesHandler(@NotNull Editor editor, @NotNull PsiFile file, @NotNull PsiElement target) {
     return MyHandler.createForElement(editor, file, target);
   }
 
