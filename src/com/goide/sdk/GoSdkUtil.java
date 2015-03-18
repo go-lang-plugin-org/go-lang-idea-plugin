@@ -25,6 +25,7 @@ import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.SystemInfo;
+import com.intellij.openapi.util.UserDataHolder;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
@@ -77,14 +78,23 @@ public class GoSdkUtil {
     return sdkSrcDir;
   }
 
-  // todo: caching
   @Nullable
   public static GoFile findBuiltinFile(@NotNull PsiElement context) {
-    VirtualFile sdkSrcDir = getSdkSrcDir(context);
-    if (sdkSrcDir == null) return null;
-    VirtualFile vBuiltin = sdkSrcDir.findFileByRelativePath("builtin/builtin.go");
-    if (vBuiltin == null) return null;
-    PsiFile psiBuiltin = context.getManager().findFile(vBuiltin);
+    final Project project = context.getProject();
+    final Module module = ModuleUtilCore.findModuleForPsiElement(context);
+    UserDataHolder holder = ObjectUtils.notNull(module, project);
+    VirtualFile file = CachedValuesManager.getManager(context.getProject()).getCachedValue(holder, new CachedValueProvider<VirtualFile>() {
+      @Nullable
+      @Override
+      public Result<VirtualFile> compute() {
+        VirtualFile sdkSrcDir = getSdkSrcDir(project, module);
+        VirtualFile result = sdkSrcDir != null ? sdkSrcDir.findFileByRelativePath("builtin/builtin.go") : null;
+        return Result.create(result, getSdkAndLibrariesCacheDependencies(project, module, result));
+      }
+    });
+
+    if (file == null) return null;
+    PsiFile psiBuiltin = context.getManager().findFile(file);
     return (psiBuiltin instanceof GoFile) ? (GoFile)psiBuiltin : null;
   }
 
@@ -333,6 +343,7 @@ public class GoSdkUtil {
                                                                        @Nullable Module module,
                                                                        Object... extraDeps) {
     Collection<Object> dependencies = ContainerUtil.newArrayList();
+    ContainerUtil.addAllNotNull(dependencies, GoSdkService.getInstance(project));
     ContainerUtil.addAllNotNull(dependencies, extraDeps);
     ContainerUtil.addIfNotNull(dependencies, getSdkSrcDir(project, module));
     Collections.addAll(dependencies, module != null
