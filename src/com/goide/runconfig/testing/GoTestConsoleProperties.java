@@ -78,7 +78,7 @@ public class GoTestConsoleProperties extends TestConsoleProperties implements SM
 
       if ((matcher = RUN.matcher(text)).find()) {
         String testName = StringUtil.notNullize(matcher.group(1), "<test>");
-        ServiceMessageBuilder testStarted = ServiceMessageBuilder.testStarted(testName).addAttribute("locationHint", "gotest://" + testName);
+        ServiceMessageBuilder testStarted = ServiceMessageBuilder.testStarted(testName).addAttribute("locationHint", testUrl(testName));
         return processNotFinishedMessage(testStarted.toString(), outputType, visitor);
       }
 
@@ -110,6 +110,11 @@ public class GoTestConsoleProperties extends TestConsoleProperties implements SM
       }
 
       return super.processServiceMessages(text, outputType, visitor);
+    }
+
+    @NotNull
+    private static String testUrl(@NotNull String testName) {
+      return GoTestLocationProvider.PROTOCOL + "://" + testName;
     }
 
     private boolean processNotFinishedMessage(String message, Key outputType, ServiceMessageVisitor visitor) throws ParseException {

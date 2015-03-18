@@ -27,12 +27,18 @@ import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.List;
 
 public class GoTestLocationProvider implements TestLocationProvider {
+  public static final String PROTOCOL = "gotest";
+
   @NotNull
   @Override
   public List<Location> getLocation(@NotNull String protocolId, @NotNull String locationData, @NotNull final Project project) {
+    if (!PROTOCOL.equals(protocolId)) {
+      return Collections.emptyList();
+    }
     return ContainerUtil.map(GoFunctionIndex.find(locationData, project, GlobalSearchScope.projectScope(project)), new Function<GoFunctionDeclaration, Location>() {
       @Override
       public Location fun(GoFunctionDeclaration declaration) {
