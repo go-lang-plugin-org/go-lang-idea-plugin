@@ -109,7 +109,7 @@ public class GoFieldNameReference extends GoCachedReference<GoFieldName> {
   @NotNull
   @Override
   public Object[] getVariants() {
-    GoScopeProcessorBase p = getProcessor(false);
+    GoScopeProcessorBase p = getProcessor(true);
     processFields(p);
     List<GoNamedElement> variants = p.getVariants();
     if (variants.isEmpty()) return EMPTY_ARRAY;
