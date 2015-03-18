@@ -61,3 +61,21 @@ func main() {
     }
 }
 func create() []*Person {return make([]*Person, 0)}
+
+type myStruct struct {
+    MyVal bool
+}
+
+type myChanType chan myStruct
+
+func chanFn(c myChanType) {
+    for v := range c {
+             fmt.Printf("Got %v\n", v.MyVal) // v.MyVal is unresolved
+    }
+}
+
+func <warning>main2</warning>() {
+    ch := make(myChanType)
+    go chanFn(ch)
+    ch <- myStruct{true}
+}

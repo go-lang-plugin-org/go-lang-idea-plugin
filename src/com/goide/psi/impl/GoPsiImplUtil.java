@@ -529,6 +529,9 @@ public class GoPsiImplUtil {
         PsiElement resolve = typeRef.getReference().resolve();
         if (resolve instanceof GoTypeSpec) {
           type = ((GoTypeSpec)resolve).getType();
+          if (type instanceof GoChannelType) {
+            return type.getType();
+          }
         }
       }
       if (type instanceof GoArrayOrSliceType && i == 1) return type.getType();
