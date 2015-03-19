@@ -1,0 +1,14 @@
+<idea-plugin version="2">
+  <id>com.intellij.appengine</id>
+  <!-- It's supposed that this module will be moved to IDEA source and bundled in IDEA 15 -->
+
+  <!-- optinal yaml dependency here-->
+  
+  <extensionPoints>
+    <!-- app engine support extension point here -->
+  </extensionPoints>
+  
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- app engine remoteServer.type extension here -->
+  </extensions>
+</idea-plugin>

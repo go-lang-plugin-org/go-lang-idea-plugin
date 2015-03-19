@@ -7,6 +7,7 @@
     <log_file path="$USER_HOME$/Library/Caches/IdeaIC14/plugins-sandbox/system/log/idea.log" checked="true" skipped="true" show_all="false" alias="IDEA LOG" />
     <method>
       <option name="BuildArtifacts" enabled="true">
+        <artifact name="google-app-engine.jar" />
         <artifact name="jps-plugin.jar" />
         <artifact name="utils.jar" />
       </option>
