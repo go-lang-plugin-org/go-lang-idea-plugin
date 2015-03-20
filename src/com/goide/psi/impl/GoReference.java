@@ -316,7 +316,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     if (parent instanceof GoSelectorExpr) {
       boolean result = processSelector((GoSelectorExpr)parent, processor, state, myElement);
       if (processor.isCompletion()) return result;
-      if (!result) return false;
+      if (!result || prevDot(myElement)) return false;
     }
 
     PsiElement grandPa = parent.getParent();
