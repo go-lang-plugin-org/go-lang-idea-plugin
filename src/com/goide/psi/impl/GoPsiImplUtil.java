@@ -631,7 +631,9 @@ public class GoPsiImplUtil {
         if (parametersType != null) return parametersType;
         List<GoType> composite = ContainerUtil.newArrayList();
         for (GoParameterDeclaration p : parameters.getParameterDeclarationList()) {
-          composite.add(p.getType());
+          for (GoParamDefinition definition : p.getParamDefinitionList()) {
+            composite.add(definition.getGoType(context));
+          }
         }
         class MyGoTypeList extends LightElement implements GoTypeList {
           @NotNull private final List<GoType> myTypes;
