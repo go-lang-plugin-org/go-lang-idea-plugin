@@ -13,7 +13,7 @@ public interface GoIndexOrSliceExpr extends GoExpression {
   @NotNull
   PsiElement getLbrack();
 
-  @NotNull
+  @Nullable
   PsiElement getRbrack();
 
 }

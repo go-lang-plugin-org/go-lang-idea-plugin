@@ -4341,21 +4341,23 @@ public class GoParser implements PsiParser {
     return r;
   }
 
-  // '[' (SliceExprBody | IndexExprBody) ']'
+  // '[' <<enterMode "PAR">> (SliceExprBody | IndexExprBody) <<exitModeSafe "PAR">> ']'
   private static boolean IndexOrSliceExpr_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IndexOrSliceExpr_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeTokenSmart(b, LBRACK);
-    r = r && IndexOrSliceExpr_0_1(b, l + 1);
+    r = r && enterMode(b, l + 1, "PAR");
+    r = r && IndexOrSliceExpr_0_2(b, l + 1);
+    r = r && exitModeSafe(b, l + 1, "PAR");
     r = r && consumeToken(b, RBRACK);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // SliceExprBody | IndexExprBody
-  private static boolean IndexOrSliceExpr_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "IndexOrSliceExpr_0_1")) return false;
+  private static boolean IndexOrSliceExpr_0_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IndexOrSliceExpr_0_2")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = SliceExprBody(b, l + 1);

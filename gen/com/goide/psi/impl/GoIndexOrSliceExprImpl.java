@@ -34,9 +34,9 @@ public class GoIndexOrSliceExprImpl extends GoExpressionImpl implements GoIndexO
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getRbrack() {
-    return findNotNullChildByType(RBRACK);
+    return findChildByType(RBRACK);
   }
 
 }

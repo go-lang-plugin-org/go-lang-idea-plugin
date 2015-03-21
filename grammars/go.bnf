@@ -361,7 +361,7 @@ private unary_op ::= '+' | '-' | '!' | '^' | '*' | '&' | '<-'
 MethodExpr ::= ReceiverType '.' identifier
 ReceiverType ::= TypeName | '(' '*' TypeName ')' | '(' ReceiverType ')'
 SelectorExpr ::= Expression '.' !('(' 'type') Expression
-IndexOrSliceExpr ::= Expression '[' (SliceExprBody | IndexExprBody) ']'
+IndexOrSliceExpr ::= Expression '[' <<enterMode "PAR">> (SliceExprBody | IndexExprBody) <<exitModeSafe "PAR">> ']' {pin=2}
 private IndexExprBody ::= Expression SliceExprBodyInner?
 private inner SliceExprBodyInner ::= SliceExprBody
 private SliceExprBody ::= &':' (':' Expression ':' Expression) | (':' Expression?)

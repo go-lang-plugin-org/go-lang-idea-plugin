@@ -1,0 +1,58 @@
+GO_FILE
+  PACKAGE_CLAUSE
+    PsiElement(package)('package')
+    PsiElement(identifier)('main')
+  IMPORT_LIST
+    <empty list>
+  FUNCTION_DECLARATION
+    PsiElement(func)('func')
+    PsiElement(identifier)('main')
+    SIGNATURE
+      PARAMETERS
+        PsiElement(()('(')
+        PsiElement())(')')
+    BLOCK
+      PsiElement({)('{')
+      IF_STATEMENT
+        PsiElement(if)('if')
+        SIMPLE_STATEMENT
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('allowedErrors')
+        COMPOSITE_LIT
+          LITERAL_TYPE_EXPR
+            ARRAY_OR_SLICE_TYPE
+              PsiElement([)('[')
+              COMPOSITE_LIT
+                LITERAL_TYPE_EXPR
+                  TYPE_REFERENCE_EXPRESSION
+                    PsiElement(identifier)('osPkg')
+                LITERAL_VALUE
+                  PsiElement({)('{')
+                  ELEMENT
+                    VALUE
+                      STRING_LITERAL
+                        PsiElement(string)('""')
+                  PsiElement(,)(',')
+                  ELEMENT
+                    VALUE
+                      STRING_LITERAL
+                        PsiElement(string)('""')
+                  PsiElement(})('}')
+              PsiElement(])(']')
+              PsiErrorElement:<type> expected, got '{'
+                <empty list>
+          LITERAL_VALUE
+            PsiElement({)('{')
+            PsiElement(})('}')
+        PsiErrorElement:'!=', '%', '&', '&^', '(', '*', '+', '-', '/', <, <<, <=, '==', '>', '>=', '>>', '^', '{' or '|' expected, got ''
+          <empty list>
+      PsiElement(})('}')
+  PsiComment(GO_LINE_COMMENT)('// type osPkg struct {')
+  PsiComment(GO_LINE_COMMENT)('//     goos, pkg string')
+  PsiComment(GO_LINE_COMMENT)('// }')
+  PsiComment(GO_LINE_COMMENT)('// ')
+  PsiComment(GO_LINE_COMMENT)('// ')
+  PsiComment(GO_LINE_COMMENT)('// var allowedErrors = map[osPkg]bool{')
+  PsiComment(GO_LINE_COMMENT)('//     osPkg{"windows", "log/syslog"}: true,')
+  PsiComment(GO_LINE_COMMENT)('//     osPkg{"plan9", "log/syslog"}:   true,')
+  PsiComment(GO_LINE_COMMENT)('// }')
