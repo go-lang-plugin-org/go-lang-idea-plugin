@@ -398,8 +398,7 @@ TypeCaseClause ::= TypeSwitchCase ':' Statements?
 TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
 TypeList ::= Type ( ',' Type )*
 TypeListNoPin ::= Type ( ',' Type )* {elementType=TypeList}
-ForStatement ::= for <<enterMode "BLOCK?">> (ForOrRangeClause ForBlock | ForBlock | Expression ForBlock) <<exitModeSafe "BLOCK?">> {pin(".*")="for|ForOrRangeClause"}
-private ForBlock ::= <<exitModeSafe "BLOCK?">> Block
+ForStatement ::= for <<enterMode "BLOCK?">> (ForOrRangeClause Block | Block | Expression Block) <<exitModeSafe "BLOCK?">> {pin(".*")="for|ForOrRangeClause"}
 private ForOrRangeClause ::= ForClause | RangeClause
 ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement? {methods=[processDeclarations]}
 RangeClause ::= ExpressionsOrVariables? range Expression {pin=2 extends=VarSpec}

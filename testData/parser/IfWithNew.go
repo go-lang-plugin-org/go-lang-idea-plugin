@@ -11,6 +11,11 @@ func (sh serverHandler) ServeHTTP(rw ResponseWriter, req *Request) {
   for {
         w, err := c.readRequest()
   }
+  
+  for atomic.LoadUint32(&x) != expected {
+  
+  }
+  
   if req.RequestURI == "*" && req.Method == "OPTIONS" {
         handler = globalOptionsHandler{}
   }

@@ -1619,18 +1619,6 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // <<exitModeSafe "BLOCK?">> Block
-  static boolean ForBlock(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ForBlock")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = exitModeSafe(b, l + 1, "BLOCK?");
-    r = r && Block(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  /* ********************************************************** */
   // SimpleStatement? ';' Expression? ';' SimpleStatement?
   public static boolean ForClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForClause")) return false;
@@ -1679,7 +1667,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // for <<enterMode "BLOCK?">> (ForOrRangeClause ForBlock | ForBlock | Expression ForBlock) <<exitModeSafe "BLOCK?">>
+  // for <<enterMode "BLOCK?">> (ForOrRangeClause Block | Block | Expression Block) <<exitModeSafe "BLOCK?">>
   public static boolean ForStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForStatement")) return false;
     if (!nextTokenIs(b, FOR)) return false;
@@ -1694,37 +1682,37 @@ public class GoParser implements PsiParser {
     return r || p;
   }
 
-  // ForOrRangeClause ForBlock | ForBlock | Expression ForBlock
+  // ForOrRangeClause Block | Block | Expression Block
   private static boolean ForStatement_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForStatement_2")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = ForStatement_2_0(b, l + 1);
-    if (!r) r = ForBlock(b, l + 1);
+    if (!r) r = Block(b, l + 1);
     if (!r) r = ForStatement_2_2(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // ForOrRangeClause ForBlock
+  // ForOrRangeClause Block
   private static boolean ForStatement_2_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForStatement_2_0")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, null);
     r = ForOrRangeClause(b, l + 1);
     p = r; // pin = for|ForOrRangeClause
-    r = r && ForBlock(b, l + 1);
+    r = r && Block(b, l + 1);
     exit_section_(b, l, m, null, r, p, null);
     return r || p;
   }
 
-  // Expression ForBlock
+  // Expression Block
   private static boolean ForStatement_2_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForStatement_2_2")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = Expression(b, l + 1, -1);
-    r = r && ForBlock(b, l + 1);
+    r = r && Block(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }

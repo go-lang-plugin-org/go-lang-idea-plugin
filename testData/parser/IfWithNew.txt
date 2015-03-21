@@ -61,6 +61,28 @@ GO_FILE
                   PsiElement(()('(')
                   PsiElement())(')')
           PsiElement(})('}')
+      FOR_STATEMENT
+        PsiElement(for)('for')
+        CONDITIONAL_EXPR
+          CALL_EXPR
+            REFERENCE_EXPRESSION
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('atomic')
+              PsiElement(.)('.')
+              PsiElement(identifier)('LoadUint32')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              UNARY_EXPR
+                PsiElement(&)('&')
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('x')
+              PsiElement())(')')
+          PsiElement(!=)('!=')
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('expected')
+        BLOCK
+          PsiElement({)('{')
+          PsiElement(})('}')
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
