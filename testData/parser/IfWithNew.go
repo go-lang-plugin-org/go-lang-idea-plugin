@@ -16,6 +16,12 @@ func (sh serverHandler) ServeHTTP(rw ResponseWriter, req *Request) {
   
   }
   
+  for ; ; c <- *a[S{}.i] {
+          if t != nil {
+                  break
+          }
+  }
+  
   if req.RequestURI == "*" && req.Method == "OPTIONS" {
         handler = globalOptionsHandler{}
   }

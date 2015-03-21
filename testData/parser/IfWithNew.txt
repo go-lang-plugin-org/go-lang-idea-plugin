@@ -83,6 +83,50 @@ GO_FILE
         BLOCK
           PsiElement({)('{')
           PsiElement(})('}')
+      FOR_STATEMENT
+        PsiElement(for)('for')
+        FOR_CLAUSE
+          PsiElement(;)(';')
+          PsiElement(;)(';')
+          SEND_STATEMENT
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('c')
+            PsiElement(<-)('<-')
+            UNARY_EXPR
+              PsiElement(*)('*')
+              INDEX_OR_SLICE_EXPR
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('a')
+                PsiElement([)('[')
+                SELECTOR_EXPR
+                  COMPOSITE_LIT
+                    LITERAL_TYPE_EXPR
+                      TYPE_REFERENCE_EXPRESSION
+                        PsiElement(identifier)('S')
+                    LITERAL_VALUE
+                      PsiElement({)('{')
+                      PsiElement(})('}')
+                  PsiElement(.)('.')
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('i')
+                PsiElement(])(']')
+        BLOCK
+          PsiElement({)('{')
+          IF_STATEMENT
+            PsiElement(if)('if')
+            SIMPLE_STATEMENT
+              CONDITIONAL_EXPR
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('t')
+                PsiElement(!=)('!=')
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('nil')
+            BLOCK
+              PsiElement({)('{')
+              BREAK_STATEMENT
+                PsiElement(break)('break')
+              PsiElement(})('}')
+          PsiElement(})('}')
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
