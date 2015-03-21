@@ -115,12 +115,9 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     return new MyScopeProcessor() {
       @Override
       public boolean execute(@NotNull PsiElement o, @NotNull ResolveState state) {
-        if (o instanceof GoNamedElement && !((GoNamedElement)o).isBlank() ||
-            o instanceof GoImportSpec && !((GoImportSpec)o).isDot()) {
-          if (filter.value(o)) {
-            ContainerUtil.addIfNotNull(variants, createLookup(o, state));
-          }
-          return true;
+        if ((o instanceof GoNamedElement && !((GoNamedElement)o).isBlank() || o instanceof GoImportSpec && !((GoImportSpec)o).isDot()) &&
+            filter.value(o)) {
+          ContainerUtil.addIfNotNull(variants, createLookup(o, state));
         }
         return true;
       }
