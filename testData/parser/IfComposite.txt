@@ -16,12 +16,70 @@ GO_FILE
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          REFERENCE_EXPRESSION
-            PsiElement(identifier)('allowedErrors')
-        COMPOSITE_LIT
-          LITERAL_TYPE_EXPR
-            ARRAY_OR_SLICE_TYPE
-              PsiElement([)('[')
+          INDEX_OR_SLICE_EXPR
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('allowedErrors')
+            PsiElement([)('[')
+            COMPOSITE_LIT
+              LITERAL_TYPE_EXPR
+                TYPE_REFERENCE_EXPRESSION
+                  PsiElement(identifier)('osPkg')
+              LITERAL_VALUE
+                PsiElement({)('{')
+                ELEMENT
+                  VALUE
+                    STRING_LITERAL
+                      PsiElement(string)('""')
+                PsiElement(,)(',')
+                ELEMENT
+                  VALUE
+                    STRING_LITERAL
+                      PsiElement(string)('""')
+                PsiElement(})('}')
+            PsiElement(])(']')
+        BLOCK
+          PsiElement({)('{')
+          PsiElement(})('}')
+      PsiElement(})('}')
+  TYPE_DECLARATION
+    PsiElement(type)('type')
+    TYPE_SPEC
+      PsiElement(identifier)('osPkg')
+      STRUCT_TYPE
+        PsiElement(struct)('struct')
+        PsiElement({)('{')
+        FIELD_DECLARATION
+          FIELD_DEFINITION
+            PsiElement(identifier)('goos')
+          PsiElement(,)(',')
+          FIELD_DEFINITION
+            PsiElement(identifier)('pkg')
+          TYPE
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('string')
+        PsiElement(})('}')
+  VAR_DECLARATION
+    PsiElement(var)('var')
+    VAR_SPEC
+      VAR_DEFINITION
+        PsiElement(identifier)('allowedErrors')
+      PsiElement(=)('=')
+      COMPOSITE_LIT
+        LITERAL_TYPE_EXPR
+          MAP_TYPE
+            PsiElement(map)('map')
+            PsiElement([)('[')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('osPkg')
+            PsiElement(])(']')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('bool')
+        LITERAL_VALUE
+          PsiElement({)('{')
+          ELEMENT
+            KEY
               COMPOSITE_LIT
                 LITERAL_TYPE_EXPR
                   TYPE_REFERENCE_EXPRESSION
@@ -31,28 +89,39 @@ GO_FILE
                   ELEMENT
                     VALUE
                       STRING_LITERAL
-                        PsiElement(string)('""')
+                        PsiElement(string)('"windows"')
                   PsiElement(,)(',')
                   ELEMENT
                     VALUE
                       STRING_LITERAL
-                        PsiElement(string)('""')
+                        PsiElement(string)('"log/syslog"')
                   PsiElement(})('}')
-              PsiElement(])(']')
-              PsiErrorElement:<type> expected, got '{'
-                <empty list>
-          LITERAL_VALUE
-            PsiElement({)('{')
-            PsiElement(})('}')
-        PsiErrorElement:'!=', '%', '&', '&^', '(', '*', '+', '-', '/', <, <<, <=, '==', '>', '>=', '>>', '^', '{' or '|' expected, got ''
-          <empty list>
-      PsiElement(})('}')
-  PsiComment(GO_LINE_COMMENT)('// type osPkg struct {')
-  PsiComment(GO_LINE_COMMENT)('//     goos, pkg string')
-  PsiComment(GO_LINE_COMMENT)('// }')
-  PsiComment(GO_LINE_COMMENT)('// ')
-  PsiComment(GO_LINE_COMMENT)('// ')
-  PsiComment(GO_LINE_COMMENT)('// var allowedErrors = map[osPkg]bool{')
-  PsiComment(GO_LINE_COMMENT)('//     osPkg{"windows", "log/syslog"}: true,')
-  PsiComment(GO_LINE_COMMENT)('//     osPkg{"plan9", "log/syslog"}:   true,')
-  PsiComment(GO_LINE_COMMENT)('// }')
+            PsiElement(:)(':')
+            VALUE
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('true')
+          PsiElement(,)(',')
+          ELEMENT
+            KEY
+              COMPOSITE_LIT
+                LITERAL_TYPE_EXPR
+                  TYPE_REFERENCE_EXPRESSION
+                    PsiElement(identifier)('osPkg')
+                LITERAL_VALUE
+                  PsiElement({)('{')
+                  ELEMENT
+                    VALUE
+                      STRING_LITERAL
+                        PsiElement(string)('"plan9"')
+                  PsiElement(,)(',')
+                  ELEMENT
+                    VALUE
+                      STRING_LITERAL
+                        PsiElement(string)('"log/syslog"')
+                  PsiElement(})('}')
+            PsiElement(:)(':')
+            VALUE
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('true')
+          PsiElement(,)(',')
+          PsiElement(})('}')
