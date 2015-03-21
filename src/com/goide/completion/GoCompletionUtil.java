@@ -19,6 +19,7 @@ package com.goide.completion;
 import com.goide.GoIcons;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
+import com.goide.stubs.GoFieldDefinitionStub;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.completion.PrioritizedLookupElement;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
@@ -27,6 +28,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.PlatformIcons;
 import com.intellij.util.ui.UIUtil;
@@ -111,8 +113,7 @@ public class GoCompletionUtil {
         text = GoPsiImplUtil.getText((GoInterfaceType)parent);
       }
     }
-    if (!StringUtil.isEmpty(text)) return " " + UIUtil.rightArrow() + " " + text;
-    return null;
+    return StringUtil.isNotEmpty(text) ? " " + UIUtil.rightArrow() + " " + text : null;
   }
 
   @NotNull
@@ -182,9 +183,20 @@ public class GoCompletionUtil {
       LookupElementBuilder.create(v, name)
         .withLookupString(name.toLowerCase())
         .withIcon(icon)
-        .withTypeText(text, true),
-      VAR_PRIORITY);
+        .withTailText(calcTailTextForFields(v), true)
+        .withTypeText(text, true), VAR_PRIORITY);
   }
+
+  @Nullable
+  private static String calcTailTextForFields(@NotNull GoNamedElement v) {
+    String name = null;
+    if (v instanceof GoFieldDefinition) {
+      GoFieldDefinitionStub stub = ((GoFieldDefinition)v).getStub();
+      GoTypeSpec spec = stub != null ? stub.getParentStubOfType(GoTypeSpec.class) : PsiTreeUtil.getParentOfType(v, GoTypeSpec.class);
+      name = spec != null ? spec.getName() : null;
+    }
+    return StringUtil.isNotEmpty(name) ? " " + UIUtil.rightArrow() + " " + name : null;
+  } 
 
   @Nullable
   public static LookupElement createPackageLookupElement(@NotNull GoImportSpec spec, @Nullable String name) {
