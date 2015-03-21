@@ -46,7 +46,8 @@ public class GoParameterInfoHandlerTest extends GoCodeInsightFixtureTestCase {
   public void testMethParam()         { doTest(1, "<html>num int, <b>text string</b></html>"); } 
   public void testMethParamNone()     { doTest(0, ""); } 
   public void testMethParamEllipsis() { doTest(5, "<html>num int, text string, <b>more ...int</b></html>"); }
-  
+  public void testFieldMethCall()     { doTest(0, "<html><b>a int</b>, b int</html>"); }
+
   private void doTest(int expectedParamIdx, String expectedPresentation) {
     // Given
     myFixture.configureByFile(getTestName(true) + ".go");
