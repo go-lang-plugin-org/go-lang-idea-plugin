@@ -44,6 +44,16 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
                                      @SuppressWarnings({"UnusedParameters", "For future"}) @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
+      public void visitFieldName(@NotNull GoFieldName o) {
+        super.visitFieldName(o);
+        PsiElement resolve = o.getReference().resolve();
+        if (resolve == null) {
+          PsiElement id = o.getIdentifier();
+          holder.registerProblem(id, "unknown field '" + id.getText() + "' in struct literal", LIKE_UNKNOWN_SYMBOL);
+        }
+      }
+
+      @Override
       public void visitReferenceExpression(@NotNull GoReferenceExpression o) {
         super.visitReferenceExpression(o);
         GoReference reference = o.getReference();
