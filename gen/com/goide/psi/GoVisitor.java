@@ -302,7 +302,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitSelectorExpr(@NotNull GoSelectorExpr o) {
-    visitExpression(o);
+    visitBinaryExpr(o);
   }
 
   public void visitSendStatement(@NotNull GoSendStatement o) {

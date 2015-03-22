@@ -68,7 +68,7 @@
     raw_string           = 'raw_string'
   ]
 
-  extends("(Or|Add|Conversion|Mul)Expr")=BinaryExpr
+  extends("(Or|Add|Conversion|Mul|Selector)Expr")=BinaryExpr
   extends(".*(Expr|Literal|Lit|OperandName)")=Expression
 
   implements("TypeSpec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver")="com.goide.psi.GoNamedElement"
@@ -327,7 +327,9 @@ Expression ::=
   | MaxGroup
   | ParenthesesExpr {methods=[getGoType] implements="com.goide.psi.GoTypeOwner"}
 
-fake BinaryExpr ::=
+fake BinaryExpr ::= Expression+{
+  methods=[left="Expression[0]" right="Expression[1]"]
+}
 
 OrExpr ::= Expression '||' Expression
 AndExpr ::= Expression '&&' Expression

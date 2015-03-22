@@ -21,4 +21,24 @@ public class GoBinaryExprImpl extends GoExpressionImpl implements GoBinaryExpr {
     else super.accept(visitor);
   }
 
+  @Override
+  @NotNull
+  public List<GoExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
+  }
+
+  @Override
+  @NotNull
+  public GoExpression getLeft() {
+    List<GoExpression> p1 = getExpressionList();
+    return p1.get(0);
+  }
+
+  @Override
+  @Nullable
+  public GoExpression getRight() {
+    List<GoExpression> p1 = getExpressionList();
+    return p1.size() < 2 ? null : p1.get(1);
+  }
+
 }

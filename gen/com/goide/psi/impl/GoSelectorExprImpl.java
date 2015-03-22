@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoSelectorExprImpl extends GoExpressionImpl implements GoSelectorExpr {
+public class GoSelectorExprImpl extends GoBinaryExprImpl implements GoSelectorExpr {
 
   public GoSelectorExprImpl(ASTNode node) {
     super(node);

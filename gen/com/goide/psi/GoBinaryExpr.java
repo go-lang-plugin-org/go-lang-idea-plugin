@@ -7,4 +7,13 @@ import com.intellij.psi.PsiElement;
 
 public interface GoBinaryExpr extends GoExpression {
 
+  @NotNull
+  List<GoExpression> getExpressionList();
+
+  @NotNull
+  GoExpression getLeft();
+
+  @Nullable
+  GoExpression getRight();
+
 }
