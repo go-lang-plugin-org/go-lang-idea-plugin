@@ -33,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.List;
 
-public class GoFieldNameReference extends GoCachedReference<GoFieldName> {
+public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressionBase> {
   private GoCompositeElement myValue;
 
   @NotNull
@@ -46,9 +46,8 @@ public class GoFieldNameReference extends GoCachedReference<GoFieldName> {
     };
   }
 
-  public GoFieldNameReference(@NotNull GoFieldName element) {
+  public GoFieldNameReference(@NotNull GoReferenceExpressionBase element) {
     super(element);
-    
     GoCompositeElement place = myElement;
     while ((place = PsiTreeUtil.getParentOfType(place, GoLiteralValue.class)) != null) {
       if (place.getParent() instanceof GoValue) {
@@ -59,6 +58,10 @@ public class GoFieldNameReference extends GoCachedReference<GoFieldName> {
   }
 
   private boolean processFields(@NotNull GoScopeProcessorBase processor) {
+    GoKey key = PsiTreeUtil.getParentOfType(myElement, GoKey.class);
+    GoValue value = PsiTreeUtil.getParentOfType(myElement, GoValue.class);
+    if (key == null && (value == null || PsiTreeUtil.getPrevSiblingOfType(value, GoKey.class) != null)) return false;
+
     GoCompositeLit lit = PsiTreeUtil.getParentOfType(myElement, GoCompositeLit.class);
     GoLiteralTypeExpr expr = lit != null ? lit.getLiteralTypeExpr() : null;
     if (expr == null) return false;

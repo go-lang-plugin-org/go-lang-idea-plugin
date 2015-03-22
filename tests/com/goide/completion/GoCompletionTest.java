@@ -16,6 +16,7 @@
 
 package com.goide.completion;
 
+import com.intellij.codeInsight.lookup.Lookup;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.TreePrintCondition;
@@ -332,6 +333,29 @@ public class GoCompletionTest extends GoCompletionTestBase {
                   "    for _, v := range (*<caret>) {\n" +
                   "    }\n" +
                   "}", "fooVar");
+  }
+
+  private static final String TYPE = "package main;\n" +
+                                     "type WaitGroup struct {\n" +
+                                     "    counter int32\n" +
+                                     "    waiters int32\n" +
+                                     "    sema    *uint32\n" +
+                                     "}\n";
+
+  public void testStructField() {
+    doTestInclude(TYPE + "func main() {WaitGroup{<caret>}};", "counter", "waiters", "sema");
+  }
+  
+  public void testStructField2() {
+    doTestInclude(TYPE + "func main() {WaitGroup{foo:bar, <caret>}};", "counter", "waiters", "sema");
+  }
+  
+  public void testStructFieldReplace() {
+    doCheckResult(TYPE + "func main() { WaitGroup{sem<caret>abc} }", TYPE + "func main() { WaitGroup{sema:<caret>} }", Lookup.REPLACE_SELECT_CHAR);
+  }
+  
+  public void testNoStructFieldAfterColon() {
+    doTestExclude(TYPE + "func main() {WaitGroup{sema:<caret>}};", "counter", "waiters", "sema");
   }
 
   public void testStructConstructions() {

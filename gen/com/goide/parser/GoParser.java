@@ -2128,14 +2128,15 @@ public class GoParser implements PsiParser {
   // (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">>) '{' ElementList? '}'
   public static boolean LiteralValue(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LiteralValue")) return false;
-    boolean r;
+    boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, "<literal value>");
     r = LiteralValue_0(b, l + 1);
     r = r && consumeToken(b, LBRACE);
-    r = r && LiteralValue_2(b, l + 1);
-    r = r && consumeToken(b, RBRACE);
-    exit_section_(b, l, m, LITERAL_VALUE, r, false, null);
-    return r;
+    p = r; // pin = 2
+    r = r && report_error_(b, LiteralValue_2(b, l + 1));
+    r = p && consumeToken(b, RBRACE) && r;
+    exit_section_(b, l, m, LITERAL_VALUE, r, p, null);
+    return r || p;
   }
 
   // <<isModeOff "BLOCK?">> | <<isModeOn "PAR">>

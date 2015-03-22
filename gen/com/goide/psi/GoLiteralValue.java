@@ -13,7 +13,7 @@ public interface GoLiteralValue extends GoCompositeElement {
   @NotNull
   PsiElement getLbrace();
 
-  @NotNull
+  @Nullable
   PsiElement getRbrace();
 
 }

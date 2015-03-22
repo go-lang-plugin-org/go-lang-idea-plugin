@@ -34,9 +34,9 @@ public class GoLiteralValueImpl extends GoCompositeElementImpl implements GoLite
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getRbrace() {
-    return findNotNullChildByType(RBRACE);
+    return findChildByType(RBRACE);
   }
 
 }

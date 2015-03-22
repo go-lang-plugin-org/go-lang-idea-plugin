@@ -21,6 +21,7 @@ import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.stubs.GoFieldDefinitionStub;
 import com.intellij.codeInsight.completion.InsertHandler;
+import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.completion.PrioritizedLookupElement;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -28,6 +29,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.PlatformIcons;
@@ -179,12 +181,28 @@ public class GoCompletionUtil {
     GoType type = v.getGoType(null);
     String text = GoPsiImplUtil.getText(type);
     String name = StringUtil.notNullize(v.getName());
+    SingleCharInsertHandler handler =
+      v instanceof GoFieldDefinition ?
+      new SingleCharInsertHandler(':') {
+        @Override
+        public void handleInsert(@NotNull InsertionContext context, LookupElement item) {
+          PsiFile file = context.getFile();
+          if (!(file instanceof GoFile)) return;
+          context.commitDocument();
+          int offset = context.getStartOffset();
+          PsiElement at = file.findElementAt(offset);
+          if (PsiTreeUtil.getParentOfType(at, GoValue.class) == null) return;
+          super.handleInsert(context, item);
+        }
+      } : null;
     return PrioritizedLookupElement.withPriority(
       LookupElementBuilder.create(v, name)
         .withLookupString(name.toLowerCase())
         .withIcon(icon)
         .withTailText(calcTailTextForFields(v), true)
-        .withTypeText(text, true), VAR_PRIORITY);
+        .withTypeText(text, true)
+        .withInsertHandler(handler)
+      , VAR_PRIORITY);
   }
 
   @Nullable
