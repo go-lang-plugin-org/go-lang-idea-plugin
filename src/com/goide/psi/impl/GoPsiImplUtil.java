@@ -871,7 +871,21 @@ public class GoPsiImplUtil {
   public static PsiReference getCallReference(@Nullable GoExpression first) {
     if (!(first instanceof GoCallExpr)) return null;
     GoExpression e = ((GoCallExpr)first).getExpression();
+    if (e instanceof GoSelectorExpr) {
+      return getCallReferenceFromSelectorExpr((GoSelectorExpr)e);
+    }
     GoReferenceExpression r = e instanceof GoReferenceExpression ? ((GoReferenceExpression)e) : PsiTreeUtil.getChildOfType(e, GoReferenceExpression.class);
     return (r != null ? r : e).getReference();
+  }
+
+  @Nullable
+  private static PsiReference getCallReferenceFromSelectorExpr(@NotNull GoSelectorExpr selectorExpr) {
+    if (selectorExpr.getChildren().length < 2) {
+      return null;
+    }
+    if (!(selectorExpr.getChildren()[1] instanceof GoReferenceExpression)) {
+      return null;
+    }
+    return ((GoReferenceExpression)selectorExpr.getChildren()[1]).getReference();
   }
 }
