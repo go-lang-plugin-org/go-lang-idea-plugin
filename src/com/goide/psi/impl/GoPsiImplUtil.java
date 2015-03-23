@@ -25,6 +25,7 @@ import com.goide.stubs.GoParameterDeclarationStub;
 import com.goide.stubs.GoTypeStub;
 import com.goide.stubs.index.GoMethodIndex;
 import com.goide.util.GoStringLiteralEscaper;
+import com.goide.util.GoUtil;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
@@ -161,7 +162,19 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static PsiReference getReference(@NotNull GoFieldName o) {
-    return new PsiMultiReference(new PsiReference[]{ new GoFieldNameReference(o), new GoReference(o)}, o);
+    return new PsiMultiReference(new PsiReference[]{new GoFieldNameReference(o), new GoReference(o)}, o) {
+      @Override
+      public PsiElement resolve() {
+        PsiReference[] refs = getReferences();
+        PsiElement resolve = refs.length > 0 ? refs[0].resolve() : null;
+        if (resolve != null) return resolve;
+        return refs.length > 1 ? refs[1].resolve() : null;
+      }
+
+      public boolean isReferenceTo(PsiElement element) {
+        return GoUtil.couldBeReferenceTo(element, getElement()) && getElement().getManager().areElementsEquivalent(resolve(), element);
+      }
+    };
   }
 
   @Nullable

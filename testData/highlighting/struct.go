@@ -104,3 +104,15 @@ type aaa interface {
           <error>A</error>()
     }
 }
+
+type A struct {
+    b int
+    c int
+}
+
+func <warning>NewA</warning>(b int) *A {
+    return &A{
+        b: b, // Reported error: "unknown field b", but that is not correct
+        c: 1,
+    }
+}
