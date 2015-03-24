@@ -67,6 +67,11 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
       if (block != null && block.getTextRange().getLength() > 1) result.add(new FoldingDescriptor(block, block.getTextRange()));
     }
 
+    for (GoFunctionLit function : PsiTreeUtil.findChildrenOfType(file, GoFunctionLit.class)) {
+      GoBlock block = function.getBlock();
+      if (block != null && block.getTextRange().getLength() > 1) result.add(new FoldingDescriptor(block, block.getTextRange()));
+    }
+
     for (GoTypeSpec type : file.getTypes()) {
       foldTypes(type.getType(), result);
     }

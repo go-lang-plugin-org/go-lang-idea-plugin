@@ -13,6 +13,12 @@ func (i int) test() <fold text='{...}'>{
   return 1
 }</fold>
 
+SomeMethod(func() <fold text='{...}'>{
+    SomeOtherMethod(func() <fold text='{...}'>{
+        return 1
+    }</fold>)
+}</fold>)
+
 type A struct <fold text='{...}'>{
     in int
 }</fold>
