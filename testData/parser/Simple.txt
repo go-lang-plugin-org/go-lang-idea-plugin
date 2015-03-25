@@ -1448,16 +1448,19 @@ GO_FILE
           VAR_DEFINITION
             PsiElement(identifier)('i')
           PsiElement(:=)(':=')
-          COMPOSITE_LIT
-            LITERAL_TYPE_EXPR
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('M')
-            LITERAL_VALUE
-              PsiElement({)('{')
-              PsiElement(})('}')
-          PsiElement(,)(',')
-          LITERAL
-            PsiElement(int)('10')
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('M')
+      PsiErrorElement:',', ';', <NL> or '}' expected, got '{'
+        <empty list>
+      STATEMENT
+        BLOCK
+          PsiElement({)('{')
+          PsiElement(})('}')
+      PsiErrorElement:';', <NL> or '}' expected, got ','
+        PsiElement(,)(',')
+      SIMPLE_STATEMENT
+        LITERAL
+          PsiElement(int)('10')
       PsiElement(;)(';')
       SIMPLE_STATEMENT
         CONDITIONAL_EXPR

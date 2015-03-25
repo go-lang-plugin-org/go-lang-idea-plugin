@@ -185,7 +185,7 @@ MapType ::= map '[' Type ']' Type {
 ChannelType ::= ChanTypePrefix Type {pin=1}
 private ChanTypePrefix ::= chan '<-'? | '<-' chan {pin(".*")=1}
 
-Block ::= <<consumeBlock>> | '{' <<exitModeSafe "PAR">> ('}' | Statements '}') {pin(".*")=1 methods=[processDeclarations]}
+Block ::= <<consumeBlock>> | '{' <<exitModeSafe "PAR">> <<exitModeSafe "BLOCK?">> ('}' | Statements '}') {pin(".*")=1 methods=[processDeclarations]}
 private Statements ::= StatementWithSemi*
 
 private StatementWithSemi ::= Statement (semi|&'}') { pin=1 recoverWhile=StatementRecover }
@@ -400,8 +400,8 @@ TypeCaseClause ::= TypeSwitchCase ':' Statements?
 TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
 TypeList ::= Type ( ',' Type )*
 TypeListNoPin ::= Type ( ',' Type )* {elementType=TypeList}
-ForStatement ::= for <<enterMode "BLOCK?">> (ForOrRangeClause Block | Block | Expression Block) <<exitModeSafe "BLOCK?">> {pin(".*")="for|ForOrRangeClause"}
-private ForOrRangeClause ::= ForClause | RangeClause
+ForStatement ::= for <<enterMode "BLOCK?">> (ForOrRangeClause Block | Block | Expression Block) {pin(".*")="for|ForOrRangeClause"}
+private ForOrRangeClause ::= (ForClause | RangeClause)
 ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement? {methods=[processDeclarations]}
 RangeClause ::= ExpressionsOrVariables? range Expression {pin=2 extends=VarSpec}
 private ExpressionsOrVariables ::= ExpressionList '=' | VarDefinitionList ':='

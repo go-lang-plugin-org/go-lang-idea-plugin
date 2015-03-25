@@ -165,4 +165,21 @@ GO_FILE
                 PsiElement({)('{')
                 PsiElement(})('}')
           PsiElement(})('}')
+      FOR_STATEMENT
+        PsiElement(for)('for')
+        BLOCK
+          PsiElement({)('{')
+          ASSIGNMENT_STATEMENT
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('handler')
+            ASSIGN_OP
+              PsiElement(=)('=')
+            COMPOSITE_LIT
+              LITERAL_TYPE_EXPR
+                TYPE_REFERENCE_EXPRESSION
+                  PsiElement(identifier)('globalOptionsHandler')
+              LITERAL_VALUE
+                PsiElement({)('{')
+                PsiElement(})('}')
+          PsiElement(})('}')
       PsiElement(})('}')

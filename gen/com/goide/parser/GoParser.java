@@ -473,7 +473,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // <<consumeBlock>> | '{' <<exitModeSafe "PAR">> ('}' | Statements '}')
+  // <<consumeBlock>> | '{' <<exitModeSafe "PAR">> <<exitModeSafe "BLOCK?">> ('}' | Statements '}')
   public static boolean Block(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Block")) return false;
     boolean r;
@@ -484,7 +484,7 @@ public class GoParser implements PsiParser {
     return r;
   }
 
-  // '{' <<exitModeSafe "PAR">> ('}' | Statements '}')
+  // '{' <<exitModeSafe "PAR">> <<exitModeSafe "BLOCK?">> ('}' | Statements '}')
   private static boolean Block_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Block_1")) return false;
     boolean r, p;
@@ -492,25 +492,26 @@ public class GoParser implements PsiParser {
     r = consumeToken(b, LBRACE);
     p = r; // pin = 1
     r = r && report_error_(b, exitModeSafe(b, l + 1, "PAR"));
-    r = p && Block_1_2(b, l + 1) && r;
+    r = p && report_error_(b, exitModeSafe(b, l + 1, "BLOCK?")) && r;
+    r = p && Block_1_3(b, l + 1) && r;
     exit_section_(b, l, m, null, r, p, null);
     return r || p;
   }
 
   // '}' | Statements '}'
-  private static boolean Block_1_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Block_1_2")) return false;
+  private static boolean Block_1_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Block_1_3")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, RBRACE);
-    if (!r) r = Block_1_2_1(b, l + 1);
+    if (!r) r = Block_1_3_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // Statements '}'
-  private static boolean Block_1_2_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Block_1_2_1")) return false;
+  private static boolean Block_1_3_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Block_1_3_1")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, null);
     r = Statements(b, l + 1);
@@ -1668,7 +1669,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // for <<enterMode "BLOCK?">> (ForOrRangeClause Block | Block | Expression Block) <<exitModeSafe "BLOCK?">>
+  // for <<enterMode "BLOCK?">> (ForOrRangeClause Block | Block | Expression Block)
   public static boolean ForStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForStatement")) return false;
     if (!nextTokenIs(b, FOR)) return false;
@@ -1677,8 +1678,7 @@ public class GoParser implements PsiParser {
     r = consumeToken(b, FOR);
     p = r; // pin = for|ForOrRangeClause
     r = r && report_error_(b, enterMode(b, l + 1, "BLOCK?"));
-    r = p && report_error_(b, ForStatement_2(b, l + 1)) && r;
-    r = p && exitModeSafe(b, l + 1, "BLOCK?") && r;
+    r = p && ForStatement_2(b, l + 1) && r;
     exit_section_(b, l, m, FOR_STATEMENT, r, p, null);
     return r || p;
   }

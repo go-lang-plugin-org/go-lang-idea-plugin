@@ -25,4 +25,8 @@ func (sh serverHandler) ServeHTTP(rw ResponseWriter, req *Request) {
   if req.RequestURI == "*" && req.Method == "OPTIONS" {
         handler = globalOptionsHandler{}
   }
+  
+  for {
+          handler = globalOptionsHandler{}
+  }
 }
