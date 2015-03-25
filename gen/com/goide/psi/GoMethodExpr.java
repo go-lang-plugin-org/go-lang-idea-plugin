@@ -10,10 +10,10 @@ public interface GoMethodExpr extends GoExpression {
   @NotNull
   GoReceiverType getReceiverType();
 
-  @NotNull
-  PsiElement getDot();
+  @Nullable
+  GoReferenceExpression getReferenceExpression();
 
   @NotNull
-  PsiElement getIdentifier();
+  PsiElement getDot();
 
 }

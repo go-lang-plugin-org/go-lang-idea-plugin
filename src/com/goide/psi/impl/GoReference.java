@@ -75,7 +75,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   }
   
   @Override
-  public boolean isReferenceTo(PsiElement element) {
+  public boolean isReferenceTo(@NotNull PsiElement element) {
     return GoUtil.couldBeReferenceTo(element, myElement) && super.isReferenceTo(element);
   }
 
@@ -266,14 +266,18 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     PsiElement resolve = reference != null ? reference.resolve() : null;
     if (resolve instanceof GoTypeSpec) {
       GoType resolveType = ((GoTypeSpec)resolve).getType();
-      if (resolveType != null && (recursiveStopper == null || !resolveType.textMatches(recursiveStopper)) &&
-          !processGoType(resolveType, processor, state)) {
-        return false;
-      }
+      if (notMatchRecursiveStopper(recursiveStopper, resolveType) && !processGoType(resolveType, processor, state)) return false;
+    }
+    else if (resolve instanceof GoTypeOwner) {
+      GoType type = ((GoTypeOwner)resolve).getGoType(state);
+      if (notMatchRecursiveStopper(recursiveStopper, type) && !processGoType(type, processor, state)) return false;
     }
     return true;
   }
 
+  private static boolean notMatchRecursiveStopper(@Nullable GoType recursiveStopper, @Nullable GoType resolveType) {
+    return resolveType != null && (recursiveStopper == null || !resolveType.textMatches(recursiveStopper));
+  }
 
   @Nullable
   private static String getPath(@Nullable PsiFile file) {
@@ -305,6 +309,12 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
                                             @NotNull MyScopeProcessor processor,
                                             @NotNull ResolveState state,
                                             boolean localResolve) {
+    // todo: rewrite with qualification not with siblings
+    GoReceiverType receiverType = PsiTreeUtil.getPrevSiblingOfType(myElement, GoReceiverType.class);
+    if (receiverType != null) {
+      return processGoType(receiverType, processor, state);
+    }
+
     String id = getName();
     if ("_".equals(id)) return processor.execute(myElement, state);
 

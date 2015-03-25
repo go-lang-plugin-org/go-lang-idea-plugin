@@ -50,7 +50,7 @@ var t T
 
 func <warning>bar</warning>() {
     t.Mv(7)
-    T.Mv<error>(t, 7)</error>
+    T.Mv<error>(t, 7)</error> // todo: it's a greed code
     (T).Mv(t, 7)
     f1 := T.Mv; f1(t, 7)
     f2 := (T).Mv; f2(t, 7)

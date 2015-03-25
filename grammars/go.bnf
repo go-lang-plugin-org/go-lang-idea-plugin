@@ -360,7 +360,7 @@ private add_op ::= '+' | '-' | '|' | '^'
 private mul_op ::= '*' | '/' | '%' | '<<' | '>>' | '&' | '&^'
 private unary_op ::= '+' | '-' | '!' | '^' | '*' | '&' | '<-'
 
-MethodExpr ::= ReceiverType '.' identifier
+MethodExpr ::= ReceiverType '.' ReferenceExpression // todo: rewrite with qualification not with siblings
 ReceiverType ::= TypeName | '(' '*' TypeName ')' | '(' ReceiverType ')'
 SelectorExpr ::= Expression '.' !('(' 'type') Expression
 IndexOrSliceExpr ::= Expression '[' <<enterMode "PAR">> (SliceExprBody | IndexExprBody) <<exitModeSafe "PAR">> ']' {pin=2}

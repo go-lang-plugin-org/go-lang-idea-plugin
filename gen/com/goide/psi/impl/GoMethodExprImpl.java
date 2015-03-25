@@ -28,15 +28,15 @@ public class GoMethodExprImpl extends GoExpressionImpl implements GoMethodExpr {
   }
 
   @Override
-  @NotNull
-  public PsiElement getDot() {
-    return findNotNullChildByType(DOT);
+  @Nullable
+  public GoReferenceExpression getReferenceExpression() {
+    return findChildByClass(GoReferenceExpression.class);
   }
 
   @Override
   @NotNull
-  public PsiElement getIdentifier() {
-    return findNotNullChildByType(IDENTIFIER);
+  public PsiElement getDot() {
+    return findNotNullChildByType(DOT);
   }
 
 }

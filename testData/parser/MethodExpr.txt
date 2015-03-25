@@ -137,7 +137,8 @@ GO_FILE
                   PsiElement(identifier)('T')
               PsiElement())(')')
             PsiElement(.)('.')
-            PsiElement(identifier)('Mv')
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('Mv')
           ARGUMENT_LIST
             PsiElement(()('(')
             REFERENCE_EXPRESSION
@@ -182,7 +183,8 @@ GO_FILE
                   PsiElement(identifier)('T')
               PsiElement())(')')
             PsiElement(.)('.')
-            PsiElement(identifier)('Mv')
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('Mv')
       PsiElement(;)(';')
       SIMPLE_STATEMENT
         CALL_EXPR

@@ -254,6 +254,9 @@ public class GoPsiImplUtil {
       GoType type = o.getType();
       return type != null ? type.getTypeReferenceExpression() : null;
     }
+    if (o instanceof GoReceiverType) {
+      return PsiTreeUtil.findChildOfAnyType(o, GoTypeReferenceExpression.class);
+    }
     return o.getTypeReferenceExpression();
   }
 

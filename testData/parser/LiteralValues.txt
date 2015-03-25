@@ -1265,7 +1265,8 @@ GO_FILE
                                                                                                                                                                                                     PsiElement(identifier)('session')
                                                                                                                                                                                                   PsiElement())(')')
                                                                                                                                                                                                 PsiElement(.)('.')
-                                                                                                                                                                                                PsiElement(identifier)('θ_debug_ide')
+                                                                                                                                                                                                REFERENCE_EXPRESSION
+                                                                                                                                                                                                  PsiElement(identifier)('θ_debug_ide')
                                                                                                                                                                                           PsiElement(,)(',')
                                                                                                                                                                                           ELEMENT
                                                                                                                                                                                             VALUE
@@ -1407,7 +1408,8 @@ GO_FILE
                                                     PsiElement(identifier)('session')
                                                   PsiElement())(')')
                                                 PsiElement(.)('.')
-                                                PsiElement(identifier)('θ_echo')
+                                                REFERENCE_EXPRESSION
+                                                  PsiElement(identifier)('θ_echo')
                                           PsiElement(,)(',')
                                           ELEMENT
                                             VALUE
@@ -1581,7 +1583,8 @@ GO_FILE
                                                                     PsiElement(identifier)('session')
                                                                   PsiElement())(')')
                                                                 PsiElement(.)('.')
-                                                                PsiElement(identifier)('θ_get_output_type')
+                                                                REFERENCE_EXPRESSION
+                                                                  PsiElement(identifier)('θ_get_output_type')
                                                           PsiElement(,)(',')
                                                           ELEMENT
                                                             VALUE
@@ -1701,7 +1704,8 @@ GO_FILE
                                                                     PsiElement(identifier)('session')
                                                                   PsiElement())(')')
                                                                 PsiElement(.)('.')
-                                                                PsiElement(identifier)('θ_get_server_time')
+                                                                REFERENCE_EXPRESSION
+                                                                  PsiElement(identifier)('θ_get_server_time')
                                                           PsiElement(,)(',')
                                                           ELEMENT
                                                             VALUE
@@ -1769,7 +1773,8 @@ GO_FILE
                                     PsiElement(identifier)('session')
                                   PsiElement())(')')
                                 PsiElement(.)('.')
-                                PsiElement(identifier)('θ_quit')
+                                REFERENCE_EXPRESSION
+                                  PsiElement(identifier)('θ_quit')
                           PsiElement(,)(',')
                           ELEMENT
                             VALUE
@@ -2053,7 +2058,8 @@ GO_FILE
                                                                                                     PsiElement(identifier)('session')
                                                                                                   PsiElement())(')')
                                                                                                 PsiElement(.)('.')
-                                                                                                PsiElement(identifier)('θ_set_output_type')
+                                                                                                REFERENCE_EXPRESSION
+                                                                                                  PsiElement(identifier)('θ_set_output_type')
                                                                                           PsiElement(,)(',')
                                                                                           ELEMENT
                                                                                             VALUE
@@ -2233,7 +2239,8 @@ GO_FILE
                                                                     PsiElement(identifier)('session')
                                                                   PsiElement())(')')
                                                                 PsiElement(.)('.')
-                                                                PsiElement(identifier)('θ_get_server_time')
+                                                                REFERENCE_EXPRESSION
+                                                                  PsiElement(identifier)('θ_get_server_time')
                                                           PsiElement(,)(',')
                                                           ELEMENT
                                                             VALUE
