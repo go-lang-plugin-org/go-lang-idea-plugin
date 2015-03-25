@@ -84,7 +84,10 @@ public class GoVarDeclarationInspection extends GoInspectionBase {
   @NotNull
   private static Pair<List<? extends GoCompositeElement>, List<GoExpression>> getPair(@NotNull GoVarSpec varDeclaration) {
     PsiElement assign = varDeclaration.getAssign();
-    if (varDeclaration instanceof GoRecvStatement && assign != null) {
+    if (assign == null) {
+      return Pair.<List<? extends GoCompositeElement>, List<GoExpression>>create(ContainerUtil.<GoCompositeElement>emptyList(), ContainerUtil.<GoExpression>emptyList());
+    }
+    if (varDeclaration instanceof GoRecvStatement) {
       List<GoCompositeElement> v= ContainerUtil.newArrayList();
       List<GoExpression> e = ContainerUtil.newArrayList();
       for (PsiElement c : varDeclaration.getChildren()) {
