@@ -16,10 +16,12 @@
 
 package com.goide.psi.impl;
 
+import com.goide.util.GoUtil;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
+import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,5 +47,16 @@ public abstract class GoCachedReference<T extends PsiElement> extends PsiReferen
     return myElement.isValid()
            ? ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, MY_RESOLVER, false, false)
            : null;
+  }
+
+  @Override
+  public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
+    myElement.replace(GoElementFactory.createIdentifierFromText(myElement.getProject(), newElementName));
+    return myElement;
+  }
+
+  @Override
+  public boolean isReferenceTo(PsiElement element) {
+    return GoUtil.couldBeReferenceTo(element, myElement) && super.isReferenceTo(element);
   }
 }

@@ -20,13 +20,11 @@ import com.goide.completion.GoCompletionUtil;
 import com.goide.psi.GoBlock;
 import com.goide.psi.GoLabelDefinition;
 import com.goide.psi.GoLabelRef;
-import com.goide.util.GoUtil;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -69,16 +67,5 @@ public class GoLabelReference extends GoCachedReference<GoLabelRef> {
       result.add(GoCompletionUtil.createLabelLookupElement(element));
     }
     return ArrayUtil.toObjectArray(result);
-  }
-
-  @Override
-  public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-    myElement.replace(GoElementFactory.createIdentifierFromText(myElement.getProject(), newElementName));
-    return myElement;
-  }
-
-  @Override
-  public boolean isReferenceTo(PsiElement element) {
-    return GoUtil.couldBeReferenceTo(element, myElement) && super.isReferenceTo(element);
   }
 }
