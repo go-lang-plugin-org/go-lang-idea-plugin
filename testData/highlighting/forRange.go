@@ -14,4 +14,9 @@ func main() {
             break
         }
     }
+    
+    for _, _ = range "abc"  {
+    }
+    for _ = range "abc"  {
+    }
 }
