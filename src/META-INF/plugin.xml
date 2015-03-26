@@ -33,10 +33,9 @@
 
   <change-notes>
     <![CDATA[
-    <h3>Release notes</h3>
-        <ul>
-            <li>Fully reworked internals</li>
-        </ul>
+    <ul>
+      <li>Fully reworked internals</li>
+    </ul>
     ]]>
   </change-notes>
 
