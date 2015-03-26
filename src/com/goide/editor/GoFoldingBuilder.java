@@ -63,13 +63,11 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
     }
 
     for (GoFunctionOrMethodDeclaration method : ContainerUtil.concat(file.getMethods(), file.getFunctions())) {
-      GoBlock block = method.getBlock();
-      if (block != null && block.getTextRange().getLength() > 1) result.add(new FoldingDescriptor(block, block.getTextRange()));
+      foldBlock(result, method.getBlock());
     }
 
     for (GoFunctionLit function : PsiTreeUtil.findChildrenOfType(file, GoFunctionLit.class)) {
-      GoBlock block = function.getBlock();
-      if (block != null && block.getTextRange().getLength() > 1) result.add(new FoldingDescriptor(block, block.getTextRange()));
+      foldBlock(result, function.getBlock());
     }
 
     for (GoTypeSpec type : file.getTypes()) {
@@ -94,6 +92,10 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
       });
     }
     return result.toArray(new FoldingDescriptor[result.size()]);
+  }
+
+  private static void foldBlock(@NotNull List<FoldingDescriptor> result, @Nullable GoBlock block) {
+    if (block != null && block.getTextRange().getLength() > 1) result.add(new FoldingDescriptor(block, block.getTextRange()));
   }
 
   private static void foldTypes(@Nullable PsiElement element, List<FoldingDescriptor> result) {
