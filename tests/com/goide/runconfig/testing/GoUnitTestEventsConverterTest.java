@@ -33,6 +33,10 @@ public class GoUnitTestEventsConverterTest extends GoCodeInsightFixtureTestCase 
   public void testSkipTest() throws Exception {
     doTest();
   }
+  
+  public void testStdOut() throws Exception {
+    doTest();
+  }
 
   @Override
   protected String getBasePath() {

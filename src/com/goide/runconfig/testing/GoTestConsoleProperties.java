@@ -64,6 +64,7 @@ public class GoTestConsoleProperties extends TestConsoleProperties implements SM
 
     private boolean myFailed = false;
     private boolean mySkipped = false;
+    private boolean myOutputAppeared = false;
     @NotNull private StringBuilder myStdOut = new StringBuilder();
     @NotNull private String myCurrentTest = "<test>";
 
@@ -77,6 +78,7 @@ public class GoTestConsoleProperties extends TestConsoleProperties implements SM
       Matcher matcher;
 
       if ((matcher = RUN.matcher(text)).find()) {
+        myOutputAppeared = false;
         String testName = StringUtil.notNullize(matcher.group(1), "<test>");
         ServiceMessageBuilder testStarted = ServiceMessageBuilder.testStarted(testName).addAttribute("locationHint", testUrl(testName));
         return processNotFinishedMessage(testStarted.toString(), outputType, visitor);
@@ -84,9 +86,10 @@ public class GoTestConsoleProperties extends TestConsoleProperties implements SM
 
       if ((matcher = PASSED.matcher(text)).find()) {
         String testName = StringUtil.notNullize(matcher.group(1), "<test>");
-        return processNotFinishedMessage(ServiceMessageBuilder.testFinished(testName).toString(), outputType, visitor);
+        return addNewLineIfNeeded(testName, outputType, visitor) 
+               && processNotFinishedMessage(ServiceMessageBuilder.testFinished(testName).toString(), outputType, visitor);
       }
-      
+
       if ((matcher = SKIP.matcher(text)).find()) {
         mySkipped = true;
         myCurrentTest = StringUtil.notNullize(matcher.group(1), "<test>");
@@ -109,6 +112,7 @@ public class GoTestConsoleProperties extends TestConsoleProperties implements SM
         }
       }
 
+      myOutputAppeared = true;
       return super.processServiceMessages(text, outputType, visitor);
     }
 
@@ -125,16 +129,22 @@ public class GoTestConsoleProperties extends TestConsoleProperties implements SM
     }
 
     private boolean processFailedMessage(Key outputType, ServiceMessageVisitor visitor) throws ParseException {
-      ServiceMessageBuilder builder = myFailed 
-                                      ? ServiceMessageBuilder.testFailed(myCurrentTest) 
+      ServiceMessageBuilder builder = myFailed
+                                      ? ServiceMessageBuilder.testFailed(myCurrentTest)
                                       : ServiceMessageBuilder.testIgnored(myCurrentTest);
       String message = builder.addAttribute("message", myStdOut.toString().trim()).toString();
-      
+
       myFailed = false;
       mySkipped = false;
       myStdOut = new StringBuilder();
       return super.processServiceMessages(message, outputType, visitor)
              && super.processServiceMessages(ServiceMessageBuilder.testFinished(myCurrentTest).toString(), outputType, visitor);
+    }
+
+    private boolean addNewLineIfNeeded(@NotNull String testName, @NotNull Key outputType, @NotNull ServiceMessageVisitor visitor)
+      throws ParseException {
+      ServiceMessageBuilder message = ServiceMessageBuilder.testStdOut(testName).addAttribute("out", "\n");
+      return !myOutputAppeared || processServiceMessages(message.toString(), outputType, visitor);
     }
   }
 }
