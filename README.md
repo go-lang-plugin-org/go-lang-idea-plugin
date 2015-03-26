@@ -4,10 +4,11 @@
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/go-lang-plugin-org/go-lang-idea-plugin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Pre-release builds
-You can manually set up the latest plugin version from the [releases page](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/releases).
+You can subscribe to the alpha and nightly channels.
+Please see a [corresponding instruction](https://www.jetbrains.com/idea/help/managing-enterprise-plugin-repositories.html) and use the following urls:
+* https://plugins.jetbrains.com/plugins/alpha/list
+* https://plugins.jetbrains.com/plugins/nightly/list
 
-Note for **Mac OS X** users: you need to download the entire zip file, not a several jars (see [Apple discussion forum](https://discussions.apple.com/thread/1483114)).
- 
 ## Bugs
 
 If you found a bug, please report it at the Google Go plugin project's tracker
