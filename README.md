@@ -4,27 +4,42 @@
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/go-lang-plugin-org/go-lang-idea-plugin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Pre-release builds
-You can subscribe to the alpha and nightly channels.
-Please see a [corresponding instruction](https://www.jetbrains.com/idea/help/managing-enterprise-plugin-repositories.html) and use the following urls:
-* https://plugins.jetbrains.com/plugins/alpha/list
-* https://plugins.jetbrains.com/plugins/nightly/list
 
+Pre-release builds are available in two forms: nightly and alphas. At the time
+of writing, alpha builds are released usually at the start of every week while
+nightly builds are released every night, using the latest buildable source.
+
+To use them, you'll need to follow these steps:
+
+1. Follow [the instructions](https://www.jetbrains.com/idea/help/managing-enterprise-plugin-repositories.html)
+1. Paste the url for the version you desire:
+ - alpha: https://plugins.jetbrains.com/plugins/alpha/list
+ - nightly: https://plugins.jetbrains.com/plugins/nightly/list
+
+As always, please remember that this is an alpha release and while efforts are
+made to ensure the best possible experience, sometimes things might be broken.
+
+Reporting issues is very important for us as such, please see the section below
+on how to submit a proper bug report.
+ 
 ## Bugs
 
-If you found a bug, please report it at the Google Go plugin project's tracker
-on GitHub: <http://github.com/go-lang-plugin-org/go-lang-idea-plugin/issues>.
+**Please ensure that the bug is not reported already using the search functionality**
+
+If you found a bug, and it's not a duplicate, you can report it here:
+<http://github.com/go-lang-plugin-org/go-lang-idea-plugin/issues>.
 
 When reporting a bug, please include the following:
 - IDEA version
 - OS version
 - JDK version
-- plugin version (or commit hash, even better, if possible)
-
-Please ensure that the bug is not reported already.
+- plugin version (or commit hash, if you built the plugin yourself)
 
 ## Contributing
 
-If you want to contribute to the plugin, please see [CONTRIBUTING.md](CONTRIBUTING.md).
+We encourage you to contribute to the plugin if you find any issues / or missing
+functionality that you'd want to see. In order to get started, see
+[CONTRIBUTING.md](CONTRIBUTING.md) guide.
 
 ## Contributors
 
