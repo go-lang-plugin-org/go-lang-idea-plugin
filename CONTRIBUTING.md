@@ -64,7 +64,7 @@ in the way we spend time to understand the problems and thus solve them.
 1. Checkout plugin repo and open the project
 1. Setup [IDEA SDK](http://confluence.jetbrains.net/display/IDEADEV/Getting+Started+with+Plugin+Development#GettingStartedwithPluginDevelopment-anchor2):
 select the IDEA installation directory as SDK root (should be named ```IDEA sdk```)
-1. If you want to run Go Plugin in WebStorm or in IDEA EAP setup corresponding additional SDKs (should be named  ```WebStorm 9 sdk``` and ```IDEA 14.1 sdk```)
+1. If you want to run Go Plugin in WebStorm or in IDEA EAP setup corresponding additional SDKs (should be named  ```WebStorm sdk``` and ```IDEA EAP sdk```)
 1. Setup the right version of [Grammar-Kit](https://www.dropbox.com/s/tqmj3urcnmt22a2/GrammarKit-14-01-2015.zip?dl=0) plugin (for [140.2500+](https://www.dropbox.com/s/3a80wo77684dr0d/GrammarKit-02-19-2015.zip?dl=0))
 1. Setup the **ant support** plugin 
 1. Run the **Go** run configuration
@@ -98,7 +98,7 @@ used to build IDEA 14:
 ```bash
     git clone git@github.com:JetBrains/intellij-community.git idea
     cd idea
-    git checkout idea/139.1038.6
+    git checkout idea/141.177.4
     # and we build it using ant
     ant
 ```
@@ -111,9 +111,9 @@ end it should put the build artifacts into `out/artifacts` folder.
     drwxr-xr-x   7 mtoader  staff        238 Jun  1 22:34 .
     drwxr-xr-x   8 mtoader  staff        272 Jun  1 22:25 ..
     drwxr-xr-x  10 mtoader  staff        340 Jun  1 22:34 core
-    -rw-r--r--   1 mtoader  staff  112106975 Jun  1 22:34 ideaIC-139.SNAPSHOT.mac.zip
-    -rw-r--r--   1 mtoader  staff  110192607 Jun  1 22:34 ideaIC-139.SNAPSHOT.tar.gz
-    -rw-r--r--   1 mtoader  staff  110468031 Jun  1 22:34 ideaIC-139.SNAPSHOT.win.zip
+    -rw-r--r--   1 mtoader  staff  112106975 Jun  1 22:34 ideaIC-141.SNAPSHOT.mac.zip
+    -rw-r--r--   1 mtoader  staff  110192607 Jun  1 22:34 ideaIC-141.SNAPSHOT.tar.gz
+    -rw-r--r--   1 mtoader  staff  110468031 Jun  1 22:34 ideaIC-141.SNAPSHOT.win.zip
     -rw-r--r--   1 mtoader  staff   40308058 Jun  1 22:34 sources.zip
 
 Use the artifact from your target OS to run the built version of IDEA.
@@ -145,7 +145,7 @@ The steps:
 from here: <http://www.jetbrains.com/idea/>.
 * Open the copy of google-go-lang-idea-plugin repository (that was previously
 checked out) with it (the default project module config should work with a
-recent IDEA 14 version).
+recent IDEA 14.1 version).
 * Open the Project Settings (Command + ; on Mac or File -> Project Settings on
 other platforms), go to the SDKs entry, click the `+` (and select IntelliJ IDEA
 Plugin SDK). 
@@ -158,7 +158,7 @@ version that you used for build idea. If you use mac,you should check follow pat
 * After setup java SDK. go to the SDKs entry, click the `+` (and select IntelliJ IDEA
 Plugin SDK) navigate to the unzipped location of the IDEA build that you
 created before. It will recognize a new IDEA Plugin SDK with the name
-`IDEA IC-139.SNAPSHOT`. After that you should add the IDEA sources to it by
+`IDEA IC-141.SNAPSHOT`. After that you should add the IDEA sources to it by
 selecting the SDK, going to the `Sourcepath` tab, clicking `+` in the lower
 panel and navigating to the checkout out sources of IDEA. Press add, let it
 inspect the folders for sources and add all the found sources to the SDK.
@@ -172,8 +172,8 @@ run and play.
 Going to ``` Run -> Run... ``` will provide you with the following run configurations: 
 
 + `Go` will spawn a new IDEA with the latest version of the plugin enabled
-+ `Go in WebStorm` will spawn a new WebStorm with the latest version of the plugin enabled (requires SDK named ```WebStorm 9 sdk```)
-+ `Go in IDEA EAP` will spawn a new unstable IDEA with the latest version of the plugin enabled (requires SDK named ```IDEA 14.1 sdk```)
++ `Go in WebStorm` will spawn a new WebStorm with the latest version of the plugin enabled (requires SDK named ```WebStorm sdk```)
++ `Go in IDEA EAP` will spawn a new unstable IDEA with the latest version of the plugin enabled (requires SDK named ```IDEA EAP sdk```)
 + `All in intellij-go` will run all the test cases available in the project. Please make 
 sure that all the test cases pass before committing anything (or making a pull request).
 
