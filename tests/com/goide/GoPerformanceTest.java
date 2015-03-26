@@ -8,7 +8,6 @@ import com.goide.inspections.unresolved.GoUnusedVariableInspection;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.InspectionProfileEntry;
-import com.intellij.codeInspection.ex.GlobalInspectionContextImpl;
 import com.intellij.codeInspection.ex.InspectionManagerEx;
 import com.intellij.codeInspection.ex.InspectionToolRegistrar;
 import com.intellij.codeInspection.ex.InspectionToolWrapper;
@@ -16,6 +15,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.InspectionTestUtil;
 import com.intellij.testFramework.PlatformTestUtil;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
+import com.intellij.testFramework.fixtures.impl.GlobalInspectionContextForTests;
 import com.intellij.util.ThrowableRunnable;
 import org.jetbrains.annotations.NotNull;
 
@@ -58,13 +58,13 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
 
     final InspectionManagerEx inspectionManager = (InspectionManagerEx)InspectionManager.getInstance(getProject());
     final InspectionToolWrapper wrapper = InspectionToolRegistrar.wrapTool(tool);
-    final GlobalInspectionContextImpl globalContext =
+    final GlobalInspectionContextForTests globalContext =
       CodeInsightTestFixtureImpl.createGlobalContextForTool(scope, getProject(), inspectionManager, wrapper);
 
     PlatformTestUtil.startPerformanceTest(getTestName(true), expected, new ThrowableRunnable() {
       @Override
       public void run() throws Throwable {
-        InspectionTestUtil.runTool(wrapper, scope, globalContext, inspectionManager);
+        InspectionTestUtil.runTool(wrapper, scope, globalContext);
         InspectionTestUtil.compareToolResults(globalContext, wrapper, false, new File(getTestDataPath(), wrapper.getShortName()).getPath());
       }
     }).cpuBound().attempts(3).usesAllCPUCores().assertTiming();

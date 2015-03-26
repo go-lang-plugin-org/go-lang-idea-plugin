@@ -41,7 +41,6 @@ import com.intellij.openapi.roots.libraries.LibraryTable;
 import com.intellij.openapi.roots.libraries.LibraryTablesRegistrar;
 import com.intellij.openapi.vfs.*;
 import com.intellij.util.Alarm;
-import com.intellij.util.containers.ConcurrentHashSet;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -55,7 +54,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   private static final String GO_LIBRARIES_NOTIFICATION_HAD_BEEN_SHOWN = "go.libraries.notification.had.been.shown";
   private static final int UPDATE_DELAY = 300;
 
-  private final Set<VirtualFile> myFilesToWatch = new ConcurrentHashSet<VirtualFile>(); // replace with ContainerUtil after 14.1
+  private final Set<VirtualFile> myFilesToWatch = ContainerUtil.newConcurrentSet();
   private final Alarm myAlarm;
 
   @NotNull private final Set<String> myLastHandledRoots = ContainerUtil.newHashSet();
