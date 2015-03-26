@@ -21,16 +21,21 @@
   <vendor url="https://github.com/go-lang-plugin-org/go-lang-idea-plugin"/>
   <category>Custom Languages</category>
 
-  <description>
-    <![CDATA[<h2>Support for Go programming language.</h2>
-    ]]>
-  </description>
+  <description><![CDATA[
+    <h2>Support for Go programming language.</h2>
+    <p>Alpha pre-release of the 1.0.0 version.</p>
+    <p>Doesn't contain all the functionality of the 0.9.x branch but has a completely reworked internals.
+      It's faster than 0.9.x, refactoring works to some degree and has native support for gopath packages.</p>
+    
+    <h3>Compatibility</h3>
+    <p>Plugin can be installed on IntelliJ platform 141.2 or greater. It corresponds to IntelliJ IDEA 14.1, WebStorm 10, PhpStorm 9</p>
+    ]]></description>
 
   <change-notes>
     <![CDATA[
-    <h3>1.0.0 changes:</h3>
+    <h3>Release notes</h3>
         <ul>
-            <li>[improvement] Fully reworked internals</li>
+            <li>Fully reworked internals</li>
         </ul>
     ]]>
   </change-notes>
