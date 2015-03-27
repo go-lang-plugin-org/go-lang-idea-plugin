@@ -17,6 +17,7 @@
 package com.goide.inspections;
 
 import com.goide.psi.*;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElement;
@@ -66,18 +67,18 @@ public class GoInspectionUtil {
   }
 
   private static int getFunctionResultCount(@NotNull GoCallExpr call) {
-    GoFunctionOrMethodDeclaration declaration = resolveFunctionCall(call);
+    GoSignatureOwner declaration = resolveFunctionCall(call);
     return declaration == null ? UNKNOWN_COUNT : getFunctionResultCount(declaration);
   }
 
   @Nullable
-  private static GoFunctionOrMethodDeclaration resolveFunctionCall(@NotNull GoCallExpr call) {
-    PsiReference reference = call.getExpression().getReference();
+  private static GoSignatureOwner resolveFunctionCall(@NotNull GoCallExpr call) {
+    PsiReference reference = GoPsiImplUtil.getCallReference(call);
     PsiElement function = reference != null ? reference.resolve() : null;
-    return function instanceof GoFunctionOrMethodDeclaration ? (GoFunctionOrMethodDeclaration)function : null;
+    return function instanceof GoSignatureOwner ? (GoSignatureOwner)function : null;
   }
 
-  public static int getFunctionResultCount(@NotNull GoFunctionOrMethodDeclaration function) {
+  public static int getFunctionResultCount(@NotNull GoSignatureOwner function) {
     int count = 0;
     GoSignature signature = function.getSignature();
     GoResult result = signature != null ? signature.getResult() : null;
