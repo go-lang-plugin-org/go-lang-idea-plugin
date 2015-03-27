@@ -35,7 +35,9 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.keymap.KeymapUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
+import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
@@ -228,14 +230,10 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
 
   private static class MyImportsComparator implements Comparator<String> {
     @Override
-    public int compare(@NotNull String s1, @NotNull String s2) {
-      String dot = ".";
-      if (s1.contains(dot) && !s2.contains(dot)) return 1;
-      if (!s1.contains(dot) && s2.contains(dot)) return -1;
-      String slash = "/";
-      if (s1.contains(slash) && !s2.contains(slash)) return 1;
-      if (!s1.contains(slash) && s2.contains(slash)) return -1;
-      return s1.compareTo(s2);
+    public int compare(String s1, String s2) {
+      int result = Comparing.compare(StringUtil.containsChar(s1, '.'), StringUtil.containsChar(s2, '.'));
+      result = result == 0 ? Comparing.compare(StringUtil.containsChar(s1, '/'), StringUtil.containsChar(s2, '/')) : result;
+      return result == 0 ? Comparing.compare(s1, s2) : result;
     }
   }
 }
