@@ -18,7 +18,7 @@
   <id>ro.redeul.google.go</id>
   <name>Go</name>
   <version>1.0</version>
-  <vendor url="https://github.com/go-lang-plugin-org/go-lang-idea-plugin"/>
+  <vendor url="https://github.com/go-lang-plugin-org"/>
   <category>Custom Languages</category>
 
   <description><![CDATA[
