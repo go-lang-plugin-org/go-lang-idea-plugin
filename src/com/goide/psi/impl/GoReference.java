@@ -214,7 +214,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     if (!(myFile instanceof GoFile)) return true;
     boolean localResolve = Comparing.equal(((GoFile)myFile.getOriginalFile()).getImportPath(), ((GoFile)file.getOriginalFile()).getImportPath());
 
-    PsiElement parent = type.getParent();
+    PsiElement parent = type.getStub() == null ? type.getParent() : type.getStub().getParentStub().getPsi();
     if (parent instanceof GoTypeSpec && !processNamedElements(processor, state, ((GoTypeSpec)parent).getMethods(), localResolve)) {
       return false;
     }
