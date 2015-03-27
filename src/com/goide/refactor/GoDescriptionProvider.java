@@ -18,7 +18,6 @@ package com.goide.refactor;
 
 import com.goide.psi.*;
 import com.intellij.codeInsight.highlighting.HighlightUsagesDescriptionLocation;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.ElementDescriptionLocation;
 import com.intellij.psi.ElementDescriptionProvider;
 import com.intellij.psi.PsiElement;
@@ -34,34 +33,28 @@ public class GoDescriptionProvider implements ElementDescriptionProvider {
   @Override
   public String getElementDescription(@NotNull PsiElement o, @NotNull ElementDescriptionLocation location) {
     if (o instanceof GoNamedElement && location == UsageViewNodeTextLocation.INSTANCE) {
-      return getDescription(o, false);
+      return getElementDescription(o, UsageViewShortNameLocation.INSTANCE);
     }
     if (o instanceof GoNamedElement && (location == UsageViewShortNameLocation.INSTANCE || location == UsageViewLongNameLocation.INSTANCE)) {
       return ((GoNamedElement)o).getName();
     }
     if (location == HighlightUsagesDescriptionLocation.INSTANCE) {
-      return getDescription(o, true);
+      return getElementDescription(o, UsageViewShortNameLocation.INSTANCE);
     }
     if (location == UsageViewTypeLocation.INSTANCE) {
-      if (o instanceof GoMethodDeclaration) return "Method";
-      if (o instanceof GoFunctionDeclaration) return "Function";
-      if (o instanceof GoConstDefinition) return "Constant";
-      if (o instanceof GoVarDefinition) return "Variable";
-      if (o instanceof GoParamDefinition) return "Parameter";
-      if (o instanceof GoFieldDefinition) return "Field";
-      if (o instanceof GoAnonymousFieldDefinition) return "Anonymous field";
-      if (o instanceof GoTypeSpec) return "Type";
-      if (o instanceof GoImportSpec) return "Import alias";
-      if (o instanceof GoReceiver) return "Receiver";
-      if (o instanceof GoMethodSpec) return "Method specification";
-      if (o instanceof GoLabelDefinition) return "Label";
+      if (o instanceof GoMethodDeclaration) return "method";
+      if (o instanceof GoFunctionDeclaration) return "function";
+      if (o instanceof GoConstDefinition) return "constant";
+      if (o instanceof GoVarDefinition) return "variable";
+      if (o instanceof GoParamDefinition) return "parameter";
+      if (o instanceof GoFieldDefinition) return "field";
+      if (o instanceof GoAnonymousFieldDefinition) return "anonymous field";
+      if (o instanceof GoTypeSpec) return "type";
+      if (o instanceof GoImportSpec) return "import alias";
+      if (o instanceof GoReceiver) return "receiver";
+      if (o instanceof GoMethodSpec) return "method specification";
+      if (o instanceof GoLabelDefinition) return "label";
     }
     return null;
-  }
-
-  @NotNull
-  private String getDescription(@NotNull PsiElement o, boolean lowercase) {
-    String type = getElementDescription(o, UsageViewTypeLocation.INSTANCE);
-    return (lowercase ? StringUtil.toLowerCase(type) : type) + " '" + getElementDescription(o, UsageViewShortNameLocation.INSTANCE) + "'";
   }
 }

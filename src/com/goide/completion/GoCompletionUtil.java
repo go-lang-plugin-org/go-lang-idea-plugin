@@ -175,7 +175,7 @@ public class GoCompletionUtil {
                 v instanceof GoParamDefinition ? GoIcons.PARAMETER :
                 v instanceof GoFieldDefinition ? GoIcons.FIELD :
                 v instanceof GoReceiver ? GoIcons.RECEIVER :
-                v instanceof GoConstDefinition ? GoIcons.CONST :
+                v instanceof GoConstDefinition ? GoIcons.CONSTANT :
                 v instanceof GoAnonymousFieldDefinition ? GoIcons.FIELD :
                 null;
     GoType type = v.getGoType(null);

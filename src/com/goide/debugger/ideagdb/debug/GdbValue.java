@@ -33,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 
 public class GdbValue extends XValue {
-  private static final Icon VAR_ICON = GoIcons.VARIABLE; // todo: detect GoIcons.CONST?
+  private static final Icon VAR_ICON = GoIcons.VARIABLE; // todo: detect GoIcons.CONSTANT?
   private static final Logger LOG = Logger.getInstance(GdbValue.class);
 
   private final Gdb myGdb;
