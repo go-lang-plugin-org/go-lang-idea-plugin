@@ -1,7 +1,6 @@
 package com.goide.runconfig.before;
 
 import com.goide.GoConstants;
-import com.goide.GoEnvironmentUtil;
 import com.goide.GoIcons;
 import com.goide.runconfig.GoRunConfigurationBase;
 import com.goide.sdk.GoSdkService;
@@ -136,8 +135,8 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
         GoSdkService sdkService = GoSdkService.getInstance(project);
         if (!sdkService.isGoModule(module)) return;
 
-        final String sdkPath = sdkService.getSdkHomePath(module);
-        if (StringUtil.isEmpty(sdkPath)) return;
+        final String executablePath = sdkService.getGoExecutablePath(module);
+        if (StringUtil.isEmpty(executablePath)) return;
 
         FileDocumentManager.getInstance().saveAllDocuments();
 
@@ -145,10 +144,9 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
         Task.Backgroundable t = new Task.Backgroundable(project, "Executing " + task.toString(), true) {
           public void run(@NotNull ProgressIndicator indicator) {
             try {
-              String executable = GoEnvironmentUtil.getExecutableForSdk(sdkPath).getAbsolutePath();
               GeneralCommandLine commandLine = new GeneralCommandLine();
               final String goPath = GoSdkUtil.retrieveGoPath(module);
-              commandLine.setExePath(executable);
+              commandLine.setExePath(executablePath);
               commandLine.getEnvironment().put(GoConstants.GO_PATH, goPath);
               commandLine.withWorkDirectory(workingDirectory);
               commandLine.getParametersList().addParametersString(task.getCommand());

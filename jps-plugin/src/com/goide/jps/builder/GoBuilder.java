@@ -63,7 +63,7 @@ public class GoBuilder extends TargetBuilder<GoSourceRootDescriptor, GoTarget> {
     JpsTypedModule<JpsSimpleElement<JpsGoModuleProperties>> module = jpsModule.asTyped(JpsGoModuleType.INSTANCE);
     assert module != null;
     JpsSdk<JpsDummyElement> sdk = getSdk(context, module);
-    File executable = GoEnvironmentUtil.getExecutableForSdk(sdk.getHomePath());
+    File executable = new File(sdk.getHomePath(), "bin/" + GoEnvironmentUtil.getBinaryFileNameForPath(GoConstants.GO_EXECUTABLE_NAME));
     File outputDirectory = getBuildOutputDirectory(module, target.isTests(), context);
 
     for (String contentRootUrl : module.getContentRootsList().getUrls()) {

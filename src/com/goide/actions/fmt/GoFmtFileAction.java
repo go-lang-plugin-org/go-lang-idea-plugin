@@ -16,7 +16,6 @@
 
 package com.goide.actions.fmt;
 
-import com.goide.GoEnvironmentUtil;
 import com.goide.sdk.GoSdkService;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
@@ -36,8 +35,6 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
-
 public class GoFmtFileAction extends GoExternalToolsAction {
   public boolean doSomething(@NotNull PsiFile file,
                              @NotNull Project project,
@@ -50,16 +47,14 @@ public class GoFmtFileAction extends GoExternalToolsAction {
     assert filePath != null;
 
     GeneralCommandLine commandLine = new GeneralCommandLine();
-
-    String sdkHome = GoSdkService.getInstance(project).getSdkHomePath(ModuleUtilCore.findModuleForPsiElement(file));
-    if (StringUtil.isEmpty(sdkHome)) {
+    
+    String executablePath = GoSdkService.getInstance(project).getGoExecutablePath(ModuleUtilCore.findModuleForPsiElement(file));
+    if (StringUtil.isEmpty(executablePath)) {
       warning(project, groupId, "Project sdk is not valid");
       return true;
     }
 
-    File executable = GoEnvironmentUtil.getExecutableForSdk(sdkHome);
-
-    commandLine.setExePath(executable.getAbsolutePath());
+    commandLine.setExePath(executablePath);
     commandLine.addParameters("fmt", filePath);
 
     FileDocumentManager.getInstance().saveDocument(document);

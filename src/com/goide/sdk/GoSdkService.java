@@ -35,7 +35,7 @@ public abstract class GoSdkService extends SimpleModificationTracker {
 
   @Nullable
   public abstract String getSdkVersion(@Nullable Module module);
-  
+
   public boolean isAppEngineSdk(@Nullable Module module) {
     return isAppEngineSdkPath(getSdkHomePath(module));
   }
@@ -56,6 +56,20 @@ public abstract class GoSdkService extends SimpleModificationTracker {
 
   @Nullable
   public Configurable createSdkConfigurable() {
+    return null;
+  }
+
+  @Nullable
+  public String getGoExecutablePath(@Nullable Module module) {
+    return getGoExecutablePath(getSdkHomePath(module));
+  }
+
+  public static String getGoExecutablePath(@Nullable String sdkHomePath) {
+    if (sdkHomePath != null) {
+      return isAppEngineSdkPath(sdkHomePath)
+             ? StringUtil.trimEnd(sdkHomePath, GoConstants.APP_ENGINE_GO_ROOT_DIRECTORY) + "/" + GoConstants.GAE_EXECUTABLE_NAME
+             : sdkHomePath + "/" + GoConstants.GO_EXECUTABLE_NAME;
+    }
     return null;
   }
 }

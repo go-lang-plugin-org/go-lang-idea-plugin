@@ -1,7 +1,6 @@
 package com.goide.util;
 
 import com.goide.GoConstants;
-import com.goide.GoEnvironmentUtil;
 import com.goide.runconfig.GoConsoleFilter;
 import com.goide.sdk.GoSdkService;
 import com.goide.sdk.GoSdkUtil;
@@ -241,9 +240,8 @@ public class GoExecutor {
       throw new ExecutionException("Sdk is not set or Sdk home path is empty for module");
     }
 
-    String executable = GoEnvironmentUtil.getExecutableForSdk(myGoRoot).getAbsolutePath();
     GeneralCommandLine commandLine = new GeneralCommandLine();
-    commandLine.setExePath(ObjectUtils.notNull(myExePath, executable));
+    commandLine.setExePath(ObjectUtils.notNull(myExePath, GoSdkService.getGoExecutablePath(myGoRoot)));
     commandLine.getEnvironment().putAll(myExtraEnvironment);
     commandLine.getEnvironment().put(GoConstants.GO_ROOT, StringUtil.notNullize(myGoRoot));
     commandLine.getEnvironment().put(GoConstants.GO_PATH, StringUtil.notNullize(myGoPath));

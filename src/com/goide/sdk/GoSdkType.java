@@ -17,7 +17,6 @@
 package com.goide.sdk;
 
 import com.goide.GoConstants;
-import com.goide.GoEnvironmentUtil;
 import com.goide.GoIcons;
 import com.intellij.openapi.projectRoots.*;
 import com.intellij.openapi.roots.OrderRootType;
@@ -28,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.io.File;
 
 public class GoSdkType extends SdkType {
 
@@ -63,7 +63,8 @@ public class GoSdkType extends SdkType {
 
   @Override
   public boolean isValidSdkHome(@NotNull String path) {
-    return GoEnvironmentUtil.getExecutableForSdk(path).canExecute() && getVersionString(path) != null;
+    String executablePath = GoSdkService.getGoExecutablePath(path);
+    return executablePath != null && new File(executablePath).canExecute() && getVersionString(path) != null;
   }
 
   @Override

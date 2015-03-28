@@ -16,7 +16,6 @@
 
 package com.goide.actions.fmt;
 
-import com.goide.GoEnvironmentUtil;
 import com.goide.sdk.GoSdkService;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.KillableColoredProcessHandler;
@@ -31,6 +30,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
@@ -38,8 +38,6 @@ import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.util.ExceptionUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.io.File;
 
 public class GoFmtProjectAction extends AnAction implements DumbAware {
   private static final String NOTIFICATION_TITLE = "Reformat code with go gmt";
@@ -56,20 +54,18 @@ public class GoFmtProjectAction extends AnAction implements DumbAware {
     assert project != null;
 
     final String groupId = e.getPresentation().getText();
+    assert groupId != null;
     try {
       GeneralCommandLine commandLine = new GeneralCommandLine();
-      String sdkHome = GoSdkService.getInstance(project).getSdkHomePath(null);
-      if (StringUtil.isEmpty(sdkHome)) {
+      String executablePath = GoSdkService.getInstance(project).getGoExecutablePath(((Module)null));
+      if (StringUtil.isEmpty(executablePath)) {
         warning(project, groupId, "Project sdk is not valid");
         return;
       }
 
       FileDocumentManager.getInstance().saveAllDocuments();
-
-      File executable = GoEnvironmentUtil.getExecutableForSdk(sdkHome);
-
+      commandLine.setExePath(executablePath);
       commandLine.withWorkDirectory(project.getBasePath());
-      commandLine.setExePath(executable.getAbsolutePath());
       commandLine.addParameters("fmt", "./...");
 
       final String commandLineString = commandLine.getCommandLineString();

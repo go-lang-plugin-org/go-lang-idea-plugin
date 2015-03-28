@@ -23,6 +23,9 @@ public class GoConstants {
   
   @NonNls public static final String APP_ENGINE_MARKER_FILE = "appcfg.py";
   @NonNls public static final String APP_ENGINE_GO_ROOT_DIRECTORY = "goroot";
+  @NonNls public static final String GAE_EXECUTABLE_NAME = "goapp";
+  
+  @NonNls public static final String GO_EXECUTABLE_NAME = "go";
 
   private GoConstants() {
     
