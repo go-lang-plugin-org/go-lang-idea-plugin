@@ -16,7 +16,10 @@
 
 package com.goide.actions.fmt;
 
-import com.goide.psi.GoFile;
+import com.goide.GoConstants;
+import com.goide.GoFileType;
+import com.goide.sdk.GoSdkService;
+import com.goide.util.GoExecutor;
 import com.intellij.execution.ExecutionException;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
@@ -25,11 +28,14 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiFile;
 import com.intellij.util.ExceptionUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,53 +43,58 @@ import org.jetbrains.annotations.Nullable;
 public abstract class GoExternalToolsAction extends AnAction implements DumbAware {
   private static final Logger LOG = Logger.getInstance(GoExternalToolsAction.class);
 
-  private void error(@NotNull PsiFile file, @NotNull Project project, @NotNull String groupId, @Nullable Exception ex) {
-    Notifications.Bus.notify(new Notification(groupId,
-                                              getErrorTitle(file.getName()),
-                                              ex == null ? "" : ExceptionUtil.getUserStackTrace(ex, LOG),
-                                              NotificationType.ERROR), project);
-  }
-
-  protected void warning(@NotNull Project project, @NotNull String groupId, @NotNull String content) {
-    Notifications.Bus.notify(new Notification(groupId, getWarningTitle(), content, NotificationType.WARNING), project);
-  }
-
-  @NotNull
-  protected String getWarningTitle() {
-    return "";
-  }
-
-  @NotNull
-  protected String getErrorTitle(@NotNull String fileName) {
-    return "";
+  private static void error(@NotNull String title, @NotNull Project project, @Nullable Exception ex) {
+    Notifications.Bus.notify(new Notification(GoConstants.GO_NOTIFICATION_GROUP, title,
+                                              ex == null ? "" : ExceptionUtil.getUserStackTrace(ex, LOG), NotificationType.ERROR), project);
   }
 
   @Override
   public void update(@NotNull AnActionEvent e) {
-    e.getPresentation().setEnabled(e.getProject() != null && e.getData(CommonDataKeys.PSI_FILE) instanceof GoFile);
+    super.update(e);
+    Project project = e.getProject();
+    VirtualFile file = e.getData(CommonDataKeys.VIRTUAL_FILE);
+    if (project == null || file == null || !file.isInLocalFileSystem() || file.getFileType() != GoFileType.INSTANCE) {
+      e.getPresentation().setEnabled(false);
+      return;
+    }
+    Module module = ModuleUtilCore.findModuleForFile(file, project);
+    e.getPresentation().setEnabled(GoSdkService.getInstance(project).isGoModule(module));
   }
 
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
-    PsiFile file = e.getData(CommonDataKeys.PSI_FILE);
     Project project = e.getProject();
+    VirtualFile file = e.getRequiredData(CommonDataKeys.VIRTUAL_FILE);
     assert project != null;
-    assert file instanceof GoFile;
-    VirtualFile vFile = file.getVirtualFile();
-
-    String groupId = e.getPresentation().getText();
+    String title = StringUtil.notNullize(e.getPresentation().getText());
 
     try {
-      doSomething(file, project, vFile, StringUtil.notNullize(groupId, ""));
+      doSomething(file, project, title);
     }
-    catch (Exception ex) {
-      error(file, project, groupId, ex);
+    catch (ExecutionException ex) {
+      error(title, project, ex);
       LOG.error(ex);
     }
   }
 
-  protected abstract boolean doSomething(@NotNull PsiFile file,
-                                         @NotNull Project project,
-                                         @Nullable VirtualFile virtualFile,
-                                         @NotNull String groupId) throws ExecutionException;
+  protected boolean doSomething(@NotNull VirtualFile virtualFile, @NotNull Project project, @NotNull String title)
+    throws ExecutionException {
+      final Module module = ModuleUtilCore.findModuleForFile(virtualFile, project);
+      assert module != null;
+      Document document = FileDocumentManager.getInstance().getDocument(virtualFile);
+      assert document != null;
+      final String filePath = virtualFile.getCanonicalPath();
+      assert filePath != null;
+
+      FileDocumentManager.getInstance().saveDocument(document);
+      GoExecutor executor = createExecutor(module, title, filePath);
+      if (executor != null) {
+        executor.executeWithProgress(false);
+        return true;
+      }
+      return false;
+  }
+
+  @Nullable
+  protected abstract GoExecutor createExecutor(Module module, @NotNull String title, @NotNull String filePath);
 }

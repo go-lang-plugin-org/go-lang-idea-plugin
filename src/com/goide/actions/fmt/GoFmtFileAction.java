@@ -16,80 +16,14 @@
 
 package com.goide.actions.fmt;
 
-import com.goide.sdk.GoSdkService;
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.process.KillableColoredProcessHandler;
-import com.intellij.execution.process.OSProcessHandler;
-import com.intellij.execution.process.ProcessAdapter;
-import com.intellij.execution.process.ProcessEvent;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiFile;
+import com.goide.util.GoExecutor;
+import com.intellij.openapi.module.Module;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoFmtFileAction extends GoExternalToolsAction {
-  public boolean doSomething(@NotNull PsiFile file,
-                             @NotNull Project project,
-                             @Nullable final VirtualFile virtualFile,
-                             @NotNull String groupId) throws ExecutionException {
-    if (virtualFile == null || !virtualFile.isInLocalFileSystem()) return true;
-    Document document = PsiDocumentManager.getInstance(project).getDocument(file);
-    assert document != null;
-    String filePath = virtualFile.getCanonicalPath();
-    assert filePath != null;
-
-    GeneralCommandLine commandLine = new GeneralCommandLine();
-    
-    String executablePath = GoSdkService.getInstance(project).getGoExecutablePath(ModuleUtilCore.findModuleForPsiElement(file));
-    if (StringUtil.isEmpty(executablePath)) {
-      warning(project, groupId, "Project sdk is not valid");
-      return true;
-    }
-
-    commandLine.setExePath(executablePath);
-    commandLine.addParameters("fmt", filePath);
-
-    FileDocumentManager.getInstance().saveDocument(document);
-
-    String commandLineString = commandLine.getCommandLineString();
-    OSProcessHandler handler = new KillableColoredProcessHandler(commandLine.createProcess(), commandLineString);
-    handler.addProcessListener(new ProcessAdapter() {
-      @Override
-      public void processTerminated(ProcessEvent event) {
-        ApplicationManager.getApplication().invokeLater(new Runnable() {
-          @Override
-          public void run() {
-            ApplicationManager.getApplication().runWriteAction(new Runnable() {
-              @Override
-              public void run() {
-                virtualFile.refresh(false, false);
-              }
-            });
-          }
-        });
-      }
-    });
-    handler.startNotify();
-    return false;
-  }
-
-  @Override
-  @NotNull
-  protected String getWarningTitle() {
-    return "Reformat code with go gmt";
-  }
-
-  @Override
-  @NotNull
-  protected String getErrorTitle(@NotNull String fileName) {
-    return fileName + " formatting with go fmt failed";
+  @Nullable
+  protected GoExecutor createExecutor(Module module, @NotNull String title, @NotNull String filePath) {
+    return GoExecutor.in(module).withPresentableName(title).withParameters("fmt", filePath).showOutputOnError();
   }
 }

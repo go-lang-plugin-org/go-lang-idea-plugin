@@ -18,6 +18,9 @@ import com.intellij.notification.Notifications;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.progress.ProgressIndicator;
+import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.Key;
@@ -203,6 +206,31 @@ public class GoExecutor {
       return false;
     }
   }
+
+  public void executeWithProgress(final boolean modal) {
+    ProgressManager.getInstance().run(new Task.Backgroundable(myProject, getPresentableName(), true) {
+      @Override
+      public void onCancel() {
+        ProcessHandler handler = getProcessHandler();
+        if (handler != null) {
+          handler.destroyProcess();
+        }
+      }
+
+      @Override
+      public boolean isConditionalModal() {
+        return modal;
+      }
+
+      public void run(@NotNull ProgressIndicator indicator) {
+        if (myProject == null || myProject.isDisposed()) {
+          return;
+        }
+        execute();
+      }
+    });
+  }
+
 
   @Nullable
   public ProcessHandler getProcessHandler() {
