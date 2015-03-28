@@ -1,6 +1,7 @@
-package com.goide.sdk;
+package com.goide.appengine;
 
-import com.goide.GoIcons;
+import com.goide.sdk.GoSdkService;
+import com.goide.sdk.GoSmallIDEsSdkService;
 import com.intellij.openapi.roots.libraries.DummyLibraryProperties;
 import com.intellij.openapi.roots.libraries.LibraryKind;
 import com.intellij.openapi.roots.libraries.LibraryPresentationProvider;
@@ -11,22 +12,24 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.util.List;
 
-public class GoSdkLibraryPresentationProvider extends LibraryPresentationProvider<DummyLibraryProperties> {
-  private static final LibraryKind KIND = LibraryKind.create("go");
+public class GoAppEngineLibraryPresentationProvider extends LibraryPresentationProvider<DummyLibraryProperties> {
+  private static final LibraryKind KIND = LibraryKind.create("go_gae");
 
-  public GoSdkLibraryPresentationProvider() {
+  public GoAppEngineLibraryPresentationProvider() {
     super(KIND);
   }
 
   @Nullable
+  @Override
   public Icon getIcon() {
-    return GoIcons.ICON;
+    return GoAppEngineIcons.ICON;
   }
 
   @Nullable
+  @Override
   public DummyLibraryProperties detect(@NotNull List<VirtualFile> classesRoots) {
     for (VirtualFile root : classesRoots) {
-      if (GoSmallIDEsSdkService.isGoSdkLibRoot(root) && !GoSdkService.isAppEngineSdkPath(GoSdkService.libraryRootToSdkPath(root))) {
+      if (GoSmallIDEsSdkService.isGoSdkLibRoot(root) && GoSdkService.isAppEngineSdkPath(GoSdkService.libraryRootToSdkPath(root))) {
         return DummyLibraryProperties.INSTANCE;
       }
     }
