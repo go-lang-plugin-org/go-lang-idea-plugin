@@ -69,7 +69,7 @@ public abstract class GoSdkService extends SimpleModificationTracker {
     if (sdkHomePath != null) {
       return isAppEngineSdkPath(sdkHomePath)
              ? FileUtil.join(StringUtil.trimEnd(sdkHomePath, GoConstants.APP_ENGINE_GO_ROOT_DIRECTORY_PATH), GoConstants.GAE_EXECUTABLE_NAME)
-             : FileUtil.join(sdkHomePath, GoConstants.GO_EXECUTABLE_NAME);
+             : FileUtil.join(sdkHomePath, "bin", GoConstants.GO_EXECUTABLE_NAME);
     }
     return null;
   }
