@@ -6,6 +6,7 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.SimpleModificationTracker;
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -41,7 +42,7 @@ public abstract class GoSdkService extends SimpleModificationTracker {
   }
 
   public static boolean isAppEngineSdkPath(@Nullable String path) {
-    return path != null && path.endsWith(GoConstants.APP_ENGINE_GO_ROOT_DIRECTORY);
+    return path != null && path.endsWith(GoConstants.APP_ENGINE_GO_ROOT_DIRECTORY_PATH);
   }
 
   public abstract void chooseAndSetSdk(@Nullable Module module);
@@ -67,8 +68,8 @@ public abstract class GoSdkService extends SimpleModificationTracker {
   public static String getGoExecutablePath(@Nullable String sdkHomePath) {
     if (sdkHomePath != null) {
       return isAppEngineSdkPath(sdkHomePath)
-             ? StringUtil.trimEnd(sdkHomePath, GoConstants.APP_ENGINE_GO_ROOT_DIRECTORY) + "/" + GoConstants.GAE_EXECUTABLE_NAME
-             : sdkHomePath + "/" + GoConstants.GO_EXECUTABLE_NAME;
+             ? FileUtil.join(StringUtil.trimEnd(sdkHomePath, GoConstants.APP_ENGINE_GO_ROOT_DIRECTORY_PATH), GoConstants.GAE_EXECUTABLE_NAME)
+             : FileUtil.join(sdkHomePath, GoConstants.GO_EXECUTABLE_NAME);
     }
     return null;
   }

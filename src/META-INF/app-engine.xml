@@ -4,6 +4,10 @@
   </extensions>
   <extensions defaultExtensionNs="com.intellij">
     <library.presentationProvider implementation="com.goide.appengine.GoAppEngineLibraryPresentationProvider"/>
+    
+    <!-- run application -->
+    <configurationType implementation="com.goide.appengine.run.GoAppEngineRunConfigurationType"/>
+    
     <!-- app engine remoteServer.type extension here -->
   </extensions>
 
