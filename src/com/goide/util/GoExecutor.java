@@ -164,7 +164,7 @@ public class GoExecutor {
         @Override
         public void processTerminated(@NotNull final ProcessEvent event) {
           super.processTerminated(event);
-          final boolean success = event.getExitCode() == 0;
+          final boolean success = event.getExitCode() == 0 && myProcessOutput.getStderr().isEmpty();
           result.set(success);
           if (success && myShowNotifications) {
             showNotification("Finished successfully", NotificationType.INFORMATION);
@@ -172,7 +172,7 @@ public class GoExecutor {
           ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
-              if (!success) {
+              if (!success && myShowOutputOnError) {
                 showOutput(myProcessHandler, historyProcessListener);
               }
               ApplicationManager.getApplication().runWriteAction(new Runnable() {
@@ -209,8 +209,11 @@ public class GoExecutor {
 
   public void executeWithProgress(final boolean modal) {
     ProgressManager.getInstance().run(new Task.Backgroundable(myProject, getPresentableName(), true) {
+      private boolean doNotStart = false;
+      
       @Override
       public void onCancel() {
+        doNotStart = true;
         ProcessHandler handler = getProcessHandler();
         if (handler != null) {
           handler.destroyProcess();
@@ -223,9 +226,10 @@ public class GoExecutor {
       }
 
       public void run(@NotNull ProgressIndicator indicator) {
-        if (myProject == null || myProject.isDisposed()) {
+        if (doNotStart || myProject == null || myProject.isDisposed()) {
           return;
         }
+        indicator.setIndeterminate(true);
         execute();
       }
     });
