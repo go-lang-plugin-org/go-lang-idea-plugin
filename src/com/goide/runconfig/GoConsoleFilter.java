@@ -34,6 +34,7 @@ import java.util.regex.Pattern;
 public class GoConsoleFilter implements Filter {
   private static final Pattern MESSAGE_PATTERN = Pattern.compile("^[ \t]*(\\S+\\.\\w+):(\\d+)[:\\s].*\n?$");
   private static final Pattern GO_GET_MESSAGE_PATTERN = Pattern.compile("^[ \t]*(go get (.*))\n?$");
+  private static final Pattern APP_ENGINE_PATH_PATTERN = Pattern.compile("/tmp[A-z0-9]+appengine-go-bin/");
 
   @NotNull private final Project myProject;
   @Nullable private final Module myModule;
@@ -68,6 +69,11 @@ public class GoConsoleFilter implements Filter {
     int lineNumber = StringUtil.parseInt(matcher.group(2), 0) - 1;
     if (lineNumber < 0) {
       return null;
+    }
+
+    Matcher appEnginePathMatcher = APP_ENGINE_PATH_PATTERN.matcher(fileName);
+    if (appEnginePathMatcher.find()) {
+      fileName = fileName.substring(appEnginePathMatcher.end());
     }
 
     VirtualFile virtualFile = LocalFileSystem.getInstance().refreshAndFindFileByPath(myWorkingDirectory + "/" + fileName);
