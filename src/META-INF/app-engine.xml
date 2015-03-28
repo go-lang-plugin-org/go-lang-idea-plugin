@@ -1,0 +1,11 @@
+<idea-plugin version="2">
+  <extensions defaultExtensionNs="ro.redeul.google.go">
+    <appengine.Extension implementation="com.goide.appengine.GoAppEngineExtension"/>
+  </extensions>
+  <extensions defaultExtensionNs="com.intellij">
+    <library.presentationProvider implementation="com.goide.appengine.GoAppEngineLibraryPresentationProvider"/>
+    <!-- app engine remoteServer.type extension here -->
+  </extensions>
+
+</idea-plugin>
+

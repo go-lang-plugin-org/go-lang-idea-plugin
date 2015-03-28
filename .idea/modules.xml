@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/google-app-engine/google-app-engine.iml" filepath="$PROJECT_DIR$/google-app-engine/google-app-engine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/google-app-engine/google-app-engine-yaml/google-app-engine-yaml.iml" filepath="$PROJECT_DIR$/google-app-engine/google-app-engine-yaml/google-app-engine-yaml.iml" />
       <module fileurl="file://$PROJECT_DIR$/intellij-go.iml" filepath="$PROJECT_DIR$/intellij-go.iml" />
       <module fileurl="file://$PROJECT_DIR$/jps-plugin/jps-plugin.iml" filepath="$PROJECT_DIR$/jps-plugin/jps-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/utils/utils.iml" filepath="$PROJECT_DIR$/utils/utils.iml" />

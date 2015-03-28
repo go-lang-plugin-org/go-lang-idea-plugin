@@ -12,7 +12,6 @@ import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.roots.libraries.LibraryTable;
 import com.intellij.openapi.roots.libraries.LibraryTablesRegistrar;
 import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.util.CachedValueProvider;
@@ -40,8 +39,7 @@ public class GoSmallIDEsSdkService extends GoSdkService {
           if (libraryName != null && libraryName.startsWith(LIBRARY_NAME)) {
             for (final VirtualFile root : library.getFiles(OrderRootType.CLASSES)) {
               if (isGoSdkLibRoot(root)) {
-                String result = StringUtil.trimEnd(StringUtil.trimEnd(root.getUrl(), "src/pkg"), "src");
-                return VfsUtilCore.urlToPath(result);
+                return libraryRootToSdkPath(root);
               }
             }
           }

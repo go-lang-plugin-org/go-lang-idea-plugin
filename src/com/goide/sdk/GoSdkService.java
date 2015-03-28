@@ -1,10 +1,14 @@
 package com.goide.sdk;
 
+import com.goide.GoConstants;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.SimpleModificationTracker;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VfsUtilCore;
+import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,10 +27,23 @@ public abstract class GoSdkService extends SimpleModificationTracker {
 
   @Nullable
   public abstract String getSdkHomePath(@Nullable Module module);
-  
+
+  @NotNull
+  public static String libraryRootToSdkPath(@NotNull VirtualFile root) {
+    return VfsUtilCore.urlToPath(StringUtil.trimEnd(StringUtil.trimEnd(StringUtil.trimEnd(root.getUrl(), "src/pkg"), "src"), "/"));
+  }
+
   @Nullable
   public abstract String getSdkVersion(@Nullable Module module);
   
+  public boolean isAppEngineSdk(@Nullable Module module) {
+    return isAppEngineSdkPath(getSdkHomePath(module));
+  }
+
+  public static boolean isAppEngineSdkPath(@Nullable String path) {
+    return path != null && path.endsWith(GoConstants.APP_ENGINE_GO_ROOT_DIRECTORY);
+  }
+
   public abstract void chooseAndSetSdk(@Nullable Module module);
 
   /**

@@ -15,6 +15,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="utils" />
     <orderEntry type="module" module-name="jps-plugin" />
+    <orderEntry type="module" module-name="google-app-engine" />
     <orderEntry type="library" scope="PROVIDED" name="coverage" level="project" />
   </component>
 </module>
