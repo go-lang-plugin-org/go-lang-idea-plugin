@@ -149,14 +149,17 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
           }
         }
         else {
-          ApplicationManager.getApplication().invokeLater(new Runnable() {
-            @Override
-            public void run() {
-              if (!project.isDisposed() && !GoSdkService.getInstance(project).isGoModule(GoModuleLibrariesInitializer.this.myModule)) {
-                removeLibraryIfNeeded();
+          synchronized (myLastHandledRoots) {
+            myLastHandledRoots.clear();
+            ApplicationManager.getApplication().invokeLater(new Runnable() {
+              @Override
+              public void run() {
+                if (!project.isDisposed() && !GoSdkService.getInstance(project).isGoModule(GoModuleLibrariesInitializer.this.myModule)) {
+                  removeLibraryIfNeeded();
+                }
               }
-            }
-          });
+            });
+          }
         }
       }
     }, delay);
