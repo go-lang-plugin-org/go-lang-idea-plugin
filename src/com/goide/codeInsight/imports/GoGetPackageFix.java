@@ -21,21 +21,15 @@ import com.goide.util.GoExecutor;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInspection.LocalQuickFixBase;
 import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.execution.process.ProcessHandler;
 import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.progress.PerformInBackgroundOption;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
 public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAction {
-  private static final String TITLE = "Something went wrong with `go get`";
   @NotNull private final String myPackage;
 
   public GoGetPackageFix(@NotNull String packageName) {
@@ -62,42 +56,11 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
     if (StringUtil.isEmpty(sdkPath)) {
       return;
     }
-
-    final Task task = new Task.Backgroundable(project, "Go get '" + packageName + "'", true, PerformInBackgroundOption.ALWAYS_BACKGROUND) {
-      GoExecutor executor;
-      volatile boolean doNotStart = false;
-
-      @Override
-      public void onCancel() {
-        doNotStart = true;
-        if (executor != null) {
-          ProcessHandler handler = executor.getProcessHandler();
-          if (handler != null) {
-            handler.destroyProcess();
-          }
-        }
-      }
-
-      @Override
-      public boolean shouldStartInBackground() {
-        return startInBackground;
-      }
-
-      public void run(@NotNull final ProgressIndicator indicator) {
-        if (!module.isDisposed()) {
-          indicator.setIndeterminate(true);
-          executor = GoExecutor.in(module).withPresentableName("go get " + packageName)
-            .withParameters("get", packageName).showNotifications().showOutputOnError();
-          if (!doNotStart) {
-            executor.execute();
-          }
-        }
-      }
-    };
     CommandProcessor.getInstance().runUndoTransparentAction(new Runnable() {
       @Override
       public void run() {
-        ProgressManager.getInstance().run(task);
+        GoExecutor.in(module).withPresentableName("go get " + packageName)
+          .withParameters("get", packageName).showNotifications().showOutputOnError().executeWithProgress(!startInBackground);
       }
     });
   }

@@ -221,6 +221,11 @@ public class GoExecutor {
       }
 
       @Override
+      public boolean shouldStartInBackground() {
+        return !modal;
+      }
+
+      @Override
       public boolean isConditionalModal() {
         return modal;
       }
