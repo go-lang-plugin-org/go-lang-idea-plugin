@@ -9,7 +9,7 @@
     <property name="gen" location="${basedir}/gen"/>
     <property name="jps" location="${basedir}/jps-plugin"/>
     <property name="google-app-engine" location="${basedir}/google-app-engine"/>
-    <property name="google-app-engine-yaml" location="${basedir}/google-app-engine-yaml"/>
+    <property name="google-app-engine-yaml" location="${google-app-engine}/google-app-engine-yaml"/>
     <property name="utils" location="${basedir}/utils"/>
     <property name="test.src" location="${basedir}/tests"/>
     <property name="build" location="build"/>
