@@ -8,6 +8,8 @@
     <property name="src" location="${basedir}/src"/>
     <property name="gen" location="${basedir}/gen"/>
     <property name="jps" location="${basedir}/jps-plugin"/>
+    <property name="google-app-engine" location="${basedir}/google-app-engine"/>
+    <property name="google-app-engine-yaml" location="${basedir}/google-app-engine-yaml"/>
     <property name="utils" location="${basedir}/utils"/>
     <property name="test.src" location="${basedir}/tests"/>
     <property name="build" location="build"/>
@@ -80,6 +82,9 @@
                 <fileset dir="${jps}">
                     <patternset refid="resources"/>
                 </fileset>
+                <fileset dir="${google-app-engine}">
+                    <patternset refid="resources"/>
+                </fileset>
                 <fileset dir="${jps}/src">
                     <include name="META-INF/services/**"/>
                 </fileset>
@@ -101,6 +106,8 @@
                 <src path="${gen}"/>
                 <src path="${utils}/src"/>
                 <src path="${jps}/src"/>
+                <src path="${google-app-engine}/src"/>
+                <src path="${google-app-engine-yaml}/src"/>
                 <src path="${test.src}"/>
             </javac2>
 
