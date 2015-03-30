@@ -17,6 +17,7 @@
 package com.goide.runconfig;
 
 import com.goide.codeInsight.imports.GoGetPackageFix;
+import com.goide.sdk.GoSdkUtil;
 import com.intellij.execution.filters.Filter;
 import com.intellij.execution.filters.HyperlinkInfo;
 import com.intellij.execution.filters.OpenFileHyperlinkInfo;
@@ -79,19 +80,16 @@ public class GoConsoleFilter implements Filter {
     VirtualFile virtualFile = LocalFileSystem.getInstance().refreshAndFindFileByPath(myWorkingDirectory + "/" + fileName);
     if (virtualFile == null) {
       if (myModule != null) {
-        VirtualFile moduleFile = myModule.getModuleFile();
-        if (moduleFile != null) {
-          VirtualFile moduleDirectory = moduleFile.getParent();
-          if (moduleDirectory != null) {
-            virtualFile = moduleDirectory.findFileByRelativePath(fileName);
-          }
+        for (VirtualFile goPathSrc : GoSdkUtil.getGoPathsSources(myProject, myModule)) {
+          virtualFile = goPathSrc.findFileByRelativePath(fileName);
+          if (virtualFile != null) break;
         }
       }
-      else {
-        VirtualFile baseDir = myProject.getBaseDir();
-        if (baseDir != null) {
-          virtualFile = baseDir.findFileByRelativePath(fileName);
-        }
+    }
+    if (virtualFile == null) {
+      VirtualFile baseDir = myProject.getBaseDir();
+      if (baseDir != null) {
+        virtualFile = baseDir.findFileByRelativePath(fileName);
       }
     }
     if (virtualFile == null) {
