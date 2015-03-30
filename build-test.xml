@@ -85,6 +85,9 @@
                 <fileset dir="${google-app-engine}">
                     <patternset refid="resources"/>
                 </fileset>
+                <fileset dir="${google-app-engine-yaml}">
+                    <patternset refid="resources"/>
+                </fileset>
                 <fileset dir="${jps}/src">
                     <include name="META-INF/services/**"/>
                 </fileset>
@@ -136,6 +139,9 @@
 
         <copy todir="${build}">
             <fileset dir="${resources}">
+                <include name="*/**"/>
+            </fileset>
+            <fileset dir="${google-app-engine}/resources">
                 <include name="*/**"/>
             </fileset>
         </copy>
