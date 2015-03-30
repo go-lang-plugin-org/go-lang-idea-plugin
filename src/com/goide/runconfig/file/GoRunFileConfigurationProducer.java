@@ -26,7 +26,8 @@ public class GoRunFileConfigurationProducer extends GoRunConfigurationProducerBa
   }
 
   @Override
-  protected void setConfigurationName(@NotNull GoRunFileConfiguration configuration, @NotNull PsiFile file) {
-    configuration.setName("Run " + file.getName());
+  @NotNull
+  protected String getConfigurationName(@NotNull PsiFile file) {
+    return "go run " + file.getName();
   }
 }

@@ -17,9 +17,17 @@
 package com.goide.runconfig.application;
 
 import com.goide.runconfig.GoRunConfigurationProducerBase;
+import com.intellij.psi.PsiFile;
+import org.jetbrains.annotations.NotNull;
 
 public class GoApplicationRunConfigurationProducer extends GoRunConfigurationProducerBase<GoApplicationConfiguration> implements Cloneable {
   public GoApplicationRunConfigurationProducer() {
     super(GoApplicationRunConfigurationType.getInstance());
+  }
+
+  @NotNull
+  @Override
+  protected String getConfigurationName(@NotNull PsiFile file) {
+    return "Build " + file.getName() + " and run";
   }
 }

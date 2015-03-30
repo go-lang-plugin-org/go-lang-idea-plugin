@@ -29,7 +29,7 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class GoRunConfigurationProducerBase<T extends GoRunConfigurationWithMain> extends RunConfigurationProducer<T> implements Cloneable {
+public abstract class GoRunConfigurationProducerBase<T extends GoRunConfigurationWithMain> extends RunConfigurationProducer<T> implements Cloneable {
   protected GoRunConfigurationProducerBase(@NotNull ConfigurationType configurationType) {
     super(configurationType);
   }
@@ -39,7 +39,7 @@ public class GoRunConfigurationProducerBase<T extends GoRunConfigurationWithMain
     PsiFile file = getFileFromContext(context);
     if (file != null) {
       if (GoConstants.MAIN.equals(((GoFile)file).getPackageName()) && ((GoFile)file).findMainFunction() != null) {
-        setConfigurationName(configuration, file);
+        configuration.setName(getConfigurationName(file));
         configuration.setFilePath(file.getVirtualFile().getPath());
         Module module = context.getModule();
         if (module != null) {
@@ -51,9 +51,8 @@ public class GoRunConfigurationProducerBase<T extends GoRunConfigurationWithMain
     return false;
   }
 
-  protected void setConfigurationName(@NotNull T configuration, @NotNull PsiFile file) {
-    configuration.setName(file.getName());
-  }
+  @NotNull
+  protected abstract String getConfigurationName(@NotNull PsiFile file);
 
   @Override
   public boolean isConfigurationFromContext(@NotNull T configuration, ConfigurationContext context) {
