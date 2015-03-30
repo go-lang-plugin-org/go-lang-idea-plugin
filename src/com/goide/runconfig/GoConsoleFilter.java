@@ -33,7 +33,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GoConsoleFilter implements Filter {
-  private static final Pattern MESSAGE_PATTERN = Pattern.compile("^[ \t]*(\\S+\\.\\w+):(\\d+)[:\\s].*\n?$");
+  private static final Pattern MESSAGE_PATTERN = Pattern.compile("^[ \t]*(\\S+\\.\\w+):(\\d+)(:(\\d+))?[:\\s].*\n?$");
   private static final Pattern GO_GET_MESSAGE_PATTERN = Pattern.compile("^[ \t]*(go get (.*))\n?$");
   private static final Pattern APP_ENGINE_PATH_PATTERN = Pattern.compile("/tmp[A-z0-9]+appengine-go-bin/");
 
@@ -66,10 +66,19 @@ public class GoConsoleFilter implements Filter {
       return null;
     }
 
+    int startOffset = matcher.start(1);
+    int endOffset = matcher.end(2);
+    
     String fileName = matcher.group(1);
-    int lineNumber = StringUtil.parseInt(matcher.group(2), 0) - 1;
+    int lineNumber = StringUtil.parseInt(matcher.group(2), 1) - 1;
     if (lineNumber < 0) {
       return null;
+    }
+
+    int columnNumber = 0;
+    if (matcher.groupCount() > 3) {
+      columnNumber = StringUtil.parseInt(matcher.group(4), 0);
+      endOffset = matcher.end(4);
     }
 
     Matcher appEnginePathMatcher = APP_ENGINE_PATH_PATTERN.matcher(fileName);
@@ -96,8 +105,8 @@ public class GoConsoleFilter implements Filter {
       return null;
     }
 
-    HyperlinkInfo hyperlinkInfo = new OpenFileHyperlinkInfo(myProject, virtualFile, lineNumber);
+    HyperlinkInfo hyperlinkInfo = new OpenFileHyperlinkInfo(myProject, virtualFile, lineNumber, columnNumber);
     int lineStart = entireLength - line.length();
-    return new Result(lineStart + matcher.start(1), lineStart + matcher.end(2), hyperlinkInfo);
+    return new Result(lineStart + startOffset, lineStart + endOffset, hyperlinkInfo);
   }
 }
