@@ -1,0 +1,24 @@
+started_test: Test_Sd
+  test_output
+
+finished_test: Test_Sd
+started_test: Test_Sp
+  test_output
+
+  test_output: Test_Sp............end
+  ignored_test: Test_Sp
+    sputils_test.go:23: sad
+finished_test: Test_Sp
+started_test: Test_Sp2
+  test_output
+
+  test_output: Test_Sp............end
+
+finished_test: Test_Sp2
+started_test: Test_Sp3
+  test_output
+
+  test_output: Test_Sp............end
+  failed_test: Test_Sp3
+    sputils_test.go:43: sad
+finished_test: Test_Sp3

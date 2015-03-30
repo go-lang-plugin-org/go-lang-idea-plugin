@@ -37,6 +37,10 @@ public class GoUnitTestEventsConverterTest extends GoCodeInsightFixtureTestCase 
   public void testStdOut() throws Exception {
     doTest();
   }
+  
+  public void testOneLineEvents() throws Exception {
+    doTest();
+  }
 
   @Override
   protected String getBasePath() {

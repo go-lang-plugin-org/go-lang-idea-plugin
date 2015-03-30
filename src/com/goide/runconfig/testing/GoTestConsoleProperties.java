@@ -57,9 +57,9 @@ public class GoTestConsoleProperties extends TestConsoleProperties implements SM
 
   public static class GoOutputToGeneralTestEventsConverter extends OutputToGeneralTestEventsConverter {
     private static final Pattern RUN = Pattern.compile("^=== RUN (.+)");
-    private static final Pattern PASSED = Pattern.compile("^--- PASS: ([^( ]+)");
-    private static final Pattern SKIP = Pattern.compile("^--- SKIP: ([^( ]+)");
-    private static final Pattern FAILED = Pattern.compile("^--- FAIL: ([^( ]+)");
+    private static final Pattern PASSED = Pattern.compile("--- PASS: ([^( ]+)");
+    private static final Pattern SKIP = Pattern.compile("--- SKIP: ([^( ]+)");
+    private static final Pattern FAILED = Pattern.compile("--- FAIL: ([^( ]+)");
     private static final Pattern FINISHED = Pattern.compile("^(PASS)|(FAIL)$");
 
     private boolean myFailed = false;
@@ -86,19 +86,21 @@ public class GoTestConsoleProperties extends TestConsoleProperties implements SM
 
       if ((matcher = PASSED.matcher(text)).find()) {
         String testName = StringUtil.notNullize(matcher.group(1), "<test>");
-        return addNewLineIfNeeded(testName, outputType, visitor) 
+        return handleFinishTest(text, matcher, testName, outputType, visitor) 
                && processNotFinishedMessage(ServiceMessageBuilder.testFinished(testName).toString(), outputType, visitor);
       }
 
       if ((matcher = SKIP.matcher(text)).find()) {
         mySkipped = true;
         myCurrentTest = StringUtil.notNullize(matcher.group(1), "<test>");
+        handleFinishTest(text, matcher, myCurrentTest, outputType, visitor);
         return true;
       }
 
       if ((matcher = FAILED.matcher(text)).find()) {
         myFailed = true;
         myCurrentTest = StringUtil.notNullize(matcher.group(1), "<test>");
+        handleFinishTest(text, matcher, myCurrentTest, outputType, visitor);
         return true;
       }
 
@@ -132,7 +134,7 @@ public class GoTestConsoleProperties extends TestConsoleProperties implements SM
       ServiceMessageBuilder builder = myFailed
                                       ? ServiceMessageBuilder.testFailed(myCurrentTest)
                                       : ServiceMessageBuilder.testIgnored(myCurrentTest);
-      String message = builder.addAttribute("message", myStdOut.toString().trim()).toString();
+      String message = builder.addAttribute("message", myStdOut.toString().trim() + "\n").toString();
 
       myFailed = false;
       mySkipped = false;
@@ -141,10 +143,22 @@ public class GoTestConsoleProperties extends TestConsoleProperties implements SM
              && super.processServiceMessages(ServiceMessageBuilder.testFinished(myCurrentTest).toString(), outputType, visitor);
     }
 
+    private boolean handleFinishTest(String text, Matcher matcher, String testName, Key outputType, ServiceMessageVisitor visitor)
+      throws ParseException {
+      addNewLineIfNeeded(testName, outputType, visitor);
+      if (matcher.start() > 0) {
+        myOutputAppeared = true;
+        String out = text.substring(0, matcher.start()) + (!myFailed && !mySkipped ? "\n" : "");
+        ServiceMessageBuilder message = ServiceMessageBuilder.testStdOut(testName).addAttribute("out", out);
+        super.processServiceMessages(message.toString(), outputType, visitor);
+      }
+      return true;
+    }
+
     private boolean addNewLineIfNeeded(@NotNull String testName, @NotNull Key outputType, @NotNull ServiceMessageVisitor visitor)
       throws ParseException {
       ServiceMessageBuilder message = ServiceMessageBuilder.testStdOut(testName).addAttribute("out", "\n");
-      return !myOutputAppeared || processServiceMessages(message.toString(), outputType, visitor);
+      return !myOutputAppeared || super.processServiceMessages(message.toString(), outputType, visitor);
     }
   }
 }
