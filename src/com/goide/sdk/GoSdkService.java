@@ -1,6 +1,7 @@
 package com.goide.sdk;
 
 import com.goide.GoConstants;
+import com.goide.GoEnvironmentUtil;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.Configurable;
@@ -68,8 +69,9 @@ public abstract class GoSdkService extends SimpleModificationTracker {
   public static String getGoExecutablePath(@Nullable String sdkHomePath) {
     if (sdkHomePath != null) {
       return isAppEngineSdkPath(sdkHomePath)
-             ? FileUtil.join(StringUtil.trimEnd(sdkHomePath, GoConstants.APP_ENGINE_GO_ROOT_DIRECTORY_PATH), GoConstants.GAE_EXECUTABLE_NAME)
-             : FileUtil.join(sdkHomePath, "bin", GoConstants.GO_EXECUTABLE_NAME);
+             ? FileUtil.join(StringUtil.trimEnd(sdkHomePath, GoConstants.APP_ENGINE_GO_ROOT_DIRECTORY_PATH),
+                             GoEnvironmentUtil.getBinaryFileNameForPath(GoConstants.GAE_EXECUTABLE_NAME))
+             : FileUtil.join(sdkHomePath, "bin", GoEnvironmentUtil.getBinaryFileNameForPath(GoConstants.GO_EXECUTABLE_NAME));
     }
     return null;
   }
