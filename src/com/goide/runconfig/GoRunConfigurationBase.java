@@ -69,7 +69,7 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
       myWorkingDirectory = StringUtil.trimEnd(PathUtil.getParentPath(module.getModuleFilePath()), ".idea");
     }
     else {
-      myWorkingDirectory = configurationModule.getProject().getBasePath();
+      myWorkingDirectory = StringUtil.notNullize(configurationModule.getProject().getBasePath());
     }
   }
 
