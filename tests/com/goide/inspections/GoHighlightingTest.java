@@ -108,7 +108,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   
   public void testInitInOnePackage() {
     myFixture.configureByText("a.go", "package foo; func init() {bar()}; func bar() {}");
-    myFixture.configureByText("b.go", "package foo; func init() {bar()}; func <error>bar</error>() {}");
+    myFixture.configureByText("b.go", "package foo; func init() {bar()}; func <error>bar</error>() {}; func init() {}");
     myFixture.checkHighlighting();
   }
 
