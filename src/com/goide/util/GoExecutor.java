@@ -49,7 +49,8 @@ public class GoExecutor {
   @Nullable private String myGoPath;
   @Nullable private String myWorkDirectory;
   private boolean myShowOutputOnError = false;
-  private boolean myShowNotifications = false;
+  private boolean myShowNotificationsOnError = false;
+  private boolean myShowNotificationsOnSuccess = false;
   private boolean myPassParentEnvironment = true;
   @Nullable private String myExePath = null;
   @Nullable private String myPresentableName;
@@ -142,8 +143,9 @@ public class GoExecutor {
   }
 
   @NotNull
-  public GoExecutor showNotifications() {
-    myShowNotifications = true;
+  public GoExecutor showNotifications(boolean onErrorOnly) {
+    myShowNotificationsOnError = true;
+    myShowNotificationsOnSuccess = !onErrorOnly;
     return this;
   }
 
@@ -169,7 +171,7 @@ public class GoExecutor {
           super.processTerminated(event);
           final boolean success = event.getExitCode() == 0 && myProcessOutput.getStderr().isEmpty();
           result.set(success);
-          if (success && myShowNotifications) {
+          if (success && myShowNotificationsOnSuccess) {
             showNotification("Finished successfully", NotificationType.INFORMATION);
           }
           ApplicationManager.getApplication().invokeLater(new Runnable() {
@@ -201,7 +203,7 @@ public class GoExecutor {
       if (myShowOutputOnError) {
         ExecutionHelper.showErrors(myProject, Collections.singletonList(e), getPresentableName(), null);
       }
-      if (myShowNotifications) {
+      if (myShowNotificationsOnError) {
         showNotification(StringUtil.notNullize(e.getMessage(), "Unknown error, see logs for details"), NotificationType.ERROR);
       }
       String commandLineInfo = commandLine != null ? commandLine.getCommandLineString() : "not constructed";
@@ -270,7 +272,7 @@ public class GoExecutor {
       runContentExecutor.run();
       historyProcessListener.apply(outputHandler);
     }
-    if (myShowNotifications) {
+    if (myShowNotificationsOnError) {
       showNotification("Failed to run", NotificationType.ERROR);
     }
   }
