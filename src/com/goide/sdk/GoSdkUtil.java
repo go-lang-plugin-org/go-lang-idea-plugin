@@ -281,8 +281,19 @@ public class GoSdkUtil {
     if (new File(path, GoConstants.LIB_EXEC_DIRECTORY).exists()) {
       path += File.separatorChar + GoConstants.LIB_EXEC_DIRECTORY;
     }
-    boolean isAppEnginePath = new File(path, GoConstants.APP_ENGINE_MARKER_FILE).exists();
-    return isAppEnginePath ? path + GoConstants.APP_ENGINE_GO_ROOT_DIRECTORY_PATH : path;
+
+    File possibleGCloudSdk = new File(path, GoConstants.GCLOUD_APP_ENGINE_DIRECTORY_PATH);
+    if (possibleGCloudSdk.exists() && possibleGCloudSdk.isDirectory()) {
+      if (isAppEngine(possibleGCloudSdk.getAbsolutePath())) {
+        return possibleGCloudSdk.getAbsolutePath() + GoConstants.APP_ENGINE_GO_ROOT_DIRECTORY_PATH;
+      }
+    }
+
+    return isAppEngine(path) ? path + GoConstants.APP_ENGINE_GO_ROOT_DIRECTORY_PATH : path;
+  }
+
+  private static boolean isAppEngine(@NotNull String path) {
+    return new File(path, GoConstants.APP_ENGINE_MARKER_FILE).exists();
   }
 
 
