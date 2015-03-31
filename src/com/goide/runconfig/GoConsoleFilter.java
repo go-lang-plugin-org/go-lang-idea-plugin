@@ -78,7 +78,7 @@ public class GoConsoleFilter implements Filter {
     int columnNumber = 0;
     if (matcher.groupCount() > 3) {
       columnNumber = StringUtil.parseInt(matcher.group(4), 0);
-      endOffset = matcher.end(4);
+      endOffset = Math.max(endOffset, matcher.end(4));
     }
 
     Matcher appEnginePathMatcher = APP_ENGINE_PATH_PATTERN.matcher(fileName);
