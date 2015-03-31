@@ -22,12 +22,12 @@ import com.intellij.execution.runners.DefaultProgramRunner;
 import org.jetbrains.annotations.NotNull;
 
 public class GoRunner extends DefaultProgramRunner {
-  public static final String GO_RUNNER_ID = "GoRunner";
+  private static final String ID = "GoRunner";
 
   @NotNull
   @Override
   public String getRunnerId() {
-    return GO_RUNNER_ID;
+    return ID;
   }
 
   @Override

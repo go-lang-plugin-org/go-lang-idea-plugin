@@ -19,23 +19,15 @@ package com.goide.runconfig.application;
 import com.goide.runconfig.GoRunningState;
 import com.goide.util.GoExecutor;
 import com.intellij.execution.ExecutionException;
-import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.process.ProcessHandler;
-import com.intellij.execution.process.ProcessOutput;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.progress.Task;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.io.FileUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.IOException;
 
 public class GoApplicationRunningState extends GoRunningState<GoApplicationConfiguration> {
-  private File myTempFile;
+  private String myTmpFilePath;
 
   public GoApplicationRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module,
                                    @NotNull GoApplicationConfiguration configuration) {
@@ -45,65 +37,24 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
   @NotNull
   @Override
   protected ProcessHandler startProcess() throws ExecutionException {
-    setConsoleBuilder(TextConsoleBuilderFactory.getInstance().createBuilder(myModule.getProject()));
     try {
-      myTempFile = FileUtil.createTempFile(myConfiguration.getName(), "go", true);
-      //noinspection ResultOfMethodCallIgnored
-      myTempFile.setExecutable(true);
-    }
-    catch (IOException e) {
-      throw new ExecutionException("Can't create temporary output file", e);
-    }
-
-    final ProcessOutput processOutput = new ProcessOutput();
-    final Ref<ExecutionException> buildException = Ref.create();
-    final Ref<Boolean> success = Ref.create(false);
-
-    try {
-      ProgressManager.getInstance().run(new Task.Modal(myModule.getProject(), "go build", true) {
-        private GoExecutor myExecutor;
-
-        @Override
-        public void onCancel() {
-          if (myExecutor != null) {
-            ProcessHandler handler = myExecutor.getProcessHandler();
-            if (handler != null) {
-              handler.destroyProcess();
-            }
-          }
-        }
-
-        public void run(@NotNull ProgressIndicator indicator) {
-          if (myProject == null || myProject.isDisposed()) {
-            return;
-          }
-          myExecutor = GoExecutor.in(myModule).withPresentableName("go build")
-            .withParameters("build", "-o", myTempFile.getAbsolutePath(), myConfiguration.getFilePath())
-            .withWorkDirectory(myConfiguration.getWorkingDirectory())
-            .withProcessOutput(processOutput).showOutputOnError();
-          success.set(myExecutor.execute());
-        }
-      });
-
-      if (!buildException.isNull()) {
-        throw buildException.get();
-      }
-
-      if (!success.get()) {
-        throw new ExecutionException("Build failure. `go build` is finished with exit code " + processOutput.getExitCode());
-      }
-
       return super.startProcess();
     }
     finally {
-      //noinspection ResultOfMethodCallIgnored
-      myTempFile.delete();
+      File file = new File(myTmpFilePath);
+      if (file.exists()) {
+        //noinspection ResultOfMethodCallIgnored
+        file.delete();
+      }
     }
   }
 
-
   @Override
   protected GoExecutor patchExecutor(@NotNull GoExecutor executor) throws ExecutionException {
-    return executor.withExePath(myTempFile.getAbsolutePath());
+    return executor.withExePath(myTmpFilePath);
+  }
+
+  public void setTmpFilePath(String tmpFilePath) {
+    myTmpFilePath = tmpFilePath;
   }
 }

@@ -1,6 +1,5 @@
 package com.goide.appengine.run;
 
-import com.goide.runconfig.GoConsoleFilter;
 import com.goide.runconfig.GoRunningState;
 import com.goide.util.GoExecutor;
 import com.intellij.execution.ExecutionException;
@@ -14,7 +13,6 @@ public class GoAppEngineRunningState extends GoRunningState<GoAppEngineRunConfig
                                  @NotNull Module module,
                                  @NotNull GoAppEngineRunConfiguration configuration) {
     super(env, module, configuration);
-    addConsoleFilters(new GoConsoleFilter(myConfiguration.getProject(), myModule, myConfiguration.getWorkingDirectory()));
   }
   
   @Override

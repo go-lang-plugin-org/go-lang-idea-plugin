@@ -34,18 +34,19 @@ public abstract class GoRunningState<T extends GoRunConfigurationBase<?>> extend
     super(env);
     myModule = module;
     myConfiguration = configuration;
+    addConsoleFilters(new GoConsoleFilter(myConfiguration.getProject(), myModule, myConfiguration.getWorkingDirectory()));
   }
 
   @NotNull
   @Override
   protected ProcessHandler startProcess() throws ExecutionException {
-    GeneralCommandLine commandLine = createExecutor().createCommandLine();
+    GeneralCommandLine commandLine = patchExecutor(createCommonExecutor()).createCommandLine();
     return new KillableColoredProcessHandler(commandLine.createProcess(), commandLine.getCommandLineString());
   }
 
   @NotNull
-  private GoExecutor createExecutor() throws ExecutionException {
-    return patchExecutor(GoExecutor.in(myModule).withWorkDirectory(myConfiguration.getWorkingDirectory()))
+  public GoExecutor createCommonExecutor() throws ExecutionException {
+    return GoExecutor.in(myModule).withWorkDirectory(myConfiguration.getWorkingDirectory())
       .withExtraEnvironment(myConfiguration.getCustomEnvironment())
       .withPassParentEnvironment(myConfiguration.isPassParentEnvironment())
       .withParameterString(myConfiguration.getParams());

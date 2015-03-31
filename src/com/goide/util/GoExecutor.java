@@ -34,6 +34,7 @@ import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -54,6 +55,7 @@ public class GoExecutor {
   @Nullable private String myExePath = null;
   @Nullable private String myPresentableName;
   private OSProcessHandler myProcessHandler;
+  private Collection<ProcessListener> myProcessListeners = ContainerUtil.newArrayList();
 
   private GoExecutor(@NotNull Project project, @Nullable Module module) {
     myProject = project;
@@ -104,10 +106,9 @@ public class GoExecutor {
     myGoPath = goPath;
     return this;
   }
-
-  @NotNull
-  public GoExecutor withProcessOutput(@NotNull ProcessOutput processOutput) {
-    myProcessOutput = processOutput;
+  
+  public GoExecutor withProcessListener(@NotNull ProcessListener listener) {
+    myProcessListeners.add(listener);
     return this;
   }
 
@@ -159,6 +160,9 @@ public class GoExecutor {
       myProcessHandler = new KillableColoredProcessHandler(commandLine);
       final HistoryProcessListener historyProcessListener = new HistoryProcessListener();
       myProcessHandler.addProcessListener(historyProcessListener);
+      for (ProcessListener listener : myProcessListeners) {
+        myProcessHandler.addProcessListener(listener);
+      }
 
       final CapturingProcessAdapter processAdapter = new CapturingProcessAdapter(myProcessOutput) {
         @Override
@@ -210,7 +214,7 @@ public class GoExecutor {
   public void executeWithProgress(final boolean modal) {
     ProgressManager.getInstance().run(new Task.Backgroundable(myProject, getPresentableName(), true) {
       private boolean doNotStart = false;
-      
+
       @Override
       public void onCancel() {
         doNotStart = true;

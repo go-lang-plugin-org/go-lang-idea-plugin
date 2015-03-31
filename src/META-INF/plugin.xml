@@ -34,7 +34,7 @@
   <change-notes>
     <![CDATA[
     <ul>
-      <li>Fully reworked internals</li>
+      <li>Initial GAE support: running dev server. <strong>Requires resetting project SDK.</strong></li>
     </ul>
     ]]>
   </change-notes>
@@ -141,7 +141,8 @@
     <runConfigurationProducer implementation="com.goide.runconfig.file.GoRunFileConfigurationProducer"/>
 
     <!-- run application -->
-    <programRunner implementation="com.goide.runconfig.GoRunner"/>
+    <programRunner implementation="com.goide.runconfig.GoBuildingRunner" order="before goRunner"/>
+    <programRunner id="goRunner" implementation="com.goide.runconfig.GoRunner"/>
     <runConfigurationProducer implementation="com.goide.runconfig.application.GoApplicationRunConfigurationProducer"/>
     <configurationType implementation="com.goide.runconfig.application.GoApplicationRunConfigurationType"/>
 
