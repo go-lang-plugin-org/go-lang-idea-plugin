@@ -28,3 +28,37 @@ GO_FILE
         STRING_LITERAL
           PsiElement(string)('"x509: invalid signature: parent certificate cannot sign this kind of certificate"')
       PsiElement(})('}')
+  METHOD_DECLARATION
+    PsiElement(func)('func')
+    RECEIVER
+      PsiElement(()('(')
+      PsiElement(identifier)('ds')
+      PsiElement(*)('*')
+      TYPE
+        TYPE_REFERENCE_EXPRESSION
+          PsiElement(identifier)('dasa')
+      PsiElement(,)(',')
+      PsiElement())(')')
+    PsiElement(identifier)('yooolo')
+    SIGNATURE
+      PARAMETERS
+        PsiElement(()('(')
+        PARAMETER_DECLARATION
+          PARAM_DEFINITION
+            PsiElement(identifier)('dsa')
+          TYPE
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('dasa')
+        PsiElement())(')')
+    BLOCK
+      PsiElement({)('{')
+      ASSIGNMENT_STATEMENT
+        UNARY_EXPR
+          PsiElement(*)('*')
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('ds')
+        ASSIGN_OP
+          PsiElement(=)('=')
+        REFERENCE_EXPRESSION
+          PsiElement(identifier)('dsa')
+      PsiElement(})('}')

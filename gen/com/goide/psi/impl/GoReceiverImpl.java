@@ -35,6 +35,12 @@ public class GoReceiverImpl extends GoNamedElementImpl<GoReceiverStub> implement
   }
 
   @Override
+  @Nullable
+  public PsiElement getComma() {
+    return findChildByType(COMMA);
+  }
+
+  @Override
   @NotNull
   public PsiElement getLparen() {
     return findNotNullChildByType(LPAREN);

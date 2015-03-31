@@ -273,7 +273,7 @@ Receiver ::= '(' (identifier ReceiverTail | ReceiverTail) ')' {
   pin=1
   stubClass="com.goide.stubs.GoReceiverStub"
 }
-private ReceiverTail ::= '*'? ReceiverResultType
+private ReceiverTail ::= '*'? ReceiverResultType ','?
 ReceiverResultType ::= TypeReferenceExpression {elementType=Type}
 
 Literal ::=
