@@ -12,7 +12,6 @@ import com.intellij.execution.configurations.EncodingEnvironmentUtil;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.ParametersList;
 import com.intellij.execution.process.*;
-import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.application.ApplicationManager;
@@ -39,7 +38,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class GoExecutor {
+public class GoExecutor {  
   private static final Logger LOGGER = Logger.getInstance(GoExecutor.class);
   @NotNull private final Map<String, String> myExtraEnvironment = ContainerUtil.newHashMap();
   @NotNull private final ParametersList myParameterList = new ParametersList();
@@ -254,7 +253,8 @@ public class GoExecutor {
     ApplicationManager.getApplication().invokeLater(new Runnable() {
       @Override
       public void run() {
-        Notifications.Bus.notify(new Notification(GoConstants.GO_NOTIFICATION_GROUP, getPresentableName(), message, type), myProject);
+        String title = getPresentableName();
+        Notifications.Bus.notify(GoConstants.GO_EXECUTION_NOTIFICATION_GROUP.createNotification(title, message, type, null), myProject);
       }
     });
   }

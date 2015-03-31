@@ -21,7 +21,6 @@ import com.goide.GoEnvironmentUtil;
 import com.goide.util.GoExecutor;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.PathEnvironmentVariableUtil;
-import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.module.Module;
@@ -38,9 +37,9 @@ public class GoImportsFileAction extends GoExternalToolsAction {
     throws ExecutionException {
     File executable = getExecutable();
     if (executable == null) {
-      Notifications.Bus.notify(new Notification(GoConstants.GO_NOTIFICATION_GROUP, title,
+      Notifications.Bus.notify(GoConstants.GO_EXECUTION_NOTIFICATION_GROUP.createNotification(title,
                                                 "Looks like you haven't any goimports executable in your PATH",
-                                                NotificationType.WARNING), project);
+                                                NotificationType.WARNING, null), project);
       return false;
     }
     return super.doSomething(virtualFile, project, title);

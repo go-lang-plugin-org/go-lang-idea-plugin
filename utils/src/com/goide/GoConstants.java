@@ -1,5 +1,7 @@
 package com.goide;
 
+import com.intellij.notification.NotificationGroup;
+import com.intellij.openapi.wm.ToolWindowId;
 import org.jetbrains.annotations.NonNls;
 
 public class GoConstants {
@@ -16,6 +18,7 @@ public class GoConstants {
   public static final String INIT = "init";
 
   public static final String GO_NOTIFICATION_GROUP = "Go plugin notifications";
+  public static NotificationGroup GO_EXECUTION_NOTIFICATION_GROUP = NotificationGroup.toolWindowGroup("Go Execution", ToolWindowId.RUN);
   
   @NonNls public static final String LIB_EXEC_DIRECTORY = "libexec";
   @NonNls public static final String GO_VERSION_FILE_PATH = "runtime/zversion.go";

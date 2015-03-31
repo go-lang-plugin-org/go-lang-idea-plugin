@@ -21,7 +21,6 @@ import com.goide.GoFileType;
 import com.goide.sdk.GoSdkService;
 import com.goide.util.GoExecutor;
 import com.intellij.execution.ExecutionException;
-import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -43,8 +42,9 @@ public abstract class GoExternalToolsAction extends DumbAwareAction {
   private static final Logger LOG = Logger.getInstance(GoExternalToolsAction.class);
 
   private static void error(@NotNull String title, @NotNull Project project, @Nullable Exception ex) {
-    Notifications.Bus.notify(new Notification(GoConstants.GO_NOTIFICATION_GROUP, title,
-                                              ex == null ? "" : ExceptionUtil.getUserStackTrace(ex, LOG), NotificationType.ERROR), project);
+    String message = ex == null ? "" : ExceptionUtil.getUserStackTrace(ex, LOG);
+    NotificationType type = NotificationType.ERROR;
+    Notifications.Bus.notify(GoConstants.GO_EXECUTION_NOTIFICATION_GROUP.createNotification(title, message, type, null), project);
   }
 
   @Override
