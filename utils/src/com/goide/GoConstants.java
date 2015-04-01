@@ -28,7 +28,9 @@ public class GoConstants {
   @NonNls public static final String APP_ENGINE_GO_ROOT_DIRECTORY_PATH = "/goroot";
   @NonNls public static final String GCLOUD_APP_ENGINE_DIRECTORY_PATH = "/platform/google_appengine";
   @NonNls public static final String GAE_EXECUTABLE_NAME = "goapp";
-  
+  @NonNls public static final String GAE_BAT_EXECUTABLE_NAME = "goapp.bat";
+  @NonNls public static final String GAE_CMD_EXECUTABLE_NAME = "goapp.cmd";
+
   @NonNls public static final String GO_EXECUTABLE_NAME = "go";
 
   private GoConstants() {

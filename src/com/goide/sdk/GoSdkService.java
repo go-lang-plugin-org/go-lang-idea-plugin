@@ -12,6 +12,7 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.util.PathUtil;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -70,12 +71,11 @@ public abstract class GoSdkService extends SimpleModificationTracker {
   public static String getGoExecutablePath(@Nullable String sdkHomePath) {
     if (sdkHomePath != null) {
       if (isAppEngineSdkPath(sdkHomePath)) {
-        String executable = GoEnvironmentUtil.getBinaryFileNameForPath(GoConstants.GAE_EXECUTABLE_NAME);
-        sdkHomePath = StringUtil.trimEnd(sdkHomePath, GoConstants.APP_ENGINE_GO_ROOT_DIRECTORY_PATH);
+        sdkHomePath = StringUtil.trimEnd(PathUtil.toSystemIndependentName(sdkHomePath), GoConstants.APP_ENGINE_GO_ROOT_DIRECTORY_PATH);
         // gcloud and standalone installations
         return sdkHomePath.endsWith(GoConstants.GCLOUD_APP_ENGINE_DIRECTORY_PATH)
-               ? FileUtil.join(StringUtil.trimEnd(sdkHomePath, GoConstants.GCLOUD_APP_ENGINE_DIRECTORY_PATH), "bin", executable)
-               : FileUtil.join(sdkHomePath, SystemInfo.isWindows ? StringUtil.replace(executable, ".exe", ".bat") : executable);
+               ? FileUtil.join(StringUtil.trimEnd(sdkHomePath, GoConstants.GCLOUD_APP_ENGINE_DIRECTORY_PATH), "bin", SystemInfo.isWindows ? GoConstants.GAE_CMD_EXECUTABLE_NAME : GoConstants.GAE_EXECUTABLE_NAME)
+               : FileUtil.join(sdkHomePath, SystemInfo.isWindows ? GoConstants.GAE_BAT_EXECUTABLE_NAME : GoConstants.GAE_EXECUTABLE_NAME);
       }
       else {
         return FileUtil.join(sdkHomePath, "bin", GoEnvironmentUtil.getBinaryFileNameForPath(GoConstants.GO_EXECUTABLE_NAME));

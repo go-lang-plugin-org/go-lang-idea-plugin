@@ -12,6 +12,7 @@ This is a list of all the people we'd like to thank for helping us with active d
 - [@jakecoffman](https://github.com/jakecoffman)
 - [@kokizzu](https://github.com/kokizzu)
 - [@linniksa](https://github.com/linniksa)
+- [@nisckis](https://github.com/nisckis)
 - [@stuartcarnie](https://github.com/stuartcarnie)
 
 
