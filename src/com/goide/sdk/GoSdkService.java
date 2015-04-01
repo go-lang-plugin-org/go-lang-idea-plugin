@@ -7,6 +7,7 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.SimpleModificationTracker;
+import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
@@ -74,7 +75,7 @@ public abstract class GoSdkService extends SimpleModificationTracker {
         // gcloud and standalone installations
         return sdkHomePath.endsWith(GoConstants.GCLOUD_APP_ENGINE_DIRECTORY_PATH)
                ? FileUtil.join(StringUtil.trimEnd(sdkHomePath, GoConstants.GCLOUD_APP_ENGINE_DIRECTORY_PATH), "bin", executable)
-               : FileUtil.join(sdkHomePath, executable);
+               : FileUtil.join(sdkHomePath, SystemInfo.isWindows ? StringUtil.replace(executable, ".exe", ".bat") : executable);
       }
       else {
         return FileUtil.join(sdkHomePath, "bin", GoEnvironmentUtil.getBinaryFileNameForPath(GoConstants.GO_EXECUTABLE_NAME));
