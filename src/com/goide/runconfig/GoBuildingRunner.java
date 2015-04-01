@@ -73,7 +73,8 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
 
     final AsyncPromise<RunProfileStarter> promise = new AsyncPromise<RunProfileStarter>();
     FileDocumentManager.getInstance().saveAllDocuments();
-    ((GoApplicationRunningState)state).createCommonExecutor().withParameters("build", "-o", tmpFile.getAbsolutePath())
+    ((GoApplicationRunningState)state).createCommonExecutor()
+      .withParameters("build", "-o", tmpFile.getAbsolutePath(), ((GoApplicationRunningState)state).getMainFilePath())
       .showNotifications(true)
       .showOutputOnError()
       .withPresentableName("go build")

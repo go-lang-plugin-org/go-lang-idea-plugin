@@ -33,6 +33,11 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
                                    @NotNull GoApplicationConfiguration configuration) {
     super(env, module, configuration);
   }
+  
+  @NotNull
+  public String getMainFilePath() {
+    return myConfiguration.getFilePath();
+  }
 
   @NotNull
   @Override
