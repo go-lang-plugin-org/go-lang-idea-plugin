@@ -5,6 +5,8 @@
 
 ## Pre-release builds
 
+Pre-release builds can be installed on IntelliJ platform 141.2 or greater. It corresponds to IntelliJ IDEA 14.1, WebStorm 10, PhpStorm 9.
+
 Pre-release builds are available in two forms: nightly and alphas. At the time
 of writing, alpha builds are released usually at the start of every week while
 nightly builds are released every night, using the latest buildable source.
