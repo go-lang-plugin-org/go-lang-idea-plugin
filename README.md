@@ -21,6 +21,11 @@ To use them, you'll need to follow these steps:
 As always, please remember that this is an alpha release and while efforts are
 made to ensure the best possible experience, sometimes things might be broken.
 
+**NOTE**
+The above links are not meant to be used in browsers. As such, don't report issues
+about them not working or being inaccessible unless you are getting an error from
+the IDE itself.
+
 Reporting issues is very important for us as such, please see the section below
 on how to submit a proper bug report.
  
@@ -36,6 +41,19 @@ When reporting a bug, please include the following:
 - OS version
 - JDK version
 - plugin version (or commit hash, if you built the plugin yourself)
+
+## Bumping or +1 or me as well comments
+
+As annoying as things might be when they don't work, please don't comment with
+"bump", "+1", "same for me" or other form of comments which is not relevant for
+either better identifying the issue providing a solution to it.
+
+If you want to mark that the said issue is meaningful for you, go ahead and
+contact Github support to add a issue voting feature to the repositories by
+writing them here: https://github.com/contact
+
+Contributions are always welcomed and we'll do our best to help you out to add
+yours to the project.
 
 ## Contributing
 
