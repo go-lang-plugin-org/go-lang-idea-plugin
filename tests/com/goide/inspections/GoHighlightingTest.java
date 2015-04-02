@@ -77,6 +77,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testReceiverType(){ doTest(); }
   public void testForRange()    { doTest(); }
   public void testMismatch()    { doTest(); }
+  public void testStubParams()  { doTest(); }
   
   public void testDoNotReportNonLastMultiResolvedImport() throws IOException {
     final VirtualFile root1 = myFixture.getTempDirFixture().findOrCreateDir("root1");

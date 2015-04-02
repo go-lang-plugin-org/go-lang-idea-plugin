@@ -17,10 +17,9 @@
 package com.goide.psi.impl;
 
 import com.goide.GoIcons;
-import com.goide.GoTypes;
 import com.goide.psi.*;
 import com.goide.stubs.GoNamedStub;
-import com.goide.stubs.types.GoTypeStubElementType;
+import com.goide.stubs.GoTypeStub;
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.openapi.util.text.StringUtil;
@@ -29,7 +28,6 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.stubs.IStubElementType;
-import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.usageView.UsageViewUtil;
 import com.intellij.util.IncorrectOperationException;
@@ -99,12 +97,11 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
   public GoType findSiblingType() {
     T stub = getStub();
     if (stub != null) {
-      StubElement parentStub = stub.getParentStub();
-      if (parentStub != null) {
-        //noinspection unchecked
-        StubElement type = parentStub.findChildStubByType((GoTypeStubElementType)GoTypes.TYPE);
-        return type != null ? (GoType)type.getPsi() : null;
-      }
+      PsiElement parent = getParentByStub();
+      // todo: cast is weird
+      return parent instanceof GoStubbedElementImpl ? 
+             (GoType)((GoStubbedElementImpl)parent).findChildByClass(GoType.class, GoTypeStub.class) :
+             null;
     }
     return PsiTreeUtil.getNextSiblingOfType(this, GoType.class);
   }
