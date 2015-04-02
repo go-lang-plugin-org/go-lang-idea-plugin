@@ -75,7 +75,7 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
   }
 
   @Nullable
-  private GoType getType(GoType type) {
+  private GoType getType(GoType type) { // todo: rethink and unify this algorithm
     boolean inValue = myValue != null;
     
     if (inValue && type instanceof GoArrayOrSliceType) type = type.getType();
@@ -92,6 +92,13 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
 
     if (type != null && type.getTypeReferenceExpression() != null) {
       type = GoPsiImplUtil.getType(type.getTypeReferenceExpression());
+    }
+
+    if (type instanceof GoPointerType) {
+      GoType inner = type.getType();
+      if (inner != null && inner.getTypeReferenceExpression() != null) {
+        type = GoPsiImplUtil.getType(inner.getTypeReferenceExpression());
+      }
     }
 
     return type;

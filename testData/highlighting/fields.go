@@ -1,5 +1,9 @@
 package main
 
+import (
+    "fmt"
+)
+
 var <warning>unused</warning> int = 1
 
 var langId = "es"
@@ -41,3 +45,19 @@ func <warning>prtMain</warning>() {
     _ = (*ptr).field
 }
 
+type User struct {
+    ID int
+    Name string
+}
+
+func <warning>main23</warning>() {
+    members := []User{{ID: 2}, {ID: 3}}
+    members2 := []*User{{ID: 2}  }
+    members3 := []*struct{ID int}{{ID: 2}  }
+    members4 := []*User{&User{ID: 2}, &User{ID: 3}}
+
+    fmt.Println(len(members))
+    fmt.Println(len(members2))
+    fmt.Println(len(members3))
+    fmt.Println(len(members4))
+}   
