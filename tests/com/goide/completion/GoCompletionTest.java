@@ -118,6 +118,11 @@ public class GoCompletionTest extends GoCompletionTestBase {
     doCheckResult("package foo; import imp \"\"; func foo() {im<caret>.foo}", "package foo; import imp \"\"; func foo() {imp.<caret>foo}");
   }
 
+  public void testCompleteFieldWithoutColon() {
+    doCheckResult("package main;func main(){a:=struct{Demo int}{Demo:1};println(a.D<caret>)}", 
+                  "package main;func main(){a:=struct{Demo int}{Demo:1};println(a.Demo<caret>)}");
+  }
+
   public void testTopLevelKeywords() {
     myFixture.testCompletionVariants(getTestName(true) + ".go", "const", "func", "import", "type", "var");
   }
