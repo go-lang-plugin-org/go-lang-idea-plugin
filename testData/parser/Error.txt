@@ -398,9 +398,8 @@ GO_FILE
         UNARY_EXPR
           PsiElement(&)('&')
           COMPOSITE_LIT
-            LITERAL_TYPE_EXPR
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('TypeAssertionError')
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('TypeAssertionError')
             LITERAL_VALUE
               PsiElement({)('{')
               ELEMENT
@@ -810,9 +809,8 @@ GO_FILE
         UNARY_EXPR
           PsiElement(&)('&')
           COMPOSITE_LIT
-            LITERAL_TYPE_EXPR
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('Fetcher')
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('Fetcher')
             LITERAL_VALUE
               PsiElement({)('{')
               ELEMENT

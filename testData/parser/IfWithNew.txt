@@ -100,9 +100,8 @@ GO_FILE
                 PsiElement([)('[')
                 SELECTOR_EXPR
                   COMPOSITE_LIT
-                    LITERAL_TYPE_EXPR
-                      TYPE_REFERENCE_EXPRESSION
-                        PsiElement(identifier)('S')
+                    TYPE_REFERENCE_EXPRESSION
+                      PsiElement(identifier)('S')
                     LITERAL_VALUE
                       PsiElement({)('{')
                       PsiElement(})('}')
@@ -158,9 +157,8 @@ GO_FILE
             ASSIGN_OP
               PsiElement(=)('=')
             COMPOSITE_LIT
-              LITERAL_TYPE_EXPR
-                TYPE_REFERENCE_EXPRESSION
-                  PsiElement(identifier)('globalOptionsHandler')
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('globalOptionsHandler')
               LITERAL_VALUE
                 PsiElement({)('{')
                 PsiElement(})('}')
@@ -175,9 +173,8 @@ GO_FILE
             ASSIGN_OP
               PsiElement(=)('=')
             COMPOSITE_LIT
-              LITERAL_TYPE_EXPR
-                TYPE_REFERENCE_EXPRESSION
-                  PsiElement(identifier)('globalOptionsHandler')
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('globalOptionsHandler')
               LITERAL_VALUE
                 PsiElement({)('{')
                 PsiElement(})('}')

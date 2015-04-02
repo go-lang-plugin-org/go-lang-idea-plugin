@@ -8,9 +8,12 @@ import com.intellij.psi.PsiElement;
 public interface GoCompositeLit extends GoExpression {
 
   @NotNull
-  GoLiteralTypeExpr getLiteralTypeExpr();
-
-  @NotNull
   GoLiteralValue getLiteralValue();
+
+  @Nullable
+  GoType getType();
+
+  @Nullable
+  GoTypeReferenceExpression getTypeReferenceExpression();
 
 }

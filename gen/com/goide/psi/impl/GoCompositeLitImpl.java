@@ -23,14 +23,20 @@ public class GoCompositeLitImpl extends GoExpressionImpl implements GoCompositeL
 
   @Override
   @NotNull
-  public GoLiteralTypeExpr getLiteralTypeExpr() {
-    return findNotNullChildByClass(GoLiteralTypeExpr.class);
+  public GoLiteralValue getLiteralValue() {
+    return findNotNullChildByClass(GoLiteralValue.class);
   }
 
   @Override
-  @NotNull
-  public GoLiteralValue getLiteralValue() {
-    return findNotNullChildByClass(GoLiteralValue.class);
+  @Nullable
+  public GoType getType() {
+    return findChildByClass(GoType.class);
+  }
+
+  @Override
+  @Nullable
+  public GoTypeReferenceExpression getTypeReferenceExpression() {
+    return findChildByClass(GoTypeReferenceExpression.class);
   }
 
 }

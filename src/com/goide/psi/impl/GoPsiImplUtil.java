@@ -309,9 +309,9 @@ public class GoPsiImplUtil {
       return null;
     }
     else if (o instanceof GoCompositeLit) {
-      GoType type = ((GoCompositeLit)o).getLiteralTypeExpr().getType();
+      GoType type = ((GoCompositeLit)o).getType();
       if (type != null) return type;
-      GoTypeReferenceExpression expression = ((GoCompositeLit)o).getLiteralTypeExpr().getTypeReferenceExpression();
+      GoTypeReferenceExpression expression = ((GoCompositeLit)o).getTypeReferenceExpression();
       return getType(expression);
     }
     else if (o instanceof GoFunctionLit) {
@@ -499,7 +499,7 @@ public class GoPsiImplUtil {
     }
     GoCompositeLit literal = PsiTreeUtil.getNextSiblingOfType(o, GoCompositeLit.class);
     if (literal != null) {
-      return literal.getLiteralTypeExpr().getType();
+      return literal.getType();
     }
     GoType siblingType = o.findSiblingType();
     if (siblingType != null) return siblingType;

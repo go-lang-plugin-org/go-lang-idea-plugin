@@ -98,7 +98,7 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       .afterInside(MAP, MAP_TYPE).none()
       .aroundInside(LBRACK, MAP_TYPE).none()
       .aroundInside(RBRACK, MAP_TYPE).none()
-      .between(LITERAL_TYPE_EXPR, LITERAL_VALUE).none()
+      .beforeInside(LITERAL_VALUE, COMPOSITE_LIT).none()
       .afterInside(LBRACE, LITERAL_VALUE).none()
       .beforeInside(LBRACE, LITERAL_VALUE).none()
       .afterInside(BIT_AND, UNARY_EXPR).none()

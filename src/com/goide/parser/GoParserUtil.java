@@ -85,6 +85,11 @@ public class GoParserUtil extends GeneratedParserUtilBase {
     return getParsingModes(builder_).get(mode) == 0;
   }
 
+  public static boolean prevIsArrayType(@NotNull PsiBuilder builder_, @SuppressWarnings("UnusedParameters") int level) {
+    LighterASTNode marker = builder_.getLatestDoneMarker();
+    return marker != null && marker.getTokenType() == GoTypes.ARRAY_OR_SLICE_TYPE;
+  }
+  
   public static boolean keyOrValueExpression(@NotNull PsiBuilder builder_, int level) {
     PsiBuilder.Marker m = enter_section_(builder_);
     boolean r = GoParser.Expression(builder_, level + 1, -1);

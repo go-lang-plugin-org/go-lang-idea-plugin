@@ -362,9 +362,8 @@ GO_FILE
                 UNARY_EXPR
                   PsiElement(&)('&')
                   COMPOSITE_LIT
-                    LITERAL_TYPE_EXPR
-                      TYPE_REFERENCE_EXPRESSION
-                        PsiElement(identifier)('Cmd')
+                    TYPE_REFERENCE_EXPRESSION
+                      PsiElement(identifier)('Cmd')
                     LITERAL_VALUE
                       PsiElement({)('{')
                       ELEMENT
@@ -496,13 +495,12 @@ GO_FILE
           PsiElement(:=)(':=')
           PsiElement(range)('range')
           COMPOSITE_LIT
-            LITERAL_TYPE_EXPR
-              ARRAY_OR_SLICE_TYPE
-                PsiElement([)('[')
-                PsiElement(])(']')
-                TYPE
-                  TYPE_REFERENCE_EXPRESSION
-                    PsiElement(identifier)('string')
+            ARRAY_OR_SLICE_TYPE
+              PsiElement([)('[')
+              PsiElement(])(']')
+              TYPE
+                TYPE_REFERENCE_EXPRESSION
+                  PsiElement(identifier)('string')
             LITERAL_VALUE
               PsiElement({)('{')
               ELEMENT
@@ -701,14 +699,13 @@ GO_FILE
         PsiElement(identifier)('days')
       PsiElement(=)('=')
       COMPOSITE_LIT
-        LITERAL_TYPE_EXPR
-          ARRAY_OR_SLICE_TYPE
-            PsiElement([)('[')
-            PsiElement(...)('...')
-            PsiElement(])(']')
-            TYPE
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('string')
+        ARRAY_OR_SLICE_TYPE
+          PsiElement([)('[')
+          PsiElement(...)('...')
+          PsiElement(])(']')
+          TYPE
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('string')
         LITERAL_VALUE
           PsiElement({)('{')
           ELEMENT
@@ -913,20 +910,19 @@ GO_FILE
         PsiElement(identifier)('alreadyAddedErrors')
       PsiElement(=)('=')
       COMPOSITE_LIT
-        LITERAL_TYPE_EXPR
-          MAP_TYPE
-            PsiElement(map)('map')
-            PsiElement([)('[')
-            TYPE
+        MAP_TYPE
+          PsiElement(map)('map')
+          PsiElement([)('[')
+          TYPE
+            TYPE_REFERENCE_EXPRESSION
               TYPE_REFERENCE_EXPRESSION
-                TYPE_REFERENCE_EXPRESSION
-                  PsiElement(identifier)('pb')
-                PsiElement(.)('.')
-                PsiElement(identifier)('TaskQueueServiceError_ErrorCode')
-            PsiElement(])(']')
-            TYPE
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('bool')
+                PsiElement(identifier)('pb')
+              PsiElement(.)('.')
+              PsiElement(identifier)('TaskQueueServiceError_ErrorCode')
+          PsiElement(])(']')
+          TYPE
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('bool')
         LITERAL_VALUE
           PsiElement({)('{')
           ELEMENT
@@ -949,20 +945,19 @@ GO_FILE
         PsiElement(identifier)('alreadyAddedErrors2')
       PsiElement(=)('=')
       COMPOSITE_LIT
-        LITERAL_TYPE_EXPR
-          MAP_TYPE
-            PsiElement(map)('map')
-            PsiElement([)('[')
-            TYPE
+        MAP_TYPE
+          PsiElement(map)('map')
+          PsiElement([)('[')
+          TYPE
+            TYPE_REFERENCE_EXPRESSION
               TYPE_REFERENCE_EXPRESSION
-                TYPE_REFERENCE_EXPRESSION
-                  PsiElement(identifier)('pb')
-                PsiElement(.)('.')
-                PsiElement(identifier)('TaskQueueServiceError_ErrorCode')
-            PsiElement(])(']')
-            TYPE
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('bool')
+                PsiElement(identifier)('pb')
+              PsiElement(.)('.')
+              PsiElement(identifier)('TaskQueueServiceError_ErrorCode')
+          PsiElement(])(']')
+          TYPE
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('bool')
         LITERAL_VALUE
           PsiElement({)('{')
           ELEMENT
@@ -1021,17 +1016,16 @@ GO_FILE
         PsiElement(identifier)('b')
       PsiElement(=)('=')
       COMPOSITE_LIT
-        LITERAL_TYPE_EXPR
-          MAP_TYPE
-            PsiElement(map)('map')
-            PsiElement([)('[')
-            TYPE
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('string')
-            PsiElement(])(']')
-            TYPE
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('int')
+        MAP_TYPE
+          PsiElement(map)('map')
+          PsiElement([)('[')
+          TYPE
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('string')
+          PsiElement(])(']')
+          TYPE
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('int')
         LITERAL_VALUE
           PsiElement({)('{')
           ELEMENT
@@ -1145,15 +1139,14 @@ GO_FILE
           PsiElement(:=)(':=')
           PsiElement(range)('range')
           COMPOSITE_LIT
-            LITERAL_TYPE_EXPR
-              ARRAY_OR_SLICE_TYPE
-                PsiElement([)('[')
-                PsiElement(])(']')
-                POINTER_TYPE
-                  PsiElement(*)('*')
-                  TYPE
-                    TYPE_REFERENCE_EXPRESSION
-                      PsiElement(identifier)('File')
+            ARRAY_OR_SLICE_TYPE
+              PsiElement([)('[')
+              PsiElement(])(']')
+              POINTER_TYPE
+                PsiElement(*)('*')
+                TYPE
+                  TYPE_REFERENCE_EXPRESSION
+                    PsiElement(identifier)('File')
             LITERAL_VALUE
               PsiElement({)('{')
               PsiElement(})('}')
@@ -1198,15 +1191,14 @@ GO_FILE
           PsiElement(:=)(':=')
           PsiElement(range)('range')
           COMPOSITE_LIT
-            LITERAL_TYPE_EXPR
-              ARRAY_OR_SLICE_TYPE
-                PsiElement([)('[')
-                PsiElement(])(']')
-                POINTER_TYPE
-                  PsiElement(*)('*')
-                  TYPE
-                    TYPE_REFERENCE_EXPRESSION
-                      PsiElement(identifier)('File')
+            ARRAY_OR_SLICE_TYPE
+              PsiElement([)('[')
+              PsiElement(])(']')
+              POINTER_TYPE
+                PsiElement(*)('*')
+                TYPE
+                  TYPE_REFERENCE_EXPRESSION
+                    PsiElement(identifier)('File')
             LITERAL_VALUE
               PsiElement({)('{')
               PsiElement(})('}')
@@ -1263,13 +1255,12 @@ GO_FILE
             PsiElement(identifier)('a')
           PsiElement(:=)(':=')
           COMPOSITE_LIT
-            LITERAL_TYPE_EXPR
-              ARRAY_OR_SLICE_TYPE
-                PsiElement([)('[')
-                PsiElement(])(']')
-                TYPE
-                  TYPE_REFERENCE_EXPRESSION
-                    PsiElement(identifier)('byte')
+            ARRAY_OR_SLICE_TYPE
+              PsiElement([)('[')
+              PsiElement(])(']')
+              TYPE
+                TYPE_REFERENCE_EXPRESSION
+                  PsiElement(identifier)('byte')
             LITERAL_VALUE
               PsiElement({)('{')
               PsiElement(})('}')
@@ -1374,9 +1365,8 @@ GO_FILE
               ARGUMENT_LIST
                 PsiElement(()('(')
                 COMPOSITE_LIT
-                  LITERAL_TYPE_EXPR
-                    TYPE_REFERENCE_EXPRESSION
-                      PsiElement(identifier)('demo')
+                  TYPE_REFERENCE_EXPRESSION
+                    PsiElement(identifier)('demo')
                   LITERAL_VALUE
                     PsiElement({)('{')
                     PsiElement(})('}')
@@ -1410,9 +1400,8 @@ GO_FILE
             PARENTHESES_EXPR
               PsiElement(()('(')
               COMPOSITE_LIT
-                LITERAL_TYPE_EXPR
-                  TYPE_REFERENCE_EXPRESSION
-                    PsiElement(identifier)('demo')
+                TYPE_REFERENCE_EXPRESSION
+                  PsiElement(identifier)('demo')
                 LITERAL_VALUE
                   PsiElement({)('{')
                   PsiElement(})('}')
@@ -1507,9 +1496,8 @@ GO_FILE
               PARENTHESES_EXPR
                 PsiElement(()('(')
                 COMPOSITE_LIT
-                  LITERAL_TYPE_EXPR
-                    TYPE_REFERENCE_EXPRESSION
-                      PsiElement(identifier)('M')
+                  TYPE_REFERENCE_EXPRESSION
+                    PsiElement(identifier)('M')
                   LITERAL_VALUE
                     PsiElement({)('{')
                     PsiElement(})('}')

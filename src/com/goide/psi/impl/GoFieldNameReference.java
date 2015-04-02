@@ -61,12 +61,10 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
     if (key == null && (value == null || PsiTreeUtil.getPrevSiblingOfType(value, GoKey.class) != null)) return false;
 
     GoCompositeLit lit = PsiTreeUtil.getParentOfType(myElement, GoCompositeLit.class);
-    GoLiteralTypeExpr expr = lit != null ? lit.getLiteralTypeExpr() : null;
-    if (expr == null) return false;
 
-    GoType type = expr.getType();
-    if (type == null) {
-      type = GoPsiImplUtil.getType(expr.getTypeReferenceExpression());
+    GoType type = lit != null ? lit.getType() : null;
+    if (type == null && lit != null) {
+      type = GoPsiImplUtil.getType(lit.getTypeReferenceExpression());
     }
 
     type = getType(type);

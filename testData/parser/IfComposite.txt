@@ -21,9 +21,8 @@ GO_FILE
               PsiElement(identifier)('allowedErrors')
             PsiElement([)('[')
             COMPOSITE_LIT
-              LITERAL_TYPE_EXPR
-                TYPE_REFERENCE_EXPRESSION
-                  PsiElement(identifier)('osPkg')
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('osPkg')
               LITERAL_VALUE
                 PsiElement({)('{')
                 ELEMENT
@@ -65,25 +64,23 @@ GO_FILE
         PsiElement(identifier)('allowedErrors')
       PsiElement(=)('=')
       COMPOSITE_LIT
-        LITERAL_TYPE_EXPR
-          MAP_TYPE
-            PsiElement(map)('map')
-            PsiElement([)('[')
-            TYPE
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('osPkg')
-            PsiElement(])(']')
-            TYPE
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('bool')
+        MAP_TYPE
+          PsiElement(map)('map')
+          PsiElement([)('[')
+          TYPE
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('osPkg')
+          PsiElement(])(']')
+          TYPE
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('bool')
         LITERAL_VALUE
           PsiElement({)('{')
           ELEMENT
             KEY
               COMPOSITE_LIT
-                LITERAL_TYPE_EXPR
-                  TYPE_REFERENCE_EXPRESSION
-                    PsiElement(identifier)('osPkg')
+                TYPE_REFERENCE_EXPRESSION
+                  PsiElement(identifier)('osPkg')
                 LITERAL_VALUE
                   PsiElement({)('{')
                   ELEMENT
@@ -104,9 +101,8 @@ GO_FILE
           ELEMENT
             KEY
               COMPOSITE_LIT
-                LITERAL_TYPE_EXPR
-                  TYPE_REFERENCE_EXPRESSION
-                    PsiElement(identifier)('osPkg')
+                TYPE_REFERENCE_EXPRESSION
+                  PsiElement(identifier)('osPkg')
                 LITERAL_VALUE
                   PsiElement({)('{')
                   ELEMENT

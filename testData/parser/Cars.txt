@@ -147,17 +147,15 @@ GO_FILE
             PsiElement(identifier)('f')
           PsiElement(:=)(':=')
           COMPOSITE_LIT
-            LITERAL_TYPE_EXPR
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('Ferrari')
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('Ferrari')
             LITERAL_VALUE
               PsiElement({)('{')
               ELEMENT
                 VALUE
                   COMPOSITE_LIT
-                    LITERAL_TYPE_EXPR
-                      TYPE_REFERENCE_EXPRESSION
-                        PsiElement(identifier)('Car')
+                    TYPE_REFERENCE_EXPRESSION
+                      PsiElement(identifier)('Car')
                     LITERAL_VALUE
                       PsiElement({)('{')
                       ELEMENT
@@ -206,17 +204,15 @@ GO_FILE
             PsiElement(identifier)('a')
           PsiElement(:=)(':=')
           COMPOSITE_LIT
-            LITERAL_TYPE_EXPR
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('AstonMartin')
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('AstonMartin')
             LITERAL_VALUE
               PsiElement({)('{')
               ELEMENT
                 VALUE
                   COMPOSITE_LIT
-                    LITERAL_TYPE_EXPR
-                      TYPE_REFERENCE_EXPRESSION
-                        PsiElement(identifier)('Car')
+                    TYPE_REFERENCE_EXPRESSION
+                      PsiElement(identifier)('Car')
                     LITERAL_VALUE
                       PsiElement({)('{')
                       ELEMENT

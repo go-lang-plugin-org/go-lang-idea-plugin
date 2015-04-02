@@ -123,7 +123,7 @@ private TypeLit ::=
   | MapType
   | ChannelType
 
-ArrayOrSliceType ::= '[' ('...'|Expression?) ']' <<exitModeSafe "BLOCK?">> Type {pin=1}
+ArrayOrSliceType ::= '[' ('...'|Expression?) ']' Type {pin=1}
 
 StructType ::= struct '{' Fields? '}' {pin=1}
 private Fields ::= FieldDeclaration (semi FieldDeclaration)* semi? {pin=1}
@@ -297,14 +297,16 @@ OperandName ::= ReferenceExpression QualifiedReferenceExpression? {elementType=R
 left QualifiedReferenceExpression ::= '.' identifier {elementType=ReferenceExpression}
 ReferenceExpression ::= identifier { methods=[getReference getQualifier] extends=Expression}
 
-CompositeLit ::= (LiteralTypeExpr LiteralValue) // the brackets are valuable
-LiteralTypeExpr ::=
+CompositeLit ::= (LiteralTypeExprInner LiteralValue) // the brackets are valuable
+private LiteralTypeExprInner ::=
     StructType
   | ArrayOrSliceType
   | MapType
   | TypeName
+  
+LiteralTypeExpr ::= LiteralTypeExprInner
 
-LiteralValue ::= (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">>) '{' ElementList? '}' {pin=2}
+LiteralValue ::= (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">> | <<prevIsArrayType>>) '{' ElementList? '}' {pin=2}
 private ElementList  ::= Element ( ',' Element? )*
 Element ::= First [':' Value] 
 private First ::= Key | <<keyOrValueExpression>>

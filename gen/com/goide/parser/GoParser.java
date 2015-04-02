@@ -424,7 +424,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // '[' ('...'|Expression?) ']' <<exitModeSafe "BLOCK?">> Type
+  // '[' ('...'|Expression?) ']' Type
   public static boolean ArrayOrSliceType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ArrayOrSliceType")) return false;
     if (!nextTokenIs(b, LBRACK)) return false;
@@ -434,7 +434,6 @@ public class GoParser implements PsiParser {
     p = r; // pin = 1
     r = r && report_error_(b, ArrayOrSliceType_1(b, l + 1));
     r = p && report_error_(b, consumeToken(b, RBRACK)) && r;
-    r = p && report_error_(b, exitModeSafe(b, l + 1, "BLOCK?")) && r;
     r = p && Type(b, l + 1) && r;
     exit_section_(b, l, m, ARRAY_OR_SLICE_TYPE, r, p, null);
     return r || p;
@@ -2126,7 +2125,24 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">>) '{' ElementList? '}'
+  // StructType
+  //   | ArrayOrSliceType
+  //   | MapType
+  //   | TypeName
+  static boolean LiteralTypeExprInner(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LiteralTypeExprInner")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = StructType(b, l + 1);
+    if (!r) r = ArrayOrSliceType(b, l + 1);
+    if (!r) r = MapType(b, l + 1);
+    if (!r) r = TypeName(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">> | <<prevIsArrayType>>) '{' ElementList? '}'
   public static boolean LiteralValue(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LiteralValue")) return false;
     boolean r, p;
@@ -2140,13 +2156,14 @@ public class GoParser implements PsiParser {
     return r || p;
   }
 
-  // <<isModeOff "BLOCK?">> | <<isModeOn "PAR">>
+  // <<isModeOff "BLOCK?">> | <<isModeOn "PAR">> | <<prevIsArrayType>>
   private static boolean LiteralValue_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LiteralValue_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = isModeOff(b, l + 1, "BLOCK?");
     if (!r) r = isModeOn(b, l + 1, "PAR");
+    if (!r) r = prevIsArrayType(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -4192,12 +4209,12 @@ public class GoParser implements PsiParser {
     return r;
   }
 
-  // LiteralTypeExpr LiteralValue
+  // LiteralTypeExprInner LiteralValue
   public static boolean CompositeLit(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "CompositeLit")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, "<composite lit>");
-    r = LiteralTypeExpr(b, l + 1);
+    r = LiteralTypeExprInner(b, l + 1);
     r = r && LiteralValue(b, l + 1);
     exit_section_(b, l, m, COMPOSITE_LIT, r, false, null);
     return r;
@@ -4402,18 +4419,12 @@ public class GoParser implements PsiParser {
     return r;
   }
 
-  // StructType
-  //   | ArrayOrSliceType
-  //   | MapType
-  //   | TypeName
+  // LiteralTypeExprInner
   public static boolean LiteralTypeExpr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LiteralTypeExpr")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, "<literal type expr>");
-    r = StructType(b, l + 1);
-    if (!r) r = ArrayOrSliceType(b, l + 1);
-    if (!r) r = MapType(b, l + 1);
-    if (!r) r = TypeName(b, l + 1);
+    r = LiteralTypeExprInner(b, l + 1);
     exit_section_(b, l, m, LITERAL_TYPE_EXPR, r, false, null);
     return r;
   }

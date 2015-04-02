@@ -187,9 +187,8 @@ GO_FILE
         UNARY_EXPR
           PsiElement(&)('&')
           COMPOSITE_LIT
-            LITERAL_TYPE_EXPR
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('Writer')
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('Writer')
             LITERAL_VALUE
               PsiElement({)('{')
               ELEMENT
