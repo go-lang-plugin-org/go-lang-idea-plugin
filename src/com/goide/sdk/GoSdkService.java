@@ -73,7 +73,7 @@ public abstract class GoSdkService extends SimpleModificationTracker {
         String goExecutablePath = PathUtil.toSystemIndependentName(sdkHomePath);
         goExecutablePath = StringUtil.trimEnd(goExecutablePath, GoConstants.APP_ENGINE_GO_ROOT_DIRECTORY_PATH);
         
-        boolean gcloudInstallation = sdkHomePath.endsWith(GoConstants.GCLOUD_APP_ENGINE_DIRECTORY_PATH);
+        boolean gcloudInstallation = goExecutablePath.endsWith(GoConstants.GCLOUD_APP_ENGINE_DIRECTORY_PATH);
         if (gcloudInstallation) {
           goExecutablePath = FileUtil.join(StringUtil.trimEnd(goExecutablePath, GoConstants.GCLOUD_APP_ENGINE_DIRECTORY_PATH), "bin");
         }
