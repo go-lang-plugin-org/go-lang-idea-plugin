@@ -15,6 +15,10 @@
 
 ### Reporting errors
 
+Before reporting an error, please read the [FAQ](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/wiki/FAQ)
+and search for the issue in the issue tracker. Also, please don't bump, +1
+or "me too" issues. Thank you.
+
 The simples way to contribute to the plugin is to report issues you encounter
 in your day to day use.
 
