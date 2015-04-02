@@ -61,3 +61,8 @@ func <warning>main23</warning>() {
     fmt.Println(len(members3))
     fmt.Println(len(members4))
 }   
+
+func <warning>main345</warning>() {
+    type T1 string
+    fmt.Println(T1("1"))
+} 
