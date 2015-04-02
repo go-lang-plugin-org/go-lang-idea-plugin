@@ -1,7 +1,5 @@
 # Go plugin for IntelliJ
-[![Build Status](https://travis-ci.org/go-lang-plugin-org/go-lang-idea-plugin.png?branch=v1.0.0-alpha0)](https://travis-ci.org/go-lang-plugin-org/go-lang-idea-plugin)
-
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/go-lang-plugin-org/go-lang-idea-plugin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://travis-ci.org/go-lang-plugin-org/go-lang-idea-plugin.png?branch=v1.0.0-alpha0)](https://travis-ci.org/go-lang-plugin-org/go-lang-idea-plugin) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/go-lang-plugin-org/go-lang-idea-plugin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Pre-release builds
 
@@ -28,6 +26,10 @@ the IDE itself.
 
 Reporting issues is very important for us as such, please see the section below
 on how to submit a proper bug report.
+
+## FAQ
+
+Here's a list of the most frequent asked questions: [FAQ](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/wiki/FAQ)
  
 ## Bugs
 
