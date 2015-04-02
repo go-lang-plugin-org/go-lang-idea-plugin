@@ -39,7 +39,7 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
     return new GoScopeProcessorBase(myElement.getText(), myElement, completion) {
       @Override
       protected boolean condition(@NotNull PsiElement element) {
-        return !(element instanceof GoFieldDefinition);
+        return !(element instanceof GoFieldDefinition) && !(element instanceof GoAnonymousFieldDefinition);
       }
     };
   }
