@@ -40,7 +40,9 @@ public abstract class GoRunningState<T extends GoRunConfigurationBase<?>> extend
   @NotNull
   @Override
   protected ProcessHandler startProcess() throws ExecutionException {
-    GeneralCommandLine commandLine = patchExecutor(createCommonExecutor()).createCommandLine();
+    GeneralCommandLine commandLine = patchExecutor(createCommonExecutor())
+      .withParameterString(myConfiguration.getParams())
+      .createCommandLine();
     return new KillableColoredProcessHandler(commandLine.createProcess(), commandLine.getCommandLineString());
   }
 
@@ -48,8 +50,7 @@ public abstract class GoRunningState<T extends GoRunConfigurationBase<?>> extend
   public GoExecutor createCommonExecutor() throws ExecutionException {
     return GoExecutor.in(myModule).withWorkDirectory(myConfiguration.getWorkingDirectory())
       .withExtraEnvironment(myConfiguration.getCustomEnvironment())
-      .withPassParentEnvironment(myConfiguration.isPassParentEnvironment())
-      .withParameterString(myConfiguration.getParams());
+      .withPassParentEnvironment(myConfiguration.isPassParentEnvironment());
   }
 
   protected GoExecutor patchExecutor(@NotNull GoExecutor executor) throws ExecutionException {

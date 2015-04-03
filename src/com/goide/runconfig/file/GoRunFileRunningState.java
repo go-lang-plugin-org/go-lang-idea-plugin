@@ -19,8 +19,6 @@ package com.goide.runconfig.file;
 import com.goide.runconfig.GoRunningState;
 import com.goide.util.GoExecutor;
 import com.intellij.execution.ExecutionException;
-import com.intellij.execution.filters.TextConsoleBuilderFactory;
-import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
 import org.jetbrains.annotations.NotNull;
@@ -28,13 +26,6 @@ import org.jetbrains.annotations.NotNull;
 public class GoRunFileRunningState extends GoRunningState<GoRunFileConfiguration> {
   public GoRunFileRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module, GoRunFileConfiguration configuration) {
     super(env, module, configuration);
-  }
-
-  @NotNull
-  @Override
-  protected ProcessHandler startProcess() throws ExecutionException {
-    setConsoleBuilder(TextConsoleBuilderFactory.getInstance().createBuilder(myModule.getProject()));
-    return super.startProcess();
   }
 
   @Override
