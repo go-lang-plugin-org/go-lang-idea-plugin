@@ -8,10 +8,13 @@ import com.intellij.psi.PsiElement;
 public interface GoSimpleStatement extends GoStatement {
 
   @Nullable
-  GoExpression getExpression();
+  GoLeftHandExprList getLeftHandExprList();
 
   @Nullable
   GoShortVarDeclaration getShortVarDeclaration();
+
+  @Nullable
+  GoStatement getStatement();
 
   @Nullable
   PsiElement getMinusMinus();

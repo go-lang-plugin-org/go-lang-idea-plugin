@@ -16,26 +16,27 @@ GO_FILE
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          INDEX_OR_SLICE_EXPR
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('allowedErrors')
-            PsiElement([)('[')
-            COMPOSITE_LIT
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('osPkg')
-              LITERAL_VALUE
-                PsiElement({)('{')
-                ELEMENT
-                  VALUE
-                    STRING_LITERAL
-                      PsiElement(string)('""')
-                PsiElement(,)(',')
-                ELEMENT
-                  VALUE
-                    STRING_LITERAL
-                      PsiElement(string)('""')
-                PsiElement(})('}')
-            PsiElement(])(']')
+          LEFT_HAND_EXPR_LIST
+            INDEX_OR_SLICE_EXPR
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('allowedErrors')
+              PsiElement([)('[')
+              COMPOSITE_LIT
+                TYPE_REFERENCE_EXPRESSION
+                  PsiElement(identifier)('osPkg')
+                LITERAL_VALUE
+                  PsiElement({)('{')
+                  ELEMENT
+                    VALUE
+                      STRING_LITERAL
+                        PsiElement(string)('""')
+                  PsiElement(,)(',')
+                  ELEMENT
+                    VALUE
+                      STRING_LITERAL
+                        PsiElement(string)('""')
+                  PsiElement(})('}')
+              PsiElement(])(']')
         BLOCK
           PsiElement({)('{')
           PsiElement(})('}')

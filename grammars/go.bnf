@@ -147,7 +147,7 @@ Signature ::= Parameters Result? {
   stubClass="com.goide.stubs.GoSignatureStub"
   methods=[shouldGoDeeper]
 }
-Result ::= '(' TypeListNoPin ')' | Type | Parameters {
+Result ::= '(' TypeListNoPin ')' | Type | Parameters { // todo: reorder and pin (
   stubClass="com.goide.stubs.GoResultStub"
 }
 Parameters ::= '(' [ (ParameterList ','?| TypeListNoPin) ] ')' {
@@ -155,7 +155,7 @@ Parameters ::= '(' [ (ParameterList ','?| TypeListNoPin) ] ')' {
   stubClass="com.goide.stubs.GoParametersStub"
 }
 private ParameterList ::= ParameterDeclaration (',' (ParameterDeclaration | &')'))* {pin(".*")=1}
-ParameterDeclaration ::= ParamDefinitionListNoPin? '...'? Type | Type {
+ParameterDeclaration ::= ParamDefinitionListNoPin? '...'? Type | Type { // todo: use left rule
   stubClass="com.goide.stubs.GoParameterDeclarationStub"
   methods = [isVariadic]
 }
@@ -211,10 +211,8 @@ Statement ::=
 private StatementRecover ::= !('!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | '*' | '*=' | '+' | '++' | '+=' | '-' | '--' | '-=' | '.' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex | identifier | if | imaginary | int | interface | map | oct | return | rune | select | string | raw_string | struct | switch | var)
 
 SimpleStatement ::=
-    AssignmentStatement
-  | SendStatement
-  | ShortVarDeclaration
-  | Expression ['++' | '--']
+    ShortVarDeclaration
+  | (LeftHandExprList (AssignmentStatement | SendStatement | ['++' | '--'])) {pin(".*")="ExpressionList"}
 
 private TopLevelDeclaration ::= OneOfDeclarations semi {pin=1 recoverWhile=TopLevelDeclarationRecover}
 private OneOfDeclarations ::=
@@ -234,6 +232,7 @@ ConstDefinition ::= identifier {
   methods=[getGoType]
 }
 
+LeftHandExprList ::= ExpressionList
 private ExpressionList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &')'))* {pin(".*")=1}
 private ExpressionWithRecover ::= Expression {recoverWhile=ExpressionListRecover}
 private ExpressionListRecover ::= !('!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '.' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex | identifier | if | imaginary | int | interface | map | oct | return | rune | select | string | raw_string | struct | switch | var)
@@ -329,7 +328,7 @@ Expression ::=
   | MaxGroup
   | ParenthesesExpr {methods=[getGoType] implements="com.goide.psi.GoTypeOwner"}
 
-fake BinaryExpr ::= Expression+{
+fake BinaryExpr ::= Expression+ {
   methods=[left="Expression[0]" right="Expression[1]"]
 }
 
@@ -381,8 +380,8 @@ LabeledStatement ::= LabelDefinition ':' Statement? {pin=2}
 LabelDefinition ::= identifier {
   stubClass="com.goide.stubs.GoLabelDefinitionStub" // todo: remove when you'll have some spare time 
 }
-SendStatement ::= Expression '<-' Expression {pin=2}
-AssignmentStatement ::= ExpressionList assign_op ExpressionList {pin=2}
+left SendStatement ::= '<-' Expression {pin=1}
+left AssignmentStatement ::= assign_op ExpressionList {pin=1}
 assign_op ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=' | '&=' | '&^='
 IfStatement ::= if Condition Block ElseStatement?
 ElseStatement ::= else (IfStatement | Block)
@@ -410,7 +409,7 @@ private ExpressionsOrVariables ::= ExpressionList '=' | VarDefinitionList ':='
 GoStatement ::= go Expression
 SelectStatement ::= select '{' CommClause* '}'
 CommClause ::= CommCase ':' Statements? {pin=1}
-CommCase ::= case ( SendStatement | RecvStatement ) | default {pin(".*")=1}
+CommCase ::= case ( Expression SendStatement | RecvStatement ) | default {pin(".*")="case"}
 RecvStatement ::= ExpressionsOrVariables? Expression {pin=0 extends=VarSpec}
 ReturnStatement ::= return ExpressionList?
 LabelRef ::= identifier {

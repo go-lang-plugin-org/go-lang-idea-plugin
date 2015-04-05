@@ -35,12 +35,8 @@ public class GoAssignmentToConstantInspection extends GoInspectionBase {
     return new GoVisitor() {
       @Override
       public void visitAssignmentStatement(@NotNull GoAssignmentStatement o) {
-        int offset = o.getAssignOp().getTextOffset();
-        List<GoExpression> list = o.getExpressionList();
-        for (GoExpression expression : list) {
-          if (expression.getTextOffset() < offset) checkExpression(expression);
-        }
-        super.visitAssignmentStatement(o);
+        List<GoExpression> list = o.getLeftHandExprList().getExpressionList();
+        for (GoExpression expression : list) checkExpression(expression);
       }
 
       private void checkExpression(GoExpression expression) {

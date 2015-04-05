@@ -208,6 +208,10 @@ public class GoVisitor extends PsiElementVisitor {
     visitStatement(o);
   }
 
+  public void visitLeftHandExprList(@NotNull GoLeftHandExprList o) {
+    visitCompositeElement(o);
+  }
+
   public void visitLiteral(@NotNull GoLiteral o) {
     visitExpression(o);
   }

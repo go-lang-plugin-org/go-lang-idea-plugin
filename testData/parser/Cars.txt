@@ -79,17 +79,18 @@ GO_FILE
     BLOCK
       PsiElement({)('{')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('fmt')
-            PsiElement(.)('.')
-            PsiElement(identifier)('Println')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            STRING_LITERAL
-              PsiElement(string)('"Hi Schumacher!"')
-            PsiElement())(')')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('fmt')
+              PsiElement(.)('.')
+              PsiElement(identifier)('Println')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              STRING_LITERAL
+                PsiElement(string)('"Hi Schumacher!"')
+              PsiElement())(')')
       PsiElement(})('}')
   TYPE_DECLARATION
     PsiElement(type)('type')
@@ -120,17 +121,18 @@ GO_FILE
     BLOCK
       PsiElement({)('{')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('fmt')
-            PsiElement(.)('.')
-            PsiElement(identifier)('Println')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            STRING_LITERAL
-              PsiElement(string)('"Hi Bond, James Bond!"')
-            PsiElement())(')')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('fmt')
+              PsiElement(.)('.')
+              PsiElement(identifier)('Println')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              STRING_LITERAL
+                PsiElement(string)('"Hi Bond, James Bond!"')
+              PsiElement())(')')
       PsiElement(})('}')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
@@ -165,38 +167,40 @@ GO_FILE
                       PsiElement(})('}')
               PsiElement(})('}')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('fmt')
-            PsiElement(.)('.')
-            PsiElement(identifier)('Println')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            STRING_LITERAL
-              PsiElement(string)('"A Ferrari has this many wheels: "')
-            PsiElement(,)(',')
-            CALL_EXPR
               REFERENCE_EXPRESSION
+                PsiElement(identifier)('fmt')
+              PsiElement(.)('.')
+              PsiElement(identifier)('Println')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              STRING_LITERAL
+                PsiElement(string)('"A Ferrari has this many wheels: "')
+              PsiElement(,)(',')
+              CALL_EXPR
                 REFERENCE_EXPRESSION
-                  PsiElement(identifier)('f')
-                PsiElement(.)('.')
-                PsiElement(identifier)('numberOfWheels')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                PsiElement())(')')
-            PsiElement())(')')
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('f')
+                  PsiElement(.)('.')
+                  PsiElement(identifier)('numberOfWheels')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  PsiElement())(')')
+              PsiElement())(')')
       PsiComment(GO_LINE_COMMENT)('//has car behavior')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('f')
-            PsiElement(.)('.')
-            PsiElement(identifier)('sayHiToSchumacher')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            PsiElement())(')')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('f')
+              PsiElement(.)('.')
+              PsiElement(identifier)('sayHiToSchumacher')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              PsiElement())(')')
       PsiComment(GO_LINE_COMMENT)('//has Ferrari behavior')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
@@ -222,37 +226,39 @@ GO_FILE
                       PsiElement(})('}')
               PsiElement(})('}')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('fmt')
-            PsiElement(.)('.')
-            PsiElement(identifier)('Println')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            STRING_LITERAL
-              PsiElement(string)('"An Aston Martin has this many wheels: "')
-            PsiElement(,)(',')
-            CALL_EXPR
               REFERENCE_EXPRESSION
+                PsiElement(identifier)('fmt')
+              PsiElement(.)('.')
+              PsiElement(identifier)('Println')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              STRING_LITERAL
+                PsiElement(string)('"An Aston Martin has this many wheels: "')
+              PsiElement(,)(',')
+              CALL_EXPR
                 REFERENCE_EXPRESSION
-                  PsiElement(identifier)('a')
-                PsiElement(.)('.')
-                PsiElement(identifier)('numberOfWheels')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                PsiElement())(')')
-            PsiElement())(')')
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('a')
+                  PsiElement(.)('.')
+                  PsiElement(identifier)('numberOfWheels')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  PsiElement())(')')
+              PsiElement())(')')
       PsiComment(GO_LINE_COMMENT)('//has car behavior')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('a')
-            PsiElement(.)('.')
-            PsiElement(identifier)('sayHiToBond')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            PsiElement())(')')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('a')
+              PsiElement(.)('.')
+              PsiElement(identifier)('sayHiToBond')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              PsiElement())(')')
       PsiComment(GO_LINE_COMMENT)('//has AstonMartin behavior')
       PsiElement(})('}')

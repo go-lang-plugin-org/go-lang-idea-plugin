@@ -37,53 +37,58 @@ GO_FILE
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          REFERENCE_EXPRESSION
-            PsiElement(identifier)('false')
+          LEFT_HAND_EXPR_LIST
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('false')
         BLOCK
           PsiElement({)('{')
           SIMPLE_STATEMENT
-            CALL_EXPR
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('panic')
-              ARGUMENT_LIST
-                PsiElement(()('(')
+            LEFT_HAND_EXPR_LIST
+              CALL_EXPR
                 REFERENCE_EXPRESSION
-                  PsiElement(identifier)('err')
-                PsiElement())(')')
+                  PsiElement(identifier)('panic')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('err')
+                  PsiElement())(')')
           PsiElement(})('}')
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          CONDITIONAL_EXPR
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('err')
-            PsiElement(!=)('!=')
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('nil')
+          LEFT_HAND_EXPR_LIST
+            CONDITIONAL_EXPR
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('err')
+              PsiElement(!=)('!=')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('nil')
         BLOCK
           PsiElement({)('{')
           SIMPLE_STATEMENT
-            CALL_EXPR
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('panic')
-              ARGUMENT_LIST
-                PsiElement(()('(')
+            LEFT_HAND_EXPR_LIST
+              CALL_EXPR
                 REFERENCE_EXPRESSION
-                  PsiElement(identifier)('err')
-                PsiElement())(')')
+                  PsiElement(identifier)('panic')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('err')
+                  PsiElement())(')')
           PsiElement(})('}')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('fmt')
-            PsiElement(.)('.')
-            PsiElement(identifier)('Println')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            STRING_LITERAL
-              PsiElement(string)('"Hello, playground"')
-            PsiElement())(')')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('fmt')
+              PsiElement(.)('.')
+              PsiElement(identifier)('Println')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              STRING_LITERAL
+                PsiElement(string)('"Hello, playground"')
+              PsiElement())(')')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
           VAR_DEFINITION
@@ -106,13 +111,14 @@ GO_FILE
                     PsiElement(identifier)('int')
             PsiElement())(')')
       ASSIGNMENT_STATEMENT
-        INDEX_OR_SLICE_EXPR
-          REFERENCE_EXPRESSION
-            PsiElement(identifier)('x')
-          PsiElement([)('[')
-          STRING_LITERAL
-            PsiElement(string)('"foo"')
-          PsiElement(])(']')
+        LEFT_HAND_EXPR_LIST
+          INDEX_OR_SLICE_EXPR
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('x')
+            PsiElement([)('[')
+            STRING_LITERAL
+              PsiElement(string)('"foo"')
+            PsiElement(])(']')
         ASSIGN_OP
           PsiElement(=)('=')
         LITERAL
@@ -142,17 +148,18 @@ GO_FILE
         BLOCK
           PsiElement({)('{')
           SIMPLE_STATEMENT
-            CALL_EXPR
-              REFERENCE_EXPRESSION
+            LEFT_HAND_EXPR_LIST
+              CALL_EXPR
                 REFERENCE_EXPRESSION
-                  PsiElement(identifier)('fmt')
-                PsiElement(.)('.')
-                PsiElement(identifier)('Println')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                STRING_LITERAL
-                  PsiElement(string)('"Missing key 'foo'"')
-                PsiElement())(')')
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('fmt')
+                  PsiElement(.)('.')
+                  PsiElement(identifier)('Println')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  STRING_LITERAL
+                    PsiElement(string)('"Missing key 'foo'"')
+                  PsiElement())(')')
           PsiElement(})('}')
       STATEMENT
         TYPE_DECLARATION
@@ -166,10 +173,11 @@ GO_FILE
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          UNARY_EXPR
-            PsiElement(&)('&')
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('A')
+          LEFT_HAND_EXPR_LIST
+            UNARY_EXPR
+              PsiElement(&)('&')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('A')
         BLOCK
           PsiElement({)('{')
           PsiElement(})('}')
@@ -179,14 +187,15 @@ GO_FILE
         BLOCK
           PsiElement({)('{')
           SIMPLE_STATEMENT
-            CALL_EXPR
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('panic')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                STRING_LITERAL
-                  PsiElement(string)('"foo"')
-                PsiElement())(')')
+            LEFT_HAND_EXPR_LIST
+              CALL_EXPR
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('panic')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  STRING_LITERAL
+                    PsiElement(string)('"foo"')
+                  PsiElement())(')')
           PsiElement(})('}')
       PsiComment(GO_LINE_COMMENT)('// error, it's ok')
       PsiElement(})('}')

@@ -101,52 +101,55 @@ GO_FILE
     BLOCK
       PsiElement({)('{')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('t')
-            PsiElement(.)('.')
-            PsiElement(identifier)('Mv')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            LITERAL
-              PsiElement(int)('7')
-            PsiElement())(')')
-      SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('T')
-            PsiElement(.)('.')
-            PsiElement(identifier)('Mv')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('t')
-            PsiElement(,)(',')
-            LITERAL
-              PsiElement(int)('7')
-            PsiElement())(')')
-      SIMPLE_STATEMENT
-        CALL_EXPR
-          METHOD_EXPR
-            RECEIVER_TYPE
-              PsiElement(()('(')
-              RECEIVER_TYPE
-                TYPE_REFERENCE_EXPRESSION
-                  PsiElement(identifier)('T')
-              PsiElement())(')')
-            PsiElement(.)('.')
-            REFERENCE_EXPRESSION
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('t')
+              PsiElement(.)('.')
               PsiElement(identifier)('Mv')
-          ARGUMENT_LIST
-            PsiElement(()('(')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              LITERAL
+                PsiElement(int)('7')
+              PsiElement())(')')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('t')
-            PsiElement(,)(',')
-            LITERAL
-              PsiElement(int)('7')
-            PsiElement())(')')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('T')
+              PsiElement(.)('.')
+              PsiElement(identifier)('Mv')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('t')
+              PsiElement(,)(',')
+              LITERAL
+                PsiElement(int)('7')
+              PsiElement())(')')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
+            METHOD_EXPR
+              RECEIVER_TYPE
+                PsiElement(()('(')
+                RECEIVER_TYPE
+                  TYPE_REFERENCE_EXPRESSION
+                    PsiElement(identifier)('T')
+                PsiElement())(')')
+              PsiElement(.)('.')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('Mv')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('t')
+              PsiElement(,)(',')
+              LITERAL
+                PsiElement(int)('7')
+              PsiElement())(')')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
           VAR_DEFINITION
@@ -159,17 +162,18 @@ GO_FILE
             PsiElement(identifier)('Mv')
       PsiElement(;)(';')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
-            PsiElement(identifier)('f1')
-          ARGUMENT_LIST
-            PsiElement(()('(')
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('t')
-            PsiElement(,)(',')
-            LITERAL
-              PsiElement(int)('7')
-            PsiElement())(')')
+              PsiElement(identifier)('f1')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('t')
+              PsiElement(,)(',')
+              LITERAL
+                PsiElement(int)('7')
+              PsiElement())(')')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
           VAR_DEFINITION
@@ -187,15 +191,16 @@ GO_FILE
               PsiElement(identifier)('Mv')
       PsiElement(;)(';')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
-            PsiElement(identifier)('f2')
-          ARGUMENT_LIST
-            PsiElement(()('(')
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('t')
-            PsiElement(,)(',')
-            LITERAL
-              PsiElement(int)('7')
-            PsiElement())(')')
+              PsiElement(identifier)('f2')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('t')
+              PsiElement(,)(',')
+              LITERAL
+                PsiElement(int)('7')
+              PsiElement())(')')
       PsiElement(})('}')

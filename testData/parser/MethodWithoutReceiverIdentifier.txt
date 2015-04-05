@@ -53,10 +53,11 @@ GO_FILE
     BLOCK
       PsiElement({)('{')
       ASSIGNMENT_STATEMENT
-        UNARY_EXPR
-          PsiElement(*)('*')
-          REFERENCE_EXPRESSION
-            PsiElement(identifier)('ds')
+        LEFT_HAND_EXPR_LIST
+          UNARY_EXPR
+            PsiElement(*)('*')
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('ds')
         ASSIGN_OP
           PsiElement(=)('=')
         REFERENCE_EXPRESSION

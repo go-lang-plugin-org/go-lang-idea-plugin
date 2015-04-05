@@ -54,12 +54,13 @@ GO_FILE
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          CONDITIONAL_EXPR
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('len')
-            PsiElement(>)('>')
-            LITERAL
-              PsiElement(int)('0')
+          LEFT_HAND_EXPR_LIST
+            CONDITIONAL_EXPR
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('len')
+              PsiElement(>)('>')
+              LITERAL
+                PsiElement(int)('0')
         BLOCK
           PsiElement({)('{')
           PsiElement(})('}')

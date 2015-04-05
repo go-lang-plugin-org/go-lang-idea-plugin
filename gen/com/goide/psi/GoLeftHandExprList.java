@@ -5,15 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoAssignmentStatement extends GoStatement {
+public interface GoLeftHandExprList extends GoCompositeElement {
 
   @NotNull
   List<GoExpression> getExpressionList();
-
-  @NotNull
-  GoLeftHandExprList getLeftHandExprList();
-
-  @NotNull
-  GoAssignOp getAssignOp();
 
 }

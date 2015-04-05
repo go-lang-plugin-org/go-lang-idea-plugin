@@ -92,7 +92,7 @@ abstract public class GoLiveTemplateContextType extends TemplateContextType {
   
     @Override
     protected boolean isInContext(@NotNull PsiElement element) {
-      return element instanceof GoSimpleStatement && PsiTreeUtil.getParentOfType(element, GoBlock.class) != null;
+      return (element instanceof GoLeftHandExprList || element instanceof GoSimpleStatement) && PsiTreeUtil.getParentOfType(element, GoBlock.class) != null;
     }
   }
 }

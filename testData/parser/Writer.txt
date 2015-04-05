@@ -226,23 +226,25 @@ GO_FILE
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          CONDITIONAL_EXPR
-            REFERENCE_EXPRESSION
+          LEFT_HAND_EXPR_LIST
+            CONDITIONAL_EXPR
               REFERENCE_EXPRESSION
-                PsiElement(identifier)('tw')
-              PsiElement(.)('.')
-              PsiElement(identifier)('nb')
-            PsiElement(>)('>')
-            LITERAL
-              PsiElement(int)('0')
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('tw')
+                PsiElement(.)('.')
+                PsiElement(identifier)('nb')
+              PsiElement(>)('>')
+              LITERAL
+                PsiElement(int)('0')
         BLOCK
           PsiElement({)('{')
           ASSIGNMENT_STATEMENT
-            REFERENCE_EXPRESSION
+            LEFT_HAND_EXPR_LIST
               REFERENCE_EXPRESSION
-                PsiElement(identifier)('tw')
-              PsiElement(.)('.')
-              PsiElement(identifier)('err')
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('tw')
+                PsiElement(.)('.')
+                PsiElement(identifier)('err')
             ASSIGN_OP
               PsiElement(=)('=')
             CALL_EXPR
@@ -318,17 +320,19 @@ GO_FILE
           IF_STATEMENT
             PsiElement(if)('if')
             SIMPLE_STATEMENT
-              CONDITIONAL_EXPR
-                REFERENCE_EXPRESSION
-                  PsiElement(identifier)('nr')
-                PsiElement(>)('>')
-                REFERENCE_EXPRESSION
-                  PsiElement(identifier)('blockSize')
+              LEFT_HAND_EXPR_LIST
+                CONDITIONAL_EXPR
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('nr')
+                  PsiElement(>)('>')
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('blockSize')
             BLOCK
               PsiElement({)('{')
               ASSIGNMENT_STATEMENT
-                REFERENCE_EXPRESSION
-                  PsiElement(identifier)('nr')
+                LEFT_HAND_EXPR_LIST
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('nr')
                 ASSIGN_OP
                   PsiElement(=)('=')
                 REFERENCE_EXPRESSION
@@ -344,14 +348,15 @@ GO_FILE
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(identifier)('int')
           ASSIGNMENT_STATEMENT
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('nw')
-            PsiElement(,)(',')
-            REFERENCE_EXPRESSION
+            LEFT_HAND_EXPR_LIST
               REFERENCE_EXPRESSION
-                PsiElement(identifier)('tw')
-              PsiElement(.)('.')
-              PsiElement(identifier)('err')
+                PsiElement(identifier)('nw')
+              PsiElement(,)(',')
+              REFERENCE_EXPRESSION
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('tw')
+                PsiElement(.)('.')
+                PsiElement(identifier)('err')
             ASSIGN_OP
               PsiElement(=)('=')
             CALL_EXPR
@@ -378,8 +383,9 @@ GO_FILE
                   PsiElement(])(']')
                 PsiElement())(')')
           ASSIGNMENT_STATEMENT
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('n')
+            LEFT_HAND_EXPR_LIST
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('n')
             ASSIGN_OP
               PsiElement(-=)('-=')
             CALL_EXPR
@@ -392,21 +398,23 @@ GO_FILE
                 PsiElement())(')')
           PsiElement(})('}')
       ASSIGNMENT_STATEMENT
-        REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
           REFERENCE_EXPRESSION
-            PsiElement(identifier)('tw')
-          PsiElement(.)('.')
-          PsiElement(identifier)('nb')
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('tw')
+            PsiElement(.)('.')
+            PsiElement(identifier)('nb')
         ASSIGN_OP
           PsiElement(=)('=')
         LITERAL
           PsiElement(int)('0')
       ASSIGNMENT_STATEMENT
-        REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
           REFERENCE_EXPRESSION
-            PsiElement(identifier)('tw')
-          PsiElement(.)('.')
-          PsiElement(identifier)('pad')
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('tw')
+            PsiElement(.)('.')
+            PsiElement(identifier)('pad')
         ASSIGN_OP
           PsiElement(=)('=')
         LITERAL
@@ -456,46 +464,49 @@ GO_FILE
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          CONDITIONAL_EXPR
-            CALL_EXPR
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('len')
-              ARGUMENT_LIST
-                PsiElement(()('(')
+          LEFT_HAND_EXPR_LIST
+            CONDITIONAL_EXPR
+              CALL_EXPR
                 REFERENCE_EXPRESSION
-                  PsiElement(identifier)('s')
-                PsiElement())(')')
-            PsiElement(>)('>')
-            CALL_EXPR
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('len')
-              ARGUMENT_LIST
-                PsiElement(()('(')
+                  PsiElement(identifier)('len')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('s')
+                  PsiElement())(')')
+              PsiElement(>)('>')
+              CALL_EXPR
                 REFERENCE_EXPRESSION
-                  PsiElement(identifier)('b')
-                PsiElement())(')')
+                  PsiElement(identifier)('len')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('b')
+                  PsiElement())(')')
         BLOCK
           PsiElement({)('{')
           IF_STATEMENT
             PsiElement(if)('if')
             SIMPLE_STATEMENT
-              CONDITIONAL_EXPR
-                REFERENCE_EXPRESSION
+              LEFT_HAND_EXPR_LIST
+                CONDITIONAL_EXPR
                   REFERENCE_EXPRESSION
-                    PsiElement(identifier)('tw')
-                  PsiElement(.)('.')
-                  PsiElement(identifier)('err')
-                PsiElement(==)('==')
-                REFERENCE_EXPRESSION
-                  PsiElement(identifier)('nil')
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('tw')
+                    PsiElement(.)('.')
+                    PsiElement(identifier)('err')
+                  PsiElement(==)('==')
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('nil')
             BLOCK
               PsiElement({)('{')
               ASSIGNMENT_STATEMENT
-                REFERENCE_EXPRESSION
+                LEFT_HAND_EXPR_LIST
                   REFERENCE_EXPRESSION
-                    PsiElement(identifier)('tw')
-                  PsiElement(.)('.')
-                  PsiElement(identifier)('err')
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('tw')
+                    PsiElement(.)('.')
+                    PsiElement(identifier)('err')
                 ASSIGN_OP
                   PsiElement(=)('=')
                 REFERENCE_EXPRESSION
@@ -505,45 +516,23 @@ GO_FILE
             PsiElement(return)('return')
           PsiElement(})('}')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
-            PsiElement(identifier)('copy')
-          ARGUMENT_LIST
-            PsiElement(()('(')
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('b')
-            PsiElement(,)(',')
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('s')
-            PsiElement())(')')
+              PsiElement(identifier)('copy')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('b')
+              PsiElement(,)(',')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('s')
+              PsiElement())(')')
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          CONDITIONAL_EXPR
-            CALL_EXPR
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('len')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                REFERENCE_EXPRESSION
-                  PsiElement(identifier)('s')
-                PsiElement())(')')
-            PsiElement(<)('<')
-            CALL_EXPR
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('len')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                REFERENCE_EXPRESSION
-                  PsiElement(identifier)('b')
-                PsiElement())(')')
-        BLOCK
-          PsiElement({)('{')
-          ASSIGNMENT_STATEMENT
-            INDEX_OR_SLICE_EXPR
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('b')
-              PsiElement([)('[')
+          LEFT_HAND_EXPR_LIST
+            CONDITIONAL_EXPR
               CALL_EXPR
                 REFERENCE_EXPRESSION
                   PsiElement(identifier)('len')
@@ -552,7 +541,32 @@ GO_FILE
                   REFERENCE_EXPRESSION
                     PsiElement(identifier)('s')
                   PsiElement())(')')
-              PsiElement(])(']')
+              PsiElement(<)('<')
+              CALL_EXPR
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('len')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('b')
+                  PsiElement())(')')
+        BLOCK
+          PsiElement({)('{')
+          ASSIGNMENT_STATEMENT
+            LEFT_HAND_EXPR_LIST
+              INDEX_OR_SLICE_EXPR
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('b')
+                PsiElement([)('[')
+                CALL_EXPR
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('len')
+                  ARGUMENT_LIST
+                    PsiElement(()('(')
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('s')
+                    PsiElement())(')')
+                PsiElement(])(']')
             ASSIGN_OP
               PsiElement(=)('=')
             LITERAL
@@ -640,8 +654,9 @@ GO_FILE
         BLOCK
           PsiElement({)('{')
           ASSIGNMENT_STATEMENT
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('s')
+            LEFT_HAND_EXPR_LIST
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('s')
             ASSIGN_OP
               PsiElement(=)('=')
             ADD_EXPR
@@ -652,20 +667,21 @@ GO_FILE
                 PsiElement(identifier)('s')
           PsiElement(})('}')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('tw')
-            PsiElement(.)('.')
-            PsiElement(identifier)('cString')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('b')
-            PsiElement(,)(',')
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('s')
-            PsiElement())(')')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('tw')
+              PsiElement(.)('.')
+              PsiElement(identifier)('cString')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('b')
+              PsiElement(,)(',')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('s')
+              PsiElement())(')')
       PsiElement(})('}')
   PsiComment(GO_LINE_COMMENT)('// Write x into b, either as octal or as binary (GNUtar/star extension).')
   METHOD_DECLARATION
@@ -724,51 +740,54 @@ GO_FILE
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          CONDITIONAL_EXPR
-            CALL_EXPR
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('len')
-              ARGUMENT_LIST
-                PsiElement(()('(')
+          LEFT_HAND_EXPR_LIST
+            CONDITIONAL_EXPR
+              CALL_EXPR
                 REFERENCE_EXPRESSION
-                  PsiElement(identifier)('s')
-                PsiElement())(')')
-            PsiElement(<)('<')
-            CALL_EXPR
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('len')
-              ARGUMENT_LIST
-                PsiElement(()('(')
+                  PsiElement(identifier)('len')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('s')
+                  PsiElement())(')')
+              PsiElement(<)('<')
+              CALL_EXPR
                 REFERENCE_EXPRESSION
-                  PsiElement(identifier)('b')
-                PsiElement())(')')
+                  PsiElement(identifier)('len')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('b')
+                  PsiElement())(')')
         BLOCK
           PsiElement({)('{')
           SIMPLE_STATEMENT
-            CALL_EXPR
-              REFERENCE_EXPRESSION
+            LEFT_HAND_EXPR_LIST
+              CALL_EXPR
                 REFERENCE_EXPRESSION
-                  PsiElement(identifier)('tw')
-                PsiElement(.)('.')
-                PsiElement(identifier)('octal')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                REFERENCE_EXPRESSION
-                  PsiElement(identifier)('b')
-                PsiElement(,)(',')
-                REFERENCE_EXPRESSION
-                  PsiElement(identifier)('x')
-                PsiElement())(')')
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('tw')
+                  PsiElement(.)('.')
+                  PsiElement(identifier)('octal')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('b')
+                  PsiElement(,)(',')
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('x')
+                  PsiElement())(')')
           RETURN_STATEMENT
             PsiElement(return)('return')
           PsiElement(})('}')
       PsiComment(GO_LINE_COMMENT)('// Too big: use binary (big-endian).')
       ASSIGNMENT_STATEMENT
-        REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
           REFERENCE_EXPRESSION
-            PsiElement(identifier)('tw')
-          PsiElement(.)('.')
-          PsiElement(identifier)('usedBinary')
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('tw')
+            PsiElement(.)('.')
+            PsiElement(identifier)('usedBinary')
         ASSIGN_OP
           PsiElement(=)('=')
         REFERENCE_EXPRESSION
@@ -810,19 +829,21 @@ GO_FILE
                 PsiElement(int)('0')
           PsiElement(;)(';')
           SIMPLE_STATEMENT
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('i')
+            LEFT_HAND_EXPR_LIST
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('i')
             PsiElement(--)('--')
         BLOCK
           PsiElement({)('{')
           ASSIGNMENT_STATEMENT
-            INDEX_OR_SLICE_EXPR
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('b')
-              PsiElement([)('[')
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('i')
-              PsiElement(])(']')
+            LEFT_HAND_EXPR_LIST
+              INDEX_OR_SLICE_EXPR
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('b')
+                PsiElement([)('[')
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('i')
+                PsiElement(])(']')
             ASSIGN_OP
               PsiElement(=)('=')
             CALL_EXPR
@@ -834,21 +855,23 @@ GO_FILE
                   PsiElement(identifier)('x')
                 PsiElement())(')')
           ASSIGNMENT_STATEMENT
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('x')
+            LEFT_HAND_EXPR_LIST
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('x')
             ASSIGN_OP
               PsiElement(>>=)('>>=')
             LITERAL
               PsiElement(int)('8')
           PsiElement(})('}')
       ASSIGNMENT_STATEMENT
-        INDEX_OR_SLICE_EXPR
-          REFERENCE_EXPRESSION
-            PsiElement(identifier)('b')
-          PsiElement([)('[')
-          LITERAL
-            PsiElement(int)('0')
-          PsiElement(])(']')
+        LEFT_HAND_EXPR_LIST
+          INDEX_OR_SLICE_EXPR
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('b')
+            PsiElement([)('[')
+            LITERAL
+              PsiElement(int)('0')
+            PsiElement(])(']')
         ASSIGN_OP
           PsiElement(|=)('|=')
         LITERAL
@@ -946,11 +969,12 @@ GO_FILE
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          REFERENCE_EXPRESSION
+          LEFT_HAND_EXPR_LIST
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('tw')
-            PsiElement(.)('.')
-            PsiElement(identifier)('closed')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('tw')
+              PsiElement(.)('.')
+              PsiElement(identifier)('closed')
         BLOCK
           PsiElement({)('{')
           RETURN_STATEMENT
@@ -961,40 +985,43 @@ GO_FILE
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          CONDITIONAL_EXPR
-            REFERENCE_EXPRESSION
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('tw')
-              PsiElement(.)('.')
-              PsiElement(identifier)('err')
-            PsiElement(==)('==')
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('nil')
-        BLOCK
-          PsiElement({)('{')
-          SIMPLE_STATEMENT
-            CALL_EXPR
+          LEFT_HAND_EXPR_LIST
+            CONDITIONAL_EXPR
               REFERENCE_EXPRESSION
                 REFERENCE_EXPRESSION
                   PsiElement(identifier)('tw')
                 PsiElement(.)('.')
-                PsiElement(identifier)('Flush')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                PsiElement())(')')
+                PsiElement(identifier)('err')
+              PsiElement(==)('==')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('nil')
+        BLOCK
+          PsiElement({)('{')
+          SIMPLE_STATEMENT
+            LEFT_HAND_EXPR_LIST
+              CALL_EXPR
+                REFERENCE_EXPRESSION
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('tw')
+                  PsiElement(.)('.')
+                  PsiElement(identifier)('Flush')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  PsiElement())(')')
           PsiElement(})('}')
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          CONDITIONAL_EXPR
-            REFERENCE_EXPRESSION
+          LEFT_HAND_EXPR_LIST
+            CONDITIONAL_EXPR
               REFERENCE_EXPRESSION
-                PsiElement(identifier)('tw')
-              PsiElement(.)('.')
-              PsiElement(identifier)('err')
-            PsiElement(!=)('!=')
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('nil')
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('tw')
+                PsiElement(.)('.')
+                PsiElement(identifier)('err')
+              PsiElement(!=)('!=')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('nil')
         BLOCK
           PsiElement({)('{')
           RETURN_STATEMENT
@@ -1029,38 +1056,39 @@ GO_FILE
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          OR_EXPR
-            CONDITIONAL_EXPR
-              CALL_EXPR
-                REFERENCE_EXPRESSION
-                  PsiElement(identifier)('len')
-                ARGUMENT_LIST
-                  PsiElement(()('(')
+          LEFT_HAND_EXPR_LIST
+            OR_EXPR
+              CONDITIONAL_EXPR
+                CALL_EXPR
                   REFERENCE_EXPRESSION
+                    PsiElement(identifier)('len')
+                  ARGUMENT_LIST
+                    PsiElement(()('(')
                     REFERENCE_EXPRESSION
-                      PsiElement(identifier)('hdr')
-                    PsiElement(.)('.')
-                    PsiElement(identifier)('Name')
-                  PsiElement())(')')
-              PsiElement(>)('>')
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('fileNameSize')
-            PsiElement(||)('||')
-            CONDITIONAL_EXPR
-              CALL_EXPR
+                      REFERENCE_EXPRESSION
+                        PsiElement(identifier)('hdr')
+                      PsiElement(.)('.')
+                      PsiElement(identifier)('Name')
+                    PsiElement())(')')
+                PsiElement(>)('>')
                 REFERENCE_EXPRESSION
-                  PsiElement(identifier)('len')
-                ARGUMENT_LIST
-                  PsiElement(()('(')
+                  PsiElement(identifier)('fileNameSize')
+              PsiElement(||)('||')
+              CONDITIONAL_EXPR
+                CALL_EXPR
                   REFERENCE_EXPRESSION
+                    PsiElement(identifier)('len')
+                  ARGUMENT_LIST
+                    PsiElement(()('(')
                     REFERENCE_EXPRESSION
-                      PsiElement(identifier)('hdr')
-                    PsiElement(.)('.')
-                    PsiElement(identifier)('Linkname')
-                  PsiElement())(')')
-              PsiElement(>)('>')
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('fileNameSize')
+                      REFERENCE_EXPRESSION
+                        PsiElement(identifier)('hdr')
+                      PsiElement(.)('.')
+                      PsiElement(identifier)('Linkname')
+                    PsiElement())(')')
+                PsiElement(>)('>')
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('fileNameSize')
         BLOCK
           PsiElement({)('{')
           STATEMENT
@@ -1073,14 +1101,15 @@ GO_FILE
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(identifier)('error')
           ASSIGNMENT_STATEMENT
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('prefix')
-            PsiElement(,)(',')
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('suffix')
-            PsiElement(,)(',')
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('err')
+            LEFT_HAND_EXPR_LIST
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('prefix')
+              PsiElement(,)(',')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('suffix')
+              PsiElement(,)(',')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('err')
             ASSIGN_OP
               PsiElement(=)('=')
             CALL_EXPR
@@ -1102,29 +1131,30 @@ GO_FILE
           IF_STATEMENT
             PsiElement(if)('if')
             SIMPLE_STATEMENT
-              OR_EXPR
-                CONDITIONAL_EXPR
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('err')
-                  PsiElement(==)('==')
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('errNameTooLong')
-                PsiElement(||)('||')
-                CONDITIONAL_EXPR
-                  CALL_EXPR
+              LEFT_HAND_EXPR_LIST
+                OR_EXPR
+                  CONDITIONAL_EXPR
                     REFERENCE_EXPRESSION
-                      PsiElement(identifier)('len')
-                    ARGUMENT_LIST
-                      PsiElement(()('(')
+                      PsiElement(identifier)('err')
+                    PsiElement(==)('==')
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('errNameTooLong')
+                  PsiElement(||)('||')
+                  CONDITIONAL_EXPR
+                    CALL_EXPR
                       REFERENCE_EXPRESSION
+                        PsiElement(identifier)('len')
+                      ARGUMENT_LIST
+                        PsiElement(()('(')
                         REFERENCE_EXPRESSION
-                          PsiElement(identifier)('hdr')
-                        PsiElement(.)('.')
-                        PsiElement(identifier)('Linkname')
-                      PsiElement())(')')
-                  PsiElement(>)('>')
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('fileNameSize')
+                          REFERENCE_EXPRESSION
+                            PsiElement(identifier)('hdr')
+                          PsiElement(.)('.')
+                          PsiElement(identifier)('Linkname')
+                        PsiElement())(')')
+                    PsiElement(>)('>')
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('fileNameSize')
             BLOCK
               PsiElement({)('{')
               IF_STATEMENT
@@ -1165,12 +1195,13 @@ GO_FILE
               IF_STATEMENT
                 PsiElement(if)('if')
                 SIMPLE_STATEMENT
-                  CONDITIONAL_EXPR
-                    REFERENCE_EXPRESSION
-                      PsiElement(identifier)('err')
-                    PsiElement(!=)('!=')
-                    REFERENCE_EXPRESSION
-                      PsiElement(identifier)('nil')
+                  LEFT_HAND_EXPR_LIST
+                    CONDITIONAL_EXPR
+                      REFERENCE_EXPRESSION
+                        PsiElement(identifier)('err')
+                      PsiElement(!=)('!=')
+                      REFERENCE_EXPRESSION
+                        PsiElement(identifier)('nil')
                 BLOCK
                   PsiElement({)('{')
                   RETURN_STATEMENT
@@ -1180,11 +1211,12 @@ GO_FILE
                   PsiElement(})('}')
           PsiElement(})('}')
       ASSIGNMENT_STATEMENT
-        REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
           REFERENCE_EXPRESSION
-            PsiElement(identifier)('tw')
-          PsiElement(.)('.')
-          PsiElement(identifier)('nb')
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('tw')
+            PsiElement(.)('.')
+            PsiElement(identifier)('nb')
         ASSIGN_OP
           PsiElement(=)('=')
         CALL_EXPR
@@ -1199,11 +1231,12 @@ GO_FILE
               PsiElement(identifier)('Size')
             PsiElement())(')')
       ASSIGNMENT_STATEMENT
-        REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
           REFERENCE_EXPRESSION
-            PsiElement(identifier)('tw')
-          PsiElement(.)('.')
-          PsiElement(identifier)('pad')
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('tw')
+            PsiElement(.)('.')
+            PsiElement(identifier)('pad')
         ASSIGN_OP
           PsiElement(=)('=')
         MUL_EXPR
@@ -1259,29 +1292,30 @@ GO_FILE
                 PsiElement(identifier)('header')
               PsiElement())(')')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('tw')
-            PsiElement(.)('.')
-            PsiElement(identifier)('cString')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            CALL_EXPR
               REFERENCE_EXPRESSION
+                PsiElement(identifier)('tw')
+              PsiElement(.)('.')
+              PsiElement(identifier)('cString')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              CALL_EXPR
                 REFERENCE_EXPRESSION
-                  PsiElement(identifier)('s')
-                PsiElement(.)('.')
-                PsiElement(identifier)('next')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                REFERENCE_EXPRESSION
-                  PsiElement(identifier)('fileNameSize')
-                PsiElement())(')')
-            PsiElement(,)(',')
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('suffix')
-            PsiElement())(')')
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('s')
+                  PsiElement(.)('.')
+                  PsiElement(identifier)('next')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('fileNameSize')
+                  PsiElement())(')')
+              PsiElement(,)(',')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('suffix')
+              PsiElement())(')')
       PsiComment(GO_LINE_COMMENT)('// Handle out of range ModTime carefully.')
       STATEMENT
         VAR_DECLARATION
@@ -1295,47 +1329,49 @@ GO_FILE
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          AND_EXPR
-            UNARY_EXPR
-              PsiElement(!)('!')
-              CALL_EXPR
-                SELECTOR_EXPR
-                  REFERENCE_EXPRESSION
+          LEFT_HAND_EXPR_LIST
+            AND_EXPR
+              UNARY_EXPR
+                PsiElement(!)('!')
+                CALL_EXPR
+                  SELECTOR_EXPR
                     REFERENCE_EXPRESSION
-                      PsiElement(identifier)('hdr')
+                      REFERENCE_EXPRESSION
+                        PsiElement(identifier)('hdr')
+                      PsiElement(.)('.')
+                      PsiElement(identifier)('ModTime')
                     PsiElement(.)('.')
-                    PsiElement(identifier)('ModTime')
-                  PsiElement(.)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('Before')
-                ARGUMENT_LIST
-                  PsiElement(()('(')
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('minTime')
-                  PsiElement())(')')
-            PsiElement(&&)('&&')
-            UNARY_EXPR
-              PsiElement(!)('!')
-              CALL_EXPR
-                SELECTOR_EXPR
-                  REFERENCE_EXPRESSION
                     REFERENCE_EXPRESSION
-                      PsiElement(identifier)('hdr')
+                      PsiElement(identifier)('Before')
+                  ARGUMENT_LIST
+                    PsiElement(()('(')
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('minTime')
+                    PsiElement())(')')
+              PsiElement(&&)('&&')
+              UNARY_EXPR
+                PsiElement(!)('!')
+                CALL_EXPR
+                  SELECTOR_EXPR
+                    REFERENCE_EXPRESSION
+                      REFERENCE_EXPRESSION
+                        PsiElement(identifier)('hdr')
+                      PsiElement(.)('.')
+                      PsiElement(identifier)('ModTime')
                     PsiElement(.)('.')
-                    PsiElement(identifier)('ModTime')
-                  PsiElement(.)('.')
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('After')
-                ARGUMENT_LIST
-                  PsiElement(()('(')
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('maxTime')
-                  PsiElement())(')')
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('After')
+                  ARGUMENT_LIST
+                    PsiElement(()('(')
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('maxTime')
+                    PsiElement())(')')
         BLOCK
           PsiElement({)('{')
           ASSIGNMENT_STATEMENT
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('modTime')
+            LEFT_HAND_EXPR_LIST
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('modTime')
             ASSIGN_OP
               PsiElement(=)('=')
             CALL_EXPR
@@ -1353,169 +1389,161 @@ GO_FILE
                 PsiElement())(')')
           PsiElement(})('}')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('tw')
-            PsiElement(.)('.')
-            PsiElement(identifier)('octal')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            CALL_EXPR
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('tw')
+              PsiElement(.)('.')
+              PsiElement(identifier)('octal')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              CALL_EXPR
+                REFERENCE_EXPRESSION
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('s')
+                  PsiElement(.)('.')
+                  PsiElement(identifier)('next')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  LITERAL
+                    PsiElement(int)('8')
+                  PsiElement())(')')
+              PsiElement(,)(',')
               REFERENCE_EXPRESSION
                 REFERENCE_EXPRESSION
-                  PsiElement(identifier)('s')
+                  PsiElement(identifier)('hdr')
                 PsiElement(.)('.')
-                PsiElement(identifier)('next')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                LITERAL
-                  PsiElement(int)('8')
-                PsiElement())(')')
-            PsiElement(,)(',')
-            REFERENCE_EXPRESSION
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('hdr')
-              PsiElement(.)('.')
-              PsiElement(identifier)('Mode')
-            PsiElement())(')')
+                PsiElement(identifier)('Mode')
+              PsiElement())(')')
       PsiComment(GO_LINE_COMMENT)('// 100:108')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('tw')
-            PsiElement(.)('.')
-            PsiElement(identifier)('numeric')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            CALL_EXPR
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(identifier)('s')
-                PsiElement(.)('.')
-                PsiElement(identifier)('next')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                LITERAL
-                  PsiElement(int)('8')
-                PsiElement())(')')
-            PsiElement(,)(',')
-            CALL_EXPR
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('int64')
-              ARGUMENT_LIST
-                PsiElement(()('(')
+                PsiElement(identifier)('tw')
+              PsiElement(.)('.')
+              PsiElement(identifier)('numeric')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              CALL_EXPR
                 REFERENCE_EXPRESSION
                   REFERENCE_EXPRESSION
-                    PsiElement(identifier)('hdr')
+                    PsiElement(identifier)('s')
                   PsiElement(.)('.')
-                  PsiElement(identifier)('Uid')
-                PsiElement())(')')
-            PsiElement())(')')
+                  PsiElement(identifier)('next')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  LITERAL
+                    PsiElement(int)('8')
+                  PsiElement())(')')
+              PsiElement(,)(',')
+              CALL_EXPR
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('int64')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  REFERENCE_EXPRESSION
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('hdr')
+                    PsiElement(.)('.')
+                    PsiElement(identifier)('Uid')
+                  PsiElement())(')')
+              PsiElement())(')')
       PsiComment(GO_LINE_COMMENT)('// 108:116')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('tw')
-            PsiElement(.)('.')
-            PsiElement(identifier)('numeric')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            CALL_EXPR
               REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(identifier)('s')
-                PsiElement(.)('.')
-                PsiElement(identifier)('next')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                LITERAL
-                  PsiElement(int)('8')
-                PsiElement())(')')
-            PsiElement(,)(',')
-            CALL_EXPR
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('int64')
-              ARGUMENT_LIST
-                PsiElement(()('(')
+                PsiElement(identifier)('tw')
+              PsiElement(.)('.')
+              PsiElement(identifier)('numeric')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              CALL_EXPR
                 REFERENCE_EXPRESSION
                   REFERENCE_EXPRESSION
-                    PsiElement(identifier)('hdr')
+                    PsiElement(identifier)('s')
                   PsiElement(.)('.')
-                  PsiElement(identifier)('Gid')
-                PsiElement())(')')
-            PsiElement())(')')
+                  PsiElement(identifier)('next')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  LITERAL
+                    PsiElement(int)('8')
+                  PsiElement())(')')
+              PsiElement(,)(',')
+              CALL_EXPR
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('int64')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  REFERENCE_EXPRESSION
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('hdr')
+                    PsiElement(.)('.')
+                    PsiElement(identifier)('Gid')
+                  PsiElement())(')')
+              PsiElement())(')')
       PsiComment(GO_LINE_COMMENT)('// 116:124')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('tw')
-            PsiElement(.)('.')
-            PsiElement(identifier)('numeric')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            CALL_EXPR
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('tw')
+              PsiElement(.)('.')
+              PsiElement(identifier)('numeric')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              CALL_EXPR
+                REFERENCE_EXPRESSION
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('s')
+                  PsiElement(.)('.')
+                  PsiElement(identifier)('next')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  LITERAL
+                    PsiElement(int)('12')
+                  PsiElement())(')')
+              PsiElement(,)(',')
               REFERENCE_EXPRESSION
                 REFERENCE_EXPRESSION
-                  PsiElement(identifier)('s')
+                  PsiElement(identifier)('hdr')
                 PsiElement(.)('.')
-                PsiElement(identifier)('next')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                LITERAL
-                  PsiElement(int)('12')
-                PsiElement())(')')
-            PsiElement(,)(',')
-            REFERENCE_EXPRESSION
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('hdr')
-              PsiElement(.)('.')
-              PsiElement(identifier)('Size')
-            PsiElement())(')')
+                PsiElement(identifier)('Size')
+              PsiElement())(')')
       PsiComment(GO_LINE_COMMENT)('// 124:136')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('tw')
-            PsiElement(.)('.')
-            PsiElement(identifier)('numeric')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            CALL_EXPR
               REFERENCE_EXPRESSION
+                PsiElement(identifier)('tw')
+              PsiElement(.)('.')
+              PsiElement(identifier)('numeric')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              CALL_EXPR
                 REFERENCE_EXPRESSION
-                  PsiElement(identifier)('s')
-                PsiElement(.)('.')
-                PsiElement(identifier)('next')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                LITERAL
-                  PsiElement(int)('12')
-                PsiElement())(')')
-            PsiElement(,)(',')
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('modTime')
-            PsiElement())(')')
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('s')
+                  PsiElement(.)('.')
+                  PsiElement(identifier)('next')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  LITERAL
+                    PsiElement(int)('12')
+                  PsiElement())(')')
+              PsiElement(,)(',')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('modTime')
+              PsiElement())(')')
       PsiComment(GO_LINE_COMMENT)('// 136:148')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('s')
-            PsiElement(.)('.')
-            PsiElement(identifier)('next')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            LITERAL
-              PsiElement(int)('8')
-            PsiElement())(')')
-      PsiComment(GO_LINE_COMMENT)('// chksum (148:156)')
-      ASSIGNMENT_STATEMENT
-        INDEX_OR_SLICE_EXPR
+        LEFT_HAND_EXPR_LIST
           CALL_EXPR
             REFERENCE_EXPRESSION
               REFERENCE_EXPRESSION
@@ -1525,12 +1553,27 @@ GO_FILE
             ARGUMENT_LIST
               PsiElement(()('(')
               LITERAL
-                PsiElement(int)('1')
+                PsiElement(int)('8')
               PsiElement())(')')
-          PsiElement([)('[')
-          LITERAL
-            PsiElement(int)('0')
-          PsiElement(])(']')
+      PsiComment(GO_LINE_COMMENT)('// chksum (148:156)')
+      ASSIGNMENT_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          INDEX_OR_SLICE_EXPR
+            CALL_EXPR
+              REFERENCE_EXPRESSION
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('s')
+                PsiElement(.)('.')
+                PsiElement(identifier)('next')
+              ARGUMENT_LIST
+                PsiElement(()('(')
+                LITERAL
+                  PsiElement(int)('1')
+                PsiElement())(')')
+            PsiElement([)('[')
+            LITERAL
+              PsiElement(int)('0')
+            PsiElement(])(']')
         ASSIGN_OP
           PsiElement(=)('=')
         REFERENCE_EXPRESSION
@@ -1540,289 +1583,300 @@ GO_FILE
           PsiElement(identifier)('Typeflag')
       PsiComment(GO_LINE_COMMENT)('// 156:157')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('tw')
-            PsiElement(.)('.')
-            PsiElement(identifier)('cString')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            CALL_EXPR
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('tw')
+              PsiElement(.)('.')
+              PsiElement(identifier)('cString')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              CALL_EXPR
+                REFERENCE_EXPRESSION
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('s')
+                  PsiElement(.)('.')
+                  PsiElement(identifier)('next')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  LITERAL
+                    PsiElement(int)('100')
+                  PsiElement())(')')
+              PsiElement(,)(',')
               REFERENCE_EXPRESSION
                 REFERENCE_EXPRESSION
-                  PsiElement(identifier)('s')
+                  PsiElement(identifier)('hdr')
                 PsiElement(.)('.')
-                PsiElement(identifier)('next')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                LITERAL
-                  PsiElement(int)('100')
-                PsiElement())(')')
-            PsiElement(,)(',')
-            REFERENCE_EXPRESSION
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('hdr')
-              PsiElement(.)('.')
-              PsiElement(identifier)('Linkname')
-            PsiElement())(')')
+                PsiElement(identifier)('Linkname')
+              PsiElement())(')')
       PsiComment(GO_LINE_COMMENT)('// linkname (157:257)')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
-            PsiElement(identifier)('copy')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            CALL_EXPR
-              REFERENCE_EXPRESSION
-                REFERENCE_EXPRESSION
-                  PsiElement(identifier)('s')
-                PsiElement(.)('.')
-                PsiElement(identifier)('next')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                LITERAL
-                  PsiElement(int)('8')
-                PsiElement())(')')
-            PsiElement(,)(',')
-            CONVERSION_EXPR
-              ARRAY_OR_SLICE_TYPE
-                PsiElement([)('[')
-                PsiElement(])(']')
-                TYPE
-                  TYPE_REFERENCE_EXPRESSION
-                    PsiElement(identifier)('byte')
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('copy')
+            ARGUMENT_LIST
               PsiElement(()('(')
-              STRING_LITERAL
-                PsiElement(string)('"ustar\x0000"')
+              CALL_EXPR
+                REFERENCE_EXPRESSION
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('s')
+                  PsiElement(.)('.')
+                  PsiElement(identifier)('next')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  LITERAL
+                    PsiElement(int)('8')
+                  PsiElement())(')')
+              PsiElement(,)(',')
+              CONVERSION_EXPR
+                ARRAY_OR_SLICE_TYPE
+                  PsiElement([)('[')
+                  PsiElement(])(']')
+                  TYPE
+                    TYPE_REFERENCE_EXPRESSION
+                      PsiElement(identifier)('byte')
+                PsiElement(()('(')
+                STRING_LITERAL
+                  PsiElement(string)('"ustar\x0000"')
+                PsiElement())(')')
               PsiElement())(')')
-            PsiElement())(')')
       PsiComment(GO_LINE_COMMENT)('// 257:265')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('tw')
-            PsiElement(.)('.')
-            PsiElement(identifier)('cString')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            CALL_EXPR
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('tw')
+              PsiElement(.)('.')
+              PsiElement(identifier)('cString')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              CALL_EXPR
+                REFERENCE_EXPRESSION
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('s')
+                  PsiElement(.)('.')
+                  PsiElement(identifier)('next')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  LITERAL
+                    PsiElement(int)('32')
+                  PsiElement())(')')
+              PsiElement(,)(',')
               REFERENCE_EXPRESSION
                 REFERENCE_EXPRESSION
-                  PsiElement(identifier)('s')
+                  PsiElement(identifier)('hdr')
                 PsiElement(.)('.')
-                PsiElement(identifier)('next')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                LITERAL
-                  PsiElement(int)('32')
-                PsiElement())(')')
-            PsiElement(,)(',')
-            REFERENCE_EXPRESSION
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('hdr')
-              PsiElement(.)('.')
-              PsiElement(identifier)('Uname')
-            PsiElement())(')')
+                PsiElement(identifier)('Uname')
+              PsiElement())(')')
       PsiComment(GO_LINE_COMMENT)('// 265:297')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('tw')
-            PsiElement(.)('.')
-            PsiElement(identifier)('cString')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            CALL_EXPR
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('tw')
+              PsiElement(.)('.')
+              PsiElement(identifier)('cString')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              CALL_EXPR
+                REFERENCE_EXPRESSION
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('s')
+                  PsiElement(.)('.')
+                  PsiElement(identifier)('next')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  LITERAL
+                    PsiElement(int)('32')
+                  PsiElement())(')')
+              PsiElement(,)(',')
               REFERENCE_EXPRESSION
                 REFERENCE_EXPRESSION
-                  PsiElement(identifier)('s')
+                  PsiElement(identifier)('hdr')
                 PsiElement(.)('.')
-                PsiElement(identifier)('next')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                LITERAL
-                  PsiElement(int)('32')
-                PsiElement())(')')
-            PsiElement(,)(',')
-            REFERENCE_EXPRESSION
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('hdr')
-              PsiElement(.)('.')
-              PsiElement(identifier)('Gname')
-            PsiElement())(')')
+                PsiElement(identifier)('Gname')
+              PsiElement())(')')
       PsiComment(GO_LINE_COMMENT)('// 297:329')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('tw')
-            PsiElement(.)('.')
-            PsiElement(identifier)('numeric')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            CALL_EXPR
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('tw')
+              PsiElement(.)('.')
+              PsiElement(identifier)('numeric')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              CALL_EXPR
+                REFERENCE_EXPRESSION
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('s')
+                  PsiElement(.)('.')
+                  PsiElement(identifier)('next')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  LITERAL
+                    PsiElement(int)('8')
+                  PsiElement())(')')
+              PsiElement(,)(',')
               REFERENCE_EXPRESSION
                 REFERENCE_EXPRESSION
-                  PsiElement(identifier)('s')
+                  PsiElement(identifier)('hdr')
                 PsiElement(.)('.')
-                PsiElement(identifier)('next')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                LITERAL
-                  PsiElement(int)('8')
-                PsiElement())(')')
-            PsiElement(,)(',')
-            REFERENCE_EXPRESSION
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('hdr')
-              PsiElement(.)('.')
-              PsiElement(identifier)('Devmajor')
-            PsiElement())(')')
+                PsiElement(identifier)('Devmajor')
+              PsiElement())(')')
       PsiComment(GO_LINE_COMMENT)('// 329:337')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('tw')
-            PsiElement(.)('.')
-            PsiElement(identifier)('numeric')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            CALL_EXPR
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('tw')
+              PsiElement(.)('.')
+              PsiElement(identifier)('numeric')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              CALL_EXPR
+                REFERENCE_EXPRESSION
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('s')
+                  PsiElement(.)('.')
+                  PsiElement(identifier)('next')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  LITERAL
+                    PsiElement(int)('8')
+                  PsiElement())(')')
+              PsiElement(,)(',')
               REFERENCE_EXPRESSION
                 REFERENCE_EXPRESSION
-                  PsiElement(identifier)('s')
+                  PsiElement(identifier)('hdr')
                 PsiElement(.)('.')
-                PsiElement(identifier)('next')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                LITERAL
-                  PsiElement(int)('8')
-                PsiElement())(')')
-            PsiElement(,)(',')
-            REFERENCE_EXPRESSION
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('hdr')
-              PsiElement(.)('.')
-              PsiElement(identifier)('Devminor')
-            PsiElement())(')')
+                PsiElement(identifier)('Devminor')
+              PsiElement())(')')
       PsiComment(GO_LINE_COMMENT)('// 337:345')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('tw')
-            PsiElement(.)('.')
-            PsiElement(identifier)('cString')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            CALL_EXPR
               REFERENCE_EXPRESSION
+                PsiElement(identifier)('tw')
+              PsiElement(.)('.')
+              PsiElement(identifier)('cString')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              CALL_EXPR
                 REFERENCE_EXPRESSION
-                  PsiElement(identifier)('s')
-                PsiElement(.)('.')
-                PsiElement(identifier)('next')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                LITERAL
-                  PsiElement(int)('155')
-                PsiElement())(')')
-            PsiElement(,)(',')
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('prefix')
-            PsiElement())(')')
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('s')
+                  PsiElement(.)('.')
+                  PsiElement(identifier)('next')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  LITERAL
+                    PsiElement(int)('155')
+                  PsiElement())(')')
+              PsiElement(,)(',')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('prefix')
+              PsiElement())(')')
       PsiComment(GO_LINE_COMMENT)('// 345:500')
       PsiComment(GO_LINE_COMMENT)('// Use the GNU magic instead of POSIX magic if we used any GNU extensions.')
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          REFERENCE_EXPRESSION
+          LEFT_HAND_EXPR_LIST
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('tw')
-            PsiElement(.)('.')
-            PsiElement(identifier)('usedBinary')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('tw')
+              PsiElement(.)('.')
+              PsiElement(identifier)('usedBinary')
         BLOCK
           PsiElement({)('{')
           SIMPLE_STATEMENT
-            CALL_EXPR
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('copy')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                INDEX_OR_SLICE_EXPR
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('header')
-                  PsiElement([)('[')
-                  LITERAL
-                    PsiElement(int)('257')
-                  PsiElement(:)(':')
-                  LITERAL
-                    PsiElement(int)('265')
-                  PsiElement(])(']')
-                PsiElement(,)(',')
-                CONVERSION_EXPR
-                  ARRAY_OR_SLICE_TYPE
-                    PsiElement([)('[')
-                    PsiElement(])(']')
-                    TYPE
-                      TYPE_REFERENCE_EXPRESSION
-                        PsiElement(identifier)('byte')
+            LEFT_HAND_EXPR_LIST
+              CALL_EXPR
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('copy')
+                ARGUMENT_LIST
                   PsiElement(()('(')
-                  STRING_LITERAL
-                    PsiElement(string)('"ustar  \x00"')
+                  INDEX_OR_SLICE_EXPR
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('header')
+                    PsiElement([)('[')
+                    LITERAL
+                      PsiElement(int)('257')
+                    PsiElement(:)(':')
+                    LITERAL
+                      PsiElement(int)('265')
+                    PsiElement(])(']')
+                  PsiElement(,)(',')
+                  CONVERSION_EXPR
+                    ARRAY_OR_SLICE_TYPE
+                      PsiElement([)('[')
+                      PsiElement(])(']')
+                      TYPE
+                        TYPE_REFERENCE_EXPRESSION
+                          PsiElement(identifier)('byte')
+                    PsiElement(()('(')
+                    STRING_LITERAL
+                      PsiElement(string)('"ustar  \x00"')
+                    PsiElement())(')')
                   PsiElement())(')')
-                PsiElement())(')')
           PsiElement(})('}')
       PsiComment(GO_LINE_COMMENT)('// Use the ustar magic if we used ustar long names.')
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          CONDITIONAL_EXPR
-            CALL_EXPR
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('len')
-              ARGUMENT_LIST
-                PsiElement(()('(')
+          LEFT_HAND_EXPR_LIST
+            CONDITIONAL_EXPR
+              CALL_EXPR
                 REFERENCE_EXPRESSION
-                  PsiElement(identifier)('prefix')
-                PsiElement())(')')
-            PsiElement(>)('>')
-            LITERAL
-              PsiElement(int)('0')
+                  PsiElement(identifier)('len')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('prefix')
+                  PsiElement())(')')
+              PsiElement(>)('>')
+              LITERAL
+                PsiElement(int)('0')
         BLOCK
           PsiElement({)('{')
           SIMPLE_STATEMENT
-            CALL_EXPR
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('copy')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                INDEX_OR_SLICE_EXPR
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('header')
-                  PsiElement([)('[')
-                  LITERAL
-                    PsiElement(int)('257')
-                  PsiElement(:)(':')
-                  LITERAL
-                    PsiElement(int)('265')
-                  PsiElement(])(']')
-                PsiElement(,)(',')
-                CONVERSION_EXPR
-                  ARRAY_OR_SLICE_TYPE
-                    PsiElement([)('[')
-                    PsiElement(])(']')
-                    TYPE
-                      TYPE_REFERENCE_EXPRESSION
-                        PsiElement(identifier)('byte')
+            LEFT_HAND_EXPR_LIST
+              CALL_EXPR
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('copy')
+                ARGUMENT_LIST
                   PsiElement(()('(')
-                  STRING_LITERAL
-                    PsiElement(string)('"ustar\000"')
+                  INDEX_OR_SLICE_EXPR
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('header')
+                    PsiElement([)('[')
+                    LITERAL
+                      PsiElement(int)('257')
+                    PsiElement(:)(':')
+                    LITERAL
+                      PsiElement(int)('265')
+                    PsiElement(])(']')
+                  PsiElement(,)(',')
+                  CONVERSION_EXPR
+                    ARRAY_OR_SLICE_TYPE
+                      PsiElement([)('[')
+                      PsiElement(])(']')
+                      TYPE
+                        TYPE_REFERENCE_EXPRESSION
+                          PsiElement(identifier)('byte')
+                    PsiElement(()('(')
+                    STRING_LITERAL
+                      PsiElement(string)('"ustar\000"')
+                    PsiElement())(')')
                   PsiElement())(')')
-                PsiElement())(')')
           PsiElement(})('}')
       PsiComment(GO_LINE_COMMENT)('// The chksum field is terminated by a NUL and a space.')
       PsiComment(GO_LINE_COMMENT)('// This is different from the other octal fields.')
@@ -1843,36 +1897,38 @@ GO_FILE
                 PsiElement(identifier)('header')
               PsiElement())(')')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('tw')
-            PsiElement(.)('.')
-            PsiElement(identifier)('octal')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            INDEX_OR_SLICE_EXPR
               REFERENCE_EXPRESSION
-                PsiElement(identifier)('header')
-              PsiElement([)('[')
-              LITERAL
-                PsiElement(int)('148')
-              PsiElement(:)(':')
-              LITERAL
-                PsiElement(int)('155')
-              PsiElement(])(']')
-            PsiElement(,)(',')
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('chksum')
-            PsiElement())(')')
+                PsiElement(identifier)('tw')
+              PsiElement(.)('.')
+              PsiElement(identifier)('octal')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              INDEX_OR_SLICE_EXPR
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('header')
+                PsiElement([)('[')
+                LITERAL
+                  PsiElement(int)('148')
+                PsiElement(:)(':')
+                LITERAL
+                  PsiElement(int)('155')
+                PsiElement(])(']')
+              PsiElement(,)(',')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('chksum')
+              PsiElement())(')')
       ASSIGNMENT_STATEMENT
-        INDEX_OR_SLICE_EXPR
-          REFERENCE_EXPRESSION
-            PsiElement(identifier)('header')
-          PsiElement([)('[')
-          LITERAL
-            PsiElement(int)('155')
-          PsiElement(])(']')
+        LEFT_HAND_EXPR_LIST
+          INDEX_OR_SLICE_EXPR
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('header')
+            PsiElement([)('[')
+            LITERAL
+              PsiElement(int)('155')
+            PsiElement(])(']')
         ASSIGN_OP
           PsiElement(=)('=')
         LITERAL
@@ -1880,15 +1936,16 @@ GO_FILE
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          CONDITIONAL_EXPR
-            REFERENCE_EXPRESSION
+          LEFT_HAND_EXPR_LIST
+            CONDITIONAL_EXPR
               REFERENCE_EXPRESSION
-                PsiElement(identifier)('tw')
-              PsiElement(.)('.')
-              PsiElement(identifier)('err')
-            PsiElement(!=)('!=')
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('nil')
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('tw')
+                PsiElement(.)('.')
+                PsiElement(identifier)('err')
+              PsiElement(!=)('!=')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('nil')
         BLOCK
           PsiElement({)('{')
           PsiComment(GO_LINE_COMMENT)('// problem with header; probably integer too big for a field.')
@@ -1901,14 +1958,15 @@ GO_FILE
               PsiElement(identifier)('err')
           PsiElement(})('}')
       ASSIGNMENT_STATEMENT
-        REFERENCE_EXPRESSION
-          PsiElement(identifier)('_')
-        PsiElement(,)(',')
-        REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
           REFERENCE_EXPRESSION
-            PsiElement(identifier)('tw')
-          PsiElement(.)('.')
-          PsiElement(identifier)('err')
+            PsiElement(identifier)('_')
+          PsiElement(,)(',')
+          REFERENCE_EXPRESSION
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('tw')
+            PsiElement(.)('.')
+            PsiElement(identifier)('err')
         ASSIGN_OP
           PsiElement(=)('=')
         CALL_EXPR
@@ -1997,21 +2055,23 @@ GO_FILE
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          CONDITIONAL_EXPR
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('length')
-            PsiElement(>)('>')
-            ADD_EXPR
+          LEFT_HAND_EXPR_LIST
+            CONDITIONAL_EXPR
               REFERENCE_EXPRESSION
-                PsiElement(identifier)('fileNamePrefixSize')
-              PsiElement(+)('+')
-              LITERAL
-                PsiElement(int)('1')
+                PsiElement(identifier)('length')
+              PsiElement(>)('>')
+              ADD_EXPR
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('fileNamePrefixSize')
+                PsiElement(+)('+')
+                LITERAL
+                  PsiElement(int)('1')
         BLOCK
           PsiElement({)('{')
           ASSIGNMENT_STATEMENT
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('length')
+            LEFT_HAND_EXPR_LIST
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('length')
             ASSIGN_OP
               PsiElement(=)('=')
             ADD_EXPR
@@ -2026,26 +2086,28 @@ GO_FILE
           IF_STATEMENT
             PsiElement(if)('if')
             SIMPLE_STATEMENT
-              CONDITIONAL_EXPR
-                INDEX_OR_SLICE_EXPR
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('name')
-                  PsiElement([)('[')
-                  ADD_EXPR
+              LEFT_HAND_EXPR_LIST
+                CONDITIONAL_EXPR
+                  INDEX_OR_SLICE_EXPR
                     REFERENCE_EXPRESSION
-                      PsiElement(identifier)('length')
-                    PsiElement(-)('-')
-                    LITERAL
-                      PsiElement(int)('1')
-                  PsiElement(])(']')
-                PsiElement(==)('==')
-                LITERAL
-                  PsiElement(char)(''/'')
+                      PsiElement(identifier)('name')
+                    PsiElement([)('[')
+                    ADD_EXPR
+                      REFERENCE_EXPRESSION
+                        PsiElement(identifier)('length')
+                      PsiElement(-)('-')
+                      LITERAL
+                        PsiElement(int)('1')
+                    PsiElement(])(']')
+                  PsiElement(==)('==')
+                  LITERAL
+                    PsiElement(char)(''/'')
             BLOCK
               PsiElement({)('{')
               SIMPLE_STATEMENT
-                REFERENCE_EXPRESSION
-                  PsiElement(identifier)('length')
+                LEFT_HAND_EXPR_LIST
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('length')
                 PsiElement(--)('--')
               PsiElement(})('}')
       SIMPLE_STATEMENT
@@ -2091,33 +2153,35 @@ GO_FILE
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          OR_EXPR
+          LEFT_HAND_EXPR_LIST
             OR_EXPR
-              CONDITIONAL_EXPR
-                REFERENCE_EXPRESSION
-                  PsiElement(identifier)('i')
-                PsiElement(<=)('<=')
-                LITERAL
-                  PsiElement(int)('0')
+              OR_EXPR
+                CONDITIONAL_EXPR
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('i')
+                  PsiElement(<=)('<=')
+                  LITERAL
+                    PsiElement(int)('0')
+                PsiElement(||)('||')
+                CONDITIONAL_EXPR
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('nlen')
+                  PsiElement(>)('>')
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('fileNameSize')
               PsiElement(||)('||')
               CONDITIONAL_EXPR
                 REFERENCE_EXPRESSION
                   PsiElement(identifier)('nlen')
-                PsiElement(>)('>')
-                REFERENCE_EXPRESSION
-                  PsiElement(identifier)('fileNameSize')
-            PsiElement(||)('||')
-            CONDITIONAL_EXPR
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('nlen')
-              PsiElement(==)('==')
-              LITERAL
-                PsiElement(int)('0')
+                PsiElement(==)('==')
+                LITERAL
+                  PsiElement(int)('0')
         BLOCK
           PsiElement({)('{')
           ASSIGNMENT_STATEMENT
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('err')
+            LEFT_HAND_EXPR_LIST
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('err')
             ASSIGN_OP
               PsiElement(=)('=')
             REFERENCE_EXPRESSION
@@ -2126,11 +2190,12 @@ GO_FILE
             PsiElement(return)('return')
           PsiElement(})('}')
       ASSIGNMENT_STATEMENT
-        REFERENCE_EXPRESSION
-          PsiElement(identifier)('prefix')
-        PsiElement(,)(',')
-        REFERENCE_EXPRESSION
-          PsiElement(identifier)('suffix')
+        LEFT_HAND_EXPR_LIST
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('prefix')
+          PsiElement(,)(',')
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('suffix')
         ASSIGN_OP
           PsiElement(=)('=')
         INDEX_OR_SLICE_EXPR
@@ -2204,11 +2269,12 @@ GO_FILE
                   PsiElement(identifier)('Header')
             PsiElement())(')')
       ASSIGNMENT_STATEMENT
-        REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
           REFERENCE_EXPRESSION
-            PsiElement(identifier)('ext')
-          PsiElement(.)('.')
-          PsiElement(identifier)('Typeflag')
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('ext')
+            PsiElement(.)('.')
+            PsiElement(identifier)('Typeflag')
         ASSIGN_OP
           PsiElement(=)('=')
         REFERENCE_EXPRESSION
@@ -2216,11 +2282,12 @@ GO_FILE
       PsiComment(GO_LINE_COMMENT)('// Setting ModTime is required for reader parsing to')
       PsiComment(GO_LINE_COMMENT)('// succeed, and seems harmless enough.')
       ASSIGNMENT_STATEMENT
-        REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
           REFERENCE_EXPRESSION
-            PsiElement(identifier)('ext')
-          PsiElement(.)('.')
-          PsiElement(identifier)('ModTime')
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('ext')
+            PsiElement(.)('.')
+            PsiElement(identifier)('ModTime')
         ASSIGN_OP
           PsiElement(=)('=')
         REFERENCE_EXPRESSION
@@ -2267,11 +2334,12 @@ GO_FILE
                 PsiElement(identifier)('Name')
               PsiElement())(')')
       ASSIGNMENT_STATEMENT
-        REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
           REFERENCE_EXPRESSION
-            PsiElement(identifier)('ext')
-          PsiElement(.)('.')
-          PsiElement(identifier)('Name')
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('ext')
+            PsiElement(.)('.')
+            PsiElement(identifier)('Name')
         ASSIGN_OP
           PsiElement(=)('=')
         INDEX_OR_SLICE_EXPR
@@ -2327,111 +2395,116 @@ GO_FILE
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          CONDITIONAL_EXPR
-            CALL_EXPR
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('len')
-              ARGUMENT_LIST
-                PsiElement(()('(')
+          LEFT_HAND_EXPR_LIST
+            CONDITIONAL_EXPR
+              CALL_EXPR
                 REFERENCE_EXPRESSION
+                  PsiElement(identifier)('len')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
                   REFERENCE_EXPRESSION
-                    PsiElement(identifier)('hdr')
-                  PsiElement(.)('.')
-                  PsiElement(identifier)('Name')
-                PsiElement())(')')
-            PsiElement(>)('>')
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('fileNameSize')
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('hdr')
+                    PsiElement(.)('.')
+                    PsiElement(identifier)('Name')
+                  PsiElement())(')')
+              PsiElement(>)('>')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('fileNameSize')
         BLOCK
           PsiElement({)('{')
           SIMPLE_STATEMENT
-            CALL_EXPR
-              REFERENCE_EXPRESSION
+            LEFT_HAND_EXPR_LIST
+              CALL_EXPR
                 REFERENCE_EXPRESSION
-                  PsiElement(identifier)('fmt')
-                PsiElement(.)('.')
-                PsiElement(identifier)('Fprint')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                UNARY_EXPR
-                  PsiElement(&)('&')
                   REFERENCE_EXPRESSION
-                    PsiElement(identifier)('buf')
-                PsiElement(,)(',')
-                CALL_EXPR
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('paxHeader')
-                  ARGUMENT_LIST
-                    PsiElement(()('(')
-                    ADD_EXPR
-                      STRING_LITERAL
-                        PsiElement(string)('"path="')
-                      PsiElement(+)('+')
-                      REFERENCE_EXPRESSION
+                    PsiElement(identifier)('fmt')
+                  PsiElement(.)('.')
+                  PsiElement(identifier)('Fprint')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  UNARY_EXPR
+                    PsiElement(&)('&')
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('buf')
+                  PsiElement(,)(',')
+                  CALL_EXPR
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('paxHeader')
+                    ARGUMENT_LIST
+                      PsiElement(()('(')
+                      ADD_EXPR
+                        STRING_LITERAL
+                          PsiElement(string)('"path="')
+                        PsiElement(+)('+')
                         REFERENCE_EXPRESSION
-                          PsiElement(identifier)('hdr')
-                        PsiElement(.)('.')
-                        PsiElement(identifier)('Name')
-                    PsiElement())(')')
-                PsiElement())(')')
+                          REFERENCE_EXPRESSION
+                            PsiElement(identifier)('hdr')
+                          PsiElement(.)('.')
+                          PsiElement(identifier)('Name')
+                      PsiElement())(')')
+                  PsiElement())(')')
           PsiElement(})('}')
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          CONDITIONAL_EXPR
-            CALL_EXPR
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('len')
-              ARGUMENT_LIST
-                PsiElement(()('(')
+          LEFT_HAND_EXPR_LIST
+            CONDITIONAL_EXPR
+              CALL_EXPR
                 REFERENCE_EXPRESSION
+                  PsiElement(identifier)('len')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
                   REFERENCE_EXPRESSION
-                    PsiElement(identifier)('hdr')
-                  PsiElement(.)('.')
-                  PsiElement(identifier)('Linkname')
-                PsiElement())(')')
-            PsiElement(>)('>')
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('fileNameSize')
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('hdr')
+                    PsiElement(.)('.')
+                    PsiElement(identifier)('Linkname')
+                  PsiElement())(')')
+              PsiElement(>)('>')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('fileNameSize')
         BLOCK
           PsiElement({)('{')
           SIMPLE_STATEMENT
-            CALL_EXPR
-              REFERENCE_EXPRESSION
+            LEFT_HAND_EXPR_LIST
+              CALL_EXPR
                 REFERENCE_EXPRESSION
-                  PsiElement(identifier)('fmt')
-                PsiElement(.)('.')
-                PsiElement(identifier)('Fprint')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                UNARY_EXPR
-                  PsiElement(&)('&')
                   REFERENCE_EXPRESSION
-                    PsiElement(identifier)('buf')
-                PsiElement(,)(',')
-                CALL_EXPR
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('paxHeader')
-                  ARGUMENT_LIST
-                    PsiElement(()('(')
-                    ADD_EXPR
-                      STRING_LITERAL
-                        PsiElement(string)('"linkpath="')
-                      PsiElement(+)('+')
-                      REFERENCE_EXPRESSION
+                    PsiElement(identifier)('fmt')
+                  PsiElement(.)('.')
+                  PsiElement(identifier)('Fprint')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  UNARY_EXPR
+                    PsiElement(&)('&')
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('buf')
+                  PsiElement(,)(',')
+                  CALL_EXPR
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('paxHeader')
+                    ARGUMENT_LIST
+                      PsiElement(()('(')
+                      ADD_EXPR
+                        STRING_LITERAL
+                          PsiElement(string)('"linkpath="')
+                        PsiElement(+)('+')
                         REFERENCE_EXPRESSION
-                          PsiElement(identifier)('hdr')
-                        PsiElement(.)('.')
-                        PsiElement(identifier)('Linkname')
-                    PsiElement())(')')
-                PsiElement())(')')
+                          REFERENCE_EXPRESSION
+                            PsiElement(identifier)('hdr')
+                          PsiElement(.)('.')
+                          PsiElement(identifier)('Linkname')
+                      PsiElement())(')')
+                  PsiElement())(')')
           PsiElement(})('}')
       ASSIGNMENT_STATEMENT
-        REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
           REFERENCE_EXPRESSION
-            PsiElement(identifier)('ext')
-          PsiElement(.)('.')
-          PsiElement(identifier)('Size')
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('ext')
+            PsiElement(.)('.')
+            PsiElement(identifier)('Size')
         ASSIGN_OP
           PsiElement(=)('=')
         CALL_EXPR
@@ -2612,8 +2685,9 @@ GO_FILE
             REFERENCE_EXPRESSION
               PsiElement(identifier)('padding')
       ASSIGNMENT_STATEMENT
-        REFERENCE_EXPRESSION
-          PsiElement(identifier)('size')
+        LEFT_HAND_EXPR_LIST
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('size')
         ASSIGN_OP
           PsiElement(+=)('+=')
         CALL_EXPR
@@ -2658,25 +2732,27 @@ GO_FILE
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          CONDITIONAL_EXPR
-            CALL_EXPR
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('len')
-              ARGUMENT_LIST
-                PsiElement(()('(')
+          LEFT_HAND_EXPR_LIST
+            CONDITIONAL_EXPR
+              CALL_EXPR
                 REFERENCE_EXPRESSION
-                  PsiElement(identifier)('record')
-                PsiElement())(')')
-            PsiElement(!=)('!=')
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('size')
+                  PsiElement(identifier)('len')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('record')
+                  PsiElement())(')')
+              PsiElement(!=)('!=')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('size')
         BLOCK
           PsiElement({)('{')
           PsiComment(GO_LINE_COMMENT)('// Final adjustment if adding size increased')
           PsiComment(GO_LINE_COMMENT)('// the number of digits in size')
           ASSIGNMENT_STATEMENT
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('size')
+            LEFT_HAND_EXPR_LIST
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('size')
             ASSIGN_OP
               PsiElement(=)('=')
             CALL_EXPR
@@ -2688,8 +2764,9 @@ GO_FILE
                   PsiElement(identifier)('record')
                 PsiElement())(')')
           ASSIGNMENT_STATEMENT
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('record')
+            LEFT_HAND_EXPR_LIST
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('record')
             ASSIGN_OP
               PsiElement(=)('=')
             CALL_EXPR
@@ -2764,16 +2841,18 @@ GO_FILE
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          REFERENCE_EXPRESSION
+          LEFT_HAND_EXPR_LIST
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('tw')
-            PsiElement(.)('.')
-            PsiElement(identifier)('closed')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('tw')
+              PsiElement(.)('.')
+              PsiElement(identifier)('closed')
         BLOCK
           PsiElement({)('{')
           ASSIGNMENT_STATEMENT
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('err')
+            LEFT_HAND_EXPR_LIST
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('err')
             ASSIGN_OP
               PsiElement(=)('=')
             REFERENCE_EXPRESSION
@@ -2791,32 +2870,34 @@ GO_FILE
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          CONDITIONAL_EXPR
-            CALL_EXPR
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('int64')
-              ARGUMENT_LIST
-                PsiElement(()('(')
-                CALL_EXPR
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('len')
-                  ARGUMENT_LIST
-                    PsiElement(()('(')
+          LEFT_HAND_EXPR_LIST
+            CONDITIONAL_EXPR
+              CALL_EXPR
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('int64')
+                ARGUMENT_LIST
+                  PsiElement(()('(')
+                  CALL_EXPR
                     REFERENCE_EXPRESSION
-                      PsiElement(identifier)('b')
-                    PsiElement())(')')
-                PsiElement())(')')
-            PsiElement(>)('>')
-            REFERENCE_EXPRESSION
+                      PsiElement(identifier)('len')
+                    ARGUMENT_LIST
+                      PsiElement(()('(')
+                      REFERENCE_EXPRESSION
+                        PsiElement(identifier)('b')
+                      PsiElement())(')')
+                  PsiElement())(')')
+              PsiElement(>)('>')
               REFERENCE_EXPRESSION
-                PsiElement(identifier)('tw')
-              PsiElement(.)('.')
-              PsiElement(identifier)('nb')
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('tw')
+                PsiElement(.)('.')
+                PsiElement(identifier)('nb')
         BLOCK
           PsiElement({)('{')
           ASSIGNMENT_STATEMENT
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('b')
+            LEFT_HAND_EXPR_LIST
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('b')
             ASSIGN_OP
               PsiElement(=)('=')
             INDEX_OR_SLICE_EXPR
@@ -2833,19 +2914,21 @@ GO_FILE
                 PsiElement(identifier)('nb')
               PsiElement(])(']')
           ASSIGNMENT_STATEMENT
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('overwrite')
+            LEFT_HAND_EXPR_LIST
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('overwrite')
             ASSIGN_OP
               PsiElement(=)('=')
             REFERENCE_EXPRESSION
               PsiElement(identifier)('true')
           PsiElement(})('}')
       ASSIGNMENT_STATEMENT
-        REFERENCE_EXPRESSION
-          PsiElement(identifier)('n')
-        PsiElement(,)(',')
-        REFERENCE_EXPRESSION
-          PsiElement(identifier)('err')
+        LEFT_HAND_EXPR_LIST
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('n')
+          PsiElement(,)(',')
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('err')
         ASSIGN_OP
           PsiElement(=)('=')
         CALL_EXPR
@@ -2864,11 +2947,12 @@ GO_FILE
               PsiElement(identifier)('b')
             PsiElement())(')')
       ASSIGNMENT_STATEMENT
-        REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
           REFERENCE_EXPRESSION
-            PsiElement(identifier)('tw')
-          PsiElement(.)('.')
-          PsiElement(identifier)('nb')
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('tw')
+            PsiElement(.)('.')
+            PsiElement(identifier)('nb')
         ASSIGN_OP
           PsiElement(-=)('-=')
         CALL_EXPR
@@ -2882,21 +2966,23 @@ GO_FILE
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          AND_EXPR
-            CONDITIONAL_EXPR
+          LEFT_HAND_EXPR_LIST
+            AND_EXPR
+              CONDITIONAL_EXPR
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('err')
+                PsiElement(==)('==')
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('nil')
+              PsiElement(&&)('&&')
               REFERENCE_EXPRESSION
-                PsiElement(identifier)('err')
-              PsiElement(==)('==')
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('nil')
-            PsiElement(&&)('&&')
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('overwrite')
+                PsiElement(identifier)('overwrite')
         BLOCK
           PsiElement({)('{')
           ASSIGNMENT_STATEMENT
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('err')
+            LEFT_HAND_EXPR_LIST
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('err')
             ASSIGN_OP
               PsiElement(=)('=')
             REFERENCE_EXPRESSION
@@ -2905,11 +2991,12 @@ GO_FILE
             PsiElement(return)('return')
           PsiElement(})('}')
       ASSIGNMENT_STATEMENT
-        REFERENCE_EXPRESSION
+        LEFT_HAND_EXPR_LIST
           REFERENCE_EXPRESSION
-            PsiElement(identifier)('tw')
-          PsiElement(.)('.')
-          PsiElement(identifier)('err')
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('tw')
+            PsiElement(.)('.')
+            PsiElement(identifier)('err')
         ASSIGN_OP
           PsiElement(=)('=')
         REFERENCE_EXPRESSION
@@ -2943,22 +3030,23 @@ GO_FILE
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          OR_EXPR
-            CONDITIONAL_EXPR
+          LEFT_HAND_EXPR_LIST
+            OR_EXPR
+              CONDITIONAL_EXPR
+                REFERENCE_EXPRESSION
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('tw')
+                  PsiElement(.)('.')
+                  PsiElement(identifier)('err')
+                PsiElement(!=)('!=')
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('nil')
+              PsiElement(||)('||')
               REFERENCE_EXPRESSION
                 REFERENCE_EXPRESSION
                   PsiElement(identifier)('tw')
                 PsiElement(.)('.')
-                PsiElement(identifier)('err')
-              PsiElement(!=)('!=')
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('nil')
-            PsiElement(||)('||')
-            REFERENCE_EXPRESSION
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('tw')
-              PsiElement(.)('.')
-              PsiElement(identifier)('closed')
+                PsiElement(identifier)('closed')
         BLOCK
           PsiElement({)('{')
           RETURN_STATEMENT
@@ -2970,21 +3058,23 @@ GO_FILE
               PsiElement(identifier)('err')
           PsiElement(})('}')
       SIMPLE_STATEMENT
-        CALL_EXPR
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
+            REFERENCE_EXPRESSION
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('tw')
+              PsiElement(.)('.')
+              PsiElement(identifier)('Flush')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              PsiElement())(')')
+      ASSIGNMENT_STATEMENT
+        LEFT_HAND_EXPR_LIST
           REFERENCE_EXPRESSION
             REFERENCE_EXPRESSION
               PsiElement(identifier)('tw')
             PsiElement(.)('.')
-            PsiElement(identifier)('Flush')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            PsiElement())(')')
-      ASSIGNMENT_STATEMENT
-        REFERENCE_EXPRESSION
-          REFERENCE_EXPRESSION
-            PsiElement(identifier)('tw')
-          PsiElement(.)('.')
-          PsiElement(identifier)('closed')
+            PsiElement(identifier)('closed')
         ASSIGN_OP
           PsiElement(=)('=')
         REFERENCE_EXPRESSION
@@ -2992,15 +3082,16 @@ GO_FILE
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          CONDITIONAL_EXPR
-            REFERENCE_EXPRESSION
+          LEFT_HAND_EXPR_LIST
+            CONDITIONAL_EXPR
               REFERENCE_EXPRESSION
-                PsiElement(identifier)('tw')
-              PsiElement(.)('.')
-              PsiElement(identifier)('err')
-            PsiElement(!=)('!=')
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('nil')
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('tw')
+                PsiElement(.)('.')
+                PsiElement(identifier)('err')
+              PsiElement(!=)('!=')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('nil')
         BLOCK
           PsiElement({)('{')
           RETURN_STATEMENT
@@ -3031,20 +3122,22 @@ GO_FILE
               PsiElement(int)('2')
           PsiElement(;)(';')
           SIMPLE_STATEMENT
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('i')
+            LEFT_HAND_EXPR_LIST
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('i')
             PsiElement(++)('++')
         BLOCK
           PsiElement({)('{')
           ASSIGNMENT_STATEMENT
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('_')
-            PsiElement(,)(',')
-            REFERENCE_EXPRESSION
+            LEFT_HAND_EXPR_LIST
               REFERENCE_EXPRESSION
-                PsiElement(identifier)('tw')
-              PsiElement(.)('.')
-              PsiElement(identifier)('err')
+                PsiElement(identifier)('_')
+              PsiElement(,)(',')
+              REFERENCE_EXPRESSION
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('tw')
+                PsiElement(.)('.')
+                PsiElement(identifier)('err')
             ASSIGN_OP
               PsiElement(=)('=')
             CALL_EXPR
@@ -3065,15 +3158,16 @@ GO_FILE
           IF_STATEMENT
             PsiElement(if)('if')
             SIMPLE_STATEMENT
-              CONDITIONAL_EXPR
-                REFERENCE_EXPRESSION
+              LEFT_HAND_EXPR_LIST
+                CONDITIONAL_EXPR
                   REFERENCE_EXPRESSION
-                    PsiElement(identifier)('tw')
-                  PsiElement(.)('.')
-                  PsiElement(identifier)('err')
-                PsiElement(!=)('!=')
-                REFERENCE_EXPRESSION
-                  PsiElement(identifier)('nil')
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('tw')
+                    PsiElement(.)('.')
+                    PsiElement(identifier)('err')
+                  PsiElement(!=)('!=')
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('nil')
             BLOCK
               PsiElement({)('{')
               BREAK_STATEMENT

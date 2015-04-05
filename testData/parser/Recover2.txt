@@ -23,8 +23,9 @@ GO_FILE
           PsiElement(identifier)('Label1')
         PsiElement(:)(':')
         SIMPLE_STATEMENT
-          LITERAL
-            PsiElement(int)('1')
+          LEFT_HAND_EXPR_LIST
+            LITERAL
+              PsiElement(int)('1')
       PsiElement(;)(';')
       GOTO_STATEMENT
         PsiElement(goto)('goto')
@@ -41,18 +42,20 @@ GO_FILE
     BLOCK
       PsiElement({)('{')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
-            PsiElement(identifier)('foo')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            PsiErrorElement:'!=', '%', '&', '&^', '(', ')', '*', '+', ',', '-', '/', <, <-, <<, <=, <assign op>, <expression>, '==', '>', '>=', '>>', '^' or '|' expected, got 'if'
-              <empty list>
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('foo')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              PsiErrorElement:')' or <expression> expected, got 'if'
+                <empty list>
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          LITERAL
-            PsiElement(int)('1')
+          LEFT_HAND_EXPR_LIST
+            LITERAL
+              PsiElement(int)('1')
         BLOCK
           PsiElement({)('{')
           PsiElement(})('}')
@@ -67,22 +70,24 @@ GO_FILE
     BLOCK
       PsiElement({)('{')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
-            PsiElement(identifier)('bar')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            PsiErrorElement:'!=', '%', '&', '&^', '(', ')', '*', '+', '-', '/', <, <-, <<, <=, <expression>, '==', '>', '>=', '>>', '^' or '|' expected, got ','
-              <empty list>
-      PsiElement(,)(',')
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('bar')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              PsiErrorElement:')' or <expression> expected, got ','
+                <empty list>
+          PsiElement(,)(',')
       PsiElement())(')')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
-            PsiElement(identifier)('doo')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            PsiElement())(')')
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('doo')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              PsiElement())(')')
       PsiElement(})('}')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
@@ -97,8 +102,9 @@ GO_FILE
         SWITCH_START
           PsiElement(switch)('switch')
         SIMPLE_STATEMENT
-          REFERENCE_EXPRESSION
-            PsiElement(identifier)('expr')
+          LEFT_HAND_EXPR_LIST
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('expr')
         PsiElement({)('{')
         EXPR_CASE_CLAUSE
           PsiElement(case)('case')

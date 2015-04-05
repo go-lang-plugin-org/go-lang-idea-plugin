@@ -80,11 +80,10 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
   }
 
   private static ElementPattern<? extends PsiElement> afterIfBlock(@NotNull IElementType tokenType) {
-    return psiElement(tokenType).withParent(
-      psiElement(GoReferenceExpressionBase.class).with(new GoNonQualifiedReference()).withParent(psiElement(GoStatement.class)
-                                                                                      .afterSiblingSkipping(
-                                                                                        psiElement().whitespaceCommentEmptyOrError(),
-                                                                                        psiElement(GoIfStatement.class))))
+    PsiElementPattern.Capture<GoStatement> statement = 
+      psiElement(GoStatement.class).afterSiblingSkipping(psiElement().whitespaceCommentEmptyOrError(), psiElement(GoIfStatement.class));
+    PsiElementPattern.Capture<GoLeftHandExprList> lh = psiElement(GoLeftHandExprList.class).withParent(statement);
+    return psiElement(tokenType).withParent(psiElement(GoReferenceExpressionBase.class).with(new GoNonQualifiedReference()).withParent(lh))
       .andNot(afterElseKeyword()).andNot(onStatementBeginning(tokenType));
   }
 
@@ -117,7 +116,8 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
 
   private static PsiElementPattern.Capture<PsiElement> insideBlockPattern(@NotNull IElementType tokenType) {
     return onStatementBeginning(tokenType)
-      .withParent(psiElement(GoExpression.class).withParent(psiElement(GoStatement.class).withParent(GoBlock.class)));
+      .withParent(psiElement(GoExpression.class).withParent(psiElement(GoLeftHandExprList.class).withParent(
+        psiElement(GoStatement.class).withParent(GoBlock.class))));
   }
 
   private static PsiElementPattern.Capture<PsiElement> topLevelPattern() {

@@ -39,12 +39,13 @@ GO_FILE
             IF_STATEMENT
               PsiElement(if)('if')
               SIMPLE_STATEMENT
-                CONDITIONAL_EXPR
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('x')
-                  PsiElement(==)('==')
-                  LITERAL
-                    PsiElement(int)('0')
+                LEFT_HAND_EXPR_LIST
+                  CONDITIONAL_EXPR
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('x')
+                    PsiElement(==)('==')
+                    LITERAL
+                      PsiElement(int)('0')
               BLOCK
                 PsiElement({)('{')
                 BREAK_STATEMENT
@@ -55,12 +56,13 @@ GO_FILE
             IF_STATEMENT
               PsiElement(if)('if')
               SIMPLE_STATEMENT
-                CONDITIONAL_EXPR
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('x')
-                  PsiElement(==)('==')
-                  LITERAL
-                    PsiElement(int)('1')
+                LEFT_HAND_EXPR_LIST
+                  CONDITIONAL_EXPR
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('x')
+                    PsiElement(==)('==')
+                    LITERAL
+                      PsiElement(int)('1')
               BLOCK
                 PsiElement({)('{')
                 CONTINUE_STATEMENT
@@ -87,12 +89,13 @@ GO_FILE
             IF_STATEMENT
               PsiElement(if)('if')
               SIMPLE_STATEMENT
-                CONDITIONAL_EXPR
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('x')
-                  PsiElement(==)('==')
-                  LITERAL
-                    PsiElement(int)('0')
+                LEFT_HAND_EXPR_LIST
+                  CONDITIONAL_EXPR
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('x')
+                    PsiElement(==)('==')
+                    LITERAL
+                      PsiElement(int)('0')
               BLOCK
                 PsiElement({)('{')
                 BREAK_STATEMENT
@@ -103,12 +106,13 @@ GO_FILE
             IF_STATEMENT
               PsiElement(if)('if')
               SIMPLE_STATEMENT
-                CONDITIONAL_EXPR
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('x')
-                  PsiElement(==)('==')
-                  LITERAL
-                    PsiElement(int)('1')
+                LEFT_HAND_EXPR_LIST
+                  CONDITIONAL_EXPR
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('x')
+                    PsiElement(==)('==')
+                    LITERAL
+                      PsiElement(int)('1')
               BLOCK
                 PsiElement({)('{')
                 CONTINUE_STATEMENT
@@ -142,12 +146,13 @@ GO_FILE
             IF_STATEMENT
               PsiElement(if)('if')
               SIMPLE_STATEMENT
-                CONDITIONAL_EXPR
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('x')
-                  PsiElement(==)('==')
-                  LITERAL
-                    PsiElement(int)('11')
+                LEFT_HAND_EXPR_LIST
+                  CONDITIONAL_EXPR
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('x')
+                    PsiElement(==)('==')
+                    LITERAL
+                      PsiElement(int)('11')
               BLOCK
                 PsiElement({)('{')
                 BREAK_STATEMENT
@@ -158,12 +163,13 @@ GO_FILE
             IF_STATEMENT
               PsiElement(if)('if')
               SIMPLE_STATEMENT
-                CONDITIONAL_EXPR
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('x')
-                  PsiElement(==)('==')
-                  LITERAL
-                    PsiElement(int)('12')
+                LEFT_HAND_EXPR_LIST
+                  CONDITIONAL_EXPR
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('x')
+                    PsiElement(==)('==')
+                    LITERAL
+                      PsiElement(int)('12')
               BLOCK
                 PsiElement({)('{')
                 CONTINUE_STATEMENT
@@ -184,19 +190,21 @@ GO_FILE
         IF_STATEMENT
           PsiElement(if)('if')
           SIMPLE_STATEMENT
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('true')
+            LEFT_HAND_EXPR_LIST
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('true')
           BLOCK
             PsiElement({)('{')
             IF_STATEMENT
               PsiElement(if)('if')
               SIMPLE_STATEMENT
-                CONDITIONAL_EXPR
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('x')
-                  PsiElement(==)('==')
-                  LITERAL
-                    PsiElement(int)('13')
+                LEFT_HAND_EXPR_LIST
+                  CONDITIONAL_EXPR
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('x')
+                    PsiElement(==)('==')
+                    LITERAL
+                      PsiElement(int)('13')
               BLOCK
                 PsiElement({)('{')
                 BREAK_STATEMENT
@@ -208,12 +216,13 @@ GO_FILE
             IF_STATEMENT
               PsiElement(if)('if')
               SIMPLE_STATEMENT
-                CONDITIONAL_EXPR
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('x')
-                  PsiElement(==)('==')
-                  LITERAL
-                    PsiElement(int)('14')
+                LEFT_HAND_EXPR_LIST
+                  CONDITIONAL_EXPR
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('x')
+                    PsiElement(==)('==')
+                    LITERAL
+                      PsiElement(int)('14')
               BLOCK
                 PsiElement({)('{')
                 CONTINUE_STATEMENT
@@ -225,12 +234,13 @@ GO_FILE
             IF_STATEMENT
               PsiElement(if)('if')
               SIMPLE_STATEMENT
-                CONDITIONAL_EXPR
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('x')
-                  PsiElement(==)('==')
-                  LITERAL
-                    PsiElement(int)('15')
+                LEFT_HAND_EXPR_LIST
+                  CONDITIONAL_EXPR
+                    REFERENCE_EXPRESSION
+                      PsiElement(identifier)('x')
+                    PsiElement(==)('==')
+                    LITERAL
+                      PsiElement(int)('15')
               BLOCK
                 PsiElement({)('{')
                 GOTO_STATEMENT
@@ -244,21 +254,23 @@ GO_FILE
           PsiElement(identifier)('L5')
         PsiElement(:)(':')
         SIMPLE_STATEMENT
-          CALL_EXPR
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('f')
-            ARGUMENT_LIST
-              PsiElement(()('(')
-              PsiElement())(')')
+          LEFT_HAND_EXPR_LIST
+            CALL_EXPR
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('f')
+              ARGUMENT_LIST
+                PsiElement(()('(')
+                PsiElement())(')')
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          CONDITIONAL_EXPR
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('x')
-            PsiElement(==)('==')
-            LITERAL
-              PsiElement(int)('16')
+          LEFT_HAND_EXPR_LIST
+            CONDITIONAL_EXPR
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('x')
+              PsiElement(==)('==')
+              LITERAL
+                PsiElement(int)('16')
         BLOCK
           PsiElement({)('{')
           BREAK_STATEMENT
@@ -270,12 +282,13 @@ GO_FILE
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          CONDITIONAL_EXPR
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('x')
-            PsiElement(==)('==')
-            LITERAL
-              PsiElement(int)('17')
+          LEFT_HAND_EXPR_LIST
+            CONDITIONAL_EXPR
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('x')
+              PsiElement(==)('==')
+              LITERAL
+                PsiElement(int)('17')
         BLOCK
           PsiElement({)('{')
           CONTINUE_STATEMENT
@@ -287,12 +300,13 @@ GO_FILE
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT
-          CONDITIONAL_EXPR
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('x')
-            PsiElement(==)('==')
-            LITERAL
-              PsiElement(int)('18')
+          LEFT_HAND_EXPR_LIST
+            CONDITIONAL_EXPR
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('x')
+              PsiElement(==)('==')
+              LITERAL
+                PsiElement(int)('18')
         BLOCK
           PsiElement({)('{')
           GOTO_STATEMENT
@@ -307,12 +321,13 @@ GO_FILE
           IF_STATEMENT
             PsiElement(if)('if')
             SIMPLE_STATEMENT
-              CONDITIONAL_EXPR
-                REFERENCE_EXPRESSION
-                  PsiElement(identifier)('x')
-                PsiElement(==)('==')
-                LITERAL
-                  PsiElement(int)('19')
+              LEFT_HAND_EXPR_LIST
+                CONDITIONAL_EXPR
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('x')
+                  PsiElement(==)('==')
+                  LITERAL
+                    PsiElement(int)('19')
             BLOCK
               PsiElement({)('{')
               BREAK_STATEMENT
@@ -324,12 +339,13 @@ GO_FILE
           IF_STATEMENT
             PsiElement(if)('if')
             SIMPLE_STATEMENT
-              CONDITIONAL_EXPR
-                REFERENCE_EXPRESSION
-                  PsiElement(identifier)('x')
-                PsiElement(==)('==')
-                LITERAL
-                  PsiElement(int)('20')
+              LEFT_HAND_EXPR_LIST
+                CONDITIONAL_EXPR
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('x')
+                  PsiElement(==)('==')
+                  LITERAL
+                    PsiElement(int)('20')
             BLOCK
               PsiElement({)('{')
               CONTINUE_STATEMENT
@@ -341,12 +357,13 @@ GO_FILE
           IF_STATEMENT
             PsiElement(if)('if')
             SIMPLE_STATEMENT
-              CONDITIONAL_EXPR
-                REFERENCE_EXPRESSION
-                  PsiElement(identifier)('x')
-                PsiElement(==)('==')
-                LITERAL
-                  PsiElement(int)('21')
+              LEFT_HAND_EXPR_LIST
+                CONDITIONAL_EXPR
+                  REFERENCE_EXPRESSION
+                    PsiElement(identifier)('x')
+                  PsiElement(==)('==')
+                  LITERAL
+                    PsiElement(int)('21')
             BLOCK
               PsiElement({)('{')
               GOTO_STATEMENT

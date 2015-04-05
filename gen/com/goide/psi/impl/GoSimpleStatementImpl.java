@@ -23,14 +23,20 @@ public class GoSimpleStatementImpl extends GoStatementImpl implements GoSimpleSt
 
   @Override
   @Nullable
-  public GoExpression getExpression() {
-    return findChildByClass(GoExpression.class);
+  public GoLeftHandExprList getLeftHandExprList() {
+    return findChildByClass(GoLeftHandExprList.class);
   }
 
   @Override
   @Nullable
   public GoShortVarDeclaration getShortVarDeclaration() {
     return findChildByClass(GoShortVarDeclaration.class);
+  }
+
+  @Override
+  @Nullable
+  public GoStatement getStatement() {
+    return findChildByClass(GoStatement.class);
   }
 
   @Override

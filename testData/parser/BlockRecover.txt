@@ -14,39 +14,44 @@ GO_FILE
     BLOCK
       PsiElement({)('{')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
-            PsiElement(identifier)('test')
-          ARGUMENT_LIST
-            PsiElement(()('(')
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
             REFERENCE_EXPRESSION
-              PsiElement(identifier)('asd')
-            PsiErrorElement:')', ',' or '...' expected, got 'asd'
-              <empty list>
+              PsiElement(identifier)('test')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('asd')
+              PsiErrorElement:')', ',' or '...' expected, got 'asd'
+                <empty list>
       SIMPLE_STATEMENT
-        REFERENCE_EXPRESSION
-          PsiElement(identifier)('asd')
-      PsiErrorElement:'!=', '%', '&', '&^', '(', '*', '+', '++', ',', '-', '--', '.', '/', ':=', ';', <, <-, <<, <=, <NL>, <assign op>, '==', '>', '>=', '>>', '^', '{', '|' or '}' expected, got ')'
+        LEFT_HAND_EXPR_LIST
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('asd')
+      PsiErrorElement:'++', ',', '--', ';', <-, <NL>, <assign op> or '}' expected, got ')'
         PsiElement())(')')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
-            PsiElement(identifier)('test')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            PsiElement())(')')
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('test')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              PsiElement())(')')
       SIMPLE_STATEMENT
-        REFERENCE_EXPRESSION
-          PsiElement(identifier)('asd')
-      PsiErrorElement:'!=', '%', '&', '&^', '(', '*', '+', '++', ',', '-', '--', '.', '/', ':=', ';', <, <-, <<, <=, <NL>, <assign op>, '==', '>', '>=', '>>', '^', '{', '|' or '}' expected, got ')'
+        LEFT_HAND_EXPR_LIST
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('asd')
+      PsiErrorElement:'++', ',', '--', ';', <-, <NL>, <assign op> or '}' expected, got ')'
         PsiElement())(')')
       SIMPLE_STATEMENT
-        CALL_EXPR
-          REFERENCE_EXPRESSION
-            PsiElement(identifier)('test')
-          ARGUMENT_LIST
-            PsiElement(()('(')
-            PsiElement())(')')
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('test')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              PsiElement())(')')
       PsiElement(})('}')
   FUNCTION_DECLARATION
     PsiElement(func)('func')

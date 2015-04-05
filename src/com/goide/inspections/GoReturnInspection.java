@@ -71,7 +71,8 @@ public class GoReturnInspection extends GoInspectionBase {
       return true;
     }
     else if (s instanceof GoSimpleStatement) {
-      GoExpression expression = ((GoSimpleStatement)s).getExpression();
+      GoLeftHandExprList list = ((GoSimpleStatement)s).getLeftHandExprList();
+      GoExpression expression = ContainerUtil.getFirstItem(list != null ? list.getExpressionList() : null);
       if (expression instanceof GoCallExpr && GoPsiImplUtil.isPanic((GoCallExpr)expression)) return true;
     }
     else if (s instanceof GoBlock) {

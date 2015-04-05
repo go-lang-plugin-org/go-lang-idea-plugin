@@ -61,6 +61,7 @@ public interface GoTypes {
   IElementType LABELED_STATEMENT = new GoCompositeElementType("LABELED_STATEMENT");
   IElementType LABEL_DEFINITION = GoStubElementTypeFactory.factory("LABEL_DEFINITION");
   IElementType LABEL_REF = new GoCompositeElementType("LABEL_REF");
+  IElementType LEFT_HAND_EXPR_LIST = new GoCompositeElementType("LEFT_HAND_EXPR_LIST");
   IElementType LITERAL = new GoCompositeElementType("LITERAL");
   IElementType LITERAL_TYPE_EXPR = new GoCompositeElementType("LITERAL_TYPE_EXPR");
   IElementType LITERAL_VALUE = new GoCompositeElementType("LITERAL_VALUE");
@@ -350,6 +351,9 @@ public interface GoTypes {
       }
       else if (type == LABEL_REF) {
         return new GoLabelRefImpl(node);
+      }
+      else if (type == LEFT_HAND_EXPR_LIST) {
+        return new GoLeftHandExprListImpl(node);
       }
       else if (type == LITERAL) {
         return new GoLiteralImpl(node);
