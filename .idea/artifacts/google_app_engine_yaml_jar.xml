@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="google-app-engine-yaml.jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/google_app_engine_yaml_jar</output-path>
+    <root id="archive" name="google-app-engine-yaml.jar">
+      <element id="module-output" name="google-app-engine-yaml" />
+    </root>
+  </artifact>
+</component>
