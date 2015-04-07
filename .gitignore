@@ -13,3 +13,4 @@ build_test/
 intellij-go.jar
 
 testData/performance/docker
+testData/performance/go
