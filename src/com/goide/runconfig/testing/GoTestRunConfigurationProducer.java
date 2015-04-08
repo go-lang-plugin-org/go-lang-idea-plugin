@@ -96,14 +96,10 @@ public class GoTestRunConfigurationProducer extends RunConfigurationProducer<GoT
   @Override
   public boolean isConfigurationFromContext(@NotNull GoTestRunConfiguration configuration, ConfigurationContext context) {
     PsiElement contextElement = getContextElement(context);
-    if (contextElement == null) {
-      return false;
-    }
+    if (contextElement == null) return false;
 
     Module module = ModuleUtilCore.findModuleForPsiElement(contextElement);
-    if (!Comparing.equal(module, configuration.getConfigurationModule().getModule())) {
-      return false;
-    }
+    if (!Comparing.equal(module, configuration.getConfigurationModule().getModule())) return false;
 
     PsiFile file = contextElement.getContainingFile();
     switch (configuration.getKind()) {
@@ -114,7 +110,7 @@ public class GoTestRunConfigurationProducer extends RunConfigurationProducer<GoT
                  FileUtil.pathsEqual(configuration.getWorkingDirectory(), directoryPath);
         }
       case PACKAGE:
-        if (file == null || !Comparing.equal(((GoFile)file).getImportPath(), configuration.getPackage())) return false;
+        if (!(file instanceof GoFile) || !Comparing.equal(((GoFile)file).getImportPath(), configuration.getPackage())) return false;
         if (isPackageContext(contextElement) && configuration.getPattern().isEmpty()) return true;
         
         String functionNameFromContext = findFunctionNameFromContext(contextElement);
