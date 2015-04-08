@@ -105,9 +105,7 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
               String trim = FileUtil.loadFile(new File(path), "UTF-8", true).trim();
               PsiFile psi = PsiFileFactory.getInstance(getProject()).createFileFromText(file.getName(), file.getFileType(), trim);
               System.out.print(".");
-              boolean contains = DebugUtil.psiToString(psi, true).contains("PsiErrorElement");
-              if (contains) System.err.println(path);
-              //assertFalse(path + " contains error elements", DebugUtil.psiToString(psi, true).contains("PsiErrorElement"));
+              assertFalse(path + " contains error elements", DebugUtil.psiToString(psi, true).contains("PsiErrorElement"));
               String full = DebugUtil.stubTreeToString(GoFileElementType.INSTANCE.getBuilder().buildStubTree(psi));
               psi.putUserData(IndexingDataKeys.VIRTUAL_FILE, file);
               String fast = DebugUtil.stubTreeToString(GoFileElementType.INSTANCE.getBuilder().buildStubTree(psi));
