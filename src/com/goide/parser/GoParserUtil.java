@@ -30,6 +30,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.indexing.IndexingDataKeys;
 import gnu.trove.TObjectIntHashMap;
+import gnu.trove.TObjectIntProcedure;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -81,13 +82,54 @@ public class GoParserUtil extends GeneratedParserUtilBase {
     return getParsingModes(builder_).get(mode) > 0;
   }
 
+  public static boolean withOn(PsiBuilder builder_, int level_, String mode, Parser parser) {
+    return withImpl(builder_, level_, mode, true, parser, parser);
+  }
+
+  public static boolean withOff(PsiBuilder builder_, int level_, Parser parser, String... modes) {
+    final TObjectIntHashMap<String> map = getParsingModes(builder_);
+
+    TObjectIntHashMap<String> prev = new TObjectIntHashMap<String>();
+    
+    for (String mode : modes) {
+      int p = map.get(mode);
+      if (p > 0) {
+        map.put(mode, 0);
+        prev.put(mode, p);
+      }
+    }
+    
+    boolean result = parser.parse(builder_, level_);
+    
+    prev.forEachEntry(new TObjectIntProcedure<String>() {
+      @Override
+      public boolean execute(String mode, int p) {
+        map.put(mode, p);
+        return true;
+      }
+    });
+    
+    return result;
+  }
+
+  private static boolean withImpl(PsiBuilder builder_, int level_, String mode, boolean onOff, Parser whenOn, Parser whenOff) {
+    TObjectIntHashMap<String> map = getParsingModes(builder_);
+    int prev = map.get(mode);
+    boolean change = ((prev & 1) == 0) == onOff;
+    if (change) map.put(mode, prev << 1 | (onOff ? 1 : 0));
+    boolean result = (change ? whenOn : whenOff).parse(builder_, level_);
+    if (change) map.put(mode, prev);
+    return result;
+  }
+
   public static boolean isModeOff(@NotNull PsiBuilder builder_, @SuppressWarnings("UnusedParameters") int level, String mode) {
     return getParsingModes(builder_).get(mode) == 0;
   }
 
   public static boolean prevIsArrayType(@NotNull PsiBuilder builder_, @SuppressWarnings("UnusedParameters") int level) {
     LighterASTNode marker = builder_.getLatestDoneMarker();
-    return marker != null && marker.getTokenType() == GoTypes.ARRAY_OR_SLICE_TYPE;
+    IElementType type = marker != null ? marker.getTokenType() : null;
+    return type == GoTypes.ARRAY_OR_SLICE_TYPE || type == GoTypes.MAP_TYPE;
   }
   
   public static boolean keyOrValueExpression(@NotNull PsiBuilder builder_, int level) {

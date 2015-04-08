@@ -185,7 +185,7 @@ MapType ::= map '[' Type ']' Type {
 ChannelType ::= ChanTypePrefix Type {pin=1}
 private ChanTypePrefix ::= chan '<-'? | '<-' chan {pin(".*")=1}
 
-Block ::= <<consumeBlock>> | '{' <<exitModeSafe "PAR">> <<exitModeSafe "BLOCK?">> ('}' | Statements '}') {pin(".*")=1 methods=[processDeclarations]}
+Block ::= <<consumeBlock>> | '{' ('}' | (<<withOff Statements "BLOCK?" "PAR">> | (!() Statements)) '}') {pin(".*")=1 methods=[processDeclarations]}
 private Statements ::= StatementWithSemi*
 
 private StatementWithSemi ::= Statement (semi|&'}') { pin=1 recoverWhile=StatementRecover }
@@ -233,6 +233,8 @@ ConstDefinition ::= identifier {
 }
 
 LeftHandExprList ::= ExpressionList
+private ExpressionArgList ::= ExpressionWithRecover2 (',' (ExpressionWithRecover2 | &')'))* {pin(".*")=1}
+private ExpressionWithRecover2 ::= <<withOn "PAR" ExpressionWithRecover>> | (!() Expression) {recoverWhile=ExpressionListRecover}
 private ExpressionList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &')'))* {pin(".*")=1}
 private ExpressionWithRecover ::= Expression {recoverWhile=ExpressionListRecover}
 private ExpressionListRecover ::= !('!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '.' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex | identifier | if | imaginary | int | interface | map | oct | return | rune | select | string | raw_string | struct | switch | var)
@@ -306,7 +308,8 @@ private LiteralTypeExprInner ::=
 LiteralTypeExpr ::= LiteralTypeExprInner
 
 LiteralValue ::= (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">> | <<prevIsArrayType>>) '{' ElementList? '}' {pin=2}
-private ElementList  ::= Element ( ',' Element? )*
+private ElementList  ::= E ( ',' E? )*
+private E::= <<withOn "PAR" Element>> | (!() Element)
 Element ::= First [':' Value] 
 private First ::= Key | <<keyOrValueExpression>>
 Key ::= (FieldName &':') | !() Expression // nullability hack for key without reference inside
@@ -370,7 +373,7 @@ private inner SliceExprBodyInner ::= SliceExprBody
 private SliceExprBody ::= &':' (':' Expression ':' Expression) | (':' Expression?)
 TypeAssertionExpr ::= Expression '.' '(' &(!'type') Type ')'
 CallExpr ::= Expression ArgumentList
-ArgumentList ::= '(' <<enterMode "PAR">> [ ExpressionList '...'? ','? ] <<exitModeSafe "PAR">>')' {pin=1}
+ArgumentList ::= '(' [ ExpressionArgList '...'? ','? ] ')' {pin=1}
 ConversionExpr ::= &ConversionPredicate Type ConversionTail
 private ConversionPredicate ::= ConversionStart | '(' ConversionStart
 private ConversionTail ::= '(' Expression ','? ')' {pin=1}
@@ -401,7 +404,7 @@ TypeCaseClause ::= TypeSwitchCase ':' Statements?
 TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
 TypeList ::= Type ( ',' Type )*
 TypeListNoPin ::= Type ( ',' Type )* {elementType=TypeList}
-ForStatement ::= for <<enterMode "BLOCK?">> (ForOrRangeClause Block | Block | Expression Block) {pin(".*")="for|ForOrRangeClause"}
+ForStatement ::= for <<enterMode "BLOCK?">> (ForOrRangeClause Block | Block | Expression Block) <<exitModeSafe "BLOCK?">> {pin(".*")="for|ForOrRangeClause"}
 private ForOrRangeClause ::= (ForClause | RangeClause)
 ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement? {methods=[processDeclarations]}
 RangeClause ::= ExpressionsOrVariables? range Expression {pin=2 extends=VarSpec}
