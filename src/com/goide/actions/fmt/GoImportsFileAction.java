@@ -50,7 +50,7 @@ public class GoImportsFileAction extends GoExternalToolsAction {
   protected GoExecutor createExecutor(Module module, @NotNull String title, @NotNull String filePath) {
     File executable = getExecutable();
     assert executable != null;
-    return GoExecutor.in(module).withExePath(executable.getAbsolutePath()).withParameters(filePath).showOutputOnError();
+    return GoExecutor.in(module).withExePath(executable.getAbsolutePath()).withParameters("-w", filePath).showOutputOnError();
   }
 
   @Nullable
