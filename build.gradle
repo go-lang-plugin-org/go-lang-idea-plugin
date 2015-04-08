@@ -1,0 +1,70 @@
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+}
+
+repositories {
+  maven { url "https://www.jetbrains.com/intellij-repository/releases" }
+  mavenCentral()
+}
+
+configurations {
+  idea
+  provided
+  compile.extendsFrom provided
+}
+
+defaultTasks 'test'
+
+apply plugin: 'java'
+
+dependencies {
+  idea group: 'com.jetbrains.intellij.idea', name: 'ideaIC', version: '14.1', ext: 'zip'
+  provided fileTree(ideaSdkPath()).include("lib/*.jar")
+  provided fileTree(ideaSdkPath()).include("plugins/coverage/lib/*.jar")
+  
+  testCompile fileTree("${System.properties['java.home']}/../lib").include('*tools.jar')
+}
+
+sourceSets {
+  main {
+    java {
+      srcDirs 'src', 'gen', 'utils/src', 'google-app-engine/src', 'google-app-engine-yaml/src'
+    }
+    resources {
+      srcDirs 'resources', 'google-app-engine/resources'
+    }
+  }
+  
+  test {
+    java {
+      srcDirs 'src', 'tests'
+    }
+  }
+//  classpath = classpath. (fileTree(ideaSdkPath()).include("lib/*.jar").files)
+}
+
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+task prepareIdeaSdk(type: Copy, dependsOn: configurations.idea) {
+  def source = configurations.idea.singleFile
+  def target = ideaSdkPath()
+  if (!file(target).exists()) {
+    from zipTree(source)
+    into target
+  }
+}
+compileJava.dependsOn prepareIdeaSdk
+
+task removeIdeaSdk(dependsOn: configurations.idea) {
+//  delete ideaSdkPath()
+}
+
+clean.dependsOn removeIdeaSdk
+
+private String ideaSdkPath() {
+  def source = configurations.idea.singleFile
+  source.parent + '/' + source.name - '.zip'
+}
