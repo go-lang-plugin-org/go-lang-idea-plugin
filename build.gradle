@@ -1,70 +1,93 @@
-buildscript {
+// todo google-app-engine-yaml.jar invalid
+allprojects {
+  apply plugin: 'java'
+  jar.archiveName = "${project.name}.jar"
+
   repositories {
+    maven { url "https://www.jetbrains.com/intellij-repository/releases" }
     mavenCentral()
   }
-}
 
-repositories {
-  maven { url "https://www.jetbrains.com/intellij-repository/releases" }
-  mavenCentral()
-}
-
-configurations {
-  idea
-  provided
-  compile.extendsFrom provided
-}
-
-defaultTasks 'test'
-
-apply plugin: 'java'
-
-dependencies {
-  idea group: 'com.jetbrains.intellij.idea', name: 'ideaIC', version: '14.1', ext: 'zip'
-  provided fileTree(ideaSdkPath()).include("lib/*.jar")
-  provided fileTree(ideaSdkPath()).include("plugins/coverage/lib/*.jar")
-  
-  testCompile fileTree("${System.properties['java.home']}/../lib").include('*tools.jar')
-}
-
-sourceSets {
-  main {
-    java {
-      srcDirs 'src', 'gen', 'utils/src', 'google-app-engine/src', 'google-app-engine-yaml/src'
-    }
-    resources {
-      srcDirs 'resources', 'google-app-engine/resources'
-    }
+  configurations {
+    idea
+    provided
   }
-  
-  test {
-    java {
-      srcDirs 'src', 'tests'
+
+  dependencies {
+    idea group: 'com.jetbrains.intellij.idea', name: 'ideaIC', version: '14.1', ext: 'zip'
+    provided fileTree(ideaSdkPath()).include("lib/*.jar")
+    provided fileTree(ideaSdkPath()).include("plugins/coverage/lib/*.jar")
+    testCompile fileTree("${System.properties['java.home']}/../lib").include('*tools.jar')
+  }
+
+  sourceSets {
+    main {
+      java {
+        srcDirs 'src', 'gen'
+      }
+      resources {
+        srcDirs 'resources'
+      }
+      compileClasspath += configurations.provided
+      runtimeClasspath += configurations.provided
+    }
+
+    test {
+      java {
+        srcDirs 'tests'
+      }
+      compileClasspath += configurations.provided
+      runtimeClasspath += configurations.provided
     }
   }
-//  classpath = classpath. (fileTree(ideaSdkPath()).include("lib/*.jar").files)
-}
 
-sourceCompatibility = 1.6
-targetCompatibility = 1.6
 
-task prepareIdeaSdk(type: Copy, dependsOn: configurations.idea) {
-  def source = configurations.idea.singleFile
-  def target = ideaSdkPath()
-  if (!file(target).exists()) {
-    from zipTree(source)
-    into target
+  task prepareIdeaSdk(type: Copy, dependsOn: configurations.idea) {
+    def source = configurations.idea.singleFile
+    def target = ideaSdkPath()
+    if (!file(target).exists()) {
+      from zipTree(source)
+      into target
+    }
   }
-}
-compileJava.dependsOn prepareIdeaSdk
+  compileJava.dependsOn prepareIdeaSdk
 
-task removeIdeaSdk(dependsOn: configurations.idea) {
-//  delete ideaSdkPath()
-}
+  task removeIdeaSdk(dependsOn: configurations.idea) {
+//    delete ideaSdkPath()
+  }
 
-clean.dependsOn removeIdeaSdk
+  clean.dependsOn removeIdeaSdk
+}
 
 private String ideaSdkPath() {
   def source = configurations.idea.singleFile
   source.parent + '/' + source.name - '.zip'
+}
+
+apply plugin: 'distribution'
+
+dependencies {
+  compile project(':utils'), project(':google-app-engine'), project(':google-app-engine-yaml')
+}
+
+distributions {
+  main {
+    baseName = 'Go'
+    contents {
+      allprojects.each { project ->
+        project.tasks.withType(Jar).each { archiveTask ->
+          into('lib') {
+            from archiveTask.archivePath
+          }
+        }
+      }
+    }
+  }
+}
+
+test {
+  maxHeapSize = '512m'
+  minHeapSize = '256m'
+  enableAssertions = true
+  jvmArgs '-XX:MaxPermSize=250m'
 }
