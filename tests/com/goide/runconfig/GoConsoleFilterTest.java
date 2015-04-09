@@ -34,6 +34,16 @@ public class GoConsoleFilterTest extends GoCodeInsightFixtureTestCase {
     GoApplicationLibrariesService.getInstance().setLibraryRootUrls(ArrayUtil.EMPTY_STRING_ARRAY);
     super.tearDown();
   }
+  
+  public void testAbsolutePath() {
+    doFileLineTest("\t/src/goPath/src/nestedGoPath.go:57:1: expected operand, found '<'",
+                   1, 37, "/src/goPath/src/nestedGoPath.go", 57, 1);
+  }
+  
+  public void testAbsolutePathWithLoggingTime() {
+    doFileLineTest("2015/03/30 09:15:13 /src/goPath/src/nestedGoPath.go:57:1: expected operand, found '<'",
+                   20, 56, "/src/goPath/src/nestedGoPath.go", 57, 1);
+  }
 
   public void testRelativeToWorkingDirectory() {
     doFileLineTest("src/nestedWorkingDirectory.go:5:5: found packages file.go (main) and file2.go (my) in /Some/path/to/directory",

@@ -21,6 +21,7 @@ import com.goide.sdk.GoSdkUtil;
 import com.intellij.execution.filters.Filter;
 import com.intellij.execution.filters.HyperlinkInfo;
 import com.intellij.execution.filters.OpenFileHyperlinkInfo;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
@@ -28,6 +29,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.openapi.vfs.ex.temp.TempFileSystem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,7 +37,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GoConsoleFilter implements Filter {
-  private static final Pattern MESSAGE_PATTERN = Pattern.compile("^[ \t]*(\\S+\\.\\w+):(\\d+)(:(\\d+))?[:\\s].*\n?$");
+  private static final Pattern MESSAGE_PATTERN = Pattern.compile("(?:^|\\s)(\\S+\\.\\w+):(\\d+)(:(\\d+))?[:\\s].*");
   private static final Pattern GO_GET_MESSAGE_PATTERN = Pattern.compile("^[ \t]*(go get (.*))\n?$");
   private static final Pattern APP_ENGINE_PATH_PATTERN = Pattern.compile("/tmp[A-z0-9]+appengine-go-bin/");
 
@@ -52,14 +54,14 @@ public class GoConsoleFilter implements Filter {
   @Override
   public Result applyFilter(@NotNull String line, int entireLength) {
     Matcher goGetMatcher = GO_GET_MESSAGE_PATTERN.matcher(line);
-    if (goGetMatcher.matches() && myModule != null) {
+    if (goGetMatcher.find() && myModule != null) {
       final String packageName = goGetMatcher.group(2).trim();
       HyperlinkInfo hyperlinkInfo = new GoGetHyperlinkInfo(packageName, myModule);
       int lineStart = entireLength - line.length();
       return new Result(lineStart + goGetMatcher.start(1), lineStart + goGetMatcher.end(2), hyperlinkInfo);
     }
     Matcher matcher = MESSAGE_PATTERN.matcher(line);
-    if (!matcher.matches()) {
+    if (!matcher.find()) {
       return null;
     }
 
@@ -85,11 +87,13 @@ public class GoConsoleFilter implements Filter {
 
     VirtualFile virtualFile = null;
     if (FileUtil.isAbsolutePlatformIndependent(fileName)) {
-      virtualFile = VirtualFileManager.getInstance().findFileByUrl(VfsUtilCore.pathToUrl(fileName));
+      virtualFile = ApplicationManager.getApplication().isUnitTestMode()
+                    ? TempFileSystem.getInstance().refreshAndFindFileByPath(fileName)
+                    : VirtualFileManager.getInstance().refreshAndFindFileByUrl(VfsUtilCore.pathToUrl(fileName));
     }
     else {
       if (myWorkingDirectoryUrl != null) {
-        virtualFile = VirtualFileManager.getInstance().findFileByUrl(myWorkingDirectoryUrl + "/" + fileName);
+        virtualFile = VirtualFileManager.getInstance().refreshAndFindFileByUrl(myWorkingDirectoryUrl + "/" + fileName);
       }
       if (virtualFile == null && myModule != null) {
         virtualFile = findInGoPath(fileName);
