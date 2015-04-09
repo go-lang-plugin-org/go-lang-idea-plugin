@@ -23,9 +23,11 @@ import com.intellij.execution.filters.HyperlinkInfo;
 import com.intellij.execution.filters.OpenFileHyperlinkInfo;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
+import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,12 +41,12 @@ public class GoConsoleFilter implements Filter {
 
   @NotNull private final Project myProject;
   @Nullable private final Module myModule;
-  @NotNull private final String myWorkingDirectory;
+  @Nullable private final String myWorkingDirectoryUrl;
 
-  public GoConsoleFilter(@NotNull Project project, @Nullable Module module, @NotNull String workingDirectory) {
+  public GoConsoleFilter(@NotNull Project project, @Nullable Module module, @Nullable String workingDirectoryUrl) {
     myProject = project;
     myModule = module;
-    myWorkingDirectory = workingDirectory;
+    myWorkingDirectoryUrl = workingDirectoryUrl;
   }
 
   @Override
@@ -52,12 +54,7 @@ public class GoConsoleFilter implements Filter {
     Matcher goGetMatcher = GO_GET_MESSAGE_PATTERN.matcher(line);
     if (goGetMatcher.matches() && myModule != null) {
       final String packageName = goGetMatcher.group(2).trim();
-      HyperlinkInfo hyperlinkInfo = new HyperlinkInfo() {
-        @Override
-        public void navigate(Project project) {
-          GoGetPackageFix.applyFix(project, myModule, packageName, false);
-        }
-      };
+      HyperlinkInfo hyperlinkInfo = new GoGetHyperlinkInfo(packageName, myModule);
       int lineStart = entireLength - line.length();
       return new Result(lineStart + goGetMatcher.start(1), lineStart + goGetMatcher.end(2), hyperlinkInfo);
     }
@@ -68,16 +65,16 @@ public class GoConsoleFilter implements Filter {
 
     int startOffset = matcher.start(1);
     int endOffset = matcher.end(2);
-    
+
     String fileName = matcher.group(1);
     int lineNumber = StringUtil.parseInt(matcher.group(2), 1) - 1;
     if (lineNumber < 0) {
       return null;
     }
 
-    int columnNumber = 0;
+    int columnNumber = -1;
     if (matcher.groupCount() > 3) {
-      columnNumber = StringUtil.parseInt(matcher.group(4), 0);
+      columnNumber = StringUtil.parseInt(matcher.group(4), 1) - 1;
       endOffset = Math.max(endOffset, matcher.end(4));
     }
 
@@ -86,27 +83,65 @@ public class GoConsoleFilter implements Filter {
       fileName = fileName.substring(appEnginePathMatcher.end());
     }
 
-    VirtualFile virtualFile = LocalFileSystem.getInstance().refreshAndFindFileByPath(myWorkingDirectory + "/" + fileName);
-    if (virtualFile == null) {
-      if (myModule != null) {
-        for (VirtualFile goPathSrc : GoSdkUtil.getGoPathsSources(myProject, myModule)) {
-          virtualFile = goPathSrc.findFileByRelativePath(fileName);
-          if (virtualFile != null) break;
+    VirtualFile virtualFile = null;
+    if (FileUtil.isAbsolutePlatformIndependent(fileName)) {
+      virtualFile = VirtualFileManager.getInstance().findFileByUrl(VfsUtilCore.pathToUrl(fileName));
+    }
+    else {
+      if (myWorkingDirectoryUrl != null) {
+        virtualFile = VirtualFileManager.getInstance().findFileByUrl(myWorkingDirectoryUrl + "/" + fileName);
+      }
+      if (virtualFile == null && myModule != null) {
+        virtualFile = findInGoPath(fileName);
+        if (virtualFile == null && fileName.startsWith("src/")) {
+          virtualFile = findInGoPath(StringUtil.trimStart(fileName, "src/"));
         }
       }
-    }
-    if (virtualFile == null) {
-      VirtualFile baseDir = myProject.getBaseDir();
-      if (baseDir != null) {
-        virtualFile = baseDir.findFileByRelativePath(fileName);
+      if (virtualFile == null) {
+        VirtualFile baseDir = myProject.getBaseDir();
+        if (baseDir != null) {
+          virtualFile = baseDir.findFileByRelativePath(fileName);
+          if (virtualFile == null && fileName.startsWith("src/")) {
+            // exclude 'src
+            virtualFile = baseDir.findFileByRelativePath(StringUtil.trimStart(fileName, "src/"));
+          }
+        }
       }
     }
     if (virtualFile == null) {
       return null;
     }
-
     HyperlinkInfo hyperlinkInfo = new OpenFileHyperlinkInfo(myProject, virtualFile, lineNumber, columnNumber);
     int lineStart = entireLength - line.length();
     return new Result(lineStart + startOffset, lineStart + endOffset, hyperlinkInfo);
+  }
+
+  @Nullable
+  private VirtualFile findInGoPath(@NotNull String fileName) {
+    for (VirtualFile goPathSrc : GoSdkUtil.getGoPathsSources(myProject, myModule)) {
+      VirtualFile virtualFile = goPathSrc.findFileByRelativePath(fileName);
+      if (virtualFile != null) return virtualFile;
+    }
+    return null;
+  }
+
+  public static class GoGetHyperlinkInfo implements HyperlinkInfo {
+    private final String myPackageName;
+    private final Module myModule;
+
+    public GoGetHyperlinkInfo(@NotNull String packageName, @NotNull Module module) {
+      myPackageName = packageName;
+      myModule = module;
+    }
+
+    @NotNull
+    public String getPackageName() {
+      return myPackageName;
+    }
+
+    @Override
+    public void navigate(Project project) {
+      GoGetPackageFix.applyFix(project, myModule, myPackageName, false);
+    }
   }
 }

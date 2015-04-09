@@ -267,7 +267,7 @@ public class GoExecutor {
       RunContentExecutor runContentExecutor = new RunContentExecutor(myProject, outputHandler)
         .withTitle(getPresentableName())
         .withActivateToolWindow(myShowOutputOnError)
-        .withFilter(new GoConsoleFilter(myProject, myModule, StringUtil.notNullize(myWorkDirectory)));
+        .withFilter(new GoConsoleFilter(myProject, myModule, myWorkDirectory));
       Disposer.register(myProject, runContentExecutor);
       runContentExecutor.run();
       historyProcessListener.apply(outputHandler);
