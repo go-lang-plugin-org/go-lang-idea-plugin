@@ -110,7 +110,7 @@ public class GoTestRunConfigurationProducer extends RunConfigurationProducer<GoT
                  FileUtil.pathsEqual(configuration.getWorkingDirectory(), directoryPath);
         }
       case PACKAGE:
-        if (!(file instanceof GoFile) || !Comparing.equal(((GoFile)file).getImportPath(), configuration.getPackage())) return false;
+        if (!(GoTestFinder.isTestFile(file)) || !Comparing.equal(((GoFile)file).getImportPath(), configuration.getPackage())) return false;
         if (isPackageContext(contextElement) && configuration.getPattern().isEmpty()) return true;
         
         String functionNameFromContext = findFunctionNameFromContext(contextElement);
@@ -118,7 +118,7 @@ public class GoTestRunConfigurationProducer extends RunConfigurationProducer<GoT
                ? configuration.getPattern().equals("^" + functionNameFromContext + "$") 
                : configuration.getPattern().isEmpty();
       case FILE:
-        return file != null && FileUtil.pathsEqual(configuration.getFilePath(), file.getVirtualFile().getPath()) &&
+        return GoTestFinder.isTestFile(file) && FileUtil.pathsEqual(configuration.getFilePath(), file.getVirtualFile().getPath()) &&
           findFunctionNameFromContext(contextElement) == null;
     }
     return false;
