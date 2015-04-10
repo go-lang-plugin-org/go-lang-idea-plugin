@@ -191,7 +191,8 @@ public class GoCompletionUtil {
           context.commitDocument();
           int offset = context.getStartOffset();
           PsiElement at = file.findElementAt(offset);
-          if (PsiTreeUtil.getParentOfType(at, GoValue.class) == null) return;
+          GoValue value = PsiTreeUtil.getParentOfType(at, GoValue.class);
+          if (value == null || PsiTreeUtil.getPrevSiblingOfType(value, GoKey.class) != null) return;
           super.handleInsert(context, item);
         }
       } : null;

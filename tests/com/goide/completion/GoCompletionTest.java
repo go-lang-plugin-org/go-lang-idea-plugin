@@ -122,6 +122,11 @@ public class GoCompletionTest extends GoCompletionTestBase {
     doCheckResult("package main;func main(){a:=struct{Demo int}{Demo:1};println(a.D<caret>)}", 
                   "package main;func main(){a:=struct{Demo int}{Demo:1};println(a.Demo<caret>)}");
   }
+  
+  public void testCompleteFieldWithoutColonAfterKey() {
+    doCheckResult("package main; type Test struct { ID string }; func t() { var n Test; _ = &Test{ID: n.I<caret>} }",
+                  "package main; type Test struct { ID string }; func t() { var n Test; _ = &Test{ID: n.ID<caret>} }");
+  }
 
   public void testTopLevelKeywords() {
     myFixture.testCompletionVariants(getTestName(true) + ".go", "const", "func", "import", "type", "var");
