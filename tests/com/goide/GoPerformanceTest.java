@@ -78,7 +78,7 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
         InspectionTestUtil.runTool(wrapper, scope, globalContext);
         InspectionTestUtil.compareToolResults(globalContext, wrapper, false, new File(getTestDataPath(), wrapper.getShortName()).getPath());
       }
-    }).cpuBound().attempts(3).usesAllCPUCores().assertTiming();
+    }).cpuBound().usesAllCPUCores().assertTiming();
   }
 
   public void testParserAndStubs() {
