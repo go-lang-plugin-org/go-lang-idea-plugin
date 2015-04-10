@@ -23,10 +23,18 @@ import com.intellij.execution.configurations.ConfigurationType;
 import com.intellij.execution.configurations.ModuleBasedConfiguration;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.execution.runners.ExecutionEnvironment;
+import com.intellij.ide.scratch.ScratchFileType;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.LocalFileSystem;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.util.PathUtil;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+import java.util.UUID;
 
 public class GoRunFileConfiguration extends GoRunConfigurationWithMain<GoRunFileRunningState> {
   public GoRunFileConfiguration(Project project, String name, @NotNull ConfigurationType configurationType) {
@@ -48,6 +56,24 @@ public class GoRunFileConfiguration extends GoRunConfigurationWithMain<GoRunFile
   @NotNull
   @Override
   protected GoRunFileRunningState newRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module) {
+    String path = getFilePath();
+    if (!"go".equals(PathUtil.getFileExtension(path))) {
+      final VirtualFile f = LocalFileSystem.getInstance().refreshAndFindFileByPath(path);
+      if (f != null && f.getFileType() == ScratchFileType.INSTANCE) {
+        final String suffix = "." + UUID.randomUUID().toString().substring(0, 6) + ".go";
+        ApplicationManager.getApplication().runWriteAction(new Runnable() {
+          @Override
+          public void run() {
+            try {
+              f.rename(this, f.getName() + suffix);
+            }
+            catch (IOException ignored) {
+            }
+          }
+        });
+        setFilePath(path + suffix);
+      }
+    } 
     return new GoRunFileRunningState(env, module, this);
   }
 }
