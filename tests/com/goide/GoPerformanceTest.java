@@ -26,6 +26,7 @@ import com.intellij.testFramework.UsefulTestCase;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 import com.intellij.testFramework.fixtures.impl.GlobalInspectionContextForTests;
 import com.intellij.util.ThrowableRunnable;
+import com.intellij.util.indexing.FileContentImpl;
 import com.intellij.util.indexing.IndexingDataKeys;
 import org.jetbrains.annotations.NotNull;
 
@@ -101,17 +102,19 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
             if (file.isDirectory() && "test".equals(file.getName()) && file.getParent().equals(root)) return SKIP_CHILDREN;
             if (file.getFileType() != GoFileType.INSTANCE) return CONTINUE;
             try {
-              String path = file.getPath();
-              String trim = FileUtil.loadFile(new File(path), "UTF-8", true).trim();
-              PsiFile psi = PsiFileFactory.getInstance(getProject()).createFileFromText(file.getName(), file.getFileType(), trim);
               System.out.print(".");
+              String path = file.getPath();
+              String fileContent = FileUtil.loadFile(new File(path), "UTF-8", true).trim();
+              PsiFile psi = PsiFileFactory.getInstance(getProject()).createFileFromText(file.getName(), file.getFileType(), fileContent);
               assertFalse(path + " contains error elements", DebugUtil.psiToString(psi, true).contains("PsiErrorElement"));
               String full = DebugUtil.stubTreeToString(GoFileElementType.INSTANCE.getBuilder().buildStubTree(psi));
               psi.putUserData(IndexingDataKeys.VIRTUAL_FILE, file);
-              String fast = DebugUtil.stubTreeToString(GoFileElementType.INSTANCE.getBuilder().buildStubTree(psi));
+              FileContentImpl content = new FileContentImpl(file, fileContent, file.getCharset());
+              PsiFile psiFile = content.getPsiFile();
+              String fast = DebugUtil.stubTreeToString(GoFileElementType.INSTANCE.getBuilder().buildStubTree(psiFile));
               if (!Comparing.strEqual(full, fast)) {
-                UsefulTestCase.assertSameLines(full, fast);
                 System.err.println(path);
+                UsefulTestCase.assertSameLines(full, fast);
               }
             }
             catch (IOException e) {
