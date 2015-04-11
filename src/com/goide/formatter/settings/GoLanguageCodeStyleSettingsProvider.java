@@ -49,7 +49,7 @@ public class GoLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSettin
     indentOptions.INDENT_SIZE = 4;
     indentOptions.CONTINUATION_INDENT_SIZE = 4;
     indentOptions.TAB_SIZE = 4;
-    indentOptions.USE_TAB_CHARACTER = false; // todo: should be true
+    indentOptions.USE_TAB_CHARACTER = true;
     return defaultSettings;
   }
 

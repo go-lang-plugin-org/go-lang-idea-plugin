@@ -51,8 +51,8 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "func test(){Fprintl<caret>}",
                   "package main;\n" +
                   "import (\n" +
-                  "    _ \"fmt\"\n" +
-                  "    \"fmt\"\n" +
+                  "\t_ \"fmt\"\n" +
+                  "\t\"fmt\"\n" +
                   ")\n" +
                   "func test(){fmt.Fprintln()}");
   }
@@ -89,7 +89,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "\n" +
                   "import (\n" +
                   "    \"fmt\"\n" +
-                  "    \"dirName\"\n" +
+                  "\t\"dirName\"\n" +
                   ")\n" +
                   "\n" +
                   "func main() {\n" +
