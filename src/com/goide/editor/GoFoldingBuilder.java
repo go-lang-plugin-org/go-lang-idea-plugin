@@ -99,6 +99,10 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
   }
 
   private static void foldTypes(@Nullable PsiElement element, List<FoldingDescriptor> result) {
+    if (element == null || element.getChildren().length == 0) {
+      return;
+    }
+
     if (element instanceof GoStructType) {
       addTypeBlock(element, ((GoStructType)element).getLbrace(), ((GoStructType)element).getRbrace(), result);
     }
@@ -117,7 +121,7 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
   }
 
   // com.intellij.codeInsight.folding.impl.JavaFoldingBuilderBase.addCodeBlockFolds()
-  private static void addCommentFolds(@NotNull PsiElement comment, 
+  private static void addCommentFolds(@NotNull PsiElement comment,
                                       @NotNull Set<PsiElement> processedComments,
                                       @NotNull List<FoldingDescriptor> foldElements) {
     if (processedComments.contains(comment)) return;
@@ -140,7 +144,7 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
       foldElements.add(new FoldingDescriptor(comment, new TextRange(comment.getTextRange().getStartOffset(), end.getTextRange().getEndOffset())));
     }
   }
-  
+
   @Nullable
   @Override
   public String getPlaceholderText(@NotNull ASTNode node) {
