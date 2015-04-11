@@ -26,3 +26,5 @@ type A struct <fold text='{...}'>{
 type C interface <fold text='{...}'>{
     Foo() int
 }</fold>
+
+type D interface {}
