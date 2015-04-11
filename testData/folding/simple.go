@@ -27,4 +27,9 @@ type C interface <fold text='{...}'>{
     Foo() int
 }</fold>
 
-type D interface {}
+type D interface {
+  
+}
+type T struct {
+  
+}

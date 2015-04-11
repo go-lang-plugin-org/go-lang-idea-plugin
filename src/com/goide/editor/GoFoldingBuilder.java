@@ -98,16 +98,14 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
     if (block != null && block.getTextRange().getLength() > 1) result.add(new FoldingDescriptor(block, block.getTextRange()));
   }
 
-  private static void foldTypes(@Nullable PsiElement element, List<FoldingDescriptor> result) {
-    if (element == null || element.getChildren().length == 0) {
-      return;
+  private static void foldTypes(@Nullable PsiElement e, List<FoldingDescriptor> result) {
+    if (e instanceof GoStructType) {
+      if (((GoStructType)e).getFieldDeclarationList().isEmpty()) return;
+      addTypeBlock(e, ((GoStructType)e).getLbrace(), ((GoStructType)e).getRbrace(), result);
     }
-
-    if (element instanceof GoStructType) {
-      addTypeBlock(element, ((GoStructType)element).getLbrace(), ((GoStructType)element).getRbrace(), result);
-    }
-    if (element instanceof GoInterfaceType) {
-      addTypeBlock(element, ((GoInterfaceType)element).getLbrace(), ((GoInterfaceType)element).getRbrace(), result);
+    if (e instanceof GoInterfaceType) {
+      if (e.getChildren().length == 0) return;
+      addTypeBlock(e, ((GoInterfaceType)e).getLbrace(), ((GoInterfaceType)e).getRbrace(), result);
     }
   }
 
