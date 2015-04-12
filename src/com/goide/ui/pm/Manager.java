@@ -262,16 +262,16 @@ public class Manager {
 
     DefaultListModel model = new DefaultListModel();
     List<GoPackage> goPackages = myPackages.getHits();
-    if (goPackages.size() == 0) {
+    if (goPackages.isEmpty()) {
       model.addElement("No packages found");
     }
     else {
       for (GoPackage goPackage : goPackages) {
         String description = goPackage.name;
-        if (goPackage.synopsis != "") {
+        if (!goPackage.synopsis.isEmpty()) {
           description += " (" + goPackage.synopsis + ")";
         }
-        else if (goPackage.description != "") {
+        else if (!goPackage.description.isEmpty()) {
           description += " (";
           if (goPackage.description.length() > 30) {
             description += goPackage.description.substring(0, 30);
