@@ -128,13 +128,11 @@ public class GoUtil {
 
   /**
    * isReferenceTo optimization. Before complex checking via resolve we can say for sure that element 
-   * can't be a reference to given declaration in following cases:
-   *
-   * - GoLabelRef can't be resolved to anything but GoLabelDefinition
-   * - GoTypeReferenceExpression can't be resolved to anything but GoTypeSpec
-   * <p/>
-   * - definition is private and reference in different package
-   * - definition is public, reference in different package and reference containing file doesn't have an import of definition package
+   * can't be a reference to given declaration in following cases:<br/>
+   * – GoLabelRef can't be resolved to anything but GoLabelDefinition<br/>
+   * – GoTypeReferenceExpression (not from receiver type) can't be resolved to anything but GoTypeSpec<br/>
+   * – Definition is private and reference in different package<br/>
+   * – Definition is public, reference in different package and reference containing file doesn't have an import of definition package
    */
   public static boolean couldBeReferenceTo(@NotNull PsiElement definition, @NotNull PsiElement reference) {
     if (definition instanceof PsiDirectory && reference instanceof GoReferenceExpressionBase) return true;
