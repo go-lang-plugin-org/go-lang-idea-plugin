@@ -148,6 +148,15 @@ public class GoStubElementTypeFactory {
         }
       };
     }
+    if (name.equals("PAR_TYPE")) {
+      return new GoTypeStubElementType(name) {
+        @NotNull
+        @Override
+        public GoType createPsi(@NotNull GoTypeStub stub) {
+          return new GoParTypeImpl(stub, this);
+        }
+      };
+    }
     if (name.equals("TYPE_LIST")) {
       return new GoTypeStubElementType(name) {
         @NotNull

@@ -76,6 +76,7 @@ public interface GoTypes {
   IElementType PARAMETER_DECLARATION = GoStubElementTypeFactory.factory("PARAMETER_DECLARATION");
   IElementType PARAM_DEFINITION = GoStubElementTypeFactory.factory("PARAM_DEFINITION");
   IElementType PARENTHESES_EXPR = new GoCompositeElementType("PARENTHESES_EXPR");
+  IElementType PAR_TYPE = GoStubElementTypeFactory.factory("PAR_TYPE");
   IElementType POINTER_TYPE = GoStubElementTypeFactory.factory("POINTER_TYPE");
   IElementType RANGE_CLAUSE = GoStubElementTypeFactory.factory("RANGE_CLAUSE");
   IElementType RECEIVER = GoStubElementTypeFactory.factory("RECEIVER");
@@ -396,6 +397,9 @@ public interface GoTypes {
       }
       else if (type == PARENTHESES_EXPR) {
         return new GoParenthesesExprImpl(node);
+      }
+      else if (type == PAR_TYPE) {
+        return new GoParTypeImpl(node);
       }
       else if (type == POINTER_TYPE) {
         return new GoPointerTypeImpl(node);

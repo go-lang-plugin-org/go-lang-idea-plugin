@@ -252,6 +252,10 @@ public class GoVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitParType(@NotNull GoParType o) {
+    visitType(o);
+  }
+
   public void visitParamDefinition(@NotNull GoParamDefinition o) {
     visitNamedElement(o);
   }

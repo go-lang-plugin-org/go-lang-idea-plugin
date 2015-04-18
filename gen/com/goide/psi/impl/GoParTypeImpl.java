@@ -8,29 +8,40 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
-import com.goide.stubs.GoTypeStub;
 import com.goide.psi.*;
 import com.intellij.psi.stubs.IStubElementType;
 
-public class GoTypeImpl extends GoStubbedElementImpl<GoTypeStub> implements GoType {
+public class GoParTypeImpl extends GoTypeImpl implements GoParType {
 
-  public GoTypeImpl(ASTNode node) {
+  public GoParTypeImpl(ASTNode node) {
     super(node);
   }
 
-  public GoTypeImpl(GoTypeStub stub, IStubElementType nodeType) {
+  public GoParTypeImpl(com.goide.stubs.GoTypeStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitType(this);
+    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitParType(this);
     else super.accept(visitor);
   }
 
   @Override
-  @Nullable
-  public GoTypeReferenceExpression getTypeReferenceExpression() {
-    return findChildByClass(GoTypeReferenceExpression.class);
+  @NotNull
+  public GoType getType() {
+    return findNotNullChildByClass(GoType.class);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getLparen() {
+    return findNotNullChildByType(LPAREN);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getRparen() {
+    return findNotNullChildByType(RPAREN);
   }
 
 }

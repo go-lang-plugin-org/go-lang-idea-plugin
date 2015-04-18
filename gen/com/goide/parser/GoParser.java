@@ -202,6 +202,9 @@ public class GoParser implements PsiParser {
     else if (t == PACKAGE_CLAUSE) {
       r = PackageClause(b, 0);
     }
+    else if (t == PAR_TYPE) {
+      r = ParType(b, 0);
+    }
     else if (t == PARAM_DEFINITION) {
       r = ParamDefinition(b, 0);
     }
@@ -341,8 +344,8 @@ public class GoParser implements PsiParser {
     create_token_set_(ADD_EXPR, CONVERSION_EXPR, MUL_EXPR, OR_EXPR,
       SELECTOR_EXPR),
     create_token_set_(ARRAY_OR_SLICE_TYPE, CHANNEL_TYPE, FUNCTION_TYPE, INTERFACE_TYPE,
-      MAP_TYPE, POINTER_TYPE, RECEIVER_TYPE, STRUCT_TYPE,
-      TYPE, TYPE_LIST),
+      MAP_TYPE, PAR_TYPE, POINTER_TYPE, RECEIVER_TYPE,
+      STRUCT_TYPE, TYPE, TYPE_LIST),
     create_token_set_(ASSIGNMENT_STATEMENT, BREAK_STATEMENT, CONTINUE_STATEMENT, DEFER_STATEMENT,
       ELSE_STATEMENT, EXPR_SWITCH_STATEMENT, FALLTHROUGH_STATEMENT, FOR_STATEMENT,
       GOTO_STATEMENT, GO_STATEMENT, IF_STATEMENT, LABELED_STATEMENT,
@@ -2542,6 +2545,20 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // '(' Type ')'
+  public static boolean ParType(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ParType")) return false;
+    if (!nextTokenIs(b, LPAREN)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LPAREN);
+    r = r && Type(b, l + 1);
+    r = r && consumeToken(b, RPAREN);
+    exit_section_(b, m, PAR_TYPE, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // identifier
   public static boolean ParamDefinition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ParamDefinition")) return false;
@@ -3563,27 +3580,15 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // TypeName | TypeLit | '(' Type ')'
+  // TypeName | TypeLit | ParType
   public static boolean Type(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Type")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _COLLAPSE_, "<type>");
     r = TypeName(b, l + 1);
     if (!r) r = TypeLit(b, l + 1);
-    if (!r) r = Type_2(b, l + 1);
+    if (!r) r = ParType(b, l + 1);
     exit_section_(b, l, m, TYPE, r, false, null);
-    return r;
-  }
-
-  // '(' Type ')'
-  private static boolean Type_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Type_2")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, LPAREN);
-    r = r && Type(b, l + 1);
-    r = r && consumeToken(b, RPAREN);
-    exit_section_(b, m, null, r);
     return r;
   }
 

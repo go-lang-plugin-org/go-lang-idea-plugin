@@ -251,7 +251,7 @@ public class GoPsiImplUtil {
   public static GoTypeReferenceExpression getTypeReference(@Nullable GoType o) {
     if (o == null) return null;
     if (o instanceof GoChannelType) {
-      GoType type = o.getType();
+      GoType type = ((GoChannelType)o).getType();
       return type != null ? type.getTypeReferenceExpression() : null;
     }
     if (o instanceof GoReceiverType) {
@@ -302,8 +302,8 @@ public class GoPsiImplUtil {
       GoExpression expression = ((GoUnaryExpr)o).getExpression();
       if (expression != null) {
         GoType type = expression.getGoType(context);
-        if (type instanceof GoChannelType && ((GoUnaryExpr)o).getSendChannel() != null) return type.getType();
-        if (type instanceof GoPointerType && ((GoUnaryExpr)o).getMul() != null) return type.getType();
+        if (type instanceof GoChannelType && ((GoUnaryExpr)o).getSendChannel() != null) return ((GoChannelType)type).getType();
+        if (type instanceof GoPointerType && ((GoUnaryExpr)o).getMul() != null) return ((GoPointerType)type).getType();
         return type;
       }
       return null;
@@ -362,14 +362,14 @@ public class GoPsiImplUtil {
         }
       }
       else if (type instanceof GoArrayOrSliceType) {
-        return type.getType();
+        return ((GoArrayOrSliceType)type).getType();
       }
     }
     else if (o instanceof GoTypeAssertionExpr) {
       return ((GoTypeAssertionExpr)o).getType();
     }
     else if (o instanceof GoConversionExpr) {
-      return ((GoConversionExpr)o).getType().getType();
+      return ((GoConversionExpr)o).getType();
     }
     return null;
   }
@@ -406,18 +406,6 @@ public class GoPsiImplUtil {
         @Nullable
         @Override
         public GoTypeReferenceExpression getTypeReferenceExpression() {
-          return null;
-        }
-
-        @Nullable
-        @Override
-        public PsiElement getLparen() {
-          return null;
-        }
-
-        @Nullable
-        @Override
-        public PsiElement getRparen() {
           return null;
         }
 
@@ -549,7 +537,7 @@ public class GoPsiImplUtil {
       i = i == -1 ? 0 : i;
       GoType type = last.getGoType(null);
       if (type instanceof GoChannelType) {
-        return type.getType();
+        return ((GoChannelType)type).getType();
       }
       GoTypeReferenceExpression typeRef = type != null ? type.getTypeReferenceExpression() : null;
       if (typeRef != null) {
@@ -557,11 +545,11 @@ public class GoPsiImplUtil {
         if (resolve instanceof GoTypeSpec) {
           type = ((GoTypeSpec)resolve).getType();
           if (type instanceof GoChannelType) {
-            return type.getType();
+            return ((GoChannelType)type).getType();
           }
         }
       }
-      if (type instanceof GoArrayOrSliceType && i == 1) return type.getType();
+      if (type instanceof GoArrayOrSliceType && i == 1) return ((GoArrayOrSliceType)type).getType();
       if (type instanceof GoMapType) {
         List<GoType> list = ((GoMapType)type).getTypeList();
         if (i == 0) return ContainerUtil.getFirstItem(list);
@@ -678,25 +666,7 @@ public class GoPsiImplUtil {
 
           @Nullable
           @Override
-          public GoType getType() {
-            return null;
-          }
-
-          @Nullable
-          @Override
           public GoTypeReferenceExpression getTypeReferenceExpression() {
-            return null;
-          }
-
-          @Nullable
-          @Override
-          public PsiElement getLparen() {
-            return null;
-          }
-
-          @Nullable
-          @Override
-          public PsiElement getRparen() {
             return null;
           }
 

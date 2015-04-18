@@ -835,7 +835,7 @@ GO_FILE
               PsiElement(identifier)('targ')
             PsiElement(,)(',')
             CONVERSION_EXPR
-              TYPE
+              PAR_TYPE
                 PsiElement(()('(')
                 POINTER_TYPE
                   PsiElement(*)('*')
@@ -878,7 +878,7 @@ GO_FILE
             PsiElement(identifier)('v')
           PsiElement(:=)(':=')
           CONVERSION_EXPR
-            TYPE
+            PAR_TYPE
               PsiElement(()('(')
               INTERFACE_TYPE
                 PsiElement(interface)('interface')

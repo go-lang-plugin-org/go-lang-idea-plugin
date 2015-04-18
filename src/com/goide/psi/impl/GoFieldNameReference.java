@@ -78,7 +78,7 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
   private GoType getType(GoType type) { // todo: rethink and unify this algorithm
     boolean inValue = myValue != null;
     
-    if (inValue && type instanceof GoArrayOrSliceType) type = type.getType();
+    if (inValue && type instanceof GoArrayOrSliceType) type = ((GoArrayOrSliceType)type).getType();
     else if (type instanceof GoMapType) type = inValue ? ((GoMapType)type).getValueType() : ((GoMapType)type).getKeyType();
     else if (inValue && type instanceof GoStructType) {
       GoKey key = PsiTreeUtil.getPrevSiblingOfType(myValue, GoKey.class);
@@ -95,7 +95,7 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
     }
 
     if (type instanceof GoPointerType) {
-      GoType inner = type.getType();
+      GoType inner = ((GoPointerType)type).getType();
       if (inner != null && inner.getTypeReferenceExpression() != null) {
         type = GoPsiImplUtil.getType(inner.getTypeReferenceExpression());
       }

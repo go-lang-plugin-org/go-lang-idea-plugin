@@ -10,15 +10,6 @@ import com.goide.stubs.GoTypeStub;
 public interface GoType extends GoCompositeElement, StubBasedPsiElement<GoTypeStub> {
 
   @Nullable
-  GoType getType();
-
-  @Nullable
   GoTypeReferenceExpression getTypeReferenceExpression();
-
-  @Nullable
-  PsiElement getLparen();
-
-  @Nullable
-  PsiElement getRparen();
 
 }
