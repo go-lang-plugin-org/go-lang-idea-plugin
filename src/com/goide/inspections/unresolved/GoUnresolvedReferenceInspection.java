@@ -31,6 +31,7 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveResult;
 import com.intellij.psi.formatter.FormatterUtil;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
+import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -137,6 +138,7 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
   }
 
   private static boolean isProhibited(@NotNull GoCompositeElement o, @Nullable GoCompositeElement qualifier) {
+    if (PsiTreeUtil.getPrevSiblingOfType(o, GoReceiverType.class) != null) return true;
     ASTNode next = FormatterUtil.getNextNonWhitespaceSibling(o.getNode());
     boolean isDot = next != null && next.getElementType() == GoTypes.DOT;
     return isDot || qualifier != null;
