@@ -107,6 +107,12 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.checkHighlighting();
   }
   
+  public void testDuplicatesNoLocalResolveForTest() {
+    myFixture.configureByText("a.go", "package i; type P struct { v1 int }");
+    myFixture.configureByText("b.go", "package i_test; import ( \".\" ); func <warning>f</warning>() { print(i.P{}.<error>v1</error>) }");
+    myFixture.checkHighlighting();
+  }
+  
   public void testDuplicatesInOnePackage() {
     myFixture.configureByText("a.go", "package foo; func init() {bar()}; func bar() {}");
     myFixture.configureByText("b.go", "package foo; func <error>bar</error>() {}");
