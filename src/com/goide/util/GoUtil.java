@@ -137,6 +137,7 @@ public class GoUtil {
    * - definition is public, reference in different package and reference containing file doesn't have an import of definition package
    */
   public static boolean couldBeReferenceTo(@NotNull PsiElement definition, @NotNull PsiElement reference) {
+    if (definition instanceof PsiDirectory && reference instanceof GoReferenceExpressionBase) return true;
     if (reference instanceof GoLabelRef && !(definition instanceof GoLabelDefinition)) return false;
     if (reference instanceof GoTypeReferenceExpression &&
         !(reference.getParent() instanceof GoReceiverType) &&
@@ -158,8 +159,9 @@ public class GoUtil {
         if (reference instanceof GoNamedElement && !((GoNamedElement)reference).isPublic()) {
           return false;
         }
-        if (!((GoFile)referenceFile).getImportedPackagesMap().containsKey(((GoFile)definitionFile).getImportPath())) {
-          return false;
+        String path = ((GoFile)definitionFile).getImportPath();
+        if (!((GoFile)referenceFile).getImportedPackagesMap().containsKey(path)) {
+          return "builtin".equals(path);
         }
       }
     }
