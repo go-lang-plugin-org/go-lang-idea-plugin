@@ -382,3 +382,11 @@ func <warning>defer_go</warning>() {
 func <warning>foo_bar_</warning>(bar func(baz    int)) {
       <error>baz</error>
 }
+
+type Ormer interface {
+	Insert(interface{})
+}
+
+func <warning>Save</warning>(o Ormer) {
+	(*o).Insert(1)
+}

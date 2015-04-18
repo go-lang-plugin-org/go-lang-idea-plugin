@@ -51,6 +51,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   public static final Key<List<? extends PsiElement>> IMPORT_USERS = Key.create("IMPORT_USERS");
   public static final Key<String > ACTUAL_NAME = Key.create("ACTUAL_NAME");
   public static final Key<Object> POINTER = Key.create("POINTER");
+  public static final Key<Object> RECEIVER = Key.create("RECEIVER");
   public static final Key<SmartPsiElementPointer<GoReferenceExpressionBase>> CONTEXT = Key.create("CONTEXT");
   
   private static final ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase> MY_RESOLVER =
@@ -186,6 +187,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
   private boolean processGoType(@NotNull GoType type, @NotNull MyScopeProcessor processor, @NotNull ResolveState state) {
     if (type instanceof GoParType) return processGoType(((GoParType)type).getType(), processor, state);
+    if (type instanceof GoReceiverType) state = state.put(RECEIVER, Boolean.TRUE);
     if (!processExistingType(type, processor, state)) return false;
     if (type instanceof GoPointerType) {
       if (!processPointer((GoPointerType)type, processor, state.put(POINTER, Boolean.TRUE))) return false;
@@ -193,6 +195,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
       if (pointer instanceof GoPointerType) {
         return processPointer((GoPointerType)pointer, processor, state.put(POINTER, Boolean.TRUE));
       }
+      else if (pointer != null && state.get(RECEIVER) != null && !processGoType(pointer, processor, state)) return false;
     }
     return processTypeRef(type, processor, state);
   }

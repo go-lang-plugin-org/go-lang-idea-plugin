@@ -37,3 +37,6 @@ func <warning>Add0</warning>(users ...User)  { users[0].Name() }
 func <warning>Add1</warning>(users ...*User) { users[0].<error>Name</error>() } 
 func <warning>Add2</warning>(users User)     { users[0].<error>Name</error>() }
 func <warning>Add3</warning>(users ...User)  { users.<error>Name</error>() }
+
+func <warning>Add4</warning>(users *User)    { (*users).Name() }
+func <warning>Add5</warning>(users User)     { users.Name() }
