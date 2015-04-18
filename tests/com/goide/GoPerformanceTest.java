@@ -117,14 +117,13 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
                 UsefulTestCase.assertSameLines(full, fast);
               }
             }
-            catch (IOException e) {
-              return CONTINUE;
+            catch (IOException ignored) {
             }
             return CONTINUE;
           }
         });
       }
-    }).cpuBound().usesAllCPUCores().assertTiming();
+    }).usesAllCPUCores().assertTiming();
   }
 
   @Override
