@@ -146,9 +146,7 @@ public class GoUtil {
 
     PsiFile definitionFile = definition.getContainingFile();
     PsiFile referenceFile = reference.getContainingFile();
-    if (!(definitionFile instanceof GoFile) || !(referenceFile instanceof GoFile)) {
-      return false;
-    }
+    if (!(definitionFile instanceof GoFile) || !(referenceFile instanceof GoFile)) return false; // todo: zolotov, are you sure? cross refs, for instance?
 
     boolean inSameFile = definitionFile.isEquivalentTo(referenceFile);
     if (!inSameFile) {
