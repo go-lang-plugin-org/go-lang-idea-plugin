@@ -17,7 +17,9 @@
 package com.goide.psi.impl;
 
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.ResolveState;
+import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
@@ -57,9 +59,11 @@ public final class ResolveUtil {
                                                @NotNull PsiElement place) {
     PsiElement run = element.getFirstChild();
     while (run != null) {
-      if (run.isEquivalentTo(lastParent)) return true;
-      if (PsiTreeUtil.findCommonParent(place, run) != run && !run.processDeclarations(processor, substitutor, null, place)) {
-        return false;
+      if (!(run instanceof LeafPsiElement || run instanceof PsiWhiteSpace)) {
+        if (run.isEquivalentTo(lastParent)) return true;
+        if (PsiTreeUtil.findCommonParent(place, run) != run && !run.processDeclarations(processor, substitutor, null, place)) {
+          return false;
+        }
       }
       run = run.getNextSibling();
     }
