@@ -46,7 +46,7 @@ public class GoVarProcessor extends GoScopeProcessorBase {
     if (inShortVar && differentBlocks && myImShortVarDeclaration) return true;
     if (differentBlocks && inShortVar && !inVarOrRange && getResult() != null && !myIsCompletion) return true;
     if (inShortVar && fromNotAncestorBlock(o)) return true;
-    return super.add(o) || !inVarOrRange;
+    return super.add(o);
   }
 
   private boolean fromNotAncestorBlock(@NotNull GoNamedElement o) {
