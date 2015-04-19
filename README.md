@@ -13,8 +13,8 @@ To use them, you'll need to follow these steps:
 
 1. Follow [the instructions](https://www.jetbrains.com/idea/help/managing-enterprise-plugin-repositories.html)
 1. Paste the url for the version you desire:
- - alpha: https://plugins.jetbrains.com/plugins/alpha/list
- - nightly: https://plugins.jetbrains.com/plugins/nightly/list
+ - alpha: https://plugins.jetbrains.com/plugins/alpha/5047
+ - nightly: https://plugins.jetbrains.com/plugins/nightly/5047
 
 As always, please remember that this is an alpha release and while efforts are
 made to ensure the best possible experience, sometimes things might be broken.
