@@ -41,14 +41,14 @@ public class GoCompositeElementImpl extends ASTWrapperPsiElement implements GoCo
                                      @NotNull ResolveState state,
                                      @Nullable PsiElement lastParent,
                                      @NotNull PsiElement place) {
-    return precessDeclarationDefault(this, processor, state, lastParent, place);
+    return processDeclarationsDefault(this, processor, state, lastParent, place);
   }
 
-  public static boolean precessDeclarationDefault(@NotNull GoCompositeElement o,
-                                                  @NotNull PsiScopeProcessor processor,
-                                                  @NotNull ResolveState state,
-                                                  @Nullable PsiElement lastParent,
-                                                  @NotNull PsiElement place) {
+  public static boolean processDeclarationsDefault(@NotNull GoCompositeElement o,
+                                                   @NotNull PsiScopeProcessor processor,
+                                                   @NotNull ResolveState state,
+                                                   @Nullable PsiElement lastParent,
+                                                   @NotNull PsiElement place) {
     if (!o.shouldGoDeeper()) return processor.execute(o, state);
     return processor.execute(o, state) && 
            o instanceof GoBlock ? 

@@ -195,9 +195,9 @@ public class GoPsiImplUtil {
 
   public static boolean processDeclarations(@NotNull GoCompositeElement o, @NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
     boolean isAncestor = PsiTreeUtil.isAncestor(o, place, false);
-    if (o instanceof GoVarSpec) return isAncestor || GoCompositeElementImpl.precessDeclarationDefault(o, processor, state, lastParent, place);
+    if (o instanceof GoVarSpec) return isAncestor || GoCompositeElementImpl.processDeclarationsDefault(o, processor, state, lastParent, place);
 
-    if (isAncestor) return GoCompositeElementImpl.precessDeclarationDefault(o, processor, state, lastParent, place);
+    if (isAncestor) return GoCompositeElementImpl.processDeclarationsDefault(o, processor, state, lastParent, place);
 
     if (o instanceof GoBlock ||
         o instanceof GoIfStatement ||
@@ -208,7 +208,7 @@ public class GoPsiImplUtil {
         o instanceof GoExprCaseClause) {
       return processor.execute(o, state);
     }
-    return GoCompositeElementImpl.precessDeclarationDefault(o, processor, state, lastParent, place);
+    return GoCompositeElementImpl.processDeclarationsDefault(o, processor, state, lastParent, place);
   }
 
   @Nullable

@@ -64,7 +64,7 @@ public abstract class GoStubbedElementImpl<T extends StubBase<?>> extends StubBa
                                      @NotNull ResolveState state,
                                      PsiElement lastParent,
                                      @NotNull PsiElement place) {
-    return GoCompositeElementImpl.precessDeclarationDefault(this, processor, state, lastParent, place);
+    return GoCompositeElementImpl.processDeclarationsDefault(this, processor, state, lastParent, place);
   }
   
   @Nullable

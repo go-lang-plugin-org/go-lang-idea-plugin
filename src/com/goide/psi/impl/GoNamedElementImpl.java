@@ -111,7 +111,7 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
                                      @NotNull ResolveState state,
                                      PsiElement lastParent,
                                      @NotNull PsiElement place) {
-    return GoCompositeElementImpl.precessDeclarationDefault(this, processor, state, lastParent, place);
+    return GoCompositeElementImpl.processDeclarationsDefault(this, processor, state, lastParent, place);
   }
 
   @Override
