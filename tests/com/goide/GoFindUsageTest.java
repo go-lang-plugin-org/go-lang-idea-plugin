@@ -24,7 +24,6 @@ import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
 import java.util.List;
 
 import static com.intellij.util.containers.ContainerUtil.newArrayList;
@@ -59,9 +58,7 @@ public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
 
   public void testBuiltinHighlighting() {
     myFixture.configureByText("a.go", "package main; func bar() i<caret>nt {}");
-    PsiElement caret = myFixture.getElementAtCaret();
-    Collection<UsageInfo> usages = myFixture.findUsages(caret);
-    assertSize(1, usages);
+    assertSize(1, myFixture.findUsages(myFixture.getElementAtCaret()));
   }
 
   @Override
