@@ -210,6 +210,7 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       if (type == SWITCH_START) return Indent.getNoneIndent();
       if (parentType == BLOCK && type == SELECT_STATEMENT) return Indent.getNoneIndent();
       if (parentType == SELECT_STATEMENT && type == RBRACE) return Indent.getNormalIndent();
+      if (parentType==ARGUMENT_LIST && type != LPAREN && type != RPAREN) return Indent.getNormalIndent();
       if ((parentType == EXPR_CASE_CLAUSE || parentType == TYPE_CASE_CLAUSE) && (type == CASE || type == DEFAULT)) return Indent.getNoneIndent();
       if (BLOCKS_TOKEN_SET.contains(parentType)) return indentIfNotBrace(child);
       if (parentType == IMPORT_DECLARATION && type == IMPORT_SPEC) return Indent.getNormalIndent();
@@ -237,8 +238,9 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
           parentType == IMPORT_DECLARATION ||
           parentType == CONST_DECLARATION ||
           parentType == VAR_DECLARATION ||
-          parentType == EXPR_SWITCH_STATEMENT||
-          parentType == TYPE_SWITCH_STATEMENT) {
+          parentType == EXPR_SWITCH_STATEMENT ||
+          parentType == TYPE_SWITCH_STATEMENT ||
+          parentType == ARGUMENT_LIST) {
         childIndent = Indent.getNormalIndent();
       }
       return new ChildAttributes(childIndent, null);

@@ -85,6 +85,12 @@ func main23() {
 func main() {
     tick := time.Tick(100 * time.Millisecond)
     boom := time.After(500 * time.Millisecond)
+    
+    
+    example23123(
+    	          	"test",
+    		              1,
+    	)
 
     for {
             select {
