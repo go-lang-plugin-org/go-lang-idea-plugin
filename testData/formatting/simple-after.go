@@ -65,6 +65,24 @@ func main() {
 }
 
 
+func main23() {
+	i := 1
+
+	switch i {
+	case 1:
+		fmt.Print("1")
+		fmt.Print("1")
+		fmt.Print("1")
+		fmt.Print("1")
+	case 2:
+	default:
+		fmt.Println(1)
+
+
+	}
+}
+
+
 
 func main() {
 	tick := time.Tick(100 * time.Millisecond)
