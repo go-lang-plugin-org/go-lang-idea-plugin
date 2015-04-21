@@ -105,6 +105,8 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       .beforeInside(TYPE, VAR_SPEC).spaces(1)
       .after(GoParserDefinition.LINE_COMMENT).lineBreakInCodeIf(true)
       .after(GoParserDefinition.MULTILINE_COMMENT).lineBreakInCodeIf(true)
+      .between(COMM_CASE, COLON).none()
+      .afterInside(COLON, COMM_CLAUSE).lineBreakInCode()
       ;
   }
 
