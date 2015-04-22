@@ -16,10 +16,12 @@
 
 package com.goide;
 
-import com.intellij.lang.Commenter;
+import com.intellij.lang.CodeDocumentationAwareCommenter;
+import com.intellij.psi.PsiComment;
+import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.Nullable;
 
-public class GoCommenter implements Commenter {
+public class GoCommenter implements CodeDocumentationAwareCommenter {
   @Nullable
   @Override
   public String getLineCommentPrefix() {
@@ -48,5 +50,46 @@ public class GoCommenter implements Commenter {
   @Override
   public String getCommentedBlockCommentSuffix() {
     return null;
+  }
+
+  @Nullable
+  @Override
+  public IElementType getLineCommentTokenType() {
+    return GoParserDefinition.LINE_COMMENT;
+  }
+
+  @Nullable
+  @Override
+  public IElementType getBlockCommentTokenType() {
+    return GoParserDefinition.MULTILINE_COMMENT;
+  }
+
+  @Nullable
+  @Override
+  public IElementType getDocumentationCommentTokenType() {
+    return null;
+  }
+
+  @Nullable
+  @Override
+  public String getDocumentationCommentPrefix() {
+    return null;
+  }
+
+  @Nullable
+  @Override
+  public String getDocumentationCommentLinePrefix() {
+    return null;
+  }
+
+  @Nullable
+  @Override
+  public String getDocumentationCommentSuffix() {
+    return null;
+  }
+
+  @Override
+  public boolean isDocumentationComment(PsiComment comment) {
+    return false;
   }
 }
