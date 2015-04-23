@@ -55,6 +55,15 @@ public class GoCompletionTest extends GoCompletionTestBase {
     assertSameElements(lookupElementStrings, "package1", "package1/pack", "package2", "package2/pack");
   }
 
+  public void testImportIgnoringDirectories() throws IOException {
+    myFixture.getTempDirFixture().createFile("package/testdata/test.go", "package pack");
+    myFixture.getTempDirFixture().createFile("package/.name/test.go", "package pack");
+    myFixture.getTempDirFixture().createFile("package/_workspace/test.go", "package pack");
+    myFixture.configureByText("test.go", "package foo; import `package/<caret>`");
+    myFixture.completeBasic();
+    assertNull(myFixture.getLookupElementStrings());
+  }
+
   public void testDoNotCompleteFullPackagesForRelativeImports() throws IOException {
     myFixture.getTempDirFixture().createFile("package1/pack/test.go", "package foo");
     myFixture.getTempDirFixture().createFile("package2/pack/test.go", "package bar");
@@ -119,7 +128,7 @@ public class GoCompletionTest extends GoCompletionTestBase {
   }
 
   public void testCompleteFieldWithoutColon() {
-    doCheckResult("package main;func main(){a:=struct{Demo int}{Demo:1};println(a.D<caret>)}", 
+    doCheckResult("package main;func main(){a:=struct{Demo int}{Demo:1};println(a.D<caret>)}",
                   "package main;func main(){a:=struct{Demo int}{Demo:1};println(a.Demo<caret>)}");
   }
   
@@ -361,7 +370,8 @@ public class GoCompletionTest extends GoCompletionTestBase {
   }
   
   public void testStructFieldReplace() {
-    doCheckResult(TYPE + "func main() { WaitGroup{sem<caret>abc} }", TYPE + "func main() { WaitGroup{sema:<caret>} }", Lookup.REPLACE_SELECT_CHAR);
+    doCheckResult(TYPE + "func main() { WaitGroup{sem<caret>abc} }", TYPE + "func main() { WaitGroup{sema:<caret>} }",
+                  Lookup.REPLACE_SELECT_CHAR);
   }
   
   public void testNoStructFieldAfterColon() {

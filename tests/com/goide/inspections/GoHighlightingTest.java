@@ -3,6 +3,8 @@ package com.goide.inspections;
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.goide.inspections.unresolved.*;
 import com.goide.project.GoModuleLibrariesService;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.util.ThrowableComputable;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.LightProjectDescriptor;
 
@@ -79,6 +81,22 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testMismatch()    { doTest(); }
   public void testStubParams()  { doTest(); }
   
+  public void testImportIgnoringDirectories() throws IOException {
+    final VirtualFile root = myFixture.getTempDirFixture().findOrCreateDir("root");
+    myFixture.getTempDirFixture().findOrCreateDir("root/src/to_import/testdata");
+    myFixture.getTempDirFixture().findOrCreateDir("root/src/to_import/.name");
+    myFixture.getTempDirFixture().findOrCreateDir("root/src/to_import/_name");
+    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(root.getUrl());
+    doTest();
+  }
+  
+  public void testRelativeImportIgnoringDirectories() throws IOException {
+    myFixture.getTempDirFixture().findOrCreateDir("to_import/testdata");
+    myFixture.getTempDirFixture().findOrCreateDir("to_import/.name");
+    myFixture.getTempDirFixture().findOrCreateDir("to_import/_name");
+    doTest();
+  }
+  
   public void testDoNotReportNonLastMultiResolvedImport() throws IOException {
     final VirtualFile root1 = myFixture.getTempDirFixture().findOrCreateDir("root1");
     final VirtualFile root2 = myFixture.getTempDirFixture().findOrCreateDir("root2");
@@ -94,6 +112,23 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureByText("a.go", "package foo; func bar() {}");
     myFixture.configureByText("b.go", "package foo; func init(){bar()}");
     myFixture.checkHighlighting();
+  }
+  
+  public void testInnerTypesFromTestDataPackage() throws Throwable {
+    final VirtualFile root = myFixture.getTempDirFixture().findOrCreateDir("root");
+    ApplicationManager.getApplication().runWriteAction(new ThrowableComputable<Object, Throwable>() {
+      @Override
+      public Object compute() throws Throwable {
+        VirtualFile file = myFixture.getTempDirFixture().findOrCreateDir("root/src/to_import/testdata").createChildData(this, "test.go");
+        myFixture.saveText(file, "package testdata;\n" +
+                                 "type Reader interface {\n" +
+                                 "\tRead(p []byte) (n int, err error)\n" +
+                                 "}");
+        return null;
+      }
+    });
+    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(root.getUrl());
+    doTest();
   }
   
   public void testInnerTypesFromOtherPackage() {

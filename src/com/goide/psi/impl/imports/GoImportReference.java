@@ -17,6 +17,7 @@
 package com.goide.psi.impl.imports;
 
 import com.goide.completion.GoCompletionUtil;
+import com.goide.util.GoUtil;
 import com.intellij.codeInsight.completion.CompletionUtil;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.TextRange;
@@ -26,6 +27,7 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferen
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,26 +57,43 @@ public class GoImportReference extends FileReference {
     if (isFirst()) {
       if (".".equals(getCanonicalText())) {
         PsiDirectory directory = getDirectory();
-        return directory != null ? new PsiElementResolveResult[]{new PsiElementResolveResult(directory)} : ResolveResult.EMPTY_ARRAY;
+        return isAllowed(directory) ? new PsiElementResolveResult[]{new PsiElementResolveResult(directory)} : ResolveResult.EMPTY_ARRAY;
       }
       else if ("..".equals(getCanonicalText())) {
         PsiDirectory directory = getDirectory();
         PsiDirectory grandParent = directory != null ? directory.getParentDirectory() : null;
-        return grandParent != null ? new PsiElementResolveResult[]{new PsiElementResolveResult(grandParent)} : ResolveResult.EMPTY_ARRAY;
+        return isAllowed(grandParent) ? new PsiElementResolveResult[]{new PsiElementResolveResult(grandParent)} : ResolveResult.EMPTY_ARRAY;
       }
     }
 
     if (isLast()) {
-      List<ResolveResult> filtered = ContainerUtil.filter(super.innerResolve(caseSensitive, file), new Condition<ResolveResult>() {
+      return filter2Array(super.innerResolve(caseSensitive, file), new Condition<ResolveResult>() {
         @Override
         public boolean value(@NotNull ResolveResult resolveResult) {
           PsiElement element = resolveResult.getElement();
-          return element != null && element instanceof PsiDirectory;
+          return element instanceof PsiDirectory && isAllowed(element);
         }
       });
-      return filtered.toArray(new ResolveResult[filtered.size()]);
     }
-    return super.innerResolve(caseSensitive, file);
+    return filter2Array(super.innerResolve(caseSensitive, file), new Condition<ResolveResult>() {
+      @Override
+      public boolean value(ResolveResult result) {
+        PsiElement element = result.getElement();
+        return isAllowed(element);
+      }
+    });
+  }
+
+  @NotNull
+  private static ResolveResult[] filter2Array(@NotNull ResolveResult[] collection, @NotNull Condition<ResolveResult> condition) {
+    List<ResolveResult> filtered = ContainerUtil.filter(collection, condition);
+    return filtered.toArray(new ResolveResult[filtered.size()]);
+  }
+
+  @Contract("null -> false")
+  private static boolean isAllowed(@Nullable PsiElement directory) {
+    return directory != null && directory instanceof PsiFileSystemItem &&
+           !GoUtil.directoryShouldBeExcluded((((PsiFileSystemItem)directory)).getVirtualFile());
   }
 
   @Override

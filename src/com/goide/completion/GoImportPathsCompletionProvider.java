@@ -41,7 +41,7 @@ public class GoImportPathsCompletionProvider extends CompletionProvider<Completi
         VirtualFile parent = file.getParent();
         if (parent == null) continue;
         String importPath = GoSdkUtil.getPathRelativeToSdkAndLibraries(parent, module.getProject(), module);
-        if (StringUtil.isEmpty(importPath)) continue;
+        if (StringUtil.isEmpty(importPath) || !GoUtil.importPathAllowed(importPath)) continue;
         result.addElement(GoCompletionUtil.createPackageLookupElement(importPath, false));
       }
     }

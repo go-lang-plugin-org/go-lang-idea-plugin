@@ -259,7 +259,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
         @NotNull
         @Override
         public Result visitFileEx(@NotNull VirtualFile file) {
-          if (GoUtil.shouldBeExcluded(file)) {
+          if (GoUtil.directoryShouldBeExcluded(file)) {
             result.add(file);
             LOG.info("Excluding part of GOPATH: " + file.getPath());
             return SKIP_CHILDREN;

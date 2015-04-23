@@ -42,6 +42,7 @@ import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.text.CharSequenceHashingStrategy;
 import gnu.trove.THashSet;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -53,7 +54,7 @@ import java.util.regex.Pattern;
 
 public class GoUtil {
   public static final String PLUGIN_VERSION = getPlugin().getVersion();
-  
+
   private static final String PLUGIN_ID = "ro.redeul.google.go";
   private static final Pattern FULL = Pattern.compile("\\w+_(\\w+)_(\\w+)");
   private static final Pattern SHORT = Pattern.compile("\\w+_(\\w+)");
@@ -61,7 +62,7 @@ public class GoUtil {
   private static final Set<CharSequence> MAC = set("darwin", "no", "unix", "posix", "notwin");
   private static final Set<CharSequence> WINDOWS = set("windows", "no");
   private static final Set<CharSequence> OS = set("openbsd", "plan9", "unix", "linux", "netbsd", "darwin", "dragonfly", "bsd", "windows",
-                                                 "posix", "freebsd", "notwin");
+                                                  "posix", "freebsd", "notwin");
 
   public static boolean allowed(@NotNull PsiFile file) {
     String name = StringUtil.trimEnd(FileUtil.getNameWithoutExtension(file.getName()), GoConstants.TEST_SUFFIX);
@@ -77,6 +78,17 @@ public class GoUtil {
       String os = matcher.group(1);
       if (!OS.contains(os)) return true;
       return os(os);
+    }
+
+    return !(file instanceof GoFile && !importPathAllowed(((GoFile)file).getImportPath()));
+  }
+
+  @Contract("null -> true")
+  public static boolean importPathAllowed(@Nullable String importPath) {
+    if (importPath != null) {
+      for (String part : StringUtil.split(importPath, "/")) {
+        if (dirNameToIgnore(part)) return false;
+      }
     }
     return true;
   }
@@ -103,7 +115,7 @@ public class GoUtil {
                                         boolean directory,
                                         @Nullable Condition<VirtualFile> fileFilter) {
     FileChooserDescriptor chooseDirectoryDescriptor = directory
-                                                      ? FileChooserDescriptorFactory.createSingleFolderDescriptor() 
+                                                      ? FileChooserDescriptorFactory.createSingleFolderDescriptor()
                                                       : FileChooserDescriptorFactory.createSingleLocalFileDescriptor();
     chooseDirectoryDescriptor.setRoots(project.getBaseDir());
     chooseDirectoryDescriptor.setShowFileSystemRoots(false);
@@ -127,7 +139,7 @@ public class GoUtil {
   }
 
   /**
-   * isReferenceTo optimization. Before complex checking via resolve we can say for sure that element 
+   * isReferenceTo optimization. Before complex checking via resolve we can say for sure that element
    * can't be a reference to given declaration in following cases:<br/>
    * – GoLabelRef can't be resolved to anything but GoLabelDefinition<br/>
    * – GoTypeReferenceExpression (not from receiver type) can't be resolved to anything but GoTypeSpec<br/>
@@ -189,9 +201,11 @@ public class GoUtil {
     });
   }
 
-  public static boolean shouldBeExcluded(@NotNull VirtualFile file) {
-    if (!file.isDirectory()) return false;
-    String fileName = file.getName();
-    return GoConstants.TESTDATA_NAME.equals(fileName) || StringUtil.startsWithChar(fileName, '.') || StringUtil.startsWithChar(fileName, '_');
+  public static boolean directoryShouldBeExcluded(@NotNull VirtualFile file) {
+    return file.isDirectory() && dirNameToIgnore(file.getName());
+  }
+
+  private static boolean dirNameToIgnore(@NotNull String name) {
+    return GoConstants.TESTDATA_NAME.equals(name) || StringUtil.startsWithChar(name, '.') || StringUtil.startsWithChar(name, '_');
   }
 }

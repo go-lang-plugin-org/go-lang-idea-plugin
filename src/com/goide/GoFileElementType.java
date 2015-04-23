@@ -17,9 +17,12 @@
 package com.goide;
 
 import com.goide.psi.GoFile;
+import com.goide.sdk.GoSdkUtil;
 import com.goide.stubs.GoFileStub;
 import com.goide.stubs.index.GoPackagesIndex;
+import com.goide.util.GoUtil;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.StubBuilder;
 import com.intellij.psi.stubs.*;
@@ -30,7 +33,7 @@ import java.io.IOException;
 
 public class GoFileElementType extends IStubFileElementType<GoFileStub> {
   public static final IStubFileElementType INSTANCE = new GoFileElementType();
-  public static final int VERSION = 6;
+  public static final int VERSION = 7;
 
   private GoFileElementType() {
     super("GO_FILE", GoLanguage.INSTANCE);
@@ -80,5 +83,14 @@ public class GoFileElementType extends IStubFileElementType<GoFileStub> {
   @Override
   public String getExternalId() {
     return "go.FILE";
+  }
+
+  @Override
+  public boolean shouldBuildStubFor(VirtualFile file) {
+    String importPathGuess = GoSdkUtil.getPathRelativeToSdkAndLibraries(file, null, null);
+    if (!GoUtil.importPathAllowed(importPathGuess)) {
+      return false;
+    }
+    return super.shouldBuildStubFor(file);
   }
 }
