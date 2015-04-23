@@ -60,8 +60,8 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   private static final String GO_LIB_NAME = "GOPATH";
   private static final Logger LOG = Logger.getInstance(GoModuleLibrariesInitializer.class);
   private static final String GO_LIBRARIES_NOTIFICATION_HAD_BEEN_SHOWN = "go.libraries.notification.had.been.shown";
-  private static final int DEFAULT_UPDATE_DELAY = 300;
-  private static int updateDelay = DEFAULT_UPDATE_DELAY;
+  private static final int UPDATE_DELAY = 300;
+  private static boolean isTestingMode = false;
 
   private final Set<VirtualFile> myFilesToWatch = ContainerUtil.newConcurrentSet();
   private final Alarm myAlarm;
@@ -103,12 +103,12 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   
   @TestOnly
   public static void setTestingMode(@NotNull Disposable disposable) {
-    updateDelay = 0;
+    isTestingMode = true;
     Disposer.register(disposable, new Disposable() {
       @Override
       public void dispose() {
         //noinspection AssignmentToStaticFieldFromInstanceMethod
-        updateDelay = DEFAULT_UPDATE_DELAY;
+        isTestingMode = false;
       }
     });
   }
@@ -138,12 +138,18 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   }
 
   private void scheduleUpdate() {
-    scheduleUpdate(updateDelay);
+    scheduleUpdate(UPDATE_DELAY);
   }
 
   private void scheduleUpdate(int delay) {
     myAlarm.cancelAllRequests();
-    myAlarm.addRequest(new UpdateRequest(), ApplicationManager.getApplication().isUnitTestMode() ? 0 : delay);
+    UpdateRequest updateRequest = new UpdateRequest();
+    if (isTestingMode) {
+      ApplicationManager.getApplication().invokeLater(updateRequest);
+    }
+    else {
+      myAlarm.addRequest(updateRequest, delay);
+    }
   }
 
   private void attachLibraries(@NotNull final Collection<VirtualFile> libraryRoots, final Set<VirtualFile> exclusions) {
