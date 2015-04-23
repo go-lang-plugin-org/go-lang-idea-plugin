@@ -78,8 +78,7 @@ public class GoImportReference extends FileReference {
     return filter2Array(super.innerResolve(caseSensitive, file), new Condition<ResolveResult>() {
       @Override
       public boolean value(ResolveResult result) {
-        PsiElement element = result.getElement();
-        return isAllowed(element);
+        return isAllowed(result.getElement());
       }
     });
   }
@@ -91,9 +90,9 @@ public class GoImportReference extends FileReference {
   }
 
   @Contract("null -> false")
-  private static boolean isAllowed(@Nullable PsiElement directory) {
-    return directory != null && directory instanceof PsiFileSystemItem &&
-           !GoUtil.directoryShouldBeExcluded((((PsiFileSystemItem)directory)).getVirtualFile());
+  public static boolean isAllowed(@Nullable PsiElement directory) {
+    return directory != null && directory instanceof PsiDirectory &&
+           !GoUtil.directoryShouldBeExcluded((((PsiDirectory)directory)).getVirtualFile());
   }
 
   @Override

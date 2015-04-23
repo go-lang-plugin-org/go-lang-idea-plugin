@@ -52,7 +52,17 @@ public class GoCompletionTest extends GoCompletionTestBase {
     myFixture.completeBasic();
     List<String> lookupElementStrings = myFixture.getLookupElementStrings();
     assertNotNull(lookupElementStrings);
-    assertSameElements(lookupElementStrings, "package1", "package1/pack", "package2", "package2/pack");
+    assertSameElements(lookupElementStrings, "package1/pack", "package2/pack");
+  }
+  
+  public void testImportRelativePackages() throws IOException {
+    myFixture.getTempDirFixture().createFile("package1/pack/test.go", "package foo");
+    myFixture.getTempDirFixture().createFile("package2/pack/test.go", "package bar");
+    myFixture.configureByText("test.go", "package foo; import `./pack<caret>`");
+    myFixture.completeBasic();
+    List<String> lookupElementStrings = myFixture.getLookupElementStrings();
+    assertNotNull(lookupElementStrings);
+    assertSameElements(lookupElementStrings, "package1", "package2");
   }
 
   public void testImportIgnoringDirectories() throws IOException {
@@ -61,7 +71,8 @@ public class GoCompletionTest extends GoCompletionTestBase {
     myFixture.getTempDirFixture().createFile("package/_workspace/test.go", "package pack");
     myFixture.configureByText("test.go", "package foo; import `package/<caret>`");
     myFixture.completeBasic();
-    assertNull(myFixture.getLookupElementStrings());
+    //noinspection ConstantConditions
+    assertEmpty(myFixture.getLookupElementStrings());
   }
 
   public void testDoNotCompleteFullPackagesForRelativeImports() throws IOException {

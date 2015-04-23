@@ -32,7 +32,16 @@ public class GoImportReferenceSet extends FileReferenceSet {
 
   @Override
   protected Condition<PsiFileSystemItem> getReferenceCompletionFilter() {
-    return DIRECTORY_FILTER;
+    if (!getPathString().startsWith("./") && !getPathString().startsWith("../")) {
+      //noinspection unchecked
+      return Condition.FALSE;
+    }
+    return new Condition<PsiFileSystemItem>() {
+      @Override
+      public boolean value(PsiFileSystemItem item) {
+        return GoImportReference.isAllowed(item);
+      }
+    };
   }
 
   @Nullable
