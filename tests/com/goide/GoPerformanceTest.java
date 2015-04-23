@@ -55,6 +55,15 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
   public void testUnusedImport() {
     doInspectionTest(new GoUnusedImportDeclaration(), (int)TimeUnit.MINUTES.toMillis(1));
   }
+  
+  public void testPerformanceA()  {
+    PlatformTestUtil.startPerformanceTest(getTestName(true), 10 * 1000, new ThrowableRunnable() {
+      @Override
+      public void run() throws Throwable {
+        myFixture.testHighlighting(true, false, false, getTestName(true) + ".go"); 
+      }
+    }).cpuBound().usesAllCPUCores().assertTiming();
+  }
 
   private void doInspectionTest(@NotNull InspectionProfileEntry tool, int expected) {
     if (!new File(myFixture.getTestDataPath(), "docker").exists()) {

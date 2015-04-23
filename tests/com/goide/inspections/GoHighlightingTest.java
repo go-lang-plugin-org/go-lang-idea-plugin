@@ -5,8 +5,6 @@ import com.goide.inspections.unresolved.*;
 import com.goide.project.GoModuleLibrariesService;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.LightProjectDescriptor;
-import com.intellij.testFramework.PlatformTestUtil;
-import com.intellij.util.ThrowableRunnable;
 
 import java.io.IOException;
 
@@ -80,15 +78,6 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testForRange()    { doTest(); }
   public void testMismatch()    { doTest(); }
   public void testStubParams()  { doTest(); }
-  
-  public void testPerformanceA()  {
-    PlatformTestUtil.startPerformanceTest(getTestName(true), 10 * 1000, new ThrowableRunnable() {
-      @Override
-      public void run() throws Throwable {
-        doTest(); 
-      }
-    }).cpuBound().usesAllCPUCores().assertTiming();
-  }
   
   public void testDoNotReportNonLastMultiResolvedImport() throws IOException {
     final VirtualFile root1 = myFixture.getTempDirFixture().findOrCreateDir("root1");
