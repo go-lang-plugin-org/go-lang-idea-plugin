@@ -25,8 +25,9 @@ public abstract class GoCompletionTestBase extends GoCodeInsightFixtureTestCase 
   protected String getBasePath() {
     return "completion";
   }
-  
+
   protected enum CheckType {EQUALS, INCLUDES, EXCLUDES}
+
   protected void doTestVariantsInner(CompletionType type, int count, CheckType checkType, String... variants) {
     myFixture.complete(type, count);
     List<String> stringList = myFixture.getLookupElementStrings();
@@ -68,7 +69,9 @@ public abstract class GoCompletionTestBase extends GoCodeInsightFixtureTestCase 
     doTestVariants(txt, CompletionType.BASIC, 1, CheckType.EQUALS, variants);
   }
 
-  protected void doCheckResult(@NotNull String before, @NotNull String after) { doCheckResult(before, after, null); }
+  protected void doCheckResult(@NotNull String before, @NotNull String after) {
+    doCheckResult(before, after, null);
+  }
 
   protected void doCheckResult(@NotNull String before, @NotNull String after, @Nullable Character c) {
     myFixture.configureByText("a.go", before);

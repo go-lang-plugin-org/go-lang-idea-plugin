@@ -100,6 +100,7 @@ public class GoCompletionUtil {
         .withTailText(calcTailText(f), true)
         .withLookupString(name.toLowerCase())
         .withLookupString((pkg + name).toLowerCase())
+        .withLookupString(pkg + name)
         .withPresentableText(pkg + name + paramText), priority);
   }
 
@@ -135,6 +136,7 @@ public class GoCompletionUtil {
     LookupElementBuilder builder = LookupElementBuilder.create(t, name)
       .withLookupString(name.toLowerCase())
       .withLookupString((pkg + name).toLowerCase())
+      .withLookupString(pkg + name)
       .withPresentableText(pkg + name)
       .withInsertHandler(handler)
       .withIcon(GoIcons.TYPE);
