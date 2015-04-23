@@ -12,6 +12,7 @@ public class GoConstants {
   public static final String GO_LIBRARIES_SERVICE_NAME = "GoLibraries";
   public static final String GO_LIBRARIES_CONFIG_FILE = "goLibraries.xml";
 
+  public static final String TESTDATA_NAME = "testdata";
   public static final String TEST_SUFFIX = "_test";
   public static final String TEST_SUFFIX_WITH_EXTENSION = "_test.go";
   public static final String MAIN = "main";

@@ -16,8 +16,10 @@
 
 package com.goide;
 
+import com.goide.project.GoApplicationLibrariesService;
 import com.goide.sdk.GoSdkType;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.projectRoots.ProjectJdkTable;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkModificator;
@@ -35,6 +37,12 @@ import java.io.IOException;
 
 abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsightFixtureTestCase {
   @Override
+  protected void tearDown() throws Exception {
+    GoApplicationLibrariesService.getInstance().setLibraryRootUrls();
+    super.tearDown();
+  }
+
+  @Override
   protected String getTestDataPath() {
     return new File("testData/" + getBasePath()).getAbsolutePath();
   }
@@ -45,6 +53,11 @@ abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsi
       public Sdk getSdk() {
         String version = "1.1.2";
         return createMockSdk("testData/mockSdk-" + version + "/", version);
+      }
+
+      @Override
+      public ModuleType getModuleType() {
+        return GoModuleType.getInstance();
       }
     };
   }

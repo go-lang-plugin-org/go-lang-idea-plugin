@@ -85,10 +85,10 @@ public abstract class GoLibrariesService extends SimpleModificationTracker imple
   
   public void setLibraryRootUrls(@NotNull Collection<String> libraryRootUrls) {
     if (!myState.getUrls().equals(libraryRootUrls)) {
+      myState.setUrls(libraryRootUrls);
       incModificationCount();
       ApplicationManager.getApplication().getMessageBus().syncPublisher(LIBRARIES_TOPIC).librariesChanged(libraryRootUrls);
     }
-    myState.setUrls(libraryRootUrls);
   }
 
   @NotNull

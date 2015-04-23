@@ -20,18 +20,21 @@ import com.goide.GoConstants;
 import com.goide.configuration.GoLibrariesConfigurableProvider;
 import com.goide.sdk.GoSdkService;
 import com.goide.sdk.GoSdkUtil;
+import com.goide.util.GoUtil;
 import com.intellij.ProjectTopics;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationListener;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleComponent;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ShowSettingsUtil;
+import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.*;
 import com.intellij.openapi.roots.impl.OrderEntryUtil;
@@ -39,25 +42,34 @@ import com.intellij.openapi.roots.impl.libraries.LibraryEx;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.roots.libraries.LibraryTable;
 import com.intellij.openapi.roots.libraries.LibraryTablesRegistrar;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.vfs.*;
 import com.intellij.util.Alarm;
 import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.messages.MessageBusConnection;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.TestOnly;
 
 import javax.swing.event.HyperlinkEvent;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.Set;
 
 public class GoModuleLibrariesInitializer implements ModuleComponent {
   private static final String GO_LIB_NAME = "GOPATH";
   private static final Logger LOG = Logger.getInstance(GoModuleLibrariesInitializer.class);
   private static final String GO_LIBRARIES_NOTIFICATION_HAD_BEEN_SHOWN = "go.libraries.notification.had.been.shown";
-  private static final int UPDATE_DELAY = 300;
+  private static final int DEFAULT_UPDATE_DELAY = 300;
+  private static int updateDelay = DEFAULT_UPDATE_DELAY;
 
   private final Set<VirtualFile> myFilesToWatch = ContainerUtil.newConcurrentSet();
   private final Alarm myAlarm;
+  private final MessageBusConnection myConnection;
 
-  @NotNull private final Set<String> myLastHandledRoots = ContainerUtil.newHashSet();
+  @NotNull private final Set<VirtualFile> myLastHandledRoots = ContainerUtil.newHashSet();
+  @NotNull private final Set<VirtualFile> myLastHandledExclusions = ContainerUtil.newHashSet();
+
   @NotNull private final Module myModule;
   @NotNull private final VirtualFileAdapter myFilesListener = new VirtualFileAdapter() {
     @Override
@@ -88,22 +100,34 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
       }
     }
   };
+  
+  @TestOnly
+  public static void setTestingMode(@NotNull Disposable disposable) {
+    updateDelay = 0;
+    Disposer.register(disposable, new Disposable() {
+      @Override
+      public void dispose() {
+        //noinspection AssignmentToStaticFieldFromInstanceMethod
+        updateDelay = DEFAULT_UPDATE_DELAY;
+      }
+    });
+  }
 
   public GoModuleLibrariesInitializer(@NotNull Module module) {
     myModule = module;
-    myAlarm = new Alarm(Alarm.ThreadToUse.POOLED_THREAD, myModule);
+    myAlarm = ApplicationManager.getApplication().isUnitTestMode() ? new Alarm() : new Alarm(Alarm.ThreadToUse.POOLED_THREAD, myModule);
+    myConnection = myModule.getMessageBus().connect();
   }
 
   @Override
   public void moduleAdded() {
     scheduleUpdate(0);
-
-    myModule.getMessageBus().connect().subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
+    myConnection.subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
       public void rootsChanged(final ModuleRootEvent event) {
         scheduleUpdate();
       }
     });
-    myModule.getMessageBus().connect().subscribe(GoLibrariesService.LIBRARIES_TOPIC, new GoLibrariesService.LibrariesListener() {
+    myConnection.subscribe(GoLibrariesService.LIBRARIES_TOPIC, new GoLibrariesService.LibrariesListener() {
       @Override
       public void librariesChanged(@NotNull Collection<String> newRootUrls) {
         scheduleUpdate();
@@ -114,61 +138,18 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   }
 
   private void scheduleUpdate() {
-    scheduleUpdate(UPDATE_DELAY);
+    scheduleUpdate(updateDelay);
   }
 
   private void scheduleUpdate(int delay) {
-    myAlarm.addRequest(new Runnable() {
-      public void run() {
-        final Project project = myModule.getProject();
-        if (GoSdkService.getInstance(project).isGoModule(GoModuleLibrariesInitializer.this.myModule)) {
-          final Set<String> libraryRootUrls = ContainerUtil.newLinkedHashSet();
-          VirtualFile[] contentRoots = ProjectRootManager.getInstance(project).getContentRoots();
-
-          final Collection<VirtualFile> candidates = GoSdkUtil.getGoPathsSources(project, myModule);
-          myFilesToWatch.clear();
-          for (VirtualFile file : candidates) {
-            addRootUrlsForGoPathFile(libraryRootUrls, contentRoots, file);
-          }
-          myFilesToWatch.addAll(candidates);
-
-          synchronized (myLastHandledRoots) {
-            if (!myLastHandledRoots.equals(libraryRootUrls)) {
-              myLastHandledRoots.clear();
-              myLastHandledRoots.addAll(libraryRootUrls);
-
-              ApplicationManager.getApplication().invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                  if (!project.isDisposed() && GoSdkService.getInstance(project).isGoModule(GoModuleLibrariesInitializer.this.myModule)) {
-                    attachLibraries(libraryRootUrls);
-                  }
-                }
-              });
-            }
-          }
-        }
-        else {
-          synchronized (myLastHandledRoots) {
-            myLastHandledRoots.clear();
-            ApplicationManager.getApplication().invokeLater(new Runnable() {
-              @Override
-              public void run() {
-                if (!project.isDisposed() && !GoSdkService.getInstance(project).isGoModule(GoModuleLibrariesInitializer.this.myModule)) {
-                  removeLibraryIfNeeded();
-                }
-              }
-            });
-          }
-        }
-      }
-    }, delay);
+    myAlarm.cancelAllRequests();
+    myAlarm.addRequest(new UpdateRequest(), ApplicationManager.getApplication().isUnitTestMode() ? 0 : delay);
   }
 
-  private void attachLibraries(@NotNull final Set<String> libraryRootUrls) {
+  private void attachLibraries(@NotNull final Collection<VirtualFile> libraryRoots, final Set<VirtualFile> exclusions) {
     ApplicationManager.getApplication().assertIsDispatchThread();
 
-    if (!libraryRootUrls.isEmpty()) {
+    if (!libraryRoots.isEmpty()) {
       ApplicationManager.getApplication().runWriteAction(new Runnable() {
         @Override
         public void run() {
@@ -176,15 +157,15 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
           final LibraryOrderEntry goLibraryEntry = OrderEntryUtil.findLibraryOrderEntry(model, getLibraryName());
 
           if (goLibraryEntry != null && goLibraryEntry.isValid()) {
-            final Library goLibrary = goLibraryEntry.getLibrary();
-            if (goLibrary != null && !((LibraryEx)goLibrary).isDisposed()) {
-              fillLibrary(goLibrary, libraryRootUrls);
+            final Library library = goLibraryEntry.getLibrary();
+            if (library != null && !((LibraryEx)library).isDisposed()) {
+              fillLibrary(library, libraryRoots, exclusions);
             }
           }
           else {
             final LibraryTable libraryTable = LibraryTablesRegistrar.getInstance().getLibraryTable(myModule.getProject());
             final Library library = libraryTable.createLibrary(getLibraryName());
-            fillLibrary(library, libraryRootUrls);
+            fillLibrary(library, libraryRoots, exclusions);
             ModuleRootModificationUtil.addDependency(myModule, library);
           }
         }
@@ -196,19 +177,22 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     }
   }
 
-  private String getLibraryName() {
+  public String getLibraryName() {
     return GO_LIB_NAME + " <" + myModule.getName() + ">";
   }
 
-  private static void fillLibrary(@NotNull Library library, @NotNull Set<String> libraryRootUrls) {
+  private static void fillLibrary(@NotNull Library library, @NotNull Collection<VirtualFile> libraryRoots, Set<VirtualFile> exclusions) {
     ApplicationManager.getApplication().assertWriteAccessAllowed();
 
     final Library.ModifiableModel libraryModel = library.getModifiableModel();
     for (String root : libraryModel.getUrls(OrderRootType.CLASSES)) {
       libraryModel.removeRoot(root, OrderRootType.CLASSES);
     }
-    for (String libraryRootUrl : libraryRootUrls) {
-      libraryModel.addRoot(libraryRootUrl, OrderRootType.CLASSES);
+    for (VirtualFile libraryRoot : libraryRoots) {
+      libraryModel.addRoot(libraryRoot, OrderRootType.CLASSES);
+    }
+    for (VirtualFile root : exclusions) {
+      ((LibraryEx.ModifiableModelEx)libraryModel).addExcludedRoot(root.getUrl());
     }
     libraryModel.commit();
   }
@@ -248,33 +232,37 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     }
   }
 
-  private static void addRootUrlsForGoPathFile(@NotNull final Set<String> libraryRootUrls,
-                                               @NotNull final VirtualFile[] contentRoots,
-                                               @NotNull VirtualFile file) {
+  @NotNull
+  private static Set<VirtualFile> gatherExclusions(@NotNull Collection<VirtualFile> roots, @NotNull final VirtualFile... exclusions) {
+    final Set<VirtualFile> result = ContainerUtil.newHashSet(exclusions);
 
-    VfsUtilCore.visitChildrenRecursively(file, new VirtualFileVisitor() {
-      @NotNull
-      @Override
-      public Result visitFileEx(@NotNull VirtualFile file) {
-        for (VirtualFile contentRoot : contentRoots) {
-          if (VfsUtilCore.isAncestor(contentRoot, file, false)) {
-            LOG.info("The directory is child of project root, skipping: " + file.getPath());
-            libraryRootUrls.remove(contentRoot.getUrl());
+    // todo: remove ancestors removing after 15.1
+    Iterator<VirtualFile> iterator = roots.iterator();
+    while (iterator.hasNext()) {
+      VirtualFile file = iterator.next();
+      for (VirtualFile exclusion : exclusions) {
+        if (VfsUtilCore.isAncestor(exclusion, file, false)) {
+          iterator.remove();
+          break;
+        }
+      }
+    }
+
+    for (VirtualFile file : roots) {
+      VfsUtilCore.visitChildrenRecursively(file, new VirtualFileVisitor() {
+        @NotNull
+        @Override
+        public Result visitFileEx(@NotNull VirtualFile file) {
+          if (GoUtil.shouldBeExcluded(file)) {
+            result.add(file);
+            LOG.info("Excluding part of GOPATH: " + file.getPath());
             return SKIP_CHILDREN;
           }
-          else if (VfsUtilCore.isAncestor(file, contentRoot, true)) {
-            LOG.info("The directory is ancestor of project root, looking deeper: " + file.getPath());
-            libraryRootUrls.remove(contentRoot.getUrl());
-            return CONTINUE;
-          }
-          else {
-            LOG.info("Add directory to GOPATH library: " + file.getPath());
-            libraryRootUrls.add(file.getUrl());
-          }
+          return CONTINUE;
         }
-        return SKIP_CHILDREN;
-      }
-    });
+      });
+    }
+    return result;
   }
 
   private static void showNotification(@NotNull final Project project) {
@@ -321,7 +309,12 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
 
   @Override
   public void disposeComponent() {
+    Disposer.dispose(myConnection);
+    Disposer.dispose(myAlarm);
     VirtualFileManager.getInstance().removeVirtualFileListener(myFilesListener);
+    myLastHandledRoots.clear();
+    myLastHandledExclusions.clear();
+    myFilesToWatch.clear();
   }
 
   @Override
@@ -331,12 +324,63 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
 
   @Override
   public void projectClosed() {
-    VirtualFileManager.getInstance().removeVirtualFileListener(myFilesListener);
+    disposeComponent();
   }
 
   @NotNull
   @Override
   public String getComponentName() {
     return getClass().getName();
+  }
+
+  private class UpdateRequest implements Runnable {
+    public void run() {
+      final Project project = myModule.getProject();
+      if (GoSdkService.getInstance(project).isGoModule(GoModuleLibrariesInitializer.this.myModule)) {
+        synchronized (myLastHandledRoots) {
+          final Collection<VirtualFile> libraryRoots = ContainerUtil.newHashSet();
+          for (VirtualFile packages : GoSdkUtil.getGoPathsSources(project, myModule)) {
+            Collections.addAll(libraryRoots, packages.getChildren());
+          }
+          final Set<VirtualFile> excludedRoots = gatherExclusions(libraryRoots,
+                                                                  ProjectRootManager.getInstance(project).getContentRoots());
+
+          ProgressIndicatorProvider.checkCanceled();
+          if (!myLastHandledRoots.equals(libraryRoots) || !myLastHandledExclusions.equals(excludedRoots)) {
+            myFilesToWatch.clear();
+            myFilesToWatch.addAll(libraryRoots);
+
+            ApplicationManager.getApplication().invokeLater(new Runnable() {
+              @Override
+              public void run() {
+                if (!myModule.isDisposed() && GoSdkService.getInstance(project).isGoModule(GoModuleLibrariesInitializer.this.myModule)) {
+                  attachLibraries(libraryRoots, excludedRoots);
+                }
+              }
+            });
+
+            myLastHandledRoots.clear();
+            myLastHandledRoots.addAll(libraryRoots);
+
+            myLastHandledExclusions.clear();
+            myLastHandledExclusions.addAll(excludedRoots);
+          }
+        }
+      }
+      else {
+        synchronized (myLastHandledRoots) {
+          myLastHandledRoots.clear();
+          myLastHandledExclusions.clear();
+          ApplicationManager.getApplication().invokeLater(new Runnable() {
+            @Override
+            public void run() {
+              if (!myModule.isDisposed() && GoSdkService.getInstance(project).isGoModule(GoModuleLibrariesInitializer.this.myModule)) {
+                removeLibraryIfNeeded();
+              }
+            }
+          });
+        }
+      }
+    }
   }
 }

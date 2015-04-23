@@ -20,12 +20,6 @@ public class GoCoverageCalculationTest extends GoCodeInsightFixtureTestCase {
     GoModuleLibrariesService.getInstance(myModule).setLibraryRootUrls(getRoot().getUrl());
   }
 
-  @Override
-  public void tearDown() throws Exception {
-    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls();
-    super.tearDown();
-  }
-
   public void testCoverage() throws IOException {
     assertEquals("75% statements", annotate().getFileCoverageInformationString(myFixture.findFileInTempDir(file())));
   }

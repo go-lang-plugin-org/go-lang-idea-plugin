@@ -188,4 +188,10 @@ public class GoUtil {
       }
     });
   }
+
+  public static boolean shouldBeExcluded(@NotNull VirtualFile file) {
+    if (!file.isDirectory()) return false;
+    String fileName = file.getName();
+    return GoConstants.TESTDATA_NAME.equals(fileName) || StringUtil.startsWithChar(fileName, '.') || StringUtil.startsWithChar(fileName, '_');
+  }
 }

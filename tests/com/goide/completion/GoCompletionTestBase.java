@@ -22,12 +22,6 @@ public abstract class GoCompletionTestBase extends GoCodeInsightFixtureTestCase 
   }
 
   @Override
-  protected void tearDown() throws Exception {
-    GoModuleLibrariesService.getInstance(myModule).setLibraryRootUrls();
-    super.tearDown();
-  }
-
-  @Override
   protected String getBasePath() {
     return "completion";
   }

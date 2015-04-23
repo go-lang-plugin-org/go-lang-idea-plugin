@@ -9,7 +9,6 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.util.ThrowableComputable;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,7 +30,6 @@ public class GoConsoleFilterTest extends GoCodeInsightFixtureTestCase {
   @Override
   protected void tearDown() throws Exception {
     myFilter = null;
-    GoApplicationLibrariesService.getInstance().setLibraryRootUrls(ArrayUtil.EMPTY_STRING_ARRAY);
     super.tearDown();
   }
   

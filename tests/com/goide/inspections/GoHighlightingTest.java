@@ -98,12 +98,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.getTempDirFixture().findOrCreateDir("root1/src/to_import/shared");
     myFixture.getTempDirFixture().findOrCreateDir("root2/src/to_import/shared");
     GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(root1.getUrl(), root2.getUrl());
-    try {
-      doTest();
-    }
-    finally {
-      GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls();
-    }
+    doTest();
   }
   
   public void testLocalScope() {
