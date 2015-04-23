@@ -45,6 +45,19 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "func test(){fmt.Fprintln(<caret>)}");
   }
   
+  public void testDuplicateAutoImport() {
+    doCheckResult("package main; \n" +
+                  "func test(){Fprintl<caret>}",
+                  "package main;\n" +
+                  "import \"fmt\"\n" +
+                  "func test(){fmt.Fprintln(<caret>)}");
+    myFixture.type(");Fprintl");
+    myFixture.completeBasic();
+    myFixture.checkResult("package main;\n" +
+                          "import \"fmt\"\n" +
+                          "func test(){fmt.Fprintln();fmt.Fprintln()}");
+  }
+  
   public void testForceAutoImportBlankImports() {
     doCheckResult("package main; \n" +
                   "import _ \"fmt\"\n" +
