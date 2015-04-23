@@ -192,17 +192,19 @@ public class GoSdkUtil {
   }
 
   @Nullable
-  public static String getPathRelativeToSdkAndLibraries(@NotNull VirtualFile file, @NotNull Project project, @Nullable Module module) {
-    Collection<VirtualFile> roots = ContainerUtil.newLinkedHashSet(getGoPathsSources(project, module));
-    ContainerUtil.addIfNotNull(roots, getSdkSrcDir(project, module));
-    
-    for (VirtualFile root : roots) {
-      String relativePath = VfsUtilCore.getRelativePath(file, root, '/');
-      if (StringUtil.isNotEmpty(relativePath)) {
-        return relativePath;
+  public static String getPathRelativeToSdkAndLibraries(@NotNull VirtualFile file, @Nullable Project project, @Nullable Module module) {
+    if (project != null) {
+      Collection<VirtualFile> roots = ContainerUtil.newLinkedHashSet(getGoPathsSources(project, module));
+      ContainerUtil.addIfNotNull(roots, getSdkSrcDir(project, module));
+
+      for (VirtualFile root : roots) {
+        String relativePath = VfsUtilCore.getRelativePath(file, root, '/');
+        if (StringUtil.isNotEmpty(relativePath)) {
+          return relativePath;
+        }
       }
     }
-
+    
     String filePath = file.getPath();
     int src = filePath.lastIndexOf("/src/");
     if (src > -1) {
