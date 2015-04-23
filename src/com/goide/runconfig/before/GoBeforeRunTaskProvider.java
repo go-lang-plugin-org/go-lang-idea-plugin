@@ -1,43 +1,26 @@
 package com.goide.runconfig.before;
 
-import com.goide.GoConstants;
 import com.goide.GoIcons;
 import com.goide.runconfig.GoRunConfigurationBase;
 import com.goide.sdk.GoSdkService;
-import com.goide.sdk.GoSdkUtil;
+import com.goide.util.GoExecutor;
 import com.intellij.execution.BeforeRunTaskProvider;
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.ExecutionHelper;
-import com.intellij.execution.ExecutionModes;
-import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.RunConfiguration;
-import com.intellij.execution.process.CapturingProcessAdapter;
-import com.intellij.execution.process.KillableColoredProcessHandler;
-import com.intellij.execution.process.OSProcessHandler;
+import com.intellij.execution.process.ProcessAdapter;
 import com.intellij.execution.process.ProcessEvent;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.util.concurrency.Semaphore;
 import com.intellij.util.ui.UIUtil;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBeforeRunTask> {
   public static final Key<GoCommandBeforeRunTask> ID = Key.create("GoBeforeRunTask");
@@ -121,7 +104,6 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
                              final GoCommandBeforeRunTask task) {
     final Semaphore done = new Semaphore();
     final Ref<Boolean> result = new Ref<Boolean>(false);
-    final List<Exception> exceptions = new ArrayList<Exception>();
 
     GoRunConfigurationBase goRunConfiguration = (GoRunConfigurationBase)configuration;
     final Module module = goRunConfiguration.getConfigurationModule().getModule();
@@ -135,66 +117,23 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
         GoSdkService sdkService = GoSdkService.getInstance(project);
         if (!sdkService.isGoModule(module)) return;
 
-        final String executablePath = sdkService.getGoExecutablePath(module);
-        if (StringUtil.isEmpty(executablePath)) return;
-
-        FileDocumentManager.getInstance().saveAllDocuments();
-
         done.down();
-        Task.Backgroundable t = new Task.Backgroundable(project, "Executing " + task.toString(), true) {
-          public void run(@NotNull ProgressIndicator indicator) {
-            try {
-              GeneralCommandLine commandLine = new GeneralCommandLine();
-              final String goPath = GoSdkUtil.retrieveGoPath(module);
-              commandLine.setExePath(executablePath);
-              commandLine.getEnvironment().put(GoConstants.GO_PATH, goPath);
-              commandLine.withWorkDirectory(workingDirectory);
-              commandLine.getParametersList().addParametersString(task.getCommand());
-
-              try {
-                final OSProcessHandler processHandler = new KillableColoredProcessHandler(commandLine);
-                final CapturingProcessAdapter processAdapter = new CapturingProcessAdapter() {
-                  @Override
-                  public void processTerminated(@NotNull ProcessEvent event) {
-                    super.processTerminated(event);
-                    result.set(event.getExitCode() == 0);
-                    done.up();
-                    ApplicationManager.getApplication().invokeLater(new Runnable() {
-                      @Override
-                      public void run() {
-                        ApplicationManager.getApplication().runWriteAction(new Runnable() {
-                          @Override
-                          public void run() {
-                            VirtualFileManager.getInstance().syncRefresh();
-                          }
-                        });
-                      }
-                    });
-                  }
-                };
-                processHandler.addProcessListener(processAdapter);
-                processHandler.startNotify();
-                ExecutionHelper.executeExternalProcess(project, processHandler, new ExecutionModes.SameThreadMode(60), commandLine);
-
-                ExecutionHelper.showOutput(project, processAdapter.getOutput(), "Executing `" + task.toString() + "`", null, !result.get());
-              }
-              catch (ExecutionException e) {
-                exceptions.add(e);
-              }
-            }
-            finally {
+        GoExecutor.in(module).withParameters(task.getCommand())
+          .withWorkDirectory(workingDirectory)
+          .showOutputOnError()
+          .showNotifications(false)
+          .withPresentableName("Executing `" + task.toString() + "`")
+          .withProcessListener(new ProcessAdapter() {
+            @Override
+            public void processTerminated(ProcessEvent event) {
               done.up();
+              result.set(event.getExitCode() == 0);
             }
-          }
-        };
-        ProgressManager.getInstance().run(t);
+          })
+          .executeWithProgress(false);
       }
     });
 
-    if (!exceptions.isEmpty()) {
-      ExecutionHelper.showExceptions(project, exceptions, Collections.<Exception>emptyList(),
-                                     "Cannot run `" + task.toString() + "`", null);
-    }
     done.waitFor();
     return result.get();
   }
