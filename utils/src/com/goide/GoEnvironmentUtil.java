@@ -1,5 +1,6 @@
 package com.goide;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.PathMacros;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
@@ -36,6 +37,8 @@ public class GoEnvironmentUtil {
 
   @Nullable
   public static String retrieveGoPathFromEnvironment() {
+    if (ApplicationManager.getApplication().isUnitTestMode()) return null;
+    
     String path = EnvironmentUtil.getValue(GoConstants.GO_PATH);
     return path != null ? path : PathMacros.getInstance().getValue(GoConstants.GO_PATH);
   }
