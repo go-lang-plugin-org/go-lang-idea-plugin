@@ -230,29 +230,38 @@ public class GoCompletionUtil {
   public static LookupElement createPackageLookupElement(@NotNull String importPath,
                                                          @Nullable PsiElement context,
                                                          boolean forType) {
-    return PrioritizedLookupElement.withPriority(
-      LookupElementBuilder.create(importPath).withIcon(GoIcons.PACKAGE).withInsertHandler(forType ? Lazy.PACKAGE_INSERT_HANDLER : null),
-      calculatePackagePriority(importPath, context));
+    return createPackageLookupElement(importPath, getContextImportPath(context), forType);
   }
 
-  public static int calculatePackagePriority(@NotNull String importPath, @Nullable PsiElement context) {
+  @NotNull
+  public static LookupElement createPackageLookupElement(@NotNull String importPath, @Nullable String contextImportPath, boolean forType) {
+    return PrioritizedLookupElement.withPriority(
+      LookupElementBuilder.create(importPath).withIcon(GoIcons.PACKAGE).withInsertHandler(forType ? Lazy.PACKAGE_INSERT_HANDLER : null),
+      calculatePackagePriority(importPath, contextImportPath));
+  }
+
+  public static int calculatePackagePriority(@NotNull String importPath, @Nullable String currentPath) {
     int priority = PACKAGE_PRIORITY;
-    if (context != null) {
-      String currentPath = null;
-      if (context instanceof PsiDirectory) {
-        currentPath = GoSdkUtil.getImportPath((PsiDirectory)context);
-      }
-      else {
-        PsiFile file = context.getContainingFile();
-        if (file instanceof GoFile) {
-          currentPath = ((GoFile)file).getImportPath();
-        }
-      }
-      if (StringUtil.isNotEmpty(currentPath) && (currentPath.startsWith(importPath) || importPath.startsWith(currentPath))) {
-        priority += importPath.length() - StringUtil.difference(currentPath, importPath);
-      }
+    if (StringUtil.isNotEmpty(currentPath) && (currentPath.startsWith(importPath) || importPath.startsWith(currentPath))) {
+      priority += importPath.length() - StringUtil.difference(currentPath, importPath);
     }
     return priority - StringUtil.countChars(importPath, '/') - StringUtil.countChars(importPath, '.');
+  }
+
+  @Nullable
+  public static String getContextImportPath(@Nullable PsiElement context) {
+    if (context == null) return null;
+    String currentPath = null;
+    if (context instanceof PsiDirectory) {
+      currentPath = GoSdkUtil.getImportPath((PsiDirectory)context);
+    }
+    else {
+      PsiFile file = context.getContainingFile();
+      if (file instanceof GoFile) {
+        currentPath = ((GoFile)file).getImportPath();
+      }
+    }
+    return currentPath;
   }
 
   @NotNull

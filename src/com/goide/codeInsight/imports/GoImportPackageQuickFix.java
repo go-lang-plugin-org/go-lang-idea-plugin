@@ -229,16 +229,17 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
   }
 
   private static class MyImportsComparator implements Comparator<String> {
-    private final PsiElement myContext;
+    @Nullable
+    private final String myContextImportPath;
 
-    public MyImportsComparator(PsiElement context) {
-      myContext = context;
+    public MyImportsComparator(@Nullable PsiElement context) {
+      myContextImportPath = GoCompletionUtil.getContextImportPath(context);
     }
 
     @Override
     public int compare(@NotNull String s1, @NotNull String s2) {
-      int result = Comparing.compare(GoCompletionUtil.calculatePackagePriority(s2, myContext),
-                                     GoCompletionUtil.calculatePackagePriority(s1, myContext));
+      int result = Comparing.compare(GoCompletionUtil.calculatePackagePriority(s2, myContextImportPath),
+                                     GoCompletionUtil.calculatePackagePriority(s1, myContextImportPath));
       return result != 0 ? result : Comparing.compare(s1, s2);
     }
   }

@@ -37,13 +37,14 @@ public class GoImportPathsCompletionProvider extends CompletionProvider<Completi
 
   public static void addCompletions(@NotNull CompletionResultSet result, @Nullable Module module, @Nullable PsiElement context) {
     if (module != null) {
+      String contextImportPath = GoCompletionUtil.getContextImportPath(context);
       GlobalSearchScope scope = GoUtil.moduleScope(module);
       for (VirtualFile file : FileTypeIndex.getFiles(GoFileType.INSTANCE, scope)) {
         VirtualFile parent = file.getParent();
         if (parent == null) continue;
         String importPath = GoSdkUtil.getPathRelativeToSdkAndLibraries(parent, module.getProject(), module);
         if (StringUtil.isEmpty(importPath) || !GoUtil.importPathAllowed(importPath)) continue;
-        result.addElement(GoCompletionUtil.createPackageLookupElement(importPath, context, false));
+        result.addElement(GoCompletionUtil.createPackageLookupElement(importPath, contextImportPath, false));
       }
     }
   }
