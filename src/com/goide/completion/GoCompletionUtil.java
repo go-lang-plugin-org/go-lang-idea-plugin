@@ -236,7 +236,9 @@ public class GoCompletionUtil {
   @NotNull
   public static LookupElement createPackageLookupElement(@NotNull String importPath, @Nullable String contextImportPath, boolean forType) {
     return PrioritizedLookupElement.withPriority(
-      LookupElementBuilder.create(importPath).withIcon(GoIcons.PACKAGE).withInsertHandler(forType ? Lazy.PACKAGE_INSERT_HANDLER : null),
+      LookupElementBuilder.create(importPath)
+        .withLookupString(importPath.substring(Math.max(0, importPath.lastIndexOf('/'))))
+        .withIcon(GoIcons.PACKAGE).withInsertHandler(forType ? Lazy.PACKAGE_INSERT_HANDLER : null),
       calculatePackagePriority(importPath, contextImportPath));
   }
 
