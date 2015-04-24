@@ -242,8 +242,17 @@ public class GoCompletionUtil {
 
   public static int calculatePackagePriority(@NotNull String importPath, @Nullable String currentPath) {
     int priority = PACKAGE_PRIORITY;
-    if (StringUtil.isNotEmpty(currentPath) && (currentPath.startsWith(importPath) || importPath.startsWith(currentPath))) {
-      priority += importPath.length() - StringUtil.difference(currentPath, importPath);
+    if (StringUtil.isNotEmpty(currentPath)) {
+      String[] givenSplit = importPath.split("/");
+      String[] contextSplit = currentPath.split("/");
+      for (int i = 0; i < contextSplit.length && i < givenSplit.length; i++) {
+        if (contextSplit[i].equals(givenSplit[i])) {
+          priority++;
+        }
+        else {
+          break;
+        }
+      }
     }
     return priority - StringUtil.countChars(importPath, '/') - StringUtil.countChars(importPath, '.');
   }
