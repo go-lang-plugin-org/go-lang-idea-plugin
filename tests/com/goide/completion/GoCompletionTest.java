@@ -44,7 +44,7 @@ public class GoCompletionTest extends GoCompletionTestBase {
     myFixture.completeBasic();
     myFixture.checkResultByFile(getTestName(true) + "_after.go");
   }
-  
+
   public void testImportPackages() throws IOException {
     myFixture.getTempDirFixture().createFile("package1/pack/test.go", "package foo");
     myFixture.getTempDirFixture().createFile("package2/pack/test.go", "package bar");
@@ -54,7 +54,7 @@ public class GoCompletionTest extends GoCompletionTestBase {
     assertNotNull(lookupElementStrings);
     assertSameElements(lookupElementStrings, "package1/pack", "package2/pack");
   }
-  
+
   public void testImportRelativePackages() throws IOException {
     myFixture.getTempDirFixture().createFile("package1/pack/test.go", "package foo");
     myFixture.getTempDirFixture().createFile("package2/pack/test.go", "package bar");
@@ -74,7 +74,7 @@ public class GoCompletionTest extends GoCompletionTestBase {
     //noinspection ConstantConditions
     assertEmpty(myFixture.getLookupElementStrings());
   }
-  
+
   public void testDoNotCompleteFullPackagesForRelativeImports() throws IOException {
     myFixture.getTempDirFixture().createFile("package1/pack/test.go", "package foo");
     myFixture.getTempDirFixture().createFile("package2/pack/test.go", "package bar");
@@ -85,18 +85,28 @@ public class GoCompletionTest extends GoCompletionTestBase {
     assertSameElements(lookupElementStrings, "package1", "package2");
   }
 
-  public void testImportsPriority() throws IOException {
+  public void testDoNotCompleteOwnImportPath() throws IOException {
     myFixture.getTempDirFixture().createFile("package/long/long/path/test.go", "package pack");
-    myFixture.getTempDirFixture().createFile("package/middle/path/test.go", "package pack");
-    myFixture.getTempDirFixture().createFile("package/short/test.go", "package pack");
     VirtualFile testFile = myFixture.getTempDirFixture()
       .createFile("package/very/long/path/but/same/package/test.go", "package pack; import `package/<caret>`");
     myFixture.configureFromExistingVirtualFile(testFile);
     myFixture.completeBasic();
-    myFixture.assertPreferredCompletionItems(0, "package/very/long/path/but/same/package", "package/short", 
-                                             "package/middle/path", "package/long/long/path");
+    myFixture.checkResult("package pack; import `package/long/long/path`");
   }
-  
+
+  public void testImportsPriority() throws IOException {
+    myFixture.getTempDirFixture().createFile("package/long/but/similar/path/test.go", "package pack");
+    myFixture.getTempDirFixture().createFile("package/very/long/path/test.go", "package pack");
+    myFixture.getTempDirFixture().createFile("package/middle/path/test.go", "package pack");
+    myFixture.getTempDirFixture().createFile("package/short/test.go", "package pack");
+    VirtualFile testFile = myFixture.getTempDirFixture()
+      .createFile("package/long/but/similar/test.go", "package pack; import `package/<caret>`");
+    myFixture.configureFromExistingVirtualFile(testFile);
+    myFixture.completeBasic();
+    myFixture.assertPreferredCompletionItems(0, "package/long/but/similar/path", "package/short", "package/middle/path", 
+                                             "package/very/long/path");
+  }
+
   public void testDoNotHidePopupOnSlash() throws IOException {
     myFixture.getTempDirFixture().createFile("package1/pack/test.go", "package foo");
     myFixture.getTempDirFixture().createFile("package2/pack/test.go", "package bar");
@@ -154,7 +164,7 @@ public class GoCompletionTest extends GoCompletionTestBase {
     doCheckResult("package main;func main(){a:=struct{Demo int}{Demo:1};println(a.D<caret>)}",
                   "package main;func main(){a:=struct{Demo int}{Demo:1};println(a.Demo<caret>)}");
   }
-  
+
   public void testCompleteFieldWithoutColonAfterKey() {
     doCheckResult("package main; type Test struct { ID string }; func t() { var n Test; _ = &Test{ID: n.I<caret>} }",
                   "package main; type Test struct { ID string }; func t() { var n Test; _ = &Test{ID: n.ID<caret>} }");
@@ -387,16 +397,16 @@ public class GoCompletionTest extends GoCompletionTestBase {
   public void testStructField() {
     doTestInclude(TYPE + "func main() {WaitGroup{<caret>}};", "counter", "waiters", "sema");
   }
-  
+
   public void testStructField2() {
     doTestInclude(TYPE + "func main() {WaitGroup{foo:bar, <caret>}};", "counter", "waiters", "sema");
   }
-  
+
   public void testStructFieldReplace() {
     doCheckResult(TYPE + "func main() { WaitGroup{sem<caret>abc} }", TYPE + "func main() { WaitGroup{sema:<caret>} }",
                   Lookup.REPLACE_SELECT_CHAR);
   }
-  
+
   public void testNoStructFieldAfterColon() {
     doTestExclude(TYPE + "func main() {WaitGroup{sema:<caret>}};", "counter", "waiters", "sema");
   }
