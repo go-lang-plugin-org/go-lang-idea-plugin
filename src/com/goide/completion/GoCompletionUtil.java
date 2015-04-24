@@ -19,6 +19,7 @@ package com.goide.completion;
 import com.goide.GoIcons;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
+import com.goide.sdk.GoSdkUtil;
 import com.goide.stubs.GoFieldDefinitionStub;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.completion.InsertionContext;
@@ -51,14 +52,14 @@ public class GoCompletionUtil {
   public static final int VAR_PRIORITY = 15;
   public static final int LABEL_PRIORITY = 15;
   public static final int PACKAGE_PRIORITY = 5;
-  
+
   private static class Lazy {
     private static final SingleCharInsertHandler DIR_INSERT_HANDLER = new SingleCharInsertHandler('/');
     private static final SingleCharInsertHandler PACKAGE_INSERT_HANDLER = new SingleCharInsertHandler('.');
   }
 
   private GoCompletionUtil() {
-    
+
   }
 
   @NotNull
@@ -70,7 +71,7 @@ public class GoCompletionUtil {
   public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoNamedSignatureOwner f,
                                                                   @Nullable String name, // for performance
                                                                   boolean showPackage,
-                                                                  @Nullable InsertHandler<LookupElement> h, 
+                                                                  @Nullable InsertHandler<LookupElement> h,
                                                                   double priority) {
     Icon icon = f instanceof GoMethodDeclaration || f instanceof GoMethodSpec ? GoIcons.METHOD : GoIcons.FUNCTION;
     GoSignature signature = f.getSignature();
@@ -155,7 +156,7 @@ public class GoCompletionUtil {
   }
 
   @NotNull
-  public static LookupElement createTypeConversionLookupElement(@NotNull GoTypeSpec t, 
+  public static LookupElement createTypeConversionLookupElement(@NotNull GoTypeSpec t,
                                                                 @NotNull String name,
                                                                 boolean showPackage,
                                                                 @Nullable InsertHandler<LookupElement> insertHandler,
@@ -217,19 +218,41 @@ public class GoCompletionUtil {
       name = spec != null ? spec.getName() : null;
     }
     return StringUtil.isNotEmpty(name) ? " " + UIUtil.rightArrow() + " " + name : null;
-  } 
+  }
 
   @Nullable
   public static LookupElement createPackageLookupElement(@NotNull GoImportSpec spec, @Nullable String name) {
     name = name != null ? name : ObjectUtils.notNull(spec.getAlias(), spec.getLocalPackageName());
-    return createPackageLookupElement(name, true);
+    return createPackageLookupElement(name, spec, true);
   }
 
   @NotNull
-  public static LookupElement createPackageLookupElement(@NotNull String str, boolean forType) {
+  public static LookupElement createPackageLookupElement(@NotNull String importPath,
+                                                         @Nullable PsiElement context,
+                                                         boolean forType) {
     return PrioritizedLookupElement.withPriority(
-      LookupElementBuilder.create(str).withIcon(GoIcons.PACKAGE).withInsertHandler(forType ? Lazy.PACKAGE_INSERT_HANDLER : null),
-      PACKAGE_PRIORITY);
+      LookupElementBuilder.create(importPath).withIcon(GoIcons.PACKAGE).withInsertHandler(forType ? Lazy.PACKAGE_INSERT_HANDLER : null),
+      calculatePackagePriority(importPath, context));
+  }
+
+  public static int calculatePackagePriority(@NotNull String importPath, @Nullable PsiElement context) {
+    int priority = PACKAGE_PRIORITY;
+    if (context != null) {
+      String currentPath = null;
+      if (context instanceof PsiDirectory) {
+        currentPath = GoSdkUtil.getImportPath((PsiDirectory)context);
+      }
+      else {
+        PsiFile file = context.getContainingFile();
+        if (file instanceof GoFile) {
+          currentPath = ((GoFile)file).getImportPath();
+        }
+      }
+      if (StringUtil.isNotEmpty(currentPath) && (currentPath.startsWith(importPath) || importPath.startsWith(currentPath))) {
+        priority += importPath.length() - StringUtil.difference(currentPath, importPath);
+      }
+    }
+    return priority - StringUtil.countChars(importPath, '/') - StringUtil.countChars(importPath, '.');
   }
 
   @NotNull

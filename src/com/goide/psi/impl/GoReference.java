@@ -128,7 +128,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
         // @formatter:off
         if (element instanceof GoNamedSignatureOwner)return GoCompletionUtil.createFunctionOrMethodLookupElement((GoNamedSignatureOwner)element);
         else if (element instanceof GoTypeSpec)      return forTypes ? GoCompletionUtil.createTypeLookupElement((GoTypeSpec)element) : GoCompletionUtil.createTypeConversionLookupElement((GoTypeSpec)element);
-        else if (element instanceof PsiDirectory)    return GoCompletionUtil.createPackageLookupElement(((PsiDirectory)element).getName(), true);
+        else if (element instanceof PsiDirectory)    return GoCompletionUtil.createPackageLookupElement(((PsiDirectory)element).getName(), element, true);
         else if (element instanceof GoNamedElement)  return GoCompletionUtil.createVariableLikeLookupElement((GoNamedElement)element);
         else if (element instanceof PsiNamedElement) return LookupElementBuilder.create((PsiNamedElement)element);
         else if (element instanceof GoImportSpec)    return GoCompletionUtil.createPackageLookupElement(((GoImportSpec)element), state.get(ACTUAL_NAME));

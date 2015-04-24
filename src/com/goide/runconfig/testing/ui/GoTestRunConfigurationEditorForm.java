@@ -126,7 +126,7 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
                                            int offset,
                                            @NotNull String prefix,
                                            @NotNull final CompletionResultSet result) {
-        GoImportPathsCompletionProvider.addCompletions(result, myCommonSettingsPanel.getSelectedModule());
+        GoImportPathsCompletionProvider.addCompletions(result, myCommonSettingsPanel.getSelectedModule(), null);
       }
     }.createEditor(myProject);
   }
@@ -157,7 +157,7 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
     }
     myTestKindComboBox.addActionListener(new ActionListener() {
       @Override
-      public void actionPerformed(ActionEvent e) {
+      public void actionPerformed(@NotNull ActionEvent e) {
         onTestKindChanged();
       }
     });

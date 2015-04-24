@@ -12,6 +12,7 @@ import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -31,10 +32,10 @@ public class GoImportPathsCompletionProvider extends CompletionProvider<Completi
     String newPrefix = parameters.getEditor().getDocument().getText(TextRange.create(pathRange.getStartOffset(), parameters.getOffset()));
     result = result.withPrefixMatcher(result.getPrefixMatcher().cloneWithPrefix(newPrefix));
 
-    addCompletions(result, ModuleUtilCore.findModuleForPsiElement(parameters.getPosition()));
+    addCompletions(result, ModuleUtilCore.findModuleForPsiElement(parameters.getPosition()), parameters.getOriginalFile());
   }
 
-  public static void addCompletions(@NotNull CompletionResultSet result, @Nullable Module module) {
+  public static void addCompletions(@NotNull CompletionResultSet result, @Nullable Module module, @Nullable PsiElement context) {
     if (module != null) {
       GlobalSearchScope scope = GoUtil.moduleScope(module);
       for (VirtualFile file : FileTypeIndex.getFiles(GoFileType.INSTANCE, scope)) {
@@ -42,7 +43,7 @@ public class GoImportPathsCompletionProvider extends CompletionProvider<Completi
         if (parent == null) continue;
         String importPath = GoSdkUtil.getPathRelativeToSdkAndLibraries(parent, module.getProject(), module);
         if (StringUtil.isEmpty(importPath) || !GoUtil.importPathAllowed(importPath)) continue;
-        result.addElement(GoCompletionUtil.createPackageLookupElement(importPath, false));
+        result.addElement(GoCompletionUtil.createPackageLookupElement(importPath, context, false));
       }
     }
   }

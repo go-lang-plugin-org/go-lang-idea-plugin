@@ -33,6 +33,7 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.CachedValueProvider;
@@ -43,6 +44,7 @@ import com.intellij.util.ObjectUtils;
 import com.intellij.util.SystemProperties;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.text.VersionComparatorUtil;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -110,7 +112,7 @@ public class GoSdkUtil {
     }
     return result;
   }
-  
+
   /**
    * Retrieves source directories from GOPATH env-variable.
    * This method doesn't consider user defined libraries,
@@ -193,6 +195,24 @@ public class GoSdkUtil {
   }
 
   @Nullable
+  @Contract("null -> null")
+  public static String getImportPath(@Nullable final PsiDirectory psiDirectory) {
+    if (psiDirectory == null) {
+      return null;
+    }
+    return CachedValuesManager.getCachedValue(psiDirectory, new CachedValueProvider<String>() {
+      @Nullable
+      @Override
+      public Result<String> compute() {
+        Project project = psiDirectory.getProject();
+        Module module = ModuleUtilCore.findModuleForPsiElement(psiDirectory);
+        String path = getPathRelativeToSdkAndLibraries(psiDirectory.getVirtualFile(), project, module);
+        return Result.create(path, getSdkAndLibrariesCacheDependencies(psiDirectory));
+      }
+    });
+  }
+
+  @Nullable
   public static String getPathRelativeToSdkAndLibraries(@NotNull VirtualFile file, @Nullable Project project, @Nullable Module module) {
     if (project != null) {
       Collection<VirtualFile> roots = ContainerUtil.newLinkedHashSet(getGoPathsSources(project, module));
@@ -205,7 +225,7 @@ public class GoSdkUtil {
         }
       }
     }
-    
+
     String filePath = file.getPath();
     int src = filePath.lastIndexOf("/src/");
     if (src > -1) {
@@ -295,10 +315,10 @@ public class GoSdkUtil {
     return isAppEngine(path) ? path + GoConstants.APP_ENGINE_GO_ROOT_DIRECTORY_PATH : path;
   }
 
+
   private static boolean isAppEngine(@NotNull String path) {
     return new File(path, GoConstants.APP_ENGINE_MARKER_FILE).exists();
   }
-
 
   @NotNull
   public static Collection<VirtualFile> getSdkDirectoriesToAttach(@NotNull String sdkPath, @NotNull String versionString) {
@@ -316,7 +336,7 @@ public class GoSdkUtil {
     return getSdkAndLibrariesCacheDependencies(context.getProject(), ModuleUtilCore.findModuleForPsiElement(context),
                                                ArrayUtil.append(extra, context));
   }
-  
+
   @NotNull
   public static Collection<Object> getSdkAndLibrariesCacheDependencies(@NotNull Project project, @Nullable Module module, Object... extra) {
     Collection<Object> dependencies = ContainerUtil.<Object>newArrayList(GoLibrariesService.getModificationTrackers(project, module));

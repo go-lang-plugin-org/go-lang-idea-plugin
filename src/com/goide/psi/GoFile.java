@@ -30,9 +30,6 @@ import com.goide.util.GoUtil;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
 import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.FileViewProvider;
@@ -47,7 +44,6 @@ import com.intellij.util.ArrayFactory;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -63,7 +59,7 @@ public class GoFile extends PsiFileBase {
 
   @Nullable
   public String getImportPath() {
-    return getImportPath(getParent());
+    return GoSdkUtil.getImportPath(getParent());
   }
   
   @Nullable
@@ -178,7 +174,7 @@ public class GoFile extends PsiFileBase {
           if (!spec.isForSideEffects()) {
             PsiDirectory resolve = spec.getImportString().resolve();
             extraDeps.add(resolve);
-            String path = getImportPath(resolve);
+            String path = GoSdkUtil.getImportPath(resolve);
             if (StringUtil.isNotEmpty(path)) {
               map.put(path, spec);
             }
@@ -416,23 +412,5 @@ public class GoFile extends PsiFileBase {
                                                                   IElementType elementType,
                                                                   ArrayFactory<E> f) {
     return Arrays.asList(stub.getChildrenByType(elementType, f));
-  }
-  
-  @Nullable
-  @Contract("null -> null")
-  private static String getImportPath(@Nullable final PsiDirectory psiDirectory) {
-    if (psiDirectory == null) {
-      return null;
-    }
-    return CachedValuesManager.getCachedValue(psiDirectory, new CachedValueProvider<String>() {
-      @Nullable
-      @Override
-      public Result<String> compute() {
-        Project project = psiDirectory.getProject();      
-        Module module = ModuleUtilCore.findModuleForPsiElement(psiDirectory);
-        String path = GoSdkUtil.getPathRelativeToSdkAndLibraries(psiDirectory.getVirtualFile(), project, module);
-        return Result.create(path, GoSdkUtil.getSdkAndLibrariesCacheDependencies(psiDirectory));
-      }
-    });
   }
 }

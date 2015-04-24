@@ -74,7 +74,7 @@ public class GoCompletionTest extends GoCompletionTestBase {
     //noinspection ConstantConditions
     assertEmpty(myFixture.getLookupElementStrings());
   }
-
+  
   public void testDoNotCompleteFullPackagesForRelativeImports() throws IOException {
     myFixture.getTempDirFixture().createFile("package1/pack/test.go", "package foo");
     myFixture.getTempDirFixture().createFile("package2/pack/test.go", "package bar");
@@ -83,6 +83,18 @@ public class GoCompletionTest extends GoCompletionTestBase {
     List<String> lookupElementStrings = myFixture.getLookupElementStrings();
     assertNotNull(lookupElementStrings);
     assertSameElements(lookupElementStrings, "package1", "package2");
+  }
+
+  public void testImportsPriority() throws IOException {
+    myFixture.getTempDirFixture().createFile("package/long/long/path/test.go", "package pack");
+    myFixture.getTempDirFixture().createFile("package/middle/path/test.go", "package pack");
+    myFixture.getTempDirFixture().createFile("package/short/test.go", "package pack");
+    VirtualFile testFile = myFixture.getTempDirFixture()
+      .createFile("package/very/long/path/but/same/package/test.go", "package pack; import `package/<caret>`");
+    myFixture.configureFromExistingVirtualFile(testFile);
+    myFixture.completeBasic();
+    myFixture.assertPreferredCompletionItems(0, "package/very/long/path/but/same/package", "package/short", 
+                                             "package/middle/path", "package/long/long/path");
   }
   
   public void testDoNotHidePopupOnSlash() throws IOException {
