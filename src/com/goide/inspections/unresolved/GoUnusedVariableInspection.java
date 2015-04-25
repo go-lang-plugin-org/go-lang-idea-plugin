@@ -19,9 +19,12 @@ package com.goide.inspections.unresolved;
 import com.goide.inspections.GoInspectionBase;
 import com.goide.psi.*;
 import com.intellij.codeInspection.LocalInspectionToolSession;
+import com.intellij.codeInspection.LocalQuickFixOnPsiElement;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -29,7 +32,6 @@ import com.intellij.util.Query;
 import org.jetbrains.annotations.NotNull;
 
 public class GoUnusedVariableInspection extends GoInspectionBase {
-
   @NotNull
   @Override
   protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder,
@@ -64,7 +66,30 @@ public class GoUnusedVariableInspection extends GoInspectionBase {
           }
           else {
             if (checkGlobal()) return;
-            holder.registerProblem(o, "Unused variable " + "'" + o.getText() + "'", ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+            holder.registerProblem(o, "Unused variable " + "'" + o.getText() + "'", ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
+                                   new LocalQuickFixOnPsiElement(o) {
+                                     @NotNull
+                                     @Override
+                                     public String getText() {
+                                       return "Rename to _";
+                                     }
+
+                                     @Override
+                                     public void invoke(@NotNull Project project,
+                                                        @NotNull PsiFile file,
+                                                        @NotNull PsiElement element,
+                                                        @NotNull PsiElement element1) {
+                                       if (element instanceof GoVarDefinition) {
+                                         ((GoVarDefinition)element).setName("_");
+                                       }
+                                     }
+
+                                     @NotNull
+                                     @Override
+                                     public String getFamilyName() {
+                                       return "Go";
+                                     }
+                                   });
           }
         }
       }

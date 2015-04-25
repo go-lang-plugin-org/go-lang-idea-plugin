@@ -1,11 +1,10 @@
 package com.goide.quickfix;
 
 import com.goide.inspections.unresolved.GoUnresolvedReferenceInspection;
-import com.intellij.codeInsight.intention.IntentionAction;
-
-import java.util.List;
 
 public class GoCreateTypeQuickFixTest extends GoQuickFixTestBase {
+  public static final String CREATE_TYPE_A = "Create type 'A'";
+
   @Override
   protected void setUp() throws Exception {
     super.setUp();
@@ -18,12 +17,6 @@ public class GoCreateTypeQuickFixTest extends GoQuickFixTestBase {
     return "testData/quickfixes/create-type/";
   }
 
-  public void testSimple() { doTest("Create type 'A'"); }
-
-  public void testProhibited() {
-    String testName = getTestName(true);
-    myFixture.configureByFile(testName + ".go");
-    List<IntentionAction> availableIntentions = myFixture.filterAvailableIntentions("Create type 'A'");
-    assertEmpty(availableIntentions);
-  }
+  public void testSimple()      { doTest(CREATE_TYPE_A);      }
+  public void testProhibited()  { doTestNoFix(CREATE_TYPE_A); }
 }
