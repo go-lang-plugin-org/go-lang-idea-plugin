@@ -6,7 +6,7 @@ func main() {
     fmt.Println(test())
     
     y := 1
-    <error>y, _</error> := 10, 1
+        <error>y, _</error> := 10, 1
     fmt.Println(y)
 }
 

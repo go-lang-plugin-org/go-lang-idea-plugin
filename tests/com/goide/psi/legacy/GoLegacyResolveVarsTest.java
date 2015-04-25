@@ -55,6 +55,7 @@ public class GoLegacyResolveVarsTest extends GoLegacyResolveTestBase {
   public void testResolveToFunctionName()                           { doTest(); }
   public void testVarInSwitchTypeWithNamedSwitchGuard()             { doTest(); }
   public void testVarDeclarationInSelectCommClauseSend()            { doTest(); }
+  public void testVarDeclarationOutsideSwitch()                     { doTest(); }
 
   public void testFromDefaultImportedPackage()                      { doDirTest(); }
   public void testLocalPackageDefinitionsShouldBeResolvedFirst()    { doDirTest(); }

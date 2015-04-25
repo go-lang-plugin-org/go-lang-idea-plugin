@@ -16,13 +16,13 @@
 
 package com.goide.psi.impl;
 
-import com.goide.psi.GoBlock;
-import com.goide.psi.GoCompositeElement;
+import com.goide.psi.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,6 +51,16 @@ public class GoCompositeElementImpl extends ASTWrapperPsiElement implements GoCo
                                                    @NotNull PsiElement place) {
     if (!o.shouldGoDeeper()) return processor.execute(o, state);
     if (!processor.execute(o, state)) return false;
+    if ((
+          o instanceof GoSwitchStatement ||
+          o instanceof GoIfStatement ||
+          o instanceof GoForStatement ||
+          o instanceof GoBlock
+        ) 
+        && processor instanceof GoScopeProcessorBase) {
+      if (!PsiTreeUtil.isAncestor(o, ((GoScopeProcessorBase)processor).myOrigin, false)) return true;
+    }
+
     return o instanceof GoBlock ?
            ResolveUtil.processChildrenFromTop(o, processor, state, lastParent, place) :
            ResolveUtil.processChildren(o, processor, state, lastParent, place);
