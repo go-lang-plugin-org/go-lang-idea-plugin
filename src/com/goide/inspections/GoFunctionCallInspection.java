@@ -56,20 +56,19 @@ public class GoFunctionCallInspection extends LocalInspectionTool {
               expectedSize += size == 0 ? 1 : size;
             }
 
-            if (expectedSize != actualSize) {
-              if (actualSize == 1) {
-                GoExpression first = ContainerUtil.getFirstItem(list);
-                PsiReference firstRef = GoPsiImplUtil.getCallReference(first);
-                PsiElement firstResolve = firstRef != null ? firstRef.resolve() : null;
-                if (firstResolve instanceof GoFunctionOrMethodDeclaration) {
-                  int resultCount = GoInspectionUtil.getFunctionResultCount((GoFunctionOrMethodDeclaration)firstResolve);
-                  if (resultCount == expectedSize) return;
-                }
+            if (actualSize == 1) {
+              GoExpression first = ContainerUtil.getFirstItem(list);
+              PsiReference firstRef = GoPsiImplUtil.getCallReference(first);
+              PsiElement firstResolve = firstRef != null ? firstRef.resolve() : null;
+              if (firstResolve instanceof GoFunctionOrMethodDeclaration) {
+                actualSize = GoInspectionUtil.getFunctionResultCount((GoFunctionOrMethodDeclaration)firstResolve);
               }
-
-              String tail = " arguments in call to " + expression.getText();
-              holder.registerProblem(o.getArgumentList(), actualSize > expectedSize ? "too many" + tail : "not enough" + tail);
             }
+            
+            if (actualSize == expectedSize) return;
+
+            String tail = " arguments in call to " + expression.getText();
+            holder.registerProblem(o.getArgumentList(), actualSize > expectedSize ? "too many" + tail : "not enough" + tail);
           }
         }
       }
