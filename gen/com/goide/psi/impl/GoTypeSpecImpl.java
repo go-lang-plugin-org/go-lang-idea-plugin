@@ -50,4 +50,8 @@ public class GoTypeSpecImpl extends GoNamedElementImpl<GoTypeSpecStub> implement
     return GoPsiImplUtil.getMethods(this);
   }
 
+  public boolean shouldGoDeeper() {
+    return GoPsiImplUtil.shouldGoDeeper(this);
+  }
+
 }

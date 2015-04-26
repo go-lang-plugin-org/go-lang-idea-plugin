@@ -788,6 +788,10 @@ public class GoPsiImplUtil {
     return false;
   }
 
+  public static boolean shouldGoDeeper(@SuppressWarnings("UnusedParameters") GoTypeSpec o) {
+    return false;
+  }
+
   public static boolean isForSideEffects(@NotNull GoImportSpec o) {
     return "_".equals(o.getAlias());
   }
