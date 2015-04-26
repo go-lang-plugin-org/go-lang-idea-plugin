@@ -189,6 +189,9 @@
     <localInspection language="go" displayName="Duplicate function"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoDuplicateFunctionInspection"/>
+    <localInspection language="go" displayName="Duplicate method"
+                     groupName="Go" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoDuplicateMethodInspection"/>
     <localInspection language="go" displayName="Duplicate argument"
                      groupName="Go" enabledByDefault="true" level="ERROR" 
                      implementationClass="com.goide.inspections.GoDuplicateArgumentInspection"/>

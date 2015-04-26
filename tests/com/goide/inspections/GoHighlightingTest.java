@@ -23,6 +23,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       GoUnusedFunctionInspection.class,
       GoAssignmentToConstantInspection.class,
       GoDuplicateFunctionInspection.class,
+      GoDuplicateMethodInspection.class,
       GoDuplicateArgumentInspection.class,
       GoDuplicateReturnArgumentInspection.class,
       GoFunctionVariadicParameterInspection.class,
@@ -146,6 +147,18 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testDuplicatesInOnePackage() {
     myFixture.configureByText("a.go", "package foo; func init() {bar()}; func bar() {}");
     myFixture.configureByText("b.go", "package foo; func <error>bar</error>() {}");
+    myFixture.checkHighlighting();
+  }
+
+  public void testDuplicateMethodsInOnePackage() {
+    myFixture.configureByText("a.go", "package main; type Foo int; func (f Foo) bar(a, b string) {}");
+    myFixture.configureByText("b.go", "package main; func (a *Foo) <error>bar</error>() {}");
+    myFixture.checkHighlighting();
+  }
+
+  public void testNoDuplicateMethodsInOnePackage() {
+    myFixture.configureByText("a.go", "package main; type Foo int; func (f Foo) bar() {}");
+    myFixture.configureByText("b.go", "package main; type Baz int; func (f Baz) bar() {}");
     myFixture.checkHighlighting();
   }
   
