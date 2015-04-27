@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.goide.psi.impl.imports;
 
+import com.goide.GoConstants;
 import com.goide.completion.GoCompletionUtil;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.completion.CompletionUtil;
@@ -50,7 +51,7 @@ public class GoImportReference extends FileReference {
   @NotNull
   @Override
   protected ResolveResult[] innerResolve(boolean caseSensitive, @NotNull PsiFile file) {
-    if (isFirst() && isLast() && "builtin".equals(getFileReferenceSet().getPathString())) {
+    if (isFirst() && isLast() && GoConstants.BUILTIN_PACKAGE_NAME.equals(getFileReferenceSet().getPathString())) {
       // import "builtin" can't be resolved
       return ResolveResult.EMPTY_ARRAY;
     }

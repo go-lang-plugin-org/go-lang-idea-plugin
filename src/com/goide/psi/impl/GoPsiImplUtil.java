@@ -16,6 +16,7 @@
 
 package com.goide.psi.impl;
 
+import com.goide.GoConstants;
 import com.goide.GoTypes;
 import com.goide.psi.*;
 import com.goide.psi.impl.imports.GoImportReferenceSet;
@@ -61,7 +62,7 @@ public class GoPsiImplUtil {
   public static boolean builtin(@NotNull PsiElement resolve) {
     PsiFile file = resolve.getContainingFile();
     if (!(file instanceof GoFile)) return false;
-    return "builtin".equals(((GoFile)file).getPackageName()) && file.getName().equals("builtin.go");
+    return isBuiltinFile(file);
   }
 
   public static boolean isPanic(@NotNull GoCallExpr o) {
@@ -71,9 +72,14 @@ public class GoPsiImplUtil {
       PsiElement resolve = reference != null ? reference.resolve() : null;
       if (!(resolve instanceof GoFunctionDeclaration)) return false;
       GoFile file = ((GoFunctionDeclaration)resolve).getContainingFile();
-      return StringUtil.equals(file.getPackageName(), "builtin") && StringUtil.equals(file.getName(), "builtin.go");
+      return isBuiltinFile(file);
     }
     return false;
+  }
+
+  private static boolean isBuiltinFile(@NotNull PsiFile file) {
+    return StringUtil.equals(((GoFile)file).getPackageName(), GoConstants.BUILTIN_PACKAGE_NAME)
+           && StringUtil.equals(file.getName(), GoConstants.BUILTIN_FILE_NAME);
   }
 
   @NotNull

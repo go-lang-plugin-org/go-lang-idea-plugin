@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -171,7 +171,7 @@ public class GoUtil {
         }
         String path = ((GoFile)definitionFile).getImportPath();
         if (!((GoFile)referenceFile).getImportedPackagesMap().containsKey(path)) {
-          return "builtin".equals(path);
+          return GoConstants.BUILTIN_PACKAGE_NAME.equals(path);
         }
       }
     }
