@@ -242,7 +242,6 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   private static Set<VirtualFile> gatherExclusions(@NotNull Collection<VirtualFile> roots, @NotNull final VirtualFile... exclusions) {
     final Set<VirtualFile> result = ContainerUtil.newHashSet(exclusions);
 
-    // todo: remove ancestors removing after 15.1
     Iterator<VirtualFile> iterator = roots.iterator();
     while (iterator.hasNext()) {
       VirtualFile file = iterator.next();
