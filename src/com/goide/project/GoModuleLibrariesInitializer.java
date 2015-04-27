@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -283,13 +283,13 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     }
 
     if (!shownAlready) {
-      final Notification notification = new Notification(GoConstants.GO_NOTIFICATION_GROUP, "GOPATH was detected",
+      final Notification notification = GoConstants.GO_NOTIFICATION_GROUP.createNotification("GOPATH was detected",
                                                          "We've been detected some libraries from your GOPATH.\n" +
                                                          "You may want to add extra libraries in <a href='configure'>Go Libraries configuration</a>.",
                                                          NotificationType.INFORMATION, new NotificationListener.Adapter() {
         @Override
         protected void hyperlinkActivated(@NotNull Notification notification, @NotNull HyperlinkEvent event) {
-          if (event.getDescription().equals("configure")) {
+          if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED && event.getDescription().equals("configure")) {
             showModulesConfigurable(project);
           }
         }
@@ -345,7 +345,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
       if (GoSdkService.getInstance(project).isGoModule(GoModuleLibrariesInitializer.this.myModule)) {
         synchronized (myLastHandledRoots) {
           final Collection<VirtualFile> libraryRoots = ContainerUtil.newHashSet();
-          for (VirtualFile packages : GoSdkUtil.getGoPathsSources(project, myModule)) {
+          for (VirtualFile packages : GoSdkUtil.getGoPathSources(project, myModule)) {
             Collections.addAll(libraryRoots, packages.getChildren());
           }
           final Set<VirtualFile> excludedRoots = gatherExclusions(libraryRoots,

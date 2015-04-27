@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,7 +53,7 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
   public GoLibrariesConfigurableProvider(@NotNull Project project) {
     myProject = project;
   }
-  
+
   @Nullable
   @Override
   public Configurable createConfigurable() {
@@ -108,13 +108,14 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
       protected List<UnnamedConfigurable> createConfigurables() {
         final List<UnnamedConfigurable> result = ContainerUtil.newArrayList();
 
-        String[] urlsFromEnv = ContainerUtil.map2Array(GoSdkUtil.getGoPathsSourcesFromEnvironment(), String.class,
-                                                             new Function<VirtualFile, String>() {
-                                                               @Override
-                                                               public String fun(VirtualFile file) {
-                                                                 return file.getUrl();
-                                                               }
-                                                             });
+        String[] urlsFromEnv = ContainerUtil.map2Array(ContainerUtil.mapNotNull(GoSdkUtil.getGoPathsRootsFromEnvironment(),
+                                                                                new GoSdkUtil.RetrieveSourceDirectoryFunction()),
+                                                       String.class, new Function<VirtualFile, String>() {
+            @Override
+            public String fun(VirtualFile file) {
+              return file.getUrl();
+            }
+          });
         result.add(new GoLibrariesConfigurable("Global libraries", GoApplicationLibrariesService.getInstance(), urlsFromEnv));
         if (!myProject.isDefault()) {
           result.add(new GoLibrariesConfigurable("Project libraries", GoProjectLibrariesService.getInstance(myProject)));

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,10 +29,7 @@ import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.UserDataHolder;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VfsUtilCore;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.openapi.vfs.*;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -101,25 +98,39 @@ public class GoSdkUtil {
     return (psiBuiltin instanceof GoFile) ? (GoFile)psiBuiltin : null;
   }
 
-  @NotNull
-  public static Collection<VirtualFile> getGoPathsSources(@NotNull Project project, @Nullable Module module) {
-    Collection<VirtualFile> result = getGoPathsSourcesFromEnvironment();
-    Collection<? extends VirtualFile> userDefinedLibraries = module != null
-                                                             ? GoLibrariesService.getUserDefinedLibraries(module)
-                                                             : GoLibrariesService.getUserDefinedLibraries(project);
-    for (VirtualFile file : userDefinedLibraries) {
-      ContainerUtil.addIfNotNull(result, findSourceDirectory(file));
+  @Nullable
+  public static VirtualFile findExecutableInGoPath(@NotNull String executableName, @NotNull Project project, @Nullable Module module) {
+    executableName = GoEnvironmentUtil.getBinaryFileNameForPath(executableName);
+    Collection<VirtualFile> roots = getGoPathRoots(project, module);
+    for (VirtualFile file : roots) {
+      VirtualFile child = file.findChild("bin/" + executableName);
+      if (child != null) {
+        return child;
+      }
     }
-    return result;
+    File fromPath = PathEnvironmentVariableUtil.findInPath(executableName);
+    return fromPath != null ? VfsUtil.findFileByIoFile(fromPath, true) : null;
   }
 
+  @NotNull
+  private static Collection<VirtualFile> getGoPathRoots(@NotNull Project project, @Nullable Module module) {
+    Collection<VirtualFile> roots = ContainerUtil.newArrayList(getGoPathsRootsFromEnvironment());
+    roots.addAll(module != null ? GoLibrariesService.getUserDefinedLibraries(module) : GoLibrariesService.getUserDefinedLibraries(project));
+    return roots;
+  }
+
+  @NotNull
+  public static Collection<VirtualFile> getGoPathSources(@NotNull Project project, @Nullable Module module) {
+    return ContainerUtil.mapNotNull(getGoPathRoots(project, module), new RetrieveSourceDirectoryFunction());
+  }
+  
   /**
-   * Retrieves source directories from GOPATH env-variable.
+   * Retrieves root directories from GOPATH env-variable.
    * This method doesn't consider user defined libraries,
-   * for that case use {@link {@link this#getGoPathsSources(Project, Module)}
+   * for that case use {@link {@link this#getGoPathRoots(Project, Module)}
    */
   @NotNull
-  public static Collection<VirtualFile> getGoPathsSourcesFromEnvironment() {
+  public static Collection<VirtualFile> getGoPathsRootsFromEnvironment() {
     Set<VirtualFile> result = ContainerUtil.newLinkedHashSet();
     String goPath = GoEnvironmentUtil.retrieveGoPathFromEnvironment();
     if (goPath != null) {
@@ -128,15 +139,10 @@ public class GoSdkUtil {
         if (home != null) {
           s = s.replaceAll("\\$HOME", home);
         }
-        ContainerUtil.addIfNotNull(result, findSourceDirectory(LocalFileSystem.getInstance().findFileByPath(s)));
+        ContainerUtil.addIfNotNull(result, LocalFileSystem.getInstance().findFileByPath(s));
       }
     }
     return result;
-  }
-
-  @Nullable
-  private static VirtualFile findSourceDirectory(@Nullable VirtualFile file) {
-    return file == null || FileUtil.namesEqual("src", file.getName()) ? file : file.findChild("src");
   }
 
   @NotNull
@@ -185,7 +191,7 @@ public class GoSdkUtil {
 
   @Nullable
   public static VirtualFile findFileByRelativeToLibrariesPath(@NotNull String path, @NotNull Project project, @Nullable Module module) {
-    for (VirtualFile root : getGoPathsSources(project, module)) {
+    for (VirtualFile root : getGoPathSources(project, module)) {
       VirtualFile file = root.findFileByRelativePath(path);
       if (file != null) {
         return file;
@@ -215,7 +221,7 @@ public class GoSdkUtil {
   @Nullable
   public static String getPathRelativeToSdkAndLibraries(@NotNull VirtualFile file, @Nullable Project project, @Nullable Module module) {
     if (project != null) {
-      Collection<VirtualFile> roots = ContainerUtil.newLinkedHashSet(getGoPathsSources(project, module));
+      Collection<VirtualFile> roots = ContainerUtil.newLinkedHashSet(getGoPathSources(project, module));
       ContainerUtil.addIfNotNull(roots, getSdkSrcDir(project, module));
 
       for (VirtualFile root : roots) {
@@ -343,5 +349,12 @@ public class GoSdkUtil {
     ContainerUtil.addAllNotNull(dependencies, GoSdkService.getInstance(project));
     ContainerUtil.addAllNotNull(dependencies, extra);
     return dependencies;
+  }
+
+  public static class RetrieveSourceDirectoryFunction implements Function<VirtualFile, VirtualFile> {
+    @Override
+    public VirtualFile fun(VirtualFile file) {
+      return file == null || FileUtil.namesEqual("src", file.getName()) ? file : file.findChild("src");
+    }
   }
 }

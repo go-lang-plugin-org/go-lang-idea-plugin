@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -122,7 +122,7 @@ public class GoConsoleFilter implements Filter {
 
   @Nullable
   private VirtualFile findInGoPath(@NotNull String fileName) {
-    for (VirtualFile goPathSrc : GoSdkUtil.getGoPathsSources(myProject, myModule)) {
+    for (VirtualFile goPathSrc : GoSdkUtil.getGoPathSources(myProject, myModule)) {
       VirtualFile virtualFile = goPathSrc.findFileByRelativePath(fileName);
       if (virtualFile != null) return virtualFile;
     }

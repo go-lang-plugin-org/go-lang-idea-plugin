@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -103,7 +103,7 @@ public class GoImportReferenceHelper extends FileReferenceHelper {
   @NotNull
   private static Collection<? extends VirtualFile> getPathsToLookup(@NotNull PsiElement element) {
     Module module = ModuleUtilCore.findModuleForPsiElement(element);
-    Set<VirtualFile> result = ContainerUtil.newLinkedHashSet(GoSdkUtil.getGoPathsSources(element.getProject(), module));
+    Set<VirtualFile> result = ContainerUtil.newLinkedHashSet(GoSdkUtil.getGoPathSources(element.getProject(), module));
     ContainerUtil.addIfNotNull(result, GoSdkUtil.getSdkSrcDir(element));
     return result;
   }

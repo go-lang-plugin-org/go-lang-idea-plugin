@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAction {
   @NotNull private final String myPackage;
@@ -49,8 +50,8 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
   }
 
   public static void applyFix(@NotNull final Project project,
-                              @NotNull final Module module,
-                              final String packageName,
+                              @Nullable final Module module,
+                              @NotNull final String packageName,
                               final boolean startInBackground) {
     final String sdkPath = GoSdkService.getInstance(project).getSdkHomePath(module);
     if (StringUtil.isEmpty(sdkPath)) {
@@ -59,7 +60,7 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
     CommandProcessor.getInstance().runUndoTransparentAction(new Runnable() {
       @Override
       public void run() {
-        GoExecutor.in(module).withPresentableName("go get " + packageName)
+        GoExecutor.in(project, module).withPresentableName("go get " + packageName)
           .withParameters("get", packageName).showNotifications(false).showOutputOnError().executeWithProgress(!startInBackground);
       }
     });

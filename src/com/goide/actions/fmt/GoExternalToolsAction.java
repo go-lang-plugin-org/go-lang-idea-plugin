@@ -66,9 +66,10 @@ public abstract class GoExternalToolsAction extends DumbAwareAction {
     VirtualFile file = e.getRequiredData(CommonDataKeys.VIRTUAL_FILE);
     assert project != null;
     String title = StringUtil.notNullize(e.getPresentation().getText());
-
+    
+    final Module module = ModuleUtilCore.findModuleForFile(file, project);
     try {
-      doSomething(file, project, title);
+      doSomething(file, module, project, title);
     }
     catch (ExecutionException ex) {
       error(title, project, ex);
@@ -76,17 +77,15 @@ public abstract class GoExternalToolsAction extends DumbAwareAction {
     }
   }
 
-  protected boolean doSomething(@NotNull VirtualFile virtualFile, @NotNull Project project, @NotNull String title)
+  protected boolean doSomething(@NotNull VirtualFile virtualFile, @Nullable Module module, @NotNull Project project, @NotNull String title)
     throws ExecutionException {
-      final Module module = ModuleUtilCore.findModuleForFile(virtualFile, project);
-      assert module != null;
       Document document = FileDocumentManager.getInstance().getDocument(virtualFile);
       assert document != null;
       final String filePath = virtualFile.getCanonicalPath();
       assert filePath != null;
 
       FileDocumentManager.getInstance().saveDocument(document);
-      GoExecutor executor = createExecutor(module, title, filePath);
+      GoExecutor executor = createExecutor(project, module, title, filePath);
       if (executor != null) {
         executor.executeWithProgress(false);
         return true;
@@ -95,5 +94,8 @@ public abstract class GoExternalToolsAction extends DumbAwareAction {
   }
 
   @Nullable
-  protected abstract GoExecutor createExecutor(Module module, @NotNull String title, @NotNull String filePath);
+  protected abstract GoExecutor createExecutor(@NotNull Project project,
+                                               @Nullable Module module,
+                                               @NotNull String title,
+                                               @NotNull String filePath);
 }
