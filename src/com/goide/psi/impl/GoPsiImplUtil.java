@@ -77,7 +77,7 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
-  public static GlobalSearchScope cretePackageScope(@NotNull GoFile file) {
+  public static GlobalSearchScope packageScope(@NotNull GoFile file) {
     List<GoFile> files = getAllPackageFiles(file);
     return GlobalSearchScope.filesScope(file.getProject(), ContainerUtil.map(files, new Function<GoFile, VirtualFile>() {
       @Override
