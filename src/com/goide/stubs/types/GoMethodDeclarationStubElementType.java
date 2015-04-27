@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,9 +58,7 @@ public class GoMethodDeclarationStubElementType extends GoNamedStubElementType<G
   @Nullable
   @Override
   public GoMethodDeclarationStub createStub(@NotNull GoMethodDeclaration psi, StubElement parentStub) {
-    GoTypeReferenceExpression reference = GoPsiImplUtil.getTypeReference(psi.getReceiver().getType());
-    String text = reference != null ? reference.getIdentifier().getText() : null;
-    return new GoMethodDeclarationStub(parentStub, this, psi.getName(), psi.isPublic(), text);
+    return new GoMethodDeclarationStub(parentStub, this, psi.getName(), psi.isPublic(), calcTypeText(psi));
   }
 
   @Override
@@ -89,5 +87,11 @@ public class GoMethodDeclarationStubElementType extends GoNamedStubElementType<G
         }
       }
     }
+  }
+
+  @Nullable
+  public static String calcTypeText(@NotNull GoMethodDeclaration psi) {
+    GoTypeReferenceExpression reference = GoPsiImplUtil.getTypeReference(psi.getReceiver().getType());
+    return reference != null ? reference.getIdentifier().getText() : null;
   }
 }

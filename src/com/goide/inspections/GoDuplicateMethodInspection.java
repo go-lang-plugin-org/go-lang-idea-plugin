@@ -16,16 +16,17 @@
 
 package com.goide.inspections;
 
-import com.goide.psi.*;
+import com.goide.psi.GoFile;
+import com.goide.psi.GoMethodDeclaration;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.stubs.index.GoMethodIndex;
+import com.goide.stubs.types.GoMethodDeclarationStubElementType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Condition;
-import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.GlobalSearchScopesCore;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,37 +35,31 @@ import java.util.Collection;
 public class GoDuplicateMethodInspection extends GoInspectionBase {
   @Override
   protected void checkFile(@NotNull GoFile file, @NotNull final ProblemsHolder problemsHolder) {
-    final PsiDirectory parent = file.getParent();
-    if (parent == null) return;
     final Project project = file.getProject();
     final String packageName = file.getPackageName();
-    final GlobalSearchScope scope = GlobalSearchScopesCore.directoryScope(parent, false);
+    final GlobalSearchScope scope = GoPsiImplUtil.cretePackageScope(file);
 
-    for (GoMethodDeclaration m : file.getMethods()) {
-      if (m.isBlank()) {
-        continue;
-      }
+    for (final GoMethodDeclaration method : file.getMethods()) {
+      if (method.isBlank()) continue;
 
-      GoType type = m.getReceiver().getType();
-      if (type == null) continue;
-
-      final String methodName = m.getName();
+      final String methodName = method.getName();
       if (methodName == null) continue;
+      
+      String typeText = GoMethodDeclarationStubElementType.calcTypeText(method);
+      if (typeText == null) continue;
 
-      String key = packageName + "." + type.getText();
-      Collection<GoMethodDeclaration> declarations = GoMethodIndex.find(key, project, scope);
-
+      Collection<GoMethodDeclaration> declarations = GoMethodIndex.find(packageName + "." + typeText, project, scope);
       declarations = ContainerUtil.filter(declarations, new Condition<GoMethodDeclaration>() {
         @Override
         public boolean value(GoMethodDeclaration d) {
-          return Comparing.equal(d.getName(), methodName);
+          return !method.isEquivalentTo(d) && Comparing.equal(d.getName(), methodName);
         }
       });
 
-      if (declarations.size() <= 1) continue;
+      if (declarations.isEmpty()) continue;
 
-      PsiElement identifier = m.getNameIdentifier();
-      problemsHolder.registerProblem(identifier == null ? m : identifier, "Duplicate method name");
+      PsiElement identifier = method.getNameIdentifier();
+      problemsHolder.registerProblem(identifier == null ? method : identifier, "Duplicate method name");
     }
   }
 }
