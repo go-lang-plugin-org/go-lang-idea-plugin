@@ -100,11 +100,10 @@ public class GoReturnInspection extends GoInspectionBase {
       boolean hasDefault = false;
       List<GoExprCaseClause> list = ((GoExprSwitchStatement)s).getExprCaseClauseList();
       for (GoExprCaseClause clause : list) {
-        PsiElement child = clause.getDefault();
-        if (child != null) {
-          hasDefault = true;
-        }
+        PsiElement def = clause.getDefault();
+        if (def != null) hasDefault = true;
         GoStatement last = ContainerUtil.getLastItem(clause.getStatementList());
+        if (last instanceof GoFallthroughStatement) continue;
         if (last == null || !isTerminating(last)) return false;
       }
       return hasDefault;

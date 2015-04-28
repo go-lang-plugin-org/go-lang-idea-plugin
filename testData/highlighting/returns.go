@@ -157,3 +157,21 @@ func NoReturn9(aa int) (int, int) {
     default:
     }
 <error>}</error>
+
+func <warning>rsaPKCS1v15SignatureAlgorithmForHashID</warning>(hashID int) string {
+	switch {
+	case hashID == 512: return "asd2"
+	case hashID == 512: return "asd1"
+	case hashID == 512: fallthrough
+	default: return "asdas"
+	}
+}
+
+func <warning>rsaPKCS1v15SignatureAlgorithmForHashID2</warning>(hashID int) string {
+	switch {
+	case hashID == 512: return "asd2"
+	case hashID == 512: return "asd1"
+	case hashID == 512:
+	default: return "asdas"
+	}
+<error>}</error>
