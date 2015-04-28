@@ -66,6 +66,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   private final Set<VirtualFile> myFilesToWatch = ContainerUtil.newConcurrentSet();
   private final Alarm myAlarm;
   private final MessageBusConnection myConnection;
+  private boolean myModuleInitialized = false;
 
   @NotNull private final Set<VirtualFile> myLastHandledRoots = ContainerUtil.newHashSet();
   @NotNull private final Set<VirtualFile> myLastHandledExclusions = ContainerUtil.newHashSet();
@@ -100,7 +101,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
       }
     }
   };
-  
+
   @TestOnly
   public static void setTestingMode(@NotNull Disposable disposable) {
     isTestingMode = true;
@@ -121,20 +122,23 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
 
   @Override
   public void moduleAdded() {
-    scheduleUpdate(0);
-    myConnection.subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
-      public void rootsChanged(final ModuleRootEvent event) {
-        scheduleUpdate();
-      }
-    });
-    myConnection.subscribe(GoLibrariesService.LIBRARIES_TOPIC, new GoLibrariesService.LibrariesListener() {
-      @Override
-      public void librariesChanged(@NotNull Collection<String> newRootUrls) {
-        scheduleUpdate();
-      }
-    });
+    if (!myModuleInitialized) {
+      myConnection.subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
+        public void rootsChanged(final ModuleRootEvent event) {
+          scheduleUpdate();
+        }
+      });
+      myConnection.subscribe(GoLibrariesService.LIBRARIES_TOPIC, new GoLibrariesService.LibrariesListener() {
+        @Override
+        public void librariesChanged(@NotNull Collection<String> newRootUrls) {
+          scheduleUpdate();
+        }
+      });
 
-    VirtualFileManager.getInstance().addVirtualFileListener(myFilesListener);
+      VirtualFileManager.getInstance().addVirtualFileListener(myFilesListener);
+    }
+    scheduleUpdate(0);
+    myModuleInitialized = true;
   }
 
   private void scheduleUpdate() {
