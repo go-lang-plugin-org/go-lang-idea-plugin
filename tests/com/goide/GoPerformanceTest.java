@@ -55,12 +55,20 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
   public void testUnusedImport() {
     doInspectionTest(new GoUnusedImportDeclaration(), (int)TimeUnit.MINUTES.toMillis(1));
   }
-  
-  public void testPerformanceA()  {
+
+  public void testPerformanceA() {
+    doHighlightingTest();
+  }
+
+  public void testPerformanceA2() {
+    doHighlightingTest();
+  }
+
+  private void doHighlightingTest() {
     PlatformTestUtil.startPerformanceTest(getTestName(true), 10 * 1000, new ThrowableRunnable() {
       @Override
       public void run() throws Throwable {
-        myFixture.testHighlighting(true, false, false, getTestName(true) + ".go"); 
+        myFixture.testHighlighting(true, false, false, getTestName(true) + ".go");
       }
     }).cpuBound().usesAllCPUCores().assertTiming();
   }
@@ -94,7 +102,10 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
   public void testParserAndStubs() {
     final File go = new File(getTestDataPath(), "go");
     if (!go.exists()) {
-      System.err.println("For performance tests you need to have a go sources (https://storage.googleapis.com/golang/go1.4.2.src.tar.gz) inside testData/" + getBasePath() + " directory");
+      System.err.println(
+        "For performance tests you need to have a go sources (https://storage.googleapis.com/golang/go1.4.2.src.tar.gz) inside testData/" +
+        getBasePath() +
+        " directory");
       return;
     }
 
