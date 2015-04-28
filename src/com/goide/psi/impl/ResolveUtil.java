@@ -16,11 +16,10 @@
 
 package com.goide.psi.impl;
 
-import com.goide.psi.GoCompositeElement;
+import com.goide.psi.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,10 +42,7 @@ public final class ResolveUtil {
                                         @NotNull PsiElement place) {
     PsiElement run = lastParent == null ? element.getLastChild() : lastParent.getPrevSibling();
     while (run != null) {
-      if (run instanceof GoCompositeElement && PsiTreeUtil.findCommonParent(place, run) != run && 
-          !run.processDeclarations(processor, substitutor, null, place)) {
-        return false;
-      }
+      if (isWorthToProcess(run) && !run.processDeclarations(processor, substitutor, null, place)) return false;
       run = run.getPrevSibling();
     }
     return true;
@@ -59,14 +55,27 @@ public final class ResolveUtil {
                                                @NotNull PsiElement place) {
     PsiElement run = element.getFirstChild();
     while (run != null) {
-      if (run instanceof GoCompositeElement) {
+      if (isWorthToProcess(run)) {
         if (run.isEquivalentTo(lastParent)) return true;
-        if (PsiTreeUtil.findCommonParent(place, run) != run && !run.processDeclarations(processor, substitutor, null, place)) {
-          return false;
-        }
+        if (!run.processDeclarations(processor, substitutor, null, place)) return false;
       }
       run = run.getNextSibling();
     }
     return true;
+  }
+
+  private static boolean isWorthToProcess(@Nullable PsiElement o) {
+    return o instanceof GoCompositeElement &&
+           !(o instanceof GoSwitchStatement ||
+             o instanceof GoContinueStatement ||
+             o instanceof GoReturnStatement ||
+             o instanceof GoElseStatement ||
+             o instanceof GoForStatement ||
+             o instanceof GoIfStatement ||
+             o instanceof GoDeferStatement ||
+             o instanceof GoBreakStatement ||
+             o instanceof GoGoStatement ||
+             o instanceof GoFallthroughStatement ||
+             o instanceof GoGotoStatement);
   }
 }
