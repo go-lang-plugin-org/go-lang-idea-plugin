@@ -858,7 +858,7 @@ public class GoPsiImplUtil {
   }
 
   public static boolean prevDot(@Nullable PsiElement parent) {
-    PsiElement prev = parent == null ? null : PsiTreeUtil.prevLeaf(parent, true);
+    PsiElement prev = parent == null ? null : PsiTreeUtil.prevVisibleLeaf(parent);
     return prev instanceof LeafElement && ((LeafElement)prev).getElementType() == GoTypes.DOT;
   }
 

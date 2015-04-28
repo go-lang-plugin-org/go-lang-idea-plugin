@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -103,7 +103,7 @@ public class GoCompletionTest extends GoCompletionTestBase {
       .createFile("package/long/but/similar/test.go", "package pack; import `package/<caret>`");
     myFixture.configureFromExistingVirtualFile(testFile);
     myFixture.completeBasic();
-    myFixture.assertPreferredCompletionItems(0, "package/long/but/similar/path", "package/short", "package/middle/path", 
+    myFixture.assertPreferredCompletionItems(0, "package/long/but/similar/path", "package/short", "package/middle/path",
                                              "package/very/long/path");
   }
 
@@ -438,10 +438,6 @@ public class GoCompletionTest extends GoCompletionTestBase {
     myFixture.configureFromExistingVirtualFile(file);
     myFixture.completeBasic();
     assertSameElements(myFixture.getLookupElementStrings(), "directory_name", "main");
-  }
-
-  private void doTestCompletion() {
-    myFixture.testCompletion(getTestName(true) + ".go", getTestName(true) + "_after.go");
   }
 
   private void doTestEmptyCompletion() {
