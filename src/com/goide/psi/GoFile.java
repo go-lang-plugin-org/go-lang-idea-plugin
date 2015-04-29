@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.util.ArrayFactory;
+import com.intellij.util.ArrayUtil;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
@@ -180,7 +181,7 @@ public class GoFile extends PsiFileBase {
             }
           }
         }
-        return Result.create(map, GoSdkUtil.getSdkAndLibrariesCacheDependencies(GoFile.this));
+        return Result.create(map, GoSdkUtil.getSdkAndLibrariesCacheDependencies(GoFile.this, ArrayUtil.toObjectArray(extraDeps)));
       }
     });
   }
