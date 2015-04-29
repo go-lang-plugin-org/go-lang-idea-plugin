@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,14 +54,18 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
     extend(CompletionType.BASIC, insideBlockPattern(GoTypes.IDENTIFIER),
            new GoKeywordCompletionProvider(GoCompletionUtil.KEYWORD_PRIORITY, ADD_BRACES_INSERT_HANDLER, "select"));
     extend(CompletionType.BASIC, typeDeclaration(),
-           new GoKeywordCompletionProvider(GoCompletionUtil.KEYWORD_PRIORITY, ADD_BRACES_INSERT_HANDLER,
-                                           "interface", "struct"));
+           new GoKeywordCompletionProvider(GoCompletionUtil.KEYWORD_PRIORITY, ADD_BRACES_INSERT_HANDLER, "interface", "struct"));
     extend(CompletionType.BASIC, insideForStatement(GoTypes.IDENTIFIER),
            new GoKeywordCompletionProvider(GoCompletionUtil.CONTEXT_KEYWORD_PRIORITY, EMPTY_INSERT_HANDLER, "break", "continue"));
     extend(CompletionType.BASIC, typeExpression(), new GoKeywordCompletionProvider(GoCompletionUtil.CONTEXT_KEYWORD_PRIORITY, "chan"));
-    extend(CompletionType.BASIC, typeExpression(),
-           new GoKeywordCompletionProvider(GoCompletionUtil.CONTEXT_KEYWORD_PRIORITY, ADD_BRACKETS_INSERT_HANDLER,
-                                           "map"));
+    extend(CompletionType.BASIC, typeExpression(), new GoKeywordCompletionProvider(GoCompletionUtil.CONTEXT_KEYWORD_PRIORITY, 
+                                                                                   ADD_BRACKETS_INSERT_HANDLER, "map"));
+    
+    extend(CompletionType.BASIC, referenceExpression(), new GoKeywordCompletionProvider(GoCompletionUtil.CONTEXT_KEYWORD_PRIORITY,
+                                                                                        ADD_BRACKETS_INSERT_HANDLER, "map"));
+    extend(CompletionType.BASIC, referenceExpression(), new GoKeywordCompletionProvider(GoCompletionUtil.CONTEXT_KEYWORD_PRIORITY,
+                                                                                        ADD_BRACES_INSERT_HANDLER, "struct"));
+    
     extend(CompletionType.BASIC, afterIfBlock(GoTypes.IDENTIFIER),
            new GoKeywordCompletionProvider(GoCompletionUtil.CONTEXT_KEYWORD_PRIORITY, "else"));
     extend(CompletionType.BASIC, afterElseKeyword(), new GoKeywordCompletionProvider(GoCompletionUtil.CONTEXT_KEYWORD_PRIORITY, "if"));
@@ -99,6 +103,12 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
     return psiElement(GoTypes.IDENTIFIER).withParent(
       psiElement(GoTypeReferenceExpression.class).with(new GoNonQualifiedReference()));
   }
+  
+  private static ElementPattern<? extends PsiElement> referenceExpression() {
+    return psiElement(GoTypes.IDENTIFIER).withParent(
+      psiElement(GoReferenceExpression.class).withParent(not(psiElement(GoSelectorExpr.class))).with(new GoNonQualifiedReference()));
+  }
+
 
   //private static ElementPattern<? extends PsiElement> insideSwitchStatement() {
   //  return insideBlockPattern().inside(GoSwitchStatement.class);

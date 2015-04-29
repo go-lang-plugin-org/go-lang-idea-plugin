@@ -170,12 +170,12 @@ public class GoCompletionTest extends GoCompletionTestBase {
 
   public void testBlockKeywords() {
     myFixture.testCompletionVariants(getTestName(true) + ".go", "for", "const", "var", "return", "if", "switch", "go", "defer", "select",
-                                     "fallthrough", "goto", "main");
+                                     "fallthrough", "goto", "main", "struct", "map");
   }
 
   public void testBlockKeywordsInsideOneLineFunction() {
     myFixture.testCompletionVariants(getTestName(true) + ".go", "for", "const", "var", "return", "if", "switch", "go", "defer", "select",
-                                     "fallthrough", "goto", "main");
+                                     "fallthrough", "goto", "main", "struct", "map");
   }
 
   public void testAddSpaceAfterKeyword() {
@@ -184,6 +184,10 @@ public class GoCompletionTest extends GoCompletionTestBase {
 
   public void testTypeKeywords() {
     myFixture.testCompletionVariants(getTestName(true) + ".go", "struct", "interface", "chan", "map");
+  }
+  
+  public void testExpressionKeywords() {
+    myFixture.testCompletionVariants(getTestName(true) + ".go", "struct", "map", "main");
   }
 
   public void testTypeKeywordsInsideParentheses() {
@@ -204,7 +208,7 @@ public class GoCompletionTest extends GoCompletionTestBase {
 
   public void testForStatementKeywords() {
     myFixture.testCompletionVariants(getTestName(true) + ".go", "bar", "break", "const", "continue", "defer", "for", "go", "if", "return",
-                                     "fallthrough", "goto", "select", "switch", "var");
+                                     "fallthrough", "goto", "select", "switch", "var", "struct", "map");
   }
 
   public void testChanKeyword() {
