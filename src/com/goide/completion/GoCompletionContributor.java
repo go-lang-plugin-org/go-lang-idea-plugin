@@ -1,3 +1,19 @@
+/*
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.goide.completion;
 
 import com.goide.GoConstants;
@@ -12,6 +28,7 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiDirectory;
@@ -33,6 +50,9 @@ public class GoCompletionContributor extends CompletionContributor {
       Collection<String> packagesInDirectory = GoUtil.getAllPackagesInDirectory(directory);
       for (String packageName : packagesInDirectory) {
         result.addElement(LookupElementBuilder.create(packageName));
+        if (packageName.endsWith(GoConstants.TEST_SUFFIX)) {
+          result.addElement(LookupElementBuilder.create(StringUtil.trimEnd(packageName, GoConstants.TEST_SUFFIX)));
+        }
       }
 
       if (packagesInDirectory.isEmpty() && directory != null) {

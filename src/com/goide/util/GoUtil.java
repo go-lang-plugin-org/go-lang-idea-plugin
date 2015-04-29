@@ -196,7 +196,7 @@ public class GoUtil {
           if (file instanceof GoFile) {
             String name = ((GoFile)file).getPackageName();
             if (name != null && !GoConstants.MAIN.equals(name)) {
-              set.add(StringUtil.trimEnd(name, GoConstants.TEST_SUFFIX));
+              set.add(name);
             }
           }
         }

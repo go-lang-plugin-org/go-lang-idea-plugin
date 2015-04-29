@@ -19,6 +19,9 @@ package com.goide.inspections;
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.goide.inspections.unresolved.*;
 import com.goide.project.GoModuleLibrariesService;
+import com.intellij.openapi.command.WriteCommandAction;
+import com.intellij.openapi.util.ThrowableComputable;
+import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.LightProjectDescriptor;
 
@@ -165,6 +168,22 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testMainInMainPackage() {
     myFixture.configureByText("a.go", "package main; func main() {bar()}; func bar() {}");
     myFixture.configureByText("b.go", "package main; func main() {bar()}; func <error>bar</error>() {}");
+    myFixture.checkHighlighting();
+  }
+  
+  public void testPackageWithTestPrefix() throws Throwable {
+    VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
+      @Override
+      public VirtualFile compute() throws Throwable {
+        final VirtualFile pack1 = myFixture.getTempDirFixture().findOrCreateDir("pack1").createChildData(this, "pack1_test.go");
+        final VirtualFile pack2 = myFixture.getTempDirFixture().findOrCreateDir("pack2").createChildData(this, "pack2_test.go");
+        VfsUtil.saveText(pack1, "package pack1_test; func Test() {}");
+        VfsUtil.saveText(pack2, "package pack2_test; import `pack1`; func TestTest() {pack1_test.Test()}");
+        return pack2;
+      }
+    });
+    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(file.getParent().getParent().getUrl());
+    myFixture.configureFromExistingVirtualFile(file);
     myFixture.checkHighlighting();
   }
   

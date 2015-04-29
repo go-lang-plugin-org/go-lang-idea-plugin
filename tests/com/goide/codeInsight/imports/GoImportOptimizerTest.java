@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,14 @@
 package com.goide.codeInsight.imports;
 
 import com.goide.GoCodeInsightFixtureTestCase;
+import com.goide.project.GoModuleLibrariesService;
 import com.intellij.codeInsight.actions.OptimizeImportsAction;
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.command.WriteCommandAction;
+import com.intellij.openapi.util.ThrowableComputable;
+import com.intellij.openapi.vfs.VfsUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 
@@ -42,6 +47,21 @@ public class GoImportOptimizerTest extends GoCodeInsightFixtureTestCase {
     doTest(); 
   }
   public void testDoNotOptimizeSideEffectImports() {
+    doTest(); 
+  }
+  public void testImportWithMultiplePackages() throws Throwable {
+    VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
+      @Override
+      public VirtualFile compute() throws Throwable {
+        VirtualFile pack = myFixture.getTempDirFixture().findOrCreateDir("pack");
+        final VirtualFile file1 = pack.createChildData(this, "pack.go");
+        final VirtualFile file2 = pack.createChildData(this, "pack_test.go");
+        VfsUtil.saveText(file1, "package pack_test; func Test() {}");
+        VfsUtil.saveText(file2, "package pack;");
+        return pack;
+      }
+    });
+    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(file.getParent().getUrl());
     doTest(); 
   }
 

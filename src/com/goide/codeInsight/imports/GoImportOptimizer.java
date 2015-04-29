@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -142,7 +142,19 @@ public class GoImportOptimizer implements ImportOptimizer {
       }
 
       private void markAsUsed(@NotNull PsiElement qualifier) {
-        result.remove(qualifier.getText());
+        Collection<String> qualifiersToDelete = ContainerUtil.newHashSet();
+        for (GoImportSpec spec : result.get(qualifier.getText())) {
+          for (Map.Entry<String, Collection<GoImportSpec>> entry : result.entrySet()) {
+            for (GoImportSpec importSpec : entry.getValue()) {
+              if (importSpec == spec) {
+                qualifiersToDelete.add(entry.getKey());
+              }
+            }
+          }
+        }
+        for (String qualifierToDelete : qualifiersToDelete) {
+          result.remove(qualifierToDelete);
+        }
       }
     });
     return result;
