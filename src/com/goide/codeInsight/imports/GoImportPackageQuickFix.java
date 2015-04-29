@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package com.goide.codeInsight.imports;
 
-import com.goide.GoConstants;
 import com.goide.GoIcons;
 import com.goide.completion.GoCompletionUtil;
 import com.goide.psi.GoFile;
@@ -158,7 +157,6 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
                              @NotNull PsiElement startElement,
                              @NotNull PsiElement endElement) {
     return !isPerformed && file instanceof GoFile && file.getManager().isInProject(file) && myReference.resolve() == null
-           && !myPackageName.endsWith(GoConstants.TEST_SUFFIX)
            && !getPackagesToImport(startElement).isEmpty() && notQualified(startElement);
   }
 
