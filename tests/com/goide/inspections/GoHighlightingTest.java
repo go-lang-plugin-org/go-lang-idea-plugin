@@ -1,10 +1,24 @@
+/*
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.goide.inspections;
 
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.goide.inspections.unresolved.*;
 import com.goide.project.GoModuleLibrariesService;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.util.ThrowableComputable;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.LightProjectDescriptor;
 
@@ -82,15 +96,6 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testMismatch()    { doTest(); }
   public void testStubParams()  { doTest(); }
   
-  public void testImportIgnoringDirectories() throws IOException {
-    final VirtualFile root = myFixture.getTempDirFixture().findOrCreateDir("root");
-    myFixture.getTempDirFixture().findOrCreateDir("root/src/to_import/testdata");
-    myFixture.getTempDirFixture().findOrCreateDir("root/src/to_import/.name");
-    myFixture.getTempDirFixture().findOrCreateDir("root/src/to_import/_name");
-    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(root.getUrl());
-    doTest();
-  }
-  
   public void testRelativeImportIgnoringDirectories() throws IOException {
     myFixture.getTempDirFixture().findOrCreateDir("to_import/testdata");
     myFixture.getTempDirFixture().findOrCreateDir("to_import/.name");
@@ -113,23 +118,6 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureByText("a.go", "package foo; func bar() {}");
     myFixture.configureByText("b.go", "package foo; func init(){bar()}");
     myFixture.checkHighlighting();
-  }
-  
-  public void testInnerTypesFromTestDataPackage() throws Throwable {
-    final VirtualFile root = myFixture.getTempDirFixture().findOrCreateDir("root");
-    ApplicationManager.getApplication().runWriteAction(new ThrowableComputable<Object, Throwable>() {
-      @Override
-      public Object compute() throws Throwable {
-        VirtualFile file = myFixture.getTempDirFixture().findOrCreateDir("root/src/to_import/testdata").createChildData(this, "test.go");
-        myFixture.saveText(file, "package testdata;\n" +
-                                 "type Reader interface {\n" +
-                                 "\tRead(p []byte) (n int, err error)\n" +
-                                 "}");
-        return null;
-      }
-    });
-    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(root.getUrl());
-    doTest();
   }
   
   public void testInnerTypesFromOtherPackage() {

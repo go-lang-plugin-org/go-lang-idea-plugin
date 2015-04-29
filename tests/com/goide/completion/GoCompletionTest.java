@@ -65,16 +65,6 @@ public class GoCompletionTest extends GoCompletionTestBase {
     assertSameElements(lookupElementStrings, "package1", "package2");
   }
 
-  public void testImportIgnoringDirectories() throws IOException {
-    myFixture.getTempDirFixture().createFile("package/testdata/test.go", "package pack");
-    myFixture.getTempDirFixture().createFile("package/.name/test.go", "package pack");
-    myFixture.getTempDirFixture().createFile("package/_workspace/test.go", "package pack");
-    myFixture.configureByText("test.go", "package foo; import `package/<caret>`");
-    myFixture.completeBasic();
-    //noinspection ConstantConditions
-    assertEmpty(myFixture.getLookupElementStrings());
-  }
-
   public void testDoNotCompleteFullPackagesForRelativeImports() throws IOException {
     myFixture.getTempDirFixture().createFile("package1/pack/test.go", "package foo");
     myFixture.getTempDirFixture().createFile("package2/pack/test.go", "package bar");

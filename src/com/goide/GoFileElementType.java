@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,9 @@
 package com.goide;
 
 import com.goide.psi.GoFile;
-import com.goide.sdk.GoSdkUtil;
 import com.goide.stubs.GoFileStub;
 import com.goide.stubs.index.GoPackagesIndex;
-import com.goide.util.GoUtil;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.StubBuilder;
 import com.intellij.psi.stubs.*;
@@ -83,14 +80,5 @@ public class GoFileElementType extends IStubFileElementType<GoFileStub> {
   @Override
   public String getExternalId() {
     return "go.FILE";
-  }
-
-  @Override
-  public boolean shouldBuildStubFor(VirtualFile file) {
-    String importPathGuess = GoSdkUtil.getPathRelativeToSdkAndLibraries(file, null, null);
-    if (!GoUtil.importPathAllowed(importPathGuess)) {
-      return false;
-    }
-    return super.shouldBuildStubFor(file);
   }
 }

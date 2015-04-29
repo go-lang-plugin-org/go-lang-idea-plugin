@@ -80,17 +80,21 @@ public class GoUtil {
       return os(os);
     }
 
-    return !(file instanceof GoFile && !importPathAllowed(((GoFile)file).getImportPath()));
+    return file instanceof GoFile;
   }
 
   @Contract("null -> true")
-  public static boolean importPathAllowed(@Nullable String importPath) {
+  public static boolean libraryImportPathToIgnore(@Nullable String importPath) {
     if (importPath != null) {
       for (String part : StringUtil.split(importPath, "/")) {
-        if (dirNameToIgnore(part)) return false;
+        if (libraryDirectoryToIgnore(part)) return false;
       }
     }
     return true;
+  }
+  
+  public static boolean libraryDirectoryToIgnore(@NotNull String name) {
+    return StringUtil.startsWithChar(name, '.') || StringUtil.startsWithChar(name, '_') || GoConstants.TESTDATA_NAME.equals(name);
   }
 
   private static boolean os(@NotNull String os) {
@@ -199,13 +203,5 @@ public class GoUtil {
         return Result.create(set, dir);
       }
     });
-  }
-
-  public static boolean directoryShouldBeExcluded(@NotNull VirtualFile file) {
-    return file.isDirectory() && dirNameToIgnore(file.getName());
-  }
-
-  private static boolean dirNameToIgnore(@NotNull String name) {
-    return GoConstants.TESTDATA_NAME.equals(name) || StringUtil.startsWithChar(name, '.') || StringUtil.startsWithChar(name, '_');
   }
 }

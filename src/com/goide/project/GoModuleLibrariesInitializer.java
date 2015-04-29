@@ -120,6 +120,10 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     myConnection = myModule.getMessageBus().connect();
   }
 
+  public static boolean directoryShouldBeExcluded(@NotNull VirtualFile file) {
+    return file.isDirectory() && GoUtil.libraryDirectoryToIgnore(file.getName());
+  }
+
   @Override
   public void moduleAdded() {
     if (!myModuleInitialized) {
@@ -262,7 +266,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
         @NotNull
         @Override
         public Result visitFileEx(@NotNull VirtualFile file) {
-          if (GoUtil.directoryShouldBeExcluded(file)) {
+          if (directoryShouldBeExcluded(file)) {
             result.add(file);
             LOG.info("Excluding part of GOPATH: " + file.getPath());
             return SKIP_CHILDREN;
