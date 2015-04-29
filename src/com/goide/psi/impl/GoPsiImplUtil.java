@@ -873,4 +873,9 @@ public class GoPsiImplUtil {
     GoReferenceExpression r = e instanceof GoReferenceExpression ? ((GoReferenceExpression)e) : PsiTreeUtil.getChildOfType(e, GoReferenceExpression.class);
     return (r != null ? r : e).getReference();
   }
+
+  public static boolean isUnaryBitAndExpression(@Nullable PsiElement parent) {
+    PsiElement grandParent = parent != null ? parent.getParent() : null;
+    return grandParent instanceof GoUnaryExpr && ((GoUnaryExpr)grandParent).getBitAnd() != null;
+  }
 }

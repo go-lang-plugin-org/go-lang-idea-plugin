@@ -38,7 +38,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
     doTestInclude("package main; import . \"fmt\"; type alias <caret>", "Formatter");
   }
 
-  public void testCamelHumpFunctionCompletion() {
+  public void testCamelHumpTypeCompletion() {
     doCheckResult("package main;\n" +
                   "func test(){io.reWSC<caret>}",
                   "package main;\n" +
@@ -46,10 +46,10 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "func test(){idea_io.ReadWriteSeekerCustom()}", Lookup.NORMAL_SELECT_CHAR);
   }
 
-  
-  public void testCamelHumpTypeCompletion() {
+
+  public void testCamelHumpFunctionCompletion() {
     doCheckResult("package main;\n" +
-                  "func test(){io.reATC<caret>}",
+                  "func test(){io.reALC<caret>}",
                   "package main;\n" +
                   "import \"idea_io\"\n" +
                   "func test(){idea_io.ReadAtLeastCustom()}", Lookup.NORMAL_SELECT_CHAR);
@@ -207,6 +207,14 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
     doTestCompletion();
   }
   
+  public void testDoNotRunAutoImportFunctionCompletionAfterUnaryAmpersand() {
+    doCheckResult("package main;\n" +
+                  "func test(){println(&io.reALC<caret>)}",
+                  "package main;\n" +
+                  "func test(){println(&io.reALC\n" +
+                  "\t<caret>)}", Lookup.NORMAL_SELECT_CHAR);
+  }
+
   public void testDoNotRunAutoImportCompletionAfterDotAndSpace() {
     doTestCompletion();
   }

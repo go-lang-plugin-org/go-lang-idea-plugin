@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.goide.completion;
 
 import com.goide.GoConstants;
 import com.goide.psi.*;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.psi.impl.GoTypeReference;
 import com.goide.stubs.index.GoFunctionIndex;
 import com.goide.stubs.index.GoTypesIndex;
@@ -87,7 +88,8 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
 
         Project project = position.getProject();
         GlobalSearchScope scope = GoUtil.moduleScope(position);
-        if (parent instanceof GoReferenceExpression) {
+
+        if (parent instanceof GoReferenceExpression && !GoPsiImplUtil.isUnaryBitAndExpression(parent)) {
           GoReferenceExpression qualifier = ((GoReferenceExpression)parent).getQualifier();
           if (qualifier == null || qualifier.getReference().resolve() == null) {
             for (String name : StubIndex.getInstance().getAllKeys(GoFunctionIndex.KEY, project)) {
@@ -103,7 +105,8 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
                     }
                     priority = GoCompletionUtil.FUNCTION_PRIORITY;
                   }
-                  result.addElement(GoCompletionUtil.createFunctionOrMethodLookupElement(declaration, name, true, FUNC_INSERT_HANDLER, priority));
+                  result.addElement(GoCompletionUtil.createFunctionOrMethodLookupElement(declaration, name, true, 
+                                                                                         FUNC_INSERT_HANDLER, priority));
                 }
               }
             }
