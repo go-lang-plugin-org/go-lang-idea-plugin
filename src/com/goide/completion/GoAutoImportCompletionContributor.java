@@ -20,6 +20,7 @@ import com.goide.GoConstants;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.psi.impl.GoTypeReference;
+import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.stubs.index.GoFunctionIndex;
 import com.goide.stubs.index.GoTypesIndex;
 import com.goide.util.GoUtil;
@@ -93,7 +94,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
           GoReferenceExpression qualifier = ((GoReferenceExpression)parent).getQualifier();
           if (qualifier == null || qualifier.getReference().resolve() == null) {
             for (String name : StubIndex.getInstance().getAllKeys(GoFunctionIndex.KEY, project)) {
-              if (StringUtil.isCapitalized(name) && !StringUtil.startsWith(name, "Test") && !StringUtil.startsWith(name, "Benchmark")) {
+              if (StringUtil.isCapitalized(name) && !GoTestFinder.isTestFunctionName(name) && !GoTestFinder.isBenchmarkFunctionName(name)) {
                 for (GoFunctionDeclaration declaration : GoFunctionIndex.find(name, project, scope)) {
                   if (!allowed(declaration)) continue;
 

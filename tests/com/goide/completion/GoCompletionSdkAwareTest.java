@@ -258,4 +258,11 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "    fmt.Fprintln()\n" +
                   "}");
   }
+  
+  public void testDoNotCompleteTestFunctions() throws IOException {
+    myFixture.getTempDirFixture().createFile("pack/pack_test.go", "package pack; func TestFoo() {}");
+    myFixture.configureByText("my_test.go", "package a; func main() { _ = TestF<caret>");
+    myFixture.completeBasic();
+    myFixture.checkResult("package a; func main() { _ = TestF<caret>");
+  }
 }

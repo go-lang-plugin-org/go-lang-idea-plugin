@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ public class GoUnusedFunctionInspection extends GoInspectionBase {
         String name = o.getName();
         if (GoConstants.MAIN.equals(file.getPackageName()) && GoConstants.MAIN.equals(name)) return;
         if (GoConstants.INIT.equals(name)) return;
-        if (GoTestFinder.isTestFile(file) && name != null && (name.startsWith("Test") || name.startsWith("Benchmark"))) return;
+        if (GoTestFinder.isTestFile(file) && (GoTestFinder.isTestFunctionName(name) || GoTestFinder.isBenchmarkFunctionName(name))) return;
         Query<PsiReference> search = ReferencesSearch.search(o, o.getUseScope());
         if (search.findFirst() == null) {
           PsiElement id = o.getIdentifier();

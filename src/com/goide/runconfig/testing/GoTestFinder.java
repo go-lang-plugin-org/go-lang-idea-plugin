@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,9 +34,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.regex.Pattern;
 
 public class GoTestFinder implements TestFinder {
   private static final String EXTENSION = "." + GoFileType.INSTANCE.getDefaultExtension();
+  private static final Pattern TEST_FUNCTION_PATTERN = Pattern.compile("^Test[0-9A-Z].*");
+  private static final Pattern BENCHMARK_FUNCTION_PATTERN = Pattern.compile("^Benchmark[0-9A-Z].*");
 
   public static boolean isTestFile(@Nullable PsiFile file) {
     return file != null && file instanceof GoFile && file.getName().endsWith(GoConstants.TEST_SUFFIX_WITH_EXTENSION);
@@ -48,11 +51,15 @@ public class GoTestFinder implements TestFinder {
   
   @Nullable
   public static String getTestFunctionName(@NotNull GoFunctionDeclaration function) {
-    String functionName = StringUtil.notNullize(function.getName());
-    if (functionName.startsWith("Test")) {
-      return functionName;
-    }
-    return null;
+    return isTestFunctionName(function.getName()) ? StringUtil.notNullize(function.getName()) : null;
+  }
+  
+  public static boolean isTestFunctionName(@Nullable String functionName) {
+    return functionName != null && TEST_FUNCTION_PATTERN.matcher(functionName).matches();
+  }
+  
+  public static boolean isBenchmarkFunctionName(@Nullable String functionName) {
+    return functionName != null && BENCHMARK_FUNCTION_PATTERN.matcher(functionName).matches();
   }
 
   @Nullable
