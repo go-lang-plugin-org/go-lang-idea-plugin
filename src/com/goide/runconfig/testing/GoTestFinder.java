@@ -34,12 +34,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.regex.Pattern;
 
 public class GoTestFinder implements TestFinder {
   private static final String EXTENSION = "." + GoFileType.INSTANCE.getDefaultExtension();
-  private static final Pattern TEST_FUNCTION_PATTERN = Pattern.compile("^Test[0-9A-Z].*");
-  private static final Pattern BENCHMARK_FUNCTION_PATTERN = Pattern.compile("^Benchmark[0-9A-Z].*");
 
   public static boolean isTestFile(@Nullable PsiFile file) {
     return file != null && file instanceof GoFile && file.getName().endsWith(GoConstants.TEST_SUFFIX_WITH_EXTENSION);
@@ -55,11 +52,19 @@ public class GoTestFinder implements TestFinder {
   }
   
   public static boolean isTestFunctionName(@Nullable String functionName) {
-    return functionName != null && TEST_FUNCTION_PATTERN.matcher(functionName).matches();
+    return checkPrefix(functionName, "Test");
   }
-  
+
   public static boolean isBenchmarkFunctionName(@Nullable String functionName) {
-    return functionName != null && BENCHMARK_FUNCTION_PATTERN.matcher(functionName).matches();
+    return checkPrefix(functionName, "Benchmark");
+  }
+
+  private static boolean checkPrefix(@Nullable String name, @NotNull String prefix) {
+    // https://github.com/golang/go/blob/master/src/cmd/go/test.go#L1161 – isTest()
+    if (name == null || !name.startsWith(prefix)) return false;
+    if (prefix.length() == name.length()) return true;
+    final char c = name.charAt(prefix.length());
+    return !Character.isLetter(c) || !Character.isLowerCase(c);
   }
 
   @Nullable
