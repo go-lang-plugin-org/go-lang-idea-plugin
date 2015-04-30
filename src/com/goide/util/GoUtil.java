@@ -42,7 +42,6 @@ import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.text.CharSequenceHashingStrategy;
 import gnu.trove.THashSet;
-import io.netty.util.internal.SystemPropertyUtil;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -99,7 +98,7 @@ public class GoUtil {
   }
 
   private static boolean os(@NotNull String os) {
-    String targetOs = SystemPropertyUtil.get("go.target.os");
+    String targetOs = System.getProperty("go.target.os");
     if ("linux".equals(targetOs)) return LINUX.contains(os);
     else if ("mac".equals(targetOs)) return MAC.contains(os);
     else if ("windows".equals(targetOs)) return WINDOWS.contains(os);
