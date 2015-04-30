@@ -89,6 +89,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
 
         Project project = position.getProject();
         GlobalSearchScope scope = GoUtil.moduleScope(position);
+        boolean isTesting = GoTestFinder.isTestFile(parameters.getOriginalFile()); 
 
         if (parent instanceof GoReferenceExpression && !GoPsiImplUtil.isUnaryBitAndExpression(parent)) {
           GoReferenceExpression qualifier = ((GoReferenceExpression)parent).getQualifier();
@@ -96,7 +97,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
             for (String name : StubIndex.getInstance().getAllKeys(GoFunctionIndex.KEY, project)) {
               if (StringUtil.isCapitalized(name) && !GoTestFinder.isTestFunctionName(name) && !GoTestFinder.isBenchmarkFunctionName(name)) {
                 for (GoFunctionDeclaration declaration : GoFunctionIndex.find(name, project, scope)) {
-                  if (!allowed(declaration)) continue;
+                  if (!allowed(declaration, isTesting)) continue;
 
                   double priority = GoCompletionUtil.NOT_IMPORTED_FUNCTION_PRIORITY;
                   GoImportSpec existingImport = importedPackages.get(declaration.getContainingFile().getImportPath());
@@ -123,7 +124,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
                   if (declaration.getContainingFile() == file) continue;
                   PsiReference reference = parent.getReference();
                   if (reference instanceof GoTypeReference && !((GoTypeReference)reference).allowed(declaration)) continue;
-                  if (!allowed(declaration)) continue;
+                  if (!allowed(declaration, isTesting)) continue;
 
                   double priority = forTypes ? GoCompletionUtil.NOT_IMPORTED_TYPE_PRIORITY : GoCompletionUtil.NOT_IMPORTED_TYPE_CONVERSION;
                   String importPath = declaration.getContainingFile().getImportPath();
@@ -150,7 +151,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         }
       }
 
-      private boolean allowed(@NotNull GoNamedElement declaration) {
+      private boolean allowed(@NotNull GoNamedElement declaration, boolean isTesting) {
         GoFile file = declaration.getContainingFile();
         if (!GoUtil.allowed(file)) return false;
         PsiDirectory directory = file.getContainingDirectory();
@@ -158,9 +159,9 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
           VirtualFile vFile = directory.getVirtualFile();
           if (vFile.getPath().endsWith("go/doc/testdata")) return false;
         }
-
+        
+        if (!isTesting && GoTestFinder.isTestFile(file)) return false;
         String packageName = file.getPackageName();
-        if (packageName != null && StringUtil.endsWith(packageName, GoConstants.TEST_SUFFIX)) return false;
         if (StringUtil.equals(packageName, GoConstants.MAIN)) return false;
         return true;
       }

@@ -265,4 +265,18 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
     myFixture.completeBasic();
     myFixture.checkResult("package a; func main() { _ = TestF<caret>");
   }
+  
+  public void testDoNotCompleteFunctionsFromTestInNotTestingContext() throws IOException {
+    myFixture.getTempDirFixture().createFile("pack/pack_test.go", "package pack; func TestingFunction() {}");
+    myFixture.configureByText("a.go", "package a; func main() { _ = TestingF<caret>");
+    myFixture.completeBasic();
+    myFixture.checkResult("package a; func main() { _ = TestingF<caret>");
+  }
+  
+  public void testCompleteTestFunctionsInTestingContext() throws IOException {
+    myFixture.getTempDirFixture().createFile("pack/pack_test.go", "package pack; func TestingFunction() {}");
+    myFixture.configureByText("my_test.go", "package a; func main() { _ = TestingF<caret>");
+    myFixture.completeBasic();
+    myFixture.checkResult("package a;\nimport \"pack\" func main() { _ = pack.TestingFunction()");
+  }
 }
