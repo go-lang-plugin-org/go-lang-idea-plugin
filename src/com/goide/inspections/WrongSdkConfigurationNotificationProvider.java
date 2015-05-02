@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,7 +86,7 @@ public class WrongSdkConfigurationNotificationProvider extends EditorNotificatio
       return createMissingSdkPanel(myProject, module);
     }
 
-    String goPath = GoSdkUtil.retrieveGoPath(module);
+    String goPath = GoSdkUtil.retrieveGoPath(myProject, module);
     if (StringUtil.isEmpty(goPath.trim())) {
       return createEmptyGoPathPanel(myProject);
     }

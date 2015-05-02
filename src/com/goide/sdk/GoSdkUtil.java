@@ -53,6 +53,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.intellij.util.containers.ContainerUtil.newLinkedHashSet;
+
 public class GoSdkUtil {
   private static final String GO_VERSION_PATTERN = "theVersion\\s*=\\s*`go([\\d.]+)`";
   private static final String GAE_VERSION_PATTERN = "theVersion\\s*=\\s*`go([\\d.]+)( \\(appengine-[\\d.]+\\))?`";
@@ -104,9 +106,7 @@ public class GoSdkUtil {
     Collection<VirtualFile> roots = getGoPathRoots(project, module);
     for (VirtualFile file : roots) {
       VirtualFile child = file.findChild("bin/" + executableName);
-      if (child != null) {
-        return child;
-      }
+      if (child != null) return child;
     }
     File fromPath = PathEnvironmentVariableUtil.findInPath(executableName);
     return fromPath != null ? VfsUtil.findFileByIoFile(fromPath, true) : null;
@@ -121,7 +121,19 @@ public class GoSdkUtil {
 
   @NotNull
   public static Collection<VirtualFile> getGoPathSources(@NotNull Project project, @Nullable Module module) {
-    return ContainerUtil.mapNotNull(getGoPathRoots(project, module), new RetrieveSourceDirectoryFunction());
+    return ContainerUtil.mapNotNull(getGoPathRoots(project, module), new RetrieveSubDirectoryOrSelfFunction("src"));
+  }
+  
+  @NotNull
+  public static Collection<VirtualFile> getGoPathBins(@NotNull Project project, @Nullable Module module) {
+    Collection<VirtualFile> result = newLinkedHashSet(ContainerUtil.mapNotNull(getGoPathRoots(project, module),
+                                                                               new RetrieveSubDirectoryOrSelfFunction("bin")));
+    String executableGoPath = GoSdkService.getInstance(project).getGoExecutablePath(module);
+    if (executableGoPath != null) {
+      VirtualFile executable = VirtualFileManager.getInstance().findFileByUrl(VfsUtilCore.pathToUrl(executableGoPath));
+      if (executable != null) ContainerUtil.addIfNotNull(result, executable.getParent());
+    }
+    return result;
   }
   
   /**
@@ -131,7 +143,7 @@ public class GoSdkUtil {
    */
   @NotNull
   public static Collection<VirtualFile> getGoPathsRootsFromEnvironment() {
-    Set<VirtualFile> result = ContainerUtil.newLinkedHashSet();
+    Set<VirtualFile> result = newLinkedHashSet();
     String goPath = GoEnvironmentUtil.retrieveGoPathFromEnvironment();
     if (goPath != null) {
       String home = SystemProperties.getUserHome();
@@ -146,29 +158,13 @@ public class GoSdkUtil {
   }
 
   @NotNull
-  public static String retrieveGoPath(@NotNull Module module) {
-    Collection<String> parts = ContainerUtil.newLinkedHashSet();
-    ContainerUtil.addIfNotNull(parts, GoEnvironmentUtil.retrieveGoPathFromEnvironment());
-    ContainerUtil.addAll(parts, ContainerUtil.map(GoLibrariesService.getUserDefinedLibraries(module), new Function<VirtualFile, String>() {
-      @Override
-      public String fun(VirtualFile file) {
-        return file.getPath();
-      }
-    }));
-    return StringUtil.join(parts, File.pathSeparator);
+  public static String retrieveGoPath(@NotNull Project project, @Nullable Module module) {
+    return StringUtil.join(getGoPathRoots(project, module), File.pathSeparator);
   }
-
+  
   @NotNull
-  public static String retrieveGoPath(@NotNull Project project) {
-    Collection<String> parts = ContainerUtil.newLinkedHashSet();
-    ContainerUtil.addIfNotNull(parts, GoEnvironmentUtil.retrieveGoPathFromEnvironment());
-    ContainerUtil.addAll(parts, ContainerUtil.map(GoLibrariesService.getUserDefinedLibraries(project), new Function<VirtualFile, String>() {
-      @Override
-      public String fun(VirtualFile file) {
-        return file.getPath();
-      }
-    }));
-    return StringUtil.join(parts, File.pathSeparator);
+  public static String retrieveEnvironmentPathForGo(@NotNull Project project, @Nullable Module module) {
+    return StringUtil.join(getGoPathBins(project, module), File.pathSeparator);
   }
 
   @NotNull
@@ -221,7 +217,7 @@ public class GoSdkUtil {
   @Nullable
   public static String getPathRelativeToSdkAndLibraries(@NotNull VirtualFile file, @Nullable Project project, @Nullable Module module) {
     if (project != null) {
-      Collection<VirtualFile> roots = ContainerUtil.newLinkedHashSet(getGoPathSources(project, module));
+      Collection<VirtualFile> roots = newLinkedHashSet(getGoPathSources(project, module));
       ContainerUtil.addIfNotNull(roots, getSdkSrcDir(project, module));
 
       for (VirtualFile root : roots) {
@@ -351,10 +347,16 @@ public class GoSdkUtil {
     return dependencies;
   }
 
-  public static class RetrieveSourceDirectoryFunction implements Function<VirtualFile, VirtualFile> {
+  public static class RetrieveSubDirectoryOrSelfFunction implements Function<VirtualFile, VirtualFile> {
+    @NotNull private final String mySubdirName;
+
+    public RetrieveSubDirectoryOrSelfFunction(@NotNull String subdirName) {
+      mySubdirName = subdirName;
+    }
+
     @Override
     public VirtualFile fun(VirtualFile file) {
-      return file == null || FileUtil.namesEqual("src", file.getName()) ? file : file.findChild("src");
+      return file == null || FileUtil.namesEqual(mySubdirName, file.getName()) ? file : file.findChild(mySubdirName);
     }
   }
 }

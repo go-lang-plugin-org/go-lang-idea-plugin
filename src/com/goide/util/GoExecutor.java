@@ -49,6 +49,7 @@ import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -63,6 +64,7 @@ public class GoExecutor {
   @Nullable private final Module myModule;
   @Nullable private String myGoRoot;
   @Nullable private String myGoPath;
+  @Nullable private String myEnvPath;
   @Nullable private String myWorkDirectory;
   private boolean myShowOutputOnError = false;
   private boolean myShowNotificationsOnError = false;
@@ -86,7 +88,8 @@ public class GoExecutor {
   public static GoExecutor in(@NotNull Project project) {
     return new GoExecutor(project, null)
       .withGoRoot(GoSdkService.getInstance(project).getSdkHomePath(null))
-      .withGoPath(GoSdkUtil.retrieveGoPath(project));
+      .withGoPath(GoSdkUtil.retrieveGoPath(project, null))
+      .withGoPath(GoSdkUtil.retrieveEnvironmentPathForGo(project, null));
   }
 
   @NotNull
@@ -94,7 +97,8 @@ public class GoExecutor {
     Project project = module.getProject();
     return new GoExecutor(project, module)
       .withGoRoot(GoSdkService.getInstance(project).getSdkHomePath(module))
-      .withGoPath(GoSdkUtil.retrieveGoPath(module));
+      .withGoPath(GoSdkUtil.retrieveGoPath(project, module))
+      .withEnvPath(GoSdkUtil.retrieveEnvironmentPathForGo(project, module));
   }
 
   @NotNull
@@ -124,6 +128,12 @@ public class GoExecutor {
   @NotNull
   public GoExecutor withGoPath(@Nullable String goPath) {
     myGoPath = goPath;
+    return this;
+  }
+  
+  @NotNull
+  public GoExecutor withEnvPath(@Nullable String envPath) {
+    myEnvPath = envPath;
     return this;
   }
   
@@ -308,6 +318,8 @@ public class GoExecutor {
     commandLine.getEnvironment().putAll(myExtraEnvironment);
     commandLine.getEnvironment().put(GoConstants.GO_ROOT, StringUtil.notNullize(myGoRoot));
     commandLine.getEnvironment().put(GoConstants.GO_PATH, StringUtil.notNullize(myGoPath));
+    String existingPathVariable = StringUtil.notNullize(commandLine.getEnvironment().get(GoConstants.PATH));
+    commandLine.getEnvironment().put(GoConstants.PATH, existingPathVariable + File.pathSeparatorChar + StringUtil.notNullize(myEnvPath));
     commandLine.withWorkDirectory(myWorkDirectory);
     commandLine.addParameters(myParameterList.getList());
     commandLine.setPassParentEnvironment(myPassParentEnvironment);
