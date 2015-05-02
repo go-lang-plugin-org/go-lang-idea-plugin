@@ -52,6 +52,7 @@ public class GoConstants {
   @NonNls public static final String GAE_CMD_EXECUTABLE_NAME = "goapp.cmd";
 
   @NonNls public static final String GO_EXECUTABLE_NAME = "go";
+  public static final String BUILD_FLAG = "+build";
 
   private GoConstants() {
     

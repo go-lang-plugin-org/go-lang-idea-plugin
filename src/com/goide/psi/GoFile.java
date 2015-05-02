@@ -32,9 +32,7 @@ import com.intellij.lang.parser.GeneratedParserUtilBase;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.FileViewProvider;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
+import com.intellij.psi.*;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubTree;
 import com.intellij.psi.tree.IElementType;
@@ -54,6 +52,7 @@ import java.util.List;
 import java.util.Map;
 
 public class GoFile extends PsiFileBase {
+
   public GoFile(@NotNull FileViewProvider viewProvider) {
     super(viewProvider, GoLanguage.INSTANCE);
   }
@@ -68,7 +67,7 @@ public class GoFile extends PsiFileBase {
     GoFileStub stub = getStub();
     if (stub != null) {
       String name = stub.getPackageName();
-      return GoElementFactory.createPackageClause(stub.getProject(), name);
+      return name != null ? GoElementFactory.createPackageClause(stub.getProject(), name) : null;
     }
     return CachedValuesManager.getCachedValue(this, new CachedValueProvider<GoPackageClause>() {
       @Override
@@ -88,6 +87,27 @@ public class GoFile extends PsiFileBase {
   public GoImportList getImportList() {
     return findChildByClass(GoImportList.class);
   }
+  
+  @Nullable
+  public String getBuildFlags() {
+    GoFileStub stub = getStub();
+    if (stub != null) {
+      return stub.getBuildFlags();
+    }
+
+    // https://code.google.com/p/go/source/browse/src/pkg/go/build/build.go?r=2449e85a115014c3d9251f86d499e5808141e6bc#790
+    Collection<String> buildFlags = ContainerUtil.newArrayList();
+    int buildFlagLength = GoConstants.BUILD_FLAG.length();
+    for (PsiComment comment : getCommentsToConsider(this)) {
+      String commentText = StringUtil.trimStart(comment.getText(), "//").trim();
+      if (commentText.startsWith(GoConstants.BUILD_FLAG) && commentText.length() > buildFlagLength 
+          && StringUtil.isWhiteSpace(commentText.charAt(buildFlagLength))) {
+        ContainerUtil.addIfNotNull(buildFlags, StringUtil.nullize(commentText.substring(buildFlagLength).trim(), true));
+      }
+    }
+    return !buildFlags.isEmpty() ? StringUtil.join(buildFlags, "|") : null;
+  }
+
 
   @NotNull
   public List<GoFunctionDeclaration> getFunctions() {
@@ -414,4 +434,33 @@ public class GoFile extends PsiFileBase {
                                                                   ArrayFactory<E> f) {
     return Arrays.asList(stub.getChildrenByType(elementType, f));
   }
+  
+  @NotNull
+  private static Collection<PsiComment> getCommentsToConsider(@NotNull GoFile file) {
+    Collection<PsiComment> commentsToConsider = ContainerUtil.newArrayList();
+    PsiElement child = file.getFirstChild();
+    int lastEmptyLineOffset = 0;
+    while (child != null) {
+      if (child instanceof PsiComment) {
+        commentsToConsider.add((PsiComment)child);
+      }
+      else if (child instanceof PsiWhiteSpace) {
+        if (StringUtil.countChars(child.getText(), '\n') > 1) {
+          lastEmptyLineOffset = child.getTextRange().getStartOffset();
+        }
+      }
+      else {
+        break;
+      }
+      child = child.getNextSibling();
+    }
+    final int finalLastEmptyLineOffset = lastEmptyLineOffset;
+    return ContainerUtil.filter(commentsToConsider, new Condition<PsiComment>() {
+      @Override
+      public boolean value(PsiComment comment) {
+        return comment.getTextRange().getStartOffset() < finalLastEmptyLineOffset;
+      }
+    });
+  }
+
 }

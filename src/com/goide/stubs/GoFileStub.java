@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,16 +26,19 @@ import org.jetbrains.annotations.Nullable;
 
 public class GoFileStub extends PsiFileStubImpl<GoFile> {
   private final StringRef myPackageName;
+  private final StringRef myBuildFlags;
 
   public GoFileStub(@NotNull GoFile file) {
-    this(file, StringRef.fromNullableString(file.getPackageName()));
+    this(file, StringRef.fromNullableString(file.getPackageName()), StringRef.fromNullableString(file.getBuildFlags()));
   }
 
-  public GoFileStub(@Nullable GoFile file, StringRef packageName) {
+  public GoFileStub(@Nullable GoFile file, StringRef packageName, StringRef buildFlags) {
     super(file);
     myPackageName = packageName;
+    myBuildFlags = buildFlags;
   }
 
+  @Nullable
   public String getPackageName() {
     return myPackageName.getString();
   }
@@ -43,5 +46,10 @@ public class GoFileStub extends PsiFileStubImpl<GoFile> {
   @Override
   public IStubFileElementType getType() {
     return GoFileElementType.INSTANCE;
+  }
+
+  @Nullable
+  public String getBuildFlags() {
+    return myBuildFlags.getString();
   }
 }
