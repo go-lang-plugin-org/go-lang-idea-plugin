@@ -30,7 +30,6 @@ import com.intellij.openapi.ui.TextBrowseFolderListener;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.SystemInfo;
-import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
@@ -49,38 +48,67 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class GoUtil {
   public static final String PLUGIN_VERSION = getPlugin().getVersion();
 
   private static final String PLUGIN_ID = "ro.redeul.google.go";
-  private static final Pattern FULL = Pattern.compile("\\w+_(\\w+)_(\\w+)");
-  private static final Pattern SHORT = Pattern.compile("\\w+_(\\w+)");
-  private static final Set<CharSequence> LINUX = set("linux", "no", "unix", "posix", "notwin");
-  private static final Set<CharSequence> MAC = set("darwin", "no", "unix", "posix", "notwin");
-  private static final Set<CharSequence> WINDOWS = set("windows", "no");
-  private static final Set<CharSequence> OS = set("openbsd", "plan9", "unix", "linux", "netbsd", "darwin", "dragonfly", "bsd", "windows",
-                                                  "posix", "freebsd", "notwin");
+
+  // see "$GOROOT/src/go/build/syslist.go
+  public static final Set<CharSequence> KNOWN_OS = set(
+    "android", "darwin", "dragonfly", "freebsd", "linux", "nacl", "netbsd", "openbsd", "plan9", "solaris", "windows"
+  );
+
+  public static final Set<CharSequence> KNOWN_ARCH = set(
+    "386", "amd64", "amd64p32", "arm"
+  );
+
+  @NotNull
+  private static GoBuildMatcher buildMatcher = new GoBuildMatcher(KNOWN_OS, KNOWN_ARCH, null, systemOS(), systemArch());
 
   public static boolean allowed(@NotNull PsiFile file) {
-    String name = StringUtil.trimEnd(FileUtil.getNameWithoutExtension(file.getName()), GoConstants.TEST_SUFFIX);
-    Matcher matcher = FULL.matcher(name);
-    if (matcher.matches()) {
-      String os = matcher.group(1);
-      String arch = matcher.group(2);
-      if (!OS.contains(os)) return true;
-      return os(os) && (SystemInfo.is64Bit && arch.contains("64") || SystemInfo.is32Bit && arch.contains("386"));
-    }
-    matcher = SHORT.matcher(name);
-    if (matcher.matches()) {
-      String os = matcher.group(1);
-      if (!OS.contains(os)) return true;
-      return os(os);
+    return buildMatcher.matchFile(file);
+  }
+
+  @NotNull
+  private static String systemOS() {
+    String targetOs = System.getProperty("go.target.os");
+
+    if (targetOs != null) {
+      if ("mac".equals(targetOs)) {
+        targetOs = "darwin";
+      }
+
+      if (KNOWN_OS.contains(targetOs)) {
+        return targetOs;
+      }
     }
 
-    return file instanceof GoFile;
+    // TODO android? dragonfly nacl? netbsd openbsd plan9
+    if (SystemInfo.isMac) {
+      return "darwin";
+    } else if (SystemInfo.isFreeBSD) {
+      return "freebsd";
+    } else if (SystemInfo.isLinux) {
+      return "linux";
+    } else if (SystemInfo.isSolaris) {
+      return "solaris";
+    } else if (SystemInfo.isWindows) {
+      return "windows";
+    }
+
+    return "unknown";
+  }
+
+  @NotNull
+  private static String systemArch() {
+    if (SystemInfo.is64Bit) {
+      return "amd64";
+    } else if (SystemInfo.is32Bit) {
+      return "386";
+    }
+
+    return "unknown";
   }
 
   @Contract("null -> true")
@@ -97,20 +125,9 @@ public class GoUtil {
     return StringUtil.startsWithChar(name, '.') || StringUtil.startsWithChar(name, '_') || GoConstants.TESTDATA_NAME.equals(name);
   }
 
-  private static boolean os(@NotNull String os) {
-    String targetOs = System.getProperty("go.target.os");
-    if ("linux".equals(targetOs)) return LINUX.contains(os);
-    else if ("mac".equals(targetOs)) return MAC.contains(os);
-    else if ("windows".equals(targetOs)) return WINDOWS.contains(os);
-    
-    return SystemInfo.isLinux ? LINUX.contains(os) :
-           SystemInfo.isMac ? MAC.contains(os) :
-           !SystemInfo.isWindows || WINDOWS.contains(os);
-  }
-
   @NotNull
   private static THashSet<CharSequence> set(@NotNull String... strings) {
-    return ContainerUtil.newTroveSet(CharSequenceHashingStrategy.CASE_INSENSITIVE, strings);
+    return ContainerUtil.newTroveSet(CharSequenceHashingStrategy.CASE_SENSITIVE, strings);
   }
 
   public static void installFileChooser(@NotNull Project project,
