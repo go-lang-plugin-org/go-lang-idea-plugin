@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,17 +45,19 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
   extends ModuleBasedConfiguration<GoModuleBasedConfiguration> implements RunConfigurationWithSuppressedDefaultRunAction {
 
   private static final String WORKING_DIRECTORY_NAME = "working_directory";
+  private static final String GO_PARAMETERS_NAME = "go_parameters";
   private static final String PARAMETERS_NAME = "parameters";
   private static final String PASS_PARENT_ENV = "pass_parent_env";
 
   @NotNull private String myWorkingDirectory = "";
+  @NotNull private String myGoParams = "";
   @NotNull private String myParams = "";
   @NotNull private final Map<String, String> myCustomEnvironment = ContainerUtil.newHashMap();
   private boolean myPassParentEnvironment = true;
 
   public GoRunConfigurationBase(String name, GoModuleBasedConfiguration configurationModule, ConfigurationFactory factory) {
     super(name, configurationModule, factory);
-    
+
     Module module = configurationModule.getModule();
     if (module == null) {
       Collection<Module> modules = getValidModules();
@@ -119,6 +121,9 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
     if (StringUtil.isNotEmpty(myWorkingDirectory)) {
       JDOMExternalizerUtil.addElementWithValueAttribute(element, WORKING_DIRECTORY_NAME, myWorkingDirectory);
     }
+    if (StringUtil.isNotEmpty(myGoParams)) {
+      JDOMExternalizerUtil.addElementWithValueAttribute(element, GO_PARAMETERS_NAME, myGoParams);
+    }
     if (StringUtil.isNotEmpty(myParams)) {
       JDOMExternalizerUtil.addElementWithValueAttribute(element, PARAMETERS_NAME, myParams);
     }
@@ -134,14 +139,15 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
   public void readExternal(@NotNull final Element element) throws InvalidDataException {
     super.readExternal(element);
     readModule(element);
+    myGoParams = StringUtil.notNullize(JDOMExternalizerUtil.getFirstChildValueAttribute(element, GO_PARAMETERS_NAME));
     myParams = StringUtil.notNullize(JDOMExternalizerUtil.getFirstChildValueAttribute(element, PARAMETERS_NAME));
-    
+
     String workingDirectoryValue = JDOMExternalizerUtil.getFirstChildValueAttribute(element, WORKING_DIRECTORY_NAME);
     if (workingDirectoryValue != null) {
       myWorkingDirectory = workingDirectoryValue;
     }
     EnvironmentVariablesComponent.readExternal(element, myCustomEnvironment);
-    
+
     String passEnvValue = JDOMExternalizerUtil.getFirstChildValueAttribute(element, PASS_PARENT_ENV);
     myPassParentEnvironment = passEnvValue == null || Boolean.valueOf(passEnvValue);
   }
@@ -160,14 +166,23 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
   protected abstract RunningState newRunningState(ExecutionEnvironment env, Module module);
 
   @NotNull
+  public String getGoToolParams() {
+    return myGoParams;
+  }
+
+  @NotNull
   public String getParams() {
     return myParams;
+  }
+
+  public void setGoParams(@NotNull String params) {
+    myGoParams = params;
   }
 
   public void setParams(@NotNull String params) {
     myParams = params;
   }
-  
+
   @NotNull
   public Map<String, String> getCustomEnvironment() {
     return myCustomEnvironment;

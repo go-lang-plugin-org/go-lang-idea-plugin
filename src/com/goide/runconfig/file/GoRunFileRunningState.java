@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,9 @@ public class GoRunFileRunningState extends GoRunningState<GoRunFileConfiguration
 
   @Override
   protected GoExecutor patchExecutor(@NotNull GoExecutor executor) throws ExecutionException {
-    return executor.withParameters("run", myConfiguration.getFilePath());
+    return executor
+      .withParameters("run")
+      .withParameterString(myConfiguration.getGoToolParams())
+      .withParameters(myConfiguration.getFilePath());
   }
 }
