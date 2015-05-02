@@ -196,12 +196,9 @@
     <localInspection language="go" displayName="Duplicate fields and methods inspection" groupPath="Go"
                      groupName="Redeclared symbols" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoDuplicateFieldsOrMethodsInspection"/>
-    <localInspection language="go" displayName="Duplicate function" groupPath="Go"
-                     groupName="Redeclared symbols" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.GoDuplicateFunctionInspection"/>
-    <localInspection language="go" displayName="Duplicate method" groupPath="Go"
-                     groupName="Redeclared symbols" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.GoDuplicateMethodInspection"/>
+    <localInspection language="go" displayName="Duplicate functions and methods inspection"
+                     groupName="Go" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoDuplicateFunctionOrMethodInspection"/>
     <localInspection language="go" displayName="Duplicate argument" groupPath="Go"
                      groupName="Redeclared symbols" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoDuplicateArgumentInspection"/>
