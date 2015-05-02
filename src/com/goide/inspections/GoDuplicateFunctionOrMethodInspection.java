@@ -17,8 +17,11 @@
 package com.goide.inspections;
 
 import com.goide.psi.GoFile;
+import com.goide.psi.GoFunctionDeclaration;
 import com.goide.psi.GoMethodDeclaration;
+import com.goide.psi.GoSignature;
 import com.goide.psi.impl.GoPsiImplUtil;
+import com.goide.stubs.index.GoFunctionIndex;
 import com.goide.stubs.index.GoMethodIndex;
 import com.goide.stubs.types.GoMethodDeclarationStubElementType;
 import com.goide.util.GoUtil;
@@ -33,19 +36,56 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-public class GoDuplicateMethodInspection extends GoInspectionBase {
+import static com.goide.GoConstants.INIT;
+import static com.goide.GoConstants.MAIN;
+
+public class GoDuplicateFunctionOrMethodInspection extends GoInspectionBase {
   @Override
   protected void checkFile(@NotNull GoFile file, @NotNull ProblemsHolder problemsHolder) {
     Project project = file.getProject();
     String packageName = file.getPackageName();
     GlobalSearchScope scope = GoPsiImplUtil.packageScope(file);
 
+    for (final GoFunctionDeclaration func : file.getFunctions()) {
+      if (func.isBlank()) continue;
+
+      final String funcName = func.getName();
+      if (funcName == null) continue;
+      if (INIT.equals(funcName) & zeroArity(func)) continue;
+
+      Collection<GoFunctionDeclaration> declarations = GoFunctionIndex.find(funcName, project, scope);
+      Condition<GoFunctionDeclaration> filter;
+
+      if ((MAIN.equals(funcName) && MAIN.equals(func.getContainingFile().getPackageName()) && zeroArity(func))) {
+        filter = new Condition<GoFunctionDeclaration>() {
+          @Override
+          public boolean value(GoFunctionDeclaration d) {
+            return !func.isEquivalentTo(d) && Comparing.equal(d.getContainingFile(), func.getContainingFile());
+          }
+        };
+      } else {
+        filter = new Condition<GoFunctionDeclaration>() {
+          @Override
+          public boolean value(GoFunctionDeclaration d) {
+            return !func.isEquivalentTo(d);
+          }
+        };
+      }
+
+      declarations = ContainerUtil.filter(declarations, filter);
+
+      if (declarations.isEmpty()) continue;
+
+      PsiElement identifier = func.getNameIdentifier();
+      problemsHolder.registerProblem(identifier == null ? func : identifier, "Duplicate function name");
+    }
+
     for (final GoMethodDeclaration method : file.getMethods()) {
       if (method.isBlank()) continue;
 
       final String methodName = method.getName();
       if (methodName == null) continue;
-      
+
       String typeText = GoMethodDeclarationStubElementType.calcTypeText(method);
       if (typeText == null) continue;
 
@@ -62,5 +102,10 @@ public class GoDuplicateMethodInspection extends GoInspectionBase {
       PsiElement identifier = method.getNameIdentifier();
       problemsHolder.registerProblem(identifier == null ? method : identifier, "Duplicate method name");
     }
+  }
+
+  private static boolean zeroArity(@NotNull GoFunctionDeclaration o) {
+    GoSignature signature = o.getSignature();
+    return signature == null || signature.getParameters().getParameterDeclarationList().isEmpty();
   }
 }
