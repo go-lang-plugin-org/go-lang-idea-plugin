@@ -59,6 +59,13 @@ public class GoSdkUtil {
   private static final String GO_VERSION_PATTERN = "theVersion\\s*=\\s*`go([\\d.]+)`";
   private static final String GAE_VERSION_PATTERN = "theVersion\\s*=\\s*`go([\\d.]+)( \\(appengine-[\\d.]+\\))?`";
   private static final String GO_DEVEL_VERSION_PATTERN = "theVersion\\s*=\\s*`(devel[\\d.]+)`";
+  private static final Function<VirtualFile, String> RETRIEVE_FILE_PATH_FUNCTION = new Function<VirtualFile, String>() {
+    @Override
+    public String fun(VirtualFile file) {
+      return file.getPath();
+    }
+  };
+
 
   // todo: caching
   @Nullable
@@ -159,12 +166,12 @@ public class GoSdkUtil {
 
   @NotNull
   public static String retrieveGoPath(@NotNull Project project, @Nullable Module module) {
-    return StringUtil.join(getGoPathRoots(project, module), File.pathSeparator);
+    return StringUtil.join(ContainerUtil.map(getGoPathRoots(project, module), RETRIEVE_FILE_PATH_FUNCTION), File.pathSeparator);
   }
   
   @NotNull
   public static String retrieveEnvironmentPathForGo(@NotNull Project project, @Nullable Module module) {
-    return StringUtil.join(getGoPathBins(project, module), File.pathSeparator);
+    return StringUtil.join(ContainerUtil.map(getGoPathBins(project, module), RETRIEVE_FILE_PATH_FUNCTION), File.pathSeparator);
   }
 
   @NotNull
