@@ -58,14 +58,13 @@ import static com.intellij.util.containers.ContainerUtil.newLinkedHashSet;
 public class GoSdkUtil {
   private static final String GO_VERSION_PATTERN = "theVersion\\s*=\\s*`go([\\d.]+)`";
   private static final String GAE_VERSION_PATTERN = "theVersion\\s*=\\s*`go([\\d.]+)( \\(appengine-[\\d.]+\\))?`";
-  private static final String GO_DEVEL_VERSION_PATTERN = "theVersion\\s*=\\s*`(devel[\\d.]+)`";
+  private static final String GO_DEVEL_VERSION_PATTERN = "theVersion\\s*=\\s*`(devel.*)`";
   private static final Function<VirtualFile, String> RETRIEVE_FILE_PATH_FUNCTION = new Function<VirtualFile, String>() {
     @Override
     public String fun(VirtualFile file) {
       return file.getPath();
     }
   };
-
 
   // todo: caching
   @Nullable
@@ -130,7 +129,7 @@ public class GoSdkUtil {
   public static Collection<VirtualFile> getGoPathSources(@NotNull Project project, @Nullable Module module) {
     return ContainerUtil.mapNotNull(getGoPathRoots(project, module), new RetrieveSubDirectoryOrSelfFunction("src"));
   }
-  
+
   @NotNull
   public static Collection<VirtualFile> getGoPathBins(@NotNull Project project, @Nullable Module module) {
     Collection<VirtualFile> result = newLinkedHashSet(ContainerUtil.mapNotNull(getGoPathRoots(project, module),
@@ -142,7 +141,7 @@ public class GoSdkUtil {
     }
     return result;
   }
-  
+
   /**
    * Retrieves root directories from GOPATH env-variable.
    * This method doesn't consider user defined libraries,
@@ -168,7 +167,7 @@ public class GoSdkUtil {
   public static String retrieveGoPath(@NotNull Project project, @Nullable Module module) {
     return StringUtil.join(ContainerUtil.map(getGoPathRoots(project, module), RETRIEVE_FILE_PATH_FUNCTION), File.pathSeparator);
   }
-  
+
   @NotNull
   public static String retrieveEnvironmentPathForGo(@NotNull Project project, @Nullable Module module) {
     return StringUtil.join(ContainerUtil.map(getGoPathBins(project, module), RETRIEVE_FILE_PATH_FUNCTION), File.pathSeparator);
@@ -282,6 +281,24 @@ public class GoSdkUtil {
   }
 
   @Nullable
+  public static String parseGoVersion(@NotNull String text) {
+    Matcher matcher = Pattern.compile(GO_VERSION_PATTERN).matcher(text);
+    if (matcher.find()) {
+      return matcher.group(1);
+    }
+    matcher = Pattern.compile(GAE_VERSION_PATTERN).matcher(text);
+    if (matcher.find()) {
+      return matcher.group(1) + matcher.group(2);
+    }
+    matcher = Pattern.compile(GO_DEVEL_VERSION_PATTERN).matcher(text);
+    if (matcher.find()) {
+      return matcher.group(1);
+    }
+
+    return null;
+  }
+
+  @Nullable
   public static String retrieveGoVersion(@NotNull final String sdkPath) {
     try {
       String oldStylePath = new File(sdkPath, "src/pkg/" + GoConstants.GO_VERSION_FILE_PATH).getPath();
@@ -289,23 +306,11 @@ public class GoSdkUtil {
       File zVersionFile = FileUtil.findFirstThatExist(oldStylePath, newStylePath);
       if (zVersionFile == null) return null;
       String text = FileUtil.loadFile(zVersionFile);
-      Matcher matcher = Pattern.compile(GO_VERSION_PATTERN).matcher(text);
-      if (matcher.find()) {
-        return matcher.group(1);
-      }
-      matcher = Pattern.compile(GAE_VERSION_PATTERN).matcher(text);
-      if (matcher.find()) {
-        return matcher.group(1) + matcher.group(2);
-      }
-      matcher = Pattern.compile(GO_DEVEL_VERSION_PATTERN).matcher(text);
-      if (matcher.find()) {
-        return matcher.group(1);
-      }
+      return parseGoVersion(text);
     }
     catch (IOException e) {
       return null;
     }
-    return null;
   }
 
   @NotNull

@@ -48,4 +48,11 @@ public class GoSdkUtilTest {
     assertEquals("src", GoSdkUtil.getSrcLocation("1.4.1"));
     assertEquals("src", GoSdkUtil.getSrcLocation("1.5"));
   }
+
+  @Test
+  public void testParseGoVersion() {
+    assertEquals("1.4.2", GoSdkUtil.parseGoVersion("const theVersion = `go1.4.2`"));
+    assertEquals("1.4.1 (appengine-1.9.18)", GoSdkUtil.parseGoVersion("const theVersion = `go1.4.1 (appengine-1.9.18)`"));
+    assertEquals("devel +e8057df Sun May 3 05:34:01 2015 +0000", GoSdkUtil.parseGoVersion("const theVersion = `devel +e8057df Sun May 3 05:34:01 2015 +0000`"));
+  }
 }
