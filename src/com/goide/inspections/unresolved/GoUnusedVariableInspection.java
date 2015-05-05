@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,10 +77,10 @@ public class GoUnusedVariableInspection extends GoInspectionBase {
                                      @Override
                                      public void invoke(@NotNull Project project,
                                                         @NotNull PsiFile file,
-                                                        @NotNull PsiElement element,
-                                                        @NotNull PsiElement element1) {
-                                       if (element instanceof GoVarDefinition) {
-                                         ((GoVarDefinition)element).setName("_");
+                                                        @NotNull PsiElement startElement,
+                                                        @NotNull PsiElement endElement) {
+                                       if (startElement instanceof GoVarDefinition) {
+                                         ((GoVarDefinition)startElement).setName("_");
                                        }
                                      }
 
