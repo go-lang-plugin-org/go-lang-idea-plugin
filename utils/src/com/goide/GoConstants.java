@@ -53,6 +53,9 @@ public class GoConstants {
 
   @NonNls public static final String GO_EXECUTABLE_NAME = "go";
   public static final String BUILD_FLAG = "+build";
+  
+  public static final String LINUX_OS = "linux";
+  public static final String ANDROID_OS = "android";
 
   private GoConstants() {
     

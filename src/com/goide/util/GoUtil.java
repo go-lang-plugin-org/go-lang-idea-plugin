@@ -39,8 +39,6 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.text.CharSequenceHashingStrategy;
-import gnu.trove.THashSet;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -55,19 +53,16 @@ public class GoUtil {
   private static final String PLUGIN_ID = "ro.redeul.google.go";
 
   // see "$GOROOT/src/go/build/syslist.go
-  public static final Set<CharSequence> KNOWN_OS = set(
+  private static final Set<String> KNOWN_OS = ContainerUtil.immutableSet(
     "android", "darwin", "dragonfly", "freebsd", "linux", "nacl", "netbsd", "openbsd", "plan9", "solaris", "windows"
   );
-
-  public static final Set<CharSequence> KNOWN_ARCH = set(
-    "386", "amd64", "amd64p32", "arm"
-  );
+  private static final Set<String> KNOWN_ARCH = ContainerUtil.immutableSet("386", "amd64", "amd64p32", "arm");
 
   @NotNull
-  private static GoBuildMatcher buildMatcher = new GoBuildMatcher(KNOWN_OS, KNOWN_ARCH, null, systemOS(), systemArch());
+  private static GoBuildMatcher BUILD_MATCHER = new GoBuildMatcher(KNOWN_OS, KNOWN_ARCH, null, systemOS(), systemArch());
 
   public static boolean allowed(@NotNull PsiFile file) {
-    return buildMatcher.matchFile(file);
+    return BUILD_MATCHER.matchFile(file);
   }
 
   @NotNull
@@ -123,11 +118,6 @@ public class GoUtil {
   
   public static boolean libraryDirectoryToIgnore(@NotNull String name) {
     return StringUtil.startsWithChar(name, '.') || StringUtil.startsWithChar(name, '_') || GoConstants.TESTDATA_NAME.equals(name);
-  }
-
-  @NotNull
-  private static THashSet<CharSequence> set(@NotNull String... strings) {
-    return ContainerUtil.newTroveSet(CharSequenceHashingStrategy.CASE_SENSITIVE, strings);
   }
 
   public static void installFileChooser(@NotNull Project project,
