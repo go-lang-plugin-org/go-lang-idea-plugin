@@ -30,6 +30,6 @@ func getAnA() (result *A) {
 }
 
 
-func <warning descr="Unused function '_'">_</warning>() {
+func _() {
     getAnA().chain()
 }
