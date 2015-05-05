@@ -655,6 +655,7 @@ public class GoPsiImplUtil {
             composite.add(definition.getGoType(context));
           }
         }
+        if (composite.size() == 1) return composite.get(0);
         class MyGoTypeList extends LightElement implements GoTypeList {
           @NotNull private final List<GoType> myTypes;
 

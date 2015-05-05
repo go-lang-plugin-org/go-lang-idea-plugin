@@ -17,3 +17,19 @@ func main() {
     field := fun()
     _ = field.Field
 }
+
+type A struct {
+}
+
+func (self *A) chain() *A{
+    return self
+}
+
+func getAnA() (result *A) {
+    return &A{}
+}
+
+
+func <warning descr="Unused function '_'">_</warning>() {
+    getAnA().chain()
+}
