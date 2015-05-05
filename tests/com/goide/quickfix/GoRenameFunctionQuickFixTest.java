@@ -17,20 +17,21 @@
 package com.goide.quickfix;
 
 import com.goide.inspections.GoRenameToBlankQuickFix;
-import com.goide.inspections.unresolved.GoUnusedVariableInspection;
+import com.goide.inspections.unresolved.GoUnusedFunctionInspection;
 
-public class GoRenameVarQuickFixTest extends GoQuickFixTestBase {
+public class GoRenameFunctionQuickFixTest extends GoQuickFixTestBase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();
-    myFixture.enableInspections(GoUnusedVariableInspection.class);
+    myFixture.enableInspections(GoUnusedFunctionInspection.class);
   }
 
   @Override
   protected String getBasePath() {
-    return "quickfixes/rename-var";
+    return "quickfixes/rename-function";
   }
 
-  public void testSimple()      { doTest(GoRenameToBlankQuickFix.NAME);      }
-  public void testProhibited()  { doTestNoFix(GoRenameToBlankQuickFix.NAME); }
+  public void testSimple() {
+    doTest(GoRenameToBlankQuickFix.NAME);
+  }
 }

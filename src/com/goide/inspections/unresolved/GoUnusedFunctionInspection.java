@@ -19,6 +19,7 @@ package com.goide.inspections.unresolved;
 import com.goide.GoConstants;
 import com.goide.inspections.GoDeleteQuickFix;
 import com.goide.inspections.GoInspectionBase;
+import com.goide.inspections.GoRenameToBlankQuickFix;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoFunctionDeclaration;
 import com.goide.psi.GoVisitor;
@@ -52,7 +53,7 @@ public class GoUnusedFunctionInspection extends GoInspectionBase {
           PsiElement id = o.getIdentifier();
           TextRange range = TextRange.from(id.getStartOffsetInParent(), id.getTextLength());
           holder.registerProblem(o, "Unused function " + "'" + name + "'", ProblemHighlightType.LIKE_UNUSED_SYMBOL, range,
-                                 new GoDeleteQuickFix("Delete function '" + name + "'"));
+                                 new GoDeleteQuickFix("Delete function '" + name + "'"), new GoRenameToBlankQuickFix(o));
         }
       }
     };
