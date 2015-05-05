@@ -304,9 +304,7 @@ public class GoSdkUtil {
       String oldStylePath = new File(sdkPath, "src/pkg/" + GoConstants.GO_VERSION_FILE_PATH).getPath();
       String newStylePath = new File(sdkPath, "src/" + GoConstants.GO_VERSION_FILE_PATH).getPath();
       File zVersionFile = FileUtil.findFirstThatExist(oldStylePath, newStylePath);
-      if (zVersionFile == null) return null;
-      String text = FileUtil.loadFile(zVersionFile);
-      return parseGoVersion(text);
+      return zVersionFile != null ? parseGoVersion(FileUtil.loadFile(zVersionFile)) : null;
     }
     catch (IOException e) {
       return null;

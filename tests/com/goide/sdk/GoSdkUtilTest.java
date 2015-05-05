@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,6 +53,7 @@ public class GoSdkUtilTest {
   public void testParseGoVersion() {
     assertEquals("1.4.2", GoSdkUtil.parseGoVersion("const theVersion = `go1.4.2`"));
     assertEquals("1.4.1 (appengine-1.9.18)", GoSdkUtil.parseGoVersion("const theVersion = `go1.4.1 (appengine-1.9.18)`"));
-    assertEquals("devel +e8057df Sun May 3 05:34:01 2015 +0000", GoSdkUtil.parseGoVersion("const theVersion = `devel +e8057df Sun May 3 05:34:01 2015 +0000`"));
+    assertEquals("devel +e8057df Sun May 3 05:34:01 2015 +0000",
+                 GoSdkUtil.parseGoVersion("const theVersion = `devel +e8057df Sun May 3 05:34:01 2015 +0000`"));
   }
 }
