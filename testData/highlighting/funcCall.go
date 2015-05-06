@@ -146,3 +146,25 @@ func bar_m() (int, int) {
 func <warning>main127</warning>() {
 	foo_m<error>(bar_m())</error>
 }
+
+type AnInterface interface {
+	MyMethod() error
+}
+
+type bar struct {}
+
+func (*bar) MyMethod() error {
+	return nil
+}
+
+type mystruct struct {}
+
+func (x *mystruct) getAnInterface() AnInterface {
+	return &bar{}
+}
+
+var getAnInterface = (*mystruct).getAnInterface
+
+func _() {
+	fmt.Println(getAnInterface(&mystruct{}).MyMethod())
+}
