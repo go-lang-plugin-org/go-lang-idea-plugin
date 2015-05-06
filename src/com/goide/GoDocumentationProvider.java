@@ -25,6 +25,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
+import com.intellij.xml.util.XmlStringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -90,22 +91,23 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
 
   @NotNull
   private static String getCommentText(@NotNull List<PsiComment> comments) {
-    return StringUtil.join(ContainerUtil.map(comments, new Function<PsiComment, String>() {
-      @Override
-      public String fun(@NotNull PsiComment c) {
-        IElementType type = c.getTokenType();
-        String text = c.getText();
-        if (type == GoParserDefinition.LINE_COMMENT) {
-          text = text.replaceAll("//", "");
+    return XmlStringUtil.escapeString(
+      StringUtil.join(ContainerUtil.map(comments, new Function<PsiComment, String>() {
+        @Override
+        public String fun(@NotNull PsiComment c) {
+          IElementType type = c.getTokenType();
+          String text = c.getText();
+          if (type == GoParserDefinition.LINE_COMMENT) {
+            text = text.replaceAll("//", "");
+          }
+          else if (type == GoParserDefinition.MULTILINE_COMMENT) {
+            text = StringUtil.trimEnd(text, "*/");
+            text = StringUtil.trimStart(text, "/*");
+            text = LEADING_TAB.matcher(text).replaceAll("");
+          }
+          return text;
         }
-        else if (type == GoParserDefinition.MULTILINE_COMMENT) {
-          text = StringUtil.trimEnd(text, "*/");
-          text = StringUtil.trimStart(text, "/*");
-          text = LEADING_TAB.matcher(text).replaceAll("");
-        }
-        return text;
-      }
-    }), "<br/>");
+      }), "\n"));
   }
 
   @NotNull

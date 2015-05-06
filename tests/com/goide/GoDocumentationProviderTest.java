@@ -14,17 +14,17 @@ public class GoDocumentationProviderTest extends GoCodeInsightFixtureTestCase {
   public void testPrintln() {
     doTest("package a; import \"fmt\"; func foo() {fmt.Printl<caret>n}",
            "<pre> <b>func Println(a ...interface{}) (n int, err error)</b><br/>" +
-           " Println formats using the default formats for its operands and writes to standard output.<br/>" +
-           " Spaces are always added between operands and a newline is appended.<br/>" +
+           " Println formats using the default formats for its operands and writes to standard output.\n" +
+           " Spaces are always added between operands and a newline is appended.\n" +
            " It returns the number of bytes written and any write error encountered.</pre>");
   }
 
   public void testFprintln() {
     doTest("package a; import \"fmt\"; func foo() {fmt.Fprintl<caret>n(\"Hello\")}",
-    "<pre> <b>func Fprintln(w io.Writer, a ...interface{}) (n int, err error)</b><br/>" +
-    " Fprintln formats using the default formats for its operands and writes to w.<br/>" +
-    " Spaces are always added between operands and a newline is appended.<br/>" +
-    " It returns the number of bytes written and any write error encountered.</pre>");
+           "<pre> <b>func Fprintln(w io.Writer, a ...interface{}) (n int, err error)</b><br/>" +
+           " Fprintln formats using the default formats for its operands and writes to w.\n" +
+           " Spaces are always added between operands and a newline is appended.\n" +
+           " It returns the number of bytes written and any write error encountered.</pre>");
   }
 
   public void testVariable() {
@@ -32,6 +32,16 @@ public class GoDocumentationProviderTest extends GoCodeInsightFixtureTestCase {
            "// test\n" +
            "var an = 1; func foo() {a<caret>n}",
            "<pre> test</pre>"
+    );
+  }
+
+  public void testEscape() {
+    doTest("package a; \n" +
+           "func _() {Replac<caret>e()}\n" +
+           "// If n < 0, there is no limit on the number of replacements.\n" +
+           "func Replace(s, old, new string, n int) string {return s}",
+           "<pre> <b>func Replace(s string, old string, new string, n int) string</b><br/>" +
+           " If n &lt; 0, there is no limit on the number of replacements.</pre>"
     );
   }
 
@@ -46,12 +56,12 @@ public class GoDocumentationProviderTest extends GoCodeInsightFixtureTestCase {
 
   public void testPackage() {
     doTest("package a; import \"io<caret>\"",
-           "<pre> Package io provides basic interfaces to I/O primitives.<br/>" +
-           " Its primary job is to wrap existing implementations of such primitives,<br/>" +
-           " such as those in package os, into shared public interfaces that<br/>" +
-           " abstract the functionality, plus some other related primitives.<br/><br/>" +
-           " Because these interfaces and primitives wrap lower-level operations with<br/>" +
-           " various implementations, unless otherwise informed clients should not<br/>" +
+           "<pre> Package io provides basic interfaces to I/O primitives.\n" +
+           " Its primary job is to wrap existing implementations of such primitives,\n" +
+           " such as those in package os, into shared public interfaces that\n" +
+           " abstract the functionality, plus some other related primitives.\n\n" +
+           " Because these interfaces and primitives wrap lower-level operations with\n" +
+           " various implementations, unless otherwise informed clients should not\n" +
            " assume they are safe for parallel execution.</pre>");
   }
 
@@ -70,7 +80,7 @@ public class GoDocumentationProviderTest extends GoCodeInsightFixtureTestCase {
   private void doTest(@NotNull String text, @NotNull String expected) {
     myFixture.configureByText("test.go", text);
     int caretPosition = myFixture.getEditor().getCaretModel().getOffset();
-    PsiReference ref =  myFixture.getFile().findReferenceAt(caretPosition);
+    PsiReference ref = myFixture.getFile().findReferenceAt(caretPosition);
     assertNotNull(ref);
     PsiElement resolve = ref.resolve();
     assertNotNull(resolve);
