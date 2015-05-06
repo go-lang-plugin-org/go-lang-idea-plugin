@@ -56,9 +56,9 @@ import java.util.regex.Pattern;
 import static com.intellij.util.containers.ContainerUtil.newLinkedHashSet;
 
 public class GoSdkUtil {
-  private static final String GO_VERSION_PATTERN = "theVersion\\s*=\\s*`go([\\d.]+)`";
-  private static final String GAE_VERSION_PATTERN = "theVersion\\s*=\\s*`go([\\d.]+)( \\(appengine-[\\d.]+\\))?`";
-  private static final String GO_DEVEL_VERSION_PATTERN = "theVersion\\s*=\\s*`(devel.*)`";
+  private static final Pattern GO_VERSION_PATTERN = Pattern.compile("theVersion\\s*=\\s*`go([\\d.]+)`");
+  private static final Pattern GAE_VERSION_PATTERN = Pattern.compile("theVersion\\s*=\\s*`go([\\d.]+)( \\(appengine-[\\d.]+\\))?`");
+  private static final Pattern GO_DEVEL_VERSION_PATTERN = Pattern.compile("theVersion\\s*=\\s*`(devel.*)`");
   private static final Function<VirtualFile, String> RETRIEVE_FILE_PATH_FUNCTION = new Function<VirtualFile, String>() {
     @Override
     public String fun(VirtualFile file) {
@@ -282,15 +282,15 @@ public class GoSdkUtil {
 
   @Nullable
   public static String parseGoVersion(@NotNull String text) {
-    Matcher matcher = Pattern.compile(GO_VERSION_PATTERN).matcher(text);
+    Matcher matcher = GO_VERSION_PATTERN.matcher(text);
     if (matcher.find()) {
       return matcher.group(1);
     }
-    matcher = Pattern.compile(GAE_VERSION_PATTERN).matcher(text);
+    matcher = GAE_VERSION_PATTERN.matcher(text);
     if (matcher.find()) {
       return matcher.group(1) + matcher.group(2);
     }
-    matcher = Pattern.compile(GO_DEVEL_VERSION_PATTERN).matcher(text);
+    matcher = GO_DEVEL_VERSION_PATTERN.matcher(text);
     if (matcher.find()) {
       return matcher.group(1);
     }
