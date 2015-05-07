@@ -2,11 +2,13 @@ package com.goide.sdk;
 
 import com.goide.GoConstants;
 import com.goide.GoEnvironmentUtil;
+import com.intellij.execution.configurations.PathEnvironmentVariableUtil;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.SimpleModificationTracker;
+import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
@@ -15,6 +17,8 @@ import com.intellij.util.PathUtil;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.File;
 
 public abstract class GoSdkService extends SimpleModificationTracker {
   @NotNull
@@ -80,7 +84,13 @@ public abstract class GoSdkService extends SimpleModificationTracker {
         return FileUtil.join(goExecutablePath, GoEnvironmentUtil.getGaeExecutableFileName(gcloudInstallation));
       }
       else {
-        return FileUtil.join(sdkHomePath, "bin", GoEnvironmentUtil.getBinaryFileNameForPath(GoConstants.GO_EXECUTABLE_NAME));
+        File binDirectory = new File(sdkHomePath, "bin");
+        if (!binDirectory.exists() && SystemInfo.isLinux) {
+          // failed to define executable path in old linux and old go
+          File goFromPath = PathEnvironmentVariableUtil.findInPath(GoConstants.GO_EXECUTABLE_NAME);
+          if (goFromPath != null && goFromPath.exists()) return goFromPath.getAbsolutePath();
+        }
+        return new File(binDirectory, GoEnvironmentUtil.getBinaryFileNameForPath(GoConstants.GO_EXECUTABLE_NAME)).getAbsolutePath();
       }
     }
     return null;
