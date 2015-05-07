@@ -29,7 +29,18 @@ func getAnA() (result *A) {
     return &A{}
 }
 
-
 func _() {
     getAnA().chain()
+}
+
+func _(callback func() (interface{}, error)) {
+	if _, err := callback(); err != nil {
+		err.Error()
+	}
+}
+
+func _(callback func() error) {
+	if err := callback(); err != nil {
+		err.Error()
+	}
 }

@@ -524,6 +524,7 @@ public class GoPsiImplUtil {
     if (exprs.size() == 1 && exprs.get(0) instanceof GoCallExpr) {
       GoExpression call = exprs.get(0);
       GoType type = call.getGoType(null);
+      type = funcType(type);
       if (type instanceof GoTypeList) {
         if (((GoTypeList)type).getTypeList().size() > i) {
           return ((GoTypeList)type).getTypeList().get(i);
@@ -533,6 +534,16 @@ public class GoPsiImplUtil {
     }
     if (exprs.size() <= i) return null;
     return exprs.get(i).getGoType(null);
+  }
+
+  @Nullable
+  private static GoType funcType(@Nullable GoType type) {
+    if (type instanceof GoFunctionType) {
+      GoSignature signature = ((GoFunctionType)type).getSignature();
+      GoResult result = signature != null ? signature.getResult() : null;
+      return result != null ? result.getType() : type;
+    }
+    return type;
   }
 
   @Nullable
