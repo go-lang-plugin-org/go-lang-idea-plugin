@@ -44,6 +44,7 @@ import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.util.EnvironmentUtil;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
@@ -318,8 +319,13 @@ public class GoExecutor {
     commandLine.getEnvironment().putAll(myExtraEnvironment);
     commandLine.getEnvironment().put(GoConstants.GO_ROOT, StringUtil.notNullize(myGoRoot));
     commandLine.getEnvironment().put(GoConstants.GO_PATH, StringUtil.notNullize(myGoPath));
-    String existingPathVariable = StringUtil.notNullize(commandLine.getEnvironment().get(GoConstants.PATH));
-    commandLine.getEnvironment().put(GoConstants.PATH, existingPathVariable + File.pathSeparatorChar + StringUtil.notNullize(myEnvPath));
+
+    Collection<String> paths = ContainerUtil.newArrayList();
+    ContainerUtil.addIfNotNull(paths, StringUtil.nullize(commandLine.getEnvironment().get(GoConstants.PATH), true));
+    ContainerUtil.addIfNotNull(paths, StringUtil.nullize(EnvironmentUtil.getValue(GoConstants.PATH), true));
+    ContainerUtil.addIfNotNull(paths, StringUtil.nullize(myEnvPath, true));
+    commandLine.getEnvironment().put(GoConstants.PATH, StringUtil.join(paths, File.pathSeparator));
+    
     commandLine.withWorkDirectory(myWorkDirectory);
     commandLine.addParameters(myParameterList.getList());
     commandLine.setPassParentEnvironment(myPassParentEnvironment);
