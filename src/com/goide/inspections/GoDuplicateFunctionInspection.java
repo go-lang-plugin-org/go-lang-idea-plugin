@@ -49,6 +49,7 @@ public class GoDuplicateFunctionInspection extends GoInspectionBase {
     file.accept(new GoRecursiveVisitor() {
       @Override
       public void visitFunctionDeclaration(@NotNull final GoFunctionDeclaration o) {
+        if (o.isBlank()) return;
         String name = o.getName();
         if (name == null) return;
         Collection<GoFunctionDeclaration> byKey = map.get(name);
