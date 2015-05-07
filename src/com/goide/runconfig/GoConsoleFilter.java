@@ -45,6 +45,11 @@ public class GoConsoleFilter implements Filter {
   @Nullable private final Module myModule;
   @Nullable private final String myWorkingDirectoryUrl;
 
+  @SuppressWarnings("unused") //used by pico container
+  public GoConsoleFilter(@NotNull Project project) {
+    this(project, null, null);
+  }
+  
   public GoConsoleFilter(@NotNull Project project, @Nullable Module module, @Nullable String workingDirectoryUrl) {
     myProject = project;
     myModule = module;
