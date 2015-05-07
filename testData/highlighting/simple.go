@@ -390,3 +390,15 @@ type Ormer interface {
 func <warning>Save</warning>(o Ormer) {
 	(*o).Insert(1)
 }
+
+type Conn interface {
+	Do(commandName string, args ...interface{}) (reply interface{}, err error)
+}
+
+func String(reply interface{}, err error) {
+}
+ 
+func _(c Conn) {
+	String(c.Do("GET", "somekey"))
+}
+
