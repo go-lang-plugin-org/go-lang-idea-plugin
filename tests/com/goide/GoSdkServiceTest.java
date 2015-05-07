@@ -1,3 +1,19 @@
+/*
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.goide;
 
 import com.goide.sdk.GoSdkService;
@@ -14,6 +30,7 @@ import java.lang.reflect.Modifier;
 public class GoSdkServiceTest extends UsefulTestCase {
   public void testRegularSdkPath() {
     setIsWindows(false);
+    setIsLinux(false);
     assertEquals("/path/to/sdk/bin/go", getExecutablePath("/path/to/sdk"));
   }
   
@@ -29,6 +46,7 @@ public class GoSdkServiceTest extends UsefulTestCase {
   
   public void testRegularSdkPathWindows() {
     setIsWindows(true);
+    setIsLinux(false);
     assertEquals("/path/to/sdk/bin/go.exe", getExecutablePath("/path/to/sdk"));
   }
   
@@ -47,9 +65,17 @@ public class GoSdkServiceTest extends UsefulTestCase {
   }
 
   private void setIsWindows(boolean value) {
+    setIsWindows(value, SystemInfo.isWindows, "isWindows");
+  }
+  
+  
+  private void setIsLinux(boolean value) {
+    setIsWindows(value, SystemInfo.isLinux, "isLinux");
+  }
+
+  private void setIsWindows(boolean value, final boolean oldValue, @NotNull String fieldName) {
     try {
-      final boolean oldValue = SystemInfo.isWindows;
-      final Field field = SystemInfo.class.getField("isWindows");
+      final Field field = SystemInfo.class.getField(fieldName);
       field.setAccessible(true);
       Field modifiersField = Field.class.getDeclaredField("modifiers");
       modifiersField.setAccessible(true);
