@@ -59,7 +59,7 @@ public class GoParserUtil extends GeneratedParserUtilBase {
       i += type == GoTypes.LBRACE ? 1 : type == GoTypes.RBRACE ? -1 : 0;  
       builder_.advanceLexer();
     }
-    while (i != 0 && !builder_.eof());
+    while (i > 0 && !builder_.eof());
     boolean result = i == 0;
     if (result) {
       m.drop();
