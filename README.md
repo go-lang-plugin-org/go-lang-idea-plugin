@@ -65,7 +65,7 @@ functionality that you'd want to see. In order to get started, see
 
 ## Contributors
 
-People who helped with the plugin development, please see [contributors.md](contributors.md)
+People who helped with the plugin development, please see [contributors page](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/graphs/contributors).
 
 ## Thank you
 
