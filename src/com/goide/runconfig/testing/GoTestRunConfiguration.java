@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
   private static final String DIRECTORY_ATTRIBUTE_NAME = "directory";
   private static final String PACKAGE_ATTRIBUTE_NAME = "package";
   private static final String KIND_ATTRIBUTE_NAME = "kind";
-  
+
   @NotNull private String myPackage = "";
   @NotNull private String myFilePath = "";
   @NotNull private String myDirectoryPath = "";
@@ -137,7 +137,7 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
     super.readExternal(element);
     try {
       String kindName = JDOMExternalizerUtil.getFirstChildValueAttribute(element, KIND_ATTRIBUTE_NAME);
-      myKind = kindName != null ? Kind.valueOf(kindName) : Kind.DIRECTORY; 
+      myKind = kindName != null ? Kind.valueOf(kindName) : Kind.DIRECTORY;
     }
     catch (IllegalArgumentException e) {
       myKind = Kind.DIRECTORY;
@@ -156,7 +156,7 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
   public void setPattern(@NotNull String pattern) {
     myPattern = pattern;
   }
-  
+
   @NotNull
   public Kind getKind() {
     return myKind;

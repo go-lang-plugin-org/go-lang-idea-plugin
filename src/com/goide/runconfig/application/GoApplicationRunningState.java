@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,8 +35,15 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
   }
   
   @NotNull
-  public String getMainFilePath() {
-    return myConfiguration.getFilePath();
+  public String getTarget() {
+    return myConfiguration.getKind() == GoApplicationConfiguration.Kind.PACKAGE
+           ? myConfiguration.getPackage()
+           : myConfiguration.getFilePath();
+  }
+
+  @NotNull
+  public String getGoBuildParams() {
+    return myConfiguration.getGoToolParams();
   }
 
   @NotNull

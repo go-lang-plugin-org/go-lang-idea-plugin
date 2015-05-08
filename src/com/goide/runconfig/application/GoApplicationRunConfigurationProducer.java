@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,73 @@
 
 package com.goide.runconfig.application;
 
+import com.goide.psi.GoFile;
 import com.goide.runconfig.GoRunConfigurationProducerBase;
+import com.goide.runconfig.GoRunUtil;
+import com.goide.sdk.GoSdkUtil;
+import com.intellij.execution.actions.ConfigurationContext;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.openapi.util.Comparing;
+import com.intellij.openapi.util.Ref;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class GoApplicationRunConfigurationProducer extends GoRunConfigurationProducerBase<GoApplicationConfiguration> implements Cloneable {
   public GoApplicationRunConfigurationProducer() {
     super(GoApplicationRunConfigurationType.getInstance());
+  }
+
+  @Override
+  protected boolean setupConfigurationFromContext(@NotNull GoApplicationConfiguration configuration,
+                                                  @NotNull ConfigurationContext context,
+                                                  Ref<PsiElement> sourceElement) {
+    String importPath = getImportPathFromContext(context);
+    if (StringUtil.isNotEmpty(importPath)) {
+      configuration.setKind(GoApplicationConfiguration.Kind.PACKAGE);
+      configuration.setPackage(importPath);
+      configuration.setName("Build " + importPath + " and run");
+      return true;
+    }
+    if (super.setupConfigurationFromContext(configuration, context, sourceElement)) {
+      configuration.setKind(GoApplicationConfiguration.Kind.FILE);
+      return true;
+    }
+    return false;
+  }
+
+  @Nullable
+  private static String getImportPathFromContext(@NotNull ConfigurationContext configurationContext) {
+    PsiElement contextElement = GoRunUtil.getContextElement(configurationContext);
+    if (GoRunUtil.isPackageContext(contextElement)) {
+      PsiFile file = contextElement.getContainingFile();
+      if (file instanceof GoFile) {
+        return ((GoFile)file).getImportPath();
+      }
+    }
+    else if (contextElement instanceof PsiDirectory) {
+      return GoSdkUtil.getImportPath(((PsiDirectory)contextElement));
+    }
+    return null;
+  }
+
+  @Override
+  public boolean isConfigurationFromContext(@NotNull GoApplicationConfiguration configuration, ConfigurationContext context) {
+    PsiElement contextElement = GoRunUtil.getContextElement(context);
+    if (contextElement == null) return false;
+
+    Module module = ModuleUtilCore.findModuleForPsiElement(contextElement);
+    if (!Comparing.equal(module, configuration.getConfigurationModule().getModule())) return false;
+
+    if (configuration.getKind() == GoApplicationConfiguration.Kind.PACKAGE) {
+      return Comparing.equal(getImportPathFromContext(context), configuration.getPackage());
+    }
+
+    return super.isConfigurationFromContext(configuration, context);
   }
 
   @NotNull

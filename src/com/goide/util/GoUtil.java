@@ -17,6 +17,7 @@
 package com.goide.util;
 
 import com.goide.GoConstants;
+import com.goide.GoFileType;
 import com.goide.psi.*;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManager;
@@ -35,6 +36,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
@@ -138,6 +140,23 @@ public class GoUtil {
     chooseDirectoryDescriptor.withFileFilter(fileFilter);
     field.addBrowseFolderListener(new TextBrowseFolderListener(chooseDirectoryDescriptor));
   }
+
+  public static void installGoWithMainFileChooser(final Project project, @NotNull TextFieldWithBrowseButton fileField) {
+    installFileChooser(project, fileField, false, new Condition<VirtualFile>() {
+      @Override
+      public boolean value(VirtualFile file) {
+        if (file.getFileType() != GoFileType.INSTANCE) {
+          return false;
+        }
+        final PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
+        if (psiFile != null && psiFile instanceof GoFile) {
+          return GoConstants.MAIN.equals(((GoFile)psiFile).getPackageName()) && ((GoFile)psiFile).findMainFunction() != null;
+        }
+        return false;
+      }
+    });
+  }
+
 
   @NotNull
   public static GlobalSearchScope moduleScope(@NotNull PsiElement element) {

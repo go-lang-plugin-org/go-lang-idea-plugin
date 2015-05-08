@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,11 @@ package com.goide.runconfig.file;
 
 import com.goide.runconfig.GoModuleBasedConfiguration;
 import com.goide.runconfig.GoRunConfigurationWithMain;
-import com.goide.runconfig.ui.GoRunConfigurationEditorForm;
+import com.goide.runconfig.ui.GoRunFileConfigurationEditorForm;
 import com.intellij.execution.configurations.ConfigurationType;
 import com.intellij.execution.configurations.ModuleBasedConfiguration;
 import com.intellij.execution.configurations.RunConfiguration;
+import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.ide.scratch.ScratchFileType;
 import com.intellij.openapi.application.ApplicationManager;
@@ -50,7 +51,13 @@ public class GoRunFileConfiguration extends GoRunConfigurationWithMain<GoRunFile
   @NotNull
   @Override
   public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-    return new GoRunConfigurationEditorForm(getProject());
+    return new GoRunFileConfigurationEditorForm(getProject());
+  }
+
+  @Override
+  public void checkConfiguration() throws RuntimeConfigurationException {
+    super.checkBaseConfiguration();
+    super.checkFileConfiguration();
   }
 
   @NotNull

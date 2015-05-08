@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package com.goide.runconfig.testing;
 
 import com.goide.psi.GoFile;
 import com.goide.psi.GoFunctionDeclaration;
-import com.goide.psi.GoPackageClause;
+import com.goide.runconfig.GoRunUtil;
 import com.goide.sdk.GoSdkService;
 import com.intellij.execution.actions.ConfigurationContext;
 import com.intellij.execution.actions.RunConfigurationProducer;
@@ -43,7 +43,7 @@ public class GoTestRunConfigurationProducer extends RunConfigurationProducer<GoT
 
   @Override
   protected boolean setupConfigurationFromContext(@NotNull GoTestRunConfiguration configuration, ConfigurationContext context, Ref sourceElement) {
-    PsiElement contextElement = getContextElement(context);
+    PsiElement contextElement = GoRunUtil.getContextElement(context);
     if (contextElement == null) {
       return false;
     }
@@ -65,7 +65,7 @@ public class GoTestRunConfigurationProducer extends RunConfigurationProducer<GoT
     else {
       PsiFile file = contextElement.getContainingFile();
       if (GoTestFinder.isTestFile(file)) {
-        if (isPackageContext(contextElement)) {
+        if (GoRunUtil.isPackageContext(contextElement)) {
           String packageName = StringUtil.notNullize(((GoFile)file).getImportPath());
           configuration.setKind(GoTestRunConfiguration.Kind.PACKAGE);
           configuration.setPackage(packageName);
@@ -95,7 +95,7 @@ public class GoTestRunConfigurationProducer extends RunConfigurationProducer<GoT
 
   @Override
   public boolean isConfigurationFromContext(@NotNull GoTestRunConfiguration configuration, ConfigurationContext context) {
-    PsiElement contextElement = getContextElement(context);
+    PsiElement contextElement = GoRunUtil.getContextElement(context);
     if (contextElement == null) return false;
 
     Module module = ModuleUtilCore.findModuleForPsiElement(contextElement);
@@ -112,7 +112,7 @@ public class GoTestRunConfigurationProducer extends RunConfigurationProducer<GoT
       case PACKAGE:
         if (!GoTestFinder.isTestFile(file)) return false;
         if (!Comparing.equal(((GoFile)file).getImportPath(), configuration.getPackage())) return false;
-        if (isPackageContext(contextElement) && configuration.getPattern().isEmpty()) return true;
+        if (GoRunUtil.isPackageContext(contextElement) && configuration.getPattern().isEmpty()) return true;
         
         String functionNameFromContext = findFunctionNameFromContext(contextElement);
         return functionNameFromContext != null 
@@ -123,22 +123,6 @@ public class GoTestRunConfigurationProducer extends RunConfigurationProducer<GoT
           findFunctionNameFromContext(contextElement) == null;
     }
     return false;
-  }
-
-  @Nullable
-  private static PsiElement getContextElement(@Nullable ConfigurationContext context) {
-    if (context == null) {
-      return null;
-    }
-    PsiElement psiElement = context.getPsiLocation();
-    if (psiElement == null || !psiElement.isValid()) {
-      return null;
-    }
-    return psiElement;
-  }
-
-  private static boolean isPackageContext(PsiElement contextElement) {
-    return PsiTreeUtil.getNonStrictParentOfType(contextElement, GoPackageClause.class) != null;
   }
 
   @Nullable
