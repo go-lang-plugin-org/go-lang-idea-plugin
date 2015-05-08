@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 package com.goide.runconfig.testing.ui;
 
 import com.goide.completion.GoImportPathsCompletionProvider;
+import com.goide.runconfig.GoRunUtil;
 import com.goide.runconfig.testing.GoTestRunConfiguration;
 import com.goide.runconfig.ui.GoCommonSettingsPanel;
-import com.goide.util.GoUtil;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
@@ -145,8 +145,8 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   }
 
   private void installFileChoosers(@NotNull Project project) {
-    GoUtil.installFileChooser(project, myFileField, false);
-    GoUtil.installFileChooser(project, myDirectoryField, true);
+    GoRunUtil.installFileChooser(project, myFileField, false);
+    GoRunUtil.installFileChooser(project, myDirectoryField, true);
   }
 
   private void installTestKindComboBox() {

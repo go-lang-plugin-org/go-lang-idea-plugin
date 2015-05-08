@@ -16,8 +16,8 @@
 
 package com.goide.runconfig.ui;
 
+import com.goide.runconfig.GoRunUtil;
 import com.goide.runconfig.file.GoRunFileConfiguration;
-import com.goide.util.GoUtil;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
@@ -33,7 +33,7 @@ public class GoRunFileConfigurationEditorForm extends SettingsEditor<GoRunFileCo
 
   public GoRunFileConfigurationEditorForm(@NotNull Project project) {
     myCommonSettingsPanel.init(project);
-    GoUtil.installGoWithMainFileChooser(project, myFileField);
+    GoRunUtil.installGoWithMainFileChooser(project, myFileField);
   }
 
   @Override

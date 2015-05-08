@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package com.goide.runconfig;
 
-import com.goide.GoConstants;
 import com.goide.psi.GoFile;
 import com.intellij.execution.actions.ConfigurationContext;
 import com.intellij.execution.actions.RunConfigurationProducer;
@@ -37,16 +36,14 @@ public abstract class GoRunConfigurationProducerBase<T extends GoRunConfiguratio
   @Override
   protected boolean setupConfigurationFromContext(@NotNull T configuration, @NotNull ConfigurationContext context, Ref<PsiElement> sourceElement) {
     PsiFile file = getFileFromContext(context);
-    if (file != null) {
-      if (GoConstants.MAIN.equals(((GoFile)file).getPackageName()) && ((GoFile)file).findMainFunction() != null) {
-        configuration.setName(getConfigurationName(file));
-        configuration.setFilePath(file.getVirtualFile().getPath());
-        Module module = context.getModule();
-        if (module != null) {
-          configuration.setModule(module);
-        }
-        return true;
+    if (GoRunUtil.isMainGoFile(file)) {
+      configuration.setName(getConfigurationName(file));
+      configuration.setFilePath(file.getVirtualFile().getPath());
+      Module module = context.getModule();
+      if (module != null) {
+        configuration.setModule(module);
       }
+      return true;
     }
     return false;
   }

@@ -17,7 +17,7 @@
 package com.goide.runconfig.ui;
 
 import com.goide.runconfig.GoRunConfigurationBase;
-import com.goide.util.GoUtil;
+import com.goide.runconfig.GoRunUtil;
 import com.intellij.application.options.ModulesComboBox;
 import com.intellij.execution.configuration.EnvironmentVariablesTextFieldWithBrowseButton;
 import com.intellij.openapi.module.Module;
@@ -39,7 +39,7 @@ public class GoCommonSettingsPanel extends JBPanel {
   @SuppressWarnings("unused") private JPanel myRoot;
 
   public void init(@NotNull Project project) {
-    GoUtil.installFileChooser(project, myWorkingDirectoryField, true);
+    GoRunUtil.installFileChooser(project, myWorkingDirectoryField, true);
   }
 
   public void resetEditorFrom(@NotNull GoRunConfigurationBase<?> configuration) {

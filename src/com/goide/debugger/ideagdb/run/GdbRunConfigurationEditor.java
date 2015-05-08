@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package com.goide.debugger.ideagdb.run;
 
-import com.goide.util.GoUtil;
+import com.goide.runconfig.GoRunUtil;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
@@ -32,8 +32,8 @@ public class GdbRunConfigurationEditor extends SettingsEditor<GdbRunConfiguratio
   private JTextArea myStartupCommands;
 
   public GdbRunConfigurationEditor(Project project) {
-    GoUtil.installFileChooser(project, myAppPath, false);
-    GoUtil.installFileChooser(project, myGdbPath, false);
+    GoRunUtil.installFileChooser(project, myAppPath, false);
+    GoRunUtil.installFileChooser(project, myGdbPath, false);
   }
 
   @Override

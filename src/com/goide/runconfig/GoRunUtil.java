@@ -17,11 +17,16 @@
 package com.goide.runconfig;
 
 import com.goide.GoConstants;
+import com.goide.GoFileType;
 import com.goide.psi.GoFile;
-import com.goide.psi.GoFunctionDeclaration;
 import com.goide.psi.GoPackageClause;
 import com.intellij.execution.actions.ConfigurationContext;
+import com.intellij.openapi.fileChooser.FileChooserDescriptor;
+import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.TextBrowseFolderListener;
+import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -36,7 +41,6 @@ public class GoRunUtil {
     
   }
 
-
   @Contract("null -> false")
   public static boolean isPackageContext(@Nullable PsiElement contextElement) {
     return PsiTreeUtil.getNonStrictParentOfType(contextElement, GoPackageClause.class) != null;
@@ -49,14 +53,8 @@ public class GoRunUtil {
         continue;
       }
       PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
-      if (psiFile == null || !(psiFile instanceof GoFile)) {
-        continue;
-      }
-      if (GoConstants.MAIN.equals(((GoFile)psiFile).getPackageName())) {
-        GoFunctionDeclaration mainFunction = ((GoFile)psiFile).findMainFunction();
-        if (mainFunction != null) {
-          return psiFile;
-        }
+      if (isMainGoFile(psiFile)) {
+        return psiFile;
       }
     }
     return null;
@@ -72,5 +70,44 @@ public class GoRunUtil {
       return null;
     }
     return psiElement;
+  }
+
+  public static void installGoWithMainFileChooser(final Project project, @NotNull TextFieldWithBrowseButton fileField) {
+    installFileChooser(project, fileField, false, new Condition<VirtualFile>() {
+      @Override
+      public boolean value(VirtualFile file) {
+        if (file.getFileType() != GoFileType.INSTANCE) {
+          return false;
+        }
+        final PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
+        return isMainGoFile(psiFile);
+      }
+    });
+  }
+  
+  public static boolean isMainGoFile(@Nullable PsiFile psiFile) {
+    if (psiFile != null && psiFile instanceof GoFile) {
+      return GoConstants.MAIN.equals(((GoFile)psiFile).getPackageName()) && ((GoFile)psiFile).hasMainFunction();
+    }
+    return false;
+  }
+
+  public static void installFileChooser(@NotNull Project project,
+                                        @NotNull TextFieldWithBrowseButton field,
+                                        boolean directory) {
+    installFileChooser(project, field, directory, null);
+  }
+
+  public static void installFileChooser(@NotNull Project project,
+                                        @NotNull TextFieldWithBrowseButton field,
+                                        boolean directory,
+                                        @Nullable Condition<VirtualFile> fileFilter) {
+    FileChooserDescriptor chooseDirectoryDescriptor = directory
+                                                      ? FileChooserDescriptorFactory.createSingleFolderDescriptor()
+                                                      : FileChooserDescriptorFactory.createSingleLocalFileDescriptor();
+    chooseDirectoryDescriptor.setRoots(project.getBaseDir());
+    chooseDirectoryDescriptor.setShowFileSystemRoots(false);
+    chooseDirectoryDescriptor.withFileFilter(fileFilter);
+    field.addBrowseFolderListener(new TextBrowseFolderListener(chooseDirectoryDescriptor));
   }
 }

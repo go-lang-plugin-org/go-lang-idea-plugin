@@ -17,26 +17,17 @@
 package com.goide.util;
 
 import com.goide.GoConstants;
-import com.goide.GoFileType;
 import com.goide.psi.*;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.extensions.PluginId;
-import com.intellij.openapi.fileChooser.FileChooserDescriptor;
-import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.TextBrowseFolderListener;
-import com.intellij.openapi.ui.TextFieldWithBrowseButton;
-import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
@@ -120,41 +111,6 @@ public class GoUtil {
   
   public static boolean libraryDirectoryToIgnore(@NotNull String name) {
     return StringUtil.startsWithChar(name, '.') || StringUtil.startsWithChar(name, '_') || GoConstants.TESTDATA_NAME.equals(name);
-  }
-
-  public static void installFileChooser(@NotNull Project project,
-                                        @NotNull TextFieldWithBrowseButton field,
-                                        boolean directory) {
-    installFileChooser(project, field, directory, null);
-  }
-
-  public static void installFileChooser(@NotNull Project project,
-                                        @NotNull TextFieldWithBrowseButton field,
-                                        boolean directory,
-                                        @Nullable Condition<VirtualFile> fileFilter) {
-    FileChooserDescriptor chooseDirectoryDescriptor = directory
-                                                      ? FileChooserDescriptorFactory.createSingleFolderDescriptor()
-                                                      : FileChooserDescriptorFactory.createSingleLocalFileDescriptor();
-    chooseDirectoryDescriptor.setRoots(project.getBaseDir());
-    chooseDirectoryDescriptor.setShowFileSystemRoots(false);
-    chooseDirectoryDescriptor.withFileFilter(fileFilter);
-    field.addBrowseFolderListener(new TextBrowseFolderListener(chooseDirectoryDescriptor));
-  }
-
-  public static void installGoWithMainFileChooser(final Project project, @NotNull TextFieldWithBrowseButton fileField) {
-    installFileChooser(project, fileField, false, new Condition<VirtualFile>() {
-      @Override
-      public boolean value(VirtualFile file) {
-        if (file.getFileType() != GoFileType.INSTANCE) {
-          return false;
-        }
-        final PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
-        if (psiFile != null && psiFile instanceof GoFile) {
-          return GoConstants.MAIN.equals(((GoFile)psiFile).getPackageName()) && ((GoFile)psiFile).findMainFunction() != null;
-        }
-        return false;
-      }
-    });
   }
 
 

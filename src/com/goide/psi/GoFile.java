@@ -371,15 +371,14 @@ public class GoFile extends PsiFileBase {
     return GoFileType.INSTANCE;
   }
 
-  @Nullable
-  public GoFunctionDeclaration findMainFunction() { // todo create a map for faster search
+  public boolean hasMainFunction() { // todo create a map for faster search
     List<GoFunctionDeclaration> functions = getFunctions();
     for (GoFunctionDeclaration function : functions) {
       if (GoConstants.MAIN.equals(function.getName())) {
-        return function;
+        return true;
       }
     }
-    return null;
+    return false;
   }
 
   @Nullable

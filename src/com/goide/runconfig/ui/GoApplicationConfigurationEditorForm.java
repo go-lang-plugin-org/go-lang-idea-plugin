@@ -17,8 +17,8 @@
 package com.goide.runconfig.ui;
 
 import com.goide.completion.GoImportPathsCompletionProvider;
+import com.goide.runconfig.GoRunUtil;
 import com.goide.runconfig.application.GoApplicationConfiguration;
-import com.goide.util.GoUtil;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
@@ -52,7 +52,7 @@ public class GoApplicationConfigurationEditorForm extends SettingsEditor<GoAppli
     myCommonSettingsPanel.init(project);
 
     installRunKindComboBox();
-    GoUtil.installGoWithMainFileChooser(myProject, myFileField);
+    GoRunUtil.installGoWithMainFileChooser(myProject, myFileField);
   }
 
   private void onRunKindChanged() {
