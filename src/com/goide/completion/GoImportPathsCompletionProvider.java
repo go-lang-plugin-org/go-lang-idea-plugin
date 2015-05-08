@@ -48,13 +48,16 @@ public class GoImportPathsCompletionProvider extends CompletionProvider<Completi
     String newPrefix = parameters.getEditor().getDocument().getText(TextRange.create(pathRange.getStartOffset(), parameters.getOffset()));
     result = result.withPrefixMatcher(result.getPrefixMatcher().cloneWithPrefix(newPrefix));
 
-    addCompletions(result, ModuleUtilCore.findModuleForPsiElement(parameters.getPosition()), parameters.getOriginalFile());
+    addCompletions(result, ModuleUtilCore.findModuleForPsiElement(parameters.getPosition()), parameters.getOriginalFile(), true);
   }
 
-  public static void addCompletions(@NotNull CompletionResultSet result, @Nullable Module module, @Nullable PsiElement context) {
+  public static void addCompletions(@NotNull CompletionResultSet result,
+                                    @Nullable Module module,
+                                    @Nullable PsiElement context,
+                                    boolean withLibraries) {
     if (module != null) {
       String contextImportPath = GoCompletionUtil.getContextImportPath(context);
-      GlobalSearchScope scope = GoUtil.moduleScope(module);
+      GlobalSearchScope scope = withLibraries ? GoUtil.moduleScope(module) : GoUtil.moduleScopeWithoutLibraries(module);
       for (VirtualFile file : FileTypeIndex.getFiles(GoFileType.INSTANCE, scope)) {
         VirtualFile parent = file.getParent();
         if (parent == null) continue;

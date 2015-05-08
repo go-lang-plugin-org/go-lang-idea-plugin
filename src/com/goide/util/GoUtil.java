@@ -124,6 +124,11 @@ public class GoUtil {
   public static GlobalSearchScope moduleScope(@NotNull Module module) {
     return GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module).uniteWith(module.getModuleContentWithDependenciesScope());
   }
+  
+  @NotNull
+  public static GlobalSearchScope moduleScopeWithoutLibraries(@NotNull Module module) {
+    return GlobalSearchScope.moduleWithDependenciesScope(module).uniteWith(module.getModuleContentWithDependenciesScope());
+  }
 
   public static IdeaPluginDescriptor getPlugin() {
     return PluginManager.getPlugin(PluginId.getId(PLUGIN_ID));
