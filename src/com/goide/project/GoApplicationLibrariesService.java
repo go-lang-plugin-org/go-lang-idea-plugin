@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@
 package com.goide.project;
 
 import com.goide.GoConstants;
+import com.goide.sdk.GoSdkUtil;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
@@ -27,10 +29,21 @@ import com.intellij.openapi.components.StoragePathMacros;
   storages = @Storage(file = StoragePathMacros.APP_CONFIG + "/" + GoConstants.GO_LIBRARIES_CONFIG_FILE)
 )
 public class GoApplicationLibrariesService extends GoLibrariesService {
-  public GoApplicationLibrariesService() {
-  }
+  private boolean myUseGoPathFromSystemEnvironment = true;
 
   public static GoApplicationLibrariesService getInstance() {
     return ServiceManager.getService(GoApplicationLibrariesService.class);
+  }
+
+  public boolean isUseGoPathFromSystemEnvironment() {
+    return myUseGoPathFromSystemEnvironment;
+  }
+
+  public void setUseGoPathFromSystemEnvironment(boolean useGoPathFromSystemEnvironment) {
+    if (myUseGoPathFromSystemEnvironment != useGoPathFromSystemEnvironment && !GoSdkUtil.getGoPathsRootsFromEnvironment().isEmpty()) {
+      incModificationCount();
+      ApplicationManager.getApplication().getMessageBus().syncPublisher(LIBRARIES_TOPIC).librariesChanged(getLibraryRootUrls());
+    }
+    myUseGoPathFromSystemEnvironment = useGoPathFromSystemEnvironment;
   }
 }

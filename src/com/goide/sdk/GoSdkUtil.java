@@ -18,6 +18,7 @@ package com.goide.sdk;
 
 import com.goide.GoConstants;
 import com.goide.GoEnvironmentUtil;
+import com.goide.project.GoApplicationLibrariesService;
 import com.goide.project.GoLibrariesService;
 import com.goide.psi.GoFile;
 import com.intellij.execution.configurations.PathEnvironmentVariableUtil;
@@ -120,7 +121,10 @@ public class GoSdkUtil {
 
   @NotNull
   private static Collection<VirtualFile> getGoPathRoots(@NotNull Project project, @Nullable Module module) {
-    Collection<VirtualFile> roots = ContainerUtil.newArrayList(getGoPathsRootsFromEnvironment());
+    Collection<VirtualFile> roots = ContainerUtil.newArrayList();
+    if (GoApplicationLibrariesService.getInstance().isUseGoPathFromSystemEnvironment()) {
+      roots.addAll(getGoPathsRootsFromEnvironment());
+    }
     roots.addAll(module != null ? GoLibrariesService.getUserDefinedLibraries(module) : GoLibrariesService.getUserDefinedLibraries(project));
     return roots;
   }

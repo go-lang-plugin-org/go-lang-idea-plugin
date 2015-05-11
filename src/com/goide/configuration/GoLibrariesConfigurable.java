@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.goide.configuration;
 
+import com.goide.project.GoApplicationLibrariesService;
 import com.goide.project.GoLibrariesService;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.fileChooser.FileChooserDialog;
@@ -28,6 +29,7 @@ import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.ui.*;
+import com.intellij.ui.components.JBCheckBox;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.IconUtil;
 import com.intellij.util.containers.ContainerUtil;
@@ -37,6 +39,9 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Collection;
 import java.util.Set;
 
 import static com.intellij.openapi.fileChooser.FileChooserDescriptorFactory.createMultipleFoldersDescriptor;
@@ -45,6 +50,7 @@ public class GoLibrariesConfigurable implements SearchableConfigurable, Configur
   @NotNull private final String myDisplayName;
   private final GoLibrariesService myLibrariesService;
   private final String[] myReadOnlyPaths;
+  private final JBCheckBox myUseEnvGoPathCheckBox = new JBCheckBox("Use GOPATH that's defined in system environment");
   private final JPanel myPanel = new JPanel(new BorderLayout());
   private final CollectionListModel<ListItem> myListModel = new CollectionListModel<ListItem>();
 
@@ -128,6 +134,20 @@ public class GoLibrariesConfigurable implements SearchableConfigurable, Configur
       })
       .disableUpDownActions();
     myPanel.add(decorator.createPanel(), BorderLayout.CENTER);
+    if (librariesService instanceof GoApplicationLibrariesService) {
+      myUseEnvGoPathCheckBox.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(@NotNull ActionEvent event) {
+          if (myUseEnvGoPathCheckBox.isSelected()) {
+            addReadOnlyPaths();
+          }
+          else {
+            removeReadOnlyPaths();
+          }
+        }
+      });
+      myPanel.add(myUseEnvGoPathCheckBox, BorderLayout.SOUTH);
+    }
   }
 
   private static void scrollToSelection(JList list) {
@@ -145,22 +165,54 @@ public class GoLibrariesConfigurable implements SearchableConfigurable, Configur
 
   @Override
   public boolean isModified() {
-    return !getUserDefinedUrls().equals(ContainerUtil.newHashSet(myLibrariesService.getLibraryRootUrls()));
+    return !getUserDefinedUrls().equals(ContainerUtil.newHashSet(myLibrariesService.getLibraryRootUrls())) ||
+           ((myLibrariesService instanceof GoApplicationLibrariesService) &&
+            (((GoApplicationLibrariesService)myLibrariesService).isUseGoPathFromSystemEnvironment() !=
+             myUseEnvGoPathCheckBox.isSelected()));
   }
 
   @Override
   public void apply() throws ConfigurationException {
     myLibrariesService.setLibraryRootUrls(getUserDefinedUrls());
+    if (myLibrariesService instanceof GoApplicationLibrariesService) {
+      ((GoApplicationLibrariesService)myLibrariesService).setUseGoPathFromSystemEnvironment(myUseEnvGoPathCheckBox.isSelected());
+    }
   }
 
   @Override
   public void reset() {
     myListModel.removeAll();
+    resetLibrariesFromEnvironment();
+    for (String url : myLibrariesService.getLibraryRootUrls()) {
+      myListModel.add(new ListItem(url, false));
+    }
+  }
+
+  private void resetLibrariesFromEnvironment() {
+    if (myLibrariesService instanceof GoApplicationLibrariesService) {
+      myUseEnvGoPathCheckBox.setSelected(((GoApplicationLibrariesService)myLibrariesService).isUseGoPathFromSystemEnvironment());
+      if (((GoApplicationLibrariesService)myLibrariesService).isUseGoPathFromSystemEnvironment()) {
+        addReadOnlyPaths();
+      }
+      else {
+        removeReadOnlyPaths();
+      }
+    }
+  }
+
+  private void addReadOnlyPaths() {
     for (String url : myReadOnlyPaths) {
       myListModel.add(new ListItem(url, true));
     }
-    for (String url : myLibrariesService.getLibraryRootUrls()) {
-      myListModel.add(new ListItem(url, false));
+  }
+
+  private void removeReadOnlyPaths() {
+    Collection<ListItem> toRemove = ContainerUtil.newArrayList();
+    for (ListItem item : myListModel.getItems()) {
+      if (item.readOnly) toRemove.add(item);
+    }
+    for (ListItem item : toRemove) {
+      myListModel.remove(item);
     }
   }
 
