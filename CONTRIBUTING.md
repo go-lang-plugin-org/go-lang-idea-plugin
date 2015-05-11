@@ -4,6 +4,7 @@
 
 ## TOC
 + [Reporting errors](#reporting-errors)
++ [Contributing to the code](#contributing-to-the-code)
 + [Submitting test cases](#submitting-test-cases)
 + [Getting started with the plugin development](#getting-started-with-the-plugin-development)
 + [Checking out the IntellJ IDEA Platform sources](#checking-out-the-intellij-idea-platform-sources)
@@ -52,6 +53,10 @@ you, we can't copy paste code from screenshots either.
 
 Please ensure that the bug is not reported already, this helps us focusing on
 working on bug fixes not triage work.
+
+### Contributing to the code
+
+If you want to contribute to the code, go to GitHub and check out the latest version and follow the instructions on how to build the plugin from source. After that, you can start picking some [pending tasks](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/issues) on the issue tracker. Make sure you look for issues tags with [up for grabs](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/labels/up%20for%20grabs) as these are some of the easier ones to get started with.
 
 ### Submitting test cases
 
