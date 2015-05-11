@@ -114,6 +114,10 @@ public class GoPsiImplUtil {
     if (declaration == null || !(declaration.getParent() instanceof GoFile)) return null;
     return declaration;
   }
+  
+  public static int getArity(@Nullable GoSignature s) {
+    return s == null ? -1 : s.getParameters().getParameterDeclarationList().size();
+  }
 
   @Nullable
   public static GoTypeReferenceExpression getQualifier(@NotNull GoTypeReferenceExpression o) {

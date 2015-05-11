@@ -17,10 +17,8 @@
 package com.goide.stubs.types;
 
 import com.goide.psi.GoMethodSpec;
-import com.goide.psi.GoParameterDeclaration;
-import com.goide.psi.GoParameters;
-import com.goide.psi.GoSignature;
 import com.goide.psi.impl.GoMethodSpecImpl;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.stubs.GoMethodSpecStub;
 import com.goide.stubs.index.GoMethodFingerprintIndex;
 import com.intellij.psi.stubs.IndexSink;
@@ -30,7 +28,6 @@ import com.intellij.psi.stubs.StubOutputStream;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.util.List;
 
 public class GoMethodSpecStubElementType extends GoNamedStubElementType<GoMethodSpecStub, GoMethodSpec> {
   public GoMethodSpecStubElementType(@NotNull String name) {
@@ -56,10 +53,7 @@ public class GoMethodSpecStubElementType extends GoNamedStubElementType<GoMethod
   @NotNull
   @Override
   public GoMethodSpecStub createStub(@NotNull GoMethodSpec psi, StubElement parentStub) {
-    GoSignature signature = psi.getSignature();
-    GoParameters parameters = signature != null ? signature.getParameters() : null;
-    List<GoParameterDeclaration> list = parameters != null ? parameters.getParameterDeclarationList() : null;
-    int arity = list != null ? list.size() : -1;
+    int arity = GoPsiImplUtil.getArity(psi.getSignature());
     return new GoMethodSpecStub(parentStub, this, psi.getName(), psi.isPublic(), arity);
   }
 
