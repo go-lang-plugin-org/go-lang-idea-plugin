@@ -40,10 +40,12 @@ public class GoApplicationLibrariesService extends GoLibrariesService {
   }
 
   public void setUseGoPathFromSystemEnvironment(boolean useGoPathFromSystemEnvironment) {
-    if (myUseGoPathFromSystemEnvironment != useGoPathFromSystemEnvironment && !GoSdkUtil.getGoPathsRootsFromEnvironment().isEmpty()) {
-      incModificationCount();
-      ApplicationManager.getApplication().getMessageBus().syncPublisher(LIBRARIES_TOPIC).librariesChanged(getLibraryRootUrls());
+    if (myUseGoPathFromSystemEnvironment != useGoPathFromSystemEnvironment) {
+      myUseGoPathFromSystemEnvironment = useGoPathFromSystemEnvironment;
+      if (!GoSdkUtil.getGoPathsRootsFromEnvironment().isEmpty()) {
+        incModificationCount();
+        ApplicationManager.getApplication().getMessageBus().syncPublisher(LIBRARIES_TOPIC).librariesChanged(getLibraryRootUrls());
+      }
     }
-    myUseGoPathFromSystemEnvironment = useGoPathFromSystemEnvironment;
   }
 }
