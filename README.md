@@ -59,7 +59,7 @@ yours to the project.
 
 ## Contributing
 
-We encourage you to contribute to the plugin if you find any issues / or missing
+We encourage you to contribute to the plugin if you find any issues or missing
 functionality that you'd want to see. In order to get started, see
 [CONTRIBUTING.md](CONTRIBUTING.md) guide.
 
