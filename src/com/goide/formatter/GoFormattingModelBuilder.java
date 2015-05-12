@@ -45,6 +45,7 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
     return FormattingModelProvider.createFormattingModelForPsiFile(element.getContainingFile(), block, settings);
   }
 
+  @NotNull
   private static SpacingBuilder createSpacingBuilder(@NotNull CodeStyleSettings settings) {
     return new SpacingBuilder(settings, GoLanguage.INSTANCE)
       .before(COMMA).spaceIf(false)
@@ -136,16 +137,20 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       RPAREN
     );
 
-    private final ASTNode myNode;
-    private final Alignment myAlignment;
-    private final Indent myIndent;
-    private final Wrap myWrap;
-    private final CodeStyleSettings mySettings;
-    private final SpacingBuilder mySpacingBuilder;
-    private List<Block> mySubBlocks;
+    @NotNull private final ASTNode myNode;
+    @Nullable private final Alignment myAlignment;
+    @Nullable private final Indent myIndent;
+    @Nullable private final Wrap myWrap;
+    @NotNull private final CodeStyleSettings mySettings;
+    @NotNull private final SpacingBuilder mySpacingBuilder;
+    @Nullable private List<Block> mySubBlocks;
 
-    public GoFormattingBlock(ASTNode node, Alignment alignment, Indent indent, Wrap wrap, CodeStyleSettings settings,
-                             SpacingBuilder spacingBuilder) {
+    public GoFormattingBlock(@NotNull ASTNode node, 
+                             @Nullable Alignment alignment, 
+                             @Nullable Indent indent, 
+                             @Nullable Wrap wrap, 
+                             @NotNull CodeStyleSettings settings,
+                             @NotNull SpacingBuilder spacingBuilder) {
       myNode = node;
       myAlignment = alignment;
       myIndent = indent;
@@ -154,6 +159,7 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       mySpacingBuilder = spacingBuilder;
     }
 
+    @NotNull
     @Override
     public ASTNode getNode() {
       return myNode;
@@ -165,16 +171,19 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       return myNode.getTextRange();
     }
 
+    @Nullable
     @Override
     public Wrap getWrap() {
       return myWrap;
     }
 
+    @Nullable
     @Override
     public Indent getIndent() {
       return myIndent;
     }
 
+    @Nullable
     @Override
     public Alignment getAlignment() {
       return myAlignment;
@@ -189,6 +198,7 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       return ContainerUtil.newArrayList(mySubBlocks);
     }
 
+    @NotNull
     private List<Block> buildSubBlocks() {
       List<Block> blocks = ContainerUtil.newArrayList();
       for (ASTNode child = myNode.getFirstChildNode(); child != null; child = child.getTreeNext()) {
@@ -206,6 +216,7 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       return new GoFormattingBlock(child, null, indent, null, mySettings, mySpacingBuilder);
     }
 
+    @NotNull
     private Indent calcIndent(@NotNull ASTNode child) {
       IElementType parentType = myNode.getElementType();
       IElementType type = child.getElementType();
@@ -222,6 +233,7 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       return Indent.getNoneIndent();
     }
 
+    @NotNull
     private static Indent indentIfNotBrace(@NotNull ASTNode child) {
       return BRACES_TOKEN_SET.contains(child.getElementType()) ? Indent.getNoneIndent() : Indent.getNormalIndent();
     }
