@@ -144,3 +144,19 @@ func main() {
 		}
 	}
 }
+
+
+type T struct {
+	name        []string // name of the object
+	value, a, b int      // its value
+}
+
+type x struct {
+	x, y int         // a
+	u    float32     // b
+	_    float32     // c
+	A1   *[]int      // ca
+	FFF  func()      // adsfasd
+	X    interface{} /* adsf*/
+	X1   interface{} /* adsf*/
+}
