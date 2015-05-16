@@ -22,6 +22,7 @@ import com.goide.sdk.GoSdkUtil;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiFile;
+import com.intellij.util.ThreeState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -99,6 +100,10 @@ public class GoBuildMatcher {
     }
     if (GoConstants.KNOWN_VERSIONS.contains(name)) {
       return myTarget.goVersion == null || GoSdkUtil.compareVersions(myTarget.goVersion, StringUtil.trimStart(name, "go")) >= 0;
+    }
+    if ("cgo".equals(name)) {
+      return myTarget.cgoEnabled == ThreeState.YES
+             || myTarget.cgoEnabled == ThreeState.UNSURE && GoConstants.KNOWN_CGO.contains(myTarget.os + "/" + myTarget.arch);
     }
     if (myTarget.supportsFlag(name)) return true;
     return false;

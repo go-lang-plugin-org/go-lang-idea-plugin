@@ -32,6 +32,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
+import com.intellij.util.ThreeState;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -46,7 +47,7 @@ public class GoUtil {
 
   public static boolean allowed(@NotNull PsiFile file) {
     String goVersion = GoSdkService.getInstance(file.getProject()).getSdkVersion(ModuleUtilCore.findModuleForPsiElement(file));
-    return new GoBuildMatcher(new GoTargetSystem(systemOS(), systemArch(), goVersion, null)).matchFile(file);
+    return new GoBuildMatcher(new GoTargetSystem(systemOS(), systemArch(), goVersion, null, ThreeState.UNSURE)).matchFile(file);
   }
 
   @NotNull

@@ -16,6 +16,7 @@
 
 package com.goide.util;
 
+import com.intellij.util.ThreeState;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,15 +29,17 @@ public class GoTargetSystem {
   @NotNull public final String arch;
   @Nullable public final String goVersion;
   @Nullable public final String compiler;
+  @NotNull public final ThreeState cgoEnabled;
 
   private final Set<String> customFlags = ContainerUtil.newHashSet();
 
-  public GoTargetSystem(@NotNull String os, @NotNull String arch, @Nullable String goVersion, @Nullable String compiler, 
-                        @NotNull String... customFlags) {
+  public GoTargetSystem(@NotNull String os, @NotNull String arch, @Nullable String goVersion, @Nullable String compiler,
+                        @NotNull ThreeState cgoEnabled, @NotNull String... customFlags) {
     this.os = os;
     this.arch = arch;
     this.goVersion = goVersion;
     this.compiler = compiler;
+    this.cgoEnabled = cgoEnabled;
     Collections.addAll(this.customFlags, customFlags);
   }
 

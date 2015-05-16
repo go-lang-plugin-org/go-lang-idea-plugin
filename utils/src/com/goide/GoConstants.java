@@ -65,9 +65,14 @@ public class GoConstants {
                                                                         "netbsd", "openbsd", "plan9", "solaris", "windows");
   public static final Set<String> KNOWN_ARCH = ContainerUtil.immutableSet("386", "amd64", "amd64p32", "arm");
   public static final Set<String> KNOWN_VERSIONS = ContainerUtil.immutableSet("go1.1", "go1.2", "go1.3", "go1.4");
+  public static final Set<String> KNOWN_CGO = ContainerUtil.immutableSet("darwin/386", "darwin/amd64", "dragonfly/386", "dragonfly/amd64",
+                                                                         "freebsd/386", "freebsd/amd64", "freebsd/arm", "linux/386",
+                                                                         "linux/amd64", "linux/arm", "android/386", "android/amd64",
+                                                                         "android/arm", "netbsd/386", "netbsd/amd64", "netbsd/arm",
+                                                                         "openbsd/386", "openbsd/amd64", "windows/386", "windows/amd64");
 
 
   private GoConstants() {
-    
+
   }
 }
