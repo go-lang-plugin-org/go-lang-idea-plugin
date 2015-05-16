@@ -44,7 +44,7 @@ public class GoUtil {
   private static final String PLUGIN_ID = "ro.redeul.google.go";
 
   @NotNull
-  private static GoBuildMatcher BUILD_MATCHER = new GoBuildMatcher(new GoTargetSystem(systemOS(), systemArch(), "go1.4"));
+  private static GoBuildMatcher BUILD_MATCHER = new GoBuildMatcher(new GoTargetSystem(systemOS(), systemArch(), "go1.4", null));
 
   public static boolean allowed(@NotNull PsiFile file) {
     return BUILD_MATCHER.matchFile(file);
