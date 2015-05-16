@@ -18,7 +18,10 @@ package com.goide;
 
 import com.intellij.notification.NotificationGroup;
 import com.intellij.openapi.wm.ToolWindowId;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NonNls;
+
+import java.util.Set;
 
 public class GoConstants {
   public static final String MODULE_TYPE_ID = "GO_MODULE";
@@ -56,6 +59,12 @@ public class GoConstants {
   
   public static final String LINUX_OS = "linux";
   public static final String ANDROID_OS = "android";
+  
+  // see "$GOROOT/src/go/build/syslist.go
+  public static final Set<String> KNOWN_OS = ContainerUtil.immutableSet("android", "darwin", "dragonfly", "freebsd", "linux", "nacl",
+                                                                        "netbsd", "openbsd", "plan9", "solaris", "windows");
+  public static final Set<String> KNOWN_ARCH = ContainerUtil.immutableSet("386", "amd64", "amd64p32", "arm");
+
 
   private GoConstants() {
     

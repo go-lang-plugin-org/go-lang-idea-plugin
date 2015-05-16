@@ -25,7 +25,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -34,19 +33,10 @@ import java.util.regex.Pattern;
 public class GoBuildMatcher {
   private static final Pattern WHITESPACES = Pattern.compile("\\s+");
 
-  private Set<String> myKnownOS;
-  private Set<String> myKnownArch;
-  private Set<String> mySupportedBuildTags;
-  private String myTargetOS;
-  private String myTargetArch;
-                                                                                              
-  public GoBuildMatcher(@NotNull Set<String> knownOS, @NotNull Set<String> knownArch, @Nullable Set<String> supportedBuildTags, 
-                        @NotNull String targetOS, @NotNull String targetArch) {
-    myKnownOS = knownOS;
-    myKnownArch = knownArch;
-    mySupportedBuildTags = supportedBuildTags;
-    myTargetOS = targetOS;
-    myTargetArch = targetArch;
+  @NotNull private final GoTargetSystem myTarget;
+
+  public GoBuildMatcher(@NotNull GoTargetSystem target) {
+    myTarget = target;
   }
 
   public boolean matchFile(@NotNull PsiFile file) {
@@ -68,7 +58,7 @@ public class GoBuildMatcher {
     if (StringUtil.startsWithChar(fileName, '_') || StringUtil.startsWithChar(fileName, '.')) return false;
 
     if (!matchFileName(fileName)) return false;
-    
+
     if (!checkBuildFlags || buildFlags == null) return true;
     for (final String line : StringUtil.split(buildFlags, "|")) {
       if (!matchBuildFlagsLine(line)) return false;
@@ -98,12 +88,12 @@ public class GoBuildMatcher {
 
     // bad syntax, reject always
     if (name.startsWith("!!")) return false;
-    
+
     // negation
     if (name.startsWith("!")) return !matchBuildFlag(name.substring(1));
 
     if (matchOS(name)) return true;
-    if (mySupportedBuildTags != null && mySupportedBuildTags.contains(name)) return true;
+    if (myTarget.supportsFlag(name)) return true;
     return false;
   }
 
@@ -118,8 +108,8 @@ public class GoBuildMatcher {
     List<String> parts = StringUtil.split(name, "_");
     final int n = parts.size();
 
-    if (n >= 2 && myKnownOS.contains(parts.get(n - 2)) && myKnownArch.contains(parts.get(n - 1))) {
-      if (!myTargetArch.equals(parts.get(n - 1))) {
+    if (n >= 2 && GoConstants.KNOWN_OS.contains(parts.get(n - 2)) && GoConstants.KNOWN_ARCH.contains(parts.get(n - 1))) {
+      if (!myTarget.arch.equals(parts.get(n - 1))) {
         return false;
       }
 
@@ -127,12 +117,12 @@ public class GoBuildMatcher {
     }
 
     if (n >= 1) {
-      if (myKnownOS.contains(parts.get(n - 1))) {
+      if (GoConstants.KNOWN_OS.contains(parts.get(n - 1))) {
         return matchOS(parts.get(n - 1));
       }
 
-      if (myKnownArch.contains(parts.get(n - 1))) {
-        return myTargetArch.equals(parts.get(n - 1));
+      if (GoConstants.KNOWN_ARCH.contains(parts.get(n - 1))) {
+        return myTarget.arch.equals(parts.get(n - 1));
       }
     }
 
@@ -140,10 +130,10 @@ public class GoBuildMatcher {
   }
 
   private boolean matchOS(@NotNull String name) {
-    if (myTargetOS.equals(name) || myTargetArch.equals(name)) {
+    if (myTarget.os.equals(name) || myTarget.arch.equals(name)) {
       return true;
     }
 
-    return GoConstants.LINUX_OS.equals(name) && GoConstants.ANDROID_OS.equals(myTargetOS);
+    return GoConstants.LINUX_OS.equals(name) && GoConstants.ANDROID_OS.equals(myTarget.os);
   }
 }

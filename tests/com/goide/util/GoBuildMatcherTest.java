@@ -17,27 +17,20 @@
 package com.goide.util;
 
 import com.goide.GoCodeInsightFixtureTestCase;
-import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Set;
-
 public class GoBuildMatcherTest extends GoCodeInsightFixtureTestCase {
-  private static final Set<String> OS = ContainerUtil.newHashSet("darwin", "linux", "windows", "plan9");
-  private static final Set<String> ARCH = ContainerUtil.newHashSet("386", "amd64", "arm");
-  private static final Set<String> TAGS = ContainerUtil.newHashSet("foo");
-
   public void testMatchFile() {
     GoBuildMatcher matcher;
 
-    matcher = new GoBuildMatcher(OS, ARCH, null, "plan9", "arm");
+    matcher = new GoBuildMatcher(new GoTargetSystem("plan9", "arm", "go1.4"));
     checkMatchFile(matcher, true, "foo_arm.go", "");
     checkMatchFile(matcher, false, "foo1_arm.go", "// +build linux");
     checkMatchFile(matcher, false, "foo_darwin.go", "");
     checkMatchFile(matcher, true, "foo.go", "");
     checkMatchFile(matcher, false, "foo1.go", "// +build linux");
 
-    matcher = new GoBuildMatcher(OS, ARCH, null, "android", "arm");
+    matcher = new GoBuildMatcher(new GoTargetSystem("android", "arm", "go1.4"));
     checkMatchFile(matcher, true, "foo_linux.go", "");
     checkMatchFile(matcher, true, "foo_android.go", "");
     checkMatchFile(matcher, false, "foo_plan9.go", "");
@@ -48,7 +41,7 @@ public class GoBuildMatcherTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testMatchFileName() {
-    GoBuildMatcher matcher = new GoBuildMatcher(OS, ARCH, null, "linux", "amd64");
+    GoBuildMatcher matcher = new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "go1.4"));
 
       assertTrue(matcher.matchFileName("file.go"));
       assertTrue(matcher.matchFileName("file_foo.go"));
@@ -75,7 +68,7 @@ public class GoBuildMatcherTest extends GoCodeInsightFixtureTestCase {
   }
   
   public void testMatchBuildFlags() {
-    GoBuildMatcher matcher = new GoBuildMatcher(OS, ARCH, null, "linux", "amd64");
+    GoBuildMatcher matcher = new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "go1.4"));
     assertFalse(matcher.matchBuildFlag(""));
     assertFalse(matcher.matchBuildFlag("!!"));
     assertTrue(matcher.matchBuildFlag("linux,amd64"));
@@ -85,7 +78,7 @@ public class GoBuildMatcherTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testMatchSupportedTags() {
-    GoBuildMatcher matcher = new GoBuildMatcher(OS, ARCH, TAGS, "linux", "amd64");
+    GoBuildMatcher matcher = new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "go1.4", "foo"));
     assertTrue(matcher.matchBuildFlag("linux,amd64"));
     assertTrue(matcher.matchBuildFlag("linux,amd64,foo"));
     assertFalse(matcher.matchBuildFlag("linux,amd64,!foo"));

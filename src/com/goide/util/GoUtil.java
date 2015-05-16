@@ -38,21 +38,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Set;
 
 public class GoUtil {
   public static final String PLUGIN_VERSION = getPlugin().getVersion();
-
   private static final String PLUGIN_ID = "ro.redeul.google.go";
 
-  // see "$GOROOT/src/go/build/syslist.go
-  private static final Set<String> KNOWN_OS = ContainerUtil.immutableSet(
-    "android", "darwin", "dragonfly", "freebsd", "linux", "nacl", "netbsd", "openbsd", "plan9", "solaris", "windows"
-  );
-  private static final Set<String> KNOWN_ARCH = ContainerUtil.immutableSet("386", "amd64", "amd64p32", "arm");
-
   @NotNull
-  private static GoBuildMatcher BUILD_MATCHER = new GoBuildMatcher(KNOWN_OS, KNOWN_ARCH, null, systemOS(), systemArch());
+  private static GoBuildMatcher BUILD_MATCHER = new GoBuildMatcher(new GoTargetSystem(systemOS(), systemArch(), "go1.4"));
 
   public static boolean allowed(@NotNull PsiFile file) {
     return BUILD_MATCHER.matchFile(file);
@@ -67,7 +59,7 @@ public class GoUtil {
         targetOs = "darwin";
       }
 
-      if (KNOWN_OS.contains(targetOs)) {
+      if (GoConstants.KNOWN_OS.contains(targetOs)) {
         return targetOs;
       }
     }
