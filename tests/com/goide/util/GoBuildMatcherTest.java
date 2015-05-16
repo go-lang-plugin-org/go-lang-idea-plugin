@@ -23,14 +23,14 @@ public class GoBuildMatcherTest extends GoCodeInsightFixtureTestCase {
   public void testMatchFile() {
     GoBuildMatcher matcher;
     
-    matcher = new GoBuildMatcher(new GoTargetSystem("plan9", "arm", "go1.4", null));
+    matcher = new GoBuildMatcher(new GoTargetSystem("plan9", "arm", "1.4", null));
     checkMatchFile(matcher, true, "foo_arm.go", "");
     checkMatchFile(matcher, false, "foo1_arm.go", "// +build linux");
     checkMatchFile(matcher, false, "foo_darwin.go", "");
     checkMatchFile(matcher, true, "foo.go", "");
     checkMatchFile(matcher, false, "foo1.go", "// +build linux");
 
-    matcher = new GoBuildMatcher(new GoTargetSystem("android", "arm", "go1.4", null));
+    matcher = new GoBuildMatcher(new GoTargetSystem("android", "arm", "1.4", null));
     checkMatchFile(matcher, true, "foo_linux.go", "");
     checkMatchFile(matcher, true, "foo_android.go", "");
     checkMatchFile(matcher, false, "foo_plan9.go", "");
@@ -41,7 +41,7 @@ public class GoBuildMatcherTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testMatchFileName() {
-    GoBuildMatcher matcher = new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "go1.4", null));
+    GoBuildMatcher matcher = new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "1.4", null));
 
     assertTrue(matcher.matchFileName("file.go"));
     assertTrue(matcher.matchFileName("file_foo.go"));
@@ -68,7 +68,7 @@ public class GoBuildMatcherTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testMatchBuildFlags() {
-    GoBuildMatcher matcher = new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "go1.4", null));
+    GoBuildMatcher matcher = new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "1.4", null));
     assertFalse(matcher.matchBuildFlag(""));
     assertFalse(matcher.matchBuildFlag("!!"));
     assertTrue(matcher.matchBuildFlag("linux,amd64"));
@@ -78,16 +78,26 @@ public class GoBuildMatcherTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testMatchCompiler() {
-    assertTrue(new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "go1.4", null)).matchBuildFlag("gc"));
-    assertTrue(new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "go1.4", null)).matchBuildFlag("gccgo"));
-    assertTrue(new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "go1.4", "gc")).matchBuildFlag("gc"));
-    assertTrue(new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "go1.4", "gccgo")).matchBuildFlag("gccgo"));
-    assertFalse(new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "go1.4", "gc")).matchBuildFlag("gccgo"));
-    assertFalse(new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "go1.4", "gccgo")).matchBuildFlag("gc"));
+    assertTrue(new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "1.4", null)).matchBuildFlag("gc"));
+    assertTrue(new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "1.4", null)).matchBuildFlag("gccgo"));
+    assertTrue(new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "1.4", "gc")).matchBuildFlag("gc"));
+    assertTrue(new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "1.4", "gccgo")).matchBuildFlag("gccgo"));
+    assertFalse(new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "1.4", "gc")).matchBuildFlag("gccgo"));
+    assertFalse(new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "1.4", "gccgo")).matchBuildFlag("gc"));
+  }
+  
+  public void testMatchVersion() {
+    assertTrue(new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "1.4", null)).matchBuildFlag("go1.4"));
+    assertTrue(new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "1.4", null)).matchBuildFlag("go1.3"));
+    assertTrue(new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "1.4", null)).matchBuildFlag("go1.2"));
+    assertTrue(new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "1.4", "gc")).matchBuildFlag("go1.1"));
+    assertTrue(new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "1.2", "gc")).matchBuildFlag("go1.1"));
+    assertFalse(new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "1.2", "gc")).matchBuildFlag("go1.3"));
+    assertFalse(new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "1.2", "gc")).matchBuildFlag("go1.4"));
   }
 
   public void testMatchSupportedTags() {
-    GoBuildMatcher matcher = new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "go1.4", null, "foo"));
+    GoBuildMatcher matcher = new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "1.4", null, "foo"));
     assertTrue(matcher.matchBuildFlag("linux,amd64"));
     assertTrue(matcher.matchBuildFlag("linux,amd64,foo"));
     assertFalse(matcher.matchBuildFlag("linux,amd64,!foo"));

@@ -18,6 +18,7 @@ package com.goide.util;
 
 import com.goide.GoConstants;
 import com.goide.psi.*;
+import com.goide.sdk.GoSdkService;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.extensions.PluginId;
@@ -43,11 +44,9 @@ public class GoUtil {
   public static final String PLUGIN_VERSION = getPlugin().getVersion();
   private static final String PLUGIN_ID = "ro.redeul.google.go";
 
-  @NotNull
-  private static GoBuildMatcher BUILD_MATCHER = new GoBuildMatcher(new GoTargetSystem(systemOS(), systemArch(), "go1.4", null));
-
   public static boolean allowed(@NotNull PsiFile file) {
-    return BUILD_MATCHER.matchFile(file);
+    String goVersion = GoSdkService.getInstance(file.getProject()).getSdkVersion(ModuleUtilCore.findModuleForPsiElement(file));
+    return new GoBuildMatcher(new GoTargetSystem(systemOS(), systemArch(), goVersion, null)).matchFile(file);
   }
 
   @NotNull

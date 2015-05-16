@@ -185,7 +185,7 @@ public class GoSdkUtil {
     return compareVersions(version, "1.4") < 0 ? "src/pkg" : "src";
   }
 
-  static int compareVersions(@NotNull String lhs, @NotNull String rhs) {
+  public static int compareVersions(@NotNull String lhs, @NotNull String rhs) {
     return VersionComparatorUtil.compare(lhs, rhs);
   }
 

@@ -64,6 +64,7 @@ public class GoConstants {
   public static final Set<String> KNOWN_OS = ContainerUtil.immutableSet("android", "darwin", "dragonfly", "freebsd", "linux", "nacl",
                                                                         "netbsd", "openbsd", "plan9", "solaris", "windows");
   public static final Set<String> KNOWN_ARCH = ContainerUtil.immutableSet("386", "amd64", "amd64p32", "arm");
+  public static final Set<String> KNOWN_VERSIONS = ContainerUtil.immutableSet("go1.1", "go1.2", "go1.3", "go1.4");
 
 
   private GoConstants() {

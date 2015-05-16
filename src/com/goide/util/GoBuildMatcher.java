@@ -18,6 +18,7 @@ package com.goide.util;
 
 import com.goide.GoConstants;
 import com.goide.psi.GoFile;
+import com.goide.sdk.GoSdkUtil;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiFile;
@@ -95,6 +96,9 @@ public class GoBuildMatcher {
     if (matchOS(name)) return true;
     if ("gc".equals(name) || "gccgo".equals(name)) {
       return myTarget.compiler == null || name.equals(myTarget.compiler);
+    }
+    if (GoConstants.KNOWN_VERSIONS.contains(name)) {
+      return myTarget.goVersion == null || GoSdkUtil.compareVersions(myTarget.goVersion, StringUtil.trimStart(name, "go")) >= 0;
     }
     if (myTarget.supportsFlag(name)) return true;
     return false;

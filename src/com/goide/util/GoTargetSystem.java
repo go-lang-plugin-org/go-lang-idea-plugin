@@ -24,15 +24,15 @@ import java.util.Collections;
 import java.util.Set;
 
 public class GoTargetSystem {
-  public final String os;
-  public final String arch;
-  public final String goVersion;
+  @NotNull public final String os;
+  @NotNull public final String arch;
+  @Nullable public final String goVersion;
   @Nullable public final String compiler;
 
   private final Set<String> customFlags = ContainerUtil.newHashSet();
 
-  public GoTargetSystem(@NotNull String os, @NotNull String arch, @NotNull String goVersion,
-                        @Nullable String compiler, @NotNull String... customFlags) {
+  public GoTargetSystem(@NotNull String os, @NotNull String arch, @Nullable String goVersion, @Nullable String compiler, 
+                        @NotNull String... customFlags) {
     this.os = os;
     this.arch = arch;
     this.goVersion = goVersion;
