@@ -169,7 +169,8 @@ public class GoCompletionUtil {
 
   @NotNull
   public static InsertHandler<LookupElement> getTypeConversionInsertHandler(@NotNull GoTypeSpec t) {
-    return t.getType() instanceof GoStructType ? BracesInsertHandler.ONE_LINER : ParenthesesInsertHandler.WITH_PARAMETERS;
+    GoType type = t.getType();
+    return type instanceof GoStructType || type instanceof GoArrayOrSliceType ? BracesInsertHandler.ONE_LINER : ParenthesesInsertHandler.WITH_PARAMETERS;
   }
 
   @NotNull

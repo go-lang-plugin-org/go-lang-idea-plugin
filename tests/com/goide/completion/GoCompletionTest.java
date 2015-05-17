@@ -360,6 +360,11 @@ public class GoCompletionTest extends GoCompletionTestBase {
     doCheckResult("package main; func test(BBA int){b<caret>}",
                   "package main; func test(BBA int){BBA<caret>}");
   }
+  
+  public void testArrayType() {
+    doCheckResult("package main; type custom []string; func main() { _ = custom<caret> }",
+                  "package main; type custom []string; func main() { _ = custom{<caret>} }");
+  }
 
   public void testRanges() {
     doTestInclude("package foo; func foo(a int) {for k := range <caret>}", "a");
