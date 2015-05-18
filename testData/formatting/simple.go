@@ -176,3 +176,15 @@ func a() {}
 
 // comment
 func (p *int) Length() {}
+
+type (
+Foo1 struct {
+a int
+}
+
+Foo2 struct {
+b int
+}
+
+F func(interface{}) interface{}
+)
