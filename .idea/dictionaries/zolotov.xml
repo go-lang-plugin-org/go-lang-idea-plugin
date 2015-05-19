@@ -11,11 +11,13 @@
       <w>goroot</w>
       <w>gotest</w>
       <w>hgap</w>
+      <w>nacl</w>
       <w>netbsd</w>
       <w>notwin</w>
       <w>openbsd</w>
       <w>redeclared</w>
       <w>runconfig</w>
+      <w>solaris</w>
       <w>vgap</w>
       <w>vspacer</w>
     </words>
