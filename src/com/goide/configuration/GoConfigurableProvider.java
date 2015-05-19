@@ -16,7 +16,6 @@
 
 package com.goide.configuration;
 
-import com.goide.project.GoBuildTargetSettings;
 import com.goide.sdk.GoSdkService;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurableProvider;
@@ -38,7 +37,7 @@ public class GoConfigurableProvider extends ConfigurableProvider {
   public Configurable createConfigurable() {
     Configurable librariesConfigurable = new GoLibrariesConfigurableProvider(myProject).createConfigurable();
     Configurable sdkConfigurable = GoSdkService.getInstance(myProject).createSdkConfigurable();
-    Configurable buildFlagsConfigurable = new GoBuildTargetConfigurable(myProject, GoBuildTargetSettings.getInstance(myProject));
+    Configurable buildFlagsConfigurable = new GoBuildTargetConfigurable(myProject);
     if (sdkConfigurable != null) {
       return new GoCompositeConfigurable(sdkConfigurable, buildFlagsConfigurable, librariesConfigurable);
     }

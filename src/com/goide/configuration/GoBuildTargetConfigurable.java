@@ -63,8 +63,8 @@ public class GoBuildTargetConfigurable implements SearchableConfigurable, Config
   @NotNull private String myDefaultCgo;
   @NotNull private final String myDefaultGoVersion;
 
-  public GoBuildTargetConfigurable(@NotNull Project project, @NotNull GoBuildTargetSettings buildTargetSettings) {
-    myBuildTargetSettings = buildTargetSettings;
+  public GoBuildTargetConfigurable(@NotNull Project project) {
+    myBuildTargetSettings = GoBuildTargetSettings.getInstance(project);
 
     myDefaultOSValue = "Default (" + GoUtil.systemOS() + ")";
     myDefaultArchValue = "Default (" + GoUtil.systemArch() + ")";
