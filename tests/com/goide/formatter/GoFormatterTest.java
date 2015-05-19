@@ -10,9 +10,9 @@ public class GoFormatterTest extends GoCodeInsightFixtureTestCase {
     return "formatting";
   }
 
-  public void testSimple() {
-    doTest();
-  }
+  public void testSimple()      { doTest(); }
+  public void testCaseEnter()   { doTest(false); }
+  public void testSwitchEnter() { doTest(false); }
 
   public void doTest() {
     doTest(true);

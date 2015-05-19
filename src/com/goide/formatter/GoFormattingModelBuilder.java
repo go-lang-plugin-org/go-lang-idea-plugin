@@ -299,10 +299,18 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
           parentType == IMPORT_DECLARATION ||
           parentType == CONST_DECLARATION ||
           parentType == VAR_DECLARATION ||
-          parentType == EXPR_SWITCH_STATEMENT ||
-          parentType == TYPE_SWITCH_STATEMENT ||
           parentType == ARGUMENT_LIST) {
         childIndent = Indent.getNormalIndent();
+      }
+      if (parentType == EXPR_SWITCH_STATEMENT || parentType == TYPE_SWITCH_STATEMENT) {
+        List<Block> subBlocks = getSubBlocks();
+        Block block = subBlocks.size() > newChildIndex ? subBlocks.get(newChildIndex - 1) : null;
+        if (block instanceof GoFormattingBlock) {
+          IElementType type = ((GoFormattingBlock)block).getNode().getElementType();
+          if (type == TYPE_CASE_CLAUSE || type == EXPR_CASE_CLAUSE) {
+            childIndent = Indent.getNormalIndent();
+          }
+        }
       }
       return new ChildAttributes(childIndent, null);
     }
