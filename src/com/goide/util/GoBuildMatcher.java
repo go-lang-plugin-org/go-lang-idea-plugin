@@ -95,15 +95,14 @@ public class GoBuildMatcher {
     if (name.startsWith("!")) return !matchBuildFlag(name.substring(1));
 
     if (matchOS(name)) return true;
-    if ("gc".equals(name) || "gccgo".equals(name)) {
+    if (GoConstants.KNOWN_COMPILERS.contains(name)) {
       return myTarget.compiler == null || name.equals(myTarget.compiler);
     }
     if (GoConstants.KNOWN_VERSIONS.contains(name)) {
       return myTarget.goVersion == null || GoSdkUtil.compareVersions(myTarget.goVersion, StringUtil.trimStart(name, "go")) >= 0;
     }
     if ("cgo".equals(name)) {
-      return myTarget.cgoEnabled == ThreeState.YES
-             || myTarget.cgoEnabled == ThreeState.UNSURE && GoConstants.KNOWN_CGO.contains(myTarget.os + "/" + myTarget.arch);
+      return myTarget.cgoEnabled == ThreeState.YES;
     }
     if (myTarget.supportsFlag(name)) return true;
     return false;

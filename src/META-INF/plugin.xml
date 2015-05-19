@@ -72,6 +72,8 @@
     <moduleService serviceImplementation="com.goide.project.GoModuleLibrariesService"/>
     <projectConfigurable groupId="language" provider="com.goide.configuration.GoConfigurableProvider" dynamic="true" 
                          bundle="do.not.touch.this.attribute" />
+
+    <projectService serviceImplementation="com.goide.project.GoBuildTargetSettings"/>
     
     <defaultLiveTemplatesProvider implementation="com.goide.template.GoLiveTemplatesProvider"/>
     <liveTemplateContext implementation="com.goide.template.GoEverywhereContextType"/>

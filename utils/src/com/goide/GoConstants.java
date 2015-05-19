@@ -31,22 +31,24 @@ public class GoConstants {
   public static final String GO_ROOT = "GOROOT";
   public static final String GO_LIBRARIES_SERVICE_NAME = "GoLibraries";
   public static final String GO_LIBRARIES_CONFIG_FILE = "goLibraries.xml";
+  public static final String GO_BUILD_FLAGS_SERVICE_NAME = "GoBuildFlags";
+  public static final String GO_BUILD_FLAGS_CONFIG_FILE = "goBuildFlags.xml";
 
   public static final String TESTDATA_NAME = "testdata";
   public static final String TEST_SUFFIX = "_test";
   public static final String TEST_SUFFIX_WITH_EXTENSION = "_test.go";
   public static final String MAIN = "main";
   public static final String INIT = "init";
-  
+
   public static final NotificationGroup GO_NOTIFICATION_GROUP = NotificationGroup.balloonGroup("Go plugin notifications");
   public static final NotificationGroup GO_EXECUTION_NOTIFICATION_GROUP = NotificationGroup.toolWindowGroup("Go Execution", ToolWindowId.RUN);
-  
+
   @NonNls public static final String LIB_EXEC_DIRECTORY = "libexec";
   @NonNls public static final String GO_VERSION_FILE_PATH = "runtime/zversion.go";
   public static final String BUILTIN_FILE_NAME = "builtin.go";
   public static final String BUILTIN_PACKAGE_NAME = "builtin";
   public static final String BUILTIN_FILE_PATH = BUILTIN_PACKAGE_NAME + "/" + BUILTIN_FILE_NAME;
-  
+
   @NonNls public static final String APP_ENGINE_MARKER_FILE = "appcfg.py";
   @NonNls public static final String APP_ENGINE_GO_ROOT_DIRECTORY_PATH = "/goroot";
   @NonNls public static final String GCLOUD_APP_ENGINE_DIRECTORY_PATH = "/platform/google_appengine";
@@ -56,10 +58,10 @@ public class GoConstants {
 
   @NonNls public static final String GO_EXECUTABLE_NAME = "go";
   public static final String BUILD_FLAG = "+build";
-  
+
   public static final String LINUX_OS = "linux";
   public static final String ANDROID_OS = "android";
-  
+
   // see "$GOROOT/src/go/build/syslist.go
   public static final Set<String> KNOWN_OS = ContainerUtil.immutableSet("android", "darwin", "dragonfly", "freebsd", "linux", "nacl",
                                                                         "netbsd", "openbsd", "plan9", "solaris", "windows");
@@ -70,7 +72,7 @@ public class GoConstants {
                                                                          "linux/amd64", "linux/arm", "android/386", "android/amd64",
                                                                          "android/arm", "netbsd/386", "netbsd/amd64", "netbsd/arm",
                                                                          "openbsd/386", "openbsd/amd64", "windows/386", "windows/amd64");
-
+  public static final Set<String> KNOWN_COMPILERS = ContainerUtil.immutableSet("gc", "gccgo");
 
   private GoConstants() {
 

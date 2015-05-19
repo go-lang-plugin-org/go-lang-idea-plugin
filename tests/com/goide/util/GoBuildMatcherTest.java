@@ -98,9 +98,6 @@ public class GoBuildMatcherTest extends GoCodeInsightFixtureTestCase {
   }
   
   public void testMatchCgo() {
-    assertTrue(new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "1.4", null, ThreeState.UNSURE)).matchBuildFlag("cgo"));
-    assertFalse(new GoBuildMatcher(new GoTargetSystem("darwin", "arm", "1.4", null, ThreeState.UNSURE)).matchBuildFlag("cgo"));
-    
     assertTrue(new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "1.4", null, ThreeState.YES)).matchBuildFlag("cgo"));
     assertFalse(new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "1.4", null, ThreeState.NO)).matchBuildFlag("cgo"));
   }

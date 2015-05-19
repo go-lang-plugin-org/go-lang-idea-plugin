@@ -17,8 +17,8 @@
 package com.goide.util;
 
 import com.goide.GoConstants;
+import com.goide.project.GoBuildTargetSettings;
 import com.goide.psi.*;
-import com.goide.sdk.GoSdkService;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.extensions.PluginId;
@@ -46,49 +46,45 @@ public class GoUtil {
   private static final String PLUGIN_ID = "ro.redeul.google.go";
 
   public static boolean allowed(@NotNull PsiFile file) {
-    String goVersion = GoSdkService.getInstance(file.getProject()).getSdkVersion(ModuleUtilCore.findModuleForPsiElement(file));
-    return new GoBuildMatcher(new GoTargetSystem(systemOS(), systemArch(), goVersion, null, ThreeState.UNSURE)).matchFile(file);
+    GoBuildTargetSettings targetSettings = GoBuildTargetSettings.getInstance(file.getProject());
+    return new GoBuildMatcher(targetSettings.getTargetSystemDescriptor(ModuleUtilCore.findModuleForPsiElement(file))).matchFile(file);
   }
 
   @NotNull
-  private static String systemOS() {
-    String targetOs = System.getProperty("go.target.os");
-
-    if (targetOs != null) {
-      if ("mac".equals(targetOs)) {
-        targetOs = "darwin";
-      }
-
-      if (GoConstants.KNOWN_OS.contains(targetOs)) {
-        return targetOs;
-      }
-    }
-
+  public static String systemOS() {
     // TODO android? dragonfly nacl? netbsd openbsd plan9
     if (SystemInfo.isMac) {
       return "darwin";
-    } else if (SystemInfo.isFreeBSD) {
+    }
+    else if (SystemInfo.isFreeBSD) {
       return "freebsd";
-    } else if (SystemInfo.isLinux) {
+    }
+    else if (SystemInfo.isLinux) {
       return "linux";
-    } else if (SystemInfo.isSolaris) {
+    }
+    else if (SystemInfo.isSolaris) {
       return "solaris";
-    } else if (SystemInfo.isWindows) {
+    }
+    else if (SystemInfo.isWindows) {
       return "windows";
     }
-
     return "unknown";
   }
 
   @NotNull
-  private static String systemArch() {
+  public static String systemArch() {
     if (SystemInfo.is64Bit) {
       return "amd64";
-    } else if (SystemInfo.is32Bit) {
+    }
+    else if (SystemInfo.is32Bit) {
       return "386";
     }
-
     return "unknown";
+  }
+
+  @NotNull
+  public static ThreeState systemCgo(@NotNull String os, @NotNull String arch) {
+    return GoConstants.KNOWN_CGO.contains(os + "/" + arch) ? ThreeState.YES : ThreeState.NO;
   }
 
   @Contract("null -> true")
@@ -100,7 +96,7 @@ public class GoUtil {
     }
     return true;
   }
-  
+
   public static boolean libraryDirectoryToIgnore(@NotNull String name) {
     return StringUtil.startsWithChar(name, '.') || StringUtil.startsWithChar(name, '_') || GoConstants.TESTDATA_NAME.equals(name);
   }
@@ -116,7 +112,7 @@ public class GoUtil {
   public static GlobalSearchScope moduleScope(@NotNull Module module) {
     return GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module).uniteWith(module.getModuleContentWithDependenciesScope());
   }
-  
+
   @NotNull
   public static GlobalSearchScope moduleScopeWithoutLibraries(@NotNull Module module) {
     return GlobalSearchScope.moduleWithDependenciesScope(module).uniteWith(module.getModuleContentWithDependenciesScope());
@@ -145,7 +141,9 @@ public class GoUtil {
 
     PsiFile definitionFile = definition.getContainingFile();
     PsiFile referenceFile = reference.getContainingFile();
-    if (!(definitionFile instanceof GoFile) || !(referenceFile instanceof GoFile)) return false; // todo: zolotov, are you sure? cross refs, for instance?
+    if (!(definitionFile instanceof GoFile) || !(referenceFile instanceof GoFile)) {
+      return false; // todo: zolotov, are you sure? cross refs, for instance?
+    }
 
     boolean inSameFile = definitionFile.isEquivalentTo(referenceFile);
     if (!inSameFile) {
