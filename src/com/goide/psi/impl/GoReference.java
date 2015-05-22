@@ -226,8 +226,6 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     }
 
     if (type instanceof GoStructType) {
-      GoScopeProcessorBase delegate = createDelegate(processor);
-      type.processDeclarations(delegate, ResolveState.initial(), null, myElement);
       final List<GoTypeReferenceExpression> interfaceRefs = ContainerUtil.newArrayList();
       final List<GoTypeReferenceExpression> structRefs = ContainerUtil.newArrayList();
       for (GoFieldDeclaration d : ((GoStructType)type).getFieldDeclarationList()) {
