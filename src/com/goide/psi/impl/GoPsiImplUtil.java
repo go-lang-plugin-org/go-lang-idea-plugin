@@ -640,11 +640,10 @@ public class GoPsiImplUtil {
 
   @NotNull
   private static List<GoMethodDeclaration> calcMethods(@NotNull GoTypeSpec o) {
-    PsiElement identifier = o.getIdentifier();
     PsiFile file = o.getContainingFile().getOriginalFile();
     if (file instanceof GoFile) {
       String packageName = ((GoFile)file).getPackageName();
-      String typeName = identifier.getText();
+      String typeName = o.getName();
       if (StringUtil.isEmpty(packageName) || StringUtil.isEmpty(typeName)) return Collections.emptyList();
       String key = packageName + "." + typeName;
       Project project = ((GoFile)file).getProject();
