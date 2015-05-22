@@ -25,7 +25,6 @@ import com.intellij.lang.annotation.Annotator;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.editor.markup.TextAttributes;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
@@ -169,21 +168,18 @@ public class GoAnnotator implements Annotator {
     return GoSyntaxHighlightingColors.METHOD_RECEIVER;
   }
 
-  private static TextAttributesKey getColor(GoTypeSpec o) {
+  private static TextAttributesKey getColor(@Nullable GoTypeSpec o) {
     GoType type = o == null ? null : o.getGoType(null);
     if (type == null) {
       return GoSyntaxHighlightingColors.TYPE_SPECIFICATION;
     }
 
+    boolean isPublic = o.isPublic();
     if (type instanceof GoInterfaceType) {
-      return StringUtil.isCapitalized(o.getText())
-             ? GoSyntaxHighlightingColors.PACKAGE_EXPORTED_INTERFACE
-             : GoSyntaxHighlightingColors.PACKAGE_LOCAL_INTERFACE;
+      return isPublic ? GoSyntaxHighlightingColors.PACKAGE_EXPORTED_INTERFACE : GoSyntaxHighlightingColors.PACKAGE_LOCAL_INTERFACE;
     }
     else if (type instanceof GoStructType) {
-      return StringUtil.isCapitalized(o.getText())
-             ? GoSyntaxHighlightingColors.PACKAGE_EXPORTED_STRUCT
-             : GoSyntaxHighlightingColors.PACKAGE_LOCAL_STRUCT;
+      return isPublic ? GoSyntaxHighlightingColors.PACKAGE_EXPORTED_STRUCT : GoSyntaxHighlightingColors.PACKAGE_LOCAL_STRUCT;
     }
 
     return GoSyntaxHighlightingColors.TYPE_SPECIFICATION;
