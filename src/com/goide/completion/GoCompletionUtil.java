@@ -195,6 +195,8 @@ public class GoCompletionUtil {
           context.commitDocument();
           int offset = context.getStartOffset();
           PsiElement at = file.findElementAt(offset);
+          GoCompositeElement ref = PsiTreeUtil.getParentOfType(at, GoValue.class, GoReferenceExpression.class);
+          if (ref instanceof GoReferenceExpression && (((GoReferenceExpression)ref).getQualifier() != null || GoPsiImplUtil.prevDot(ref))) return;
           GoValue value = PsiTreeUtil.getParentOfType(at, GoValue.class);
           if (value == null || PsiTreeUtil.getPrevSiblingOfType(value, GoKey.class) != null) return;
           super.handleInsert(context, item);

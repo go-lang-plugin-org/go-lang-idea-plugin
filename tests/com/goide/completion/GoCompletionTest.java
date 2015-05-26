@@ -405,6 +405,12 @@ public class GoCompletionTest extends GoCompletionTestBase {
     doCheckResult(TYPE + "func main() { WaitGroup{sem<caret>abc} }", TYPE + "func main() { WaitGroup{sema:<caret>} }",
                   Lookup.REPLACE_SELECT_CHAR);
   }
+  
+  public void testStructFieldFromOtherStruct() {
+    doCheckResult("package main; type Example struct { ID string }; func main() { a := Example{ID: \"a\"}; _ = []string{a.<caret>} }", 
+                  "package main; type Example struct { ID string }; func main() { a := Example{ID: \"a\"}; _ = []string{a.ID<caret>} }",
+                  Lookup.NORMAL_SELECT_CHAR);
+  }
 
   public void testNoStructFieldAfterColon() {
     doTestExclude(TYPE + "func main() {WaitGroup{sema:<caret>}};", "counter", "waiters", "sema");
