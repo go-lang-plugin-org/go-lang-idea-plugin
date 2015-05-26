@@ -40,6 +40,7 @@ import org.jetbrains.annotations.Nullable;
 public class GoBuildTargetSettings implements PersistentStateComponent<GoBuildTargetSettings.GoBuildTargetSettingsState> {
   public static final String DEFAULT = "default";
   public static final String ANY_COMPILER = "Any";
+  private static final String GAE_BUILD_FLAG = "appengine";
 
   @NotNull private final Project myProject;
   @NotNull private final GoBuildTargetSettingsState myState = new GoBuildTargetSettingsState();
@@ -111,8 +112,11 @@ public class GoBuildTargetSettings implements PersistentStateComponent<GoBuildTa
     String arch = realValue(myState.arch, GoUtil.systemArch());
     ThreeState cgo = myState.cgo == ThreeState.UNSURE ? GoUtil.systemCgo(os, arch) : myState.cgo;
     String moduleSdkVersion = GoSdkService.getInstance(myProject).getSdkVersion(module);
+    String[] customFlags = GoSdkService.getInstance(myProject).isAppEngineSdk(module)
+                           ? ArrayUtil.prepend(GAE_BUILD_FLAG, myState.customFlags)
+                           : myState.customFlags;
     String compiler = ANY_COMPILER.equals(myState.compiler) ? null : myState.compiler;
-    return new GoTargetSystem(os, arch, realValue(myState.goVersion, moduleSdkVersion), compiler, cgo, myState.customFlags);
+    return new GoTargetSystem(os, arch, realValue(myState.goVersion, moduleSdkVersion), compiler, cgo, customFlags);
   }
 
   @Contract("_,null->!null")
