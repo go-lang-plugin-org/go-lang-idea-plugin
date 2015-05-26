@@ -75,7 +75,7 @@ in the way we spend time to understand the problems and thus solve them.
 select the IDEA installation directory as SDK root (should be named ```IDEA sdk```)
 1. If you want to run Go Plugin in WebStorm or in IDEA EAP setup corresponding additional SDKs (should be named  ```WebStorm sdk``` and ```IDEA EAP sdk```)
 1. Setup the right version of [Grammar-Kit](https://www.dropbox.com/s/tqmj3urcnmt22a2/GrammarKit-14-01-2015.zip?dl=0) plugin (for [140.2500+](https://www.dropbox.com/s/3a80wo77684dr0d/GrammarKit-02-19-2015.zip?dl=0))
-1. Setup the **ant support** plugin 
+1. Setup **Ant Support** and **UI Designer** plugins
 1. Run the **Go** run configuration
 
 Note: if you'd like to build only artifact please run ```Build > Build Artifacts...``` action.
