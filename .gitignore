@@ -1,16 +1,11 @@
 out/
-bin/
 system-test/
 config-test/
 
-idea-IC/
 build/
-build_test/
 
 .idea/workspace.xml
 .idea/shelf/
-
-intellij-go.jar
 
 testData/performance/docker
 testData/performance/go
