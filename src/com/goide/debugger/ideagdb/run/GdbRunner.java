@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,24 +57,23 @@ public class GdbRunner extends DefaultProgramRunner {
   @Override
   protected RunContentDescriptor doExecute(@NotNull RunProfileState state, @NotNull ExecutionEnvironment env) throws ExecutionException {
     FileDocumentManager.getInstance().saveAllDocuments();
-    return createContentDescriptor(env.getProject(), env.getExecutor(), state, env.getContentToReuse(), env);
+    return createContentDescriptor(env.getProject(), env.getExecutor(), state, env);
   }
 
   @Nullable
   protected RunContentDescriptor createContentDescriptor(@NotNull Project project,
                                                          final Executor executor,
                                                          @NotNull final RunProfileState state,
-                                                         RunContentDescriptor contentToReuse,
                                                          @NotNull ExecutionEnvironment env)
     throws ExecutionException {
     final ExecutionResult result = state.execute(executor, this);
-    final XDebugSession debugSession = XDebuggerManager.getInstance(project).startSession(this,
-                                                                                          env, contentToReuse, new XDebugProcessStarter() {
+    final XDebugSession debugSession = XDebuggerManager.getInstance(project).startSession(env, new XDebugProcessStarter() {
       @NotNull
       @Override
       public XDebugProcess start(@NotNull XDebugSession session) throws ExecutionException {
         //session.setAutoInitBreakpoints(false); // todo[vova]: ?
         final ExecutionResult result = state.execute(executor, GdbRunner.this);
+        assert result != null;
         return new GdbDebugProcess(session, (GdbExecutionResult)result);
       }
     });
@@ -91,6 +90,7 @@ public class GdbRunner extends DefaultProgramRunner {
     Gdb gdb = debugProcess.getGdb();
     gdb.sendCommand(SET_AUTO_LOAD_SAFE_PATH + sdkHomePath);
     if (SystemInfo.isLinux) gdb.sendCommand(SET_AUTO_LOAD_SAFE_PATH + "/usr/share/go");
+    assert result != null;
     gdb.sendCommand("file " + ((GdbExecutionResult)result).getConfiguration().APP_PATH);
     debugSession.initBreakpoints();
     gdb.sendCommand("run > /dev/null"); // todo: collect all output to file and show in the console
