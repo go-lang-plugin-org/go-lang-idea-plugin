@@ -24,6 +24,7 @@ import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDirectory;
@@ -104,8 +105,12 @@ public class GoUtil {
 
   @NotNull
   public static GlobalSearchScope moduleScope(@NotNull PsiElement element) {
-    Module module = ModuleUtilCore.findModuleForPsiElement(element);
-    return module != null ? moduleScope(module) : GlobalSearchScope.projectScope(element.getProject());
+    return moduleScope(element.getProject(), ModuleUtilCore.findModuleForPsiElement(element));
+  }
+
+  @NotNull
+  public static GlobalSearchScope moduleScope(@NotNull Project project, @Nullable Module module) {
+    return module != null ? moduleScope(module) : GlobalSearchScope.projectScope(project);
   }
 
   @NotNull

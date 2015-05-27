@@ -18,6 +18,7 @@ package com.goide.runconfig;
 
 import com.goide.codeInsight.imports.GoGetPackageFix;
 import com.goide.sdk.GoSdkUtil;
+import com.goide.util.GoUtil;
 import com.intellij.execution.filters.Filter;
 import com.intellij.execution.filters.HyperlinkInfo;
 import com.intellij.execution.filters.OpenFileHyperlinkInfo;
@@ -30,7 +31,10 @@ import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.vfs.ex.temp.TempFileSystem;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.search.FilenameIndex;
 import com.intellij.util.ObjectUtils;
+import com.intellij.util.PathUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,7 +42,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GoConsoleFilter implements Filter {
-  private static final Pattern MESSAGE_PATTERN = Pattern.compile("(?:^|\\s)(\\S+\\.\\w+):(\\d+)(:(\\d+))?[:\\s].*");
+  private static final Pattern MESSAGE_PATTERN = Pattern.compile("(?:^|\\s)(\\S+\\.\\w+):(\\d+)(:(\\d+))?(?=[:\\s]|$).*");
   private static final Pattern GO_GET_MESSAGE_PATTERN = Pattern.compile("^[ \t]*(go get (.*))\n?$");
   private static final Pattern APP_ENGINE_PATH_PATTERN = Pattern.compile("/tmp[A-z0-9]+appengine-go-bin/");
 
@@ -116,6 +120,12 @@ public class GoConsoleFilter implements Filter {
             virtualFile = baseDir.findFileByRelativePath(StringUtil.trimStart(fileName, "src/"));
           }
         }
+      }
+    }
+    if (virtualFile == null && PathUtil.isValidFileName(fileName)) {
+      PsiFile[] files = FilenameIndex.getFilesByName(myProject, fileName, GoUtil.moduleScope(myProject, myModule));
+      if (files.length == 1) {
+        virtualFile = files[0].getVirtualFile();
       }
     }
     if (virtualFile == null) {
