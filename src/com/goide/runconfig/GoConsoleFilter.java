@@ -30,6 +30,7 @@ import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.vfs.ex.temp.TempFileSystem;
+import com.intellij.util.ObjectUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -53,7 +54,7 @@ public class GoConsoleFilter implements Filter {
   public GoConsoleFilter(@NotNull Project project, @Nullable Module module, @Nullable String workingDirectoryUrl) {
     myProject = project;
     myModule = module;
-    myWorkingDirectoryUrl = workingDirectoryUrl;
+    myWorkingDirectoryUrl = ObjectUtils.chooseNotNull(workingDirectoryUrl, VfsUtilCore.pathToUrl(System.getProperty("user.dir")));
   }
 
   @Override
@@ -111,7 +112,7 @@ public class GoConsoleFilter implements Filter {
         if (baseDir != null) {
           virtualFile = baseDir.findFileByRelativePath(fileName);
           if (virtualFile == null && fileName.startsWith("src/")) {
-            // exclude 'src
+            // exclude src
             virtualFile = baseDir.findFileByRelativePath(StringUtil.trimStart(fileName, "src/"));
           }
         }
