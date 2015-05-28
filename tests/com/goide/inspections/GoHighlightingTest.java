@@ -47,7 +47,8 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       GoNoNewVariablesInspection.class,
       GoReturnInspection.class,
       GoFunctionCallInspection.class,
-      GoDeferGoInspection.class
+      GoDeferGoInspection.class,
+      GoReservedWordUsedAsName.class
     );
   }
 
@@ -97,43 +98,43 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testForRange()    { doTest(); }
   public void testMismatch()    { doTest(); }
   public void testStubParams()  { doTest(); }
-  
+
   public void testRelativeImportIgnoringDirectories() throws IOException {
     myFixture.getTempDirFixture().findOrCreateDir("to_import/testdata");
     myFixture.getTempDirFixture().findOrCreateDir("to_import/.name");
     myFixture.getTempDirFixture().findOrCreateDir("to_import/_name");
     doTest();
   }
-  
+
   public void testDoNotReportNonLastMultiResolvedImport() throws IOException {
     final VirtualFile root1 = myFixture.getTempDirFixture().findOrCreateDir("root1");
     final VirtualFile root2 = myFixture.getTempDirFixture().findOrCreateDir("root2");
-    
+
     myFixture.getTempDirFixture().findOrCreateDir("root1/src/to_import/unique");
     myFixture.getTempDirFixture().findOrCreateDir("root1/src/to_import/shared");
     myFixture.getTempDirFixture().findOrCreateDir("root2/src/to_import/shared");
     GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(root1.getUrl(), root2.getUrl());
     doTest();
   }
-  
+
   public void testLocalScope() {
     myFixture.configureByText("a.go", "package foo; func bar() {}");
     myFixture.configureByText("b.go", "package foo; func init(){bar()}");
     myFixture.checkHighlighting();
   }
-  
+
   public void testInnerTypesFromOtherPackage() {
     myFixture.configureByText("main.go", "package main; import \"io\"; type Outer struct { *io.LimitedReader };" +
                                          "func main() { _ = &Outer{LimitedReader: &io.LimitedReader{}, } }");
     myFixture.checkHighlighting();
   }
-  
+
   public void testDuplicatesNoLocalResolveForTest() {
     myFixture.configureByText("a.go", "package i; type P struct { v1 int }");
     myFixture.configureByText("b.go", "package i_test; import ( \".\" ); func <warning>f</warning>() { print(i.P{}.<error>v1</error>) }");
     myFixture.checkHighlighting();
   }
-  
+
   public void testDuplicatesInOnePackage() {
     myFixture.configureByText("a.go", "package foo; func init() {bar()}; func bar() {}");
     myFixture.configureByText("b.go", "package foo; func <error>bar</error>() {}");
@@ -151,7 +152,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureByText("b.go", "package main; type Baz int; func (f Baz) bar() {}");
     myFixture.checkHighlighting();
   }
-  
+
   public void testInitInOnePackage() {
     myFixture.configureByText("a.go", "package foo; func init() {bar()}; func bar() {}");
     myFixture.configureByText("b.go", "package foo; func init() {bar()}; func <error>bar</error>() {}; func init() {}");
@@ -163,13 +164,23 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureByText("b.go", "package foo; func <error>main</error>() {bar()}; func <error>bar</error>() {}");
     myFixture.checkHighlighting();
   }
-  
+
   public void testMainInMainPackage() {
     myFixture.configureByText("a.go", "package main; func main() {bar()}; func bar() {}");
     myFixture.configureByText("b.go", "package main; func main() {bar()}; func <error>bar</error>() {}");
     myFixture.checkHighlighting();
   }
-  
+
+  public void testDuplicateBuiltinFunction() {
+    myFixture.configureByText("a.go", "package main; func main() {new()}; func <warning descr=\"Function 'new' collides with builtin function 'new'\">new</warning>() {}");
+    myFixture.checkHighlighting();
+  }
+
+  public void testDuplicateBuiltinType() {
+    myFixture.configureByText("a.go", "package main; func main() {<warning descr=\"Variable 'string' collides with builtin type 'string'\">string</warning> := 3; _ = string}");
+    myFixture.checkHighlighting();
+  }
+
   public void testPackageWithTestPrefix() throws Throwable {
     VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
       @Override
@@ -183,7 +194,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureFromExistingVirtualFile(file);
     myFixture.checkHighlighting();
   }
-  
+
   @Override
   protected LightProjectDescriptor getProjectDescriptor() {
     return createMockProjectDescriptor();

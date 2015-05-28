@@ -2,13 +2,13 @@ package main
 
 import "fmt"
 
-func append(slice []Type, elems ...Type) []Type
-func make(Type, size int) Type
+func append1(slice []Type, elems ...Type) []Type
+func make1(Type, size int) Type
 type Type int
 type int int
 type string string
 
-func println(o... interface {}) {
+func println1(o... interface {}) {
     fmt.Println(o)
 }
 type Person struct {
@@ -34,13 +34,13 @@ func main() {
     likes := make(map[string][]*Person)
     for _, p := range people {
         for _, l := range p.Likes {
-            likes[l] = append(likes[l], p)
+            likes[l] = append1(likes[l], p)
         }
     }
 
     for k, v := range likes {
-         println(k)
-         println(v[1].Likes)
+         println1(k)
+         println1(v[1].Likes)
     }
 
     var <error descr="Unused variable 'people'">people</error> []*Person // todo: should be redeclared
@@ -51,16 +51,16 @@ func main() {
     for _, p2 := range create() {
         println(p2.Likes)
     }
-    
+
     var p Plugin = nil
     for _, p := range p.Packets {
         println(p.path)
     }
-    
+
     for _, <error descr="Unused variable 'd'">d</error> := range <error descr="Unresolved reference 'd'">d</error>.Packets {
     }
 }
-func create() []*Person {return make([]*Person, 0)}
+func create() []*Person {return make1([]*Person, 0)}
 
 type myStruct struct {
     MyVal bool

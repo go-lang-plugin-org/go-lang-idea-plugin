@@ -30,7 +30,7 @@ func (e E) foo() {
 
 type Type int
 
-func new(Type) *Type
+func new1(Type) *Type
 
 type T int
 func (t T) name()  {
