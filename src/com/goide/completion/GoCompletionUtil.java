@@ -134,7 +134,7 @@ public class GoCompletionUtil {
                                                       double priority) {
     String pkg = showPackage ? StringUtil.notNullize(t.getContainingFile().getPackageName()) : "";
     pkg = pkg.isEmpty() ? pkg : pkg + ".";
-    LookupElementBuilder builder = LookupElementBuilder.create(t, name)
+    LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(name, t)
       .withLookupString(name.toLowerCase())
       .withLookupString((pkg + name).toLowerCase())
       .withLookupString(pkg + name)
