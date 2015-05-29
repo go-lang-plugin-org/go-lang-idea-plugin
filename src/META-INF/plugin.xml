@@ -26,7 +26,7 @@
     <p>Alpha pre-release of the 1.0.0 version.</p>
     <p>Doesn't contain all the functionality of the 0.9.x branch but has a completely reworked internals.
       It's faster than 0.9.x, refactoring works to some degree and has native support for gopath packages.</p>
-    
+
     <h3>Compatibility</h3>
     <p>Plugin can be installed on IntelliJ platform 141.2 or greater. It corresponds to IntelliJ IDEA 14.1, WebStorm 10, PhpStorm 9</p>
     ]]></description>
@@ -41,13 +41,13 @@
 
   <idea-version since-build="141.2" until-build="141.9999"/>
   <depends>com.intellij.modules.lang</depends>
-  
+
   <depends optional="true" config-file="java-deps.xml">com.intellij.modules.java</depends>
   <depends optional="true" config-file="coverage.xml">Coverage</depends>
   <depends optional="true" config-file="coverage.xml">com.intellij.modules.coverage</depends>
   <!-- todo[IDEA 15] replace with real dependency -->
   <depends optional="true" config-file="app-engine.xml">com.intellij.modules.lang</depends>
-  
+
   <module-components>
     <component>
       <implementation-class>com.goide.project.GoModuleLibrariesInitializer</implementation-class>
@@ -70,11 +70,11 @@
     <applicationService serviceImplementation="com.goide.project.GoApplicationLibrariesService"/>
     <projectService serviceImplementation="com.goide.project.GoProjectLibrariesService"/>
     <moduleService serviceImplementation="com.goide.project.GoModuleLibrariesService"/>
-    <projectConfigurable groupId="language" provider="com.goide.configuration.GoConfigurableProvider" dynamic="true" 
-                         bundle="do.not.touch.this.attribute" />
+    <projectConfigurable groupId="language" provider="com.goide.configuration.GoConfigurableProvider" dynamic="true"
+                         bundle="do.not.touch.this.attribute"/>
 
     <projectService serviceImplementation="com.goide.project.GoBuildTargetSettings"/>
-    
+
     <defaultLiveTemplatesProvider implementation="com.goide.template.GoLiveTemplatesProvider"/>
     <liveTemplateContext implementation="com.goide.template.GoEverywhereContextType"/>
     <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$GoFileContextType"/>
@@ -87,11 +87,11 @@
     <errorHandler implementation="com.intellij.diagnostic.ITNReporter"/>
     <extendWordSelectionHandler implementation="com.goide.editor.GoWordSelectioner"/>
     <annotator language="go" implementationClass="com.goide.GoAnnotator"/>
-    
+
     <lang.importOptimizer language="go" implementationClass="com.goide.codeInsight.imports.GoImportOptimizer"/>
     <psi.fileReferenceHelper implementation="com.goide.psi.impl.imports.GoImportReferenceHelper"/>
     <fileContextProvider implementation="com.goide.psi.impl.imports.GoFileContextProvider"/>
-    
+
     <lang.parserDefinition language="go" implementationClass="com.goide.GoParserDefinition"/>
     <fileTypeFactory implementation="com.goide.GoFileTypeFactory"/>
     <lang.syntaxHighlighterFactory key="go" implementationClass="com.goide.highlighting.GoSyntaxHighlighterFactory"/>
@@ -100,14 +100,15 @@
     <lang.braceMatcher language="go" implementationClass="com.goide.editor.GoBraceMatcher"/>
     <quoteHandler fileType="Go" className="com.goide.editor.GoQuoteHandler"/>
     <lang.commenter language="go" implementationClass="com.goide.GoCommenter"/>
-    <lang.elementManipulator forClass="com.goide.psi.impl.GoStringLiteralImpl" implementationClass="com.goide.psi.impl.manipulator.GoStringManipulator"/>
-    
+    <lang.elementManipulator forClass="com.goide.psi.impl.GoStringLiteralImpl"
+                             implementationClass="com.goide.psi.impl.manipulator.GoStringManipulator"/>
+
     <completion.contributor language="go" implementationClass="com.goide.completion.GoCompletionContributor"/>
     <completion.contributor language="go" implementationClass="com.goide.completion.GoKeywordCompletionContributor"/>
     <completion.contributor language="go" order="last" implementationClass="com.goide.completion.GoAutoImportCompletionContributor"/>
     <completion.confidence language="go" order="last" implementationClass="com.goide.completion.GoCompletionConfidence"/>
     <lookup.charFilter implementation="com.goide.completion.GoCharFilter"/>
-    
+
     <lang.refactoringSupport language="go" implementationClass="com.goide.refactor.GoRefactoringSupportProvider"/>
     <spellchecker.support language="go" implementationClass="com.goide.inspections.GoSpellcheckingStrategy"/>
     <elementDescriptionProvider implementation="com.goide.refactor.GoDescriptionProvider"/>
@@ -126,7 +127,7 @@
     <lang.formatter language="go" implementationClass="com.goide.formatter.GoFormattingModelBuilder"/>
     <codeStyleSettingsProvider implementation="com.goide.formatter.settings.GoCodeStyleSettingsProvider"/>
     <langCodeStyleSettingsProvider implementation="com.goide.formatter.settings.GoLanguageCodeStyleSettingsProvider"/>
-    
+
     <renamePsiElementProcessor implementation="com.goide.refactor.GoAnonymousFieldProcessor"/>
 
     <gotoSymbolContributor implementation="com.goide.go.GoSymbolContributor"/>
@@ -165,10 +166,10 @@
     <programRunner implementation="com.goide.debugger.ideagdb.run.GdbRunner"/>
 
     <checkinHandlerFactory implementation="com.goide.actions.fmt.GoFmtCheckinFactory" order="last"/>
-    
+
     <defaultHighlightingSettingProvider implementation="com.goide.highlighting.GoDefaultHighlightingSettingProvider"/>
     <lang.inspectionSuppressor language="go" implementationClass="com.goide.inspections.suppression.GoInspectionSuppressor"/>
-    
+
     <localInspection language="go" displayName="Unresolved reference inspection"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.unresolved.GoUnresolvedReferenceInspection"/>
@@ -176,16 +177,16 @@
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoUnusedImportDeclaration"/>
     <localInspection language="go" displayName="Duplicate fields and methods inspection"
-                     groupName="Go" enabledByDefault="true" level="ERROR" 
+                     groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoDuplicateFieldsOrMethodsInspection"/>
     <localInspection language="go" displayName="Unused variables inspection"
-                     groupName="Go" enabledByDefault="true" level="ERROR"  
+                     groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.unresolved.GoUnusedVariableInspection"/>
     <localInspection language="go" displayName="Unused global variables inspection"
-                     groupName="Go" enabledByDefault="true" level="WARNING" 
+                     groupName="Go" enabledByDefault="true" level="WARNING"
                      implementationClass="com.goide.inspections.unresolved.GoUnusedGlobalVariableInspection"/>
     <localInspection language="go" displayName="Unused function inspection"
-                     groupName="Go" enabledByDefault="true" level="WARNING" 
+                     groupName="Go" enabledByDefault="true" level="WARNING"
                      implementationClass="com.goide.inspections.unresolved.GoUnusedFunctionInspection"/>
     <localInspection language="go" displayName="Assignment to constant"
                      groupName="Go" enabledByDefault="true" level="ERROR"
@@ -197,25 +198,25 @@
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoDuplicateMethodInspection"/>
     <localInspection language="go" displayName="Duplicate argument"
-                     groupName="Go" enabledByDefault="true" level="ERROR" 
+                     groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoDuplicateArgumentInspection"/>
     <localInspection language="go" displayName="Duplicate return argument"
-                     groupName="Go" enabledByDefault="true" level="ERROR" 
+                     groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoDuplicateReturnArgumentInspection"/>
     <localInspection language="go" displayName="Incorrect variadic parameter"
-                     groupName="Go" enabledByDefault="true" level="ERROR" 
+                     groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoFunctionVariadicParameterInspection"/>
     <localInspection language="go" displayName="Incorrect variable declaration"
-                     groupName="Go" enabledByDefault="true" level="ERROR" 
+                     groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoVarDeclarationInspection"/>
     <localInspection language="go" displayName="No new variables on left side of :="
-                     groupName="Go" enabledByDefault="true" level="ERROR" 
+                     groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoNoNewVariablesInspection"/>
     <localInspection language="go" displayName="Missing return at end of function"
-                     groupName="Go" enabledByDefault="true" level="ERROR" 
+                     groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoReturnInspection"/>
     <localInspection language="go" displayName="Function call inspection"
-                     groupName="Go" enabledByDefault="true" level="ERROR" 
+                     groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoFunctionCallInspection"/>
     <localInspection language="go" displayName="Defer/go statements check"
                      groupName="Go" enabledByDefault="true" level="ERROR"
@@ -226,7 +227,7 @@
             text="Go File" description="Create new Go file">
       <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
     </action>
-    
+
     <action id="GoShowTypeInternalAction"
             class="com.goide.actions.internal.GoShowTypeInternalAction"
             text="Show Go type info">
@@ -263,10 +264,10 @@
       <implementation-class>com.goide.ui.ProjectTutorialNotification</implementation-class>
     </component>
   </application-components>
-  
-  
+
+
   <!-- GAE -->
-  
+
   <!-- START plugin.xml of future GAE module -->
   <!-- todo[IDEA 15] It's supposed that GAE-core module will be moved to IDEA source and bundled in IDEA 15 -->
   <!--<id>com.intellij.appengine</id>-->
