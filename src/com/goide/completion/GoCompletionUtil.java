@@ -76,13 +76,12 @@ public class GoCompletionUtil {
 
   @NotNull
   public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoNamedSignatureOwner f) {
-    return createFunctionOrMethodLookupElement(f, f.getName(), false, null, FUNCTION_PRIORITY);
+    return createFunctionOrMethodLookupElement(f, f.getName(), null, FUNCTION_PRIORITY);
   }
 
   @NotNull
   public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoNamedSignatureOwner f,
-                                                                  @Nullable String name, // for performance
-                                                                  boolean showPackage,
+                                                                  @Nullable String lookupString,
                                                                   @Nullable InsertHandler<LookupElement> h,
                                                                   double priority) {
     Icon icon = f instanceof GoMethodDeclaration || f instanceof GoMethodSpec ? GoIcons.METHOD : GoIcons.FUNCTION;
@@ -101,18 +100,13 @@ public class GoCompletionUtil {
                                            paramsCount == 0
                                            ? ParenthesesInsertHandler.NO_PARAMETERS
                                            : ParenthesesInsertHandler.WITH_PARAMETERS;
-    String pkg = showPackage ? StringUtil.notNullize(f.getContainingFile().getPackageName()) : "";
-    pkg = pkg.isEmpty() ? pkg : pkg + ".";
-    name = StringUtil.notNullize(name);
-    return PrioritizedLookupElement.withPriority(
-      LookupElementBuilder
-        .create(f, name)
-        .withIcon(icon)
-        .withInsertHandler(handler)
-        .withTypeText(typeText, true)
-        .withTailText(calcTailText(f), true)
-        .withLookupString(pkg + name)
-        .withPresentableText(pkg + name + paramText), priority);
+    lookupString = StringUtil.notNullize(lookupString);
+    return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(f, lookupString)
+                                                   .withIcon(icon)
+                                                   .withInsertHandler(handler)
+                                                   .withTypeText(typeText, true)
+                                                   .withTailText(calcTailText(f), true)
+                                                   .withPresentableText(lookupString + paramText), priority);
   }
 
   @Nullable
@@ -132,23 +126,16 @@ public class GoCompletionUtil {
 
   @NotNull
   public static LookupElement createTypeLookupElement(@NotNull GoTypeSpec t) {
-    return createTypeLookupElement(t, StringUtil.notNullize(t.getName()), false, null, null, TYPE_PRIORITY);
+    return createTypeLookupElement(t, StringUtil.notNullize(t.getName()), null, null, TYPE_PRIORITY);
   }
 
   @NotNull
   public static LookupElement createTypeLookupElement(@NotNull GoTypeSpec t,
-                                                      @NotNull String name,
-                                                      boolean showPackage,
+                                                      @NotNull String lookupString,
                                                       @Nullable InsertHandler<LookupElement> handler,
                                                       @Nullable String importPath,
                                                       double priority) {
-    String pkg = showPackage ? StringUtil.notNullize(t.getContainingFile().getPackageName()) : "";
-    pkg = pkg.isEmpty() ? pkg : pkg + ".";
-    LookupElementBuilder builder = LookupElementBuilder.create(t, name)
-      .withLookupString(pkg + name)
-      .withPresentableText(pkg + name)
-      .withInsertHandler(handler)
-      .withIcon(GoIcons.TYPE);
+    LookupElementBuilder builder = LookupElementBuilder.create(t, lookupString).withInsertHandler(handler).withIcon(GoIcons.TYPE);
     if (importPath != null) builder = builder.withTailText(" " + importPath, true);
     return PrioritizedLookupElement.withPriority(builder, priority);
   }
@@ -160,19 +147,18 @@ public class GoCompletionUtil {
 
   @NotNull
   public static LookupElement createTypeConversionLookupElement(@NotNull GoTypeSpec t) {
-    return createTypeConversionLookupElement(t, StringUtil.notNullize(t.getName()), false, null, null, TYPE_CONVERSION);
+    return createTypeConversionLookupElement(t, StringUtil.notNullize(t.getName()), null, null, TYPE_CONVERSION);
   }
 
   @NotNull
   public static LookupElement createTypeConversionLookupElement(@NotNull GoTypeSpec t,
-                                                                @NotNull String name,
-                                                                boolean showPackage,
+                                                                @NotNull String lookupString,
                                                                 @Nullable InsertHandler<LookupElement> insertHandler,
                                                                 @Nullable String importPath,
                                                                 double priority) {
     // todo: check context and place caret in or outside {}
     InsertHandler<LookupElement> handler = ObjectUtils.notNull(insertHandler, getTypeConversionInsertHandler(t));
-    return createTypeLookupElement(t, name, showPackage, handler, importPath, priority);
+    return createTypeLookupElement(t, lookupString, handler, importPath, priority);
   }
 
   @NotNull

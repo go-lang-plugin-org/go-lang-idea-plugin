@@ -60,7 +60,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "func test(){Templat<caret>}",
                   "package main;\n" +
                   "import \"text/template\"\n" +
-                  "func test(){template.Template{<caret>}}");
+                  "func test(){template.Template{<caret>}}", "template.Template");
   }
 
   public void testTypeAutoImportOnQualifiedName() {
@@ -76,7 +76,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "func test(){Fprintl<caret>}",
                   "package main;\n" +
                   "import \"fmt\"\n" +
-                  "func test(){fmt.Fprintln(<caret>)}");
+                  "func test(){fmt.Fprintln(<caret>)}", "fmt.Fprintln");
   }
 
   public void testDuplicateAutoImport() {
@@ -84,9 +84,10 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "func test(){Fprintl<caret>}",
                   "package main;\n" +
                   "import \"fmt\"\n" +
-                  "func test(){fmt.Fprintln(<caret>)}");
+                  "func test(){fmt.Fprintln(<caret>)}", "fmt.Fprintln");
     myFixture.type(");Fprintl");
     myFixture.completeBasic();
+    selectLookupItem("fmt.Fprintln");
     myFixture.checkResult("package main;\n" +
                           "import \"fmt\"\n" +
                           "func test(){fmt.Fprintln();fmt.Fprintln()}");
@@ -101,7 +102,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "\t_ \"fmt\"\n" +
                   "\t\"fmt\"\n" +
                   ")\n" +
-                  "func test(){fmt.Fprintln()}");
+                  "func test(){fmt.Fprintln()}", "fmt.Fprintln");
   }
 
   public void testAutoImportWithAlias() {
@@ -110,7 +111,8 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "func test(){Fprintl<caret>}",
                   "package main; \n" +
                   "import alias `fmt`\n" +
-                  "func test(){alias.Fprintln()}");
+                  "func test(){alias.Fprintln()}",
+                  "alias.Fprintln");
   }
 
   public void testAutoImportWithDotAlias() {
@@ -141,7 +143,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "\n" +
                   "func main() {\n" +
                   "    fmt.Printf(otherPackage.FunctionInPackageThatDoesNotMatchDirectoryName());\n" +
-                  "}");
+                  "}", "otherPackage.FunctionInPackageThatDoesNotMatchDirectoryName");
   }
 
   public void testUsePackageNameInsteadOfImportPathIfPackageIsImported() {
@@ -164,7 +166,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "\n" +
                   "func main() {\n" +
                   "    fmt.Printf(otherPackage.FunctionInPackageThatDoesNotMatchDirectoryName());\n" +
-                  "}");
+                  "}", "otherPackage.FunctionInPackageThatDoesNotMatchDirectoryName");
   }
 
   public void testDoNotImportLocallyImportedPackage() throws IOException {
@@ -174,7 +176,8 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "import `./imported`\n" +
                   "func test(){LocallyImport<caret>}", "package main; \n" +
                                                        "import `./imported`\n" +
-                                                       "func test(){imported.LocallyImported()}");
+                                                       "func test(){imported.LocallyImported()}",
+                  "imported.LocallyImported");
   }
 
   public void testImportedFunctionsPriority() {
@@ -183,7 +186,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                                       "func test(){ReadA<caret>}");
     failOnFileLoading();
     myFixture.completeBasic();
-    myFixture.assertPreferredCompletionItems(0, "ReadAtLeast", "ReaderAt", "ReadAtLeastCustom", "ReaderAtCustom");
+    myFixture.assertPreferredCompletionItems(0, "io.ReadAtLeast", "io.ReaderAt", "idea_io.ReadAtLeastCustom", "idea_io.ReaderAtCustom");
   }
 
   public void testImportedTypesPriority() {
@@ -192,7 +195,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                                       "func test(ReadWriteSeeke<caret>){}");
     failOnFileLoading();
     myFixture.completeBasic();
-    myFixture.assertPreferredCompletionItems(0, "ReadWriteSeeker", "ReadWriteSeekerCustom");
+    myFixture.assertPreferredCompletionItems(0, "io.ReadWriteSeeker", "idea_io.ReadWriteSeekerCustom");
   }
 
   public void testDoNothingInsideSelector() {
@@ -277,6 +280,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
     myFixture.getTempDirFixture().createFile("pack/pack_test.go", "package pack; func TestingFunction() {}");
     myFixture.configureByText("my_test.go", "package a; func main() { _ = TestingF<caret>");
     myFixture.completeBasic();
+    selectLookupItem("pack.TestingFunction");
     myFixture.checkResult("package a;\nimport \"pack\" func main() { _ = pack.TestingFunction()");
   }
 }

@@ -19,6 +19,8 @@ package com.goide.completion;
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.goide.project.GoModuleLibrariesService;
 import com.intellij.codeInsight.completion.CompletionType;
+import com.intellij.codeInsight.lookup.Lookup;
+import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.testFramework.UsefulTestCase;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -90,7 +92,7 @@ public abstract class GoCompletionTestBase extends GoCodeInsightFixtureTestCase 
   }
 
   protected void doCheckResult(@NotNull String before, @NotNull String after) {
-    doCheckResult(before, after, null);
+    doCheckResult(before, after, (Character)null);
   }
 
   protected void doCheckResult(@NotNull String before, @NotNull String after, @Nullable Character c) {
@@ -99,6 +101,29 @@ public abstract class GoCompletionTestBase extends GoCodeInsightFixtureTestCase 
     myFixture.completeBasic();
     if (c != null) myFixture.type(c);
     myFixture.checkResult(after);
+  }
+  
+  protected void doCheckResult(@NotNull String before, @NotNull String after, @NotNull String selectItem) {
+    myFixture.configureByText("a.go", before);
+    failOnFileLoading();
+    myFixture.completeBasic();
+    selectLookupItem(selectItem);
+    myFixture.checkResult(after);
+  }
+
+  protected void selectLookupItem(@NotNull String selectItem) {
+    LookupElement[] lookupElements = myFixture.getLookupElements();
+    assertNotNull("Lookup is empty", lookupElements);
+    LookupElement toSelect = null;
+    for (LookupElement lookupElement : lookupElements) {
+      if (selectItem.equals(lookupElement.getLookupString())) {
+        toSelect = lookupElement;
+        break;
+      }
+    }
+    assertNotNull(selectItem + " not found in lookup", toSelect);
+    myFixture.getLookup().setCurrentItem(toSelect);
+    myFixture.type(Lookup.NORMAL_SELECT_CHAR);
   }
 
   protected void failOnFileLoading() {
