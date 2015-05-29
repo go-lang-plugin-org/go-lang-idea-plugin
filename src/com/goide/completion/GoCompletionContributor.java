@@ -21,6 +21,7 @@ import com.goide.GoParserDefinition;
 import com.goide.GoTypes;
 import com.goide.psi.GoImportString;
 import com.goide.psi.GoPackageClause;
+import com.goide.psi.GoReferenceExpressionBase;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
@@ -40,6 +41,7 @@ import java.util.Collection;
 public class GoCompletionContributor extends CompletionContributor {
   public GoCompletionContributor() {
     extend(CompletionType.BASIC, importString(), new GoImportPathsCompletionProvider());
+    extend(CompletionType.BASIC, referenceExpression(), new GoReferenceCompletionProvider());
   }
 
   @Override
@@ -68,5 +70,9 @@ public class GoCompletionContributor extends CompletionContributor {
 
   private static PsiElementPattern.Capture<PsiElement> importString() {
     return PlatformPatterns.psiElement().withElementType(GoParserDefinition.STRING_LITERALS).withParent(GoImportString.class);
+  }
+  
+  private static PsiElementPattern.Capture<PsiElement> referenceExpression() {
+    return PlatformPatterns.psiElement().withParent(GoReferenceExpressionBase.class);
   }
 }

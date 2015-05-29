@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,16 @@
 
 package com.goide.psi.impl;
 
-import com.goide.completion.GoCompletionUtil;
 import com.goide.psi.*;
 import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.sdk.GoSdkUtil;
 import com.goide.util.GoUtil;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
-import com.intellij.psi.scope.BaseScopeProcessor;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
@@ -85,10 +80,10 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   }
 
   @NotNull
-  static MyScopeProcessor createResolveProcessor(@NotNull final String text,
+  static GoScopeProcessor createResolveProcessor(@NotNull final String text,
                                                  @NotNull final Collection<ResolveResult> result,
                                                  @NotNull final GoCompositeElement o) {
-    return new MyScopeProcessor() {
+    return new GoScopeProcessor() {
       @Override
       public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state) {
         if (element.equals(o)) return !result.add(new PsiElementResolveResult(element));
@@ -98,46 +93,6 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
           result.add(new PsiElementResolveResult(element));
           return false;
         }
-        return true;
-      }
-    };
-  }
-
-  abstract static class MyScopeProcessor extends BaseScopeProcessor {
-    boolean isCompletion() {
-      return false;
-    }
-  }
-
-  @NotNull
-  static MyScopeProcessor createCompletionProcessor(@NotNull final Collection<LookupElement> variants, 
-                                                    final boolean forTypes,
-                                                    @NotNull final Condition<PsiElement> filter) {
-    return new MyScopeProcessor() {
-      @Override
-      public boolean execute(@NotNull PsiElement o, @NotNull ResolveState state) {
-        if ((o instanceof GoNamedElement && !((GoNamedElement)o).isBlank() || o instanceof GoImportSpec && !((GoImportSpec)o).isDot()) &&
-            filter.value(o)) {
-          ContainerUtil.addIfNotNull(variants, createLookup(o, state));
-        }
-        return true;
-      }
-      
-      @Nullable
-      private LookupElement createLookup(@NotNull PsiElement element, @NotNull ResolveState state) {
-        // @formatter:off
-        if (element instanceof GoNamedSignatureOwner)return GoCompletionUtil.createFunctionOrMethodLookupElement((GoNamedSignatureOwner)element);
-        else if (element instanceof GoTypeSpec)      return forTypes ? GoCompletionUtil.createTypeLookupElement((GoTypeSpec)element) : GoCompletionUtil.createTypeConversionLookupElement((GoTypeSpec)element);
-        else if (element instanceof PsiDirectory)    return GoCompletionUtil.createPackageLookupElement(((PsiDirectory)element).getName(), element, true);
-        else if (element instanceof GoNamedElement)  return GoCompletionUtil.createVariableLikeLookupElement((GoNamedElement)element);
-        else if (element instanceof PsiNamedElement) return LookupElementBuilder.create((PsiNamedElement)element);
-        else if (element instanceof GoImportSpec)    return GoCompletionUtil.createPackageLookupElement(((GoImportSpec)element), state.get(ACTUAL_NAME));
-        // @formatter:on
-        return null;
-      }
-
-      @Override
-      boolean isCompletion() {
         return true;
       }
     };
@@ -153,13 +108,10 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   @NotNull
   @Override
   public Object[] getVariants() {
-    List<LookupElement> variants = ContainerUtil.newArrayList();
-    //noinspection unchecked
-    processResolveVariants(createCompletionProcessor(variants, false, Condition.TRUE));
-    return ArrayUtil.toObjectArray(variants);
+    return ArrayUtil.EMPTY_OBJECT_ARRAY;
   }
 
-  private boolean processResolveVariants(@NotNull MyScopeProcessor processor) {
+  public boolean processResolveVariants(@NotNull GoScopeProcessor processor) {
     PsiFile file = myElement.getContainingFile();
     if (!(file instanceof GoFile)) return false;
     ResolveState state = ResolveState.initial();
@@ -171,7 +123,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
   private boolean processQualifierExpression(@NotNull GoFile file,
                                              @NotNull GoReferenceExpressionBase qualifier,
-                                             @NotNull MyScopeProcessor processor,
+                                             @NotNull GoScopeProcessor processor,
                                              @NotNull ResolveState state) {
     PsiReference reference = qualifier.getReference();
     PsiElement target = reference != null ? reference.resolve() : null;
@@ -185,7 +137,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     return true;
   }
 
-  private boolean processGoType(@NotNull GoType type, @NotNull MyScopeProcessor processor, @NotNull ResolveState state) {
+  private boolean processGoType(@NotNull GoType type, @NotNull GoScopeProcessor processor, @NotNull ResolveState state) {
     if (type instanceof GoParType) return processGoType(((GoParType)type).getType(), processor, state);
     if (type instanceof GoReceiverType) state = state.put(RECEIVER, Boolean.TRUE);
     if (!processExistingType(type, processor, state)) return false;
@@ -200,17 +152,17 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     return processTypeRef(type, processor, state);
   }
 
-  private boolean processPointer(@NotNull GoPointerType type, @NotNull MyScopeProcessor processor, @NotNull ResolveState state) {
+  private boolean processPointer(@NotNull GoPointerType type, @NotNull GoScopeProcessor processor, @NotNull ResolveState state) {
     GoType pointer = type.getType();
     return pointer == null || processExistingType(pointer, processor, state) && processTypeRef(pointer, processor, state);
   }
 
-  private boolean processTypeRef(@Nullable GoType type, @NotNull MyScopeProcessor processor, @NotNull ResolveState state) {
+  private boolean processTypeRef(@Nullable GoType type, @NotNull GoScopeProcessor processor, @NotNull ResolveState state) {
     return processInTypeRef(getTypeReference(type), type, processor, state);
   }
 
   private boolean processExistingType(@NotNull GoType type,
-                                      @NotNull MyScopeProcessor processor,
+                                      @NotNull GoScopeProcessor processor,
                                       @NotNull ResolveState state) {
     PsiFile file = type.getContainingFile();
     if (!(file instanceof GoFile)) return true;
@@ -256,7 +208,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
   private boolean processCollectedRefs(@NotNull GoType type,
                                        @NotNull List<GoTypeReferenceExpression> refs,
-                                       @NotNull MyScopeProcessor processor,
+                                       @NotNull GoScopeProcessor processor,
                                        @NotNull ResolveState state) {
     for (GoTypeReferenceExpression ref : refs) {
       if (!processInTypeRef(ref, type, processor, state)) return false;
@@ -266,7 +218,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
   private boolean processInTypeRef(@Nullable GoTypeReferenceExpression refExpr,
                                    @Nullable GoType recursiveStopper,
-                                   @NotNull MyScopeProcessor processor,
+                                   @NotNull GoScopeProcessor processor,
                                    @NotNull ResolveState state) {
     PsiReference reference = refExpr != null ? refExpr.getReference() : null;
     PsiElement resolve = reference != null ? reference.resolve() : null;
@@ -295,7 +247,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   protected static boolean processDirectory(@Nullable PsiDirectory dir,
                                             @Nullable GoFile file,
                                             @Nullable String packageName,
-                                            @NotNull MyScopeProcessor processor,
+                                            @NotNull GoScopeProcessor processor,
                                             @NotNull ResolveState state,
                                             boolean localProcessing) {
     if (dir == null) return true;
@@ -312,7 +264,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   }
 
   private boolean processUnqualifiedResolve(@NotNull GoFile file,
-                                            @NotNull MyScopeProcessor processor,
+                                            @NotNull GoScopeProcessor processor,
                                             @NotNull ResolveState state,
                                             boolean localResolve) {
     // todo: rewrite with qualification not with siblings
@@ -351,14 +303,14 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     return true;
   }
 
-  static boolean processBuiltin(@NotNull MyScopeProcessor processor, @NotNull ResolveState state, @NotNull GoCompositeElement element) {
+  static boolean processBuiltin(@NotNull GoScopeProcessor processor, @NotNull ResolveState state, @NotNull GoCompositeElement element) {
     GoFile builtinFile = GoSdkUtil.findBuiltinFile(element);
     if (builtinFile != null && !processFileEntities(builtinFile, processor, state, true)) return true;
     return false;
   }
 
   static boolean processImports(@NotNull GoFile file,
-                                @NotNull MyScopeProcessor processor,
+                                @NotNull GoScopeProcessor processor,
                                 @NotNull ResolveState state,
                                 @NotNull GoCompositeElement element) {
     for (Map.Entry<String, Collection<GoImportSpec>> entry : file.getImportMap().entrySet()) {
@@ -386,7 +338,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   }
 
   private boolean processSelector(@NotNull GoSelectorExpr parent,
-                                  @NotNull MyScopeProcessor processor,
+                                  @NotNull GoScopeProcessor processor,
                                   @NotNull ResolveState state,
                                   @Nullable PsiElement another) {
     List<GoExpression> list = parent.getExpressionList();
@@ -403,7 +355,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   }
 
   @NotNull
-  private GoVarProcessor createDelegate(@NotNull MyScopeProcessor processor) {
+  private GoVarProcessor createDelegate(@NotNull GoScopeProcessor processor) {
     return new GoVarProcessor(getName(), myElement, processor.isCompletion(), true) {
       @Override
       protected boolean condition(@NotNull PsiElement e) {
@@ -413,7 +365,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   }
 
   private static boolean processFileEntities(@NotNull GoFile file,
-                                             @NotNull MyScopeProcessor processor,
+                                             @NotNull GoScopeProcessor processor,
                                              @NotNull ResolveState state,
                                              boolean localProcessing) {
     if (!processNamedElements(processor, state, file.getConstants(), localProcessing)) return false;
