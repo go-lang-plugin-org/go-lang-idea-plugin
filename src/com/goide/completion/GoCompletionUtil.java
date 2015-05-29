@@ -198,8 +198,9 @@ public class GoCompletionUtil {
       } : null;
     return PrioritizedLookupElement.withPriority(
       LookupElementBuilder.create(v, name)
-        .withLookupString(name.toLowerCase())
+        //.withLookupString(name.toLowerCase())
         .withIcon(icon)
+        .withCaseSensitivity(false)
         .withTailText(calcTailTextForFields(v), true)
         .withTypeText(text, true)
         .withInsertHandler(handler)
