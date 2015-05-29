@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,9 @@ import com.goide.sdk.GoSdkUtil;
 import com.goide.stubs.GoFieldDefinitionStub;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.completion.InsertionContext;
+import com.intellij.codeInsight.completion.PrefixMatcher;
 import com.intellij.codeInsight.completion.PrioritizedLookupElement;
+import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
@@ -63,6 +65,16 @@ public class GoCompletionUtil {
   }
 
   @NotNull
+  public static CamelHumpMatcher createPrefixMatcher(@NotNull PrefixMatcher original) {
+    return createPrefixMatcher(original.getPrefix());
+  }
+
+  @NotNull
+  public static CamelHumpMatcher createPrefixMatcher(@NotNull String prefix) {
+    return new CamelHumpMatcher(prefix, false);
+  }
+
+  @NotNull
   public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoNamedSignatureOwner f) {
     return createFunctionOrMethodLookupElement(f, f.getName(), false, null, FUNCTION_PRIORITY);
   }
@@ -99,8 +111,6 @@ public class GoCompletionUtil {
         .withInsertHandler(handler)
         .withTypeText(typeText, true)
         .withTailText(calcTailText(f), true)
-        .withLookupString(name.toLowerCase())
-        .withLookupString((pkg + name).toLowerCase())
         .withLookupString(pkg + name)
         .withPresentableText(pkg + name + paramText), priority);
   }
@@ -134,9 +144,7 @@ public class GoCompletionUtil {
                                                       double priority) {
     String pkg = showPackage ? StringUtil.notNullize(t.getContainingFile().getPackageName()) : "";
     pkg = pkg.isEmpty() ? pkg : pkg + ".";
-    LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(name, t)
-      .withLookupString(name.toLowerCase())
-      .withLookupString((pkg + name).toLowerCase())
+    LookupElementBuilder builder = LookupElementBuilder.create(t, name)
       .withLookupString(pkg + name)
       .withPresentableText(pkg + name)
       .withInsertHandler(handler)

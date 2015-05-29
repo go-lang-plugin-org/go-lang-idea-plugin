@@ -43,6 +43,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
+import static com.goide.completion.GoCompletionUtil.createPrefixMatcher;
 import static com.goide.psi.impl.GoPsiImplUtil.prevDot;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
@@ -171,7 +172,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
                                                 @NotNull PsiElement parent) {
         int startOffset = parent.getTextRange().getStartOffset();
         String newPrefix = parameters.getEditor().getDocument().getText(TextRange.create(startOffset, parameters.getOffset()));
-        return result.withPrefixMatcher(result.getPrefixMatcher().cloneWithPrefix(newPrefix));
+        return result.withPrefixMatcher(createPrefixMatcher(newPrefix));
       }
     });
   }
