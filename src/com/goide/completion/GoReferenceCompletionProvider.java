@@ -17,6 +17,7 @@
 package com.goide.completion;
 
 import com.goide.psi.*;
+import com.goide.psi.impl.GoFieldNameReference;
 import com.goide.psi.impl.GoReference;
 import com.goide.psi.impl.GoScopeProcessor;
 import com.goide.psi.impl.GoTypeReference;
@@ -56,6 +57,13 @@ public class GoReferenceCompletionProvider extends CompletionProvider<Completion
     }
     else if (reference instanceof GoReference) {
       ((GoReference)reference).processResolveVariants(new MyGoScopeProcessor(result, false));
+
+      PsiElement element = reference.getElement();
+      if (element instanceof GoReferenceExpression && PsiTreeUtil.getParentOfType(element, GoCompositeLit.class) != null) {
+        for (Object o : new GoFieldNameReference(((GoReferenceExpression)element)).getVariants()) {
+          if (o instanceof LookupElement) result.addElement(((LookupElement)o));
+        }
+      }
     }
     else if (reference instanceof GoTypeReference) {
       PsiElement element = reference.getElement();

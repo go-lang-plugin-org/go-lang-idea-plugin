@@ -47,7 +47,6 @@ import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ArrayUtil;
 import com.intellij.util.Function;
 import com.intellij.util.PathUtil;
 import com.intellij.util.containers.ContainerUtil;
@@ -156,17 +155,7 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static GoReference getReference(@NotNull final GoReferenceExpression o) {
-    return new GoReference(o) {
-      @NotNull
-      @Override
-      public Object[] getVariants() {
-        Object[] variants = super.getVariants();
-        // should work only in case of literal expression
-        return PsiTreeUtil.getParentOfType(o, GoCompositeLit.class) != null 
-               ? ArrayUtil.mergeArrays(variants, new GoFieldNameReference(o).getVariants()) 
-               : variants;
-      }
-    };
+    return new GoReference(o);
   }
 
   @NotNull
