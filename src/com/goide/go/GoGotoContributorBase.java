@@ -57,14 +57,9 @@ public class GoGotoContributorBase<T extends GoNamedElement> implements ChooseBy
 
   @Override
   public void processElementsWithName(@NotNull String s,
-                                      @NotNull final Processor<NavigationItem> processor,
+                                      @NotNull Processor<NavigationItem> processor,
                                       @NotNull FindSymbolParameters parameters) {
     StubIndex.getInstance().processElements(myIndexKey, s, parameters.getProject(), parameters.getSearchScope(),
-                                            parameters.getIdFilter(), myClazz, new Processor<GoNamedElement>() {
-        @Override
-        public boolean process(final GoNamedElement namedElement) {
-          return processor.process(namedElement);
-        }
-      });
+                                            parameters.getIdFilter(), myClazz, processor);
   }
 }
