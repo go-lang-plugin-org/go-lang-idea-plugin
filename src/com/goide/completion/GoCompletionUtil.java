@@ -101,7 +101,7 @@ public class GoCompletionUtil {
                                            ? ParenthesesInsertHandler.NO_PARAMETERS
                                            : ParenthesesInsertHandler.WITH_PARAMETERS;
     lookupString = StringUtil.notNullize(lookupString);
-    return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(f, lookupString)
+    return PrioritizedLookupElement.withPriority(LookupElementBuilder.createWithSmartPointer(lookupString, f)
                                                    .withIcon(icon)
                                                    .withInsertHandler(handler)
                                                    .withTypeText(typeText, true)
@@ -135,14 +135,16 @@ public class GoCompletionUtil {
                                                       @Nullable InsertHandler<LookupElement> handler,
                                                       @Nullable String importPath,
                                                       double priority) {
-    LookupElementBuilder builder = LookupElementBuilder.create(t, lookupString).withInsertHandler(handler).withIcon(GoIcons.TYPE);
+    LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(lookupString, t)
+      .withInsertHandler(handler).withIcon(GoIcons.TYPE);
     if (importPath != null) builder = builder.withTailText(" " + importPath, true);
     return PrioritizedLookupElement.withPriority(builder, priority);
   }
 
   @NotNull
-  public static LookupElement createLabelLookupElement(@NotNull GoLabelDefinition l) {
-    return PrioritizedLookupElement.withPriority(LookupElementBuilder.create(l).withIcon(GoIcons.LABEL), LABEL_PRIORITY);
+  public static LookupElement createLabelLookupElement(@NotNull GoLabelDefinition l, @NotNull String lookupString) {
+    return PrioritizedLookupElement.withPriority(LookupElementBuilder.createWithSmartPointer(lookupString, l)
+                                                   .withIcon(GoIcons.LABEL), LABEL_PRIORITY);
   }
 
   @NotNull
@@ -164,7 +166,9 @@ public class GoCompletionUtil {
   @NotNull
   public static InsertHandler<LookupElement> getTypeConversionInsertHandler(@NotNull GoTypeSpec t) {
     GoType type = t.getType();
-    return type instanceof GoStructType || type instanceof GoArrayOrSliceType ? BracesInsertHandler.ONE_LINER : ParenthesesInsertHandler.WITH_PARAMETERS;
+    return type instanceof GoStructType || type instanceof GoArrayOrSliceType
+           ? BracesInsertHandler.ONE_LINER
+           : ParenthesesInsertHandler.WITH_PARAMETERS;
   }
 
   @NotNull
@@ -190,14 +194,16 @@ public class GoCompletionUtil {
           int offset = context.getStartOffset();
           PsiElement at = file.findElementAt(offset);
           GoCompositeElement ref = PsiTreeUtil.getParentOfType(at, GoValue.class, GoReferenceExpression.class);
-          if (ref instanceof GoReferenceExpression && (((GoReferenceExpression)ref).getQualifier() != null || GoPsiImplUtil.prevDot(ref))) return;
+          if (ref instanceof GoReferenceExpression && (((GoReferenceExpression)ref).getQualifier() != null || GoPsiImplUtil.prevDot(ref))) {
+            return;
+          }
           GoValue value = PsiTreeUtil.getParentOfType(at, GoValue.class);
           if (value == null || PsiTreeUtil.getPrevSiblingOfType(value, GoKey.class) != null) return;
           super.handleInsert(context, item);
         }
       } : null;
     return PrioritizedLookupElement.withPriority(
-      LookupElementBuilder.create(v, name)
+      LookupElementBuilder.createWithSmartPointer(name, v)
         //.withLookupString(name.toLowerCase())
         .withIcon(icon)
         .withCaseSensitivity(false)
@@ -276,7 +282,7 @@ public class GoCompletionUtil {
   @NotNull
   public static LookupElementBuilder createDirectoryLookupElement(@NotNull PsiDirectory dir) {
     int files = dir.getFiles().length;
-    return LookupElementBuilder.create(dir).withIcon(PlatformIcons.DIRECTORY_CLOSED_ICON)
+    return LookupElementBuilder.createWithSmartPointer(dir.getName(), dir).withIcon(PlatformIcons.DIRECTORY_CLOSED_ICON)
       .withInsertHandler(files == 0 ? Lazy.DIR_INSERT_HANDLER : null);
   }
 }
