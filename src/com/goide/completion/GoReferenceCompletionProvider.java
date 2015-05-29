@@ -84,30 +84,38 @@ public class GoReferenceCompletionProvider extends CompletionProvider<Completion
   }
 
   private static void addElement(@NotNull PsiElement o, @NotNull ResolveState state, boolean forTypes, @NotNull CompletionResultSet set) {
+    LookupElement lookup = createLookupElement(o, state, forTypes);
+    if (lookup != null) {
+      set.addElement(lookup);
+    }
+  }
+
+  @Nullable
+  private static LookupElement createLookupElement(@NotNull PsiElement o, @NotNull ResolveState state, boolean forTypes) {
     if (o instanceof GoNamedElement && !((GoNamedElement)o).isBlank() || o instanceof GoImportSpec && !((GoImportSpec)o).isDot()) {
-      LookupElement lookup;
       if (o instanceof GoImportSpec) {
-        lookup = GoCompletionUtil.createPackageLookupElement(((GoImportSpec)o), state.get(GoReference.ACTUAL_NAME));
+        return GoCompletionUtil.createPackageLookupElement(((GoImportSpec)o), state.get(GoReference.ACTUAL_NAME));
       }
-      else if (o instanceof GoNamedSignatureOwner) {
-        lookup = GoCompletionUtil.createFunctionOrMethodLookupElement((GoNamedSignatureOwner)o);
+      else if (o instanceof GoNamedSignatureOwner && ((GoNamedSignatureOwner)o).getName() != null) {
+        String name = ((GoNamedSignatureOwner)o).getName();
+        if (name != null) {
+          return GoCompletionUtil.createFunctionOrMethodLookupElement((GoNamedSignatureOwner)o, name, null,
+                                                                        GoCompletionUtil.FUNCTION_PRIORITY);
+        }
       }
       else if (o instanceof GoTypeSpec) {
-        lookup = forTypes
+        return forTypes
                  ? GoCompletionUtil.createTypeLookupElement((GoTypeSpec)o)
                  : GoCompletionUtil.createTypeConversionLookupElement((GoTypeSpec)o);
       }
       else if (o instanceof PsiDirectory) {
-        lookup = GoCompletionUtil.createPackageLookupElement(((PsiDirectory)o).getName(), o, true);
+        return GoCompletionUtil.createPackageLookupElement(((PsiDirectory)o).getName(), o, true);
       }
       else {
-        lookup = GoCompletionUtil.createVariableLikeLookupElement((GoNamedElement)o);
-      }
-
-      if (lookup != null) {
-        set.addElement(lookup);
+        return GoCompletionUtil.createVariableLikeLookupElement((GoNamedElement)o);
       }
     }
+    return null;
   }
 
   private static class MyGoScopeProcessor extends GoScopeProcessor {

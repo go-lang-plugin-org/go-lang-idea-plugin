@@ -75,13 +75,8 @@ public class GoCompletionUtil {
   }
 
   @NotNull
-  public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoNamedSignatureOwner f) {
-    return createFunctionOrMethodLookupElement(f, f.getName(), null, FUNCTION_PRIORITY);
-  }
-
-  @NotNull
   public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoNamedSignatureOwner f,
-                                                                  @Nullable String lookupString,
+                                                                  @NotNull String lookupString,
                                                                   @Nullable InsertHandler<LookupElement> h,
                                                                   double priority) {
     Icon icon = f instanceof GoMethodDeclaration || f instanceof GoMethodSpec ? GoIcons.METHOD : GoIcons.FUNCTION;
@@ -100,7 +95,6 @@ public class GoCompletionUtil {
                                            paramsCount == 0
                                            ? ParenthesesInsertHandler.NO_PARAMETERS
                                            : ParenthesesInsertHandler.WITH_PARAMETERS;
-    lookupString = StringUtil.notNullize(lookupString);
     return PrioritizedLookupElement.withPriority(LookupElementBuilder.createWithSmartPointer(lookupString, f)
                                                    .withIcon(icon)
                                                    .withInsertHandler(handler)
