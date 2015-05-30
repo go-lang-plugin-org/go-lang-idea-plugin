@@ -3,7 +3,16 @@
 
 ## Pre-release builds
 
-Pre-release builds can be installed on IntelliJ platform 141.2 or greater. It corresponds to IntelliJ IDEA 14.1, WebStorm 10, PhpStorm 9.
+**Supported IDEs**
+Pre-release builds can be installed on IntelliJ platform 141.2 or greater.
+
+- IntelliJ IDEA 14.1+ (Ultimate or Community)
+- WebStorm 10+
+- PhpStorm 9+
+- PyCharm 4.5+
+- RubyMine 7.1+
+- CLion 1.0.3+
+- Android Studio 1.2.1+
 
 Pre-release builds are available in two forms: nightly and alphas. At the time
 of writing, alpha builds are released usually at the start of every week while
@@ -16,7 +25,7 @@ To use them, you'll need to follow these steps:
  - alpha: https://plugins.jetbrains.com/plugins/alpha/5047
  - nightly: https://plugins.jetbrains.com/plugins/nightly/5047
 
-As always, please remember that this is an alpha release and while efforts are
+As always, please remember that this is an preview release and while efforts are
 made to ensure the best possible experience, sometimes things might be broken.
 
 **NOTE**
@@ -43,6 +52,8 @@ When reporting a bug, please include the following:
 - OS version
 - JDK version
 - plugin version (or commit hash, if you built the plugin yourself)
+- steps to reproduce the issue as detailed as possible
+- when possible, sample code that can reproduce the issue is crucial to the ability / time to fix the said issue (and greatly appreciated)
 
 ## Bumping or +1 or me as well comments
 
