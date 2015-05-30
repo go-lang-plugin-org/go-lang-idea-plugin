@@ -33,7 +33,7 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
                                    @NotNull GoApplicationConfiguration configuration) {
     super(env, module, configuration);
   }
-  
+
   @NotNull
   public String getTarget() {
     return myConfiguration.getKind() == GoApplicationConfiguration.Kind.PACKAGE
@@ -53,10 +53,12 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
       return super.startProcess();
     }
     finally {
-      File file = new File(myTmpFilePath);
-      if (file.exists()) {
-        //noinspection ResultOfMethodCallIgnored
-        file.delete();
+      if (myConfiguration.getOutputFilePath() == "") {
+        File file = new File(myTmpFilePath);
+        if (file.exists()) {
+          //noinspection ResultOfMethodCallIgnored
+          file.delete();
+        }
       }
     }
   }

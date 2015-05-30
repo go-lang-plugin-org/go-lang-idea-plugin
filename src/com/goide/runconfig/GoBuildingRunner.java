@@ -32,6 +32,7 @@ import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.RunContentBuilder;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.util.SystemInfoRt;
 import com.intellij.openapi.util.io.FileUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -59,12 +60,37 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
   @Override
   protected Promise<RunProfileStarter> prepare(@NotNull ExecutionEnvironment environment, @NotNull RunProfileState state)
     throws ExecutionException {
-    final File tmpFile;
+    final File outputFile;
+    String saveFilePath = ((GoApplicationRunningState)state).myConfiguration.getOutputFilePath();
     try {
       RunnerAndConfigurationSettings settings = environment.getRunnerAndConfigurationSettings();
-      tmpFile = FileUtil.createTempFile(settings != null ? settings.getName() : "application", "go", true);
-      if (!tmpFile.setExecutable(true)) {
-        throw new ExecutionException("Can't make temporary file executable (" + tmpFile.getAbsolutePath());
+      if (saveFilePath.isEmpty()) {
+        outputFile = FileUtil.createTempFile(settings != null ? settings.getName() : "application", "go", true);
+      } else if (new File(saveFilePath).isDirectory()) {
+        String fileName = settings != null ? settings.getName() : "goApplication";
+        if (SystemInfoRt.isWindows) {
+          fileName += ".exe";
+        }
+        outputFile = new File(saveFilePath + File.separator + fileName);
+
+        if (!outputFile.exists()) {
+          if (!outputFile.createNewFile()) {
+            throw new ExecutionException("Could not create output file " + outputFile.getAbsolutePath());
+          }
+        }
+      } else if (new File(saveFilePath).isFile()) {
+        outputFile = new File(saveFilePath);
+
+        if (!outputFile.exists()) {
+          if (!outputFile.createNewFile()) {
+            throw new ExecutionException("Could not create output file " + outputFile.getAbsolutePath());
+          }
+        }
+      } else {
+        throw new ExecutionException("Could not create the output file in a reasonable manner, please check your configuration");
+      }
+      if (!outputFile.setExecutable(true)) {
+        throw new ExecutionException("Can't make temporary file executable (" + outputFile.getAbsolutePath());
       }
     }
     catch (IOException e) {
@@ -73,11 +99,11 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
 
     final AsyncPromise<RunProfileStarter> promise = new AsyncPromise<RunProfileStarter>();
     FileDocumentManager.getInstance().saveAllDocuments();
-    
+
     ((GoApplicationRunningState)state).createCommonExecutor()
       .withParameters("build")
       .withParameterString(((GoApplicationRunningState)state).getGoBuildParams())
-      .withParameters("-o", tmpFile.getAbsolutePath(), ((GoApplicationRunningState)state).getTarget())
+      .withParameters("-o", outputFile.getAbsolutePath(), ((GoApplicationRunningState)state).getTarget())
       .showNotifications(true)
       .showOutputOnError()
       .withPresentableName("go build")
@@ -86,7 +112,7 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
         public void processTerminated(ProcessEvent event) {
           super.processTerminated(event);
           if (event.getExitCode() == 0) {
-            promise.setResult(new MyStarter(tmpFile.getAbsolutePath()));
+            promise.setResult(new MyStarter(outputFile.getAbsolutePath()));
           }
           else {
             promise.setResult(null);
