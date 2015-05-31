@@ -365,6 +365,11 @@ public class GoCompletionTest extends GoCompletionTestBase {
     doCheckResult("package main; type custom []string; func main() { _ = custom<caret> }",
                   "package main; type custom []string; func main() { _ = custom{<caret>} }");
   }
+  
+  public void testMapType() {
+    doCheckResult("package main; type custom map[string]string; func main() { _ = custom<caret> }",
+                  "package main; type custom map[string]string; func main() { _ = custom{<caret>} }");
+  }
 
   public void testRanges() {
     doTestInclude("package foo; func foo(a int) {for k := range <caret>}", "a");
