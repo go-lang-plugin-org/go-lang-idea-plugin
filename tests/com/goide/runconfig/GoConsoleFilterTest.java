@@ -49,6 +49,10 @@ public class GoConsoleFilterTest extends GoCodeInsightFixtureTestCase {
     super.tearDown();
   }
   
+  public void testFileNameInParens() {
+    doFileLineTest("Message (nestedWorkingDirectory.go) with file", 9, 34, "/src/workingDirectory/src/nestedWorkingDirectory.go", 1, 1);
+  }
+  
   public void testSimpleFileName() {
     doFileLineTest("nestedWorkingDirectory.go:57", 0, 28, "/src/workingDirectory/src/nestedWorkingDirectory.go", 57, 1);
   }

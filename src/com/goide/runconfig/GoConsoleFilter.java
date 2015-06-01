@@ -35,9 +35,11 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.PathUtil;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,6 +47,7 @@ public class GoConsoleFilter implements Filter {
   private static final Pattern MESSAGE_PATTERN = Pattern.compile("(?:^|\\s)(\\S+\\.\\w+):(\\d+)(:(\\d+))?(?=[:\\s]|$).*");
   private static final Pattern GO_GET_MESSAGE_PATTERN = Pattern.compile("^[ \t]*(go get (.*))\n?$");
   private static final Pattern APP_ENGINE_PATH_PATTERN = Pattern.compile("/tmp[A-z0-9]+appengine-go-bin/");
+  private static final Pattern GO_FILE_PATTERN = Pattern.compile("\\((\\w+\\.go)\\)");
 
   @NotNull private final Project myProject;
   @Nullable private final Module myModule;
@@ -54,7 +57,7 @@ public class GoConsoleFilter implements Filter {
   public GoConsoleFilter(@NotNull Project project) {
     this(project, null, null);
   }
-  
+
   public GoConsoleFilter(@NotNull Project project, @Nullable Module module, @Nullable String workingDirectoryUrl) {
     myProject = project;
     myModule = module;
@@ -72,7 +75,15 @@ public class GoConsoleFilter implements Filter {
     }
     Matcher matcher = MESSAGE_PATTERN.matcher(line);
     if (!matcher.find()) {
-      return null;
+      Matcher fileMatcher = GO_FILE_PATTERN.matcher(line);
+      List<ResultItem> resultItems = ContainerUtil.newArrayList();
+      while (fileMatcher.find()) {
+        VirtualFile file = findSingleFile(fileMatcher.group(1));
+        if (file != null) {
+          resultItems.add(createResult(line, entireLength, fileMatcher.start(1), fileMatcher.end(1), 0, 0, file));
+        }
+      }
+      return !resultItems.isEmpty() ? new Result(resultItems) : null;
     }
 
     int startOffset = matcher.start(1);
@@ -122,18 +133,43 @@ public class GoConsoleFilter implements Filter {
         }
       }
     }
-    if (virtualFile == null && PathUtil.isValidFileName(fileName)) {
-      PsiFile[] files = FilenameIndex.getFilesByName(myProject, fileName, GoUtil.moduleScope(myProject, myModule));
-      if (files.length == 1) {
-        virtualFile = files[0].getVirtualFile();
-      }
+    if (virtualFile == null) {
+      virtualFile = findSingleFile(fileName);
     }
     if (virtualFile == null) {
       return null;
     }
+    return createResult(line, entireLength, startOffset, endOffset, lineNumber, columnNumber, virtualFile);
+  }
+
+  @NotNull
+  private Result createResult(@NotNull String line,
+                              int entireLength,
+                              int startOffset,
+                              int endOffset,
+                              int lineNumber,
+                              int columnNumber,
+                              @NotNull VirtualFile virtualFile) {
     HyperlinkInfo hyperlinkInfo = new OpenFileHyperlinkInfo(myProject, virtualFile, lineNumber, columnNumber);
     int lineStart = entireLength - line.length();
     return new Result(lineStart + startOffset, lineStart + endOffset, hyperlinkInfo);
+  }
+
+  @Nullable
+  private VirtualFile findSingleFile(@NotNull String fileName) {
+    if (PathUtil.isValidFileName(fileName)) {
+      PsiFile[] files = FilenameIndex.getFilesByName(myProject, fileName, GoUtil.moduleScope(myProject, myModule));
+      if (files.length == 1) {
+        return files[0].getVirtualFile();
+      }
+      else if (files.length > 0 && myModule != null) {
+        files = FilenameIndex.getFilesByName(myProject, fileName, GoUtil.moduleScopeWithoutLibraries(myModule));
+        if (files.length == 1) {
+          return files[0].getVirtualFile();
+        }
+      }
+    }
+    return null;
   }
 
   @Nullable
