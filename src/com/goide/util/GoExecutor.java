@@ -278,7 +278,6 @@ public class GoExecutor {
     });
   }
 
-
   @Nullable
   public ProcessHandler getProcessHandler() {
     return myProcessHandler;

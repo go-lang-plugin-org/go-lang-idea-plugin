@@ -51,6 +51,6 @@ public class GoFmtProjectAction extends DumbAwareAction {
 
   private static void fmt(@NotNull Project project, @Nullable Module module, @NotNull String presentableName, @NotNull String directory) {
     GoExecutor.in(project, module).withPresentableName(presentableName).withWorkDirectory(directory)
-      .withParameters("fmt", "./...").showOutputOnError().executeWithProgress(true);
+      .withParameters("fmt", "./...").showOutputOnError().executeWithProgress(false);
   }
 }
