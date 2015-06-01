@@ -21,11 +21,13 @@ import com.goide.sdk.GoSdkUtil;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.psi.ElementDescriptionUtil;
+import com.intellij.psi.PsiElement;
+import com.intellij.usageView.UsageViewTypeLocation;
+import freemarker.template.utility.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class GoReservedWordUsedAsName extends GoInspectionBase {
-  private GoFile builtin;
-
   @NotNull
   @Override
   protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
@@ -42,65 +44,46 @@ public class GoReservedWordUsedAsName extends GoInspectionBase {
     };
   }
 
-  protected void check(@NotNull GoFunctionDeclaration goFunction, @NotNull ProblemsHolder holder) {
-    if (builtin == null) {
-      builtin = GoSdkUtil.findBuiltinFile(goFunction);
-      if (builtin == null) {
-        return;
-      }
-    }
+  private static void check(@NotNull GoFunctionDeclaration function, @NotNull ProblemsHolder holder) {
+    GoFile builtin = GoSdkUtil.findBuiltinFile(function);
+    if (builtin == null) return;
 
-    String functionName = goFunction.getName();
-    if (functionName == null) {
-      return;
-    }
+    String name = function.getName();
+    if (name == null) return;
 
     for (GoFunctionDeclaration builtinFunctionDeclaration : builtin.getFunctions()) {
-      if (functionName.equals(builtinFunctionDeclaration.getName())) {
-        String prefix = "my";
-        if (goFunction.isPublic()) {
-          prefix = "My";
-        }
-        String newFunctionName = prefix + functionName.substring(0, 1).toUpperCase() + functionName.substring(1);
-        holder.registerProblem(goFunction.getIdentifier(), errorTextFunction(functionName), ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-                               new GoRenameQuickFix(goFunction, newFunctionName));
+      if (name.equals(builtinFunctionDeclaration.getName())) {
+        registerProblem(holder, function, builtinFunctionDeclaration, name);
         break;
       }
     }
   }
 
-  protected void check(@NotNull GoVarDefinition goVarDefinition, @NotNull ProblemsHolder holder) {
-    if (builtin == null) {
-      builtin = GoSdkUtil.findBuiltinFile(goVarDefinition);
-      if (builtin == null) {
-        return;
-      }
-    }
+  private static void check(@NotNull GoVarDefinition variable, @NotNull ProblemsHolder holder) {
+    GoFile builtin = GoSdkUtil.findBuiltinFile(variable);
+    if (builtin == null) return;
 
-    String varName = goVarDefinition.getName();
-    if (varName == null) {
-      return;
-    }
+    String name = variable.getName();
+    if (name == null) return;
 
     for (GoTypeSpec builtinTypeDeclaration : builtin.getTypes()) {
-      if (varName.equals(builtinTypeDeclaration.getName())) {
-        String prefix = "my";
-        if (goVarDefinition.isPublic()) {
-          prefix = "My";
-        }
-        String newVarName = prefix + varName.substring(0, 1).toUpperCase() + varName.substring(1);
-        holder.registerProblem(goVarDefinition.getIdentifier(), errorVarDeclaration(varName), ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-                               new GoRenameQuickFix(goVarDefinition, newVarName));
+      if (name.equals(builtinTypeDeclaration.getName())) {
+        registerProblem(holder, variable, builtinTypeDeclaration, name);
         break;
       }
     }
   }
 
-  private static String errorTextFunction(@NotNull String name) {
-    return "Function '" + name + "' collides with builtin function '" + name + "'";
-  }
-
-  private static String errorVarDeclaration(@NotNull String name) {
-    return "Variable '" + name + "' collides with builtin type '" + name + "'";
+  private static void registerProblem(@NotNull ProblemsHolder holder,
+                                      @NotNull GoNamedElement element,
+                                      @NotNull GoNamedElement builtinElement,
+                                      @NotNull String name) {
+    PsiElement identifier = element.getIdentifier();
+    if (identifier != null) {
+      String elementDescription = ElementDescriptionUtil.getElementDescription(element, UsageViewTypeLocation.INSTANCE);
+      String builtinElementDescription = ElementDescriptionUtil.getElementDescription(builtinElement, UsageViewTypeLocation.INSTANCE);
+      String message = StringUtil.capitalize(elementDescription) + " '" + name + "' collides with builtin " + builtinElementDescription;
+      holder.registerProblem(identifier, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new GoRenameQuickFix(element));
+    }
   }
 }
