@@ -19,16 +19,12 @@ package com.goide.runconfig.ui;
 import com.goide.runconfig.GoRunUtil;
 import com.goide.runconfig.application.GoApplicationConfiguration;
 import com.goide.runconfig.testing.ui.GoPackageFieldCompletionProvider;
-import com.intellij.openapi.fileChooser.FileChooserDescriptor;
-import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.TextBrowseFolderListener;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.ui.EditorTextField;
 import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.util.Producer;
@@ -48,7 +44,7 @@ public class GoApplicationConfigurationEditorForm extends SettingsEditor<GoAppli
   private JComboBox myRunKindComboBox;
   private JLabel myPackageLabel;
   private JLabel myFileLabel;
-  private TextFieldWithBrowseButton myOutputFilePath;
+  private TextFieldWithBrowseButton myOutputFilePathField;
 
 
   public GoApplicationConfigurationEditorForm(@NotNull final Project project) {
@@ -58,10 +54,7 @@ public class GoApplicationConfigurationEditorForm extends SettingsEditor<GoAppli
 
     installRunKindComboBox();
     GoRunUtil.installGoWithMainFileChooser(myProject, myFileField);
-    FileChooserDescriptor chooseOutputFileDescriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor()
-      .withTitle("Save Build File to")
-      .withDescription("Choose build file save location");
-    myOutputFilePath.addBrowseFolderListener(new TextBrowseFolderListener(chooseOutputFileDescriptor));
+    GoRunUtil.installFileChooser(myProject, myOutputFilePathField, true);
   }
 
   private void onRunKindChanged() {
@@ -83,7 +76,7 @@ public class GoApplicationConfigurationEditorForm extends SettingsEditor<GoAppli
     myFileField.setText(configuration.getFilePath());
     myPackageField.setText(configuration.getPackage());
     myRunKindComboBox.setSelectedItem(configuration.getKind());
-    myOutputFilePath.setText(configuration.getOutputFilePath());
+    myOutputFilePathField.setText(StringUtil.notNullize(configuration.getOutputFilePath()));
     myCommonSettingsPanel.resetEditorFrom(configuration);
   }
 
@@ -92,7 +85,7 @@ public class GoApplicationConfigurationEditorForm extends SettingsEditor<GoAppli
     configuration.setFilePath(myFileField.getText());
     configuration.setPackage(myPackageField.getText());
     configuration.setKind((GoApplicationConfiguration.Kind)myRunKindComboBox.getSelectedItem());
-    configuration.setFileOutputPath(myOutputFilePath.getText());
+    configuration.setFileOutputPath(StringUtil.nullize(myOutputFilePathField.getText()));
     myCommonSettingsPanel.applyEditorTo(configuration);
   }
 
