@@ -22,6 +22,7 @@ import com.intellij.execution.ExecutionException;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.util.text.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -53,7 +54,7 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
       return super.startProcess();
     }
     finally {
-      if (myConfiguration.getOutputFilePath() == "") {
+      if (StringUtil.isEmpty(myConfiguration.getOutputFilePath())) {
         File file = new File(myTmpFilePath);
         if (file.exists()) {
           //noinspection ResultOfMethodCallIgnored
