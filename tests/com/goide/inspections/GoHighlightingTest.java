@@ -172,12 +172,12 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testDuplicateBuiltinFunction() {
-    myFixture.configureByText("a.go", "package main; func main() {new()}; func <warning descr=\"Function 'new' collides with builtin function 'new'\">new</warning>() {}");
+    myFixture.configureByText("a.go", "package main; func main() {new()}; func <warning descr=\"Function 'new' collides with builtin function\">new</warning>() {}");
     myFixture.checkHighlighting();
   }
 
   public void testDuplicateBuiltinType() {
-    myFixture.configureByText("a.go", "package main; func main() {<warning descr=\"Variable 'string' collides with builtin type 'string'\">string</warning> := 3; _ = string}");
+    myFixture.configureByText("a.go", "package main; func main() {<warning descr=\"Variable 'string' collides with builtin type\">string</warning> := 3; _ = string}");
     myFixture.checkHighlighting();
   }
 

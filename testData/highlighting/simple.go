@@ -93,10 +93,10 @@ func <warning>BenchmarkName</warning>(b *AA) {
      b.N
 }
 
-func make(o interface{}, args ...interface{}) {
+func <warning descr="Function 'make' collides with builtin function">make</warning>(o interface{}, args ...interface{}) {
 }
 
-func new(o interface{}) {
+func <warning descr="Function 'new' collides with builtin function">new</warning>(o interface{}) {
   func(i interface{}) {
     Println(o)
     Println(i)
