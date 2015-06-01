@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.CommandLineState;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.KillableColoredProcessHandler;
+import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
@@ -43,7 +44,9 @@ public abstract class GoRunningState<T extends GoRunConfigurationBase<?>> extend
     GeneralCommandLine commandLine = patchExecutor(createCommonExecutor())
       .withParameterString(myConfiguration.getParams())
       .createCommandLine();
-    return new KillableColoredProcessHandler(commandLine.createProcess(), commandLine.getCommandLineString());
+    OSProcessHandler processHandler = new KillableColoredProcessHandler(commandLine.createProcess(), commandLine.getCommandLineString());
+    processHandler.setHasPty(true);
+    return processHandler;
   }
 
   @NotNull

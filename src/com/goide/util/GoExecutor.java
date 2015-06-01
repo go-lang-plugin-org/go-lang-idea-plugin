@@ -27,6 +27,7 @@ import com.intellij.execution.RunContentExecutor;
 import com.intellij.execution.configurations.EncodingEnvironmentUtil;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.ParametersList;
+import com.intellij.execution.configurations.PtyCommandLine;
 import com.intellij.execution.process.*;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
@@ -190,6 +191,7 @@ public class GoExecutor {
       commandLine = createCommandLine();
 
       myProcessHandler = new KillableColoredProcessHandler(commandLine);
+      myProcessHandler.setHasPty(true);
       final HistoryProcessListener historyProcessListener = new HistoryProcessListener();
       myProcessHandler.addProcessListener(historyProcessListener);
       for (ProcessListener listener : myProcessListeners) {
@@ -294,7 +296,7 @@ public class GoExecutor {
 
   private void showOutput(@NotNull OSProcessHandler originalHandler, @NotNull HistoryProcessListener historyProcessListener) {
     if (myShowOutputOnError) {
-      BaseOSProcessHandler outputHandler = new ColoredProcessHandler(originalHandler.getProcess(), null);
+      BaseOSProcessHandler outputHandler = new KillableColoredProcessHandler(originalHandler.getProcess(), null);
       RunContentExecutor runContentExecutor = new RunContentExecutor(myProject, outputHandler)
         .withTitle(getPresentableName())
         .withActivateToolWindow(myShowOutputOnError)
@@ -314,7 +316,7 @@ public class GoExecutor {
       throw new ExecutionException("Sdk is not set or Sdk home path is empty for module");
     }
 
-    GeneralCommandLine commandLine = new GeneralCommandLine();
+    PtyCommandLine commandLine = new PtyCommandLine();
     commandLine.setExePath(ObjectUtils.notNull(myExePath, GoSdkService.getGoExecutablePath(myGoRoot)));
     commandLine.getEnvironment().putAll(myExtraEnvironment);
     commandLine.getEnvironment().put(GoConstants.GO_ROOT, StringUtil.notNullize(myGoRoot));
