@@ -30,7 +30,7 @@ func (e E) foo() {
 
 type Type int
 
-func new(Type) *Type
+func <warning descr="Function 'new' collides with builtin function">new</warning>(Type) *Type
 
 type T int
 func (t T) name()  {

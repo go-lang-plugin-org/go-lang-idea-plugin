@@ -16,9 +16,7 @@
 
 package com.goide.go;
 
-import com.goide.psi.GoFile;
 import com.goide.psi.GoNamedElement;
-import com.goide.tree.GoStructureViewFactory;
 import com.intellij.navigation.ChooseByNameContributorEx;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.project.Project;
@@ -26,7 +24,6 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.psi.stubs.StubIndexKey;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.ObjectUtils;
 import com.intellij.util.Processor;
 import com.intellij.util.indexing.FindSymbolParameters;
 import com.intellij.util.indexing.IdFilter;
@@ -60,21 +57,9 @@ public class GoGotoContributorBase<T extends GoNamedElement> implements ChooseBy
 
   @Override
   public void processElementsWithName(@NotNull String s,
-                                      @NotNull final Processor<NavigationItem> processor,
+                                      @NotNull Processor<NavigationItem> processor,
                                       @NotNull FindSymbolParameters parameters) {
     StubIndex.getInstance().processElements(myIndexKey, s, parameters.getProject(), parameters.getSearchScope(),
-                                            parameters.getIdFilter(), myClazz, new Processor<GoNamedElement>() {
-        @Override
-        public boolean process(final GoNamedElement namedElement) {
-          return processor.process(new GoStructureViewFactory.Element(namedElement) {
-            @Override
-            public String getLocationString() {
-              GoFile file = namedElement.getContainingFile();
-              String locationString = ObjectUtils.notNull(file.getImportPath(), ObjectUtils.notNull(file.getPackageName(), file.getName()));
-              return "(in " + locationString + ")";
-            }
-          });
-        }
-      });
+                                            parameters.getIdFilter(), myClazz, processor);
   }
 }
