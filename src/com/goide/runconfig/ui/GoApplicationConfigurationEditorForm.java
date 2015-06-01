@@ -44,6 +44,7 @@ public class GoApplicationConfigurationEditorForm extends SettingsEditor<GoAppli
   private JComboBox myRunKindComboBox;
   private JLabel myPackageLabel;
   private JLabel myFileLabel;
+  private TextFieldWithBrowseButton myOutputFilePathField;
 
 
   public GoApplicationConfigurationEditorForm(@NotNull final Project project) {
@@ -53,6 +54,7 @@ public class GoApplicationConfigurationEditorForm extends SettingsEditor<GoAppli
 
     installRunKindComboBox();
     GoRunUtil.installGoWithMainFileChooser(myProject, myFileField);
+    GoRunUtil.installFileChooser(myProject, myOutputFilePathField, true);
   }
 
   private void onRunKindChanged() {
@@ -74,6 +76,7 @@ public class GoApplicationConfigurationEditorForm extends SettingsEditor<GoAppli
     myFileField.setText(configuration.getFilePath());
     myPackageField.setText(configuration.getPackage());
     myRunKindComboBox.setSelectedItem(configuration.getKind());
+    myOutputFilePathField.setText(StringUtil.notNullize(configuration.getOutputFilePath()));
     myCommonSettingsPanel.resetEditorFrom(configuration);
   }
 
@@ -82,6 +85,7 @@ public class GoApplicationConfigurationEditorForm extends SettingsEditor<GoAppli
     configuration.setFilePath(myFileField.getText());
     configuration.setPackage(myPackageField.getText());
     configuration.setKind((GoApplicationConfiguration.Kind)myRunKindComboBox.getSelectedItem());
+    configuration.setFileOutputPath(StringUtil.nullize(myOutputFilePathField.getText()));
     myCommonSettingsPanel.applyEditorTo(configuration);
   }
 

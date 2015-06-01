@@ -22,18 +22,19 @@ import com.intellij.execution.ExecutionException;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.util.text.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
 public class GoApplicationRunningState extends GoRunningState<GoApplicationConfiguration> {
-  private String myTmpFilePath;
+  private String myOutputFilePath;
 
   public GoApplicationRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module,
                                    @NotNull GoApplicationConfiguration configuration) {
     super(env, module, configuration);
   }
-  
+
   @NotNull
   public String getTarget() {
     return myConfiguration.getKind() == GoApplicationConfiguration.Kind.PACKAGE
@@ -53,20 +54,22 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
       return super.startProcess();
     }
     finally {
-      File file = new File(myTmpFilePath);
-      if (file.exists()) {
-        //noinspection ResultOfMethodCallIgnored
-        file.delete();
+      if (StringUtil.isEmpty(myConfiguration.getOutputFilePath())) {
+        File file = new File(myOutputFilePath);
+        if (file.exists()) {
+          //noinspection ResultOfMethodCallIgnored
+          file.delete();
+        }
       }
     }
   }
 
   @Override
   protected GoExecutor patchExecutor(@NotNull GoExecutor executor) throws ExecutionException {
-    return executor.withExePath(myTmpFilePath);
+    return executor.withExePath(myOutputFilePath);
   }
 
-  public void setTmpFilePath(String tmpFilePath) {
-    myTmpFilePath = tmpFilePath;
+  public void setOutputFilePath(@NotNull String outputFilePath) {
+    myOutputFilePath = outputFilePath;
   }
 }
