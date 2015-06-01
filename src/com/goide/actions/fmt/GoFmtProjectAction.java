@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,17 @@
 package com.goide.actions.fmt;
 
 import com.goide.sdk.GoSdkService;
+import com.goide.sdk.GoSdkUtil;
 import com.goide.util.GoExecutor;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class GoFmtProjectAction extends DumbAwareAction {
   @Override
@@ -37,8 +42,15 @@ public class GoFmtProjectAction extends DumbAwareAction {
     assert project != null;
 
     FileDocumentManager.getInstance().saveAllDocuments();
-    GoExecutor.in(project).withPresentableName(e.getPresentation().getText())
-      .withWorkDirectory(project.getBasePath())
+    for (Module module : GoSdkUtil.getGoModules(project)) {
+      for (VirtualFile file : ModuleRootManager.getInstance(module).getContentRoots()) {
+        fmt(project, module, "go fmt " + file.getPath(), file.getPath());
+      }
+    }
+  }
+
+  private static void fmt(@NotNull Project project, @Nullable Module module, @NotNull String presentableName, @NotNull String directory) {
+    GoExecutor.in(project, module).withPresentableName(presentableName).withWorkDirectory(directory)
       .withParameters("fmt", "./...").showOutputOnError().executeWithProgress(true);
   }
 }
