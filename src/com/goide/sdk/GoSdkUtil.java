@@ -23,9 +23,11 @@ import com.goide.project.GoLibrariesService;
 import com.goide.psi.GoFile;
 import com.intellij.execution.configurations.PathEnvironmentVariableUtil;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.UserDataHolder;
 import com.intellij.openapi.util.io.FileUtil;
@@ -359,6 +361,18 @@ public class GoSdkUtil {
     ContainerUtil.addAllNotNull(dependencies, GoSdkService.getInstance(project));
     ContainerUtil.addAllNotNull(dependencies, extra);
     return dependencies;
+  }
+
+  @NotNull
+  public static Collection<Module> getGoModules(@NotNull Project project) {
+    if (project.isDefault()) return Collections.emptyList();
+    final GoSdkService sdkService = GoSdkService.getInstance(project);
+    return ContainerUtil.filter(ModuleManager.getInstance(project).getModules(), new Condition<Module>() {
+      @Override
+      public boolean value(Module module) {
+        return sdkService.isGoModule(module);
+      }
+    });
   }
 
   public static class RetrieveSubDirectoryOrSelfFunction implements Function<VirtualFile, VirtualFile> {

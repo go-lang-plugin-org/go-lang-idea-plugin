@@ -17,6 +17,7 @@
 package com.goide.runconfig;
 
 import com.goide.sdk.GoSdkService;
+import com.goide.sdk.GoSdkUtil;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
@@ -25,9 +26,6 @@ import com.intellij.execution.configurations.*;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.RunConfigurationWithSuppressedDefaultRunAction;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizerUtil;
 import com.intellij.openapi.util.WriteExternalException;
@@ -84,13 +82,7 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
   @NotNull
   @Override
   public Collection<Module> getValidModules() {
-    final Project project = getProject();
-    return ContainerUtil.filter(ModuleManager.getInstance(project).getModules(), new Condition<Module>() {
-      @Override
-      public boolean value(Module module) {
-        return !project.isDefault() && GoSdkService.getInstance(project).isGoModule(module);
-      }
-    });
+    return GoSdkUtil.getGoModules(getProject());
   }
 
   @Override
