@@ -1,0 +1,35 @@
+=== RUN Test
+START: setups_test.go:19: FixtureTestBothErrorSuite.SetUpSuite
+<SuiteSetUp>PASS: setups_test.go:19: FixtureTestBothErrorSuite.SetUpSuite	0.000s
+
+START: setups_test.go:37: FixtureTestBothErrorSuite.TestA
+START: setups_test.go:27: FixtureTestBothErrorSuite.SetUpTest
+<TestSetUp>setups_test.go:29:
+    c.Assert("Foo", Equals, "Bar")
+... obtained string = "Foo"
+... expected string = "Bar"
+
+FAIL: setups_test.go:27: FixtureTestBothErrorSuite.SetUpTest
+
+START: setups_test.go:32: FixtureTestBothErrorSuite.TearDownTest
+<TestTearDown>setups_test.go:34:
+    c.Assert("Blah", Equals, "Bazz")
+... obtained string = "Blah"
+... expected string = "Bazz"
+
+FAIL: setups_test.go:32: FixtureTestBothErrorSuite.TearDownTest
+
+... Panic: Fixture has panicked (see related PANIC)
+PANIC: setups_test.go:37: FixtureTestBothErrorSuite.TestA
+
+START: setups_test.go:41: FixtureTestBothErrorSuite.TestB
+MISS: setups_test.go:41: FixtureTestBothErrorSuite.TestB
+
+START: setups_test.go:23: FixtureTestBothErrorSuite.TearDownSuite
+<SuiteTearDown>PASS: setups_test.go:23: FixtureTestBothErrorSuite.TearDownSuite	0.000s
+
+OOPS: 0 passed, 2 FAILED, 2 MISSED
+--- FAIL: Test (0.00s)
+FAIL
+exit status 1
+FAIL	github.com/mailgun/sandbox/fixtureTestBothError	0.006s

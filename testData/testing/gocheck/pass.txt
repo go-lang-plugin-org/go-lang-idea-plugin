@@ -1,0 +1,19 @@
+=== RUN Test
+START: all_pass_test.go:20: AllPassSuite.TestA
+PASS: all_pass_test.go:20: AllPassSuite.TestA	0.000s
+
+START: all_pass_test.go:22: AllPassSuite.TestB
+FooBarPASS: all_pass_test.go:22: AllPassSuite.TestB	0.000s
+
+START: all_pass_test.go:27: AllPassSuite.TestC
+Blah
+PASS: all_pass_test.go:27: AllPassSuite.TestC	0.000s
+
+START: all_pass_test.go:31: AllPassSuite.TestD
+Превед
+				МедведPASS: all_pass_test.go:31: AllPassSuite.TestD	0.000s
+
+OK: 4 passed
+--- PASS: Test (0.00s)
+PASS
+ok  	github.com/mailgun/sandbox/all_pass	0.005s

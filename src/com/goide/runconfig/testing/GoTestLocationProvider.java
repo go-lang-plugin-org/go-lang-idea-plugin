@@ -17,16 +17,19 @@
 package com.goide.runconfig.testing;
 
 import com.goide.psi.GoFunctionDeclaration;
+import com.goide.psi.GoMethodDeclaration;
+import com.goide.psi.GoTypeSpec;
 import com.goide.stubs.index.GoFunctionIndex;
+import com.goide.stubs.index.GoTypesIndex;
 import com.intellij.execution.Location;
 import com.intellij.execution.PsiLocation;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.testIntegration.TestLocationProvider;
-import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -40,11 +43,37 @@ public class GoTestLocationProvider implements TestLocationProvider {
     if (!PROTOCOL.equals(protocolId)) {
       return Collections.emptyList();
     }
-    return ContainerUtil.map(GoFunctionIndex.find(locationData, project, GlobalSearchScope.projectScope(project)), new Function<GoFunctionDeclaration, Location>() {
-      @Override
-      public Location fun(GoFunctionDeclaration declaration) {
-        return PsiLocation.fromPsiElement(project, declaration);
+
+    List<Location> locations = ContainerUtil.newArrayList();
+    String[] locationDataItems = locationData.split("\\.");
+
+    // Location is a function name, e.g. `TestCheckItOut`
+    if (locationDataItems.length == 1) {
+      Collection<GoFunctionDeclaration> goFunctionDeclarations = GoFunctionIndex.find(
+        locationData, project, GlobalSearchScope.projectScope(project));
+      for (GoFunctionDeclaration goFunctionDeclaration : goFunctionDeclarations) {
+        Location<GoFunctionDeclaration> functionLocation = PsiLocation.fromPsiElement(project, goFunctionDeclaration);
+        ContainerUtil.addIfNotNull(locations, functionLocation);
       }
-    });
+      return locations;
+    }
+
+    // Location is a method name, e.g. `FooSuite.TestCheckItOut`
+    if (locationDataItems.length == 2) {
+      Collection<GoTypeSpec> goTypeSpecs = GoTypesIndex.find(
+        locationDataItems[0], project, GlobalSearchScope.projectScope(project));
+      for (GoTypeSpec goTypeSpec : goTypeSpecs) {
+        for (GoMethodDeclaration method : goTypeSpec.getMethods()) {
+          if (locationDataItems[1].equals(method.getName())) {
+            Location<GoMethodDeclaration> methodLocation = PsiLocation.fromPsiElement(method);
+            ContainerUtil.addIfNotNull(locations, methodLocation);
+          }
+        }
+      }
+      return locations;
+    }
+
+    throw new RuntimeException("Unsupported location: " + locationData);
   }
+
 }

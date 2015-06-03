@@ -1,0 +1,46 @@
+=== RUN Test
+START: setups_test.go:19: FixtureSuite.SetUpSuite
+SetUp
+PASS: setups_test.go:19: FixtureSuite.SetUpSuite	0.000s
+
+START: setups_test.go:41: FixtureSuite.TestA
+START: setups_test.go:30: FixtureSuite.SetUpTest
+SetUp
+PASS: setups_test.go:30: FixtureSuite.SetUpTest	0.000s
+
+START: setups_test.go:35: FixtureSuite.TearDownTest
+TearDown
+PASS: setups_test.go:35: FixtureSuite.TearDownTest	0.000s
+
+PASS: setups_test.go:41: FixtureSuite.TestA	0.000s
+
+START: setups_test.go:43: FixtureSuite.TestB
+START: setups_test.go:30: FixtureSuite.SetUpTest
+SetUp
+PASS: setups_test.go:30: FixtureSuite.SetUpTest	0.000s
+
+somethingSTART: setups_test.go:35: FixtureSuite.TearDownTest
+TearDown
+PASS: setups_test.go:35: FixtureSuite.TearDownTest	0.000s
+
+PASS: setups_test.go:43: FixtureSuite.TestB	0.000s
+
+START: setups_test.go:48: FixtureSuite.TestC
+START: setups_test.go:30: FixtureSuite.SetUpTest
+SetUp
+PASS: setups_test.go:30: FixtureSuite.SetUpTest	0.000s
+
+somethingSTART: setups_test.go:35: FixtureSuite.TearDownTest
+TearDown
+PASS: setups_test.go:35: FixtureSuite.TearDownTest	0.000s
+
+PASS: setups_test.go:48: FixtureSuite.TestC	0.000s
+
+START: setups_test.go:25: FixtureSuite.TearDownSuite
+TearDown
+PASS: setups_test.go:25: FixtureSuite.TearDownSuite	0.000s
+
+OK: 3 passed
+--- PASS: Test (0.00s)
+PASS
+ok  	github.com/mailgun/sandbox/setups	0.005s

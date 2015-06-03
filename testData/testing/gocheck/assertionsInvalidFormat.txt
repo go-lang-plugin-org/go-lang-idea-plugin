@@ -1,0 +1,11 @@
+=== RUN Test
+START: all_fail_test.go:19: SomeFailSuite.TestA
+... value string = "Foo"
+
+FAIL: all_fail_test.go:19: SomeFailSuite.TestA
+
+OOPS: 0 passed, 1 FAILED
+--- FAIL: Test (0.00s)
+FAIL
+exit status 1
+FAIL	github.com/mailgun/sandbox/all_fail	0.007s

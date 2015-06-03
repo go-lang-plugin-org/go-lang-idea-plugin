@@ -1,0 +1,23 @@
+TestSuiteStarted
+    - name=FixtureSuiteTearDownErrorSuite
+  TestStarted
+      - locationHint=gotest://FixtureSuiteTearDownErrorSuite.TestA
+      - name=FixtureSuiteTearDownErrorSuite.TestA
+    TestStdOut
+        - name=FixtureSuiteTearDownErrorSuite.TestA
+        - out=<TestSetUp>\n<TestA><TestTearDown>\n
+  TestFinished
+      - name=FixtureSuiteTearDownErrorSuite.TestA
+  TestStarted
+      - locationHint=gotest://FixtureSuiteTearDownErrorSuite.TestB
+      - name=FixtureSuiteTearDownErrorSuite.TestB
+    TestStdOut
+        - name=FixtureSuiteTearDownErrorSuite.TestB
+        - out=<TestSetUp>\n<TestB><TestTearDown>\n
+  TestFinished
+      - name=FixtureSuiteTearDownErrorSuite.TestB
+TestSuiteFinished
+    - name=FixtureSuiteTearDownErrorSuite
+TestStdOut
+    - name=SuiteTearDown
+    - out=<SuiteTearDown>setups_test.go:25:\n    c.Assert("Foo", Equals, "Bar")\n... obtained string = "Foo"\n... expected string = "Bar"\n\n\nOOPS: 2 passed, 1 FAILED\n--- FAIL: Test (0.00s)\n

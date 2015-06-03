@@ -1,6 +1,6 @@
 package com.goide.runconfig.testing.coverage;
 
-import com.goide.runconfig.testing.GoTestRunConfiguration;
+import com.goide.runconfig.testing.GoTestRunConfigurationBase;
 import com.goide.runconfig.testing.GoTestRunningState;
 import com.intellij.coverage.CoverageExecutor;
 import com.intellij.coverage.CoverageHelper;
@@ -32,7 +32,7 @@ public class GoCoverageProgramRunner extends GenericProgramRunner {
 
   @Override
   public boolean canRun(@NotNull final String executorId, @NotNull final RunProfile profile) {
-    return executorId.equals(CoverageExecutor.EXECUTOR_ID) && profile instanceof GoTestRunConfiguration;
+    return executorId.equals(CoverageExecutor.EXECUTOR_ID) && profile instanceof GoTestRunConfigurationBase;
   }
 
   @Override
@@ -46,7 +46,7 @@ public class GoCoverageProgramRunner extends GenericProgramRunner {
     throws ExecutionException {
     assert state instanceof GoTestRunningState;
     GoTestRunningState runningState = (GoTestRunningState)state;
-    GoTestRunConfiguration runConfiguration = ObjectUtils.tryCast(environment.getRunProfile(), GoTestRunConfiguration.class);
+    GoTestRunConfigurationBase runConfiguration = ObjectUtils.tryCast(environment.getRunProfile(), GoTestRunConfigurationBase.class);
     if (runConfiguration == null) {
       return null;
     }

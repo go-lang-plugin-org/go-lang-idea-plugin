@@ -1,0 +1,26 @@
+TestSuiteStarted
+    - name=FixtureTestSetUpErrorSuite
+  TestStarted
+      - locationHint=gotest://FixtureTestSetUpErrorSuite.TestA
+      - name=FixtureTestSetUpErrorSuite.TestA
+    TestFailed
+        - actual=string = "Foo"
+        - details=<TestSetUp>setups_test.go:29
+        - expected=string = "Bar"
+        - message=c.Assert("Foo", Equals, "Bar")
+        - name=FixtureTestSetUpErrorSuite.TestA
+        - type=comparisonFailure
+  TestFinished
+      - name=FixtureTestSetUpErrorSuite.TestA
+  TestStarted
+      - locationHint=gotest://FixtureTestSetUpErrorSuite.TestB
+      - name=FixtureTestSetUpErrorSuite.TestB
+    TestIgnored
+        - name=FixtureTestSetUpErrorSuite.TestB
+  TestFinished
+      - name=FixtureTestSetUpErrorSuite.TestB
+TestSuiteFinished
+    - name=FixtureTestSetUpErrorSuite
+TestStdOut
+    - name=SuiteTearDown
+    - out=<SuiteTearDown>\nOOPS: 0 passed, 1 FAILED, 2 MISSED\n--- FAIL: Test (0.00s)\n

@@ -20,6 +20,7 @@ import com.goide.psi.GoFile;
 import com.goide.psi.GoFunctionDeclaration;
 import com.goide.runconfig.GoConsoleFilter;
 import com.goide.runconfig.GoRunningState;
+import com.goide.runconfig.testing.frameworks.gocheck.GocheckRunConfigurationType;
 import com.goide.util.GoExecutor;
 import com.intellij.execution.DefaultExecutionResult;
 import com.intellij.execution.ExecutionException;
@@ -33,6 +34,7 @@ import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.testframework.autotest.ToggleAutoTestAction;
 import com.intellij.execution.testframework.sm.SMTestRunnerConnectionUtil;
 import com.intellij.execution.ui.ConsoleView;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
@@ -45,12 +47,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.Collection;
+import java.util.Scanner;
 
-public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
+public class GoTestRunningState extends GoRunningState<GoTestRunConfigurationBase> {
+  private static final Logger LOG = Logger.getInstance(GoTestRunningState.class);
+
   private String myCoverageFilePath;
 
-  public GoTestRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module, @NotNull GoTestRunConfiguration configuration) {
+  public GoTestRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module, @NotNull GoTestRunConfigurationBase configuration) {
     super(env, module, configuration);
   }
 
@@ -62,7 +68,7 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
     setConsoleBuilder(consoleBuilder);
 
     GoTestConsoleProperties consoleProperties = new GoTestConsoleProperties(myConfiguration, executor);
-    ConsoleView consoleView = SMTestRunnerConnectionUtil.createAndAttachConsole("Go", processHandler, consoleProperties, getEnvironment());
+    ConsoleView consoleView = SMTestRunnerConnectionUtil.createAndAttachConsole("gocheck", processHandler, consoleProperties, getEnvironment());
     consoleView.addMessageFilter(new GoConsoleFilter(myConfiguration.getProject(), myModule, myConfiguration.getWorkingDirectory()));
 
     DefaultExecutionResult executionResult = new DefaultExecutionResult(consoleView, processHandler);
@@ -120,6 +126,11 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
     if (myCoverageFilePath != null) {
       executor.withParameters("-coverprofile=" + myCoverageFilePath, "-covermode=count");
     }
+
+    if (myConfiguration.getType() == GocheckRunConfigurationType.getInstance()) {
+      executor.withParameters("-check.vv");
+    }
+
     return executor;
   }
 
@@ -131,5 +142,10 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
 
   public void setCoverageFilePath(@Nullable String coverageFile) {
     myCoverageFilePath = coverageFile;
+  }
+
+  private static String convertStreamToString(InputStream is) {
+    Scanner s = new Scanner(is).useDelimiter("\\A");
+    return s.hasNext() ? s.next() : "";
   }
 }

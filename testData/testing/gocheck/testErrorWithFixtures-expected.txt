@@ -1,0 +1,34 @@
+TestSuiteStarted
+    - name=FixtureTestErrorSuite
+  TestStarted
+      - locationHint=gotest://FixtureTestErrorSuite.TestA
+      - name=FixtureTestErrorSuite.TestA
+    TestStdOut
+        - name=FixtureTestErrorSuite.TestA
+        - out=<TestSetUp>\n
+    TestFailed
+        - actual=string = "Foo"
+        - details=<TestA>setups_test.go:37
+        - expected=string = "Bar"
+        - message=c.Assert("Foo", Equals, "Bar")
+        - name=FixtureTestErrorSuite.TestA
+        - type=comparisonFailure
+  TestFinished
+      - name=FixtureTestErrorSuite.TestA
+  TestStarted
+      - locationHint=gotest://FixtureTestErrorSuite.TestB
+      - name=FixtureTestErrorSuite.TestB
+    TestStdOut
+        - name=FixtureTestErrorSuite.TestB
+        - out=<TestSetUp>\n<TestB><TestTearDown>\n
+    TestFailed
+        - details=/usr/local/go/src/runtime/panic.go:387\n  in gopanic\nsetups_test.go:42\n  in FixtureTestErrorSuite.TestB\n/usr/local/go/src/reflect/value.go:296\n  in Value.Call\n/usr/local/go/src/runtime/asm_amd64.s:2232\n  in goexit\n
+        - message=Panic: Kaboom! (PC=0x3B0A5)\n
+        - name=FixtureTestErrorSuite.TestB
+  TestFinished
+      - name=FixtureTestErrorSuite.TestB
+TestSuiteFinished
+    - name=FixtureTestErrorSuite
+TestStdOut
+    - name=SuiteTearDown
+    - out=<SuiteTearDown>\nOOPS: 0 passed, 1 FAILED, 1 PANICKED\n--- FAIL: Test (0.00s)\n

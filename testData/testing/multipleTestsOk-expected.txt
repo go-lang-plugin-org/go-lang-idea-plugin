@@ -1,8 +1,0 @@
-started_test: TestSqrt3
-finished_test: TestSqrt3
-started_test: TestSqrt4
-finished_test: TestSqrt4
-started_test: TestSqrt
-finished_test: TestSqrt
-started_test: TestSqrt2
-finished_test: TestSqrt2

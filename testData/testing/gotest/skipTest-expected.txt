@@ -1,0 +1,18 @@
+TestStarted
+    - locationHint=gotest://TestRegistryGetOrRegister
+    - name=TestRegistryGetOrRegister
+TestFinished
+    - name=TestRegistryGetOrRegister
+TestStarted
+    - locationHint=gotest://TestRuntimeMemStatsBlocking
+    - name=TestRuntimeMemStatsBlocking
+  TestIgnored
+      - message=runtime_test.go:20: skipping TestRuntimeMemStatsBlocking with GOMAXPROCS=1\n
+      - name=TestRuntimeMemStatsBlocking
+TestFinished
+    - name=TestRuntimeMemStatsBlocking
+TestStarted
+    - locationHint=gotest://TestExpDecaySample10
+    - name=TestExpDecaySample10
+TestFinished
+    - name=TestExpDecaySample10

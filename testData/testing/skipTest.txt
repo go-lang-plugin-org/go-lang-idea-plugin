@@ -1,9 +1,0 @@
-=== RUN TestRegistryGetOrRegister
---- PASS: TestRegistryGetOrRegister (0.00 seconds)
-=== RUN TestRuntimeMemStatsBlocking
---- SKIP: TestRuntimeMemStatsBlocking (0.00 seconds)
-	runtime_test.go:20: skipping TestRuntimeMemStatsBlocking with GOMAXPROCS=1
-=== RUN TestExpDecaySample10
---- PASS: TestExpDecaySample10 (0.00 seconds)
-PASS
-ok  	github.com/dlsniper/go-metrics	0.069s

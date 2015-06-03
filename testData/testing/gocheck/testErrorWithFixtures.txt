@@ -1,0 +1,45 @@
+=== RUN Test
+START: setups_test.go:19: FixtureTestErrorSuite.SetUpSuite
+<SuiteSetUp>PASS: setups_test.go:19: FixtureTestErrorSuite.SetUpSuite	0.000s
+
+START: setups_test.go:35: FixtureTestErrorSuite.TestA
+START: setups_test.go:27: FixtureTestErrorSuite.SetUpTest
+<TestSetUp>PASS: setups_test.go:27: FixtureTestErrorSuite.SetUpTest	0.000s
+
+<TestA>setups_test.go:37:
+    c.Assert("Foo", Equals, "Bar")
+... obtained string = "Foo"
+... expected string = "Bar"
+
+START: setups_test.go:31: FixtureTestErrorSuite.TearDownTest
+<TestTearDown>PASS: setups_test.go:31: FixtureTestErrorSuite.TearDownTest	0.000s
+
+FAIL: setups_test.go:35: FixtureTestErrorSuite.TestA
+
+START: setups_test.go:40: FixtureTestErrorSuite.TestB
+START: setups_test.go:27: FixtureTestErrorSuite.SetUpTest
+<TestSetUp>PASS: setups_test.go:27: FixtureTestErrorSuite.SetUpTest	0.000s
+
+<TestB>START: setups_test.go:31: FixtureTestErrorSuite.TearDownTest
+<TestTearDown>PASS: setups_test.go:31: FixtureTestErrorSuite.TearDownTest	0.000s
+
+... Panic: Kaboom! (PC=0x3B0A5)
+
+/usr/local/go/src/runtime/panic.go:387
+  in gopanic
+setups_test.go:42
+  in FixtureTestErrorSuite.TestB
+/usr/local/go/src/reflect/value.go:296
+  in Value.Call
+/usr/local/go/src/runtime/asm_amd64.s:2232
+  in goexit
+PANIC: setups_test.go:40: FixtureTestErrorSuite.TestB
+
+START: setups_test.go:23: FixtureTestErrorSuite.TearDownSuite
+<SuiteTearDown>PASS: setups_test.go:23: FixtureTestErrorSuite.TearDownSuite	0.000s
+
+OOPS: 0 passed, 1 FAILED, 1 PANICKED
+--- FAIL: Test (0.00s)
+FAIL
+exit status 1
+FAIL	github.com/mailgun/sandbox/fixtureTestError	0.006s

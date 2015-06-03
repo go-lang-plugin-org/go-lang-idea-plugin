@@ -1,0 +1,20 @@
+TestStarted
+    - locationHint=gotest://TestSqrt3
+    - name=TestSqrt3
+TestFinished
+    - name=TestSqrt3
+TestStarted
+    - locationHint=gotest://TestSqrt4
+    - name=TestSqrt4
+TestFinished
+    - name=TestSqrt4
+TestStarted
+    - locationHint=gotest://TestSqrt
+    - name=TestSqrt
+TestFinished
+    - name=TestSqrt
+TestStarted
+    - locationHint=gotest://TestSqrt2
+    - name=TestSqrt2
+TestFinished
+    - name=TestSqrt2

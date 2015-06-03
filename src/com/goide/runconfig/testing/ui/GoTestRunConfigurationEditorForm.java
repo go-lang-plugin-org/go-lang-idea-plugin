@@ -17,7 +17,7 @@
 package com.goide.runconfig.testing.ui;
 
 import com.goide.runconfig.GoRunUtil;
-import com.goide.runconfig.testing.GoTestRunConfiguration;
+import com.goide.runconfig.testing.GoTestRunConfigurationBase;
 import com.goide.runconfig.ui.GoCommonSettingsPanel;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.ConfigurationException;
@@ -36,7 +36,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunConfiguration> {
+public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunConfigurationBase> {
   @NotNull private final Project myProject;
   private JPanel myComponent;
   private EditorTextField myPatternEditor;
@@ -61,13 +61,13 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   }
 
   private void onTestKindChanged() {
-    GoTestRunConfiguration.Kind selectedKind = (GoTestRunConfiguration.Kind)myTestKindComboBox.getSelectedItem();
+    GoTestRunConfigurationBase.Kind selectedKind = (GoTestRunConfigurationBase.Kind)myTestKindComboBox.getSelectedItem();
     if (selectedKind == null) {
-      selectedKind = GoTestRunConfiguration.Kind.DIRECTORY;
+      selectedKind = GoTestRunConfigurationBase.Kind.DIRECTORY;
     }
-    boolean allInPackage = selectedKind == GoTestRunConfiguration.Kind.PACKAGE;
-    boolean allInDirectory = selectedKind == GoTestRunConfiguration.Kind.DIRECTORY;
-    boolean file = selectedKind == GoTestRunConfiguration.Kind.FILE;
+    boolean allInPackage = selectedKind == GoTestRunConfigurationBase.Kind.PACKAGE;
+    boolean allInDirectory = selectedKind == GoTestRunConfigurationBase.Kind.DIRECTORY;
+    boolean file = selectedKind == GoTestRunConfigurationBase.Kind.FILE;
 
     myPackageField.setVisible(allInPackage);
     myPackageLabel.setVisible(allInPackage);
@@ -80,7 +80,7 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   }
 
   @Override
-  protected void resetEditorFrom(@NotNull GoTestRunConfiguration configuration) {
+  protected void resetEditorFrom(@NotNull GoTestRunConfigurationBase configuration) {
     myTestKindComboBox.setSelectedItem(configuration.getKind());
     myPackageField.setText(configuration.getPackage());
 
@@ -96,8 +96,8 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   }
 
   @Override
-  protected void applyEditorTo(@NotNull GoTestRunConfiguration configuration) throws ConfigurationException {
-    configuration.setKind((GoTestRunConfiguration.Kind)myTestKindComboBox.getSelectedItem());
+  protected void applyEditorTo(@NotNull GoTestRunConfigurationBase configuration) throws ConfigurationException {
+    configuration.setKind((GoTestRunConfigurationBase.Kind)myTestKindComboBox.getSelectedItem());
     configuration.setPackage(myPackageField.getText());
     configuration.setDirectoryPath(myDirectoryField.getText());
     configuration.setFilePath(myFileField.getText());
@@ -129,10 +129,10 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   }
 
   @Nullable
-  private static ListCellRendererWrapper<GoTestRunConfiguration.Kind> getTestKindListCellRendererWrapper() {
-    return new ListCellRendererWrapper<GoTestRunConfiguration.Kind>() {
+  private static ListCellRendererWrapper<GoTestRunConfigurationBase.Kind> getTestKindListCellRendererWrapper() {
+    return new ListCellRendererWrapper<GoTestRunConfigurationBase.Kind>() {
       @Override
-      public void customize(JList list, @Nullable GoTestRunConfiguration.Kind kind, int index, boolean selected, boolean hasFocus) {
+      public void customize(JList list, @Nullable GoTestRunConfigurationBase.Kind kind, int index, boolean selected, boolean hasFocus) {
         if (kind != null) {
           String kindName = StringUtil.capitalize(kind.toString().toLowerCase());
           setText(kindName);
@@ -149,7 +149,7 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   private void installTestKindComboBox() {
     myTestKindComboBox.removeAllItems();
     myTestKindComboBox.setRenderer(getTestKindListCellRendererWrapper());
-    for (GoTestRunConfiguration.Kind kind : GoTestRunConfiguration.Kind.values()) {
+    for (GoTestRunConfigurationBase.Kind kind : GoTestRunConfigurationBase.Kind.values()) {
       myTestKindComboBox.addItem(kind);
     }
     myTestKindComboBox.addActionListener(new ActionListener() {

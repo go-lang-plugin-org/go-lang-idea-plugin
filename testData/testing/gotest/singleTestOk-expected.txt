@@ -1,0 +1,5 @@
+TestStarted
+    - locationHint=gotest://TestSqrt2
+    - name=TestSqrt2
+TestFinished
+    - name=TestSqrt2

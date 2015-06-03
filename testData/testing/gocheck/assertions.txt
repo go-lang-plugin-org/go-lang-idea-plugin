@@ -1,0 +1,68 @@
+=== RUN Test
+START: all_fail_test.go:19: SomeFailSuite.TestA
+Somethingall_fail_test.go:21:
+    c.Assert("Foo", IsNil)
+... value string = "Foo"
+
+FAIL: all_fail_test.go:19: SomeFailSuite.TestA
+
+START: all_fail_test.go:24: SomeFailSuite.TestB
+Somethingall_fail_test.go:26:
+    c.Assert(nil, NotNil)
+... value = nil
+
+FAIL: all_fail_test.go:24: SomeFailSuite.TestB
+
+START: all_fail_test.go:29: SomeFailSuite.TestC
+Somethingall_fail_test.go:31:
+    c.Assert("Foo", Matches, "[bB].(R|r)")
+... value string = "Foo"
+... regex string = "[bB].(R|r)"
+
+FAIL: all_fail_test.go:29: SomeFailSuite.TestC
+
+START: all_fail_test.go:34: SomeFailSuite.TestD
+Somethingall_fail_test.go:36:
+    c.Assert("Foo", Equals, "Bar")
+... obtained string = "Foo"
+... expected string = "Bar"
+
+FAIL: all_fail_test.go:34: SomeFailSuite.TestD
+
+START: all_fail_test.go:39: SomeFailSuite.TestE
+Somethingall_fail_test.go:41:
+    c.Assert([]string{"a", "b"}, DeepEquals, []string{"a", "B"})
+... obtained []string = []string{"a", "b"}
+... expected []string = []string{"a", "B"}
+
+FAIL: all_fail_test.go:39: SomeFailSuite.TestE
+
+START: all_fail_test.go:44: SomeFailSuite.TestF
+Somethingall_fail_test.go:54:
+    c.Assert(`multi
+
+    	          line
+    	          string`,
+        Equals,
+        `Another
+    multi
+    	line
+    		string`)
+... obtained string = "" +
+...     "multi\n" +
+...     "\n" +
+...     "\t          line\n" +
+...     "\t          string"
+... expected string = "" +
+...     "Another\n" +
+...     "multi\n" +
+...     "\tline\n" +
+...     "\t\tstring"
+
+FAIL: all_fail_test.go:46: SomeFailSuite.TestF
+
+OOPS: 0 passed, 6 FAILED
+--- FAIL: Test (0.00s)
+FAIL
+exit status 1
+FAIL	github.com/mailgun/sandbox/all_fail	0.007s

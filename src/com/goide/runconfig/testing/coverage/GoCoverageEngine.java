@@ -2,7 +2,7 @@ package com.goide.runconfig.testing.coverage;
 
 import com.goide.GoFileType;
 import com.goide.runconfig.testing.GoTestFinder;
-import com.goide.runconfig.testing.GoTestRunConfiguration;
+import com.goide.runconfig.testing.GoTestRunConfigurationBase;
 import com.intellij.coverage.*;
 import com.intellij.coverage.view.CoverageViewExtension;
 import com.intellij.coverage.view.CoverageViewManager;
@@ -46,7 +46,7 @@ public class GoCoverageEngine extends CoverageEngine {
 
   @Override
   public boolean isApplicableTo(@Nullable final RunConfigurationBase conf) {
-    return conf instanceof GoTestRunConfiguration;
+    return conf instanceof GoTestRunConfigurationBase;
   }
 
   @Override
@@ -57,7 +57,7 @@ public class GoCoverageEngine extends CoverageEngine {
   @NotNull
   @Override
   public CoverageEnabledConfiguration createCoverageEnabledConfiguration(@Nullable final RunConfigurationBase conf) {
-    return new GoCoverageEnabledConfiguration((GoTestRunConfiguration)conf);
+    return new GoCoverageEnabledConfiguration((GoTestRunConfigurationBase)conf);
   }
 
   @Override

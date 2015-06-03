@@ -1,4 +1,0 @@
-started_test: TestSqrt2
-  failed_test: TestSqrt2
-    test_test.go:15: Sqrt(4) = 2, want 3
-finished_test: TestSqrt2

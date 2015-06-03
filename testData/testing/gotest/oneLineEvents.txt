@@ -1,0 +1,17 @@
+=== RUN Test_Sd
+Test_Sd
+--- PASS: Test_Sd (0.00 seconds)
+=== RUN Test_Sp
+ text1
+Test_Sp............end--- SKIP: Test_Sp (0.00 seconds)
+	sputils_test.go:23: sad
+=== RUN Test_Sp2
+ text2
+Test_Sp............end--- PASS: Test_Sp2 (0.00 seconds)
+=== RUN Test_Sp3
+ text3
+Test_Sp............end--- FAIL: Test_Sp3 (0.00 seconds)
+	sputils_test.go:43: sad
+FAIL
+exit status 1
+FAIL	Spacer/src	0.008s
