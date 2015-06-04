@@ -19,6 +19,8 @@ package com.goide.runconfig.application;
 import com.goide.runconfig.GoRunningState;
 import com.goide.util.GoExecutor;
 import com.intellij.execution.ExecutionException;
+import com.intellij.execution.process.ProcessAdapter;
+import com.intellij.execution.process.ProcessEvent;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
@@ -50,18 +52,21 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
   @NotNull
   @Override
   protected ProcessHandler startProcess() throws ExecutionException {
-    try {
-      return super.startProcess();
-    }
-    finally {
-      if (StringUtil.isEmpty(myConfiguration.getOutputFilePath())) {
-        File file = new File(myOutputFilePath);
-        if (file.exists()) {
-          //noinspection ResultOfMethodCallIgnored
-          file.delete();
+    ProcessHandler processHandler = super.startProcess();
+    processHandler.addProcessListener(new ProcessAdapter() {
+      @Override
+      public void processTerminated(ProcessEvent event) {
+        super.processTerminated(event);
+        if (StringUtil.isEmpty(myConfiguration.getOutputFilePath())) {
+          File file = new File(myOutputFilePath);
+          if (file.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            file.delete();
+          }
         }
       }
-    }
+    });
+    return processHandler;
   }
 
   @Override
