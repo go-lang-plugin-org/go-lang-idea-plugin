@@ -90,7 +90,7 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
         throw new ExecutionException("Cannot create output file in " + outputDirectory.getAbsolutePath());
       }
     }
-    if (!outputFile.setExecutable(true)) {
+    if (!prepareFile(outputFile)) {
       throw new ExecutionException("Cannot make temporary file executable " + outputFile.getAbsolutePath());
     }
 
@@ -119,6 +119,16 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
       }).executeWithProgress(false);
 
     return promise;
+  }
+
+  private static boolean prepareFile(@NotNull File file) {
+    try {
+      FileUtil.writeToFile(file, new byte[] { 0x7F, 'E', 'L', 'F' } );
+    }
+    catch (IOException e) {
+      return false;
+    }
+    return file.setExecutable(true);
   }
 
   private class MyStarter extends RunProfileStarter {
