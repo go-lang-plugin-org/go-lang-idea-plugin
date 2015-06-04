@@ -69,6 +69,7 @@ public class GoExecutor {
   private boolean myShowNotificationsOnError = false;
   private boolean myShowNotificationsOnSuccess = false;
   private boolean myPassParentEnvironment = true;
+  private boolean myPtyDisabled = false;
   @Nullable private String myExePath = null;
   @Nullable private String myPresentableName;
   private OSProcessHandler myProcessHandler;
@@ -172,6 +173,12 @@ public class GoExecutor {
   }
 
   @NotNull
+  public GoExecutor disablePty() {
+    myPtyDisabled = true;
+    return this;
+  }
+
+  @NotNull
   public GoExecutor showNotifications(boolean onErrorOnly) {
     myShowNotificationsOnError = true;
     myShowNotificationsOnSuccess = !onErrorOnly;
@@ -188,7 +195,6 @@ public class GoExecutor {
       commandLine = createCommandLine();
 
       myProcessHandler = new KillableColoredProcessHandler(commandLine);
-      myProcessHandler.setHasPty(true);
       final HistoryProcessListener historyProcessListener = new HistoryProcessListener();
       myProcessHandler.addProcessListener(historyProcessListener);
       for (ProcessListener listener : myProcessListeners) {
@@ -312,7 +318,7 @@ public class GoExecutor {
       throw new ExecutionException("Sdk is not set or Sdk home path is empty for module");
     }
 
-    GeneralCommandLine commandLine = PtyCommandLine.isEnabled() ? new PtyCommandLine() : new GeneralCommandLine();
+    GeneralCommandLine commandLine = !myPtyDisabled ? new PtyCommandLine() : new GeneralCommandLine();
     commandLine.setExePath(ObjectUtils.notNull(myExePath, GoSdkService.getGoExecutablePath(myGoRoot)));
     commandLine.getEnvironment().putAll(myExtraEnvironment);
     commandLine.getEnvironment().put(GoConstants.GO_ROOT, StringUtil.notNullize(myGoRoot));

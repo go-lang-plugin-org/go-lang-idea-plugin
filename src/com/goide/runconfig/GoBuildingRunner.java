@@ -103,6 +103,7 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
       .withParameters("-o", outputFile.getAbsolutePath(), ((GoApplicationRunningState)state).getTarget())
       .showNotifications(true)
       .showOutputOnError()
+      .disablePty()
       .withPresentableName("go build")
       .withProcessListener(new ProcessAdapter() {
         @Override
