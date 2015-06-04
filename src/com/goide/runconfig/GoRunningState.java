@@ -20,6 +20,7 @@ import com.goide.util.GoExecutor;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.CommandLineState;
 import com.intellij.execution.configurations.GeneralCommandLine;
+import com.intellij.execution.configurations.PtyCommandLine;
 import com.intellij.execution.process.KillableColoredProcessHandler;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.process.ProcessHandler;
@@ -45,7 +46,7 @@ public abstract class GoRunningState<T extends GoRunConfigurationBase<?>> extend
       .withParameterString(myConfiguration.getParams())
       .createCommandLine();
     OSProcessHandler processHandler = new KillableColoredProcessHandler(commandLine.createProcess(), commandLine.getCommandLineString());
-    processHandler.setHasPty(true);
+    processHandler.setHasPty(PtyCommandLine.isEnabled());
     return processHandler;
   }
 
