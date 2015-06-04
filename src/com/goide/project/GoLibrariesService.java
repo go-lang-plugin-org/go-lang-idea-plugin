@@ -17,6 +17,7 @@
 package com.goide.project;
 
 import com.goide.GoLibrariesState;
+import com.goide.sdk.GoSdkUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.module.Module;
@@ -54,7 +55,7 @@ public abstract class GoLibrariesService extends SimpleModificationTracker imple
   @NotNull
   public static Collection<? extends VirtualFile> getUserDefinedLibraries(@NotNull Module module) {
     final Set<VirtualFile> result = ContainerUtil.newLinkedHashSet();
-    result.addAll(filesFromUrls(GoModuleLibrariesService.getInstance(module).getLibraryRootUrls()));
+    result.addAll(goRootsFromUrls(GoModuleLibrariesService.getInstance(module).getLibraryRootUrls()));
     result.addAll(getUserDefinedLibraries(module.getProject()));
     return result;
   }
@@ -62,14 +63,14 @@ public abstract class GoLibrariesService extends SimpleModificationTracker imple
   @NotNull
   public static Collection<? extends VirtualFile> getUserDefinedLibraries(@NotNull Project project) {
     final Set<VirtualFile> result = ContainerUtil.newLinkedHashSet();
-    result.addAll(filesFromUrls(GoProjectLibrariesService.getInstance(project).getLibraryRootUrls()));
+    result.addAll(goRootsFromUrls(GoProjectLibrariesService.getInstance(project).getLibraryRootUrls()));
     result.addAll(getUserDefinedLibraries());
     return result;
   }
 
   @NotNull
   public static Collection<? extends VirtualFile> getUserDefinedLibraries() {
-    return filesFromUrls(GoApplicationLibrariesService.getInstance().getLibraryRootUrls());
+    return goRootsFromUrls(GoApplicationLibrariesService.getInstance().getLibraryRootUrls());
   }
 
   @NotNull
@@ -97,11 +98,12 @@ public abstract class GoLibrariesService extends SimpleModificationTracker imple
   }
 
   @NotNull
-  private static Collection<? extends VirtualFile> filesFromUrls(@NotNull Collection<String> urls) {
+  private static Collection<? extends VirtualFile> goRootsFromUrls(@NotNull Collection<String> urls) {
     return ContainerUtil.skipNulls(ContainerUtil.map(urls, new Function<String, VirtualFile>() {
       @Override
       public VirtualFile fun(String url) {
-        return VirtualFileManager.getInstance().findFileByUrl(url);
+        VirtualFile file = VirtualFileManager.getInstance().findFileByUrl(url);
+        return file != null && GoSdkUtil.retrieveGoVersion(file.getPath()) == null ? file : null;
       }
     }));
   }
