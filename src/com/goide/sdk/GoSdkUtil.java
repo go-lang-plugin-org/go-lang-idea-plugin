@@ -232,12 +232,14 @@ public class GoSdkUtil {
       Collection<VirtualFile> roots = newLinkedHashSet(getGoPathSources(project, module));
       ContainerUtil.addIfNotNull(roots, getSdkSrcDir(project, module));
 
+      String result = null;
       for (VirtualFile root : roots) {
         String relativePath = VfsUtilCore.getRelativePath(file, root, '/');
-        if (StringUtil.isNotEmpty(relativePath)) {
-          return relativePath;
+        if (StringUtil.isNotEmpty(relativePath) && (result == null || result.length() > relativePath.length())) {
+          result = relativePath;
         }
       }
+      if (result != null) return result;
     }
 
     String filePath = file.getPath();
