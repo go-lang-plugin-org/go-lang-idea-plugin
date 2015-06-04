@@ -52,7 +52,6 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class GoExecutor {  
   private static final Logger LOGGER = Logger.getInstance(GoExecutor.class);
@@ -195,7 +194,7 @@ public class GoExecutor {
       commandLine = createCommandLine();
 
       myProcessHandler = new KillableColoredProcessHandler(commandLine);
-      final HistoryProcessListener historyProcessListener = new HistoryProcessListener();
+      final GoHistoryProcessListener historyProcessListener = new GoHistoryProcessListener();
       myProcessHandler.addProcessListener(historyProcessListener);
       for (ProcessListener listener : myProcessListeners) {
         myProcessHandler.addProcessListener(listener);
@@ -296,7 +295,7 @@ public class GoExecutor {
     });
   }
 
-  private void showOutput(@NotNull OSProcessHandler originalHandler, @NotNull HistoryProcessListener historyProcessListener) {
+  private void showOutput(@NotNull OSProcessHandler originalHandler, @NotNull GoHistoryProcessListener historyProcessListener) {
     if (myShowOutputOnError) {
       BaseOSProcessHandler outputHandler = new KillableColoredProcessHandler(originalHandler.getProcess(), null);
       RunContentExecutor runContentExecutor = new RunContentExecutor(myProject, outputHandler)
@@ -341,20 +340,5 @@ public class GoExecutor {
   @NotNull
   private String getPresentableName() {
     return ObjectUtils.notNull(myPresentableName, "go");
-  }
-
-  private static class HistoryProcessListener extends ProcessAdapter {
-    private final ConcurrentLinkedQueue<Pair<ProcessEvent, Key>> myHistory = new ConcurrentLinkedQueue<Pair<ProcessEvent, Key>>();
-
-    @Override
-    public void onTextAvailable(ProcessEvent event, Key outputType) {
-      myHistory.add(Pair.create(event, outputType));
-    }
-
-    public void apply(ProcessHandler listener) {
-      for (Pair<ProcessEvent, Key> pair : myHistory) {
-        listener.notifyTextAvailable(pair.getFirst().getText(), pair.getSecond());
-      }
-    }
   }
 }

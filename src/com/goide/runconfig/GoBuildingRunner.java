@@ -19,6 +19,7 @@ package com.goide.runconfig;
 import com.goide.GoEnvironmentUtil;
 import com.goide.runconfig.application.GoApplicationConfiguration;
 import com.goide.runconfig.application.GoApplicationRunningState;
+import com.goide.util.GoHistoryProcessListener;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
 import com.intellij.execution.RunProfileStarter;
@@ -97,6 +98,7 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
     final AsyncPromise<RunProfileStarter> promise = new AsyncPromise<RunProfileStarter>();
     FileDocumentManager.getInstance().saveAllDocuments();
 
+    final GoHistoryProcessListener historyProcessListener = new GoHistoryProcessListener();
     ((GoApplicationRunningState)state).createCommonExecutor()
       .withParameters("build")
       .withParameterString(((GoApplicationRunningState)state).getGoBuildParams())
@@ -105,12 +107,14 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
       .showOutputOnError()
       .disablePty()
       .withPresentableName("go build")
+      .withProcessListener(historyProcessListener)
       .withProcessListener(new ProcessAdapter() {
+
         @Override
         public void processTerminated(ProcessEvent event) {
           super.processTerminated(event);
           if (event.getExitCode() == 0) {
-            promise.setResult(new MyStarter(outputFile.getAbsolutePath()));
+            promise.setResult(new MyStarter(outputFile.getAbsolutePath(), historyProcessListener));
           }
           else {
             promise.setResult(null);
@@ -133,9 +137,11 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
 
   private class MyStarter extends RunProfileStarter {
     private final String myOutputFilePath;
+    private GoHistoryProcessListener myHistoryProcessListener;
 
-    private MyStarter(@NotNull String outputFilePath) {
+    private MyStarter(@NotNull String outputFilePath, @NotNull GoHistoryProcessListener historyProcessListener) {
       myOutputFilePath = outputFilePath;
+      myHistoryProcessListener = historyProcessListener;
     }
 
     @Nullable
@@ -143,6 +149,7 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
     public RunContentDescriptor execute(@NotNull RunProfileState state, @NotNull ExecutionEnvironment env) throws ExecutionException {
       if (state instanceof GoApplicationRunningState) {
         FileDocumentManager.getInstance().saveAllDocuments();
+        ((GoApplicationRunningState)state).setHistoryProcessHandler(myHistoryProcessListener);
         ((GoApplicationRunningState)state).setOutputFilePath(myOutputFilePath);
         ExecutionResult executionResult = state.execute(env.getExecutor(), GoBuildingRunner.this);
         return executionResult != null ? new RunContentBuilder(executionResult, env).showRunContent(env.getContentToReuse()) : null;

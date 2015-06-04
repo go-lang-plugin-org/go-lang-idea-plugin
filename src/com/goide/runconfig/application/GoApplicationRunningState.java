@@ -18,19 +18,24 @@ package com.goide.runconfig.application;
 
 import com.goide.runconfig.GoRunningState;
 import com.goide.util.GoExecutor;
+import com.goide.util.GoHistoryProcessListener;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.process.ProcessAdapter;
 import com.intellij.execution.process.ProcessEvent;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.text.StringUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GoApplicationRunningState extends GoRunningState<GoApplicationConfiguration> {
   private String myOutputFilePath;
+  @Nullable private GoHistoryProcessListener myHistoryProcessHandler;
 
   public GoApplicationRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module,
                                    @NotNull GoApplicationConfiguration configuration) {
@@ -52,8 +57,20 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
   @NotNull
   @Override
   protected ProcessHandler startProcess() throws ExecutionException {
-    ProcessHandler processHandler = super.startProcess();
+    final ProcessHandler processHandler = super.startProcess();
     processHandler.addProcessListener(new ProcessAdapter() {
+      private AtomicBoolean firstOutput = new AtomicBoolean(true);
+
+      @Override
+      public void onTextAvailable(ProcessEvent event, Key outputType) {
+        if (firstOutput.getAndSet(false)) {
+          if (myHistoryProcessHandler != null) {
+            myHistoryProcessHandler.apply(processHandler);
+          }
+        }
+        super.onTextAvailable(event, outputType);
+      }
+
       @Override
       public void processTerminated(ProcessEvent event) {
         super.processTerminated(event);
@@ -76,5 +93,9 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
 
   public void setOutputFilePath(@NotNull String outputFilePath) {
     myOutputFilePath = outputFilePath;
+  }
+
+  public void setHistoryProcessHandler(@Nullable GoHistoryProcessListener historyProcessHandler) {
+    myHistoryProcessHandler = historyProcessHandler;
   }
 }
