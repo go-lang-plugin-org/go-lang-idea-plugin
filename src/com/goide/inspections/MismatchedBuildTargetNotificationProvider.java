@@ -18,6 +18,7 @@ package com.goide.inspections;
 
 import com.goide.GoFileType;
 import com.goide.configuration.GoBuildTargetConfigurable;
+import com.goide.project.GoBuildTargetSettings;
 import com.goide.util.GoUtil;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.options.ShowSettingsUtil;
@@ -35,8 +36,14 @@ public class MismatchedBuildTargetNotificationProvider extends EditorNotificatio
 
   private final Project myProject;
 
-  public MismatchedBuildTargetNotificationProvider(@NotNull Project project) {
+  public MismatchedBuildTargetNotificationProvider(@NotNull Project project, @NotNull final EditorNotifications notifications) {
     myProject = project;
+    myProject.getMessageBus().connect(project).subscribe(GoBuildTargetSettings.TOPIC, new GoBuildTargetSettings.BuildTargetListener() {
+      @Override
+      public void changed() {
+        notifications.updateAllNotifications();
+      }
+    });
   }
 
   @NotNull

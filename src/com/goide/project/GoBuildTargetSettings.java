@@ -25,6 +25,7 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ThreeState;
+import com.intellij.util.messages.Topic;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -38,6 +39,8 @@ import org.jetbrains.annotations.Nullable;
                                 GoConstants.GO_BUILD_FLAGS_CONFIG_FILE, scheme = StorageScheme.DIRECTORY_BASED)
   })
 public class GoBuildTargetSettings implements PersistentStateComponent<GoBuildTargetSettings.GoBuildTargetSettingsState> {
+  public static final Topic<BuildTargetListener> TOPIC = new Topic<BuildTargetListener>("build target changed", BuildTargetListener.class);
+  
   public static final String DEFAULT = "default";
   public static final String ANY_COMPILER = "Any";
   private static final String GAE_BUILD_FLAG = "appengine";
@@ -60,6 +63,7 @@ public class GoBuildTargetSettings implements PersistentStateComponent<GoBuildTa
 
   public void setOS(@NotNull String OS) {
     myState.os = OS;
+    notifyChange();
   }
 
   @NotNull
@@ -69,6 +73,7 @@ public class GoBuildTargetSettings implements PersistentStateComponent<GoBuildTa
 
   public void setArch(@NotNull String arch) {
     myState.arch = arch;
+    notifyChange();
   }
 
   @NotNull
@@ -78,6 +83,7 @@ public class GoBuildTargetSettings implements PersistentStateComponent<GoBuildTa
 
   public void setCgo(@NotNull ThreeState cgo) {
     myState.cgo = cgo;
+    notifyChange();
   }
 
   @NotNull
@@ -87,6 +93,7 @@ public class GoBuildTargetSettings implements PersistentStateComponent<GoBuildTa
 
   public void setCompiler(@NotNull String compiler) {
     myState.compiler = compiler;
+    notifyChange();
   }
 
   @NotNull
@@ -96,6 +103,7 @@ public class GoBuildTargetSettings implements PersistentStateComponent<GoBuildTa
 
   public void setCustomFlags(@NotNull String... customFlags) {
     myState.customFlags = customFlags;
+    notifyChange();
   }
 
   @NotNull
@@ -105,6 +113,7 @@ public class GoBuildTargetSettings implements PersistentStateComponent<GoBuildTa
 
   public void setGoVersion(@NotNull String goVersion) {
     myState.goVersion = goVersion;
+    notifyChange();
   }
 
   public GoTargetSystem getTargetSystemDescriptor(@Nullable Module module) {
@@ -142,5 +151,13 @@ public class GoBuildTargetSettings implements PersistentStateComponent<GoBuildTa
     @NotNull private String compiler = ANY_COMPILER;
     @NotNull private String goVersion = DEFAULT;
     @NotNull private String[] customFlags = ArrayUtil.EMPTY_STRING_ARRAY;
+  }
+  
+  private void notifyChange() {
+    myProject.getMessageBus().syncPublisher(TOPIC).changed();
+  }
+
+  public interface BuildTargetListener {
+    void changed();
   }
 }
