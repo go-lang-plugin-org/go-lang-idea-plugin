@@ -47,7 +47,7 @@ public class WrongSdkConfigurationNotificationProvider extends EditorNotificatio
 
   private final Project myProject;
 
-  public WrongSdkConfigurationNotificationProvider(Project project, final EditorNotifications notifications) {
+  public WrongSdkConfigurationNotificationProvider(@NotNull Project project, @NotNull final EditorNotifications notifications) {
     myProject = project;
     myProject.getMessageBus().connect(project).subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
       @Override
