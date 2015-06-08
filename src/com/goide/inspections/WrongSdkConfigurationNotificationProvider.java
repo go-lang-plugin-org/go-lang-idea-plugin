@@ -37,6 +37,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.ui.EditorNotificationPanel;
 import com.intellij.ui.EditorNotifications;
+import com.intellij.util.messages.MessageBusConnection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,13 +50,14 @@ public class WrongSdkConfigurationNotificationProvider extends EditorNotificatio
 
   public WrongSdkConfigurationNotificationProvider(@NotNull Project project, @NotNull final EditorNotifications notifications) {
     myProject = project;
-    myProject.getMessageBus().connect(project).subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
+    MessageBusConnection connection = myProject.getMessageBus().connect(project);
+    connection.subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
       @Override
       public void rootsChanged(ModuleRootEvent event) {
         notifications.updateAllNotifications();
       }
     });
-    myProject.getMessageBus().connect(project).subscribe(GoLibrariesService.LIBRARIES_TOPIC, new GoLibrariesService.LibrariesListener() {
+    connection.subscribe(GoLibrariesService.LIBRARIES_TOPIC, new GoLibrariesService.LibrariesListener() {
       @Override
       public void librariesChanged(@NotNull Collection<String> newRootUrls) {
         notifications.updateAllNotifications();
