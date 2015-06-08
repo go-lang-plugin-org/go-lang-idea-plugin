@@ -139,6 +139,7 @@
                     overrides="false"/>
     <library.presentationProvider implementation="com.goide.sdk.GoSdkLibraryPresentationProvider"/>
     <editorNotificationProvider implementation="com.goide.inspections.WrongSdkConfigurationNotificationProvider"/>
+    <editorNotificationProvider implementation="com.goide.inspections.MismatchedBuildTargetNotificationProvider"/>
 
     <stepsBeforeRunProvider implementation="com.goide.runconfig.before.GoBeforeRunTaskProvider"/>
     <!-- run single file -->

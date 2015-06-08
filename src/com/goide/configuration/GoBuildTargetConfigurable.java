@@ -36,6 +36,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
@@ -63,7 +64,11 @@ public class GoBuildTargetConfigurable implements SearchableConfigurable, Config
   @NotNull private String myDefaultCgo;
   @NotNull private final String myDefaultGoVersion;
 
-  public GoBuildTargetConfigurable(@NotNull Project project) {
+  public GoBuildTargetConfigurable(@NotNull Project project, boolean dialogMode) {
+    if (dialogMode) {
+      myPanel.setPreferredSize(new Dimension(400, -1));
+    }
+    
     myBuildTargetSettings = GoBuildTargetSettings.getInstance(project);
 
     myDefaultOSValue = "Default (" + GoUtil.systemOS() + ")";
