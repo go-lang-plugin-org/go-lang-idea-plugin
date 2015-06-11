@@ -21,10 +21,10 @@ import com.goide.sdk.GoSdkUtil;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.ElementDescriptionUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.usageView.UsageViewTypeLocation;
-import freemarker.template.utility.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class GoReservedWordUsedAsName extends GoInspectionBase {
