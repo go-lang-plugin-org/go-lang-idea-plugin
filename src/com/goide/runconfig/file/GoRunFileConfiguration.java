@@ -29,6 +29,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.PathUtil;
@@ -67,18 +68,22 @@ public class GoRunFileConfiguration extends GoRunConfigurationWithMain<GoRunFile
     if (!"go".equals(PathUtil.getFileExtension(path))) {
       final VirtualFile f = LocalFileSystem.getInstance().refreshAndFindFileByPath(path);
       if (f != null && f.getFileType() == ScratchFileType.INSTANCE) {
-        final String suffix = "." + UUID.randomUUID().toString().substring(0, 4) + ".go";
+        String suffixWithoutExt = "." + UUID.randomUUID().toString().substring(0, 4);
+        final String suffix = suffixWithoutExt + ".go";
+        final String before = f.getName();
+        String beforeWithoutExt = FileUtil.getNameWithoutExtension(before);
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
           @Override
           public void run() {
             try {
-              f.rename(this, f.getName() + suffix);
+              f.rename(this, before + suffix);
             }
             catch (IOException ignored) {
             }
           }
         });
         setFilePath(path + suffix);
+        setName(getName().replace(beforeWithoutExt, beforeWithoutExt + suffixWithoutExt));
       }
     } 
     return new GoRunFileRunningState(env, module, this);
