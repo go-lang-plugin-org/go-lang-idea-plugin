@@ -67,7 +67,7 @@ public class GoRunFileConfiguration extends GoRunConfigurationWithMain<GoRunFile
     if (!"go".equals(PathUtil.getFileExtension(path))) {
       final VirtualFile f = LocalFileSystem.getInstance().refreshAndFindFileByPath(path);
       if (f != null && f.getFileType() == ScratchFileType.INSTANCE) {
-        final String suffix = "." + UUID.randomUUID().toString().substring(0, 6) + ".go";
+        final String suffix = "." + UUID.randomUUID().toString().substring(0, 4) + ".go";
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
           @Override
           public void run() {
