@@ -1,3 +1,19 @@
+/*
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.goide.configuration;
 
 import com.goide.sdk.GoSdkService;
@@ -29,7 +45,6 @@ import com.intellij.ui.DocumentAdapter;
 import com.intellij.ui.JBCardLayout;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBLabel;
-import com.intellij.ui.components.JBPanel;
 import com.intellij.util.Alarm;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ObjectUtils;
@@ -210,8 +225,7 @@ public class GoSdkConfigurable implements SearchableConfigurable, Configurable.N
     myVersionLabel = new JBLabel();
     myDefaultLabelColor = myVersionLabel.getForeground();
 
-    myVersionPanel = new JBPanel(new JBCardLayout());
-
+    myVersionPanel = new JPanel(new JBCardLayout());
     JPanel gettingVersionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
     AsyncProcessIcon gettingVersionIcon = new AsyncProcessIcon("Getting Go version");
     gettingVersionPanel.add(gettingVersionIcon);

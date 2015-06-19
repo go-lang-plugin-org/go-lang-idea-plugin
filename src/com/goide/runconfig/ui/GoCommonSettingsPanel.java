@@ -24,13 +24,12 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.ui.RawCommandLineEditor;
-import com.intellij.ui.components.JBPanel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-public class GoCommonSettingsPanel extends JBPanel {
+public class GoCommonSettingsPanel extends JPanel {
   private RawCommandLineEditor myGoToolParamsField;
   private RawCommandLineEditor myParamsField;
   private TextFieldWithBrowseButton myWorkingDirectoryField;
