@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import com.goide.debugger.gdb.messages.GdbVariableObject;
 import com.goide.debugger.gdb.messages.GdbVariableObjects;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.xdebugger.XSourcePosition;
-import com.intellij.xdebugger.evaluation.EvaluationMode;
 import com.intellij.xdebugger.evaluation.XDebuggerEvaluator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -59,35 +58,16 @@ public class GdbEvaluator extends XDebuggerEvaluator {
    *
    * @param expression         The expression to evaluate.
    * @param callback           The callback function.
-   * @param expressionPosition ??
+   * @param position ??
    */
   @Override
-  public void evaluate(@NotNull String expression, @NotNull final XEvaluationCallback callback,
-                       @Nullable XSourcePosition expressionPosition) {
+  public void evaluate(@NotNull String expression, @NotNull final XEvaluationCallback callback, @Nullable XSourcePosition position) {
     myGdb.evaluateExpression(myThread, myFrame, expression, new Gdb.GdbEventCallback() {
       @Override
       public void onGdbCommandCompleted(GdbEvent event) {
         onGdbExpressionReady(event, callback);
       }
     });
-  }
-
-  /**
-   * Evaluates the given expression.
-   *
-   * @param expression         The expression to evaluate.
-   * @param callback           The callback function.
-   * @param expressionPosition ??
-   * @param mode               Evaluation mode for the expression.
-   */
-  @Override
-  public void evaluate(@NotNull String expression, @NotNull XEvaluationCallback callback,
-                       @Nullable XSourcePosition expressionPosition, @Nullable EvaluationMode mode) {
-    if (mode != null && mode != EvaluationMode.EXPRESSION) {
-      throw new IllegalArgumentException("Unsupported expression evaluation mode");
-    }
-
-    evaluate(expression, callback, expressionPosition);
   }
 
   /**

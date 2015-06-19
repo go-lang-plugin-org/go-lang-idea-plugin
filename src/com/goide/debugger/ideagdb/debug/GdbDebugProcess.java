@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +42,7 @@ import com.intellij.xdebugger.XSourcePosition;
 import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import com.intellij.xdebugger.breakpoints.XBreakpointHandler;
 import com.intellij.xdebugger.evaluation.XDebuggerEditorsProvider;
+import com.intellij.xdebugger.ui.XDebugTabLayouter;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -147,28 +148,29 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
     return myConsole;
   }
 
-  /**
-   * Called when the debugger UI is created so we can add our own content.
-   *
-   * @param ui The debugger UI.
-   */
+  @NotNull
   @Override
-  public void registerAdditionalContent(@NotNull RunnerLayoutUi ui) {
-    Content gdbConsoleContent = ui.createContent("GdbConsoleContent",
-                                                 myGdbConsole.getComponent(), "GDB Console", AllIcons.Debugger.Console,
-                                                 myGdbConsole.getPreferredFocusableComponent());
-    gdbConsoleContent.setCloseable(false);
+  public XDebugTabLayouter createTabLayouter() {
+    return new XDebugTabLayouter() {
+      @Override
+      public void registerAdditionalContent(@NotNull RunnerLayoutUi ui) {
+        Content gdbConsoleContent = ui.createContent("GdbConsoleContent",
+                                                     myGdbConsole.getComponent(), "GDB Console", AllIcons.Debugger.Console,
+                                                     myGdbConsole.getPreferredFocusableComponent());
+        gdbConsoleContent.setCloseable(false);
 
-    // Create the actions
-    final DefaultActionGroup consoleActions = new DefaultActionGroup();
-    AnAction[] actions = myGdbConsole.getConsole().createConsoleActions();
-    for (AnAction action : actions) {
-      consoleActions.add(action);
-    }
-    gdbConsoleContent.setActions(consoleActions, ActionPlaces.DEBUGGER_TOOLBAR,
-                                 myGdbConsole.getConsole().getPreferredFocusableComponent());
+        // Create the actions
+        final DefaultActionGroup consoleActions = new DefaultActionGroup();
+        AnAction[] actions = myGdbConsole.getConsole().createConsoleActions();
+        for (AnAction action : actions) {
+          consoleActions.add(action);
+        }
+        gdbConsoleContent.setActions(consoleActions, ActionPlaces.DEBUGGER_TOOLBAR,
+                                     myGdbConsole.getConsole().getPreferredFocusableComponent());
 
-    ui.addContent(gdbConsoleContent, 2, PlaceInGrid.bottom, false);
+        ui.addContent(gdbConsoleContent, 2, PlaceInGrid.bottom, false);
+      }
+    };
   }
 
   /**
