@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,18 +35,19 @@ public class GoParameterInfoHandlerTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testUnnamedAndNamedParameters() { doTest(0, "<html><b>a string</b>, interface{}</html>"); }
-  public void testUnnamedParameters() { doTest(0, "<html><b>string</b>, interface{}</html>"); } 
-  public void testFuncParam()         { doTest(1, "<html>num int, <b>text string</b></html>"); } 
-  public void testFuncParamMulti()    { doTest(4, "<html>a int, b int, c int, d string, <b>e string</b>, f string</html>"); } 
-  public void testFuncParamNone()     { doTest(0, ""); } 
-  public void testChainedCall()       { doTest(0, "<html><b>param1 string</b>, param2 int</html>"); } 
-  public void testFuncParamEllipsis() { doTest(5, "<html>num int, text string, <b>more ...int</b></html>"); } 
-  public void testFuncEmbedInner()    { doTest(1, "<html>num int, <b>text string</b></html>"); } 
-  public void testFuncEmbedOuter()    { doTest(2, "<html>a int, b int, <b>c int</b>, d int</html>"); } 
-  public void testMethParam()         { doTest(1, "<html>num int, <b>text string</b></html>"); } 
-  public void testMethParamNone()     { doTest(0, ""); } 
+  public void testUnnamedParameters() { doTest(0, "<html><b>string</b>, interface{}</html>"); }
+  public void testFuncParam()         { doTest(1, "<html>num int, <b>text string</b></html>"); }
+  public void testFuncParamMulti()    { doTest(4, "<html>a int, b int, c int, d string, <b>e string</b>, f string</html>"); }
+  public void testFuncParamNone()     { doTest(0, ""); }
+  public void testChainedCall()       { doTest(0, "<html><b>param1 string</b>, param2 int</html>"); }
+  public void testFuncParamEllipsis() { doTest(5, "<html>num int, text string, <b>more ...int</b></html>"); }
+  public void testFuncEmbedInner()    { doTest(1, "<html>num int, <b>text string</b></html>"); }
+  public void testFuncEmbedOuter()    { doTest(2, "<html>a int, b int, <b>c int</b>, d int</html>"); }
+  public void testMethParam()         { doTest(1, "<html>num int, <b>text string</b></html>"); }
+  public void testMethParamNone()     { doTest(0, ""); }
   public void testMethParamEllipsis() { doTest(5, "<html>num int, text string, <b>more ...int</b></html>"); }
   public void testFieldMethCall()     { doTest(0, "<html><b>a int</b>, b int</html>"); }
+  public void testClosure()           { doTest(1, "<html>param1 string, <b>param2 string</b></html>"); }
 
   private void doTest(int expectedParamIdx, String expectedPresentation) {
     // Given

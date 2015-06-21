@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -111,6 +111,9 @@ public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabAction
     if (resolve instanceof GoSignatureOwner) {
       context.setItemsToShow(new Object[]{resolve});
       context.showHint(argList, argList.getTextRange().getStartOffset(), this);
+    } else if (ref == null && (((GoCallExpr)parent).getExpression() instanceof GoFunctionLit)) {
+      context.setItemsToShow(new Object[]{((GoFunctionLit)((GoCallExpr)parent).getExpression())});
+      context.showHint(argList, argList.getTextRange().getStartOffset(), this);
     }
   }
 
@@ -152,7 +155,7 @@ public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabAction
     List<String> parametersPresentations = getParameterPresentations(parameters);
     // Figure out what particular presentation is actually selected. Take in
     // account possibility of the last variadic parameter.
-    int selected = isLastParameterVariadic(parameters.getParameterDeclarationList()) 
+    int selected = isLastParameterVariadic(parameters.getParameterDeclarationList())
                    ? Math.min(context.getCurrentParameterIndex(), parametersPresentations.size() - 1)
                    : context.getCurrentParameterIndex();
     // Build the parameter presentation string.
