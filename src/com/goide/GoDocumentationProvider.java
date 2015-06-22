@@ -144,9 +144,9 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       else if (signatureResult.getType() != null) {
         GoType signatureResultType = signatureResult.getType();
         if (signatureResultType instanceof GoTypeList) {
-          result.append(" (").append(signatureResult.getType().getText()).append(')');
+          result.append(" (").append(XmlStringUtil.escapeString(signatureResult.getType().getText())).append(')');
         } else {
-          result.append(' ').append(signatureResult.getType().getText());
+          result.append(' ').append(XmlStringUtil.escapeString(signatureResult.getType().getText()));
         }
       }
     }

@@ -45,6 +45,16 @@ public class GoDocumentationProviderTest extends GoCodeInsightFixtureTestCase {
     );
   }
 
+  public void testEscapeReturnValues() {
+    doTest("package a; \n" +
+           "func _() {Replac<caret>e()}\n" +
+           "// If n < 0, there is no limit on the number of replacements.\n" +
+           "func Replace(s, old, new string, n int) <-chan string {return s}",
+           "<pre> <b>func Replace(s string, old string, new string, n int) &lt;-chan string</b><br/>" +
+           " If n &lt; 0, there is no limit on the number of replacements.</pre>"
+    );
+  }
+
   public void testPackageWithDoc() {
     doTest("package a; import \"fm<caret>t\"",
            "<pre>\n" +
