@@ -106,13 +106,15 @@ public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabAction
     PsiElement parent = argList.getParent();
     if (!(parent instanceof GoCallExpr)) return;
 
-    PsiReference ref = GoPsiImplUtil.getCallReference((GoCallExpr)parent);
+    GoCallExpr call = (GoCallExpr)parent;
+    PsiReference ref = GoPsiImplUtil.getCallReference(call);
     PsiElement resolve = ref != null ? ref.resolve() : null;
-    if (resolve instanceof GoSignatureOwner) {
-      context.setItemsToShow(new Object[]{resolve});
+    if (ref == null && ((call).getExpression() instanceof GoFunctionLit)) {
+      context.setItemsToShow(new Object[]{((GoFunctionLit)(call).getExpression())});
       context.showHint(argList, argList.getTextRange().getStartOffset(), this);
-    } else if (ref == null && (((GoCallExpr)parent).getExpression() instanceof GoFunctionLit)) {
-      context.setItemsToShow(new Object[]{((GoFunctionLit)((GoCallExpr)parent).getExpression())});
+    }
+    else if (resolve instanceof GoSignatureOwner) {
+      context.setItemsToShow(new Object[]{resolve});
       context.showHint(argList, argList.getTextRange().getStartOffset(), this);
     }
   }
