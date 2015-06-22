@@ -360,7 +360,8 @@ public class GoPsiImplUtil {
         }
       }
       else if (type instanceof GoArrayOrSliceType) {
-        return ((GoArrayOrSliceType)type).getType();
+        GoType tt = ((GoArrayOrSliceType)type).getType();
+        return typeFromRefOrType(tt);
       }
     }
     else if (o instanceof GoTypeAssertionExpr) {
@@ -376,6 +377,13 @@ public class GoPsiImplUtil {
       return resolve instanceof GoTypeOwner ? ((GoTypeOwner)resolve).getGoType(context) : null;
     }
     return null;
+  }
+
+  @Nullable
+  private static GoType typeFromRefOrType(@Nullable GoType tt) {
+    if (tt == null) return null;
+    GoTypeReferenceExpression tr = getTypeReference(tt);
+    return tr != null ? getType(tr) : tt;
   }
 
   @Nullable
@@ -516,8 +524,7 @@ public class GoPsiImplUtil {
     List<GoExpression> exprs = parent.getExpressionList();
     if (exprs.size() == 1 && exprs.get(0) instanceof GoCallExpr) {
       GoExpression call = exprs.get(0);
-      GoType type = call.getGoType(null);
-      type = funcType(type);
+      GoType type = funcType(typeFromRefOrType(call.getGoType(null)));
       if (type instanceof GoTypeList) {
         if (((GoTypeList)type).getTypeList().size() > i) {
           return ((GoTypeList)type).getTypeList().get(i);
