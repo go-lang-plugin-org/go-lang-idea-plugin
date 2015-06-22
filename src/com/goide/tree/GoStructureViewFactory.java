@@ -16,23 +16,29 @@
 
 package com.goide.tree;
 
+import com.goide.GoIcons;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.ide.structureView.*;
-import com.intellij.ide.util.treeView.smartTree.Sorter;
-import com.intellij.ide.util.treeView.smartTree.TreeElement;
+import com.intellij.ide.util.ActionShortcutProvider;
+import com.intellij.ide.util.FileStructureNodeProvider;
+import com.intellij.ide.util.treeView.smartTree.*;
 import com.intellij.lang.PsiStructureViewFactory;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.NavigationItem;
+import com.intellij.openapi.actionSystem.Shortcut;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class GoStructureViewFactory implements PsiStructureViewFactory {
@@ -54,6 +60,9 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
   }
 
   public static class Model extends StructureViewModelBase implements StructureViewModel.ElementInfoProvider {
+
+    public static final List<NodeProvider> PROVIDERS = ContainerUtil.<NodeProvider>newSmartList(new TreeElementFileStructureNodeProvider());
+
     public Model(@NotNull PsiFile psiFile) {
       super(psiFile, new Element(psiFile));
       withSuitableClasses(GoFile.class).withSorters(ExportabilitySorter.INSTANCE, Sorter.ALPHA_SORTER);
@@ -67,6 +76,63 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
     @Override
     public boolean isAlwaysLeaf(StructureViewTreeElement structureViewTreeElement) {
       return false;
+    }
+
+    @NotNull
+    @Override
+    public Collection<NodeProvider> getNodeProviders() {
+      return PROVIDERS;
+    }
+
+    private static class TreeElementFileStructureNodeProvider implements FileStructureNodeProvider<TreeElement>, ActionShortcutProvider {
+      public static final String ID = "Show package structure";
+
+      @NotNull
+      @Override
+      public ActionPresentation getPresentation() {
+        return new ActionPresentationData(ID, null, GoIcons.PACKAGE);
+      }
+
+      @NotNull
+      @Override
+      public String getName() {
+        return ID;
+      }
+
+      @NotNull
+      @Override
+      public Collection<TreeElement> provideNodes(@NotNull TreeElement node) {
+        PsiElement psi = node instanceof Element ? ((Element)node).myElement : null;
+        if (psi instanceof GoFile) {
+          GoFile orig = (GoFile)psi;
+          List<TreeElement> result = ContainerUtil.newSmartList();
+          for (GoFile f : GoPsiImplUtil.getAllPackageFiles(orig)) {
+            if (f != orig) {
+              ContainerUtil.addAll(result, new Element(f).getChildren());
+            }
+          }
+          return result;
+        }
+        return Collections.emptyList();
+      }
+
+      @NotNull
+      @Override
+      public String getCheckBoxText() {
+        return ID;
+      }
+
+      @NotNull
+      @Override
+      public Shortcut[] getShortcut() {
+        throw new IncorrectOperationException("see getActionIdForShortcut()");
+      }
+
+      @NotNull
+      @Override
+      public String getActionIdForShortcut() {
+        return "FileStructurePopup";
+      }
     }
   }
 
