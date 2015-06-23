@@ -5,6 +5,7 @@
       <w>coverprofile</w>
       <w>devel</w>
       <w>gcloud</w>
+      <w>gocheck</w>
       <w>goide</w>
       <w>goimports</w>
       <w>gopath</w>

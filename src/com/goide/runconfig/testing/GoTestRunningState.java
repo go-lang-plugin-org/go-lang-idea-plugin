@@ -34,7 +34,6 @@ import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.testframework.autotest.ToggleAutoTestAction;
 import com.intellij.execution.testframework.sm.SMTestRunnerConnectionUtil;
 import com.intellij.execution.ui.ConsoleView;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
@@ -47,13 +46,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.io.InputStream;
 import java.util.Collection;
-import java.util.Scanner;
 
 public class GoTestRunningState extends GoRunningState<GoTestRunConfigurationBase> {
-  private static final Logger LOG = Logger.getInstance(GoTestRunningState.class);
-
   private String myCoverageFilePath;
 
   public GoTestRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module, @NotNull GoTestRunConfigurationBase configuration) {
@@ -142,10 +137,5 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfigurationBas
 
   public void setCoverageFilePath(@Nullable String coverageFile) {
     myCoverageFilePath = coverageFile;
-  }
-
-  private static String convertStreamToString(InputStream is) {
-    Scanner s = new Scanner(is).useDelimiter("\\A");
-    return s.hasNext() ? s.next() : "";
   }
 }

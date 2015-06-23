@@ -461,7 +461,7 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter {
       // Ignore trailing empty lines.
       while (StringUtil.isEmptyOrSpaces(myStdOut.get(i))) {
         --i;
-      };
+      }
 
       // All lines up until an empty one comprise the stack trace.
       while (!StringUtil.isEmptyOrSpaces(myStdOut.get(i))) {

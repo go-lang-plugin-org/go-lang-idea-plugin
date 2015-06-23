@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,35 +17,21 @@
 package com.goide.runconfig.testing.frameworks.gotest;
 
 import com.goide.GoIcons;
-import com.goide.runconfig.GoConfigurationFactoryBase;
-import com.goide.runconfig.before.GoBeforeRunTaskProvider;
-import com.goide.runconfig.before.GoCommandBeforeRunTask;
-import com.intellij.execution.BeforeRunTask;
+import com.goide.runconfig.testing.frameworks.GoTestConfigurationFactoryBase;
 import com.intellij.execution.configurations.ConfigurationTypeBase;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Key;
 import org.jetbrains.annotations.NotNull;
 
 public class GotestRunConfigurationType extends ConfigurationTypeBase {
 
   public GotestRunConfigurationType() {
     super("GoTestRunConfiguration", "Go Test", "Go test run configuration", GoIcons.TEST_RUN);
-    addFactory(new GoConfigurationFactoryBase(this) {
+    addFactory(new GoTestConfigurationFactoryBase(this) {
       @NotNull
       public RunConfiguration createTemplateConfiguration(@NotNull Project project) {
         return new GotestRunConfiguration(project, "Go Test", getInstance());
-      }
-
-      @Override
-      public void configureBeforeRunTaskDefaults(Key<? extends BeforeRunTask> providerID, BeforeRunTask task) {
-        super.configureBeforeRunTaskDefaults(providerID, task);
-        if (providerID == GoBeforeRunTaskProvider.ID && task instanceof GoCommandBeforeRunTask 
-            && ((GoCommandBeforeRunTask)task).getCommand() == null) {
-          task.setEnabled(true);
-          ((GoCommandBeforeRunTask)task).setCommand("test -i");
-        }
       }
     });
   }
