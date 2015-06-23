@@ -17,10 +17,7 @@
 package com.goide.completion;
 
 import com.goide.psi.*;
-import com.goide.psi.impl.GoFieldNameReference;
-import com.goide.psi.impl.GoReference;
-import com.goide.psi.impl.GoScopeProcessor;
-import com.goide.psi.impl.GoTypeReference;
+import com.goide.psi.impl.*;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
@@ -42,9 +39,13 @@ import static com.goide.completion.GoCompletionUtil.createPrefixMatcher;
 public class GoReferenceCompletionProvider extends CompletionProvider<CompletionParameters> {
   @Override
   protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet set) {
-    final GoReferenceExpressionBase expression = PsiTreeUtil.getParentOfType(parameters.getPosition(), GoReferenceExpressionBase.class);
+    GoReferenceExpressionBase expression = PsiTreeUtil.getParentOfType(parameters.getPosition(), GoReferenceExpressionBase.class);
     if (expression != null) {
       fillVariantsByReference(expression.getReference(), set.withPrefixMatcher(createPrefixMatcher(set.getPrefixMatcher())));
+    }
+    GoVarDefinition varDefinition = PsiTreeUtil.getParentOfType(parameters.getPosition(), GoVarDefinition.class);
+    if (varDefinition != null) {
+      fillVariantsByReference(varDefinition.getReference(), set.withPrefixMatcher(createPrefixMatcher(set.getPrefixMatcher())));
     }
   }
 
@@ -81,6 +82,9 @@ public class GoReferenceCompletionProvider extends CompletionProvider<Completion
         fillVariantsByReference(new GoReference((GoReferenceExpressionBase)element), result);
       }
     }
+    else if (reference instanceof GoCachedReference) {
+      ((GoCachedReference)reference).processResolveVariants(new MyGoScopeProcessor(result, false));
+    }
   }
 
   private static void addElement(@NotNull PsiElement o, @NotNull ResolveState state, boolean forTypes, @NotNull CompletionResultSet set) {
@@ -100,13 +104,13 @@ public class GoReferenceCompletionProvider extends CompletionProvider<Completion
         String name = ((GoNamedSignatureOwner)o).getName();
         if (name != null) {
           return GoCompletionUtil.createFunctionOrMethodLookupElement((GoNamedSignatureOwner)o, name, null,
-                                                                        GoCompletionUtil.FUNCTION_PRIORITY);
+                                                                      GoCompletionUtil.FUNCTION_PRIORITY);
         }
       }
       else if (o instanceof GoTypeSpec) {
         return forTypes
-                 ? GoCompletionUtil.createTypeLookupElement((GoTypeSpec)o)
-                 : GoCompletionUtil.createTypeConversionLookupElement((GoTypeSpec)o);
+               ? GoCompletionUtil.createTypeLookupElement((GoTypeSpec)o)
+               : GoCompletionUtil.createTypeConversionLookupElement((GoTypeSpec)o);
       }
       else if (o instanceof PsiDirectory) {
         return GoCompletionUtil.createPackageLookupElement(((PsiDirectory)o).getName(), o, true);

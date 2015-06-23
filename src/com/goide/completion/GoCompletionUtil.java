@@ -111,6 +111,7 @@ public class GoCompletionUtil {
       p.setTailText(calcTailTextForFields(v), true);
       p.setTypeText(text);
       p.setTypeGrayed(true);
+      p.setItemText(element.getLookupString());
     }
   };
 
@@ -229,10 +230,7 @@ public class GoCompletionUtil {
         }
       } : null;
     return PrioritizedLookupElement.withPriority(
-      LookupElementBuilder.createWithSmartPointer(name, v)
-        .withLookupString(name.toLowerCase()).withRenderer(VARIABLE_RENDERER)
-        .withInsertHandler(handler)
-      , VAR_PRIORITY);
+      LookupElementBuilder.createWithSmartPointer(name, v).withRenderer(VARIABLE_RENDERER).withInsertHandler(handler), VAR_PRIORITY);
   }
 
   @Nullable

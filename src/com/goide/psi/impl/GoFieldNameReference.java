@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -110,6 +110,10 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
     GoScopeProcessorBase p = getProcessor(false);
     processFields(p);
     return p.getResult();
+  }
+
+  @Override
+  public void processResolveVariants(@NotNull GoScopeProcessor processor) {
   }
 
   @NotNull

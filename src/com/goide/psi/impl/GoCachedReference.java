@@ -21,6 +21,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
+import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -49,6 +50,8 @@ public abstract class GoCachedReference<T extends PsiElement> extends PsiReferen
            : null;
   }
 
+  public abstract void processResolveVariants(@NotNull GoScopeProcessor processor);
+
   @Override
   public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
     myElement.replace(GoElementFactory.createIdentifierFromText(myElement.getProject(), newElementName));
@@ -59,4 +62,11 @@ public abstract class GoCachedReference<T extends PsiElement> extends PsiReferen
   public boolean isReferenceTo(PsiElement element) {
     return GoUtil.couldBeReferenceTo(element, myElement) && super.isReferenceTo(element);
   }
+  
+  @NotNull
+  @Override
+  public Object[] getVariants() {
+    return ArrayUtil.EMPTY_OBJECT_ARRAY;
+  }
+
 }

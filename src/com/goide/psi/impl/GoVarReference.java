@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import com.goide.util.GoUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,21 +40,21 @@ public class GoVarReference extends GoCachedReference<GoVarDefinition> {
   @Override
   public PsiElement resolveInner() {
     GoVarProcessor p = new GoVarProcessor(myElement.getText(), myElement, false);
-    if (myPotentialStopBlock != null) {
-      if (myPotentialStopBlock.getParent() instanceof GoFunctionOrMethodDeclaration) {
-        GoReference.processFunctionParameters(myElement, p);
-        if (p.getResult() != null) return p.getResult();
-      }
-      myPotentialStopBlock.processDeclarations(p, ResolveState.initial(), PsiTreeUtil.getParentOfType(myElement, GoStatement.class),
-                                               myElement);
-    }
-    return p.getResult();
+    processResolveVariants(p);
+    return p.getResult(); 
   }
 
-  @NotNull
   @Override
-  public Object[] getVariants() {
-    GoVarProcessor p = new GoVarProcessor(myElement.getText(), myElement, true);
+  public void processResolveVariants(@NotNull final GoScopeProcessor processor) {
+    GoVarProcessor p = processor instanceof GoVarProcessor
+                       ? ((GoVarProcessor)processor)
+                       : new GoVarProcessor(myElement.getText(), myElement, processor.isCompletion()) {
+                         @Override
+                         public boolean execute(@NotNull PsiElement psiElement, @NotNull ResolveState resolveState) {
+                           return super.execute(psiElement, resolveState) && processor.execute(psiElement, resolveState);
+                         }
+                       };
+
     if (myPotentialStopBlock != null) {
       if (myPotentialStopBlock.getParent() instanceof GoFunctionOrMethodDeclaration) {
         GoReference.processFunctionParameters(myElement, p);
@@ -63,7 +62,6 @@ public class GoVarReference extends GoCachedReference<GoVarDefinition> {
       myPotentialStopBlock.processDeclarations(p, ResolveState.initial(), PsiTreeUtil.getParentOfType(myElement, GoStatement.class),
                                                myElement);
     }
-    return ArrayUtil.toObjectArray(p.getVariants());
   }
 
   @Override

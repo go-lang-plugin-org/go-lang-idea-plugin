@@ -59,6 +59,10 @@ public class GoLabelReference extends GoCachedReference<GoLabelRef> {
     return null;
   }
 
+  @Override
+  public void processResolveVariants(@NotNull GoScopeProcessor processor) {
+  }
+
   @NotNull
   @Override
   public Object[] getVariants() {

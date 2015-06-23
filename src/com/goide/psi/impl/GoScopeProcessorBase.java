@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.goide.psi.GoNamedElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
-import com.intellij.psi.scope.BaseScopeProcessor;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.OrderedSet;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public abstract class GoScopeProcessorBase extends BaseScopeProcessor {
+public abstract class GoScopeProcessorBase extends GoScopeProcessor {
   @NotNull protected final OrderedSet<GoNamedElement> myResult = new OrderedSet<GoNamedElement>();
 
   @NotNull protected final PsiElement myOrigin;
