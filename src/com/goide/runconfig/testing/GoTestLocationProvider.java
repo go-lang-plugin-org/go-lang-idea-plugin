@@ -26,10 +26,11 @@ import com.intellij.execution.PsiLocation;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.testIntegration.TestLocationProvider;
+import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
+import freemarker.template.utility.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,29 +45,26 @@ public class GoTestLocationProvider implements TestLocationProvider {
       return Collections.emptyList();
     }
 
-    List<Location> locations = ContainerUtil.newArrayList();
-    String[] locationDataItems = locationData.split("\\.");
+    String[] locationDataItems = StringUtil.split(locationData, '.');
 
     // Location is a function name, e.g. `TestCheckItOut`
     if (locationDataItems.length == 1) {
-      Collection<GoFunctionDeclaration> goFunctionDeclarations = GoFunctionIndex.find(
-        locationData, project, GlobalSearchScope.projectScope(project));
-      for (GoFunctionDeclaration goFunctionDeclaration : goFunctionDeclarations) {
-        Location<GoFunctionDeclaration> functionLocation = PsiLocation.fromPsiElement(project, goFunctionDeclaration);
-        ContainerUtil.addIfNotNull(locations, functionLocation);
-      }
-      return locations;
+      return ContainerUtil.mapNotNull(GoFunctionIndex.find(locationData, project, GlobalSearchScope.projectScope(project)),
+                                      new Function<GoFunctionDeclaration, Location>() {
+                                        @Override
+                                        public Location fun(GoFunctionDeclaration function) {
+                                          return PsiLocation.fromPsiElement(project, function);
+                                        }
+                                      });
     }
 
     // Location is a method name, e.g. `FooSuite.TestCheckItOut`
     if (locationDataItems.length == 2) {
-      Collection<GoTypeSpec> goTypeSpecs = GoTypesIndex.find(
-        locationDataItems[0], project, GlobalSearchScope.projectScope(project));
-      for (GoTypeSpec goTypeSpec : goTypeSpecs) {
-        for (GoMethodDeclaration method : goTypeSpec.getMethods()) {
+      List<Location> locations = ContainerUtil.newArrayList();
+      for (GoTypeSpec typeSpec : GoTypesIndex.find(locationDataItems[0], project, GlobalSearchScope.projectScope(project))) {
+        for (GoMethodDeclaration method : typeSpec.getMethods()) {
           if (locationDataItems[1].equals(method.getName())) {
-            Location<GoMethodDeclaration> methodLocation = PsiLocation.fromPsiElement(method);
-            ContainerUtil.addIfNotNull(locations, methodLocation);
+            ContainerUtil.addIfNotNull(locations, PsiLocation.fromPsiElement(method));
           }
         }
       }
