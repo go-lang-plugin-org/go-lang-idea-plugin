@@ -16,33 +16,16 @@
 
 package com.goide.psi.impl;
 
-import com.goide.completion.GoCompletionUtil;
 import com.goide.psi.*;
-import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.List;
-
 public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressionBase> {
   private GoCompositeElement myValue;
-
-  @NotNull
-  private GoScopeProcessorBase getProcessor(final boolean completion) {
-    return new GoScopeProcessorBase(myElement.getText(), myElement, completion) {
-      @Override
-      protected boolean condition(@NotNull PsiElement element) {
-        return !(element instanceof GoFieldDefinition) && !(element instanceof GoAnonymousFieldDefinition);
-      }
-    };
-  }
 
   public GoFieldNameReference(@NotNull GoReferenceExpressionBase element) {
     super(element);
@@ -55,10 +38,17 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
     }
   }
 
-  private boolean processFields(@NotNull GoScopeProcessorBase processor) {
+  @Override
+  public boolean processResolveVariants(@NotNull final GoScopeProcessor processor) {
+    GoScopeProcessor fieldProcessor = processor instanceof GoFieldProcessor ? processor : new GoFieldProcessor(myElement) {
+      @Override
+      public boolean execute(@NotNull PsiElement psiElement, @NotNull ResolveState resolveState) {
+        return super.execute(psiElement, resolveState) && processor.execute(psiElement, resolveState);
+      }
+    };
     GoKey key = PsiTreeUtil.getParentOfType(myElement, GoKey.class);
     GoValue value = PsiTreeUtil.getParentOfType(myElement, GoValue.class);
-    if (key == null && (value == null || PsiTreeUtil.getPrevSiblingOfType(value, GoKey.class) != null)) return false;
+    if (key == null && (value == null || PsiTreeUtil.getPrevSiblingOfType(value, GoKey.class) != null)) return true;
 
     GoCompositeLit lit = PsiTreeUtil.getParentOfType(myElement, GoCompositeLit.class);
 
@@ -69,9 +59,9 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
 
     type = getType(type);
 
-    if (type instanceof GoStructType && !type.processDeclarations(processor, ResolveState.initial(), null, myElement)) return true;
+    if (type instanceof GoStructType && !type.processDeclarations(fieldProcessor, ResolveState.initial(), null, myElement)) return false;
 
-    return false;
+    return true;
   }
 
   @Nullable
@@ -107,26 +97,19 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
   @Nullable
   @Override
   public PsiElement resolveInner() {
-    GoScopeProcessorBase p = getProcessor(false);
-    processFields(p);
+    GoScopeProcessorBase p = new GoFieldProcessor(myElement);
+    processResolveVariants(p);
     return p.getResult();
   }
 
-  @Override
-  public void processResolveVariants(@NotNull GoScopeProcessor processor) {
-  }
-
-  @NotNull
-  @Override
-  public Object[] getVariants() {
-    GoScopeProcessorBase p = getProcessor(true);
-    processFields(p);
-    List<GoNamedElement> variants = p.getVariants();
-    if (variants.isEmpty()) return EMPTY_ARRAY;
-    Collection<LookupElement> result = ContainerUtil.newArrayList();
-    for (GoNamedElement element : variants) {
-      result.add(GoCompletionUtil.createVariableLikeLookupElement(element));
+  private static class GoFieldProcessor extends GoScopeProcessorBase {
+    public GoFieldProcessor(@NotNull PsiElement element) {
+      super(element.getText(), element, false);
     }
-    return ArrayUtil.toObjectArray(result);
+
+    @Override
+    protected boolean condition(@NotNull PsiElement element) {
+      return !(element instanceof GoFieldDefinition) && !(element instanceof GoAnonymousFieldDefinition);
+    }
   }
 }

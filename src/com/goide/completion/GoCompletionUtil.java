@@ -179,8 +179,8 @@ public class GoCompletionUtil {
 
   @NotNull
   public static LookupElement createLabelLookupElement(@NotNull GoLabelDefinition l, @NotNull String lookupString) {
-    return PrioritizedLookupElement.withPriority(LookupElementBuilder.createWithSmartPointer(lookupString, l)
-                                                   .withIcon(GoIcons.LABEL), LABEL_PRIORITY);
+    return PrioritizedLookupElement.withPriority(LookupElementBuilder.createWithSmartPointer(lookupString, l).withIcon(GoIcons.LABEL), 
+                                                 LABEL_PRIORITY);
   }
 
   @NotNull

@@ -45,7 +45,7 @@ public class GoVarReference extends GoCachedReference<GoVarDefinition> {
   }
 
   @Override
-  public void processResolveVariants(@NotNull final GoScopeProcessor processor) {
+  public boolean processResolveVariants(@NotNull final GoScopeProcessor processor) {
     GoVarProcessor p = processor instanceof GoVarProcessor
                        ? ((GoVarProcessor)processor)
                        : new GoVarProcessor(myElement.getText(), myElement, processor.isCompletion()) {
@@ -61,9 +61,11 @@ public class GoVarReference extends GoCachedReference<GoVarDefinition> {
       }
       myPotentialStopBlock.processDeclarations(p, ResolveState.initial(), PsiTreeUtil.getParentOfType(myElement, GoStatement.class),
                                                myElement);
+      return true;
     }
+    return false;
   }
-
+  
   @Override
   public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
     myElement.replace(GoElementFactory.createVarDefinitionFromText(myElement.getProject(), newElementName));

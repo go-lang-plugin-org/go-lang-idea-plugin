@@ -16,16 +16,12 @@
 
 package com.goide.psi.impl;
 
-import com.goide.completion.GoCompletionUtil;
 import com.goide.psi.GoBlock;
 import com.goide.psi.GoLabelDefinition;
 import com.goide.psi.GoLabelRef;
-import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,27 +48,20 @@ public class GoLabelReference extends GoCachedReference<GoLabelRef> {
   @Nullable
   @Override
   protected PsiElement resolveInner() {
-    Collection<GoLabelDefinition> defs = getLabelDefinitions();
-    for (GoLabelDefinition def : defs) {
-      if (!myProcessor.execute(def, ResolveState.initial())) return def;
+    if (!processResolveVariants(myProcessor)) {
+      return myProcessor.getResult();
     }
     return null;
   }
 
   @Override
-  public void processResolveVariants(@NotNull GoScopeProcessor processor) {
-  }
-
-  @NotNull
-  @Override
-  public Object[] getVariants() {
-    Collection<LookupElement> result = ContainerUtil.newArrayList();
-    for (GoLabelDefinition element : getLabelDefinitions()) {
-      String name = element.getName();
-      if (name != null) {
-        result.add(GoCompletionUtil.createLabelLookupElement(element, name));
+  public boolean processResolveVariants(@NotNull GoScopeProcessor processor) {
+    Collection<GoLabelDefinition> defs = getLabelDefinitions();
+    for (GoLabelDefinition def : defs) {
+      if (!processor.execute(def, ResolveState.initial())) {
+        return false;
       }
     }
-    return ArrayUtil.toObjectArray(result);
+    return true;
   }
 }

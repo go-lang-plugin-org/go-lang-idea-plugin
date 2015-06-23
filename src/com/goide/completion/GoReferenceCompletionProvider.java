@@ -43,9 +43,9 @@ public class GoReferenceCompletionProvider extends CompletionProvider<Completion
     if (expression != null) {
       fillVariantsByReference(expression.getReference(), set.withPrefixMatcher(createPrefixMatcher(set.getPrefixMatcher())));
     }
-    GoVarDefinition varDefinition = PsiTreeUtil.getParentOfType(parameters.getPosition(), GoVarDefinition.class);
-    if (varDefinition != null) {
-      fillVariantsByReference(varDefinition.getReference(), set.withPrefixMatcher(createPrefixMatcher(set.getPrefixMatcher())));
+    PsiElement parent = parameters.getPosition().getParent();
+    if (parent != null) {
+      fillVariantsByReference(parent.getReference(), set.withPrefixMatcher(createPrefixMatcher(set.getPrefixMatcher())));
     }
   }
 
@@ -61,9 +61,7 @@ public class GoReferenceCompletionProvider extends CompletionProvider<Completion
 
       PsiElement element = reference.getElement();
       if (element instanceof GoReferenceExpression && PsiTreeUtil.getParentOfType(element, GoCompositeLit.class) != null) {
-        for (Object o : new GoFieldNameReference(((GoReferenceExpression)element)).getVariants()) {
-          if (o instanceof LookupElement) result.addElement(((LookupElement)o));
-        }
+        new GoFieldNameReference(((GoReferenceExpression)element)).processResolveVariants(new MyGoScopeProcessor(result, false));
       }
     }
     else if (reference instanceof GoTypeReference) {
@@ -114,6 +112,10 @@ public class GoReferenceCompletionProvider extends CompletionProvider<Completion
       }
       else if (o instanceof PsiDirectory) {
         return GoCompletionUtil.createPackageLookupElement(((PsiDirectory)o).getName(), o, true);
+      }
+      else if (o instanceof GoLabelDefinition) {
+        String name = ((GoLabelDefinition)o).getName();
+        if (name != null) return GoCompletionUtil.createLabelLookupElement((GoLabelDefinition)o, name);
       }
       else {
         return GoCompletionUtil.createVariableLikeLookupElement((GoNamedElement)o);

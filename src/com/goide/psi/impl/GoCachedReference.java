@@ -50,7 +50,7 @@ public abstract class GoCachedReference<T extends PsiElement> extends PsiReferen
            : null;
   }
 
-  public abstract void processResolveVariants(@NotNull GoScopeProcessor processor);
+  public abstract boolean processResolveVariants(@NotNull GoScopeProcessor processor);
 
   @Override
   public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
