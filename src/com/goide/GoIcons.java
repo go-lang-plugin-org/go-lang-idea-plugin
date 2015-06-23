@@ -19,6 +19,7 @@ package com.goide;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.ui.LayeredIcon;
+import com.intellij.util.PlatformIcons;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -39,6 +40,7 @@ public interface GoIcons {
   Icon PACKAGE = AllIcons.Nodes.Package;
   Icon MODULE_ICON = IconLoader.findIcon("/icons/goModule.png");
   Icon DEBUG = ICON;
+  Icon DIRECTORY = PlatformIcons.DIRECTORY_CLOSED_ICON;
 
   class Helper {
     @NotNull
