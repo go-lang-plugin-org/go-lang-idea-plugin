@@ -50,7 +50,7 @@ public class GoImportsFileAction extends GoExternalToolsAction {
     return super.doSomething(virtualFile, module, project, title);
   }
 
-  @Nullable
+  @NotNull
   @Override
   protected GoExecutor createExecutor(@NotNull Project project, @Nullable Module module, @NotNull String title, @NotNull String filePath) {
     VirtualFile executable = getExecutable(project, module);

@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoFmtFileAction extends GoExternalToolsAction {
-  @Nullable
+  @NotNull
   protected GoExecutor createExecutor(@NotNull Project project, @Nullable Module module, @NotNull String title, @NotNull String filePath) {
     return GoExecutor.in(project, module).withPresentableName(title).withParameters("fmt", filePath).showOutputOnError();
   }

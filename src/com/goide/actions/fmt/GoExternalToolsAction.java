@@ -79,21 +79,17 @@ public abstract class GoExternalToolsAction extends DumbAwareAction {
 
   protected boolean doSomething(@NotNull VirtualFile virtualFile, @Nullable Module module, @NotNull Project project, @NotNull String title)
     throws ExecutionException {
-      Document document = FileDocumentManager.getInstance().getDocument(virtualFile);
-      assert document != null;
-      final String filePath = virtualFile.getCanonicalPath();
-      assert filePath != null;
+    Document document = FileDocumentManager.getInstance().getDocument(virtualFile);
+    assert document != null;
+    final String filePath = virtualFile.getCanonicalPath();
+    assert filePath != null;
 
-      FileDocumentManager.getInstance().saveDocument(document);
-      GoExecutor executor = createExecutor(project, module, title, filePath);
-      if (executor != null) {
-        executor.executeWithProgress(false);
-        return true;
-      }
-      return false;
+    FileDocumentManager.getInstance().saveDocument(document);
+    createExecutor(project, module, title, filePath).executeWithProgress(false);
+    return true;
   }
 
-  @Nullable
+  @NotNull
   protected abstract GoExecutor createExecutor(@NotNull Project project,
                                                @Nullable Module module,
                                                @NotNull String title,
