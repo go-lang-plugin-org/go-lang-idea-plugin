@@ -17,3 +17,33 @@ func main() {
         case
     }
 }
+
+func User(createBase base.AuthFunc) base.Ajaxer {
+
+	log.Println("Restful user request.")
+	authCtrl := createBase("controller/account/user")
+
+	switch authCtrl.Req.Method {
+	case "PUT":
+		return &edit{AuthCtrl: authCtrl}
+		"DELETE":
+		return &delete{AuthCtrl: authCtrl}
+	default:
+		return &read{AuthCtrl: authCtrl}
+	}
+}
+
+func User(createBase base.AuthFunc) base.Ajaxer {
+
+	log.Println("Restful user request.")
+	authCtrl := createBase("controller/account/user")
+
+	switch authCtrl.Req.Method {
+	"PUT":
+		return &edit{AuthCtrl: authCtrl}
+		"DELETE":
+		return &delete{AuthCtrl: authCtrl}
+	default:
+		return &read{AuthCtrl: authCtrl}
+	}
+}
