@@ -16,21 +16,32 @@
 
 package com.goide.runconfig.testing.frameworks.gocheck;
 
+import com.goide.psi.GoFile;
+import com.goide.runconfig.GoModuleBasedConfiguration;
 import com.goide.runconfig.testing.GoTestRunConfigurationBase;
 import com.goide.runconfig.testing.GoTestRunningState;
 import com.goide.runconfig.testing.ui.GoTestRunConfigurationEditorForm;
+import com.goide.stubs.index.GoPackagesIndex;
+import com.goide.util.GoUtil;
 import com.intellij.execution.configurations.ConfigurationType;
 import com.intellij.execution.configurations.ModuleBasedConfiguration;
 import com.intellij.execution.configurations.RunConfiguration;
+import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.testframework.TestConsoleProperties;
 import com.intellij.execution.testframework.sm.runner.OutputToGeneralTestEventsConverter;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.stubs.StubIndex;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.regex.Pattern;
+
 public class GocheckRunConfiguration extends GoTestRunConfigurationBase {
+  private static final Pattern GO_CHECK_IMPORT_PATH = Pattern.compile("gopkg\\.in/check\\.v\\d+");
+  private static final Pattern GO_CHECK_GITHUB_IMPORT_PATH = Pattern.compile("github\\.com/go-check/check\\.v\\d+");
+
   public GocheckRunConfiguration(@NotNull Project project, String name, @NotNull ConfigurationType configurationType) {
     super(project, name, configurationType);
   }
@@ -43,6 +54,22 @@ public class GocheckRunConfiguration extends GoTestRunConfigurationBase {
   @Override
   public String getFrameworkName() {
     return "gocheck";
+  }
+
+  @Override
+  public void checkConfiguration() throws RuntimeConfigurationException {
+    super.checkConfiguration();
+    GoModuleBasedConfiguration configurationModule = getConfigurationModule();
+    Module module = configurationModule.getModule();
+    assert module != null;
+    for (GoFile file : StubIndex.getElements(GoPackagesIndex.KEY, "check", getProject(), GoUtil.moduleScope(module), GoFile.class)) {
+      String importPath = file.getImportPath();
+      if (importPath != null && (GO_CHECK_IMPORT_PATH.matcher(importPath).matches() ||
+                                 GO_CHECK_GITHUB_IMPORT_PATH.matcher(importPath).matches())) {
+        return;
+      }
+    }
+    throw new RuntimeConfigurationException("Cannot find gocheck package in GOPATH");
   }
 
   @NotNull

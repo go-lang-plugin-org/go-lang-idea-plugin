@@ -23,5 +23,4 @@ public class GotestRunConfigurationProducer extends GoTestRunConfigurationProduc
   public GotestRunConfigurationProducer() {
     super(GotestRunConfigurationType.getInstance());
   }
-
 }
