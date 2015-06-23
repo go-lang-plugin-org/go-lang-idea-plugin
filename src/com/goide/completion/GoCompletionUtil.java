@@ -29,13 +29,14 @@ import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.codeInsight.lookup.LookupElementPresentation;
+import com.intellij.codeInsight.lookup.LookupElementRenderer;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ObjectUtils;
-import com.intellij.util.PlatformIcons;
 import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -54,6 +55,64 @@ public class GoCompletionUtil {
   public static final int VAR_PRIORITY = 15;
   public static final int LABEL_PRIORITY = 15;
   public static final int PACKAGE_PRIORITY = 5;
+  public static final InsertHandler<LookupElement> FUNCTION_INSERT_HANDLER = new InsertHandler<LookupElement>() {
+    @Override
+    public void handleInsert(InsertionContext context, LookupElement item) {
+      PsiElement element = item.getPsiElement();
+      if (!(element instanceof GoSignatureOwner)) return;
+      GoSignatureOwner f = (GoSignatureOwner)element;
+      GoSignature signature = f.getSignature();
+      int paramsCount = signature != null ? signature.getParameters().getParameterDeclarationList().size() : 0;
+      InsertHandler<LookupElement> handler =
+        paramsCount == 0 ? ParenthesesInsertHandler.NO_PARAMETERS : ParenthesesInsertHandler.WITH_PARAMETERS;
+      handler.handleInsert(context, item);
+    }
+  };
+  public static final LookupElementRenderer<LookupElement> FUNCTION_RENDERER = new LookupElementRenderer<LookupElement>() {
+    @Override
+    public void renderElement(LookupElement element, LookupElementPresentation p) {
+      PsiElement o = element.getPsiElement();
+      if (!(o instanceof GoNamedSignatureOwner)) return;
+      GoNamedSignatureOwner f = (GoNamedSignatureOwner)o;
+      Icon icon = f instanceof GoMethodDeclaration || f instanceof GoMethodSpec ? GoIcons.METHOD : GoIcons.FUNCTION;
+      String typeText = "";
+      GoSignature signature = f.getSignature();
+      String paramText = "";
+      if (signature != null) {
+        GoResult result = signature.getResult();
+        paramText = signature.getParameters().getText();
+        if (result != null) typeText = result.getText();
+      }
+
+      p.setIcon(icon);
+      p.setTypeText(typeText);
+      p.setTypeGrayed(true);
+      p.setTailText(calcTailText(f), true);
+      p.setItemText(element.getLookupString() + paramText);
+    }
+  };
+  public static final LookupElementRenderer<LookupElement> VARIABLE_RENDERER = new LookupElementRenderer<LookupElement>() {
+    @Override
+    public void renderElement(LookupElement element, LookupElementPresentation p) {
+      PsiElement o = element.getPsiElement();
+      if (!(o instanceof GoNamedElement)) return;
+      GoNamedElement v = (GoNamedElement)o;
+      GoType type = v.getGoType(null);
+      String text = GoPsiImplUtil.getText(type);
+      Icon icon = v instanceof GoVarDefinition ? GoIcons.VARIABLE :
+                  v instanceof GoParamDefinition ? GoIcons.PARAMETER :
+                  v instanceof GoFieldDefinition ? GoIcons.FIELD :
+                  v instanceof GoReceiver ? GoIcons.RECEIVER :
+                  v instanceof GoConstDefinition ? GoIcons.CONSTANT :
+                  v instanceof GoAnonymousFieldDefinition ? GoIcons.FIELD :
+                  null;
+
+      p.setIcon(icon);
+      p.setTailText(calcTailTextForFields(v), true);
+      p.setTypeText(text);
+      p.setTypeGrayed(true);
+    }
+  };
 
   private static class Lazy {
     private static final SingleCharInsertHandler DIR_INSERT_HANDLER = new SingleCharInsertHandler('/');
@@ -75,32 +134,14 @@ public class GoCompletionUtil {
   }
 
   @NotNull
-  public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoNamedSignatureOwner f,
-                                                                  @NotNull String lookupString,
-                                                                  @Nullable InsertHandler<LookupElement> h,
-                                                                  double priority) {
-    Icon icon = f instanceof GoMethodDeclaration || f instanceof GoMethodSpec ? GoIcons.METHOD : GoIcons.FUNCTION;
-    GoSignature signature = f.getSignature();
-    int paramsCount = 0;
-    String typeText = "";
-    String paramText = "";
-    if (signature != null) {
-      paramsCount = signature.getParameters().getParameterDeclarationList().size();
-      GoResult result = signature.getResult();
-      paramText = signature.getParameters().getText();
-      if (result != null) typeText = result.getText();
-    }
-
-    InsertHandler<LookupElement> handler = h != null ? h :
-                                           paramsCount == 0
-                                           ? ParenthesesInsertHandler.NO_PARAMETERS
-                                           : ParenthesesInsertHandler.WITH_PARAMETERS;
-    return PrioritizedLookupElement.withPriority(LookupElementBuilder.createWithSmartPointer(lookupString, f)
-                                                   .withIcon(icon)
-                                                   .withInsertHandler(handler)
-                                                   .withTypeText(typeText, true)
-                                                   .withTailText(calcTailText(f), true)
-                                                   .withPresentableText(lookupString + paramText), priority);
+  public static LookupElement createFunctionOrMethodLookupElement(@NotNull final GoNamedSignatureOwner f,
+                                                                  @NotNull final String lookupString,
+                                                                  @Nullable final InsertHandler<LookupElement> h,
+                                                                  final double priority) {
+    return PrioritizedLookupElement.withPriority(LookupElementBuilder
+                                                   .createWithSmartPointer(lookupString, f)
+                                                   .withRenderer(FUNCTION_RENDERER)
+                                                   .withInsertHandler(h != null ? h : FUNCTION_INSERT_HANDLER), priority);
   }
 
   @Nullable
@@ -167,15 +208,6 @@ public class GoCompletionUtil {
 
   @NotNull
   public static LookupElement createVariableLikeLookupElement(@NotNull GoNamedElement v) {
-    Icon icon = v instanceof GoVarDefinition ? GoIcons.VARIABLE :
-                v instanceof GoParamDefinition ? GoIcons.PARAMETER :
-                v instanceof GoFieldDefinition ? GoIcons.FIELD :
-                v instanceof GoReceiver ? GoIcons.RECEIVER :
-                v instanceof GoConstDefinition ? GoIcons.CONSTANT :
-                v instanceof GoAnonymousFieldDefinition ? GoIcons.FIELD :
-                null;
-    GoType type = v.getGoType(null);
-    String text = GoPsiImplUtil.getText(type);
     String name = StringUtil.notNullize(v.getName());
     SingleCharInsertHandler handler =
       v instanceof GoFieldDefinition ?
@@ -198,10 +230,7 @@ public class GoCompletionUtil {
       } : null;
     return PrioritizedLookupElement.withPriority(
       LookupElementBuilder.createWithSmartPointer(name, v)
-        .withLookupString(name.toLowerCase())
-        .withIcon(icon)
-        .withTailText(calcTailTextForFields(v), true)
-        .withTypeText(text, true)
+        .withLookupString(name.toLowerCase()).withRenderer(VARIABLE_RENDERER)
         .withInsertHandler(handler)
       , VAR_PRIORITY);
   }
@@ -275,7 +304,7 @@ public class GoCompletionUtil {
   @NotNull
   public static LookupElementBuilder createDirectoryLookupElement(@NotNull PsiDirectory dir) {
     int files = dir.getFiles().length;
-    return LookupElementBuilder.createWithSmartPointer(dir.getName(), dir).withIcon(PlatformIcons.DIRECTORY_CLOSED_ICON)
+    return LookupElementBuilder.createWithSmartPointer(dir.getName(), dir).withIcon(GoIcons.DIRECTORY)
       .withInsertHandler(files == 0 ? Lazy.DIR_INSERT_HANDLER : null);
   }
 }

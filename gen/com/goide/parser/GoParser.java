@@ -1229,23 +1229,33 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // ExprSwitchCase ':' Statements?
+  // !'}' ExprSwitchCase ':' Statements?
   public static boolean ExprCaseClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExprCaseClause")) return false;
-    if (!nextTokenIs(b, "<expr case clause>", CASE, DEFAULT)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, "<expr case clause>");
-    r = ExprSwitchCase(b, l + 1);
+    r = ExprCaseClause_0(b, l + 1);
     p = r; // pin = 1
-    r = r && report_error_(b, consumeToken(b, COLON));
-    r = p && ExprCaseClause_2(b, l + 1) && r;
+    r = r && report_error_(b, ExprSwitchCase(b, l + 1));
+    r = p && report_error_(b, consumeToken(b, COLON)) && r;
+    r = p && ExprCaseClause_3(b, l + 1) && r;
     exit_section_(b, l, m, EXPR_CASE_CLAUSE, r, p, null);
     return r || p;
   }
 
+  // !'}'
+  private static boolean ExprCaseClause_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExprCaseClause_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NOT_, null);
+    r = !consumeToken(b, RBRACE);
+    exit_section_(b, l, m, null, r, false, null);
+    return r;
+  }
+
   // Statements?
-  private static boolean ExprCaseClause_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ExprCaseClause_2")) return false;
+  private static boolean ExprCaseClause_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExprCaseClause_3")) return false;
     Statements(b, l + 1);
     return true;
   }
@@ -3312,7 +3322,7 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // !('!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | '*' | '*=' | '+' | '++' | '+=' | '-' | '--' | '-=' | '.' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex | identifier | if | imaginary | int | interface | map | oct | return | rune | select | string | raw_string | struct | switch | var)
+  // !('!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | '*' | '*=' | '+' | '++' | '+=' | '-' | '--' | '-=' | '.' | '...' | '/' | '/=' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex | identifier | if | imaginary | int | interface | map | oct | return | rune | select | string | raw_string | struct | switch | var)
   static boolean StatementRecover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StatementRecover")) return false;
     boolean r;
@@ -3322,7 +3332,7 @@ public class GoParser implements PsiParser {
     return r;
   }
 
-  // '!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | '*' | '*=' | '+' | '++' | '+=' | '-' | '--' | '-=' | '.' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex | identifier | if | imaginary | int | interface | map | oct | return | rune | select | string | raw_string | struct | switch | var
+  // '!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | '*' | '*=' | '+' | '++' | '+=' | '-' | '--' | '-=' | '.' | '...' | '/' | '/=' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex | identifier | if | imaginary | int | interface | map | oct | return | rune | select | string | raw_string | struct | switch | var
   private static boolean StatementRecover_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StatementRecover_0")) return false;
     boolean r;
@@ -3349,7 +3359,6 @@ public class GoParser implements PsiParser {
     if (!r) r = consumeToken(b, TRIPLE_DOT);
     if (!r) r = consumeToken(b, QUOTIENT);
     if (!r) r = consumeToken(b, QUOTIENT_ASSIGN);
-    if (!r) r = consumeToken(b, COLON);
     if (!r) r = consumeToken(b, SEMICOLON);
     if (!r) r = consumeToken(b, LESS);
     if (!r) r = consumeToken(b, SEND_CHANNEL);
