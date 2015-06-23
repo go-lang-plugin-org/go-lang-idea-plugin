@@ -16,6 +16,7 @@
 
 package com.goide.runconfig.testing.frameworks.gotest;
 
+import com.goide.runconfig.testing.GoTestEventsConverterBase;
 import com.goide.runconfig.testing.GoTestLocationProvider;
 import com.intellij.execution.testframework.TestConsoleProperties;
 import com.intellij.execution.testframework.sm.ServiceMessageBuilder;
@@ -29,7 +30,7 @@ import java.text.ParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class GotestEventsConverter extends OutputToGeneralTestEventsConverter {
+public class GotestEventsConverter extends OutputToGeneralTestEventsConverter implements GoTestEventsConverterBase {
   private static final String FRAMEWORK_NAME = "gotest";
 
   private static final Pattern RUN = Pattern.compile("^=== RUN (.+)");
@@ -49,7 +50,7 @@ public class GotestEventsConverter extends OutputToGeneralTestEventsConverter {
   }
 
   @Override
-  protected boolean processServiceMessages(@NotNull String text, Key outputType, ServiceMessageVisitor visitor) throws ParseException {
+  public boolean processServiceMessages(@NotNull String text, Key outputType, ServiceMessageVisitor visitor) throws ParseException {
     Matcher matcher;
 
     if ((matcher = RUN.matcher(text)).find()) {

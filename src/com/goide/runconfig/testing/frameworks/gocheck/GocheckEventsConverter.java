@@ -16,6 +16,7 @@
 
 package com.goide.runconfig.testing.frameworks.gocheck;
 
+import com.goide.runconfig.testing.GoTestEventsConverterBase;
 import com.goide.runconfig.testing.GoTestLocationProvider;
 import com.intellij.execution.testframework.TestConsoleProperties;
 import com.intellij.execution.testframework.sm.ServiceMessageBuilder;
@@ -35,7 +36,7 @@ import java.util.regex.Pattern;
 
 import static com.intellij.openapi.util.Pair.pair;
 
-public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter {
+public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter implements GoTestEventsConverterBase {
   private static final String FRAMEWORK_NAME = "gocheck";
 
   /*
@@ -112,7 +113,7 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter {
   }
 
   @Override
-  protected boolean processServiceMessages(@NotNull String text, Key outputType, ServiceMessageVisitor visitor) throws ParseException {
+  public boolean processServiceMessages(@NotNull String text, Key outputType, ServiceMessageVisitor visitor) throws ParseException {
     Matcher matcher;
 
     switch (myScope) {

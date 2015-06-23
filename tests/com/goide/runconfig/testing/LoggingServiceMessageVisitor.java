@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.goide.runconfig.testing.frameworks;
+package com.goide.runconfig.testing;
 
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.containers.ContainerUtil;

@@ -14,20 +14,13 @@
  * limitations under the License.
  */
 
-package com.goide.runconfig.testing.frameworks.gocheck;
+package com.goide.runconfig.testing;
 
-import com.goide.GoCodeInsightFixtureTestCase;
-import com.goide.runconfig.testing.GoTestConsoleProperties;
-import com.goide.runconfig.testing.frameworks.LoggingServiceMessageVisitor;
-import com.intellij.execution.Executor;
-import com.intellij.execution.executors.DefaultRunExecutor;
-import com.intellij.execution.process.ProcessOutputTypes;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.util.SystemProperties;
+import com.goide.runconfig.testing.frameworks.gocheck.GocheckRunConfiguration;
+import com.goide.runconfig.testing.frameworks.gocheck.GocheckRunConfigurationType;
+import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-
-public class GocheckEventsConverterTest extends GoCodeInsightFixtureTestCase {
+public class GocheckEventsConverterTest extends GoEventsConverterTestCase {
 
   public void testPass() throws Exception { doTest(); }
   public void testAssertions() throws Exception { doTest(); }
@@ -47,19 +40,10 @@ public class GocheckEventsConverterTest extends GoCodeInsightFixtureTestCase {
   protected String getBasePath() {
     return "testing/gocheck";
   }
-
-  private void doTest() throws Exception {
-    Executor executor = new DefaultRunExecutor();
-    GocheckRunConfiguration runConfig = new GocheckRunConfiguration(myFixture.getProject(), "", GocheckRunConfigurationType.getInstance());
-    GoTestConsoleProperties consoleProperties = new GoTestConsoleProperties(runConfig, executor);
-    GocheckEventsConverter converter = (GocheckEventsConverter) consoleProperties.createTestEventsConverter("gocheck", consoleProperties);
-
-    String inputDataFilename = getTestName(true) + ".txt";
-    LoggingServiceMessageVisitor serviceMessageVisitor = new LoggingServiceMessageVisitor();
-    String lineSeparator = SystemProperties.getLineSeparator();
-    for (String line : FileUtil.loadLines(new File(getTestDataPath() + "/" + inputDataFilename))) {
-      converter.processServiceMessages(line + lineSeparator, ProcessOutputTypes.STDOUT, serviceMessageVisitor);
-    }
-    assertSameLinesWithFile(getTestDataPath() + "/" + getTestName(true) + "-expected.txt", serviceMessageVisitor.getLog());
+  
+  @NotNull
+  @Override
+  protected GoTestRunConfigurationBase createRunConfiguration() {
+    return new GocheckRunConfiguration(myFixture.getProject(), "", GocheckRunConfigurationType.getInstance());
   }
 }
