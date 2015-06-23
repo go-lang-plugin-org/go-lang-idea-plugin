@@ -23,6 +23,8 @@ import com.intellij.execution.configurations.ConfigurationType;
 import com.intellij.execution.configurations.ModuleBasedConfiguration;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.execution.runners.ExecutionEnvironment;
+import com.intellij.execution.testframework.TestConsoleProperties;
+import com.intellij.execution.testframework.sm.runner.OutputToGeneralTestEventsConverter;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
@@ -31,6 +33,16 @@ import org.jetbrains.annotations.NotNull;
 public class GocheckRunConfiguration extends GoTestRunConfigurationBase {
   public GocheckRunConfiguration(@NotNull Project project, String name, @NotNull ConfigurationType configurationType) {
     super(project, name, configurationType);
+  }
+
+  @Override
+  public OutputToGeneralTestEventsConverter createTestEventsConverter(@NotNull TestConsoleProperties consoleProperties) {
+    return new GocheckEventsConverter(consoleProperties);
+  }
+
+  @Override
+  public String getFrameworkName() {
+    return "gocheck";
   }
 
   @NotNull
@@ -42,7 +54,7 @@ public class GocheckRunConfiguration extends GoTestRunConfigurationBase {
   @NotNull
   @Override
   protected GoTestRunningState newRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module) {
-    return new GoTestRunningState(env, module, this);
+    return new GocheckRunningState(env, module, this);
   }
 
   @NotNull

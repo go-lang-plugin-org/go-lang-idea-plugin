@@ -20,7 +20,6 @@ import com.goide.psi.GoFile;
 import com.goide.psi.GoFunctionDeclaration;
 import com.goide.runconfig.GoConsoleFilter;
 import com.goide.runconfig.GoRunningState;
-import com.goide.runconfig.testing.frameworks.gocheck.GocheckRunConfigurationType;
 import com.goide.util.GoExecutor;
 import com.intellij.execution.DefaultExecutionResult;
 import com.intellij.execution.ExecutionException;
@@ -63,7 +62,8 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfigurationBas
     setConsoleBuilder(consoleBuilder);
 
     GoTestConsoleProperties consoleProperties = new GoTestConsoleProperties(myConfiguration, executor);
-    ConsoleView consoleView = SMTestRunnerConnectionUtil.createAndAttachConsole("gocheck", processHandler, consoleProperties, getEnvironment());
+    ConsoleView consoleView = SMTestRunnerConnectionUtil.createAndAttachConsole(myConfiguration.getFrameworkName(), processHandler, 
+                                                                                consoleProperties, getEnvironment());
     consoleView.addMessageFilter(new GoConsoleFilter(myConfiguration.getProject(), myModule, myConfiguration.getWorkingDirectory()));
 
     DefaultExecutionResult executionResult = new DefaultExecutionResult(consoleView, processHandler);
@@ -120,10 +120,6 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfigurationBas
 
     if (myCoverageFilePath != null) {
       executor.withParameters("-coverprofile=" + myCoverageFilePath, "-covermode=count");
-    }
-
-    if (myConfiguration.getType() == GocheckRunConfigurationType.getInstance()) {
-      executor.withParameters("-check.vv");
     }
 
     return executor;

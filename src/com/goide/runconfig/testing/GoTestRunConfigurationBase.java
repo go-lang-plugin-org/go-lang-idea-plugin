@@ -19,7 +19,11 @@ package com.goide.runconfig.testing;
 import com.goide.runconfig.GoModuleBasedConfiguration;
 import com.goide.runconfig.GoRunConfigurationBase;
 import com.goide.sdk.GoSdkUtil;
-import com.intellij.execution.configurations.*;
+import com.intellij.execution.configurations.ConfigurationType;
+import com.intellij.execution.configurations.RuntimeConfigurationError;
+import com.intellij.execution.configurations.RuntimeConfigurationException;
+import com.intellij.execution.testframework.TestConsoleProperties;
+import com.intellij.execution.testframework.sm.runner.OutputToGeneralTestEventsConverter;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.InvalidDataException;
@@ -51,6 +55,10 @@ public abstract class GoTestRunConfigurationBase extends GoRunConfigurationBase<
   public GoTestRunConfigurationBase(@NotNull Project project, String name, @NotNull ConfigurationType configurationType) {
     super(name, new GoModuleBasedConfiguration(project), configurationType.getConfigurationFactories()[0]);
   }
+  
+  public abstract OutputToGeneralTestEventsConverter createTestEventsConverter(@NotNull TestConsoleProperties consoleProperties);
+  
+  public abstract String getFrameworkName();
 
   @Override
   public void checkConfiguration() throws RuntimeConfigurationException {

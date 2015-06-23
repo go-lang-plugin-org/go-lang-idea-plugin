@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,6 @@
 
 package com.goide.runconfig.testing;
 
-import com.goide.runconfig.testing.frameworks.gocheck.GocheckEventsConverter;
-import com.goide.runconfig.testing.frameworks.gocheck.GocheckRunConfigurationType;
-import com.goide.runconfig.testing.frameworks.gotest.GotestEventsConverter;
-import com.goide.runconfig.testing.frameworks.gotest.GotestRunConfigurationType;
 import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.execution.testframework.TestConsoleProperties;
@@ -30,8 +26,7 @@ import com.intellij.util.config.Storage;
 import org.jetbrains.annotations.NotNull;
 
 public class GoTestConsoleProperties extends TestConsoleProperties implements SMCustomMessagesParsing {
-
-  private final RunConfiguration myConfiguration;
+  private final GoTestRunConfigurationBase myConfiguration;
 
   public GoTestConsoleProperties(@NotNull GoTestRunConfigurationBase configuration, @NotNull Executor executor) {
     super(new Storage.PropertiesComponentStorage("GoTestSupport.", PropertiesComponent.getInstance()), configuration.getProject(),
@@ -43,13 +38,7 @@ public class GoTestConsoleProperties extends TestConsoleProperties implements SM
   @Override
   public OutputToGeneralTestEventsConverter createTestEventsConverter(@NotNull String testFrameworkName,
                                                                       @NotNull TestConsoleProperties consoleProperties) {
-    if (myConfiguration.getType() == GotestRunConfigurationType.getInstance()) {
-      return new GotestEventsConverter(consoleProperties);
-    }
-    if (myConfiguration.getType() == GocheckRunConfigurationType.getInstance()) {
-      return new GocheckEventsConverter(consoleProperties);
-    }
-    throw new RuntimeException("Unexpected test framework: " + testFrameworkName);
+    return myConfiguration.createTestEventsConverter(consoleProperties);
   }
 
   @Override

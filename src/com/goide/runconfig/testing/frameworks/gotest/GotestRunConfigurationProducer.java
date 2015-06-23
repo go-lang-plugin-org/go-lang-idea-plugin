@@ -20,7 +20,6 @@ import com.goide.runconfig.testing.GoTestRunConfigurationProducerBase;
 
 
 public class GotestRunConfigurationProducer extends GoTestRunConfigurationProducerBase implements Cloneable {
-
   public GotestRunConfigurationProducer() {
     super(GotestRunConfigurationType.getInstance());
   }
