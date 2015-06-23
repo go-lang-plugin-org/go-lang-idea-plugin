@@ -77,7 +77,7 @@ public class GoFmtCheckinFactory extends CheckinHandlerFactory {
           for (PsiFile file : getPsiFiles()) {
             try {
               VirtualFile virtualFile = file.getVirtualFile();
-              new GoFmtFileAction().doSomething(virtualFile, ModuleUtilCore.findModuleForPsiElement(file), file.getProject(), "Go fmt");
+              new GoFmtFileAction().doSomething(virtualFile, ModuleUtilCore.findModuleForPsiElement(file), file.getProject(), "Go fmt", true);
             }
             catch (ExecutionException ignored) {
             }
