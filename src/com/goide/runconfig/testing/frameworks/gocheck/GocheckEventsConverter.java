@@ -60,18 +60,18 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter i
     TEST_TEARDOWN
   }
 
-  private static final Pattern SUITE_START = Pattern.compile("=== RUN (.+)\\n");
-  private static final Pattern SUITE_END = Pattern.compile("((PASS)|(FAIL))\\n");
-  private static final Pattern TEST_START = Pattern.compile("(.*)START: [^:]+:\\d+: ([^\\s]+)\\n");
-  private static final Pattern TEST_PASSED = Pattern.compile("(.*)PASS: [^:]+:\\d+: ([^\\s]+)\\t[^\\s]+\\n");
-  private static final Pattern TEST_FAILED = Pattern.compile("(.*)FAIL: [^:]+:\\d+: ([^\\s]+)\\n");
-  private static final Pattern TEST_PANICKED = Pattern.compile("(.*)PANIC: [^:]+:\\d+: ([^\\s]+)\\n");
-  private static final Pattern TEST_MISSED = Pattern.compile("(.*)MISS: [^:]+:\\d+: ([^\\s]+)\\n");
-  private static final Pattern ERROR_LOCATION = Pattern.compile("(.*:\\d+):\\n");
-  private static final Pattern ERROR_ACTUAL = Pattern.compile("\\.\\.\\. ((obtained)|(value)) (.*?)( \\+)?\\n");
-  private static final Pattern ERROR_EXPECTED = Pattern.compile("\\.\\.\\. ((expected)|(regex)) (.*?)( \\+)?\\n");
-  private static final Pattern ERROR_CONTINUATION = Pattern.compile("\\.\\.\\. {5}(.*?)( +\\+)?\\n");
-  private static final Pattern PANIC_VALUE = Pattern.compile("(.*)\\.\\.\\. (Panic: .* \\(.*\\)\\n)");
+  private static final Pattern SUITE_START = Pattern.compile("=== RUN (.+)\\s*$");
+  private static final Pattern SUITE_END = Pattern.compile("((PASS)|(FAIL))\\s*$");
+  private static final Pattern TEST_START = Pattern.compile("(.*)START: [^:]+:\\d+: ([^\\s]+)\\s*$");
+  private static final Pattern TEST_PASSED = Pattern.compile("(.*)PASS: [^:]+:\\d+: ([^\\s]+)\\t[^\\s]+\\s*$");
+  private static final Pattern TEST_FAILED = Pattern.compile("(.*)FAIL: [^:]+:\\d+: ([^\\s]+)\\s*$");
+  private static final Pattern TEST_PANICKED = Pattern.compile("(.*)PANIC: [^:]+:\\d+: ([^\\s]+)\\s*$");
+  private static final Pattern TEST_MISSED = Pattern.compile("(.*)MISS: [^:]+:\\d+: ([^\\s]+)\\s*$");
+  private static final Pattern ERROR_LOCATION = Pattern.compile("(.*:\\d+):\\s*$");
+  private static final Pattern ERROR_ACTUAL = Pattern.compile("\\.\\.\\. ((obtained)|(value)) (.*?)( \\+)?\\s*$");
+  private static final Pattern ERROR_EXPECTED = Pattern.compile("\\.\\.\\. ((expected)|(regex)) (.*?)( \\+)?\\s*$");
+  private static final Pattern ERROR_CONTINUATION = Pattern.compile("\\.\\.\\. {5}(.*?)( +\\+)?\\s*$");
+  private static final Pattern PANIC_VALUE = Pattern.compile("(.*)\\.\\.\\. (Panic: .* \\(.*\\)\\s*)$");
 
   private Scope myScope = Scope.GLOBAL;
   private String mySuiteName;
