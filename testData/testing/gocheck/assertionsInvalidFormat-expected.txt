@@ -3,11 +3,13 @@ TestSuiteStarted
   TestStarted
       - locationHint=gotest://SomeFailSuite.TestA
       - name=SomeFailSuite.TestA
-    TestStdOut
-        - name=SomeFailSuite.TestA
-        - out=... value string = "Foo"\n\n
     TestFailed
+        - actual=string = "Foo"
+        - details=
+        - expected=
+        - message=
         - name=SomeFailSuite.TestA
+        - type=comparisonFailure
   TestFinished
       - name=SomeFailSuite.TestA
 TestSuiteFinished

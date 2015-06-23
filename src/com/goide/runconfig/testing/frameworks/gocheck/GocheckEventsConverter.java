@@ -28,11 +28,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.text.ParseException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.intellij.openapi.util.Pair.pair;
 
 public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter {
   private static final String FRAMEWORK_NAME = "gocheck";
@@ -88,7 +89,7 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter {
     TestResult(@NotNull Status status) {
       this(status, null);
     }
-    
+
     TestResult(@NotNull Status status, @Nullable Map<String, String> attributes) {
       myStatus = status;
       if (attributes != null) myAttributes.putAll(attributes);
@@ -233,22 +234,22 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter {
   private TestResult detectTestResult(String text, boolean parseDetails) {
     Matcher matcher;
     if ((matcher = TEST_PASSED.matcher(text)).matches()) {
-      myStdOut.add(StringUtil.notNullize(matcher.group(1), "").trim());
+      myStdOut.add(StringUtil.notNullize(matcher.group(1)).trim());
       return new TestResult(Status.PASSED);
     }
     if ((matcher = TEST_MISSED.matcher(text)).matches()) {
-      myStdOut.add(StringUtil.notNullize(matcher.group(1), "").trim());
+      myStdOut.add(StringUtil.notNullize(matcher.group(1)).trim());
       return new TestResult(Status.MISSED);
     }
     if ((matcher = TEST_FAILED.matcher(text)).matches()) {
-      myStdOut.add(StringUtil.notNullize(matcher.group(1), "").trim());
+      myStdOut.add(StringUtil.notNullize(matcher.group(1)).trim());
       if (parseDetails) {
         return new TestResult(Status.FAILED, parseFailureAttributes());
       }
       return new TestResult(Status.FAILED);
     }
     if ((matcher = TEST_PANICKED.matcher(text)).matches()) {
-      myStdOut.add(StringUtil.notNullize(matcher.group(1), "").trim());
+      myStdOut.add(StringUtil.notNullize(matcher.group(1)).trim());
       if (parseDetails) {
         return new TestResult(Status.PANICKED, parsePanickedAttributes());
       }
@@ -300,8 +301,7 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter {
     }
     String allStdOut = StringUtil.join(myStdOut, "");
     if (!StringUtil.isEmptyOrSpaces(allStdOut)) {
-      String testStdOutMsg = ServiceMessageBuilder.testStdOut(testName)
-        .addAttribute("out", allStdOut).toString();
+      String testStdOutMsg = ServiceMessageBuilder.testStdOut(testName).addAttribute("out", allStdOut).toString();
       super.processServiceMessages(testStdOutMsg, outputType, visitor);
     }
     myStdOut = null;
@@ -323,7 +323,7 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter {
 
   /**
    * Parses assertion error report into a set of SystemMessage attributes.
-   *
+   * <p/>
    * An assertion error report usually looks like this:
    * <pre>
    * all_fail_test.go:36:
@@ -364,78 +364,73 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter {
    *
    * @return a map of system message attributes.
    */
+  @Nullable
   private Map<String, String> parseFailureAttributes() {
-    assert myStdOut != null: "expected to be called in a context where myStdOut is not null";
+    if (myStdOut == null || myStdOut.isEmpty()) return null;
 
-    int i = myStdOut.size() - 1;
-    Map<String, String> attributes = ContainerUtil.newHashMap();
-    attributes.put("type", "comparisonFailure");
+    int lineNumber = myStdOut.size() - 1;
+    StringBuilder expectedMessage = new StringBuilder();
+    StringBuilder actualMessage = new StringBuilder();
+    StringBuilder errorMessage = new StringBuilder();
+    String details = "";
 
-    // Traverse the test StdOut in bottom-up direction and retrieve the
-    // assertion error parameters.
-    try {
-      List<String> buffer = ContainerUtil.newArrayList();
-      Matcher matcher;
-
-      // Skip forward to the error description.
-      while (!StringUtil.startsWith(myStdOut.get(i), "...")) {
-        --i;
-      }
-
-      // Collected all lines of the expected value.
-      String expected = "";
-      while ((matcher = ERROR_CONTINUATION.matcher(myStdOut.get(i))).matches()) {
-        --i;
-        buffer.add(matcher.group(1));
-      }
-      if ((matcher = ERROR_EXPECTED.matcher(myStdOut.get(i))).matches()) {
-        --i;
-        buffer.add(matcher.group(4));
-        Collections.reverse(buffer);
-        expected = StringUtil.join(buffer, "\n");
-        buffer.clear();
-      }
-      attributes.put("expected", expected);
-
-      // Collect all lines of the actual value
-      String actual = "";
-      while ((matcher = ERROR_CONTINUATION.matcher(myStdOut.get(i))).matches()) {
-        --i;
-        buffer.add(matcher.group(1));
-      }
-      if ((matcher = ERROR_ACTUAL.matcher(myStdOut.get(i))).matches()) {
-        --i;
-        buffer.add(matcher.group(4));
-        Collections.reverse(buffer);
-        actual = StringUtil.join(buffer, "\n");
-        buffer.clear();
-      }
-      attributes.put("actual", actual);
-
-      // Collect all lines of the error message and details
-      while (!(matcher = ERROR_LOCATION.matcher(myStdOut.get(i))).matches()) {
-        buffer.add(myStdOut.get(i));
-        --i;
-      }
-      Collections.reverse(buffer);
-      attributes.put("message", StringUtil.join(buffer, "").trim());
-      attributes.put("details", matcher.group(1));
+    // Skip forward to the error description.
+    while (lineNumber >= 0 && !StringUtil.startsWith(myStdOut.get(lineNumber), "...")) {
+      lineNumber--;
     }
-    catch (IndexOutOfBoundsException e) {
-      // The assertion error description is not formatted as expected,
-      // so it will not be made into a ServiceMessage but will stay in
-      // the test StdOut.
-      return Collections.emptyMap();
+
+    lineNumber = collectErrorMessage(myStdOut, lineNumber, ERROR_CONTINUATION, ERROR_EXPECTED, expectedMessage);
+    lineNumber = collectErrorMessage(myStdOut, lineNumber, ERROR_CONTINUATION, ERROR_ACTUAL, actualMessage);
+
+    // Collect all lines of the error message and details
+    while (lineNumber >= 0) {
+      String line = myStdOut.get(lineNumber);
+      Matcher matcher = ERROR_LOCATION.matcher(line);
+      if (matcher.matches()) {
+        details = matcher.group(1);
+        break;
+      }
+      else {
+        errorMessage.insert(0, line);
+        lineNumber--;
+      }
     }
+
     // Remove the assertion error info from the test StdOut.
-    myStdOut = myStdOut.subList(0, i);
+    myStdOut = safeSublist(myStdOut, lineNumber);
 
-    return attributes;
+    return ContainerUtil.newHashMap(pair("expected", expectedMessage.toString().trim()),
+                                    pair("actual", actualMessage.toString().trim()),
+                                    pair("type", "comparisonFailure"),
+                                    pair("message", errorMessage.toString().trim()),
+                                    pair("details", details));
+  }
+
+  private static int collectErrorMessage(List<String> lines, int currentLine, Pattern continuationPattern, Pattern messagePattern,
+                                         StringBuilder result) {
+    while (currentLine >= 0) {
+      String line = lines.get(currentLine);
+
+      Matcher continuationMatcher = continuationPattern.matcher(line);
+      if (continuationMatcher.matches()) {
+        result.insert(0, '\n').insert(0, continuationMatcher.group(1));
+        currentLine--;
+        continue;
+      }
+
+      Matcher messageMatcher = messagePattern.matcher(line);
+      if (messageMatcher.matches()) {
+        result.insert(0, '\n').insert(0, messageMatcher.group(4));
+        currentLine--;
+      }
+      break;
+    }
+    return currentLine;
   }
 
   /**
    * Parses panic report into a set of SystemMessage attributes.
-   *
+   * <p/>
    * A panic report usually looks like this:
    * <pre>
    * ... Panic: bar (PC=0x3B0A5)
@@ -452,54 +447,46 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter {
    *
    * @return a map of system message attributes.
    */
+  @Nullable
   private Map<String, String> parsePanickedAttributes() {
-    assert myStdOut != null: "expected to be called from a context where myStdOut is not null";
+    if (myStdOut == null || myStdOut.isEmpty()) return null;
 
-    int i = myStdOut.size() - 1;
-    Map<String, String> attributes = ContainerUtil.newHashMap();
-    // Traverse the test StdOut in bottom-up direction and retrieve the
-    // panic parameters.
-    try {
-      List<String> buffer = ContainerUtil.newArrayList();
-      Matcher matcher;
-
-      // Ignore trailing empty lines.
-      while (StringUtil.isEmptyOrSpaces(myStdOut.get(i))) {
-        --i;
-      }
-
-      // All lines up until an empty one comprise the stack trace.
-      while (!StringUtil.isEmptyOrSpaces(myStdOut.get(i))) {
-        buffer.add(myStdOut.get(i--));
-      }
-      Collections.reverse(buffer);
-      attributes.put("details", StringUtil.join(buffer, ""));
-
-      // Skip the empty line.
-      --i;
-
-      // Then follows the panic description.
-      String errorMessage = "";
-      if ((matcher = PANIC_VALUE.matcher(myStdOut.get(i))).matches()) {
-        String stdoutLeftover = matcher.group(1);
-        if (!StringUtil.isEmptyOrSpaces(stdoutLeftover)) {
-          myStdOut.set(i, stdoutLeftover);
-          ++i;
-        }
-        errorMessage = matcher.group(2);
-      }
-      attributes.put("message", errorMessage);
-    }
-    catch (IndexOutOfBoundsException e) {
-      // The panic description is not formatted as expected, so it will
-      // not be made into a ServiceMessage but will stay in the test StdOut.
-      return Collections.emptyMap();
+    int lineNumber = myStdOut.size() - 1;
+    // Ignore trailing empty lines.
+    while (lineNumber >= 0 && StringUtil.isEmptyOrSpaces(myStdOut.get(lineNumber))) {
+      lineNumber--;
     }
 
+    StringBuilder detailsMessage = new StringBuilder();
+    // All lines up until an empty one comprise the stack trace.
+    while (lineNumber >= 0 && !StringUtil.isEmptyOrSpaces(myStdOut.get(lineNumber))) {
+      detailsMessage.insert(0, myStdOut.get(lineNumber));
+      lineNumber--;
+    }
+    lineNumber--; // skip empty line
+
+    // Then follows the panic description.
+    String errorMessage = "";
+    Matcher matcher;
+    if (lineNumber >= 0 && (matcher = PANIC_VALUE.matcher(myStdOut.get(lineNumber))).matches()) {
+      String stdoutLeftover = matcher.group(1);
+      if (!StringUtil.isEmptyOrSpaces(stdoutLeftover)) {
+        myStdOut.set(lineNumber, stdoutLeftover);
+        lineNumber++;
+      }
+      errorMessage = matcher.group(2);
+    }
     // Remove the panic info from the test StdOut.
-    myStdOut = myStdOut.subList(0, i);
+    myStdOut = safeSublist(myStdOut, lineNumber);
+    return ContainerUtil.newHashMap(pair("details", detailsMessage.toString()), pair("message", errorMessage));
+  }
 
-    return attributes;
+  @NotNull
+  private static List<String> safeSublist(@NotNull List<String> list, int until) {
+    if (0 < until && until <= list.size() - 1) {
+      return list.subList(0, until);
+    }
+    return ContainerUtil.newArrayList();
   }
 
   @NotNull
