@@ -91,6 +91,28 @@ public class GoCompletionUtil {
       presentation.setItemText(element.getLookupString() + paramText);
     }
   };
+  public static final LookupElementRenderer<LookupElement> VARIABLE_RENDERER = new LookupElementRenderer<LookupElement>() {
+    @Override
+    public void renderElement(LookupElement element, LookupElementPresentation p) {
+      PsiElement o = element.getPsiElement();
+      if (!(o instanceof GoNamedElement)) return;
+      GoNamedElement v = (GoNamedElement)o;
+      GoType type = v.getGoType(null);
+      String text = GoPsiImplUtil.getText(type);
+      Icon icon = v instanceof GoVarDefinition ? GoIcons.VARIABLE :
+                  v instanceof GoParamDefinition ? GoIcons.PARAMETER :
+                  v instanceof GoFieldDefinition ? GoIcons.FIELD :
+                  v instanceof GoReceiver ? GoIcons.RECEIVER :
+                  v instanceof GoConstDefinition ? GoIcons.CONSTANT :
+                  v instanceof GoAnonymousFieldDefinition ? GoIcons.FIELD :
+                  null;
+
+      p.setIcon(icon);
+      p.setTailText(calcTailTextForFields(v), true);
+      p.setTypeText(text);
+      p.setTypeGrayed(true);
+    }
+  };
 
   private static class Lazy {
     private static final SingleCharInsertHandler DIR_INSERT_HANDLER = new SingleCharInsertHandler('/');
@@ -186,15 +208,6 @@ public class GoCompletionUtil {
 
   @NotNull
   public static LookupElement createVariableLikeLookupElement(@NotNull GoNamedElement v) {
-    Icon icon = v instanceof GoVarDefinition ? GoIcons.VARIABLE :
-                v instanceof GoParamDefinition ? GoIcons.PARAMETER :
-                v instanceof GoFieldDefinition ? GoIcons.FIELD :
-                v instanceof GoReceiver ? GoIcons.RECEIVER :
-                v instanceof GoConstDefinition ? GoIcons.CONSTANT :
-                v instanceof GoAnonymousFieldDefinition ? GoIcons.FIELD :
-                null;
-    GoType type = v.getGoType(null);
-    String text = GoPsiImplUtil.getText(type);
     String name = StringUtil.notNullize(v.getName());
     SingleCharInsertHandler handler =
       v instanceof GoFieldDefinition ?
@@ -217,10 +230,7 @@ public class GoCompletionUtil {
       } : null;
     return PrioritizedLookupElement.withPriority(
       LookupElementBuilder.createWithSmartPointer(name, v)
-        .withLookupString(name.toLowerCase())
-        .withIcon(icon)
-        .withTailText(calcTailTextForFields(v), true)
-        .withTypeText(text, true)
+        .withLookupString(name.toLowerCase()).withRenderer(VARIABLE_RENDERER)
         .withInsertHandler(handler)
       , VAR_PRIORITY);
   }
