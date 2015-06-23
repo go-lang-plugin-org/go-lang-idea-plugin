@@ -16,11 +16,19 @@
 
 package com.goide.runconfig.testing.frameworks.gocheck;
 
+import com.goide.runconfig.GoRunUtil;
 import com.goide.runconfig.testing.GoTestRunConfigurationProducerBase;
+import com.intellij.openapi.module.Module;
+import org.jetbrains.annotations.Nullable;
 
 
 public class GocheckRunConfigurationProducer extends GoTestRunConfigurationProducerBase implements Cloneable {
   public GocheckRunConfigurationProducer() {
     super(GocheckRunConfigurationType.getInstance());
+  }
+
+  @Override
+  protected boolean isAvailableInModule(@Nullable Module module) {
+    return super.isAvailableInModule(module) && GoRunUtil.hasGoCheckSupport(module);
   }
 }

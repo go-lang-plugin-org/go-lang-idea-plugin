@@ -50,9 +50,7 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
     }
 
     Module module = ModuleUtilCore.findModuleForPsiElement(contextElement);
-    if (module == null || !GoSdkService.getInstance(configuration.getProject()).isGoModule(module)) {
-      return false;
-    }
+    if (!isAvailableInModule(module)) return false;
     
     configuration.setModule(module);
     if (contextElement instanceof PsiDirectory) {
@@ -92,6 +90,10 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
     }
 
     return false;
+  }
+
+  protected boolean isAvailableInModule(@Nullable Module module) {
+    return module != null && GoSdkService.getInstance(module.getProject()).isGoModule(module);
   }
 
   @Override

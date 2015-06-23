@@ -20,9 +20,12 @@ import com.goide.GoConstants;
 import com.goide.GoFileType;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoPackageClause;
+import com.goide.stubs.index.GoPackagesIndex;
+import com.goide.util.GoUtil;
 import com.intellij.execution.actions.ConfigurationContext;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.TextBrowseFolderListener;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
@@ -31,14 +34,20 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
+import com.intellij.psi.stubs.StubIndex;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.regex.Pattern;
+
 public class GoRunUtil {
+  private static final Pattern GO_CHECK_IMPORT_PATH = Pattern.compile("gopkg\\.in/check\\.v\\d+");
+  private static final Pattern GO_CHECK_GITHUB_IMPORT_PATH = Pattern.compile("github\\.com/go-check/check\\.v\\d+");
+
   private GoRunUtil() {
-    
+
   }
 
   @Contract("null -> false")
@@ -72,6 +81,18 @@ public class GoRunUtil {
     return psiElement;
   }
 
+  public static boolean hasGoCheckSupport(@Nullable Module module) {
+    if (module == null) return false;
+    for (GoFile file : StubIndex.getElements(GoPackagesIndex.KEY, "check", module.getProject(), GoUtil.moduleScope(module), GoFile.class)) {
+      String importPath = file.getImportPath();
+      if (importPath != null && (GO_CHECK_IMPORT_PATH.matcher(importPath).matches() ||
+                                 GO_CHECK_GITHUB_IMPORT_PATH.matcher(importPath).matches())) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public static void installGoWithMainFileChooser(final Project project, @NotNull TextFieldWithBrowseButton fileField) {
     installFileChooser(project, fileField, false, new Condition<VirtualFile>() {
       @Override
@@ -84,7 +105,7 @@ public class GoRunUtil {
       }
     });
   }
-  
+
   public static boolean isMainGoFile(@Nullable PsiFile psiFile) {
     if (psiFile != null && psiFile instanceof GoFile) {
       return GoConstants.MAIN.equals(((GoFile)psiFile).getPackageName()) && ((GoFile)psiFile).hasMainFunction();
