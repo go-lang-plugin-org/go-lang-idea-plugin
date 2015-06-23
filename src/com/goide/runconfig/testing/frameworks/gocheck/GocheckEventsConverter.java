@@ -83,13 +83,18 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter {
 
   private static final class TestResult {
     private final Status myStatus;
-    private final Map<String, String> myAttributes;
+    private final Map<String, String> myAttributes = ContainerUtil.newHashMap();
 
-    TestResult(Status status, Map<String, String> attributes) {
+    TestResult(@NotNull Status status) {
+      this(status, null);
+    }
+    
+    TestResult(@NotNull Status status, @Nullable Map<String, String> attributes) {
       myStatus = status;
-      this.myAttributes = ContainerUtil.newHashMap(attributes);
+      if (attributes != null) myAttributes.putAll(attributes);
     }
 
+    @NotNull
     public Status getStatus() {
       return myStatus;
     }
@@ -229,25 +234,25 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter {
     Matcher matcher;
     if ((matcher = TEST_PASSED.matcher(text)).matches()) {
       myStdOut.add(StringUtil.notNullize(matcher.group(1), "").trim());
-      return new TestResult(Status.PASSED, Collections.<String, String>emptyMap());
+      return new TestResult(Status.PASSED);
     }
     if ((matcher = TEST_MISSED.matcher(text)).matches()) {
       myStdOut.add(StringUtil.notNullize(matcher.group(1), "").trim());
-      return new TestResult(Status.MISSED, Collections.<String, String>emptyMap());
+      return new TestResult(Status.MISSED);
     }
     if ((matcher = TEST_FAILED.matcher(text)).matches()) {
       myStdOut.add(StringUtil.notNullize(matcher.group(1), "").trim());
       if (parseDetails) {
         return new TestResult(Status.FAILED, parseFailureAttributes());
       }
-      return new TestResult(Status.FAILED, Collections.<String, String>emptyMap());
+      return new TestResult(Status.FAILED);
     }
     if ((matcher = TEST_PANICKED.matcher(text)).matches()) {
       myStdOut.add(StringUtil.notNullize(matcher.group(1), "").trim());
       if (parseDetails) {
         return new TestResult(Status.PANICKED, parsePanickedAttributes());
       }
-      return new TestResult(Status.FAILED, Collections.<String, String>emptyMap());
+      return new TestResult(Status.FAILED);
     }
     return null;
   }
