@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.goide.runconfig.testing.frameworks;
+package com.goide.runconfig.testing;
 
 import com.goide.runconfig.GoConfigurationFactoryBase;
 import com.goide.runconfig.before.GoBeforeRunTaskProvider;

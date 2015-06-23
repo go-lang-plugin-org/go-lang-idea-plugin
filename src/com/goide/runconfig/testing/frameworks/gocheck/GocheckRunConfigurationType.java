@@ -17,7 +17,7 @@
 package com.goide.runconfig.testing.frameworks.gocheck;
 
 import com.goide.GoIcons;
-import com.goide.runconfig.testing.frameworks.GoTestConfigurationFactoryBase;
+import com.goide.runconfig.testing.GoTestConfigurationFactoryBase;
 import com.intellij.execution.configurations.ConfigurationTypeBase;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.openapi.extensions.Extensions;
