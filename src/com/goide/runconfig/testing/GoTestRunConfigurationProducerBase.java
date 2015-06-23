@@ -54,7 +54,7 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
     
     configuration.setModule(module);
     if (contextElement instanceof PsiDirectory) {
-      configuration.setName("All in '" + ((PsiDirectory)contextElement).getName() + "'");
+      configuration.setName(getPackageConfigurationName(((PsiDirectory)contextElement).getName()));
       configuration.setKind(GoTestRunConfigurationBase.Kind.DIRECTORY);
       String directoryPath = ((PsiDirectory)contextElement).getVirtualFile().getPath();
       configuration.setDirectoryPath(directoryPath);
@@ -68,19 +68,19 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
           String packageName = StringUtil.notNullize(((GoFile)file).getImportPath());
           configuration.setKind(GoTestRunConfigurationBase.Kind.PACKAGE);
           configuration.setPackage(packageName);
-          configuration.setName("All in '" + packageName + "'");
+          configuration.setName(getPackageConfigurationName(packageName));
         }
         else {
           String functionNameFromContext = findFunctionNameFromContext(contextElement);
           if (functionNameFromContext != null) {
-            configuration.setName(functionNameFromContext + " in " + file.getName());
+            configuration.setName(getFunctionConfigurationName(functionNameFromContext, getFileConfigurationName(file.getName())));
             configuration.setPattern("^" + functionNameFromContext + "$");
 
             configuration.setKind(GoTestRunConfigurationBase.Kind.PACKAGE);
             configuration.setPackage(StringUtil.notNullize(((GoFile)file).getImportPath()));
           }
           else {
-            configuration.setName(file.getName());
+            configuration.setName(getFileConfigurationName(file.getName()));
             configuration.setKind(GoTestRunConfigurationBase.Kind.FILE);
             configuration.setFilePath(file.getVirtualFile().getPath());
           }
@@ -90,6 +90,21 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
     }
 
     return false;
+  }
+
+  @NotNull
+  protected String getFileConfigurationName(@NotNull String fileName) {
+    return fileName;
+  }
+
+  @NotNull
+  protected String getFunctionConfigurationName(@NotNull String functionNameFromContext, @NotNull String fileName) {
+    return functionNameFromContext + " in " + fileName;
+  }
+
+  @NotNull
+  protected String getPackageConfigurationName(@NotNull String packageName) {
+    return "All in '" + packageName + "'";
   }
 
   protected boolean isAvailableInModule(@Nullable Module module) {
