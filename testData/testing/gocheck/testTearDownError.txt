@@ -1,0 +1,30 @@
+=== RUN Test
+START: setups_test.go:19: FixtureTestTearDownErrorSuite.SetUpSuite
+<SuiteSetUp>PASS: setups_test.go:19: FixtureTestTearDownErrorSuite.SetUpSuite	0.000s
+
+START: setups_test.go:36: FixtureTestTearDownErrorSuite.TestA
+START: setups_test.go:27: FixtureTestTearDownErrorSuite.SetUpTest
+<TestSetUp>PASS: setups_test.go:27: FixtureTestTearDownErrorSuite.SetUpTest	0.000s
+
+<TestA>START: setups_test.go:31: FixtureTestTearDownErrorSuite.TearDownTest
+<TestTearDown>setups_test.go:33:
+    c.Assert("Foo", Equals, "Bar")
+... obtained string = "Foo"
+... expected string = "Bar"
+
+FAIL: setups_test.go:31: FixtureTestTearDownErrorSuite.TearDownTest
+
+... Panic: Fixture has panicked (see related PANIC)
+PANIC: setups_test.go:36: FixtureTestTearDownErrorSuite.TestA
+
+START: setups_test.go:40: FixtureTestTearDownErrorSuite.TestB
+MISS: setups_test.go:40: FixtureTestTearDownErrorSuite.TestB
+
+START: setups_test.go:23: FixtureTestTearDownErrorSuite.TearDownSuite
+<SuiteTearDown>PASS: setups_test.go:23: FixtureTestTearDownErrorSuite.TearDownSuite	0.000s
+
+OOPS: 0 passed, 1 FAILED, 2 MISSED
+--- FAIL: Test (0.00s)
+FAIL
+exit status 1
+FAIL	github.com/mailgun/sandbox/fixtureTestTearDownError	0.005s

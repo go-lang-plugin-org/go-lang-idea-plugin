@@ -153,8 +153,10 @@
     <configurationType implementation="com.goide.runconfig.application.GoApplicationRunConfigurationType"/>
 
     <!-- test -->
-    <runConfigurationProducer implementation="com.goide.runconfig.testing.GoTestRunConfigurationProducer"/>
-    <configurationType implementation="com.goide.runconfig.testing.GoTestRunConfigurationType"/>
+    <runConfigurationProducer implementation="com.goide.runconfig.testing.frameworks.gotest.GotestRunConfigurationProducer"/>
+    <configurationType implementation="com.goide.runconfig.testing.frameworks.gotest.GotestRunConfigurationType"/>
+    <runConfigurationProducer implementation="com.goide.runconfig.testing.frameworks.gocheck.GocheckRunConfigurationProducer"/>
+    <configurationType implementation="com.goide.runconfig.testing.frameworks.gocheck.GocheckRunConfigurationType"/>
     <testFinder implementation="com.goide.runconfig.testing.GoTestFinder"/>
     <testSrcLocator implementation="com.goide.runconfig.testing.GoTestLocationProvider"/>
 

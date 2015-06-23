@@ -1,0 +1,40 @@
+TestSuiteStarted
+    - name=SomePanicSuite
+  TestStarted
+      - locationHint=gotest://SomePanicSuite.TestA
+      - name=SomePanicSuite.TestA
+  TestFinished
+      - name=SomePanicSuite.TestA
+  TestStarted
+      - locationHint=gotest://SomePanicSuite.TestB
+      - name=SomePanicSuite.TestB
+  TestFinished
+      - name=SomePanicSuite.TestB
+  TestStarted
+      - locationHint=gotest://SomePanicSuite.TestC
+      - name=SomePanicSuite.TestC
+    TestStdOut
+        - name=SomePanicSuite.TestC
+        - out=something
+    TestFailed
+        - details=/usr/local/go/src/runtime/panic.go:387\n  in gopanic\nsome_panic_test.go:27\n  in SomePanicSuite.TestC\n/usr/local/go/src/reflect/value.go:296\n  in Value.Call\n/usr/local/go/src/runtime/asm_amd64.s:2232\n  in goexit\n
+        - message=Panic: foo (PC=0x3B0A5)\n
+        - name=SomePanicSuite.TestC
+  TestFinished
+      - name=SomePanicSuite.TestC
+  TestStarted
+      - locationHint=gotest://SomePanicSuite.TestD
+      - name=SomePanicSuite.TestD
+    TestFailed
+        - details=/usr/local/go/src/runtime/panic.go:387\n  in gopanic\nsome_panic_test.go:31\n  in SomePanicSuite.TestD\n/usr/local/go/src/reflect/value.go:296\n  in Value.Call\n/usr/local/go/src/runtime/asm_amd64.s:2232\n  in goexit\n
+        - message=Panic: bar (PC=0x3B0A5)\n
+        - name=SomePanicSuite.TestD
+  TestFinished
+      - name=SomePanicSuite.TestD
+  TestStarted
+      - locationHint=gotest://SomePanicSuite.TestE
+      - name=SomePanicSuite.TestE
+  TestFinished
+      - name=SomePanicSuite.TestE
+TestSuiteFinished
+    - name=SomePanicSuite

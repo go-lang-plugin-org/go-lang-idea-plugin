@@ -1,0 +1,29 @@
+TestSuiteStarted
+    - name=FixtureTestAndTearDownErrorSuite
+  TestStarted
+      - locationHint=gotest://FixtureTestAndTearDownErrorSuite.TestA
+      - name=FixtureTestAndTearDownErrorSuite.TestA
+    TestStdOut
+        - name=FixtureTestAndTearDownErrorSuite.TestA
+        - out=<TestSetUp>\n<TestA>setups_test.go:38:\n    c.Assert("blah", IsNil)\n... value string = "blah"\n
+    TestFailed
+        - actual=string = "Foo"
+        - details=<TestTearDown>setups_test.go:33
+        - expected=string = "Bar"
+        - message=c.Assert("Foo", Equals, "Bar")
+        - name=FixtureTestAndTearDownErrorSuite.TestA
+        - type=comparisonFailure
+  TestFinished
+      - name=FixtureTestAndTearDownErrorSuite.TestA
+  TestStarted
+      - locationHint=gotest://FixtureTestAndTearDownErrorSuite.TestB
+      - name=FixtureTestAndTearDownErrorSuite.TestB
+    TestIgnored
+        - name=FixtureTestAndTearDownErrorSuite.TestB
+  TestFinished
+      - name=FixtureTestAndTearDownErrorSuite.TestB
+TestSuiteFinished
+    - name=FixtureTestAndTearDownErrorSuite
+TestStdOut
+    - name=SuiteTearDown
+    - out=<SuiteTearDown>\nOOPS: 0 passed, 1 FAILED, 2 MISSED\n--- FAIL: Test (0.00s)\n

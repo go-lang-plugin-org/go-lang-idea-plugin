@@ -1,0 +1,47 @@
+TestStarted
+    - locationHint=gotest://Test_Sd
+    - name=Test_Sd
+  TestStdOut
+      - name=Test_Sd
+      - out=\n
+TestFinished
+    - name=Test_Sd
+TestStarted
+    - locationHint=gotest://Test_Sp
+    - name=Test_Sp
+  TestStdOut
+      - name=Test_Sp
+      - out=\n
+  TestStdOut
+      - name=Test_Sp
+      - out=Test_Sp............end
+  TestIgnored
+      - message=sputils_test.go:23: sad\n
+      - name=Test_Sp
+TestFinished
+    - name=Test_Sp
+TestStarted
+    - locationHint=gotest://Test_Sp2
+    - name=Test_Sp2
+  TestStdOut
+      - name=Test_Sp2
+      - out=\n
+  TestStdOut
+      - name=Test_Sp2
+      - out=Test_Sp............end\n
+TestFinished
+    - name=Test_Sp2
+TestStarted
+    - locationHint=gotest://Test_Sp3
+    - name=Test_Sp3
+  TestStdOut
+      - name=Test_Sp3
+      - out=\n
+  TestStdOut
+      - name=Test_Sp3
+      - out=Test_Sp............end
+  TestFailed
+      - message=sputils_test.go:43: sad\n
+      - name=Test_Sp3
+TestFinished
+    - name=Test_Sp3

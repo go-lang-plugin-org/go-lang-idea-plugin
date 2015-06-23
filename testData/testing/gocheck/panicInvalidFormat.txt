@@ -1,0 +1,14 @@
+=== RUN Test
+START: some_panic_test.go:30: SomePanicSuite.TestD
+  in SomePanicSuite.TestD
+/usr/local/go/src/reflect/value.go:296
+  in Value.Call
+/usr/local/go/src/runtime/asm_amd64.s:2232
+  in goexit
+PANIC: some_panic_test.go:30: SomePanicSuite.TestD
+
+OOPS: 0 passed, 1 PANICKED
+--- FAIL: Test (0.00s)
+FAIL
+exit status 1
+FAIL	github.com/mailgun/sandbox/some_panic	0.005s

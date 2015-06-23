@@ -1,0 +1,31 @@
+TestSuiteStarted
+    - name=FixtureSuite
+  TestStarted
+      - locationHint=gotest://FixtureSuite.TestA
+      - name=FixtureSuite.TestA
+    TestStdOut
+        - name=FixtureSuite.TestA
+        - out=SetUp\n\nTearDown\n\n
+  TestFinished
+      - name=FixtureSuite.TestA
+  TestStarted
+      - locationHint=gotest://FixtureSuite.TestB
+      - name=FixtureSuite.TestB
+    TestStdOut
+        - name=FixtureSuite.TestB
+        - out=SetUp\n\nsomethingTearDown\n\n
+  TestFinished
+      - name=FixtureSuite.TestB
+  TestStarted
+      - locationHint=gotest://FixtureSuite.TestC
+      - name=FixtureSuite.TestC
+    TestStdOut
+        - name=FixtureSuite.TestC
+        - out=SetUp\n\nsomethingTearDown\n\n
+  TestFinished
+      - name=FixtureSuite.TestC
+TestSuiteFinished
+    - name=FixtureSuite
+TestStdOut
+    - name=SuiteTearDown
+    - out=TearDown\n\nOK: 3 passed\n--- PASS: Test (0.00s)\n

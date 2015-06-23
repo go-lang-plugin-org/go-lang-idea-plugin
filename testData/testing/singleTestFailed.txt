@@ -1,6 +1,0 @@
-=== RUN TestSqrt2
---- FAIL: TestSqrt2 (0.00 seconds)
-	test_test.go:15: Sqrt(4) = 2, want 3
-FAIL
-exit status 1
-FAIL	_/Users/zolotov/IdeaProjects/untitled/go	0.012s

@@ -1,0 +1,29 @@
+=== RUN Test
+START: setups_test.go:19: FixtureSuiteSetUpErrorSuite.SetUpSuite
+<SuiteSetUp>setups_test.go:21:
+    c.Assert("Foo", Equals, "Bar")
+... obtained string = "Foo"
+... expected string = "Bar"
+
+FAIL: setups_test.go:19: FixtureSuiteSetUpErrorSuite.SetUpSuite
+
+START: setups_test.go:36: FixtureSuiteSetUpErrorSuite.TestA
+MISS: setups_test.go:36: FixtureSuiteSetUpErrorSuite.TestA
+
+START: setups_test.go:40: FixtureSuiteSetUpErrorSuite.TestB
+MISS: setups_test.go:40: FixtureSuiteSetUpErrorSuite.TestB
+
+START: setups_test.go:45: FixtureSuiteSetUpErrorSuite.TestC
+MISS: setups_test.go:45: FixtureSuiteSetUpErrorSuite.TestC
+
+START: setups_test.go:51: FixtureSuiteSetUpErrorSuite.TestD
+MISS: setups_test.go:51: FixtureSuiteSetUpErrorSuite.TestD
+
+START: setups_test.go:24: FixtureSuiteSetUpErrorSuite.TearDownSuite
+<SuiteTearDown>PASS: setups_test.go:24: FixtureSuiteSetUpErrorSuite.TearDownSuite	0.000s
+
+OOPS: 0 passed, 1 FAILED, 2 MISSED
+--- FAIL: Test (0.00s)
+FAIL
+exit status 1
+FAIL	github.com/mailgun/sandbox/fixtureSuiteSetUpError	0.005s

@@ -1,0 +1,17 @@
+=== RUN TestEWMA1
+hello
+hello
+
+--- PASS: TestEWMA1 (0.00 seconds)
+=== RUN TestEWMA5
+hello2
+hello2
+
+--- FAIL: TestEWMA5 (0.00 seconds)
+	ewma_test.go:122: 6 minute a.Rate(): 0.18071652714732128 != 0.18071652714732128
+=== RUN TestEWMA15
+hello3
+hello3
+--- PASS: TestEWMA15 (0.00 seconds)
+FAIL
+exit status 1

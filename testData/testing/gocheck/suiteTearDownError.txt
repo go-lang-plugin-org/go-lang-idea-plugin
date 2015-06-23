@@ -1,0 +1,35 @@
+=== RUN Test
+START: setups_test.go:19: FixtureSuiteTearDownErrorSuite.SetUpSuite
+<SuiteSetUp>PASS: setups_test.go:19: FixtureSuiteTearDownErrorSuite.SetUpSuite	0.000s
+
+START: setups_test.go:36: FixtureSuiteTearDownErrorSuite.TestA
+START: setups_test.go:28: FixtureSuiteTearDownErrorSuite.SetUpTest
+<TestSetUp>PASS: setups_test.go:28: FixtureSuiteTearDownErrorSuite.SetUpTest	0.000s
+
+<TestA>START: setups_test.go:32: FixtureSuiteTearDownErrorSuite.TearDownTest
+<TestTearDown>PASS: setups_test.go:32: FixtureSuiteTearDownErrorSuite.TearDownTest	0.000s
+
+PASS: setups_test.go:36: FixtureSuiteTearDownErrorSuite.TestA	0.000s
+
+START: setups_test.go:40: FixtureSuiteTearDownErrorSuite.TestB
+START: setups_test.go:28: FixtureSuiteTearDownErrorSuite.SetUpTest
+<TestSetUp>PASS: setups_test.go:28: FixtureSuiteTearDownErrorSuite.SetUpTest	0.000s
+
+<TestB>START: setups_test.go:32: FixtureSuiteTearDownErrorSuite.TearDownTest
+<TestTearDown>PASS: setups_test.go:32: FixtureSuiteTearDownErrorSuite.TearDownTest	0.000s
+
+PASS: setups_test.go:40: FixtureSuiteTearDownErrorSuite.TestB	0.000s
+
+START: setups_test.go:23: FixtureSuiteTearDownErrorSuite.TearDownSuite
+<SuiteTearDown>setups_test.go:25:
+    c.Assert("Foo", Equals, "Bar")
+... obtained string = "Foo"
+... expected string = "Bar"
+
+FAIL: setups_test.go:23: FixtureSuiteTearDownErrorSuite.TearDownSuite
+
+OOPS: 2 passed, 1 FAILED
+--- FAIL: Test (0.00s)
+FAIL
+exit status 1
+FAIL	github.com/mailgun/sandbox/fixtureSuiteTearDownError	0.006s

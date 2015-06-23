@@ -1,0 +1,76 @@
+TestSuiteStarted
+    - name=SomeFailSuite
+  TestStarted
+      - locationHint=gotest://SomeFailSuite.TestA
+      - name=SomeFailSuite.TestA
+    TestFailed
+        - actual=string = "Foo"
+        - details=Somethingall_fail_test.go:21
+        - expected=
+        - message=c.Assert("Foo", IsNil)
+        - name=SomeFailSuite.TestA
+        - type=comparisonFailure
+  TestFinished
+      - name=SomeFailSuite.TestA
+  TestStarted
+      - locationHint=gotest://SomeFailSuite.TestB
+      - name=SomeFailSuite.TestB
+    TestFailed
+        - actual== nil
+        - details=Somethingall_fail_test.go:26
+        - expected=
+        - message=c.Assert(nil, NotNil)
+        - name=SomeFailSuite.TestB
+        - type=comparisonFailure
+  TestFinished
+      - name=SomeFailSuite.TestB
+  TestStarted
+      - locationHint=gotest://SomeFailSuite.TestC
+      - name=SomeFailSuite.TestC
+    TestFailed
+        - actual=string = "Foo"
+        - details=Somethingall_fail_test.go:31
+        - expected=string = "[bB].(R|r)"
+        - message=c.Assert("Foo", Matches, "[bB].(R|r)")
+        - name=SomeFailSuite.TestC
+        - type=comparisonFailure
+  TestFinished
+      - name=SomeFailSuite.TestC
+  TestStarted
+      - locationHint=gotest://SomeFailSuite.TestD
+      - name=SomeFailSuite.TestD
+    TestFailed
+        - actual=string = "Foo"
+        - details=Somethingall_fail_test.go:36
+        - expected=string = "Bar"
+        - message=c.Assert("Foo", Equals, "Bar")
+        - name=SomeFailSuite.TestD
+        - type=comparisonFailure
+  TestFinished
+      - name=SomeFailSuite.TestD
+  TestStarted
+      - locationHint=gotest://SomeFailSuite.TestE
+      - name=SomeFailSuite.TestE
+    TestFailed
+        - actual=[]string = []string{"a", "b"}
+        - details=Somethingall_fail_test.go:41
+        - expected=[]string = []string{"a", "B"}
+        - message=c.Assert([]string{"a", "b"}, DeepEquals, []string{"a", "B"})
+        - name=SomeFailSuite.TestE
+        - type=comparisonFailure
+  TestFinished
+      - name=SomeFailSuite.TestE
+  TestStarted
+      - locationHint=gotest://SomeFailSuite.TestF
+      - name=SomeFailSuite.TestF
+    TestFailed
+        - actual=string = ""\n"multi\n"\n"\n"\n"\t          line\n"\n"\t          string"
+        - details=Somethingall_fail_test.go:54
+        - expected=string = ""\n"Another\n"\n"multi\n"\n"\tline\n"\n"\t\tstring"
+        - message=c.Assert(`multi\n\n    	          line\n    	          string`,\n        Equals,\n        `Another\n    multi\n    	line\n    		string`)
+        - name=SomeFailSuite.TestF
+        - type=comparisonFailure
+  TestFinished
+      - name=SomeFailSuite.TestF
+TestSuiteFinished
+    - name=SomeFailSuite

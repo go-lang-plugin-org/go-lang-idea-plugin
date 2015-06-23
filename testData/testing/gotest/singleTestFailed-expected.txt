@@ -1,0 +1,8 @@
+TestStarted
+    - locationHint=gotest://TestSqrt2
+    - name=TestSqrt2
+  TestFailed
+      - message=test_test.go:15: Sqrt(4) = 2, want 3\n
+      - name=TestSqrt2
+TestFinished
+    - name=TestSqrt2

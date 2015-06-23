@@ -1,0 +1,14 @@
+TestSuiteStarted
+    - name=SomeFailSuite
+  TestStarted
+      - locationHint=gotest://SomeFailSuite.TestA
+      - name=SomeFailSuite.TestA
+    TestStdOut
+        - name=SomeFailSuite.TestA
+        - out=... value string = "Foo"\n\n
+    TestFailed
+        - name=SomeFailSuite.TestA
+  TestFinished
+      - name=SomeFailSuite.TestA
+TestSuiteFinished
+    - name=SomeFailSuite

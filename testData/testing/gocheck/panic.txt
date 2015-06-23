@@ -1,0 +1,41 @@
+=== RUN Test
+START: some_panic_test.go:20: SomePanicSuite.TestA
+PASS: some_panic_test.go:20: SomePanicSuite.TestA	0.000s
+
+START: some_panic_test.go:23: SomePanicSuite.TestB
+PASS: some_panic_test.go:23: SomePanicSuite.TestB	0.000s
+
+START: some_panic_test.go:25: SomePanicSuite.TestC
+something... Panic: foo (PC=0x3B0A5)
+
+/usr/local/go/src/runtime/panic.go:387
+  in gopanic
+some_panic_test.go:27
+  in SomePanicSuite.TestC
+/usr/local/go/src/reflect/value.go:296
+  in Value.Call
+/usr/local/go/src/runtime/asm_amd64.s:2232
+  in goexit
+PANIC: some_panic_test.go:25: SomePanicSuite.TestC
+
+START: some_panic_test.go:30: SomePanicSuite.TestD
+... Panic: bar (PC=0x3B0A5)
+
+/usr/local/go/src/runtime/panic.go:387
+  in gopanic
+some_panic_test.go:31
+  in SomePanicSuite.TestD
+/usr/local/go/src/reflect/value.go:296
+  in Value.Call
+/usr/local/go/src/runtime/asm_amd64.s:2232
+  in goexit
+PANIC: some_panic_test.go:30: SomePanicSuite.TestD
+
+START: some_panic_test.go:36: SomePanicSuite.TestE
+PASS: some_panic_test.go:36: SomePanicSuite.TestE	0.000s
+
+OOPS: 3 passed, 2 PANICKED
+--- FAIL: Test (0.00s)
+FAIL
+exit status 1
+FAIL	github.com/mailgun/sandbox/some_panic	0.005s
