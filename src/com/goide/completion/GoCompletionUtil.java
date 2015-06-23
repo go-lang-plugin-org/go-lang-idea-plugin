@@ -70,7 +70,7 @@ public class GoCompletionUtil {
   };
   public static final LookupElementRenderer<LookupElement> FUNCTION_RENDERER = new LookupElementRenderer<LookupElement>() {
     @Override
-    public void renderElement(LookupElement element, LookupElementPresentation presentation) {
+    public void renderElement(LookupElement element, LookupElementPresentation p) {
       PsiElement o = element.getPsiElement();
       if (!(o instanceof GoNamedSignatureOwner)) return;
       GoNamedSignatureOwner f = (GoNamedSignatureOwner)o;
@@ -84,11 +84,11 @@ public class GoCompletionUtil {
         if (result != null) typeText = result.getText();
       }
 
-      presentation.setIcon(icon);
-      presentation.setTypeText(typeText);
-      presentation.setTypeGrayed(true);
-      presentation.setTailText(calcTailText(f), true);
-      presentation.setItemText(element.getLookupString() + paramText);
+      p.setIcon(icon);
+      p.setTypeText(typeText);
+      p.setTypeGrayed(true);
+      p.setTailText(calcTailText(f), true);
+      p.setItemText(element.getLookupString() + paramText);
     }
   };
   public static final LookupElementRenderer<LookupElement> VARIABLE_RENDERER = new LookupElementRenderer<LookupElement>() {
