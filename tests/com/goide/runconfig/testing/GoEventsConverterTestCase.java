@@ -21,6 +21,7 @@ import com.intellij.execution.Executor;
 import com.intellij.execution.executors.DefaultRunExecutor;
 import com.intellij.execution.process.ProcessOutputTypes;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.vfs.CharsetToolkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -34,7 +35,7 @@ public abstract class GoEventsConverterTestCase extends GoCodeInsightFixtureTest
       (GoTestEventsConverterBase)consoleProperties.createTestEventsConverter("gotest", consoleProperties);
 
     LoggingServiceMessageVisitor serviceMessageVisitor = new LoggingServiceMessageVisitor();
-    for (String line : FileUtil.loadLines(new File(getTestDataPath(), getTestName(true) + ".txt"))) {
+    for (String line : FileUtil.loadLines(new File(getTestDataPath(), getTestName(true) + ".txt"), CharsetToolkit.UTF8)) {
       converter.processServiceMessages(line + "\n", ProcessOutputTypes.STDOUT, serviceMessageVisitor);
     }
     assertSameLinesWithFile(getTestDataPath() + "/" + getTestName(true) + "-expected.txt", serviceMessageVisitor.getLog());
