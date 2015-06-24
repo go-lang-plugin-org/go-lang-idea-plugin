@@ -60,6 +60,7 @@ public class GoSyntaxHighlightingColors {
   public static final TextAttributesKey LOCAL_CONSTANT = createTextAttributesKey("GO_LOCAL_CONSTANT", DefaultLanguageHighlighterColors.CONSTANT);
   public static final TextAttributesKey LOCAL_VARIABLE = createTextAttributesKey("GO_LOCAL_VARIABLE", DefaultLanguageHighlighterColors.LOCAL_VARIABLE);
   public static final TextAttributesKey SCOPE_VARIABLE = createTextAttributesKey("GO_SCOPE_VARIABLE", DefaultLanguageHighlighterColors.LOCAL_VARIABLE);
+  public static final TextAttributesKey LABEL = createTextAttributesKey("GO_LABEL", DefaultLanguageHighlighterColors.LABEL);
   private GoSyntaxHighlightingColors() {
   }
 }
