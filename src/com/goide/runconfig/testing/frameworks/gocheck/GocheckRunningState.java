@@ -21,6 +21,7 @@ import com.goide.util.GoExecutor;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.util.text.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class GocheckRunningState extends GoTestRunningState {
@@ -29,9 +30,16 @@ public class GocheckRunningState extends GoTestRunningState {
                              @NotNull GocheckRunConfiguration configuration) {
     super(env, module, configuration);
   }
-  
+
   @Override
   protected GoExecutor patchExecutor(@NotNull GoExecutor executor) throws ExecutionException {
     return super.patchExecutor(executor).withParameters("-check.vv");
+  }
+  
+  @Override
+  protected void addFilterParameter(@NotNull GoExecutor executor, String pattern) {
+    if (StringUtil.isNotEmpty(pattern)) {
+      executor.withParameters("-check.f", pattern);
+    }
   }
 }
