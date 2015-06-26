@@ -16,11 +16,10 @@
 
 package com.goide.runconfig.testing.frameworks.gocheck;
 
+import com.goide.psi.GoFunctionDeclaration;
+import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.goide.psi.GoMethodDeclaration;
-import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.runconfig.testing.GoTestRunConfigurationProducerBase;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,20 +37,20 @@ public class GocheckRunConfigurationProducer extends GoTestRunConfigurationProdu
 
   @NotNull
   @Override
-  protected String getFunctionConfigurationName(@NotNull String functionName, @NotNull String fileName) {
-    return "gocheck function " + super.getFunctionConfigurationName(functionName, fileName);
+  protected String getFunctionConfigurationName(@NotNull GoFunctionOrMethodDeclaration function, @NotNull String fileName) {
+    return function instanceof GoMethodDeclaration
+           ? "gocheck " + GocheckFramework.getGocheckTestName((GoMethodDeclaration)function)
+           : super.getFunctionConfigurationName(function, fileName);
+  }
+
+  @Override
+  protected boolean shouldSkipContext(@Nullable GoFunctionOrMethodDeclaration context) {
+    return context != null && context instanceof GoFunctionDeclaration;
   }
 
   @NotNull
   @Override
   protected String getFileConfigurationName(@NotNull String fileName) {
     return "gocheck " + super.getFileConfigurationName(fileName);
-  }
-  
-  @Nullable
-  @Override
-  protected String findFunctionNameFromContext(PsiElement contextElement) {
-    GoMethodDeclaration method = PsiTreeUtil.getNonStrictParentOfType(contextElement, GoMethodDeclaration.class);
-    return method != null ? GoTestFinder.getTestFunctionName(method) : null;
   }
 }

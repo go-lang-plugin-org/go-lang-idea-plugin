@@ -16,11 +16,9 @@
 
 package com.goide.runconfig.testing.frameworks.gotest;
 
-import com.goide.psi.GoFunctionDeclaration;
-import com.goide.runconfig.testing.GoTestFinder;
+import com.goide.psi.GoFunctionOrMethodDeclaration;
+import com.goide.psi.GoMethodDeclaration;
 import com.goide.runconfig.testing.GoTestRunConfigurationProducerBase;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.Nullable;
 
 
@@ -28,11 +26,9 @@ public class GotestRunConfigurationProducer extends GoTestRunConfigurationProduc
   public GotestRunConfigurationProducer() {
     super(GoTestFrameworkImpl.INSTANCE);
   }
-
-  @Nullable
+  
   @Override
-  protected String findFunctionNameFromContext(PsiElement contextElement) {
-    GoFunctionDeclaration function = PsiTreeUtil.getNonStrictParentOfType(contextElement, GoFunctionDeclaration.class);
-    return function != null ? GoTestFinder.getTestFunctionName(function) : null;
+  protected boolean shouldSkipContext(@Nullable GoFunctionOrMethodDeclaration context) {
+    return context != null && context instanceof GoMethodDeclaration;
   }
 }

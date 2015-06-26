@@ -17,6 +17,9 @@
 package com.goide.runconfig.testing.frameworks.gocheck;
 
 import com.goide.psi.GoFile;
+import com.goide.psi.GoMethodDeclaration;
+import com.goide.psi.impl.GoPsiImplUtil;
+import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.runconfig.testing.GoTestFramework;
 import com.goide.runconfig.testing.GoTestRunConfiguration;
 import com.goide.runconfig.testing.GoTestRunningState;
@@ -39,6 +42,18 @@ public class GocheckFramework extends GoTestFramework {
   private static final Pattern GO_CHECK_GITHUB_IMPORT_PATH = Pattern.compile("github\\.com/go-check/check\\.v\\d+");
 
   private GocheckFramework() {
+  }
+
+  @Nullable
+  public static String getGocheckTestName(@NotNull GoMethodDeclaration method) {
+    String methodName = GoTestFinder.getTestFunctionName(method);
+    if (methodName != null) {
+      String suiteName = GoPsiImplUtil.getText(method.getReceiver().getType());
+      if (!suiteName.isEmpty()) {
+        return suiteName + "." + methodName;
+      }
+    }
+    return null;
   }
 
   @NotNull

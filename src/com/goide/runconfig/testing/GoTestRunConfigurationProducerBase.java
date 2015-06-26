@@ -17,6 +17,7 @@
 package com.goide.runconfig.testing;
 
 import com.goide.psi.GoFile;
+import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.goide.runconfig.GoRunUtil;
 import com.goide.sdk.GoSdkService;
 import com.intellij.execution.actions.ConfigurationContext;
@@ -30,6 +31,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -75,10 +77,12 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
           configuration.setName(getPackageConfigurationName(packageName));
         }
         else {
-          String functionNameFromContext = findFunctionNameFromContext(contextElement);
-          if (functionNameFromContext != null) {
-            configuration.setName(getFunctionConfigurationName(functionNameFromContext, getFileConfigurationName(file.getName())));
-            configuration.setPattern("^" + functionNameFromContext + "$");
+          GoFunctionOrMethodDeclaration function = findTestFunctionInContext(contextElement);
+          if (shouldSkipContext(function)) return false;
+          
+          if (function != null) {
+            configuration.setName(getFunctionConfigurationName(function, getFileConfigurationName(file.getName())));
+            configuration.setPattern("^" + function.getName() + "$");
 
             configuration.setKind(GoTestRunConfiguration.Kind.PACKAGE);
             configuration.setPackage(StringUtil.notNullize(((GoFile)file).getImportPath()));
@@ -96,14 +100,16 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
     return false;
   }
 
+  protected abstract boolean shouldSkipContext(@Nullable GoFunctionOrMethodDeclaration context);
+
   @NotNull
   protected String getFileConfigurationName(@NotNull String fileName) {
     return fileName;
   }
 
   @NotNull
-  protected String getFunctionConfigurationName(@NotNull String functionNameFromContext, @NotNull String fileName) {
-    return functionNameFromContext + " in " + fileName;
+  protected String getFunctionConfigurationName(@NotNull GoFunctionOrMethodDeclaration function, @NotNull String fileName) {
+    return function.getName() + " in " + fileName;
   }
 
   @NotNull
@@ -133,17 +139,20 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
         if (!Comparing.equal(((GoFile)file).getImportPath(), configuration.getPackage())) return false;
         if (GoRunUtil.isPackageContext(contextElement) && configuration.getPattern().isEmpty()) return true;
 
-        String functionNameFromContext = findFunctionNameFromContext(contextElement);
-        return functionNameFromContext != null
-               ? configuration.getPattern().equals("^" + functionNameFromContext + "$")
+        GoFunctionOrMethodDeclaration contextFunction = findTestFunctionInContext(contextElement);
+        return contextFunction != null
+               ? configuration.getPattern().equals("^" + contextFunction.getName() + "$")
                : configuration.getPattern().isEmpty();
       case FILE:
         return GoTestFinder.isTestFile(file) && FileUtil.pathsEqual(configuration.getFilePath(), file.getVirtualFile().getPath()) &&
-               findFunctionNameFromContext(contextElement) == null;
+               findTestFunctionInContext(contextElement) == null;
     }
     return false;
   }
 
   @Nullable
-  protected abstract String findFunctionNameFromContext(PsiElement contextElement);
+  private static GoFunctionOrMethodDeclaration findTestFunctionInContext(@NotNull PsiElement contextElement) {
+    GoFunctionOrMethodDeclaration function = PsiTreeUtil.getNonStrictParentOfType(contextElement, GoFunctionOrMethodDeclaration.class);
+    return function != null && GoTestFinder.isTestFunctionName(function.getName()) ? function : null;
+  }
 }

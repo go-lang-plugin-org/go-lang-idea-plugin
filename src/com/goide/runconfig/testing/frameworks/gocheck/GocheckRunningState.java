@@ -18,8 +18,6 @@ package com.goide.runconfig.testing.frameworks.gocheck;
 
 import com.goide.psi.GoFile;
 import com.goide.psi.GoMethodDeclaration;
-import com.goide.psi.impl.GoPsiImplUtil;
-import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.runconfig.testing.GoTestRunConfiguration;
 import com.goide.runconfig.testing.GoTestRunningState;
 import com.goide.util.GoExecutor;
@@ -49,13 +47,7 @@ public class GocheckRunningState extends GoTestRunningState {
   protected String buildFilePattern(GoFile file) {
     Collection<String> testNames = ContainerUtil.newLinkedHashSet();
     for (GoMethodDeclaration method : file.getMethods()) {
-      String methodName = GoTestFinder.getTestFunctionName(method);
-      if (methodName != null) {
-        String suiteName = GoPsiImplUtil.getText(method.getReceiver().getType());
-        if (!suiteName.isEmpty()) {
-          testNames.add(suiteName + "." + methodName);
-        }
-      }
+      ContainerUtil.addIfNotNull(testNames, GocheckFramework.getGocheckTestName(method));
     }
     return "^" + StringUtil.join(testNames, "|") + "$";
   }
