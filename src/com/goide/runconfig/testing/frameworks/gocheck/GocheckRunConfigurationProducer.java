@@ -16,9 +16,13 @@
 
 package com.goide.runconfig.testing.frameworks.gocheck;
 
+import com.goide.psi.GoMethodDeclaration;
 import com.goide.runconfig.GoRunUtil;
+import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.runconfig.testing.GoTestRunConfigurationProducerBase;
 import com.intellij.openapi.module.Module;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,5 +53,12 @@ public class GocheckRunConfigurationProducer extends GoTestRunConfigurationProdu
   @Override
   protected boolean isAvailableInModule(@Nullable Module module) {
     return super.isAvailableInModule(module) && GoRunUtil.hasGoCheckSupport(module);
+  }
+
+  @Nullable
+  @Override
+  protected String findFunctionNameFromContext(PsiElement contextElement) {
+    GoMethodDeclaration method = PsiTreeUtil.getNonStrictParentOfType(contextElement, GoMethodDeclaration.class);
+    return method != null ? GoTestFinder.getTestFunctionName(method) : null;
   }
 }

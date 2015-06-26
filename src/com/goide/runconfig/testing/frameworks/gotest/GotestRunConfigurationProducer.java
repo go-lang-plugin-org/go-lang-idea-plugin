@@ -16,11 +16,23 @@
 
 package com.goide.runconfig.testing.frameworks.gotest;
 
+import com.goide.psi.GoFunctionDeclaration;
+import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.runconfig.testing.GoTestRunConfigurationProducerBase;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.util.PsiTreeUtil;
+import org.jetbrains.annotations.Nullable;
 
 
 public class GotestRunConfigurationProducer extends GoTestRunConfigurationProducerBase implements Cloneable {
   public GotestRunConfigurationProducer() {
     super(GotestRunConfigurationType.getInstance());
+  }
+
+  @Nullable
+  @Override
+  protected String findFunctionNameFromContext(PsiElement contextElement) {
+    GoFunctionDeclaration function = PsiTreeUtil.getNonStrictParentOfType(contextElement, GoFunctionDeclaration.class);
+    return function != null ? GoTestFinder.getTestFunctionName(function) : null;
   }
 }

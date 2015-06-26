@@ -17,7 +17,6 @@
 package com.goide.runconfig.testing;
 
 import com.goide.psi.GoFile;
-import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.goide.runconfig.GoRunUtil;
 import com.goide.sdk.GoSdkService;
 import com.intellij.execution.actions.ConfigurationContext;
@@ -32,7 +31,6 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -144,8 +142,5 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
   }
 
   @Nullable
-  private static String findFunctionNameFromContext(PsiElement contextElement) {
-    GoFunctionOrMethodDeclaration function = PsiTreeUtil.getNonStrictParentOfType(contextElement, GoFunctionOrMethodDeclaration.class);
-    return function != null ? GoTestFinder.getTestFunctionName(function) : null;
-  }
+  protected abstract String findFunctionNameFromContext(PsiElement contextElement);
 }
