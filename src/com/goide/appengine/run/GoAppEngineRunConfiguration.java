@@ -105,10 +105,15 @@ public class GoAppEngineRunConfiguration extends GoRunConfigurationBase<GoAppEng
       }
     }
 
-    if (StringUtil.isNotEmpty(myPort)) {
-      int port = StringUtil.parseInt(myPort, -1);
-      if (port < 0 || port > Short.MAX_VALUE * 2) {
-        throw new RuntimeConfigurationError("Invalid port");
+    checkPortValue(myPort, "Invalid port");
+    checkPortValue(myAdminPort, "Invalid admin port");
+  }
+
+  private static void checkPortValue(@Nullable String port, @NotNull String errorMessage) throws RuntimeConfigurationError {
+    if (StringUtil.isNotEmpty(port)) {
+      int intPort = StringUtil.parseInt(port, -1);
+      if (intPort < 0 || intPort > Short.MAX_VALUE * 2) {
+        throw new RuntimeConfigurationError(errorMessage);
       }
     }
   }
