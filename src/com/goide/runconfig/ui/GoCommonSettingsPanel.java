@@ -39,6 +39,8 @@ public class GoCommonSettingsPanel extends JPanel {
 
   public void init(@NotNull Project project) {
     GoRunUtil.installFileChooser(project, myWorkingDirectoryField, true);
+    myGoToolParamsField.setDialogCaption("Go tool arguments");
+    myParamsField.setDialogCaption("Program arguments");
   }
 
   public void resetEditorFrom(@NotNull GoRunConfigurationBase<?> configuration) {
