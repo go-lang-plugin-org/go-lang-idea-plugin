@@ -37,11 +37,15 @@ public class GoAppEngineRunningState extends GoRunningState<GoAppEngineRunConfig
     executor.withParameterString(myConfiguration.getGoToolParams());
     String host = myConfiguration.getHost();
     String port = myConfiguration.getPort();
+    String adminPort = myConfiguration.getAdminPort();
     if (StringUtil.isNotEmpty(host)) {
       executor.withParameters("-host", host);
     }
     if (StringUtil.isNotEmpty(port)) {
       executor.withParameters("-port", port);
+    }
+    if (StringUtil.isNotEmpty(adminPort)) {
+      executor.withParameters("-admin_port", adminPort);
     }
     executor.withParameters(".");
     return executor;

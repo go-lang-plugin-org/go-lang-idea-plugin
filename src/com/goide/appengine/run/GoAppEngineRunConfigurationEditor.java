@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ public class GoAppEngineRunConfigurationEditor extends SettingsEditor<GoAppEngin
   private JBTextField myHostField;
   private JBTextField myPortField;
   private GoCommonSettingsPanel myCommonSettingsPanel;
+  private JBTextField myAdminPortField;
 
   public GoAppEngineRunConfigurationEditor(@NotNull final Project project) {
     super(null);
@@ -41,6 +42,7 @@ public class GoAppEngineRunConfigurationEditor extends SettingsEditor<GoAppEngin
   protected void resetEditorFrom(@NotNull GoAppEngineRunConfiguration configuration) {
     myHostField.setText(StringUtil.notNullize(configuration.getHost()));
     myPortField.setText(StringUtil.notNullize(configuration.getPort()));
+    myAdminPortField.setText(StringUtil.notNullize(configuration.getAdminPort()));
     myCommonSettingsPanel.resetEditorFrom(configuration);
   }
 
@@ -48,6 +50,7 @@ public class GoAppEngineRunConfigurationEditor extends SettingsEditor<GoAppEngin
   protected void applyEditorTo(@NotNull GoAppEngineRunConfiguration configuration) throws ConfigurationException {
     configuration.setHost(StringUtil.nullize(myHostField.getText().trim()));
     configuration.setPort(StringUtil.nullize(myPortField.getText().trim()));
+    configuration.setAdminPort(StringUtil.nullize(myAdminPortField.getText().trim()));
     myCommonSettingsPanel.applyEditorTo(configuration);
   }
 
