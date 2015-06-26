@@ -207,9 +207,10 @@ public class GoCompletionUtil {
            : ParenthesesInsertHandler.WITH_PARAMETERS;
   }
 
-  @NotNull
+  @Nullable
   public static LookupElement createVariableLikeLookupElement(@NotNull GoNamedElement v) {
-    String name = StringUtil.notNullize(v.getName());
+    String name = v.getName();
+    if (StringUtil.isEmpty(name)) return null;
     SingleCharInsertHandler handler =
       v instanceof GoFieldDefinition ?
       new SingleCharInsertHandler(':') {
