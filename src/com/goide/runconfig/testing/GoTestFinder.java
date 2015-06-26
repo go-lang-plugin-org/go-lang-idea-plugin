@@ -19,7 +19,7 @@ package com.goide.runconfig.testing;
 import com.goide.GoConstants;
 import com.goide.GoFileType;
 import com.goide.psi.GoFile;
-import com.goide.psi.GoFunctionDeclaration;
+import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -47,7 +47,7 @@ public class GoTestFinder implements TestFinder {
   }
   
   @Nullable
-  public static String getTestFunctionName(@NotNull GoFunctionDeclaration function) {
+  public static String getTestFunctionName(@NotNull GoFunctionOrMethodDeclaration function) {
     return isTestFunctionName(function.getName()) ? StringUtil.notNullize(function.getName()) : null;
   }
   
