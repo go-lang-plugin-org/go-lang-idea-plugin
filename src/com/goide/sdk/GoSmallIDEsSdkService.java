@@ -1,8 +1,25 @@
+/*
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.goide.sdk;
 
 import com.goide.GoConstants;
 import com.goide.configuration.GoSdkConfigurable;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.components.ComponentManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ShowSettingsUtil;
@@ -16,6 +33,7 @@ import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
+import com.intellij.util.ObjectUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,22 +47,29 @@ public class GoSmallIDEsSdkService extends GoSdkService {
   @Nullable
   @Override
   public String getSdkHomePath(@Nullable final Module module) {
-    return ApplicationManager.getApplication().runReadAction(new Computable<String>() {
+    ComponentManager holder = ObjectUtils.notNull(module, myProject);
+    return CachedValuesManager.getManager(myProject).getCachedValue(holder, new CachedValueProvider<String>() {
       @Nullable
       @Override
-      public String compute() {
-        LibraryTable table = LibraryTablesRegistrar.getInstance().getLibraryTable(myProject);
-        for (Library library : table.getLibraries()) {
-          final String libraryName = library.getName();
-          if (libraryName != null && libraryName.startsWith(LIBRARY_NAME)) {
-            for (final VirtualFile root : library.getFiles(OrderRootType.CLASSES)) {
-              if (isGoSdkLibRoot(root)) {
-                return libraryRootToSdkPath(root);
+      public Result<String> compute() {
+        return Result.create(ApplicationManager.getApplication().runReadAction(new Computable<String>() {
+          @Nullable
+          @Override
+          public String compute() {
+            LibraryTable table = LibraryTablesRegistrar.getInstance().getLibraryTable(myProject);
+            for (Library library : table.getLibraries()) {
+              final String libraryName = library.getName();
+              if (libraryName != null && libraryName.startsWith(LIBRARY_NAME)) {
+                for (final VirtualFile root : library.getFiles(OrderRootType.CLASSES)) {
+                  if (isGoSdkLibRoot(root)) {
+                    return libraryRootToSdkPath(root);
+                  }
+                }
               }
             }
+            return null;
           }
-        }
-        return null;
+        }), GoSmallIDEsSdkService.this);
       }
     });
   }
@@ -52,7 +77,8 @@ public class GoSmallIDEsSdkService extends GoSdkService {
   @Nullable
   @Override
   public String getSdkVersion(@Nullable final Module module) {
-    return CachedValuesManager.getManager(myProject).getCachedValue(myProject, new CachedValueProvider<String>() {
+    ComponentManager holder = ObjectUtils.notNull(module, myProject);
+    return CachedValuesManager.getManager(myProject).getCachedValue(holder, new CachedValueProvider<String>() {
       @Nullable
       @Override
       public Result<String> compute() {
