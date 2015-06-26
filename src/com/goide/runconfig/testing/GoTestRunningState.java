@@ -90,9 +90,11 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfigurationBas
           executor.withParameters("./...");
           executor.withWorkDirectory(myConfiguration.getDirectoryPath());
         }
+        addFilterParameter(executor, myConfiguration.getPattern());
         break;
       case PACKAGE:
         executor.withParameters(myConfiguration.getPackage());
+        addFilterParameter(executor, myConfiguration.getPattern());
         break;
       case FILE:
         String filePath = myConfiguration.getFilePath();
@@ -111,21 +113,24 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfigurationBas
         }
 
         executor.withParameters(importPath);
-        Collection<String> testNames = ContainerUtil.newLinkedHashSet();
-        for (GoFunctionDeclaration function : ((GoFile)file).getFunctions()) {
-          ContainerUtil.addIfNotNull(testNames, GoTestFinder.getTestFunctionName(function));
-        }
-        addFilterParameter(executor, "^" + StringUtil.join(testNames, "|") + "$");
+        addFilterParameter(executor, buildFilePattern((GoFile)file));
         break;
     }
-    String pattern = myConfiguration.getPattern();
-    addFilterParameter(executor, pattern);
 
     if (myCoverageFilePath != null) {
       executor.withParameters("-coverprofile=" + myCoverageFilePath, "-covermode=count");
     }
 
     return executor;
+  }
+
+  @NotNull
+  protected String buildFilePattern(GoFile file) {
+    Collection<String> testNames = ContainerUtil.newLinkedHashSet();
+    for (GoFunctionDeclaration function : file.getFunctions()) {
+      ContainerUtil.addIfNotNull(testNames, GoTestFinder.getTestFunctionName(function));
+    }
+    return "^" + StringUtil.join(testNames, "|") + "$";
   }
 
   protected void addFilterParameter(@NotNull GoExecutor executor, String pattern) {
