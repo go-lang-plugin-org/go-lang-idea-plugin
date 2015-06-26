@@ -88,7 +88,7 @@
         </constraints>
         <properties>
           <labelFor value="f2164"/>
-          <text value="Go &amp;tool arguments:"/>
+          <text value="Go tool &amp;arguments:"/>
         </properties>
       </component>
     </children>
