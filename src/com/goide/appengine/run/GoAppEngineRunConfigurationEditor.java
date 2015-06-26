@@ -16,12 +16,20 @@
 
 package com.goide.appengine.run;
 
+import com.goide.runconfig.GoRunUtil;
 import com.goide.runconfig.ui.GoCommonSettingsPanel;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.search.FilenameIndex;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.ui.TextFieldWithHistoryWithBrowseButton;
 import com.intellij.ui.components.JBTextField;
+import com.intellij.util.Function;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -32,9 +40,11 @@ public class GoAppEngineRunConfigurationEditor extends SettingsEditor<GoAppEngin
   private JBTextField myPortField;
   private GoCommonSettingsPanel myCommonSettingsPanel;
   private JBTextField myAdminPortField;
+  private TextFieldWithHistoryWithBrowseButton myConfigFileField;
 
   public GoAppEngineRunConfigurationEditor(@NotNull final Project project) {
     super(null);
+    initConfigFileField(project);
     myCommonSettingsPanel.init(project);
   }
 
@@ -43,6 +53,7 @@ public class GoAppEngineRunConfigurationEditor extends SettingsEditor<GoAppEngin
     myHostField.setText(StringUtil.notNullize(configuration.getHost()));
     myPortField.setText(StringUtil.notNullize(configuration.getPort()));
     myAdminPortField.setText(StringUtil.notNullize(configuration.getAdminPort()));
+    myConfigFileField.getChildComponent().setText(StringUtil.notNullize(configuration.getConfigFile()));
     myCommonSettingsPanel.resetEditorFrom(configuration);
   }
 
@@ -51,6 +62,7 @@ public class GoAppEngineRunConfigurationEditor extends SettingsEditor<GoAppEngin
     configuration.setHost(StringUtil.nullize(myHostField.getText().trim()));
     configuration.setPort(StringUtil.nullize(myPortField.getText().trim()));
     configuration.setAdminPort(StringUtil.nullize(myAdminPortField.getText().trim()));
+    configuration.setConfigFile(StringUtil.nullize(myConfigFileField.getText().trim()));
     myCommonSettingsPanel.applyEditorTo(configuration);
   }
 
@@ -63,5 +75,21 @@ public class GoAppEngineRunConfigurationEditor extends SettingsEditor<GoAppEngin
   @Override
   protected void disposeEditor() {
     myComponent.setVisible(false);
+  }
+
+  private void initConfigFileField(@NotNull Project project) {
+    GoRunUtil.installFileChooser(project, myConfigFileField, false, new Condition<VirtualFile>() {
+      @Override
+      public boolean value(VirtualFile file) {
+        return "yaml".equals(file.getExtension());
+      }
+    });
+    myConfigFileField.getChildComponent().setHistory(ContainerUtil.map2List(
+      FilenameIndex.getAllFilesByExt(project, "yaml", GlobalSearchScope.projectScope(project)), new Function<VirtualFile, String>() {
+        @Override
+        public String fun(VirtualFile file) {
+          return file.getPath();
+        }
+      }));
   }
 }

@@ -47,7 +47,7 @@ public class GoAppEngineRunningState extends GoRunningState<GoAppEngineRunConfig
     if (StringUtil.isNotEmpty(adminPort)) {
       executor.withParameters("-admin_port", adminPort);
     }
-    executor.withParameters(".");
+    executor.withParameters(StringUtil.notNullize(myConfiguration.getConfigFile(), "."));
     return executor;
   }
 }

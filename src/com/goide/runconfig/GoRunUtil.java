@@ -24,7 +24,9 @@ import com.intellij.execution.actions.ConfigurationContext;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.ComponentWithBrowseButton;
 import com.intellij.openapi.ui.TextBrowseFolderListener;
+import com.intellij.openapi.ui.TextComponentAccessor;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -91,14 +93,12 @@ public class GoRunUtil {
     return false;
   }
 
-  public static void installFileChooser(@NotNull Project project,
-                                        @NotNull TextFieldWithBrowseButton field,
-                                        boolean directory) {
+  public static void installFileChooser(@NotNull Project project, @NotNull ComponentWithBrowseButton field, boolean directory) {
     installFileChooser(project, field, directory, null);
   }
 
   public static void installFileChooser(@NotNull Project project,
-                                        @NotNull TextFieldWithBrowseButton field,
+                                        @NotNull ComponentWithBrowseButton field,
                                         boolean directory,
                                         @Nullable Condition<VirtualFile> fileFilter) {
     FileChooserDescriptor chooseDirectoryDescriptor = directory
@@ -107,6 +107,14 @@ public class GoRunUtil {
     chooseDirectoryDescriptor.setRoots(project.getBaseDir());
     chooseDirectoryDescriptor.setShowFileSystemRoots(false);
     chooseDirectoryDescriptor.withFileFilter(fileFilter);
-    field.addBrowseFolderListener(new TextBrowseFolderListener(chooseDirectoryDescriptor));
+    if (field instanceof TextFieldWithBrowseButton) {
+      ((TextFieldWithBrowseButton)field).addBrowseFolderListener(new TextBrowseFolderListener(chooseDirectoryDescriptor, project));
+    }
+    else {
+      //noinspection unchecked
+      field.addBrowseFolderListener(project, new ComponentWithBrowseButton.BrowseFolderActionListener(null, null, field, project,
+                                                                                                      chooseDirectoryDescriptor,
+                                                                                                      TextComponentAccessor.TEXT_FIELD_WITH_HISTORY_WHOLE_TEXT));
+    }
   }
 }
