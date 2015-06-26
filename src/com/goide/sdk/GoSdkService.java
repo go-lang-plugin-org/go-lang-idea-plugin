@@ -30,13 +30,17 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.PathUtil;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.util.Set;
 
 public abstract class GoSdkService extends SimpleModificationTracker {
+  private static final Set<String> FEDORA_SUBDIRECTORIES = ContainerUtil.newHashSet("linux_amd64", "linux_386", "linux_arm");
+  
   @NotNull
   protected final Project myProject;
 
@@ -106,7 +110,18 @@ public abstract class GoSdkService extends SimpleModificationTracker {
           File goFromPath = PathEnvironmentVariableUtil.findInPath(GoConstants.GO_EXECUTABLE_NAME);
           if (goFromPath != null && goFromPath.exists()) return goFromPath.getAbsolutePath();
         }
-        return FileUtil.join(sdkHomePath, "bin", GoEnvironmentUtil.getBinaryFileNameForPath(GoConstants.GO_EXECUTABLE_NAME));
+
+        String executableName = GoEnvironmentUtil.getBinaryFileNameForPath(GoConstants.GO_EXECUTABLE_NAME);
+        String executable = FileUtil.join(sdkHomePath, "bin", executableName);
+        
+        if (!new File(executable).exists() && SystemInfo.isLinux) {
+          // fedora
+          for (String directory : FEDORA_SUBDIRECTORIES) {
+            File file = new File(binDirectory, directory);
+            if (file.exists() && file.isDirectory()) return FileUtil.join(file.getAbsolutePath(), executableName);
+          }
+        }
+        return executable;
       }
     }
     return null;
