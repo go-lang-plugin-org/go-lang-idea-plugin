@@ -23,6 +23,7 @@
               </grid>
             </constraints>
             <properties>
+              <labelFor value="f19ee"/>
               <text value="&amp;Host:"/>
             </properties>
           </component>
@@ -41,6 +42,7 @@
               </grid>
             </constraints>
             <properties>
+              <labelFor value="5f40f"/>
               <text value="&amp;Port:"/>
             </properties>
           </component>

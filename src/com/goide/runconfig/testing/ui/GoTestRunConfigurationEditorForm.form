@@ -45,6 +45,7 @@
           </grid>
         </constraints>
         <properties>
+          <labelFor value="c2258"/>
           <text value="&amp;Directory:"/>
           <visible value="true"/>
         </properties>
@@ -64,6 +65,7 @@
           </grid>
         </constraints>
         <properties>
+          <labelFor value="d8a73"/>
           <text value="&amp;Package:"/>
           <visible value="true"/>
         </properties>
@@ -83,6 +85,7 @@
           </grid>
         </constraints>
         <properties>
+          <labelFor value="b2116"/>
           <text value="&amp;File:"/>
           <visible value="true"/>
         </properties>
@@ -113,6 +116,7 @@
           </grid>
         </constraints>
         <properties>
+          <labelFor value="5d2fe"/>
           <text value="Patte&amp;rn:"/>
         </properties>
       </component>
