@@ -43,7 +43,6 @@ import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Function;
 import com.intellij.util.ObjectUtils;
-import com.intellij.util.SystemProperties;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.text.VersionComparatorUtil;
 import org.jetbrains.annotations.Contract;
@@ -54,7 +53,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -158,18 +156,7 @@ public class GoSdkUtil {
    */
   @NotNull
   public static Collection<VirtualFile> getGoPathsRootsFromEnvironment() {
-    Set<VirtualFile> result = newLinkedHashSet();
-    String goPath = GoEnvironmentUtil.retrieveGoPathFromEnvironment();
-    if (goPath != null) {
-      String home = SystemProperties.getUserHome();
-      for (String s : StringUtil.split(goPath, File.pathSeparator)) {
-        if (home != null) {
-          s = s.replaceAll("\\$HOME", home);
-        }
-        ContainerUtil.addIfNotNull(result, LocalFileSystem.getInstance().findFileByPath(s));
-      }
-    }
-    return result;
+    return GoEnvironmentGoPathModificationTracker.getGoEnvironmentGoPathRoots();
   }
 
   @NotNull

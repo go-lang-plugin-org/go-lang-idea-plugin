@@ -135,6 +135,7 @@
 
     <!-- sdk -->
     <sdkType implementation="com.goide.sdk.GoSdkType"/>
+    <applicationService serviceImplementation="com.goide.sdk.GoEnvironmentGoPathModificationTracker"/>
     <projectService serviceInterface="com.goide.sdk.GoSdkService" serviceImplementation="com.goide.sdk.GoSmallIDEsSdkService"
                     overrides="false"/>
     <library.presentationProvider implementation="com.goide.sdk.GoSdkLibraryPresentationProvider"/>
