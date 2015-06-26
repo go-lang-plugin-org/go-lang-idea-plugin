@@ -17,32 +17,24 @@
 package com.goide.runconfig.testing;
 
 import com.intellij.execution.Executor;
-import com.intellij.execution.configurations.RunConfiguration;
+import com.intellij.execution.configurations.RunProfile;
 import com.intellij.execution.testframework.TestConsoleProperties;
 import com.intellij.execution.testframework.sm.SMCustomMessagesParsing;
 import com.intellij.execution.testframework.sm.runner.OutputToGeneralTestEventsConverter;
-import com.intellij.ide.util.PropertiesComponent;
-import com.intellij.util.config.Storage;
+import com.intellij.execution.testframework.sm.runner.SMTRunnerConsoleProperties;
 import org.jetbrains.annotations.NotNull;
 
-public class GoTestConsoleProperties extends TestConsoleProperties implements SMCustomMessagesParsing {
-  private final GoTestRunConfigurationBase myConfiguration;
-
+public class GoTestConsoleProperties extends SMTRunnerConsoleProperties implements SMCustomMessagesParsing {
   public GoTestConsoleProperties(@NotNull GoTestRunConfigurationBase configuration, @NotNull Executor executor) {
-    super(new Storage.PropertiesComponentStorage("GoTestSupport.", PropertiesComponent.getInstance()), configuration.getProject(),
-          executor);
-    myConfiguration = configuration;
+    super(configuration, configuration.getFrameworkName(), executor);
   }
 
   @NotNull
   @Override
   public OutputToGeneralTestEventsConverter createTestEventsConverter(@NotNull String testFrameworkName,
                                                                       @NotNull TestConsoleProperties consoleProperties) {
-    return myConfiguration.createTestEventsConverter(consoleProperties);
-  }
-
-  @Override
-  public RunConfiguration getConfiguration() {
-    return myConfiguration;
+    RunProfile configuration = getConfiguration();
+    assert configuration instanceof GoTestRunConfigurationBase;
+    return ((GoTestRunConfigurationBase)configuration).createTestEventsConverter(consoleProperties);
   }
 }
