@@ -1,0 +1,44 @@
+TestSuiteStarted
+    - name=FixtureSuiteSetUpErrorSuite
+  TestStarted
+      - locationHint=gotest://FixtureSuiteSetUpErrorSuite.TestA
+      - name=FixtureSuiteSetUpErrorSuite.TestA
+    TestFailed
+        - actual=
+        - details=
+        - expected=
+        - message=
+        - name=FixtureSuiteSetUpErrorSuite.TestA
+        - type=comparisonFailure
+  TestFinished
+      - duration=42
+      - name=FixtureSuiteSetUpErrorSuite.TestA
+  TestStarted
+      - locationHint=gotest://FixtureSuiteSetUpErrorSuite.TestB
+      - name=FixtureSuiteSetUpErrorSuite.TestB
+    TestIgnored
+        - name=FixtureSuiteSetUpErrorSuite.TestB
+  TestFinished
+      - duration=42
+      - name=FixtureSuiteSetUpErrorSuite.TestB
+  TestStarted
+      - locationHint=gotest://FixtureSuiteSetUpErrorSuite.TestC
+      - name=FixtureSuiteSetUpErrorSuite.TestC
+    TestIgnored
+        - name=FixtureSuiteSetUpErrorSuite.TestC
+  TestFinished
+      - duration=42
+      - name=FixtureSuiteSetUpErrorSuite.TestC
+  TestStarted
+      - locationHint=gotest://FixtureSuiteSetUpErrorSuite.TestD
+      - name=FixtureSuiteSetUpErrorSuite.TestD
+    TestIgnored
+        - name=FixtureSuiteSetUpErrorSuite.TestD
+  TestFinished
+      - duration=42
+      - name=FixtureSuiteSetUpErrorSuite.TestD
+TestSuiteFinished
+    - name=FixtureSuiteSetUpErrorSuite
+TestStdOut
+    - name=SuiteTearDown
+    - out=<SuiteTearDown>\nOOPS: 0 passed, 1 FAILED, 2 MISSED\n--- FAIL: Test (0.00s)\n

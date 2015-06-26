@@ -1,0 +1,24 @@
+=== RUN Test
+START: setups_test.go:19: FixtureSuiteSetUpErrorSuite.SetUpSuite
+FAIL: setups_test.go:19: FixtureSuiteSetUpErrorSuite.SetUpSuite
+
+START: setups_test.go:36: FixtureSuiteSetUpErrorSuite.TestA
+SKIP: setups_test.go:36: FixtureSuiteSetUpErrorSuite.TestA
+
+START: setups_test.go:40: FixtureSuiteSetUpErrorSuite.TestB
+SKIP: setups_test.go:40: FixtureSuiteSetUpErrorSuite.TestB
+
+START: setups_test.go:45: FixtureSuiteSetUpErrorSuite.TestC
+SKIP: setups_test.go:45: FixtureSuiteSetUpErrorSuite.TestC
+
+START: setups_test.go:51: FixtureSuiteSetUpErrorSuite.TestD
+SKIP: setups_test.go:51: FixtureSuiteSetUpErrorSuite.TestD
+
+START: setups_test.go:24: FixtureSuiteSetUpErrorSuite.TearDownSuite
+<SuiteTearDown>PASS: setups_test.go:24: FixtureSuiteSetUpErrorSuite.TearDownSuite	0.000s
+
+OOPS: 0 passed, 1 FAILED, 2 MISSED
+--- FAIL: Test (0.00s)
+FAIL
+exit status 1
+FAIL	github.com/mailgun/sandbox/fixtureSuiteSetUpError	0.005s

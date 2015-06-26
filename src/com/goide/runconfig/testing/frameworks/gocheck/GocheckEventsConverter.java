@@ -67,6 +67,7 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter i
   private static final Pattern TEST_FAILED = Pattern.compile("(.*)FAIL: [^:]+:\\d+: ([^\\s]+)\\s*$");
   private static final Pattern TEST_PANICKED = Pattern.compile("(.*)PANIC: [^:]+:\\d+: ([^\\s]+)\\s*$");
   private static final Pattern TEST_MISSED = Pattern.compile("(.*)MISS: [^:]+:\\d+: ([^\\s]+)\\s*$");
+  private static final Pattern TEST_SKIPPED = Pattern.compile("(.*)SKIP: [^:]+:\\d+: ([^\\s]+)( \\(.*\\))?\\s*$");
   private static final Pattern ERROR_LOCATION = Pattern.compile("(.*:\\d+):\\s*$");
   private static final Pattern ERROR_ACTUAL = Pattern.compile("\\.\\.\\. ((obtained)|(value)) (.*?)( \\+)?\\s*$");
   private static final Pattern ERROR_EXPECTED = Pattern.compile("\\.\\.\\. ((expected)|(regex)) (.*?)( \\+)?\\s*$");
@@ -81,7 +82,7 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter i
   private List<String> myStdOut;
 
   private enum Status {
-    PASSED, FAILED, PANICKED, MISSED
+    PASSED, FAILED, PANICKED, MISSED, SKIPPED
   }
 
   private static final class TestResult {
@@ -191,7 +192,7 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter i
         if (testResult != null) {
           myScope = Scope.SUITE;
           if ((StringUtil.notNullize(testResult.myAttributes.get("details")).contains("Fixture has panicked"))
-              || (testResult.getStatus() == Status.MISSED && myFixtureFailure != null)) {
+              || ((testResult.getStatus() == Status.MISSED || testResult.getStatus() == Status.SKIPPED)&& myFixtureFailure != null)) {
             testResult = myFixtureFailure;
           }
           myFixtureFailure = null;
@@ -243,6 +244,10 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter i
       myStdOut.add(StringUtil.notNullize(matcher.group(1)).trim());
       return new TestResult(Status.MISSED);
     }
+    if ((matcher = TEST_SKIPPED.matcher(text)).matches()) {
+      myStdOut.add(StringUtil.notNullize(matcher.group(1)).trim());
+      return new TestResult(Status.SKIPPED);
+    }
     if ((matcher = TEST_FAILED.matcher(text)).matches()) {
       myStdOut.add(StringUtil.notNullize(matcher.group(1)).trim());
       if (parseDetails) {
@@ -274,10 +279,11 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter i
         break;
 
       case MISSED:
+      case SKIPPED:
         String testIgnoredStr = ServiceMessageBuilder.testIgnored(myTestName).toString();
         super.processServiceMessages(testIgnoredStr, outputType, visitor);
         break;
-
+      
       case FAILED:
         ServiceMessageBuilder testError = ServiceMessageBuilder.testFailed(myTestName);
         testResult.addAttributesTo(testError);

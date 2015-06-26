@@ -34,6 +34,7 @@ public class GocheckEventsConverterTest extends GoEventsConverterTestCase {
   public void testTestErrorWithFixtures() throws Exception { doTest(); }
   public void testTestAndTestTearDownError() throws Exception { doTest(); }
   public void testTestBothFixturesError() throws Exception { doTest(); }
+  public void testSkippingTests() throws Exception { doTest(); }
 
   @Override
   protected String getBasePath() {
