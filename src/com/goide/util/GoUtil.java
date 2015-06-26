@@ -27,12 +27,14 @@ import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
+import com.intellij.util.Function;
 import com.intellij.util.ThreeState;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.Contract;
@@ -44,6 +46,18 @@ import java.util.Collections;
 
 public class GoUtil {
   public static final String PLUGIN_VERSION = getPlugin().getVersion();
+  public static final Function<VirtualFile, String> RETRIEVE_FILE_PATH_FUNCTION = new Function<VirtualFile, String>() {
+    @Override
+    public String fun(VirtualFile file) {
+      return file.getPath();
+    }
+  };
+  public static final Function<VirtualFile, VirtualFile> RETRIEVE_FILE_PARENT_FUNCTION = new Function<VirtualFile, VirtualFile>() {
+    @Override
+    public VirtualFile fun(VirtualFile file) {
+      return file.getParent();
+    }
+  };
   private static final String PLUGIN_ID = "ro.redeul.google.go";
 
   public static boolean allowed(@NotNull PsiFile file) {

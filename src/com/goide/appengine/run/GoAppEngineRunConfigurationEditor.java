@@ -16,19 +16,18 @@
 
 package com.goide.appengine.run;
 
+import com.goide.appengine.YamlFilesModificationTracker;
 import com.goide.runconfig.GoRunUtil;
 import com.goide.runconfig.ui.GoCommonSettingsPanel;
+import com.goide.util.GoUtil;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.search.FilenameIndex;
-import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.ui.TextFieldWithHistoryWithBrowseButton;
 import com.intellij.ui.components.JBTextField;
-import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -85,11 +84,6 @@ public class GoAppEngineRunConfigurationEditor extends SettingsEditor<GoAppEngin
       }
     });
     myConfigFileField.getChildComponent().setHistory(ContainerUtil.map2List(
-      FilenameIndex.getAllFilesByExt(project, "yaml", GlobalSearchScope.projectScope(project)), new Function<VirtualFile, String>() {
-        @Override
-        public String fun(VirtualFile file) {
-          return file.getPath();
-        }
-      }));
+      YamlFilesModificationTracker.getYamlFiles(project, null), GoUtil.RETRIEVE_FILE_PATH_FUNCTION));
   }
 }

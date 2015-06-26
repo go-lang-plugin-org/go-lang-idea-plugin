@@ -18,9 +18,11 @@ package com.goide.sdk;
 
 import com.goide.GoConstants;
 import com.goide.GoEnvironmentUtil;
+import com.goide.appengine.YamlFilesModificationTracker;
 import com.goide.project.GoApplicationLibrariesService;
 import com.goide.project.GoLibrariesService;
 import com.goide.psi.GoFile;
+import com.goide.util.GoUtil;
 import com.intellij.execution.configurations.PathEnvironmentVariableUtil;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
@@ -62,12 +64,7 @@ public class GoSdkUtil {
   private static final Pattern GO_VERSION_PATTERN = Pattern.compile("theVersion\\s*=\\s*`go([\\d.]+)`");
   private static final Pattern GAE_VERSION_PATTERN = Pattern.compile("theVersion\\s*=\\s*`go([\\d.]+)( \\(appengine-[\\d.]+\\))?`");
   private static final Pattern GO_DEVEL_VERSION_PATTERN = Pattern.compile("theVersion\\s*=\\s*`(devel.*)`");
-  private static final Function<VirtualFile, String> RETRIEVE_FILE_PATH_FUNCTION = new Function<VirtualFile, String>() {
-    @Override
-    public String fun(VirtualFile file) {
-      return file.getPath();
-    }
-  };
+
 
   // todo: caching
   @Nullable
@@ -132,8 +129,14 @@ public class GoSdkUtil {
   }
 
   @NotNull
-  public static Collection<VirtualFile> getGoPathSources(@NotNull Project project, @Nullable Module module) {
-    return ContainerUtil.mapNotNull(getGoPathRoots(project, module), new RetrieveSubDirectoryOrSelfFunction("src"));
+  public static Collection<VirtualFile> getGoPathSources(@NotNull final Project project, @Nullable final Module module) {
+    Collection<VirtualFile> result = newLinkedHashSet();
+    if (module != null && GoSdkService.getInstance(project).isAppEngineSdk(module)) {
+      ContainerUtil.addAllNotNull(result, ContainerUtil.mapNotNull(YamlFilesModificationTracker.getYamlFiles(project, module), 
+                                                                   GoUtil.RETRIEVE_FILE_PARENT_FUNCTION));
+    }
+    result.addAll(ContainerUtil.mapNotNull(getGoPathRoots(project, module), new RetrieveSubDirectoryOrSelfFunction("src")));
+    return result;
   }
 
   @NotNull
@@ -171,12 +174,12 @@ public class GoSdkUtil {
 
   @NotNull
   public static String retrieveGoPath(@NotNull Project project, @Nullable Module module) {
-    return StringUtil.join(ContainerUtil.map(getGoPathRoots(project, module), RETRIEVE_FILE_PATH_FUNCTION), File.pathSeparator);
+    return StringUtil.join(ContainerUtil.map(getGoPathRoots(project, module), GoUtil.RETRIEVE_FILE_PATH_FUNCTION), File.pathSeparator);
   }
 
   @NotNull
   public static String retrieveEnvironmentPathForGo(@NotNull Project project, @Nullable Module module) {
-    return StringUtil.join(ContainerUtil.map(getGoPathBins(project, module), RETRIEVE_FILE_PATH_FUNCTION), File.pathSeparator);
+    return StringUtil.join(ContainerUtil.map(getGoPathBins(project, module), GoUtil.RETRIEVE_FILE_PATH_FUNCTION), File.pathSeparator);
   }
 
   @NotNull
