@@ -18,6 +18,7 @@ package com.goide.runconfig.testing;
 
 import com.goide.runconfig.GoModuleBasedConfiguration;
 import com.goide.runconfig.GoRunConfigurationBase;
+import com.goide.runconfig.testing.frameworks.gotest.GotestFramework;
 import com.goide.runconfig.testing.ui.GoTestRunConfigurationEditorForm;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.execution.configurations.*;
@@ -53,7 +54,7 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
 
   @NotNull private String myPattern = "";
   @NotNull private Kind myKind = Kind.DIRECTORY;
-  private GoTestFramework myTestFramework;
+  private GoTestFramework myTestFramework = GotestFramework.INSTANCE;
 
   public GoTestRunConfiguration(@NotNull Project project, String name, @NotNull ConfigurationType configurationType) {
     super(name, new GoModuleBasedConfiguration(project), configurationType.getConfigurationFactories()[0]);
