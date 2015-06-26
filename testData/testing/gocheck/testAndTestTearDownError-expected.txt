@@ -14,6 +14,7 @@ TestSuiteStarted
         - name=FixtureTestAndTearDownErrorSuite.TestA
         - type=comparisonFailure
   TestFinished
+      - duration=42
       - name=FixtureTestAndTearDownErrorSuite.TestA
   TestStarted
       - locationHint=gotest://FixtureTestAndTearDownErrorSuite.TestB
@@ -21,6 +22,7 @@ TestSuiteStarted
     TestIgnored
         - name=FixtureTestAndTearDownErrorSuite.TestB
   TestFinished
+      - duration=42
       - name=FixtureTestAndTearDownErrorSuite.TestB
 TestSuiteFinished
     - name=FixtureTestAndTearDownErrorSuite

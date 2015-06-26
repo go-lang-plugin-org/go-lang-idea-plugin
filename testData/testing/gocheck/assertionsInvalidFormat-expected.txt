@@ -11,6 +11,7 @@ TestSuiteStarted
         - name=SomeFailSuite.TestA
         - type=comparisonFailure
   TestFinished
+      - duration=42
       - name=SomeFailSuite.TestA
 TestSuiteFinished
     - name=SomeFailSuite

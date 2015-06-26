@@ -5,4 +5,5 @@ TestStarted
       - message=test_test.go:15: Sqrt(4) = 2, want 3\n
       - name=TestSqrt2
 TestFinished
+    - duration=42
     - name=TestSqrt2

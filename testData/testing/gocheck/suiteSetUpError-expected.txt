@@ -11,6 +11,7 @@ TestSuiteStarted
         - name=FixtureSuiteSetUpErrorSuite.TestA
         - type=comparisonFailure
   TestFinished
+      - duration=42
       - name=FixtureSuiteSetUpErrorSuite.TestA
   TestStarted
       - locationHint=gotest://FixtureSuiteSetUpErrorSuite.TestB
@@ -18,6 +19,7 @@ TestSuiteStarted
     TestIgnored
         - name=FixtureSuiteSetUpErrorSuite.TestB
   TestFinished
+      - duration=42
       - name=FixtureSuiteSetUpErrorSuite.TestB
   TestStarted
       - locationHint=gotest://FixtureSuiteSetUpErrorSuite.TestC
@@ -25,6 +27,7 @@ TestSuiteStarted
     TestIgnored
         - name=FixtureSuiteSetUpErrorSuite.TestC
   TestFinished
+      - duration=42
       - name=FixtureSuiteSetUpErrorSuite.TestC
   TestStarted
       - locationHint=gotest://FixtureSuiteSetUpErrorSuite.TestD
@@ -32,6 +35,7 @@ TestSuiteStarted
     TestIgnored
         - name=FixtureSuiteSetUpErrorSuite.TestD
   TestFinished
+      - duration=42
       - name=FixtureSuiteSetUpErrorSuite.TestD
 TestSuiteFinished
     - name=FixtureSuiteSetUpErrorSuite

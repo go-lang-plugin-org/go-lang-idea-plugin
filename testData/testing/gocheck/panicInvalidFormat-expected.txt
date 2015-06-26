@@ -8,6 +8,7 @@ TestSuiteStarted
         - message=
         - name=SomePanicSuite.TestD
   TestFinished
+      - duration=42
       - name=SomePanicSuite.TestD
 TestSuiteFinished
     - name=SomePanicSuite

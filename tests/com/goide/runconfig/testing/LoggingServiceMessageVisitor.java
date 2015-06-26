@@ -45,8 +45,10 @@ public class LoggingServiceMessageVisitor implements ServiceMessageVisitor {
     increaseIndent();
     increaseIndent();
     for (Map.Entry<String, String> entry : ContainerUtil.newTreeMap(message.getAttributes()).entrySet()) {
-      myLog.append(myIndent).append("- ").append(entry.getKey()).append("=")
-        .append(entry.getValue().replace("\n", "\\n")).append('\n');
+      String key = entry.getKey();
+      String value = "duration".equals(key) ? "42" : entry.getValue();
+      myLog.append(myIndent).append("- ").append(key).append("=")
+        .append(value.replace("\n", "\\n")).append('\n');
     }
     decreaseIndent();
     decreaseIndent();

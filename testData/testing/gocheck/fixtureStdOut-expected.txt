@@ -7,6 +7,7 @@ TestSuiteStarted
         - name=FixtureSuite.TestA
         - out=SetUp\n\nTearDown\n\n
   TestFinished
+      - duration=42
       - name=FixtureSuite.TestA
   TestStarted
       - locationHint=gotest://FixtureSuite.TestB
@@ -15,6 +16,7 @@ TestSuiteStarted
         - name=FixtureSuite.TestB
         - out=SetUp\n\nsomethingTearDown\n\n
   TestFinished
+      - duration=42
       - name=FixtureSuite.TestB
   TestStarted
       - locationHint=gotest://FixtureSuite.TestC
@@ -23,6 +25,7 @@ TestSuiteStarted
         - name=FixtureSuite.TestC
         - out=SetUp\n\nsomethingTearDown\n\n
   TestFinished
+      - duration=42
       - name=FixtureSuite.TestC
 TestSuiteFinished
     - name=FixtureSuite

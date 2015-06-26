@@ -4,11 +4,13 @@ TestSuiteStarted
       - locationHint=gotest://SomePanicSuite.TestA
       - name=SomePanicSuite.TestA
   TestFinished
+      - duration=42
       - name=SomePanicSuite.TestA
   TestStarted
       - locationHint=gotest://SomePanicSuite.TestB
       - name=SomePanicSuite.TestB
   TestFinished
+      - duration=42
       - name=SomePanicSuite.TestB
   TestStarted
       - locationHint=gotest://SomePanicSuite.TestC
@@ -21,6 +23,7 @@ TestSuiteStarted
         - message=Panic: foo (PC=0x3B0A5)\n
         - name=SomePanicSuite.TestC
   TestFinished
+      - duration=42
       - name=SomePanicSuite.TestC
   TestStarted
       - locationHint=gotest://SomePanicSuite.TestD
@@ -30,11 +33,13 @@ TestSuiteStarted
         - message=Panic: bar (PC=0x3B0A5)\n
         - name=SomePanicSuite.TestD
   TestFinished
+      - duration=42
       - name=SomePanicSuite.TestD
   TestStarted
       - locationHint=gotest://SomePanicSuite.TestE
       - name=SomePanicSuite.TestE
   TestFinished
+      - duration=42
       - name=SomePanicSuite.TestE
 TestSuiteFinished
     - name=SomePanicSuite

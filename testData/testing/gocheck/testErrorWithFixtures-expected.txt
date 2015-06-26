@@ -14,6 +14,7 @@ TestSuiteStarted
         - name=FixtureTestErrorSuite.TestA
         - type=comparisonFailure
   TestFinished
+      - duration=42
       - name=FixtureTestErrorSuite.TestA
   TestStarted
       - locationHint=gotest://FixtureTestErrorSuite.TestB
@@ -26,6 +27,7 @@ TestSuiteStarted
         - message=Panic: Kaboom! (PC=0x3B0A5)\n
         - name=FixtureTestErrorSuite.TestB
   TestFinished
+      - duration=42
       - name=FixtureTestErrorSuite.TestB
 TestSuiteFinished
     - name=FixtureTestErrorSuite

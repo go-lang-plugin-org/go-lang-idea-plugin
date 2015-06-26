@@ -44,6 +44,7 @@ public class GotestEventsConverter extends OutputToGeneralTestEventsConverter im
   private boolean myOutputAppeared = false;
   @NotNull private StringBuilder myStdOut = new StringBuilder();
   @NotNull private String myCurrentTest = "<test>";
+  private long myCurrentTestStart;
 
   public GotestEventsConverter(@NotNull TestConsoleProperties consoleProperties) {
     super(FRAMEWORK_NAME, consoleProperties);
@@ -57,13 +58,15 @@ public class GotestEventsConverter extends OutputToGeneralTestEventsConverter im
       myOutputAppeared = false;
       String testName = StringUtil.notNullize(matcher.group(1), "<test>");
       ServiceMessageBuilder testStarted = ServiceMessageBuilder.testStarted(testName).addAttribute("locationHint", testUrl(testName));
-      return processNotFinishedMessage(testStarted.toString(), outputType, visitor);
+      boolean result = processNotFinishedMessage(testStarted.toString(), outputType, visitor);
+      myCurrentTestStart = System.currentTimeMillis();
+      return result;
     }
 
     if ((matcher = PASSED.matcher(text)).find()) {
       String testName = StringUtil.notNullize(matcher.group(1), "<test>");
       return handleFinishTest(text, matcher, testName, outputType, visitor)
-             && processNotFinishedMessage(ServiceMessageBuilder.testFinished(testName).toString(), outputType, visitor);
+             && processNotFinishedMessage(testFinishedMessage(testName), outputType, visitor);
     }
 
     if ((matcher = SKIP.matcher(text)).find()) {
@@ -95,6 +98,12 @@ public class GotestEventsConverter extends OutputToGeneralTestEventsConverter im
   }
 
   @NotNull
+  private String testFinishedMessage(String testName) {
+    long duration = System.currentTimeMillis() - myCurrentTestStart;
+    return ServiceMessageBuilder.testFinished(testName).addAttribute("duration", Long.toString(duration)).toString();
+  }
+
+  @NotNull
   private static String testUrl(@NotNull String testName) {
     return GoTestLocationProvider.PROTOCOL + "://" + testName;
   }
@@ -116,7 +125,7 @@ public class GotestEventsConverter extends OutputToGeneralTestEventsConverter im
     mySkipped = false;
     myStdOut = new StringBuilder();
     return super.processServiceMessages(message, outputType, visitor)
-           && super.processServiceMessages(ServiceMessageBuilder.testFinished(myCurrentTest).toString(), outputType, visitor);
+           && super.processServiceMessages(testFinishedMessage(myCurrentTest), outputType, visitor);
   }
 
   private boolean handleFinishTest(String text, Matcher matcher, String testName, Key outputType, ServiceMessageVisitor visitor)

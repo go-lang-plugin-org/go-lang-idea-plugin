@@ -2,6 +2,7 @@ TestStarted
     - locationHint=gotest://TestSqrt3
     - name=TestSqrt3
 TestFinished
+    - duration=42
     - name=TestSqrt3
 TestStarted
     - locationHint=gotest://TestSqrt4
@@ -10,11 +11,13 @@ TestStarted
       - message=test2_test.go:15: Sqrt(4) = 2, want 3\n
       - name=TestSqrt4
 TestFinished
+    - duration=42
     - name=TestSqrt4
 TestStarted
     - locationHint=gotest://TestSqrt
     - name=TestSqrt
 TestFinished
+    - duration=42
     - name=TestSqrt
 TestStarted
     - locationHint=gotest://TestSqrt2
@@ -23,4 +26,5 @@ TestStarted
       - message=test_test.go:15: Sqrt(4) = 2, want 3\n
       - name=TestSqrt2
 TestFinished
+    - duration=42
     - name=TestSqrt2

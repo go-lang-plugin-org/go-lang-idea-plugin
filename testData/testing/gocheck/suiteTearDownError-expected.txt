@@ -7,6 +7,7 @@ TestSuiteStarted
         - name=FixtureSuiteTearDownErrorSuite.TestA
         - out=<TestSetUp>\n<TestA><TestTearDown>\n
   TestFinished
+      - duration=42
       - name=FixtureSuiteTearDownErrorSuite.TestA
   TestStarted
       - locationHint=gotest://FixtureSuiteTearDownErrorSuite.TestB
@@ -15,6 +16,7 @@ TestSuiteStarted
         - name=FixtureSuiteTearDownErrorSuite.TestB
         - out=<TestSetUp>\n<TestB><TestTearDown>\n
   TestFinished
+      - duration=42
       - name=FixtureSuiteTearDownErrorSuite.TestB
 TestSuiteFinished
     - name=FixtureSuiteTearDownErrorSuite

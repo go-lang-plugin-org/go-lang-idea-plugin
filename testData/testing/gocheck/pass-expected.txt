@@ -4,6 +4,7 @@ TestSuiteStarted
       - locationHint=gotest://AllPassSuite.TestA
       - name=AllPassSuite.TestA
   TestFinished
+      - duration=42
       - name=AllPassSuite.TestA
   TestStarted
       - locationHint=gotest://AllPassSuite.TestB
@@ -12,6 +13,7 @@ TestSuiteStarted
         - name=AllPassSuite.TestB
         - out=FooBar
   TestFinished
+      - duration=42
       - name=AllPassSuite.TestB
   TestStarted
       - locationHint=gotest://AllPassSuite.TestC
@@ -20,6 +22,7 @@ TestSuiteStarted
         - name=AllPassSuite.TestC
         - out=Blah\n
   TestFinished
+      - duration=42
       - name=AllPassSuite.TestC
   TestStarted
       - locationHint=gotest://AllPassSuite.TestD
@@ -28,6 +31,7 @@ TestSuiteStarted
         - name=AllPassSuite.TestD
         - out=Превед\nМедвед
   TestFinished
+      - duration=42
       - name=AllPassSuite.TestD
 TestSuiteFinished
     - name=AllPassSuite

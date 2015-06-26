@@ -11,6 +11,7 @@ TestSuiteStarted
         - name=SomeFailSuite.TestA
         - type=comparisonFailure
   TestFinished
+      - duration=42
       - name=SomeFailSuite.TestA
   TestStarted
       - locationHint=gotest://SomeFailSuite.TestB
@@ -23,6 +24,7 @@ TestSuiteStarted
         - name=SomeFailSuite.TestB
         - type=comparisonFailure
   TestFinished
+      - duration=42
       - name=SomeFailSuite.TestB
   TestStarted
       - locationHint=gotest://SomeFailSuite.TestC
@@ -35,6 +37,7 @@ TestSuiteStarted
         - name=SomeFailSuite.TestC
         - type=comparisonFailure
   TestFinished
+      - duration=42
       - name=SomeFailSuite.TestC
   TestStarted
       - locationHint=gotest://SomeFailSuite.TestD
@@ -47,6 +50,7 @@ TestSuiteStarted
         - name=SomeFailSuite.TestD
         - type=comparisonFailure
   TestFinished
+      - duration=42
       - name=SomeFailSuite.TestD
   TestStarted
       - locationHint=gotest://SomeFailSuite.TestE
@@ -59,6 +63,7 @@ TestSuiteStarted
         - name=SomeFailSuite.TestE
         - type=comparisonFailure
   TestFinished
+      - duration=42
       - name=SomeFailSuite.TestE
   TestStarted
       - locationHint=gotest://SomeFailSuite.TestF
@@ -71,6 +76,7 @@ TestSuiteStarted
         - name=SomeFailSuite.TestF
         - type=comparisonFailure
   TestFinished
+      - duration=42
       - name=SomeFailSuite.TestF
 TestSuiteFinished
     - name=SomeFailSuite

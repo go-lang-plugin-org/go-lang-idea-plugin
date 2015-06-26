@@ -76,6 +76,7 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter i
   private Scope myScope = Scope.GLOBAL;
   private String mySuiteName;
   private String myTestName;
+  private long myCurrentTestStart;
   private TestResult myFixtureFailure;
   private List<String> myStdOut;
 
@@ -292,7 +293,8 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter i
       default:
         throw new RuntimeException("Unexpected test result: " + testResult.toString());
     }
-    String testFinishedMsg = ServiceMessageBuilder.testFinished(myTestName).toString();
+    long duration = System.currentTimeMillis() - myCurrentTestStart;
+    String testFinishedMsg = ServiceMessageBuilder.testFinished(myTestName).addAttribute("duration", Long.toString(duration)).toString();
     super.processServiceMessages(testFinishedMsg, outputType, visitor);
   }
 
@@ -311,6 +313,7 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter i
   private void processTestSectionStart(@NotNull String testName, Key outputType, ServiceMessageVisitor visitor) throws ParseException {
     String suiteName = testName.substring(0, testName.indexOf("."));
     myTestName = testName;
+    myCurrentTestStart = System.currentTimeMillis();
     if (!suiteName.equals(mySuiteName)) {
       if (mySuiteName != null) {
         String suiteFinishedMsg = ServiceMessageBuilder.testSuiteFinished(mySuiteName).toString();

@@ -5,6 +5,7 @@ TestStarted
       - name=TestEWMA1
       - out=\n
 TestFinished
+    - duration=42
     - name=TestEWMA1
 TestStarted
     - locationHint=gotest://TestEWMA5
@@ -16,6 +17,7 @@ TestStarted
       - message=ewma_test.go:122: 6 minute a.Rate(): 0.18071652714732128 != 0.18071652714732128\n
       - name=TestEWMA5
 TestFinished
+    - duration=42
     - name=TestEWMA5
 TestStarted
     - locationHint=gotest://TestEWMA15
@@ -24,4 +26,5 @@ TestStarted
       - name=TestEWMA15
       - out=\n
 TestFinished
+    - duration=42
     - name=TestEWMA15

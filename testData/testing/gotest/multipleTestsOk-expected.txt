@@ -2,19 +2,23 @@ TestStarted
     - locationHint=gotest://TestSqrt3
     - name=TestSqrt3
 TestFinished
+    - duration=42
     - name=TestSqrt3
 TestStarted
     - locationHint=gotest://TestSqrt4
     - name=TestSqrt4
 TestFinished
+    - duration=42
     - name=TestSqrt4
 TestStarted
     - locationHint=gotest://TestSqrt
     - name=TestSqrt
 TestFinished
+    - duration=42
     - name=TestSqrt
 TestStarted
     - locationHint=gotest://TestSqrt2
     - name=TestSqrt2
 TestFinished
+    - duration=42
     - name=TestSqrt2

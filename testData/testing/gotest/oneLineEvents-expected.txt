@@ -5,6 +5,7 @@ TestStarted
       - name=Test_Sd
       - out=\n
 TestFinished
+    - duration=42
     - name=Test_Sd
 TestStarted
     - locationHint=gotest://Test_Sp
@@ -19,6 +20,7 @@ TestStarted
       - message=sputils_test.go:23: sad\n
       - name=Test_Sp
 TestFinished
+    - duration=42
     - name=Test_Sp
 TestStarted
     - locationHint=gotest://Test_Sp2
@@ -30,6 +32,7 @@ TestStarted
       - name=Test_Sp2
       - out=Test_Sp............end\n
 TestFinished
+    - duration=42
     - name=Test_Sp2
 TestStarted
     - locationHint=gotest://Test_Sp3
@@ -44,4 +47,5 @@ TestStarted
       - message=sputils_test.go:43: sad\n
       - name=Test_Sp3
 TestFinished
+    - duration=42
     - name=Test_Sp3
