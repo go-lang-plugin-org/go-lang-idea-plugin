@@ -17,7 +17,9 @@
 package com.goide.runconfig.testing.ui;
 
 import com.goide.runconfig.GoRunUtil;
-import com.goide.runconfig.testing.GoTestRunConfigurationBase;
+import com.goide.runconfig.testing.GoTestRunConfiguration;
+import com.goide.runconfig.testing.frameworks.gocheck.GocheckFramework;
+import com.goide.runconfig.testing.frameworks.gotest.GoTestFrameworkImpl;
 import com.goide.runconfig.ui.GoCommonSettingsPanel;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.ConfigurationException;
@@ -36,7 +38,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunConfigurationBase> {
+public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunConfiguration> {
   @NotNull private final Project myProject;
   private JPanel myComponent;
   private EditorTextField myPatternEditor;
@@ -50,6 +52,8 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   private TextFieldWithBrowseButton myDirectoryField;
   private JLabel myPatternLabel;
   private GoCommonSettingsPanel myCommonSettingsPanel;
+  private JRadioButton myGotestFrameworkRadioButton;
+  private JRadioButton myGocheckFrameworkRadioButton;
 
   public GoTestRunConfigurationEditorForm(@NotNull final Project project) {
     super(null);
@@ -61,13 +65,13 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   }
 
   private void onTestKindChanged() {
-    GoTestRunConfigurationBase.Kind selectedKind = (GoTestRunConfigurationBase.Kind)myTestKindComboBox.getSelectedItem();
+    GoTestRunConfiguration.Kind selectedKind = (GoTestRunConfiguration.Kind)myTestKindComboBox.getSelectedItem();
     if (selectedKind == null) {
-      selectedKind = GoTestRunConfigurationBase.Kind.DIRECTORY;
+      selectedKind = GoTestRunConfiguration.Kind.DIRECTORY;
     }
-    boolean allInPackage = selectedKind == GoTestRunConfigurationBase.Kind.PACKAGE;
-    boolean allInDirectory = selectedKind == GoTestRunConfigurationBase.Kind.DIRECTORY;
-    boolean file = selectedKind == GoTestRunConfigurationBase.Kind.FILE;
+    boolean allInPackage = selectedKind == GoTestRunConfiguration.Kind.PACKAGE;
+    boolean allInDirectory = selectedKind == GoTestRunConfiguration.Kind.DIRECTORY;
+    boolean file = selectedKind == GoTestRunConfiguration.Kind.FILE;
 
     myPackageField.setVisible(allInPackage);
     myPackageLabel.setVisible(allInPackage);
@@ -80,7 +84,9 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   }
 
   @Override
-  protected void resetEditorFrom(@NotNull GoTestRunConfigurationBase configuration) {
+  protected void resetEditorFrom(@NotNull GoTestRunConfiguration configuration) {
+    myGotestFrameworkRadioButton.setSelected(configuration.getTestFramework() == GoTestFrameworkImpl.INSTANCE);
+    myGocheckFrameworkRadioButton.setSelected(configuration.getTestFramework() == GocheckFramework.INSTANCE);
     myTestKindComboBox.setSelectedItem(configuration.getKind());
     myPackageField.setText(configuration.getPackage());
 
@@ -96,8 +102,9 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   }
 
   @Override
-  protected void applyEditorTo(@NotNull GoTestRunConfigurationBase configuration) throws ConfigurationException {
-    configuration.setKind((GoTestRunConfigurationBase.Kind)myTestKindComboBox.getSelectedItem());
+  protected void applyEditorTo(@NotNull GoTestRunConfiguration configuration) throws ConfigurationException {
+    configuration.setTestFramework(myGocheckFrameworkRadioButton.isSelected() ? GocheckFramework.INSTANCE : GoTestFrameworkImpl.INSTANCE);
+    configuration.setKind((GoTestRunConfiguration.Kind)myTestKindComboBox.getSelectedItem());
     configuration.setPackage(myPackageField.getText());
     configuration.setDirectoryPath(myDirectoryField.getText());
     configuration.setFilePath(myFileField.getText());
@@ -128,11 +135,15 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
     }).createEditor(myProject);
   }
 
+  private String getSelectedFramework() {
+    return myGocheckFrameworkRadioButton.isSelected() ? GocheckFramework.NAME : GoTestFrameworkImpl.NAME;
+  }
+  
   @Nullable
-  private static ListCellRendererWrapper<GoTestRunConfigurationBase.Kind> getTestKindListCellRendererWrapper() {
-    return new ListCellRendererWrapper<GoTestRunConfigurationBase.Kind>() {
+  private static ListCellRendererWrapper<GoTestRunConfiguration.Kind> getTestKindListCellRendererWrapper() {
+    return new ListCellRendererWrapper<GoTestRunConfiguration.Kind>() {
       @Override
-      public void customize(JList list, @Nullable GoTestRunConfigurationBase.Kind kind, int index, boolean selected, boolean hasFocus) {
+      public void customize(JList list, @Nullable GoTestRunConfiguration.Kind kind, int index, boolean selected, boolean hasFocus) {
         if (kind != null) {
           String kindName = StringUtil.capitalize(kind.toString().toLowerCase());
           setText(kindName);
@@ -149,7 +160,7 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   private void installTestKindComboBox() {
     myTestKindComboBox.removeAllItems();
     myTestKindComboBox.setRenderer(getTestKindListCellRendererWrapper());
-    for (GoTestRunConfigurationBase.Kind kind : GoTestRunConfigurationBase.Kind.values()) {
+    for (GoTestRunConfiguration.Kind kind : GoTestRunConfiguration.Kind.values()) {
       myTestKindComboBox.addItem(kind);
     }
     myTestKindComboBox.addActionListener(new ActionListener() {

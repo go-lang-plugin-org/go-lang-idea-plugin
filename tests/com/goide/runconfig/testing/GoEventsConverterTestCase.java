@@ -29,7 +29,8 @@ import java.io.File;
 public abstract class GoEventsConverterTestCase extends GoCodeInsightFixtureTestCase {
   protected void doTest() throws Exception {
     Executor executor = new DefaultRunExecutor();
-    GoTestRunConfigurationBase runConfig = createRunConfiguration();
+    GoTestRunConfiguration runConfig = new GoTestRunConfiguration(myFixture.getProject(), "", GoTestRunConfigurationType.getInstance());
+    runConfig.setTestFramework(getTestFramework());
     GoTestConsoleProperties consoleProperties = new GoTestConsoleProperties(runConfig, executor);
     GoTestEventsConverterBase converter =
       (GoTestEventsConverterBase)consoleProperties.createTestEventsConverter("gotest", consoleProperties);
@@ -42,6 +43,6 @@ public abstract class GoEventsConverterTestCase extends GoCodeInsightFixtureTest
   }
 
   @NotNull
-  protected abstract GoTestRunConfigurationBase createRunConfiguration();
+  protected abstract GoTestFramework getTestFramework();
 }
 

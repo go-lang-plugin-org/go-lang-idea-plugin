@@ -21,7 +21,6 @@ import com.goide.runconfig.GoRunUtil;
 import com.goide.sdk.GoSdkService;
 import com.intellij.execution.actions.ConfigurationContext;
 import com.intellij.execution.actions.RunConfigurationProducer;
-import com.intellij.execution.configurations.ConfigurationType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.util.Comparing;
@@ -34,26 +33,33 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class GoTestRunConfigurationProducerBase extends RunConfigurationProducer<GoTestRunConfigurationBase> {
+public abstract class GoTestRunConfigurationProducerBase extends RunConfigurationProducer<GoTestRunConfiguration> {
 
-  protected GoTestRunConfigurationProducerBase(@NotNull ConfigurationType configurationType) {
-    super(configurationType);
+  @NotNull private final GoTestFramework myFramework;
+
+  protected GoTestRunConfigurationProducerBase(@NotNull GoTestFramework framework) {
+    super(GoTestRunConfigurationType.getInstance());
+    myFramework = framework;
   }
 
   @Override
-  protected boolean setupConfigurationFromContext(@NotNull GoTestRunConfigurationBase configuration, ConfigurationContext context, Ref sourceElement) {
+  protected boolean setupConfigurationFromContext(@NotNull GoTestRunConfiguration configuration,
+                                                  ConfigurationContext context,
+                                                  Ref sourceElement) {
     PsiElement contextElement = GoRunUtil.getContextElement(context);
     if (contextElement == null) {
       return false;
     }
 
     Module module = ModuleUtilCore.findModuleForPsiElement(contextElement);
-    if (!isAvailableInModule(module)) return false;
-    
+    if (module == null || !GoSdkService.getInstance(module.getProject()).isGoModule(module)) return false;
+    if (!myFramework.isAvailable(module)) return false;
+
     configuration.setModule(module);
+    configuration.setTestFramework(myFramework);
     if (contextElement instanceof PsiDirectory) {
       configuration.setName(getPackageConfigurationName(((PsiDirectory)contextElement).getName()));
-      configuration.setKind(GoTestRunConfigurationBase.Kind.DIRECTORY);
+      configuration.setKind(GoTestRunConfiguration.Kind.DIRECTORY);
       String directoryPath = ((PsiDirectory)contextElement).getVirtualFile().getPath();
       configuration.setDirectoryPath(directoryPath);
       configuration.setWorkingDirectory(directoryPath);
@@ -64,7 +70,7 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
       if (GoTestFinder.isTestFile(file)) {
         if (GoRunUtil.isPackageContext(contextElement)) {
           String packageName = StringUtil.notNullize(((GoFile)file).getImportPath());
-          configuration.setKind(GoTestRunConfigurationBase.Kind.PACKAGE);
+          configuration.setKind(GoTestRunConfiguration.Kind.PACKAGE);
           configuration.setPackage(packageName);
           configuration.setName(getPackageConfigurationName(packageName));
         }
@@ -74,12 +80,12 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
             configuration.setName(getFunctionConfigurationName(functionNameFromContext, getFileConfigurationName(file.getName())));
             configuration.setPattern("^" + functionNameFromContext + "$");
 
-            configuration.setKind(GoTestRunConfigurationBase.Kind.PACKAGE);
+            configuration.setKind(GoTestRunConfiguration.Kind.PACKAGE);
             configuration.setPackage(StringUtil.notNullize(((GoFile)file).getImportPath()));
           }
           else {
             configuration.setName(getFileConfigurationName(file.getName()));
-            configuration.setKind(GoTestRunConfigurationBase.Kind.FILE);
+            configuration.setKind(GoTestRunConfiguration.Kind.FILE);
             configuration.setFilePath(file.getVirtualFile().getPath());
           }
         }
@@ -105,17 +111,14 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
     return "All in '" + packageName + "'";
   }
 
-  protected boolean isAvailableInModule(@Nullable Module module) {
-    return module != null && GoSdkService.getInstance(module.getProject()).isGoModule(module);
-  }
-
   @Override
-  public boolean isConfigurationFromContext(@NotNull GoTestRunConfigurationBase configuration, ConfigurationContext context) {
+  public boolean isConfigurationFromContext(@NotNull GoTestRunConfiguration configuration, ConfigurationContext context) {
     PsiElement contextElement = GoRunUtil.getContextElement(context);
     if (contextElement == null) return false;
 
     Module module = ModuleUtilCore.findModuleForPsiElement(contextElement);
     if (!Comparing.equal(module, configuration.getConfigurationModule().getModule())) return false;
+    if (!Comparing.equal(myFramework, configuration.getTestFramework())) return false;
 
     PsiFile file = contextElement.getContainingFile();
     switch (configuration.getKind()) {
@@ -129,14 +132,14 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
         if (!GoTestFinder.isTestFile(file)) return false;
         if (!Comparing.equal(((GoFile)file).getImportPath(), configuration.getPackage())) return false;
         if (GoRunUtil.isPackageContext(contextElement) && configuration.getPattern().isEmpty()) return true;
-        
+
         String functionNameFromContext = findFunctionNameFromContext(contextElement);
-        return functionNameFromContext != null 
-               ? configuration.getPattern().equals("^" + functionNameFromContext + "$") 
+        return functionNameFromContext != null
+               ? configuration.getPattern().equals("^" + functionNameFromContext + "$")
                : configuration.getPattern().isEmpty();
       case FILE:
         return GoTestFinder.isTestFile(file) && FileUtil.pathsEqual(configuration.getFilePath(), file.getVirtualFile().getPath()) &&
-          findFunctionNameFromContext(contextElement) == null;
+               findFunctionNameFromContext(contextElement) == null;
     }
     return false;
   }

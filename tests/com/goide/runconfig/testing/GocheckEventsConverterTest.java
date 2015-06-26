@@ -16,8 +16,7 @@
 
 package com.goide.runconfig.testing;
 
-import com.goide.runconfig.testing.frameworks.gocheck.GocheckRunConfiguration;
-import com.goide.runconfig.testing.frameworks.gocheck.GocheckRunConfigurationType;
+import com.goide.runconfig.testing.frameworks.gocheck.GocheckFramework;
 import org.jetbrains.annotations.NotNull;
 
 public class GocheckEventsConverterTest extends GoEventsConverterTestCase {
@@ -43,7 +42,7 @@ public class GocheckEventsConverterTest extends GoEventsConverterTestCase {
   
   @NotNull
   @Override
-  protected GoTestRunConfigurationBase createRunConfiguration() {
-    return new GocheckRunConfiguration(myFixture.getProject(), "", GocheckRunConfigurationType.getInstance());
+  protected GoTestFramework getTestFramework() {
+    return GocheckFramework.INSTANCE;
   }
 }

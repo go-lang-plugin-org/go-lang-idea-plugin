@@ -25,8 +25,8 @@ import com.intellij.execution.testframework.sm.runner.SMTRunnerConsoleProperties
 import org.jetbrains.annotations.NotNull;
 
 public class GoTestConsoleProperties extends SMTRunnerConsoleProperties implements SMCustomMessagesParsing {
-  public GoTestConsoleProperties(@NotNull GoTestRunConfigurationBase configuration, @NotNull Executor executor) {
-    super(configuration, configuration.getFrameworkName(), executor);
+  public GoTestConsoleProperties(@NotNull GoTestRunConfiguration configuration, @NotNull Executor executor) {
+    super(configuration, configuration.getTestFramework().getName(), executor);
   }
 
   @NotNull
@@ -34,7 +34,7 @@ public class GoTestConsoleProperties extends SMTRunnerConsoleProperties implemen
   public OutputToGeneralTestEventsConverter createTestEventsConverter(@NotNull String testFrameworkName,
                                                                       @NotNull TestConsoleProperties consoleProperties) {
     RunProfile configuration = getConfiguration();
-    assert configuration instanceof GoTestRunConfigurationBase;
-    return ((GoTestRunConfigurationBase)configuration).createTestEventsConverter(consoleProperties);
+    assert configuration instanceof GoTestRunConfiguration;
+    return ((GoTestRunConfiguration)configuration).createTestEventsConverter(consoleProperties);
   }
 }

@@ -20,6 +20,7 @@ import com.goide.psi.GoFile;
 import com.goide.psi.GoMethodDeclaration;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.runconfig.testing.GoTestFinder;
+import com.goide.runconfig.testing.GoTestRunConfiguration;
 import com.goide.runconfig.testing.GoTestRunningState;
 import com.goide.util.GoExecutor;
 import com.intellij.execution.ExecutionException;
@@ -34,7 +35,7 @@ import java.util.Collection;
 public class GocheckRunningState extends GoTestRunningState {
   public GocheckRunningState(@NotNull ExecutionEnvironment env,
                              @NotNull Module module,
-                             @NotNull GocheckRunConfiguration configuration) {
+                             @NotNull GoTestRunConfiguration configuration) {
     super(env, module, configuration);
   }
 

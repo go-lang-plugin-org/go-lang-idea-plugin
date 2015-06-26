@@ -47,10 +47,10 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.util.Collection;
 
-public class GoTestRunningState extends GoRunningState<GoTestRunConfigurationBase> {
+public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
   private String myCoverageFilePath;
 
-  public GoTestRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module, @NotNull GoTestRunConfigurationBase configuration) {
+  public GoTestRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module, @NotNull GoTestRunConfiguration configuration) {
     super(env, module, configuration);
   }
 
@@ -63,7 +63,7 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfigurationBas
 
     GoTestConsoleProperties consoleProperties = new GoTestConsoleProperties(myConfiguration, executor);
     // todo: replace with simple create console
-    ConsoleView consoleView = SMTestRunnerConnectionUtil.createConsoleWithCustomLocator(myConfiguration.getFrameworkName(),
+    ConsoleView consoleView = SMTestRunnerConnectionUtil.createConsoleWithCustomLocator(myConfiguration.getTestFramework().getName(),
                                                                                         consoleProperties, getEnvironment(),
                                                                                         new GoTestLocationProvider());
     consoleView.attachToProcess(processHandler);

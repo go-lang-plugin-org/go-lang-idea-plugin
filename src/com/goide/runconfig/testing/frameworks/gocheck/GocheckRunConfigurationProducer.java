@@ -17,10 +17,8 @@
 package com.goide.runconfig.testing.frameworks.gocheck;
 
 import com.goide.psi.GoMethodDeclaration;
-import com.goide.runconfig.GoRunUtil;
 import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.runconfig.testing.GoTestRunConfigurationProducerBase;
-import com.intellij.openapi.module.Module;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class GocheckRunConfigurationProducer extends GoTestRunConfigurationProducerBase implements Cloneable {
   public GocheckRunConfigurationProducer() {
-    super(GocheckRunConfigurationType.getInstance());
+    super(GocheckFramework.INSTANCE);
   }
 
   @NotNull
@@ -49,12 +47,7 @@ public class GocheckRunConfigurationProducer extends GoTestRunConfigurationProdu
   protected String getFileConfigurationName(@NotNull String fileName) {
     return "gocheck " + super.getFileConfigurationName(fileName);
   }
-
-  @Override
-  protected boolean isAvailableInModule(@Nullable Module module) {
-    return super.isAvailableInModule(module) && GoRunUtil.hasGoCheckSupport(module);
-  }
-
+  
   @Nullable
   @Override
   protected String findFunctionNameFromContext(PsiElement contextElement) {

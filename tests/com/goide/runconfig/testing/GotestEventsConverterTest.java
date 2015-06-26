@@ -16,8 +16,7 @@
 
 package com.goide.runconfig.testing;
 
-import com.goide.runconfig.testing.frameworks.gotest.GotestRunConfiguration;
-import com.goide.runconfig.testing.frameworks.gotest.GotestRunConfigurationType;
+import com.goide.runconfig.testing.frameworks.gotest.GoTestFrameworkImpl;
 import org.jetbrains.annotations.NotNull;
 
 public class GotestEventsConverterTest extends GoEventsConverterTestCase {
@@ -53,10 +52,10 @@ public class GotestEventsConverterTest extends GoEventsConverterTestCase {
   protected String getBasePath() {
     return "testing/gotest";
   }
-
+  
   @NotNull
   @Override
-  protected GoTestRunConfigurationBase createRunConfiguration() {
-    return new GotestRunConfiguration(myFixture.getProject(), "", GotestRunConfigurationType.getInstance());
+  protected GoTestFramework getTestFramework() {
+    return GoTestFrameworkImpl.INSTANCE;
   }
 }
