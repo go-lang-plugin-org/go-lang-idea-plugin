@@ -24,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class GotestRunConfigurationProducer extends GoTestRunConfigurationProducerBase implements Cloneable {
   public GotestRunConfigurationProducer() {
-    super(GoTestFrameworkImpl.INSTANCE);
+    super(GotestFramework.INSTANCE);
   }
   
   @Override

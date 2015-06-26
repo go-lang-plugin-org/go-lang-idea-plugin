@@ -17,7 +17,7 @@
 package com.goide.runconfig.testing;
 
 import com.goide.runconfig.testing.frameworks.gocheck.GocheckFramework;
-import com.goide.runconfig.testing.frameworks.gotest.GoTestFrameworkImpl;
+import com.goide.runconfig.testing.frameworks.gotest.GotestFramework;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.testframework.TestConsoleProperties;
 import com.intellij.execution.testframework.sm.runner.OutputToGeneralTestEventsConverter;
@@ -31,7 +31,7 @@ public abstract class GoTestFramework {
     if (GocheckFramework.NAME.equals(name)) {
       return GocheckFramework.INSTANCE;
     }
-    return GoTestFrameworkImpl.INSTANCE;
+    return GotestFramework.INSTANCE;
   }
   
   @NotNull

@@ -16,7 +16,7 @@
 
 package com.goide.runconfig.testing;
 
-import com.goide.runconfig.testing.frameworks.gotest.GoTestFrameworkImpl;
+import com.goide.runconfig.testing.frameworks.gotest.GotestFramework;
 import org.jetbrains.annotations.NotNull;
 
 public class GotestEventsConverterTest extends GoEventsConverterTestCase {
@@ -56,6 +56,6 @@ public class GotestEventsConverterTest extends GoEventsConverterTestCase {
   @NotNull
   @Override
   protected GoTestFramework getTestFramework() {
-    return GoTestFrameworkImpl.INSTANCE;
+    return GotestFramework.INSTANCE;
   }
 }

@@ -26,11 +26,11 @@ import com.intellij.openapi.module.Module;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class GoTestFrameworkImpl extends GoTestFramework {
+public class GotestFramework extends GoTestFramework {
   public static final String NAME = "gotest";
-  public static final GoTestFrameworkImpl INSTANCE = new GoTestFrameworkImpl();
+  public static final GotestFramework INSTANCE = new GotestFramework();
 
-  private GoTestFrameworkImpl() {
+  private GotestFramework() {
   }
 
   @NotNull
