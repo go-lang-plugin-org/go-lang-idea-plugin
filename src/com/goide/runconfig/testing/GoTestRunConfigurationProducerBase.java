@@ -24,17 +24,13 @@ import com.intellij.execution.actions.ConfigurationContext;
 import com.intellij.execution.actions.RunConfigurationProducer;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.FileIndexFacade;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiFileSystemItem;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -58,14 +54,7 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
     }
 
     Module module = ModuleUtilCore.findModuleForPsiElement(contextElement);
-    if (module == null) return false;
-    Project project = module.getProject();
-    if (!GoSdkService.getInstance(project).isGoModule(module)) return false;
-    
-    FileIndexFacade indexFacade = FileIndexFacade.getInstance(project);
-    VirtualFile virtualFile = contextElement instanceof PsiFileSystemItem ? ((PsiFileSystemItem)contextElement). getVirtualFile() : contextElement.getContainingFile().getVirtualFile();
-    if (!indexFacade.isInContent(virtualFile) || indexFacade.isExcludedFile(virtualFile)) return false;
-    if (!myFramework.isAvailable(module)) return false;
+    if (module == null || !GoSdkService.getInstance(module.getProject()).isGoModule(module)) return false;
     if (!myFramework.isAvailable(module)) return false;
 
     configuration.setModule(module);

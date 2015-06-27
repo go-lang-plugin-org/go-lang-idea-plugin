@@ -59,14 +59,8 @@ public abstract class GoRunConfigurationProducerBase<T extends GoRunConfiguratio
 
   @Nullable
   private static GoFile getFileFromContext(@Nullable ConfigurationContext context) {
-    if (context == null) {
-      return null;
-    }
-    PsiElement psiElement = context.getPsiLocation();
-    if (psiElement == null || !psiElement.isValid()) {
-      return null;
-    }
-    PsiFile file = psiElement.getContainingFile();
-    return file instanceof GoFile ? (GoFile)file : null;
+    PsiElement contextElement = GoRunUtil.getContextElement(context);
+    PsiFile psiFile = contextElement != null ? contextElement.getContainingFile() : null;
+    return psiFile != null && psiFile instanceof GoFile ? ((GoFile)psiFile) : null;
   }
 }
