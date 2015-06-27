@@ -60,12 +60,17 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
     configuration.setModule(module);
     configuration.setTestFramework(myFramework);
     if (contextElement instanceof PsiDirectory) {
-      configuration.setName(getPackageConfigurationName(((PsiDirectory)contextElement).getName()));
-      configuration.setKind(GoTestRunConfiguration.Kind.DIRECTORY);
-      String directoryPath = ((PsiDirectory)contextElement).getVirtualFile().getPath();
-      configuration.setDirectoryPath(directoryPath);
-      configuration.setWorkingDirectory(directoryPath);
-      return true;
+      for (PsiFile file : ((PsiDirectory)contextElement).getFiles()) {
+        if (GoTestFinder.isTestFile(file)) {
+          configuration.setName(getPackageConfigurationName(((PsiDirectory)contextElement).getName()));
+          configuration.setKind(GoTestRunConfiguration.Kind.DIRECTORY);
+          String directoryPath = ((PsiDirectory)contextElement).getVirtualFile().getPath();
+          configuration.setDirectoryPath(directoryPath);
+          configuration.setWorkingDirectory(directoryPath);
+          return true;
+        }
+      }
+      return false;
     }
     else {
       PsiFile file = contextElement.getContainingFile();
@@ -79,7 +84,7 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
         else {
           GoFunctionOrMethodDeclaration function = findTestFunctionInContext(contextElement);
           if (shouldSkipContext(function)) return false;
-          
+
           if (function != null) {
             configuration.setName(getFunctionConfigurationName(function, getFileConfigurationName(file.getName())));
             configuration.setPattern("^" + function.getName() + "$");
