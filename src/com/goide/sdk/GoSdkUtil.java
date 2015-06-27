@@ -59,7 +59,7 @@ import java.util.regex.Pattern;
 import static com.intellij.util.containers.ContainerUtil.newLinkedHashSet;
 
 public class GoSdkUtil {
-  private static final Pattern GO_VERSION_PATTERN = Pattern.compile("theVersion\\s*=\\s*`go([\\d.]+)`");
+  private static final Pattern GO_VERSION_PATTERN = Pattern.compile("theVersion\\s*=\\s*`go([\\d.]+(rc\\d+)?)`");
   private static final Pattern GAE_VERSION_PATTERN = Pattern.compile("theVersion\\s*=\\s*`go([\\d.]+)( \\(appengine-[\\d.]+\\))?`");
   private static final Pattern GO_DEVEL_VERSION_PATTERN = Pattern.compile("theVersion\\s*=\\s*`(devel.*)`");
 
@@ -130,7 +130,7 @@ public class GoSdkUtil {
   public static Collection<VirtualFile> getGoPathSources(@NotNull final Project project, @Nullable final Module module) {
     Collection<VirtualFile> result = newLinkedHashSet();
     if (module != null && GoSdkService.getInstance(project).isAppEngineSdk(module)) {
-      ContainerUtil.addAllNotNull(result, ContainerUtil.mapNotNull(YamlFilesModificationTracker.getYamlFiles(project, module), 
+      ContainerUtil.addAllNotNull(result, ContainerUtil.mapNotNull(YamlFilesModificationTracker.getYamlFiles(project, module),
                                                                    GoUtil.RETRIEVE_FILE_PARENT_FUNCTION));
     }
     result.addAll(ContainerUtil.mapNotNull(getGoPathRoots(project, module), new RetrieveSubDirectoryOrSelfFunction("src")));
