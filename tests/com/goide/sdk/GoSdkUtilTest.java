@@ -28,14 +28,16 @@ public class GoSdkUtilTest {
     assertEquals(-1, GoSdkUtil.compareVersions("1.1.2", "2.1.1"));
     assertEquals(-1, GoSdkUtil.compareVersions("1.2", "1.2.1"));
     assertEquals(-1, GoSdkUtil.compareVersions("1", "1.1"));
+    assertEquals(-1, GoSdkUtil.compareVersions("1.4rc2", "1.4"));
     assertEquals(0, GoSdkUtil.compareVersions("1.2.3", "1.2.3"));
     assertEquals(0, GoSdkUtil.compareVersions("1.2", "1.2"));
     assertEquals(0, GoSdkUtil.compareVersions("1", "1"));
+    assertEquals(0, GoSdkUtil.compareVersions("1.4rc2", "1.4rc2"));
     assertEquals(1, GoSdkUtil.compareVersions("1.2.4", "1.2.3"));
     assertEquals(1, GoSdkUtil.compareVersions("1.3.3", "1.2.4"));
     assertEquals(1, GoSdkUtil.compareVersions("2.2.3", "1.4.4"));
     assertEquals(1, GoSdkUtil.compareVersions("1.2.1", "1.2"));
-    assertEquals(0, GoSdkUtil.compareVersions("1.2.1", "1.2.1"));
+    assertEquals(1, GoSdkUtil.compareVersions("1.4rc2", "1.3"));
   }
 
   @Test
@@ -51,6 +53,7 @@ public class GoSdkUtilTest {
 
   @Test
   public void testParseGoVersion() {
+    assertEquals("1.4rc2", GoSdkUtil.parseGoVersion("const theVersion = `go1.4rc2`"));
     assertEquals("1.4.2", GoSdkUtil.parseGoVersion("const theVersion = `go1.4.2`"));
     assertEquals("1.4.1 (appengine-1.9.18)", GoSdkUtil.parseGoVersion("const theVersion = `go1.4.1 (appengine-1.9.18)`"));
     assertEquals("devel +e8057df Sun May 3 05:34:01 2015 +0000",
