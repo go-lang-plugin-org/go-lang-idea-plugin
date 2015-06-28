@@ -37,6 +37,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.ProcessingContext;
+import com.intellij.util.Processor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -88,32 +89,15 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
 
         Project project = position.getProject();
         GlobalSearchScope scope = GoUtil.moduleScope(position);
-        boolean isTesting = GoTestFinder.isTestFile(parameters.getOriginalFile()); 
+        boolean isTesting = GoTestFinder.isTestFile(parameters.getOriginalFile());
 
         if (parent instanceof GoReferenceExpression && !GoPsiImplUtil.isUnaryBitAndExpression(parent)) {
           GoReferenceExpression qualifier = ((GoReferenceExpression)parent).getQualifier();
           if (qualifier == null || qualifier.getReference().resolve() == null) {
             for (String name : StubIndex.getInstance().getAllKeys(GoFunctionIndex.KEY, project)) {
               if (StringUtil.isCapitalized(name) && !GoTestFinder.isTestFunctionName(name) && !GoTestFinder.isBenchmarkFunctionName(name)) {
-                for (GoFunctionDeclaration declaration : GoFunctionIndex.find(name, project, scope)) {
-                  GoFile declarationFile = declaration.getContainingFile();
-                  if (declarationFile == file) continue;
-                  if (!allowed(declaration, isTesting)) continue;
-                  
-                  double priority = GoCompletionUtil.NOT_IMPORTED_FUNCTION_PRIORITY;
-                  GoImportSpec existingImport = importedPackages.get(declarationFile.getImportPath());
-                  String pkg = declarationFile.getPackageName();
-                  if (existingImport != null) {
-                    if (existingImport.isDot()) {
-                      continue;
-                    }
-                    priority = GoCompletionUtil.FUNCTION_PRIORITY;
-                    pkg = ObjectUtils.chooseNotNull(existingImport.getAlias(), pkg);
-                  }
-                  String lookupString = StringUtil.isNotEmpty(pkg) ? pkg + "." + name : name;
-                  result.addElement(GoCompletionUtil.createFunctionOrMethodLookupElement(declaration, lookupString,
-                                                                                         FUNC_INSERT_HANDLER, priority));
-                }
+                StubIndex.getInstance().processElements(GoFunctionIndex.KEY, name, project, scope, GoFunctionDeclaration.class,
+                                                        new FunctionsProcessor(file, isTesting, importedPackages, name, result));
               }
             }
           }
@@ -124,54 +108,13 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
             boolean forTypes = parent instanceof GoTypeReferenceExpression;
             for (String name : StubIndex.getInstance().getAllKeys(GoTypesIndex.KEY, project)) {
               if (StringUtil.isCapitalized(name)) {
-                for (GoTypeSpec declaration : GoTypesIndex.find(name, project, scope)) {
-                  GoFile declarationFile = declaration.getContainingFile();
-                  if (declarationFile == file) continue;
-                  PsiReference reference = parent.getReference();
-                  if (reference instanceof GoTypeReference && !((GoTypeReference)reference).allowed(declaration)) continue;
-                  if (!allowed(declaration, isTesting)) continue;
-
-                  double priority = forTypes ? GoCompletionUtil.NOT_IMPORTED_TYPE_PRIORITY : GoCompletionUtil.NOT_IMPORTED_TYPE_CONVERSION;
-                  String importPath = declarationFile.getImportPath();
-                  String pkg = declarationFile.getPackageName();
-                  GoImportSpec existingImport = importedPackages.get(importPath);
-                  if (existingImport != null) {
-                    if (existingImport.isDot()) {
-                      continue;
-                    }
-                    priority = forTypes ? GoCompletionUtil.TYPE_PRIORITY : GoCompletionUtil.TYPE_CONVERSION;
-                    pkg = ObjectUtils.chooseNotNull(existingImport.getAlias(), pkg);
-                  }
-                  String lookupString = StringUtil.isNotEmpty(pkg) ? pkg + "." + name : name; 
-                  if (forTypes) {
-                    result.addElement(GoCompletionUtil.createTypeLookupElement(declaration, lookupString, TYPE_INSERT_HANDLER, 
-                                                                               importPath, priority));
-                  }
-                  else {
-                    result.addElement(GoCompletionUtil.createTypeConversionLookupElement(declaration, lookupString,
-                                                                                         TYPE_CONVERSION_INSERT_HANDLER, importPath,
-                                                                                         priority));
-                  }
-                }
+                StubIndex.getInstance().processElements(GoTypesIndex.KEY, name, project, scope, GoTypeSpec.class,
+                                                        new TypesProcessor(file, parent, isTesting, forTypes, importedPackages, name,
+                                                                           result));
               }
             }
           }
         }
-      }
-
-      private boolean allowed(@NotNull GoNamedElement declaration, boolean isTesting) {
-        GoFile file = declaration.getContainingFile();
-        if (!GoUtil.allowed(file)) return false;
-        PsiDirectory directory = file.getContainingDirectory();
-        if (directory != null) {
-          VirtualFile vFile = directory.getVirtualFile();
-          if (vFile.getPath().endsWith("go/doc/testdata")) return false;
-        }
-        
-        if (!isTesting && GoTestFinder.isTestFile(file)) return false;
-        String packageName = file.getPackageName();
-        if (StringUtil.equals(packageName, GoConstants.MAIN)) return false;
-        return true;
       }
 
       private CompletionResultSet adjustMatcher(@NotNull CompletionParameters parameters,
@@ -212,11 +155,120 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
 
     String fullPackageName = element.getContainingFile().getImportPath();
     if (StringUtil.isEmpty(fullPackageName)) return;
-    
+
     GoImportSpec existingImport = ((GoFile)file).getImportedPackagesMap().get(fullPackageName);
     if (existingImport != null) return;
-    
+
     PsiDocumentManager.getInstance(context.getProject()).commitDocument(context.getEditor().getDocument());
     ((GoFile)file).addImport(fullPackageName, null);
+  }
+
+  private static boolean allowed(@NotNull GoNamedElement declaration, boolean isTesting) {
+    GoFile file = declaration.getContainingFile();
+    if (!GoUtil.allowed(file)) return false;
+    PsiDirectory directory = file.getContainingDirectory();
+    if (directory != null) {
+      VirtualFile vFile = directory.getVirtualFile();
+      if (vFile.getPath().endsWith("go/doc/testdata")) return false;
+    }
+
+    if (!isTesting && GoTestFinder.isTestFile(file)) return false;
+    String packageName = file.getPackageName();
+    if (StringUtil.equals(packageName, GoConstants.MAIN)) return false;
+    return true;
+  }
+
+  private static class FunctionsProcessor implements Processor<GoFunctionDeclaration> {
+    private final PsiFile myFile;
+    private final boolean myIsTesting;
+    private final Map<String, GoImportSpec> myImportedPackages;
+    private final String myName;
+    private final CompletionResultSet myFinalResult;
+
+    public FunctionsProcessor(PsiFile file,
+                              boolean isTesting,
+                              Map<String, GoImportSpec> importedPackages,
+                              String name,
+                              CompletionResultSet finalResult) {
+      myFile = file;
+      myIsTesting = isTesting;
+      myImportedPackages = importedPackages;
+      myName = name;
+      myFinalResult = finalResult;
+    }
+
+    @Override
+    public boolean process(GoFunctionDeclaration declaration) {
+      GoFile declarationFile = declaration.getContainingFile();
+      if (declarationFile == myFile) return true;
+      if (!allowed(declaration, myIsTesting)) return true;
+
+      double priority = GoCompletionUtil.NOT_IMPORTED_FUNCTION_PRIORITY;
+      GoImportSpec existingImport = myImportedPackages.get(declarationFile.getImportPath());
+      String pkg = declarationFile.getPackageName();
+      if (existingImport != null) {
+        if (existingImport.isDot()) {
+          return true;
+        }
+        priority = GoCompletionUtil.FUNCTION_PRIORITY;
+        pkg = ObjectUtils.chooseNotNull(existingImport.getAlias(), pkg);
+      }
+      String lookupString = StringUtil.isNotEmpty(pkg) ? pkg + "." + myName : myName;
+      myFinalResult.addElement(GoCompletionUtil.createFunctionOrMethodLookupElement(declaration, lookupString, FUNC_INSERT_HANDLER,
+                                                                                    priority));
+      return true;
+    }
+  }
+
+  private static class TypesProcessor implements Processor<GoTypeSpec> {
+    private final PsiFile myFile;
+    private final PsiElement myParent;
+    private final boolean myIsTesting;
+    private final boolean myForTypes;
+    private final Map<String, GoImportSpec> myImportedPackages;
+    private final String myName;
+    private final CompletionResultSet myResult;
+
+    public TypesProcessor(PsiFile file, PsiElement parent, boolean isTesting, boolean forTypes, Map<String, GoImportSpec> importedPackages,
+                          String name, CompletionResultSet result) {
+      myFile = file;
+      myParent = parent;
+      myIsTesting = isTesting;
+      myForTypes = forTypes;
+      myImportedPackages = importedPackages;
+      myName = name;
+      myResult = result;
+    }
+
+    @Override
+    public boolean process(GoTypeSpec spec) {
+      GoFile declarationFile = spec.getContainingFile();
+      if (declarationFile == myFile) return true;
+
+      PsiReference reference = myParent.getReference();
+      if (reference instanceof GoTypeReference && !((GoTypeReference)reference).allowed(spec)) return true;
+      if (!allowed(spec, myIsTesting)) return true;
+
+      double priority = myForTypes ? GoCompletionUtil.NOT_IMPORTED_TYPE_PRIORITY : GoCompletionUtil.NOT_IMPORTED_TYPE_CONVERSION;
+      String importPath = declarationFile.getImportPath();
+      String pkg = declarationFile.getPackageName();
+      GoImportSpec existingImport = myImportedPackages.get(importPath);
+      if (existingImport != null) {
+        if (existingImport.isDot()) {
+          return true;
+        }
+        priority = myForTypes ? GoCompletionUtil.TYPE_PRIORITY : GoCompletionUtil.TYPE_CONVERSION;
+        pkg = ObjectUtils.chooseNotNull(existingImport.getAlias(), pkg);
+      }
+      String lookupString = StringUtil.isNotEmpty(pkg) ? pkg + "." + myName : myName;
+      if (myForTypes) {
+        myResult.addElement(GoCompletionUtil.createTypeLookupElement(spec, lookupString, TYPE_INSERT_HANDLER, importPath, priority));
+      }
+      else {
+        myResult.addElement(GoCompletionUtil.createTypeConversionLookupElement(spec, lookupString, TYPE_CONVERSION_INSERT_HANDLER,
+                                                                               importPath, priority));
+      }
+      return true;
+    }
   }
 }
