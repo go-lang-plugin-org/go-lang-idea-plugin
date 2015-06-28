@@ -70,6 +70,9 @@ public class GoAnnotator implements Annotator {
     else if (o instanceof GoReceiver) {
       setHighlighting(o, holder, getReceiverColor(), "receiver");
     }
+    else if (o instanceof GoLabelDefinition || o instanceof GoLabelRef) {
+      setHighlighting(o, holder, GoSyntaxHighlightingColors.LABEL, "label");
+    }
     else if (o instanceof GoNamedSignatureOwner) {
       PsiElement identifier = ((GoNamedSignatureOwner)o).getIdentifier();
       if (identifier != null) {

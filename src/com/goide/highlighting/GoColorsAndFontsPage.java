@@ -69,6 +69,7 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
     new AttributesDescriptor("Local constant", LOCAL_CONSTANT),
     new AttributesDescriptor("Local variable", LOCAL_VARIABLE),
     new AttributesDescriptor("Scope declared variable", SCOPE_VARIABLE),
+    new AttributesDescriptor("Label", LABEL)
   };
   private static final Map<String, TextAttributesKey> ATTRIBUTES_KEY_MAP = ContainerUtil.newTroveMap();
   static {
@@ -95,6 +96,7 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
     ATTRIBUTES_KEY_MAP.put("lc", LOCAL_CONSTANT);
     ATTRIBUTES_KEY_MAP.put("lv", LOCAL_VARIABLE);
     ATTRIBUTES_KEY_MAP.put("sv", SCOPE_VARIABLE);
+    ATTRIBUTES_KEY_MAP.put("ll", LABEL);
   }
 
   @NotNull
@@ -204,9 +206,10 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
            "        _ = <sv>demo2</sv>\n" +
            "        return\n" +
            "    }\n" +
-           "\n" +
+           "<ll>demoLabel</ll>:\n" +
            "    for <sv>demo1</sv> := range []<bt>int</bt>{1, 2, 3, 4} {\n" +
            "        _ = <sv>demo1</sv>\n" +
+           "        continue <ll>demoLabel</ll>\n" +
            "    }\n" +
            "\n" +
            "    switch {\n" +
