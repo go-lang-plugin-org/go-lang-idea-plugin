@@ -80,42 +80,42 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         PsiElement position = parameters.getPosition();
         PsiElement parent = position.getParent();
         if (prevDot(parent)) return;
-        result = adjustMatcher(parameters, result, parent);
-
-        final PsiFile file = parameters.getOriginalFile();
+        PsiFile file = parameters.getOriginalFile();
         if (!(file instanceof GoFile)) return;
-
-        final Map<String, GoImportSpec> importedPackages = ((GoFile)file).getImportedPackagesMap();
-
+        if (!(parent instanceof GoReferenceExpressionBase)) return;
+        GoReferenceExpressionBase qualifier = ((GoReferenceExpressionBase)parent).getQualifier();
+        if (qualifier != null && qualifier.getReference() != null && qualifier.getReference().resolve() != null) return;
+        
+        boolean completeFunctions = parent instanceof GoReferenceExpression && !GoPsiImplUtil.isUnaryBitAndExpression(parent);
+        boolean completeTypes = parent instanceof GoReferenceExpression || parent instanceof GoTypeReferenceExpression;
+        
+        if (!completeFunctions && !completeTypes) return;
+        
+        result = adjustMatcher(parameters, result, parent);
+        Map<String, GoImportSpec> importedPackages = ((GoFile)file).getImportedPackagesMap();
         Project project = position.getProject();
         GlobalSearchScope scope = GoUtil.moduleScopeExceptContainingFile(file);
         boolean isTesting = GoTestFinder.isTestFile(file);
-
-        if (parent instanceof GoReferenceExpression && !GoPsiImplUtil.isUnaryBitAndExpression(parent)) {
-          GoReferenceExpression qualifier = ((GoReferenceExpression)parent).getQualifier();
-          if (qualifier == null || qualifier.getReference().resolve() == null) {
-            FunctionsProcessor processor = new FunctionsProcessor(isTesting, importedPackages, result);
-            for (String name : StubIndex.getInstance().getAllKeys(GoFunctionIndex.KEY, project)) {
-              if (StringUtil.isCapitalized(name) && 
-                  !GoTestFinder.isTestFunctionName(name) && 
-                  !GoTestFinder.isExampleFunctionName(name) && 
-                  !GoTestFinder.isBenchmarkFunctionName(name)) {
-                processor.setName(name);
-                StubIndex.getInstance().processElements(GoFunctionIndex.KEY, name, project, scope, GoFunctionDeclaration.class, processor);
-              }
+        
+        if (completeFunctions) {
+          FunctionsProcessor processor = new FunctionsProcessor(isTesting, importedPackages, result);
+          for (String name : StubIndex.getInstance().getAllKeys(GoFunctionIndex.KEY, project)) {
+            if (StringUtil.isCapitalized(name) &&
+                !GoTestFinder.isTestFunctionName(name) &&
+                !GoTestFinder.isExampleFunctionName(name) &&
+                !GoTestFinder.isBenchmarkFunctionName(name)) {
+              processor.setName(name);
+              StubIndex.getInstance().processElements(GoFunctionIndex.KEY, name, project, scope, GoFunctionDeclaration.class, processor);
             }
           }
         }
-        if (parent instanceof GoReferenceExpression || parent instanceof GoTypeReferenceExpression) {
-          GoReferenceExpressionBase qualifier = ((GoReferenceExpressionBase)parent).getQualifier();
-          if (qualifier == null || qualifier.getReference() == null || qualifier.getReference().resolve() == null) {
-            boolean forTypes = parent instanceof GoTypeReferenceExpression;
-            final TypesProcessor processor = new TypesProcessor(parent, isTesting, forTypes, importedPackages, result);
-            for (String name : StubIndex.getInstance().getAllKeys(GoTypesIndex.KEY, project)) {
-              if (StringUtil.isCapitalized(name)) {
-                processor.setName(name);
-                StubIndex.getInstance().processElements(GoTypesIndex.KEY, name, project, scope, GoTypeSpec.class, processor);
-              }
+        if (completeTypes) {
+          boolean forTypes = parent instanceof GoTypeReferenceExpression;
+          final TypesProcessor processor = new TypesProcessor(parent, isTesting, forTypes, importedPackages, result);
+          for (String name : StubIndex.getInstance().getAllKeys(GoTypesIndex.KEY, project)) {
+            if (StringUtil.isCapitalized(name)) {
+              processor.setName(name);
+              StubIndex.getInstance().processElements(GoTypesIndex.KEY, name, project, scope, GoTypeSpec.class, processor);
             }
           }
         }
