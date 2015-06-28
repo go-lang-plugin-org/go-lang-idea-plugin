@@ -30,9 +30,12 @@ import com.goide.util.GoUtil;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
 import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
+import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubTree;
 import com.intellij.psi.tree.IElementType;
@@ -61,7 +64,14 @@ public class GoFile extends PsiFileBase {
   public String getImportPath() {
     return GoSdkUtil.getImportPath(getParent());
   }
-  
+
+  @NotNull
+  @Override
+  public SearchScope getUseScope() {
+    Module module = ModuleUtilCore.findModuleForPsiElement(this);
+    return module != null ? GoUtil.moduleScope(getProject(), module) : super.getUseScope();
+  }
+
   @Nullable
   public GoPackageClause getPackage() {
     GoFileStub stub = getStub();

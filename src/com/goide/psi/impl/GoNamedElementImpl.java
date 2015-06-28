@@ -20,8 +20,11 @@ import com.goide.GoIcons;
 import com.goide.psi.*;
 import com.goide.stubs.GoNamedStub;
 import com.goide.stubs.GoTypeStub;
+import com.goide.util.GoUtil;
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
@@ -37,7 +40,8 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStubbedElementImpl<T> implements GoCompositeElement, GoNamedElement {
+public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStubbedElementImpl<T>
+  implements GoCompositeElement, GoNamedElement {
 
   public GoNamedElementImpl(@NotNull T stub, @NotNull IStubElementType nodeType) {
     super(stub, nodeType);
@@ -99,7 +103,7 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
     if (stub != null) {
       PsiElement parent = getParentByStub();
       // todo: cast is weird
-      return parent instanceof GoStubbedElementImpl ? 
+      return parent instanceof GoStubbedElementImpl ?
              (GoType)((GoStubbedElementImpl)parent).findChildByClass(GoType.class, GoTypeStub.class) :
              null;
     }
@@ -160,7 +164,13 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
   @NotNull
   @Override
   public SearchScope getUseScope() {
-    return isPublic() ? super.getUseScope() : GoPsiImplUtil.packageScope(getContainingFile());
+    if (isPublic()) {
+      Module module = ModuleUtilCore.findModuleForPsiElement(this);
+      return module != null ? GoUtil.moduleScope(getProject(), module) : super.getUseScope();
+    }
+    else {
+      return GoPsiImplUtil.packageScope(getContainingFile());
+    }
   }
 
   @Override
