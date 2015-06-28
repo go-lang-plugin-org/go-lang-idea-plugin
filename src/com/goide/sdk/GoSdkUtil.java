@@ -87,7 +87,17 @@ public class GoSdkUtil {
   @Nullable
   public static GoFile findBuiltinFile(@NotNull PsiElement context) {
     final Project project = context.getProject();
-    final Module module = ModuleUtilCore.findModuleForPsiElement(context);
+    Module moduleFromContext = ModuleUtilCore.findModuleForPsiElement(context);
+    if (moduleFromContext == null) {
+      for (Module module : ModuleManager.getInstance(project).getModules()) {
+        if (GoSdkService.getInstance(project).isGoModule(module)) {
+          moduleFromContext = module;
+          break;
+        }
+      }
+    }
+    
+    final Module module = moduleFromContext;
     UserDataHolder holder = ObjectUtils.notNull(module, project);
     VirtualFile file = CachedValuesManager.getManager(context.getProject()).getCachedValue(holder, new CachedValueProvider<VirtualFile>() {
       @Nullable
