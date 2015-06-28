@@ -40,7 +40,8 @@ import java.util.Collection;
 import java.util.Map;
 
 public abstract class GoRunConfigurationBase<RunningState extends GoRunningState>
-  extends ModuleBasedConfiguration<GoModuleBasedConfiguration> implements RunConfigurationWithSuppressedDefaultRunAction {
+  extends ModuleBasedConfiguration<GoModuleBasedConfiguration> implements RunConfigurationWithSuppressedDefaultRunAction,
+                                                                          RunConfigurationWithSuppressedDefaultDebugAction {
 
   private static final String WORKING_DIRECTORY_NAME = "working_directory";
   private static final String GO_PARAMETERS_NAME = "go_parameters";
