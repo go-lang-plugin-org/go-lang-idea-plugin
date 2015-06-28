@@ -21,8 +21,7 @@ import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.psi.impl.GoTypeReference;
 import com.goide.runconfig.testing.GoTestFinder;
-import com.goide.stubs.index.GoFunctionIndex;
-import com.goide.stubs.index.GoTypesIndex;
+import com.goide.stubs.index.GoAllNamesIndex;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
@@ -96,27 +95,15 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         Project project = position.getProject();
         GlobalSearchScope scope = GoUtil.moduleScopeExceptContainingFile(file);
         boolean isTesting = GoTestFinder.isTestFile(file);
-        
-        if (completeFunctions) {
-          FunctionsProcessor processor = new FunctionsProcessor(isTesting, importedPackages, result);
-          for (String name : StubIndex.getInstance().getAllKeys(GoFunctionIndex.KEY, project)) {
-            if (StringUtil.isCapitalized(name) &&
-                !GoTestFinder.isTestFunctionName(name) &&
-                !GoTestFinder.isExampleFunctionName(name) &&
-                !GoTestFinder.isBenchmarkFunctionName(name)) {
-              processor.setName(name);
-              StubIndex.getInstance().processElements(GoFunctionIndex.KEY, name, project, scope, GoFunctionDeclaration.class, processor);
-            }
-          }
-        }
-        if (completeTypes) {
-          boolean forTypes = parent instanceof GoTypeReferenceExpression;
-          final TypesProcessor processor = new TypesProcessor(parent, isTesting, forTypes, importedPackages, result);
-          for (String name : StubIndex.getInstance().getAllKeys(GoTypesIndex.KEY, project)) {
-            if (StringUtil.isCapitalized(name)) {
-              processor.setName(name);
-              StubIndex.getInstance().processElements(GoTypesIndex.KEY, name, project, scope, GoTypeSpec.class, processor);
-            }
+        boolean forTypes = parent instanceof GoTypeReferenceExpression;
+
+        FunctionsProcessor functionProcessor = new FunctionsProcessor(isTesting, importedPackages, result);
+        TypesProcessor typeProcessor = new TypesProcessor(parent, isTesting, forTypes, importedPackages, result);
+        NamedElementProcessor processor = new NamedElementProcessor(completeFunctions, completeTypes, functionProcessor, typeProcessor);
+        for (String name : StubIndex.getInstance().getAllKeys(GoAllNamesIndex.ALL_NAMES, project)) {
+          if (StringUtil.isCapitalized(name)) {
+            processor.setName(name);
+            StubIndex.getInstance().processElements(GoAllNamesIndex.ALL_NAMES, name, project, scope, GoNamedElement.class, processor);
           }
         }
       }
@@ -269,6 +256,41 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
       else {
         myResult.addElement(GoCompletionUtil.createTypeConversionLookupElement(spec, lookupString, TYPE_CONVERSION_INSERT_HANDLER,
                                                                                importPath, priority));
+      }
+      return true;
+    }
+  }
+
+  private static class NamedElementProcessor implements Processor<GoNamedElement> {
+    private final boolean myCompleteFunctions;
+    private final boolean myCompleteTypes;
+    private final FunctionsProcessor myFunctionProcessor;
+    private final TypesProcessor myTypeProcessor;
+    private String myName;
+
+    public NamedElementProcessor(boolean completeFunctions,
+                                 boolean completeTypes,
+                                 FunctionsProcessor functionProcessor,
+                                 TypesProcessor typeProcessor) {
+      myCompleteFunctions = completeFunctions;
+      myCompleteTypes = completeTypes;
+      myFunctionProcessor = functionProcessor;
+      myTypeProcessor = typeProcessor;
+    }
+
+    public void setName(@NotNull String name) {
+      myName = name;
+    }
+
+    @Override
+    public boolean process(GoNamedElement element) {
+      if (myCompleteFunctions && element instanceof GoFunctionDeclaration) {
+        myFunctionProcessor.setName(myName);
+        return myFunctionProcessor.process(((GoFunctionDeclaration)element));
+      }
+      if (myCompleteTypes && element instanceof GoTypeSpec) {
+        myTypeProcessor.setName(myName);
+        return myTypeProcessor.process(((GoTypeSpec)element));
       }
       return true;
     }
