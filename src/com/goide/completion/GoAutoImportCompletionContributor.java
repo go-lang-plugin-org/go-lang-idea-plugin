@@ -88,16 +88,17 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         final Map<String, GoImportSpec> importedPackages = ((GoFile)file).getImportedPackagesMap();
 
         Project project = position.getProject();
-        GlobalSearchScope scope = GoUtil.moduleScope(position);
-        boolean isTesting = GoTestFinder.isTestFile(parameters.getOriginalFile());
+        GlobalSearchScope scope = GoUtil.moduleScopeExceptContainingFile(file);
+        boolean isTesting = GoTestFinder.isTestFile(file);
 
         if (parent instanceof GoReferenceExpression && !GoPsiImplUtil.isUnaryBitAndExpression(parent)) {
           GoReferenceExpression qualifier = ((GoReferenceExpression)parent).getQualifier();
           if (qualifier == null || qualifier.getReference().resolve() == null) {
+            FunctionsProcessor processor = new FunctionsProcessor(isTesting, importedPackages, result);
             for (String name : StubIndex.getInstance().getAllKeys(GoFunctionIndex.KEY, project)) {
               if (StringUtil.isCapitalized(name) && !GoTestFinder.isTestFunctionName(name) && !GoTestFinder.isBenchmarkFunctionName(name)) {
-                StubIndex.getInstance().processElements(GoFunctionIndex.KEY, name, project, scope, GoFunctionDeclaration.class,
-                                                        new FunctionsProcessor(file, isTesting, importedPackages, name, result));
+                processor.setName(name);
+                StubIndex.getInstance().processElements(GoFunctionIndex.KEY, name, project, scope, GoFunctionDeclaration.class, processor);
               }
             }
           }
@@ -106,11 +107,11 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
           GoReferenceExpressionBase qualifier = ((GoReferenceExpressionBase)parent).getQualifier();
           if (qualifier == null || qualifier.getReference() == null || qualifier.getReference().resolve() == null) {
             boolean forTypes = parent instanceof GoTypeReferenceExpression;
+            final TypesProcessor processor = new TypesProcessor(parent, isTesting, forTypes, importedPackages, result);
             for (String name : StubIndex.getInstance().getAllKeys(GoTypesIndex.KEY, project)) {
               if (StringUtil.isCapitalized(name)) {
-                StubIndex.getInstance().processElements(GoTypesIndex.KEY, name, project, scope, GoTypeSpec.class,
-                                                        new TypesProcessor(file, parent, isTesting, forTypes, importedPackages, name,
-                                                                           result));
+                processor.setName(name);
+                StubIndex.getInstance().processElements(GoTypesIndex.KEY, name, project, scope, GoTypeSpec.class, processor);
               }
             }
           }
@@ -179,31 +180,27 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
   }
 
   private static class FunctionsProcessor implements Processor<GoFunctionDeclaration> {
-    private final PsiFile myFile;
     private final boolean myIsTesting;
     private final Map<String, GoImportSpec> myImportedPackages;
-    private final String myName;
     private final CompletionResultSet myFinalResult;
+    private String myName;
 
-    public FunctionsProcessor(PsiFile file,
-                              boolean isTesting,
-                              Map<String, GoImportSpec> importedPackages,
-                              String name,
-                              CompletionResultSet finalResult) {
-      myFile = file;
+    public FunctionsProcessor(boolean isTesting, Map<String, GoImportSpec> importedPackages, CompletionResultSet finalResult) {
       myIsTesting = isTesting;
       myImportedPackages = importedPackages;
-      myName = name;
       myFinalResult = finalResult;
+    }
+
+    public void setName(@NotNull String name) {
+      myName = name;
     }
 
     @Override
     public boolean process(GoFunctionDeclaration declaration) {
-      GoFile declarationFile = declaration.getContainingFile();
-      if (declarationFile == myFile) return true;
       if (!allowed(declaration, myIsTesting)) return true;
 
       double priority = GoCompletionUtil.NOT_IMPORTED_FUNCTION_PRIORITY;
+      GoFile declarationFile = declaration.getContainingFile();
       GoImportSpec existingImport = myImportedPackages.get(declarationFile.getImportPath());
       String pkg = declarationFile.getPackageName();
       if (existingImport != null) {
@@ -221,35 +218,37 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
   }
 
   private static class TypesProcessor implements Processor<GoTypeSpec> {
-    private final PsiFile myFile;
     private final PsiElement myParent;
     private final boolean myIsTesting;
     private final boolean myForTypes;
     private final Map<String, GoImportSpec> myImportedPackages;
-    private final String myName;
     private final CompletionResultSet myResult;
+    private String myName;
 
-    public TypesProcessor(PsiFile file, PsiElement parent, boolean isTesting, boolean forTypes, Map<String, GoImportSpec> importedPackages,
-                          String name, CompletionResultSet result) {
-      myFile = file;
+    public TypesProcessor(PsiElement parent,
+                          boolean isTesting,
+                          boolean forTypes,
+                          Map<String, GoImportSpec> importedPackages,
+                          CompletionResultSet result) {
       myParent = parent;
       myIsTesting = isTesting;
       myForTypes = forTypes;
       myImportedPackages = importedPackages;
-      myName = name;
       myResult = result;
+    }
+
+    public void setName(@NotNull String name) {
+      myName = name;
     }
 
     @Override
     public boolean process(GoTypeSpec spec) {
-      GoFile declarationFile = spec.getContainingFile();
-      if (declarationFile == myFile) return true;
-
       PsiReference reference = myParent.getReference();
       if (reference instanceof GoTypeReference && !((GoTypeReference)reference).allowed(spec)) return true;
       if (!allowed(spec, myIsTesting)) return true;
 
       double priority = myForTypes ? GoCompletionUtil.NOT_IMPORTED_TYPE_PRIORITY : GoCompletionUtil.NOT_IMPORTED_TYPE_CONVERSION;
+      GoFile declarationFile = spec.getContainingFile();
       String importPath = declarationFile.getImportPath();
       String pkg = declarationFile.getPackageName();
       GoImportSpec existingImport = myImportedPackages.get(importPath);

@@ -31,6 +31,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.search.DelegatingGlobalSearchScope;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
@@ -204,5 +205,26 @@ public class GoUtil {
         return Result.create(set, dir);
       }
     });
+  }
+
+  @NotNull
+  public static GlobalSearchScope moduleScopeExceptContainingFile(@NotNull PsiElement context) {
+    PsiFile file = context.getContainingFile();
+    GlobalSearchScope moduleScope = moduleScope(context);
+    return file != null ? new ExceptFileScope(moduleScope, file.getVirtualFile()) : moduleScope;
+  }
+
+  private static class ExceptFileScope extends DelegatingGlobalSearchScope {
+    @Nullable private final VirtualFile myFile;
+
+    public ExceptFileScope(GlobalSearchScope moduleScope, @Nullable VirtualFile file) {
+      super(moduleScope);
+      myFile = file;
+    }
+
+    @Override
+    public boolean contains(@NotNull VirtualFile file) {
+      return !file.equals(myFile) && super.contains(file);
+    }
   }
 }
