@@ -45,14 +45,18 @@ public class GoTestFinder implements TestFinder {
   public static boolean isTestFile(@Nullable VirtualFile file) {
     return file != null && file.getFileType() == GoFileType.INSTANCE && file.getNameWithoutExtension().endsWith(GoConstants.TEST_SUFFIX);
   }
-  
+
   @Nullable
   public static String getTestFunctionName(@NotNull GoFunctionOrMethodDeclaration function) {
     return isTestFunctionName(function.getName()) ? StringUtil.notNullize(function.getName()) : null;
   }
-  
+
   public static boolean isTestFunctionName(@Nullable String functionName) {
     return checkPrefix(functionName, "Test");
+  }
+
+  public static boolean isExampleFunctionName(@Nullable String functionName) {
+    return checkPrefix(functionName, "Example");
   }
 
   public static boolean isBenchmarkFunctionName(@Nullable String functionName) {
@@ -100,7 +104,7 @@ public class GoTestFinder implements TestFinder {
     }
     return Collections.emptyList();
   }
-  
+
   @Override
   public boolean isTest(@NotNull PsiElement element) {
     return isTestFile(InjectedLanguageUtil.getTopLevelFile(element));

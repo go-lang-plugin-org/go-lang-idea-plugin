@@ -96,7 +96,10 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
           if (qualifier == null || qualifier.getReference().resolve() == null) {
             FunctionsProcessor processor = new FunctionsProcessor(isTesting, importedPackages, result);
             for (String name : StubIndex.getInstance().getAllKeys(GoFunctionIndex.KEY, project)) {
-              if (StringUtil.isCapitalized(name) && !GoTestFinder.isTestFunctionName(name) && !GoTestFinder.isBenchmarkFunctionName(name)) {
+              if (StringUtil.isCapitalized(name) && 
+                  !GoTestFinder.isTestFunctionName(name) && 
+                  !GoTestFinder.isExampleFunctionName(name) && 
+                  !GoTestFinder.isBenchmarkFunctionName(name)) {
                 processor.setName(name);
                 StubIndex.getInstance().processElements(GoFunctionIndex.KEY, name, project, scope, GoFunctionDeclaration.class, processor);
               }

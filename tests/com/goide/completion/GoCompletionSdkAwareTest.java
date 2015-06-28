@@ -205,11 +205,11 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
       "func test(){fmt.Sprintln().<caret>}", CompletionType.BASIC, 1, CheckType.EQUALS
     );
   }
-  
+
   public void testDoNotRunAutoImportCompletionAfterDot() {
     doTestCompletion();
   }
-  
+
   public void testDoNotRunAutoImportFunctionCompletionAfterUnaryAmpersand() {
     doCheckResult("package main;\n" +
                   "func test(){println(&io.reALC<caret>)}",
@@ -261,21 +261,35 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "    fmt.Fprintln()\n" +
                   "}");
   }
-  
+
   public void testDoNotCompleteTestFunctions() throws IOException {
     myFixture.getTempDirFixture().createFile("pack/pack_test.go", "package pack; func TestFoo() {}");
     myFixture.configureByText("my_test.go", "package a; func main() { _ = TestF<caret>");
     myFixture.completeBasic();
     myFixture.checkResult("package a; func main() { _ = TestF<caret>");
   }
-  
+
+  public void testDoNotCompleteBenchmarkFunctions() throws IOException {
+    myFixture.getTempDirFixture().createFile("pack/pack_test.go", "package pack; func BenchmarkFoo() {}");
+    myFixture.configureByText("my_test.go", "package a; func main() { _ = BenchmarkF<caret>");
+    myFixture.completeBasic();
+    myFixture.checkResult("package a; func main() { _ = BenchmarkF<caret>");
+  }
+
+  public void testDoNotCompleteExampleFunctions() throws IOException {
+    myFixture.getTempDirFixture().createFile("pack/pack_test.go", "package pack; func ExampleFoo() {}");
+    myFixture.configureByText("my_test.go", "package a; func main() { _ = ExampleF<caret>");
+    myFixture.completeBasic();
+    myFixture.checkResult("package a; func main() { _ = ExampleF<caret>");
+  }
+
   public void testDoNotCompleteFunctionsFromTestInNotTestingContext() throws IOException {
     myFixture.getTempDirFixture().createFile("pack/pack_test.go", "package pack; func TestingFunction() {}");
     myFixture.configureByText("a.go", "package a; func main() { _ = TestingF<caret>");
     myFixture.completeBasic();
     myFixture.checkResult("package a; func main() { _ = TestingF<caret>");
   }
-  
+
   public void testCompleteTestFunctionsInTestingContext() throws IOException {
     myFixture.getTempDirFixture().createFile("pack/pack_test.go", "package pack; func TestingFunction() {}");
     myFixture.configureByText("my_test.go", "package a; func main() { _ = TestingF<caret>");
