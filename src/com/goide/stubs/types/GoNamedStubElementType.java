@@ -17,13 +17,13 @@
 package com.goide.stubs.types;
 
 import com.goide.psi.GoNamedElement;
+import com.goide.stubs.GoNamedStub;
 import com.goide.stubs.index.GoAllPrivateNamesIndex;
 import com.goide.stubs.index.GoAllPublicNamesIndex;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.stubs.IndexSink;
-import com.intellij.psi.stubs.NamedStubBase;
 import com.intellij.psi.stubs.StubIndexKey;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.Collections;
 
-public abstract class GoNamedStubElementType<S extends NamedStubBase<T>, T extends GoNamedElement> extends GoStubElementType<S, T> {
+public abstract class GoNamedStubElementType<S extends GoNamedStub<T>, T extends GoNamedElement> extends GoStubElementType<S, T> {
   public GoNamedStubElementType(@NonNls @NotNull String debugName) {
     super(debugName);
   }
@@ -45,7 +45,7 @@ public abstract class GoNamedStubElementType<S extends NamedStubBase<T>, T exten
   public void indexStub(@NotNull final S stub, @NotNull final IndexSink sink) {
     String name = stub.getName();
     if (shouldIndex() && StringUtil.isNotEmpty(name)) {
-      if (StringUtil.isCapitalized(name)) {
+      if (stub.isPublic()) {
         sink.occurrence(GoAllPublicNamesIndex.ALL_PUBLIC_NAMES, name);
       }
       else {
