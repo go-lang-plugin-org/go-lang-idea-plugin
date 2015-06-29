@@ -24,14 +24,15 @@ import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.stubs.index.GoAllPublicNamesIndex;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.completion.*;
-import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
-import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.PsiElementPattern;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.util.ObjectUtils;
@@ -46,30 +47,6 @@ import static com.goide.psi.impl.GoPsiImplUtil.prevDot;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public class GoAutoImportCompletionContributor extends CompletionContributor {
-  private static final ParenthesesWithImport FUNC_INSERT_HANDLER = new ParenthesesWithImport();
-  private static final InsertHandler<LookupElement> TYPE_INSERT_HANDLER = new InsertHandler<LookupElement>() {
-    @Override
-    public void handleInsert(InsertionContext context, LookupElement item) {
-      PsiElement element = item.getPsiElement();
-      if (element instanceof GoNamedElement) {
-        autoImport(context, (GoNamedElement)element);
-      }
-    }
-  };
-  private static final InsertHandler<LookupElement> TYPE_CONVERSION_INSERT_HANDLER = new InsertHandler<LookupElement>() {
-    @Override
-    public void handleInsert(InsertionContext context, LookupElement item) {
-      PsiElement element = item.getPsiElement();
-      if (element instanceof GoNamedElement) {
-        if (element instanceof GoTypeSpec) {
-          GoCompletionUtil.getTypeConversionInsertHandler(((GoTypeSpec)element)).handleInsert(context, item);
-        }
-        autoImport(context, (GoNamedElement)element);
-      }
-    }
-  };
-
-
   public GoAutoImportCompletionContributor() {
     extend(CompletionType.BASIC, inGoFile(), new CompletionProvider<CompletionParameters>() {
       @Override
@@ -116,40 +93,8 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
     });
   }
 
-  private static class ParenthesesWithImport extends ParenthesesInsertHandler<LookupElement> {
-    @Override
-    public void handleInsert(@NotNull InsertionContext context, @NotNull LookupElement item) {
-      PsiElement element = item.getPsiElement();
-      if (element instanceof GoFunctionDeclaration) {
-        super.handleInsert(context, item);
-        autoImport(context, (GoNamedElement)element);
-      }
-    }
-
-    @Override
-    protected boolean placeCaretInsideParentheses(InsertionContext context, @NotNull LookupElement item) {
-      PsiElement e = item.getPsiElement();
-      GoSignature signature = e instanceof GoFunctionDeclaration ? ((GoFunctionDeclaration)e).getSignature() : null;
-      return signature != null && signature.getParameters().getParameterDeclarationList().size() > 0;
-    }
-  }
-
   private static PsiElementPattern.Capture<PsiElement> inGoFile() {
     return psiElement().inFile(psiElement(GoFile.class));
-  }
-
-  private static void autoImport(@NotNull InsertionContext context, @NotNull GoNamedElement element) {
-    PsiFile file = context.getFile();
-    if (!(file instanceof GoFile)) return;
-
-    String fullPackageName = element.getContainingFile().getImportPath();
-    if (StringUtil.isEmpty(fullPackageName)) return;
-
-    GoImportSpec existingImport = ((GoFile)file).getImportedPackagesMap().get(fullPackageName);
-    if (existingImport != null) return;
-
-    PsiDocumentManager.getInstance(context.getProject()).commitDocument(context.getEditor().getDocument());
-    ((GoFile)file).addImport(fullPackageName, null);
   }
 
   private static boolean allowed(@NotNull GoNamedElement declaration, boolean isTesting) {
@@ -201,7 +146,8 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         pkg = ObjectUtils.chooseNotNull(existingImport.getAlias(), pkg);
       }
       String lookupString = StringUtil.isNotEmpty(pkg) ? pkg + "." + myName : myName;
-      myFinalResult.addElement(GoCompletionUtil.createFunctionOrMethodLookupElement(declaration, lookupString, FUNC_INSERT_HANDLER,
+      myFinalResult.addElement(GoCompletionUtil.createFunctionOrMethodLookupElement(declaration, lookupString, 
+                                                                                    GoAutoImportInsertHandler.FUNCTION_INSERT_HANDLER,
                                                                                     priority));
       return true;
     }
@@ -251,10 +197,12 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
       }
       String lookupString = StringUtil.isNotEmpty(pkg) ? pkg + "." + myName : myName;
       if (myForTypes) {
-        myResult.addElement(GoCompletionUtil.createTypeLookupElement(spec, lookupString, TYPE_INSERT_HANDLER, importPath, priority));
+        myResult.addElement(GoCompletionUtil.createTypeLookupElement(spec, lookupString, GoAutoImportInsertHandler.TYPE_INSERT_HANDLER, 
+                                                                     importPath, priority));
       }
       else {
-        myResult.addElement(GoCompletionUtil.createTypeConversionLookupElement(spec, lookupString, TYPE_CONVERSION_INSERT_HANDLER,
+        myResult.addElement(GoCompletionUtil.createTypeConversionLookupElement(spec, lookupString, 
+                                                                               GoAutoImportInsertHandler.TYPE_CONVERSION_INSERT_HANDLER,
                                                                                importPath, priority));
       }
       return true;
