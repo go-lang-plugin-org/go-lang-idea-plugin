@@ -21,7 +21,6 @@ import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.psi.impl.GoTypeReference;
 import com.goide.runconfig.testing.GoTestFinder;
-import com.goide.stubs.index.GoAllPublicNamesIndex;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.openapi.project.Project;
@@ -40,10 +39,12 @@ import com.intellij.util.ProcessingContext;
 import com.intellij.util.Processor;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.Map;
 
 import static com.goide.completion.GoCompletionUtil.createPrefixMatcher;
 import static com.goide.psi.impl.GoPsiImplUtil.prevDot;
+import static com.goide.stubs.index.GoAllPublicNamesIndex.ALL_PUBLIC_NAMES;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public class GoAutoImportCompletionContributor extends CompletionContributor {
@@ -77,9 +78,11 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         FunctionsProcessor functionProcessor = new FunctionsProcessor(isTesting, importedPackages, result);
         TypesProcessor typeProcessor = new TypesProcessor(parent, isTesting, forTypes, importedPackages, result);
         NamedElementProcessor processor = new NamedElementProcessor(completeFunctions, completeTypes, functionProcessor, typeProcessor);
-        for (String name : StubIndex.getInstance().getAllKeys(GoAllPublicNamesIndex.ALL_PUBLIC_NAMES, project)) {
+        PrefixMatcher matcher = result.getPrefixMatcher();
+        Collection<String> keys = CompletionUtil.sortMatching(matcher, StubIndex.getInstance().getAllKeys(ALL_PUBLIC_NAMES, project));
+        for (String name : keys) {
           processor.setName(name);
-          StubIndex.getInstance().processElements(GoAllPublicNamesIndex.ALL_PUBLIC_NAMES, name, project, scope, GoNamedElement.class, processor);
+          StubIndex.getInstance().processElements(ALL_PUBLIC_NAMES, name, project, scope, GoNamedElement.class, processor);
         }
       }
 
