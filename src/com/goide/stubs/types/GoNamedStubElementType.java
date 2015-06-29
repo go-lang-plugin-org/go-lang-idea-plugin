@@ -16,6 +16,7 @@
 
 package com.goide.stubs.types;
 
+import com.goide.psi.GoFile;
 import com.goide.psi.GoNamedElement;
 import com.goide.stubs.GoNamedStub;
 import com.goide.stubs.index.GoAllPrivateNamesIndex;
@@ -45,11 +46,14 @@ public abstract class GoNamedStubElementType<S extends GoNamedStub<T>, T extends
   public void indexStub(@NotNull final S stub, @NotNull final IndexSink sink) {
     String name = stub.getName();
     if (shouldIndex() && StringUtil.isNotEmpty(name)) {
+      GoFile file = stub.getParentStubOfType(GoFile.class);
+      String packageName = file != null ? file.getPackageName() : null;
+      String indexingName = StringUtil.isNotEmpty(packageName) ? packageName + "." + name : name;
       if (stub.isPublic()) {
-        sink.occurrence(GoAllPublicNamesIndex.ALL_PUBLIC_NAMES, name);
+        sink.occurrence(GoAllPublicNamesIndex.ALL_PUBLIC_NAMES, indexingName);
       }
       else {
-        sink.occurrence(GoAllPrivateNamesIndex.ALL_PRIVATE_NAMES, name);
+        sink.occurrence(GoAllPrivateNamesIndex.ALL_PRIVATE_NAMES, indexingName);
       }
       for (StubIndexKey<String, ? extends GoNamedElement> key : getExtraIndexKeys()) {
         sink.occurrence(key, name);
