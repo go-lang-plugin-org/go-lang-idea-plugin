@@ -16,8 +16,8 @@
 
 package com.goide.stubs.types;
 
-import com.goide.psi.GoFile;
 import com.goide.psi.GoNamedElement;
+import com.goide.stubs.GoFileStub;
 import com.goide.stubs.GoNamedStub;
 import com.goide.stubs.index.GoAllPrivateNamesIndex;
 import com.goide.stubs.index.GoAllPublicNamesIndex;
@@ -25,6 +25,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.stubs.IndexSink;
+import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubIndexKey;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -46,8 +47,15 @@ public abstract class GoNamedStubElementType<S extends GoNamedStub<T>, T extends
   public void indexStub(@NotNull final S stub, @NotNull final IndexSink sink) {
     String name = stub.getName();
     if (shouldIndex() && StringUtil.isNotEmpty(name)) {
-      GoFile file = stub.getParentStubOfType(GoFile.class);
-      String packageName = file != null ? file.getPackageName() : null;
+      String packageName = null;
+      StubElement parent = stub.getParentStub();
+      while (parent != null) {
+        if (parent instanceof GoFileStub) {
+          packageName = ((GoFileStub)parent).getPackageName();
+        }
+        parent = parent.getParentStub();
+      }
+      
       String indexingName = StringUtil.isNotEmpty(packageName) ? packageName + "." + name : name;
       if (stub.isPublic()) {
         sink.occurrence(GoAllPublicNamesIndex.ALL_PUBLIC_NAMES, indexingName);
