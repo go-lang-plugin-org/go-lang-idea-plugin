@@ -82,17 +82,15 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testCompletionPerformance() {
-    doCompletionTest("package main; func main() { <caret> }", TimeUnit.MINUTES.toMillis(1));
+    doCompletionTest("package main; func main() { <caret> }", TimeUnit.SECONDS.toMillis(30));
   }
 
   public void testCompletionWithPrefixPerformance() {
-    doCompletionTest("package main; func main() { slee<caret> }", TimeUnit.MINUTES.toMillis(1));
+    doCompletionTest("package main; func main() { slee<caret> }", TimeUnit.SECONDS.toMillis(10));
   }
 
   private void doCompletionTest(String source, long expectation) {
-    VirtualFile docker = installTestData("go");
-    if (docker == null) return;
-    VirtualFile go = installTestData("docker");
+    VirtualFile go = installTestData("go");
     if (go == null) return;
     
     myFixture.configureByText(GoFileType.INSTANCE, source);
