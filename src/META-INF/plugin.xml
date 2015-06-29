@@ -55,7 +55,8 @@
   </module-components>
 
   <extensions defaultExtensionNs="com.intellij">
-    <stubIndex implementation="com.goide.stubs.index.GoAllNamesIndex"/>
+    <stubIndex implementation="com.goide.stubs.index.GoAllPublicNamesIndex"/>
+    <stubIndex implementation="com.goide.stubs.index.GoAllPrivateNamesIndex"/>
     <stubIndex implementation="com.goide.stubs.index.GoFunctionIndex"/>
     <stubIndex implementation="com.goide.stubs.index.GoTypesIndex"/>
     <stubIndex implementation="com.goide.stubs.index.GoPackagesIndex"/>

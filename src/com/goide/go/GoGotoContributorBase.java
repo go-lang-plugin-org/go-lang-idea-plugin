@@ -30,11 +30,11 @@ import com.intellij.util.indexing.IdFilter;
 import org.jetbrains.annotations.NotNull;
 
 public class GoGotoContributorBase<T extends GoNamedElement> implements ChooseByNameContributorEx {
-  protected final StubIndexKey<String, T> myIndexKey;
+  protected final StubIndexKey<String, T>[] myIndexKeys;
   @NotNull private final Class<T> myClazz;
 
-  public GoGotoContributorBase(@NotNull StubIndexKey<String, T> key, @NotNull Class<T> clazz) {
-    myIndexKey = key;
+  public GoGotoContributorBase(@NotNull Class<T> clazz, @NotNull StubIndexKey<String, T>... key) {
+    myIndexKeys = key;
     myClazz = clazz;
   }
 
@@ -52,14 +52,18 @@ public class GoGotoContributorBase<T extends GoNamedElement> implements ChooseBy
 
   @Override
   public void processNames(@NotNull Processor<String> processor, @NotNull GlobalSearchScope scope, IdFilter filter) {
-    StubIndex.getInstance().processAllKeys(myIndexKey, processor, scope, filter);
+    for (StubIndexKey<String, T> key : myIndexKeys) {
+      StubIndex.getInstance().processAllKeys(key, processor, scope, filter);
+    }
   }
 
   @Override
   public void processElementsWithName(@NotNull String s,
                                       @NotNull Processor<NavigationItem> processor,
                                       @NotNull FindSymbolParameters parameters) {
-    StubIndex.getInstance().processElements(myIndexKey, s, parameters.getProject(), parameters.getSearchScope(),
-                                            parameters.getIdFilter(), myClazz, processor);
+    for (StubIndexKey<String, T> key : myIndexKeys) {
+      StubIndex.getInstance().processElements(key, s, parameters.getProject(), parameters.getSearchScope(), parameters.getIdFilter(), 
+                                              myClazz, processor);
+    }
   }
 }

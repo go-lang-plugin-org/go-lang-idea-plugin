@@ -21,6 +21,6 @@ import com.goide.stubs.index.GoTypesIndex;
 
 public class GoTypeContributor extends GoGotoContributorBase<GoTypeSpec> {
   public GoTypeContributor() {
-    super(GoTypesIndex.KEY, GoTypeSpec.class);
+    super(GoTypeSpec.class, GoTypesIndex.KEY);
   }
 }

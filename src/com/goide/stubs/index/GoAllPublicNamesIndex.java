@@ -14,14 +14,25 @@
  * limitations under the License.
  */
 
-package com.goide.go;
+package com.goide.stubs.index;
 
+import com.goide.GoFileElementType;
 import com.goide.psi.GoNamedElement;
-import com.goide.stubs.index.GoAllPrivateNamesIndex;
-import com.goide.stubs.index.GoAllPublicNamesIndex;
+import com.intellij.psi.stubs.StringStubIndexExtension;
+import com.intellij.psi.stubs.StubIndexKey;
+import org.jetbrains.annotations.NotNull;
 
-public class GoSymbolContributor extends GoGotoContributorBase<GoNamedElement> {
-  public GoSymbolContributor() {
-    super(GoNamedElement.class, GoAllPublicNamesIndex.ALL_PUBLIC_NAMES, GoAllPrivateNamesIndex.ALL_PRIVATE_NAMES);
+public class GoAllPublicNamesIndex extends StringStubIndexExtension<GoNamedElement> {
+  public static final StubIndexKey<String, GoNamedElement> ALL_PUBLIC_NAMES = StubIndexKey.createIndexKey("go.all.name");
+
+  @Override
+  public int getVersion() {
+    return GoFileElementType.VERSION;
+  }
+
+  @NotNull
+  @Override
+  public StubIndexKey<String, GoNamedElement> getKey() {
+    return ALL_PUBLIC_NAMES;
   }
 }

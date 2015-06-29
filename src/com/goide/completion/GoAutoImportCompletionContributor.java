@@ -21,7 +21,7 @@ import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.psi.impl.GoTypeReference;
 import com.goide.runconfig.testing.GoTestFinder;
-import com.goide.stubs.index.GoAllNamesIndex;
+import com.goide.stubs.index.GoAllPublicNamesIndex;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
@@ -100,11 +100,9 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         FunctionsProcessor functionProcessor = new FunctionsProcessor(isTesting, importedPackages, result);
         TypesProcessor typeProcessor = new TypesProcessor(parent, isTesting, forTypes, importedPackages, result);
         NamedElementProcessor processor = new NamedElementProcessor(completeFunctions, completeTypes, functionProcessor, typeProcessor);
-        for (String name : StubIndex.getInstance().getAllKeys(GoAllNamesIndex.ALL_NAMES, project)) {
-          if (StringUtil.isCapitalized(name)) {
-            processor.setName(name);
-            StubIndex.getInstance().processElements(GoAllNamesIndex.ALL_NAMES, name, project, scope, GoNamedElement.class, processor);
-          }
+        for (String name : StubIndex.getInstance().getAllKeys(GoAllPublicNamesIndex.ALL_PUBLIC_NAMES, project)) {
+          processor.setName(name);
+          StubIndex.getInstance().processElements(GoAllPublicNamesIndex.ALL_PUBLIC_NAMES, name, project, scope, GoNamedElement.class, processor);
         }
       }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,8 @@
 package com.goide.stubs.types;
 
 import com.goide.psi.GoNamedElement;
-import com.goide.stubs.index.GoAllNamesIndex;
+import com.goide.stubs.index.GoAllPrivateNamesIndex;
+import com.goide.stubs.index.GoAllPublicNamesIndex;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
@@ -44,8 +45,12 @@ public abstract class GoNamedStubElementType<S extends NamedStubBase<T>, T exten
   public void indexStub(@NotNull final S stub, @NotNull final IndexSink sink) {
     String name = stub.getName();
     if (shouldIndex() && StringUtil.isNotEmpty(name)) {
-      //noinspection ConstantConditions
-      sink.occurrence(GoAllNamesIndex.ALL_NAMES, name);
+      if (StringUtil.isCapitalized(name)) {
+        sink.occurrence(GoAllPublicNamesIndex.ALL_PUBLIC_NAMES, name);
+      }
+      else {
+        sink.occurrence(GoAllPrivateNamesIndex.ALL_PRIVATE_NAMES, name);
+      }
       for (StubIndexKey<String, ? extends GoNamedElement> key : getExtraIndexKeys()) {
         sink.occurrence(key, name);
       }
