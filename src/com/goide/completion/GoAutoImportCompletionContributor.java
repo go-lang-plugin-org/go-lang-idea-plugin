@@ -185,6 +185,8 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
 
     @Override
     public boolean process(GoFunctionDeclaration declaration) {
+      if (GoTestFinder.isTestFunctionName(myName) || GoTestFinder.isBenchmarkFunctionName(myName) || 
+          GoTestFinder.isExampleFunctionName(myName)) return true;
       if (!allowed(declaration, myIsTesting)) return true;
 
       double priority = GoCompletionUtil.NOT_IMPORTED_FUNCTION_PRIORITY;
