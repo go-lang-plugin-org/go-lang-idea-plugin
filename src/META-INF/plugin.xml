@@ -33,9 +33,6 @@
 
   <change-notes>
     <![CDATA[
-    <ul>
-      <li>Initial GAE support: running dev server. <strong>Requires resetting project SDK.</strong></li>
-    </ul>
     ]]>
   </change-notes>
 
