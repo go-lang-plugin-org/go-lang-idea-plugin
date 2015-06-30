@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.actionSystem.Shortcut;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.util.Iconable;
 import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -244,7 +245,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
     @Override
     public Icon getIcon(boolean open) {
       if (!myElement.isValid()) return null;
-      return myElement.getIcon(0);
+      return myElement.getIcon(Iconable.ICON_FLAG_VISIBILITY);
     }
   }
 }

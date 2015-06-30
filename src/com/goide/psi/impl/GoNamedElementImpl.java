@@ -25,15 +25,19 @@ import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.openapi.util.Iconable;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
+import com.intellij.psi.impl.ElementBase;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.ui.RowIcon;
 import com.intellij.usageView.UsageViewUtil;
 import com.intellij.util.IncorrectOperationException;
+import com.intellij.util.PlatformIcons;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -138,7 +142,7 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
         @Nullable
         @Override
         public Icon getIcon(boolean b) {
-          return GoNamedElementImpl.this.getIcon(0);
+          return GoNamedElementImpl.this.getIcon(Iconable.ICON_FLAG_VISIBILITY);
         }
       };
     }
@@ -148,16 +152,25 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
   @Nullable
   @Override
   public Icon getIcon(int flags) {
-    if (this instanceof GoMethodDeclaration) return GoIcons.METHOD;
-    if (this instanceof GoFunctionDeclaration) return GoIcons.FUNCTION;
-    if (this instanceof GoTypeSpec) return GoIcons.TYPE;
-    if (this instanceof GoVarDefinition) return GoIcons.VARIABLE;
-    if (this instanceof GoConstDefinition) return GoIcons.CONSTANT;
-    if (this instanceof GoFieldDefinition) return GoIcons.FIELD;
-    if (this instanceof GoMethodSpec) return GoIcons.METHOD;
-    if (this instanceof GoAnonymousFieldDefinition) return GoIcons.FIELD;
-    if (this instanceof GoParamDefinition) return GoIcons.PARAMETER;
-    if (this instanceof GoLabelDefinition) return GoIcons.LABEL;
+    Icon icon = null;
+    if (this instanceof GoMethodDeclaration) icon = GoIcons.METHOD;
+    else if (this instanceof GoFunctionDeclaration) icon = GoIcons.FUNCTION;
+    else if (this instanceof GoTypeSpec) icon = GoIcons.TYPE;
+    else if (this instanceof GoVarDefinition) icon = GoIcons.VARIABLE;
+    else if (this instanceof GoConstDefinition) icon = GoIcons.CONSTANT;
+    else if (this instanceof GoFieldDefinition) icon = GoIcons.FIELD;
+    else if (this instanceof GoMethodSpec) icon = GoIcons.METHOD;
+    else if (this instanceof GoAnonymousFieldDefinition) icon = GoIcons.FIELD;
+    else if (this instanceof GoParamDefinition) icon = GoIcons.PARAMETER;
+    else if (this instanceof GoLabelDefinition) icon = GoIcons.LABEL;
+    if (icon != null) {
+      if ((flags & Iconable.ICON_FLAG_VISIBILITY) != 0) {
+        final RowIcon rowIcon = ElementBase.createLayeredIcon(this, icon, flags);
+        rowIcon.setIcon(isPublic() ? PlatformIcons.PUBLIC_ICON : PlatformIcons.PRIVATE_ICON, 1);
+        return rowIcon;
+      }
+      return icon;
+    }
     return super.getIcon(flags);
   }
 
