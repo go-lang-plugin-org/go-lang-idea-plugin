@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,9 @@ public interface GoNamedElement extends GoCompositeElement, GoTypeOwner, PsiName
 
   @Nullable
   PsiElement getIdentifier();
+  
+  @Nullable
+  String getQualifiedName();
 
   @NotNull
   GoFile getContainingFile();

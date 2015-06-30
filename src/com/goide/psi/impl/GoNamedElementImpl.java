@@ -18,6 +18,7 @@ package com.goide.psi.impl;
 
 import com.goide.GoIcons;
 import com.goide.psi.*;
+import com.goide.sdk.GoSdkUtil;
 import com.goide.stubs.GoNamedStub;
 import com.goide.stubs.GoTypeStub;
 import com.goide.util.GoUtil;
@@ -37,6 +38,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.RowIcon;
 import com.intellij.usageView.UsageViewUtil;
 import com.intellij.util.IncorrectOperationException;
+import com.intellij.util.ObjectUtils;
 import com.intellij.util.PlatformIcons;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -76,6 +78,15 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
     }
     PsiElement identifier = getIdentifier();
     return identifier != null ? identifier.getText() : null;
+  }
+  
+  @Nullable
+  @Override
+  public String getQualifiedName() {
+    String name = getName();
+    if (name == null) return null;
+    String packageName = getContainingFile().getPackageName();
+    return StringUtil.isNotEmpty(packageName) ? packageName + "." + name : name;
   }
 
   @Override
@@ -136,7 +147,10 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
         @Nullable
         @Override
         public String getLocationString() {
-          return getContainingFile().getName();
+          GoFile file = getContainingFile();
+          String fileName = file.getName();
+          String importPath = ObjectUtils.chooseNotNull(GoSdkUtil.getImportPath(file.getContainingDirectory()), file.getPackageName());
+          return "in " + (importPath != null ? importPath  + "/" + fileName : fileName);
         }
 
         @Nullable
