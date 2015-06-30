@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoAutoImportInsertHandler<T extends GoNamedElement> implements InsertHandler<LookupElement> {
-  public static final InsertHandler<LookupElement> TYPE_INSERT_HANDLER = new GoAutoImportInsertHandler<GoNamedElement>();
+  public static final InsertHandler<LookupElement> SIMPLE_INSERT_HANDLER = new GoAutoImportInsertHandler<GoNamedElement>();
   public static final InsertHandler<LookupElement> TYPE_CONVERSION_INSERT_HANDLER = new GoAutoImportInsertHandler<GoTypeSpec>(
     new Function<GoTypeSpec, InsertHandler<LookupElement>>() {
       @Override
