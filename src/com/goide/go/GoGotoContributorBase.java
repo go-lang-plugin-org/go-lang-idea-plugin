@@ -18,6 +18,7 @@ package com.goide.go;
 
 import com.goide.psi.GoNamedElement;
 import com.intellij.navigation.ChooseByNameContributorEx;
+import com.intellij.navigation.GotoClassContributor;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -28,8 +29,9 @@ import com.intellij.util.Processor;
 import com.intellij.util.indexing.FindSymbolParameters;
 import com.intellij.util.indexing.IdFilter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class GoGotoContributorBase<T extends GoNamedElement> implements ChooseByNameContributorEx {
+public class GoGotoContributorBase<T extends GoNamedElement> implements GotoClassContributor, ChooseByNameContributorEx {
   protected final StubIndexKey<String, T>[] myIndexKeys;
   @NotNull private final Class<T> myClazz;
 
@@ -65,5 +67,21 @@ public class GoGotoContributorBase<T extends GoNamedElement> implements ChooseBy
       StubIndex.getInstance().processElements(key, s, parameters.getProject(), parameters.getSearchScope(), parameters.getIdFilter(), 
                                               myClazz, processor);
     }
+  }
+  
+  @Nullable
+  @Override
+  public String getQualifiedName(NavigationItem item) {
+    if (item instanceof GoNamedElement) {
+      return ((GoNamedElement)item).getQualifiedName();
+    }
+    return null;
+  }
+
+  @Nullable
+  @Override
+  public String getQualifiedNameSeparator() {
+    // todo[IDEA 15.1]: replace with null 
+    return ".";
   }
 }
