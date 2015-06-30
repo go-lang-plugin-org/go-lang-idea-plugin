@@ -188,7 +188,7 @@ public class GoFile extends PsiFileBase {
   }
 
   /**
-   * @return map like { full package name -> import spec } for file
+   * @return map like { import path -> import spec } for file
    */
   @NotNull
   public Map<String, GoImportSpec> getImportedPackagesMap() {
@@ -213,6 +213,9 @@ public class GoFile extends PsiFileBase {
     });
   }
 
+  /**
+   * @return map like { local package name, maybe alias -> import spec } for file
+   */
   @NotNull
   public MultiMap<String, GoImportSpec> getImportMap() {
     MultiMap<String, GoImportSpec> map = MultiMap.create();
