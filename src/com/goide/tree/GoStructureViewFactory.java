@@ -69,6 +69,12 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
       withSuitableClasses(GoFile.class).withSorters(ExportabilitySorter.INSTANCE, Sorter.ALPHA_SORTER);
     }
 
+    @NotNull
+    @Override
+    public Filter[] getFilters() {
+      return new Filter[] {new GoPrivateMembersFilter()};
+    }
+
     @Override
     public boolean isAlwaysShowsPlus(StructureViewTreeElement structureViewTreeElement) {
       return false;
