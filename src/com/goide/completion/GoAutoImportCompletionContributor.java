@@ -67,6 +67,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         final ArrayList<ElementProcessor> processors = ContainerUtil.newArrayList();
         if (parent instanceof GoReferenceExpression && !GoPsiImplUtil.isUnaryBitAndExpression(parent)) {
           processors.add(new FunctionsProcessor());
+          processors.add(new VariablesAndConstantsProcessor());
         }
         if (parent instanceof GoReferenceExpression || parent instanceof GoTypeReferenceExpression) {
           processors.add(new TypesProcessor(parent));
@@ -98,8 +99,9 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
 
   private static Set<String> sortMatching(@NotNull PrefixMatcher matcher, @NotNull Collection<String> names, @NotNull GoFile file) {
     ProgressManager.checkCanceled();
-    if (matcher.getPrefix().isEmpty()) return ContainerUtil.newLinkedHashSet(names);
-    
+    String prefix = matcher.getPrefix();
+    if (prefix.isEmpty()) return ContainerUtil.newLinkedHashSet(names);
+
     Set<String> packagesWithAliases = ContainerUtil.newHashSet();
     for (Map.Entry<String, Collection<GoImportSpec>> entry : file.getImportMap().entrySet()) {
       for (GoImportSpec spec : entry.getValue()) {
@@ -176,6 +178,25 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
     boolean isMine(@NotNull String name, @NotNull GoNamedElement element);
   }
   
+  private static class VariablesAndConstantsProcessor implements ElementProcessor {
+    @Override
+    public boolean process(@NotNull String name,
+                           @NotNull GoNamedElement element,
+                           @NotNull ExistingImportData importData,
+                           @NotNull CompletionResultSet result) {
+      double priority = importData.exists ? GoCompletionUtil.VAR_PRIORITY : GoCompletionUtil.NOT_IMPORTED_VAR_PRIORITY;
+      String lookupString = importData.alias != null ? importData.alias + "." + substringAfter(name, '.') : name;
+      result.addElement(GoCompletionUtil.createVariableLikeLookupElement(element, lookupString,
+                                                                         GoAutoImportInsertHandler.SIMPLE_INSERT_HANDLER, priority));
+      return true;
+    }
+
+    @Override
+    public boolean isMine(@NotNull String name, @NotNull GoNamedElement element) {
+      return element instanceof GoVarDefinition || element instanceof GoConstDefinition;
+    }
+  }
+  
   private static class FunctionsProcessor implements ElementProcessor {
     @Override
     public boolean process(@NotNull String name,
@@ -225,7 +246,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
 
       String lookupString = importData.alias != null ? importData.alias + "." + substringAfter(name, '.') : name;
       if (forTypes) {
-        result.addElement(GoCompletionUtil.createTypeLookupElement(spec, lookupString, GoAutoImportInsertHandler.TYPE_INSERT_HANDLER,
+        result.addElement(GoCompletionUtil.createTypeLookupElement(spec, lookupString, GoAutoImportInsertHandler.SIMPLE_INSERT_HANDLER,
                                                                    importData.importPath, priority));
       }
       else {

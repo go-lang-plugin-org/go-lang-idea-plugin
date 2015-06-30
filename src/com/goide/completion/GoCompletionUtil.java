@@ -52,7 +52,8 @@ public class GoCompletionUtil {
   public static final int TYPE_PRIORITY = NOT_IMPORTED_TYPE_PRIORITY + 10;
   public static final int NOT_IMPORTED_TYPE_CONVERSION = 1;
   public static final int TYPE_CONVERSION = NOT_IMPORTED_TYPE_CONVERSION + 10;
-  public static final int VAR_PRIORITY = 15;
+  public static final int NOT_IMPORTED_VAR_PRIORITY = 5;
+  public static final int VAR_PRIORITY = NOT_IMPORTED_VAR_PRIORITY + 10;
   public static final int LABEL_PRIORITY = 15;
   public static final int PACKAGE_PRIORITY = 5;
   public static final InsertHandler<LookupElement> FUNCTION_INSERT_HANDLER = new InsertHandler<LookupElement>() {
@@ -206,32 +207,38 @@ public class GoCompletionUtil {
            ? BracesInsertHandler.ONE_LINER
            : ParenthesesInsertHandler.WITH_PARAMETERS;
   }
-
+  
   @Nullable
   public static LookupElement createVariableLikeLookupElement(@NotNull GoNamedElement v) {
     String name = v.getName();
     if (StringUtil.isEmpty(name)) return null;
-    SingleCharInsertHandler handler =
-      v instanceof GoFieldDefinition ?
-      new SingleCharInsertHandler(':') {
-        @Override
-        public void handleInsert(@NotNull InsertionContext context, LookupElement item) {
-          PsiFile file = context.getFile();
-          if (!(file instanceof GoFile)) return;
-          context.commitDocument();
-          int offset = context.getStartOffset();
-          PsiElement at = file.findElementAt(offset);
-          GoCompositeElement ref = PsiTreeUtil.getParentOfType(at, GoValue.class, GoReferenceExpression.class);
-          if (ref instanceof GoReferenceExpression && (((GoReferenceExpression)ref).getQualifier() != null || GoPsiImplUtil.prevDot(ref))) {
-            return;
-          }
-          GoValue value = PsiTreeUtil.getParentOfType(at, GoValue.class);
-          if (value == null || PsiTreeUtil.getPrevSiblingOfType(value, GoKey.class) != null) return;
-          super.handleInsert(context, item);
+    return createVariableLikeLookupElement(v, name, v instanceof GoFieldDefinition
+                                                        ? new SingleCharInsertHandler(':') {
+      @Override
+      public void handleInsert(@NotNull InsertionContext context, LookupElement item) {
+        PsiFile file = context.getFile();
+        if (!(file instanceof GoFile)) return;
+        context.commitDocument();
+        int offset = context.getStartOffset();
+        PsiElement at = file.findElementAt(offset);
+        GoCompositeElement ref = PsiTreeUtil.getParentOfType(at, GoValue.class, GoReferenceExpression.class);
+        if (ref instanceof GoReferenceExpression && (((GoReferenceExpression)ref).getQualifier() != null || GoPsiImplUtil.prevDot(ref))) {
+          return;
         }
-      } : null;
-    return PrioritizedLookupElement.withPriority(
-      LookupElementBuilder.createWithSmartPointer(name, v).withRenderer(VARIABLE_RENDERER).withInsertHandler(handler), VAR_PRIORITY);
+        GoValue value = PsiTreeUtil.getParentOfType(at, GoValue.class);
+        if (value == null || PsiTreeUtil.getPrevSiblingOfType(value, GoKey.class) != null) return;
+        super.handleInsert(context, item);
+      }
+    } : null, VAR_PRIORITY);
+  }
+
+  @NotNull
+  public static LookupElement createVariableLikeLookupElement(@NotNull GoNamedElement v, @NotNull String lookupString,
+                                                              @Nullable InsertHandler<LookupElement> insertHandler,
+                                                              double priority) {
+    return PrioritizedLookupElement.withPriority(LookupElementBuilder.createWithSmartPointer(lookupString, v)
+                                                   .withRenderer(VARIABLE_RENDERER)
+                                                   .withInsertHandler(insertHandler), priority);
   }
 
   @Nullable
