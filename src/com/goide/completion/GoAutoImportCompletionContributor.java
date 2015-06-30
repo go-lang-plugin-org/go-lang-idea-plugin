@@ -169,12 +169,16 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
     return true;
   }
 
+  @NotNull
+  private static String replacePackageWithAlias(@NotNull String qualifiedName, @Nullable String alias) {
+    return alias != null ? alias + "." + substringAfter(qualifiedName, '.') : qualifiedName;
+  }
+  
   private interface ElementProcessor {
     boolean process(@NotNull String name,
                     @NotNull GoNamedElement element,
                     @NotNull ExistingImportData importData,
                     @NotNull CompletionResultSet result);
-
     boolean isMine(@NotNull String name, @NotNull GoNamedElement element);
   }
   
@@ -185,18 +189,16 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
                            @NotNull ExistingImportData importData,
                            @NotNull CompletionResultSet result) {
       double priority = importData.exists ? GoCompletionUtil.VAR_PRIORITY : GoCompletionUtil.NOT_IMPORTED_VAR_PRIORITY;
-      String lookupString = importData.alias != null ? importData.alias + "." + substringAfter(name, '.') : name;
-      result.addElement(GoCompletionUtil.createVariableLikeLookupElement(element, lookupString,
+      result.addElement(GoCompletionUtil.createVariableLikeLookupElement(element, replacePackageWithAlias(name, importData.alias),
                                                                          GoAutoImportInsertHandler.SIMPLE_INSERT_HANDLER, priority));
       return true;
     }
-
     @Override
     public boolean isMine(@NotNull String name, @NotNull GoNamedElement element) {
       return element instanceof GoVarDefinition || element instanceof GoConstDefinition;
     }
   }
-  
+
   private static class FunctionsProcessor implements ElementProcessor {
     @Override
     public boolean process(@NotNull String name,
@@ -205,8 +207,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
                            @NotNull CompletionResultSet result) {
       GoFunctionDeclaration function = ((GoFunctionDeclaration)element);
       double priority = importData.exists ? GoCompletionUtil.FUNCTION_PRIORITY : GoCompletionUtil.NOT_IMPORTED_FUNCTION_PRIORITY;
-      String lookupString = importData.alias != null ? importData.alias + "." + substringAfter(name, '.') : name;
-      result.addElement(GoCompletionUtil.createFunctionOrMethodLookupElement(function, lookupString,
+      result.addElement(GoCompletionUtil.createFunctionOrMethodLookupElement(function, replacePackageWithAlias(name, importData.alias),
                                                                              GoAutoImportInsertHandler.FUNCTION_INSERT_HANDLER, priority));
       return true;
     }
@@ -244,7 +245,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         priority = forTypes ? GoCompletionUtil.NOT_IMPORTED_TYPE_PRIORITY : GoCompletionUtil.NOT_IMPORTED_TYPE_CONVERSION;
       }
 
-      String lookupString = importData.alias != null ? importData.alias + "." + substringAfter(name, '.') : name;
+      String lookupString = replacePackageWithAlias(name, importData.alias);
       if (forTypes) {
         result.addElement(GoCompletionUtil.createTypeLookupElement(spec, lookupString, GoAutoImportInsertHandler.SIMPLE_INSERT_HANDLER,
                                                                    importData.importPath, priority));
