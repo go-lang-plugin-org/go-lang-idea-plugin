@@ -10,10 +10,10 @@ public interface GoTypeCaseClause extends GoCompositeElement {
   @NotNull
   List<GoStatement> getStatementList();
 
-  @NotNull
+  @Nullable
   GoTypeSwitchCase getTypeSwitchCase();
 
-  @NotNull
+  @Nullable
   PsiElement getColon();
 
 }

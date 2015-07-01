@@ -112,7 +112,8 @@ public class GoReturnInspection extends GoInspectionBase {
       boolean hasDefault = false;
       List<GoTypeCaseClause> list = ((GoTypeSwitchStatement)s).getTypeCaseClauseList();
       for (GoTypeCaseClause clause : list) {
-        PsiElement child = clause.getTypeSwitchCase().getFirstChild();
+        GoTypeSwitchCase switchCase = clause.getTypeSwitchCase();
+        PsiElement child = switchCase == null ? null : switchCase.getFirstChild();
         if (child != null && child.getNode().getElementType() == GoTypes.DEFAULT) {
           hasDefault = true;
         }
