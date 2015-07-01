@@ -25,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class GoVarProcessor extends GoScopeProcessorBase {
   private final boolean myImShortVarDeclaration;
+  private final PsiElement myParentGuard; 
   @Nullable private final GoCompositeElement myScope;
   
   public GoVarProcessor(@NotNull String requestedName, @NotNull PsiElement origin, boolean completion) {
@@ -34,18 +35,21 @@ public class GoVarProcessor extends GoScopeProcessorBase {
   public GoVarProcessor(@NotNull String requestedName, @NotNull PsiElement origin, boolean completion, boolean delegate) {
     super(requestedName, origin, completion);
     myImShortVarDeclaration = PsiTreeUtil.getParentOfType(origin, GoShortVarDeclaration.class) != null && !delegate;
+    myParentGuard = origin.getParent() instanceof GoTypeSwitchGuard ? origin.getParent() : null;
     myScope = getScope(origin);
   }
 
   @Override
   protected boolean add(@NotNull GoNamedElement o) {
     if (PsiTreeUtil.findCommonParent(o, myOrigin) instanceof GoRangeClause) return true;
-    boolean inVarOrRange = PsiTreeUtil.getParentOfType(o, GoVarDeclaration.class) != null || o.getParent() instanceof GoRangeClause;
+    PsiElement p = o.getParent();
+    boolean inVarOrRange = PsiTreeUtil.getParentOfType(o, GoVarDeclaration.class) != null || p instanceof GoRangeClause;
     boolean differentBlocks = differentBlocks(o);
     boolean inShortVar = PsiTreeUtil.getParentOfType(o, GoShortVarDeclaration.class, GoRecvStatement.class) != null;
     if (inShortVar && differentBlocks && myImShortVarDeclaration) return true;
     if (differentBlocks && inShortVar && !inVarOrRange && getResult() != null && !myIsCompletion) return true;
     if (inShortVar && fromNotAncestorBlock(o)) return true;
+    if (myParentGuard != null && o instanceof GoVarDefinition && p.isEquivalentTo(myParentGuard)) return true;
     return super.add(o);
   }
 

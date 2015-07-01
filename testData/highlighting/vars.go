@@ -28,4 +28,12 @@ func Foo2() {
     <error>err</error> := 1
     err,x := 2,1
     fmt.Println(x)
-} 
+}
+}
+func _(p interface{}) error {
+	switch <error>p</error> := p.(type) {
+		case error:
+		return nil
+	}
+	return nil
+}
