@@ -3602,22 +3602,33 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // TypeSwitchCase ':' Statements?
+  // !'}' TypeSwitchCase ':' Statements?
   public static boolean TypeCaseClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeCaseClause")) return false;
-    if (!nextTokenIs(b, "<type case clause>", CASE, DEFAULT)) return false;
-    boolean r;
+    boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, "<type case clause>");
-    r = TypeSwitchCase(b, l + 1);
-    r = r && consumeToken(b, COLON);
-    r = r && TypeCaseClause_2(b, l + 1);
-    exit_section_(b, l, m, TYPE_CASE_CLAUSE, r, false, null);
+    r = TypeCaseClause_0(b, l + 1);
+    p = r; // pin = 1
+    r = r && report_error_(b, TypeSwitchCase(b, l + 1));
+    r = p && report_error_(b, consumeToken(b, COLON)) && r;
+    r = p && TypeCaseClause_3(b, l + 1) && r;
+    exit_section_(b, l, m, TYPE_CASE_CLAUSE, r, p, null);
+    return r || p;
+  }
+
+  // !'}'
+  private static boolean TypeCaseClause_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TypeCaseClause_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NOT_, null);
+    r = !consumeToken(b, RBRACE);
+    exit_section_(b, l, m, null, r, false, null);
     return r;
   }
 
   // Statements?
-  private static boolean TypeCaseClause_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "TypeCaseClause_2")) return false;
+  private static boolean TypeCaseClause_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TypeCaseClause_3")) return false;
     Statements(b, l + 1);
     return true;
   }

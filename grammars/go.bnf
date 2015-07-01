@@ -401,7 +401,7 @@ private ExprSwitchCase ::= case ExpressionList | default {pin(".*")=1}
 left TypeSwitchStatement ::= (TypeSwitchGuard | SimpleStatement ';'? TypeSwitchGuard) '{' ( TypeCaseClause )* '}' {pin=1 extends=SwitchStatement}
 TypeSwitchGuard ::= [ VarDefinition ':=' ] Expression '.' TypeGuard
 TypeGuard ::= '(' 'type' ')' {pin=2}
-TypeCaseClause ::= TypeSwitchCase ':' Statements?
+TypeCaseClause ::= !'}' TypeSwitchCase ':' Statements? {pin=1}
 TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
 TypeList ::= Type ( ',' Type )*
 TypeListNoPin ::= Type ( ',' Type )* {elementType=TypeList}
