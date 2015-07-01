@@ -188,3 +188,11 @@ b int
 
 F func(interface{}) interface{}
 )
+
+func Test(p interface{}) error {
+	switch p := p.(type) { // should be error: "p declared and not used"
+                	case error:
+		return nil
+	}
+	return nil
+}

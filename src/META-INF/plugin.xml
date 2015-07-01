@@ -100,6 +100,7 @@
     <colorSettingsPage implementation="com.goide.highlighting.GoColorsAndFontsPage"/>
     <lang.braceMatcher language="go" implementationClass="com.goide.editor.GoBraceMatcher"/>
     <quoteHandler fileType="Go" className="com.goide.editor.GoQuoteHandler"/>
+    <editorTypedHandler implementationClass="com.goide.editor.GoTypedHandler" />
     <lang.commenter language="go" implementationClass="com.goide.GoCommenter"/>
     <lang.elementManipulator forClass="com.goide.psi.impl.GoStringLiteralImpl"
                              implementationClass="com.goide.psi.impl.manipulator.GoStringManipulator"/>

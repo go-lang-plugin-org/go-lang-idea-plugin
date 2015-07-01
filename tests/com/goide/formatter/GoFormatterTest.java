@@ -3,6 +3,7 @@ package com.goide.formatter;
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.psi.codeStyle.CodeStyleManager;
+import org.jetbrains.annotations.Nullable;
 
 public class GoFormatterTest extends GoCodeInsightFixtureTestCase {
   @Override
@@ -11,23 +12,28 @@ public class GoFormatterTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testSimple()      { doTest(); }
-  public void testCaseEnter()   { doTest(false); }
-  public void testSwitchEnter() { doTest(false); }
-  public void testTypeEnter()   { doTest(false); }
+  public void testCaseE()       { doTest('e'); }
+  public void testCaseEnter()   { doTestEnter(); }
+  public void testSwitchEnter() { doTestEnter(); }
+  public void testTypeEnter()   { doTestEnter(); }
 
   public void doTest() {
-    doTest(true);
+    doTest(null);
   }
 
-  public void doTest(boolean format) {
+  public void doTestEnter() {
+    doTest('\n');
+  }
+
+  public void doTest(@Nullable Character c) {
     String testName = getTestName(true);
     myFixture.configureByFile(testName + ".go");
-    String after = doTest(format, testName);
+    String after = doTest(c, testName);
     assertSameLinesWithFile(getTestDataPath() + "/" + after, myFixture.getFile().getText());
   }
 
-  private String doTest(boolean format, String testName) {
-    if (format) {
+  private String doTest(@Nullable Character c, String testName) {
+    if (c == null) {
       ApplicationManager.getApplication().runWriteAction(new Runnable() {
         @Override
         public void run() {
@@ -36,7 +42,7 @@ public class GoFormatterTest extends GoCodeInsightFixtureTestCase {
       });
     }
     else {
-      myFixture.type('\n');
+      myFixture.type(c);
     }
     return String.format("%s-after.go", testName);
   }
