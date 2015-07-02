@@ -181,7 +181,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.checkHighlighting();
   }
 
-  public void testPackageWithTestPrefix() throws Throwable {
+  public void _testPackageWithTestPrefix() throws Throwable {
     VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
       @Override
       public VirtualFile compute() throws Throwable {
