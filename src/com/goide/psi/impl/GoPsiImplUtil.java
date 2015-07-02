@@ -321,12 +321,7 @@ public class GoPsiImplUtil {
       String text = ((GoBuiltinCallExpr)o).getReferenceExpression().getText();
       if ("new".equals(text) || "make".equals(text)) {
         GoBuiltinArgs args = ((GoBuiltinCallExpr)o).getBuiltinArgs();
-        GoType type = args != null ? args.getType() : null;
-        if (type instanceof GoMapType || type instanceof GoArrayOrSliceType || type instanceof GoChannelType) return type;
-        if (type != null) {
-          GoTypeReferenceExpression expression = getTypeReference(type);
-          return getType(expression);
-        }
+        return args != null ? args.getType() : null;
       }
     }
     else if (o instanceof GoCallExpr) {
