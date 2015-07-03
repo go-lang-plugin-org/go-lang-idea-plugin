@@ -287,11 +287,10 @@ public class GoPsiImplUtil {
     GoType commonType = spec.getType();
     if (commonType != null) return commonType;
     List<GoConstDefinition> varList = spec.getConstDefinitionList();
-    int i = varList.indexOf(o);
-    i = i == -1 ? 0 : i;
-    List<GoExpression> exprs = spec.getExpressionList();
-    if (exprs.size() <= i) return null;
-    return exprs.get(i).getGoType(null);
+    int i = Math.max(varList.indexOf(o), 0);
+    List<GoExpression> es = spec.getExpressionList();
+    if (es.size() <= i) return null;
+    return es.get(i).getGoType(null);
   }
 
   @Nullable
