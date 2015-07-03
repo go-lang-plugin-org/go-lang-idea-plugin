@@ -441,6 +441,14 @@ public class GoCompletionTest extends GoCompletionTestBase {
   }
 
   @SuppressWarnings("ConstantConditions")
+  public void testPackageNamesInTestFile() {
+    myFixture.configureByText("foo.go", "package foo");
+    myFixture.configureByText("foo_test.go", "package <caret>");
+    myFixture.completeBasic();
+    assertSameElements(myFixture.getLookupElementStrings(), "foo", "foo_test", "main");
+  }
+
+  @SuppressWarnings("ConstantConditions")
   public void testPackageNamesInEmptyDirectory() throws IOException {
     VirtualFile dir = myFixture.getTempDirFixture().findOrCreateDir("directory-name");
     VirtualFile file = dir.createChildData(this, "test.go");

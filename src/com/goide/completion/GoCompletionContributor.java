@@ -23,6 +23,7 @@ import com.goide.psi.GoImportString;
 import com.goide.psi.GoPackageClause;
 import com.goide.psi.GoReferenceExpressionBase;
 import com.goide.psi.impl.GoCachedReference;
+import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
@@ -30,7 +31,6 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiDirectory;
@@ -58,8 +58,8 @@ public class GoCompletionContributor extends CompletionContributor {
       Collection<String> packagesInDirectory = GoUtil.getAllPackagesInDirectory(directory);
       for (String packageName : packagesInDirectory) {
         result.addElement(LookupElementBuilder.create(packageName));
-        if (packageName.endsWith(GoConstants.TEST_SUFFIX)) {
-          result.addElement(LookupElementBuilder.create(StringUtil.trimEnd(packageName, GoConstants.TEST_SUFFIX)));
+        if (GoTestFinder.isTestFile(parameters.getOriginalFile())) {
+          result.addElement(LookupElementBuilder.create(packageName + GoConstants.TEST_SUFFIX));
         }
       }
 
