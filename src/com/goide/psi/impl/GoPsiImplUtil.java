@@ -377,6 +377,13 @@ public class GoPsiImplUtil {
     else if (o instanceof GoStringLiteral) {
       return getBuiltinType(o, "string");
     }
+    else if (o instanceof GoLiteral) {
+      GoLiteral l = (GoLiteral)o;
+      if (l.getInt() != null) return getBuiltinType(o, "int"); 
+      if (l.getFloat() != null) return getBuiltinType(o, "float64");
+      if (l.getFloati() != null) return getBuiltinType(o, "complex64");
+      if (l.getDecimali() != null) return getBuiltinType(o, "complex128");
+    }
     return null;
   }
 
