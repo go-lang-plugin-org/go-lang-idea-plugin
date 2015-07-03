@@ -43,10 +43,10 @@ public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionO
   private String myPackageName;
   private boolean myIsOneTheFly;
 
-  protected GoMultiplePackagesQuickFix(@NotNull GoPackageClause packageClause, Collection<String> packages, boolean isOnTheFly) {
-    super(packageClause);
+  protected GoMultiplePackagesQuickFix(@NotNull PsiElement element, @NotNull String packageName, Collection<String> packages, boolean isOnTheFly) {
+    super(element);
     myPackages = packages;
-    myPackageName = ((GoFile)packageClause.getContainingFile()).getPackageName();
+    myPackageName = packageName;
     myIsOneTheFly = isOnTheFly;
   }
 
@@ -60,7 +60,7 @@ public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionO
           if (GoUtil.allowed(file)) {
             GoPackageClause packageClause = ((GoFile)file).getPackage();
             String name = ((GoFile)file).getPackageName();
-            if (packageClause != null && name != null && name.equals(GoConstants.DOCUMENTATION)) {
+            if (packageClause != null && name != null && !name.equals(GoConstants.DOCUMENTATION)) {
               String fullName = GoTestFinder.isTestFile(file) ? newName + GoConstants.TEST_SUFFIX : newName;
               packageClause.replace(GoElementFactory.createPackageClause(project, fullName));
             }

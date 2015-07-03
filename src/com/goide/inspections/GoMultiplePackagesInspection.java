@@ -20,10 +20,12 @@ import com.goide.GoConstants;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoPackageClause;
 import com.goide.util.GoUtil;
+import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiDirectory;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class GoMultiplePackagesInspection extends GoInspectionBase {
@@ -43,7 +45,15 @@ public class GoMultiplePackagesInspection extends GoInspectionBase {
       Collection<String> packages = GoUtil.getAllPackagesInDirectory(dir);
       packages.remove(GoConstants.DOCUMENTATION);
       if (packages.size() > 1) {
-          problemsHolder.registerProblem(packageClause, "Multiple packages in directory", new GoMultiplePackagesQuickFix(packageClause, packages, problemsHolder.isOnTheFly()));
+        ArrayList<LocalQuickFix> fixes = new ArrayList<LocalQuickFix>();
+        if (problemsHolder.isOnTheFly()) {
+          fixes.add(new GoMultiplePackagesQuickFix(packageClause, packageName, packages, true));
+        } else {
+          for (String name : packages) {
+            fixes.add(new GoMultiplePackagesQuickFix(packageClause, name, packages, false));
+          }
+        }
+        problemsHolder.registerProblem(packageClause, "Multiple packages in directory", fixes.toArray(new LocalQuickFix[fixes.size()]));
       }
     }
   }
