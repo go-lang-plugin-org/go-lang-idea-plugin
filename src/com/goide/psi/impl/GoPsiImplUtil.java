@@ -20,6 +20,7 @@ import com.goide.GoConstants;
 import com.goide.GoTypes;
 import com.goide.psi.*;
 import com.goide.psi.impl.imports.GoImportReferenceSet;
+import com.goide.sdk.GoSdkUtil;
 import com.goide.stubs.GoImportSpecStub;
 import com.goide.stubs.GoNamedStub;
 import com.goide.stubs.GoParameterDeclarationStub;
@@ -372,6 +373,26 @@ public class GoPsiImplUtil {
       GoReference reference = e != null ? e.getReference() : null;
       PsiElement resolve = reference != null ? reference.resolve() : null;
       return resolve instanceof GoTypeOwner ? ((GoTypeOwner)resolve).getGoType(context) : null;
+    }
+    else if (o instanceof GoStringLiteral) {
+      return getBuiltinType(o, "string");
+    }
+    return null;
+  }
+
+  @Nullable
+  private static GoType getBuiltinType(@NotNull GoExpression o, @NotNull final String name) {
+    GoFile builtin = GoSdkUtil.findBuiltinFile(o);
+    if (builtin != null) {
+      GoTypeSpec str = ContainerUtil.find(builtin.getTypes(), new Condition<GoTypeSpec>() {
+        @Override
+        public boolean value(GoTypeSpec spec) {
+          return name.equals(spec.getName());
+        }
+      });
+      if (str != null) {
+        return str.getType();
+      }
     }
     return null;
   }
