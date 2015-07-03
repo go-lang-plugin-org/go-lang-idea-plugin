@@ -21,6 +21,7 @@ import com.goide.psi.*;
 import com.goide.psi.impl.GoReference;
 import com.intellij.lang.ImportOptimizer;
 import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
@@ -60,13 +61,13 @@ public class GoImportOptimizer implements ImportOptimizer {
         commit(file);
 
         for (PsiElement importEntry : importEntriesToDelete) {
-          if (importEntry.isValid()) {
+          if (importEntry != null && importEntry.isValid()) {
             deleteImportSpec(getImportSpec(importEntry));
           }
         }
 
         for (PsiElement identifier : importIdentifiersToDelete) {
-          if (identifier.isValid()) {
+          if (identifier != null && identifier.isValid()) {
             identifier.delete();
           }
         }
@@ -82,12 +83,8 @@ public class GoImportOptimizer implements ImportOptimizer {
       if (importSpec != null) {
         String localPackageName = importSpec.getLocalPackageName();
         if (!StringUtil.isEmpty(localPackageName)) {
-          PsiElement identifier = importSpec.getIdentifier();
-          if (identifier != null) {
-            String identifierName = identifier.getText();
-            if (identifierName.equals(localPackageName)) {
-              importIdentifiersToDelete.add(identifier);
-            }
+          if (Comparing.equal(importSpec.getAlias(), localPackageName)) {
+            importIdentifiersToDelete.add(importSpec.getIdentifier());
           }
         }
       }
