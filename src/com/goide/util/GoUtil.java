@@ -19,6 +19,7 @@ package com.goide.util;
 import com.goide.GoConstants;
 import com.goide.project.GoBuildTargetSettings;
 import com.goide.psi.*;
+import com.goide.runconfig.testing.GoTestFinder;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.extensions.PluginId;
@@ -208,23 +209,18 @@ public class GoUtil {
   }
 
   @NotNull
-  public static GlobalSearchScope moduleScopeExceptContainingFile(@NotNull PsiElement context) {
-    PsiFile file = context.getContainingFile();
-    GlobalSearchScope moduleScope = moduleScope(context);
-    return file != null ? new ExceptFileScope(moduleScope, file.getVirtualFile()) : moduleScope;
+  public static GlobalSearchScope moduleScopeWithoutTests(@NotNull PsiElement context) {
+    return new ExceptTestsScope(moduleScope(context));
   }
 
-  private static class ExceptFileScope extends DelegatingGlobalSearchScope {
-    @Nullable private final VirtualFile myFile;
-
-    public ExceptFileScope(GlobalSearchScope moduleScope, @Nullable VirtualFile file) {
-      super(moduleScope);
-      myFile = file;
+  private static class ExceptTestsScope extends DelegatingGlobalSearchScope {
+    public ExceptTestsScope(@NotNull GlobalSearchScope baseScope) {
+      super(baseScope);
     }
 
     @Override
     public boolean contains(@NotNull VirtualFile file) {
-      return !file.equals(myFile) && super.contains(file);
+      return !GoTestFinder.isTestFile(file) && super.contains(file);
     }
   }
 }
