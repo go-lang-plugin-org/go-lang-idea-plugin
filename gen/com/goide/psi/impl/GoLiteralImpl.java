@@ -53,12 +53,6 @@ public class GoLiteralImpl extends GoExpressionImpl implements GoLiteral {
 
   @Override
   @Nullable
-  public PsiElement getImaginary() {
-    return findChildByType(IMAGINARY);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getInt() {
     return findChildByType(INT);
   }
@@ -67,12 +61,6 @@ public class GoLiteralImpl extends GoExpressionImpl implements GoLiteral {
   @Nullable
   public PsiElement getOct() {
     return findChildByType(OCT);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getRune() {
-    return findChildByType(RUNE);
   }
 
 }

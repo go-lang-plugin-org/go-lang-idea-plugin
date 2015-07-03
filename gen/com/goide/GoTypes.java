@@ -151,7 +151,6 @@ public interface GoTypes {
   IElementType HEX = new GoTokenType("hex");
   IElementType IDENTIFIER = new GoTokenType("identifier");
   IElementType IF = new GoTokenType("if");
-  IElementType IMAGINARY = new GoTokenType("imaginary");
   IElementType IMPORT = new GoTokenType("import");
   IElementType INT = new GoTokenType("int");
   IElementType INTERFACE = new GoTokenType("interface");
@@ -183,7 +182,6 @@ public interface GoTypes {
   IElementType REMAINDER_ASSIGN = new GoTokenType("%=");
   IElementType RETURN = new GoTokenType("return");
   IElementType RPAREN = new GoTokenType(")");
-  IElementType RUNE = new GoTokenType("rune");
   IElementType SELECT = new GoTokenType("select");
   IElementType SEMICOLON = new GoTokenType(";");
   IElementType SEMICOLON_SYNTHETIC = new GoTokenType("<NL>");
