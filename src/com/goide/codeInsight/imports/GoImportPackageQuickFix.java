@@ -37,6 +37,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
@@ -171,7 +172,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
     if (myPackagesToImport == null) {
       final GlobalSearchScope scope = GoUtil.moduleScope(element);
       PsiFile file = element.getContainingFile();
-      final String importPathToIgnore = file instanceof GoFile ? ((GoFile)file).getImportPath() : null;
+      final PsiDirectory parentDirectory = file != null ? file.getParent() : null;
       Collection<GoFile> es = StubIndex.getElements(GoPackagesIndex.KEY, myPackageName, element.getProject(), scope, GoFile.class);
       myPackagesToImport = sorted(skipNulls(map2Set(
         es,
@@ -179,8 +180,8 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
           @Nullable
           @Override
           public String fun(@NotNull GoFile file) {
-            String importPath = file.getImportPath();
-            return importPathToIgnore == null || !importPathToIgnore.equals(importPath) ? importPath : null;
+            PsiDirectory parent = file.getParent();
+            return parentDirectory == null || !parentDirectory.isEquivalentTo(parent) ? file.getImportPath() : null;
           }
         }
       )), new MyImportsComparator(element));
