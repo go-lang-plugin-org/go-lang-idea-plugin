@@ -170,6 +170,8 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
   private Collection<String> getPackagesToImport(@NotNull PsiElement element) {
     if (myPackagesToImport == null) {
       final GlobalSearchScope scope = GoUtil.moduleScope(element);
+      PsiFile file = element.getContainingFile();
+      final String importPathToIgnore = file instanceof GoFile ? ((GoFile)file).getImportPath() : null;
       Collection<GoFile> es = StubIndex.getElements(GoPackagesIndex.KEY, myPackageName, element.getProject(), scope, GoFile.class);
       myPackagesToImport = sorted(skipNulls(map2Set(
         es,
@@ -177,7 +179,8 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
           @Nullable
           @Override
           public String fun(@NotNull GoFile file) {
-            return file.getImportPath();
+            String importPath = file.getImportPath();
+            return importPathToIgnore == null || !importPathToIgnore.equals(importPath) ? importPath : null;
           }
         }
       )), new MyImportsComparator(element));
