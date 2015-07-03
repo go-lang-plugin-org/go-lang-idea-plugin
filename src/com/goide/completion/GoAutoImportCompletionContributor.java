@@ -24,7 +24,6 @@ import com.goide.util.GoUtil;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -75,10 +74,13 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         if (processors.isEmpty()) return;
 
         result = adjustMatcher(parameters, result, parent);
-        Map<String, GoImportSpec> importedPackages = ((GoFile)file).getImportedPackagesMap();
-        NamedElementProcessor processor = new NamedElementProcessor(processors, ((GoFile)file).getImportPath(), importedPackages, result);
+        NamedElementProcessor processor = new NamedElementProcessor(processors, ((GoFile)file).getImportedPackagesMap(), result);
         Project project = position.getProject();
         GlobalSearchScope scope = GoUtil.moduleScopeWithoutTests(file);
+        VirtualFile containingDirectory = file.getVirtualFile().getParent();
+        if (containingDirectory != null) {
+          scope = new GoUtil.ExceptChildOfDirectory(containingDirectory, scope);
+        }
         PrefixMatcher matcher = result.getPrefixMatcher();
         Set<String> sortedKeys = sortMatching(matcher, StubIndex.getInstance().getAllKeys(ALL_PUBLIC_NAMES, project), ((GoFile)file));
         for (String name : sortedKeys) {
@@ -154,9 +156,8 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
     return s.substring(i + 1);
   }
   
-  private static boolean allowed(@NotNull GoNamedElement element, @Nullable String currentImportPath, @Nullable String targetImportPath) {
+  private static boolean allowed(@NotNull GoNamedElement element) {
     GoFile file = element.getContainingFile();
-    if (Comparing.equal(currentImportPath, targetImportPath)) return false;
     if (!GoUtil.allowed(file)) return false;
     PsiDirectory directory = file.getContainingDirectory();
     if (directory != null) {
@@ -267,15 +268,12 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
     @NotNull private final Collection<ElementProcessor> myProcessors;
     @NotNull private final CompletionResultSet myResult;
     @NotNull private String myName = "";
-    @Nullable private final String myImportPath;
     @NotNull private final Map<String, GoImportSpec> myImportedPackages;
 
     public NamedElementProcessor(@NotNull Collection<ElementProcessor> processors,
-                                 @Nullable String importPath,
                                  @NotNull Map<String, GoImportSpec> packages,
                                  @NotNull CompletionResultSet result) {
       myProcessors = processors;
-      myImportPath = importPath;
       myImportedPackages = packages;
       myResult = result;
     }
@@ -292,7 +290,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
       for (ElementProcessor processor : myProcessors) {
         if (processor.isMine(myName, element)) {
           importData = cachedImportData(element, importData);
-          allowed = cachedAllowed(element, myImportPath, importData.importPath, allowed);
+          allowed = cachedAllowed(element, allowed);
           if (allowed == Boolean.FALSE || importData.isDot) break;
           if (!processor.process(myName, element, importData, myResult)) {
             return false;
@@ -302,12 +300,9 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
       return true;
     }
 
-    private static Boolean cachedAllowed(@NotNull GoNamedElement element,
-                                         @Nullable String currentImportPath,
-                                         @Nullable String targetImportPath,
-                                         @Nullable Boolean existingValue) {
+    private static Boolean cachedAllowed(@NotNull GoNamedElement element, @Nullable Boolean existingValue) {
       if (existingValue != null) return existingValue;
-      return allowed(element, currentImportPath, targetImportPath);
+      return allowed(element);
     }
 
     private ExistingImportData cachedImportData(@NotNull GoNamedElement element, @Nullable ExistingImportData existingValue) {

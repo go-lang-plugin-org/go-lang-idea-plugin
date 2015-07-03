@@ -223,4 +223,19 @@ public class GoUtil {
       return !GoTestFinder.isTestFile(file) && super.contains(file);
     }
   }
+  
+  public static class ExceptChildOfDirectory extends DelegatingGlobalSearchScope {
+    @NotNull private final VirtualFile myParent;
+
+    public ExceptChildOfDirectory(@NotNull VirtualFile parent, @NotNull GlobalSearchScope baseScope) {
+      super(baseScope);
+      myParent = parent;
+    }
+
+    @Override
+    public boolean contains(@NotNull VirtualFile file) {
+      return !myParent.equals(file.getParent()) && super.contains(file);
+    }
+  }
+
 }
