@@ -18,6 +18,7 @@ package com.goide.completion;
 
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.Lookup;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.LightProjectDescriptor;
 
 import java.io.IOException;
@@ -311,5 +312,15 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
     myFixture.completeBasic();
     selectLookupItem("pack.TestingFunction");
     myFixture.checkResult("package a;\nimport \"pack\" func main() { _ = pack.TestingFunction()");
+  }
+  
+  public void testDoNotAutoImportWithTheSameImportPath() throws IOException {
+    myFixture.getTempDirFixture().createFile("pack1/file2.go", "package pack1; func MyFunctionFromSamePath() {}");
+    myFixture.getTempDirFixture().createFile("pack2/file2.go", "package pack1; func MyFunctionFromOtherPath() {}");
+    VirtualFile file = myFixture.getTempDirFixture().createFile("pack1/file1.go", "package pack1; func test() { pack1.MyFunc<caret> }");
+    myFixture.configureFromExistingVirtualFile(file);
+    myFixture.completeBasic();
+    myFixture.checkResult("package pack1;\n" +
+                          "import \"pack2\" func test() { pack1.MyFunctionFromOtherPath() }");
   }
 }

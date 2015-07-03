@@ -25,6 +25,7 @@ import com.goide.util.GoUtil;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -76,7 +77,9 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
 
         result = adjustMatcher(parameters, result, parent);
         Map<String, GoImportSpec> importedPackages = ((GoFile)file).getImportedPackagesMap();
-        NamedElementProcessor processor = new NamedElementProcessor(processors, importedPackages, GoTestFinder.isTestFile(file), result);
+        String importPath = ((GoFile)file).getImportPath();
+        boolean isTesting = GoTestFinder.isTestFile(file);
+        NamedElementProcessor processor = new NamedElementProcessor(processors, importPath, importedPackages, isTesting, result);
         Project project = position.getProject();
         GlobalSearchScope scope = GoUtil.moduleScopeExceptContainingFile(file);
         PrefixMatcher matcher = result.getPrefixMatcher();
@@ -154,8 +157,12 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
     return s.substring(i + 1);
   }
   
-  private static boolean allowed(@NotNull GoNamedElement element, boolean isTesting) {
+  private static boolean allowed(@NotNull GoNamedElement element, 
+                                 @Nullable String currentImportPath, 
+                                 @Nullable String targetImportPath, 
+                                 boolean isTesting) {
     GoFile file = element.getContainingFile();
+    if (Comparing.equal(currentImportPath, targetImportPath)) return false;
     if (!GoUtil.allowed(file)) return false;
     PsiDirectory directory = file.getContainingDirectory();
     if (directory != null) {
@@ -273,13 +280,16 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
     private final boolean myTesting;
     @NotNull private final CompletionResultSet myResult;
     @NotNull private String myName = "";
+    @Nullable private final String myImportPath;
     @NotNull private final Map<String, GoImportSpec> myImportedPackages;
 
     public NamedElementProcessor(@NotNull Collection<ElementProcessor> processors,
+                                 @Nullable String importPath, 
                                  @NotNull Map<String, GoImportSpec> packages,
                                  boolean isTesting,
                                  @NotNull CompletionResultSet result) {
       myProcessors = processors;
+      myImportPath = importPath;
       myImportedPackages = packages;
       myTesting = isTesting;
       myResult = result;
@@ -296,8 +306,8 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
       ExistingImportData importData = null;
       for (ElementProcessor processor : myProcessors) {
         if (processor.isMine(myName, element)) {
-          allowed = cachedAllowed(element, allowed);
           importData = cachedImportData(element, importData);
+          allowed = cachedAllowed(element, myImportPath, importData.importPath, allowed);
           if (allowed == Boolean.FALSE || importData.isDot) break;
           if (!processor.process(myName, element, importData, myResult)) {
             return false;
@@ -307,9 +317,12 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
       return true;
     }
 
-    private Boolean cachedAllowed(@NotNull GoNamedElement element, @Nullable Boolean existingValue) {
+    private Boolean cachedAllowed(@NotNull GoNamedElement element,
+                                  @Nullable String currentImportPath, 
+                                  @Nullable String targetImportPath, 
+                                  @Nullable Boolean existingValue) {
       if (existingValue != null) return existingValue;
-      return allowed(element, myTesting);
+      return allowed(element, currentImportPath, targetImportPath, myTesting);
     }
 
     private ExistingImportData cachedImportData(@NotNull GoNamedElement element, @Nullable ExistingImportData existingValue) {
