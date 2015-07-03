@@ -34,6 +34,9 @@ import com.intellij.psi.impl.ElementBase;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.stubs.IStubElementType;
+import com.intellij.psi.util.CachedValueProvider;
+import com.intellij.psi.util.CachedValuesManager;
+import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.RowIcon;
 import com.intellij.usageView.UsageViewUtil;
@@ -107,7 +110,18 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
 
   @Nullable
   @Override
-  public GoType getGoType(ResolveState context) {
+  public GoType getGoType(@Nullable final ResolveState context) {
+    return CachedValuesManager.getCachedValue(this, new CachedValueProvider<GoType>() {
+      @Nullable
+      @Override
+      public Result<GoType> compute() {
+        return Result.create(getGoTypeInner(context), PsiModificationTracker.MODIFICATION_COUNT);
+      }
+    });
+  }
+
+  @Nullable
+  protected GoType getGoTypeInner(@Nullable ResolveState context) {
     return findSiblingType();
   }
 

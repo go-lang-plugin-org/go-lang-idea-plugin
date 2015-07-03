@@ -20,7 +20,7 @@ public interface GoMethodSpec extends GoNamedSignatureOwner, StubBasedPsiElement
   PsiElement getIdentifier();
 
   @Nullable
-  GoType getGoType(ResolveState context);
+  GoType getGoTypeInner(ResolveState context);
 
   @Nullable
   String getName();

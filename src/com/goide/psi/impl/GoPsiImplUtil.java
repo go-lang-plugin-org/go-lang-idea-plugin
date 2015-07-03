@@ -45,6 +45,7 @@ import com.intellij.psi.search.GlobalSearchScopesCore;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
+import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Function;
 import com.intellij.util.PathUtil;
@@ -209,12 +210,12 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType getGoType(@NotNull GoReceiver o, @SuppressWarnings("UnusedParameters") @Nullable ResolveState context) {
+  public static GoType getGoTypeInner(@NotNull GoReceiver o, @SuppressWarnings("UnusedParameters") @Nullable ResolveState context) {
     return o.getType();
   }
 
   @Nullable
-  public static GoType getGoType(@NotNull GoAnonymousFieldDefinition o, @SuppressWarnings("UnusedParameters") @Nullable ResolveState context) {
+  public static GoType getGoTypeInner(@NotNull GoAnonymousFieldDefinition o, @SuppressWarnings("UnusedParameters") @Nullable ResolveState context) {
     return getType(o.getTypeReferenceExpression());
   }
 
@@ -258,7 +259,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType getGoType(@NotNull final GoConstDefinition o, @Nullable final ResolveState context) {
+  public static GoType getGoTypeInner(@NotNull final GoConstDefinition o, @Nullable final ResolveState context) {
     GoType sibling = o.findSiblingType();
     if (sibling != null) return sibling;
     
@@ -298,7 +299,18 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType getGoType(@NotNull final GoExpression o, @Nullable ResolveState context) {
+  public static GoType getGoType(@NotNull final GoExpression o, @Nullable final ResolveState context) {
+    return CachedValuesManager.getCachedValue(o, new CachedValueProvider<GoType>() {
+      @Nullable
+      @Override
+      public Result<GoType> compute() {
+        return Result.create(getGoTypeInner(o, context), PsiModificationTracker.MODIFICATION_COUNT);
+      }
+    });
+  }
+
+  @Nullable
+  public static GoType getGoTypeInner(@NotNull final GoExpression o, @Nullable ResolveState context) {
     if (o instanceof GoUnaryExpr) {
       GoExpression expression = ((GoUnaryExpr)o).getExpression();
       if (expression != null) {
@@ -345,7 +357,7 @@ public class GoPsiImplUtil {
     }
     else if (o instanceof GoIndexOrSliceExpr) {
       GoExpression first = ContainerUtil.getFirstItem(((GoIndexOrSliceExpr)o).getExpressionList());
-      GoType type = first == null ? null : getGoType(first, context);
+      GoType type = first == null ? null : first.getGoType(context);
       if (o.getNode().findChildByType(GoTypes.COLON) != null) return type; // means slice expression, todo: extract if needed
       GoTypeReferenceExpression typeRef = getTypeReference(type);
       if (typeRef != null) {
@@ -509,12 +521,12 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType getGoType(@NotNull GoTypeSpec o, @SuppressWarnings("UnusedParameters") @Nullable ResolveState context) {
+  public static GoType getGoTypeInner(@NotNull GoTypeSpec o, @SuppressWarnings("UnusedParameters") @Nullable ResolveState context) {
     return o.getType();
   }
 
   @Nullable
-  public static GoType getGoType(@NotNull GoVarDefinition o, @Nullable ResolveState context) {
+  public static GoType getGoTypeInner(@NotNull GoVarDefinition o, @Nullable ResolveState context) {
     // see http://golang.org/ref/spec#RangeClause
     PsiElement parent = o.getParent();
     if (parent instanceof GoRangeClause) {
@@ -682,7 +694,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType getGoType(@NotNull GoSignatureOwner o, @SuppressWarnings("UnusedParameters") @Nullable ResolveState context) {
+  public static GoType getGoTypeInner(@NotNull GoSignatureOwner o, @SuppressWarnings("UnusedParameters") @Nullable ResolveState context) {
     GoSignature signature = o.getSignature();
     GoResult result = signature != null ? signature.getResult() : null;
     if (result != null) {

@@ -47,8 +47,8 @@ public class GoMethodSpecImpl extends GoNamedElementImpl<GoMethodSpecStub> imple
   }
 
   @Nullable
-  public GoType getGoType(ResolveState context) {
-    return GoPsiImplUtil.getGoType(this, context);
+  public GoType getGoTypeInner(ResolveState context) {
+    return GoPsiImplUtil.getGoTypeInner(this, context);
   }
 
   @Nullable

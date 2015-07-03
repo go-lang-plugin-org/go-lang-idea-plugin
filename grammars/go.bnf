@@ -136,7 +136,7 @@ FieldDefinition ::= identifier {
 
 AnonymousFieldDefinition ::= '*'? TypeName {
   stubClass="com.goide.stubs.GoAnonymousFieldDefinitionStub"
-  methods=[getIdentifier getName getTextOffset getGoType]
+  methods=[getIdentifier getName getTextOffset getGoTypeInner]
 }
 Tag ::= string | raw_string
 
@@ -173,7 +173,7 @@ InterfaceType ::= interface '{' MethodSpecs? '}' {
 private MethodSpecs ::= MethodSpec (semi MethodSpec)* semi? {pin=1}
 MethodSpec ::= TypeName &(!'(') | identifier Signature {
   stubClass="com.goide.stubs.GoMethodSpecStub"
-  methods=[getGoType getName]
+  methods=[getGoTypeInner getName]
 }
 
 MapType ::= map '[' Type ']' Type {
@@ -230,7 +230,7 @@ ConstSpec ::= ConstDefinitionList [ ('=' ExpressionList | Type '=' ExpressionLis
 private ConstDefinitionList ::= ConstDefinition ( ',' ConstDefinition )*
 ConstDefinition ::= identifier {
   stubClass="com.goide.stubs.GoConstDefinitionStub"
-  methods=[getGoType]
+  methods=[getGoTypeInner]
 }
 
 LeftHandExprList ::= ExpressionList
@@ -244,7 +244,7 @@ TypeDeclaration ::= 'type' ( TypeSpec | '(' TypeSpecs? ')' ) {pin(".*")=1}
 private TypeSpecs ::= TypeSpec (semi TypeSpec)* semi? {pin=1}
 TypeSpec ::= identifier Type {
   pin=1
-  methods=[getGoType getMethods shouldGoDeeper]
+  methods=[getGoTypeInner getMethods shouldGoDeeper]
   stubClass="com.goide.stubs.GoTypeSpecStub"
 }
 
@@ -256,7 +256,7 @@ VarSpec ::= VarDefinitionList ( Type [ '=' ExpressionList ] | '=' ExpressionList
 }
 private VarDefinitionList ::= VarDefinition ( ',' VarDefinition )*
 VarDefinition ::= identifier {
-  methods=[getGoType getReference]
+  methods=[getGoTypeInner getReference]
   stubClass="com.goide.stubs.GoVarDefinitionStub"
 }
 
@@ -271,7 +271,7 @@ MethodDeclaration ::= func Receiver identifier Signature Block? {
   stubClass="com.goide.stubs.GoMethodDeclarationStub"
 }
 Receiver ::= '(' (identifier ReceiverTail | ReceiverTail) ')' {
-  methods=[getGoType]
+  methods=[getGoTypeInner]
   pin=1
   stubClass="com.goide.stubs.GoReceiverStub"
 }

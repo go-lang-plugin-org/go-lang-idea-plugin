@@ -65,8 +65,8 @@ public class GoReceiverImpl extends GoNamedElementImpl<GoReceiverStub> implement
   }
 
   @Nullable
-  public GoType getGoType(ResolveState context) {
-    return GoPsiImplUtil.getGoType(this, context);
+  public GoType getGoTypeInner(ResolveState context) {
+    return GoPsiImplUtil.getGoTypeInner(this, context);
   }
 
 }
