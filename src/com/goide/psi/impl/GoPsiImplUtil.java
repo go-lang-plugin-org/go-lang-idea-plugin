@@ -29,9 +29,7 @@ import com.goide.util.GoStringLiteralEscaper;
 import com.goide.util.GoUtil;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.util.*;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
@@ -259,7 +257,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType getGoType(@NotNull GoConstDefinition o, @Nullable ResolveState context) {
+  public static GoType getGoType(@NotNull final GoConstDefinition o, @Nullable final ResolveState context) {
     GoType sibling = o.findSiblingType();
     if (sibling != null) return sibling;
     
@@ -267,16 +265,21 @@ public class GoPsiImplUtil {
     GoType fromSpec = findTypeInConstSpec(o);
     if (fromSpec != null) return fromSpec;
 
-    GoConstSpec prev = PsiTreeUtil.getPrevSiblingOfType(o.getParent(), GoConstSpec.class);
-    while (prev != null) {
-      GoType type = prev.getType();
-      if (type != null) return type;
-      GoExpression expr = ContainerUtil.getFirstItem(prev.getExpressionList()); // not sure about first
-      if (expr != null) return expr.getGoType(context);
-      prev = PsiTreeUtil.getPrevSiblingOfType(prev, GoConstSpec.class);
-    }
-    
-    return null;
+    return RecursionManager.doPreventingRecursion(o, true, new NullableComputable<GoType>() {
+      @Nullable
+      @Override
+      public GoType compute() {
+        GoConstSpec prev = PsiTreeUtil.getPrevSiblingOfType(o.getParent(), GoConstSpec.class);
+        while (prev != null) {
+          GoType type = prev.getType();
+          if (type != null) return type;
+          GoExpression expr = ContainerUtil.getFirstItem(prev.getExpressionList()); // not sure about first
+          if (expr != null) return expr.getGoType(context);
+          prev = PsiTreeUtil.getPrevSiblingOfType(prev, GoConstSpec.class);
+        }
+        return null;
+      }
+    });
   }
 
   @Nullable

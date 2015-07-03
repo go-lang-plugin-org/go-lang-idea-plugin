@@ -431,6 +431,10 @@ public class GoCompletionTest extends GoCompletionTestBase {
                   "package main; func main() {int(<caret>)}; type int int");
   }
 
+  public void testPreventSOE() throws Exception {
+    doTestInclude("package rubex; const ( IGNORECASE = 1; EXTEND = (IGNORECASE << 1); MULTILINE = (EXTEND << 1)); func m() {<caret>}", "EXTEND");
+  }
+
   @SuppressWarnings("ConstantConditions")
   public void testPackageNames() {
     myFixture.configureByText("test_test.go", "package fromTest_test");
