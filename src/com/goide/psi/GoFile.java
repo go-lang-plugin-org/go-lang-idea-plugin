@@ -416,10 +416,7 @@ public class GoFile extends PsiFileBase {
       PsiElement packageIdentifier = packageClause.getIdentifier();
       if (packageIdentifier != null) {
         String name = packageIdentifier.getText().trim();
-        if (GoTestFinder.isTestFile(this)) {
-          name = StringUtil.trimEnd(name, GoConstants.TEST_SUFFIX);
-        }
-        return name;
+        return GoTestFinder.isTestFile(this) ? StringUtil.trimEnd(name, GoConstants.TEST_SUFFIX) : name;
       }
     }
     return null;
