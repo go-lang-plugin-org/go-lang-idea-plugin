@@ -71,12 +71,27 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "func test(){template.Template{<caret>}}");
   }
 
-  public void testAutoImport() {
+  public void testFunctionAutoImport() {
     doCheckResult("package main; \n" +
                   "func test(){Fprintl<caret>}",
                   "package main;\n" +
                   "import \"fmt\"\n" +
                   "func test(){fmt.Fprintln(<caret>)}", "fmt.Fprintln");
+  }
+  
+  public void testVariableAutoImport() {
+    doCheckResult("package main; \n" +
+                  "func test(){ErrNotSuppor<caret>}",
+                  "package main;\n" +
+                  "import \"net/http\"\n" +
+                  "func test(){http.ErrNotSupported}", "http.ErrNotSupported");
+  }
+  
+  public void testConstantAutoImport() {
+    doCheckResult("package main; \n" +
+                  "func test(){O_RDO<caret>}", "package main;\n" +
+                                               "import \"os\"\n" +
+                                               "func test(){os.O_RDONLY}");
   }
 
   public void testDuplicateAutoImport() {
