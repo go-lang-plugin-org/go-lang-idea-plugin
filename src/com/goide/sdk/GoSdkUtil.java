@@ -229,8 +229,9 @@ public class GoSdkUtil {
   @Nullable
   public static String getPathRelativeToSdkAndLibraries(@NotNull VirtualFile file, @Nullable Project project, @Nullable Module module) {
     if (project != null) {
-      Collection<VirtualFile> roots = newLinkedHashSet(getGoPathSources(project, module));
+      Collection<VirtualFile> roots = newLinkedHashSet();
       ContainerUtil.addIfNotNull(roots, getSdkSrcDir(project, module));
+      roots.addAll(getGoPathSources(project, module));
 
       String result = null;
       for (VirtualFile root : roots) {
