@@ -1096,10 +1096,10 @@ public class GoParser implements PsiParser {
   static boolean E(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "E")) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, null);
     r = withOn(b, l + 1, "PAR", Element_parser_);
     if (!r) r = E_1(b, l + 1);
-    exit_section_(b, m, null, r);
+    exit_section_(b, l, m, null, r, false, E_recover_parser_);
     return r;
   }
 
@@ -1130,15 +1130,38 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // !('}'|',')
+  static boolean E_recover(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "E_recover")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NOT_, null);
+    r = !E_recover_0(b, l + 1);
+    exit_section_(b, l, m, null, r, false, null);
+    return r;
+  }
+
+  // '}'|','
+  private static boolean E_recover_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "E_recover_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, RBRACE);
+    if (!r) r = consumeToken(b, COMMA);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // First [':' Value]
   public static boolean Element(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Element")) return false;
-    boolean r;
+    boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, "<element>");
     r = First(b, l + 1);
+    p = r; // pin = 1
     r = r && Element_1(b, l + 1);
-    exit_section_(b, l, m, ELEMENT, r, false, null);
-    return r;
+    exit_section_(b, l, m, ELEMENT, r, p, null);
+    return r || p;
   }
 
   // [':' Value]
@@ -1151,12 +1174,13 @@ public class GoParser implements PsiParser {
   // ':' Value
   private static boolean Element_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Element_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeToken(b, COLON);
+    p = r; // pin = 1
     r = r && Value(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
+    exit_section_(b, l, m, null, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -4677,6 +4701,11 @@ public class GoParser implements PsiParser {
     return r || p;
   }
 
+  final static Parser E_recover_parser_ = new Parser() {
+    public boolean parse(PsiBuilder b, int l) {
+      return E_recover(b, l + 1);
+    }
+  };
   final static Parser Element_parser_ = new Parser() {
     public boolean parse(PsiBuilder b, int l) {
       return Element(b, l + 1);

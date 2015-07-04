@@ -60,4 +60,5 @@ public class GoParserTest extends ParsingTestCase {
   public void testBlockRecover()                    { doTest(false); }
   public void testMethodWithoutReceiverIdentifier() { doTest(false); }
   public void testExpressionPerformance()           { doTest(false); }
+  public void testElementRecover()                  { doTest(false); }
 }
