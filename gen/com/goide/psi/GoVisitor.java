@@ -154,6 +154,7 @@ public class GoVisitor extends PsiElementVisitor {
 
   public void visitFunctionType(@NotNull GoFunctionType o) {
     visitType(o);
+    // visitSignatureOwner(o);
   }
 
   public void visitGoStatement(@NotNull GoGoStatement o) {

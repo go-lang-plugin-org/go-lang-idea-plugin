@@ -142,7 +142,7 @@ Tag ::= string | raw_string
 
 PointerType ::= '*' Type {pin=1}
 
-FunctionType ::= func Signature {pin=1}
+FunctionType ::= func Signature {pin=1 implements="com.goide.psi.GoSignatureOwner"}
 Signature ::= Parameters Result? {
   pin=1
   stubClass="com.goide.stubs.GoSignatureStub"

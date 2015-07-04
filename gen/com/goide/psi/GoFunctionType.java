@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoFunctionType extends GoType {
+public interface GoFunctionType extends GoType, GoSignatureOwner {
 
   @Nullable
   GoSignature getSignature();
