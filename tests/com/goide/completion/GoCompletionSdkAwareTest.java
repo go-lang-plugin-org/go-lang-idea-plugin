@@ -301,7 +301,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
   
   public void testCompleteTestBenchmarkExamplesFromNonTestFiles() throws IOException {
     myFixture.getTempDirFixture().createFile("pack/pack.go", "package pack; func TestFoo() {} func BenchmarkFoo() {} func ExampleFoo() {}");
-    myFixture.configureByText("my_test.go", "package a; func main() { _ = <caret>");
+    myFixture.configureByText("my_test.go", "package a; func main() { _ = Foo<caret>");
     myFixture.completeBasic();
     assertContainsElements(myFixture.getLookupElementStrings(), "pack.TestFoo", "pack.BenchmarkFoo", "pack.ExampleFoo");
   }

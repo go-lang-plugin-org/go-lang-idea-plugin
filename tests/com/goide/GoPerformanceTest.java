@@ -22,6 +22,7 @@ import com.goide.inspections.unresolved.GoUnusedFunctionInspection;
 import com.goide.inspections.unresolved.GoUnusedGlobalVariableInspection;
 import com.goide.inspections.unresolved.GoUnusedVariableInspection;
 import com.intellij.analysis.AnalysisScope;
+import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.InspectionProfileEntry;
 import com.intellij.codeInspection.ex.InspectionManagerEx;
@@ -82,14 +83,14 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testCompletionPerformance() {
-    doCompletionTest("package main; func main() { <caret> }", TimeUnit.SECONDS.toMillis(30));
+    doCompletionTest("package main; func main() { <caret> }", 2, TimeUnit.SECONDS.toMillis(30));
   }
 
   public void testCompletionWithPrefixPerformance() {
-    doCompletionTest("package main; func main() { slee<caret> }", TimeUnit.SECONDS.toMillis(10));
+    doCompletionTest("package main; func main() { slee<caret> }", 1, TimeUnit.SECONDS.toMillis(10));
   }
 
-  private void doCompletionTest(String source, long expectation) {
+  private void doCompletionTest(String source, final int invocationCount, long expectation) {
     VirtualFile go = installTestData("go");
     if (go == null) return;
     
@@ -97,7 +98,7 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
     PlatformTestUtil.startPerformanceTest(getTestName(true), (int)expectation, new ThrowableRunnable() {
       @Override
       public void run() throws Throwable {
-        myFixture.completeBasic();
+        myFixture.complete(CompletionType.BASIC, invocationCount);
       }
     }).cpuBound().usesAllCPUCores().assertTiming();
   }

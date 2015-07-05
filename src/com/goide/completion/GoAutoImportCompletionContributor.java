@@ -28,6 +28,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.PsiElementPattern;
+import com.intellij.patterns.StandardPatterns;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -60,6 +61,14 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         PsiFile file = parameters.getOriginalFile();
         if (!(file instanceof GoFile)) return;
         if (!(parent instanceof GoReferenceExpressionBase)) return;
+        
+        result = adjustMatcher(parameters, result, parent);
+        PrefixMatcher matcher = result.getPrefixMatcher();
+        if (parameters.getInvocationCount() < 2 && matcher.getPrefix().isEmpty()) {
+          result.restartCompletionOnPrefixChange(StandardPatterns.string().longerThan(0));
+          return;
+        }
+        
         GoReferenceExpressionBase qualifier = ((GoReferenceExpressionBase)parent).getQualifier();
         if (qualifier != null && qualifier.getReference() != null && qualifier.getReference().resolve() != null) return;
 
@@ -73,7 +82,6 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         }
         if (processors.isEmpty()) return;
 
-        result = adjustMatcher(parameters, result, parent);
         NamedElementProcessor processor = new NamedElementProcessor(processors, ((GoFile)file).getImportedPackagesMap(), result);
         Project project = position.getProject();
         GlobalSearchScope scope = GoUtil.moduleScopeWithoutTests(file);
@@ -81,7 +89,6 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         if (containingDirectory != null) {
           scope = new GoUtil.ExceptChildOfDirectory(containingDirectory, scope);
         }
-        PrefixMatcher matcher = result.getPrefixMatcher();
         Set<String> sortedKeys = sortMatching(matcher, StubIndex.getInstance().getAllKeys(ALL_PUBLIC_NAMES, project), ((GoFile)file));
         for (String name : sortedKeys) {
           processor.setName(name);
