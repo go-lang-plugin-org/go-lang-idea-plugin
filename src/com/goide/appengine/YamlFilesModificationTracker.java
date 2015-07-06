@@ -17,9 +17,11 @@
 package com.goide.appengine;
 
 import com.goide.util.GoUtil;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.SimpleModificationTracker;
 import com.intellij.openapi.util.UserDataHolder;
 import com.intellij.openapi.vfs.*;
@@ -64,7 +66,7 @@ public class YamlFilesModificationTracker extends SimpleModificationTracker {
       }
     }, project);
   }
-  
+
   public static YamlFilesModificationTracker getInstance(@NotNull Project project) {
     return ServiceManager.getService(project, YamlFilesModificationTracker.class);
   }
@@ -76,8 +78,14 @@ public class YamlFilesModificationTracker extends SimpleModificationTracker {
       @Nullable
       @Override
       public Result<Collection<VirtualFile>> compute() {
-        GlobalSearchScope scope = module != null ? GoUtil.moduleScopeWithoutLibraries(module) : GlobalSearchScope.projectScope(project);
-        return Result.create(FilenameIndex.getAllFilesByExt(project, "yaml", scope), getInstance(project));
+        Collection<VirtualFile> yamlFiles = ApplicationManager.getApplication().runReadAction(new Computable<Collection<VirtualFile>>() {
+          @Override
+          public Collection<VirtualFile> compute() {
+            GlobalSearchScope scope = module != null ? GoUtil.moduleScopeWithoutLibraries(module) : GlobalSearchScope.projectScope(project);
+            return FilenameIndex.getAllFilesByExt(project, "yaml", scope);
+          }
+        });
+        return Result.create(yamlFiles, getInstance(project));
       }
     });
   }
