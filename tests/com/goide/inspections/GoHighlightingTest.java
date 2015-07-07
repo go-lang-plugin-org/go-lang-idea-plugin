@@ -49,7 +49,8 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       GoFunctionCallInspection.class,
       GoDeferGoInspection.class,
       GoReservedWordUsedAsName.class,
-      GoMultiplePackagesInspection.class
+      GoMultiplePackagesInspection.class,
+      GoCGOInTestInspection.class
     );
   }
 
@@ -246,6 +247,16 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testTestPackage() {
     myFixture.addFileToProject("a.go", "package a");
     myFixture.configureByText("a_test.go", "package a_test");
+    myFixture.checkHighlighting();
+  }
+
+  public void testCGOImportInTestFile() {
+    myFixture.configureByText("a_test.go", "package a; import<error>\"C\"</error>;");
+    myFixture.checkHighlighting();
+  }
+
+  public void testCGOImportInNonTestFile() {
+    myFixture.configureByText("a.go", "package a; import \"C\"");
     myFixture.checkHighlighting();
   }
 
