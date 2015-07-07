@@ -23,6 +23,7 @@ import com.goide.psi.impl.GoElementFactory;
 import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.util.GoUtil;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -32,6 +33,7 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.ui.components.JBList;
+import com.intellij.util.ArrayUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -76,6 +78,10 @@ public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionO
                      @Nullable("is null when called from inspection") Editor editor,
                      @NotNull PsiElement startElement,
                      @NotNull PsiElement endElement) {
+    if (ApplicationManager.getApplication().isUnitTestMode()) {
+      renamePackagesInDirectory(project, file.getContainingDirectory(), ArrayUtil.toStringArray(myPackages)[0]);
+      return;
+    }
     if (editor == null) {
       renamePackagesInDirectory(project, file.getContainingDirectory(), myPackageName);
       return;
