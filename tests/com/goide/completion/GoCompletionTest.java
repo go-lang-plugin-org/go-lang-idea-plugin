@@ -469,7 +469,7 @@ public class GoCompletionTest extends GoCompletionTestBase {
   }
 
   @SuppressWarnings("ConstantConditions")
-  public void testPackageNamesInEmptyDirectory() throws IOException {
+  public void _testPackageNamesInEmptyDirectory() throws IOException {
     VirtualFile dir = myFixture.getTempDirFixture().findOrCreateDir("directory-name");
     VirtualFile file = dir.createChildData(this, "test.go");
     VfsUtil.saveText(file, "package <caret>");
