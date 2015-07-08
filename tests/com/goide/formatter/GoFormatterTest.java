@@ -14,6 +14,7 @@ public class GoFormatterTest extends GoCodeInsightFixtureTestCase {
   public void testSimple()      { doTest(); }
   public void testCaseE()       { doTest('e'); }
   public void testCaseEnter()   { doTestEnter(); }
+  public void testCase2Enter()  { doTestEnter(); }
   public void testSwitchEnter() { doTestEnter(); }
   public void testTypeEnter()   { doTestEnter(); }
 
