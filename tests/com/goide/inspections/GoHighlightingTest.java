@@ -143,6 +143,12 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.checkHighlighting();
   }
   
+  public void testDuplicateFunctionsInDifferentPackages() {
+    myFixture.configureByText("a.go", "package foo; func init() {bar()}; func bar() {};");
+    myFixture.configureByText("b_test.go", "package foo_test; func init() {bar(); buzz();}; func bar() {}; func buzz() {}");
+    myFixture.checkHighlighting();
+  }
+  
   public void testDoNotSearchFunctionDuplicatesForNotTargetMatchingFiles() {
     myFixture.configureByText("a.go", "//+build appengine\n\npackage foo; func init() {buzz()}; func buzz() {}");
     myFixture.configureByText("b.go", "//+build appengine\n\npackage foo; func init() {buzz()}; func buzz() {}");
