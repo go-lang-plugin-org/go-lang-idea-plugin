@@ -27,17 +27,14 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.ui.components.JBList;
-import com.intellij.util.ArrayUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
 import java.util.Collection;
 
 public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionOnPsiElement {
@@ -78,16 +75,12 @@ public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionO
                      @Nullable("is null when called from inspection") Editor editor,
                      @NotNull PsiElement startElement,
                      @NotNull PsiElement endElement) {
-    if (ApplicationManager.getApplication().isUnitTestMode()) {
-      renamePackagesInDirectory(project, file.getContainingDirectory(), ArrayUtil.toStringArray(myPackages)[0]);
-      return;
-    }
-    if (editor == null) {
+    if (editor == null || ApplicationManager.getApplication().isUnitTestMode()) {
       renamePackagesInDirectory(project, file.getContainingDirectory(), myPackageName);
       return;
     }
-    final JList list = new JBList(myPackages);
-    JBPopup popup = JBPopupFactory.getInstance().createListPopupBuilder(list).setItemChoosenCallback(new Runnable() {
+    final JBList list = new JBList(myPackages);
+    JBPopupFactory.getInstance().createListPopupBuilder(list).setItemChoosenCallback(new Runnable() {
       @Override
       public void run() {
         String name = (String)list.getSelectedValue();
@@ -95,8 +88,7 @@ public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionO
           renamePackagesInDirectory(project, file.getContainingDirectory(), name);
         }
       }
-    }).createPopup();
-    popup.showInBestPositionFor(editor);
+    }).createPopup().showInBestPositionFor(editor);
   }
 
   @NotNull

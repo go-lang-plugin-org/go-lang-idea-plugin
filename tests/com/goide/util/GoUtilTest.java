@@ -25,7 +25,8 @@ public class GoUtilTest  extends GoCodeInsightFixtureTestCase {
     myFixture.configureByText("main.go", "package main");
     myFixture.configureByText("docs.go", "package documentation");
     myFixture.configureByText("bar_test.go", "package tricky_package_name");
-    assertSameElements(GoUtil.getAllPackagesInDirectory(myFixture.getFile().getContainingDirectory()), "foo", "main", "documentation", "tricky_package_name");
+    assertSameElements(GoUtil.getAllPackagesInDirectory(myFixture.getFile().getContainingDirectory()), 
+                       "foo", "main", "documentation", "tricky_package_name");
   }
 
 }

@@ -23,29 +23,25 @@ import com.goide.util.GoUtil;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiDirectory;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class GoMultiplePackagesInspection extends GoInspectionBase {
 
   @Override
   protected void checkFile(@NotNull GoFile file, @NotNull ProblemsHolder problemsHolder) {
-    if (!GoUtil.allowed(file)) {
-      return;
-    }
+    if (!GoUtil.allowed(file)) return;
     GoPackageClause packageClause = file.getPackage();
     if (packageClause != null) {
       String packageName = file.getPackageName();
-      if (packageName == null || packageName.equals(GoConstants.DOCUMENTATION)){
-        return;
-      }
+      if (packageName == null || packageName.equals(GoConstants.DOCUMENTATION)) return;
       PsiDirectory dir = file.getContainingDirectory();
       Collection<String> packages = GoUtil.getAllPackagesInDirectory(dir);
       packages.remove(GoConstants.DOCUMENTATION);
       if (packages.size() > 1) {
-        ArrayList<LocalQuickFix> fixes = new ArrayList<LocalQuickFix>();
+        Collection<LocalQuickFix> fixes = ContainerUtil.newArrayList();
         if (problemsHolder.isOnTheFly()) {
           fixes.add(new GoMultiplePackagesQuickFix(packageClause, packageName, packages, true));
         } else {

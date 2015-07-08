@@ -17,10 +17,6 @@
 package com.goide.quickfix;
 
 import com.goide.inspections.GoMultiplePackagesInspection;
-import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.util.containers.ContainerUtil;
-
-import java.util.List;
 
 public class GoMultiplePackagesQuickFixTest extends GoQuickFixTestBase {
   @Override
@@ -39,10 +35,7 @@ public class GoMultiplePackagesQuickFixTest extends GoQuickFixTestBase {
     myFixture.configureByFile("b.go");
     myFixture.configureByFile("b_test.go");
 
-    List<IntentionAction> availableIntentions = myFixture.filterAvailableIntentions("Rename packages");
-    IntentionAction action = ContainerUtil.getFirstItem(availableIntentions);
-    assertNotNull(action);
-    myFixture.launchAction(action);
+    applySingleQuickFix("Rename packages");
 
     myFixture.checkResultByFile("a.go", "a-after.go", true);
     myFixture.checkResultByFile("b.go", "b-after.go", true);
