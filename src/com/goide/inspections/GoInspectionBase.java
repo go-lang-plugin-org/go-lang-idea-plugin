@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.goide.inspections;
 
 import com.goide.psi.GoFile;
 import com.goide.psi.GoVisitor;
+import com.goide.util.GoUtil;
 import com.intellij.codeInspection.*;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiFile;
@@ -32,7 +33,7 @@ abstract public class GoInspectionBase extends LocalInspectionTool {
   @Override
   public final PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly, @NotNull LocalInspectionToolSession session) {
     GoFile file = ObjectUtils.tryCast(session.getFile(), GoFile.class);
-    return file != null ? buildGoVisitor(holder, session) : DUMMY_VISITOR;
+    return file != null && GoUtil.allowed(file) ? buildGoVisitor(holder, session) : DUMMY_VISITOR;
   }
 
   @NotNull

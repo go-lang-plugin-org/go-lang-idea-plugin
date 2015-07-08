@@ -39,8 +39,6 @@ import static com.goide.GoConstants.MAIN;
 public class GoDuplicateFunctionInspection extends GoInspectionBase {
   @Override
   protected void checkFile(@NotNull GoFile file, @NotNull final ProblemsHolder problemsHolder) {
-    if (!GoUtil.allowed(file)) return;
-
     final MultiMap<String, GoFunctionDeclaration> map = MultiMap.create();
     List<GoFile> files = GoPsiImplUtil.getAllPackageFiles(file);
     for (GoFile goFile : files) {

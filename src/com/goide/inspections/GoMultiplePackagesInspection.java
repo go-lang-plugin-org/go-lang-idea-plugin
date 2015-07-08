@@ -30,7 +30,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 public class GoMultiplePackagesInspection extends GoInspectionBase {
-
   @Override
   protected void checkFile(@NotNull GoFile file, @NotNull ProblemsHolder problemsHolder) {
     if (GoUtil.directoryToIgnore(file.getName()) || ((ScratchFileType)ScratchFileType.INSTANCE).isMyFileType(file.getVirtualFile())) return;
