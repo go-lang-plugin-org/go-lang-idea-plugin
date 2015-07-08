@@ -39,6 +39,7 @@ public class GoConstants {
   public static final String TEST_SUFFIX_WITH_EXTENSION = "_test.go";
   public static final String MAIN = "main";
   public static final String INIT = "init";
+  public static final String DOCUMENTATION = "documentation";
 
   public static final NotificationGroup GO_NOTIFICATION_GROUP = NotificationGroup.balloonGroup("Go plugin notifications");
   public static final NotificationGroup GO_EXECUTION_NOTIFICATION_GROUP = NotificationGroup.toolWindowGroup("Go Execution", ToolWindowId.RUN);

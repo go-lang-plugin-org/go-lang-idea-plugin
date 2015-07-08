@@ -231,7 +231,7 @@ public class GoFile extends PsiFileBase {
       }
       GoImportString string = spec.getImportString();
       PsiDirectory dir = string.resolve();
-      Collection<String> packagesInDirectory = GoUtil.getAllPackagesInDirectory(dir);
+      Collection<String> packagesInDirectory = GoUtil.getAllPackagesInDirectory(dir, true);
       if (!packagesInDirectory.isEmpty()) {
         for (String packageNames : packagesInDirectory) {
           if (!StringUtil.isEmpty(packageNames)) {
