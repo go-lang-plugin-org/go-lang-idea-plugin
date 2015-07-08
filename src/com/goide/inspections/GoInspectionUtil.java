@@ -21,9 +21,7 @@ import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -67,17 +65,10 @@ public class GoInspectionUtil {
   }
 
   private static int getFunctionResultCount(@NotNull GoCallExpr call) {
-    GoSignatureOwner declaration = resolveFunctionCall(call);
-    return declaration == null ? UNKNOWN_COUNT : getFunctionResultCount(declaration);
+    GoSignatureOwner signatureOwner = GoPsiImplUtil.resolveCall(call);
+    return signatureOwner == null ? UNKNOWN_COUNT : getFunctionResultCount(signatureOwner);
   }
-
-  @Nullable
-  private static GoSignatureOwner resolveFunctionCall(@NotNull GoCallExpr call) {
-    PsiReference reference = GoPsiImplUtil.getCallReference(call);
-    PsiElement function = reference != null ? reference.resolve() : null;
-    return function instanceof GoSignatureOwner ? (GoSignatureOwner)function : null;
-  }
-
+  
   public static int getFunctionResultCount(@NotNull GoSignatureOwner function) {
     int count = 0;
     GoSignature signature = function.getSignature();

@@ -58,10 +58,9 @@ public class GoFunctionCallInspection extends LocalInspectionTool {
 
             if (actualSize == 1) {
               GoExpression first = ContainerUtil.getFirstItem(list);
-              PsiReference firstRef = GoPsiImplUtil.getCallReference(first);
-              PsiElement firstResolve = firstRef != null ? firstRef.resolve() : null;
-              if (firstResolve instanceof GoNamedSignatureOwner) {
-                actualSize = GoInspectionUtil.getFunctionResultCount((GoNamedSignatureOwner)firstResolve);
+              GoSignatureOwner firstResolve = GoPsiImplUtil.resolveCall(first);
+              if (firstResolve != null) {
+                actualSize = GoInspectionUtil.getFunctionResultCount(firstResolve);
               }
             }
             
