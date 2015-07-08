@@ -202,6 +202,20 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       public VirtualFile compute() throws Throwable {
         myFixture.getTempDirFixture().createFile("pack1/pack1_test.go", "package pack1_test; func Test() {}");
         return myFixture.getTempDirFixture().createFile("pack2/pack2_test.go",
+                                                        "package pack2_test; import `pack1`; func TestTest() {<error>pack1_test</error>.Test()}");
+      }
+    });
+    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(file.getParent().getParent().getUrl());
+    myFixture.configureFromExistingVirtualFile(file);
+    myFixture.checkHighlighting();
+  }
+  
+  public void testPackageWithTestPrefixNotInsideTestFile() throws Throwable {
+    VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
+      @Override
+      public VirtualFile compute() throws Throwable {
+        myFixture.getTempDirFixture().createFile("pack1/pack1.go", "package pack1_test; func Test() {}");
+        return myFixture.getTempDirFixture().createFile("pack2/pack2_test.go",
                                                         "package pack2_test; import `pack1`; func TestTest() {pack1_test.Test()}");
       }
     });
@@ -209,6 +223,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureFromExistingVirtualFile(file);
     myFixture.checkHighlighting();
   }
+
 
   public void testMultiplePackages() {
     myFixture.addFileToProject("a.go", "package a");

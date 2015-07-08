@@ -38,7 +38,7 @@ public class GoMultiplePackagesInspection extends GoInspectionBase {
       String packageName = file.getPackageName();
       if (packageName == null || packageName.equals(GoConstants.DOCUMENTATION)) return;
       PsiDirectory dir = file.getContainingDirectory();
-      Collection<String> packages = GoUtil.getAllPackagesInDirectory(dir);
+      Collection<String> packages = GoUtil.getAllPackagesInDirectory(dir, true);
       packages.remove(GoConstants.DOCUMENTATION);
       if (packages.size() > 1) {
         Collection<LocalQuickFix> fixes = ContainerUtil.newArrayList();

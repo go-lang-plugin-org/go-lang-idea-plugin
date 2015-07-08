@@ -26,6 +26,7 @@ import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -34,6 +35,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.DelegatingGlobalSearchScope;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.util.CachedValue;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.util.Function;
@@ -61,6 +63,8 @@ public class GoUtil {
     }
   };
   private static final String PLUGIN_ID = "ro.redeul.google.go";
+  private static final Key<CachedValue<Collection<String>>> PACKAGES_CACHE = Key.create("packages_cache");
+  private static final Key<CachedValue<Collection<String>>> PACKAGES_TEST_TRIMMED_CACHE = Key.create("packages_test_trimmed_cache");
 
   public static boolean allowed(@NotNull PsiFile file) {
     GoBuildTargetSettings targetSettings = GoBuildTargetSettings.getInstance(file.getProject());
@@ -189,11 +193,10 @@ public class GoUtil {
   }
 
   @NotNull
-  public static Collection<String> getAllPackagesInDirectory(@Nullable final PsiDirectory dir) {
-    if (dir == null) {
-      return Collections.emptyList();
-    }
-    return CachedValuesManager.getCachedValue(dir, new CachedValueProvider<Collection<String>>() {
+  public static Collection<String> getAllPackagesInDirectory(@Nullable final PsiDirectory dir, final boolean trimTestSuffices) {
+    if (dir == null) return Collections.emptyList();
+    Key<CachedValue<Collection<String>>> key = trimTestSuffices ? PACKAGES_TEST_TRIMMED_CACHE : PACKAGES_CACHE;
+    return CachedValuesManager.getManager(dir.getProject()).getCachedValue(dir, key, new CachedValueProvider<Collection<String>>() {
       @Nullable
       @Override
       public Result<Collection<String>> compute() {
@@ -202,13 +205,13 @@ public class GoUtil {
           if (file instanceof GoFile && !directoryToIgnore(file.getName())) {
             String name = ((GoFile)file).getPackageName();
             if (name != null) {
-              set.add(name);
+              set.add(trimTestSuffices && GoTestFinder.isTestFile(file) ? StringUtil.trimEnd(name, GoConstants.TEST_SUFFIX) : name);
             }
           }
         }
         return Result.create(set, dir);
       }
-    });
+    }, false);
   }
 
   @NotNull

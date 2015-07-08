@@ -18,15 +18,20 @@ package com.goide.util;
 
 import com.goide.GoCodeInsightFixtureTestCase;
 
-public class GoUtilTest  extends GoCodeInsightFixtureTestCase {
+public class GoUtilTest extends GoCodeInsightFixtureTestCase {
   public void testPackageNameOfTestPackageInNonTestFile() {
     myFixture.configureByText("foo.go", "package foo");
     myFixture.configureByText("foo_test.go", "package foo_test");
     myFixture.configureByText("main.go", "package main");
     myFixture.configureByText("docs.go", "package documentation");
     myFixture.configureByText("bar_test.go", "package tricky_package_name");
-    assertSameElements(GoUtil.getAllPackagesInDirectory(myFixture.getFile().getContainingDirectory()), 
-                       "foo", "main", "documentation", "tricky_package_name");
+    myFixture.configureByText("non_test_file.go", "package non_test");
+    
+    assertSameElements(GoUtil.getAllPackagesInDirectory(myFixture.getFile().getContainingDirectory(), true), 
+                       "foo", "main", "non_test", "documentation", "tricky_package_name");
+    
+    assertSameElements(GoUtil.getAllPackagesInDirectory(myFixture.getFile().getContainingDirectory(), false), 
+                       "foo", "foo_test", "main", "non_test", "documentation", "tricky_package_name");
   }
 
 }

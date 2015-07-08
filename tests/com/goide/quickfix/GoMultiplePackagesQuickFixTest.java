@@ -31,9 +31,9 @@ public class GoMultiplePackagesQuickFixTest extends GoQuickFixTestBase {
   }
 
   public void testMultiplePackagesQuickFix() {
-    myFixture.configureByFile("a.go");
     myFixture.configureByFile("b.go");
     myFixture.configureByFile("b_test.go");
+    myFixture.configureByFile("a.go");
 
     applySingleQuickFix("Rename packages");
 

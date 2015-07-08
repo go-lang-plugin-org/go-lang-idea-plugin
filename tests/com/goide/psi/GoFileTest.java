@@ -50,7 +50,7 @@ public class GoFileTest extends GoCodeInsightFixtureTestCase {
 
   public void testPackageNameOfTestFile() {
     myFixture.configureByText("foo_test.go", "package foo_test");
-    assertEquals("foo", ((GoFile)myFixture.getFile()).getPackageName());
+    assertEquals("foo_test", ((GoFile)myFixture.getFile()).getPackageName());
   }
 
   public void testPackageNameOfNonTestPackageInTestFile() {

@@ -172,8 +172,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
       if (vFile.getPath().endsWith("go/doc/testdata")) return false;
     }
 
-    String packageName = file.getPackageName();
-    if (StringUtil.equals(packageName, GoConstants.MAIN)) return false;
+    if (StringUtil.equals(file.getPackageName(), GoConstants.MAIN)) return false;
     return true;
   }
 
