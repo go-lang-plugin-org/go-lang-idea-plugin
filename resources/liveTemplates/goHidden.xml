@@ -73,14 +73,14 @@
     </context>
   </template>
   <template description='Case clause' id='go_lang_case' name='go_lang_case' toReformat='true' toShortenFQNames='true'
-            value='case $CONDITION$: &#10;	$END$&#10;'>
+            value='case $CONDITION$: &#10;	$END$'>
     <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='CONDITION'/>
     <context>
       <option name='GO' value='true'/>
     </context>
   </template>
   <template description='Default clause' id='go_lang_default' name='go_lang_default' toReformat='true' toShortenFQNames='true'
-            value='default: &#10;	$END$&#10;'>
+            value='default: &#10;	$END$'>
     <context>
       <option name='GO' value='true'/>
     </context>

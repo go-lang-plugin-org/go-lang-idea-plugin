@@ -26,6 +26,7 @@ import com.intellij.patterns.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -69,8 +70,8 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
     extend(CompletionType.BASIC, afterIfBlock(GoTypes.IDENTIFIER),
            new GoKeywordCompletionProvider(GoCompletionUtil.CONTEXT_KEYWORD_PRIORITY, "else"));
     extend(CompletionType.BASIC, afterElseKeyword(), new GoKeywordCompletionProvider(GoCompletionUtil.CONTEXT_KEYWORD_PRIORITY, "if"));
-    //extend(CompletionType.BASIC, insideSwitchStatement(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, "case", "default"));
-    //  todo: "case", "default", "range"
+    extend(CompletionType.BASIC, insideSwitchStatement(), new GoKeywordCompletionProvider(GoCompletionUtil.CONTEXT_KEYWORD_PRIORITY, "case", "default"));
+    //  todo: "range"
   }
 
   @Override
@@ -109,10 +110,10 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
       psiElement(GoReferenceExpression.class).withParent(not(psiElement(GoSelectorExpr.class))).with(new GoNonQualifiedReference()));
   }
 
-
-  //private static ElementPattern<? extends PsiElement> insideSwitchStatement() {
-  //  return insideBlockPattern().inside(GoSwitchStatement.class);
-  //}
+  private static ElementPattern<? extends PsiElement> insideSwitchStatement() {
+    return onStatementBeginning(GoTypes.IDENTIFIER, GoTypes.CASE, GoTypes.DEFAULT).andOr(psiElement().inside(GoExprCaseClause.class),
+                                                                                         psiElement().inside(GoTypeCaseClause.class));
+  }
 
   private static ElementPattern<? extends PsiElement> typeDeclaration() {
     return psiElement(GoTypes.IDENTIFIER)
@@ -145,10 +146,11 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
       .withParent(psiElement(PsiErrorElement.class).withParent(goFileWithoutPackage()).isFirstAcceptedChild(psiElement()));
   }
 
-  private static PsiElementPattern.Capture<PsiElement> onStatementBeginning(@NotNull IElementType tokenType) {
-    return psiElement(tokenType).afterLeafSkipping(psiElement().whitespaceCommentEmptyOrError().withoutText(string().containsChars("\n")),
-                                                   or(psiElement(GoTypes.SEMICOLON), psiElement(GoTypes.LBRACE),
-                                                      psiElement().withText(string().containsChars("\n"))));
+  private static PsiElementPattern.Capture<PsiElement> onStatementBeginning(@NotNull IElementType... tokenTypes) {
+    return psiElement().withElementType(TokenSet.create(tokenTypes))
+      .afterLeafSkipping(psiElement().whitespaceCommentEmptyOrError().withoutText(string().containsChars("\n")),
+                         or(psiElement(GoTypes.SEMICOLON), psiElement(GoTypes.LBRACE),
+                            psiElement().withText(string().containsChars("\n"))));
   }
 
   private static PsiFilePattern.Capture<GoFile> goFileWithPackage() {
