@@ -111,8 +111,7 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
   }
 
   private static ElementPattern<? extends PsiElement> insideSwitchStatement() {
-    return onStatementBeginning(GoTypes.IDENTIFIER, GoTypes.CASE, GoTypes.DEFAULT).andOr(psiElement().inside(GoExprCaseClause.class),
-                                                                                         psiElement().inside(GoTypeCaseClause.class));
+    return onStatementBeginning(GoTypes.IDENTIFIER, GoTypes.CASE, GoTypes.DEFAULT).inside(GoCaseClause.class);
   }
 
   private static ElementPattern<? extends PsiElement> typeDeclaration() {
