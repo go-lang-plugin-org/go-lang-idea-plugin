@@ -204,7 +204,7 @@ public class GoUtil {
         for (PsiFile file : dir.getFiles()) {
           if (file instanceof GoFile && !directoryToIgnore(file.getName())) {
             String name = ((GoFile)file).getPackageName();
-            if (name != null) {
+            if (StringUtil.isNotEmpty(name)) {
               set.add(trimTestSuffices && GoTestFinder.isTestFile(file) ? StringUtil.trimEnd(name, GoConstants.TEST_SUFFIX) : name);
             }
           }
