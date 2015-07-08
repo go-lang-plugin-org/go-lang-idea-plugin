@@ -75,11 +75,6 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   }
 
   @NotNull
-  private String getName() {
-    return getIdentifier().getText();
-  }
-
-  @NotNull
   private PsiElement getIdentifier() {
     return myElement.getIdentifier();
   }
