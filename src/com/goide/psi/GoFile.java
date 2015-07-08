@@ -21,6 +21,7 @@ import com.goide.GoFileType;
 import com.goide.GoLanguage;
 import com.goide.GoTypes;
 import com.goide.psi.impl.GoElementFactory;
+import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.sdk.GoSdkUtil;
 import com.goide.stubs.GoConstSpecStub;
 import com.goide.stubs.GoFileStub;
@@ -417,7 +418,8 @@ public class GoFile extends PsiFileBase {
     if (packageClause != null) {
       PsiElement packageIdentifier = packageClause.getIdentifier();
       if (packageIdentifier != null) {
-        return packageIdentifier.getText().trim();
+        String name = packageIdentifier.getText().trim();
+        return GoTestFinder.isTestFile(this) ? StringUtil.trimEnd(name, GoConstants.TEST_SUFFIX) : name;
       }
     }
     return null;

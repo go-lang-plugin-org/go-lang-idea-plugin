@@ -47,4 +47,19 @@ public class GoFileTest extends GoCodeInsightFixtureTestCase {
                                       "package net\n");
     assertNull(((GoFile)myFixture.getFile()).getBuildFlags());
   }
+
+  public void testPackageNameOfTestFile() {
+    myFixture.configureByText("foo_test.go", "package foo_test");
+    assertEquals("foo", ((GoFile)myFixture.getFile()).getPackageName());
+  }
+
+  public void testPackageNameOfNonTestPackageInTestFile() {
+    myFixture.configureByText("foo_test.go", "package fooa");
+    assertEquals("fooa",((GoFile)myFixture.getFile()).getPackageName());
+  }
+
+  public void testPackageNameOfTestPackageInNonTestFile() {
+    myFixture.configureByText("foo.go", "package foo_test");
+    assertEquals("foo_test", ((GoFile)myFixture.getFile()).getPackageName());
+  }
 }

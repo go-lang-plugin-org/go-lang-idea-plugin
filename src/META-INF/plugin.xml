@@ -226,6 +226,9 @@
     <localInspection language="go" displayName="Defer/go statements check"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoDeferGoInspection"/>
+    <localInspection language="go" displayName="Multiple packages in directory declaration"
+                     groupName="Go" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoMultiplePackagesInspection" />
   </extensions>
   <actions>
     <action id="Go.NewGoFile" class="com.goide.actions.GoCreateFileAction"

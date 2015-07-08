@@ -457,7 +457,15 @@ public class GoCompletionTest extends GoCompletionTestBase {
     myFixture.configureByText("test_file.go", "package fromFile");
     myFixture.configureByText("test.go", "package <caret>");
     myFixture.completeBasic();
-    assertSameElements(myFixture.getLookupElementStrings(), "fromTest", "fromTest_test", "fromFile", "main");
+    assertSameElements(myFixture.getLookupElementStrings(), "fromTest", "fromFile", "main");
+  }
+
+  @SuppressWarnings("ConstantConditions")
+  public void testPackageNamesInTestFile() {
+    myFixture.configureByText("foo.go", "package foo");
+    myFixture.configureByText("foo_test.go", "package <caret>");
+    myFixture.completeBasic();
+    assertSameElements(myFixture.getLookupElementStrings(), "foo", "foo_test", "main");
   }
 
   @SuppressWarnings("ConstantConditions")

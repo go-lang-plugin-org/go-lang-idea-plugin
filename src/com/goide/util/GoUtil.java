@@ -196,9 +196,9 @@ public class GoUtil {
       public Result<Collection<String>> compute() {
         Collection<String> set = ContainerUtil.newLinkedHashSet();
         for (PsiFile file : dir.getFiles()) {
-          if (file instanceof GoFile) {
+          if (file instanceof GoFile && !libraryDirectoryToIgnore(file.getName())) {
             String name = ((GoFile)file).getPackageName();
-            if (name != null && !GoConstants.MAIN.equals(name)) {
+            if (name != null) {
               set.add(name);
             }
           }
