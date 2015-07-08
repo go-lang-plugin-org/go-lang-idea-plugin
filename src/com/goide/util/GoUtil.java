@@ -105,19 +105,22 @@ public class GoUtil {
   }
 
   @Contract("null -> true")
-  public static boolean libraryImportPathToIgnore(@Nullable String importPath) {
+  public static boolean importPathToIgnore(@Nullable String importPath) {
     if (importPath != null) {
       for (String part : StringUtil.split(importPath, "/")) {
-        if (libraryDirectoryToIgnore(part)) return false;
+        if (directoryToIgnore(part)) return false;
       }
     }
     return true;
   }
 
   public static boolean libraryDirectoryToIgnore(@NotNull String name) {
-    return StringUtil.startsWithChar(name, '.') || StringUtil.startsWithChar(name, '_') || GoConstants.TESTDATA_NAME.equals(name);
+    return directoryToIgnore(name) || GoConstants.TESTDATA_NAME.equals(name);
   }
-
+  
+  public static boolean directoryToIgnore(@NotNull String name) {
+    return StringUtil.startsWithChar(name, '_') || StringUtil.startsWithChar(name, '.');
+  }
 
   @NotNull
   public static GlobalSearchScope moduleScope(@NotNull PsiElement element) {
@@ -196,7 +199,7 @@ public class GoUtil {
       public Result<Collection<String>> compute() {
         Collection<String> set = ContainerUtil.newLinkedHashSet();
         for (PsiFile file : dir.getFiles()) {
-          if (file instanceof GoFile && !libraryDirectoryToIgnore(file.getName())) {
+          if (file instanceof GoFile && !directoryToIgnore(file.getName())) {
             String name = ((GoFile)file).getPackageName();
             if (name != null) {
               set.add(name);

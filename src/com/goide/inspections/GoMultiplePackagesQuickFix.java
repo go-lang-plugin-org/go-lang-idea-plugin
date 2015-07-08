@@ -56,7 +56,7 @@ public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionO
       @Override
       public void run() {
         for (PsiFile file : dir.getFiles()) {
-          if (file instanceof GoFile && !GoUtil.libraryDirectoryToIgnore(file.getName())) {
+          if (file instanceof GoFile && !GoUtil.directoryToIgnore(file.getName())) {
             GoPackageClause packageClause = ((GoFile)file).getPackage();
             String name = ((GoFile)file).getPackageName();
             if (packageClause != null && name != null && !name.equals(GoConstants.DOCUMENTATION)) {

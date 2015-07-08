@@ -57,9 +57,7 @@ public class GoBuildMatcher {
   }
 
   public boolean match(@NotNull String fileName, @Nullable String buildFlags, boolean checkBuildFlags) {
-    if (StringUtil.startsWithChar(fileName, '_') || StringUtil.startsWithChar(fileName, '.')) return false;
-
-    if (!matchFileName(fileName)) return false;
+    if (GoUtil.directoryToIgnore(fileName) || !matchFileName(fileName)) return false;
 
     if (!checkBuildFlags || buildFlags == null) return true;
     for (final String line : StringUtil.split(buildFlags, "|")) {
