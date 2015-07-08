@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoTypeCaseClause extends GoCompositeElement {
+public interface GoTypeCaseClause extends GoCaseClause {
 
   @NotNull
   List<GoStatement> getStatementList();
