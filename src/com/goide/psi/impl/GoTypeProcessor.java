@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class GoTypeProcessor extends GoScopeProcessorBase {
   public GoTypeProcessor(@NotNull GoTypeReferenceExpression origin, boolean completion) {
-    super(origin.getIdentifier().getText(), origin, completion);
+    super(origin.getIdentifier(), origin, completion);
   }
 
   @Override

@@ -104,7 +104,7 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
 
   private static class GoFieldProcessor extends GoScopeProcessorBase {
     public GoFieldProcessor(@NotNull PsiElement element) {
-      super(element.getText(), element, false);
+      super(element, false);
     }
 
     @Override

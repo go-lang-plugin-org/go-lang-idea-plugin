@@ -18,6 +18,7 @@ package com.goide.psi.impl;
 
 import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.goide.psi.GoNamedElement;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.util.containers.ContainerUtil;
@@ -31,11 +32,15 @@ public abstract class GoScopeProcessorBase extends GoScopeProcessor {
   @NotNull protected final OrderedSet<GoNamedElement> myResult = new OrderedSet<GoNamedElement>();
 
   @NotNull protected final PsiElement myOrigin;
-  @NotNull private final String myRequestedName;
+  @NotNull private final PsiElement myRequestedNameElement;
   protected final boolean myIsCompletion;
 
-  public GoScopeProcessorBase(@NotNull String requestedName, @NotNull PsiElement origin, boolean completion) {
-    myRequestedName = requestedName;
+  public GoScopeProcessorBase(@NotNull PsiElement origin, boolean completion) {
+    this(origin, origin, completion);
+  }
+
+  public GoScopeProcessorBase(@NotNull PsiElement requestedNameElement, @NotNull PsiElement origin, boolean completion) {
+    myRequestedNameElement = requestedNameElement;
     myOrigin = origin;
     myIsCompletion = completion;
   }
@@ -44,7 +49,8 @@ public abstract class GoScopeProcessorBase extends GoScopeProcessor {
   public boolean execute(@NotNull PsiElement psiElement, @NotNull ResolveState resolveState) {
     if (psiElement instanceof GoFunctionOrMethodDeclaration) return false;
     if (!(psiElement instanceof GoNamedElement)) return true;
-    if (!myIsCompletion && !myRequestedName.equals(((GoNamedElement)psiElement).getName())) return true;
+    String name = ((GoNamedElement)psiElement).getName();
+    if (StringUtil.isEmpty(name) || !myIsCompletion && !myRequestedNameElement.textMatches(name)) return true;
     if (condition(psiElement)) return true;
     if (psiElement.equals(myOrigin)) return true;
     return add((GoNamedElement)psiElement) || myIsCompletion;

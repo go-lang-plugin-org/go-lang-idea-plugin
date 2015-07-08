@@ -28,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 public class GoLabelReference extends GoCachedReference<GoLabelRef> {
-  private final GoScopeProcessorBase myProcessor = new GoScopeProcessorBase(myElement.getText(), myElement, false) {
+  private final GoScopeProcessorBase myProcessor = new GoScopeProcessorBase(myElement, false) {
     @Override
     protected boolean condition(@NotNull PsiElement element) {
       return !(element instanceof GoLabelDefinition);

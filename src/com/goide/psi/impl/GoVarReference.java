@@ -39,7 +39,7 @@ public class GoVarReference extends GoCachedReference<GoVarDefinition> {
   @Nullable
   @Override
   public PsiElement resolveInner() {
-    GoVarProcessor p = new GoVarProcessor(myElement.getText(), myElement, false);
+    GoVarProcessor p = new GoVarProcessor(myElement, false);
     processResolveVariants(p);
     return p.getResult(); 
   }
@@ -48,7 +48,7 @@ public class GoVarReference extends GoCachedReference<GoVarDefinition> {
   public boolean processResolveVariants(@NotNull final GoScopeProcessor processor) {
     GoVarProcessor p = processor instanceof GoVarProcessor
                        ? ((GoVarProcessor)processor)
-                       : new GoVarProcessor(myElement.getText(), myElement, processor.isCompletion()) {
+                       : new GoVarProcessor(myElement, processor.isCompletion()) {
                          @Override
                          public boolean execute(@NotNull PsiElement psiElement, @NotNull ResolveState resolveState) {
                            return super.execute(psiElement, resolveState) && processor.execute(psiElement, resolveState);

@@ -74,8 +74,14 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     return GoUtil.couldBeReferenceTo(element, myElement) && super.isReferenceTo(element);
   }
 
+  @NotNull
   private String getName() {
-    return myElement.getIdentifier().getText();
+    return getIdentifier().getText();
+  }
+
+  @NotNull
+  private PsiElement getIdentifier() {
+    return myElement.getIdentifier();
   }
 
   @NotNull
@@ -270,8 +276,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
       return processGoType(receiverType, processor, state);
     }
 
-    String id = getName();
-    if ("_".equals(id)) return processor.execute(myElement, state);
+    if (getIdentifier().textMatches("_")) return processor.execute(myElement, state);
 
     PsiElement parent = myElement.getParent();
 
@@ -353,7 +358,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
   @NotNull
   private GoVarProcessor createDelegate(@NotNull GoScopeProcessor processor) {
-    return new GoVarProcessor(getName(), myElement, processor.isCompletion(), true) {
+    return new GoVarProcessor(getIdentifier(), myElement, processor.isCompletion(), true) {
       @Override
       protected boolean condition(@NotNull PsiElement e) {
         return super.condition(e) && !(e instanceof GoTypeSpec);
@@ -416,7 +421,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   @NotNull
   @Override
   public PsiElement handleElementRename(@NotNull String newElementName) throws IncorrectOperationException {
-    myElement.getIdentifier().replace(GoElementFactory.createIdentifierFromText(myElement.getProject(), newElementName));
+    getIdentifier().replace(GoElementFactory.createIdentifierFromText(myElement.getProject(), newElementName));
     return myElement;
   }
 
