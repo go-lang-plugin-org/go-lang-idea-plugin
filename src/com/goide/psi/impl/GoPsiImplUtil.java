@@ -545,8 +545,7 @@ public class GoPsiImplUtil {
     if (parent instanceof GoTypeSwitchGuard) {
       SmartPsiElementPointer<GoReferenceExpressionBase> pointer = context == null ? null : context.get(GoReference.CONTEXT);
       GoTypeCaseClause typeCase = PsiTreeUtil.getParentOfType(pointer != null ? pointer.getElement() : null, GoTypeCaseClause.class);
-      GoTypeSwitchCase switchCase = typeCase != null ? typeCase.getTypeSwitchCase() : null;
-      return switchCase != null ? switchCase.getType() : null;
+      return typeCase != null ? typeCase.getType() : null;
     }
     return null;
   }

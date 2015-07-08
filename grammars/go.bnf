@@ -401,7 +401,7 @@ left TypeSwitchStatement ::= (TypeSwitchGuard | SimpleStatement ';'? TypeSwitchG
 TypeSwitchGuard ::= [ VarDefinition ':=' ] Expression '.' TypeGuard
 TypeGuard ::= '(' 'type' ')' {pin=2}
 TypeCaseClause ::= !'}' TypeSwitchCase ':' Statements? {pin=1}
-TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
+private TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
 TypeList ::= Type ( ',' Type )*
 TypeListNoPin ::= Type ( ',' Type )* {elementType=TypeList}
 ForStatement ::= for <<enterMode "BLOCK?">> (ForOrRangeClause Block | Block | Expression Block) <<exitModeSafe "BLOCK?">> {pin(".*")="for|ForOrRangeClause"}

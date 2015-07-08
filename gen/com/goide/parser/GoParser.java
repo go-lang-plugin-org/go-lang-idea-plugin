@@ -301,9 +301,6 @@ public class GoParser implements PsiParser {
     else if (t == TYPE_SPEC) {
       r = TypeSpec(b, 0);
     }
-    else if (t == TYPE_SWITCH_CASE) {
-      r = TypeSwitchCase(b, 0);
-    }
     else if (t == TYPE_SWITCH_GUARD) {
       r = TypeSwitchGuard(b, 0);
     }
@@ -3901,14 +3898,14 @@ public class GoParser implements PsiParser {
 
   /* ********************************************************** */
   // case TypeList | default
-  public static boolean TypeSwitchCase(PsiBuilder b, int l) {
+  static boolean TypeSwitchCase(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeSwitchCase")) return false;
-    if (!nextTokenIs(b, "<type switch case>", CASE, DEFAULT)) return false;
+    if (!nextTokenIs(b, "", CASE, DEFAULT)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, "<type switch case>");
+    Marker m = enter_section_(b);
     r = TypeSwitchCase_0(b, l + 1);
     if (!r) r = consumeToken(b, DEFAULT);
-    exit_section_(b, l, m, TYPE_SWITCH_CASE, r, false, null);
+    exit_section_(b, m, null, r);
     return r;
   }
 

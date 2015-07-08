@@ -29,14 +29,26 @@ public class GoTypeCaseClauseImpl extends GoCompositeElementImpl implements GoTy
 
   @Override
   @Nullable
-  public GoTypeSwitchCase getTypeSwitchCase() {
-    return findChildByClass(GoTypeSwitchCase.class);
+  public GoType getType() {
+    return findChildByClass(GoType.class);
   }
 
   @Override
   @Nullable
   public PsiElement getColon() {
     return findChildByType(COLON);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getCase() {
+    return findChildByType(CASE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getDefault() {
+    return findChildByType(DEFAULT);
   }
 
 }
