@@ -28,6 +28,7 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -58,9 +59,11 @@ public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionO
         for (PsiFile file : dir.getFiles()) {
           if (file instanceof GoFile && !GoUtil.directoryToIgnore(file.getName())) {
             GoPackageClause packageClause = ((GoFile)file).getPackage();
-            String name = ((GoFile)file).getPackageName();
-            if (packageClause != null && name != null && !name.equals(GoConstants.DOCUMENTATION)) {
-              String fullName = GoTestFinder.isTestFile(file) ? newName + GoConstants.TEST_SUFFIX : newName;
+            String oldName = ((GoFile)file).getPackageName();
+            if (packageClause != null && oldName != null && !oldName.equals(GoConstants.DOCUMENTATION)) {
+              String fullName = GoTestFinder.isTestFile(file) && StringUtil.endsWith(oldName, GoConstants.TEST_SUFFIX)
+                                ? newName + GoConstants.TEST_SUFFIX 
+                                : newName;
               packageClause.replace(GoElementFactory.createPackageClause(project, fullName));
             }
           }

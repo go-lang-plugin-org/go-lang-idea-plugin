@@ -31,6 +31,7 @@ public class GoMultiplePackagesQuickFixTest extends GoQuickFixTestBase {
   }
 
   public void testMultiplePackagesQuickFix() {
+    myFixture.configureByFile("c_test.go");
     myFixture.configureByFile("b.go");
     myFixture.configureByFile("b_test.go");
     myFixture.configureByFile("a.go");
@@ -40,5 +41,6 @@ public class GoMultiplePackagesQuickFixTest extends GoQuickFixTestBase {
     myFixture.checkResultByFile("a.go", "a-after.go", true);
     myFixture.checkResultByFile("b.go", "b-after.go", true);
     myFixture.checkResultByFile("b_test.go", "b_test-after.go", true);
+    myFixture.checkResultByFile("c_test.go", "c_test-after.go", true);
   }
 }
