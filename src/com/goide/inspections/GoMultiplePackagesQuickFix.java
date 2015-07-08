@@ -32,10 +32,14 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.ui.IdeBorderFactory;
+import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBList;
+import com.intellij.util.NotNullFunction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
 import java.util.Collection;
 
 public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionOnPsiElement {
@@ -83,6 +87,15 @@ public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionO
       return;
     }
     final JBList list = new JBList(myPackages);
+    list.installCellRenderer(new NotNullFunction<Object, JComponent>() {
+      @NotNull
+      @Override
+      public JComponent fun(@NotNull Object o) {
+        JBLabel label = new JBLabel(o.toString());
+        label.setBorder(IdeBorderFactory.createEmptyBorder(2, 4, 2, 4));
+        return label;
+      }
+    });
     JBPopupFactory.getInstance().createListPopupBuilder(list).setItemChoosenCallback(new Runnable() {
       @Override
       public void run() {
