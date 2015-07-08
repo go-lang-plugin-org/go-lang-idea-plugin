@@ -16,12 +16,14 @@
 
 package com.goide.psi.impl;
 
+import com.goide.GoTypes;
 import com.goide.psi.*;
 import com.goide.sdk.GoSdkUtil;
 import com.goide.util.GoUtil;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
+import com.intellij.psi.formatter.FormatterUtil;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -126,7 +128,9 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
     if (!GoReference.processDirectory(dir, file, file.getPackageName(), processor, state, true)) return false;
     if (GoReference.processImports(file, processor, state, myElement)) return false;
     if (processBuiltin(processor, state, myElement)) return false;
-    if (PsiTreeUtil.getParentOfType(myElement, GoTypeSwitchCase.class) != null && "nil".equals(getName())) {
+    if ("nil".equals(getName()) && PsiTreeUtil.getParentOfType(myElement, GoTypeCaseClause.class) != null) {
+      GoType type = PsiTreeUtil.getParentOfType(myElement, GoType.class);
+      if (FormatterUtil.getPrevious(type != null ? type.getNode() : null, GoTypes.CASE) == null) return true;
       GoFile builtinFile = GoSdkUtil.findBuiltinFile(myElement);
       if (builtinFile == null) return false;
       GoVarDefinition nil = ContainerUtil.find(builtinFile.getVars(), new Condition<GoVarDefinition>() {

@@ -395,13 +395,13 @@ left ExprSwitchStatement ::= Condition '{' ExprCaseClause* '}' {pin=2 extends=Sw
 private Condition ::= <<enterMode "BLOCK?">> SimpleStatementOpt Expression? <<exitModeSafe "BLOCK?">>
 private SimpleStatementOpt ::= [SimpleStatement ';'?] // todo: remove ?
 
-ExprCaseClause ::= !'}' ExprSwitchCase ':' Statements? {pin=1}
+ExprCaseClause ::= !'}' ExprSwitchCase ':' Statements? {pin=1 implements="com.goide.psi.GoCaseClause"}
 private ExprSwitchCase ::= case ExpressionList | default {pin(".*")=1} 
 left TypeSwitchStatement ::= (TypeSwitchGuard | SimpleStatement ';'? TypeSwitchGuard) '{' ( TypeCaseClause )* '}' {pin=1 extends=SwitchStatement}
 TypeSwitchGuard ::= [ VarDefinition ':=' ] Expression '.' TypeGuard
 TypeGuard ::= '(' 'type' ')' {pin=2}
-TypeCaseClause ::= !'}' TypeSwitchCase ':' Statements? {pin=1}
-TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
+TypeCaseClause ::= !'}' TypeSwitchCase ':' Statements? {pin=1 implements="com.goide.psi.GoCaseClause"}
+private TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
 TypeList ::= Type ( ',' Type )*
 TypeListNoPin ::= Type ( ',' Type )* {elementType=TypeList}
 ForStatement ::= for <<enterMode "BLOCK?">> (ForOrRangeClause Block | Block | Expression Block) <<exitModeSafe "BLOCK?">> {pin(".*")="for|ForOrRangeClause"}

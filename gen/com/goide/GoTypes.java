@@ -105,7 +105,6 @@ public interface GoTypes {
   IElementType TYPE_LIST = GoStubElementTypeFactory.factory("TYPE_LIST");
   IElementType TYPE_REFERENCE_EXPRESSION = new GoCompositeElementType("TYPE_REFERENCE_EXPRESSION");
   IElementType TYPE_SPEC = GoStubElementTypeFactory.factory("TYPE_SPEC");
-  IElementType TYPE_SWITCH_CASE = new GoCompositeElementType("TYPE_SWITCH_CASE");
   IElementType TYPE_SWITCH_GUARD = new GoCompositeElementType("TYPE_SWITCH_GUARD");
   IElementType TYPE_SWITCH_STATEMENT = new GoCompositeElementType("TYPE_SWITCH_STATEMENT");
   IElementType UNARY_EXPR = new GoCompositeElementType("UNARY_EXPR");
@@ -482,9 +481,6 @@ public interface GoTypes {
       }
       else if (type == TYPE_SPEC) {
         return new GoTypeSpecImpl(node);
-      }
-      else if (type == TYPE_SWITCH_CASE) {
-        return new GoTypeSwitchCaseImpl(node);
       }
       else if (type == TYPE_SWITCH_GUARD) {
         return new GoTypeSwitchGuardImpl(node);

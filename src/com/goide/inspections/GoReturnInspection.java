@@ -16,7 +16,6 @@
 
 package com.goide.inspections;
 
-import com.goide.GoTypes;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInsight.template.Template;
@@ -112,9 +111,7 @@ public class GoReturnInspection extends GoInspectionBase {
       boolean hasDefault = false;
       List<GoTypeCaseClause> list = ((GoTypeSwitchStatement)s).getTypeCaseClauseList();
       for (GoTypeCaseClause clause : list) {
-        GoTypeSwitchCase switchCase = clause.getTypeSwitchCase();
-        PsiElement child = switchCase == null ? null : switchCase.getFirstChild();
-        if (child != null && child.getNode().getElementType() == GoTypes.DEFAULT) {
+        if (clause.getDefault() != null) {
           hasDefault = true;
         }
         GoStatement last = ContainerUtil.getLastItem(clause.getStatementList());
