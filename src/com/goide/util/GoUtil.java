@@ -198,7 +198,7 @@ public class GoUtil {
         for (PsiFile file : dir.getFiles()) {
           if (file instanceof GoFile) {
             String name = ((GoFile)file).getPackageName();
-            if (name != null && !GoConstants.MAIN.equals(name)) {
+            if (StringUtil.isNotEmpty(name) && !GoConstants.MAIN.equals(name)) {
               set.add(name);
             }
           }
