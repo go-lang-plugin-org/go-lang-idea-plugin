@@ -41,17 +41,13 @@ public class GoLabelReference extends GoCachedReference<GoLabelRef> {
 
   @NotNull
   private Collection<GoLabelDefinition> getLabelDefinitions() {
-    GoBlock block = PsiTreeUtil.getTopmostParentOfType(myElement, GoBlock.class);
-    return PsiTreeUtil.findChildrenOfType(block, GoLabelDefinition.class);
+    return PsiTreeUtil.findChildrenOfType(PsiTreeUtil.getTopmostParentOfType(myElement, GoBlock.class), GoLabelDefinition.class);
   }
 
   @Nullable
   @Override
   protected PsiElement resolveInner() {
-    if (!processResolveVariants(myProcessor)) {
-      return myProcessor.getResult();
-    }
-    return null;
+    return !processResolveVariants(myProcessor) ? myProcessor.getResult() : null;
   }
 
   @Override
