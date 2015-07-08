@@ -64,9 +64,8 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   
   @NotNull
   private ResolveResult[] resolveInner() {
-    String identifierText = getName();
     Collection<ResolveResult> result = new OrderedSet<ResolveResult>();
-    processResolveVariants(createResolveProcessor(identifierText, result, myElement));
+    processResolveVariants(createResolveProcessor(result, myElement));
     return result.toArray(new ResolveResult[result.size()]);
   }
   
@@ -80,16 +79,14 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   }
 
   @NotNull
-  static GoScopeProcessor createResolveProcessor(@NotNull final String text,
-                                                 @NotNull final Collection<ResolveResult> result,
-                                                 @NotNull final GoCompositeElement o) {
+  static GoScopeProcessor createResolveProcessor(@NotNull final Collection<ResolveResult> result, @NotNull final GoReferenceExpressionBase o) {
     return new GoScopeProcessor() {
       @Override
       public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state) {
         if (element.equals(o)) return !result.add(new PsiElementResolveResult(element));
         String name = ObjectUtils.chooseNotNull(state.get(ACTUAL_NAME), 
                                                 element instanceof PsiNamedElement ? ((PsiNamedElement)element).getName() : null);
-        if (text.equals(name)) {
+        if (o.getIdentifier().textMatches(name)) {
           result.add(new PsiElementResolveResult(element));
           return false;
         }
