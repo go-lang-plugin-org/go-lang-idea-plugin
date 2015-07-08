@@ -1,6 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <component name="ProjectDictionaryState">
   <dictionary name="zolotov">
     <words>
+      <w>backticks</w>
+      <w>consts</w>
       <w>covermode</w>
       <w>coverprofile</w>
       <w>devel</w>
@@ -16,6 +19,7 @@
       <w>netbsd</w>
       <w>notwin</w>
       <w>openbsd</w>
+      <w>recv</w>
       <w>redeclared</w>
       <w>runconfig</w>
       <w>solaris</w>
