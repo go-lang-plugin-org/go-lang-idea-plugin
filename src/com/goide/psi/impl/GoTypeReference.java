@@ -54,9 +54,8 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
 
   @NotNull
   private ResolveResult[] resolveInner() {
-    String identifierText = getName();
     Collection<ResolveResult> result = new OrderedSet<ResolveResult>();
-    processResolveVariants(GoReference.createResolveProcessor(identifierText, result, myElement));
+    processResolveVariants(GoReference.createResolveProcessor(result, myElement));
     
     if (result.isEmpty() && myElement.getParent() instanceof GoReceiverType) {
       PsiElement resolve = new GoReference(myElement).resolve();
@@ -73,8 +72,9 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
     return GoUtil.couldBeReferenceTo(element, myElement) && super.isReferenceTo(element);
   }
 
-  private String getName() {
-    return myElement.getIdentifier().getText();
+  @NotNull
+  private PsiElement getIdentifier() {
+    return myElement.getIdentifier();
   }
 
   @Override
@@ -128,7 +128,7 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
     if (!GoReference.processDirectory(dir, file, file.getPackageName(), processor, state, true)) return false;
     if (GoReference.processImports(file, processor, state, myElement)) return false;
     if (processBuiltin(processor, state, myElement)) return false;
-    if ("nil".equals(getName()) && PsiTreeUtil.getParentOfType(myElement, GoTypeCaseClause.class) != null) {
+    if (getIdentifier().textMatches("nil") && PsiTreeUtil.getParentOfType(myElement, GoTypeCaseClause.class) != null) {
       GoType type = PsiTreeUtil.getParentOfType(myElement, GoType.class);
       if (FormatterUtil.getPrevious(type != null ? type.getNode() : null, GoTypes.CASE) == null) return true;
       GoFile builtinFile = GoSdkUtil.findBuiltinFile(myElement);
@@ -153,7 +153,7 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
 
   @NotNull
   private GoTypeProcessor createDelegate(@NotNull GoScopeProcessor processor) {
-    return new GoTypeProcessor(getName(), myElement, processor.isCompletion());
+    return new GoTypeProcessor(myElement, processor.isCompletion());
   }
 
   private boolean processFileEntities(@NotNull GoFile file,
@@ -180,7 +180,7 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
 
   @Override
   public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-    myElement.getIdentifier().replace(GoElementFactory.createIdentifierFromText(myElement.getProject(), newElementName));
+    getIdentifier().replace(GoElementFactory.createIdentifierFromText(myElement.getProject(), newElementName));
     return myElement;
   }
 }

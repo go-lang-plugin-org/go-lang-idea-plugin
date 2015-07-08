@@ -16,13 +16,14 @@
 
 package com.goide.psi.impl;
 
+import com.goide.psi.GoTypeReferenceExpression;
 import com.goide.psi.GoTypeSpec;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
 public class GoTypeProcessor extends GoScopeProcessorBase {
-  public GoTypeProcessor(String requestedName, PsiElement origin, boolean completion) {
-    super(requestedName, origin, completion);
+  public GoTypeProcessor(@NotNull GoTypeReferenceExpression origin, boolean completion) {
+    super(origin.getIdentifier(), origin, completion);
   }
 
   @Override

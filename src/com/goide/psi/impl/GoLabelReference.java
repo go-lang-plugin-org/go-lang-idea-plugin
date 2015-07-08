@@ -28,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 public class GoLabelReference extends GoCachedReference<GoLabelRef> {
-  private final GoScopeProcessorBase myProcessor = new GoScopeProcessorBase(myElement.getText(), myElement, false) {
+  private final GoScopeProcessorBase myProcessor = new GoScopeProcessorBase(myElement, false) {
     @Override
     protected boolean condition(@NotNull PsiElement element) {
       return !(element instanceof GoLabelDefinition);
@@ -41,17 +41,13 @@ public class GoLabelReference extends GoCachedReference<GoLabelRef> {
 
   @NotNull
   private Collection<GoLabelDefinition> getLabelDefinitions() {
-    GoBlock block = PsiTreeUtil.getTopmostParentOfType(myElement, GoBlock.class);
-    return PsiTreeUtil.findChildrenOfType(block, GoLabelDefinition.class);
+    return PsiTreeUtil.findChildrenOfType(PsiTreeUtil.getTopmostParentOfType(myElement, GoBlock.class), GoLabelDefinition.class);
   }
 
   @Nullable
   @Override
   protected PsiElement resolveInner() {
-    if (!processResolveVariants(myProcessor)) {
-      return myProcessor.getResult();
-    }
-    return null;
+    return !processResolveVariants(myProcessor) ? myProcessor.getResult() : null;
   }
 
   @Override
