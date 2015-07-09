@@ -531,7 +531,7 @@ public class GoPsiImplUtil {
     // see http://golang.org/ref/spec#RangeClause
     PsiElement parent = o.getParent();
     if (parent instanceof GoRangeClause) {
-      return processRangeClause(o, (GoRangeClause)parent);
+      return processRangeClause(o, (GoRangeClause)parent, context);
     }
     if (parent instanceof GoVarSpec) {
       return findTypeInVarSpec(o, context);
@@ -585,7 +585,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  private static GoType processRangeClause(@NotNull GoVarDefinition o, @NotNull GoRangeClause parent) {
+  private static GoType processRangeClause(@NotNull GoVarDefinition o, @NotNull GoRangeClause parent, @Nullable ResolveState context) {
     List<GoExpression> exprs = parent.getExpressionList();
     GoExpression last = ContainerUtil.getLastItem(exprs);
     int rangeOffset = parent.getRange().getTextOffset();
@@ -595,7 +595,7 @@ public class GoPsiImplUtil {
       List<GoVarDefinition> varList = parent.getVarDefinitionList();
       int i = varList.indexOf(o);
       i = i == -1 ? 0 : i;
-      GoType type = last.getGoType(null);
+      GoType type = last.getGoType(context);
       if (type instanceof GoChannelType) {
         return ((GoChannelType)type).getType();
       }
