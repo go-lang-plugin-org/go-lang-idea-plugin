@@ -300,11 +300,12 @@ public class GoPsiImplUtil {
 
   @Nullable
   public static GoType getGoType(@NotNull final GoExpression o, @Nullable final ResolveState context) {
+    if (context != null) return getGoTypeInner(o, context);
     return CachedValuesManager.getCachedValue(o, new CachedValueProvider<GoType>() {
       @Nullable
       @Override
       public Result<GoType> compute() {
-        return Result.create(getGoTypeInner(o, context), PsiModificationTracker.MODIFICATION_COUNT);
+        return Result.create(getGoTypeInner(o, null), PsiModificationTracker.MODIFICATION_COUNT);
       }
     });
   }

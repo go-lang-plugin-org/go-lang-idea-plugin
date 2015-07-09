@@ -111,11 +111,12 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
   @Nullable
   @Override
   public GoType getGoType(@Nullable final ResolveState context) {
+    if (context != null) return getGoTypeInner(context);
     return CachedValuesManager.getCachedValue(this, new CachedValueProvider<GoType>() {
       @Nullable
       @Override
       public Result<GoType> compute() {
-        return Result.create(getGoTypeInner(context), PsiModificationTracker.MODIFICATION_COUNT);
+        return Result.create(getGoTypeInner(null), PsiModificationTracker.MODIFICATION_COUNT);
       }
     });
   }
