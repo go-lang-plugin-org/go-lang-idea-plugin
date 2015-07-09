@@ -534,7 +534,7 @@ public class GoPsiImplUtil {
       return processRangeClause(o, (GoRangeClause)parent);
     }
     if (parent instanceof GoVarSpec) {
-      return findTypeInVarSpec(o);
+      return findTypeInVarSpec(o, context);
     }
     GoCompositeLit literal = PsiTreeUtil.getNextSiblingOfType(o, GoCompositeLit.class);
     if (literal != null) {
@@ -552,7 +552,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  private static GoType findTypeInVarSpec(@NotNull GoVarDefinition o) {
+  private static GoType findTypeInVarSpec(@NotNull GoVarDefinition o, @Nullable ResolveState context) {
     GoVarSpec parent = (GoVarSpec)o.getParent();
     GoType commonType = parent.getType();
     if (commonType != null) return commonType;
@@ -562,7 +562,7 @@ public class GoPsiImplUtil {
     List<GoExpression> exprs = parent.getExpressionList();
     if (exprs.size() == 1 && exprs.get(0) instanceof GoCallExpr) {
       GoExpression call = exprs.get(0);
-      GoType type = funcType(typeFromRefOrType(call.getGoType(null)));
+      GoType type = funcType(typeFromRefOrType(call.getGoType(context)));
       if (type instanceof GoTypeList) {
         if (((GoTypeList)type).getTypeList().size() > i) {
           return ((GoTypeList)type).getTypeList().get(i);
@@ -571,7 +571,7 @@ public class GoPsiImplUtil {
       return type;
     }
     if (exprs.size() <= i) return null;
-    return exprs.get(i).getGoType(null);
+    return exprs.get(i).getGoType(context);
   }
 
   @Nullable
