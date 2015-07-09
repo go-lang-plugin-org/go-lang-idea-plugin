@@ -22,6 +22,7 @@ import com.goide.psi.GoPackageClause;
 import com.goide.util.GoUtil;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.ide.scratch.ScratchFileType;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +33,7 @@ public class GoMultiplePackagesInspection extends GoInspectionBase {
 
   @Override
   protected void checkFile(@NotNull GoFile file, @NotNull ProblemsHolder problemsHolder) {
-    if (!GoUtil.allowed(file)) return;
+    if (GoUtil.directoryToIgnore(file.getName()) || ((ScratchFileType)ScratchFileType.INSTANCE).isMyFileType(file.getVirtualFile())) return;
     GoPackageClause packageClause = file.getPackage();
     if (packageClause != null) {
       String packageName = file.getPackageName();
