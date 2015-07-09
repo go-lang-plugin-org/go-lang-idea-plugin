@@ -44,7 +44,8 @@ public class GoMultiplePackagesInspection extends GoInspectionBase {
         Collection<LocalQuickFix> fixes = ContainerUtil.newArrayList();
         if (problemsHolder.isOnTheFly()) {
           fixes.add(new GoMultiplePackagesQuickFix(packageClause, packageName, packages, true));
-        } else {
+        }
+        else {
           for (String name : packages) {
             fixes.add(new GoMultiplePackagesQuickFix(packageClause, name, packages, false));
           }
