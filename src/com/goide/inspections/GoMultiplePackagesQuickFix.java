@@ -96,7 +96,8 @@ public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionO
         return label;
       }
     });
-    JBPopupFactory.getInstance().createListPopupBuilder(list).setItemChoosenCallback(new Runnable() {
+    
+    JBPopupFactory.getInstance().createListPopupBuilder(list).setTitle("Choose package name").setItemChoosenCallback(new Runnable() {
       @Override
       public void run() {
         String name = (String)list.getSelectedValue();
