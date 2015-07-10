@@ -91,6 +91,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testBackticks()   { doTest(); }
   public void testConsts()      { doTest(); }
   public void testFields()      { doTest(); }
+  public void testBlankFields() { doTest(); }
   public void testFuncLiteral() { doTest(); }
   public void testTypeLiterals(){ doTest(); }
   public void testFuncType()    { doTest(); }
