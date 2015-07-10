@@ -18,20 +18,19 @@ package com.goide.inspections;
 
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
-import com.intellij.codeInspection.LocalInspectionTool;
+import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiReference;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class GoFunctionCallInspection extends LocalInspectionTool {
+public class GoFunctionCallInspection extends GoInspectionBase {
   @NotNull
   @Override
-  public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly) {
+  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
       public void visitCallExpr(@NotNull GoCallExpr o) {
@@ -63,7 +62,7 @@ public class GoFunctionCallInspection extends LocalInspectionTool {
                 actualSize = GoInspectionUtil.getFunctionResultCount(firstResolve);
               }
             }
-            
+
             if (actualSize == expectedSize) return;
 
             String tail = " arguments in call to " + expression.getText();
@@ -71,7 +70,6 @@ public class GoFunctionCallInspection extends LocalInspectionTool {
           }
         }
       }
-
     };
   }
 }
