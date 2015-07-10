@@ -121,6 +121,7 @@
     <highlightUsagesHandlerFactory implementation="com.goide.highlighting.GoHighlightExitPointsHandlerFactory"/>
     <codeInsight.lineMarkerProvider language="go" implementationClass="com.goide.editor.marker.GoMethodSeparatorProvider"/>
     <analyzeStacktraceFilter implementation="com.goide.runconfig.GoConsoleFilter"/>
+    <lang.implementationTextSelectioner language="go" implementationClass="com.goide.editor.GoImplementationTextSelectioner"/>
 
     <!--formatter-->
     <lang.formatter language="go" implementationClass="com.goide.formatter.GoFormattingModelBuilder"/>
