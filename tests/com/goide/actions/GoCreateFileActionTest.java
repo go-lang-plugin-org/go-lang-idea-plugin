@@ -18,47 +18,42 @@ package com.goide.actions;
 
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.goide.psi.GoFile;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiFile;
-
-import java.io.IOException;
+import org.jetbrains.annotations.NotNull;
 
 public class GoCreateFileActionTest extends GoCodeInsightFixtureTestCase {
-  @Override
-  protected String getBasePath() {
-    return "actions";
+  private static void createFileAndCheckPackage(@NotNull PsiDirectory dir, @NotNull String name, @NotNull String packageName) {
+    GoFile file = (GoFile)new GoCreateFileAction().createFile(name, "Go File", dir);
+    assertNotNull(file);
+    assertEquals(packageName, file.getPackageName());
   }
 
-  public void testPackageNameCreateFileInEmptyDirectory() throws IOException {
-    PsiDirectory dir = myFixture.getPsiManager().findDirectory(getProject().getBaseDir().createChildDirectory(this, "empty-dir"));
+  public void testPackageNameInEmptyDirectory() throws Exception {
+    PsiDirectory dir = myFixture.getPsiManager().findDirectory(getProject().getBaseDir().createChildDirectory(this, "1empty-dir"));
     assertNotNull(dir);
-    PsiFile file = new GoCreateFileAction().createFile("a", "Go File", dir);
-    assertNotNull(file);
-    assertEquals(((GoFile)file).getPackageName(), "empty_dir");
+    createFileAndCheckPackage(dir, "a", "_empty_dir");
   }
 
-  public void testPackageNameCreateFilesInDirectoryWithExistingPackage() {
-    VirtualFile virtualDir = myFixture.copyDirectoryToProject("createFile", "");
-    PsiDirectory dir = myFixture.getPsiManager().findDirectory(virtualDir);
-    assertNotNull(dir);
-    GoCreateFileAction action = new GoCreateFileAction();
+  private void createFileInExistingPackage(@NotNull String name, @NotNull String packageName) {
+    myFixture.configureByText("a.go", "package a");
+    PsiDirectory dir = myFixture.getFile().getContainingDirectory();
+    createFileAndCheckPackage(dir, name, packageName);
+  }
 
-    GoFile file = (GoFile)action.createFile("b", "Go File", dir);
-    assertNotNull(file);
-    assertEquals(file.getPackageName(), "a");
+  public void testPackageNameInExistingPackage() {
+    createFileInExistingPackage("b", "a");
+  }
 
-    file = (GoFile)action.createFile("a_test", "Go File", dir);
-    assertNotNull(file);
-    assertEquals(file.getPackageName(), "a_test");
+  public void testTestPackageNameInExistingPackage() {
+    createFileInExistingPackage("a_test", "a_test");
+  }
 
-    file = (GoFile)action.createFile("c.go", "Go File", dir);
-    assertNotNull(file);
-    assertEquals(file.getPackageName(), "a");
+  public void testPackageNameInExistingPackageWithExtension() {
+    createFileInExistingPackage("b.go", "a");
+  }
 
-    file = (GoFile)action.createFile("c_test.go", "Go File", dir);
-    assertNotNull(file);
-    assertEquals(file.getPackageName(), "a_test");
+  public void testTestPackageNameInExistingPackageWithExtension() {
+    createFileInExistingPackage("a_test.go", "a_test");
   }
 }
 
