@@ -816,20 +816,22 @@ public class GoPsiImplUtil {
     return spec;
   }
 
-  /**
-   * Make local package name valid:
-   * https://github.com/golang/go/blob/master/src/cmd/go/pkg.go#L235-235
-   */
   public static String getLocalPackageName(@NotNull String importPath) {
-    final String illegalChars = "[-!\"#$%&'()*,:;<=>?[\\]^{|}\uFFFD]";
-    StringBuilder name = new StringBuilder(PathUtil.getFileName(importPath));
-    for (int i = 0; i < name.length(); i++) {
-      char ch = name.charAt(i);
-      if (Character.isWhitespace(ch) || illegalChars.indexOf(ch) != -1) {
-        name.setCharAt(i, '_');
+    StringBuilder name = null;
+    for (int i = 0; i < importPath.length(); i++) {
+      char c = importPath.charAt(i);
+      if (!(Character.isLetter(c) || c == '_' || (i != 0 && Character.isDigit(c)))) {
+        if (name == null) {
+          name = new StringBuilder(importPath.length());
+          name.append(importPath, 0, i);
+        }
+        name.append('_');
+      }
+      else if (name != null) {
+        name.append(c);
       }
     }
-    return name.toString();
+    return name == null ? importPath : name.toString();
   }
 
   public static String getLocalPackageName(@NotNull GoImportSpec importSpec) {

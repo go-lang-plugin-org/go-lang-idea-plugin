@@ -19,7 +19,15 @@ package com.goide.psi.impl;
 import com.goide.GoCodeInsightFixtureTestCase;
 
 public class GoPsiImplUtilTest extends GoCodeInsightFixtureTestCase {
-  public void testDirectoryNameConversion() {
+  public void testGetLocalPackageNameDash() {
     assertEquals("test_directory", GoPsiImplUtil.getLocalPackageName("test-directory"));
+  }
+
+  public void testGetLocalPackageNameDigitAtBeginning() {
+    assertEquals("_23abc", GoPsiImplUtil.getLocalPackageName("123abc"));
+  }
+
+  public void testGetLocalPackageNameUnderscore() {
+    assertEquals("_", GoPsiImplUtil.getLocalPackageName("_"));
   }
 }
