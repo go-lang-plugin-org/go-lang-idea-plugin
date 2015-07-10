@@ -231,7 +231,7 @@
                      implementationClass="com.goide.inspections.GoMultiplePackagesInspection" />
     <localInspection language="go" displayName="Usage of cgo in tests is not supported"
                      groupName="Go" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.GoCGOInTestInspection"/>
+                     implementationClass="com.goide.inspections.GoCgoInTestInspection"/>
   </extensions>
   <actions>
     <action id="Go.NewGoFile" class="com.goide.actions.GoCreateFileAction"

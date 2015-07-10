@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class GoCGOInTestInspection extends GoInspectionBase {
+public class GoCgoInTestInspection extends GoInspectionBase {
   @Override
   protected void checkFile(@NotNull GoFile file, @NotNull ProblemsHolder problemsHolder) {
     if (!GoTestFinder.isTestFile(file)) {

@@ -50,7 +50,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       GoDeferGoInspection.class,
       GoReservedWordUsedAsName.class,
       GoMultiplePackagesInspection.class,
-      GoCGOInTestInspection.class
+      GoCgoInTestInspection.class
     );
   }
 
