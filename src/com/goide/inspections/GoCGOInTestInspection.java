@@ -16,6 +16,7 @@
 
 package com.goide.inspections;
 
+import com.goide.GoConstants;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoImportSpec;
 import com.goide.runconfig.testing.GoTestFinder;
@@ -25,8 +26,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class GoCGOInTestInspection extends GoInspectionBase {
-  private static final String C_PATH = "C";
-
   @Override
   protected void checkFile(@NotNull GoFile file, @NotNull ProblemsHolder problemsHolder) {
     if (!GoTestFinder.isTestFile(file)) {
@@ -34,7 +33,7 @@ public class GoCGOInTestInspection extends GoInspectionBase {
     }
     List<GoImportSpec> imports = file.getImports();
     for (GoImportSpec importSpec : imports) {
-      if (importSpec.getPath().equals(C_PATH)) {
+      if (importSpec.getPath().equals(GoConstants.C_PATH)) {
         problemsHolder.registerProblem(importSpec, "Usage of cgo in tests is not supported.", new GoDeleteQuickFix("Remove 'C' import"));
       }
     }
