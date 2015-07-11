@@ -33,10 +33,10 @@ import com.intellij.psi.PsiFile;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
 import java.util.Properties;
 
 public class GoCreateFileAction extends CreateFileFromTemplateAction implements DumbAware {
+  public static final String FILE_TEMPLATE = "Go File";
   private static final String NEW_GO_FILE = "New Go File";
   private static final String PACKAGE = "PACKAGE";
 
@@ -71,7 +71,7 @@ public class GoCreateFileAction extends CreateFileFromTemplateAction implements 
   protected void buildDialog(final Project project, PsiDirectory directory, @NotNull CreateFileFromTemplateDialog.Builder builder) {
     // todo: check that file already exists
     builder.setTitle(NEW_GO_FILE)
-      .addKind("Empty file", GoIcons.ICON, "Go File")
+      .addKind("Empty file", GoIcons.ICON, FILE_TEMPLATE)
       .addKind("Simple Application", GoIcons.ICON, "Go Application");
   }
 

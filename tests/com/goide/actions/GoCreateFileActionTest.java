@@ -21,39 +21,49 @@ import com.goide.psi.GoFile;
 import com.intellij.psi.PsiDirectory;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+
 public class GoCreateFileActionTest extends GoCodeInsightFixtureTestCase {
-  private static void createFileAndCheckPackage(@NotNull PsiDirectory dir, @NotNull String name, @NotNull String packageName) {
-    GoFile file = (GoFile)new GoCreateFileAction().createFile(name, "Go File", dir);
-    assertNotNull(file);
-    assertEquals(packageName, file.getPackageName());
-  }
-
   public void testPackageNameInEmptyDirectory() throws Exception {
-    PsiDirectory dir = myFixture.getPsiManager().findDirectory(getProject().getBaseDir().createChildDirectory(this, "1empty-dir"));
-    assertNotNull(dir);
-    createFileAndCheckPackage(dir, "a", "_empty_dir");
+    doTestInEmptyDirectory("empty-dir", "a", "empty_dir");
   }
 
-  private void createFileInExistingPackage(@NotNull String name, @NotNull String packageName) {
-    myFixture.configureByText("a.go", "package a");
-    PsiDirectory dir = myFixture.getFile().getContainingDirectory();
-    createFileAndCheckPackage(dir, name, packageName);
+  public void testPackageNameInEmptyDirectoryWithTestSuffix() throws Exception {
+    doTestInEmptyDirectory("empty-dir-test", "a_test", "empty_dir_test_test");
   }
 
   public void testPackageNameInExistingPackage() {
-    createFileInExistingPackage("b", "a");
+    doTestWithExistingPackage("b", "a");
   }
 
   public void testTestPackageNameInExistingPackage() {
-    createFileInExistingPackage("a_test", "a_test");
+    doTestWithExistingPackage("a_test", "a_test");
   }
 
   public void testPackageNameInExistingPackageWithExtension() {
-    createFileInExistingPackage("b.go", "a");
+    doTestWithExistingPackage("b.go", "a");
   }
 
   public void testTestPackageNameInExistingPackageWithExtension() {
-    createFileInExistingPackage("a_test.go", "a_test");
+    doTestWithExistingPackage("a_test.go", "a_test");
+  }
+
+  private void doTestWithExistingPackage(@NotNull String fileName, @NotNull String expectedPackage) {
+    myFixture.configureByText("a.go", "package a");
+    doTest(myFixture.getFile().getContainingDirectory(), fileName, expectedPackage);
+  }
+
+  private void doTestInEmptyDirectory(@NotNull String directoryName, @NotNull String newFileName, @NotNull String expectedPackage)
+    throws IOException {
+    PsiDirectory dir = myFixture.getPsiManager().findDirectory(myFixture.getTempDirFixture().findOrCreateDir(directoryName));
+    assertNotNull(dir);
+    doTest(dir, newFileName, expectedPackage);
+  }
+
+  private static void doTest(@NotNull PsiDirectory dir, @NotNull String newFileName, @NotNull String expectedPackage) {
+    GoFile file = (GoFile)new GoCreateFileAction().createFile(newFileName, GoCreateFileAction.FILE_TEMPLATE, dir);
+    assertNotNull(file);
+    assertEquals(expectedPackage, file.getPackageName());
   }
 }
 
