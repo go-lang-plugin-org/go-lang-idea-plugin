@@ -817,7 +817,21 @@ public class GoPsiImplUtil {
   }
 
   public static String getLocalPackageName(@NotNull String importPath) {
-    return PathUtil.getFileName(importPath);
+    StringBuilder name = null;
+    for (int i = 0; i < importPath.length(); i++) {
+      char c = importPath.charAt(i);
+      if (!(Character.isLetter(c) || c == '_' || (i != 0 && Character.isDigit(c)))) {
+        if (name == null) {
+          name = new StringBuilder(importPath.length());
+          name.append(importPath, 0, i);
+        }
+        name.append('_');
+      }
+      else if (name != null) {
+        name.append(c);
+      }
+    }
+    return name == null ? importPath : name.toString();
   }
 
   public static String getLocalPackageName(@NotNull GoImportSpec importSpec) {
