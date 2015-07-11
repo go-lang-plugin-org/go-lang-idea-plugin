@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,7 +56,7 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
         int offset = importKeyword.getTextRange().getEndOffset();
         int startOffset = importKeyword.getNextSibling() instanceof PsiWhiteSpace ? offset + 1 : offset;
         TextRange range = TextRange.create(startOffset, importList.getTextRange().getEndOffset());
-        if (!range.isEmpty()) {
+        if (range.getLength() > 3) {
           result.add(new FoldingDescriptor(importList, range));
         }
       }
