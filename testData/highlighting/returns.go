@@ -2,7 +2,7 @@ package main
 
 func main() {
     Ok1() + 
-    Ok2<error>()</error> +
+    Ok2(42) +
     Ok3() +
     Ok4() +
     Ok5() +
@@ -19,6 +19,9 @@ func main() {
     NoReturn7(1) +
     NoReturn8(1) +
     NoReturn9(1) 
+    
+    rsaPKCS1v15SignatureAlgorithmForHashID(42)
+    rsaPKCS1v15SignatureAlgorithmForHashID2(42)
     
     func() int {
     <error>}</error>
@@ -85,7 +88,7 @@ func Ok8() bool {
     for a := 0;; a++ {
 
     }
-<error>}</error>
+}
 
 func NoReturn1() int {
 <error>}</error>
@@ -158,7 +161,7 @@ func NoReturn9(aa int) (int, int) {
     }
 <error>}</error>
 
-func <warning>rsaPKCS1v15SignatureAlgorithmForHashID</warning>(hashID int) string {
+func rsaPKCS1v15SignatureAlgorithmForHashID(hashID int) string {
 	switch {
 	case hashID == 512: return "asd2"
 	case hashID == 512: return "asd1"
@@ -167,7 +170,7 @@ func <warning>rsaPKCS1v15SignatureAlgorithmForHashID</warning>(hashID int) strin
 	}
 }
 
-func <warning>rsaPKCS1v15SignatureAlgorithmForHashID2</warning>(hashID int) string {
+func rsaPKCS1v15SignatureAlgorithmForHashID2(hashID int) string {
 	switch {
 	case hashID == 512: return "asd2"
 	case hashID == 512: return "asd1"
