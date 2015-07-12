@@ -37,3 +37,18 @@ func _(p interface{}) error {
 	}
 	return nil
 }
+
+type Image interface {
+	At(x, y int)
+}
+
+func _() {
+	var p Image
+	switch q := p.(type) {
+	case Image:
+		fmt.Println("draw.Image")
+	default:
+		fmt.Println("default")
+		q.At(0, 0)
+	}
+}
