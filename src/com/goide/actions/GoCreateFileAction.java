@@ -42,8 +42,9 @@ public class GoCreateFileAction extends CreateFileFromTemplateAction implements 
 
   @Override
   protected PsiFile createFile(String name, @NotNull String templateName, @NotNull PsiDirectory dir) {
-    FileTemplate template = FileTemplateManager.getInstance(dir.getProject()).getInternalTemplate(templateName);
-    Properties properties = new Properties();
+    FileTemplateManager templateManager = FileTemplateManager.getInstance(dir.getProject());
+    FileTemplate template = templateManager.getInternalTemplate(templateName);
+    Properties properties = templateManager.getDefaultProperties();
     String packageName = ContainerUtil.getFirstItem(GoUtil.getAllPackagesInDirectory(dir, true));
     if (packageName == null) {
       packageName = GoPsiImplUtil.getLocalPackageName(dir.getName());
