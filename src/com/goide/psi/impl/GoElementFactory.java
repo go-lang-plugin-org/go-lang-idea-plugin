@@ -95,4 +95,10 @@ public class GoElementFactory {
     GoFile f = createFileFromText(project, "package a; var b = " + stringLiteral);
     return PsiTreeUtil.getNextSiblingOfType(ContainerUtil.getFirstItem(f.getVars()), GoStringLiteral.class);
   }
+
+  @NotNull
+  public static GoSignature createFunctionSignatureFromText(@NotNull Project project, @NotNull String text) {
+    GoFile file = createFileFromText(project, "package a; func t(" + text + ") {\n}");
+    return ContainerUtil.getFirstItem(file.getFunctions()).getSignature();
+  }
 }

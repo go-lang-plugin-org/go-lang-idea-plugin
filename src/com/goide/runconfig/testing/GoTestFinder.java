@@ -48,27 +48,7 @@ public class GoTestFinder implements TestFinder {
 
   @Nullable
   public static String getTestFunctionName(@NotNull GoFunctionOrMethodDeclaration function) {
-    return isTestFunctionName(function.getName()) ? StringUtil.notNullize(function.getName()) : null;
-  }
-
-  public static boolean isTestFunctionName(@Nullable String functionName) {
-    return checkPrefix(functionName, "Test");
-  }
-
-  public static boolean isExampleFunctionName(@Nullable String functionName) {
-    return checkPrefix(functionName, "Example");
-  }
-
-  public static boolean isBenchmarkFunctionName(@Nullable String functionName) {
-    return checkPrefix(functionName, "Benchmark");
-  }
-
-  private static boolean checkPrefix(@Nullable String name, @NotNull String prefix) {
-    // https://github.com/golang/go/blob/master/src/cmd/go/test.go#L1161 – isTest()
-    if (name == null || !name.startsWith(prefix)) return false;
-    if (prefix.length() == name.length()) return true;
-    final char c = name.charAt(prefix.length());
-    return !Character.isLetter(c) || !Character.isLowerCase(c);
+    return GoTestFunctionType.fromName(function.getName()) == GoTestFunctionType.TEST ? StringUtil.notNullize(function.getName()) : null;
   }
 
   @Nullable

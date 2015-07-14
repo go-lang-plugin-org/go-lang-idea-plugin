@@ -50,7 +50,8 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       GoDeferGoInspection.class,
       GoReservedWordUsedAsName.class,
       GoMultiplePackagesInspection.class,
-      GoCgoInTestInspection.class
+      GoCgoInTestInspection.class,
+      GoTestSignaturesInspection.class
     );
   }
 
@@ -210,7 +211,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       public VirtualFile compute() throws Throwable {
         myFixture.getTempDirFixture().createFile("pack1/pack1_test.go", "package pack1_test; func Test() {}");
         return myFixture.getTempDirFixture().createFile("pack2/pack2_test.go",
-                                                        "package pack2_test; import `pack1`; func TestTest() {<error>pack1_test</error>.Test()}");
+                                                        "package pack2_test; import `pack1`; import \"testing\"; func TestTest(t *testing.T) {<error>pack1_test</error>.Test()}");
       }
     });
     GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(file.getParent().getParent().getUrl());
@@ -224,7 +225,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       public VirtualFile compute() throws Throwable {
         myFixture.getTempDirFixture().createFile("pack1/pack1.go", "package pack1_test; func Test() {}");
         return myFixture.getTempDirFixture().createFile("pack2/pack2_test.go",
-                                                        "package pack2_test; import `pack1`; func TestTest() {pack1_test.Test()}");
+                                                        "package pack2_test; import `pack1`; import \"testing\"; func TestTest(t *testing.T) {pack1_test.Test()}");
       }
     });
     GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(file.getParent().getParent().getUrl());
