@@ -17,35 +17,53 @@
 package com.goide.project;
 
 import com.goide.GoConstants;
+import com.goide.GoLibrariesState;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.components.StoragePathMacros;
+import org.jetbrains.annotations.NotNull;
 
 @State(
   name = GoConstants.GO_LIBRARIES_SERVICE_NAME,
   storages = @Storage(file = StoragePathMacros.APP_CONFIG + "/" + GoConstants.GO_LIBRARIES_CONFIG_FILE)
 )
-public class GoApplicationLibrariesService extends GoLibrariesService {
-  private boolean myUseGoPathFromSystemEnvironment = true;
+public class GoApplicationLibrariesService extends GoLibrariesService<GoApplicationLibrariesService.GoApplicationLibrariesState> {
+  @NotNull
+  @Override
+  protected GoApplicationLibrariesState createState() {
+    return new GoApplicationLibrariesState();
+  }
 
   public static GoApplicationLibrariesService getInstance() {
     return ServiceManager.getService(GoApplicationLibrariesService.class);
   }
 
   public boolean isUseGoPathFromSystemEnvironment() {
-    return myUseGoPathFromSystemEnvironment;
+    return myState.isUseGoPathFromSystemEnvironment();
   }
 
   public void setUseGoPathFromSystemEnvironment(boolean useGoPathFromSystemEnvironment) {
-    if (myUseGoPathFromSystemEnvironment != useGoPathFromSystemEnvironment) {
-      myUseGoPathFromSystemEnvironment = useGoPathFromSystemEnvironment;
+    if (myState.isUseGoPathFromSystemEnvironment() != useGoPathFromSystemEnvironment) {
+      myState.setUseGoPathFromSystemEnvironment(useGoPathFromSystemEnvironment);
       if (!GoSdkUtil.getGoPathsRootsFromEnvironment().isEmpty()) {
         incModificationCount();
         ApplicationManager.getApplication().getMessageBus().syncPublisher(LIBRARIES_TOPIC).librariesChanged(getLibraryRootUrls());
       }
     }
   }
+
+  public static class GoApplicationLibrariesState extends GoLibrariesState {
+    private boolean myUseGoPathFromSystemEnvironment = true;
+
+    public boolean isUseGoPathFromSystemEnvironment() {
+      return myUseGoPathFromSystemEnvironment;
+    }
+
+    public void setUseGoPathFromSystemEnvironment(boolean useGoPathFromSystemEnvironment) {
+      this.myUseGoPathFromSystemEnvironment = useGoPathFromSystemEnvironment;
+    }
+  } 
 }

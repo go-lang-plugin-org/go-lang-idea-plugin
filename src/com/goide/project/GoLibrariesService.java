@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,19 +37,25 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;
 
-public abstract class GoLibrariesService extends SimpleModificationTracker implements PersistentStateComponent<GoLibrariesState> {
+public abstract class GoLibrariesService<T extends GoLibrariesState> extends SimpleModificationTracker implements PersistentStateComponent<T> {
   public static final Topic<LibrariesListener> LIBRARIES_TOPIC = new Topic<LibrariesListener>("libraries changes", LibrariesListener.class);
-  private final GoLibrariesState myState = new GoLibrariesState();
+  protected final T myState = createState();
 
   @NotNull
   @Override
-  public GoLibrariesState getState() {
+  public T getState() {
     return myState;
   }
 
   @Override
-  public void loadState(GoLibrariesState state) {
+  public void loadState(T state) {
     XmlSerializerUtil.copyBean(state, myState);
+  }
+
+  @NotNull
+  protected T createState() {
+    //noinspection unchecked
+    return (T)new GoLibrariesState();
   }
 
   @NotNull

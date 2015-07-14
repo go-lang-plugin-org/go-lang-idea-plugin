@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package com.goide.project;
 
 import com.goide.GoConstants;
+import com.goide.GoLibrariesState;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.components.StoragePathMacros;
@@ -28,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
   name = GoConstants.GO_LIBRARIES_SERVICE_NAME,
   storages = @Storage(file = StoragePathMacros.MODULE_FILE)
 )
-public class GoModuleLibrariesService extends GoLibrariesService {
+public class GoModuleLibrariesService extends GoLibrariesService<GoLibrariesState> {
   public static GoModuleLibrariesService getInstance(@NotNull Module module) {
     return ModuleServiceManager.getService(module, GoModuleLibrariesService.class);
   }
