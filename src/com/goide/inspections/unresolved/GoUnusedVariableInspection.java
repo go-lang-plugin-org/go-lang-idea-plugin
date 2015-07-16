@@ -45,12 +45,16 @@ public class GoUnusedVariableInspection extends GoInspectionBase {
           PsiElement resolve = reference != null ? reference.resolve() : null;
           if (resolve != null) return;
           Query<PsiReference> query = ReferencesSearch.search(o, o.getUseScope());
-          boolean shortDecl = PsiTreeUtil.getParentOfType(o, GoShortVarDeclaration.class, GoVarDeclaration.class) instanceof GoShortVarDeclaration;
           for (PsiReference ref : query) {
             PsiElement element = ref.getElement();
             if (element == null) continue;
             PsiElement parent = element.getParent();
-            if (shortDecl && parent instanceof GoLeftHandExprList && parent.getParent() instanceof GoAssignmentStatement) continue;
+            if (parent instanceof GoLeftHandExprList) {
+              PsiElement grandParent = parent.getParent();
+              if (grandParent instanceof GoAssignmentStatement && ((GoAssignmentStatement)grandParent).getAssignOp().getAssign() != null) {
+                continue;
+              }
+            }
             if (parent instanceof GoShortVarDeclaration) {
               int op = ((GoShortVarDeclaration)parent).getVarAssign().getStartOffsetInParent();
               if (element.getStartOffsetInParent() < op) continue;
