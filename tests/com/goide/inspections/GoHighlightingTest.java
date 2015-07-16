@@ -253,7 +253,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testCGOImportInTestFile() {
-    myFixture.configureByText("a_test.go", "package a; import<error>\"C\"</error>;");
+    myFixture.configureByText("a_test.go", "package a; import<error>\"C\"</error>; import<error>\"C\"</error>;");
     myFixture.checkHighlighting();
   }
 
