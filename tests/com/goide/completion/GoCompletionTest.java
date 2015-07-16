@@ -468,14 +468,15 @@ public class GoCompletionTest extends GoCompletionTestBase {
     assertSameElements(myFixture.getLookupElementStrings(), "foo", "foo_test", "main");
   }
 
-  @SuppressWarnings("ConstantConditions")
-  public void _testPackageNamesInEmptyDirectory() throws IOException {
+  public void testPackageNamesInEmptyDirectory() throws IOException {
     VirtualFile dir = myFixture.getTempDirFixture().findOrCreateDir("directory-name");
     VirtualFile file = dir.createChildData(this, "test.go");
     VfsUtil.saveText(file, "package <caret>");
     myFixture.configureFromExistingVirtualFile(file);
     myFixture.completeBasic();
-    assertSameElements(myFixture.getLookupElementStrings(), "directory_name", "main");
+    List<String> strings = myFixture.getLookupElementStrings();
+    assertNotNull(strings);
+    assertSameElements(strings, "directory_name", "main");
   }
 
   private void doTestEmptyCompletion() {
