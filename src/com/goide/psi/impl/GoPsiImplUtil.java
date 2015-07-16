@@ -48,7 +48,6 @@ import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Function;
-import com.intellij.util.PathUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -772,29 +771,30 @@ public class GoPsiImplUtil {
   @NotNull
   public static GoImportSpec addImport(@NotNull GoImportList importList, @NotNull String packagePath, @Nullable String alias) {
     Project project = importList.getProject();
-    GoImportDeclaration lastImportDeclaration = ContainerUtil.getLastItem(importList.getImportDeclarationList());
     GoImportDeclaration newDeclaration = GoElementFactory.createImportDeclaration(project, packagePath, alias, false);
-    if (lastImportDeclaration != null) {
-      List<GoImportSpec> importSpecList = lastImportDeclaration.getImportSpecList();
-      if (lastImportDeclaration.getRparen() == null && importSpecList.size() == 1) {
+    List<GoImportDeclaration> existingImports = importList.getImportDeclarationList();
+    for (int i = existingImports.size() - 1; i >= 0; i--) {
+      GoImportDeclaration existingImport = existingImports.get(i);
+      List<GoImportSpec> importSpecList = existingImport.getImportSpecList();
+      if (existingImport.getRparen() == null && importSpecList.size() == 1) {
         GoImportSpec firstItem = ContainerUtil.getFirstItem(importSpecList);
         assert firstItem != null;
         String path = firstItem.getPath();
         String oldAlias = firstItem.getAlias();
-        
+        if (GoConstants.C_PATH.equals(path)) continue;
+
         GoImportDeclaration importWithParens = GoElementFactory.createImportDeclaration(project, path, oldAlias, true);
-        lastImportDeclaration = (GoImportDeclaration)lastImportDeclaration.replace(importWithParens);
+        existingImport = (GoImportDeclaration)existingImport.replace(importWithParens);
       }
-      return lastImportDeclaration.addImportSpec(packagePath, alias);
+      return existingImport.addImportSpec(packagePath, alias);
     }
-    else {
-      return addImportDeclaration(importList, newDeclaration);
-    }
+    return addImportDeclaration(importList, newDeclaration);
   }
 
   @NotNull
   private static GoImportSpec addImportDeclaration(@NotNull GoImportList importList, @NotNull GoImportDeclaration newImportDeclaration) {
-    GoImportDeclaration importDeclaration = (GoImportDeclaration)importList.addAfter(newImportDeclaration, null);
+    GoImportDeclaration lastImport = ContainerUtil.getLastItem(importList.getImportDeclarationList());
+    GoImportDeclaration importDeclaration = (GoImportDeclaration)importList.addAfter(newImportDeclaration, lastImport);
     final PsiElement importListNextSibling = importList.getNextSibling();
     if (!(importListNextSibling instanceof PsiWhiteSpace)) {
       importList.addAfter(GoElementFactory.createNewLine(importList.getProject()), importDeclaration);
