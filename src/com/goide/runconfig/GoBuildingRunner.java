@@ -68,7 +68,7 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
     String configurationName = settings != null ? settings.getName() : "application";
     if (StringUtil.isEmpty(outputDirectoryPath)) {
       try {
-        outputFile = FileUtil.createTempFile(configurationName, "go", true);
+        outputFile = FileUtil.createTempFile(configurationName, GoEnvironmentUtil.getBinaryFileNameForPath("go"), true);
       }
       catch (IOException e) {
         throw new ExecutionException("Cannot create temporary output file", e);
