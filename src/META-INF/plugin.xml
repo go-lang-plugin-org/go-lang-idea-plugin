@@ -233,6 +233,9 @@
     <localInspection language="go" displayName="Usage of cgo in tests is not supported"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoCgoInTestInspection"/>
+    <localInspection language="go" displayName="Wrong test declaration"
+                     groupName="Go" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoTestSignaturesInspection"/>
   </extensions>
   <actions>
     <action id="Go.NewGoFile" class="com.goide.actions.GoCreateFileAction"

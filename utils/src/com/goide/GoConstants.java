@@ -37,10 +37,15 @@ public class GoConstants {
   public static final String TESTDATA_NAME = "testdata";
   public static final String TEST_SUFFIX = "_test";
   public static final String TEST_SUFFIX_WITH_EXTENSION = "_test.go";
+  public static final String TEST_PREFIX = "Test";
+  public static final String BENCHMARK_PREFIX = "Benchmark";
+  public static final String EXAMPLE_PREFIX = "Example";
+  public static final String TEST_MAIN = "TestMain";
   public static final String MAIN = "main";
   public static final String INIT = "init";
   public static final String DOCUMENTATION = "documentation";
   public static final String C_PATH = "C";
+  public static final String TESTING_PATH = "testing";
 
   public static final NotificationGroup GO_NOTIFICATION_GROUP = NotificationGroup.balloonGroup("Go plugin notifications");
   public static final NotificationGroup GO_EXECUTION_NOTIFICATION_GROUP = NotificationGroup.toolWindowGroup("Go Execution", ToolWindowId.RUN);
