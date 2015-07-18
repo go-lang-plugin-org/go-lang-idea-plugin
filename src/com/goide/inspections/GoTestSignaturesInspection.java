@@ -36,8 +36,10 @@ import java.util.Locale;
 
 public class GoTestSignaturesInspection extends GoInspectionBase {
   private static String getTestingAlias(GoImportSpec testingImportSpec) {
-    return testingImportSpec == null ? GoConstants.TESTING_PATH :
-           !testingImportSpec.isDot() ? StringUtil.notNullize(testingImportSpec.getAlias(), GoConstants.TESTING_PATH) : "";
+    if (testingImportSpec != null) {
+      return !testingImportSpec.isDot() ? StringUtil.notNullize(testingImportSpec.getAlias(), GoConstants.TESTING_PATH) : "";
+    }
+    return GoConstants.TESTING_PATH;
   }
 
   private static String getProperParamType(@NotNull String testingAlias, GoTestFunctionType type) {
