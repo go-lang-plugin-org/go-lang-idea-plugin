@@ -24,6 +24,7 @@ import com.goide.psi.GoFile;
 import com.goide.psi.GoFunctionDeclaration;
 import com.goide.psi.GoVisitor;
 import com.goide.runconfig.testing.GoTestFinder;
+import com.goide.runconfig.testing.GoTestFunctionType;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
@@ -47,7 +48,7 @@ public class GoUnusedFunctionInspection extends GoInspectionBase {
         String name = o.getName();
         if (GoConstants.MAIN.equals(file.getPackageName()) && GoConstants.MAIN.equals(name)) return;
         if (GoConstants.INIT.equals(name)) return;
-        if (GoTestFinder.isTestFile(file) && (GoTestFinder.isTestFunctionName(name) || GoTestFinder.isBenchmarkFunctionName(name))) return;
+        if (GoTestFinder.isTestFile(file) && GoTestFunctionType.fromName(name) != null) return;
         Query<PsiReference> search = ReferencesSearch.search(o, o.getUseScope());
         if (search.findFirst() == null) {
           PsiElement id = o.getIdentifier();

@@ -158,6 +158,6 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
   @Nullable
   private static GoFunctionOrMethodDeclaration findTestFunctionInContext(@NotNull PsiElement contextElement) {
     GoFunctionOrMethodDeclaration function = PsiTreeUtil.getNonStrictParentOfType(contextElement, GoFunctionOrMethodDeclaration.class);
-    return function != null && GoTestFinder.isTestFunctionName(function.getName()) ? function : null;
+    return function != null && GoTestFunctionType.fromName(function.getName()) == GoTestFunctionType.TEST ? function : null;
   }
 }
