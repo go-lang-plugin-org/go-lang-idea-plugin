@@ -38,15 +38,10 @@ public class GoLegacyResolveBuiltinTest extends GoLegacyResolveTestBase {
     return createMockProjectDescriptor();
   }
   
-  public void testMethodName()        { doFileTest(false); } 
-  public void testBuiltinTypes()      { doFileTest(false); } 
-  public void testBuiltinConversion() { doFileTest(false); } 
-  public void testVarBuiltinType()    { doFileTest(false); } 
-  public void testVarMethodType()     { doFileTest(false); } 
-  public void testParameterType()     { doFileTest(false); }
-
-  @Override
-  protected void processNullResolve() {
-    fail("Reference " + myReference + " should be resolved");
-  }
+  public void testMethodName()        { doFileTest(); } 
+  public void testBuiltinTypes()      { doFileTest(); } 
+  public void testBuiltinConversion() { doFileTest(); } 
+  public void testVarBuiltinType()    { doFileTest(); } 
+  public void testVarMethodType()     { doFileTest(); } 
+  public void testParameterType()     { doFileTest(); }
 }

@@ -20,11 +20,11 @@ public class GoLegacyResolveStructTest extends GoLegacyResolveTestBase {
   @Override
   protected String getBasePath() { return "psi/resolve/struct"; }
 
-  public void testDirectStructField()                       { doFileTest(false); } 
-  public void testAnonymousDirectStructField()              { doFileTest(false); } 
-  public void testPromotedStructField()                     { doFileTest(false); } 
-  public void testFieldVsParam()                            { doFileTest(false); } 
-  public void testFieldVsParam2()                           { doFileTest(false); }
+  public void testDirectStructField()                       { doFileTest(); } 
+  public void testAnonymousDirectStructField()              { doFileTest(); } 
+  public void testPromotedStructField()                     { doFileTest(); } 
+  public void testFieldVsParam()                            { doFileTest(); } 
+  public void testFieldVsParam2()                           { doFileTest(); }
 
   public void testDirectExportedFieldFromImportedPackage()  { doDirTest(); } 
   public void testDirectPrivateFieldFromImportedPackage()   { doDirTest(); }

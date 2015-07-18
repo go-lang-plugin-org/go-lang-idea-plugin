@@ -20,12 +20,12 @@ public class GoLegacyResolveTypesTest extends GoLegacyResolveTestBase {
   @Override
   protected String getBasePath() { return "psi/resolve/types"; }
 
-  public void testLocalType()                                     { doFileTest(false); } 
-  public void testFromMethodReceiver()                            { doFileTest(false); } 
-  public void testResolveTypeNameInTypeSpec()                     { doFileTest(false); } 
-  public void testResolveTypeInCast()                             { doFileTest(false); } 
-  public void testResolveArrayInRange()                           { doFileTest(false); } 
-  public void testMethodsOrder()                                  { doFileTest(false); }
+  public void testLocalType()                                     { doFileTest(); } 
+  public void testFromMethodReceiver()                            { doFileTest(); } 
+  public void testResolveTypeNameInTypeSpec()                     { doFileTest(); } 
+  public void testResolveTypeInCast()                             { doFileTest(); } 
+  public void testResolveArrayInRange()                           { doFileTest(); } 
+  public void testMethodsOrder()                                  { doFileTest(); }
 
   public void testFromDefaultImportedPackage()                    { doDirTest(); } 
   public void testFromInjectedPackage()                           { doDirTest(); } 

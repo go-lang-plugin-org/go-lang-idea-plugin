@@ -9,5 +9,5 @@ func F(func()) {
 }
 
 func main() {
-    F(/*ref*/Pmm)    // <-- second place
+    F(/*no ref*/Pmm)    // <-- second place
 }

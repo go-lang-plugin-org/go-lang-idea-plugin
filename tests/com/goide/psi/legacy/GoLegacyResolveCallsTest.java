@@ -20,29 +20,29 @@ public class GoLegacyResolveCallsTest extends GoLegacyResolveTestBase {
   @Override
   protected String getBasePath() { return "psi/resolve/calls"; }
 
-  public void testCallToLocalMethodByPointer()                           { doFileTest(false); } 
-  public void testCallToLocalMethod()                                    { doFileTest(false); } 
-  public void testCallToLocalMethodNested()                              { doFileTest(false); } 
-  public void testCallToLocalMethodViaMap()                              { doFileTest(false); } 
-  public void testCallToLocalMethodViaShortVarDeclaration()              { doFileTest(false); } 
-  public void testCallToLocalMethodViaSlice()                            { doFileTest(false); } 
-  public void testCallToLocalMethodViaTypeAssert()                       { doFileTest(false); } 
-  public void testCallToLocalInterfaceMethod()                           { doFileTest(false); } 
-  public void testCallToLocalInterfaceMethodNested()                     { doFileTest(false); } 
-  public void testCallToLocalInterfaceMethodViaMap()                     { doFileTest(false); } 
-  public void testCallToLocalInterfaceMethodViaSlice()                   { doFileTest(false); } 
-  public void testCallToLocalInterfaceMethodViaTypeAssert()              { doFileTest(false); } 
-  public void testCallToLocalFunction()                                  { doFileTest(false); } 
-  public void testCallToFunctionLiteral()                                { doFileTest(false); } 
-  public void testTypeConversionToLocalType()                            { doFileTest(false); } 
-  public void testRecursiveMethodCall()                                  { doFileTest(false); } 
-  public void testCallToMethodParameter()                                { doFileTest(false); } 
-  public void testCallToFunctionVariable()                               { doFileTest(false); } 
-  public void testDirectlyInheritedMethodSet()                           { doFileTest(false); } 
-  public void testGrandParentDirectlyInheritedMethodSet()                { doFileTest(false); } 
-  public void testCallToEmbeddedInterfaceMethod()                        { doFileTest(false); } 
-  public void testCallToFunctionWithSameNameAsMethod()                   { doFileTest(false); } 
-  public void testCallToMethodWithTheSameNameAsFunction()                { doFileTest(false); } 
+  public void testCallToLocalMethodByPointer()                           { doFileTest(); } 
+  public void testCallToLocalMethod()                                    { doFileTest(); } 
+  public void testCallToLocalMethodNested()                              { doFileTest(); } 
+  public void testCallToLocalMethodViaMap()                              { doFileTest(); } 
+  public void testCallToLocalMethodViaShortVarDeclaration()              { doFileTest(); } 
+  public void testCallToLocalMethodViaSlice()                            { doFileTest(); } 
+  public void testCallToLocalMethodViaTypeAssert()                       { doFileTest(); } 
+  public void testCallToLocalInterfaceMethod()                           { doFileTest(); } 
+  public void testCallToLocalInterfaceMethodNested()                     { doFileTest(); } 
+  public void testCallToLocalInterfaceMethodViaMap()                     { doFileTest(); } 
+  public void testCallToLocalInterfaceMethodViaSlice()                   { doFileTest(); } 
+  public void testCallToLocalInterfaceMethodViaTypeAssert()              { doFileTest(); } 
+  public void testCallToLocalFunction()                                  { doFileTest(); } 
+  public void testCallToFunctionLiteral()                                { doFileTest(); } 
+  public void testTypeConversionToLocalType()                            { doFileTest(); } 
+  public void testRecursiveMethodCall()                                  { doFileTest(); } 
+  public void testCallToMethodParameter()                                { doFileTest(); } 
+  public void testCallToFunctionVariable()                               { doFileTest(); } 
+  public void testDirectlyInheritedMethodSet()                           { doFileTest(); } 
+  public void testGrandParentDirectlyInheritedMethodSet()                { doFileTest(); } 
+  public void testCallToEmbeddedInterfaceMethod()                        { doFileTest(); } 
+  public void testCallToFunctionWithSameNameAsMethod()                   { doFileTest(); } 
+  public void testCallToMethodWithTheSameNameAsFunction()                { doFileTest(); } 
 
   public void testConversionToImportedType()                             { doDirTest(); } 
   public void testConversionToImportedFunction()                         { doDirTest(); } 

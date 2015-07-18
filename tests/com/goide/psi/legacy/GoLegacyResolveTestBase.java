@@ -35,18 +35,20 @@ import java.io.File;
 
 public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCase {
   @NotNull public static final String REF_MARK = "/*ref*/";
+  @NotNull public static final String NO_REF_MARK = "/*no ref*/";
   @NotNull public static final String DEF_MARK = "/*def*/";
 
   @Nullable protected PsiReference myReference;
   @Nullable protected PsiElement myDefinition;
+  protected boolean myShouldBeResolved = true;
 
   @Override
   protected String getBasePath() {
     return "psi/resolve";
   }
 
-  protected void doFileTest(boolean lowercase) {
-    processPsiFile((GoFile)myFixture.configureByFile(getTestName(lowercase) + ".go"));
+  protected void doFileTest() {
+    processPsiFile((GoFile)myFixture.configureByFile(getTestName(false) + ".go"));
     doResolveTest();
   }
   
@@ -62,37 +64,44 @@ public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCa
 
   private void doResolveTest() {
     if (myReference == null) fail("no reference defined in test case");
+    if (myShouldBeResolved && !allowNullDefinition() && myDefinition == null) fail("no definition defined in test case");
     PsiElement resolve = myReference.resolve();
-    if (resolve != null && myDefinition == null && !allowNullDefinition()) fail("element resolved but it shouldn't have");
-    if (resolve == null && myDefinition != null) fail("element didn't resolve when it should have");
-    if (resolve != null) {
-      if (!allowNullDefinition()) {
+    if (myShouldBeResolved) {
+      assertNotNull("cannot resolve reference " + myReference, resolve);
+      if (myDefinition != null) {
         PsiElement def = PsiTreeUtil.getParentOfType(myDefinition, resolve.getClass(), false);
-        assertSame(def, resolve);
+        assertSame("element resolved in non-expected element from " + getFileName(resolve) + ":\n" + resolve.getText(), 
+                   def, resolve);
       }
     }
-    else {
-      processNullResolve();
-    }
+    else if (resolve != null) {
+        fail("element is resolved but it wasn't should. resolved to element from " + getFileName(resolve) + ":\n" + resolve.getText());
+      }
+  }
+
+  @NotNull
+  private static String getFileName(PsiElement resolve) {
+    return resolve instanceof PsiFile ? ((PsiFile)resolve).getName() : resolve.getContainingFile().getName();
   }
 
   protected boolean allowNullDefinition() {
     return false;
   }
-
-  protected void processNullResolve() {
-  }
-
+  
   private void processPsiFile(@NotNull GoFile file) {
     String fileContent = loadText(file.getVirtualFile());
-    
-    int refIndex = fileContent.indexOf(REF_MARK);
+
     String fileName = file.getName();
+    int refIndex = fileContent.indexOf(REF_MARK);
     if (refIndex != -1) {
-      if (myReference != null) fail("only once reference should be declared in a test case, see file: " + fileName);
       int offset = refIndex + REF_MARK.length();
-      myReference = file.findReferenceAt(offset);
-      if (myReference == null) fail("no reference was found as marked in file: " + fileName + ", offset: " + offset);
+      myReference = findReference(file, offset);
+    }
+    int noRefIndex = fileContent.indexOf(NO_REF_MARK);
+    if (noRefIndex != -1) {
+      int offset = noRefIndex + NO_REF_MARK.length();
+      myReference = findReference(file, offset);
+      myShouldBeResolved = false;
     }
 
     int defIndex = fileContent.indexOf(DEF_MARK);
@@ -100,8 +109,16 @@ public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCa
       if (myDefinition != null) fail("only one definition should be allowed in a resolve test case, see file: " + fileName);
       int offset = defIndex + DEF_MARK.length();
       myDefinition = file.findElementAt(offset);
-      if (myDefinition == null) fail("no definition was found where marked in file: " + fileName + ", offset: " + offset);
+      if (myDefinition == null) fail("no definition was found at mark in file: " + fileName + ", offset: " + offset);
     }
+  }
+
+  @NotNull
+  private PsiReference findReference(@NotNull GoFile file, int offset) {
+    if (myReference != null) fail("only one reference should be declared in a test case, see file: " + file.getName());
+    PsiReference result = file.findReferenceAt(offset);
+    if (result == null) fail("no reference was found at mark in file: " + file.getName() + ", offset: " + offset);
+    return result;
   }
 
   private void doDirectoryTest(@NotNull final VirtualFile file) {

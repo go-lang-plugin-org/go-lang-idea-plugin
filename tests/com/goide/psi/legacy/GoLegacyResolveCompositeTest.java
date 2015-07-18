@@ -20,21 +20,21 @@ public class GoLegacyResolveCompositeTest extends GoLegacyResolveTestBase {
   @Override
   protected String getBasePath() { return "psi/resolve/composite"; }
 
-  public void testTypeName()                { doFileTest(false); } 
-  public void testTypeStruct()              { doFileTest(false); } 
-  public void testTypeStructArray()         { doFileTest(false); } 
-  public void testTypeStructSlice()         { doFileTest(false); } 
-  public void testTypeStructMap()           { doFileTest(false); } 
-  public void testTypeNameArray()           { doFileTest(false); } 
-  public void testTypeNameMap()             { doFileTest(false); } 
-  public void testTypeNameSlice()           { doFileTest(false); } 
-  public void testNestedStruct()            { doFileTest(false); } 
-  public void testNestedNamedStruct()       { doFileTest(false); } 
-  public void testKeyAsConstantExpression() { doFileTest(false); } 
-  public void testExpressionKey()           { doFileTest(false); } 
-  public void testPromotedAnonymousField1() { doFileTest(false); } 
-  public void testPromotedAnonymousField2() { doFileTest(false); } 
-  public void testPromotedAnonymousField3() { doFileTest(false); } 
-  public void testPromotedAnonymousField4() { doFileTest(false); } 
-  public void testTypeSwitch()              { doFileTest(false); }
+  public void testTypeName()                { doFileTest(); } 
+  public void testTypeStruct()              { doFileTest(); } 
+  public void testTypeStructArray()         { doFileTest(); } 
+  public void testTypeStructSlice()         { doFileTest(); } 
+  public void testTypeStructMap()           { doFileTest(); } 
+  public void testTypeNameArray()           { doFileTest(); } 
+  public void testTypeNameMap()             { doFileTest(); } 
+  public void testTypeNameSlice()           { doFileTest(); } 
+  public void testNestedStruct()            { doFileTest(); } 
+  public void testNestedNamedStruct()       { doFileTest(); } 
+  public void testKeyAsConstantExpression() { doFileTest(); } 
+  public void testExpressionKey()           { doFileTest(); } 
+  public void testPromotedAnonymousField1() { doFileTest(); } 
+  public void testPromotedAnonymousField2() { doFileTest(); } 
+  public void testPromotedAnonymousField3() { doFileTest(); } 
+  public void testPromotedAnonymousField4() { doFileTest(); } 
+  public void testTypeSwitch()              { doFileTest(); }
 }

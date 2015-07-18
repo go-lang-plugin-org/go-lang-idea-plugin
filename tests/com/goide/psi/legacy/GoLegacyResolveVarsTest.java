@@ -21,118 +21,118 @@ public class GoLegacyResolveVarsTest extends GoLegacyResolveTestBase {
   protected String getBasePath() { return "psi/resolve/vars"; }
 
   public void testAnonymousFunctionInvocation()                     {
-    doFileTest(false);
+    doFileTest();
   } 
   public void testDeclaredInForRange1()                             {
-    doFileTest(false);
+    doFileTest();
   }
   public void testDeclaredInForRange2()                             {
-    doFileTest(false);
+    doFileTest();
   }
   public void testDeclaredInForRangeAsValue()                       {
-    doFileTest(false);
+    doFileTest();
   }
   public void testDeclaredInForClause()                             {
-    doFileTest(false);
+    doFileTest();
   }
   public void testMethodReturn()                                    {
-    doFileTest(false);
+    doFileTest();
   }
   public void testSimpleMethodParameter()                           {
-    doFileTest(false);
+    doFileTest();
   }
   public void testMethodReturn2()                                   {
-    doFileTest(false);
+    doFileTest();
   }
   public void testGlobalVarDeclaration()                            {
-    doFileTest(false);
+    doFileTest();
   }
   public void testGlobalShadowedVarDeclaration()                    {
-    doFileTest(false);
+    doFileTest();
   }
   public void testGlobalVarDeclarationFromBlock()                   {
-    doFileTest(false);
+    doFileTest();
   }
   public void testShortVarDeclaration()                             {
-    doFileTest(false);
+    doFileTest();
   }
   public void testShortVarRedeclaration()                           {
-    doFileTest(false);
+    doFileTest();
   }
   public void testShortVarDeclarationFromBlock()                    {
-    doFileTest(false);
+    doFileTest();
   }
   public void testGlobalConstDeclaration()                          {
-    doFileTest(false);
+    doFileTest();
   }
   public void testResolveToMethodName()                             {
-    doFileTest(false);
+    doFileTest();
   }
   public void testLocalConstDeclaration()                           {
-    doFileTest(false);
+    doFileTest();
   }
   public void testChainedSelector()                                 {
-    doFileTest(false);
+    doFileTest();
   }
   public void testVarInSwitchExpr()                                 {
-    doFileTest(false);
+    doFileTest();
   }
   public void testVarInSwitchExprInitialization()                   {
-    doFileTest(false);
+    doFileTest();
   }
   public void testVarInSwitchType()                                 {
-    doFileTest(false);
+    doFileTest();
   }
   public void testVarInSwitchTypeInitialization()                   {
-    doFileTest(false);
+    doFileTest();
   }
   public void testMultipleGlobalVars()                              {
-    doFileTest(false);
+    doFileTest();
   }
   public void testMultipleGlobalConsts()                            {
-    doFileTest(false);
+    doFileTest();
   }
   public void testDeclarationInsideLabeledStatement()               {
-    doFileTest(false);
+    doFileTest();
   }
   public void testStructFieldViaChannel()                           {
-    doFileTest(false);
+    doFileTest();
   }
   public void testShortVarDeclarationFromSelectClause()             {
-    doFileTest(false);
+    doFileTest();
   }
   public void testVarDeclarationInSelectCommClauseRecv()            {
-    doFileTest(false);
+    doFileTest();
   }
   public void testVarDeclarationInSelectCommClauseDefault()         {
-    doFileTest(false);
+    doFileTest();
   }
   public void testRangeExpressionVarsShouldNotResolveToRangeVars()  {
-    doFileTest(false);
+    doFileTest();
   }
   public void testVarDereferenceAsTypeCast()                        {
-    doFileTest(false);
+    doFileTest();
   }
   public void testShortAssignToReturnVar()                          {
-    doFileTest(false);
+    doFileTest();
   }
   public void testResolveToFunctionName()                           {
-    doFileTest(false);
+    doFileTest();
   }
   public void testVarInSwitchTypeWithNamedSwitchGuard()             {
-    doFileTest(false);
+    doFileTest();
   }
   public void testVarDeclarationInSelectCommClauseSend()            {
-    doFileTest(false);
+    doFileTest();
   }
   public void testVarDeclarationOutsideSwitch()                     {
-    doFileTest(false);
+    doFileTest();
   }
   public void testVarVsInnerTypes()                                 {
-    doFileTest(false);
+    doFileTest();
   }
   public void testVarTypeGuard()                                    {
-    doFileTest(false);
+    doFileTest();
   }
 
   public void testFromDefaultImportedPackage()                      { doDirTest(); }
