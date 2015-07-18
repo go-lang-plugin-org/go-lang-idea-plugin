@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,14 +31,15 @@ import org.jetbrains.annotations.Nullable;
 
 public class GoInspectionSuppressor implements InspectionSuppressor {
   @Override
-  public boolean isSuppressedFor(@NotNull PsiElement element, String toolId) {
+  public boolean isSuppressedFor(@NotNull PsiElement element, @NotNull String toolId) {
     return SuppressionUtil.isSuppressedInStatement(element, toolId, GoStatement.class) ||
            SuppressionUtil.isSuppressedInStatement(element, toolId, GoFunctionOrMethodDeclaration.class) ||
            SuppressionUtil.isSuppressedInStatement(element, toolId, GoImportDeclaration.class);
   }
 
+  @NotNull
   @Override
-  public SuppressQuickFix[] getSuppressActions(PsiElement element, String toolId) {
+  public SuppressQuickFix[] getSuppressActions(PsiElement element, @NotNull String toolId) {
     return new SuppressQuickFix[]{
       new GoSuppressInspectionFix("Suppress all inspections for function", GoFunctionOrMethodDeclaration.class),
       new GoSuppressInspectionFix(toolId, "Suppress for function", GoFunctionOrMethodDeclaration.class),
