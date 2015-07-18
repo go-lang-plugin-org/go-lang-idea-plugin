@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.goide.psi;
 
+import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +27,7 @@ public class GoRecursiveVisitor extends GoVisitor {
     for (PsiElement psiElement : o.getChildren()) {
       if (psiElement instanceof GoCompositeElement) {
         psiElement.accept(this);
+        ProgressIndicatorProvider.checkCanceled();
       }
     }
   }
@@ -35,6 +37,7 @@ public class GoRecursiveVisitor extends GoVisitor {
     for (PsiElement psiElement : file.getChildren()) {
       if (psiElement instanceof GoCompositeElement) {
         psiElement.accept(this);
+        ProgressIndicatorProvider.checkCanceled();
       }
     }
   }
