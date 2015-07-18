@@ -112,7 +112,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   public boolean processResolveVariants(@NotNull GoScopeProcessor processor) {
     PsiFile file = myElement.getContainingFile();
     if (!(file instanceof GoFile)) return false;
-    ResolveState state = ResolveState.initial();
+    ResolveState state = createContext();
     GoReferenceExpressionBase qualifier = myElement.getQualifier();
     return qualifier != null
            ? processQualifierExpression(((GoFile)file), qualifier, processor, state)
@@ -164,14 +164,15 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
                                       @NotNull ResolveState state) {
     PsiFile file = type.getContainingFile();
     if (!(file instanceof GoFile)) return true;
-    PsiFile myFile = myElement.getContainingFile();
-    if (!(myFile instanceof GoFile)) return true;
+    PsiFile myFile = ObjectUtils.notNull(getContextFile(state), myElement.getContainingFile());
+    if (!(myFile instanceof GoFile) || !allowed(file, myFile)) return true;
+    
     GoFile o1 = (GoFile)myFile.getOriginalFile();
     GoFile o2 = (GoFile)file.getOriginalFile();
     boolean localResolve = Comparing.equal(o1.getImportPath(), o2.getImportPath()) && Comparing.equal(o1.getPackageName(), o2.getPackageName());
 
     PsiElement parent = type.getStub() == null ? type.getParent() : type.getStub().getParentStub().getPsi();
-    if (parent instanceof GoTypeSpec && !processNamedElements(processor, state, ((GoTypeSpec)parent).getMethods(), localResolve)) {
+    if (parent instanceof GoTypeSpec && !processNamedElements(processor, state, ((GoTypeSpec)parent).getMethods(), localResolve, true)) {
       return false;
     }
 
@@ -192,7 +193,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
       if (!processCollectedRefs(type, structRefs, processor, state)) return false;
     }
     else if (state.get(POINTER) == null && type instanceof GoInterfaceType) {
-      if (!processNamedElements(processor, state, ((GoInterfaceType)type).getMethods(), localResolve)) return false;
+      if (!processNamedElements(processor, state, ((GoInterfaceType)type).getMethods(), localResolve, true)) return false;
       if (!processCollectedRefs(type, ((GoInterfaceType)type).getBaseTypesReferences(), processor, state)) return false;
     }
     else if (type instanceof GoFunctionType) {
@@ -252,13 +253,20 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     String filePath = getPath(file);
     boolean isTesting = GoTestFinder.isTestFile(file);
     for (PsiFile f : dir.getFiles()) {
-      if (f instanceof GoFile && GoUtil.allowed(f) && !Comparing.equal(getPath(f), filePath)) {
-        if (GoTestFinder.isTestFile(f) && !isTesting) continue;
-        if (packageName != null && !packageName.equals(((GoFile)f).getPackageName())) continue;
-        if (!processFileEntities((GoFile)f, processor, state, localProcessing)) return false;
-      }
+      if (!(f instanceof GoFile) || Comparing.equal(getPath(f), filePath)) continue;
+      if (packageName != null && !packageName.equals(((GoFile)f).getPackageName())) continue;
+      if (allowed(f, isTesting) && !processFileEntities((GoFile)f, processor, state, localProcessing)) return false;
     }
     return true;
+  }
+  
+  private static boolean allowed(@NotNull PsiFile file, boolean isTesting) {
+    return file instanceof GoFile && (!GoTestFinder.isTestFile(file) || isTesting) && GoUtil.allowed(file);
+  }
+  
+  private static boolean allowed(@NotNull PsiFile file, @Nullable PsiFile contextFile) {
+    if (contextFile == null || !(contextFile instanceof GoFile)) return true; 
+    return allowed(file, GoTestFinder.isTestFile(contextFile));
   }
 
   private boolean processUnqualifiedResolve(@NotNull GoFile file,
@@ -374,12 +382,28 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
   static boolean processNamedElements(@NotNull PsiScopeProcessor processor,
                                       @NotNull ResolveState state,
-                                      @NotNull Collection<? extends GoNamedElement> elements, 
+                                      @NotNull Collection<? extends GoNamedElement> elements,
                                       boolean localResolve) {
+    return processNamedElements(processor, state, elements, localResolve, false);
+  }
+
+  static boolean processNamedElements(@NotNull PsiScopeProcessor processor,
+                                      @NotNull ResolveState state,
+                                      @NotNull Collection<? extends GoNamedElement> elements,
+                                      boolean localResolve,
+                                      boolean checkContainingFile) {
+    PsiFile contextFile = checkContainingFile ? getContextFile(state) : null;
     for (GoNamedElement definition : elements) {
+      if (checkContainingFile && !allowed(definition.getContainingFile(), contextFile)) continue;
       if ((localResolve || definition.isPublic()) && !processor.execute(definition, state)) return false;
     }
     return true;
+  }
+
+  @Nullable
+  private static PsiFile getContextFile(@NotNull ResolveState state) {
+    SmartPsiElementPointer<GoReferenceExpressionBase> context = state.get(CONTEXT);
+    return context != null ? context.getContainingFile() : null;
   }
 
   // todo: return boolean for better performance 
@@ -401,8 +425,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
   private static boolean processParameters(@NotNull GoScopeProcessorBase processor, @NotNull GoParameters parameters) {
     for (GoParameterDeclaration declaration : parameters.getParameterDeclarationList()) {
-      List<GoParamDefinition> list = declaration.getParamDefinitionList();
-      if (!processNamedElements(processor, ResolveState.initial(), list, true)) return false;
+      if (!processNamedElements(processor, ResolveState.initial(), declaration.getParamDefinitionList(), true)) return false;
     }
     return true;
   }

@@ -55,4 +55,6 @@ public class GoLegacyResolveCallsTest extends GoLegacyResolveTestBase {
   public void testCallToMethodViaShortVar()                              { doDirTest(); } 
   public void testImportedEmbeddedTypeMethod()                           { doDirTest(); } 
   public void testCallToMethodWithTheSameNameAsFunctionAcrossPackages()  { doDirTest(); }
+  public void testCallFromTestToMethodDefinedInTestFile()                { doDirTest(); }
+  public void testCallToMethodDefinedInTestFile()                        { doDirTest(); }
 }
