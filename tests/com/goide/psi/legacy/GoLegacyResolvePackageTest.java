@@ -20,5 +20,5 @@ public class GoLegacyResolvePackageTest extends GoLegacyResolveTestBase {
   @Override
   protected String getBasePath() { return "psi/resolve/package"; }
 
-  public void testAliasedImport() { doFileTest(); } 
+  public void testImportAlias() { doFileTest(); } 
 }
