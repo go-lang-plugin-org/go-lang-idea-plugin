@@ -17,9 +17,9 @@
 package com.goide.psi.legacy;
 
 import com.goide.GoCodeInsightFixtureTestCase;
+import com.goide.project.GoModuleLibrariesService;
 import com.goide.psi.GoFile;
 import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
@@ -43,6 +43,12 @@ public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCa
   protected boolean myShouldBeResolved = true;
 
   @Override
+  public void tearDown() throws Exception {
+    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls();
+    super.tearDown();
+  }
+
+  @Override
   protected String getBasePath() {
     return "psi/resolve";
   }
@@ -54,12 +60,23 @@ public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCa
   
   protected void doDirTest() {
     String testDataPath = getTestDataPath();
-    File fromFile = new File(testDataPath + "/" + getTestName(false));
-    if (fromFile.isDirectory()) {
-      VirtualFile dir = LocalFileSystem.getInstance().findFileByPath(fromFile.getPath());
-      assert dir != null;
-      doDirectoryTest(dir);
+    String testName = getTestName(false);
+    File fromDir = new File(testDataPath + "/" + testName);
+    if (!fromDir.isDirectory()) {
+      throw new RuntimeException("Given file is not directory: " + fromDir);
     }
+    //noinspection ConstantConditions
+    for (File file : fromDir.listFiles()) {
+      if (file.isDirectory()) {
+        myFixture.copyDirectoryToProject(testName + "/" + file.getName(), file.getName());
+      }
+      else {
+        myFixture.copyFileToProject(testName + "/" + file.getName());
+      }
+    }
+    VirtualFile dirToTest = myFixture.getTempDirFixture().getFile(".");
+    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(dirToTest.getUrl());
+    doDirectoryTest(dirToTest);
   }
 
   private void doResolveTest() {
@@ -67,7 +84,7 @@ public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCa
     if (myShouldBeResolved && !allowNullDefinition() && myDefinition == null) fail("no definition defined in test case");
     PsiElement resolve = myReference.resolve();
     if (myShouldBeResolved) {
-      assertNotNull("cannot resolve reference " + myReference, resolve);
+      assertNotNull("cannot resolve reference " + myReference.getCanonicalText(), resolve);
       if (myDefinition != null) {
         PsiElement def = PsiTreeUtil.getParentOfType(myDefinition, resolve.getClass(), false);
         assertSame("element resolved in non-expected element from " + getFileName(resolve) + ":\n" + resolve.getText(), 
