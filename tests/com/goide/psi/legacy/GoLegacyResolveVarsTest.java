@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Claudiu Toader
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,44 +20,120 @@ public class GoLegacyResolveVarsTest extends GoLegacyResolveTestBase {
   @Override
   protected String getBasePath() { return "psi/resolve/vars"; }
 
-  public void testAnonymousFunctionInvocation()                     { doTest(); } 
-  public void testDeclaredInForRange1()                             { doTest(); }
-  public void testDeclaredInForRange2()                             { doTest(); }
-  public void testDeclaredInForRangeAsValue()                       { doTest(); }
-  public void testDeclaredInForClause()                             { doTest(); }
-  public void testMethodReturn()                                    { doTest(); }
-  public void testSimpleMethodParameter()                           { doTest(); }
-  public void testMethodReturn2()                                   { doTest(); }
-  public void testGlobalVarDeclaration()                            { doTest(); }
-  public void testGlobalShadowedVarDeclaration()                    { doTest(); }
-  public void testGlobalVarDeclarationFromBlock()                   { doTest(); }
-  public void testShortVarDeclaration()                             { doTest(); }
-  public void testShortVarRedeclaration()                           { doTest(); }
-  public void testShortVarDeclarationFromBlock()                    { doTest(); }
-  public void testGlobalConstDeclaration()                          { doTest(); }
-  public void testResolveToMethodName()                             { doTest(); }
-  public void testLocalConstDeclaration()                           { doTest(); }
-  public void testChainedSelector()                                 { doTest(); }
-  public void testVarInSwitchExpr()                                 { doTest(); }
-  public void testVarInSwitchExprInitialization()                   { doTest(); }
-  public void testVarInSwitchType()                                 { doTest(); }
-  public void testVarInSwitchTypeInitialization()                   { doTest(); }
-  public void testMultipleGlobalVars()                              { doTest(); }
-  public void testMultipleGlobalConsts()                            { doTest(); }
-  public void testDeclarationInsideLabeledStatement()               { doTest(); }
-  public void testStructFieldViaChannel()                           { doTest(); }
-  public void testShortVarDeclarationFromSelectClause()             { doTest(); }
-  public void testVarDeclarationInSelectCommClauseRecv()            { doTest(); }
-  public void testVarDeclarationInSelectCommClauseDefault()         { doTest(); }
-  public void testRangeExpressionVarsShouldNotResolveToRangeVars()  { doTest(); }
-  public void testVarDereferenceAsTypeCast()                        { doTest(); }
-  public void testShortAssignToReturnVar()                          { doTest(); }
-  public void testResolveToFunctionName()                           { doTest(); }
-  public void testVarInSwitchTypeWithNamedSwitchGuard()             { doTest(); }
-  public void testVarDeclarationInSelectCommClauseSend()            { doTest(); }
-  public void testVarDeclarationOutsideSwitch()                     { doTest(); }
-  public void testVarVsInnerTypes()                                 { doTest(); }
-  public void testVarTypeGuard()                                    { doTest(); }
+  public void testAnonymousFunctionInvocation()                     {
+    doFileTest(false);
+  } 
+  public void testDeclaredInForRange1()                             {
+    doFileTest(false);
+  }
+  public void testDeclaredInForRange2()                             {
+    doFileTest(false);
+  }
+  public void testDeclaredInForRangeAsValue()                       {
+    doFileTest(false);
+  }
+  public void testDeclaredInForClause()                             {
+    doFileTest(false);
+  }
+  public void testMethodReturn()                                    {
+    doFileTest(false);
+  }
+  public void testSimpleMethodParameter()                           {
+    doFileTest(false);
+  }
+  public void testMethodReturn2()                                   {
+    doFileTest(false);
+  }
+  public void testGlobalVarDeclaration()                            {
+    doFileTest(false);
+  }
+  public void testGlobalShadowedVarDeclaration()                    {
+    doFileTest(false);
+  }
+  public void testGlobalVarDeclarationFromBlock()                   {
+    doFileTest(false);
+  }
+  public void testShortVarDeclaration()                             {
+    doFileTest(false);
+  }
+  public void testShortVarRedeclaration()                           {
+    doFileTest(false);
+  }
+  public void testShortVarDeclarationFromBlock()                    {
+    doFileTest(false);
+  }
+  public void testGlobalConstDeclaration()                          {
+    doFileTest(false);
+  }
+  public void testResolveToMethodName()                             {
+    doFileTest(false);
+  }
+  public void testLocalConstDeclaration()                           {
+    doFileTest(false);
+  }
+  public void testChainedSelector()                                 {
+    doFileTest(false);
+  }
+  public void testVarInSwitchExpr()                                 {
+    doFileTest(false);
+  }
+  public void testVarInSwitchExprInitialization()                   {
+    doFileTest(false);
+  }
+  public void testVarInSwitchType()                                 {
+    doFileTest(false);
+  }
+  public void testVarInSwitchTypeInitialization()                   {
+    doFileTest(false);
+  }
+  public void testMultipleGlobalVars()                              {
+    doFileTest(false);
+  }
+  public void testMultipleGlobalConsts()                            {
+    doFileTest(false);
+  }
+  public void testDeclarationInsideLabeledStatement()               {
+    doFileTest(false);
+  }
+  public void testStructFieldViaChannel()                           {
+    doFileTest(false);
+  }
+  public void testShortVarDeclarationFromSelectClause()             {
+    doFileTest(false);
+  }
+  public void testVarDeclarationInSelectCommClauseRecv()            {
+    doFileTest(false);
+  }
+  public void testVarDeclarationInSelectCommClauseDefault()         {
+    doFileTest(false);
+  }
+  public void testRangeExpressionVarsShouldNotResolveToRangeVars()  {
+    doFileTest(false);
+  }
+  public void testVarDereferenceAsTypeCast()                        {
+    doFileTest(false);
+  }
+  public void testShortAssignToReturnVar()                          {
+    doFileTest(false);
+  }
+  public void testResolveToFunctionName()                           {
+    doFileTest(false);
+  }
+  public void testVarInSwitchTypeWithNamedSwitchGuard()             {
+    doFileTest(false);
+  }
+  public void testVarDeclarationInSelectCommClauseSend()            {
+    doFileTest(false);
+  }
+  public void testVarDeclarationOutsideSwitch()                     {
+    doFileTest(false);
+  }
+  public void testVarVsInnerTypes()                                 {
+    doFileTest(false);
+  }
+  public void testVarTypeGuard()                                    {
+    doFileTest(false);
+  }
 
   public void testFromDefaultImportedPackage()                      { doDirTest(); }
   public void testLocalPackageDefinitionsShouldBeResolvedFirst()    { doDirTest(); }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,12 @@ public class GoLegacyResolveStructTest extends GoLegacyResolveTestBase {
   @Override
   protected String getBasePath() { return "psi/resolve/struct"; }
 
-  public void testDirectStructField()                       { doTest(); } 
-  public void testAnonymousDirectStructField()              { doTest(); } 
-  public void testPromotedStructField()                     { doTest(); } 
-  public void testFieldVsParam()                            { doTest(); } 
-  public void testFieldVsParam2()                           { doTest(); } 
+  public void testDirectStructField()                       { doFileTest(false); } 
+  public void testAnonymousDirectStructField()              { doFileTest(false); } 
+  public void testPromotedStructField()                     { doFileTest(false); } 
+  public void testFieldVsParam()                            { doFileTest(false); } 
+  public void testFieldVsParam2()                           { doFileTest(false); }
+
   public void testDirectExportedFieldFromImportedPackage()  { doDirTest(); } 
   public void testDirectPrivateFieldFromImportedPackage()   { doDirTest(); }
 }

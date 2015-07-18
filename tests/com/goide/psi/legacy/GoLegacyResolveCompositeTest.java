@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,21 +20,21 @@ public class GoLegacyResolveCompositeTest extends GoLegacyResolveTestBase {
   @Override
   protected String getBasePath() { return "psi/resolve/composite"; }
 
-  public void testTypeName()                { doTest(); } 
-  public void testTypeStruct()              { doTest(); } 
-  public void testTypeStructArray()         { doTest(); } 
-  public void testTypeStructSlice()         { doTest(); } 
-  public void testTypeStructMap()           { doTest(); } 
-  public void testTypeNameArray()           { doTest(); } 
-  public void testTypeNameMap()             { doTest(); } 
-  public void testTypeNameSlice()           { doTest(); } 
-  public void testNestedStruct()            { doTest(); } 
-  public void testNestedNamedStruct()       { doTest(); } 
-  public void testKeyAsConstantExpression() { doTest(); } 
-  public void testExpressionKey()           { doTest(); } 
-  public void testPromotedAnonymousField1() { doTest(); } 
-  public void testPromotedAnonymousField2() { doTest(); } 
-  public void testPromotedAnonymousField3() { doTest(); } 
-  public void testPromotedAnonymousField4() { doTest(); } 
-  public void testTypeSwitch()              { doTest(); }
+  public void testTypeName()                { doFileTest(false); } 
+  public void testTypeStruct()              { doFileTest(false); } 
+  public void testTypeStructArray()         { doFileTest(false); } 
+  public void testTypeStructSlice()         { doFileTest(false); } 
+  public void testTypeStructMap()           { doFileTest(false); } 
+  public void testTypeNameArray()           { doFileTest(false); } 
+  public void testTypeNameMap()             { doFileTest(false); } 
+  public void testTypeNameSlice()           { doFileTest(false); } 
+  public void testNestedStruct()            { doFileTest(false); } 
+  public void testNestedNamedStruct()       { doFileTest(false); } 
+  public void testKeyAsConstantExpression() { doFileTest(false); } 
+  public void testExpressionKey()           { doFileTest(false); } 
+  public void testPromotedAnonymousField1() { doFileTest(false); } 
+  public void testPromotedAnonymousField2() { doFileTest(false); } 
+  public void testPromotedAnonymousField3() { doFileTest(false); } 
+  public void testPromotedAnonymousField4() { doFileTest(false); } 
+  public void testTypeSwitch()              { doFileTest(false); }
 }

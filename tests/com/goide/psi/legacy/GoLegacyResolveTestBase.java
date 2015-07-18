@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,8 +45,9 @@ public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCa
     return "psi/resolve";
   }
 
-  protected void doResolveTest(boolean lowercase) {
-    doResolveTest(getTestName(lowercase) + ".go");
+  protected void doFileTest(boolean lowercase) {
+    processPsiFile((GoFile)myFixture.configureByFile(getTestName(lowercase) + ".go"));
+    doResolveTest();
   }
   
   protected void doDirTest() {
@@ -59,8 +60,7 @@ public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCa
     }
   }
 
-  private void doResolveTest(@NotNull String filePath) {
-    processPsiFile((GoFile)myFixture.configureByFile(filePath));
+  private void doResolveTest() {
     if (myReference == null) fail("no reference defined in test case");
     PsiElement resolve = myReference.resolve();
     if (resolve != null && myDefinition == null && !allowNullDefinition()) fail("element resolved but it shouldn't have");
@@ -125,7 +125,6 @@ public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCa
         }
       )
     );
+    doResolveTest();
   }
-
-  protected void doTest() { doResolveTest(false); }
 }
