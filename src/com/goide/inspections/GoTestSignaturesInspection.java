@@ -27,15 +27,16 @@ import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Locale;
 
 public class GoTestSignaturesInspection extends GoInspectionBase {
-  private static String getTestingAlias(GoImportSpec testingImportSpec) {
+  private static String getTestingAlias(@Nullable GoImportSpec testingImportSpec) {
     if (testingImportSpec != null) {
       return !testingImportSpec.isDot() ? StringUtil.notNullize(testingImportSpec.getAlias(), GoConstants.TESTING_PATH) : "";
     }
@@ -84,23 +85,25 @@ public class GoTestSignaturesInspection extends GoInspectionBase {
 
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-      PsiElement function = descriptor.getStartElement().getParent();
-      GoSignature signature =
-        (function != null && function instanceof GoFunctionDeclaration) ? ((GoFunctionDeclaration)function).getSignature() : null;
+      PsiElement element = descriptor.getStartElement();
+      if (element == null) return;
+      GoFunctionDeclaration function = ObjectUtils.tryCast(element.getParent(), GoFunctionDeclaration.class);
+      GoSignature signature = function != null ? function.getSignature() : null;
       if (signature == null) return;
-      PsiFile file = signature.getContainingFile();
-      if (!(file instanceof GoFile)) return;
+      GoFile file = ObjectUtils.tryCast(signature.getContainingFile(), GoFile.class);
+      if (file == null) return;
+      
       if (myType == GoTestFunctionType.EXAMPLE) {
         signature.replace(GoElementFactory.createFunctionSignatureFromText(project, ""));
         return;
       }
-      GoImportSpec testingImportSpec = (((GoFile)file).getImportedPackagesMap().get(GoConstants.TESTING_PATH));
+      GoImportSpec testingImportSpec = (file.getImportedPackagesMap().get(GoConstants.TESTING_PATH));
       if (testingImportSpec == null) {
-        ((GoFile)file).addImport(GoConstants.TESTING_PATH, null);
+        file.addImport(GoConstants.TESTING_PATH, null);
       }
       String paramType = getProperParamType(getTestingAlias(testingImportSpec), myType);
-      signature
-        .replace(GoElementFactory.createFunctionSignatureFromText(project, myType.getParamType().toLowerCase(Locale.US) + " " + paramType));
+      String newSignature = myType.getParamType().toLowerCase(Locale.US) + " " + paramType;
+      signature.replace(GoElementFactory.createFunctionSignatureFromText(project, newSignature));
     }
   }
 }
