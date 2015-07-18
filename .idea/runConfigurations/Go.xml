@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Go" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin" singleton="true">
     <module name="intellij-go" />
@@ -23,7 +24,6 @@
     <method>
       <option name="BuildArtifacts" enabled="true">
         <artifact name="google-app-engine.jar" />
-        <artifact name="jps-plugin.jar" />
         <artifact name="utils.jar" />
       </option>
     </method>
