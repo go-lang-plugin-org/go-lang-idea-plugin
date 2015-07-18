@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,12 +44,13 @@ public class GoDescriptionProvider implements ElementDescriptionProvider {
     if (location == UsageViewTypeLocation.INSTANCE) {
       if (o instanceof GoMethodDeclaration) return "method";
       if (o instanceof GoFunctionDeclaration) return "function";
-      if (o instanceof GoConstDefinition) return "constant";
-      if (o instanceof GoVarDefinition) return "variable";
+      if (o instanceof GoConstDefinition || o instanceof GoConstDeclaration) return "constant";
+      if (o instanceof GoVarDefinition || o instanceof GoVarDeclaration) return "variable";
       if (o instanceof GoParamDefinition) return "parameter";
       if (o instanceof GoFieldDefinition) return "field";
       if (o instanceof GoAnonymousFieldDefinition) return "anonymous field";
-      if (o instanceof GoTypeSpec) return "type";
+      if (o instanceof GoTypeSpec || o instanceof GoTypeDeclaration) return "type";
+      if (o instanceof GoImportDeclaration) return "import";
       if (o instanceof GoImportSpec) return "import alias";
       if (o instanceof GoReceiver) return "receiver";
       if (o instanceof GoMethodSpec) return "method specification";

@@ -17,23 +17,30 @@
 package com.goide.inspections.suppression;
 
 import com.goide.psi.GoCompositeElement;
-import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.goide.psi.GoImportDeclaration;
 import com.goide.psi.GoStatement;
+import com.goide.psi.GoTopLevelDeclaration;
 import com.intellij.codeInsight.daemon.impl.actions.AbstractBatchSuppressByNoInspectionCommentFix;
 import com.intellij.codeInspection.InspectionSuppressor;
 import com.intellij.codeInspection.SuppressQuickFix;
 import com.intellij.codeInspection.SuppressionUtil;
+import com.intellij.openapi.extensions.Extensions;
+import com.intellij.psi.ElementDescriptionProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.usageView.UsageViewTypeLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoInspectionSuppressor implements InspectionSuppressor {
   @Override
   public boolean isSuppressedFor(@NotNull PsiElement element, @NotNull String toolId) {
+    GoTopLevelDeclaration topLevelDeclaration = PsiTreeUtil.getTopmostParentOfType(element, GoTopLevelDeclaration.class);
+    if (topLevelDeclaration != null && SuppressionUtil.isSuppressedInStatement(element, toolId, GoTopLevelDeclaration.class)) {
+      return true;
+    }
     return SuppressionUtil.isSuppressedInStatement(element, toolId, GoStatement.class) ||
-           SuppressionUtil.isSuppressedInStatement(element, toolId, GoFunctionOrMethodDeclaration.class) ||
+           SuppressionUtil.isSuppressedInStatement(element, toolId, GoTopLevelDeclaration.class) ||
            SuppressionUtil.isSuppressedInStatement(element, toolId, GoImportDeclaration.class);
   }
 
@@ -41,34 +48,64 @@ public class GoInspectionSuppressor implements InspectionSuppressor {
   @Override
   public SuppressQuickFix[] getSuppressActions(PsiElement element, @NotNull String toolId) {
     return new SuppressQuickFix[]{
-      new GoSuppressInspectionFix("Suppress all inspections for function", GoFunctionOrMethodDeclaration.class),
-      new GoSuppressInspectionFix(toolId, "Suppress for function", GoFunctionOrMethodDeclaration.class),
-      new GoSuppressInspectionFix("Suppress all inspections for statement", GoStatement.class),
-      new GoSuppressInspectionFix(toolId, "Suppress for statement", GoStatement.class),
-      new GoSuppressInspectionFix("Suppress all inspections for import", GoImportDeclaration.class),
-      new GoSuppressInspectionFix(toolId, "Suppress for import", GoImportDeclaration.class),
+      new GoSuppressInspectionFix("declaration", GoTopLevelDeclaration.class, true),
+      new GoSuppressInspectionFix(toolId, "declaration", GoTopLevelDeclaration.class, true),
+      new GoSuppressInspectionFix("statement", GoStatement.class, false),
+      new GoSuppressInspectionFix(toolId, "statement", GoStatement.class, false),
+      new GoSuppressInspectionFix("import", GoImportDeclaration.class, false),
+      new GoSuppressInspectionFix(toolId, "import", GoImportDeclaration.class, false),
     };
   }
 
   public static class GoSuppressInspectionFix extends AbstractBatchSuppressByNoInspectionCommentFix {
     private final Class<? extends GoCompositeElement> myContainerClass;
-  
-    public GoSuppressInspectionFix(@NotNull String text, Class<? extends GoCompositeElement> containerClass) {
+    private final String myBaseText;
+    private final boolean myTopMost;
+
+    public GoSuppressInspectionFix(@NotNull String elementDescription,
+                                   Class<? extends GoCompositeElement> containerClass,
+                                   boolean topMost) {
       super(SuppressionUtil.ALL, true);
-      setText(text);
+      myBaseText = "Suppress all inspections for ";
+      setText(myBaseText + elementDescription);
       myContainerClass = containerClass;
+      myTopMost = topMost;
     }
-  
-    public GoSuppressInspectionFix(@NotNull String ID, @NotNull String text, Class<? extends GoCompositeElement> containerClass) {
+
+    public GoSuppressInspectionFix(@NotNull String ID,
+                                   @NotNull String elementDescription,
+                                   Class<? extends GoCompositeElement> containerClass,
+                                   boolean topMost) {
       super(ID, false);
-      setText(text);
+      myBaseText = "Suppress for ";
+      setText(myBaseText + elementDescription);
+      myTopMost = topMost;
       myContainerClass = containerClass;
     }
-  
+
     @Override
     @Nullable
     public PsiElement getContainer(PsiElement context) {
-      return PsiTreeUtil.getNonStrictParentOfType(context, myContainerClass);
+      PsiElement container;
+      if (myTopMost) {
+        container = PsiTreeUtil.getTopmostParentOfType(context, myContainerClass);
+        if (container == null && myContainerClass.isInstance(context)) {
+          container = context;
+        }
+      }
+      else {
+        container = PsiTreeUtil.getNonStrictParentOfType(context, myContainerClass);
+      }
+      if (container != null) {
+        for (ElementDescriptionProvider provider : Extensions.getExtensions(ElementDescriptionProvider.EP_NAME)) {
+          String description = provider.getElementDescription(container, UsageViewTypeLocation.INSTANCE);
+          if (description != null) {
+            setText(myBaseText + description);
+            break;
+          }
+        }
+      }
+      return container;
     }
   }
 }
