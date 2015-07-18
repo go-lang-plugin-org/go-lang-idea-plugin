@@ -29,6 +29,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.RefactoringActionHandlerFactory;
+import com.intellij.refactoring.rename.RenameHandler;
+import com.intellij.refactoring.rename.RenameHandlerRegistry;
 import com.intellij.usageView.UsageViewTypeLocation;
 import com.intellij.util.Consumer;
 import org.jetbrains.annotations.NotNull;
@@ -47,19 +49,22 @@ public class GoRenameQuickFix extends LocalQuickFixOnPsiElement {
                      @NotNull PsiFile file,
                      @NotNull final PsiElement startElement,
                      @NotNull PsiElement endElement) {
-    if (!FileModificationService.getInstance().preparePsiElementsForWrite(startElement)) {
-      return;
-    }
+    if (!FileModificationService.getInstance().preparePsiElementsForWrite(startElement)) return;
 
-    RefactoringActionHandlerFactory factory = RefactoringActionHandlerFactory.getInstance();
-    final RefactoringActionHandler renameHandler = factory.createRenameHandler();
     Runnable runnable = new Runnable() {
       public void run() {
         final AsyncResult<DataContext> dataContextContainer = DataManager.getInstance().getDataContextFromFocus();
         dataContextContainer.doWhenDone(new Consumer<DataContext>() {
           @Override
           public void consume(DataContext dataContext) {
-            renameHandler.invoke(project, new PsiElement[]{startElement}, dataContext);
+            final RenameHandler renameHandler = RenameHandlerRegistry.getInstance().getRenameHandler(dataContext);
+            if (renameHandler != null) {
+              renameHandler.invoke(project, new PsiElement[]{startElement}, dataContext);
+            }
+            else {
+              RefactoringActionHandler renameRefactoringHandler = RefactoringActionHandlerFactory.getInstance().createRenameHandler();
+              renameRefactoringHandler.invoke(project, new PsiElement[]{startElement}, dataContext);
+            }
           }
         });
       }
@@ -76,7 +81,7 @@ public class GoRenameQuickFix extends LocalQuickFixOnPsiElement {
   public String getFamilyName() {
     return "Go";
   }
-  
+
   @NotNull
   @Override
   public String getText() {
