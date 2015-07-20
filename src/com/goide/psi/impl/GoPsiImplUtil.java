@@ -418,10 +418,10 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  private static GoType typeFromRefOrType(@Nullable GoType tt) {
-    if (tt == null) return null;
-    GoTypeReferenceExpression tr = getTypeReference(tt);
-    return tr != null ? getType(tr) : tt;
+  private static GoType typeFromRefOrType(@Nullable GoType t) {
+    if (t == null) return null;
+    GoTypeReferenceExpression tr = getTypeReference(t);
+    return tr != null ? getType(tr) : t;
   }
 
   @Nullable
@@ -564,7 +564,9 @@ public class GoPsiImplUtil {
     List<GoExpression> exprs = parent.getExpressionList();
     if (exprs.size() == 1 && exprs.get(0) instanceof GoCallExpr) {
       GoExpression call = exprs.get(0);
-      GoType type = funcType(typeFromRefOrType(call.getGoType(context)));
+      GoType fromCall = call.getGoType(context);
+      GoType type = funcType(typeFromRefOrType(fromCall));
+      if (type == null) return fromCall;
       if (type instanceof GoTypeList) {
         if (((GoTypeList)type).getTypeList().size() > i) {
           return ((GoTypeList)type).getTypeList().get(i);
