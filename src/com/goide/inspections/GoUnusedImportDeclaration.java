@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +19,14 @@ package com.goide.inspections;
 import com.goide.codeInsight.imports.GoImportOptimizer;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoImportSpec;
+import com.goide.psi.GoRecursiveVisitor;
 import com.intellij.codeInspection.*;
 import com.intellij.lang.ImportOptimizer;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiReference;
 import com.intellij.util.containers.MultiMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -60,7 +62,9 @@ public class GoUnusedImportDeclaration extends GoInspectionBase {
     for (GoImportSpec duplicatedImportSpec : GoImportOptimizer.findDuplicatedEntries(importMap)) {
       problemsHolder.registerProblem(duplicatedImportSpec, "Redeclared import", ProblemHighlightType.GENERIC_ERROR, OPTIMIZE_QUICK_FIX);
     }
-    
+    if (!problemsHolder.isOnTheFly()) {
+      resolveAllReferences(file);
+    }
     for (PsiElement importEntry : GoImportOptimizer.filterUnusedImports(file, importMap).values()) {
       GoImportSpec spec = GoImportOptimizer.getImportSpec(importEntry);
       if (spec != null) {
@@ -69,5 +73,16 @@ public class GoUnusedImportDeclaration extends GoInspectionBase {
         }
       }
     }
+  }
+
+  private static void resolveAllReferences(@NotNull GoFile file) {
+    file.accept(new GoRecursiveVisitor() {
+      @Override
+      public void visitElement(@NotNull PsiElement o) {
+        for (PsiReference reference : o.getReferences()) {
+          reference.resolve();
+        }
+      }
+    });
   }
 }
