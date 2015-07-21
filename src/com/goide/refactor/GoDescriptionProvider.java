@@ -16,15 +16,13 @@
 
 package com.goide.refactor;
 
-import com.goide.psi.*;
+import com.goide.psi.GoNamedElement;
 import com.intellij.codeInsight.highlighting.HighlightUsagesDescriptionLocation;
 import com.intellij.psi.ElementDescriptionLocation;
 import com.intellij.psi.ElementDescriptionProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.usageView.UsageViewLongNameLocation;
-import com.intellij.usageView.UsageViewNodeTextLocation;
 import com.intellij.usageView.UsageViewShortNameLocation;
-import com.intellij.usageView.UsageViewTypeLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,29 +30,11 @@ public class GoDescriptionProvider implements ElementDescriptionProvider {
   @Nullable
   @Override
   public String getElementDescription(@NotNull PsiElement o, @NotNull ElementDescriptionLocation location) {
-    if (o instanceof GoNamedElement && location == UsageViewNodeTextLocation.INSTANCE) {
-      return getElementDescription(o, UsageViewShortNameLocation.INSTANCE);
-    }
     if (o instanceof GoNamedElement && (location == UsageViewShortNameLocation.INSTANCE || location == UsageViewLongNameLocation.INSTANCE)) {
       return ((GoNamedElement)o).getName();
     }
     if (location == HighlightUsagesDescriptionLocation.INSTANCE) {
       return getElementDescription(o, UsageViewShortNameLocation.INSTANCE);
-    }
-    if (location == UsageViewTypeLocation.INSTANCE) {
-      if (o instanceof GoMethodDeclaration) return "method";
-      if (o instanceof GoFunctionDeclaration) return "function";
-      if (o instanceof GoConstDefinition || o instanceof GoConstDeclaration) return "constant";
-      if (o instanceof GoVarDefinition || o instanceof GoVarDeclaration) return "variable";
-      if (o instanceof GoParamDefinition) return "parameter";
-      if (o instanceof GoFieldDefinition) return "field";
-      if (o instanceof GoAnonymousFieldDefinition) return "anonymous field";
-      if (o instanceof GoTypeSpec || o instanceof GoTypeDeclaration) return "type";
-      if (o instanceof GoImportDeclaration) return "import";
-      if (o instanceof GoImportSpec) return "import alias";
-      if (o instanceof GoReceiver) return "receiver";
-      if (o instanceof GoMethodSpec) return "method specification";
-      if (o instanceof GoLabelDefinition) return "label";
     }
     return null;
   }

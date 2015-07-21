@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package com.goide;
 
 import com.goide.lexer.GoLexer;
-import com.goide.psi.GoNamedElement;
+import com.goide.psi.*;
 import com.intellij.lang.HelpID;
 import com.intellij.lang.cacheBuilder.DefaultWordsScanner;
 import com.intellij.lang.cacheBuilder.WordsScanner;
@@ -26,8 +26,7 @@ import com.intellij.psi.ElementDescriptionUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.usageView.UsageViewLongNameLocation;
-import com.intellij.usageView.UsageViewNodeTextLocation;
-import com.intellij.usageView.UsageViewTypeLocation;
+import com.intellij.usageView.UsageViewShortNameLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -53,7 +52,19 @@ public class GoFindUsagesProvider implements FindUsagesProvider {
   @NotNull
   @Override
   public String getType(@NotNull PsiElement element) {
-    return ElementDescriptionUtil.getElementDescription(element, UsageViewTypeLocation.INSTANCE);
+    if (element instanceof GoMethodDeclaration) return "method";
+    if (element instanceof GoFunctionDeclaration) return "function";
+    if (element instanceof GoConstDefinition) return "constant";
+    if (element instanceof GoVarDefinition) return "variable";
+    if (element instanceof GoParamDefinition) return "parameter";
+    if (element instanceof GoFieldDefinition) return "field";
+    if (element instanceof GoAnonymousFieldDefinition) return "anonymous field";
+    if (element instanceof GoTypeSpec) return "type";
+    if (element instanceof GoImportSpec) return "import alias";
+    if (element instanceof GoReceiver) return "receiver";
+    if (element instanceof GoMethodSpec) return "method specification";
+    if (element instanceof GoLabelDefinition) return "label";
+    throw new RuntimeException("Cannot find type name for element: " + element);
   }
 
   @NotNull
@@ -65,6 +76,6 @@ public class GoFindUsagesProvider implements FindUsagesProvider {
   @NotNull
   @Override
   public String getNodeText(@NotNull PsiElement element, boolean useFullName) {
-    return ElementDescriptionUtil.getElementDescription(element, UsageViewNodeTextLocation.INSTANCE);
+    return ElementDescriptionUtil.getElementDescription(element, UsageViewShortNameLocation.INSTANCE);
   }
 }
