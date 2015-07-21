@@ -29,7 +29,7 @@ public class GoInspectionUtil {
   public static final int UNKNOWN_COUNT = -1;
 
   public static int getExpressionResultCount(GoExpression call) {
-    if (call instanceof GoLiteral || call instanceof GoBinaryExpr || call instanceof GoParenthesesExpr ||
+    if (call instanceof GoLiteral || call instanceof GoStringLiteral || call instanceof GoBinaryExpr || call instanceof GoParenthesesExpr ||
         (call instanceof GoUnaryExpr && ((GoUnaryExpr)call).getSendChannel() == null) || call instanceof GoBuiltinCallExpr) {
       return 1;
     }
