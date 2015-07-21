@@ -24,8 +24,8 @@ import com.intellij.codeInsight.daemon.impl.actions.AbstractBatchSuppressByNoIns
 import com.intellij.codeInspection.InspectionSuppressor;
 import com.intellij.codeInspection.SuppressQuickFix;
 import com.intellij.codeInspection.SuppressionUtil;
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.psi.ElementDescriptionProvider;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.ElementDescriptionUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.usageView.UsageViewTypeLocation;
@@ -97,12 +97,9 @@ public class GoInspectionSuppressor implements InspectionSuppressor {
         container = PsiTreeUtil.getNonStrictParentOfType(context, myContainerClass);
       }
       if (container != null) {
-        for (ElementDescriptionProvider provider : Extensions.getExtensions(ElementDescriptionProvider.EP_NAME)) {
-          String description = provider.getElementDescription(container, UsageViewTypeLocation.INSTANCE);
-          if (description != null) {
-            setText(myBaseText + description);
-            break;
-          }
+        String description = ElementDescriptionUtil.getElementDescription(container, UsageViewTypeLocation.INSTANCE);
+        if (StringUtil.isNotEmpty(description)) {
+          setText(myBaseText + description);
         }
       }
       return container;
