@@ -76,8 +76,9 @@ public class GoRunUtil {
 
     FileIndexFacade indexFacade = FileIndexFacade.getInstance(psiElement.getProject());
     PsiFileSystemItem psiFile = psiElement instanceof PsiFileSystemItem ? (PsiFileSystemItem)psiElement : psiElement.getContainingFile();
-    VirtualFile file = psiFile.getVirtualFile();
-    if (file.getFileType() != ScratchFileType.INSTANCE && (!indexFacade.isInContent(file) || indexFacade.isExcludedFile(file))) {
+    VirtualFile file = psiFile != null ? psiFile.getVirtualFile() : null;
+    if (file != null && file.getFileType() != ScratchFileType.INSTANCE && 
+        (!indexFacade.isInContent(file) || indexFacade.isExcludedFile(file))) {
       return null;
     }
 
