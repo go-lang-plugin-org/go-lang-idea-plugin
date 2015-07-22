@@ -412,7 +412,7 @@ public class GoPsiImplUtil {
         }
       });
       if (spec != null) {
-        return spec.getSpecType(); // todo
+        return spec.getSpecType().getType(); // todo
       }
     }
     return null;
