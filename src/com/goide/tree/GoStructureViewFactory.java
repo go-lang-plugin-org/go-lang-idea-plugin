@@ -196,7 +196,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
       }
       else if (myElement instanceof GoTypeSpec) {
         GoTypeSpec typeSpec = (GoTypeSpec)myElement;
-        GoType type = (typeSpec).getType();
+        GoType type = typeSpec.getSpecType().getType();
         for (GoMethodDeclaration m : GoPsiImplUtil.getMethods(typeSpec)) result.add(new Element(m));
         if (type instanceof GoStructType) {
           for (GoFieldDeclaration field : ((GoStructType)type).getFieldDeclarationList()) {
@@ -223,10 +223,10 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
         return (id != null ? id.getText() : "") + signatureText;
       }
       else if (myElement instanceof GoTypeSpec) {
-        GoType type = ((GoTypeSpec)myElement).getType();
+        GoType type = ((GoTypeSpec)myElement).getSpecType().getType();
         String appendix = type instanceof GoStructType || type instanceof GoInterfaceType ?
                           "" :
-                          (type != null ? separator + GoPsiImplUtil.getText(type) : "");
+                          separator + GoPsiImplUtil.getText(type);
         return ((GoTypeSpec)myElement).getName() + appendix;
       }
       else if (myElement instanceof GoNamedElement) {

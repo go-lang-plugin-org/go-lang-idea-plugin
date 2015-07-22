@@ -19,6 +19,7 @@ package com.goide.psi.impl;
 import com.goide.psi.*;
 import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.sdk.GoSdkUtil;
+import com.goide.stubs.GoTypeStub;
 import com.goide.util.GoUtil;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Key;
@@ -171,11 +172,11 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     GoFile o2 = (GoFile)file.getOriginalFile();
     boolean localResolve = Comparing.equal(o1.getImportPath(), o2.getImportPath()) && Comparing.equal(o1.getPackageName(), o2.getPackageName());
 
-    PsiElement parent = type.getStub() == null ? type.getParent() : type.getStub().getParentStub().getPsi();
-    if (parent instanceof GoTypeSpec && !processNamedElements(processor, state, ((GoTypeSpec)parent).getMethods(), localResolve, true)) {
-      return false;
-    }
+    GoTypeStub stub = type.getStub();
+    PsiElement parent = stub == null ? type.getParent() : stub.getParentStub().getPsi();
+    if (parent instanceof GoTypeSpec && !processNamedElements(processor, state, ((GoTypeSpec)parent).getMethods(), localResolve, true)) return false;
 
+    if (type instanceof GoSpecType) type = ((GoSpecType)type).getType();
     if (type instanceof GoStructType) {
       GoScopeProcessorBase delegate = createDelegate(processor);
       type.processDeclarations(delegate, ResolveState.initial(), null, myElement);
@@ -221,19 +222,22 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
                                    @NotNull ResolveState state) {
     PsiReference reference = refExpr != null ? refExpr.getReference() : null;
     PsiElement resolve = reference != null ? reference.resolve() : null;
-    if (resolve instanceof GoTypeSpec) {
-      GoType resolveType = ((GoTypeSpec)resolve).getType();
-      if (notMatchRecursiveStopper(recursiveStopper, resolveType) && !processGoType(resolveType, processor, state)) return false;
-    }
-    else if (resolve instanceof GoTypeOwner) {
+    if (resolve instanceof GoTypeOwner) {
       GoType type = ((GoTypeOwner)resolve).getGoType(state);
-      if (notMatchRecursiveStopper(recursiveStopper, type) && !processGoType(type, processor, state)) return false;
+      if (notMatchRecursiveStopper(recursiveStopper, type)) {
+        if (!processGoType(type, processor, state)) return false;
+        if (type instanceof GoSpecType && !processGoType(((GoSpecType)type).getType(), processor, state)) return false;
+      }
     }
     return true;
   }
 
   private static boolean notMatchRecursiveStopper(@Nullable GoType recursiveStopper, @Nullable GoType resolveType) {
-    return resolveType != null && (recursiveStopper == null || !resolveType.textMatches(recursiveStopper));
+    if (resolveType == null) return false;
+    if (recursiveStopper == null) return true;
+    if (!resolveType.isEquivalentTo(recursiveStopper) &&
+        !(resolveType instanceof GoSpecType && ((GoSpecType)resolveType).getType().isEquivalentTo(recursiveStopper))) return true;
+    return false;
   }
 
   @Nullable

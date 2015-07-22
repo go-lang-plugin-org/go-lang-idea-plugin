@@ -10,11 +10,8 @@ import com.intellij.psi.ResolveState;
 
 public interface GoTypeSpec extends GoNamedElement, StubBasedPsiElement<GoTypeSpecStub> {
 
-  @Nullable
-  GoType getType();
-
   @NotNull
-  PsiElement getIdentifier();
+  GoSpecType getSpecType();
 
   @Nullable
   GoType getGoTypeInner(ResolveState context);
@@ -23,5 +20,8 @@ public interface GoTypeSpec extends GoNamedElement, StubBasedPsiElement<GoTypeSp
   List<GoMethodDeclaration> getMethods();
 
   boolean shouldGoDeeper();
+
+  @NotNull
+  PsiElement getIdentifier();
 
 }

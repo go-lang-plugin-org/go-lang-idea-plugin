@@ -71,7 +71,7 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
     }
 
     for (GoTypeSpec type : file.getTypes()) {
-      foldTypes(type.getType(), result);
+      foldTypes(type.getSpecType().getType(), result);
     }
 
     if (!quick) {

@@ -259,6 +259,9 @@ public class GoParser implements PsiParser {
     else if (t == SIMPLE_STATEMENT) {
       r = SimpleStatement(b, 0);
     }
+    else if (t == SPEC_TYPE) {
+      r = SpecType(b, 0);
+    }
     else if (t == STATEMENT) {
       r = Statement(b, 0);
     }
@@ -342,7 +345,7 @@ public class GoParser implements PsiParser {
       SELECTOR_EXPR),
     create_token_set_(ARRAY_OR_SLICE_TYPE, CHANNEL_TYPE, FUNCTION_TYPE, INTERFACE_TYPE,
       MAP_TYPE, PAR_TYPE, POINTER_TYPE, RECEIVER_TYPE,
-      STRUCT_TYPE, TYPE, TYPE_LIST),
+      SPEC_TYPE, STRUCT_TYPE, TYPE, TYPE_LIST),
     create_token_set_(ASSIGNMENT_STATEMENT, BREAK_STATEMENT, CONTINUE_STATEMENT, DEFER_STATEMENT,
       ELSE_STATEMENT, EXPR_SWITCH_STATEMENT, FALLTHROUGH_STATEMENT, FOR_STATEMENT,
       GOTO_STATEMENT, GO_STATEMENT, IF_STATEMENT, LABELED_STATEMENT,
@@ -3298,6 +3301,19 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // identifier Type
+  public static boolean SpecType(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SpecType")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, IDENTIFIER);
+    r = r && Type(b, l + 1);
+    exit_section_(b, m, SPEC_TYPE, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // ConstDeclaration
   //   | TypeDeclaration
   //   | VarDeclaration
@@ -3838,17 +3854,15 @@ public class GoParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // identifier Type
+  // SpecType
   public static boolean TypeSpec(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeSpec")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, null);
-    r = consumeToken(b, IDENTIFIER);
-    p = r; // pin = 1
-    r = r && Type(b, l + 1);
-    exit_section_(b, l, m, TYPE_SPEC, r, p, null);
-    return r || p;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = SpecType(b, l + 1);
+    exit_section_(b, m, TYPE_SPEC, r);
+    return r;
   }
 
   /* ********************************************************** */

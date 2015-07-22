@@ -91,6 +91,7 @@ public interface GoTypes {
   IElementType SHORT_VAR_DECLARATION = GoStubElementTypeFactory.factory("SHORT_VAR_DECLARATION");
   IElementType SIGNATURE = GoStubElementTypeFactory.factory("SIGNATURE");
   IElementType SIMPLE_STATEMENT = new GoCompositeElementType("SIMPLE_STATEMENT");
+  IElementType SPEC_TYPE = GoStubElementTypeFactory.factory("SPEC_TYPE");
   IElementType STATEMENT = new GoCompositeElementType("STATEMENT");
   IElementType STRING_LITERAL = new GoCompositeElementType("STRING_LITERAL");
   IElementType STRUCT_TYPE = GoStubElementTypeFactory.factory("STRUCT_TYPE");
@@ -439,6 +440,9 @@ public interface GoTypes {
       }
       else if (type == SIMPLE_STATEMENT) {
         return new GoSimpleStatementImpl(node);
+      }
+      else if (type == SPEC_TYPE) {
+        return new GoSpecTypeImpl(node);
       }
       else if (type == STATEMENT) {
         return new GoStatementImpl(node);

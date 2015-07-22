@@ -11,17 +11,18 @@ GO_FILE
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
-      PsiElement(identifier)('Car')
-      STRUCT_TYPE
-        PsiElement(struct)('struct')
-        PsiElement({)('{')
-        FIELD_DECLARATION
-          FIELD_DEFINITION
-            PsiElement(identifier)('wheelCount')
-          TYPE
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(identifier)('int')
-        PsiElement(})('}')
+      SPEC_TYPE
+        PsiElement(identifier)('Car')
+        STRUCT_TYPE
+          PsiElement(struct)('struct')
+          PsiElement({)('{')
+          FIELD_DECLARATION
+            FIELD_DEFINITION
+              PsiElement(identifier)('wheelCount')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('int')
+          PsiElement(})('}')
   METHOD_DECLARATION
     PsiElement(func)('func')
     RECEIVER
@@ -53,15 +54,16 @@ GO_FILE
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
-      PsiElement(identifier)('Ferrari')
-      STRUCT_TYPE
-        PsiElement(struct)('struct')
-        PsiElement({)('{')
-        FIELD_DECLARATION
-          ANONYMOUS_FIELD_DEFINITION
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(identifier)('Car')
-        PsiElement(})('}')
+      SPEC_TYPE
+        PsiElement(identifier)('Ferrari')
+        STRUCT_TYPE
+          PsiElement(struct)('struct')
+          PsiElement({)('{')
+          FIELD_DECLARATION
+            ANONYMOUS_FIELD_DEFINITION
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('Car')
+          PsiElement(})('}')
   METHOD_DECLARATION
     PsiElement(func)('func')
     RECEIVER
@@ -95,15 +97,16 @@ GO_FILE
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
-      PsiElement(identifier)('AstonMartin')
-      STRUCT_TYPE
-        PsiElement(struct)('struct')
-        PsiElement({)('{')
-        FIELD_DECLARATION
-          ANONYMOUS_FIELD_DEFINITION
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(identifier)('Car')
-        PsiElement(})('}')
+      SPEC_TYPE
+        PsiElement(identifier)('AstonMartin')
+        STRUCT_TYPE
+          PsiElement(struct)('struct')
+          PsiElement({)('{')
+          FIELD_DECLARATION
+            ANONYMOUS_FIELD_DEFINITION
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('Car')
+          PsiElement(})('}')
   METHOD_DECLARATION
     PsiElement(func)('func')
     RECEIVER

@@ -238,24 +238,25 @@ GO_FILE
         TYPE_DECLARATION
           PsiElement(type)('type')
           TYPE_SPEC
-            PsiElement(identifier)('M2')
-            STRUCT_TYPE
-              PsiElement(struct)('struct')
-              PsiElement({)('{')
-              FIELD_DECLARATION
-                FIELD_DEFINITION
-                  PsiElement(identifier)('name')
-                TYPE
-                  TYPE_REFERENCE_EXPRESSION
-                    PsiElement(identifier)('string')
-              PsiElement(;)(';')
-              FIELD_DECLARATION
-                FIELD_DEFINITION
-                  PsiElement(identifier)('want')
-                TYPE
-                  TYPE_REFERENCE_EXPRESSION
-                    PsiElement(identifier)('int')
-              PsiElement(})('}')
+            SPEC_TYPE
+              PsiElement(identifier)('M2')
+              STRUCT_TYPE
+                PsiElement(struct)('struct')
+                PsiElement({)('{')
+                FIELD_DECLARATION
+                  FIELD_DEFINITION
+                    PsiElement(identifier)('name')
+                  TYPE
+                    TYPE_REFERENCE_EXPRESSION
+                      PsiElement(identifier)('string')
+                PsiElement(;)(';')
+                FIELD_DECLARATION
+                  FIELD_DEFINITION
+                    PsiElement(identifier)('want')
+                  TYPE
+                    TYPE_REFERENCE_EXPRESSION
+                      PsiElement(identifier)('int')
+                PsiElement(})('}')
       FOR_STATEMENT
         PsiElement(for)('for')
         RANGE_CLAUSE

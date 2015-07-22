@@ -116,7 +116,7 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
 
   private static ElementPattern<? extends PsiElement> typeDeclaration() {
     return psiElement(GoTypes.IDENTIFIER)
-      .withParent(psiElement(GoTypeReferenceExpression.class).withParent(psiElement(GoType.class).withParent(GoTypeSpec.class)));
+      .withParent(psiElement(GoTypeReferenceExpression.class).withParent(psiElement(GoType.class).withParent(GoSpecType.class)));
   }
 
   private static PsiElementPattern.Capture<PsiElement> insideGoOrDeferStatements(@NotNull IElementType tokenType) {

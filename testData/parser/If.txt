@@ -11,11 +11,12 @@ GO_FILE
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
-      PsiElement(identifier)('A')
-      STRUCT_TYPE
-        PsiElement(struct)('struct')
-        PsiElement({)('{')
-        PsiElement(})('}')
+      SPEC_TYPE
+        PsiElement(identifier)('A')
+        STRUCT_TYPE
+          PsiElement(struct)('struct')
+          PsiElement({)('{')
+          PsiElement(})('}')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
     PsiElement(identifier)('main')
@@ -165,11 +166,12 @@ GO_FILE
         TYPE_DECLARATION
           PsiElement(type)('type')
           TYPE_SPEC
-            PsiElement(identifier)('A')
-            STRUCT_TYPE
-              PsiElement(struct)('struct')
-              PsiElement({)('{')
-              PsiElement(})('}')
+            SPEC_TYPE
+              PsiElement(identifier)('A')
+              STRUCT_TYPE
+                PsiElement(struct)('struct')
+                PsiElement({)('{')
+                PsiElement(})('}')
       IF_STATEMENT
         PsiElement(if)('if')
         SIMPLE_STATEMENT

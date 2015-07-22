@@ -363,6 +363,7 @@ public class GoPsiImplUtil {
       if (typeRef != null) {
         type = getType(typeRef);
       }
+      if (type instanceof GoSpecType) type = ((GoSpecType)type).getType();
       if (type instanceof GoMapType) {
         List<GoType> list = ((GoMapType)type).getTypeList();
         if (list.size() == 2) {
@@ -411,7 +412,7 @@ public class GoPsiImplUtil {
         }
       });
       if (str != null) {
-        return str.getType();
+        return str.getSpecType(); // todo
       }
     }
     return null;
@@ -507,7 +508,7 @@ public class GoPsiImplUtil {
   public static GoType getType(@Nullable GoTypeReferenceExpression expression) {
     PsiReference reference = expression != null ? expression.getReference() : null;
     PsiElement resolve = reference != null ? reference.resolve() : null;
-    return resolve instanceof GoTypeSpec ? ((GoTypeSpec)resolve).getType() : null;
+    return resolve instanceof GoTypeSpec ? ((GoTypeSpec)resolve).getSpecType() : null;
   }
 
   public static boolean isVariadic(@NotNull GoParamDefinition o) {
@@ -522,7 +523,7 @@ public class GoPsiImplUtil {
 
   @Nullable
   public static GoType getGoTypeInner(@NotNull GoTypeSpec o, @SuppressWarnings("UnusedParameters") @Nullable ResolveState context) {
-    return o.getType();
+    return o.getSpecType();
   }
 
   @Nullable
@@ -565,7 +566,10 @@ public class GoPsiImplUtil {
     if (exprs.size() == 1 && exprs.get(0) instanceof GoCallExpr) {
       GoExpression call = exprs.get(0);
       GoType fromCall = call.getGoType(context);
-      GoType type = funcType(typeFromRefOrType(fromCall));
+      boolean canDecouple = varList.size() > 1;
+      GoType underlyingType = canDecouple && fromCall instanceof GoSpecType ? ((GoSpecType)fromCall).getType() : fromCall;
+      GoType byRef = typeFromRefOrType(underlyingType);
+      GoType type = funcType(canDecouple && byRef instanceof GoSpecType ? ((GoSpecType)byRef).getType() : byRef);
       if (type == null) return fromCall;
       if (type instanceof GoTypeList) {
         if (((GoTypeList)type).getTypeList().size() > i) {
@@ -607,7 +611,7 @@ public class GoPsiImplUtil {
       if (typeRef != null) {
         PsiElement resolve = typeRef.getReference().resolve();
         if (resolve instanceof GoTypeSpec) {
-          type = ((GoTypeSpec)resolve).getType();
+          type = ((GoTypeSpec)resolve).getSpecType().getType();
           if (type instanceof GoChannelType) {
             return ((GoChannelType)type).getType();
           }
@@ -678,6 +682,11 @@ public class GoPsiImplUtil {
       });
     }
     return calcMethods(o);
+  }
+
+  @NotNull
+  public PsiElement getType(@NotNull GoTypeSpec o) {
+    return o.getSpecType();
   }
 
   @NotNull

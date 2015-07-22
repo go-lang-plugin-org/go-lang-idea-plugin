@@ -402,3 +402,11 @@ func _(c Conn) {
 	String(c.Do("GET", "somekey"))
 }
 
+type MyType string
+
+func (t MyType) Get(key string) string { return "hello" }
+
+func _() {
+	st := MyType("tag")
+	st.Get("key") // <- unresolved Get
+}

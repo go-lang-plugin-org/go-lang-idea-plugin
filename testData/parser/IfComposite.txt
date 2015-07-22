@@ -44,20 +44,21 @@ GO_FILE
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
-      PsiElement(identifier)('osPkg')
-      STRUCT_TYPE
-        PsiElement(struct)('struct')
-        PsiElement({)('{')
-        FIELD_DECLARATION
-          FIELD_DEFINITION
-            PsiElement(identifier)('goos')
-          PsiElement(,)(',')
-          FIELD_DEFINITION
-            PsiElement(identifier)('pkg')
-          TYPE
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(identifier)('string')
-        PsiElement(})('}')
+      SPEC_TYPE
+        PsiElement(identifier)('osPkg')
+        STRUCT_TYPE
+          PsiElement(struct)('struct')
+          PsiElement({)('{')
+          FIELD_DECLARATION
+            FIELD_DEFINITION
+              PsiElement(identifier)('goos')
+            PsiElement(,)(',')
+            FIELD_DEFINITION
+              PsiElement(identifier)('pkg')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('string')
+          PsiElement(})('}')
   VAR_DECLARATION
     PsiElement(var)('var')
     VAR_SPEC

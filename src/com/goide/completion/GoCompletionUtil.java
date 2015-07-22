@@ -202,7 +202,7 @@ public class GoCompletionUtil {
 
   @NotNull
   public static InsertHandler<LookupElement> getTypeConversionInsertHandler(@NotNull GoTypeSpec t) {
-    GoType type = t.getType();
+    GoType type = t.getSpecType().getType();
     return type instanceof GoStructType || type instanceof GoArrayOrSliceType || type instanceof GoMapType
            ? BracesInsertHandler.ONE_LINER
            : ParenthesesInsertHandler.WITH_PARAMETERS;

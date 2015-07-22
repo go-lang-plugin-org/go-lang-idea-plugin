@@ -7,11 +7,12 @@ GO_FILE
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
-      PsiElement(identifier)('connection')
-      INTERFACE_TYPE
-        PsiElement(interface)('interface')
-        PsiElement({)('{')
-        PsiElement(})('}')
+      SPEC_TYPE
+        PsiElement(identifier)('connection')
+        INTERFACE_TYPE
+          PsiElement(interface)('interface')
+          PsiElement({)('{')
+          PsiElement(})('}')
   METHOD_DECLARATION
     PsiElement(func)('func')
     RECEIVER

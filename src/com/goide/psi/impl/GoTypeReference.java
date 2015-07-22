@@ -175,7 +175,7 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
   }
 
   public boolean allowed(@NotNull GoTypeSpec definition) {
-    return !myInsideInterfaceType || (definition.getType() instanceof GoInterfaceType);
+    return !myInsideInterfaceType || (definition.getSpecType().getType() instanceof GoInterfaceType);
   }
 
   @Override
