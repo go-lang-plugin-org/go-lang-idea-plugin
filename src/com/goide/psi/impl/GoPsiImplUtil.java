@@ -405,14 +405,14 @@ public class GoPsiImplUtil {
   private static GoType getBuiltinType(@NotNull GoExpression o, @NotNull final String name) {
     GoFile builtin = GoSdkUtil.findBuiltinFile(o);
     if (builtin != null) {
-      GoTypeSpec str = ContainerUtil.find(builtin.getTypes(), new Condition<GoTypeSpec>() {
+      GoTypeSpec spec = ContainerUtil.find(builtin.getTypes(), new Condition<GoTypeSpec>() {
         @Override
         public boolean value(GoTypeSpec spec) {
           return name.equals(spec.getName());
         }
       });
-      if (str != null) {
-        return str.getSpecType(); // todo
+      if (spec != null) {
+        return spec.getSpecType(); // todo
       }
     }
     return null;
