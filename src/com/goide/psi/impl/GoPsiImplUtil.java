@@ -153,7 +153,7 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
-  public static GoReference getReference(@NotNull final GoReferenceExpression o) {
+  public static GoReference getReference(@NotNull GoReferenceExpression o) {
     return new GoReference(o);
   }
 
@@ -298,7 +298,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType getGoType(@NotNull final GoExpression o, @Nullable final ResolveState context) {
+  public static GoType getGoType(@NotNull final GoExpression o, @Nullable ResolveState context) {
     if (context != null) return getGoTypeInner(o, context);
     return CachedValuesManager.getCachedValue(o, new CachedValueProvider<GoType>() {
       @Nullable
@@ -310,7 +310,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType getGoTypeInner(@NotNull final GoExpression o, @Nullable ResolveState context) {
+  public static GoType getGoTypeInner(@NotNull GoExpression o, @Nullable ResolveState context) {
     if (o instanceof GoUnaryExpr) {
       GoExpression expression = ((GoUnaryExpr)o).getExpression();
       if (expression != null) {
@@ -648,7 +648,7 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
-  public static List<GoMethodSpec> getMethods(@NotNull final GoInterfaceType o) {
+  public static List<GoMethodSpec> getMethods(@NotNull GoInterfaceType o) {
     return ContainerUtil.filter(o.getMethodSpecList(), new Condition<GoMethodSpec>() {
       @Override
       public boolean value(@NotNull GoMethodSpec spec) {
@@ -658,7 +658,7 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
-  public static List<GoTypeReferenceExpression> getBaseTypesReferences(@NotNull final GoInterfaceType o) {
+  public static List<GoTypeReferenceExpression> getBaseTypesReferences(@NotNull GoInterfaceType o) {
     final List<GoTypeReferenceExpression> refs = ContainerUtil.newArrayList();
     o.accept(new GoRecursiveVisitor() {
       @Override
@@ -806,7 +806,7 @@ public class GoPsiImplUtil {
   private static GoImportSpec addImportDeclaration(@NotNull GoImportList importList, @NotNull GoImportDeclaration newImportDeclaration) {
     GoImportDeclaration lastImport = ContainerUtil.getLastItem(importList.getImportDeclarationList());
     GoImportDeclaration importDeclaration = (GoImportDeclaration)importList.addAfter(newImportDeclaration, lastImport);
-    final PsiElement importListNextSibling = importList.getNextSibling();
+    PsiElement importListNextSibling = importList.getNextSibling();
     if (!(importListNextSibling instanceof PsiWhiteSpace)) {
       importList.addAfter(GoElementFactory.createNewLine(importList.getProject()), importDeclaration);
       if (importListNextSibling != null) {
@@ -869,7 +869,7 @@ public class GoPsiImplUtil {
       return stub.getAlias();
     }
     
-    final PsiElement identifier = importSpec.getIdentifier();
+    PsiElement identifier = importSpec.getIdentifier();
     if (identifier != null) {
       return identifier.getText();
     }
@@ -891,11 +891,9 @@ public class GoPsiImplUtil {
   @NotNull
   public static String getPath(@NotNull GoImportString importString) {
     String text = importString.getText();
-    if (!text.isEmpty()) {
-      char quote = text.charAt(0);
-      return isQuote(quote) ? StringUtil.unquoteString(text, quote) : text;
-    }
-    return "";
+    if (StringUtil.isEmpty(text)) return "";
+    char quote = text.charAt(0);
+    return isQuote(quote) ? StringUtil.unquoteString(text, quote) : text;
   }
 
   @NotNull

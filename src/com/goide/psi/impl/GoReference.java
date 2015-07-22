@@ -45,7 +45,7 @@ import static com.goide.psi.impl.GoPsiImplUtil.*;
 
 public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressionBase> {
   public static final Key<List<? extends PsiElement>> IMPORT_USERS = Key.create("IMPORT_USERS");
-  public static final Key<String > ACTUAL_NAME = Key.create("ACTUAL_NAME");
+  public static final Key<String> ACTUAL_NAME = Key.create("ACTUAL_NAME");
   public static final Key<Object> POINTER = Key.create("POINTER");
   public static final Key<Object> RECEIVER = Key.create("RECEIVER");
   public static final Key<SmartPsiElementPointer<GoReferenceExpressionBase>> CONTEXT = Key.create("CONTEXT");
@@ -99,7 +99,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
   @Override
   @NotNull
-  public ResolveResult[] multiResolve(final boolean incompleteCode) {
+  public ResolveResult[] multiResolve(boolean incompleteCode) {
     if (!myElement.isValid()) return ResolveResult.EMPTY_ARRAY;
     return ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, MY_RESOLVER, false, false);
   }
@@ -180,8 +180,8 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     if (type instanceof GoStructType) {
       GoScopeProcessorBase delegate = createDelegate(processor);
       type.processDeclarations(delegate, ResolveState.initial(), null, myElement);
-      final List<GoTypeReferenceExpression> interfaceRefs = ContainerUtil.newArrayList();
-      final List<GoTypeReferenceExpression> structRefs = ContainerUtil.newArrayList();
+      List<GoTypeReferenceExpression> interfaceRefs = ContainerUtil.newArrayList();
+      List<GoTypeReferenceExpression> structRefs = ContainerUtil.newArrayList();
       for (GoFieldDeclaration d : ((GoStructType)type).getFieldDeclarationList()) {
         if (!processNamedElements(processor, state, d.getFieldDefinitionList(), localResolve)) return false;
         GoAnonymousFieldDefinition anon = d.getAnonymousFieldDefinition();
@@ -360,7 +360,8 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
   @NotNull
   public ResolveState createContext() {
-    return ResolveState.initial().put(CONTEXT, SmartPointerManager.getInstance(myElement.getProject()).createSmartPsiElementPointer(myElement));
+    return ResolveState.initial().put(CONTEXT,
+                                      SmartPointerManager.getInstance(myElement.getProject()).createSmartPsiElementPointer(myElement));
   }
 
   @NotNull
