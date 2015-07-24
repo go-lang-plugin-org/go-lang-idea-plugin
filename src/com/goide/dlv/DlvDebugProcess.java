@@ -92,7 +92,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     VirtualFile file = breakpointPosition.getFile();
     int line = breakpointPosition.getLine();
     DlvVm vm = (DlvVm)getVm();
-    Promise<Breakpoint> promise = vm.getCommandProcessor().send(new DlvSetBreakpoint(file.getCanonicalPath(), line));
+    Promise<Breakpoint> promise = vm.getCommandProcessor().send(new DlvSetBreakpoint(file.getCanonicalPath(), line + 1));
     promise.processed(new Consumer<Breakpoint>() {
       @Override
       public void consume(Breakpoint b) {
