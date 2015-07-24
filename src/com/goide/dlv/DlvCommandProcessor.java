@@ -18,7 +18,6 @@ package com.goide.dlv;
 
 import com.goide.dlv.protocol.Breakpoint;
 import com.goide.dlv.protocol.CommandResponse;
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.intellij.util.containers.ContainerUtil;
@@ -31,6 +30,7 @@ import org.jetbrains.rpc.MessageWriter;
 import org.jetbrains.rpc.RequestCallback;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +58,6 @@ public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, CommandR
 
   @Override
   public void acceptNonSequence(JsonReaderEx message) {
-
   }
 
   public MessageManager<Request, JsonReaderEx, CommandResponse, CommandResponse> getMessageManager() {
@@ -92,50 +91,16 @@ public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, CommandR
   }
   @Override
   public <RESULT> RESULT readResult(@NotNull String readMethodName, @NotNull CommandResponse successResponse) {
-    System.out.println(readMethodName);
-    System.out.println(successResponse);
-    Gson gson = new GsonBuilder().create();
     JsonReader reader = successResponse.result().asGson();
-    Object o = gson.fromJson(reader, Breakpoint.class);
+    Object o = new GsonBuilder().create().fromJson(reader, getT(readMethodName));
+    //noinspection unchecked
     return (RESULT)o;
-    //gson.fromJson(new JsonReader(successResponse.result()), DlvSetBreakpoint.Breakpoint.class);
-    //try {
-    //  return (RESULT)gson.getAdapter(Object.class).fromJson(successResponse.result().toString());
-    //}
-    //catch (IOException e) {
-    //  e.printStackTrace();
-    //}
-    //return null;
   }
 
-  //@SuppressWarnings("unchecked")
-  //public <T> T fromJson(Gson gson, JsonReaderEx reader, Type typeOfT) throws JsonIOException, JsonSyntaxException {
-  //  boolean isEmpty = true;
-  //  boolean oldLenient = reader.isLenient();
-  //  reader.setLenient(true);
-  //  try {
-  //    reader.peek();
-  //    isEmpty = false;
-  //    TypeToken<T> typeToken = (TypeToken<T>) TypeToken.get(typeOfT);
-  //    TypeAdapter<T> typeAdapter = gson.getAdapter(typeToken);
-  //    T object = typeAdapter.read(reader);
-  //    return object;
-  //  } catch (EOFException e) {
-  //    /*
-  //     * For compatibility with JSON 1.5 and earlier, we return null for empty
-  //     * documents instead of throwing.
-  //     */
-  //    if (isEmpty) {
-  //      return null;
-  //    }
-  //    throw new JsonSyntaxException(e);
-  //  } catch (IllegalStateException e) {
-  //    throw new JsonSyntaxException(e);
-  //  } catch (IOException e) {
-  //    // TODO(inder): Figure out whether it is indeed right to rethrow this as JsonSyntaxException
-  //    throw new JsonSyntaxException(e);
-  //  } finally {
-  //    reader.setLenient(oldLenient);
-  //  }
-  //}
+  @NotNull
+  private static Type getT(@NotNull String method) {
+    if (method.equals("RPCServer.CreateBreakpoint")) return Breakpoint.class;
+    if (method.equals("RPCServer.ClearBreakpoint")) return Breakpoint.class;
+    return Object.class;
+  }
 }
