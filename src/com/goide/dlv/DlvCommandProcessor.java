@@ -89,6 +89,7 @@ public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, CommandR
       callback.onError(Promise.createError(message));
     }
   }
+  
   @Override
   public <RESULT> RESULT readResult(@NotNull String readMethodName, @NotNull CommandResponse successResponse) {
     JsonReader reader = successResponse.result().asGson();
