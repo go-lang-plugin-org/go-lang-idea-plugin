@@ -104,8 +104,8 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     });
     promise.rejected(new Consumer<Throwable>() {
       @Override
-      public void consume(Throwable throwable) {
-        throwable.printStackTrace();
+      public void consume(Throwable t) {
+        getSession().updateBreakpointPresentation(breakpoint, AllIcons.Debugger.Db_invalid_breakpoint, t == null ? null : t.getMessage());
       }
     });
   }
