@@ -1,0 +1,141 @@
+/*
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.goide.dlv;
+
+import com.goide.dlv.protocol.Breakpoint;
+import com.goide.dlv.protocol.CommandResponse;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
+import com.intellij.util.containers.ContainerUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.concurrency.Promise;
+import org.jetbrains.jsonProtocol.Request;
+import org.jetbrains.rpc.CommandProcessor;
+import org.jetbrains.rpc.MessageManager;
+import org.jetbrains.rpc.MessageWriter;
+import org.jetbrains.rpc.RequestCallback;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, CommandResponse, CommandResponse> {
+  private final MessageWriter myWriter;
+
+  public DlvCommandProcessor(@NotNull MessageWriter writer) {
+    myWriter = writer;
+  }
+
+  @Override
+  public boolean write(@NotNull Request message) throws IOException {
+    return myWriter.fun(message);
+  }
+
+  @Override
+  public CommandResponse readIfHasSequence(JsonReaderEx message) {
+    return new CommandResponse.CommandResponseImpl(message, null);
+  }
+
+  @Override
+  public int getSequence(CommandResponse response) {
+    return response.id();
+  }
+
+  @Override
+  public void acceptNonSequence(JsonReaderEx message) {
+
+  }
+
+  public MessageManager<Request, JsonReaderEx, CommandResponse, CommandResponse> getMessageManager() {
+    return messageManager;
+  }
+
+  @Override
+  public void call(CommandResponse response, RequestCallback<CommandResponse> callback) {
+    if (response.result() != null) {
+      callback.onSuccess(response, this);
+    }
+    else {
+      String message;
+      if (response.error() == null) {
+        message = "Internal messaging error";
+      }
+      else {
+        CommandResponse.ErrorInfo errorInfo = response.error();
+        if (ContainerUtil.isEmpty(errorInfo.data())) {
+          message = errorInfo.message();
+        }
+        else {
+          List<String> messageList = new ArrayList<String>();
+          messageList.add(errorInfo.message());
+          messageList.addAll(errorInfo.data());
+          message = messageList.toString();
+        }
+      }
+      callback.onError(Promise.createError(message));
+    }
+  }
+  @Override
+  public <RESULT> RESULT readResult(@NotNull String readMethodName, @NotNull CommandResponse successResponse) {
+    System.out.println(readMethodName);
+    System.out.println(successResponse);
+    Gson gson = new GsonBuilder().create();
+    JsonReader reader = successResponse.result().asGson();
+    Object o = gson.fromJson(reader, Breakpoint.class);
+    return (RESULT)o;
+    //gson.fromJson(new JsonReader(successResponse.result()), DlvSetBreakpoint.Breakpoint.class);
+    //try {
+    //  return (RESULT)gson.getAdapter(Object.class).fromJson(successResponse.result().toString());
+    //}
+    //catch (IOException e) {
+    //  e.printStackTrace();
+    //}
+    //return null;
+  }
+
+  //@SuppressWarnings("unchecked")
+  //public <T> T fromJson(Gson gson, JsonReaderEx reader, Type typeOfT) throws JsonIOException, JsonSyntaxException {
+  //  boolean isEmpty = true;
+  //  boolean oldLenient = reader.isLenient();
+  //  reader.setLenient(true);
+  //  try {
+  //    reader.peek();
+  //    isEmpty = false;
+  //    TypeToken<T> typeToken = (TypeToken<T>) TypeToken.get(typeOfT);
+  //    TypeAdapter<T> typeAdapter = gson.getAdapter(typeToken);
+  //    T object = typeAdapter.read(reader);
+  //    return object;
+  //  } catch (EOFException e) {
+  //    /*
+  //     * For compatibility with JSON 1.5 and earlier, we return null for empty
+  //     * documents instead of throwing.
+  //     */
+  //    if (isEmpty) {
+  //      return null;
+  //    }
+  //    throw new JsonSyntaxException(e);
+  //  } catch (IllegalStateException e) {
+  //    throw new JsonSyntaxException(e);
+  //  } catch (IOException e) {
+  //    // TODO(inder): Figure out whether it is indeed right to rethrow this as JsonSyntaxException
+  //    throw new JsonSyntaxException(e);
+  //  } finally {
+  //    reader.setLenient(oldLenient);
+  //  }
+  //}
+}

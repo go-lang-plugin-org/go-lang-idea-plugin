@@ -17,6 +17,8 @@
 package com.goide.runconfig;
 
 import com.goide.GoEnvironmentUtil;
+import com.goide.dlv.DlvDebugProcess;
+import com.goide.dlv.DlvRemoteVmConnection;
 import com.goide.runconfig.application.GoApplicationConfiguration;
 import com.goide.runconfig.application.GoApplicationRunningState;
 import com.goide.util.GoHistoryProcessListener;
@@ -26,6 +28,7 @@ import com.intellij.execution.RunProfileStarter;
 import com.intellij.execution.RunnerAndConfigurationSettings;
 import com.intellij.execution.configurations.RunProfile;
 import com.intellij.execution.configurations.RunProfileState;
+import com.intellij.execution.executors.DefaultDebugExecutor;
 import com.intellij.execution.executors.DefaultRunExecutor;
 import com.intellij.execution.process.ProcessAdapter;
 import com.intellij.execution.process.ProcessEvent;
@@ -36,13 +39,20 @@ import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.util.net.NetUtils;
+import com.intellij.xdebugger.XDebugProcess;
+import com.intellij.xdebugger.XDebugProcessStarter;
+import com.intellij.xdebugger.XDebugSession;
+import com.intellij.xdebugger.XDebuggerManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.concurrency.AsyncPromise;
 import org.jetbrains.concurrency.Promise;
+import org.jetbrains.debugger.connection.RemoteVmConnection;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 
 public class GoBuildingRunner extends AsyncGenericProgramRunner {
   private static final String ID = "GoBuildingRunner";
@@ -55,7 +65,10 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
 
   @Override
   public boolean canRun(@NotNull String executorId, @NotNull RunProfile profile) {
-    return DefaultRunExecutor.EXECUTOR_ID.equals(executorId) && profile instanceof GoApplicationConfiguration;
+    if (profile instanceof GoApplicationConfiguration) {
+      return DefaultRunExecutor.EXECUTOR_ID.equals(executorId) || DefaultDebugExecutor.EXECUTOR_ID.equals(executorId);
+    }
+    return false;
   }
 
   @NotNull
@@ -68,7 +81,7 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
     String configurationName = settings != null ? settings.getName() : "application";
     if (StringUtil.isEmpty(outputDirectoryPath)) {
       try {
-        outputFile = FileUtil.createTempFile(configurationName, GoEnvironmentUtil.getBinaryFileNameForPath("go"), true);
+        outputFile = FileUtil.createTempFile(configurationName, "go", true);
       }
       catch (IOException e) {
         throw new ExecutionException("Cannot create temporary output file", e);
@@ -127,7 +140,7 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
 
   private static boolean prepareFile(@NotNull File file) {
     try {
-      FileUtil.writeToFile(file, new byte[] { 0x7F, 'E', 'L', 'F' } );
+      FileUtil.writeToFile(file, new byte[]{0x7F, 'E', 'L', 'F'});
     }
     catch (IOException e) {
       return false;
@@ -146,11 +159,27 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
 
     @Nullable
     @Override
-    public RunContentDescriptor execute(@NotNull RunProfileState state, @NotNull ExecutionEnvironment env) throws ExecutionException {
+    public RunContentDescriptor execute(@NotNull RunProfileState state, @NotNull final ExecutionEnvironment env) throws ExecutionException {
       if (state instanceof GoApplicationRunningState) {
         FileDocumentManager.getInstance().saveAllDocuments();
         ((GoApplicationRunningState)state).setHistoryProcessHandler(myHistoryProcessListener);
         ((GoApplicationRunningState)state).setOutputFilePath(myOutputFilePath);
+        // todo: here is actually starting 
+        if (((GoApplicationRunningState)state).isDebug()) {
+
+          FileDocumentManager.getInstance().saveAllDocuments();
+
+          return XDebuggerManager.getInstance(env.getProject()).startSession(env, new XDebugProcessStarter() {
+            @NotNull
+            @Override
+            public XDebugProcess start(@NotNull XDebugSession session) throws ExecutionException {
+              RemoteVmConnection connection = new DlvRemoteVmConnection();
+              DlvDebugProcess process = new DlvDebugProcess(session, connection);
+              connection.open(new InetSocketAddress(NetUtils.getLoopbackAddress(), 9090));
+              return process;
+            }
+          }).getRunContentDescriptor();
+        }
         ExecutionResult executionResult = state.execute(env.getExecutor(), GoBuildingRunner.this);
         return executionResult != null ? new RunContentBuilder(executionResult, env).showRunContent(env.getContentToReuse()) : null;
       }

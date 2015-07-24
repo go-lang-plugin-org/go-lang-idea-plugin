@@ -28,6 +28,12 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class GoRunningState<T extends GoRunConfigurationBase<?>> extends CommandLineState {
   @NotNull protected final Module myModule;
+
+  @NotNull
+  public T getConfiguration() {
+    return myConfiguration;
+  }
+
   @NotNull protected final T myConfiguration;
 
   public GoRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module, @NotNull T configuration) {
