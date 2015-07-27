@@ -16,7 +16,6 @@
 
 package com.goide.dlv;
 
-import com.goide.dlv.rdp.DlvRequest;
 import com.intellij.openapi.vfs.CharsetToolkit;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
@@ -39,7 +38,6 @@ public class DlvVm extends VmBase implements StandaloneVmHelper.VmEx {
   private final DlvBreakpointManager breakpointManager = new DlvBreakpointManager(this);
   private final DlvScriptManager scriptManager = new DlvScriptManager();
   @NotNull private final DlvSuspendContextManager suspendContextManager;
-  String tabActor;
   String threadActor;
 
   public DlvVm(@NotNull DebugEventListener tabListener, @NotNull Channel channel) {
@@ -62,7 +60,7 @@ public class DlvVm extends VmBase implements StandaloneVmHelper.VmEx {
       @Override
       protected void messageReceived(ChannelHandlerContext context, Object message) throws Exception {
         if (message instanceof ByteBuf) {
-          System.out.println(((ByteBuf)message).toString(CharsetToolkit.UTF8_CHARSET));
+          System.out.println("IN: " + ((ByteBuf)message).toString(CharsetToolkit.UTF8_CHARSET));
           CharSequence string = ChannelBufferToString.readChars((ByteBuf)message);
           JsonReaderEx ex = new JsonReaderEx(string);
           getCommandProcessor().getMessageManager().processIncoming(ex);
@@ -74,7 +72,7 @@ public class DlvVm extends VmBase implements StandaloneVmHelper.VmEx {
   @Nullable
   @Override
   public Request createDisconnectRequest() {
-    return tabActor == null ? null : DlvRequest.detach(tabActor);
+    return null;
   }
 
   @NotNull
