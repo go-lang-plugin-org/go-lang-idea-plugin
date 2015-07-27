@@ -16,8 +16,11 @@
 
 package com.goide.dlv.rdp;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 public interface SourcesResult {
+  @NotNull
   List<Source> sources();
 }

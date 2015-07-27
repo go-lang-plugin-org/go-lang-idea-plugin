@@ -19,7 +19,7 @@ package com.goide.dlv.protocol;
 import org.jetbrains.annotations.NotNull;
 
 public final class DlvSimpleRequest<T> extends DlvRequest<T> {
-  private final String methodName;
+  @NotNull private final String methodName;
 
   public DlvSimpleRequest(@NotNull String methodName) {
     super(methodName);
@@ -27,6 +27,7 @@ public final class DlvSimpleRequest<T> extends DlvRequest<T> {
     this.methodName = methodName;
   }
 
+  @NotNull
   @Override
   public String getMethodName() {
     return methodName;

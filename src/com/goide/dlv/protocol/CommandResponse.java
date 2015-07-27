@@ -19,6 +19,7 @@ package com.goide.dlv.protocol;
 import com.goide.dlv.JsonReaderEx;
 import com.google.gson.stream.JsonToken;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jsonProtocol.JsonOptionalField;
 import org.jetbrains.jsonProtocol.JsonType;
 
@@ -29,16 +30,20 @@ import java.util.List;
 public interface CommandResponse {
   int id();
 
+  @Nullable
   @JsonOptionalField
   JsonReaderEx result();
 
+  @Nullable
   @JsonOptionalField
   ErrorInfo error();
 
   @JsonType
   interface ErrorInfo {
+    @NotNull
     String message();
 
+    @NotNull
     @JsonOptionalField
     List<String> data();
 
@@ -46,11 +51,11 @@ public interface CommandResponse {
   }
 
   final class CommandResponseImpl implements CommandResponse {
-    private CommandResponse.ErrorInfo _error;
+    @Nullable private CommandResponse.ErrorInfo _error;
     private int _id = -1;
-    private JsonReaderEx _result;
+    @Nullable private JsonReaderEx _result;
 
-    public CommandResponseImpl(JsonReaderEx reader, String name) {
+    public CommandResponseImpl(@NotNull JsonReaderEx reader, @Nullable String name) {
       if (name == null) {
         if (reader.hasNext() && reader.beginObject().hasNext()) {
           name = reader.nextName();
@@ -80,6 +85,7 @@ public interface CommandResponse {
       reader.endObject();
     }
 
+    @Nullable
     @Override
     public CommandResponse.ErrorInfo error() {
       return _error;
@@ -90,6 +96,7 @@ public interface CommandResponse {
       return _id;
     }
 
+    @Nullable
     @Override
     public JsonReaderEx result() {
       return _result;
@@ -98,10 +105,10 @@ public interface CommandResponse {
 
   final class M5m implements CommandResponse.ErrorInfo {
     private int _code = -1;
-    private List<String> _data = Collections.emptyList();
-    private String _message;
+    @NotNull private List<String> _data = Collections.emptyList();
+    @Nullable private String _message;
 
-    M5m(JsonReaderEx reader, String name) {
+    M5m(@NotNull JsonReaderEx reader, String name) {
       _message = nextNullableString(reader);
     }
 
@@ -110,6 +117,7 @@ public interface CommandResponse {
       return _code;
     }
 
+    @NotNull
     @Override
     public List<String> data() {
       return _data;
@@ -121,7 +129,7 @@ public interface CommandResponse {
       return _message;
     }
 
-    private static String nextNullableString(JsonReaderEx reader) {
+    private static String nextNullableString(@NotNull JsonReaderEx reader) {
       if (reader.peek() == JsonToken.NULL) {
         reader.nextNull();
         return null;
@@ -130,8 +138,5 @@ public interface CommandResponse {
         return reader.nextString();
       }
     }
-
   }
-  
-  
 }

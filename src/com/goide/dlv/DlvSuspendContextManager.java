@@ -32,14 +32,16 @@ import org.jetbrains.rpc.CommandProcessor;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class DlvSuspendContextManager extends SuspendContextManagerBase<DlvSuspendContext, DlvCallFrame> {
-  private final DlvVm vm;
+  @NotNull private final DlvVm vm;
 
-  final AtomicReference<AsyncPromise<CompletionValueYetAnotherPoorFirefoxRdpStructure>> clientEvaluate = new AtomicReference<AsyncPromise<CompletionValueYetAnotherPoorFirefoxRdpStructure>>();
+  final AtomicReference<AsyncPromise<CompletionValueYetAnotherPoorFirefoxRdpStructure>> clientEvaluate =
+    new AtomicReference<AsyncPromise<CompletionValueYetAnotherPoorFirefoxRdpStructure>>();
 
   DlvSuspendContextManager(@NotNull DlvVm vm) {
     this.vm = vm;
   }
 
+  @NotNull
   @Override
   protected DebugEventListener getDebugListener() {
     return vm.getDebugListener();
@@ -77,7 +79,7 @@ public class DlvSuspendContextManager extends SuspendContextManagerBase<DlvSuspe
       vm.commandProcessor.send(DlvRequest.getFrames(vm.threadActor))
         .done(new Consumer<FramesResult>() {
           @Override
-          public void consume(FramesResult result) {
+          public void consume(@NotNull FramesResult result) {
             DlvValueManager valueManager = new DlvValueManager(vm);
             CallFrame[] frames = DlvSuspendContext.createFrames(result, null, valueManager);
             doPaused(event, null, frames);

@@ -16,6 +16,7 @@
 
 package com.goide.dlv.rdp;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jsonProtocol.JsonOptionalField;
 
@@ -26,6 +27,7 @@ public interface PrototypeAndPropertiesResult {
   @Nullable
   Grip prototype();
 
+  @NotNull
   Map<String, PropertyDescriptor> ownProperties();
 
   @JsonOptionalField

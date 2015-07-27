@@ -35,15 +35,16 @@ import org.jetbrains.rpc.CommandProcessor;
 import java.util.List;
 
 public class DlvCallFrame extends CallFrameBase {
-  final String scriptUrl;
-  final String scriptId;
+  @Nullable final String scriptUrl;
+  @Nullable final String scriptId;
 
-  private final Variable thisObject;
+  @Nullable private final Variable thisObject;
 
   public DlvCallFrame(@NotNull final DlvValueManager valueManager,
                       @NotNull final Frame frame,
                       final boolean useBindingsFromFrameData) {
-    super(getFunctionName(frame.environment().function()), frame.where().line() - 1, frame.where().column(), new DlvEvaluateContext(frame.actor(), valueManager));
+    super(getFunctionName(frame.environment().function()), frame.where().line() - 1, frame.where().column(),
+          new DlvEvaluateContext(frame.actor(), valueManager));
 
     if (frame.source() == null) {
       scriptId = null;
@@ -82,7 +83,10 @@ public class DlvCallFrame extends CallFrameBase {
   }
 
   @NotNull
-  private static Scope createScope(@NotNull Frame.Environment environment, @NotNull DlvValueManager valueManager, boolean local, boolean useBindingsFromFrameData) {
+  private static Scope createScope(@NotNull Frame.Environment environment,
+                                   @NotNull DlvValueManager valueManager,
+                                   boolean local,
+                                   boolean useBindingsFromFrameData) {
     Scope.Type type;
     switch (environment.type()) {
       case OBJECT:
@@ -126,6 +130,7 @@ public class DlvCallFrame extends CallFrameBase {
     return Promise.resolve(thisObject);
   }
 
+  @Nullable
   @Override
   public Object getEqualityObject() {
     return ObjectUtils.chooseNotNull(scriptId, scriptUrl) + "#" + getFunctionName();

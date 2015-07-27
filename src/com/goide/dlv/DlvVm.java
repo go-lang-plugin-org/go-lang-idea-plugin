@@ -34,11 +34,11 @@ import org.jetbrains.io.SimpleChannelInboundHandlerAdapter;
 import org.jetbrains.jsonProtocol.Request;
 
 public class DlvVm extends VmBase implements StandaloneVmHelper.VmEx {
-  final DlvCommandProcessor commandProcessor;
-  private final StandaloneVmHelper vmHelper;
+  @NotNull final DlvCommandProcessor commandProcessor;
+  @NotNull private final StandaloneVmHelper vmHelper;
   private final DlvBreakpointManager breakpointManager = new DlvBreakpointManager(this);
   private final DlvScriptManager scriptManager = new DlvScriptManager();
-  private final DlvSuspendContextManager suspendContextManager;
+  @NotNull private final DlvSuspendContextManager suspendContextManager;
   String tabActor;
   String threadActor;
 

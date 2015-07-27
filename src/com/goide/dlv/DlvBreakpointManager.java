@@ -36,7 +36,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class DlvBreakpointManager extends BreakpointManagerBase<DlvBreakpoint> {
-  private final DlvVm vm;
+  @NotNull private final DlvVm vm;
 
   public DlvBreakpointManager(@NotNull DlvVm vm) {
     this.vm = vm;
@@ -58,18 +58,26 @@ public class DlvBreakpointManager extends BreakpointManagerBase<DlvBreakpoint> {
     return result;
   }
 
+  @Nullable
   @Override
-  protected DlvBreakpoint createBreakpoint(@NotNull BreakpointTarget target, int line, int column, @Nullable String condition, int ignoreCount, boolean enabled) {
+  protected DlvBreakpoint createBreakpoint(@NotNull BreakpointTarget target,
+                                           int line,
+                                           int column,
+                                           @Nullable String condition,
+                                           int ignoreCount,
+                                           boolean enabled) {
     return new DlvBreakpoint(target, line, column, condition, enabled);
   }
 
+  @NotNull
   @Override
   protected Promise<Breakpoint> doSetBreakpoint(@NotNull BreakpointTarget target, @NotNull final DlvBreakpoint breakpoint) {
     final String scriptUrl = ((BreakpointTarget.ScriptName)target).getName();
     return vm.commandProcessor.send(DlvRequest.setBreakpoint(vm.threadActor, scriptUrl, breakpoint.getLine(), breakpoint.getColumn())).then(
       new Function<SetBreakpointResult, Breakpoint>() {
+        @NotNull
         @Override
-        public Breakpoint fun(SetBreakpointResult result) {
+        public Breakpoint fun(@NotNull SetBreakpointResult result) {
           Location location;
           Location rawLocation = result.actualLocation();
           // if location and actualLocation are the same, then the actualLocation property can be omitted

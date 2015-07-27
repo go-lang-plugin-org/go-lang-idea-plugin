@@ -37,6 +37,7 @@ import com.intellij.xdebugger.breakpoints.XBreakpointHandler;
 import com.intellij.xdebugger.breakpoints.XLineBreakpoint;
 import com.intellij.xdebugger.evaluation.XDebuggerEditorsProviderBase;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.concurrency.Promise;
 import org.jetbrains.debugger.DebugProcessImpl;
 import org.jetbrains.debugger.connection.RemoteVmConnection;
@@ -52,7 +53,10 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
       }
 
       @Override
-      protected PsiFile createExpressionCodeFragment(@NotNull Project project, @NotNull String text, PsiElement context, boolean isPhysical) {
+      protected PsiFile createExpressionCodeFragment(@NotNull Project project,
+                                                     @NotNull String text,
+                                                     PsiElement context,
+                                                     boolean isPhysical) {
         return PsiFileFactory.getInstance(project).createFileFromText("a.go", GoLanguage.INSTANCE, text);
       }
     }, null, null);
@@ -95,7 +99,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     Promise<Breakpoint> promise = vm.getCommandProcessor().send(new DlvSetBreakpoint(file.getCanonicalPath(), line + 1));
     promise.processed(new Consumer<Breakpoint>() {
       @Override
-      public void consume(Breakpoint b) {
+      public void consume(@Nullable Breakpoint b) {
         if (b != null) {
           breakpoint.putUserData(ID, b.id);
           getSession().updateBreakpointPresentation(breakpoint, AllIcons.Debugger.Db_verified_breakpoint, null);
@@ -104,7 +108,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     });
     promise.rejected(new Consumer<Throwable>() {
       @Override
-      public void consume(Throwable t) {
+      public void consume(@Nullable Throwable t) {
         getSession().updateBreakpointPresentation(breakpoint, AllIcons.Debugger.Db_invalid_breakpoint, t == null ? null : t.getMessage());
       }
     });
@@ -125,7 +129,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     });
     promise.rejected(new Consumer<Throwable>() {
       @Override
-      public void consume(Throwable throwable) {
+      public void consume(@NotNull Throwable throwable) {
         throwable.printStackTrace();
       }
     });

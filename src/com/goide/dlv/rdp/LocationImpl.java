@@ -16,6 +16,8 @@
 
 package com.goide.dlv.rdp;
 
+import org.jetbrains.annotations.Nullable;
+
 public class LocationImpl implements Location {
   public LocationImpl(String url, int line, int column) {
     myUrl = url;
@@ -23,10 +25,11 @@ public class LocationImpl implements Location {
     myColumn = column;
   }
 
-  private final String  myUrl;
-  private final int  myLine;
-  private final int  myColumn;
-  
+  private final String myUrl;
+  private final int myLine;
+  private final int myColumn;
+
+  @Nullable
   @Override
   public String url() {
     return null;

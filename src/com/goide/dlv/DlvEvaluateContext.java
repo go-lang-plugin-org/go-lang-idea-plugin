@@ -35,7 +35,7 @@ import java.util.Map;
 import static org.jetbrains.rpc.CommandProcessor.LOG;
 
 public class DlvEvaluateContext extends EvaluateContextBase<DlvValueManager> {
-  private final String frameActor;
+  @NotNull private final String frameActor;
 
   protected DlvEvaluateContext(@NotNull String frameActor, @NotNull DlvValueManager valueManager) {
     super(valueManager);
@@ -45,7 +45,9 @@ public class DlvEvaluateContext extends EvaluateContextBase<DlvValueManager> {
 
   @NotNull
   @Override
-  public Promise<EvaluateResult> evaluate(@NotNull String expression, @Nullable Map<String, Object> additionalContext, boolean enableBreak) {
+  public Promise<EvaluateResult> evaluate(@NotNull String expression,
+                                          @Nullable Map<String, Object> additionalContext,
+                                          boolean enableBreak) {
     if (valueManager.isObsolete()) {
       return ValueManager.reject();
     }
@@ -62,14 +64,15 @@ public class DlvEvaluateContext extends EvaluateContextBase<DlvValueManager> {
       })
       .rejected(new Consumer<Throwable>() {
         @Override
-        public void consume(Throwable e) {
+        public void consume(@NotNull Throwable e) {
           promise.setError(e);
         }
       });
 
     return promise.then(new Function<CompletionValueYetAnotherPoorFirefoxRdpStructure, EvaluateResult>() {
+      @Nullable
       @Override
-      public EvaluateResult fun(CompletionValueYetAnotherPoorFirefoxRdpStructure result) {
+      public EvaluateResult fun(@NotNull CompletionValueYetAnotherPoorFirefoxRdpStructure result) {
         Value value;
         Grip exception = result.exception();
         if (exception == null) {

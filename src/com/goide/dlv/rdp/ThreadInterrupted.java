@@ -16,6 +16,7 @@
 
 package com.goide.dlv.rdp;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jsonProtocol.JsonOptionalField;
 
@@ -27,6 +28,7 @@ public interface ThreadInterrupted {
       PAUSED, ALREADY_PAUSED, INTERRUPTED, ATTACHED, BREAKPOINT, RESUME_LIMIT, DEBUGGER_STATEMENT, CLIENT_EVALUATED, NO_ENUM_CONST
     }
 
+    @NotNull
     Type type();
 
     @JsonOptionalField
@@ -42,5 +44,6 @@ public interface ThreadInterrupted {
   @Nullable
   Frame frame();
 
+  @NotNull
   Reason why();
 }

@@ -16,13 +16,17 @@
 
 package com.goide.dlv.rdp;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.jsonProtocol.JsonType;
 
 @JsonType
 public interface Tab {
+  @NotNull
   String actor();
 
+  @NotNull
   String title();
 
+  @NotNull
   String url();
 }

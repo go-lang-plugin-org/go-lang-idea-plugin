@@ -46,8 +46,9 @@ public class DlvSuspendContext extends SuspendContextBase<DlvValueManager> {
       DlvVm vm = context.getValueManager().getVm();
       return vm.commandProcessor.send(DlvRequest.getFrames(vm.threadActor, 1))
         .then(new Function<FramesResult, CallFrame[]>() {
+          @NotNull
           @Override
-          public CallFrame[] fun(FramesResult result) {
+          public CallFrame[] fun(@NotNull FramesResult result) {
             return createFrames(result, context.topFrame, context.valueManager);
           }
         });
@@ -77,7 +78,7 @@ public class DlvSuspendContext extends SuspendContextBase<DlvValueManager> {
   @Nullable
   volatile Promise<CallFrame[]> frames;
 
-  private final List<Breakpoint> breakpointsHit;
+  @NotNull private final List<Breakpoint> breakpointsHit;
 
   DlvSuspendContext(@Nullable Frame topVmFrame,
                     @Nullable CallFrame[] frames,

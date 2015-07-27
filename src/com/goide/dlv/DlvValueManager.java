@@ -68,7 +68,9 @@ public final class DlvValueManager extends ValueManager<DlvVm> {
   }
 
   @NotNull
-  public Variable createProperty(@NotNull String name, @NotNull PropertyDescriptor descriptor, @Nullable SafeGetterValue getterValueDescriptor) {
+  public Variable createProperty(@NotNull String name,
+                                 @NotNull PropertyDescriptor descriptor,
+                                 @Nullable SafeGetterValue getterValueDescriptor) {
     int flags = 0;
     if (descriptor.writable()) {
       flags |= ObjectPropertyImpl.WRITABLE;

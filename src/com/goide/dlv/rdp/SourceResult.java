@@ -16,11 +16,13 @@
 
 package com.goide.dlv.rdp;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jsonProtocol.JsonOptionalField;
 
 // todo long content (grip)
 public interface SourceResult {
+  @NotNull
   String source();
 
   @JsonOptionalField

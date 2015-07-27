@@ -27,7 +27,9 @@ import java.io.Closeable;
 import java.util.Arrays;
 
 public final class JsonReaderEx implements Closeable {
-  /** The only non-execute prefix this parser permits */
+  /**
+   * The only non-execute prefix this parser permits
+   */
   private static final char[] NON_EXECUTE_PREFIX = ")]}'\n".toCharArray();
   private static final long MIN_INCOMPLETE_INTEGER = Long.MIN_VALUE / 10;
 
@@ -42,12 +44,16 @@ public final class JsonReaderEx implements Closeable {
   private static final int PEEKED_SINGLE_QUOTED = 8;
   private static final int PEEKED_DOUBLE_QUOTED = 9;
   private static final int PEEKED_UNQUOTED = 10;
-  /** When this is returned, the string value is stored in peekedString. */
+  /**
+   * When this is returned, the string value is stored in peekedString.
+   */
   private static final int PEEKED_BUFFERED = 11;
   private static final int PEEKED_SINGLE_QUOTED_NAME = 12;
   private static final int PEEKED_DOUBLE_QUOTED_NAME = 13;
   private static final int PEEKED_UNQUOTED_NAME = 14;
-  /** When this is returned, the integer value is stored in peekedLong. */
+  /**
+   * When this is returned, the integer value is stored in peekedLong.
+   */
   private static final int PEEKED_LONG = 15;
   private static final int PEEKED_NUMBER = 16;
   private static final int PEEKED_EOF = 17;
@@ -62,9 +68,11 @@ public final class JsonReaderEx implements Closeable {
   private static final int NUMBER_CHAR_EXP_SIGN = 6;
   private static final int NUMBER_CHAR_EXP_DIGIT = 7;
 
-  private final CharSequence in;
+  @NotNull private final CharSequence in;
 
-  /** True to accept non-spec compliant JSON */
+  /**
+   * True to accept non-spec compliant JSON
+   */
   private boolean lenient = false;
 
   private int position;
@@ -89,7 +97,7 @@ public final class JsonReaderEx implements Closeable {
    * This is populated before a numeric value is parsed and used if that parsing
    * fails.
    */
-  private String peekedString;
+  @Nullable private String peekedString;
 
   /*
    * The nesting stack. Using a manual array rather than an ArrayList saves 20%.
@@ -191,7 +199,8 @@ public final class JsonReaderEx implements Closeable {
     subReader.peekedString = peekedString;
     return subReader;
   }
-  
+
+  @NotNull
   public JsonReader asGson() {
     JsonToken nextToken = peek();
     switch (nextToken) {
@@ -204,7 +213,7 @@ public final class JsonReaderEx implements Closeable {
       default:
         throw createParseError("Cannot create sub reader, next token " + nextToken + " is not value");
     }
-    
+
     CharSequence sequence = position > 0 ? in.subSequence(position - 1, in.length()) : in;
     return new JsonReader(new CharSequenceReader(sequence));
   }
@@ -213,6 +222,7 @@ public final class JsonReaderEx implements Closeable {
     this.lenient = lenient;
   }
 
+  @NotNull
   public final JsonReaderEx lenient(boolean lenient) {
     this.lenient = lenient;
     return this;
@@ -263,6 +273,7 @@ public final class JsonReaderEx implements Closeable {
    * Consumes the next token from the JSON stream and asserts that it is the
    * beginning of a new object.
    */
+  @NotNull
   public JsonReaderEx beginObject() {
     int p = peeked;
     if (p == PEEKED_NONE) {
@@ -310,6 +321,7 @@ public final class JsonReaderEx implements Closeable {
   /**
    * Returns the type of the next token without consuming it.
    */
+  @NotNull
   public JsonToken peek() {
     int p = peeked;
     if (p == PEEKED_NONE) {
@@ -704,6 +716,7 @@ public final class JsonReaderEx implements Closeable {
   /**
    * Returns the next token, a {@link JsonToken#NAME property name}, and consumes it
    */
+  @Nullable
   public String nextName() {
     String result = nextNameOrNull();
     if (result == null) {
@@ -738,6 +751,7 @@ public final class JsonReaderEx implements Closeable {
     return result;
   }
 
+  @Nullable
   public CharSequence nextNameAsCharSequence() {
     // todo
     return nextName();
@@ -803,6 +817,7 @@ public final class JsonReaderEx implements Closeable {
     return peek() == JsonToken.STRING ? nextString() : null;
   }
 
+  @Nullable
   public String nextString() {
     return nextString(false);
   }
@@ -813,8 +828,9 @@ public final class JsonReaderEx implements Closeable {
    * string form.
    *
    * @throws IllegalStateException if the next token is not a string or if
-   *     this reader is closed.
+   *                               this reader is closed.
    */
+  @Nullable
   public String nextString(boolean anyPrimitiveAsString) {
     int p = peeked;
     if (p == PEEKED_NONE) {
@@ -863,7 +879,7 @@ public final class JsonReaderEx implements Closeable {
    * consuming it.
    *
    * @throws IllegalStateException if the next token is not a boolean or if
-   *     this reader is closed.
+   *                               this reader is closed.
    */
   public boolean nextBoolean() {
     int p = peeked;
@@ -886,7 +902,7 @@ public final class JsonReaderEx implements Closeable {
    * literal null.
    *
    * @throws IllegalStateException if the next token is not null or if this
-   *     reader is closed.
+   *                               reader is closed.
    */
   public void nextNull() {
     int p = peeked;
@@ -908,7 +924,7 @@ public final class JsonReaderEx implements Closeable {
    *
    * @throws IllegalStateException if the next token is not a literal value.
    * @throws NumberFormatException if the next literal value cannot be parsed
-   *     as a double, or is non-finite.
+   *                               as a double, or is non-finite.
    */
   public double nextDouble() {
     int p = peeked;
@@ -954,7 +970,7 @@ public final class JsonReaderEx implements Closeable {
    *
    * @throws IllegalStateException if the next token is not a literal value.
    * @throws NumberFormatException if the next literal value cannot be parsed
-   *     as a number, or exactly represented as a long.
+   *                               as a number, or exactly represented as a long.
    */
   public long nextLong() {
     int p = peeked;
@@ -1007,8 +1023,9 @@ public final class JsonReaderEx implements Closeable {
    *
    * @param quote either ' or ".
    * @throws NumberFormatException if any unicode escape sequences are
-   *     malformed.
+   *                               malformed.
    */
+  @NotNull
   private String nextQuotedValue(char quote) {
     // Like nextNonWhitespace, this uses locals 'p' and 'l' to save inner-loop field access.
     CharSequence in = this.in;
@@ -1058,6 +1075,7 @@ public final class JsonReaderEx implements Closeable {
   /**
    * Returns an unquoted value as a string.
    */
+  @NotNull
   private String nextUnquotedValue() {
     int i = position;
     findNonLiteralCharacter:
@@ -1152,7 +1170,7 @@ public final class JsonReaderEx implements Closeable {
    *
    * @throws IllegalStateException if the next token is not a literal value.
    * @throws NumberFormatException if the next literal value cannot be parsed
-   *     as a number, or exactly represented as an int.
+   *                               as a number, or exactly represented as an int.
    */
   public int nextInt() {
     int p = peeked;
@@ -1408,7 +1426,7 @@ public final class JsonReaderEx implements Closeable {
     }
   }
 
-  private boolean skipTo(String toFind) {
+  private boolean skipTo(@NotNull String toFind) {
     outer:
     for (; position + toFind.length() <= limit; position++) {
       if (in.charAt(position) == '\n') {
@@ -1426,6 +1444,7 @@ public final class JsonReaderEx implements Closeable {
     return false;
   }
 
+  @NotNull
   @Override
   public String toString() {
     return getClass().getSimpleName() + " at line " + getLineNumber() + " column " + getColumnNumber();
@@ -1438,7 +1457,7 @@ public final class JsonReaderEx implements Closeable {
    * escapes "\n".
    *
    * @throws NumberFormatException if any unicode escape sequences are
-   *     malformed.
+   *                               malformed.
    */
   private char readEscapeCharacter() {
     if (position == limit) {
@@ -1504,6 +1523,7 @@ public final class JsonReaderEx implements Closeable {
    * Throws a new IO exception with the given message and a context snippet
    * with this reader's content.
    */
+  @NotNull
   private JsonParseException createParseError(String message) {
     throw new JsonParseException(message + " at line " + getLineNumber() + " column " + getColumnNumber());
   }

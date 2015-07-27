@@ -16,6 +16,7 @@
 
 package com.goide.dlv.rdp;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jsonProtocol.JsonField;
 import org.jetbrains.jsonProtocol.JsonOptionalField;
@@ -40,8 +41,10 @@ public interface Frame {
       OBJECT, FUNCTION, WITH, BLOCK, NO_ENUM_CONST
     }
 
+    @NotNull
     String actor();
 
+    @NotNull
     Type type();
 
     @JsonOptionalField
@@ -61,16 +64,21 @@ public interface Frame {
     Environment parent();
   }
 
+  @NotNull
   String actor();
 
+  @NotNull
   Environment environment();
 
+  @NotNull
   @JsonField(name = "this")
   Grip receiver();
 
+  @NotNull
   Location where();
 
   interface SourceYetAnotherPoorFirefoxRdpStructure {
+    @NotNull
     String actor();
   }
 

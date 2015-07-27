@@ -16,9 +16,12 @@
 
 package com.goide.dlv.rdp;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 public interface ListTabsResult {
+  @NotNull
   List<Tab> tabs();
 
   int selected();

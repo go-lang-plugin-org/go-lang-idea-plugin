@@ -29,7 +29,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class DlvRequest<RESULT> extends OutMessage implements Request<RESULT> {
-  public final Method method;
+  @NotNull public final Method method;
 
   public DlvRequest(@NotNull String actor, @NotNull Method type) {
     this.method = type;
@@ -46,11 +46,10 @@ public class DlvRequest<RESULT> extends OutMessage implements Request<RESULT> {
     CLIENT_EVALUATE(null, "resumed"),
     SOURCES, SOURCE,
     PROTOTYPE_AND_PROPERTIES, PROPERTY, PROTOTYPE, BINDINGS, THREAD_GRIP, THREAD_GRIPS, RELEASE_MANY,
-    _NONE_
-    ;
+    _NONE_;
 
     public final String protocolName;
-    public final String uglyProtocolResponseType;
+    @Nullable public final String uglyProtocolResponseType;
 
     Method() {
       this(null, null);

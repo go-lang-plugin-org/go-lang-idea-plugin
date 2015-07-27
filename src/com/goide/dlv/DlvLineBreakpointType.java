@@ -56,7 +56,7 @@ public class DlvLineBreakpointType extends XLineBreakpointType<DlvLineBreakpoint
   // it should return true for lines matching "Executable Lines"
   // description at http://www.Dlv.org/doc/apps/debugger/debugger_chapter.html
   // and, ideally, it should return false otherwise
-  private static boolean isLineBreakpointAvailable(VirtualFile file, int line, @NotNull Project project) {
+  private static boolean isLineBreakpointAvailable(@NotNull VirtualFile file, int line, @NotNull Project project) {
     Document document = FileDocumentManager.getInstance().getDocument(file);
     if (document == null) return false;
     LineBreakpointAvailabilityProcessor canPutAtChecker = new LineBreakpointAvailabilityProcessor();

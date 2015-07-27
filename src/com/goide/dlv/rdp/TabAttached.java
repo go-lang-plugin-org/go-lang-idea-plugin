@@ -16,6 +16,9 @@
 
 package com.goide.dlv.rdp;
 
+import org.jetbrains.annotations.NotNull;
+
 public interface TabAttached {
+  @NotNull
   String threadActor();
 }

@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DlvDeclarativeScope extends DeclarativeScope<DlvValueManager> {
-  private final String actor;
+  @NotNull private final String actor;
 
   public DlvDeclarativeScope(@NotNull Type type,
                              @NotNull Frame.Environment environment,
@@ -47,8 +47,9 @@ public class DlvDeclarativeScope extends DeclarativeScope<DlvValueManager> {
       protected Promise<List<Variable>> load() {
         return valueManager.getVm().commandProcessor.send(DlvRequest.getBindings(actor))
           .then(new Function<Bindings, List<Variable>>() {
+            @NotNull
             @Override
-            public List<Variable> fun(Bindings bindings) {
+            public List<Variable> fun(@NotNull Bindings bindings) {
               List<Variable> variables = vmBindingsToOurVariables(valueManager, bindings);
               valueManager.promoteRecentlyAddedActorsToThreadLifetime();
               return variables;
@@ -79,7 +80,9 @@ public class DlvDeclarativeScope extends DeclarativeScope<DlvValueManager> {
     return variables;
   }
 
-  private static void createProperties(@Nullable Map<String, PropertyDescriptor> descriptors, @NotNull DlvValueManager valueManager, @NotNull List<Variable> variables) {
+  private static void createProperties(@Nullable Map<String, PropertyDescriptor> descriptors,
+                                       @NotNull DlvValueManager valueManager,
+                                       @NotNull List<Variable> variables) {
     if (descriptors == null || descriptors.isEmpty()) {
       return;
     }

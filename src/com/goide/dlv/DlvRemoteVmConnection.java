@@ -33,7 +33,7 @@ public class DlvRemoteVmConnection extends RemoteVmConnection {
   public Bootstrap createBootstrap(@NotNull InetSocketAddress address, @NotNull final AsyncPromise<Vm> vmResult) {
     return createBootstrap().handler(new ChannelInitializer() {
       @Override
-      protected void initChannel(Channel channel) throws Exception {
+      protected void initChannel(@NotNull Channel channel) throws Exception {
         vmResult.setResult(new DlvVm(getDebugEventListener(), channel));
       }
     });

@@ -23,6 +23,7 @@ import gnu.trove.THashMap;
 import gnu.trove.TIntArrayList;
 import gnu.trove.TLongArrayList;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jsonProtocol.StringIntPair;
 
 import java.util.ArrayList;
@@ -34,13 +35,13 @@ public final class JsonReaders {
   private JsonReaders() {
   }
 
-  private static void checkIsNull(JsonReaderEx reader, String fieldName) {
+  private static void checkIsNull(@NotNull JsonReaderEx reader, @Nullable String fieldName) {
     if (reader.peek() == JsonToken.NULL) {
       throw new RuntimeException("Field is not nullable" + (fieldName == null ? "" : (": " + fieldName)));
     }
   }
 
-  public static String readRawString(JsonReaderEx reader) {
+  public static String readRawString(@NotNull JsonReaderEx reader) {
     return reader.nextString(true);
   }
 
@@ -86,7 +87,7 @@ public final class JsonReaders {
     }
   }
 
-  public static Object read(JsonReaderEx reader) {
+  public static Object read(@NotNull JsonReaderEx reader) {
     switch (reader.peek()) {
       case BEGIN_ARRAY:
         return nextList(reader);
@@ -108,11 +109,13 @@ public final class JsonReaders {
         reader.nextNull();
         return null;
 
-      default: throw new IllegalStateException();
+      default:
+        throw new IllegalStateException();
     }
   }
 
-  public static Map<String, Object> nextObject(JsonReaderEx reader) {
+  @NotNull
+  public static Map<String, Object> nextObject(@NotNull JsonReaderEx reader) {
     Map<String, Object> map = new THashMap<String, Object>();
     while (reader.hasNext()) {
       map.put(reader.nextName(), read(reader));
@@ -121,7 +124,8 @@ public final class JsonReaders {
     return map;
   }
 
-  public static <T> List<T> nextList(JsonReaderEx reader) {
+  @NotNull
+  public static <T> List<T> nextList(@NotNull JsonReaderEx reader) {
     reader.beginArray();
     if (!reader.hasNext()) {
       reader.endArray();
@@ -138,7 +142,8 @@ public final class JsonReaders {
     return list;
   }
 
-  public static List<String> readRawStringArray(JsonReaderEx reader) {
+  @NotNull
+  public static List<String> readRawStringArray(@NotNull JsonReaderEx reader) {
     reader.beginArray();
     if (!reader.hasNext()) {
       reader.endArray();
@@ -155,7 +160,7 @@ public final class JsonReaders {
     return list;
   }
 
-  public static long[] readLongArray(JsonReaderEx reader) {
+  public static long[] readLongArray(@NotNull JsonReaderEx reader) {
     checkIsNull(reader, null);
     reader.beginArray();
     if (!reader.hasNext()) {
@@ -172,7 +177,7 @@ public final class JsonReaders {
     return result.toNativeArray();
   }
 
-  public static double[] readDoubleArray(JsonReaderEx reader) {
+  public static double[] readDoubleArray(@NotNull JsonReaderEx reader) {
     checkIsNull(reader, null);
     reader.beginArray();
     if (!reader.hasNext()) {
@@ -189,7 +194,7 @@ public final class JsonReaders {
     return result.toNativeArray();
   }
 
-  public static int[] readIntArray(JsonReaderEx reader) {
+  public static int[] readIntArray(@NotNull JsonReaderEx reader) {
     checkIsNull(reader, null);
     reader.beginArray();
     if (!reader.hasNext()) {
@@ -206,7 +211,8 @@ public final class JsonReaders {
     return result.toNativeArray();
   }
 
-  public static List<StringIntPair> readIntStringPairs(JsonReaderEx reader) {
+  @NotNull
+  public static List<StringIntPair> readIntStringPairs(@NotNull JsonReaderEx reader) {
     checkIsNull(reader, null);
     reader.beginArray();
     if (!reader.hasNext()) {
@@ -225,7 +231,7 @@ public final class JsonReaders {
     return result;
   }
 
-  public static boolean findBooleanField(String name, JsonReaderEx reader) {
+  public static boolean findBooleanField(String name, @NotNull JsonReaderEx reader) {
     reader.beginObject();
     while (reader.hasNext()) {
       if (reader.nextName().equals(name)) {

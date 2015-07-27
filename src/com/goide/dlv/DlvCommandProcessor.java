@@ -22,6 +22,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.concurrency.Promise;
 import org.jetbrains.jsonProtocol.Request;
 import org.jetbrains.rpc.CommandProcessor;
@@ -35,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, CommandResponse, CommandResponse> {
-  private final MessageWriter myWriter;
+  @NotNull private final MessageWriter myWriter;
 
   public DlvCommandProcessor(@NotNull MessageWriter writer) {
     myWriter = writer;
@@ -46,13 +47,14 @@ public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, CommandR
     return myWriter.fun(message);
   }
 
+  @Nullable
   @Override
-  public CommandResponse readIfHasSequence(JsonReaderEx message) {
+  public CommandResponse readIfHasSequence(@NotNull JsonReaderEx message) {
     return new CommandResponse.CommandResponseImpl(message, null);
   }
 
   @Override
-  public int getSequence(CommandResponse response) {
+  public int getSequence(@NotNull CommandResponse response) {
     return response.id();
   }
 
@@ -65,7 +67,7 @@ public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, CommandR
   }
 
   @Override
-  public void call(CommandResponse response, RequestCallback<CommandResponse> callback) {
+  public void call(@NotNull CommandResponse response, @NotNull RequestCallback<CommandResponse> callback) {
     if (response.result() != null) {
       callback.onSuccess(response, this);
     }
@@ -89,7 +91,8 @@ public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, CommandR
       callback.onError(Promise.createError(message));
     }
   }
-  
+
+  @NotNull
   @Override
   public <RESULT> RESULT readResult(@NotNull String readMethodName, @NotNull CommandResponse successResponse) {
     JsonReader reader = successResponse.result().asGson();

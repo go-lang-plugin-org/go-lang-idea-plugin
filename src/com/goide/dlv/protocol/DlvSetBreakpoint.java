@@ -24,7 +24,7 @@ public final class DlvSetBreakpoint extends DlvRequest<Breakpoint> {
     writeString("file", path);
     writeInt("line", line);
   }
-  
+
   @NotNull
   @Override
   public String getMethodName() {

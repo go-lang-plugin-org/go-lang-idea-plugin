@@ -34,13 +34,13 @@ import org.jetbrains.debugger.values.ValueType;
 import java.util.*;
 
 class DlvObject extends ObjectValueBase<DlvValueManager> {
-  private final String className;
-  private final String valueString;
-  private final String actor;
+  @Nullable private final String className;
+  @Nullable private final String valueString;
+  @Nullable private final String actor;
 
   private final int ownPropertiesLength;
 
-  private List<Variable> preloadedProperties;
+  @Nullable private List<Variable> preloadedProperties;
 
   public DlvObject(@NotNull ValueType type, @NotNull final Grip valueData, @NotNull DlvValueManager valueManager) {
     super(type);
@@ -70,8 +70,9 @@ class DlvObject extends ObjectValueBase<DlvValueManager> {
         if (preloadedProperties == null) {
           return valueManager.getVm().commandProcessor.send(DlvRequest.getPrototypeAndProperties(actor))
             .then(new Function<PrototypeAndPropertiesResult, List<Variable>>() {
+              @NotNull
               @Override
-              public List<Variable> fun(PrototypeAndPropertiesResult result) {
+              public List<Variable> fun(@NotNull PrototypeAndPropertiesResult result) {
                 List<Variable> properties = valueManager.createProperties(result.ownProperties(), result.prototype(), result.safeGetterValues());
                 valueManager.promoteRecentlyAddedActorsToThreadLifetime();
                 return properties;
@@ -83,7 +84,7 @@ class DlvObject extends ObjectValueBase<DlvValueManager> {
             .then(new Function<PrototypeResult, List<Variable>>() {
               @NotNull
               @Override
-              public List<Variable> fun(PrototypeResult prototypeResult) {
+              public List<Variable> fun(@NotNull PrototypeResult prototypeResult) {
                 List<Variable> list = preloadedProperties;
                 preloadedProperties = null;
                 Variable protoVariable = valueManager.createProtoVariable(prototypeResult.prototype());
@@ -109,6 +110,7 @@ class DlvObject extends ObjectValueBase<DlvValueManager> {
     return ownPropertiesLength == -1 ? ThreeState.UNSURE : ThreeState.fromBoolean(ownPropertiesLength != 0);
   }
 
+  @Nullable
   private static String valueToString(@NotNull Grip valueData, @Nullable Grip.Preview preview) {
     if (valueData.displayString() != null) {
       return valueData.displayString();
@@ -139,7 +141,9 @@ class DlvObject extends ObjectValueBase<DlvValueManager> {
 
   @NotNull
   @Override
-  public Promise<List<Variable>> getProperties(@NotNull List<String> names, @NotNull EvaluateContext evaluateContext, @NotNull Obsolescent obsolescent) {
+  public Promise<List<Variable>> getProperties(@NotNull List<String> names,
+                                               @NotNull EvaluateContext evaluateContext,
+                                               @NotNull Obsolescent obsolescent) {
     if (childrenManager.getState() != null) {
       // properties list will be loaded, so, use default implementation
       return super.getProperties(names, evaluateContext, obsolescent);
