@@ -49,10 +49,7 @@ public class GoIntroduceVariableHandler extends GoIntroduceVariableBase implemen
     }
     else if (expressions.size() == 1) {
       GoExpression expression = ContainerUtil.getFirstItem(expressions);
-      if (expression == null) {
-        showCannotPerform(project, editor);
-        return;
-      }
+      assert expression != null;
       performOnElement(project, editor, expression);
     }
     else {
