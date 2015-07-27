@@ -18,34 +18,46 @@ package com.goide.dlv;
 
 import com.goide.GoFileType;
 import com.goide.GoLanguage;
-import com.goide.dlv.protocol.Breakpoint;
-import com.goide.dlv.protocol.DlvClearBreakpoint;
-import com.goide.dlv.protocol.DlvSetBreakpoint;
+import com.goide.dlv.protocol.*;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.AccessToken;
 import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Comparing;
+import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Key;
+import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
+import com.intellij.ui.ColoredTextContainer;
+import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.util.Consumer;
+import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.io.socketConnection.ConnectionStatus;
 import com.intellij.util.io.socketConnection.SocketConnectionListener;
 import com.intellij.xdebugger.XDebugSession;
+import com.intellij.xdebugger.XDebuggerUtil;
 import com.intellij.xdebugger.XSourcePosition;
+import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import com.intellij.xdebugger.breakpoints.XBreakpointHandler;
 import com.intellij.xdebugger.breakpoints.XLineBreakpoint;
 import com.intellij.xdebugger.evaluation.XDebuggerEditorsProviderBase;
+import com.intellij.xdebugger.frame.XCompositeNode;
+import com.intellij.xdebugger.frame.XExecutionStack;
+import com.intellij.xdebugger.frame.XStackFrame;
+import com.intellij.xdebugger.frame.XSuspendContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.concurrency.Promise;
 import org.jetbrains.debugger.DebugProcessImpl;
 import org.jetbrains.debugger.connection.RemoteVmConnection;
 
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> implements Disposable {
@@ -80,11 +92,6 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
   }
 
   @Override
-  public void resume() {
-    // todo
-  }
-
-  @Override
   public void runToPosition(@NotNull XSourcePosition position) {
     // todo
   }
@@ -97,7 +104,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
   private final AtomicBoolean breakpointsInitiated = new AtomicBoolean();
   private final AtomicBoolean connectedListenerAdded = new AtomicBoolean();
 
-  
+
   @Override
   public boolean checkCanInitBreakpoints() {
     if (connection.getState().getStatus() == ConnectionStatus.CONNECTED) {
@@ -124,21 +131,10 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     }
 
     assert getVm() != null : "Vm should be initialized";
-    //BreakpointManager bm = getVm().getBreakpointManager();
-    //bm.getBreakpoints()
-    //LineBreakpointHandler lineBreakpointHandler = new LineBreakpointHandler(JavaScriptBreakpointType.class, bm, false);
-    //exceptionBreakpointHandler = new ChromeExceptionBreakpointHandler(this);
-    //
-    //Set<Pair<Class<? extends XLineBreakpointType<?>>, Boolean>> additionalHandlers = null;
-    //
-    //breakpointHandlers = new XBreakpointHandler<?>[]{lineBreakpointHandler, exceptionBreakpointHandler};
-    //
-    //if (finder instanceof RemoteDebuggingFileFinder) {
-    //  preloadedSourceMaps = new SourceMapCollector(this).collect(((RemoteDebuggingFileFinder)finder).getMappings());
-    //}
 
     if (setBreakpoints) {
       doSetBreakpoints();
+      resume();
     }
 
     return true;
@@ -156,18 +152,22 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
 
   public static final Key<Integer> ID = Key.create("ID");
 
+  Set<XBreakpoint<DlvLineBreakpointProperties>> breakpoints = ContainerUtil.newConcurrentSet();
+
+
   public void addBreakpoint(@NotNull final XLineBreakpoint<DlvLineBreakpointProperties> breakpoint) {
     XSourcePosition breakpointPosition = breakpoint.getSourcePosition();
     if (breakpointPosition == null) return;
     VirtualFile file = breakpointPosition.getFile();
     int line = breakpointPosition.getLine();
-    DlvVm vm = (DlvVm)getVm();
-    Promise<Breakpoint> promise = vm.getCommandProcessor().send(new DlvSetBreakpoint(file.getCanonicalPath(), line + 1));
-    promise.processed(new Consumer<Breakpoint>() {
+    final DlvVm vm = (DlvVm)getVm();
+    Promise<Api.Breakpoint> promise = vm.getCommandProcessor().send(new DlvSetBreakpoint(file.getCanonicalPath(), line + 1));
+    promise.processed(new Consumer<Api.Breakpoint>() {
       @Override
-      public void consume(@Nullable Breakpoint b) {
+      public void consume(@Nullable Api.Breakpoint b) {
         if (b != null) {
           breakpoint.putUserData(ID, b.id);
+          breakpoints.add(breakpoint);
           getSession().updateBreakpointPresentation(breakpoint, AllIcons.Debugger.Db_verified_breakpoint, null);
         }
       }
@@ -184,12 +184,13 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     XSourcePosition breakpointPosition = breakpoint.getSourcePosition();
     if (breakpointPosition == null) return;
     Integer id = breakpoint.getUserData(ID);
+    breakpoints.remove(breakpoint);
     if (id == null) return;
     DlvVm vm = (DlvVm)getVm();
-    Promise<Breakpoint> promise = vm.getCommandProcessor().send(new DlvClearBreakpoint(id));
-    promise.processed(new Consumer<Breakpoint>() {
+    Promise<Api.Breakpoint> promise = vm.getCommandProcessor().send(new DlvClearBreakpoint(id));
+    promise.processed(new Consumer<Api.Breakpoint>() {
       @Override
-      public void consume(Breakpoint b) {
+      public void consume(Api.Breakpoint b) {
         System.out.println(b);
       }
     });
@@ -199,5 +200,138 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
         throwable.printStackTrace();
       }
     });
+  }
+
+  @Override
+  public void resume() {
+    DlvVm vm = (DlvVm)getVm();
+    final DlvCommandProcessor processor = vm.getCommandProcessor();
+    Promise<Api.DebuggerState> promise = processor.send(new DlvCommandRequest("continue"));
+    promise.processed(new Consumer<Api.DebuggerState>() {
+      @Override
+      public void consume(Api.DebuggerState o) {
+        if (o == null) {
+          throw new RuntimeException("debug process is null");
+        }
+        if (o.exited) {
+          // todo: terminate;
+        }
+
+
+        Api.Breakpoint bp = o.breakPoint;
+        if (bp == null) return;
+        final int id = bp.id;
+        final XBreakpoint<DlvLineBreakpointProperties> find =
+          ContainerUtil.find(breakpoints, new Condition<XBreakpoint<DlvLineBreakpointProperties>>() {
+            @Override
+            public boolean value(XBreakpoint<DlvLineBreakpointProperties> b) {
+              return Comparing.equal(b.getUserData(ID), id);
+            }
+          });
+        if (find == null) return;
+        final Promise<List<Api.Location>> stackPromise = processor.send(new DlvStacktraceRequest());
+        stackPromise.processed(new Consumer<List<Api.Location>>() {
+          @Override
+          public void consume(List<Api.Location> locations) {
+            getSession().breakpointReached(find, null, new DlvSuspendContext(locations));
+          }
+        });
+        stackPromise.rejected(new Consumer<Throwable>() {
+          @Override
+          public void consume(Throwable throwable) {
+            throwable.printStackTrace();
+          }
+        });
+      }
+    });
+    promise.rejected(new Consumer<Throwable>() {
+      @Override
+      public void consume(Throwable throwable) {
+        throwable.printStackTrace();
+      }
+    });
+  }
+
+  private static class DlvSuspendContext extends XSuspendContext {
+    private final List<Api.Location> myLocations;
+    private final DlvExecutionStack myStack;
+
+    public DlvSuspendContext(List<Api.Location> locations) {
+      myLocations = locations;
+      myStack = new DlvExecutionStack(myLocations);
+    }
+
+    @Nullable
+    @Override
+    public XExecutionStack getActiveExecutionStack() {
+      return myStack;
+    }
+
+    @Override
+    public XExecutionStack[] getExecutionStacks() {
+      return new XExecutionStack[]{myStack};
+    }
+
+    @Override
+    public void computeExecutionStacks(XExecutionStackContainer container) {
+      super.computeExecutionStacks(container);
+    }
+
+    private static class DlvExecutionStack extends XExecutionStack {
+      private final List<Api.Location> myLocations;
+      private final List<DlvStackFrame> myStack;
+
+      public DlvExecutionStack(List<Api.Location> locations) {
+        super(String.valueOf(locations.size()));
+        myLocations = locations;
+        myStack = ContainerUtil.newArrayListWithCapacity(locations.size());
+      }
+
+      @Nullable
+      @Override
+      public XStackFrame getTopFrame() {
+        return ContainerUtil.getFirstItem(myStack);
+      }
+
+      @Override
+      public void computeStackFrames(int firstFrameIndex, XStackFrameContainer container) {
+        for (Api.Location location : myLocations) {
+          if (!myStack.isEmpty()) {
+            location.line -= 1; // todo: bizzare
+          }
+          myStack.add(new DlvStackFrame(location));
+        }
+        container.addStackFrames(myStack, true);
+      }
+
+      private static class DlvStackFrame extends XStackFrame {
+        private final Api.Location myLocation;
+
+        public DlvStackFrame(Api.Location location) {
+          myLocation = location;
+        }
+
+        @Nullable
+        @Override
+        public XSourcePosition getSourcePosition() {
+          final String url = myLocation.file;
+          final VirtualFile file = LocalFileSystem.getInstance().findFileByPath(url);
+          if (file == null) return null;
+          return XDebuggerUtil.getInstance().createPosition(file, myLocation.line);
+        }
+
+        @Override
+        public void customizePresentation(@NotNull ColoredTextContainer component) {
+          super.customizePresentation(component);
+          component.append(" at " + myLocation.function.name, SimpleTextAttributes.REGULAR_ATTRIBUTES);
+          component.setIcon(AllIcons.Debugger.StackFrame);
+        }
+
+        @Override
+        public void computeChildren(@NotNull XCompositeNode node) {
+          super.computeChildren(node);
+        }
+      }
+    }
   }
 }

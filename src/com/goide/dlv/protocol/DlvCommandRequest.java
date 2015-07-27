@@ -16,16 +16,15 @@
 
 package com.goide.dlv.protocol;
 
-public class Breakpoint {
-  public int line;
-  public String file;
-  public int id;
+import org.jetbrains.annotations.Nullable;
 
-  public Breakpoint() {
+public class DlvCommandRequest extends DlvRequest<Api.DebuggerState> {
+  public DlvCommandRequest(@Nullable String command) {
+    writeString("Name", command);
   }
 
-  public Breakpoint(String f, int l) {
-    file = f;
-    line = l;
+  @Override
+  public String getMethodName() {
+    return "RPCServer.Command";
   }
 }

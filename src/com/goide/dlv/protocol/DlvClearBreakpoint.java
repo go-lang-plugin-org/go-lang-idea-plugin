@@ -19,7 +19,7 @@ package com.goide.dlv.protocol;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class DlvClearBreakpoint extends DlvRequest<Breakpoint> {
+public final class DlvClearBreakpoint extends DlvRequest<Api.Breakpoint> {
   public DlvClearBreakpoint(int id) {
     writeSingletonIntArray(argumentsKeyName(), id);
   }

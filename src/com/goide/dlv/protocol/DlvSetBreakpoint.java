@@ -19,7 +19,7 @@ package com.goide.dlv.protocol;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class DlvSetBreakpoint extends DlvRequest<Breakpoint> {
+public final class DlvSetBreakpoint extends DlvRequest<Api.Breakpoint> {
   public DlvSetBreakpoint(String path, int line) {
     writeString("file", path);
     writeInt("line", line);
