@@ -96,7 +96,7 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
   protected GoExecutor patchExecutor(@NotNull GoExecutor executor) throws ExecutionException {
     if (isDebug()) {
       return executor.withExePath(GoConstants.DELVE_EXECUTABLE_NAME)
-        .withParameters("--listen=localhost:9090", "--headless=true", "run", myOutputFilePath, "--");
+        .withParameters("--addr=localhost:9090", "--headless=true", "run", myOutputFilePath, "--");
     }
     return executor.withExePath(myOutputFilePath);
   }
