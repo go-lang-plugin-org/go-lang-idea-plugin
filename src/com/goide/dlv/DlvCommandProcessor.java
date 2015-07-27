@@ -100,9 +100,12 @@ public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, CommandR
     JsonReader reader = successResponse.result().asGson();
     final Gson gson = new GsonBuilder().create();
     if (method.equals("RPCServer.StacktraceGoroutine")) {
-      Type listType = new TypeToken<ArrayList<Api.Location>>() {
-      }.getType();
-      return gson.fromJson(reader, listType);
+      return gson.fromJson(reader, new TypeToken<ArrayList<Api.Location>>() {
+      }.getType());
+    }
+    else if (method.equals("RPCServer.ListLocalVars")) {
+      return gson.fromJson(reader, new TypeToken<ArrayList<Api.Variable>>() {
+      }.getType());
     }
     Object o = gson.fromJson(reader, getT(method));
     //noinspection unchecked

@@ -17,6 +17,7 @@
 package com.goide.dlv;
 
 import com.goide.GoFileType;
+import com.goide.GoIcons;
 import com.goide.GoLanguage;
 import com.goide.dlv.protocol.*;
 import com.intellij.icons.AllIcons;
@@ -46,10 +47,7 @@ import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import com.intellij.xdebugger.breakpoints.XBreakpointHandler;
 import com.intellij.xdebugger.breakpoints.XLineBreakpoint;
 import com.intellij.xdebugger.evaluation.XDebuggerEditorsProviderBase;
-import com.intellij.xdebugger.frame.XCompositeNode;
-import com.intellij.xdebugger.frame.XExecutionStack;
-import com.intellij.xdebugger.frame.XStackFrame;
-import com.intellij.xdebugger.frame.XSuspendContext;
+import com.intellij.xdebugger.frame.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.concurrency.Promise;
@@ -61,6 +59,14 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> implements Disposable {
+
+  public static final Consumer<Throwable> THROWABLE_CONSUMER = new Consumer<Throwable>() {
+    @Override
+    public void consume(Throwable throwable) {
+      throwable.printStackTrace();
+    }
+  };
+
   public DlvDebugProcess(@NotNull XDebugSession session,
                          @NotNull RemoteVmConnection connection) {
     super(session, connection, new XDebuggerEditorsProviderBase() {
@@ -232,32 +238,20 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
         stackPromise.processed(new Consumer<List<Api.Location>>() {
           @Override
           public void consume(List<Api.Location> locations) {
-            getSession().breakpointReached(find, null, new DlvSuspendContext(locations));
+            getSession().breakpointReached(find, null, new DlvSuspendContext(locations, processor));
           }
         });
-        stackPromise.rejected(new Consumer<Throwable>() {
-          @Override
-          public void consume(Throwable throwable) {
-            throwable.printStackTrace();
-          }
-        });
+        stackPromise.rejected(THROWABLE_CONSUMER);
       }
     });
-    promise.rejected(new Consumer<Throwable>() {
-      @Override
-      public void consume(Throwable throwable) {
-        throwable.printStackTrace();
-      }
-    });
+    promise.rejected(THROWABLE_CONSUMER);
   }
 
   private static class DlvSuspendContext extends XSuspendContext {
-    private final List<Api.Location> myLocations;
     private final DlvExecutionStack myStack;
 
-    public DlvSuspendContext(List<Api.Location> locations) {
-      myLocations = locations;
-      myStack = new DlvExecutionStack(myLocations);
+    public DlvSuspendContext(List<Api.Location> locations, DlvCommandProcessor processor) {
+      myStack = new DlvExecutionStack(locations, processor);
     }
 
     @Nullable
@@ -271,18 +265,15 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
       return new XExecutionStack[]{myStack};
     }
 
-    @Override
-    public void computeExecutionStacks(XExecutionStackContainer container) {
-      super.computeExecutionStacks(container);
-    }
-
     private static class DlvExecutionStack extends XExecutionStack {
       private final List<Api.Location> myLocations;
+      private final DlvCommandProcessor myProcessor;
       private final List<DlvStackFrame> myStack;
 
-      public DlvExecutionStack(List<Api.Location> locations) {
+      public DlvExecutionStack(List<Api.Location> locations, DlvCommandProcessor processor) {
         super(String.valueOf(locations.size()));
         myLocations = locations;
+        myProcessor = processor;
         myStack = ContainerUtil.newArrayListWithCapacity(locations.size());
       }
 
@@ -298,16 +289,18 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
           if (!myStack.isEmpty()) {
             location.line -= 1; // todo: bizzare
           }
-          myStack.add(new DlvStackFrame(location));
+          myStack.add(new DlvStackFrame(location, myProcessor));
         }
         container.addStackFrames(myStack, true);
       }
 
       private static class DlvStackFrame extends XStackFrame {
         private final Api.Location myLocation;
+        private final DlvCommandProcessor myProcessor;
 
-        public DlvStackFrame(Api.Location location) {
+        public DlvStackFrame(Api.Location location, DlvCommandProcessor processor) {
           myLocation = location;
+          myProcessor = processor;
         }
 
         @Nullable
@@ -327,9 +320,30 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
         }
 
         @Override
-        public void computeChildren(@NotNull XCompositeNode node) {
-          super.computeChildren(node);
+        public void computeChildren(@NotNull final XCompositeNode node) {
+          final Promise<List<Api.Variable>> varPromise = myProcessor.send(new DlvLocalVariablesRequest());
+          varPromise.processed(new Consumer<List<Api.Variable>>() {
+            @Override
+            public void consume(List<Api.Variable> variables) {
+              XValueChildrenList xVars = new XValueChildrenList(variables.size());
+              for (Api.Variable v : variables) {
+                xVars.add(v.name, getVariableValue(v.name, v.value, v.clazz));
+              }
+              node.addChildren(xVars, true);
+            }
+          });
+          varPromise.rejected(THROWABLE_CONSUMER);
         }
+
+        private static XValue getVariableValue(String name, final String value, final String clazz) {
+          return new XNamedValue(name) {
+            @Override
+            public void computePresentation(@NotNull XValueNode node, @NotNull XValuePlace place) {
+              node.setPresentation(GoIcons.VARIABLE, clazz, value, false);
+            }
+          };
+        }
+
       }
     }
   }
