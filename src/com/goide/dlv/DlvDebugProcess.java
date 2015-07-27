@@ -210,13 +210,12 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     promise.processed(new Consumer<Api.DebuggerState>() {
       @Override
       public void consume(Api.DebuggerState o) {
-        if (o == null) {
-          throw new RuntimeException("debug process is null");
-        }
+        if (o == null) throw new RuntimeException("debug process is null");
+        
         if (o.exited) {
-          // todo: terminate;
+          getSession().stop();
+          return;
         }
-
 
         Api.Breakpoint bp = o.breakPoint;
         if (bp == null) return;
