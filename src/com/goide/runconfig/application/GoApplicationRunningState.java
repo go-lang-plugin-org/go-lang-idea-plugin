@@ -16,6 +16,7 @@
 
 package com.goide.runconfig.application;
 
+import com.goide.GoConstants;
 import com.goide.runconfig.GoRunningState;
 import com.goide.util.GoExecutor;
 import com.goide.util.GoHistoryProcessListener;
@@ -52,9 +53,6 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
 
   @NotNull
   public String getGoBuildParams() {
-    if (isDebug()) {
-      // todo: add build parameters for delve
-    }
     return myConfiguration.getGoToolParams();
   }
 
@@ -97,9 +95,8 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
   @Override
   protected GoExecutor patchExecutor(@NotNull GoExecutor executor) throws ExecutionException {
     if (isDebug()) {
-      // todo: run delve
-      return executor.withExePath("dlv")
-        .withParameters("-addr=localhost:9090", "-headless", "run", "aaa11.go");
+      return executor.withExePath(GoConstants.DELVE_EXECUTABLE_NAME)
+        .withParameters("--listen=localhost:9090", "--headless=true", "run", myOutputFilePath, "--");
     }
     return executor.withExePath(myOutputFilePath);
   }
