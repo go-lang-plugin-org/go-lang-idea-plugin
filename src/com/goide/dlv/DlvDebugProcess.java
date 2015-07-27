@@ -23,6 +23,8 @@ import com.goide.dlv.protocol.DlvClearBreakpoint;
 import com.goide.dlv.protocol.DlvSetBreakpoint;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.Disposable;
+import com.intellij.openapi.application.AccessToken;
+import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
@@ -31,6 +33,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.util.Consumer;
+import com.intellij.util.io.socketConnection.ConnectionStatus;
+import com.intellij.util.io.socketConnection.SocketConnectionListener;
 import com.intellij.xdebugger.XDebugSession;
 import com.intellij.xdebugger.XSourcePosition;
 import com.intellij.xdebugger.breakpoints.XBreakpointHandler;
@@ -41,6 +45,8 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.concurrency.Promise;
 import org.jetbrains.debugger.DebugProcessImpl;
 import org.jetbrains.debugger.connection.RemoteVmConnection;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> implements Disposable {
   public DlvDebugProcess(@NotNull XDebugSession session,
@@ -86,6 +92,66 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
   @Override
   public void stop() {
     // todo:
+  }
+
+  private final AtomicBoolean breakpointsInitiated = new AtomicBoolean();
+  private final AtomicBoolean connectedListenerAdded = new AtomicBoolean();
+
+  
+  @Override
+  public boolean checkCanInitBreakpoints() {
+    if (connection.getState().getStatus() == ConnectionStatus.CONNECTED) {
+      // breakpointsInitiated could be set in another thread and at this point work (init breakpoints) could be not yet performed
+      return initBreakpointHandlersAndSetBreakpoints(false);
+    }
+
+    if (connectedListenerAdded.compareAndSet(false, true)) {
+      connection.addListener(new SocketConnectionListener() {
+        @Override
+        public void statusChanged(@NotNull ConnectionStatus status) {
+          if (status == ConnectionStatus.CONNECTED) {
+            initBreakpointHandlersAndSetBreakpoints(true);
+          }
+        }
+      });
+    }
+    return false;
+  }
+
+  private boolean initBreakpointHandlersAndSetBreakpoints(boolean setBreakpoints) {
+    if (!breakpointsInitiated.compareAndSet(false, true)) {
+      return false;
+    }
+
+    assert getVm() != null : "Vm should be initialized";
+    //BreakpointManager bm = getVm().getBreakpointManager();
+    //bm.getBreakpoints()
+    //LineBreakpointHandler lineBreakpointHandler = new LineBreakpointHandler(JavaScriptBreakpointType.class, bm, false);
+    //exceptionBreakpointHandler = new ChromeExceptionBreakpointHandler(this);
+    //
+    //Set<Pair<Class<? extends XLineBreakpointType<?>>, Boolean>> additionalHandlers = null;
+    //
+    //breakpointHandlers = new XBreakpointHandler<?>[]{lineBreakpointHandler, exceptionBreakpointHandler};
+    //
+    //if (finder instanceof RemoteDebuggingFileFinder) {
+    //  preloadedSourceMaps = new SourceMapCollector(this).collect(((RemoteDebuggingFileFinder)finder).getMappings());
+    //}
+
+    if (setBreakpoints) {
+      doSetBreakpoints();
+    }
+
+    return true;
+  }
+
+  private void doSetBreakpoints() {
+    AccessToken token = ReadAction.start();
+    try {
+      getSession().initBreakpoints();
+    }
+    finally {
+      token.finish();
+    }
   }
 
   public static final Key<Integer> ID = Key.create("ID");
