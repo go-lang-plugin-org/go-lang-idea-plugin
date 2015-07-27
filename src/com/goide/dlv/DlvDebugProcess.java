@@ -206,7 +206,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
   public void resume() {
     DlvVm vm = (DlvVm)getVm();
     final DlvCommandProcessor processor = vm.getCommandProcessor();
-    Promise<Api.DebuggerState> promise = processor.send(new DlvCommandRequest("continue"));
+    Promise<Api.DebuggerState> promise = processor.send(new DlvCommandRequest(Api.CONTINUE));
     promise.processed(new Consumer<Api.DebuggerState>() {
       @Override
       public void consume(Api.DebuggerState o) {
