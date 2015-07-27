@@ -1,10 +1,11 @@
 
 package com.goide.dlv.protocol;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class Api {
-
   // DebuggerState represents the current context of the debugger.
   public class DebuggerState {
     // Breakpoint is the current breakpoint at which the debugged process is
@@ -17,7 +18,6 @@ public class Api {
     // Exited indicates whether the debugged process has exited.
     public boolean exited; //`json:"exited"`
     public int exitStatus; //`json:"exitStatus"`
-
     // Filled by RPCClient.Continue, indicates an error
     public String err; //`json:"-"` // todo: should be error
   }
@@ -36,9 +36,9 @@ public class Api {
     // FunctionName is the name of the function at the current breakpoint, and
     // may not always be available.
     public String functionName; //`json:"functionName,omitempty"`
-
     // tracepoint flag
-    public boolean tracepoint; //`json:"continue"` // todo: name
+    @SerializedName("continue")
+    public boolean tracepoint; //`json:"continue"`
     // number of stack frames to retrieve
     public int stacktrace; //`json:"stacktrace"`
     // retrieve goroutine information
@@ -73,7 +73,8 @@ public class Api {
     // Name is the function name.
     public String name; //`json:"name"`
     public int value; //`json:"value"`
-    public byte Class; //`json:"class"` // todo
+    @SerializedName("class")
+    public byte clazz; //`json:"class"`
     public int goclass; //`json:"goclass"`
     // Args are the function arguments in a thread context.
     public List<Variable> args; //`json:"args"`
@@ -85,7 +86,8 @@ public class Api {
   public class Variable {
     public String name; //`json:"name"`
     public String value; //`json:"value"`
-    public String Class; //`json:"class"` // todo
+    @SerializedName("class")
+    public String clazz; //`json:"class"`
   }
 
   // Goroutine represents the information relevant to Delve from the runtime's
