@@ -285,13 +285,15 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
 
       @Override
       public void computeStackFrames(int firstFrameIndex, XStackFrameContainer container) {
-        for (Api.Location location : myLocations) {
-          if (!myStack.isEmpty()) {
-            location.line -= 1; // todo: bizzare
+        if (myStack.isEmpty()) {
+          for (Api.Location location : myLocations) {
+            if (!myStack.isEmpty()) {
+              location.line -= 1; // todo: bizzare
+            }
+            myStack.add(new DlvStackFrame(location, myProcessor));
           }
-          myStack.add(new DlvStackFrame(location, myProcessor));
+          container.addStackFrames(myStack, true);
         }
-        container.addStackFrames(myStack, true);
       }
 
       private static class DlvStackFrame extends XStackFrame {
