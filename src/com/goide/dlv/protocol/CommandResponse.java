@@ -66,13 +66,13 @@ public interface CommandResponse {
       }
 
       do {
-        if (name.equals("error")) {
+        if ("error".equals(name)) {
           _error = new M5m(reader, null);
         }
-        else if (name.equals("id")) {
+        else if ("id".equals(name)) {
           _id = reader.nextInt();
         }
-        else if (name.equals("result")) {
+        else if ("result".equals(name)) {
           _result = reader.subReader();
           reader.skipValue();
         }
