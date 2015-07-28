@@ -17,7 +17,6 @@
 package com.goide.dlv;
 
 import com.goide.GoFileType;
-import com.goide.GoIcons;
 import com.goide.GoLanguage;
 import com.goide.dlv.protocol.*;
 import com.intellij.icons.AllIcons;
@@ -29,28 +28,23 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Key;
-import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
-import com.intellij.ui.ColoredTextContainer;
-import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.util.Consumer;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.io.socketConnection.ConnectionStatus;
 import com.intellij.util.io.socketConnection.SocketConnectionListener;
 import com.intellij.xdebugger.XDebugSession;
-import com.intellij.xdebugger.XDebuggerUtil;
 import com.intellij.xdebugger.XSourcePosition;
 import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import com.intellij.xdebugger.breakpoints.XBreakpointHandler;
 import com.intellij.xdebugger.breakpoints.XLineBreakpoint;
 import com.intellij.xdebugger.evaluation.XDebuggerEditorsProviderBase;
-import com.intellij.xdebugger.frame.*;
-import com.intellij.xdebugger.frame.presentation.XNumericValuePresentation;
-import com.intellij.xdebugger.frame.presentation.XStringValuePresentation;
-import com.intellij.xdebugger.frame.presentation.XValuePresentation;
+import com.intellij.xdebugger.frame.XExecutionStack;
+import com.intellij.xdebugger.frame.XStackFrame;
+import com.intellij.xdebugger.frame.XSuspendContext;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -58,7 +52,6 @@ import org.jetbrains.concurrency.Promise;
 import org.jetbrains.debugger.DebugProcessImpl;
 import org.jetbrains.debugger.connection.RemoteVmConnection;
 
-import javax.swing.*;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -296,10 +289,11 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
         myProcessor = processor;
         myStack = ContainerUtil.newArrayListWithCapacity(locations.size());
         for (Api.Location location : myLocations) {
-          if (!myStack.isEmpty()) {
+          final boolean top = myStack.isEmpty();
+          if (!top) {
             location.line -= 1; // todo: bizarre
           }
-          myStack.add(new DlvStackFrame(location, myProcessor));
+          myStack.add(new DlvStackFrame(location, myProcessor, top));
         }
       }
 
@@ -312,84 +306,6 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
       @Override
       public void computeStackFrames(int firstFrameIndex, @NotNull XStackFrameContainer container) {
         container.addStackFrames(myStack, true);
-      }
-
-      private static class DlvStackFrame extends XStackFrame {
-        private final Api.Location myLocation;
-        private final DlvCommandProcessor myProcessor;
-
-        public DlvStackFrame(Api.Location location, DlvCommandProcessor processor) {
-          myLocation = location;
-          myProcessor = processor;
-        }
-
-        @Nullable
-        @Override
-        public XSourcePosition getSourcePosition() {
-          final String url = myLocation.file;
-          final VirtualFile file = LocalFileSystem.getInstance().findFileByPath(url);
-          if (file == null) return null;
-          return XDebuggerUtil.getInstance().createPosition(file, myLocation.line);
-        }
-
-        @Override
-        public void customizePresentation(@NotNull ColoredTextContainer component) {
-          super.customizePresentation(component);
-          component.append(" at " + myLocation.function.name, SimpleTextAttributes.REGULAR_ATTRIBUTES);
-          component.setIcon(AllIcons.Debugger.StackFrame);
-        }
-
-        @Override
-        public void computeChildren(@NotNull final XCompositeNode node) {
-          final Promise<List<Api.Variable>> varPromise = myProcessor.send(new DlvLocalsRequest.DlvLocalVarsRequest());
-          varPromise.processed(new Consumer<List<Api.Variable>>() {
-            @Override
-            public void consume(@NotNull List<Api.Variable> variables) {
-              final XValueChildrenList xVars = new XValueChildrenList(variables.size());
-              for (Api.Variable v : variables) {
-                xVars.add(v.name, getVariableValue(v.name, v.value, v.type, GoIcons.VARIABLE));
-              }
-
-              final Promise<List<Api.Variable>> argsPromise = myProcessor.send(new DlvLocalsRequest.DlvFunctionArgsRequest());
-              argsPromise.processed(new Consumer<List<Api.Variable>>() {
-                @Override
-                public void consume(List<Api.Variable> args) {
-                  for (Api.Variable v : args) {
-                    xVars.add(v.name, getVariableValue(v.name, v.value, v.type, GoIcons.PARAMETER));
-                  }
-                  node.addChildren(xVars, true);
-                }
-              });
-              argsPromise.rejected(THROWABLE_CONSUMER);
-            }
-          });
-          varPromise.rejected(THROWABLE_CONSUMER);
-        }
-
-        @NotNull
-        private static XValue getVariableValue(@NotNull String name,
-                                               @NotNull final String value,
-                                               @Nullable final String type,
-                                               @Nullable final Icon icon) {
-          return new XNamedValue(name) {
-            @Override
-            public void computePresentation(@NotNull XValueNode node, @NotNull XValuePlace place) {
-              final XValuePresentation presentation = getPresentation();
-              if (presentation != null) {
-                node.setPresentation(icon, presentation, false);
-                return;
-              }
-              node.setPresentation(icon, type, value, false);
-            }
-
-            @Nullable
-            private XValuePresentation getPresentation() {
-              if ("struct string".equals(type)) return new XStringValuePresentation(value);
-              if ("int".equals(type)) return new XNumericValuePresentation(value);
-              return null;
-            }
-          };
-        }
       }
     }
   }
