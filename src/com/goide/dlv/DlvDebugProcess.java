@@ -200,12 +200,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
         System.out.println(b);
       }
     });
-    promise.rejected(new Consumer<Throwable>() {
-      @Override
-      public void consume(@NotNull Throwable throwable) {
-        throwable.printStackTrace();
-      }
-    });
+    promise.rejected(THROWABLE_CONSUMER);
   }
 
   @Override
