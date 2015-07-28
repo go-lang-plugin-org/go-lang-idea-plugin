@@ -51,7 +51,8 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       GoReservedWordUsedAsName.class,
       GoMultiplePackagesInspection.class,
       GoCgoInTestInspection.class,
-      GoTestSignaturesInspection.class
+      GoTestSignaturesInspection.class,
+      GoAssignmentNilWithoutExplicitType.class
     );
   }
 
@@ -203,6 +204,11 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
 
   public void testDuplicateBuiltinType() {
     myFixture.configureByText("a.go", "package main; func main() {<warning descr=\"Variable 'string' collides with builtin type\">string</warning> := 3; _ = string}");
+    myFixture.checkHighlighting();
+  }
+
+  public void testUseNilWithoutExplicitType() {
+    myFixture.configureByText("a.go", "package main; func main() { var x string = nil; _ = x; var y = <error>nil</error>; _ = y}");
     myFixture.checkHighlighting();
   }
 

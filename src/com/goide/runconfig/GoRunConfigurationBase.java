@@ -29,7 +29,11 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizerUtil;
 import com.intellij.openapi.util.WriteExternalException;
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VfsUtilCore;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.util.PathUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.jdom.Element;
@@ -153,6 +157,16 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
       throw new ExecutionException("Go isn't configured for run configuration: " + getName());
     }
     return newRunningState(env, module);
+  }
+  
+  @Nullable
+  protected VirtualFile findFile(@NotNull String filePath) {
+    VirtualFile virtualFile = VirtualFileManager.getInstance().findFileByUrl(VfsUtilCore.pathToUrl(filePath));
+    if (virtualFile == null) {
+      String path = FileUtil.join(getWorkingDirectory(), filePath);
+      virtualFile = VirtualFileManager.getInstance().findFileByUrl(VfsUtilCore.pathToUrl(path));
+    }
+    return virtualFile;
   }
 
   @NotNull

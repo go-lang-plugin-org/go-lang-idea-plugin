@@ -90,10 +90,14 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
     }
     switch (myKind) {
       case DIRECTORY:
-        if (!FileUtil.isAncestor(getWorkingDirectory(), myDirectoryPath, false)) {
+        String directoryPath = FileUtil.isAbsolutePlatformIndependent(myDirectoryPath)
+                               ? myDirectoryPath
+                               : FileUtil.join(getWorkingDirectory(), myDirectoryPath);
+
+        if (!FileUtil.isAncestor(getWorkingDirectory(), directoryPath, false)) {
           throw new RuntimeConfigurationError("Working directory should be ancestor of testing directory");
         }
-        VirtualFile testingDirectory = LocalFileSystem.getInstance().findFileByPath(myDirectoryPath);
+        VirtualFile testingDirectory = LocalFileSystem.getInstance().findFileByPath(directoryPath);
         if (testingDirectory == null) {
           throw new RuntimeConfigurationError("Testing directory doesn't exist");
         }
@@ -113,7 +117,7 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
         }
         throw new RuntimeConfigurationError("Cannot find Go test files in '" + myPackage + "'");
       case FILE:
-        VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByPath(myFilePath);
+        VirtualFile virtualFile = findFile(getFilePath());
         if (virtualFile == null) {
           throw new RuntimeConfigurationError("Test file doesn't exist");
         }

@@ -16,6 +16,7 @@
 
 package com.goide.psi.impl;
 
+import com.goide.GoConstants;
 import com.goide.GoTypes;
 import com.goide.psi.*;
 import com.goide.sdk.GoSdkUtil;
@@ -128,7 +129,7 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
     if (!GoReference.processDirectory(dir, file, file.getPackageName(), processor, state, true)) return false;
     if (GoReference.processImports(file, processor, state, myElement)) return false;
     if (processBuiltin(processor, state, myElement)) return false;
-    if (getIdentifier().textMatches("nil") && PsiTreeUtil.getParentOfType(myElement, GoTypeCaseClause.class) != null) {
+    if (getIdentifier().textMatches(GoConstants.NIL) && PsiTreeUtil.getParentOfType(myElement, GoTypeCaseClause.class) != null) {
       GoType type = PsiTreeUtil.getParentOfType(myElement, GoType.class);
       if (FormatterUtil.getPrevious(type != null ? type.getNode() : null, GoTypes.CASE) == null) return true;
       GoFile builtinFile = GoSdkUtil.findBuiltinFile(myElement);
@@ -136,7 +137,7 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
       GoVarDefinition nil = ContainerUtil.find(builtinFile.getVars(), new Condition<GoVarDefinition>() {
         @Override
         public boolean value(GoVarDefinition v) {
-          return "nil".equals(v.getName());
+          return GoConstants.NIL.equals(v.getName());
         }
       });
       if (nil != null && !processor.execute(nil, state)) return false;
