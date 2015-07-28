@@ -47,6 +47,6 @@ public class DlvRemoteVmConnection extends RemoteVmConnection {
   @NotNull
   @Override
   protected String connectedAddressToPresentation(@NotNull InetSocketAddress address, @NotNull Vm vm) {
-    return "WTF";
+    return address.toString();
   }
 }
