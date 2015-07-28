@@ -23,6 +23,7 @@ import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizerUtil;
 import com.intellij.openapi.util.WriteExternalException;
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -31,7 +32,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
-
 
 public abstract class GoRunConfigurationWithMain<T extends GoRunningState> extends GoRunConfigurationBase<T> {
   private static final String FILE_PATH_ATTRIBUTE_NAME = "filePath";
@@ -60,7 +60,11 @@ public abstract class GoRunConfigurationWithMain<T extends GoRunningState> exten
   protected void checkFileConfiguration() throws RuntimeConfigurationError {
     VirtualFile file = VirtualFileManager.getInstance().findFileByUrl(VfsUtilCore.pathToUrl(getFilePath()));
     if (file == null) {
-      throw new RuntimeConfigurationError("Main file is not specified");
+      // check relative path based on working directory
+      String relativePath = FileUtil.join(getWorkingDirectory(), getFilePath());
+      file = VirtualFileManager.getInstance().findFileByUrl(VfsUtilCore.pathToUrl(relativePath));
+      if (file == null)
+        throw new RuntimeConfigurationError("Main file is not specified");
     }
     PsiFile psiFile = PsiManager.getInstance(getProject()).findFile(file);
     if (psiFile == null || !(psiFile instanceof GoFile)) {
