@@ -214,7 +214,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     Promise<Api.DebuggerState> promise = processor.send(new DlvCommandRequest(Api.CONTINUE));
     promise.processed(new Consumer<Api.DebuggerState>() {
       @Override
-      public void consume(@Nullable Api.DebuggerState o) {
+      public void consume(@Nullable final Api.DebuggerState o) {
         if (o == null || o.exited) {
           getSession().stop();
           return;
@@ -235,7 +235,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
         stackPromise.processed(new Consumer<List<Api.Location>>() {
           @Override
           public void consume(@NotNull List<Api.Location> locations) {
-            getSession().breakpointReached(find, null, new DlvSuspendContext(locations, processor));
+            getSession().breakpointReached(find, null, new DlvSuspendContext(o.currentThread.id, locations, processor));
           }
         });
         stackPromise.rejected(THROWABLE_CONSUMER);
@@ -247,8 +247,8 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
   private static class DlvSuspendContext extends XSuspendContext {
     @NotNull private final DlvExecutionStack myStack;
 
-    public DlvSuspendContext(@NotNull List<Api.Location> locations, DlvCommandProcessor processor) {
-      myStack = new DlvExecutionStack(locations, processor);
+    public DlvSuspendContext(int threadId, @NotNull List<Api.Location> locations, DlvCommandProcessor processor) {
+      myStack = new DlvExecutionStack(threadId, locations, processor);
     }
 
     @Nullable
@@ -268,8 +268,8 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
       private final DlvCommandProcessor myProcessor;
       @NotNull private final List<DlvStackFrame> myStack;
 
-      public DlvExecutionStack(@NotNull List<Api.Location> locations, DlvCommandProcessor processor) {
-        super(String.valueOf(locations.size()));
+      public DlvExecutionStack(int threadId, @NotNull List<Api.Location> locations, DlvCommandProcessor processor) {
+        super("Thread #" + threadId);
         myLocations = locations;
         myProcessor = processor;
         myStack = ContainerUtil.newArrayListWithCapacity(locations.size());
