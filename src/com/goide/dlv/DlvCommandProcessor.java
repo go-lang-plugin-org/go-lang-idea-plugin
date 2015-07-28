@@ -18,7 +18,6 @@ package com.goide.dlv;
 
 import com.goide.dlv.protocol.Api;
 import com.goide.dlv.protocol.CommandResponse;
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
@@ -97,17 +96,10 @@ public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, CommandR
   @NotNull
   @Override
   public <RESULT> RESULT readResult(@NotNull String method, @NotNull CommandResponse successResponse) {
-    JsonReader reader = successResponse.result().asGson();
-    final Gson gson = new GsonBuilder().create();
-    if (method.equals("RPCServer.StacktraceGoroutine")) {
-      return gson.fromJson(reader, new TypeToken<ArrayList<Api.Location>>() {
-      }.getType());
-    }
-    else if (method.equals("RPCServer.ListLocalVars")) {
-      return gson.fromJson(reader, new TypeToken<ArrayList<Api.Variable>>() {
-      }.getType());
-    }
-    Object o = gson.fromJson(reader, getT(method));
+    final JsonReaderEx result = successResponse.result();
+    assert result != null : "success result should be not null";
+    JsonReader reader = result.asGson();
+    Object o = new GsonBuilder().create().fromJson(reader, getT(method));
     //noinspection unchecked
     return (RESULT)o;
   }
@@ -117,6 +109,8 @@ public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, CommandR
     if (method.equals("RPCServer.CreateBreakpoint")) return Api.Breakpoint.class;
     if (method.equals("RPCServer.ClearBreakpoint")) return Api.Breakpoint.class;
     if (method.equals("RPCServer.Command")) return Api.DebuggerState.class;
+    if (method.equals("RPCServer.StacktraceGoroutine")) return new TypeToken<ArrayList<Api.Location>>() {}.getType();
+    if (method.equals("RPCServer.ListLocalVars")) return new TypeToken<ArrayList<Api.Variable>>() {}.getType();
     return Object.class;
   }
 }
