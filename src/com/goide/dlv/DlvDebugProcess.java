@@ -48,6 +48,9 @@ import com.intellij.xdebugger.breakpoints.XBreakpointHandler;
 import com.intellij.xdebugger.breakpoints.XLineBreakpoint;
 import com.intellij.xdebugger.evaluation.XDebuggerEditorsProviderBase;
 import com.intellij.xdebugger.frame.*;
+import com.intellij.xdebugger.frame.presentation.XNumericValuePresentation;
+import com.intellij.xdebugger.frame.presentation.XStringValuePresentation;
+import com.intellij.xdebugger.frame.presentation.XValuePresentation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.concurrency.Promise;
@@ -336,11 +339,22 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
           return new XNamedValue(name) {
             @Override
             public void computePresentation(@NotNull XValueNode node, @NotNull XValuePlace place) {
+              final XValuePresentation presentation = getPresentation();
+              if (presentation != null) {
+                node.setPresentation(GoIcons.VARIABLE, presentation, false);
+                return;
+              }
               node.setPresentation(GoIcons.VARIABLE, type, value, false);
+            }
+
+            @Nullable
+            private XValuePresentation getPresentation() {
+              if ("struct string".equals(type)) return new XStringValuePresentation(value);
+              if ("int".equals(type)) return new XNumericValuePresentation(value);
+              return null;
             }
           };
         }
-
       }
     }
   }
