@@ -33,7 +33,10 @@ public class GoIntroduceVariableTest extends LightPlatformCodeInsightFixtureTest
 
   public void testCaretAfterRightParenthesis()      { doTest(); }
   public void testCaretOnRightParenthesis()         { doTest(); }
-  public void testNameSuggestionsOnGetterFunction() { doTest(); }
+  public void testNameSuggestOnGetterFunction()     { doTest(); }
+  public void testNameSuggestOnDefinedImportAlias() { doTest(); }
+  public void testNameSuggestOnDefaultName()        { doTest(); }
+  public void testNameSuggestOnParamName()          { doTest(); }
 
   public void testMultipleValueResult() {
     try {

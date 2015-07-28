@@ -110,7 +110,7 @@ public class GoIntroduceVariableBase {
       return;
     }
     LinkedHashSet<String> suggestedNames = getSuggestedNames(expression);
-    final String name = suggestedNames.isEmpty() ? "i" : ContainerUtil.getFirstItem(suggestedNames);
+    final String name = ContainerUtil.getFirstItem(suggestedNames);
     assert name != null;
     final List<PsiElement> newOccurrences = ContainerUtil.newArrayList();
     PsiElement statement = new WriteCommandAction<PsiElement>(project, anchor.getContainingFile()) {
@@ -146,8 +146,27 @@ public class GoIntroduceVariableBase {
     introducer.performInplaceRefactoring(suggestedNames);
   }
 
+  private static LinkedHashSet<String> getNamesInContext(PsiElement context) {
+    if (context == null) return ContainerUtil.newLinkedHashSet();
+    final LinkedHashSet<String> names = ContainerUtil.newLinkedHashSet();
+
+    for (GoNamedElement namedElement : PsiTreeUtil.findChildrenOfType(context, GoNamedElement.class)) {
+      names.add(namedElement.getName());
+    }
+
+    names.addAll(((GoFile)context.getContainingFile()).getImportMap().keySet());
+
+    GoFunctionDeclaration functionDeclaration = PsiTreeUtil.getParentOfType(context, GoFunctionDeclaration.class);
+    GoSignature signature = PsiTreeUtil.getChildOfType(functionDeclaration, GoSignature.class);
+    for (GoParamDefinition param : PsiTreeUtil.findChildrenOfType(signature, GoParamDefinition.class)) {
+      names.add(param.getName());
+    }
+    return names;
+  }
+
   @NotNull
   private static LinkedHashSet<String> getSuggestedNames(GoExpression expression) {
+    LinkedHashSet<String> usedNames = getNamesInContext(PsiTreeUtil.getParentOfType(expression, GoBlock.class));
     LinkedHashSet<String> names = ContainerUtil.newLinkedHashSet();
     if (expression instanceof GoCallExpr) {
       GoReferenceExpression callReference = PsiTreeUtil.getChildOfType(expression, GoReferenceExpression.class);
@@ -161,9 +180,20 @@ public class GoIntroduceVariableBase {
         }
         for (int i = name.length() - 1; i >= 0; i--) {
           if (i == 0 || (Character.isLowerCase(name.charAt(i - 1)) && Character.isUpperCase(name.charAt(i)))) {
-            names.add(StringUtil.decapitalize(name.substring(i)));
+            String candidate = StringUtil.decapitalize(name.substring(i));
+            if (!usedNames.contains(candidate)) names.add(candidate);
           }
         }
+      }
+    }
+    if (names.isEmpty()) {
+      if (usedNames.contains("i")) {
+        int counter = 1;
+        while (usedNames.contains("i" + counter)) counter++;
+        names.add("i" + counter);
+      }
+      else {
+        names.add("i");
       }
     }
     return names;
@@ -171,7 +201,8 @@ public class GoIntroduceVariableBase {
 
   protected static void showCannotPerform(@NotNull Project project, @NotNull Editor editor, String message) {
     message = RefactoringBundle.getCannotRefactorMessage(message);
-    CommonRefactoringUtil.showErrorHint(project, editor, message, RefactoringBundle.getCannotRefactorMessage(null), "refactoring.extractVariable");
+    CommonRefactoringUtil
+      .showErrorHint(project, editor, message, RefactoringBundle.getCannotRefactorMessage(null), "refactoring.extractVariable");
   }
 
   protected static void smartIntroduce(@NotNull final Project project,
@@ -213,9 +244,14 @@ public class GoIntroduceVariableBase {
       expression = findParentExpression(expression);
     }
     if (expressions.isEmpty()) {
-      String message =
-        invalidExpression != null ? "Expression " + invalidExpression.getText() + " returns multiple values." : "No expression found.";
-      showCannotPerform(project, editor, message);
+      if (invalidExpression == null) {
+        showCannotPerform(project, editor, "No expression found.");
+      }
+      else {
+        int resultCount = GoInspectionUtil.getExpressionResultCount(invalidExpression);
+        showCannotPerform(project, editor, "Expression " + invalidExpression.getText() +
+                                           (resultCount == 0 ? " doesn't return a value." : " returns multiple values."));
+      }
     }
     return expressions;
   }
@@ -251,8 +287,7 @@ public class GoIntroduceVariableBase {
     public GoInplaceVariableIntroducer(GoVarDefinition target,
                                        Editor editor,
                                        List<PsiElement> occurrences) {
-      super(target, editor, editor.getProject(), "Introduce Variable", ArrayUtil.toObjectArray(occurrences, PsiElement.class),
-            null);
+      super(target, editor, editor.getProject(), "Introduce Variable", ArrayUtil.toObjectArray(occurrences, PsiElement.class), null);
     }
 
     @Nullable
