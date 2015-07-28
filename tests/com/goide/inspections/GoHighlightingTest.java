@@ -208,8 +208,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testUseNilWithoutExplicitType() {
-    myFixture.configureByText("a.go", "package main; func main() { var x = <error>nil</error>; _ = x}");
-    myFixture.configureByText("b.go", "package main; func main() { var x string = nil; _ = x}");
+    myFixture.configureByText("a.go", "package main; func main() { var x string = nil; _ = x; var y = <error>nil</error>; _ = y}");
     myFixture.checkHighlighting();
   }
 
