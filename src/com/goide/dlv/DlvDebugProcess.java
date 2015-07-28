@@ -234,8 +234,8 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     promise.rejected(THROWABLE_CONSUMER);
   }
 
-  private void command(@NotNull
-                       @MagicConstant(stringValues = {Api.NEXT, Api.CONTINUE, Api.HALT, Api.SWITCH_THREAD, Api.STEP}) String name) {
+  private void send(@NotNull
+                    @MagicConstant(stringValues = {Api.NEXT, Api.CONTINUE, Api.HALT, Api.SWITCH_THREAD, Api.STEP}) String name) {
     Promise<Api.DebuggerState> promise = getProcessor().send(new DlvCommandRequest(name));
     promise.processed(myStateConsumer);
     promise.rejected(THROWABLE_CONSUMER);
@@ -243,17 +243,17 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
 
   @Override
   public void startStepOver() {
-    command(Api.NEXT);
+    send(Api.NEXT);
   }
 
   @Override
   public void startStepInto() {
-    command(Api.STEP);
+    send(Api.STEP);
   }
 
   @Override
   public void resume() {
-    command(Api.CONTINUE);
+    send(Api.CONTINUE);
   }
 
   @Override
@@ -263,7 +263,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
 
   @Override
   public void stop() {
-    //command(Api.HALT);
+    // send(Api.HALT);
   }
 
   private static class DlvSuspendContext extends XSuspendContext {
