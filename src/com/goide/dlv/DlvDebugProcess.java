@@ -245,6 +245,11 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
   }
 
   @Override
+  public void startStepOut() {
+    // todo
+  }
+
+  @Override
   public void resume() {
     send(Api.CONTINUE);
   }
