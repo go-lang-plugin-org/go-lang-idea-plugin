@@ -277,7 +277,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
         myStack = ContainerUtil.newArrayListWithCapacity(locations.size());
         for (Api.Location location : myLocations) {
           if (!myStack.isEmpty()) {
-            location.line -= 1; // todo: bizzare
+            location.line -= 1; // todo: bizarre
           }
           myStack.add(new DlvStackFrame(location, myProcessor));
         }
