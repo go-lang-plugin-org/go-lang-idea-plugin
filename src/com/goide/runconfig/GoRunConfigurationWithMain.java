@@ -60,9 +60,8 @@ public abstract class GoRunConfigurationWithMain<T extends GoRunningState> exten
   protected void checkFileConfiguration() throws RuntimeConfigurationError {
     VirtualFile file = VirtualFileManager.getInstance().findFileByUrl(VfsUtilCore.pathToUrl(getFilePath()));
     if (file == null) {
-      // check relative path based on working directory
-      String relativePath = FileUtil.join(getWorkingDirectory(), getFilePath());
-      file = VirtualFileManager.getInstance().findFileByUrl(VfsUtilCore.pathToUrl(relativePath));
+      String path = FileUtil.join(getWorkingDirectory(), getFilePath());
+      file = VirtualFileManager.getInstance().findFileByUrl(VfsUtilCore.pathToUrl(path));
       if (file == null)
         throw new RuntimeConfigurationError("Main file is not specified");
     }

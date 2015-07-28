@@ -90,10 +90,14 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
     }
     switch (myKind) {
       case DIRECTORY:
-        if (!FileUtil.isAncestor(getWorkingDirectory(), myDirectoryPath, false)) {
+        String directoryPath = FileUtil.isAbsolutePlatformIndependent(myDirectoryPath)
+                               ? myDirectoryPath
+                               : FileUtil.join(getWorkingDirectory(), myDirectoryPath);
+
+        if (!FileUtil.isAncestor(getWorkingDirectory(), directoryPath, false)) {
           throw new RuntimeConfigurationError("Working directory should be ancestor of testing directory");
         }
-        VirtualFile testingDirectory = LocalFileSystem.getInstance().findFileByPath(myDirectoryPath);
+        VirtualFile testingDirectory = LocalFileSystem.getInstance().findFileByPath(directoryPath);
         if (testingDirectory == null) {
           throw new RuntimeConfigurationError("Testing directory doesn't exist");
         }
@@ -115,7 +119,10 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
       case FILE:
         VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByPath(myFilePath);
         if (virtualFile == null) {
-          throw new RuntimeConfigurationError("Test file doesn't exist");
+          String path = FileUtil.join(getWorkingDirectory(), myFilePath);
+          virtualFile = LocalFileSystem.getInstance().findFileByPath(path);
+          if (virtualFile == null)
+            throw new RuntimeConfigurationError("Test file doesn't exist");
         }
         PsiFile file = PsiManager.getInstance(getProject()).findFile(virtualFile);
         if (file == null || !GoTestFinder.isTestFile(file)) {
