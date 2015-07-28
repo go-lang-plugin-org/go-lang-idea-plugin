@@ -198,12 +198,6 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     if (id == null) return;
     DlvVm vm = (DlvVm)getVm();
     Promise<Api.Breakpoint> promise = vm.getCommandProcessor().send(new DlvClearBreakpoint(id));
-    promise.processed(new Consumer<Api.Breakpoint>() {
-      @Override
-      public void consume(Api.Breakpoint b) {
-        System.out.println(b);
-      }
-    });
     promise.rejected(THROWABLE_CONSUMER);
   }
 
