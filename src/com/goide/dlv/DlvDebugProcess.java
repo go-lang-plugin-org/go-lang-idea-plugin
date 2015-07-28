@@ -62,7 +62,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
 
   public static final Consumer<Throwable> THROWABLE_CONSUMER = new Consumer<Throwable>() {
     @Override
-    public void consume(Throwable throwable) {
+    public void consume(@NotNull Throwable throwable) {
       throwable.printStackTrace();
     }
   };
@@ -158,7 +158,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
 
   public static final Key<Integer> ID = Key.create("ID");
 
-  Set<XBreakpoint<DlvLineBreakpointProperties>> breakpoints = ContainerUtil.newConcurrentSet();
+  @NotNull Set<XBreakpoint<DlvLineBreakpointProperties>> breakpoints = ContainerUtil.newConcurrentSet();
 
 
   public void addBreakpoint(@NotNull final XLineBreakpoint<DlvLineBreakpointProperties> breakpoint) {
@@ -215,7 +215,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     Promise<Api.DebuggerState> promise = processor.send(new DlvCommandRequest(Api.CONTINUE));
     promise.processed(new Consumer<Api.DebuggerState>() {
       @Override
-      public void consume(Api.DebuggerState o) {
+      public void consume(@Nullable Api.DebuggerState o) {
         if (o == null) throw new RuntimeException("debug process is null");
         
         if (o.exited) {
@@ -229,7 +229,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
         final XBreakpoint<DlvLineBreakpointProperties> find =
           ContainerUtil.find(breakpoints, new Condition<XBreakpoint<DlvLineBreakpointProperties>>() {
             @Override
-            public boolean value(XBreakpoint<DlvLineBreakpointProperties> b) {
+            public boolean value(@NotNull XBreakpoint<DlvLineBreakpointProperties> b) {
               return Comparing.equal(b.getUserData(ID), id);
             }
           });
@@ -237,7 +237,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
         final Promise<List<Api.Location>> stackPromise = processor.send(new DlvStacktraceRequest());
         stackPromise.processed(new Consumer<List<Api.Location>>() {
           @Override
-          public void consume(List<Api.Location> locations) {
+          public void consume(@NotNull List<Api.Location> locations) {
             getSession().breakpointReached(find, null, new DlvSuspendContext(locations, processor));
           }
         });
@@ -248,9 +248,9 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
   }
 
   private static class DlvSuspendContext extends XSuspendContext {
-    private final DlvExecutionStack myStack;
+    @NotNull private final DlvExecutionStack myStack;
 
-    public DlvSuspendContext(List<Api.Location> locations, DlvCommandProcessor processor) {
+    public DlvSuspendContext(@NotNull List<Api.Location> locations, DlvCommandProcessor processor) {
       myStack = new DlvExecutionStack(locations, processor);
     }
 
@@ -260,17 +260,18 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
       return myStack;
     }
 
+    @NotNull
     @Override
     public XExecutionStack[] getExecutionStacks() {
       return new XExecutionStack[]{myStack};
     }
 
     private static class DlvExecutionStack extends XExecutionStack {
-      private final List<Api.Location> myLocations;
+      @NotNull private final List<Api.Location> myLocations;
       private final DlvCommandProcessor myProcessor;
-      private final List<DlvStackFrame> myStack;
+      @NotNull private final List<DlvStackFrame> myStack;
 
-      public DlvExecutionStack(List<Api.Location> locations, DlvCommandProcessor processor) {
+      public DlvExecutionStack(@NotNull List<Api.Location> locations, DlvCommandProcessor processor) {
         super(String.valueOf(locations.size()));
         myLocations = locations;
         myProcessor = processor;
@@ -290,7 +291,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
       }
 
       @Override
-      public void computeStackFrames(int firstFrameIndex, XStackFrameContainer container) {
+      public void computeStackFrames(int firstFrameIndex, @NotNull XStackFrameContainer container) {
         container.addStackFrames(myStack, true);
       }
 
@@ -324,7 +325,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
           final Promise<List<Api.Variable>> varPromise = myProcessor.send(new DlvLocalVariablesRequest());
           varPromise.processed(new Consumer<List<Api.Variable>>() {
             @Override
-            public void consume(List<Api.Variable> variables) {
+            public void consume(@NotNull List<Api.Variable> variables) {
               XValueChildrenList xVars = new XValueChildrenList(variables.size());
               for (Api.Variable v : variables) {
                 xVars.add(v.name, getVariableValue(v.name, v.value, v.type));
@@ -335,7 +336,8 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
           varPromise.rejected(THROWABLE_CONSUMER);
         }
 
-        private static XValue getVariableValue(String name, final String value, final String type) {
+        @NotNull
+        private static XValue getVariableValue(@NotNull String name, @NotNull final String value, @Nullable final String type) {
           return new XNamedValue(name) {
             @Override
             public void computePresentation(@NotNull XValueNode node, @NotNull XValuePlace place) {
