@@ -20,6 +20,7 @@ import com.goide.psi.GoExpression;
 import com.intellij.codeInsight.template.impl.TemplateManagerImpl;
 import com.intellij.codeInsight.template.impl.TemplateState;
 import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.project.Project;
@@ -42,18 +43,15 @@ public class GoIntroduceVariableHandler extends GoIntroduceVariableBase implemen
     }
     SelectionModel selectionModel = editor.getSelectionModel();
     List<GoExpression> expressions = selectionModel.hasSelection()
-                                     ? collectExpressionsInSelection(file, selectionModel)
-                                     : collectExpressionsAtOffset(file, editor.getDocument(), editor.getCaretModel().getOffset());
-    if (expressions.size() > 1) {
-      smartIntroduce(project, editor, expressions);
-    }
-    else if (expressions.size() == 1) {
+                                     ? collectExpressionsInSelection(file, project, editor, selectionModel)
+                                     : collectExpressionsAtOffset(file, project, editor, editor.getCaretModel().getOffset());
+    if (expressions.size() == 1 || ApplicationManager.getApplication().isUnitTestMode()) {
       GoExpression expression = ContainerUtil.getFirstItem(expressions);
       assert expression != null;
       performOnElement(project, editor, expression);
     }
-    else {
-      showCannotPerform(project, editor);
+    else if (expressions.size() > 1) {
+      smartIntroduce(project, editor, expressions);
     }
   }
 
