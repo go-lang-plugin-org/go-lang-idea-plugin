@@ -73,8 +73,7 @@ public class Api {
     // Name is the function name.
     public String name; //`json:"name"`
     public int value; //`json:"value"`
-    @SerializedName("class")
-    public byte clazz; //`json:"class"`
+    public byte type; //`json:"type"`
     public int goclass; //`json:"goclass"`
     // Args are the function arguments in a thread context.
     public List<Variable> args; //`json:"args"`
