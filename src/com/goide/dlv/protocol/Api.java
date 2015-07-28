@@ -117,6 +117,7 @@ public class Api {
     public List<Location> stacktrace; //`json:"stacktrace,omitempty"`
     public Goroutine goroutine; //`json:"goroutine,omitempty"`
     public List<Variable> variables; //`json:"variables,omitempty"`
+    public List<Variable> arguments; //`json:"arguments,omitempty"`
   }
 
   public static String CONTINUE = "continue";
