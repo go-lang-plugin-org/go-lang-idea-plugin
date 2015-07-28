@@ -19,8 +19,8 @@ package com.goide.dlv.protocol;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DlvLocalVariablesRequest extends DlvRequest<List<Api.Variable>> {
-  public DlvLocalVariablesRequest()  {
+public abstract class DlvLocalsRequest extends DlvRequest<List<Api.Variable>> {
+  public DlvLocalsRequest() {
     final List<String> objects = new ArrayList<String>();
     objects.add(null);
     writeStringList(argumentsKeyName(), objects);
@@ -31,9 +31,17 @@ public class DlvLocalVariablesRequest extends DlvRequest<List<Api.Variable>> {
     return false;
   }
 
+  public static class DlvLocalVarsRequest extends DlvLocalsRequest {
+    @Override
+    public String getMethodName() {
+      return "RPCServer.ListLocalVars";
+    }
+  }
 
-  @Override
-  public String getMethodName() {
-    return "RPCServer.ListLocalVars";
+  public static class DlvFunctionArgsRequest extends DlvLocalsRequest {
+    @Override
+    public String getMethodName() {
+      return "RPCServer.ListFunctionArgs";
+    }
   }
 }

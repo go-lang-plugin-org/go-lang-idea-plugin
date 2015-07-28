@@ -57,6 +57,7 @@ import org.jetbrains.concurrency.Promise;
 import org.jetbrains.debugger.DebugProcessImpl;
 import org.jetbrains.debugger.connection.RemoteVmConnection;
 
+import javax.swing.*;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -214,9 +215,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     promise.processed(new Consumer<Api.DebuggerState>() {
       @Override
       public void consume(@Nullable Api.DebuggerState o) {
-        if (o == null) throw new RuntimeException("debug process is null");
-        
-        if (o.exited) {
+        if (o == null || o.exited) {
           getSession().stop();
           return;
         }
@@ -320,31 +319,45 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
 
         @Override
         public void computeChildren(@NotNull final XCompositeNode node) {
-          final Promise<List<Api.Variable>> varPromise = myProcessor.send(new DlvLocalVariablesRequest());
+          final Promise<List<Api.Variable>> varPromise = myProcessor.send(new DlvLocalsRequest.DlvLocalVarsRequest());
           varPromise.processed(new Consumer<List<Api.Variable>>() {
             @Override
             public void consume(@NotNull List<Api.Variable> variables) {
-              XValueChildrenList xVars = new XValueChildrenList(variables.size());
+              final XValueChildrenList xVars = new XValueChildrenList(variables.size());
               for (Api.Variable v : variables) {
-                xVars.add(v.name, getVariableValue(v.name, v.value, v.type));
+                xVars.add(v.name, getVariableValue(v.name, v.value, v.type, GoIcons.VARIABLE));
               }
-              node.addChildren(xVars, true);
+
+              final Promise<List<Api.Variable>> argsPromise = myProcessor.send(new DlvLocalsRequest.DlvFunctionArgsRequest());
+              argsPromise.processed(new Consumer<List<Api.Variable>>() {
+                @Override
+                public void consume(List<Api.Variable> args) {
+                  for (Api.Variable v : args) {
+                    xVars.add(v.name, getVariableValue(v.name, v.value, v.type, GoIcons.PARAMETER));
+                  }
+                  node.addChildren(xVars, true);
+                }
+              });
+              argsPromise.rejected(THROWABLE_CONSUMER);
             }
           });
           varPromise.rejected(THROWABLE_CONSUMER);
         }
 
         @NotNull
-        private static XValue getVariableValue(@NotNull String name, @NotNull final String value, @Nullable final String type) {
+        private static XValue getVariableValue(@NotNull String name,
+                                               @NotNull final String value,
+                                               @Nullable final String type, 
+                                               @Nullable final Icon icon) {
           return new XNamedValue(name) {
             @Override
             public void computePresentation(@NotNull XValueNode node, @NotNull XValuePlace place) {
               final XValuePresentation presentation = getPresentation();
               if (presentation != null) {
-                node.setPresentation(GoIcons.VARIABLE, presentation, false);
+                node.setPresentation(icon, presentation, false);
                 return;
               }
-              node.setPresentation(GoIcons.VARIABLE, type, value, false);
+              node.setPresentation(icon, type, value, false);
             }
 
             @Nullable

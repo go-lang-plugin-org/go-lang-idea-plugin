@@ -110,7 +110,7 @@ public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, CommandR
     if (method.equals("RPCServer.ClearBreakpoint")) return Api.Breakpoint.class;
     if (method.equals("RPCServer.Command")) return Api.DebuggerState.class;
     if (method.equals("RPCServer.StacktraceGoroutine")) return new TypeToken<ArrayList<Api.Location>>() {}.getType();
-    if (method.equals("RPCServer.ListLocalVars")) return new TypeToken<ArrayList<Api.Variable>>() {}.getType();
+    if (method.equals("RPCServer.ListLocalVars") || method.equals("RPCServer.ListFunctionArgs")) return new TypeToken<ArrayList<Api.Variable>>() {}.getType();
     return Object.class;
   }
 }
