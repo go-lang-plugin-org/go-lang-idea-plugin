@@ -120,9 +120,9 @@ public class Api {
     public List<Variable> arguments; //`json:"arguments,omitempty"`
   }
 
-  public static String CONTINUE = "continue";
-  public static String STEP = "step";
-  public static String NEXT = "next";
-  public static String SWITCH_THREAD = "switchThread";
-  public static String HALT = "halt";
+  public static final String CONTINUE = "continue";
+  public static final String STEP = "step";
+  public static final String NEXT = "next";
+  public static final String SWITCH_THREAD = "switchThread";
+  public static final String HALT = "halt";
 }

@@ -51,6 +51,7 @@ import com.intellij.xdebugger.frame.*;
 import com.intellij.xdebugger.frame.presentation.XNumericValuePresentation;
 import com.intellij.xdebugger.frame.presentation.XStringValuePresentation;
 import com.intellij.xdebugger.frame.presentation.XValuePresentation;
+import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.concurrency.Promise;
@@ -70,6 +71,48 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
       throwable.printStackTrace();
     }
   };
+
+  private Consumer<Api.DebuggerState> myStateConsumer = new Consumer<Api.DebuggerState>() {
+    @Override
+    public void consume(@Nullable final Api.DebuggerState o) {
+      if (o == null || o.exited) {
+        getSession().stop();
+        return;
+      }
+
+      final XBreakpoint<DlvLineBreakpointProperties> find = findBreak(o.breakPoint);
+      final DlvCommandProcessor processor = getProcessor();
+      final Promise<List<Api.Location>> stackPromise = processor.send(new DlvStacktraceRequest());
+      stackPromise.processed(new Consumer<List<Api.Location>>() {
+        @Override
+        public void consume(@NotNull List<Api.Location> locations) {
+          final DlvSuspendContext context = new DlvSuspendContext(o.currentThread.id, locations, processor);
+          if (find == null) {
+            getSession().positionReached(context);
+          }
+          else {
+            getSession().breakpointReached(find, null, context);
+          }
+        }
+      });
+      stackPromise.rejected(THROWABLE_CONSUMER);
+    }
+
+    @Nullable
+    private XBreakpoint<DlvLineBreakpointProperties> findBreak(final Api.Breakpoint point) {
+      return point != null ? ContainerUtil.find(breakpoints, new Condition<XBreakpoint<DlvLineBreakpointProperties>>() {
+        @Override
+        public boolean value(@NotNull XBreakpoint<DlvLineBreakpointProperties> b) {
+          return Comparing.equal(b.getUserData(ID), point.id);
+        }
+      }) : null;
+    }
+  };
+
+  private DlvCommandProcessor getProcessor() {
+    return ((DlvVm)getVm()).getCommandProcessor();
+  }
+
 
   public DlvDebugProcess(@NotNull XDebugSession session,
                          @NotNull RemoteVmConnection connection) {
@@ -99,16 +142,6 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
   @Override
   public void dispose() {
     // todo
-  }
-
-  @Override
-  public void runToPosition(@NotNull XSourcePosition position) {
-    // todo
-  }
-
-  @Override
-  public void stop() {
-    // todo:
   }
 
   private final AtomicBoolean breakpointsInitiated = new AtomicBoolean();
@@ -201,47 +234,42 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     promise.rejected(THROWABLE_CONSUMER);
   }
 
+  private void command(@NotNull
+                       @MagicConstant(stringValues = {Api.NEXT, Api.CONTINUE, Api.HALT, Api.SWITCH_THREAD, Api.STEP}) String name) {
+    Promise<Api.DebuggerState> promise = getProcessor().send(new DlvCommandRequest(name));
+    promise.processed(myStateConsumer);
+    promise.rejected(THROWABLE_CONSUMER);
+  }
+
+  @Override
+  public void startStepOver() {
+    command(Api.NEXT);
+  }
+
+  @Override
+  public void startStepInto() {
+    command(Api.STEP);
+  }
+
   @Override
   public void resume() {
-    DlvVm vm = (DlvVm)getVm();
-    final DlvCommandProcessor processor = vm.getCommandProcessor();
-    Promise<Api.DebuggerState> promise = processor.send(new DlvCommandRequest(Api.CONTINUE));
-    promise.processed(new Consumer<Api.DebuggerState>() {
-      @Override
-      public void consume(@Nullable final Api.DebuggerState o) {
-        if (o == null || o.exited) {
-          getSession().stop();
-          return;
-        }
+    command(Api.CONTINUE);
+  }
 
-        Api.Breakpoint bp = o.breakPoint;
-        if (bp == null) return;
-        final int id = bp.id;
-        final XBreakpoint<DlvLineBreakpointProperties> find =
-          ContainerUtil.find(breakpoints, new Condition<XBreakpoint<DlvLineBreakpointProperties>>() {
-            @Override
-            public boolean value(@NotNull XBreakpoint<DlvLineBreakpointProperties> b) {
-              return Comparing.equal(b.getUserData(ID), id);
-            }
-          });
-        if (find == null) return;
-        final Promise<List<Api.Location>> stackPromise = processor.send(new DlvStacktraceRequest());
-        stackPromise.processed(new Consumer<List<Api.Location>>() {
-          @Override
-          public void consume(@NotNull List<Api.Location> locations) {
-            getSession().breakpointReached(find, null, new DlvSuspendContext(o.currentThread.id, locations, processor));
-          }
-        });
-        stackPromise.rejected(THROWABLE_CONSUMER);
-      }
-    });
-    promise.rejected(THROWABLE_CONSUMER);
+  @Override
+  public void runToPosition(@NotNull XSourcePosition position) {
+    // todo
+  }
+
+  @Override
+  public void stop() {
+    //command(Api.HALT);
   }
 
   private static class DlvSuspendContext extends XSuspendContext {
     @NotNull private final DlvExecutionStack myStack;
 
-    public DlvSuspendContext(int threadId, @NotNull List<Api.Location> locations, DlvCommandProcessor processor) {
+    public DlvSuspendContext(int threadId, @NotNull List<Api.Location> locations, @NotNull DlvCommandProcessor processor) {
       myStack = new DlvExecutionStack(threadId, locations, processor);
     }
 
@@ -341,7 +369,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
         @NotNull
         private static XValue getVariableValue(@NotNull String name,
                                                @NotNull final String value,
-                                               @Nullable final String type, 
+                                               @Nullable final String type,
                                                @Nullable final Icon icon) {
           return new XNamedValue(name) {
             @Override
