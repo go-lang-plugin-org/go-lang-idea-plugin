@@ -195,6 +195,9 @@
     <localInspection language="go" displayName="Assignment to constant"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.unresolved.GoAssignmentToConstantInspection"/>
+    <localInspection language="go" displayName="Assignment nil without explicit type"
+                     groupName="Go" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoAssignmentNilWithoutExplicitType" />
     <localInspection language="go" displayName="Duplicate function"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoDuplicateFunctionInspection"/>
