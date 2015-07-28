@@ -16,38 +16,27 @@
 
 package com.goide.inspections;
 
+import com.goide.GoConstants;
 import com.goide.psi.*;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 import static com.intellij.codeInspection.ProblemHighlightType.GENERIC_ERROR_OR_WARNING;
 
 public class GoAssignmentNilWithoutExplicitType extends GoInspectionBase {
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder,
-                                     @SuppressWarnings({"UnusedParameters", "For future"}) @NotNull LocalInspectionToolSession session) {
+  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
-      public void visitStatement(@NotNull GoStatement o) {
-        GoVarDeclaration declaration = o.getVarDeclaration();
-        if (declaration != null) {
-          List<GoVarSpec> specs = declaration.getVarSpecList();
-          for (GoVarSpec spec : specs) {
-
-            if (spec.getType() != null)
-              continue;
-
-            List<GoExpression> expressions = spec.getExpressionList();
-            for (GoExpression expr : expressions) {
-              if (expr instanceof GoReferenceExpression) {
-                String name = ((GoReferenceExpression)expr).getIdentifier().getText();
-                if (name != null && name.equals("nil")) {
-                  holder.registerProblem(expr, "Cannot assign nil without explicit type", GENERIC_ERROR_OR_WARNING);
-                }
+      public void visitVarDeclaration(@NotNull GoVarDeclaration o) {
+        for (GoVarSpec spec : o.getVarSpecList()) {
+          if (spec.getType() != null) continue;
+          for (GoExpression expr : spec.getExpressionList()) {
+            if (expr instanceof GoReferenceExpression) {
+              if (((GoReferenceExpression)expr).getIdentifier().textMatches(GoConstants.NIL)) {
+                holder.registerProblem(expr, "Cannot assign nil without explicit type", GENERIC_ERROR_OR_WARNING);
               }
             }
           }

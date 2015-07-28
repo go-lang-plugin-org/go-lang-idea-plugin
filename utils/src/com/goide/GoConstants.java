@@ -85,6 +85,7 @@ public class GoConstants {
                                                                          "windows/amd64", "linux/ppc64le");
   public static final Set<String> KNOWN_COMPILERS = ContainerUtil.immutableSet("gc", "gccgo");
 
+  @NonNls public static final String NIL = "nil";
   private GoConstants() {
 
   }
