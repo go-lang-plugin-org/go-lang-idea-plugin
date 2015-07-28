@@ -327,7 +327,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
             public void consume(List<Api.Variable> variables) {
               XValueChildrenList xVars = new XValueChildrenList(variables.size());
               for (Api.Variable v : variables) {
-                xVars.add(v.name, getVariableValue(v.name, v.value, v.clazz));
+                xVars.add(v.name, getVariableValue(v.name, v.value, v.type));
               }
               node.addChildren(xVars, true);
             }
@@ -335,11 +335,11 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
           varPromise.rejected(THROWABLE_CONSUMER);
         }
 
-        private static XValue getVariableValue(String name, final String value, final String clazz) {
+        private static XValue getVariableValue(String name, final String value, final String type) {
           return new XNamedValue(name) {
             @Override
             public void computePresentation(@NotNull XValueNode node, @NotNull XValuePlace place) {
-              node.setPresentation(GoIcons.VARIABLE, clazz, value, false);
+              node.setPresentation(GoIcons.VARIABLE, type, value, false);
             }
           };
         }

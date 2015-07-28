@@ -86,8 +86,7 @@ public class Api {
   public class Variable {
     public String name; //`json:"name"`
     public String value; //`json:"value"`
-    @SerializedName("class")
-    public String clazz; //`json:"class"`
+    public String type; //`json:"type"`
   }
 
   // Goroutine represents the information relevant to Delve from the runtime's
