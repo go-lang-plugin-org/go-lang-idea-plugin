@@ -16,6 +16,7 @@
 
 package com.goide.dlv;
 
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.vfs.CharsetToolkit;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
@@ -31,6 +32,8 @@ import org.jetbrains.io.SimpleChannelInboundHandlerAdapter;
 import org.jetbrains.jsonProtocol.Request;
 
 public class DlvVm extends VmBase implements StandaloneVmHelper.VmEx {
+  final static Logger LOG = Logger.getInstance(DlvVm.class);
+
   @NotNull private final DlvCommandProcessor commandProcessor;
   @NotNull private final StandaloneVmHelper vmHelper;
   @NotNull private final BreakpointManagerBase<BreakpointBase<?>> breakpointManager = new DummyBreakpointManager();
@@ -44,7 +47,7 @@ public class DlvVm extends VmBase implements StandaloneVmHelper.VmEx {
       @Override
       public boolean fun(@NotNull Request message) {
         ByteBuf content = message.getBuffer();
-        System.out.println("OUT: " + content.toString(CharsetToolkit.UTF8_CHARSET));
+        LOG.info("OUT: " + content.toString(CharsetToolkit.UTF8_CHARSET));
         return write(content);
       }
     };
@@ -55,7 +58,7 @@ public class DlvVm extends VmBase implements StandaloneVmHelper.VmEx {
       @Override
       protected void messageReceived(ChannelHandlerContext context, Object message) throws Exception {
         if (message instanceof ByteBuf) {
-          System.out.println("IN: " + ((ByteBuf)message).toString(CharsetToolkit.UTF8_CHARSET));
+          LOG.info("IN: " + ((ByteBuf)message).toString(CharsetToolkit.UTF8_CHARSET));
           CharSequence string = ChannelBufferToString.readChars((ByteBuf)message);
           JsonReaderEx ex = new JsonReaderEx(string);
           getCommandProcessor().getMessageManager().processIncoming(ex);
