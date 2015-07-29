@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Api {
+public class DlvApi {
   // DebuggerState represents the current context of the debugger.
   public static class DebuggerState {
     // Breakpoint is the current breakpoint at which the debugged process is

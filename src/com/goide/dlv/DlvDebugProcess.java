@@ -20,7 +20,8 @@ import com.goide.GoFileType;
 import com.goide.GoLanguage;
 import com.goide.dlv.breakpoint.DlvBreakpointHandler;
 import com.goide.dlv.breakpoint.DlvBreakpointProperties;
-import com.goide.dlv.protocol.*;
+import com.goide.dlv.protocol.DlvApi;
+import com.goide.dlv.protocol.DlvRequest;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.AccessToken;
@@ -63,9 +64,9 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     }
   };
 
-  private Consumer<Api.DebuggerState> myStateConsumer = new Consumer<Api.DebuggerState>() {
+  private Consumer<DlvApi.DebuggerState> myStateConsumer = new Consumer<DlvApi.DebuggerState>() {
     @Override
-    public void consume(@Nullable final Api.DebuggerState o) {
+    public void consume(@Nullable final DlvApi.DebuggerState o) {
       if (o == null || o.exited) {
         getSession().stop();
         return;
@@ -73,10 +74,10 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
 
       final XBreakpoint<DlvBreakpointProperties> find = findBreak(o.breakPoint);
       final DlvCommandProcessor processor = getProcessor();
-      Promise<List<Api.Location>> stackPromise = processor.send(new DlvStacktraceRequest());
-      stackPromise.processed(new Consumer<List<Api.Location>>() {
+      Promise<List<DlvApi.Location>> stackPromise = processor.send(new DlvRequest.Stacktrace());
+      stackPromise.processed(new Consumer<List<DlvApi.Location>>() {
         @Override
-        public void consume(@NotNull List<Api.Location> locations) {
+        public void consume(@NotNull List<DlvApi.Location> locations) {
           DlvSuspendContext context = new DlvSuspendContext(o.currentThread.id, locations, processor);
           if (find == null) {
             getSession().positionReached(context);
@@ -90,7 +91,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     }
 
     @Nullable
-    private XBreakpoint<DlvBreakpointProperties> findBreak(final Api.Breakpoint point) {
+    private XBreakpoint<DlvBreakpointProperties> findBreak(final DlvApi.Breakpoint point) {
       return point != null ? ContainerUtil.find(breakpoints, new Condition<XBreakpoint<DlvBreakpointProperties>>() {
         @Override
         public boolean value(@NotNull XBreakpoint<DlvBreakpointProperties> b) {
@@ -177,10 +178,10 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     VirtualFile file = breakpointPosition.getFile();
     int line = breakpointPosition.getLine();
     DlvVm vm = (DlvVm)getVm();
-    Promise<Api.Breakpoint> promise = vm.getCommandProcessor().send(new DlvSetBreakpoint(file.getCanonicalPath(), line + 1));
-    promise.processed(new Consumer<Api.Breakpoint>() {
+    Promise<DlvApi.Breakpoint> promise = vm.getCommandProcessor().send(new DlvRequest.SetBreakpoint(file.getCanonicalPath(), line + 1));
+    promise.processed(new Consumer<DlvApi.Breakpoint>() {
       @Override
-      public void consume(@Nullable Api.Breakpoint b) {
+      public void consume(@Nullable DlvApi.Breakpoint b) {
         if (b != null) {
           breakpoint.putUserData(ID, b.id);
           breakpoints.add(breakpoint);
@@ -203,25 +204,25 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     breakpoints.remove(breakpoint);
     if (id == null) return;
     DlvVm vm = (DlvVm)getVm();
-    Promise<Api.Breakpoint> promise = vm.getCommandProcessor().send(new DlvClearBreakpoint(id));
+    Promise<DlvApi.Breakpoint> promise = vm.getCommandProcessor().send(new DlvRequest.ClearBreakpoint(id));
     promise.rejected(THROWABLE_CONSUMER);
   }
 
   private void send(@NotNull
-                    @MagicConstant(stringValues = {Api.NEXT, Api.CONTINUE, Api.HALT, Api.SWITCH_THREAD, Api.STEP}) String name) {
-    Promise<Api.DebuggerState> promise = getProcessor().send(new DlvCommandRequest(name));
+                    @MagicConstant(stringValues = {DlvApi.NEXT, DlvApi.CONTINUE, DlvApi.HALT, DlvApi.SWITCH_THREAD, DlvApi.STEP}) String name) {
+    Promise<DlvApi.DebuggerState> promise = getProcessor().send(new DlvRequest.Command(name));
     promise.processed(myStateConsumer);
     promise.rejected(THROWABLE_CONSUMER);
   }
 
   @Override
   public void startStepOver() {
-    send(Api.NEXT);
+    send(DlvApi.NEXT);
   }
 
   @Override
   public void startStepInto() {
-    send(Api.STEP);
+    send(DlvApi.STEP);
   }
 
   @Override
@@ -231,7 +232,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
 
   @Override
   public void resume() {
-    send(Api.CONTINUE);
+    send(DlvApi.CONTINUE);
   }
 
   @Override

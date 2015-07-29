@@ -27,7 +27,7 @@ import java.util.Collections;
 import java.util.List;
 
 @JsonType
-public interface CommandResponse {
+public interface DlvResponse {
   int id();
 
   @Nullable
@@ -50,8 +50,8 @@ public interface CommandResponse {
     int code();
   }
 
-  final class CommandResponseImpl implements CommandResponse {
-    @Nullable private CommandResponse.ErrorInfo _error;
+  final class CommandResponseImpl implements DlvResponse {
+    @Nullable private DlvResponse.ErrorInfo _error;
     private int _id = -1;
     @Nullable private JsonReaderEx _result;
 
@@ -87,7 +87,7 @@ public interface CommandResponse {
 
     @Nullable
     @Override
-    public CommandResponse.ErrorInfo error() {
+    public DlvResponse.ErrorInfo error() {
       return _error;
     }
 
@@ -103,7 +103,7 @@ public interface CommandResponse {
     }
   }
 
-  final class M5m implements CommandResponse.ErrorInfo {
+  final class M5m implements DlvResponse.ErrorInfo {
     private int _code = -1;
     @NotNull private List<String> _data = Collections.emptyList();
     @Nullable private String _message;

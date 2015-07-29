@@ -17,8 +17,8 @@
 package com.goide.dlv;
 
 import com.goide.GoIcons;
-import com.goide.dlv.protocol.Api;
-import com.goide.dlv.protocol.DlvLocalsRequest;
+import com.goide.dlv.protocol.DlvApi;
+import com.goide.dlv.protocol.DlvRequest;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -39,11 +39,11 @@ import javax.swing.*;
 import java.util.List;
 
 class DlvStackFrame extends XStackFrame {
-  private final Api.Location myLocation;
+  private final DlvApi.Location myLocation;
   private final DlvCommandProcessor myProcessor;
   private final boolean myTop;
 
-  public DlvStackFrame(Api.Location location, DlvCommandProcessor processor, boolean top) {
+  public DlvStackFrame(DlvApi.Location location, DlvCommandProcessor processor, boolean top) {
     myLocation = location;
     myProcessor = processor;
     myTop = top;
@@ -71,20 +71,20 @@ class DlvStackFrame extends XStackFrame {
       super.computeChildren(node);
       return;
     }
-    Promise<List<Api.Variable>> varPromise = myProcessor.send(new DlvLocalsRequest.DlvLocalVarsRequest());
-    varPromise.processed(new Consumer<List<Api.Variable>>() {
+    Promise<List<DlvApi.Variable>> varPromise = myProcessor.send(new DlvRequest.Locals.LocalVars());
+    varPromise.processed(new Consumer<List<DlvApi.Variable>>() {
       @Override
-      public void consume(@NotNull List<Api.Variable> variables) {
+      public void consume(@NotNull List<DlvApi.Variable> variables) {
         final XValueChildrenList xVars = new XValueChildrenList(variables.size());
-        for (Api.Variable v : variables) {
+        for (DlvApi.Variable v : variables) {
           xVars.add(v.name, getVariableValue(v.name, v.value, v.type, GoIcons.VARIABLE));
         }
 
-        Promise<List<Api.Variable>> argsPromise = myProcessor.send(new DlvLocalsRequest.DlvFunctionArgsRequest());
-        argsPromise.processed(new Consumer<List<Api.Variable>>() {
+        Promise<List<DlvApi.Variable>> argsPromise = myProcessor.send(new DlvRequest.Locals.FunctionArgs());
+        argsPromise.processed(new Consumer<List<DlvApi.Variable>>() {
           @Override
-          public void consume(List<Api.Variable> args) {
-            for (Api.Variable v : args) {
+          public void consume(List<DlvApi.Variable> args) {
+            for (DlvApi.Variable v : args) {
               xVars.add(v.name, getVariableValue(v.name, v.value, v.type, GoIcons.PARAMETER));
             }
             node.addChildren(xVars, true);

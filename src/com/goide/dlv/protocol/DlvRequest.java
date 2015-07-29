@@ -16,11 +16,14 @@
 
 package com.goide.dlv.protocol;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jsonProtocol.OutMessage;
 import org.jetbrains.jsonProtocol.Request;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
   protected boolean argumentsObjectStarted;
@@ -78,5 +81,85 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
 
   protected final String argumentsKeyName() {
     return "params";
+  }
+
+  public static final class ClearBreakpoint extends DlvRequest<DlvApi.Breakpoint> {
+    public ClearBreakpoint(int id) {
+      writeSingletonIntArray(argumentsKeyName(), id);
+    }
+
+    @Override
+    protected boolean needObject() {
+      return false;
+    }
+
+    @NotNull
+    @Override
+    public String getMethodName() {
+      return "RPCServer.ClearBreakpoint";
+    }
+  }
+
+  public static final class SetBreakpoint extends DlvRequest<DlvApi.Breakpoint> {
+    public SetBreakpoint(String path, int line) {
+      writeString("file", path);
+      writeInt("line", line);
+    }
+
+    @NotNull
+    @Override
+    public String getMethodName() {
+      return "RPCServer.CreateBreakpoint";
+    }
+  }
+
+  public static class Stacktrace extends DlvRequest<List<DlvApi.Location>> {
+    public Stacktrace() {
+      writeInt("Id", -1);
+      writeInt("Depth", 100);
+    }
+
+    @Override
+    public String getMethodName() {
+      return "RPCServer." + "StacktraceGoroutine";
+    }
+  }
+
+  public abstract static class Locals extends DlvRequest<List<DlvApi.Variable>> {
+    public Locals() {
+      List<String> objects = new ArrayList<String>();
+      objects.add(null);
+      writeStringList(argumentsKeyName(), objects);
+    }
+
+    @Override
+    protected boolean needObject() {
+      return false;
+    }
+  }
+
+  public static class LocalVars extends Locals {
+    @Override
+    public String getMethodName() {
+      return "RPCServer.ListLocalVars";
+    }
+  }
+
+  public static class FunctionArgs extends Locals {
+    @Override
+    public String getMethodName() {
+      return "RPCServer.ListFunctionArgs";
+    }
+  }
+
+  public static class Command extends DlvRequest<DlvApi.DebuggerState> {
+    public Command(@Nullable String command) {
+      writeString("Name", command);
+    }
+  
+    @Override
+    public String getMethodName() {
+      return "RPCServer.Command";
+    }
   }
 }

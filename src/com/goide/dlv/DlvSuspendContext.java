@@ -16,7 +16,7 @@
 
 package com.goide.dlv;
 
-import com.goide.dlv.protocol.Api;
+import com.goide.dlv.protocol.DlvApi;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.xdebugger.frame.XExecutionStack;
 import com.intellij.xdebugger.frame.XStackFrame;
@@ -29,7 +29,7 @@ import java.util.List;
 class DlvSuspendContext extends XSuspendContext {
   @NotNull private final DlvExecutionStack myStack;
 
-  public DlvSuspendContext(int threadId, @NotNull List<Api.Location> locations, @NotNull DlvCommandProcessor processor) {
+  public DlvSuspendContext(int threadId, @NotNull List<DlvApi.Location> locations, @NotNull DlvCommandProcessor processor) {
     myStack = new DlvExecutionStack(threadId, locations, processor);
   }
 
@@ -46,16 +46,16 @@ class DlvSuspendContext extends XSuspendContext {
   }
 
   private static class DlvExecutionStack extends XExecutionStack {
-    @NotNull private final List<Api.Location> myLocations;
+    @NotNull private final List<DlvApi.Location> myLocations;
     private final DlvCommandProcessor myProcessor;
     @NotNull private final List<DlvStackFrame> myStack;
 
-    public DlvExecutionStack(int threadId, @NotNull List<Api.Location> locations, DlvCommandProcessor processor) {
+    public DlvExecutionStack(int threadId, @NotNull List<DlvApi.Location> locations, DlvCommandProcessor processor) {
       super("Thread #" + threadId);
       myLocations = locations;
       myProcessor = processor;
       myStack = ContainerUtil.newArrayListWithCapacity(locations.size());
-      for (Api.Location location : myLocations) {
+      for (DlvApi.Location location : myLocations) {
         boolean top = myStack.isEmpty();
         if (!top) {
           location.line -= 1; // todo: bizarre

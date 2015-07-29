@@ -16,8 +16,8 @@
 
 package com.goide.dlv;
 
-import com.goide.dlv.protocol.Api;
-import com.goide.dlv.protocol.CommandResponse;
+import com.goide.dlv.protocol.DlvApi;
+import com.goide.dlv.protocol.DlvResponse;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
@@ -36,7 +36,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, CommandResponse, CommandResponse> {
+public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, DlvResponse, DlvResponse> {
   @NotNull private final MessageWriter myWriter;
 
   public DlvCommandProcessor(@NotNull MessageWriter writer) {
@@ -50,12 +50,12 @@ public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, CommandR
 
   @Nullable
   @Override
-  public CommandResponse readIfHasSequence(@NotNull JsonReaderEx message) {
-    return new CommandResponse.CommandResponseImpl(message, null);
+  public DlvResponse readIfHasSequence(@NotNull JsonReaderEx message) {
+    return new DlvResponse.CommandResponseImpl(message, null);
   }
 
   @Override
-  public int getSequence(@NotNull CommandResponse response) {
+  public int getSequence(@NotNull DlvResponse response) {
     return response.id();
   }
 
@@ -63,12 +63,12 @@ public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, CommandR
   public void acceptNonSequence(JsonReaderEx message) {
   }
 
-  public MessageManager<Request, JsonReaderEx, CommandResponse, CommandResponse> getMessageManager() {
+  public MessageManager<Request, JsonReaderEx, DlvResponse, DlvResponse> getMessageManager() {
     return messageManager;
   }
 
   @Override
-  public void call(@NotNull CommandResponse response, @NotNull RequestCallback<CommandResponse> callback) {
+  public void call(@NotNull DlvResponse response, @NotNull RequestCallback<DlvResponse> callback) {
     if (response.result() != null) {
       callback.onSuccess(response, this);
     }
@@ -78,7 +78,7 @@ public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, CommandR
         message = "Internal messaging error";
       }
       else {
-        CommandResponse.ErrorInfo errorInfo = response.error();
+        DlvResponse.ErrorInfo errorInfo = response.error();
         if (ContainerUtil.isEmpty(errorInfo.data())) {
           message = errorInfo.message();
         }
@@ -95,7 +95,7 @@ public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, CommandR
 
   @NotNull
   @Override
-  public <RESULT> RESULT readResult(@NotNull String method, @NotNull CommandResponse successResponse) {
+  public <RESULT> RESULT readResult(@NotNull String method, @NotNull DlvResponse successResponse) {
     JsonReaderEx result = successResponse.result();
     assert result != null : "success result should be not null";
     JsonReader reader = result.asGson();
@@ -106,11 +106,11 @@ public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, CommandR
 
   @NotNull
   private static Type getT(@NotNull String method) {
-    if (method.equals("RPCServer.CreateBreakpoint")) return Api.Breakpoint.class;
-    if (method.equals("RPCServer.ClearBreakpoint")) return Api.Breakpoint.class;
-    if (method.equals("RPCServer.Command")) return Api.DebuggerState.class;
-    if (method.equals("RPCServer.StacktraceGoroutine")) return new TypeToken<ArrayList<Api.Location>>() {}.getType();
-    if (method.equals("RPCServer.ListLocalVars") || method.equals("RPCServer.ListFunctionArgs")) return new TypeToken<ArrayList<Api.Variable>>() {}.getType();
+    if (method.equals("RPCServer.CreateBreakpoint")) return DlvApi.Breakpoint.class;
+    if (method.equals("RPCServer.ClearBreakpoint")) return DlvApi.Breakpoint.class;
+    if (method.equals("RPCServer.Command")) return DlvApi.DebuggerState.class;
+    if (method.equals("RPCServer.StacktraceGoroutine")) return new TypeToken<ArrayList<DlvApi.Location>>() {}.getType();
+    if (method.equals("RPCServer.ListLocalVars") || method.equals("RPCServer.ListFunctionArgs")) return new TypeToken<ArrayList<DlvApi.Variable>>() {}.getType();
     return Object.class;
   }
 }
