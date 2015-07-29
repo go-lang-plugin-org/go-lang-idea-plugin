@@ -18,8 +18,8 @@ package com.goide.dlv;
 
 import com.goide.GoFileType;
 import com.goide.GoLanguage;
-import com.goide.dlv.breakpoint.DlvBreakpointHandler;
 import com.goide.dlv.breakpoint.DlvBreakpointProperties;
+import com.goide.dlv.breakpoint.DlvBreakpointType;
 import com.goide.dlv.protocol.DlvRequest;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.Disposable;
@@ -56,10 +56,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static com.goide.dlv.protocol.DlvApi.*;
 
 public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> implements Disposable {
-  public static final Key<Integer> ID = Key.create("DLV_BP_ID");
   private final AtomicBoolean breakpointsInitiated = new AtomicBoolean();
   private final AtomicBoolean connectedListenerAdded = new AtomicBoolean();
-  private final Map<Integer, XBreakpoint<DlvBreakpointProperties>> breakpoints = ContainerUtil.newConcurrentMap();
   static final Consumer<Throwable> THROWABLE_CONSUMER = new Consumer<Throwable>() {
     @Override
     public void consume(@NotNull Throwable throwable) {
@@ -110,7 +108,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
 
   public DlvDebugProcess(@NotNull XDebugSession session, @NotNull RemoteVmConnection connection) {
     super(session, connection, new MyEditorsProvider(), null, null);
-    breakpointHandlers = new XBreakpointHandler[]{new DlvBreakpointHandler(this)};
+    breakpointHandlers = new XBreakpointHandler[]{new MyBreakpointHandler()};
   }
 
   @Override
@@ -166,41 +164,6 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     }
   }
 
-  public void addBreakpoint(@NotNull final XLineBreakpoint<DlvBreakpointProperties> breakpoint) {
-    XSourcePosition breakpointPosition = breakpoint.getSourcePosition();
-    if (breakpointPosition == null) return;
-    VirtualFile file = breakpointPosition.getFile();
-    int line = breakpointPosition.getLine();
-    Promise<Breakpoint> promise = send(new DlvRequest.SetBreakpoint(file.getCanonicalPath(), line + 1));
-    promise.processed(new Consumer<Breakpoint>() {
-      @Override
-      public void consume(@Nullable Breakpoint b) {
-        if (b != null) {
-          breakpoint.putUserData(ID, b.id);
-          breakpoints.put(b.id, breakpoint);
-          getSession().updateBreakpointPresentation(breakpoint, AllIcons.Debugger.Db_verified_breakpoint, null);
-        }
-      }
-    });
-    promise.rejected(new Consumer<Throwable>() {
-      @Override
-      public void consume(@Nullable Throwable t) {
-        getSession().updateBreakpointPresentation(breakpoint, AllIcons.Debugger.Db_invalid_breakpoint, t == null ? null : t.getMessage());
-      }
-    });
-  }
-
-  public void removeBreakpoint(@NotNull XLineBreakpoint<DlvBreakpointProperties> breakpoint) {
-    XSourcePosition breakpointPosition = breakpoint.getSourcePosition();
-    if (breakpointPosition == null) return;
-    Integer id = breakpoint.getUserData(ID);
-    if (id == null) return; // obsolete
-    breakpoint.putUserData(ID, null);
-    breakpoints.remove(id);
-    Promise<Breakpoint> promise = send(new DlvRequest.ClearBreakpoint(id));
-    promise.rejected(THROWABLE_CONSUMER);
-  }
-
   private void command(@NotNull @MagicConstant(stringValues = {NEXT, CONTINUE, HALT, SWITCH_THREAD, STEP}) String name) {
     Promise<DebuggerState> promise = send(new DlvRequest.Command(name));
     promise.processed(myStateConsumer);
@@ -250,6 +213,53 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
                                                    PsiElement context,
                                                    boolean isPhysical) {
       return PsiFileFactory.getInstance(project).createFileFromText("a.go", GoLanguage.INSTANCE, text);
+    }
+  }
+
+  private static final Key<Integer> ID = Key.create("DLV_BP_ID");
+  private final Map<Integer, XBreakpoint<DlvBreakpointProperties>> breakpoints = ContainerUtil.newConcurrentMap();
+
+  private class MyBreakpointHandler extends XBreakpointHandler<XLineBreakpoint<DlvBreakpointProperties>> {
+
+    public MyBreakpointHandler() {
+      super(DlvBreakpointType.class);
+    }
+
+    @Override
+    public void registerBreakpoint(@NotNull final XLineBreakpoint<DlvBreakpointProperties> breakpoint) {
+      XSourcePosition breakpointPosition = breakpoint.getSourcePosition();
+      if (breakpointPosition == null) return;
+      VirtualFile file = breakpointPosition.getFile();
+      int line = breakpointPosition.getLine();
+      Promise<Breakpoint> promise = send(new DlvRequest.SetBreakpoint(file.getCanonicalPath(), line + 1));
+      promise.processed(new Consumer<Breakpoint>() {
+        @Override
+        public void consume(@Nullable Breakpoint b) {
+          if (b != null) {
+            breakpoint.putUserData(ID, b.id);
+            breakpoints.put(b.id, breakpoint);
+            getSession().updateBreakpointPresentation(breakpoint, AllIcons.Debugger.Db_verified_breakpoint, null);
+          }
+        }
+      });
+      promise.rejected(new Consumer<Throwable>() {
+        @Override
+        public void consume(@Nullable Throwable t) {
+          getSession().updateBreakpointPresentation(breakpoint, AllIcons.Debugger.Db_invalid_breakpoint, t == null ? null : t.getMessage());
+        }
+      });
+    }
+
+    @Override
+    public void unregisterBreakpoint(@NotNull XLineBreakpoint<DlvBreakpointProperties> breakpoint, boolean temporary) {
+      XSourcePosition breakpointPosition = breakpoint.getSourcePosition();
+      if (breakpointPosition == null) return;
+      Integer id = breakpoint.getUserData(ID);
+      if (id == null) return; // obsolete
+      breakpoint.putUserData(ID, null);
+      breakpoints.remove(id);
+      Promise<Breakpoint> promise = send(new DlvRequest.ClearBreakpoint(id));
+      promise.rejected(THROWABLE_CONSUMER);
     }
   }
 }
