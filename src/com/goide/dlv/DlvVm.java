@@ -33,7 +33,7 @@ import org.jetbrains.jsonProtocol.Request;
 public class DlvVm extends VmBase implements StandaloneVmHelper.VmEx {
   @NotNull private final DlvCommandProcessor commandProcessor;
   @NotNull private final StandaloneVmHelper vmHelper;
-  @NotNull private final DlvBreakpointManager breakpointManager = new DlvBreakpointManager(this);
+  @NotNull private final BreakpointManagerBase<DlvBreakpoint> breakpointManager = new DummyBreakpointManager();
   @NotNull private final ScriptManagerBaseEx<ScriptBase> scriptManager = new DummyScriptManager();
   @NotNull private final DlvSuspendContextManager suspendContextManager;
   String threadActor;
@@ -100,7 +100,7 @@ public class DlvVm extends VmBase implements StandaloneVmHelper.VmEx {
 
   @NotNull
   @Override
-  public DlvBreakpointManager getBreakpointManager() {
+  public BreakpointManagerBase<DlvBreakpoint> getBreakpointManager() {
     return breakpointManager;
   }
 
@@ -110,6 +110,8 @@ public class DlvVm extends VmBase implements StandaloneVmHelper.VmEx {
     return suspendContextManager;
   }
 
+  // stubs
+  
   private static class DummyScriptManager extends ScriptManagerBaseEx<ScriptBase> {
     @Override
     public boolean containsScript(@NotNull Script script) {
@@ -138,6 +140,37 @@ public class DlvVm extends VmBase implements StandaloneVmHelper.VmEx {
     @Override
     protected Promise<String> loadScriptSource(@NotNull ScriptBase script) {
       return Promise.resolve("");
+    }
+  }
+
+  private static class DummyBreakpointManager extends BreakpointManagerBase<DlvBreakpoint> {
+    @Nullable
+    @Override
+    protected DlvBreakpoint createBreakpoint(@NotNull BreakpointTarget target,
+                                             int line,
+                                             int column,
+                                             @Nullable String condition,
+                                             int ignoreCount,
+                                             boolean enabled) {
+      return null;
+    }
+
+    @NotNull
+    @Override
+    protected Promise<Breakpoint> doSetBreakpoint(@NotNull BreakpointTarget target, @NotNull final DlvBreakpoint breakpoint) {
+      return Promise.resolve(null);
+    }
+
+    @NotNull
+    @Override
+    protected Promise<Void> doClearBreakpoint(@NotNull DlvBreakpoint breakpoint) {
+      return Promise.DONE;
+    }
+
+    @NotNull
+    @Override
+    public MUTE_MODE getMuteMode() {
+      return MUTE_MODE.NONE;
     }
   }
 }
