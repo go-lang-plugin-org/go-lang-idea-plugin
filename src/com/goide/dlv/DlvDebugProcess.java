@@ -57,6 +57,8 @@ import static com.goide.dlv.protocol.DlvApi.*;
 
 public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> implements Disposable {
   public static final Key<Integer> ID = Key.create("DLV_BP_ID");
+  private final AtomicBoolean breakpointsInitiated = new AtomicBoolean();
+  private final AtomicBoolean connectedListenerAdded = new AtomicBoolean();
   private final Map<Integer, XBreakpoint<DlvBreakpointProperties>> breakpoints = ContainerUtil.newConcurrentMap();
   static final Consumer<Throwable> THROWABLE_CONSUMER = new Consumer<Throwable>() {
     @Override
@@ -65,7 +67,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     }
   };
 
-  private Consumer<DebuggerState> myStateConsumer = new Consumer<DebuggerState>() {
+  private final Consumer<DebuggerState> myStateConsumer = new Consumer<DebuggerState>() {
     @Override
     public void consume(@Nullable final DebuggerState o) {
       if (o == null || o.exited) {
@@ -74,12 +76,11 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
       }
 
       final XBreakpoint<DlvBreakpointProperties> find = findBreak(o.breakPoint);
-      final DlvCommandProcessor processor = getProcessor();
-      Promise<List<Location>> stackPromise = processor.send(new DlvRequest.Stacktrace());
+      Promise<List<Location>> stackPromise = send(new DlvRequest.Stacktrace());
       stackPromise.processed(new Consumer<List<Location>>() {
         @Override
         public void consume(@NotNull List<Location> locations) {
-          DlvSuspendContext context = new DlvSuspendContext(o.currentThread.id, locations, processor);
+          DlvSuspendContext context = new DlvSuspendContext(o.currentThread.id, locations, getProcessor());
           if (find == null) {
             getSession().positionReached(context);
           }
@@ -97,12 +98,17 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     }
   };
 
+  @NotNull
+  private <T> Promise<T> send(@NotNull DlvRequest<T> request) {
+    return getProcessor().send(request);
+  }
+
+  @NotNull
   private DlvCommandProcessor getProcessor() {
     return ((DlvVm)getVm()).getCommandProcessor();
   }
 
-  public DlvDebugProcess(@NotNull XDebugSession session,
-                         @NotNull RemoteVmConnection connection) {
+  public DlvDebugProcess(@NotNull XDebugSession session, @NotNull RemoteVmConnection connection) {
     super(session, connection, new MyEditorsProvider(), null, null);
     breakpointHandlers = new XBreakpointHandler[]{new DlvBreakpointHandler(this)};
   }
@@ -116,10 +122,6 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
   public void dispose() {
     // todo
   }
-
-  private final AtomicBoolean breakpointsInitiated = new AtomicBoolean();
-  private final AtomicBoolean connectedListenerAdded = new AtomicBoolean();
-
 
   @Override
   public boolean checkCanInitBreakpoints() {
@@ -169,8 +171,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     if (breakpointPosition == null) return;
     VirtualFile file = breakpointPosition.getFile();
     int line = breakpointPosition.getLine();
-    DlvVm vm = (DlvVm)getVm();
-    Promise<Breakpoint> promise = vm.getCommandProcessor().send(new DlvRequest.SetBreakpoint(file.getCanonicalPath(), line + 1));
+    Promise<Breakpoint> promise = send(new DlvRequest.SetBreakpoint(file.getCanonicalPath(), line + 1));
     promise.processed(new Consumer<Breakpoint>() {
       @Override
       public void consume(@Nullable Breakpoint b) {
@@ -196,13 +197,12 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     if (id == null) return; // obsolete
     breakpoint.putUserData(ID, null);
     breakpoints.remove(id);
-    DlvVm vm = (DlvVm)getVm();
-    Promise<Breakpoint> promise = vm.getCommandProcessor().send(new DlvRequest.ClearBreakpoint(id));
+    Promise<Breakpoint> promise = send(new DlvRequest.ClearBreakpoint(id));
     promise.rejected(THROWABLE_CONSUMER);
   }
 
   private void command(@NotNull @MagicConstant(stringValues = {NEXT, CONTINUE, HALT, SWITCH_THREAD, STEP}) String name) {
-    Promise<DebuggerState> promise = getProcessor().send(new DlvRequest.Command(name));
+    Promise<DebuggerState> promise = send(new DlvRequest.Command(name));
     promise.processed(myStateConsumer);
     promise.rejected(THROWABLE_CONSUMER);
   }
