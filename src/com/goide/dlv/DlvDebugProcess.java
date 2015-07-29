@@ -28,8 +28,6 @@ import com.intellij.openapi.application.AccessToken;
 import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
@@ -53,11 +51,13 @@ import org.jetbrains.debugger.DebugProcessImpl;
 import org.jetbrains.debugger.connection.RemoteVmConnection;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> implements Disposable {
-  public static final Consumer<Throwable> THROWABLE_CONSUMER = new Consumer<Throwable>() {
+  public static final Key<Integer> ID = Key.create("DLV_BP_ID");
+  private final Map<Integer, XBreakpoint<DlvBreakpointProperties>> breakpoints = ContainerUtil.newConcurrentMap();
+  private static final Consumer<Throwable> THROWABLE_CONSUMER = new Consumer<Throwable>() {
     @Override
     public void consume(@NotNull Throwable throwable) {
       throwable.printStackTrace();
@@ -91,13 +91,8 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     }
 
     @Nullable
-    private XBreakpoint<DlvBreakpointProperties> findBreak(final DlvApi.Breakpoint point) {
-      return point != null ? ContainerUtil.find(breakpoints, new Condition<XBreakpoint<DlvBreakpointProperties>>() {
-        @Override
-        public boolean value(@NotNull XBreakpoint<DlvBreakpointProperties> b) {
-          return Comparing.equal(b.getUserData(ID), point.id);
-        }
-      }) : null;
+    private XBreakpoint<DlvBreakpointProperties> findBreak(@Nullable DlvApi.Breakpoint point) {
+      return point == null ? null : breakpoints.get(point.id);
     }
   };
 
@@ -168,10 +163,6 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     }
   }
 
-  public static final Key<Integer> ID = Key.create("ID");
-
-  @NotNull Set<XBreakpoint<DlvBreakpointProperties>> breakpoints = ContainerUtil.newConcurrentSet();
-
   public void addBreakpoint(@NotNull final XLineBreakpoint<DlvBreakpointProperties> breakpoint) {
     XSourcePosition breakpointPosition = breakpoint.getSourcePosition();
     if (breakpointPosition == null) return;
@@ -184,7 +175,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
       public void consume(@Nullable DlvApi.Breakpoint b) {
         if (b != null) {
           breakpoint.putUserData(ID, b.id);
-          breakpoints.add(breakpoint);
+          breakpoints.put(b.id, breakpoint);
           getSession().updateBreakpointPresentation(breakpoint, AllIcons.Debugger.Db_verified_breakpoint, null);
         }
       }
@@ -201,15 +192,17 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     XSourcePosition breakpointPosition = breakpoint.getSourcePosition();
     if (breakpointPosition == null) return;
     Integer id = breakpoint.getUserData(ID);
-    breakpoints.remove(breakpoint);
-    if (id == null) return;
+    if (id == null) return; // obsolete
+    breakpoint.putUserData(ID, null);
+    breakpoints.remove(id);
     DlvVm vm = (DlvVm)getVm();
     Promise<DlvApi.Breakpoint> promise = vm.getCommandProcessor().send(new DlvRequest.ClearBreakpoint(id));
     promise.rejected(THROWABLE_CONSUMER);
   }
 
   private void send(@NotNull
-                    @MagicConstant(stringValues = {DlvApi.NEXT, DlvApi.CONTINUE, DlvApi.HALT, DlvApi.SWITCH_THREAD, DlvApi.STEP}) String name) {
+                    @MagicConstant(stringValues = {DlvApi.NEXT, DlvApi.CONTINUE, DlvApi.HALT, DlvApi.SWITCH_THREAD,
+                      DlvApi.STEP}) String name) {
     Promise<DlvApi.DebuggerState> promise = getProcessor().send(new DlvRequest.Command(name));
     promise.processed(myStateConsumer);
     promise.rejected(THROWABLE_CONSUMER);
