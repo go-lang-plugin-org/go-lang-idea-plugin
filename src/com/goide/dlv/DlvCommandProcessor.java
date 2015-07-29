@@ -96,7 +96,7 @@ public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, CommandR
   @NotNull
   @Override
   public <RESULT> RESULT readResult(@NotNull String method, @NotNull CommandResponse successResponse) {
-    final JsonReaderEx result = successResponse.result();
+    JsonReaderEx result = successResponse.result();
     assert result != null : "success result should be not null";
     JsonReader reader = result.asGson();
     Object o = new GsonBuilder().create().fromJson(reader, getT(method));

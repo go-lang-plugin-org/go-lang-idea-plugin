@@ -154,7 +154,7 @@ public class DlvVm extends VmBase implements StandaloneVmHelper.VmEx {
 
     @NotNull
     @Override
-    protected Promise<Breakpoint> doSetBreakpoint(@NotNull BreakpointTarget target, @NotNull final BreakpointBase<?> breakpoint) {
+    protected Promise<Breakpoint> doSetBreakpoint(@NotNull BreakpointTarget target, @NotNull BreakpointBase<?> breakpoint) {
       return Promise.resolve(null);
     }
 
@@ -186,7 +186,7 @@ public class DlvVm extends VmBase implements StandaloneVmHelper.VmEx {
   
     @NotNull
     @Override
-    public Promise<Void> continueVm(@NotNull final StepAction stepAction, int stepCount) {
+    public Promise<Void> continueVm(@NotNull StepAction stepAction, int stepCount) {
       return Promise.DONE;
     }
   }

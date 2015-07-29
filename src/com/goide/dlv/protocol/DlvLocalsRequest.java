@@ -21,7 +21,7 @@ import java.util.List;
 
 public abstract class DlvLocalsRequest extends DlvRequest<List<Api.Variable>> {
   public DlvLocalsRequest() {
-    final List<String> objects = new ArrayList<String>();
+    List<String> objects = new ArrayList<String>();
     objects.add(null);
     writeStringList(argumentsKeyName(), objects);
   }

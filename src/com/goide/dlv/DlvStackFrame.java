@@ -52,8 +52,8 @@ class DlvStackFrame extends XStackFrame {
   @Nullable
   @Override
   public XSourcePosition getSourcePosition() {
-    final String url = myLocation.file;
-    final VirtualFile file = LocalFileSystem.getInstance().findFileByPath(url);
+    String url = myLocation.file;
+    VirtualFile file = LocalFileSystem.getInstance().findFileByPath(url);
     if (file == null) return null;
     return XDebuggerUtil.getInstance().createPosition(file, myLocation.line);
   }
@@ -71,7 +71,7 @@ class DlvStackFrame extends XStackFrame {
       super.computeChildren(node);
       return;
     }
-    final Promise<List<Api.Variable>> varPromise = myProcessor.send(new DlvLocalsRequest.DlvLocalVarsRequest());
+    Promise<List<Api.Variable>> varPromise = myProcessor.send(new DlvLocalsRequest.DlvLocalVarsRequest());
     varPromise.processed(new Consumer<List<Api.Variable>>() {
       @Override
       public void consume(@NotNull List<Api.Variable> variables) {
@@ -80,7 +80,7 @@ class DlvStackFrame extends XStackFrame {
           xVars.add(v.name, getVariableValue(v.name, v.value, v.type, GoIcons.VARIABLE));
         }
 
-        final Promise<List<Api.Variable>> argsPromise = myProcessor.send(new DlvLocalsRequest.DlvFunctionArgsRequest());
+        Promise<List<Api.Variable>> argsPromise = myProcessor.send(new DlvLocalsRequest.DlvFunctionArgsRequest());
         argsPromise.processed(new Consumer<List<Api.Variable>>() {
           @Override
           public void consume(List<Api.Variable> args) {
@@ -104,7 +104,7 @@ class DlvStackFrame extends XStackFrame {
     return new XNamedValue(name) {
       @Override
       public void computePresentation(@NotNull XValueNode node, @NotNull XValuePlace place) {
-        final XValuePresentation presentation = getPresentation();
+        XValuePresentation presentation = getPresentation();
         if (presentation != null) {
           node.setPresentation(icon, presentation, false);
           return;

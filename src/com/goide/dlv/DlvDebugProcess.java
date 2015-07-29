@@ -56,7 +56,6 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> implements Disposable {
-
   public static final Consumer<Throwable> THROWABLE_CONSUMER = new Consumer<Throwable>() {
     @Override
     public void consume(@NotNull Throwable throwable) {
@@ -74,11 +73,11 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
 
       final XBreakpoint<DlvBreakpointProperties> find = findBreak(o.breakPoint);
       final DlvCommandProcessor processor = getProcessor();
-      final Promise<List<Api.Location>> stackPromise = processor.send(new DlvStacktraceRequest());
+      Promise<List<Api.Location>> stackPromise = processor.send(new DlvStacktraceRequest());
       stackPromise.processed(new Consumer<List<Api.Location>>() {
         @Override
         public void consume(@NotNull List<Api.Location> locations) {
-          final DlvSuspendContext context = new DlvSuspendContext(o.currentThread.id, locations, processor);
+          DlvSuspendContext context = new DlvSuspendContext(o.currentThread.id, locations, processor);
           if (find == null) {
             getSession().positionReached(context);
           }
@@ -104,7 +103,6 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
   private DlvCommandProcessor getProcessor() {
     return ((DlvVm)getVm()).getCommandProcessor();
   }
-
 
   public DlvDebugProcess(@NotNull XDebugSession session,
                          @NotNull RemoteVmConnection connection) {
@@ -147,9 +145,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
   }
 
   private boolean initBreakpointHandlersAndSetBreakpoints(boolean setBreakpoints) {
-    if (!breakpointsInitiated.compareAndSet(false, true)) {
-      return false;
-    }
+    if (!breakpointsInitiated.compareAndSet(false, true)) return false;
 
     assert getVm() != null : "Vm should be initialized";
 
@@ -180,7 +176,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     if (breakpointPosition == null) return;
     VirtualFile file = breakpointPosition.getFile();
     int line = breakpointPosition.getLine();
-    final DlvVm vm = (DlvVm)getVm();
+    DlvVm vm = (DlvVm)getVm();
     Promise<Api.Breakpoint> promise = vm.getCommandProcessor().send(new DlvSetBreakpoint(file.getCanonicalPath(), line + 1));
     promise.processed(new Consumer<Api.Breakpoint>() {
       @Override

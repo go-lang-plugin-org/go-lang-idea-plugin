@@ -56,7 +56,7 @@ class DlvSuspendContext extends XSuspendContext {
       myProcessor = processor;
       myStack = ContainerUtil.newArrayListWithCapacity(locations.size());
       for (Api.Location location : myLocations) {
-        final boolean top = myStack.isEmpty();
+        boolean top = myStack.isEmpty();
         if (!top) {
           location.line -= 1; // todo: bizarre
         }
