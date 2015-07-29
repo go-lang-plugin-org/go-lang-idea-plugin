@@ -33,11 +33,6 @@ public class DlvBreakpoint extends BreakpointBase<Location> {
     super(target, line, column, condition, enabled);
   }
 
-  void setRemoteData(@Nullable String actor, @Nullable Location actualLocation) {
-    this.actor = actor;
-    setActualLocation(actualLocation);
-  }
-
   @Override
   public boolean isVmRegistered() {
     return actor != null;
