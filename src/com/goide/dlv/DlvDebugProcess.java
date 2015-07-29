@@ -261,7 +261,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
 
   @Override
   public void stop() {
-    // send(Api.HALT);
+    getSession().stop();
   }
 
   private static class DlvSuspendContext extends XSuspendContext {
