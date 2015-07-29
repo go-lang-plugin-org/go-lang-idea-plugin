@@ -44,9 +44,6 @@ import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import com.intellij.xdebugger.breakpoints.XBreakpointHandler;
 import com.intellij.xdebugger.breakpoints.XLineBreakpoint;
 import com.intellij.xdebugger.evaluation.XDebuggerEditorsProviderBase;
-import com.intellij.xdebugger.frame.XExecutionStack;
-import com.intellij.xdebugger.frame.XStackFrame;
-import com.intellij.xdebugger.frame.XSuspendContext;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -111,21 +108,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
 
   public DlvDebugProcess(@NotNull XDebugSession session,
                          @NotNull RemoteVmConnection connection) {
-    super(session, connection, new XDebuggerEditorsProviderBase() {
-      @NotNull
-      @Override
-      public FileType getFileType() {
-        return GoFileType.INSTANCE;
-      }
-
-      @Override
-      protected PsiFile createExpressionCodeFragment(@NotNull Project project,
-                                                     @NotNull String text,
-                                                     PsiElement context,
-                                                     boolean isPhysical) {
-        return PsiFileFactory.getInstance(project).createFileFromText("a.go", GoLanguage.INSTANCE, text);
-      }
-    }, null, null);
+    super(session, connection, new MyEditorsProvider(), null, null);
     breakpointHandlers = new XBreakpointHandler[]{new DlvBreakpointHandler(this)};
   }
 
@@ -191,7 +174,6 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
   public static final Key<Integer> ID = Key.create("ID");
 
   @NotNull Set<XBreakpoint<DlvBreakpointProperties>> breakpoints = ContainerUtil.newConcurrentSet();
-
 
   public void addBreakpoint(@NotNull final XLineBreakpoint<DlvBreakpointProperties> breakpoint) {
     XSourcePosition breakpointPosition = breakpoint.getSourcePosition();
@@ -266,54 +248,19 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     getSession().stop();
   }
 
-  private static class DlvSuspendContext extends XSuspendContext {
-    @NotNull private final DlvExecutionStack myStack;
-
-    public DlvSuspendContext(int threadId, @NotNull List<Api.Location> locations, @NotNull DlvCommandProcessor processor) {
-      myStack = new DlvExecutionStack(threadId, locations, processor);
-    }
-
-    @Nullable
-    @Override
-    public XExecutionStack getActiveExecutionStack() {
-      return myStack;
-    }
-
+  private static class MyEditorsProvider extends XDebuggerEditorsProviderBase {
     @NotNull
     @Override
-    public XExecutionStack[] getExecutionStacks() {
-      return new XExecutionStack[]{myStack};
+    public FileType getFileType() {
+      return GoFileType.INSTANCE;
     }
 
-    private static class DlvExecutionStack extends XExecutionStack {
-      @NotNull private final List<Api.Location> myLocations;
-      private final DlvCommandProcessor myProcessor;
-      @NotNull private final List<DlvStackFrame> myStack;
-
-      public DlvExecutionStack(int threadId, @NotNull List<Api.Location> locations, DlvCommandProcessor processor) {
-        super("Thread #" + threadId);
-        myLocations = locations;
-        myProcessor = processor;
-        myStack = ContainerUtil.newArrayListWithCapacity(locations.size());
-        for (Api.Location location : myLocations) {
-          final boolean top = myStack.isEmpty();
-          if (!top) {
-            location.line -= 1; // todo: bizarre
-          }
-          myStack.add(new DlvStackFrame(location, myProcessor, top));
-        }
-      }
-
-      @Nullable
-      @Override
-      public XStackFrame getTopFrame() {
-        return ContainerUtil.getFirstItem(myStack);
-      }
-
-      @Override
-      public void computeStackFrames(int firstFrameIndex, @NotNull XStackFrameContainer container) {
-        container.addStackFrames(myStack, true);
-      }
+    @Override
+    protected PsiFile createExpressionCodeFragment(@NotNull Project project,
+                                                   @NotNull String text,
+                                                   PsiElement context,
+                                                   boolean isPhysical) {
+      return PsiFileFactory.getInstance(project).createFileFromText("a.go", GoLanguage.INSTANCE, text);
     }
   }
 }

@@ -35,7 +35,7 @@ public class DlvVm extends VmBase implements StandaloneVmHelper.VmEx {
   @NotNull private final StandaloneVmHelper vmHelper;
   @NotNull private final BreakpointManagerBase<BreakpointBase<?>> breakpointManager = new DummyBreakpointManager();
   @NotNull private final ScriptManagerBaseEx<ScriptBase> scriptManager = new DummyScriptManager();
-  @NotNull private final DlvSuspendContextManager suspendContextManager;
+  @NotNull private final SuspendContextManagerBase<SuspendContextBase, CallFrame> suspendContextManager = new DummySuspendContextManager();
 
   public DlvVm(@NotNull DebugEventListener tabListener, @NotNull Channel channel) {
     super(tabListener);
@@ -50,8 +50,6 @@ public class DlvVm extends VmBase implements StandaloneVmHelper.VmEx {
     };
     vmHelper.setChannel(channel);
     commandProcessor = new DlvCommandProcessor(vmHelper);
-    suspendContextManager = new DlvSuspendContextManager(this);
-
 
     channel.pipeline().addLast(new JsonObjectDecoder(), new SimpleChannelInboundHandlerAdapter() {
       @Override
@@ -105,7 +103,7 @@ public class DlvVm extends VmBase implements StandaloneVmHelper.VmEx {
 
   @NotNull
   @Override
-  public DlvSuspendContextManager getSuspendContextManager() {
+  public SuspendContextManagerBase<SuspendContextBase, CallFrame> getSuspendContextManager() {
     return suspendContextManager;
   }
 
@@ -170,6 +168,26 @@ public class DlvVm extends VmBase implements StandaloneVmHelper.VmEx {
     @Override
     public MUTE_MODE getMuteMode() {
       return MUTE_MODE.NONE;
+    }
+  }
+
+  public class DummySuspendContextManager extends SuspendContextManagerBase<SuspendContextBase, CallFrame> {
+    @NotNull
+    @Override
+    protected DebugEventListener getDebugListener() {
+      return DlvVm.this.getDebugListener();
+    }
+  
+    @NotNull
+    @Override
+    protected Promise<?> doSuspend() {
+      return Promise.resolve(null);
+    }
+  
+    @NotNull
+    @Override
+    public Promise<Void> continueVm(@NotNull final StepAction stepAction, int stepCount) {
+      return Promise.DONE;
     }
   }
 }
