@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package com.goide.dlv;
+package com.goide.dlv.breakpoint;
 
 import com.intellij.xdebugger.breakpoints.XBreakpointProperties;
 import org.jetbrains.annotations.Nullable;
 
-public class DlvLineBreakpointProperties extends XBreakpointProperties<DlvLineBreakpointProperties> {
+public class DlvBreakpointProperties extends XBreakpointProperties<DlvBreakpointProperties> {
   @Nullable
   @Override
-  public DlvLineBreakpointProperties getState() {
+  public DlvBreakpointProperties getState() {
     return this;
   }
 
   @Override
-  public void loadState(DlvLineBreakpointProperties state) {
+  public void loadState(DlvBreakpointProperties state) {
   }
 }

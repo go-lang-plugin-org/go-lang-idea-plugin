@@ -14,27 +14,28 @@
  * limitations under the License.
  */
 
-package com.goide.dlv;
+package com.goide.dlv.breakpoint;
 
+import com.goide.dlv.DlvDebugProcess;
 import com.intellij.xdebugger.breakpoints.XBreakpointHandler;
 import com.intellij.xdebugger.breakpoints.XLineBreakpoint;
 import org.jetbrains.annotations.NotNull;
 
-public class DlvLineBreakpointHandler extends XBreakpointHandler<XLineBreakpoint<DlvLineBreakpointProperties>> {
+public class DlvBreakpointHandler extends XBreakpointHandler<XLineBreakpoint<DlvBreakpointProperties>> {
   private final DlvDebugProcess myDebugProcess;
 
-  public DlvLineBreakpointHandler(DlvDebugProcess debugProcess) {
-    super(DlvLineBreakpointType.class);
+  public DlvBreakpointHandler(DlvDebugProcess debugProcess) {
+    super(DlvBreakpointType.class);
     myDebugProcess = debugProcess;
   }
 
   @Override
-  public void registerBreakpoint(@NotNull XLineBreakpoint<DlvLineBreakpointProperties> breakpoint) {
+  public void registerBreakpoint(@NotNull XLineBreakpoint<DlvBreakpointProperties> breakpoint) {
     myDebugProcess.addBreakpoint(breakpoint);
   }
 
   @Override
-  public void unregisterBreakpoint(@NotNull XLineBreakpoint<DlvLineBreakpointProperties> breakpoint, boolean temporary) {
+  public void unregisterBreakpoint(@NotNull XLineBreakpoint<DlvBreakpointProperties> breakpoint, boolean temporary) {
     myDebugProcess.removeBreakpoint(breakpoint);
   }
 }

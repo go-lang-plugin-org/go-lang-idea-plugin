@@ -18,6 +18,8 @@ package com.goide.dlv;
 
 import com.goide.GoFileType;
 import com.goide.GoLanguage;
+import com.goide.dlv.breakpoint.DlvBreakpointHandler;
+import com.goide.dlv.breakpoint.DlvBreakpointProperties;
 import com.goide.dlv.protocol.*;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.Disposable;
@@ -73,7 +75,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
         return;
       }
 
-      final XBreakpoint<DlvLineBreakpointProperties> find = findBreak(o.breakPoint);
+      final XBreakpoint<DlvBreakpointProperties> find = findBreak(o.breakPoint);
       final DlvCommandProcessor processor = getProcessor();
       final Promise<List<Api.Location>> stackPromise = processor.send(new DlvStacktraceRequest());
       stackPromise.processed(new Consumer<List<Api.Location>>() {
@@ -92,10 +94,10 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     }
 
     @Nullable
-    private XBreakpoint<DlvLineBreakpointProperties> findBreak(final Api.Breakpoint point) {
-      return point != null ? ContainerUtil.find(breakpoints, new Condition<XBreakpoint<DlvLineBreakpointProperties>>() {
+    private XBreakpoint<DlvBreakpointProperties> findBreak(final Api.Breakpoint point) {
+      return point != null ? ContainerUtil.find(breakpoints, new Condition<XBreakpoint<DlvBreakpointProperties>>() {
         @Override
-        public boolean value(@NotNull XBreakpoint<DlvLineBreakpointProperties> b) {
+        public boolean value(@NotNull XBreakpoint<DlvBreakpointProperties> b) {
           return Comparing.equal(b.getUserData(ID), point.id);
         }
       }) : null;
@@ -124,7 +126,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
         return PsiFileFactory.getInstance(project).createFileFromText("a.go", GoLanguage.INSTANCE, text);
       }
     }, null, null);
-    breakpointHandlers = new XBreakpointHandler[]{new DlvLineBreakpointHandler(this)};
+    breakpointHandlers = new XBreakpointHandler[]{new DlvBreakpointHandler(this)};
   }
 
   @Override
@@ -188,10 +190,10 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
 
   public static final Key<Integer> ID = Key.create("ID");
 
-  @NotNull Set<XBreakpoint<DlvLineBreakpointProperties>> breakpoints = ContainerUtil.newConcurrentSet();
+  @NotNull Set<XBreakpoint<DlvBreakpointProperties>> breakpoints = ContainerUtil.newConcurrentSet();
 
 
-  public void addBreakpoint(@NotNull final XLineBreakpoint<DlvLineBreakpointProperties> breakpoint) {
+  public void addBreakpoint(@NotNull final XLineBreakpoint<DlvBreakpointProperties> breakpoint) {
     XSourcePosition breakpointPosition = breakpoint.getSourcePosition();
     if (breakpointPosition == null) return;
     VirtualFile file = breakpointPosition.getFile();
@@ -216,7 +218,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     });
   }
 
-  public void removeBreakpoint(@NotNull XLineBreakpoint<DlvLineBreakpointProperties> breakpoint) {
+  public void removeBreakpoint(@NotNull XLineBreakpoint<DlvBreakpointProperties> breakpoint) {
     XSourcePosition breakpointPosition = breakpoint.getSourcePosition();
     if (breakpointPosition == null) return;
     Integer id = breakpoint.getUserData(ID);

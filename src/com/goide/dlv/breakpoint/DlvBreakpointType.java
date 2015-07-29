@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.goide.dlv;
+package com.goide.dlv.breakpoint;
 
 import com.goide.GoFileType;
 import com.goide.GoParserDefinition;
@@ -30,23 +30,23 @@ import com.intellij.xdebugger.breakpoints.XLineBreakpointType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class DlvLineBreakpointType extends XLineBreakpointType<DlvLineBreakpointProperties> {
+public class DlvBreakpointType extends XLineBreakpointType<DlvBreakpointProperties> {
   public static final String ID = "DlvLineBreakpoint";
-  public static final String NAME = "Line breakpoint";
+  public static final String NAME = "Dlv breakpoint";
 
-  protected DlvLineBreakpointType() {
+  protected DlvBreakpointType() {
     super(ID, NAME);
   }
 
   @Nullable
   @Override
-  public DlvLineBreakpointProperties createBreakpointProperties(@NotNull VirtualFile file, int line) {
-    return new DlvLineBreakpointProperties();
+  public DlvBreakpointProperties createBreakpointProperties(@NotNull VirtualFile file, int line) {
+    return new DlvBreakpointProperties();
   }
 
   @Override
   public int getPriority() {
-    return 100;
+    return 100; // in case of conflicts with gdb
   }
 
   @Override
@@ -57,11 +57,8 @@ public class DlvLineBreakpointType extends XLineBreakpointType<DlvLineBreakpoint
 
   private static boolean isLineBreakpointAvailable(@NotNull VirtualFile file, int line, @NotNull Project project) {
     Document document = FileDocumentManager.getInstance().getDocument(file);
-    if (document == null) return false;
+    if (document == null || document.getLineEndOffset(line) == document.getLineStartOffset(line)) return false;
     Checker canPutAtChecker = new Checker();
-    if (document.getLineEndOffset(line) == document.getLineStartOffset(line)) {
-      return false;
-    }
     XDebuggerUtil.getInstance().iterateLine(project, document, line, canPutAtChecker);
     return canPutAtChecker.isLineBreakpointAvailable();
   }
