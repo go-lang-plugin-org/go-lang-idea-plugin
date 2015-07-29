@@ -17,11 +17,13 @@
 package com.goide.dlv;
 
 import com.goide.GoFileType;
+import com.goide.GoParserDefinition;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.tree.IElementType;
 import com.intellij.util.Processor;
 import com.intellij.xdebugger.XDebuggerUtil;
 import com.intellij.xdebugger.breakpoints.XLineBreakpointType;
@@ -53,42 +55,27 @@ public class DlvLineBreakpointType extends XLineBreakpointType<DlvLineBreakpoint
     return isLineBreakpointAvailable(file, line, project);
   }
 
-  // it should return true for lines matching "Executable Lines"
-  // description at http://www.Dlv.org/doc/apps/debugger/debugger_chapter.html
-  // and, ideally, it should return false otherwise
   private static boolean isLineBreakpointAvailable(@NotNull VirtualFile file, int line, @NotNull Project project) {
     Document document = FileDocumentManager.getInstance().getDocument(file);
     if (document == null) return false;
-    LineBreakpointAvailabilityProcessor canPutAtChecker = new LineBreakpointAvailabilityProcessor();
+    Checker canPutAtChecker = new Checker();
+    if (document.getLineEndOffset(line) == document.getLineStartOffset(line)) {
+      return false;
+    }
     XDebuggerUtil.getInstance().iterateLine(project, document, line, canPutAtChecker);
     return canPutAtChecker.isLineBreakpointAvailable();
   }
 
-  private static final class LineBreakpointAvailabilityProcessor implements Processor<PsiElement> {
-    private boolean myIsLineBreakpointAvailable = true;
+  private static final class Checker implements Processor<PsiElement> {
+    private boolean myIsLineBreakpointAvailable;
 
     @Override
-    public boolean process(PsiElement psiElement) {
-      //if (DlvPsiImplUtil.isWhitespaceOrComment(psiElement) ||
-      //  psiElement.getNode().getElementType() == DlvTypes.ERL_DOT ||
-      //  psiElement.getNode().getElementType() == DlvTypes.ERL_ARROW) return true;
-      //@SuppressWarnings("unchecked")
-      //DlvCompositeElement nonExecutableParent = PsiTreeUtil.getParentOfType(psiElement,
-      //    DlvGuard.class,
-      //    DlvArgumentDefinition.class,
-      //    DlvAttribute.class,
-      //    DlvRecordDefinition.class,
-      //    DlvIncludeLib.class,
-      //    DlvInclude.class,
-      //    DlvMacrosDefinition.class,
-      //    DlvTypeDefinition.class);
-      //if (nonExecutableParent != null) return true;
-      //DlvClauseBody executableParent = PsiTreeUtil.getParentOfType(psiElement, DlvClauseBody.class);
-      //if (executableParent != null) {
-      //  myIsLineBreakpointAvailable = true;
-      //  return false;
-      //}
-      //return true;
+    public boolean process(@NotNull PsiElement o) {
+      IElementType type = o.getNode().getElementType();
+      if (GoParserDefinition.COMMENTS.contains(type) || GoParserDefinition.WHITESPACES.contains(type)) {
+        return true;
+      }
+      myIsLineBreakpointAvailable = true;
       return false;
     }
 
