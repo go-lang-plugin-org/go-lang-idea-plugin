@@ -32,16 +32,16 @@ public class LocationImpl implements Location {
   @Nullable
   @Override
   public String url() {
-    return null;
+    return myUrl;
   }
 
   @Override
   public int line() {
-    return 0;
+    return myLine;
   }
 
   @Override
   public int column() {
-    return 0;
+    return myColumn;
   }
 }

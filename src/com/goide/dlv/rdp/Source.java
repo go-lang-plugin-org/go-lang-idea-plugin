@@ -16,17 +16,11 @@
 
 package com.goide.dlv.rdp;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jsonProtocol.JsonOptionalField;
 
 public interface Source {
-  @NotNull
-  String actor();
-
   @Nullable
   @JsonOptionalField
   String url();
-
-  boolean isBlackBoxed();
 }

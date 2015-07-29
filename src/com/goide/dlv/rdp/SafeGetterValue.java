@@ -30,6 +30,4 @@ public interface SafeGetterValue extends ValueHolder {
   boolean writable();
 
   boolean configurable();
-
-  boolean enumerable();
 }
