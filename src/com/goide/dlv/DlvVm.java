@@ -33,10 +33,9 @@ import org.jetbrains.jsonProtocol.Request;
 public class DlvVm extends VmBase implements StandaloneVmHelper.VmEx {
   @NotNull private final DlvCommandProcessor commandProcessor;
   @NotNull private final StandaloneVmHelper vmHelper;
-  @NotNull private final BreakpointManagerBase<DlvBreakpoint> breakpointManager = new DummyBreakpointManager();
+  @NotNull private final BreakpointManagerBase<BreakpointBase<?>> breakpointManager = new DummyBreakpointManager();
   @NotNull private final ScriptManagerBaseEx<ScriptBase> scriptManager = new DummyScriptManager();
   @NotNull private final DlvSuspendContextManager suspendContextManager;
-  String threadActor;
 
   public DlvVm(@NotNull DebugEventListener tabListener, @NotNull Channel channel) {
     super(tabListener);
@@ -100,7 +99,7 @@ public class DlvVm extends VmBase implements StandaloneVmHelper.VmEx {
 
   @NotNull
   @Override
-  public BreakpointManagerBase<DlvBreakpoint> getBreakpointManager() {
+  public BreakpointManagerBase<BreakpointBase<?>> getBreakpointManager() {
     return breakpointManager;
   }
 
@@ -143,10 +142,10 @@ public class DlvVm extends VmBase implements StandaloneVmHelper.VmEx {
     }
   }
 
-  private static class DummyBreakpointManager extends BreakpointManagerBase<DlvBreakpoint> {
+  private static class DummyBreakpointManager extends BreakpointManagerBase<BreakpointBase<?>> {
     @Nullable
     @Override
-    protected DlvBreakpoint createBreakpoint(@NotNull BreakpointTarget target,
+    protected BreakpointBase<?> createBreakpoint(@NotNull BreakpointTarget target,
                                              int line,
                                              int column,
                                              @Nullable String condition,
@@ -157,13 +156,13 @@ public class DlvVm extends VmBase implements StandaloneVmHelper.VmEx {
 
     @NotNull
     @Override
-    protected Promise<Breakpoint> doSetBreakpoint(@NotNull BreakpointTarget target, @NotNull final DlvBreakpoint breakpoint) {
+    protected Promise<Breakpoint> doSetBreakpoint(@NotNull BreakpointTarget target, @NotNull final BreakpointBase<?> breakpoint) {
       return Promise.resolve(null);
     }
 
     @NotNull
     @Override
-    protected Promise<Void> doClearBreakpoint(@NotNull DlvBreakpoint breakpoint) {
+    protected Promise<Void> doClearBreakpoint(@NotNull BreakpointBase<?> breakpoint) {
       return Promise.DONE;
     }
 
