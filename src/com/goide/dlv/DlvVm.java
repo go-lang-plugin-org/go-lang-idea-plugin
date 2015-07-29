@@ -24,19 +24,17 @@ import io.netty.handler.codec.json.JsonObjectDecoder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.concurrency.Promise;
-import org.jetbrains.debugger.DebugEventListener;
-import org.jetbrains.debugger.ExceptionCatchMode;
-import org.jetbrains.debugger.StandaloneVmHelper;
-import org.jetbrains.debugger.VmBase;
+import org.jetbrains.debugger.*;
+import org.jetbrains.debugger.values.FunctionValue;
 import org.jetbrains.io.ChannelBufferToString;
 import org.jetbrains.io.SimpleChannelInboundHandlerAdapter;
 import org.jetbrains.jsonProtocol.Request;
 
 public class DlvVm extends VmBase implements StandaloneVmHelper.VmEx {
-  @NotNull final DlvCommandProcessor commandProcessor;
+  @NotNull private final DlvCommandProcessor commandProcessor;
   @NotNull private final StandaloneVmHelper vmHelper;
-  private final DlvBreakpointManager breakpointManager = new DlvBreakpointManager(this);
-  private final DlvScriptManager scriptManager = new DlvScriptManager();
+  @NotNull private final DlvBreakpointManager breakpointManager = new DlvBreakpointManager(this);
+  @NotNull private final ScriptManagerBaseEx<ScriptBase> scriptManager = new DummyScriptManager();
   @NotNull private final DlvSuspendContextManager suspendContextManager;
   String threadActor;
 
@@ -96,7 +94,7 @@ public class DlvVm extends VmBase implements StandaloneVmHelper.VmEx {
 
   @NotNull
   @Override
-  public DlvScriptManager getScriptManager() {
+  public ScriptManagerBase<ScriptBase> getScriptManager() {
     return scriptManager;
   }
 
@@ -110,5 +108,36 @@ public class DlvVm extends VmBase implements StandaloneVmHelper.VmEx {
   @Override
   public DlvSuspendContextManager getSuspendContextManager() {
     return suspendContextManager;
+  }
+
+  private static class DummyScriptManager extends ScriptManagerBaseEx<ScriptBase> {
+    @Override
+    public boolean containsScript(@NotNull Script script) {
+      return true;
+    }
+
+    @NotNull
+    @Override
+    public Promise setSourceOnRemote(@NotNull Script script, @NotNull CharSequence newSource, boolean preview) {
+      return Promise.DONE;
+    }
+
+    @NotNull
+    @Override
+    public Promise<Script> getScript(@NotNull FunctionValue function) {
+      return Promise.resolve(null);
+    }
+
+    @Nullable
+    @Override
+    public Script getScript(@NotNull CallFrame frame) {
+      return null;
+    }
+
+    @NotNull
+    @Override
+    protected Promise<String> loadScriptSource(@NotNull ScriptBase script) {
+      return Promise.resolve("");
+    }
   }
 }

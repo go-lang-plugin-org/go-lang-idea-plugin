@@ -68,7 +68,7 @@ class DlvObject extends ObjectValueBase<DlvValueManager> {
       @Override
       protected Promise<List<Variable>> load() {
         if (preloadedProperties == null) {
-          return valueManager.getVm().commandProcessor.send(DlvRequest.getPrototypeAndProperties(actor))
+          return valueManager.getVm().getCommandProcessor().send(DlvRequest.getPrototypeAndProperties(actor))
             .then(new Function<PrototypeAndPropertiesResult, List<Variable>>() {
               @NotNull
               @Override
@@ -80,7 +80,7 @@ class DlvObject extends ObjectValueBase<DlvValueManager> {
             });
         }
         else {
-          return valueManager.getVm().commandProcessor.send(DlvRequest.getPrototype(actor))
+          return valueManager.getVm().getCommandProcessor().send(DlvRequest.getPrototype(actor))
             .then(new Function<PrototypeResult, List<Variable>>() {
               @NotNull
               @Override
@@ -156,7 +156,7 @@ class DlvObject extends ObjectValueBase<DlvValueManager> {
     final List<Variable> list = new SmartList<Variable>();
     List<Promise<?>> promises = new SmartList<Promise<?>>();
     for (final String name : names) {
-      promises.add(childrenManager.valueManager.getVm().commandProcessor.send(DlvRequest.getProperty(actor, name))
+      promises.add(childrenManager.valueManager.getVm().getCommandProcessor().send(DlvRequest.getProperty(actor, name))
                      .done(new Consumer<PropertyResult>() {
                        @Override
                        public void consume(@Nullable PropertyResult result) {

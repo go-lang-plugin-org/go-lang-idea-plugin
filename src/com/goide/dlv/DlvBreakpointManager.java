@@ -73,7 +73,7 @@ public class DlvBreakpointManager extends BreakpointManagerBase<DlvBreakpoint> {
   @Override
   protected Promise<Breakpoint> doSetBreakpoint(@NotNull BreakpointTarget target, @NotNull final DlvBreakpoint breakpoint) {
     final String scriptUrl = ((BreakpointTarget.ScriptName)target).getName();
-    return vm.commandProcessor.send(DlvRequest.setBreakpoint(vm.threadActor, scriptUrl, breakpoint.getLine(), breakpoint.getColumn())).then(
+    return vm.getCommandProcessor().send(DlvRequest.setBreakpoint(vm.threadActor, scriptUrl, breakpoint.getLine(), breakpoint.getColumn())).then(
       new Function<SetBreakpointResult, Breakpoint>() {
         @NotNull
         @Override
@@ -103,7 +103,7 @@ public class DlvBreakpointManager extends BreakpointManagerBase<DlvBreakpoint> {
   protected Promise<Void> doClearBreakpoint(@NotNull DlvBreakpoint breakpoint) {
     String actor = breakpoint.actor;
     assert actor != null;
-    return vm.commandProcessor.send(DlvRequest.deleteBreakpoint(actor));
+    return vm.getCommandProcessor().send(DlvRequest.deleteBreakpoint(actor));
   }
 
   @NotNull

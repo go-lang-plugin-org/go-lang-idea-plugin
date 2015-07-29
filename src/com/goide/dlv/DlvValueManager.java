@@ -142,7 +142,7 @@ public final class DlvValueManager extends ValueManager<DlvVm> {
         return Promise.DONE;
       }
 
-      Promise<Void> promise = vm.commandProcessor.send(
+      Promise<Void> promise = vm.getCommandProcessor().send(
         DlvRequest.pauseLifetimeGripsToThreadLifetime(vm.threadActor, actorsNotYetPromotedToThreadLifetime));
       actorsNotYetPromotedToThreadLifetime.clear();
       return promise;
@@ -233,7 +233,7 @@ public final class DlvValueManager extends ValueManager<DlvVm> {
         return Promise.DONE;
       }
       else {
-        Promise<Void> promise = vm.commandProcessor.send(DlvRequest.release(vm.threadActor, refToValue.keySet()));
+        Promise<Void> promise = vm.getCommandProcessor().send(DlvRequest.release(vm.threadActor, refToValue.keySet()));
         refToValue.clear();
         return promise;
       }
