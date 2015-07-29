@@ -67,15 +67,15 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
 
   private final Consumer<DebuggerState> myStateConsumer = new Consumer<DebuggerState>() {
     @Override
-    public void consume(@Nullable final DebuggerState o) {
-      if (o == null || o.exited) {
+    public void consume(@NotNull final DebuggerState o) {
+      if (o.exited) {
         getSession().stop();
         return;
       }
 
       final XBreakpoint<DlvBreakpointProperties> find = findBreak(o.breakPoint);
       Promise<List<Location>> stackPromise = send(new DlvRequest.Stacktrace());
-      stackPromise.processed(new Consumer<List<Location>>() {
+      stackPromise.done(new Consumer<List<Location>>() {
         @Override
         public void consume(@NotNull List<Location> locations) {
           DlvSuspendContext context = new DlvSuspendContext(o.currentThread.id, locations, getProcessor());
@@ -166,7 +166,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
 
   private void command(@NotNull @MagicConstant(stringValues = {NEXT, CONTINUE, HALT, SWITCH_THREAD, STEP}) String name) {
     Promise<DebuggerState> promise = send(new DlvRequest.Command(name));
-    promise.processed(myStateConsumer);
+    promise.done(myStateConsumer);
     promise.rejected(THROWABLE_CONSUMER);
   }
 
@@ -208,10 +208,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     }
 
     @Override
-    protected PsiFile createExpressionCodeFragment(@NotNull Project project,
-                                                   @NotNull String text,
-                                                   PsiElement context,
-                                                   boolean isPhysical) {
+    protected PsiFile createExpressionCodeFragment(@NotNull Project project, @NotNull String text, @Nullable PsiElement context, boolean isPhysical) {
       return PsiFileFactory.getInstance(project).createFileFromText("a.go", GoLanguage.INSTANCE, text);
     }
   }
@@ -232,14 +229,12 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
       VirtualFile file = breakpointPosition.getFile();
       int line = breakpointPosition.getLine();
       Promise<Breakpoint> promise = send(new DlvRequest.SetBreakpoint(file.getCanonicalPath(), line + 1));
-      promise.processed(new Consumer<Breakpoint>() {
+      promise.done(new Consumer<Breakpoint>() {
         @Override
-        public void consume(@Nullable Breakpoint b) {
-          if (b != null) {
-            breakpoint.putUserData(ID, b.id);
-            breakpoints.put(b.id, breakpoint);
-            getSession().updateBreakpointPresentation(breakpoint, AllIcons.Debugger.Db_verified_breakpoint, null);
-          }
+        public void consume(@NotNull Breakpoint b) {
+          breakpoint.putUserData(ID, b.id);
+          breakpoints.put(b.id, breakpoint);
+          getSession().updateBreakpointPresentation(breakpoint, AllIcons.Debugger.Db_verified_breakpoint, null);
         }
       });
       promise.rejected(new Consumer<Throwable>() {

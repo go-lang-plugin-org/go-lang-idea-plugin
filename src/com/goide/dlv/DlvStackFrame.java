@@ -72,7 +72,7 @@ class DlvStackFrame extends XStackFrame {
       return;
     }
     Promise<List<DlvApi.Variable>> varPromise = myProcessor.send(new DlvRequest.Locals.LocalVars());
-    varPromise.processed(new Consumer<List<DlvApi.Variable>>() {
+    varPromise.done(new Consumer<List<DlvApi.Variable>>() {
       @Override
       public void consume(@NotNull List<DlvApi.Variable> variables) {
         final XValueChildrenList xVars = new XValueChildrenList(variables.size());
@@ -81,9 +81,9 @@ class DlvStackFrame extends XStackFrame {
         }
 
         Promise<List<DlvApi.Variable>> argsPromise = myProcessor.send(new DlvRequest.Locals.FunctionArgs());
-        argsPromise.processed(new Consumer<List<DlvApi.Variable>>() {
+        argsPromise.done(new Consumer<List<DlvApi.Variable>>() {
           @Override
-          public void consume(List<DlvApi.Variable> args) {
+          public void consume(@NotNull List<DlvApi.Variable> args) {
             for (DlvApi.Variable v : args) {
               xVars.add(v.name, getVariableValue(v.name, v.value, v.type, GoIcons.PARAMETER));
             }
