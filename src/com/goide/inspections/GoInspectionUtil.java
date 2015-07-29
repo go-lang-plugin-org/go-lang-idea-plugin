@@ -97,7 +97,7 @@ public class GoInspectionUtil {
           text = ((GoCallExpr)expr).getExpression().getText();
         }
 
-        String msg = "Multiple-value " + text + "() in single-value context";
+        String msg = count == 0 ? text + "() doesn't return a value" : "Multiple-value " + text + "() in single-value context";
         result.registerProblem(expr, msg, ProblemHighlightType.GENERIC_ERROR);
       }
     }
