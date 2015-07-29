@@ -40,7 +40,7 @@ public interface CommandResponse {
 
   @JsonType
   interface ErrorInfo {
-    @NotNull
+    @Nullable
     String message();
 
     @NotNull
@@ -67,7 +67,7 @@ public interface CommandResponse {
 
       do {
         if ("error".equals(name)) {
-          _error = new M5m(reader, null);
+          _error = new M5m(reader);
         }
         else if ("id".equals(name)) {
           _id = reader.nextInt();
@@ -108,7 +108,7 @@ public interface CommandResponse {
     @NotNull private List<String> _data = Collections.emptyList();
     @Nullable private String _message;
 
-    M5m(@NotNull JsonReaderEx reader, String name) {
+    M5m(@NotNull JsonReaderEx reader) {
       _message = nextNullableString(reader);
     }
 
@@ -123,7 +123,7 @@ public interface CommandResponse {
       return _data;
     }
 
-    @NotNull
+    @Nullable
     @Override
     public String message() {
       return _message;
