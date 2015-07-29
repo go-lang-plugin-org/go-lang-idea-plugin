@@ -58,7 +58,7 @@ import static com.goide.dlv.protocol.DlvApi.*;
 public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> implements Disposable {
   public static final Key<Integer> ID = Key.create("DLV_BP_ID");
   private final Map<Integer, XBreakpoint<DlvBreakpointProperties>> breakpoints = ContainerUtil.newConcurrentMap();
-  private static final Consumer<Throwable> THROWABLE_CONSUMER = new Consumer<Throwable>() {
+  static final Consumer<Throwable> THROWABLE_CONSUMER = new Consumer<Throwable>() {
     @Override
     public void consume(@NotNull Throwable throwable) {
       throwable.printStackTrace();
