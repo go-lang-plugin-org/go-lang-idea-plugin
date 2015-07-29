@@ -29,6 +29,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pass;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
+import com.intellij.psi.codeStyle.NameUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.IntroduceTargetChooser;
 import com.intellij.refactoring.RefactoringBundle;
@@ -147,6 +148,7 @@ public class GoIntroduceVariableBase {
   }
 
   private static LinkedHashSet<String> getNamesInContext(PsiElement context) {
+    // todo rewrite with resolve
     if (context == null) return ContainerUtil.newLinkedHashSet();
     final LinkedHashSet<String> names = ContainerUtil.newLinkedHashSet();
 
@@ -172,17 +174,8 @@ public class GoIntroduceVariableBase {
       GoReferenceExpression callReference = PsiTreeUtil.getChildOfType(expression, GoReferenceExpression.class);
       if (callReference != null) {
         String name = StringUtil.decapitalize(callReference.getIdentifier().getText());
-        if (name.startsWith("get")) {
-          name = name.substring(3);
-        }
-        else if (name.startsWith("is")) {
-          name = name.substring(2);
-        }
-        for (int i = name.length() - 1; i >= 0; i--) {
-          if (i == 0 || (Character.isLowerCase(name.charAt(i - 1)) && Character.isUpperCase(name.charAt(i)))) {
-            String candidate = StringUtil.decapitalize(name.substring(i));
-            if (!usedNames.contains(candidate)) names.add(candidate);
-          }
+        for (String candidate : NameUtil.getSuggestionsByName(name, "", "", false, false, false)) {
+          if (!usedNames.contains(candidate)) names.add(candidate);
         }
       }
     }

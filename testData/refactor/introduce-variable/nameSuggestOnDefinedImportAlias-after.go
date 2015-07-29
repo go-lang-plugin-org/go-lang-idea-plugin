@@ -3,10 +3,10 @@ package a
 import "fmt"
 
 func a() {
-	i := getFmt()
+	i := Fmt()
 	a := i
 }
 
-func getFmt() int {
+func Fmt() int {
 	return 1
 }

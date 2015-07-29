@@ -3,9 +3,9 @@ package a
 import "fmt"
 
 func a() {
-	a := getFmt()<caret>
+	a := Fmt()<caret>
 }
 
-func getFmt() int {
+func Fmt() int {
 	return 1
 }
