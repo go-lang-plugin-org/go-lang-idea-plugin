@@ -27,6 +27,7 @@ import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.util.Consumer;
 import com.intellij.xdebugger.XDebuggerUtil;
 import com.intellij.xdebugger.XSourcePosition;
+import com.intellij.xdebugger.evaluation.XDebuggerEvaluator;
 import com.intellij.xdebugger.frame.*;
 import com.intellij.xdebugger.frame.presentation.XNumericValuePresentation;
 import com.intellij.xdebugger.frame.presentation.XStringValuePresentation;
@@ -47,6 +48,32 @@ class DlvStackFrame extends XStackFrame {
     myLocation = location;
     myProcessor = processor;
     myTop = top;
+  }
+
+  @Nullable
+  @Override
+  public XDebuggerEvaluator getEvaluator() {
+    if (!myTop) return null;
+    return new XDebuggerEvaluator() {
+      @Override
+      public void evaluate(@NotNull String expression,
+                           @NotNull final XEvaluationCallback xcallback,
+                           @Nullable XSourcePosition expressionPosition) {
+        Promise<DlvApi.Variable> promise = myProcessor.send(new DlvRequest.EvalSymbol(expression));
+        promise.done(new Consumer<DlvApi.Variable>() {
+          @Override
+          public void consume(@NotNull DlvApi.Variable variable) {
+            xcallback.evaluated(getVariableValue(variable.name, variable.value, variable.type, GoIcons.VARIABLE));
+          }
+        });
+        promise.rejected(new Consumer<Throwable>() {
+          @Override
+          public void consume(@NotNull Throwable throwable) {
+            xcallback.errorOccurred(throwable.getMessage());
+          }
+        });
+      }
+    };
   }
 
   @Nullable

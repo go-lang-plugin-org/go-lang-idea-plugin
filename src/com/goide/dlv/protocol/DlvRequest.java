@@ -16,6 +16,7 @@
 
 package com.goide.dlv.protocol;
 
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jsonProtocol.OutMessage;
@@ -160,6 +161,22 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
     @Override
     public String getMethodName() {
       return "RPCServer.Command";
+    }
+  }
+
+  public static class EvalSymbol extends DlvRequest<DlvApi.Variable> {
+    public EvalSymbol(String symbol) {
+      writeStringList(argumentsKeyName(), ContainerUtil.newSmartList(symbol));
+    }
+
+    @Override
+    protected boolean needObject() {
+      return false;
+    }
+
+    @Override
+    public String getMethodName() {
+      return "RPCServer.EvalSymbol";
     }
   }
 }

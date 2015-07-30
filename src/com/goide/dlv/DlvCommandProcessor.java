@@ -111,6 +111,7 @@ public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, DlvRespo
     if (method.equals("RPCServer.Command")) return DlvApi.DebuggerState.class;
     if (method.equals("RPCServer.StacktraceGoroutine")) return new TypeToken<ArrayList<DlvApi.Location>>() {}.getType();
     if (method.equals("RPCServer.ListLocalVars") || method.equals("RPCServer.ListFunctionArgs")) return new TypeToken<ArrayList<DlvApi.Variable>>() {}.getType();
+    if (method.equals("RPCServer.EvalSymbol")) return DlvApi.Variable.class;
     return Object.class;
   }
 }
