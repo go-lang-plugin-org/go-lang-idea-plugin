@@ -17,7 +17,6 @@
 package com.goide.dlv;
 
 import com.goide.GoFileType;
-import com.goide.GoLanguage;
 import com.goide.dlv.breakpoint.DlvBreakpointProperties;
 import com.goide.dlv.breakpoint.DlvBreakpointType;
 import com.goide.dlv.protocol.DlvRequest;
@@ -27,6 +26,7 @@ import com.intellij.openapi.application.AccessToken;
 import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.openapi.fileTypes.PlainTextLanguage;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -211,7 +211,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
                                                    @NotNull String text,
                                                    @Nullable PsiElement context,
                                                    boolean isPhysical) {
-      return PsiFileFactory.getInstance(project).createFileFromText("a.go", GoLanguage.INSTANCE, text);
+      return PsiFileFactory.getInstance(project).createFileFromText("dlv-debug.txt", PlainTextLanguage.INSTANCE, text);
     }
   }
 
