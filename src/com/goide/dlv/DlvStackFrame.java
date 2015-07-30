@@ -66,19 +66,19 @@ class DlvStackFrame extends XStackFrame {
     return new XDebuggerEvaluator() {
       @Override
       public void evaluate(@NotNull String expression,
-                           @NotNull final XEvaluationCallback xcallback,
+                           @NotNull final XEvaluationCallback callback,
                            @Nullable XSourcePosition expressionPosition) {
         myProcessor.send(new DlvRequest.EvalSymbol(expression))
           .done(new Consumer<DlvApi.Variable>() {
             @Override
             public void consume(@NotNull DlvApi.Variable variable) {
-              xcallback.evaluated(createXValue(variable));
+              callback.evaluated(createXValue(variable));
             }
           })
           .rejected(new Consumer<Throwable>() {
             @Override
             public void consume(@NotNull Throwable throwable) {
-              xcallback.errorOccurred(throwable.getMessage());
+              callback.errorOccurred(throwable.getMessage());
             }
           });
       }
