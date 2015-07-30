@@ -34,7 +34,6 @@ import com.intellij.xdebugger.frame.presentation.XStringValuePresentation;
 import com.intellij.xdebugger.frame.presentation.XValuePresentation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.concurrency.Promise;
 
 import javax.swing.*;
 import java.util.List;
@@ -59,21 +58,26 @@ class DlvStackFrame extends XStackFrame {
       public void evaluate(@NotNull String expression,
                            @NotNull final XEvaluationCallback xcallback,
                            @Nullable XSourcePosition expressionPosition) {
-        Promise<DlvApi.Variable> promise = myProcessor.send(new DlvRequest.EvalSymbol(expression));
-        promise.done(new Consumer<DlvApi.Variable>() {
-          @Override
-          public void consume(@NotNull DlvApi.Variable variable) {
-            xcallback.evaluated(getVariableValue(variable.name, variable.value, variable.type, GoIcons.VARIABLE));
-          }
-        });
-        promise.rejected(new Consumer<Throwable>() {
-          @Override
-          public void consume(@NotNull Throwable throwable) {
-            xcallback.errorOccurred(throwable.getMessage());
-          }
-        });
+        myProcessor.send(new DlvRequest.EvalSymbol(expression))
+          .done(new Consumer<DlvApi.Variable>() {
+            @Override
+            public void consume(@NotNull DlvApi.Variable variable) {
+              xcallback.evaluated(createXValue(variable));
+            }
+          })
+          .rejected(new Consumer<Throwable>() {
+            @Override
+            public void consume(@NotNull Throwable throwable) {
+              xcallback.errorOccurred(throwable.getMessage());
+            }
+          });
       }
     };
+  }
+
+  @NotNull
+  private static XValue createXValue(@NotNull DlvApi.Variable variable) {
+    return getVariableValue(variable.name, variable.value, variable.type, GoIcons.VARIABLE);
   }
 
   @Nullable
@@ -98,29 +102,27 @@ class DlvStackFrame extends XStackFrame {
       super.computeChildren(node);
       return;
     }
-    Promise<List<DlvApi.Variable>> varPromise = myProcessor.send(new DlvRequest.Locals.LocalVars());
-    varPromise.done(new Consumer<List<DlvApi.Variable>>() {
-      @Override
-      public void consume(@NotNull List<DlvApi.Variable> variables) {
-        final XValueChildrenList xVars = new XValueChildrenList(variables.size());
-        for (DlvApi.Variable v : variables) {
-          xVars.add(v.name, getVariableValue(v.name, v.value, v.type, GoIcons.VARIABLE));
-        }
-
-        Promise<List<DlvApi.Variable>> argsPromise = myProcessor.send(new DlvRequest.Locals.FunctionArgs());
-        argsPromise.done(new Consumer<List<DlvApi.Variable>>() {
-          @Override
-          public void consume(@NotNull List<DlvApi.Variable> args) {
-            for (DlvApi.Variable v : args) {
-              xVars.add(v.name, getVariableValue(v.name, v.value, v.type, GoIcons.PARAMETER));
-            }
-            node.addChildren(xVars, true);
+    myProcessor.send(new DlvRequest.Locals.LocalVars())
+      .done(new Consumer<List<DlvApi.Variable>>() {
+        @Override
+        public void consume(@NotNull List<DlvApi.Variable> variables) {
+          final XValueChildrenList xVars = new XValueChildrenList(variables.size());
+          for (DlvApi.Variable v : variables) {
+            xVars.add(v.name, createXValue(v));
           }
-        });
-        argsPromise.rejected(DlvDebugProcess.THROWABLE_CONSUMER);
-      }
-    });
-    varPromise.rejected(DlvDebugProcess.THROWABLE_CONSUMER);
+
+          myProcessor.send(new DlvRequest.Locals.FunctionArgs())
+            .done(new Consumer<List<DlvApi.Variable>>() {
+              @Override
+              public void consume(@NotNull List<DlvApi.Variable> args) {
+                for (DlvApi.Variable v : args) {
+                  xVars.add(v.name, getVariableValue(v.name, v.value, v.type, GoIcons.PARAMETER));
+                }
+                node.addChildren(xVars, true);
+              }
+            }).rejected(DlvDebugProcess.THROWABLE_CONSUMER);
+        }
+      }).rejected(DlvDebugProcess.THROWABLE_CONSUMER);
   }
 
   @NotNull

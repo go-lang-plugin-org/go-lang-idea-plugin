@@ -76,20 +76,19 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
       }
 
       final XBreakpoint<DlvBreakpointProperties> find = findBreak(o.breakPoint);
-      Promise<List<Location>> stackPromise = send(new DlvRequest.Stacktrace());
-      stackPromise.done(new Consumer<List<Location>>() {
-        @Override
-        public void consume(@NotNull List<Location> locations) {
-          DlvSuspendContext context = new DlvSuspendContext(o.currentThread.id, locations, getProcessor());
-          if (find == null) {
-            getSession().positionReached(context);
+      send(new DlvRequest.Stacktrace())
+        .done(new Consumer<List<Location>>() {
+          @Override
+          public void consume(@NotNull List<Location> locations) {
+            DlvSuspendContext context = new DlvSuspendContext(o.currentThread.id, locations, getProcessor());
+            if (find == null) {
+              getSession().positionReached(context);
+            }
+            else {
+              getSession().breakpointReached(find, null, context);
+            }
           }
-          else {
-            getSession().breakpointReached(find, null, context);
-          }
-        }
-      });
-      stackPromise.rejected(THROWABLE_CONSUMER);
+        }).rejected(THROWABLE_CONSUMER);
     }
 
     @Nullable
@@ -167,9 +166,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
   }
 
   private void command(@NotNull @MagicConstant(stringValues = {NEXT, CONTINUE, HALT, SWITCH_THREAD, STEP}) String name) {
-    Promise<DebuggerState> promise = send(new DlvRequest.Command(name));
-    promise.done(myStateConsumer);
-    promise.rejected(THROWABLE_CONSUMER);
+    send(new DlvRequest.Command(name)).done(myStateConsumer).rejected(THROWABLE_CONSUMER);
   }
 
   @Override
@@ -210,7 +207,10 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     }
 
     @Override
-    protected PsiFile createExpressionCodeFragment(@NotNull Project project, @NotNull String text, @Nullable PsiElement context, boolean isPhysical) {
+    protected PsiFile createExpressionCodeFragment(@NotNull Project project,
+                                                   @NotNull String text,
+                                                   @Nullable PsiElement context,
+                                                   boolean isPhysical) {
       return PsiFileFactory.getInstance(project).createFileFromText("a.go", GoLanguage.INSTANCE, text);
     }
   }
@@ -230,16 +230,15 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
       if (breakpointPosition == null) return;
       VirtualFile file = breakpointPosition.getFile();
       int line = breakpointPosition.getLine();
-      Promise<Breakpoint> promise = send(new DlvRequest.SetBreakpoint(file.getCanonicalPath(), line + 1));
-      promise.done(new Consumer<Breakpoint>() {
-        @Override
-        public void consume(@NotNull Breakpoint b) {
-          breakpoint.putUserData(ID, b.id);
-          breakpoints.put(b.id, breakpoint);
-          getSession().updateBreakpointPresentation(breakpoint, AllIcons.Debugger.Db_verified_breakpoint, null);
-        }
-      });
-      promise.rejected(new Consumer<Throwable>() {
+      send(new DlvRequest.SetBreakpoint(file.getCanonicalPath(), line + 1))
+        .done(new Consumer<Breakpoint>() {
+          @Override
+          public void consume(@NotNull Breakpoint b) {
+            breakpoint.putUserData(ID, b.id);
+            breakpoints.put(b.id, breakpoint);
+            getSession().updateBreakpointPresentation(breakpoint, AllIcons.Debugger.Db_verified_breakpoint, null);
+          }
+        }).rejected(new Consumer<Throwable>() {
         @Override
         public void consume(@Nullable Throwable t) {
           getSession().updateBreakpointPresentation(breakpoint, AllIcons.Debugger.Db_invalid_breakpoint, t == null ? null : t.getMessage());
@@ -255,8 +254,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
       if (id == null) return; // obsolete
       breakpoint.putUserData(ID, null);
       breakpoints.remove(id);
-      Promise<Breakpoint> promise = send(new DlvRequest.ClearBreakpoint(id));
-      promise.rejected(THROWABLE_CONSUMER);
+      send(new DlvRequest.ClearBreakpoint(id)).rejected(THROWABLE_CONSUMER);
     }
   }
 }
