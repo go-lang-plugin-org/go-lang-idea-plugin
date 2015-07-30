@@ -21,6 +21,7 @@ import com.goide.dlv.protocol.DlvResponse;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -75,24 +76,20 @@ public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, DlvRespo
       callback.onSuccess(response, this);
     }
     else {
-      String message;
-      if (response.error() == null) {
-        message = "Internal messaging error";
-      }
-      else {
-        DlvResponse.ErrorInfo errorInfo = response.error();
-        if (ContainerUtil.isEmpty(errorInfo.data())) {
-          message = errorInfo.message();
-        }
-        else {
-          List<String> messageList = new ArrayList<String>();
-          messageList.add(errorInfo.message());
-          messageList.addAll(errorInfo.data());
-          message = messageList.toString();
-        }
-      }
-      callback.onError(Promise.createError(message));
+      callback.onError(Promise.createError(createMessage(response)));
     }
+  }
+
+  @NotNull
+  private static String createMessage(@NotNull DlvResponse r) {
+    DlvResponse.ErrorInfo e = r.error();
+    if (e == null) return "Internal messaging error";
+    List<String> data = e.data();
+    String message = e.message();
+    if (ContainerUtil.isEmpty(data)) return StringUtil.defaultIfEmpty(message, "<null>");
+    List<String> list = ContainerUtil.newSmartList(message);
+    list.addAll(data);
+    return list.toString();
   }
 
   @NotNull
