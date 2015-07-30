@@ -72,7 +72,7 @@ class DlvStackFrame extends XStackFrame {
           .done(new Consumer<DlvApi.Variable>() {
             @Override
             public void consume(@NotNull DlvApi.Variable variable) {
-              callback.evaluated(createXValue(variable));
+              callback.evaluated(createXValue(variable, AllIcons.Debugger.Watch));
             }
           })
           .rejected(new Consumer<Throwable>() {
@@ -94,11 +94,7 @@ class DlvStackFrame extends XStackFrame {
           @Override
           public void run() {
             try {
-              PsiElement elementAtCursor =
-                DebuggerUtilsEx.findElementAt(PsiDocumentManager.getInstance(project).getPsiFile(document), offset);
-              if (elementAtCursor == null) {
-                return;
-              }
+              PsiElement elementAtCursor = DebuggerUtilsEx.findElementAt(PsiDocumentManager.getInstance(project).getPsiFile(document), offset);
               GoTypeOwner e = PsiTreeUtil.getParentOfType(elementAtCursor,
                                                           GoReferenceExpression.class,
                                                           GoVarDefinition.class,
@@ -119,8 +115,25 @@ class DlvStackFrame extends XStackFrame {
   }
 
   @NotNull
-  private static XValue createXValue(@NotNull DlvApi.Variable variable) {
-    return getVariableValue(variable.name, variable.value, variable.type, GoIcons.VARIABLE);
+  private static XValue createXValue(@NotNull final DlvApi.Variable variable, @Nullable final Icon icon) {
+    return new XNamedValue(variable.name) {
+      @Override
+      public void computePresentation(@NotNull XValueNode node, @NotNull XValuePlace place) {
+        XValuePresentation presentation = getPresentation();
+        if (presentation != null) {
+          node.setPresentation(icon, presentation, false);
+          return;
+        }
+        node.setPresentation(icon, variable.type, variable.value, false);
+      }
+
+      @Nullable
+      private XValuePresentation getPresentation() {
+        if ("struct string".equals(variable.type)) return new XStringValuePresentation(variable.value);
+        if ("int".equals(variable.type)) return new XNumericValuePresentation(variable.value);
+        return null;
+      }
+    };
   }
 
   @Nullable
@@ -151,7 +164,7 @@ class DlvStackFrame extends XStackFrame {
         public void consume(@NotNull List<DlvApi.Variable> variables) {
           final XValueChildrenList xVars = new XValueChildrenList(variables.size());
           for (DlvApi.Variable v : variables) {
-            xVars.add(v.name, createXValue(v));
+            xVars.add(v.name, createXValue(v, GoIcons.VARIABLE));
           }
 
           myProcessor.send(new DlvRequest.ListFunctionArgs())
@@ -159,37 +172,12 @@ class DlvStackFrame extends XStackFrame {
               @Override
               public void consume(@NotNull List<DlvApi.Variable> args) {
                 for (DlvApi.Variable v : args) {
-                  xVars.add(v.name, getVariableValue(v.name, v.value, v.type, GoIcons.PARAMETER));
+                  xVars.add(v.name, createXValue(v, GoIcons.PARAMETER));
                 }
                 node.addChildren(xVars, true);
               }
             }).rejected(DlvDebugProcess.THROWABLE_CONSUMER);
         }
       }).rejected(DlvDebugProcess.THROWABLE_CONSUMER);
-  }
-
-  @NotNull
-  private static XValue getVariableValue(@NotNull String name,
-                                         @NotNull final String value,
-                                         @Nullable final String type,
-                                         @Nullable final Icon icon) {
-    return new XNamedValue(name) {
-      @Override
-      public void computePresentation(@NotNull XValueNode node, @NotNull XValuePlace place) {
-        XValuePresentation presentation = getPresentation();
-        if (presentation != null) {
-          node.setPresentation(icon, presentation, false);
-          return;
-        }
-        node.setPresentation(icon, type, value, false);
-      }
-
-      @Nullable
-      private XValuePresentation getPresentation() {
-        if ("struct string".equals(type)) return new XStringValuePresentation(value);
-        if ("int".equals(type)) return new XNumericValuePresentation(value);
-        return null;
-      }
-    };
   }
 }
