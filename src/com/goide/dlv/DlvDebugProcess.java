@@ -76,7 +76,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
       }
 
       final XBreakpoint<DlvBreakpointProperties> find = findBreak(o.breakPoint);
-      send(new DlvRequest.Stacktrace())
+      send(new DlvRequest.StacktraceGoroutine())
         .done(new Consumer<List<Location>>() {
           @Override
           public void consume(@NotNull List<Location> locations) {
@@ -230,7 +230,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
       if (breakpointPosition == null) return;
       VirtualFile file = breakpointPosition.getFile();
       int line = breakpointPosition.getLine();
-      send(new DlvRequest.SetBreakpoint(file.getCanonicalPath(), line + 1))
+      send(new DlvRequest.CreateBreakpoint(file.getCanonicalPath(), line + 1))
         .done(new Consumer<Breakpoint>() {
           @Override
           public void consume(@NotNull Breakpoint b) {

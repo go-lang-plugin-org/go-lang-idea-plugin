@@ -102,7 +102,7 @@ class DlvStackFrame extends XStackFrame {
       super.computeChildren(node);
       return;
     }
-    myProcessor.send(new DlvRequest.Locals.LocalVars())
+    myProcessor.send(new DlvRequest.ListLocalVars())
       .done(new Consumer<List<DlvApi.Variable>>() {
         @Override
         public void consume(@NotNull List<DlvApi.Variable> variables) {
@@ -111,7 +111,7 @@ class DlvStackFrame extends XStackFrame {
             xVars.add(v.name, createXValue(v));
           }
 
-          myProcessor.send(new DlvRequest.Locals.FunctionArgs())
+          myProcessor.send(new DlvRequest.ListFunctionArgs())
             .done(new Consumer<List<DlvApi.Variable>>() {
               @Override
               public void consume(@NotNull List<DlvApi.Variable> args) {

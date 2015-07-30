@@ -17,7 +17,6 @@
 package com.goide.dlv.protocol;
 
 import com.intellij.util.containers.ContainerUtil;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jsonProtocol.OutMessage;
 import org.jetbrains.jsonProtocol.Request;
@@ -30,16 +29,17 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
   protected boolean argumentsObjectStarted;
 
   public DlvRequest() {
-    this(null);
-  }
-
-  protected DlvRequest(@Nullable String command) {
     try {
-      writer.name("method").value(command == null ? getMethodName() : command);
+      writer.name("method").value(getMethodName());
     }
     catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  @Override
+  public String getMethodName() {
+    return "RPCServer." + getClass().getSimpleName();
   }
 
   @Override
@@ -93,36 +93,19 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
     protected boolean needObject() {
       return false;
     }
-
-    @NotNull
-    @Override
-    public String getMethodName() {
-      return "RPCServer.ClearBreakpoint";
-    }
   }
 
-  public static final class SetBreakpoint extends DlvRequest<DlvApi.Breakpoint> {
-    public SetBreakpoint(String path, int line) {
+  public static final class CreateBreakpoint extends DlvRequest<DlvApi.Breakpoint> {
+    public CreateBreakpoint(String path, int line) {
       writeString("file", path);
       writeInt("line", line);
     }
-
-    @NotNull
-    @Override
-    public String getMethodName() {
-      return "RPCServer.CreateBreakpoint";
-    }
   }
 
-  public static class Stacktrace extends DlvRequest<List<DlvApi.Location>> {
-    public Stacktrace() {
+  public static class StacktraceGoroutine extends DlvRequest<List<DlvApi.Location>> {
+    public StacktraceGoroutine() {
       writeInt("Id", -1);
       writeInt("Depth", 100);
-    }
-
-    @Override
-    public String getMethodName() {
-      return "RPCServer." + "StacktraceGoroutine";
     }
   }
 
@@ -139,28 +122,15 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
     }
   }
 
-  public static class LocalVars extends Locals {
-    @Override
-    public String getMethodName() {
-      return "RPCServer.ListLocalVars";
-    }
+  public static class ListLocalVars extends Locals {
   }
 
-  public static class FunctionArgs extends Locals {
-    @Override
-    public String getMethodName() {
-      return "RPCServer.ListFunctionArgs";
-    }
+  public static class ListFunctionArgs extends Locals {
   }
 
   public static class Command extends DlvRequest<DlvApi.DebuggerState> {
     public Command(@Nullable String command) {
       writeString("Name", command);
-    }
-  
-    @Override
-    public String getMethodName() {
-      return "RPCServer.Command";
     }
   }
 
@@ -172,11 +142,6 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
     @Override
     protected boolean needObject() {
       return false;
-    }
-
-    @Override
-    public String getMethodName() {
-      return "RPCServer.EvalSymbol";
     }
   }
 }
