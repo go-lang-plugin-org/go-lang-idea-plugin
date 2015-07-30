@@ -36,6 +36,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.goide.dlv.protocol.DlvRequest.*;
+
 public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, DlvResponse, DlvResponse> {
   @NotNull private final MessageWriter myWriter;
 
@@ -99,19 +101,19 @@ public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, DlvRespo
     JsonReaderEx result = successResponse.result();
     assert result != null : "success result should be not null";
     JsonReader reader = result.asGson();
-    Object o = new GsonBuilder().create().fromJson(reader, getT(method));
+    Object o = new GsonBuilder().create().fromJson(reader, getResultType(method));
     //noinspection unchecked
     return (RESULT)o;
   }
 
   @NotNull
-  private static Type getT(@NotNull String method) {
-    if (method.equals("RPCServer.CreateBreakpoint")) return DlvApi.Breakpoint.class;
-    if (method.equals("RPCServer.ClearBreakpoint")) return DlvApi.Breakpoint.class;
-    if (method.equals("RPCServer.Command")) return DlvApi.DebuggerState.class;
-    if (method.equals("RPCServer.StacktraceGoroutine")) return new TypeToken<ArrayList<DlvApi.Location>>() {}.getType();
-    if (method.equals("RPCServer.ListLocalVars") || method.equals("RPCServer.ListFunctionArgs")) return new TypeToken<ArrayList<DlvApi.Variable>>() {}.getType();
-    if (method.equals("RPCServer.EvalSymbol")) return DlvApi.Variable.class;
+  private static Type getResultType(@NotNull String method) {
+    if (method.equals(CreateBreakpoint.class.getSimpleName())) return DlvApi.Breakpoint.class;
+    if (method.equals(ClearBreakpoint.class.getSimpleName())) return DlvApi.Breakpoint.class;
+    if (method.equals(Command.class.getSimpleName())) return DlvApi.DebuggerState.class;
+    if (method.equals(StacktraceGoroutine.class.getSimpleName())) return new TypeToken<ArrayList<DlvApi.Location>>() {}.getType();
+    if (method.equals(ListLocalVars.class.getSimpleName()) || method.equals(ListFunctionArgs.class.getSimpleName())) return new TypeToken<ArrayList<DlvApi.Variable>>() {}.getType();
+    if (method.equals(EvalSymbol.class.getSimpleName())) return DlvApi.Variable.class;
     return Object.class;
   }
 }
