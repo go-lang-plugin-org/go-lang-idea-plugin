@@ -103,11 +103,11 @@ public class GoElementFactory {
   }
 
   @NotNull
-  public static GoStatement createVarDeclarationStatement(@NotNull Project project,
-                                                          @NotNull String name,
-                                                          @NotNull GoExpression initializer, boolean shortDeclaration) {
+  public static GoStatement createShortVarDeclarationStatement(@NotNull Project project,
+                                                               @NotNull String name,
+                                                               @NotNull GoExpression initializer) {
     GoFile file = createFileFromText(project, "package a; func a() {\n " + name + " := " + initializer.getText() + "}");
-    return PsiTreeUtil.findChildOfType(file, shortDeclaration ? GoSimpleStatement.class : GoStatement.class);
+    return PsiTreeUtil.findChildOfType(file, GoSimpleStatement.class);
   }
 
   @NotNull

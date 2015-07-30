@@ -16,22 +16,16 @@
 
 package com.goide.refactor;
 
-import com.goide.psi.GoExpression;
 import com.intellij.codeInsight.template.impl.TemplateManagerImpl;
 import com.intellij.codeInsight.template.impl.TemplateState;
 import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
-import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class GoIntroduceVariableHandler extends GoIntroduceVariableBase implements RefactoringActionHandler {
   @Override
@@ -41,18 +35,7 @@ public class GoIntroduceVariableHandler extends GoIntroduceVariableBase implemen
       final TemplateState templateState = TemplateManagerImpl.getTemplateState(editor);
       if (templateState != null && !templateState.isFinished()) return;
     }
-    SelectionModel selectionModel = editor.getSelectionModel();
-    List<GoExpression> expressions = selectionModel.hasSelection()
-                                     ? collectExpressionsInSelection(file, project, editor, selectionModel)
-                                     : collectExpressionsAtOffset(file, project, editor, editor.getCaretModel().getOffset());
-    if (expressions.size() == 1 || ApplicationManager.getApplication().isUnitTestMode()) {
-      GoExpression expression = ContainerUtil.getFirstItem(expressions);
-      assert expression != null;
-      performOnElement(project, editor, expression);
-    }
-    else if (expressions.size() > 1) {
-      smartIntroduce(project, editor, expressions);
-    }
+    performAction(new GoIntroduceOperation(project, editor, file));
   }
 
   @Override
