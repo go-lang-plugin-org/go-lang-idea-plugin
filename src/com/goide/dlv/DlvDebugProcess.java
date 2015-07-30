@@ -238,12 +238,13 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
             breakpoints.put(b.id, breakpoint);
             getSession().updateBreakpointPresentation(breakpoint, AllIcons.Debugger.Db_verified_breakpoint, null);
           }
-        }).rejected(new Consumer<Throwable>() {
-        @Override
-        public void consume(@Nullable Throwable t) {
-          getSession().updateBreakpointPresentation(breakpoint, AllIcons.Debugger.Db_invalid_breakpoint, t == null ? null : t.getMessage());
-        }
-      });
+        })
+        .rejected(new Consumer<Throwable>() {
+          @Override
+          public void consume(@Nullable Throwable t) {
+            getSession().updateBreakpointPresentation(breakpoint, AllIcons.Debugger.Db_invalid_breakpoint, t == null ? null : t.getMessage());
+          }
+        });
     }
 
     @Override
