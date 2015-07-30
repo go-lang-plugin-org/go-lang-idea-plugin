@@ -101,7 +101,7 @@ public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, DlvRespo
     JsonReaderEx result = successResponse.result();
     assert result != null : "success result should be not null";
     JsonReader reader = result.asGson();
-    Object o = new GsonBuilder().create().fromJson(reader, getResultType(method));
+    Object o = new GsonBuilder().create().fromJson(reader, getResultType(method.replaceFirst("RPCServer\\.", "")));
     //noinspection unchecked
     return (RESULT)o;
   }
@@ -111,8 +111,8 @@ public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, DlvRespo
     if (method.equals(CreateBreakpoint.class.getSimpleName())) return DlvApi.Breakpoint.class;
     if (method.equals(ClearBreakpoint.class.getSimpleName())) return DlvApi.Breakpoint.class;
     if (method.equals(Command.class.getSimpleName())) return DlvApi.DebuggerState.class;
-    if (method.equals(StacktraceGoroutine.class.getSimpleName())) return new TypeToken<ArrayList<DlvApi.Location>>() {}.getType();
-    if (method.equals(ListLocalVars.class.getSimpleName()) || method.equals(ListFunctionArgs.class.getSimpleName())) return new TypeToken<ArrayList<DlvApi.Variable>>() {}.getType();
+    if (method.equals(StacktraceGoroutine.class.getSimpleName())) return new TypeToken<ArrayList<DlvApi.Location>>() { }.getType();
+    if (method.equals(ListLocalVars.class.getSimpleName()) || method.equals(ListFunctionArgs.class.getSimpleName())) return new TypeToken<ArrayList<DlvApi.Variable>>() { }.getType();
     if (method.equals(EvalSymbol.class.getSimpleName())) return DlvApi.Variable.class;
     return Object.class;
   }
