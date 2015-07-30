@@ -16,10 +16,9 @@
 
 package com.goide.dlv;
 
-import com.goide.dlv.protocol.DlvApi;
+import com.goide.dlv.protocol.DlvRequest;
 import com.goide.dlv.protocol.DlvResponse;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.containers.ContainerUtil;
@@ -33,11 +32,9 @@ import org.jetbrains.rpc.MessageWriter;
 import org.jetbrains.rpc.RequestCallback;
 
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
-
-import static com.goide.dlv.protocol.DlvRequest.*;
 
 public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, DlvResponse, DlvResponse> {
   @NotNull private final MessageWriter myWriter;
@@ -105,12 +102,16 @@ public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, DlvRespo
 
   @NotNull
   private static Type getResultType(@NotNull String method) {
-    if (method.equals(CreateBreakpoint.class.getSimpleName())) return DlvApi.Breakpoint.class;
-    if (method.equals(ClearBreakpoint.class.getSimpleName())) return DlvApi.Breakpoint.class;
-    if (method.equals(Command.class.getSimpleName())) return DlvApi.DebuggerState.class;
-    if (method.equals(StacktraceGoroutine.class.getSimpleName())) return new TypeToken<ArrayList<DlvApi.Location>>() { }.getType();
-    if (method.equals(ListLocalVars.class.getSimpleName()) || method.equals(ListFunctionArgs.class.getSimpleName())) return new TypeToken<ArrayList<DlvApi.Variable>>() { }.getType();
-    if (method.equals(EvalSymbol.class.getSimpleName())) return DlvApi.Variable.class;
+    for (Class<?> c : DlvRequest.class.getDeclaredClasses()) {
+      if (method.equals(c.getSimpleName())) {
+        Type s = c.getGenericSuperclass();
+        assert s instanceof ParameterizedType : c.getCanonicalName() + " should have a generic parameter for correct callback processing";
+        Type[] arguments = ((ParameterizedType)s).getActualTypeArguments();
+        assert arguments.length == 1 : c.getCanonicalName() + " should have only one generic argument for correct callback processing";
+        return arguments[0];
+      }
+    }
+    LOG.warn("Unknown response " + method);
     return Object.class;
   }
 }

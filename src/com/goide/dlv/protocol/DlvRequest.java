@@ -109,7 +109,7 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
     }
   }
 
-  public abstract static class Locals extends DlvRequest<List<DlvApi.Variable>> {
+  public abstract static class Locals<T> extends DlvRequest<T> {
     public Locals() {
       List<String> objects = new ArrayList<String>();
       objects.add(null);
@@ -122,10 +122,10 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
     }
   }
 
-  public static class ListLocalVars extends Locals {
+  public static class ListLocalVars extends Locals<List<DlvApi.Variable>> {
   }
 
-  public static class ListFunctionArgs extends Locals {
+  public static class ListFunctionArgs extends Locals<List<DlvApi.Variable>> {
   }
 
   public static class Command extends DlvRequest<DlvApi.DebuggerState> {
