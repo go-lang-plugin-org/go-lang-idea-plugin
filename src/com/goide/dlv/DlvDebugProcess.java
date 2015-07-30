@@ -88,7 +88,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
               getSession().breakpointReached(find, null, context);
             }
           }
-        }).rejected(THROWABLE_CONSUMER);
+        });
     }
 
     @Nullable
@@ -99,7 +99,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
 
   @NotNull
   private <T> Promise<T> send(@NotNull DlvRequest<T> request) {
-    return getProcessor().send(request);
+    return getProcessor().send(request).rejected(THROWABLE_CONSUMER);
   }
 
   @NotNull
@@ -166,7 +166,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
   }
 
   private void command(@NotNull @MagicConstant(stringValues = {NEXT, CONTINUE, HALT, SWITCH_THREAD, STEP}) String name) {
-    send(new DlvRequest.Command(name)).done(myStateConsumer).rejected(THROWABLE_CONSUMER);
+    send(new DlvRequest.Command(name)).done(myStateConsumer);
   }
 
   @Override
@@ -254,7 +254,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
       if (id == null) return; // obsolete
       breakpoint.putUserData(ID, null);
       breakpoints.remove(id);
-      send(new DlvRequest.ClearBreakpoint(id)).rejected(THROWABLE_CONSUMER);
+      send(new DlvRequest.ClearBreakpoint(id));
     }
   }
 }
