@@ -32,6 +32,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.impl.ElementBase;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.util.CachedValueProvider;
@@ -210,6 +211,10 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
       return module != null ? GoUtil.moduleScope(getProject(), module) : super.getUseScope();
     }
     else {
+      if (this instanceof GoVarDefinition || this instanceof GoConstDefinition) {
+        GoBlock block = PsiTreeUtil.getParentOfType(this, GoBlock.class);
+        if (block != null) return new LocalSearchScope(block);
+      }
       return GoPsiImplUtil.packageScope(getContainingFile());
     }
   }
