@@ -19,9 +19,19 @@ package com.goide.dlv;
 import com.goide.GoIcons;
 import com.goide.dlv.protocol.DlvApi;
 import com.goide.dlv.protocol.DlvRequest;
+import com.goide.psi.*;
+import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.icons.AllIcons;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.project.IndexNotReadyException;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Ref;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.ColoredTextContainer;
 import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.util.Consumer;
@@ -71,6 +81,39 @@ class DlvStackFrame extends XStackFrame {
               xcallback.errorOccurred(throwable.getMessage());
             }
           });
+      }
+
+      @Nullable
+      @Override
+      public TextRange getExpressionRangeAtOffset(final Project project,
+                                                  final Document document,
+                                                  final int offset,
+                                                  final boolean sideEffectsAllowed) {
+        final Ref<TextRange> currentRange = Ref.create(null);
+        PsiDocumentManager.getInstance(project).commitAndRunReadAction(new Runnable() {
+          @Override
+          public void run() {
+            try {
+              PsiElement elementAtCursor =
+                DebuggerUtilsEx.findElementAt(PsiDocumentManager.getInstance(project).getPsiFile(document), offset);
+              if (elementAtCursor == null) {
+                return;
+              }
+              GoTypeOwner e = PsiTreeUtil.getParentOfType(elementAtCursor,
+                                                          GoReferenceExpression.class,
+                                                          GoVarDefinition.class,
+                                                          GoConstDefinition.class,
+                                                          GoParamDefinition.class);
+              if (e instanceof GoReferenceExpression && ((GoReferenceExpression)e).getQualifier() == null ||
+                  e != null && !(e instanceof GoReferenceExpression)) {
+                currentRange.set(e.getTextRange());
+              }
+            }
+            catch (IndexNotReadyException ignored) {
+            }
+          }
+        });
+        return currentRange.get();
       }
     };
   }
