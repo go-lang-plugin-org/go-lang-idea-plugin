@@ -35,6 +35,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.ColoredTextContainer;
 import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.util.Consumer;
+import com.intellij.util.containers.ContainerUtil;
 import com.intellij.xdebugger.XDebuggerUtil;
 import com.intellij.xdebugger.XSourcePosition;
 import com.intellij.xdebugger.evaluation.XDebuggerEvaluator;
@@ -47,11 +48,36 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.List;
+import java.util.Set;
 
 class DlvStackFrame extends XStackFrame {
   private final DlvApi.Location myLocation;
   private final DlvCommandProcessor myProcessor;
   private final boolean myTop;
+  public static final Set<String> NUMBERS = ContainerUtil.newTreeSet(
+    "int8",
+    "uint8",
+    "uint8",
+    "int16",
+    "uint16",
+    "int32",
+    "uint32",
+    "int32",
+    "float32",
+    "int32",
+    "int64",
+    "uint64",
+
+    "complex64",
+    "complex128",
+
+    "int",
+    "uint",
+    "uintptr",
+
+    "byte",
+    "rune"
+  );
 
   public DlvStackFrame(DlvApi.Location location, DlvCommandProcessor processor, boolean top) {
     myLocation = location;
@@ -129,8 +155,16 @@ class DlvStackFrame extends XStackFrame {
 
       @Nullable
       private XValuePresentation getPresentation() {
-        if ("struct string".equals(variable.type)) return new XStringValuePresentation(variable.value);
-        if ("int".equals(variable.type)) return new XNumericValuePresentation(variable.value);
+        String type = variable.type;
+        final String value = variable.value;
+        if (NUMBERS.contains(type)) return new XNumericValuePresentation(value);
+        if ("struct string".equals(type)) return new XStringValuePresentation(value);
+        if ("bool".equals(type)) return new XValuePresentation() {
+          @Override
+          public void renderValue(@NotNull XValueTextRenderer renderer) {
+            renderer.renderValue(value);
+          }
+        };
         return null;
       }
     };
