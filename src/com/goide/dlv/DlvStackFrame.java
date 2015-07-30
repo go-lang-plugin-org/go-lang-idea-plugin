@@ -85,8 +85,8 @@ class DlvStackFrame extends XStackFrame {
 
       @Nullable
       @Override
-      public TextRange getExpressionRangeAtOffset(final Project project,
-                                                  final Document document,
+      public TextRange getExpressionRangeAtOffset(@NotNull final Project project,
+                                                  @NotNull final Document document,
                                                   final int offset,
                                                   final boolean sideEffectsAllowed) {
         final Ref<TextRange> currentRange = Ref.create(null);
