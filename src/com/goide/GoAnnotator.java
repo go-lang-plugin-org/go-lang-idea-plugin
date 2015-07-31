@@ -48,7 +48,7 @@ public class GoAnnotator implements Annotator {
     }
     else if (o instanceof GoReferenceExpression) {
       PsiElement resolve = ((GoReferenceExpression)o).getReference().resolve();
-      highlightRefIfNeeded((GoReferenceExpression)o, resolve, holder);      
+      highlightRefIfNeeded((GoReferenceExpression)o, resolve, holder);
     }
     else if (o instanceof GoTypeReferenceExpression) {
       PsiElement resolve = ((GoTypeReferenceExpression)o).getReference().resolve();
@@ -70,7 +70,10 @@ public class GoAnnotator implements Annotator {
       setHighlighting(o, holder, FUNCTION_PARAMETER, "param");
     }
     else if (o instanceof GoReceiver) {
-      setHighlighting(o, holder, METHOD_RECEIVER, "receiver");
+      PsiElement identifier = ((GoReceiver)o).getIdentifier();
+      if (identifier != null) {
+        setHighlighting(identifier, holder, METHOD_RECEIVER, "receiver");
+      }
     }
     else if (o instanceof GoLabelDefinition || o instanceof GoLabelRef) {
       setHighlighting(o, holder, LABEL, "label");
@@ -86,8 +89,14 @@ public class GoAnnotator implements Annotator {
   private static void highlightRefIfNeeded(@NotNull GoReferenceExpressionBase o,
                                            @Nullable PsiElement resolve,
                                            @NotNull AnnotationHolder holder) {
+
     if (resolve instanceof GoTypeSpec) {
-      TextAttributesKey key = GoPsiImplUtil.builtin(resolve) ? BUILTIN_TYPE_REFERENCE : getColor((GoTypeSpec)resolve);
+      TextAttributesKey key = GoPsiImplUtil.builtin(resolve)
+                              ? BUILTIN_TYPE_REFERENCE
+                              : getColor((GoTypeSpec)resolve);
+      if (o.getParent() instanceof GoType && o.getParent().getParent() instanceof GoReceiver) {
+        key = TYPE_REFERENCE;
+      }
       setHighlighting(o.getIdentifier(), holder, key, "type");
     }
     else if (resolve instanceof GoConstDefinition) {
@@ -101,7 +110,7 @@ public class GoAnnotator implements Annotator {
     else if (resolve instanceof GoFieldDefinition) {
       setHighlighting(o.getIdentifier(), holder, getColor((GoFieldDefinition)resolve), "field");
     }
-    else if (resolve instanceof GoFunctionOrMethodDeclaration) {
+    else if (resolve instanceof GoFunctionOrMethodDeclaration || resolve instanceof GoMethodSpec) {
       setHighlighting(o.getIdentifier(), holder, getColor((GoNamedSignatureOwner)resolve), "func");
     }
     else if (resolve instanceof GoReceiver) {
