@@ -99,7 +99,12 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
 
   @NotNull
   private <T> Promise<T> send(@NotNull DlvRequest<T> request) {
-    return getProcessor().send(request).rejected(THROWABLE_CONSUMER);
+    return send(request, getProcessor());
+  }
+
+  @NotNull
+  static <T> Promise<T> send(@NotNull DlvRequest<T> request, @NotNull DlvCommandProcessor processor) {
+    return processor.send(request).rejected(THROWABLE_CONSUMER);
   }
 
   @NotNull

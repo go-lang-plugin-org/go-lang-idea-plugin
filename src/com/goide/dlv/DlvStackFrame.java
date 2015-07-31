@@ -45,6 +45,7 @@ import com.intellij.xdebugger.frame.presentation.XStringValuePresentation;
 import com.intellij.xdebugger.frame.presentation.XValuePresentation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.concurrency.Promise;
 
 import javax.swing.*;
 import java.util.List;
@@ -54,7 +55,7 @@ class DlvStackFrame extends XStackFrame {
   private final DlvApi.Location myLocation;
   private final DlvCommandProcessor myProcessor;
   private final boolean myTop;
-  public static final Set<String> NUMBERS = ContainerUtil.newTreeSet(
+  private static final Set<String> NUMBERS = ContainerUtil.newTroveSet(
     "int8",
     "uint8",
     "uint8",
@@ -157,12 +158,14 @@ class DlvStackFrame extends XStackFrame {
         final String value = variable.value;
         if (NUMBERS.contains(type)) return new XNumericValuePresentation(value);
         if ("struct string".equals(type)) return new XStringValuePresentation(value);
-        if ("bool".equals(type)) return new XValuePresentation() {
-          @Override
-          public void renderValue(@NotNull XValueTextRenderer renderer) {
-            renderer.renderValue(value);
-          }
-        };
+        if ("bool".equals(type)) {
+          return new XValuePresentation() {
+            @Override
+            public void renderValue(@NotNull XValueTextRenderer renderer) {
+              renderer.renderValue(value);
+            }
+          };
+        }
         return null;
       }
     };
@@ -184,32 +187,30 @@ class DlvStackFrame extends XStackFrame {
     component.setIcon(AllIcons.Debugger.StackFrame);
   }
 
+  @NotNull
+  private <T> Promise<T> send(@NotNull DlvRequest<T> request) {
+    return DlvDebugProcess.send(request, myProcessor);
+  }
+
   @Override
   public void computeChildren(@NotNull final XCompositeNode node) {
     if (!myTop) {
       super.computeChildren(node);
       return;
     }
-    myProcessor.send(new DlvRequest.ListLocalVars())
-      .done(new Consumer<List<DlvApi.Variable>>() {
-        @Override
-        public void consume(@NotNull List<DlvApi.Variable> variables) {
-          final XValueChildrenList xVars = new XValueChildrenList(variables.size());
-          for (DlvApi.Variable v : variables) {
-            xVars.add(v.name, createXValue(v, GoIcons.VARIABLE));
+    send(new DlvRequest.ListLocalVars()).done(new Consumer<List<DlvApi.Variable>>() {
+      @Override
+      public void consume(@NotNull List<DlvApi.Variable> variables) {
+        final XValueChildrenList xVars = new XValueChildrenList(variables.size());
+        for (DlvApi.Variable v : variables) xVars.add(v.name, createXValue(v, GoIcons.VARIABLE));
+        send(new DlvRequest.ListFunctionArgs()).done(new Consumer<List<DlvApi.Variable>>() {
+          @Override
+          public void consume(@NotNull List<DlvApi.Variable> args) {
+            for (DlvApi.Variable v : args) xVars.add(v.name, createXValue(v, GoIcons.PARAMETER));
+            node.addChildren(xVars, true);
           }
-
-          myProcessor.send(new DlvRequest.ListFunctionArgs())
-            .done(new Consumer<List<DlvApi.Variable>>() {
-              @Override
-              public void consume(@NotNull List<DlvApi.Variable> args) {
-                for (DlvApi.Variable v : args) {
-                  xVars.add(v.name, createXValue(v, GoIcons.PARAMETER));
-                }
-                node.addChildren(xVars, true);
-              }
-            }).rejected(DlvDebugProcess.THROWABLE_CONSUMER);
-        }
-      }).rejected(DlvDebugProcess.THROWABLE_CONSUMER);
+        });
+      }
+    });
   }
 }
