@@ -22,13 +22,18 @@ import org.jetbrains.jsonProtocol.OutMessage;
 import org.jetbrains.jsonProtocol.Request;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Please add your requests as a subclasses, otherwise reflection won't work.
+ *
+ * @param <T> type of callback
+ * @see com.goide.dlv.DlvCommandProcessor#getResultType(String)
+ */
 public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
   protected boolean argumentsObjectStarted;
 
-  public DlvRequest() {
+  private DlvRequest() {
     try {
       writer.name("method").value(getMethodName());
     }
@@ -84,7 +89,7 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
     return "params";
   }
 
-  public static final class ClearBreakpoint extends DlvRequest<DlvApi.Breakpoint> {
+  public final static class ClearBreakpoint extends DlvRequest<DlvApi.Breakpoint> {
     public ClearBreakpoint(int id) {
       writeSingletonIntArray(argumentsKeyName(), id);
     }
@@ -95,23 +100,23 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
     }
   }
 
-  public static final class CreateBreakpoint extends DlvRequest<DlvApi.Breakpoint> {
+  public final static class CreateBreakpoint extends DlvRequest<DlvApi.Breakpoint> {
     public CreateBreakpoint(String path, int line) {
       writeString("file", path);
       writeInt("line", line);
     }
   }
 
-  public static class StacktraceGoroutine extends DlvRequest<List<DlvApi.Location>> {
+  public final static class StacktraceGoroutine extends DlvRequest<List<DlvApi.Location>> {
     public StacktraceGoroutine() {
       writeInt("Id", -1);
       writeInt("Depth", 100);
     }
   }
 
-  public abstract static class Locals<T> extends DlvRequest<T> {
-    public Locals() {
-      List<String> objects = new ArrayList<String>();
+  private abstract static class Locals<T> extends DlvRequest<T> {
+    private Locals() {
+      List<String> objects = ContainerUtil.newArrayListWithCapacity(1);
       objects.add(null);
       writeStringList(argumentsKeyName(), objects);
     }
@@ -122,19 +127,19 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
     }
   }
 
-  public static class ListLocalVars extends Locals<List<DlvApi.Variable>> {
+  public final static class ListLocalVars extends Locals<List<DlvApi.Variable>> {
   }
 
-  public static class ListFunctionArgs extends Locals<List<DlvApi.Variable>> {
+  public final static class ListFunctionArgs extends Locals<List<DlvApi.Variable>> {
   }
 
-  public static class Command extends DlvRequest<DlvApi.DebuggerState> {
+  public final static class Command extends DlvRequest<DlvApi.DebuggerState> {
     public Command(@Nullable String command) {
       writeString("Name", command);
     }
   }
 
-  public static class EvalSymbol extends DlvRequest<DlvApi.Variable> {
+  public final static class EvalSymbol extends DlvRequest<DlvApi.Variable> {
     public EvalSymbol(String symbol) {
       writeStringList(argumentsKeyName(), ContainerUtil.newSmartList(symbol));
     }

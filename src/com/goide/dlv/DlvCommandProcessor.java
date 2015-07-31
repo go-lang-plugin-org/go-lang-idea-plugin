@@ -111,7 +111,7 @@ public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, DlvRespo
         return arguments[0];
       }
     }
-    LOG.warn("Unknown response " + method);
+    LOG.error("Unknown response " + method + ", please register an appropriate request into com.goide.dlv.protocol.DlvRequest");
     return Object.class;
   }
 }
