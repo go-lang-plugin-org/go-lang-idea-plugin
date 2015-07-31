@@ -53,6 +53,8 @@ public class GoBuildMatcher {
       // TODO support .c, .cpp and other
       return false;
     }
+    if (((GoFile)file).hasCPathImport() && myTarget.cgoEnabled != ThreeState.YES) return false;
+
     return match(file.getName(), ((GoFile)file).getBuildFlags(), checkBuildFlags);
   }
 
