@@ -430,6 +430,10 @@ public class GoFile extends PsiFileBase {
     return (GoFileStub)super.getStub();
   }
 
+  public boolean hasCPathImport() {
+    return getImportMap().containsKey(GoConstants.C_PATH);
+  }
+
   private static boolean processChildrenDummyAware(@NotNull GoFile file, @NotNull final Processor<PsiElement> processor) {
     StubTree stubTree = file.getStubTree();
     if (stubTree != null) {

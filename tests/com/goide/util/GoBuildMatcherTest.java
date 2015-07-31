@@ -17,6 +17,7 @@
 package com.goide.util;
 
 import com.goide.GoCodeInsightFixtureTestCase;
+import com.intellij.psi.PsiFile;
 import com.intellij.util.ThreeState;
 import org.jetbrains.annotations.NotNull;
 
@@ -100,6 +101,13 @@ public class GoBuildMatcherTest extends GoCodeInsightFixtureTestCase {
   public void testMatchCgo() {
     assertTrue(new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "1.4", null, ThreeState.YES)).matchBuildFlag("cgo"));
     assertFalse(new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "1.4", null, ThreeState.NO)).matchBuildFlag("cgo"));
+  }
+
+  public void testCgoCImport() {
+    myFixture.configureByText("a.go", "package a; import \"C\"");
+    PsiFile file = myFixture.getFile();
+    assertTrue(new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "1.4", null, ThreeState.YES)).matchFile(file));
+    assertFalse(new GoBuildMatcher(new GoTargetSystem("linux", "amd64", "1.4", null, ThreeState.NO)).matchFile(file));
   }
 
   public void testMatchSupportedTags() {
