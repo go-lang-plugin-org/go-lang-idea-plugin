@@ -431,7 +431,7 @@ public class GoFile extends PsiFileBase {
   }
 
   public boolean hasCPathImport() {
-    return getImportedPackagesMap().keySet().contains(GoConstants.C_PATH);
+    return getImportMap().containsKey(GoConstants.C_PATH);
   }
 
   private static boolean processChildrenDummyAware(@NotNull GoFile file, @NotNull final Processor<PsiElement> processor) {
