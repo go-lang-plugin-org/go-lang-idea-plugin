@@ -18,6 +18,7 @@ package com.goide.inspections;
 
 import com.goide.GoConstants;
 import com.goide.psi.*;
+import com.goide.psi.impl.GoReferenceExpressionImpl;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
 import org.jetbrains.annotations.NotNull;
@@ -32,12 +33,22 @@ public class GoAssignmentNilWithoutExplicitType extends GoInspectionBase {
       @Override
       public void visitVarDeclaration(@NotNull GoVarDeclaration o) {
         for (GoVarSpec spec : o.getVarSpecList()) {
-          if (spec.getType() != null) continue;
-          for (GoExpression expr : spec.getExpressionList()) {
-            if (expr instanceof GoReferenceExpression) {
-              if (((GoReferenceExpression)expr).getIdentifier().textMatches(GoConstants.NIL)) {
-                holder.registerProblem(expr, "Cannot assign nil without explicit type", GENERIC_ERROR_OR_WARNING);
-              }
+          check(spec);
+        }
+      }
+
+      @Override
+      public void visitShortVarDeclaration(@NotNull GoShortVarDeclaration o) {
+        check(o);
+      }
+
+      private void check(@NotNull GoVarSpec spec) {
+        if (spec.getType() != null) return;
+        for (GoExpression expr : spec.getExpressionList()) {
+          if (expr instanceof GoReferenceExpressionImpl) {
+            // todo check if there is 'nil' var/const
+            if (((GoReferenceExpressionImpl)expr).getIdentifier().textMatches(GoConstants.NIL)) {
+              holder.registerProblem(expr, "Cannot assign nil without explicit type", GENERIC_ERROR_OR_WARNING);
             }
           }
         }
