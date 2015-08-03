@@ -36,7 +36,7 @@
     </unzip>
 
     <copy todir="${unzip.go.path}/Go/lib/dlv">
-      <fileset dir="${artifact.output.path}/dlv" includes="**"/>
+      <fileset dir="${artifact.output.path}/../dlv" includes="**"/>
     </copy>
 
     <zip destfile="${artifact.output.path}/Go.zip">
