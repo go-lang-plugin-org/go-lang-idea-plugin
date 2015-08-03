@@ -103,6 +103,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testForRange()    { doTest(); }
   public void testMismatch()    { doTest(); }
   public void testStubParams()  { doTest(); }
+  public void testNil()         { doTest(); }
   public void testAssignmentUsages()  { doTest(); }
 
   public void testRelativeImportIgnoringDirectories() throws IOException {

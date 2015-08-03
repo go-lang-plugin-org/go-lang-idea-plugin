@@ -410,3 +410,4 @@ func _() {
 	st := MyType("tag")
 	st.Get("key") // <- unresolved Get
 }
+

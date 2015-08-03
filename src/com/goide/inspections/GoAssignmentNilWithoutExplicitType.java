@@ -18,9 +18,14 @@ package com.goide.inspections;
 
 import com.goide.GoConstants;
 import com.goide.psi.*;
+import com.goide.psi.impl.GoPsiImplUtil;
+import com.goide.psi.impl.GoReferenceExpressionImpl;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 import static com.intellij.codeInspection.ProblemHighlightType.GENERIC_ERROR_OR_WARNING;
 
@@ -32,12 +37,39 @@ public class GoAssignmentNilWithoutExplicitType extends GoInspectionBase {
       @Override
       public void visitVarDeclaration(@NotNull GoVarDeclaration o) {
         for (GoVarSpec spec : o.getVarSpecList()) {
-          if (spec.getType() != null) continue;
-          for (GoExpression expr : spec.getExpressionList()) {
-            if (expr instanceof GoReferenceExpression) {
-              if (((GoReferenceExpression)expr).getIdentifier().textMatches(GoConstants.NIL)) {
-                holder.registerProblem(expr, "Cannot assign nil without explicit type", GENERIC_ERROR_OR_WARNING);
-              }
+          checkVar(spec);
+        }
+      }
+
+      @Override
+      public void visitShortVarDeclaration(@NotNull GoShortVarDeclaration o) {
+        checkVar(o);
+      }
+
+      @Override
+      public void visitConstDeclaration(@NotNull GoConstDeclaration o) {
+        for (GoConstSpec spec : o.getConstSpecList()) {
+          checkConst(spec);
+        }
+      }
+
+      private void checkVar(@NotNull GoVarSpec spec) {
+        if (spec.getType() != null) return;
+        checkExpressions(spec.getExpressionList());
+      }
+
+      private void checkConst(@NotNull GoConstSpec spec) {
+        if (spec.getType() != null) return;
+        checkExpressions(spec.getExpressionList());
+      }
+
+      private void checkExpressions(@NotNull List<GoExpression> expressions) {
+        for (GoExpression expr : expressions) {
+          if (expr instanceof GoReferenceExpressionImpl) {
+            GoReferenceExpressionImpl ref = (GoReferenceExpressionImpl)expr;
+            PsiElement resolve = ref.getReference().resolve();
+            if (ref.getIdentifier().textMatches(GoConstants.NIL) && resolve != null && GoPsiImplUtil.builtin(resolve)) {
+              holder.registerProblem(expr, "Cannot assign nil without explicit type", GENERIC_ERROR_OR_WARNING);
             }
           }
         }
