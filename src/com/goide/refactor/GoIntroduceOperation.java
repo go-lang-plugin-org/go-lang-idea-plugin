@@ -22,6 +22,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -32,66 +33,82 @@ public class GoIntroduceOperation {
   final private PsiFile myFile;
   private GoExpression myExpression;
   private List<PsiElement> myOccurrences;
+  private PsiElement myContext;
   private LinkedHashSet<String> mySuggestedNames;
   private String myName;
   private GoVarDefinition myVar;
   private boolean myReplaceAll;
 
-  public GoIntroduceOperation(Project project, Editor editor, PsiFile file) {
+  public GoIntroduceOperation(@NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file) {
     myProject = project;
     myEditor = editor;
     myFile = file;
   }
 
+  public GoIntroduceOperation(@NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file, boolean replaceAll) {
+    myProject = project;
+    myEditor = editor;
+    myFile = file;
+    myReplaceAll = replaceAll;
+  }
+
+  @NotNull
   public Project getProject() {
     return myProject;
   }
 
+  @NotNull
   public Editor getEditor() {
     return myEditor;
   }
 
+  @NotNull
   public PsiFile getFile() {
     return myFile;
   }
 
+  @NotNull
   public GoExpression getExpression() {
     return myExpression;
   }
 
-  public void setExpression(GoExpression expression) {
+  public void setExpression(@NotNull GoExpression expression) {
     myExpression = expression;
   }
 
+  @NotNull
   public List<PsiElement> getOccurrences() {
     return myOccurrences;
   }
 
-  public void setOccurrences(List<PsiElement> occurrences) {
+  public void setOccurrences(@NotNull List<PsiElement> occurrences) {
     myOccurrences = occurrences;
   }
 
+  @NotNull
   public LinkedHashSet<String> getSuggestedNames() {
     return mySuggestedNames;
   }
 
-  public void setSuggestedNames(LinkedHashSet<String> suggestedNames) {
+  public void setSuggestedNames(@NotNull LinkedHashSet<String> suggestedNames) {
     mySuggestedNames = suggestedNames;
   }
 
+  @NotNull
   public String getName() {
     return myName;
   }
 
-  public void setName(String name) {
+  public void setName(@NotNull String name) {
     myName = name;
   }
 
+  @NotNull
   public GoVarDefinition getVar() {
     return myVar;
   }
 
-  public void setVar(GoVarDefinition var) {
+  public void setVar(@NotNull GoVarDefinition var) {
     myVar = var;
   }
 
@@ -101,5 +118,14 @@ public class GoIntroduceOperation {
 
   public void setReplaceAll(boolean replaceAll) {
     myReplaceAll = replaceAll;
+  }
+
+  @NotNull
+  public PsiElement getContext() {
+    return myContext;
+  }
+
+  public void setContext(@NotNull PsiElement context) {
+    myContext = context;
   }
 }

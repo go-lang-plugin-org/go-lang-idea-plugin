@@ -16,35 +16,57 @@
 
 package com.goide.refactor;
 
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiFile;
+import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
+import org.jetbrains.annotations.NotNull;
 
 public class GoIntroduceVariableTest extends LightPlatformCodeInsightFixtureTestCase {
+  private static class IntroduceTest extends GoIntroduceVariableBase {
+    static void invoke(@NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file, boolean replaceAll) {
+      performAction(new GoIntroduceOperation(project, editor, file, replaceAll));
+    }
+  }
+
   @Override
   protected String getTestDataPath() {
     return "testData/refactor/introduce-variable";
   }
 
-  protected void doTest() {
+  private void doTest() {
+    doTest(true);
+  }
+
+  private void doTest(boolean replaceAll) {
     String testName = getTestName(true);
     myFixture.configureByFile(testName + ".go");
-    new GoIntroduceVariableHandler().invoke(myFixture.getProject(), myFixture.getEditor(), myFixture.getFile(), null);
+    IntroduceTest.invoke(myFixture.getProject(), myFixture.getEditor(), myFixture.getFile(), replaceAll);
     myFixture.checkResultByFile(testName + "-after.go");
+  }
+
+  private void doFailureTest(String msg) {
+    try {
+      doTest();
+    }
+    catch (RuntimeException e) {
+      assertEquals("Cannot perform refactoring.\n" + msg, e.getMessage());
+    }
   }
 
   public void testCaretAfterRightParenthesis()      { doTest(); }
   public void testCaretOnRightParenthesis()         { doTest(); }
+  public void testCaretOnCallParenthesis()          { doTest(); }
   public void testNameSuggestOnGetterFunction()     { doTest(); }
   public void testNameSuggestOnDefinedImportAlias() { doTest(); }
   public void testNameSuggestOnDefaultName()        { doTest(); }
   public void testNameSuggestOnParamName()          { doTest(); }
 
-  public void testMultipleValueResult() {
-    try {
-      doTest();
-    }
-    catch (RuntimeException e) {
-      assertEquals("Cannot perform refactoring.\n" +
-                   "Expression fmt.Println() returns multiple values.", e.getMessage());
-    }
-  }
+  public void testMultipleValueResult() { doFailureTest("Expression fmt.Println() returns multiple values."); }
+  public void testWrongSelection()      { doFailureTest(RefactoringBundle.message("selected.block.should.represent.an.expression")); }
+  public void testTopLevelExpression()  { doFailureTest(RefactoringBundle.message("refactoring.introduce.context.error"));}
+
+  public void testReplaceAll()  { doTest(true); }
+  public void testReplaceOnly() { doTest(false);}
 }

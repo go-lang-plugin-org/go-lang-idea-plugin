@@ -26,8 +26,12 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pass;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiRecursiveElementVisitor;
 import com.intellij.psi.codeStyle.NameUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.IntroduceTargetChooser;
@@ -46,16 +50,21 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 public class GoIntroduceVariableBase {
-  protected void performAction(final GoIntroduceOperation operation) {
+  protected static void performAction(final GoIntroduceOperation operation) {
     SelectionModel selectionModel = operation.getEditor().getSelectionModel();
-    GoExpression expression =
-      selectionModel.hasSelection() ? findExpressionInSelection(operation, selectionModel) : findExpressionAtOffset(operation);
+    boolean hasSelection = selectionModel.hasSelection();
+    GoExpression expression = hasSelection ? findExpressionInSelection(operation, selectionModel) : findExpressionAtOffset(operation);
     if (expression instanceof GoParenthesesExpr) expression = ((GoParenthesesExpr)expression).getExpression();
     if (expression == null) {
-      showCannotPerform(operation, "No expression found.");
+      String message =
+        RefactoringBundle.message(hasSelection ? "selected.block.should.represent.an.expression" : "refactoring.introduce.selection.error");
+      showCannotPerform(operation, message);
       return;
     }
-
+    if (PsiTreeUtil.getParentOfType(expression, GoStatement.class) == null) {
+      showCannotPerform(operation, RefactoringBundle.message("refactoring.introduce.context.error"));
+      return;
+    }
     List<GoExpression> expressions = collectNestedExpressions(expression);
     if (expressions.isEmpty()) {
       int resultCount = GoInspectionUtil.getExpressionResultCount(expression);
@@ -64,7 +73,8 @@ public class GoIntroduceVariableBase {
                         "Expression " + text + "()" + (resultCount == 0 ? " doesn't return a value." : " returns multiple values."));
       return;
     }
-    if (expressions.size() == 1 || ApplicationManager.getApplication().isUnitTestMode()) {
+    expression = ContainerUtil.getFirstItem(expressions);
+    if (expressions.size() == 1 || hasSelection || ApplicationManager.getApplication().isUnitTestMode()) {
       operation.setExpression(expression);
       performOnElement(operation);
     }
@@ -85,35 +95,29 @@ public class GoIntroduceVariableBase {
   }
 
   @Nullable
-  protected static GoExpression findExpressionInSelection(GoIntroduceOperation operation, SelectionModel selectionModel) {
-    PsiFile file = operation.getFile();
-    PsiElement element1 = file.findElementAt(selectionModel.getSelectionStart());
-    PsiElement element2 = file.findElementAt(selectionModel.getSelectionEnd() - 1);
-    if (element1 instanceof PsiWhiteSpace) element1 = file.findElementAt(element1.getTextRange().getEndOffset());
-    if (element2 instanceof PsiWhiteSpace) element2 = file.findElementAt(element2.getTextRange().getStartOffset() - 1);
-    if (element1 == null || element2 == null) return null;
-
-    PsiElement parent = element1 == element2 ? element1 : PsiTreeUtil.findCommonParent(element1, element2);
-    return parent instanceof GoExpression ? (GoExpression)parent : PsiTreeUtil.getParentOfType(parent, GoExpression.class);
+  private static GoExpression findExpressionInSelection(GoIntroduceOperation operation, SelectionModel selectionModel) {
+    int start = selectionModel.getSelectionStart();
+    int end = selectionModel.getSelectionEnd();
+    return PsiTreeUtil.findElementOfClassAtRange(operation.getFile(), start, end, GoExpression.class);
   }
 
   @Nullable
-  protected static GoExpression findExpressionAtOffset(GoIntroduceOperation operation) {
+  private static GoExpression findExpressionAtOffset(GoIntroduceOperation operation) {
     PsiFile file = operation.getFile();
     int offset = operation.getEditor().getCaretModel().getOffset();
 
-    PsiElement element = file.findElementAt(offset);
-    GoParenthesesExpr parenthesesParent = PsiTreeUtil.getParentOfType(element, GoParenthesesExpr.class);
-    if (element instanceof PsiWhiteSpace || (parenthesesParent != null && parenthesesParent.getRparen() == element)) {
-      element = file.findElementAt(offset - 1);
-    }
-    return element instanceof GoExpression ? (GoExpression)element : PsiTreeUtil.getParentOfType(element, GoExpression.class);
+    GoExpression expr = PsiTreeUtil.getNonStrictParentOfType(file.findElementAt(offset), GoExpression.class);
+    GoExpression preExpr = PsiTreeUtil.getNonStrictParentOfType(file.findElementAt(offset - 1), GoExpression.class);
+    if (expr == null || preExpr != null && PsiTreeUtil.isAncestor(expr, preExpr, false)) return preExpr;
+    return expr;
   }
 
+  @NotNull
   private static List<GoExpression> collectNestedExpressions(GoExpression expression) {
     List<GoExpression> expressions = ContainerUtil.newArrayList();
     while (expression != null) {
-      if (!(expression instanceof GoParenthesesExpr) && GoInspectionUtil.getExpressionResultCount(expression) == 1) {
+      if (!(expression instanceof GoParenthesesExpr) && GoInspectionUtil.getExpressionResultCount(expression) == 1 &&
+          !(expression instanceof GoReferenceExpression && expression.getParent() instanceof GoCallExpr)) {
         expressions.add(expression);
       }
       expression = PsiTreeUtil.getParentOfType(expression, GoExpression.class);
@@ -124,20 +128,15 @@ public class GoIntroduceVariableBase {
   protected static void performOnElement(final GoIntroduceOperation operation) {
     final GoExpression expression = operation.getExpression();
     PsiElement statement = PsiTreeUtil.getParentOfType(expression, GoStatement.class);
-    if (statement == null) {
-      showCannotPerform(operation, RefactoringBundle.message("refactoring.introduce.context.error"));
-      return;
-    }
+
     LinkedHashSet<String> suggestedNames = getSuggestedNames(expression);
     operation.setSuggestedNames(suggestedNames);
-    operation.setOccurrences(getOccurrences(expression, PsiTreeUtil.getParentOfType(statement, GoBlock.class)));
+    operation.setOccurrences(getOccurrences(expression, PsiTreeUtil.getTopmostParentOfType(statement, GoBlock.class)));
 
     final Editor editor = operation.getEditor();
     if (editor.getSettings().isVariableInplaceRenameEnabled()) {
       operation.setName(ContainerUtil.getFirstItem(suggestedNames));
       if (ApplicationManager.getApplication().isUnitTestMode()) {
-        // todo rewrite for testing different replaceAll cases
-        operation.setReplaceAll(true);
         performInplaceIntroduce(operation);
         return;
       }
@@ -151,13 +150,13 @@ public class GoIntroduceVariableBase {
         });
     }
     //else {
-    //  // todo show dialog here; set name, replaceAll
+    //  // todo show dialog here; set name
     //  performReplace(operation);
     //}
   }
 
   @NotNull
-  public static List<PsiElement> getOccurrences(@NotNull final PsiElement pattern, @Nullable PsiElement context) {
+  private static List<PsiElement> getOccurrences(@NotNull final PsiElement pattern, @Nullable PsiElement context) {
     if (context == null) return Collections.emptyList();
     final List<PsiElement> occurrences = ContainerUtil.newArrayList();
     PsiRecursiveElementVisitor visitor = new PsiRecursiveElementVisitor() {
@@ -176,29 +175,30 @@ public class GoIntroduceVariableBase {
   private static void performInplaceIntroduce(GoIntroduceOperation operation) {
     performReplace(operation);
     new GoInplaceVariableIntroducer(operation).performInplaceRefactoring(operation.getSuggestedNames());
-    // todo doesn't validate after rename
   }
 
   protected static void performReplace(final GoIntroduceOperation operation) {
     final Project project = operation.getProject();
     final PsiElement expression = operation.getExpression();
-    final String name = operation.getName();
-    final boolean replaceAll = operation.isReplaceAll();
-    final List<PsiElement> occurrences = replaceAll ? operation.getOccurrences() : ContainerUtil.newArrayList(expression);
-    final PsiElement anchor = findAnchor(occurrences);
+    final List<PsiElement> occurrences = operation.isReplaceAll() ? operation.getOccurrences() : Collections.singletonList(expression);
+    final GoBlock context = PsiTreeUtil.getNonStrictParentOfType(PsiTreeUtil.findCommonParent(occurrences), GoBlock.class);
+    if (context == null) {
+      showCannotPerform(operation, RefactoringBundle.message("refactoring.introduce.context.error"));
+      return;
+    }
+    final PsiElement anchor = findAnchor(occurrences, context);
     if (anchor == null) {
       showCannotPerform(operation, RefactoringBundle.message("refactoring.introduce.context.error"));
       return;
     }
+    final String name = operation.getName();
     final List<PsiElement> newOccurrences = ContainerUtil.newArrayList();
-
     WriteCommandAction.runWriteCommandAction(project, new Runnable() {
       @Override
       public void run() {
-        PsiElement introducePlace = anchor.getParent();
         GoStatement declarationStatement = GoElementFactory.createShortVarDeclarationStatement(project, name, (GoExpression)expression);
         PsiElement newLine = GoElementFactory.createNewLine(project);
-        PsiElement statement = introducePlace.addBefore(declarationStatement, introducePlace.addBefore(newLine, anchor));
+        PsiElement statement = context.addBefore(declarationStatement, context.addBefore(newLine, anchor));
         operation.setVar(PsiTreeUtil.findChildOfType(statement, GoVarDefinition.class));
 
         for (PsiElement occurrence : occurrences) {
@@ -212,20 +212,12 @@ public class GoIntroduceVariableBase {
     PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(operation.getEditor().getDocument());
   }
 
-  protected static boolean isCommonAncestor(@NotNull PsiElement ancestor, @NotNull List<PsiElement> occurrences) {
-    for (PsiElement element : occurrences) {
-      if (!PsiTreeUtil.isAncestor(ancestor, element, false)) return false;
+  private static PsiElement findAnchor(List<PsiElement> occurrences, PsiElement context) {
+    PsiElement statement = PsiTreeUtil.getParentOfType(ContainerUtil.getFirstItem(occurrences), GoStatement.class);
+    while (statement != null && statement.getParent() != context) {
+      statement = statement.getParent();
     }
-    return true;
-  }
-
-  private static PsiElement findAnchor(@NotNull List<PsiElement> occurrences) {
-    PsiElement statement = ContainerUtil.getFirstItem(occurrences);
-    while (statement != null) {
-      statement = PsiTreeUtil.getParentOfType(statement, GoStatement.class);
-      if (statement != null && isCommonAncestor(statement.getParent(), occurrences)) return statement;
-    }
-    return null;
+    return statement;
   }
 
   private static LinkedHashSet<String> getNamesInContext(PsiElement context) {
@@ -235,7 +227,6 @@ public class GoIntroduceVariableBase {
     for (GoNamedElement namedElement : PsiTreeUtil.findChildrenOfType(context, GoNamedElement.class)) {
       names.add(namedElement.getName());
     }
-
     names.addAll(((GoFile)context.getContainingFile()).getImportMap().keySet());
 
     GoFunctionDeclaration functionDeclaration = PsiTreeUtil.getParentOfType(context, GoFunctionDeclaration.class);
@@ -284,12 +275,6 @@ public class GoIntroduceVariableBase {
     public GoInplaceVariableIntroducer(GoIntroduceOperation operation) {
       super(operation.getVar(), operation.getEditor(), operation.getProject(), "Introduce Variable",
             ArrayUtil.toObjectArray(operation.getOccurrences(), PsiElement.class), null);
-    }
-
-    @Nullable
-    @Override
-    protected PsiElement checkLocalScope() {
-      return myElementToRename.getContainingFile();
     }
   }
 }

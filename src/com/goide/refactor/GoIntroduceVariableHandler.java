@@ -16,8 +16,6 @@
 
 package com.goide.refactor;
 
-import com.intellij.codeInsight.template.impl.TemplateManagerImpl;
-import com.intellij.codeInsight.template.impl.TemplateState;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -31,10 +29,6 @@ public class GoIntroduceVariableHandler extends GoIntroduceVariableBase implemen
   @Override
   public void invoke(@NotNull final Project project, final Editor editor, PsiFile file, DataContext dataContext) {
     if (!CommonRefactoringUtil.checkReadOnlyStatus(file)) return;
-    if (editor.getSettings().isVariableInplaceRenameEnabled()) {
-      final TemplateState templateState = TemplateManagerImpl.getTemplateState(editor);
-      if (templateState != null && !templateState.isFinished()) return;
-    }
     performAction(new GoIntroduceOperation(project, editor, file));
   }
 
