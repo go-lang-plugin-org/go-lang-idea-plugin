@@ -16,11 +16,11 @@
 
 package com.goide.runconfig.application;
 
-import com.goide.GoConstants;
 import com.goide.dlv.DlvDebugProcess;
 import com.goide.runconfig.GoRunningState;
 import com.goide.util.GoExecutor;
 import com.goide.util.GoHistoryProcessListener;
+import com.goide.util.GoUtil;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.executors.DefaultDebugExecutor;
 import com.intellij.execution.process.ProcessAdapter;
@@ -29,6 +29,7 @@ import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.util.Key;
+import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.text.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -97,7 +98,8 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
   @Override
   protected GoExecutor patchExecutor(@NotNull GoExecutor executor) throws ExecutionException {
     if (isDebug()) {
-      return executor.withExePath(GoConstants.DELVE_EXECUTABLE_NAME)
+      File dlv = new File(GoUtil.getPlugin().getPath(), "lib/dlv/" + (SystemInfo.isMac ? "macos" : "linux") + "/dlv");
+      return executor.withExePath(dlv.getAbsolutePath())
         .withParameters("--listen=localhost:9090", "--headless=true", "run", myOutputFilePath, "--");
     }
     return executor.withExePath(myOutputFilePath);
