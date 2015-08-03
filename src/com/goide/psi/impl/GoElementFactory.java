@@ -101,4 +101,18 @@ public class GoElementFactory {
     GoFile file = createFileFromText(project, "package a; func t(" + text + ") {\n}");
     return ContainerUtil.getFirstItem(file.getFunctions()).getSignature();
   }
+
+  @NotNull
+  public static GoStatement createShortVarDeclarationStatement(@NotNull Project project,
+                                                               @NotNull String name,
+                                                               @NotNull GoExpression initializer) {
+    GoFile file = createFileFromText(project, "package a; func a() {\n " + name + " := " + initializer.getText() + "}");
+    return PsiTreeUtil.findChildOfType(file, GoSimpleStatement.class);
+  }
+
+  @NotNull
+  public static GoReferenceExpression createVarReference(@NotNull Project project, @NotNull String name) {
+    GoFile file = createFileFromText(project, "package a; var a = " + name);
+    return PsiTreeUtil.findChildOfType(file, GoReferenceExpression.class);
+  }
 }
