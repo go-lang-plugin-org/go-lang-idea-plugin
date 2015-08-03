@@ -1,0 +1,46 @@
+<project name="Plugin version patcher" default="patch-version" basedir=".">
+  <property name="unzip.intellij.go.path" value="${artifact.output.path}/intellij-go-tmp"/>
+  <property name="unzip.go.path" value="${artifact.output.path}/intellij-go-zip-tmp"/>
+
+  <target name="checkVariables">
+    <condition property="${variables.are.set}">
+      <and>
+        <isset property="build.number"/>
+        <isset property="artifact.output.path"/>
+      </and>
+    </condition>
+  </target>
+
+  <target name="clean">
+    <delete dir="${unzip.intellij.go.path}" failonerror="false"/>
+    <delete dir="${unzip.go.path}" failonerror="false"/>
+  </target>
+
+  <target name="patch-version" depends="checkVariables,clean" if="${variables.are.set}">
+    <unzip dest="${unzip.intellij.go.path}">
+      <fileset dir="${artifact.output.path}" includes="intellij-go.jar"/>
+    </unzip>
+
+    <replace file="${unzip.intellij.go.path}/META-INF/plugin.xml"
+             token="&lt;version&gt;1.0&lt;/version&gt;"
+             value="&lt;version&gt;0.9.${build.number}&lt;/version&gt;"/>
+
+    <zip destfile="${artifact.output.path}/intellij-go.jar">
+      <fileset dir="${unzip.intellij.go.path}" includes="**"/>
+    </zip>
+  </target>
+
+  <target name="copy-dlv" depends="checkVariables,clean" if="${variables.are.set}">
+    <unzip dest="${unzip.go.path}">
+      <fileset dir="${artifact.output.path}" includes="Go.zip"/>
+    </unzip>
+
+    <copy todir="${unzip.go.path}/Go/lib/dlv">
+      <fileset dir="${artifact.output.path}/dlv" includes="**"/>
+    </copy>
+
+    <zip destfile="${artifact.output.path}/Go.zip">
+      <fileset dir="${unzip.go.path}" includes="**"/>
+    </zip>
+  </target>
+</project>

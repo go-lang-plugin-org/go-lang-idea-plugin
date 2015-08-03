@@ -2,6 +2,12 @@
 <component name="ArtifactManager">
   <artifact build-on-make="true" name="Go.zip">
     <output-path>$PROJECT_DIR$/bin</output-path>
+    <properties id="ant-postprocessing">
+      <options enabled="true">
+        <file>file://$PROJECT_DIR$/prepare-artifacts.xml</file>
+        <target>copy-dlv</target>
+      </options>
+    </properties>
     <root id="archive" name="Go.zip">
       <element id="directory" name="Go">
         <element id="directory" name="lib">
