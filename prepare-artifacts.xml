@@ -34,6 +34,8 @@
     <unzip dest="${unzip.go.path}">
       <fileset dir="${artifact.output.path}" includes="Go.zip"/>
     </unzip>
+    
+    <chmod dir="${artifact.output.path}/../dlv" includes="**" perm="+x" verbose="true"/>
 
     <copy todir="${unzip.go.path}/Go/lib/dlv">
       <fileset dir="${artifact.output.path}/../dlv" includes="**"/>
