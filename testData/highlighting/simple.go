@@ -229,7 +229,7 @@ type ServiceError struct {
 
 
 func <warning>typeAssert</warning>() {
-  err := <error>nil</error>
+  err := nil
   switch err.(type) {
     case ServiceError:
             ser := err.(ServiceError)
@@ -411,13 +411,3 @@ func _() {
 	st.Get("key") // <- unresolved Get
 }
 
-func <warning>nilAssign</warning>() {
-	var a, b, c = 1, <error>nil</error>, 2
-	_, _, _ = a, b, c
-
-	d, e, f := 1, <error>nil</error>, 2
-	_, _, _ = d, e, f
-
-	const g, h, i = 1, <error>nil</error>, 2
-	_, _, _ = g, h, i
-}

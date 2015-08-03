@@ -18,9 +18,11 @@ package com.goide.inspections;
 
 import com.goide.GoConstants;
 import com.goide.psi.*;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.psi.impl.GoReferenceExpressionImpl;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -64,8 +66,9 @@ public class GoAssignmentNilWithoutExplicitType extends GoInspectionBase {
       private void checkExpressions(@NotNull List<GoExpression> expressions) {
         for (GoExpression expr : expressions) {
           if (expr instanceof GoReferenceExpressionImpl) {
-            // todo check if there is 'nil' var/const
-            if (((GoReferenceExpressionImpl)expr).getIdentifier().textMatches(GoConstants.NIL)) {
+            GoReferenceExpressionImpl ref = (GoReferenceExpressionImpl)expr;
+            PsiElement resolve = ref.getReference().resolve();
+            if (ref.getIdentifier().textMatches(GoConstants.NIL) && resolve != null && GoPsiImplUtil.builtin(resolve)) {
               holder.registerProblem(expr, "Cannot assign nil without explicit type", GENERIC_ERROR_OR_WARNING);
             }
           }
