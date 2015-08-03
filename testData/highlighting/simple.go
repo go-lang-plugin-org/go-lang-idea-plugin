@@ -417,4 +417,7 @@ func <warning>nilAssign</warning>() {
 
 	d, e, f := 1, <error>nil</error>, 2
 	_, _, _ = d, e, f
+
+	const g, h, i = 1, <error>nil</error>, 2
+	_, _, _ = g, h, i
 }

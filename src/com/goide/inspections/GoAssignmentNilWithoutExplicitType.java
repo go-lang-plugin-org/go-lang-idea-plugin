@@ -23,6 +23,8 @@ import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 import static com.intellij.codeInspection.ProblemHighlightType.GENERIC_ERROR_OR_WARNING;
 
 public class GoAssignmentNilWithoutExplicitType extends GoInspectionBase {
@@ -33,18 +35,34 @@ public class GoAssignmentNilWithoutExplicitType extends GoInspectionBase {
       @Override
       public void visitVarDeclaration(@NotNull GoVarDeclaration o) {
         for (GoVarSpec spec : o.getVarSpecList()) {
-          check(spec);
+          checkVar(spec);
         }
       }
 
       @Override
       public void visitShortVarDeclaration(@NotNull GoShortVarDeclaration o) {
-        check(o);
+        checkVar(o);
       }
 
-      private void check(@NotNull GoVarSpec spec) {
+      @Override
+      public void visitConstDeclaration(@NotNull GoConstDeclaration o) {
+        for (GoConstSpec spec : o.getConstSpecList()) {
+          checkConst(spec);
+        }
+      }
+
+      private void checkVar(@NotNull GoVarSpec spec) {
         if (spec.getType() != null) return;
-        for (GoExpression expr : spec.getExpressionList()) {
+        checkExpressions(spec.getExpressionList());
+      }
+
+      private void checkConst(@NotNull GoConstSpec spec) {
+        if (spec.getType() != null) return;
+        checkExpressions(spec.getExpressionList());
+      }
+
+      private void checkExpressions(@NotNull List<GoExpression> expressions) {
+        for (GoExpression expr : expressions) {
           if (expr instanceof GoReferenceExpressionImpl) {
             // todo check if there is 'nil' var/const
             if (((GoReferenceExpressionImpl)expr).getIdentifier().textMatches(GoConstants.NIL)) {
