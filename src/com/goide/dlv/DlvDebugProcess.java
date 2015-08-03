@@ -29,6 +29,7 @@ import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.PlainTextLanguage;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
+import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -96,6 +97,10 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
       return point == null ? null : breakpoints.get(point.id);
     }
   };
+
+  public static boolean isDlvDisabled() {
+    return SystemInfo.isWindows || SystemInfo.is32Bit;
+  }
 
   @NotNull
   private <T> Promise<T> send(@NotNull DlvRequest<T> request) {
