@@ -20,6 +20,7 @@ import com.goide.GoFileType;
 import com.goide.dlv.breakpoint.DlvBreakpointProperties;
 import com.goide.dlv.breakpoint.DlvBreakpointType;
 import com.goide.dlv.protocol.DlvRequest;
+import com.intellij.execution.ExecutionResult;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.AccessToken;
@@ -117,8 +118,8 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     return ((DlvVm)getVm()).getCommandProcessor();
   }
 
-  public DlvDebugProcess(@NotNull XDebugSession session, @NotNull RemoteVmConnection connection) {
-    super(session, connection, new MyEditorsProvider(), null, null);
+  public DlvDebugProcess(@NotNull XDebugSession session, @NotNull RemoteVmConnection connection, @Nullable ExecutionResult er) {
+    super(session, connection, new MyEditorsProvider(), null, er);
     breakpointHandlers = new XBreakpointHandler[]{new MyBreakpointHandler()};
   }
 

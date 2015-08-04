@@ -58,6 +58,7 @@ import java.net.InetSocketAddress;
 
 public class GoBuildingRunner extends AsyncGenericProgramRunner {
   private static final String ID = "GoBuildingRunner";
+  @Nullable private ExecutionResult myExecutionResult;
 
   @NotNull
   @Override
@@ -163,13 +164,12 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
       @Override
       public Promise<RunProfileStarter> fun(RunProfileStarter starter) {
         try {
-          ExecutionResult executionResult = null;
           if (starter != null) {
             ((GoApplicationRunningState)state).setHistoryProcessHandler(((MyStarter)starter).myHistoryProcessListener);
             ((GoApplicationRunningState)state).setOutputFilePath(((MyStarter)starter).myOutputFilePath);
-            executionResult = state.execute(environment.getExecutor(), GoBuildingRunner.this);
+            myExecutionResult = state.execute(environment.getExecutor(), GoBuildingRunner.this);
           }
-          return executionResult != null ? Promise.resolve(starter) : Promise.<RunProfileStarter>reject("Cannot run debugger");
+          return myExecutionResult != null ? Promise.resolve(starter) : Promise.<RunProfileStarter>reject("Cannot run debugger");
         }
         catch (ExecutionException e) {
           return Promise.reject(e);
@@ -189,7 +189,7 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
 
     @Nullable
     @Override
-    public RunContentDescriptor execute(@NotNull RunProfileState state, @NotNull final ExecutionEnvironment env) throws ExecutionException {
+    public RunContentDescriptor execute(@NotNull final RunProfileState state, @NotNull final ExecutionEnvironment env) throws ExecutionException {
       if (state instanceof GoApplicationRunningState) {
         FileDocumentManager.getInstance().saveAllDocuments();
         ((GoApplicationRunningState)state).setHistoryProcessHandler(myHistoryProcessListener);
@@ -201,7 +201,7 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
             @Override
             public XDebugProcess start(@NotNull XDebugSession session) throws ExecutionException {
               RemoteVmConnection connection = new DlvRemoteVmConnection();
-              DlvDebugProcess process = new DlvDebugProcess(session, connection);
+              DlvDebugProcess process = new DlvDebugProcess(session, connection, myExecutionResult);
               connection.open(new InetSocketAddress(NetUtils.getLoopbackAddress(), 9090));
               return process;
             }
