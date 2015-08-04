@@ -42,7 +42,7 @@
     </copy>
 
     <zip destfile="${artifact.output.path}/Go.zip">
-      <fileset dir="${unzip.go.path}" includes="**"/>
+      <zipfileset dir="${unzip.go.path}" includes="**" filemode="755"/>
     </zip>
   </target>
 </project>
