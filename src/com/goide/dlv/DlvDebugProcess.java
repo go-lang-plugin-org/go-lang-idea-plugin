@@ -21,6 +21,7 @@ import com.goide.dlv.breakpoint.DlvBreakpointProperties;
 import com.goide.dlv.breakpoint.DlvBreakpointType;
 import com.goide.dlv.protocol.DlvRequest;
 import com.intellij.execution.ExecutionResult;
+import com.intellij.execution.ui.ExecutionConsole;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.AccessToken;
@@ -121,6 +122,12 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
   public DlvDebugProcess(@NotNull XDebugSession session, @NotNull RemoteVmConnection connection, @Nullable ExecutionResult er) {
     super(session, connection, new MyEditorsProvider(), null, er);
     breakpointHandlers = new XBreakpointHandler[]{new MyBreakpointHandler()};
+  }
+
+  @NotNull
+  @Override
+  public ExecutionConsole createConsole() {
+    return executionResult == null ? super.createConsole() : executionResult.getExecutionConsole();
   }
 
   @Override
