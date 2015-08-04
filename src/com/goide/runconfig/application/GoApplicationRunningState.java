@@ -99,6 +99,7 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
   protected GoExecutor patchExecutor(@NotNull GoExecutor executor) throws ExecutionException {
     if (isDebug()) {
       File dlv = new File(GoUtil.getPlugin().getPath(), "lib/dlv/" + (SystemInfo.isMac ? "mac" : "linux") + "/dlv");
+      dlv.setExecutable(true, false); // todo
       return executor.withExePath(dlv.getAbsolutePath())
         .withParameters("--listen=localhost:9090", "--headless=true", "run", myOutputFilePath, "--");
     }
