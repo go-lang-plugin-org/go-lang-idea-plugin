@@ -21,7 +21,7 @@ public class GoBuilderTest extends JpsBuildTestCase {
   public static final String GO_MAC_SDK_PATH = "/usr/local/go";
 
   public void testSimple() throws Exception {
-    if (!SystemInfo.isMac && !SystemInfo.isLinux) return;
+    if (skip()) return;
 
     String depFile = createFile("simple/simple.go", "package main\nimport \"fmt\"\nfunc main() {\n\tfmt.Printf(\"Hello\\n\");\n}");
     String moduleName = "m";
@@ -30,8 +30,18 @@ public class GoBuilderTest extends JpsBuildTestCase {
     assertCompiled(moduleName, "simple");
   }
 
+  private static boolean skip() {
+    if (SystemInfo.isWindows) return true;
+    String path = getGoSdkPath();
+    if (!new File(path).exists()) {
+      System.out.println("Go SDK should be placed in `" + path + "`.");
+      return true;
+    }
+    return false;
+  }
+
   public void testDependentFiles() throws Exception {
-    if (!SystemInfo.isMac && !SystemInfo.isLinux) return;
+    if (skip()) return;
 
     String mainFile = createFile("simple/simple.go", "package main\nfunc main() {\n\tSayHello();\n}");
     createFile("simple/depFile.go", "package main\nimport \"fmt\"\nfunc SayHello() {\n\tfmt.Printf(\"Hello\\n\");\n}");
@@ -42,7 +52,7 @@ public class GoBuilderTest extends JpsBuildTestCase {
   }
 
   public void testCompilerErrors() {
-    if (!SystemInfo.isMac && !SystemInfo.isLinux) return;
+    if (skip()) return;
 
     String depFile = createFile("simple/errors.go", "package main\nimport \"fmt\"\nfunc main() {\n\tfmt.Printf(\"Hello\\n);\n}");
     String moduleName = "m";
