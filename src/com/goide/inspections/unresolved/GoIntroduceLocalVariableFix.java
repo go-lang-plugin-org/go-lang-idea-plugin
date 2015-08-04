@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,12 @@
 
 package com.goide.inspections.unresolved;
 
-import com.goide.psi.GoBlock;
-import com.goide.psi.GoStatement;
+import com.goide.psi.GoReferenceExpression;
+import com.goide.refactor.GoRefactoringUtil;
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateManager;
 import com.intellij.codeInsight.template.impl.TemplateSettings;
+import com.intellij.diagnostic.AttachmentFactory;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -41,14 +42,17 @@ public class GoIntroduceLocalVariableFix extends GoUnresolvedFixBase {
                      @Nullable("is null when called from inspection") Editor editor,
                      @NotNull PsiElement startElement,
                      @NotNull PsiElement endElement) {
-    GoStatement statement = PsiTreeUtil.getParentOfType(startElement, GoStatement.class);
-    while (statement != null && !(statement.getParent() instanceof GoBlock)) {
-      statement = PsiTreeUtil.getParentOfType(statement, GoStatement.class);
+    if (editor == null) return;
+    PsiElement reference = PsiTreeUtil.getNonStrictParentOfType(startElement, GoReferenceExpression.class);
+    PsiElement anchor = reference != null ? GoRefactoringUtil.findLocalAnchor(GoRefactoringUtil.getLocalOccurrences(reference)) : null;
+    if (anchor == null) {
+      LOG.error("Cannot find anchor for GoIntroduceLocalVariableQuickFix, offset: " + editor.getCaretModel().getOffset(), 
+                AttachmentFactory.createAttachment(file.getVirtualFile()));
+      return;
     }
-    if (statement == null || editor == null) return;
     Template template = TemplateSettings.getInstance().getTemplateById("go_lang_local_var_qf");
     if (template != null) {
-      int start = statement.getTextRange().getStartOffset();
+      int start = anchor.getTextRange().getStartOffset();
       editor.getCaretModel().moveToOffset(start);
       template.setToReformat(true);
       TemplateManager.getInstance(project).startTemplate(editor, template, true, ContainerUtil.stringMap("NAME", myName), null);

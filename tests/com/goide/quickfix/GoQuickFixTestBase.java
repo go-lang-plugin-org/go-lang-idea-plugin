@@ -34,7 +34,7 @@ public abstract class GoQuickFixTestBase extends GoCodeInsightFixtureTestCase {
     myFixture.configureByFile(testName + ".go");
     applySingleQuickFix(quickFixName);
     String after = String.format("%s-after.go", testName);
-    myFixture.checkResultByFile(after);
+    myFixture.checkResultByFile(after, true);
   }
 
   protected void applySingleQuickFix(@NotNull String quickFixName) {

@@ -26,7 +26,6 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pass;
-import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
@@ -68,14 +67,13 @@ public class GoIntroduceVariableBase {
     List<GoExpression> expressions = collectNestedExpressions(expression);
     if (expressions.isEmpty()) {
       int resultCount = GoInspectionUtil.getExpressionResultCount(expression);
-      String text = expression.getText();
-      showCannotPerform(operation,
-                        "Expression " + text + "()" + (resultCount == 0 ? " doesn't return a value." : " returns multiple values."));
+      showCannotPerform(operation, "Expression " + expression.getText() + "()" +
+                                   (resultCount == 0 ? " doesn't return a value." : " returns multiple values."));
       return;
     }
-    expression = ContainerUtil.getFirstItem(expressions);
     if (expressions.size() == 1 || hasSelection || ApplicationManager.getApplication().isUnitTestMode()) {
-      operation.setExpression(expression);
+      //noinspection ConstantConditions
+      operation.setExpression(ContainerUtil.getFirstItem(expressions));
       performOnElement(operation);
     }
     else {
@@ -127,14 +125,13 @@ public class GoIntroduceVariableBase {
 
   protected static void performOnElement(final GoIntroduceOperation operation) {
     final GoExpression expression = operation.getExpression();
-    PsiElement statement = PsiTreeUtil.getParentOfType(expression, GoStatement.class);
-
     LinkedHashSet<String> suggestedNames = getSuggestedNames(expression);
     operation.setSuggestedNames(suggestedNames);
-    operation.setOccurrences(getOccurrences(expression, PsiTreeUtil.getTopmostParentOfType(statement, GoBlock.class)));
+    operation.setOccurrences(GoRefactoringUtil.getLocalOccurrences(expression));
 
     final Editor editor = operation.getEditor();
     if (editor.getSettings().isVariableInplaceRenameEnabled()) {
+      //noinspection ConstantConditions
       operation.setName(ContainerUtil.getFirstItem(suggestedNames));
       if (ApplicationManager.getApplication().isUnitTestMode()) {
         performInplaceIntroduce(operation);
@@ -155,23 +152,6 @@ public class GoIntroduceVariableBase {
     //}
   }
 
-  @NotNull
-  private static List<PsiElement> getOccurrences(@NotNull final PsiElement pattern, @Nullable PsiElement context) {
-    if (context == null) return Collections.emptyList();
-    final List<PsiElement> occurrences = ContainerUtil.newArrayList();
-    PsiRecursiveElementVisitor visitor = new PsiRecursiveElementVisitor() {
-      public void visitElement(@NotNull PsiElement element) {
-        if (PsiEquivalenceUtil.areElementsEquivalent(element, pattern)) {
-          occurrences.add(element);
-          return;
-        }
-        super.visitElement(element);
-      }
-    };
-    context.acceptChildren(visitor);
-    return occurrences;
-  }
-
   private static void performInplaceIntroduce(GoIntroduceOperation operation) {
     performReplace(operation);
     new GoInplaceVariableIntroducer(operation).performInplaceRefactoring(operation.getSuggestedNames());
@@ -181,16 +161,12 @@ public class GoIntroduceVariableBase {
     final Project project = operation.getProject();
     final PsiElement expression = operation.getExpression();
     final List<PsiElement> occurrences = operation.isReplaceAll() ? operation.getOccurrences() : Collections.singletonList(expression);
-    final GoBlock context = PsiTreeUtil.getNonStrictParentOfType(PsiTreeUtil.findCommonParent(occurrences), GoBlock.class);
-    if (context == null) {
-      showCannotPerform(operation, RefactoringBundle.message("refactoring.introduce.context.error"));
-      return;
-    }
-    final PsiElement anchor = findAnchor(occurrences, context);
+    final PsiElement anchor = GoRefactoringUtil.findLocalAnchor(occurrences);
     if (anchor == null) {
       showCannotPerform(operation, RefactoringBundle.message("refactoring.introduce.context.error"));
       return;
     }
+    final GoBlock context = (GoBlock)anchor.getParent();
     final String name = operation.getName();
     final List<PsiElement> newOccurrences = ContainerUtil.newArrayList();
     WriteCommandAction.runWriteCommandAction(project, new Runnable() {
@@ -210,14 +186,6 @@ public class GoIntroduceVariableBase {
     });
     operation.setOccurrences(newOccurrences);
     PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(operation.getEditor().getDocument());
-  }
-
-  private static PsiElement findAnchor(List<PsiElement> occurrences, PsiElement context) {
-    PsiElement statement = PsiTreeUtil.getParentOfType(ContainerUtil.getFirstItem(occurrences), GoStatement.class);
-    while (statement != null && statement.getParent() != context) {
-      statement = statement.getParent();
-    }
-    return statement;
   }
 
   private static LinkedHashSet<String> getNamesInContext(PsiElement context) {

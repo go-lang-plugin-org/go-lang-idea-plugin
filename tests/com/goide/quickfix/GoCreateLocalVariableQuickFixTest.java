@@ -19,6 +19,8 @@ package com.goide.quickfix;
 import com.goide.inspections.unresolved.GoUnresolvedReferenceInspection;
 
 public class GoCreateLocalVariableQuickFixTest extends GoQuickFixTestBase {
+  public static final String CREATE_LOCAL_VARIABLE_A = "Create local variable 'a'";
+
   @Override
   protected void setUp() throws Exception {
     super.setUp();
@@ -30,6 +32,12 @@ public class GoCreateLocalVariableQuickFixTest extends GoQuickFixTestBase {
     return "quickfixes/local-variable";
   }
 
-  public void testSimple() { doTest("Create local variable 'a'"); }
-  public void testIf()     { doTest("Create local variable 'a'"); }
+  private void doTestCreateA() {
+    doTest(CREATE_LOCAL_VARIABLE_A);
+  }
+
+  public void testSimple()     { doTestCreateA(); }
+  public void testIf()         { doTestCreateA(); }
+  public void testUnresolved() { doTestCreateA(); }
+  public void testResolved()   { doTestCreateA(); }
 }
