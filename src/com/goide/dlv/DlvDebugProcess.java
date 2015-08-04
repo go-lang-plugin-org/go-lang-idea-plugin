@@ -74,7 +74,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     @Override
     public void consume(@NotNull final DebuggerState o) {
       if (o.exited) {
-        getSession().stop();
+        stop();
         return;
       }
 
