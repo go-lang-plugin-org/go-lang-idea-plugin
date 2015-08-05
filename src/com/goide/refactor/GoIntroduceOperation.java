@@ -33,7 +33,6 @@ public class GoIntroduceOperation {
   final private PsiFile myFile;
   private GoExpression myExpression;
   private List<PsiElement> myOccurrences;
-  private PsiElement myContext;
   private LinkedHashSet<String> mySuggestedNames;
   private String myName;
   private GoVarDefinition myVar;
@@ -118,14 +117,5 @@ public class GoIntroduceOperation {
 
   public void setReplaceAll(boolean replaceAll) {
     myReplaceAll = replaceAll;
-  }
-
-  @NotNull
-  public PsiElement getContext() {
-    return myContext;
-  }
-
-  public void setContext(@NotNull PsiElement context) {
-    myContext = context;
   }
 }
