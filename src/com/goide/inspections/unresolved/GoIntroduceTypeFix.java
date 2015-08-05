@@ -16,20 +16,11 @@
 
 package com.goide.inspections.unresolved;
 
-import com.goide.psi.GoTypeReferenceExpression;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class GoIntroduceTypeFix extends GoUnresolvedFixBase {
   public GoIntroduceTypeFix(@NotNull PsiElement element, @NotNull String name) {
     super(element, name, "type", "go_lang_type_qf");
-  }
-
-  @Nullable
-  @Override
-  protected PsiElement getReferenceExpression(@NotNull PsiElement element) {
-    return PsiTreeUtil.getNonStrictParentOfType(element, GoTypeReferenceExpression.class);
   }
 }

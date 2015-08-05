@@ -16,7 +16,7 @@
 
 package com.goide.inspections.unresolved;
 
-import com.goide.psi.GoReferenceExpression;
+import com.goide.psi.GoReferenceExpressionBase;
 import com.goide.refactor.GoRefactoringUtil;
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateManager;
@@ -63,7 +63,7 @@ public abstract class GoUnresolvedFixBase extends LocalQuickFixAndIntentionActio
                      @NotNull PsiElement startElement,
                      @NotNull PsiElement endElement) {
     if (editor == null) return;
-    PsiElement reference = getReferenceExpression(startElement);
+    PsiElement reference = PsiTreeUtil.getNonStrictParentOfType(startElement, GoReferenceExpressionBase.class);
     PsiElement anchor = reference != null ? findAnchor(reference) : null;
     if (anchor == null) {
       LOG.error("Cannot find anchor for " + myWhat + " (GoUnresolvedFixBase), offset: " + editor.getCaretModel().getOffset(),
@@ -77,11 +77,6 @@ public abstract class GoUnresolvedFixBase extends LocalQuickFixAndIntentionActio
       template.setToReformat(true);
       TemplateManager.getInstance(project).startTemplate(editor, template, true, ContainerUtil.stringMap("NAME", myName), null);
     }
-  }
-
-  @Nullable
-  protected PsiElement getReferenceExpression(@NotNull PsiElement element) {
-    return PsiTreeUtil.getNonStrictParentOfType(element, GoReferenceExpression.class);
   }
 
   @Nullable
