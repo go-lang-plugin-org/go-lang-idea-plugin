@@ -19,7 +19,6 @@ package com.goide.refactor;
 import com.goide.inspections.GoInspectionUtil;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoElementFactory;
-import com.intellij.codeInsight.PsiEquivalenceUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
@@ -30,7 +29,6 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiRecursiveElementVisitor;
 import com.intellij.psi.codeStyle.NameUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.IntroduceTargetChooser;
@@ -146,10 +144,14 @@ public class GoIntroduceVariableBase {
           }
         });
     }
-    //else {
-    //  // todo show dialog here; set name
-    //  performReplace(operation);
-    //}
+    else {
+      GoIntroduceVariableDialog dialog = new GoIntroduceVariableDialog(operation);
+      if (dialog.showAndGet()) {
+        operation.setName(dialog.getName());
+        operation.setReplaceAll(dialog.getReplaceAll());
+        performReplace(operation);
+      }
+    }
   }
 
   private static void performInplaceIntroduce(GoIntroduceOperation operation) {
