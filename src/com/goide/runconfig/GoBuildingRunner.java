@@ -210,7 +210,7 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
             public XDebugProcess start(@NotNull XDebugSession session) throws ExecutionException {
               RemoteVmConnection connection = new DlvRemoteVmConnection();
               DlvDebugProcess process = new DlvDebugProcess(session, connection, myExecutionResult);
-              connection.open(new InetSocketAddress(NetUtils.getLoopbackAddress(), 9090));
+              connection.open(new InetSocketAddress(NetUtils.getLoopbackAddress(), 59090));
               return process;
             }
           }).getRunContentDescriptor();
