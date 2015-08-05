@@ -16,37 +16,11 @@
 
 package com.goide.inspections.unresolved;
 
-import com.goide.psi.GoTopLevelDeclaration;
-import com.goide.psi.impl.GoPsiImplUtil;
-import com.intellij.codeInsight.template.Template;
-import com.intellij.codeInsight.template.TemplateManager;
-import com.intellij.codeInsight.template.impl.TemplateSettings;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class GoIntroduceGlobalConstantFix extends GoUnresolvedFixBase {
   public GoIntroduceGlobalConstantFix(@NotNull PsiElement element, @NotNull String name) {
-    super(element, name, "global constant");
-  }
-
-  @Override
-  public void invoke(@NotNull Project project,
-                     @NotNull PsiFile file,
-                     @Nullable("is null when called from inspection") Editor editor,
-                     @NotNull PsiElement startElement,
-                     @NotNull PsiElement endElement) {
-    GoTopLevelDeclaration declaration = GoPsiImplUtil.getTopLevelDeclaration(startElement);
-    if (declaration == null || editor == null) return;
-    Template template = TemplateSettings.getInstance().getTemplateById("go_lang_global_const_qf");
-    if (template != null) {
-      editor.getCaretModel().moveToOffset(declaration.getTextRange().getStartOffset());
-      template.setToReformat(true);
-      TemplateManager.getInstance(project).startTemplate(editor, template, true, ContainerUtil.stringMap("NAME", myName), null);
-    }
+    super(element, name, "global constant", "go_lang_global_const_qf");
   }
 }

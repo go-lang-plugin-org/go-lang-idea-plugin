@@ -16,36 +16,20 @@
 
 package com.goide.inspections.unresolved;
 
-import com.goide.psi.GoTopLevelDeclaration;
-import com.goide.psi.impl.GoPsiImplUtil;
-import com.intellij.codeInsight.template.Template;
-import com.intellij.codeInsight.template.TemplateManager;
-import com.intellij.codeInsight.template.impl.TemplateSettings;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
+import com.goide.psi.GoTypeReferenceExpression;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.util.containers.ContainerUtil;
+import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoIntroduceTypeFix extends GoUnresolvedFixBase {
   public GoIntroduceTypeFix(@NotNull PsiElement element, @NotNull String name) {
-    super(element, name, "type");
+    super(element, name, "type", "go_lang_type_qf");
   }
 
+  @Nullable
   @Override
-  public void invoke(@NotNull Project project,
-                     @NotNull PsiFile file,
-                     @Nullable("is null when called from inspection") Editor editor,
-                     @NotNull PsiElement startElement,
-                     @NotNull PsiElement endElement) {
-    GoTopLevelDeclaration decl = GoPsiImplUtil.getTopLevelDeclaration(startElement);
-    if (decl == null || editor == null) return;
-    Template template = TemplateSettings.getInstance().getTemplateById("go_lang_type_qf");
-    if (template != null) {
-      editor.getCaretModel().moveToOffset(decl.getTextRange().getStartOffset());
-      TemplateManager.getInstance(project).startTemplate(editor, template, true, ContainerUtil.stringMap("NAME", myName), null);
-    }
+  protected PsiElement getReferenceExpression(@NotNull PsiElement element) {
+    return PsiTreeUtil.getNonStrictParentOfType(element, GoTypeReferenceExpression.class);
   }
 }

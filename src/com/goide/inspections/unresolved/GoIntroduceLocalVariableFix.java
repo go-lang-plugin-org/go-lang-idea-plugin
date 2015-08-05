@@ -16,46 +16,19 @@
 
 package com.goide.inspections.unresolved;
 
-import com.goide.psi.GoReferenceExpression;
 import com.goide.refactor.GoRefactoringUtil;
-import com.intellij.codeInsight.template.Template;
-import com.intellij.codeInsight.template.TemplateManager;
-import com.intellij.codeInsight.template.impl.TemplateSettings;
-import com.intellij.diagnostic.AttachmentFactory;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoIntroduceLocalVariableFix extends GoUnresolvedFixBase {
   public GoIntroduceLocalVariableFix(@NotNull PsiElement element, @NotNull String name) {
-    super(element, name, "local variable");
+    super(element, name, "local variable", "go_lang_local_var_qf");
   }
 
+  @Nullable
   @Override
-  public void invoke(@NotNull Project project,
-                     @NotNull PsiFile file,
-                     @Nullable("is null when called from inspection") Editor editor,
-                     @NotNull PsiElement startElement,
-                     @NotNull PsiElement endElement) {
-    if (editor == null) return;
-    PsiElement reference = PsiTreeUtil.getNonStrictParentOfType(startElement, GoReferenceExpression.class);
-    PsiElement anchor = reference != null ? GoRefactoringUtil.findLocalAnchor(GoRefactoringUtil.getLocalOccurrences(reference)) : null;
-    if (anchor == null) {
-      LOG.error("Cannot find anchor for GoIntroduceLocalVariableQuickFix, offset: " + editor.getCaretModel().getOffset(), 
-                AttachmentFactory.createAttachment(file.getVirtualFile()));
-      return;
-    }
-    Template template = TemplateSettings.getInstance().getTemplateById("go_lang_local_var_qf");
-    if (template != null) {
-      int start = anchor.getTextRange().getStartOffset();
-      editor.getCaretModel().moveToOffset(start);
-      template.setToReformat(true);
-      TemplateManager.getInstance(project).startTemplate(editor, template, true, ContainerUtil.stringMap("NAME", myName), null);
-    }
+  protected PsiElement findAnchor(@NotNull PsiElement reference) {
+    return GoRefactoringUtil.findLocalAnchor(GoRefactoringUtil.getLocalOccurrences(reference));
   }
 }
