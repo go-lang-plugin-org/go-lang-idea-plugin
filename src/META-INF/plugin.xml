@@ -106,6 +106,7 @@
     <completion.contributor language="go" implementationClass="com.goide.completion.GoCompletionContributor"/>
     <completion.contributor language="go" implementationClass="com.goide.completion.GoKeywordCompletionContributor"/>
     <completion.contributor language="go" order="last" implementationClass="com.goide.completion.GoAutoImportCompletionContributor"/>
+    <referenceImporter implementation="com.goide.psi.impl.imports.GoReferenceImporter"/>
     <completion.confidence language="go" order="last" implementationClass="com.goide.completion.GoCompletionConfidence"/>
     <lookup.charFilter implementation="com.goide.completion.GoCharFilter"/>
 
