@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,7 +62,11 @@ public abstract class GoUnresolvedFixBase extends LocalQuickFixAndIntentionActio
                      @Nullable("is null when called from inspection") Editor editor,
                      @NotNull PsiElement startElement,
                      @NotNull PsiElement endElement) {
-    if (editor == null) return;
+    if (editor == null) {
+      LOG.error("Cannot run quickfix without editor: " + getClass().getSimpleName(),
+                AttachmentFactory.createAttachment(file.getVirtualFile()));
+      return;
+    }
     PsiElement reference = PsiTreeUtil.getNonStrictParentOfType(startElement, GoReferenceExpressionBase.class);
     PsiElement anchor = reference != null ? findAnchor(reference) : null;
     if (anchor == null) {
@@ -71,12 +75,15 @@ public abstract class GoUnresolvedFixBase extends LocalQuickFixAndIntentionActio
       return;
     }
     Template template = TemplateSettings.getInstance().getTemplateById(myTemplateId);
-    if (template != null) {
-      int start = anchor.getTextRange().getStartOffset();
-      editor.getCaretModel().moveToOffset(start);
-      template.setToReformat(true);
-      TemplateManager.getInstance(project).startTemplate(editor, template, true, ContainerUtil.stringMap("NAME", myName), null);
+    if (template == null) {
+      LOG.error("Cannot find anchor for " + myWhat + " (GoUnresolvedFixBase), offset: " + editor.getCaretModel().getOffset(),
+                AttachmentFactory.createAttachment(file.getVirtualFile()));
+      return;
     }
+    int start = anchor.getTextRange().getStartOffset();
+    editor.getCaretModel().moveToOffset(start);
+    template.setToReformat(true);
+    TemplateManager.getInstance(project).startTemplate(editor, template, true, ContainerUtil.stringMap("NAME", myName), null);
   }
 
   @Nullable
