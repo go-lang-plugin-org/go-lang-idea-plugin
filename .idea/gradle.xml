@@ -7,6 +7,14 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="gradleHome" value="/usr/local/Cellar/gradle/2.3/libexec" />
         <option name="gradleJvm" value="IDEA jdk" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/google-app-engine" />
+            <option value="$PROJECT_DIR$/google-app-engine/google-app-engine-yaml" />
+            <option value="$PROJECT_DIR$/utils" />
+          </set>
+        </option>
       </GradleProjectSettings>
     </option>
   </component>

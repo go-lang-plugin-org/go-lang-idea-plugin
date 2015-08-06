@@ -6,6 +6,8 @@ build/
 
 .idea/workspace.xml
 .idea/shelf/
+.idea/libraries/
+*.iml
 
 testData/performance/docker
 testData/performance/go
