@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,13 +70,17 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
           holder.registerProblem(id, "Ambiguous reference " + "'" + name + "'", GENERIC_ERROR_OR_WARNING);
         }
         else if (reference.resolve() == null) {
-          LocalQuickFix[] fixes = !isProhibited(o, qualifier) ?
-                                  new LocalQuickFix[]{
-                                    new GoIntroduceLocalVariableFix(id, name),
-                                    new GoIntroduceGlobalVariableFix(id, name),
-                                    new GoIntroduceGlobalConstantFix(id, name),
-                                  } :
-                                  createImportPackageFixes(o, reference);
+          LocalQuickFix[] fixes = LocalQuickFix.EMPTY_ARRAY;
+          if (isProhibited(o, qualifier)) {
+            fixes = createImportPackageFixes(o, reference);
+          }
+          else if (holder.isOnTheFly()) {
+            fixes = new LocalQuickFix[]{
+              new GoIntroduceLocalVariableFix(id, name),
+              new GoIntroduceGlobalVariableFix(id, name),
+              new GoIntroduceGlobalConstantFix(id, name),
+            };
+          }
           holder.registerProblem(id, "Unresolved reference " + "'" + name + "'", LIKE_UNKNOWN_SYMBOL, fixes);
         }
       }
@@ -121,9 +125,13 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
           PsiElement id = o.getIdentifier();
           String name = id.getText();
           boolean isProhibited = isProhibited(o, qualifier);
-          LocalQuickFix[] fixes = isProhibited 
-                                  ? createImportPackageFixes(o, reference) 
-                                  : new LocalQuickFix[]{new GoIntroduceTypeFix(id, name)};
+          LocalQuickFix[] fixes = LocalQuickFix.EMPTY_ARRAY;
+          if (isProhibited) {
+            fixes = createImportPackageFixes(o, reference);
+          }
+          else if (holder.isOnTheFly()) {
+            fixes = new LocalQuickFix[]{new GoIntroduceTypeFix(id, name)};
+          }
           holder.registerProblem(id, "Unresolved type " + "'" + name + "'", LIKE_UNKNOWN_SYMBOL, fixes);
         }
       }

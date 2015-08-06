@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,32 @@
 
 package com.goide.inspections.unresolved;
 
+import com.goide.psi.GoReferenceExpressionBase;
+import com.goide.refactor.GoRefactoringUtil;
+import com.intellij.codeInsight.template.Template;
+import com.intellij.codeInsight.template.TemplateManager;
+import com.intellij.codeInsight.template.impl.TemplateSettings;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import com.intellij.diagnostic.AttachmentFactory;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class GoUnresolvedFixBase extends LocalQuickFixAndIntentionActionOnPsiElement {
   @NotNull protected final String myName;
   @NotNull protected final String myWhat;
+  @NotNull protected final String myTemplateId;
 
-  public GoUnresolvedFixBase(@NotNull PsiElement element, @NotNull String name, @NotNull String what) {
+  public GoUnresolvedFixBase(@NotNull PsiElement element, @NotNull String name, @NotNull String what, @NotNull String templateId) {
     super(element);
     myName = name;
     myWhat = what;
+    myTemplateId = templateId;
   }
 
   @NotNull
@@ -41,4 +55,41 @@ public abstract class GoUnresolvedFixBase extends LocalQuickFixAndIntentionActio
   public String getFamilyName() {
     return "Go";
   }
+
+  @Override
+  public void invoke(@NotNull Project project,
+                     @NotNull PsiFile file,
+                     @Nullable("is null when called from inspection") Editor editor,
+                     @NotNull PsiElement startElement,
+                     @NotNull PsiElement endElement) {
+    if (editor == null) {
+      LOG.error("Cannot run quickfix without editor: " + getClass().getSimpleName(),
+                AttachmentFactory.createAttachment(file.getVirtualFile()));
+      return;
+    }
+    PsiElement reference = PsiTreeUtil.getNonStrictParentOfType(startElement, GoReferenceExpressionBase.class);
+    PsiElement anchor = reference != null ? findAnchor(reference) : null;
+    if (anchor == null) {
+      LOG.error("Cannot find anchor for " + myWhat + " (GoUnresolvedFixBase), offset: " + editor.getCaretModel().getOffset(),
+                AttachmentFactory.createAttachment(file.getVirtualFile()));
+      return;
+    }
+    Template template = TemplateSettings.getInstance().getTemplateById(myTemplateId);
+    if (template == null) {
+      LOG.error("Cannot find anchor for " + myWhat + " (GoUnresolvedFixBase), offset: " + editor.getCaretModel().getOffset(),
+                AttachmentFactory.createAttachment(file.getVirtualFile()));
+      return;
+    }
+    int start = anchor.getTextRange().getStartOffset();
+    editor.getCaretModel().moveToOffset(start);
+    template.setToReformat(true);
+    TemplateManager.getInstance(project).startTemplate(editor, template, true, ContainerUtil.stringMap("NAME", myName), null);
+  }
+
+  @Nullable
+  protected PsiElement findAnchor(@NotNull PsiElement reference) {
+    PsiFile file = reference.getContainingFile();
+    return GoRefactoringUtil.findAnchor(GoRefactoringUtil.getOccurrences(reference, file), file);
+  }
 }
+
