@@ -1,1 +1,1 @@
-include 'utils', 'google-app-engine', 'google-app-engine-yaml'
+include 'utils', 'google-app-engine', 'google-app-engine:google-app-engine-yaml'

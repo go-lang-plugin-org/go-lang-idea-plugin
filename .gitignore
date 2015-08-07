@@ -3,8 +3,11 @@ system-test/
 config-test/
 
 build/
+.gradle
 
 .idea/workspace.xml
+.idea/modules.xml
+.idea/misc.xml
 .idea/shelf/
 .idea/libraries/
 *.iml

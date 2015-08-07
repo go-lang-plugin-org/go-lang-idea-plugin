@@ -1,93 +1,125 @@
-// todo google-app-engine-yaml.jar invalid
+/*
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// Local testing:
+//
+buildscript {
+  repositories {
+    flatDir {
+      dirs "/Users/zolotov/dev/idea-gradle-plugin/build/libs/"
+    }
+  }
+  dependencies {
+    classpath group: 'org.jetbrains', name: 'intellij-gradle-plugin', version: '0.0.15'
+  }
+}
+
+plugins {
+//  id 'org.jetbrains.intellij' version "0.0.15"
+  id "de.undercouch.download" version "1.2"
+}
+version = '0.9.' + System.properties.getProperty('build.number', 'SNAPSHOT')
+project.ext.idea_version = System.properties.getProperty('idea.version', '141.1531.2')
+project.ext.java_version = System.properties.getProperty('java.version', '1.8')
+
 allprojects {
   apply plugin: 'java'
-  jar.archiveName = "${project.name}.jar"
-
-  repositories {
-    maven { url "https://www.jetbrains.com/intellij-repository/releases" }
-    mavenCentral()
-  }
-
-  configurations {
-    idea
-    provided
-  }
-
-  dependencies {
-    idea group: 'com.jetbrains.intellij.idea', name: 'ideaIC', version: '14.1', ext: 'zip'
-    provided fileTree(ideaSdkPath()).include("lib/*.jar")
-    provided fileTree(ideaSdkPath()).include("plugins/coverage/lib/*.jar")
-    testCompile fileTree("${System.properties['java.home']}/../lib").include('*tools.jar')
-  }
+  sourceCompatibility = rootProject.java_version
+  targetCompatibility = rootProject.java_version
 
   sourceSets {
     main {
-      java {
-        srcDirs 'src', 'gen'
-      }
-      resources {
-        srcDirs 'resources'
-      }
-      compileClasspath += configurations.provided
-      runtimeClasspath += configurations.provided
+      java.srcDirs 'src', 'gen'
+      resources.srcDir 'resources'
     }
-
     test {
-      java {
-        srcDirs 'tests'
-      }
-      compileClasspath += configurations.provided
-      runtimeClasspath += configurations.provided
+      java.srcDir 'tests'
     }
   }
 
-
-  task prepareIdeaSdk(type: Copy, dependsOn: configurations.idea) {
-    def source = configurations.idea.singleFile
-    def target = ideaSdkPath()
-    if (!file(target).exists()) {
-      from zipTree(source)
-      into target
-    }
+  apply plugin: 'org.jetbrains.intellij'
+  intellij {
+    version rootProject.idea_version
+    pluginName 'Go'
+    plugins 'coverage'
   }
-  compileJava.dependsOn prepareIdeaSdk
-
-  task removeIdeaSdk(dependsOn: configurations.idea) {
-//    delete ideaSdkPath()
-  }
-
-  clean.dependsOn removeIdeaSdk
 }
 
-private String ideaSdkPath() {
-  def source = configurations.idea.singleFile
-  source.parent + '/' + source.name - '.zip'
+apply plugin: 'idea'
+idea {
+  project {
+    jdkName = java_version
+    languageLevel = java_version
+  }
+  module {
+    generatedSourceDirs += file('gen')
+  }
 }
-
-apply plugin: 'distribution'
 
 dependencies {
-  compile project(':utils'), project(':google-app-engine'), project(':google-app-engine-yaml')
-}
-
-distributions {
-  main {
-    baseName = 'Go'
-    contents {
-      allprojects.each { project ->
-        project.tasks.withType(Jar).each { archiveTask ->
-          into('lib') {
-            from archiveTask.archivePath
-          }
-        }
-      }
-    }
-  }
+  compile project(':utils'), project(':google-app-engine'), project(':google-app-engine:google-app-engine-yaml')
 }
 
 test {
+  useJUnit {
+    excludeCategories 'com.goide.categories.Performance'
+  }
+  testLogging {
+    exceptionFormat = 'full'
+  }
+}
+
+task preparePerformanceTestData << {
+  downloadAndUnzip('https://storage.googleapis.com/golang/go1.4.2.src.tar.gz', 'go', 'go')
+  downloadAndUnzip('https://github.com/docker/docker/archive/v1.5.0.tar.gz', 'docker-1.5.0', 'docker')
+}
+
+task performanceTest(type: Test, group: 'Verification', dependsOn: [classes, testClasses, preparePerformanceTestData]) {
   maxHeapSize = '512m'
   minHeapSize = '256m'
-  enableAssertions = true
-  jvmArgs '-XX:MaxPermSize=250m'
+
+  useJUnit {
+    includeCategories 'com.goide.categories.Performance'
+    reports.html.destination = "$buildDir/reports/performanceTests"
+  }
+  testLogging {
+    exceptionFormat = 'full'
+  }
+}
+check.dependsOn performanceTest
+
+private void downloadAndUnzip(url, sourceDir, targetDir) {
+  def testDataPath = "${projectDir}/testData/performance/"
+  def markerFile = file("${testDataPath}/${targetDir}/markerFile")
+  def tmpPath = "${testDataPath}/tmp/"
+  def tar = file("${tmpPath}/${targetDir}.tar.gz")
+  if (!markerFile.exists()) {
+    download {
+      src url
+      dest tar
+    }
+    copy {
+      from tarTree(tar)
+      into tmpPath
+    }
+    copy {
+      from "${tmpPath}/${sourceDir}"
+      into "${testDataPath}/${targetDir}"
+    }
+    markerFile.createNewFile()
+  }
+  delete file(tmpPath)
 }

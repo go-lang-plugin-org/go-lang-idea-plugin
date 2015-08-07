@@ -16,6 +16,7 @@
 
 package com.goide;
 
+import com.goide.categories.Performance;
 import com.goide.inspections.GoUnusedImportDeclaration;
 import com.goide.inspections.unresolved.GoUnresolvedReferenceInspection;
 import com.goide.inspections.unresolved.GoUnusedFunctionInspection;
@@ -45,32 +46,33 @@ import com.intellij.util.ThrowableRunnable;
 import com.intellij.util.indexing.FileContentImpl;
 import com.intellij.util.indexing.IndexingDataKeys;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.junit.experimental.categories.Category;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+@Category(Performance.class)
 public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
 
-  public void _testUnusedVariable() {
-    doInspectionTest(new GoUnusedVariableInspection(), TimeUnit.MINUTES.toMillis(4));
+  public void testUnusedVariable() {
+    doInspectionTest(new GoUnusedVariableInspection(), (int)TimeUnit.MINUTES.toMillis(4));
   }
 
-  public void _testUnusedGlobalVariable() {
-    doInspectionTest(new GoUnusedGlobalVariableInspection(), TimeUnit.MINUTES.toMillis(4));
+  public void testUnusedGlobalVariable() {
+    doInspectionTest(new GoUnusedGlobalVariableInspection(), (int)TimeUnit.MINUTES.toMillis(4));
   }
 
-  public void _testUnresolvedReference() {
-    doInspectionTest(new GoUnresolvedReferenceInspection(), TimeUnit.MINUTES.toMillis(4));
+  public void testUnresolvedReference() {
+    doInspectionTest(new GoUnresolvedReferenceInspection(), (int)TimeUnit.MINUTES.toMillis(4));
   }
 
   public void testUnusedFunction() {
-    doInspectionTest(new GoUnusedFunctionInspection(), TimeUnit.MINUTES.toMillis(3));
+    doInspectionTest(new GoUnusedFunctionInspection(), (int)TimeUnit.MINUTES.toMillis(3));
   }
 
   public void testUnusedImport() {
-    doInspectionTest(new GoUnusedImportDeclaration(), TimeUnit.MINUTES.toMillis(1));
+    doInspectionTest(new GoUnusedImportDeclaration(), (int)TimeUnit.MINUTES.toMillis(1));
   }
 
   public void testPerformanceA() {
@@ -79,27 +81,6 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
 
   public void testPerformanceA2() {
     doHighlightingTest(TimeUnit.SECONDS.toMillis(15));
-  }
-
-  public void testCompletionPerformance() {
-    doCompletionTest("package main; func main() { <caret> }", TimeUnit.SECONDS.toMillis(30));
-  }
-
-  public void testCompletionWithPrefixPerformance() {
-    doCompletionTest("package main; func main() { slee<caret> }", TimeUnit.SECONDS.toMillis(10));
-  }
-
-  private void doCompletionTest(String source, long expectation) {
-    VirtualFile go = installTestData("go");
-    if (go == null) return;
-    
-    myFixture.configureByText(GoFileType.INSTANCE, source);
-    PlatformTestUtil.startPerformanceTest(getTestName(true), (int)expectation, new ThrowableRunnable() {
-      @Override
-      public void run() throws Throwable {
-        myFixture.completeBasic();
-      }
-    }).cpuBound().usesAllCPUCores().assertTiming();
   }
 
   private void doHighlightingTest(long expectation) {
@@ -111,9 +92,13 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
     }).cpuBound().usesAllCPUCores().assertTiming();
   }
 
-  private void doInspectionTest(@NotNull InspectionProfileEntry tool, long expected) {
-    VirtualFile sourceDir = installTestData("docker");
-    if (sourceDir == null) return;
+  private void doInspectionTest(@NotNull InspectionProfileEntry tool, int expected) {
+    if (!new File(myFixture.getTestDataPath(), "docker").exists()) {
+      System.err.println("For performance tests you need to have a docker project inside testData/" + getBasePath() + " directory");
+      return;
+    }
+
+    VirtualFile sourceDir = myFixture.copyDirectoryToProject("docker", "src");
     //noinspection ConstantConditions
     final AnalysisScope scope = new AnalysisScope(getPsiManager().findDirectory(sourceDir));
 
@@ -124,25 +109,15 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
     final GlobalInspectionContextForTests globalContext =
       CodeInsightTestFixtureImpl.createGlobalContextForTool(scope, getProject(), inspectionManager, wrapper);
 
-    PlatformTestUtil.startPerformanceTest(getTestName(true), (int)expected, new ThrowableRunnable() {
+    PlatformTestUtil.startPerformanceTest(getTestName(true), expected, new ThrowableRunnable() {
       @Override
       public void run() throws Throwable {
         InspectionTestUtil.runTool(wrapper, scope, globalContext);
+        InspectionTestUtil.compareToolResults(globalContext, wrapper, false, new File(getTestDataPath(), wrapper.getShortName()).getPath());
       }
     }).cpuBound().usesAllCPUCores().assertTiming();
-    InspectionTestUtil.compareToolResults(globalContext, wrapper, false, new File(getTestDataPath(), wrapper.getShortName()).getPath());
   }
 
-  @Nullable
-  private VirtualFile installTestData(String testData) {
-    if (!new File(myFixture.getTestDataPath(), testData).exists()) {
-      System.err.println("For performance tests you need to have a docker project inside testData/" + getBasePath() + " directory");
-      return null;
-    }
-
-    return myFixture.copyDirectoryToProject(testData, testData);
-  }
-  
   public void testParserAndStubs() {
     final File go = new File(getTestDataPath(), "go");
     if (!go.exists()) {
