@@ -13,32 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-// Local testing:
-//
-buildscript {
-  repositories {
-    flatDir {
-      dirs "/Users/zolotov/dev/idea-gradle-plugin/build/libs/"
-    }
-  }
-  dependencies {
-    classpath group: 'org.jetbrains', name: 'intellij-gradle-plugin', version: '0.0.15'
-  }
-}
-
 plugins {
-//  id 'org.jetbrains.intellij' version "0.0.15"
+  id 'org.jetbrains.intellij' version "0.0.16"
   id "de.undercouch.download" version "1.2"
 }
-version = '0.9.' + System.properties.getProperty('build.number', 'SNAPSHOT')
-project.ext.idea_version = System.properties.getProperty('idea.version', '141.1531.2')
-project.ext.java_version = System.properties.getProperty('java.version', '1.8')
 
+version = "${version}.${System.properties.getProperty('build.number', 'SNAPSHOT')}"
 allprojects {
   apply plugin: 'java'
-  sourceCompatibility = rootProject.java_version
-  targetCompatibility = rootProject.java_version
+  sourceCompatibility = javaVersion
+  targetCompatibility = javaVersion
 
   sourceSets {
     main {
@@ -52,7 +36,7 @@ allprojects {
 
   apply plugin: 'org.jetbrains.intellij'
   intellij {
-    version rootProject.idea_version
+    version ideaVersion
     pluginName 'Go'
     plugins 'coverage'
   }
@@ -61,16 +45,32 @@ allprojects {
 apply plugin: 'idea'
 idea {
   project {
-    jdkName = java_version
-    languageLevel = java_version
+    jdkName = javaVersion
+    languageLevel = javaVersion
   }
   module {
     generatedSourceDirs += file('gen')
   }
 }
 
+repositories { maven { url "http://dl.bintray.com/jetbrains/golang" } }
 dependencies {
   compile project(':utils'), project(':google-app-engine'), project(':google-app-engine:google-app-engine-yaml')
+  runtime "com.jetbrains:delve:${delveVersion}"
+}
+
+// delve packing
+project.afterEvaluate {
+  prepareSandbox << {
+    def libraries = "${it.destinationDir}/${intellij.pluginName}/lib/"
+    fileTree(dir: libraries, include: 'delve*').files.each { File file ->
+      copy {
+        from zipTree(file)
+        into libraries
+      }
+      file.delete()
+    }
+  }
 }
 
 test {
