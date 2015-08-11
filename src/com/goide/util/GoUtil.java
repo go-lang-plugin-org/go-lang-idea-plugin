@@ -17,6 +17,7 @@
 package com.goide.util;
 
 import com.goide.GoConstants;
+import com.goide.codeInsight.imports.GoCodeInsightSettings;
 import com.goide.project.GoBuildTargetSettings;
 import com.goide.psi.*;
 import com.goide.runconfig.testing.GoTestFinder;
@@ -69,6 +70,18 @@ public class GoUtil {
   public static boolean allowed(@NotNull PsiFile file) {
     GoBuildTargetSettings targetSettings = GoBuildTargetSettings.getInstance(file.getProject());
     return new GoBuildMatcher(targetSettings.getTargetSystemDescriptor(ModuleUtilCore.findModuleForPsiElement(file))).matchFile(file);
+  }
+
+  public static boolean isExcludedFile(@NotNull final GoFile file) {
+    return CachedValuesManager.getCachedValue(file, new CachedValueProvider<Boolean>() {
+      @Nullable
+      @Override
+      public Result<Boolean> compute() {
+        String importPath = file.getImportPath();
+        GoCodeInsightSettings settings = GoCodeInsightSettings.getInstance();
+        return Result.create(importPath != null && settings.isExcluded(importPath), file, settings);
+      }
+    });
   }
 
   @NotNull

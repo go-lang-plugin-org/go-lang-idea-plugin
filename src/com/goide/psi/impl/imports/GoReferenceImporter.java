@@ -19,11 +19,10 @@ package com.goide.psi.impl.imports;
 import com.goide.GoLanguage;
 import com.goide.codeInsight.imports.GoCodeInsightSettings;
 import com.goide.codeInsight.imports.GoImportPackageQuickFix;
-import com.goide.psi.GoElement;
+import com.goide.psi.GoCompositeElement;
 import com.goide.psi.impl.GoReference;
 import com.intellij.codeInsight.daemon.ReferenceImporter;
 import com.intellij.codeInsight.daemon.impl.CollectHighlightsUtil;
-import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -37,7 +36,7 @@ import java.util.List;
 public class GoReferenceImporter implements ReferenceImporter {
   @Override
   public boolean autoImportReferenceAtCursor(@NotNull Editor editor, @NotNull PsiFile file) {
-    if (!file.getViewProvider().getLanguages().contains(GoLanguage.INSTANCE) || !GoCodeInsightSettings.getInstance().isAddUnambiguousImportsOnTheFly()) {
+    if (!file.getViewProvider().getLanguages().contains(GoLanguage.INSTANCE)) {
       return false;
     }
 
@@ -49,7 +48,7 @@ public class GoReferenceImporter implements ReferenceImporter {
 
     List<PsiElement> elements = CollectHighlightsUtil.getElementsInRange(file, startOffset, endOffset);
     for (PsiElement element : elements) {
-      if (element instanceof GoElement) {
+      if (element instanceof GoCompositeElement) {
         for (PsiReference reference : element.getReferences()) {
           if (reference instanceof GoReference) {
             GoImportPackageQuickFix fix = new GoImportPackageQuickFix(reference);
@@ -66,7 +65,8 @@ public class GoReferenceImporter implements ReferenceImporter {
 
   @Override
   public boolean autoImportReferenceAt(@NotNull final Editor editor, @NotNull final PsiFile file, int offset) {
-    if (!file.getViewProvider().getLanguages().contains(GoLanguage.INSTANCE) || !GoCodeInsightSettings.getInstance().isAddUnambiguousImportsOnTheFly()) {
+    if (!file.getViewProvider().getLanguages().contains(GoLanguage.INSTANCE) ||
+        !GoCodeInsightSettings.getInstance().isAddUnambiguousImportsOnTheFly()) {
       return false;
     }
 
@@ -75,14 +75,7 @@ public class GoReferenceImporter implements ReferenceImporter {
       final GoImportPackageQuickFix fix = new GoImportPackageQuickFix(reference);
       final Project project = file.getProject();
       if (fix.isAvailable(project, editor, file)) {
-        WriteCommandAction.runWriteCommandAction(project, new Runnable() {
-          @Override
-          public void run() {
-            if (fix.isAvailable(project, editor, file)) {
-              fix.applyFix();
-            }
-          }
-        });
+        fix.applyFix();
         return true;
       }
     }

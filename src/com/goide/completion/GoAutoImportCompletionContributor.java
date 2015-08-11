@@ -17,6 +17,7 @@
 package com.goide.completion;
 
 import com.goide.GoConstants;
+import com.goide.codeInsight.imports.GoCodeInsightSettings;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.psi.impl.GoTypeReference;
@@ -89,13 +90,13 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         if (containingDirectory != null) {
           scope = new GoUtil.ExceptChildOfDirectory(containingDirectory, scope);
         }
-        Set<String> sortedKeys = sortMatching(matcher, StubIndex.getInstance().getAllKeys(ALL_PUBLIC_NAMES, project), ((GoFile)file));
+        Set<String> sortedKeys = sortAndFilterMatching(matcher, StubIndex.getInstance().getAllKeys(ALL_PUBLIC_NAMES, project), ((GoFile)file));
         for (String name : sortedKeys) {
           processor.setName(name);
           StubIndex.getInstance().processElements(ALL_PUBLIC_NAMES, name, project, scope, GoNamedElement.class, processor);
         }
       }
-
+      
       private CompletionResultSet adjustMatcher(@NotNull CompletionParameters parameters,
                                                 @NotNull CompletionResultSet result,
                                                 @NotNull PsiElement parent) {
@@ -106,7 +107,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
     });
   }
 
-  private static Set<String> sortMatching(@NotNull PrefixMatcher matcher, @NotNull Collection<String> names, @NotNull GoFile file) {
+  private static Set<String> sortAndFilterMatching(@NotNull PrefixMatcher matcher, @NotNull Collection<String> names, @NotNull GoFile file) {
     ProgressManager.checkCanceled();
     String prefix = matcher.getPrefix();
     if (prefix.isEmpty()) return ContainerUtil.newLinkedHashSet(names);
@@ -124,8 +125,11 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
 
     List<String> sorted = new ArrayList<String>();
     for (String name : names) {
-      if (matcher.prefixMatches(name) || packagesWithAliases.contains(substringBefore(name, '.'))) {
-        sorted.add(name);
+      String packageName = substringBefore(name, '.');
+      if (!packageName.isEmpty()) {
+        if ((matcher.prefixMatches(name) || packagesWithAliases.contains(packageName))) {
+          sorted.add(name);
+        }
       }
     }
 
@@ -153,7 +157,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
   @NotNull
   private static String substringBefore(@NotNull String s, char c) {
     int i = s.indexOf(c);
-    if (i == -1) return s;
+    if (i == -1) return "";
     return s.substring(0, i);
   }
   
@@ -165,7 +169,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
   
   private static boolean allowed(@NotNull GoNamedElement element) {
     GoFile file = element.getContainingFile();
-    if (!GoUtil.allowed(file)) return false;
+    if (!GoUtil.allowed(file) || GoUtil.isExcludedFile(file)) return false;
     PsiDirectory directory = file.getContainingDirectory();
     if (directory != null) {
       VirtualFile vFile = directory.getVirtualFile();

@@ -17,15 +17,20 @@
 package com.goide.codeInsight.imports;
 
 import com.intellij.openapi.components.*;
+import com.intellij.openapi.util.SimpleModificationTracker;
+import com.intellij.util.ArrayUtil;
 import com.intellij.util.xmlb.XmlSerializerUtil;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @State(
   name = "GoCodeInsightSettings",
   storages = @Storage(file = StoragePathMacros.APP_CONFIG + "/editor.codeinsight.xml")
 )
-public class GoCodeInsightSettings implements PersistentStateComponent<GoCodeInsightSettings> {
-  private boolean myAddUnambiguousImportsOnTheFly = true;
+public class GoCodeInsightSettings extends SimpleModificationTracker implements PersistentStateComponent<GoCodeInsightSettings> {
+  private boolean myShowImportPopup = true;
+  private boolean myAddUnambiguousImportsOnTheFly = false;
+  private String[] myExcludedPackages = ArrayUtil.EMPTY_STRING_ARRAY;
 
   public static GoCodeInsightSettings getInstance() {
     return ServiceManager.getService(GoCodeInsightSettings.class);
@@ -42,11 +47,35 @@ public class GoCodeInsightSettings implements PersistentStateComponent<GoCodeIns
     XmlSerializerUtil.copyBean(state, this);
   }
 
+  public boolean isShowImportPopup() {
+    return myShowImportPopup;
+  }
+
+  public void setShowImportPopup(boolean showImportPopup) {
+    myShowImportPopup = showImportPopup;
+  }
+
   public boolean isAddUnambiguousImportsOnTheFly() {
     return myAddUnambiguousImportsOnTheFly;
   }
 
   public void setAddUnambiguousImportsOnTheFly(boolean addUnambiguousImportsOnTheFly) {
     myAddUnambiguousImportsOnTheFly = addUnambiguousImportsOnTheFly;
+  }
+
+  public String[] getExcludedPackages() {
+    return myExcludedPackages;
+  }
+
+  public void setExcludedPackages(String... excludedPackages) {
+    myExcludedPackages = excludedPackages;
+    incModificationCount();
+  }
+
+  public boolean isExcluded(@NotNull String importPath) {
+    for (String excludedPath : myExcludedPackages) {
+      if (importPath.startsWith(excludedPath)) return true;
+    }
+    return false;
   }
 }

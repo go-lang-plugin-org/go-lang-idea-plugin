@@ -17,6 +17,7 @@
 package com.goide.completion;
 
 import com.goide.GoFileType;
+import com.goide.codeInsight.imports.GoCodeInsightSettings;
 import com.goide.psi.GoImportString;
 import com.goide.sdk.GoSdkUtil;
 import com.goide.util.GoUtil;
@@ -57,12 +58,13 @@ public class GoImportPathsCompletionProvider extends CompletionProvider<Completi
                                     boolean withLibraries) {
     if (module != null) {
       String contextImportPath = GoCompletionUtil.getContextImportPath(context);
+      GoCodeInsightSettings settings = GoCodeInsightSettings.getInstance();
       GlobalSearchScope scope = withLibraries ? GoUtil.moduleScope(module) : GoUtil.moduleScopeWithoutLibraries(module);
       for (VirtualFile file : FileTypeIndex.getFiles(GoFileType.INSTANCE, scope)) {
         VirtualFile parent = file.getParent();
         if (parent == null) continue;
         String importPath = GoSdkUtil.getPathRelativeToSdkAndLibraries(parent, module.getProject(), module);
-        if (!StringUtil.isEmpty(importPath) && !importPath.equals(contextImportPath)) {
+        if (!StringUtil.isEmpty(importPath) && !importPath.equals(contextImportPath) && !settings.isExcluded(importPath)) {
           result.addElement(GoCompletionUtil.createPackageLookupElement(importPath, contextImportPath, false));
         }
       }
