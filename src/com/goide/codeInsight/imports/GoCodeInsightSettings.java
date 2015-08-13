@@ -79,4 +79,8 @@ public class GoCodeInsightSettings extends SimpleModificationTracker implements 
     }
     return false;
   }
+
+  public void excludePath(@NotNull String importPath) {
+    setExcludedPackages(ArrayUtil.append(myExcludedPackages, importPath));
+  }
 }
