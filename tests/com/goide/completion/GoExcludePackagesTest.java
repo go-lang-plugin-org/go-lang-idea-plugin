@@ -32,15 +32,26 @@ public class GoExcludePackagesTest extends GoCodeInsightFixtureTestCase {
     return createMockProjectDescriptor();
   }
 
-  public void testExcludedPackageCompletion() {
+  private void doTestExcluded(String initial, String after, String... excludedPaths) {
     GoCodeInsightSettings settings = GoCodeInsightSettings.getInstance();
     String[] oldExcludedSettings = settings.getExcludedPackages();
-    settings.setExcludedPackages("fmt");
+    settings.setExcludedPackages(excludedPaths);
 
-    String initial = "package a; func b() {\n fmt.Printl<caret> \n}";
     myFixture.configureByText("a.go", initial);
     myFixture.completeBasic();
-    myFixture.checkResult(initial);
+    myFixture.checkResult(after);
+
     settings.setExcludedPackages(oldExcludedSettings);
+  }
+
+  public void testExcludedPathCompletion() {
+    String initial = "package a; func b() {\n fmt.Printl<caret> \n}";
+    doTestExcluded(initial, initial, "fmt");
+  }
+
+  public void testExcludedPathSameBeginning() {
+    String initial = "package a; func b() {\n fmt.Printl<caret> \n}";
+    String after = "package a;\nimport \"fmt\" func b() {\n fmt.Println(<caret>) \n}";
+    doTestExcluded(initial, after, "fm");
   }
 }

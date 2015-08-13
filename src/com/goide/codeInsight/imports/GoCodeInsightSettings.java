@@ -18,6 +18,7 @@ package com.goide.codeInsight.imports;
 
 import com.intellij.openapi.components.*;
 import com.intellij.openapi.util.SimpleModificationTracker;
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
@@ -74,7 +75,7 @@ public class GoCodeInsightSettings extends SimpleModificationTracker implements 
 
   public boolean isExcluded(@NotNull String importPath) {
     for (String excludedPath : myExcludedPackages) {
-      if (importPath.startsWith(excludedPath)) return true;
+      if (FileUtil.isAncestor(excludedPath, importPath, false)) return true;
     }
     return false;
   }
