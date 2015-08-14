@@ -16,6 +16,7 @@
 
 package com.goide.inspections;
 
+import com.goide.psi.GoForClause;
 import com.goide.psi.GoShortVarDeclaration;
 import com.goide.psi.GoVarDefinition;
 import com.goide.psi.GoVisitor;
@@ -24,6 +25,7 @@ import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,7 +40,7 @@ public class GoNoNewVariablesInspection extends GoInspectionBase {
       @Override
       public void visitShortVarDeclaration(@NotNull GoShortVarDeclaration o) {
         List<GoVarDefinition> list = o.getVarDefinitionList();
-        if (list.isEmpty()) return;
+        if (list.isEmpty() || PsiTreeUtil.getParentOfType(o, GoForClause.class) != null) return;
 
         GoVarDefinition first = ContainerUtil.getFirstItem(list);
         GoVarDefinition last = ContainerUtil.getLastItem(list);
