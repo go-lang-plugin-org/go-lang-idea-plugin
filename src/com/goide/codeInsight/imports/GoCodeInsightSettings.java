@@ -17,21 +17,16 @@
 package com.goide.codeInsight.imports;
 
 import com.intellij.openapi.components.*;
-import com.intellij.openapi.util.SimpleModificationTracker;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.util.ArrayUtil;
 import com.intellij.util.xmlb.XmlSerializerUtil;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @State(
-  name = "GoCodeInsightSettings",
+  name = "Go",
   storages = @Storage(file = StoragePathMacros.APP_CONFIG + "/editor.codeinsight.xml")
 )
-public class GoCodeInsightSettings extends SimpleModificationTracker implements PersistentStateComponent<GoCodeInsightSettings> {
+public class GoCodeInsightSettings implements PersistentStateComponent<GoCodeInsightSettings> {
   private boolean myShowImportPopup = true;
   private boolean myAddUnambiguousImportsOnTheFly = false;
-  private String[] myExcludedPackages = ArrayUtil.EMPTY_STRING_ARRAY;
 
   public static GoCodeInsightSettings getInstance() {
     return ServiceManager.getService(GoCodeInsightSettings.class);
@@ -62,25 +57,5 @@ public class GoCodeInsightSettings extends SimpleModificationTracker implements 
 
   public void setAddUnambiguousImportsOnTheFly(boolean addUnambiguousImportsOnTheFly) {
     myAddUnambiguousImportsOnTheFly = addUnambiguousImportsOnTheFly;
-  }
-
-  public String[] getExcludedPackages() {
-    return myExcludedPackages;
-  }
-
-  public void setExcludedPackages(String... excludedPackages) {
-    myExcludedPackages = excludedPackages;
-    incModificationCount();
-  }
-
-  public boolean isExcluded(@NotNull String importPath) {
-    for (String excludedPath : myExcludedPackages) {
-      if (FileUtil.isAncestor(excludedPath, importPath, false)) return true;
-    }
-    return false;
-  }
-
-  public void excludePath(@NotNull String importPath) {
-    setExcludedPackages(ArrayUtil.append(myExcludedPackages, importPath));
   }
 }

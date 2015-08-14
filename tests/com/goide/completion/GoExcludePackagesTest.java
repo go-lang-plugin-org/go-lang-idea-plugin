@@ -17,14 +17,24 @@
 package com.goide.completion;
 
 import com.goide.GoCodeInsightFixtureTestCase;
-import com.goide.codeInsight.imports.GoCodeInsightSettings;
+import com.goide.project.GoExcludedPathsSettings;
 import com.intellij.testFramework.LightProjectDescriptor;
+import com.intellij.util.ArrayUtil;
 
 public class GoExcludePackagesTest extends GoCodeInsightFixtureTestCase {
+  GoExcludedPathsSettings mySettings;
+
   @Override
   protected void setUp() throws Exception {
     super.setUp();
     setUpProjectSdk();
+    mySettings = GoExcludedPathsSettings.getInstance(getProject());
+  }
+
+  @Override
+  protected void tearDown() throws Exception {
+    GoExcludedPathsSettings.getInstance(getProject()).setExcludedPackages(ArrayUtil.EMPTY_STRING_ARRAY);
+    super.tearDown();
   }
 
   @Override
@@ -33,15 +43,11 @@ public class GoExcludePackagesTest extends GoCodeInsightFixtureTestCase {
   }
 
   private void doTestExcluded(String initial, String after, String... excludedPaths) {
-    GoCodeInsightSettings settings = GoCodeInsightSettings.getInstance();
-    String[] oldExcludedSettings = settings.getExcludedPackages();
-    settings.setExcludedPackages(excludedPaths);
+    mySettings.setExcludedPackages(excludedPaths);
 
     myFixture.configureByText("a.go", initial);
     myFixture.completeBasic();
     myFixture.checkResult(after);
-
-    settings.setExcludedPackages(oldExcludedSettings);
   }
 
   public void testExcludedPathCompletion() {

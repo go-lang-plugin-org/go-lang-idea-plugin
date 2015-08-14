@@ -73,6 +73,7 @@
                          bundle="do.not.touch.this.attribute"/>
 
     <projectService serviceImplementation="com.goide.project.GoBuildTargetSettings"/>
+    <projectService serviceImplementation="com.goide.project.GoExcludedPathsSettings"/>
 
     <defaultLiveTemplatesProvider implementation="com.goide.template.GoLiveTemplatesProvider"/>
     <liveTemplateContext implementation="com.goide.template.GoEverywhereContextType"/>
@@ -107,7 +108,6 @@
     <completion.contributor language="go" implementationClass="com.goide.completion.GoKeywordCompletionContributor"/>
     <completion.contributor language="go" order="last" implementationClass="com.goide.completion.GoAutoImportCompletionContributor"/>
     <referenceImporter implementation="com.goide.psi.impl.imports.GoReferenceImporter"/>
-    <autoImportOptionsProvider instance="com.goide.codeInsight.imports.GoAutoImportOptions" />
     <applicationService serviceImplementation="com.goide.codeInsight.imports.GoCodeInsightSettings" />
     <completion.confidence language="go" order="last" implementationClass="com.goide.completion.GoCompletionConfidence"/>
     <lookup.charFilter implementation="com.goide.completion.GoCharFilter"/>

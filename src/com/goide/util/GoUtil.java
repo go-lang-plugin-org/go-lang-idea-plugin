@@ -17,8 +17,8 @@
 package com.goide.util;
 
 import com.goide.GoConstants;
-import com.goide.codeInsight.imports.GoCodeInsightSettings;
 import com.goide.project.GoBuildTargetSettings;
+import com.goide.project.GoExcludedPathsSettings;
 import com.goide.psi.*;
 import com.goide.runconfig.testing.GoTestFinder;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
@@ -78,8 +78,8 @@ public class GoUtil {
       @Override
       public Result<Boolean> compute() {
         String importPath = file.getImportPath();
-        GoCodeInsightSettings settings = GoCodeInsightSettings.getInstance();
-        return Result.create(importPath != null && settings.isExcluded(importPath), file, settings);
+        GoExcludedPathsSettings excludedSettings = GoExcludedPathsSettings.getInstance(file.getProject());
+        return Result.create(importPath != null && excludedSettings.isExcluded(importPath), file, excludedSettings);
       }
     });
   }

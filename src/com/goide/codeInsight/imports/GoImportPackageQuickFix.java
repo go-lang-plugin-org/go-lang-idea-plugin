@@ -18,6 +18,7 @@ package com.goide.codeInsight.imports;
 
 import com.goide.GoIcons;
 import com.goide.completion.GoCompletionUtil;
+import com.goide.project.GoExcludedPathsSettings;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoReferenceExpression;
 import com.goide.psi.GoTypeReferenceExpression;
@@ -173,8 +174,9 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
       final GlobalSearchScope scope = GoUtil.moduleScope(element);
       PsiFile file = element.getContainingFile();
       final PsiDirectory parentDirectory = file != null ? file.getParent() : null;
-      Collection<GoFile> es = StubIndex.getElements(GoPackagesIndex.KEY, myPackageName, element.getProject(), scope, GoFile.class);
-      final GoCodeInsightSettings settings = GoCodeInsightSettings.getInstance();
+      Project project = element.getProject();
+      final GoExcludedPathsSettings excludedSettings = GoExcludedPathsSettings.getInstance(project);
+      Collection<GoFile> es = StubIndex.getElements(GoPackagesIndex.KEY, myPackageName, project, scope, GoFile.class);
       myPackagesToImport = sorted(skipNulls(map2Set(
         es,
         new Function<GoFile, String>() {
@@ -182,7 +184,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
           @Override
           public String fun(@NotNull GoFile file) {
             String importPath = parentDirectory == null || !parentDirectory.isEquivalentTo(file.getParent()) ? file.getImportPath() : null;
-            return importPath != null && !settings.isExcluded(importPath) ? importPath : null;
+            return importPath != null && !excludedSettings.isExcluded(importPath) ? importPath : null;
           }
         }
       )), new MyImportsComparator(element));
