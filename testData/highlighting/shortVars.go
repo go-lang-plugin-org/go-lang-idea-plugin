@@ -66,3 +66,9 @@ func Test2() (err error) {
     
     return err
 }
+
+func <warning>shadowing</warning>(i int) {
+    for i := 1; i < 3; i++ {
+        _ = i
+    }
+}
