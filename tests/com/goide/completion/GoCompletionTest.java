@@ -191,7 +191,7 @@ public class GoCompletionTest extends GoCompletionTestBase {
   }
 
   public void testTypeKeywordsInsideParentheses() {
-    myFixture.testCompletionVariants(getTestName(true) + ".go", "chan", "map");
+    myFixture.testCompletionVariants(getTestName(true) + ".go", "chan", "map", "interface", "struct");
   }
 
   public void testSelectKeywordInsertHandler() {
@@ -203,6 +203,14 @@ public class GoCompletionTest extends GoCompletionTestBase {
   }
 
   public void testTypeKeywordDoNotInsertBraces() {
+    doTestCompletion();
+  }
+  
+  public void testInterfaceKeywordAsFunctionParameter() {
+    doTestCompletion();
+  }
+  
+  public void testStructKeywordAsFunctionParameter() {
     doTestCompletion();
   }
 
@@ -256,6 +264,10 @@ public class GoCompletionTest extends GoCompletionTestBase {
   }
 
   public void testFunctionInDefer() {
+    doTestCompletion();
+  }
+  
+  public void testFunctionInMethodInvocation() {
     doTestCompletion();
   }
 
