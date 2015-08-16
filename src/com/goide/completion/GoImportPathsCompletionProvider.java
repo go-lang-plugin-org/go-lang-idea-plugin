@@ -17,6 +17,7 @@
 package com.goide.completion;
 
 import com.goide.GoFileType;
+import com.goide.project.GoExcludedPathsSettings;
 import com.goide.psi.GoImportString;
 import com.goide.sdk.GoSdkUtil;
 import com.goide.util.GoUtil;
@@ -25,6 +26,7 @@ import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -56,13 +58,15 @@ public class GoImportPathsCompletionProvider extends CompletionProvider<Completi
                                     @Nullable PsiElement context,
                                     boolean withLibraries) {
     if (module != null) {
+      Project project = module.getProject();
       String contextImportPath = GoCompletionUtil.getContextImportPath(context);
+      GoExcludedPathsSettings excludedSettings = GoExcludedPathsSettings.getInstance(project);
       GlobalSearchScope scope = withLibraries ? GoUtil.moduleScope(module) : GoUtil.moduleScopeWithoutLibraries(module);
       for (VirtualFile file : FileTypeIndex.getFiles(GoFileType.INSTANCE, scope)) {
         VirtualFile parent = file.getParent();
         if (parent == null) continue;
-        String importPath = GoSdkUtil.getPathRelativeToSdkAndLibraries(parent, module.getProject(), module);
-        if (!StringUtil.isEmpty(importPath) && !importPath.equals(contextImportPath)) {
+        String importPath = GoSdkUtil.getPathRelativeToSdkAndLibraries(parent, project, module);
+        if (!StringUtil.isEmpty(importPath) && !importPath.equals(contextImportPath) && !excludedSettings.isExcluded(importPath)) {
           result.addElement(GoCompletionUtil.createPackageLookupElement(importPath, contextImportPath, false));
         }
       }

@@ -106,7 +106,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
     });
   }
 
-  private static Set<String> sortMatching(@NotNull PrefixMatcher matcher, @NotNull Collection<String> names, @NotNull GoFile file) {
+private static Set<String> sortMatching(@NotNull PrefixMatcher matcher, @NotNull Collection<String> names, @NotNull GoFile file) {
     ProgressManager.checkCanceled();
     String prefix = matcher.getPrefix();
     if (prefix.isEmpty()) return ContainerUtil.newLinkedHashSet(names);
@@ -122,7 +122,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
       }
     }
 
-    List<String> sorted = new ArrayList<String>();
+  List<String> sorted = ContainerUtil.newArrayList();
     for (String name : names) {
       if (matcher.prefixMatches(name) || packagesWithAliases.contains(substringBefore(name, '.'))) {
         sorted.add(name);
@@ -165,7 +165,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
   
   private static boolean allowed(@NotNull GoNamedElement element) {
     GoFile file = element.getContainingFile();
-    if (!GoUtil.allowed(file)) return false;
+    if (!GoUtil.allowed(file) || GoUtil.isExcludedFile(file)) return false;
     PsiDirectory directory = file.getContainingDirectory();
     if (directory != null) {
       VirtualFile vFile = directory.getVirtualFile();
