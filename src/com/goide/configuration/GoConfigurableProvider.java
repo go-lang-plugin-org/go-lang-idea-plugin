@@ -39,7 +39,7 @@ public class GoConfigurableProvider extends ConfigurableProvider {
     Configurable librariesConfigurable = new GoLibrariesConfigurableProvider(myProject).createConfigurable();
     Configurable sdkConfigurable = GoSdkService.getInstance(myProject).createSdkConfigurable();
     Configurable buildFlagsConfigurable = new GoBuildTargetConfigurable(myProject, false);
-    Configurable autoImportConfigurable = new GoAutoImportConfigurable(myProject);
+    Configurable autoImportConfigurable = new GoAutoImportConfigurable(myProject, false);
     if (sdkConfigurable != null) {
       return new GoCompositeConfigurable(sdkConfigurable, buildFlagsConfigurable, librariesConfigurable, autoImportConfigurable);
     }

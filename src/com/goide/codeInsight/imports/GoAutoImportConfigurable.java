@@ -43,12 +43,14 @@ public class GoAutoImportConfigurable implements SearchableConfigurable {
 
   @NotNull private GoCodeInsightSettings myCodeInsightSettings;
   @NotNull private GoExcludedPathsSettings myExcludedSettings;
-  private boolean myIsDefaultProject;
+  private final boolean myIsDefaultProject;
+  private final boolean myIsDialog;
 
-  public GoAutoImportConfigurable(@NotNull Project project) {
+  public GoAutoImportConfigurable(@NotNull Project project, boolean dialogMode) {
     myCodeInsightSettings = GoCodeInsightSettings.getInstance();
     myExcludedSettings = GoExcludedPathsSettings.getInstance(project);
     myIsDefaultProject = project.isDefault();
+    myIsDialog = dialogMode;
   }
 
   @Nullable
@@ -71,6 +73,7 @@ public class GoAutoImportConfigurable implements SearchableConfigurable {
 
     JPanel result = new JPanel(new BorderLayout());
     result.add(builder.getPanel(), BorderLayout.NORTH);
+    if (myIsDialog) result.setPreferredSize(new Dimension(300, -1));
     return result;
   }
 
