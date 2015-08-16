@@ -69,7 +69,8 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
   @Override
   public boolean canRun(@NotNull String executorId, @NotNull RunProfile profile) {
     if (profile instanceof GoApplicationConfiguration) {
-      return DefaultRunExecutor.EXECUTOR_ID.equals(executorId) || DefaultDebugExecutor.EXECUTOR_ID.equals(executorId);
+      return DefaultRunExecutor.EXECUTOR_ID.equals(executorId) 
+             || DefaultDebugExecutor.EXECUTOR_ID.equals(executorId) && !DlvDebugProcess.isDlvDisabled();
     }
     return false;
   }

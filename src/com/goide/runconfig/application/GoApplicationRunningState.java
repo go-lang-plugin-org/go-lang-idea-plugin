@@ -16,7 +16,6 @@
 
 package com.goide.runconfig.application;
 
-import com.goide.dlv.DlvDebugProcess;
 import com.goide.runconfig.GoRunningState;
 import com.goide.util.GoExecutor;
 import com.goide.util.GoHistoryProcessListener;
@@ -59,7 +58,6 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
   }
 
   public boolean isDebug() {
-    if (DlvDebugProcess.isDlvDisabled()) return false;
     return DefaultDebugExecutor.EXECUTOR_ID.equals(getEnvironment().getExecutor().getId());
   }
 
