@@ -26,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 )
 public class GoCodeInsightSettings implements PersistentStateComponent<GoCodeInsightSettings> {
   private boolean myShowImportPopup = true;
-  private boolean myAddUnambiguousImportsOnTheFly = false;
+  private boolean myAddUnambiguousImportsOnTheFly = true;
 
   public static GoCodeInsightSettings getInstance() {
     return ServiceManager.getService(GoCodeInsightSettings.class);
