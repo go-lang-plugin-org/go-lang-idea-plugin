@@ -187,7 +187,7 @@ public class GoCompletionTest extends GoCompletionTestBase {
   }
   
   public void testExpressionKeywords() {
-    myFixture.testCompletionVariants(getTestName(true) + ".go", "struct", "map", "main");
+    myFixture.testCompletionVariants(getTestName(true) + ".go", "struct", "map", "main", "func");
   }
 
   public void testTypeKeywordsInsideParentheses() {
@@ -267,7 +267,11 @@ public class GoCompletionTest extends GoCompletionTestBase {
     doTestCompletion();
   }
   
-  public void testFunctionInMethodInvocation() {
+  public void testFunctionAsFunctionArgument() {
+    doTestCompletion();
+  }
+  
+  public void testFunctionAsVariableValue() {
     doTestCompletion();
   }
 
