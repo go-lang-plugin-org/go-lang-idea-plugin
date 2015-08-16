@@ -58,7 +58,6 @@ import java.net.InetSocketAddress;
 
 public class GoBuildingRunner extends AsyncGenericProgramRunner {
   private static final String ID = "GoBuildingRunner";
-  @Nullable private ExecutionResult myExecutionResult;
 
   @NotNull
   @Override
@@ -165,12 +164,14 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
       @Override
       public Promise<RunProfileStarter> fun(RunProfileStarter starter) {
         try {
+          ExecutionResult executionResult = null;
           if (starter != null) {
             ((GoApplicationRunningState)state).setHistoryProcessHandler(((MyStarter)starter).myHistoryProcessListener);
             ((GoApplicationRunningState)state).setOutputFilePath(((MyStarter)starter).myOutputFilePath);
-            myExecutionResult = state.execute(environment.getExecutor(), GoBuildingRunner.this);
+            executionResult = state.execute(environment.getExecutor(), GoBuildingRunner.this);
+            ((MyStarter)starter).setExecutionResult(executionResult);
           }
-          return myExecutionResult != null ? Promise.resolve(starter) : Promise.<RunProfileStarter>reject("Cannot run debugger");
+          return executionResult != null ? Promise.resolve(starter) : Promise.<RunProfileStarter>reject("Cannot run debugger");
         }
         catch (ExecutionException e) {
           return Promise.reject(e);
@@ -182,10 +183,16 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
   private class MyStarter extends RunProfileStarter {
     private final String myOutputFilePath;
     private final GoHistoryProcessListener myHistoryProcessListener;
+    @Nullable private ExecutionResult myExecutionResult;
+
 
     private MyStarter(@NotNull String outputFilePath, @NotNull GoHistoryProcessListener historyProcessListener) {
       myOutputFilePath = outputFilePath;
       myHistoryProcessListener = historyProcessListener;
+    }
+
+    public void setExecutionResult(@Nullable ExecutionResult executionResult) {
+      myExecutionResult = executionResult;
     }
 
     @Nullable
