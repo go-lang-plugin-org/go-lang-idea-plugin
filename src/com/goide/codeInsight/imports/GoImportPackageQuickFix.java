@@ -75,28 +75,15 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
 
   @Override
   public boolean showHint(@NotNull final Editor editor) {
+    if (isPerformed) return false;
+    if (!GoCodeInsightSettings.getInstance().isShowImportPopup()) return false;
+    if (HintManager.getInstance().hasShownHintsThatWillHideByOtherHint(true)) return false;
+    if (ApplicationManager.getApplication().isUnitTestMode()) return false;
+    
     final PsiElement element = getStartElement();
-    if (element == null || !element.isValid()) {
-      return false;
-    }
+    if (element == null || !element.isValid()) return false;
 
     if (myReference.resolve() != null) return false;
-
-    if (isPerformed) {
-      return false;
-    }
-
-    if (!GoCodeInsightSettings.getInstance().isShowImportPopup()) {
-      return false;
-    }
-
-    if (HintManager.getInstance().hasShownHintsThatWillHideByOtherHint(true)) {
-      return false;
-    }
-
-    if (ApplicationManager.getApplication().isUnitTestMode()) {
-      return false;
-    }
 
     final Collection<String> packagesToImport = getPackagesToImport(element);
     if (packagesToImport.isEmpty()) {

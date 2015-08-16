@@ -50,12 +50,11 @@ public class GoExcludePathLookupActionProvider implements LookupActionProvider {
   }
 
   private static List<String> getPaths(String importPath) {
-    List<String> result = ContainerUtil.newArrayList();
-    result.add(importPath);
-    for (int i = importPath.length() - 1; i >= 0; i--) {
-      if (importPath.charAt(i) == '/') {
-        result.add(importPath.substring(0, i));
-      }
+    List<String> result = ContainerUtil.newArrayList(importPath);
+    int i;
+    while ((i = importPath.lastIndexOf('/')) > 0) {
+      importPath = importPath.substring(0, i);
+      result.add(importPath);
     }
     return result;
   }

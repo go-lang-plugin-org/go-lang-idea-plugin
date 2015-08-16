@@ -63,16 +63,7 @@ public class GoAutoImportConfigurable implements SearchableConfigurable {
     myExcludePackagesList = new JBList();
     JComponent excludedPanel = new JPanel(new BorderLayout());
     excludedPanel.add(ToolbarDecorator.createDecorator(myExcludePackagesList)
-                        .setAddAction(new AnActionButtonRunnable() {
-                          @Override
-                          public void run(AnActionButton button) {
-                            String packageName =
-                              Messages.showInputDialog("Enter the import path to exclude from auto-import and completion:",
-                                                       "Exclude Import Path",
-                                                       Messages.getWarningIcon());
-                            addExcludedPackage(packageName);
-                          }
-                        }).disableUpDownActions().createPanel(), BorderLayout.CENTER);
+                        .setAddAction(new AddImportExclusionAction()).disableUpDownActions().createPanel(), BorderLayout.CENTER);
     excludedPanel.setBorder(IdeBorderFactory.createTitledBorder(ApplicationBundle.message("exclude.from.completion.group"), true));
     if (!myIsDefaultProject) {
       builder.addComponent(excludedPanel);
@@ -85,18 +76,6 @@ public class GoAutoImportConfigurable implements SearchableConfigurable {
 
   public void focusList() {
     myExcludePackagesList.setSelectedIndex(0);
-    myExcludePackagesList.requestFocus();
-  }
-
-  private void addExcludedPackage(@Nullable String packageName) {
-    if (StringUtil.isEmpty(packageName)) return;
-    int index = -Arrays.binarySearch(myExcludePackagesModel.toArray(), packageName) - 1;
-    if (index >= 0) {
-      myExcludePackagesModel.add(index, packageName);
-      ListScrollingUtil.ensureIndexIsVisible(myExcludePackagesList, index, 0);
-    }
-    myExcludePackagesList.clearSelection();
-    myExcludePackagesList.setSelectedValue(packageName, true);
     myExcludePackagesList.requestFocus();
   }
 
@@ -164,5 +143,28 @@ public class GoAutoImportConfigurable implements SearchableConfigurable {
     UIUtil.dispose(myExcludePackagesList);
     myExcludePackagesList = null;
     myExcludePackagesModel = null;
+  }
+
+  private class AddImportExclusionAction implements AnActionButtonRunnable {
+    @Override
+    public void run(AnActionButton button) {
+      String packageName =
+        Messages.showInputDialog("Enter the import path to exclude from auto-import and completion:",
+                                 "Exclude Import Path",
+                                 Messages.getWarningIcon());
+      addExcludedPackage(packageName);
+    }
+
+    private void addExcludedPackage(@Nullable String packageName) {
+      if (StringUtil.isEmpty(packageName)) return;
+      int index = -Arrays.binarySearch(myExcludePackagesModel.toArray(), packageName) - 1;
+      if (index >= 0) {
+        myExcludePackagesModel.add(index, packageName);
+        ListScrollingUtil.ensureIndexIsVisible(myExcludePackagesList, index, 0);
+      }
+      myExcludePackagesList.clearSelection();
+      myExcludePackagesList.setSelectedValue(packageName, true);
+      myExcludePackagesList.requestFocus();
+    }
   }
 }
