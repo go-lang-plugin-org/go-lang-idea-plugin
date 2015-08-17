@@ -167,6 +167,7 @@
 
     <!-- debugger -->
     <xdebugger.breakpointType implementation="com.goide.debugger.ideagdb.debug.breakpoints.GdbBreakpointType"/>
+    <xdebugger.breakpointType implementation="com.goide.dlv.breakpoint.DlvBreakpointType"/>
 
     <!-- temporary debugger configurations -->
     <!-- todo: move it to run/test configurations -->

@@ -19,13 +19,16 @@ package com.goide.runconfig.application;
 import com.goide.runconfig.GoRunningState;
 import com.goide.util.GoExecutor;
 import com.goide.util.GoHistoryProcessListener;
+import com.goide.util.GoUtil;
 import com.intellij.execution.ExecutionException;
+import com.intellij.execution.executors.DefaultDebugExecutor;
 import com.intellij.execution.process.ProcessAdapter;
 import com.intellij.execution.process.ProcessEvent;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.util.Key;
+import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.text.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,6 +39,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class GoApplicationRunningState extends GoRunningState<GoApplicationConfiguration> {
   private String myOutputFilePath;
   @Nullable private GoHistoryProcessListener myHistoryProcessHandler;
+  private int myDebugPort = 59090;
 
   public GoApplicationRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module,
                                    @NotNull GoApplicationConfiguration configuration) {
@@ -52,6 +56,10 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
   @NotNull
   public String getGoBuildParams() {
     return myConfiguration.getGoToolParams();
+  }
+
+  public boolean isDebug() {
+    return DefaultDebugExecutor.EXECUTOR_ID.equals(getEnvironment().getExecutor().getId());
   }
 
   @NotNull
@@ -88,6 +96,15 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
 
   @Override
   protected GoExecutor patchExecutor(@NotNull GoExecutor executor) throws ExecutionException {
+    if (isDebug()) {
+      File dlv = new File(GoUtil.getPlugin().getPath(), "lib/dlv/" + (SystemInfo.isMac ? "mac" : "linux") + "/dlv");
+      if (dlv.exists() && !dlv.canExecute()) {
+        //noinspection ResultOfMethodCallIgnored
+        dlv.setExecutable(true, false);
+      }
+      return executor.withExePath(dlv.getAbsolutePath())
+        .withParameters("--listen=localhost:" + myDebugPort, "--headless=true", "run", myOutputFilePath, "--");
+    }
     return executor.withExePath(myOutputFilePath);
   }
 
@@ -97,5 +114,9 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
 
   public void setHistoryProcessHandler(@Nullable GoHistoryProcessListener historyProcessHandler) {
     myHistoryProcessHandler = historyProcessHandler;
+  }
+
+  public void setDebugPort(int debugPort) {
+    myDebugPort = debugPort;
   }
 }
