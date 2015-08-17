@@ -39,6 +39,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class GoApplicationRunningState extends GoRunningState<GoApplicationConfiguration> {
   private String myOutputFilePath;
   @Nullable private GoHistoryProcessListener myHistoryProcessHandler;
+  private int myDebugPort = 59090;
 
   public GoApplicationRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module,
                                    @NotNull GoApplicationConfiguration configuration) {
@@ -98,10 +99,11 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
     if (isDebug()) {
       File dlv = new File(GoUtil.getPlugin().getPath(), "lib/dlv/" + (SystemInfo.isMac ? "mac" : "linux") + "/dlv");
       if (dlv.exists() && !dlv.canExecute()) {
-        dlv.setExecutable(true, false); // todo
+        //noinspection ResultOfMethodCallIgnored
+        dlv.setExecutable(true, false);
       }
       return executor.withExePath(dlv.getAbsolutePath())
-        .withParameters("--listen=localhost:59090", "--headless=true", "run", myOutputFilePath, "--");
+        .withParameters("--listen=localhost:" + myDebugPort, "--headless=true", "run", myOutputFilePath, "--");
     }
     return executor.withExePath(myOutputFilePath);
   }
@@ -112,5 +114,9 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
 
   public void setHistoryProcessHandler(@Nullable GoHistoryProcessListener historyProcessHandler) {
     myHistoryProcessHandler = historyProcessHandler;
+  }
+
+  public void setDebugPort(int debugPort) {
+    myDebugPort = debugPort;
   }
 }

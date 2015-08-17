@@ -38,6 +38,7 @@ import com.intellij.execution.runners.RunContentBuilder;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.util.io.StreamUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.net.NetUtils;
@@ -54,6 +55,7 @@ import org.jetbrains.debugger.connection.RemoteVmConnection;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.ServerSocket;
 
 public class GoBuildingRunner extends AsyncGenericProgramRunner {
   private static final String ID = "GoBuildingRunner";
@@ -172,9 +174,11 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
     public RunContentDescriptor execute(@NotNull final RunProfileState state, @NotNull final ExecutionEnvironment env)
       throws ExecutionException {
       if (state instanceof GoApplicationRunningState) {
+        final int port = findFreePort();
         FileDocumentManager.getInstance().saveAllDocuments();
         ((GoApplicationRunningState)state).setHistoryProcessHandler(myHistoryProcessListener);
         ((GoApplicationRunningState)state).setOutputFilePath(myOutputFilePath);
+        ((GoApplicationRunningState)state).setDebugPort(port);
 
         // start debugger
         final ExecutionResult executionResult = state.execute(env.getExecutor(), GoBuildingRunner.this);
@@ -188,7 +192,7 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
           public XDebugProcess start(@NotNull XDebugSession session) throws ExecutionException {
             RemoteVmConnection connection = new DlvRemoteVmConnection();
             DlvDebugProcess process = new DlvDebugProcess(session, connection, executionResult);
-            connection.open(new InetSocketAddress(NetUtils.getLoopbackAddress(), 59090));
+            connection.open(new InetSocketAddress(NetUtils.getLoopbackAddress(), port));
             return process;
           }
         }).getRunContentDescriptor();
@@ -220,5 +224,21 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
       }
       return null;
     }
+  }
+
+  private static int findFreePort() {
+    ServerSocket socket = null;
+    try {
+      //noinspection SocketOpenedButNotSafelyClosed
+      socket = new ServerSocket(0);
+      socket.setReuseAddress(true);
+      return socket.getLocalPort();
+    }
+    catch (Exception ignore) {
+    }
+    finally {
+      StreamUtil.closeStream(socket);
+    }
+    throw new IllegalStateException("Could not find a free TCP/IP port to start embedded Jetty HTTP Server on");
   }
 }
