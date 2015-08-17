@@ -47,7 +47,6 @@ import com.intellij.xdebugger.XDebugSession;
 import com.intellij.xdebugger.XDebuggerManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.concurrency.AsyncFunction;
 import org.jetbrains.concurrency.AsyncPromise;
 import org.jetbrains.concurrency.Promise;
 import org.jetbrains.debugger.connection.RemoteVmConnection;
@@ -68,7 +67,7 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
   @Override
   public boolean canRun(@NotNull String executorId, @NotNull RunProfile profile) {
     if (profile instanceof GoApplicationConfiguration) {
-      return DefaultRunExecutor.EXECUTOR_ID.equals(executorId) 
+      return DefaultRunExecutor.EXECUTOR_ID.equals(executorId)
              || DefaultDebugExecutor.EXECUTOR_ID.equals(executorId) && !DlvDebugProcess.isDlvDisabled();
     }
     return false;
@@ -110,7 +109,7 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
     if (!prepareFile(outputFile)) {
       throw new ExecutionException("Cannot make temporary file executable " + outputFile.getAbsolutePath());
     }
-    
+
     FileDocumentManager.getInstance().saveAllDocuments();
 
     final AsyncPromise<RunProfileStarter> buildingPromise = new AsyncPromise<RunProfileStarter>();
@@ -119,7 +118,7 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
       .withParameters("build")
       .withParameterString(((GoApplicationRunningState)state).getGoBuildParams())
       .withParameters("-o", outputFile.getAbsolutePath())
-      .withParameters(((GoApplicationRunningState)state).isDebug() ? new String[] {"-gcflags", "-N -l"} : ArrayUtil.EMPTY_STRING_ARRAY)
+      .withParameters(((GoApplicationRunningState)state).isDebug() ? new String[]{"-gcflags", "-N -l"} : ArrayUtil.EMPTY_STRING_ARRAY)
       .withParameters(((GoApplicationRunningState)state).getTarget())
       .showNotifications(true)
       .showOutputOnError()
@@ -132,7 +131,12 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
         public void processTerminated(ProcessEvent event) {
           super.processTerminated(event);
           if (event.getExitCode() == 0) {
-            buildingPromise.setResult(new MyStarter(outputFile.getAbsolutePath(), historyProcessListener));
+            if (((GoApplicationRunningState)state).isDebug()) {
+              buildingPromise.setResult(new MyDebugStarter(outputFile.getAbsolutePath(), historyProcessListener));
+            }
+            else {
+              buildingPromise.setResult(new MyRunStarter(outputFile.getAbsolutePath(), historyProcessListener));
+            }
           }
           else {
             buildingPromise.setResult(null);
@@ -140,9 +144,7 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
           }
         }
       }).executeWithProgress(false);
-
-
-    return ((GoApplicationRunningState)state).isDebug() ? prepareDebugger(environment, state, buildingPromise) : buildingPromise;
+    return buildingPromise;
   }
 
   private static boolean prepareFile(@NotNull File file) {
@@ -154,71 +156,67 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
     }
     return file.setExecutable(true);
   }
-
-  @NotNull
-  private Promise<RunProfileStarter> prepareDebugger(@NotNull final ExecutionEnvironment environment,
-                                                     @NotNull final RunProfileState state,
-                                                     AsyncPromise<RunProfileStarter> promise) {
-    return promise.then(new AsyncFunction<RunProfileStarter, RunProfileStarter>() {
-      @NotNull
-      @Override
-      public Promise<RunProfileStarter> fun(RunProfileStarter starter) {
-        try {
-          ExecutionResult executionResult = null;
-          if (starter != null) {
-            ((GoApplicationRunningState)state).setHistoryProcessHandler(((MyStarter)starter).myHistoryProcessListener);
-            ((GoApplicationRunningState)state).setOutputFilePath(((MyStarter)starter).myOutputFilePath);
-            executionResult = state.execute(environment.getExecutor(), GoBuildingRunner.this);
-            ((MyStarter)starter).setExecutionResult(executionResult);
-          }
-          return executionResult != null ? Promise.resolve(starter) : Promise.<RunProfileStarter>reject("Cannot run debugger");
-        }
-        catch (ExecutionException e) {
-          return Promise.reject(e);
-        }
-      }
-    });
-  }
-
-  private class MyStarter extends RunProfileStarter {
+  
+  private class MyDebugStarter extends RunProfileStarter {
     private final String myOutputFilePath;
     private final GoHistoryProcessListener myHistoryProcessListener;
-    @Nullable private ExecutionResult myExecutionResult;
 
 
-    private MyStarter(@NotNull String outputFilePath, @NotNull GoHistoryProcessListener historyProcessListener) {
+    private MyDebugStarter(@NotNull String outputFilePath, @NotNull GoHistoryProcessListener historyProcessListener) {
       myOutputFilePath = outputFilePath;
       myHistoryProcessListener = historyProcessListener;
     }
 
-    public void setExecutionResult(@Nullable ExecutionResult executionResult) {
-      myExecutionResult = executionResult;
-    }
-
     @Nullable
     @Override
-    public RunContentDescriptor execute(@NotNull final RunProfileState state, @NotNull final ExecutionEnvironment env) throws ExecutionException {
+    public RunContentDescriptor execute(@NotNull final RunProfileState state, @NotNull final ExecutionEnvironment env)
+      throws ExecutionException {
       if (state instanceof GoApplicationRunningState) {
         FileDocumentManager.getInstance().saveAllDocuments();
         ((GoApplicationRunningState)state).setHistoryProcessHandler(myHistoryProcessListener);
         ((GoApplicationRunningState)state).setOutputFilePath(myOutputFilePath);
 
-        if (((GoApplicationRunningState)state).isDebug()) {
-          return XDebuggerManager.getInstance(env.getProject()).startSession(env, new XDebugProcessStarter() {
-            @NotNull
-            @Override
-            public XDebugProcess start(@NotNull XDebugSession session) throws ExecutionException {
-              RemoteVmConnection connection = new DlvRemoteVmConnection();
-              DlvDebugProcess process = new DlvDebugProcess(session, connection, myExecutionResult);
-              connection.open(new InetSocketAddress(NetUtils.getLoopbackAddress(), 59090));
-              return process;
-            }
-          }).getRunContentDescriptor();
+        // start debugger
+        final ExecutionResult executionResult = state.execute(env.getExecutor(), GoBuildingRunner.this);
+        if (executionResult == null) {
+          throw new ExecutionException("Cannot run debugger");
         }
-        else {
-          ExecutionResult executionResult = state.execute(env.getExecutor(), GoBuildingRunner.this);
-          return executionResult != null ? new RunContentBuilder(executionResult, env).showRunContent(env.getContentToReuse()) : null;
-        }
+      
+        return XDebuggerManager.getInstance(env.getProject()).startSession(env, new XDebugProcessStarter() {
+          @NotNull
+          @Override
+          public XDebugProcess start(@NotNull XDebugSession session) throws ExecutionException {
+            RemoteVmConnection connection = new DlvRemoteVmConnection();
+            DlvDebugProcess process = new DlvDebugProcess(session, connection, executionResult);
+            connection.open(new InetSocketAddress(NetUtils.getLoopbackAddress(), 59090));
+            return process;
+          }
+        }).getRunContentDescriptor();
+      }
+      return null;
+    }
+  }
+
+  private class MyRunStarter extends RunProfileStarter {
+    private final String myOutputFilePath;
+    private final GoHistoryProcessListener myHistoryProcessListener;
+
+
+    private MyRunStarter(@NotNull String outputFilePath, @NotNull GoHistoryProcessListener historyProcessListener) {
+      myOutputFilePath = outputFilePath;
+      myHistoryProcessListener = historyProcessListener;
+    }
+
+    @Nullable
+    @Override
+    public RunContentDescriptor execute(@NotNull final RunProfileState state, @NotNull final ExecutionEnvironment env)
+      throws ExecutionException {
+      if (state instanceof GoApplicationRunningState) {
+        FileDocumentManager.getInstance().saveAllDocuments();
+        ((GoApplicationRunningState)state).setHistoryProcessHandler(myHistoryProcessListener);
+        ((GoApplicationRunningState)state).setOutputFilePath(myOutputFilePath);
+        ExecutionResult executionResult = state.execute(env.getExecutor(), GoBuildingRunner.this);
+        return executionResult != null ? new RunContentBuilder(executionResult, env).showRunContent(env.getContentToReuse()) : null;
       }
       return null;
     }
