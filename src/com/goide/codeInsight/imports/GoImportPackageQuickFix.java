@@ -31,7 +31,7 @@ import com.intellij.codeInspection.HintAction;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.WriteCommandAction;
+import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.keymap.KeymapUtil;
 import com.intellij.openapi.project.Project;
@@ -79,7 +79,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
     if (!GoCodeInsightSettings.getInstance().isShowImportPopup()) return false;
     if (HintManager.getInstance().hasShownHintsThatWillHideByOtherHint(true)) return false;
     if (ApplicationManager.getApplication().isUnitTestMode()) return false;
-    
+
     final PsiElement element = getStartElement();
     if (element == null || !element.isValid()) return false;
 
@@ -209,12 +209,17 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
 
   private void perform(@NotNull final PsiFile file, @Nullable final String pathToImport) {
     if (file instanceof GoFile && pathToImport != null) {
-      WriteCommandAction.runWriteCommandAction(file.getProject(), new Runnable() {
+      CommandProcessor.getInstance().runUndoTransparentAction(new Runnable() {
         @Override
         public void run() {
-          if (!isAvailable()) return;
-          isPerformed = true;
-          ((GoFile)file).addImport(pathToImport, null);
+          ApplicationManager.getApplication().runWriteAction(new Runnable() {
+            @Override
+            public void run() {
+              if (!isAvailable()) return;
+              isPerformed = true;
+              ((GoFile)file).addImport(pathToImport, null);
+            }
+          });
         }
       });
     }
