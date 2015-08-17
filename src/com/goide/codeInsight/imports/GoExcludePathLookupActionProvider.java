@@ -27,6 +27,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.util.Consumer;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
@@ -37,9 +38,8 @@ public class GoExcludePathLookupActionProvider implements LookupActionProvider {
   @Override
   public void fillActions(LookupElement element, final Lookup lookup, Consumer<LookupElementAction> consumer) {
     PsiElement psiElement = element.getPsiElement();
-    if (psiElement == null) return;
-
-    String importPath = ((GoFile)psiElement.getContainingFile()).getImportPath();
+    PsiFile file = psiElement != null ? psiElement.getContainingFile() : null;
+    String importPath = file instanceof GoFile ? ((GoFile)file).getImportPath() : null;
     if (importPath != null) {
       Project project = psiElement.getProject();
       for (String path : getPaths(importPath)) {
