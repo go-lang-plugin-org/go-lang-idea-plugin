@@ -58,7 +58,9 @@ public class GoImportOptimizer implements ImportOptimizer {
     return new Runnable() {
       @Override
       public void run() {
-        commit(file);
+        if (!importEntriesToDelete.isEmpty() && !importIdentifiersToDelete.isEmpty()) {
+          commit(file);
+        }
 
         for (PsiElement importEntry : importEntriesToDelete) {
           if (importEntry != null && importEntry.isValid()) {
