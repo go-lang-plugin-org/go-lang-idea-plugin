@@ -38,7 +38,6 @@ import com.intellij.execution.runners.RunContentBuilder;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.io.StreamUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.net.NetUtils;
@@ -237,7 +236,13 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
     catch (Exception ignore) {
     }
     finally {
-      StreamUtil.closeStream(socket);
+      if (socket != null) {
+        try {
+          socket.close();
+        }
+        catch (Exception ignore) {
+        }
+      }
     }
     throw new IllegalStateException("Could not find a free TCP/IP port to start embedded Jetty HTTP Server on");
   }
