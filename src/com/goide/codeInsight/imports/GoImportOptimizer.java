@@ -36,6 +36,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class GoImportOptimizer implements ImportOptimizer {
   @Override
@@ -49,13 +50,29 @@ public class GoImportOptimizer implements ImportOptimizer {
     commit(file);
     assert file instanceof GoFile;
     MultiMap<String, GoImportSpec> importMap = ((GoFile)file).getImportMap();
-    final List<PsiElement> importEntriesToDelete = ContainerUtil.newArrayList();
-    final List<PsiElement> importIdentifiersToDelete = findRedundantImportIdentifiers(importMap);
+    final Set<PsiElement> importEntriesToDelete = ContainerUtil.newLinkedHashSet();
+    final Set<PsiElement> importIdentifiersToDelete = findRedundantImportIdentifiers(importMap);
 
     importEntriesToDelete.addAll(findDuplicatedEntries(importMap));
     importEntriesToDelete.addAll(filterUnusedImports(file, importMap).values());
 
-    return new Runnable() {
+    return new CollectingInfoRunnable() {
+      @Nullable
+      @Override
+      public String getUserNotificationInfo() {
+        int entriesToDelete = importEntriesToDelete.size();
+        int identifiersToDelete = importIdentifiersToDelete.size();
+        String result = "";
+        if (entriesToDelete > 0) {
+          result = "Removed " + entriesToDelete + " import" + (entriesToDelete > 1 ? "s" : "");
+        } 
+        if (identifiersToDelete > 0) {
+          result += result.isEmpty() ? "Removed " : " and ";
+          result += identifiersToDelete + " alias" + (identifiersToDelete > 1 ? "es" : "");
+        }
+        return StringUtil.nullize(result);
+      }
+
       @Override
       public void run() {
         if (!importEntriesToDelete.isEmpty() && !importIdentifiersToDelete.isEmpty()) {
@@ -78,8 +95,8 @@ public class GoImportOptimizer implements ImportOptimizer {
   }
 
   @NotNull
-  public static List<PsiElement> findRedundantImportIdentifiers(@NotNull MultiMap<String, GoImportSpec> importMap) {
-    final List<PsiElement> importIdentifiersToDelete = ContainerUtil.newArrayList();
+  public static Set<PsiElement> findRedundantImportIdentifiers(@NotNull MultiMap<String, GoImportSpec> importMap) {
+    Set<PsiElement> importIdentifiersToDelete = ContainerUtil.newLinkedHashSet();
     for (PsiElement importEntry : importMap.values()) {
       GoImportSpec importSpec = getImportSpec(importEntry);
       if (importSpec != null) {
