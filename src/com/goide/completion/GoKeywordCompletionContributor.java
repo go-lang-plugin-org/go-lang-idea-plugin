@@ -133,7 +133,7 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
   private static PsiElementPattern.Capture<PsiElement> insideBlockPattern(@NotNull IElementType tokenType) {
     return onStatementBeginning(tokenType)
       .withParent(psiElement(GoExpression.class).withParent(psiElement(GoLeftHandExprList.class).withParent(
-        psiElement(GoStatement.class).withParent(GoBlock.class))));
+        psiElement(GoStatement.class).inside(GoBlock.class))));
   }
 
   private static PsiElementPattern.Capture<PsiElement> topLevelPattern() {
@@ -154,7 +154,7 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
   private static PsiElementPattern.Capture<PsiElement> onStatementBeginning(@NotNull IElementType... tokenTypes) {
     return psiElement().withElementType(TokenSet.create(tokenTypes))
       .afterLeafSkipping(psiElement().whitespaceCommentEmptyOrError().withoutText(string().containsChars("\n")),
-                         or(psiElement(GoTypes.SEMICOLON), psiElement(GoTypes.LBRACE),
+                         or(psiElement(GoTypes.SEMICOLON), psiElement(GoTypes.LBRACE), psiElement(GoTypes.COLON),
                             psiElement().withText(string().containsChars("\n"))));
   }
 

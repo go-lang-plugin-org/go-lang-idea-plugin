@@ -177,6 +177,11 @@ public class GoCompletionTest extends GoCompletionTestBase {
     myFixture.testCompletionVariants(getTestName(true) + ".go", "for", "const", "var", "return", "if", "switch", "go", "defer", "select",
                                      "fallthrough", "goto", "main", "struct", "map");
   }
+  
+  public void testBlockKeywordsInsideCaseStatement() {
+    myFixture.testCompletionVariants(getTestName(true) + ".go", "for", "const", "var", "return", "if", "switch", "go", "defer", "select",
+                                     "fallthrough", "goto", "main", "struct", "map", "case", "default");
+  }
 
   public void testAddSpaceAfterKeyword() {
     doTestCompletion();
