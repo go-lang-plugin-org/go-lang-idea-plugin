@@ -863,6 +863,10 @@ public class GoPsiImplUtil {
     return stub != null ? stub.getPath() : importSpec.getImportString().getPath();
   }
 
+  public static String getName(@NotNull GoImportSpec importSpec) {
+    return getAlias(importSpec);
+  }
+
   public static String getAlias(@NotNull GoImportSpec importSpec) {
     GoImportSpecStub stub = importSpec.getStub();
     if (stub != null) {

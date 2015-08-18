@@ -17,6 +17,7 @@
 package com.goide.rename;
 
 import com.goide.GoCodeInsightFixtureTestCase;
+import com.intellij.refactoring.util.CommonRefactoringUtil;
 
 public class GoRenameTest extends GoCodeInsightFixtureTestCase {
   public void testAnonymousField() {
@@ -32,6 +33,41 @@ public class GoRenameTest extends GoCodeInsightFixtureTestCase {
   public void testLabel() {
     doTest("package foo; func foo() {a:{}; goto <caret>a}", "b",
            "package foo; func foo() {b:{}; goto <caret>b}");
+  }
+
+  public void testAliasQualifier() {
+    doTest("package foo; import a \"fmt\"; func c() { a<caret>.Println() }", "b",
+           "package foo; import b \"fmt\"; func c() { b<caret>.Println() }");
+  }
+
+  public void testImportAlias() {
+    doTest("package foo; import <caret>a \"fmt\"; func foo() { a.Println() }", "b",
+           "package foo; import <caret>b \"fmt\"; func foo() { b.Println() }");
+  }
+
+  public void testDotImportAlias() {
+    myFixture.configureByText("foo.go", "package foo; import <caret>. \"fmt\"");
+    try {
+      myFixture.renameElementAtCaret("bar");
+      fail("Shouldn't be performed");
+    }
+    catch (CommonRefactoringUtil.RefactoringErrorHintException e) {
+      assertEquals("This element cannot be renamed", e.getMessage());
+    }
+  }
+
+  private void doTestDoNotRename(String text) {
+    myFixture.configureByText("foo.go", text);
+    myFixture.renameElementAtCaret("bar");
+    myFixture.checkResult(text);
+  }
+
+  public void testNullAlias() {
+    doTestDoNotRename("package foo; import <caret>\"fmt\"");
+  }
+
+  public void testPackageQualifier() {
+    doTestDoNotRename("package foo; import \"fmt\" func foo() { <caret>fmt.Println() }");
   }
 
   private void doTest(String before, String newName, String after) {

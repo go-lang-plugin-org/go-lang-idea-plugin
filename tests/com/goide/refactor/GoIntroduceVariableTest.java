@@ -17,6 +17,7 @@
 package com.goide.refactor;
 
 import com.intellij.refactoring.RefactoringBundle;
+import com.intellij.refactoring.util.CommonRefactoringUtil;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 
 public class GoIntroduceVariableTest extends LightPlatformCodeInsightFixtureTestCase {
@@ -39,8 +40,9 @@ public class GoIntroduceVariableTest extends LightPlatformCodeInsightFixtureTest
   private void doFailureTest(String msg) {
     try {
       doTest();
+      fail("Shouldn't be performed");
     }
-    catch (RuntimeException e) {
+    catch (CommonRefactoringUtil.RefactoringErrorHintException e) {
       assertEquals("Cannot perform refactoring.\n" + msg, e.getMessage());
     }
   }

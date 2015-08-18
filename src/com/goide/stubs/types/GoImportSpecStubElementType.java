@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-public class GoImportSpecStubElementType extends GoStubElementType<GoImportSpecStub, GoImportSpec> {
+public class GoImportSpecStubElementType extends GoNamedStubElementType<GoImportSpecStub, GoImportSpec> {
   public static final GoImportSpec[] EMPTY_ARRAY = new GoImportSpec[0];
   public static final ArrayFactory<GoImportSpec> ARRAY_FACTORY = new ArrayFactory<GoImportSpec>() {
     @NotNull

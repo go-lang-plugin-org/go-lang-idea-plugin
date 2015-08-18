@@ -24,7 +24,7 @@ import com.intellij.util.io.StringRef;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class GoImportSpecStub extends StubBase<GoImportSpec> {
+public class GoImportSpecStub extends GoNamedStub<GoImportSpec> {
   @Nullable
   private final StringRef myAliasRef;
   @NotNull
@@ -32,7 +32,7 @@ public class GoImportSpecStub extends StubBase<GoImportSpec> {
   private final boolean myIsDot;
 
   public GoImportSpecStub(StubElement parent, IStubElementType elementType, @Nullable String alias, @NotNull String path, boolean isDot) {
-    super(parent, elementType);
+    super(parent, elementType, (String)null, false);
     myAliasRef = StringRef.fromString(alias);
     myPathRef = StringRef.fromString(path);
     myIsDot = isDot;
@@ -50,5 +50,10 @@ public class GoImportSpecStub extends StubBase<GoImportSpec> {
 
   public boolean isDot() {
     return myIsDot;
+  }
+
+  @Override
+  public String getName() {
+    return getAlias();
   }
 }

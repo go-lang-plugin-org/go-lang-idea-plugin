@@ -167,7 +167,7 @@ public class GoUtil {
    * isReferenceTo optimization. Before complex checking via resolve we can say for sure that element
    * can't be a reference to given declaration in following cases:<br/>
    * – GoLabelRef can't be resolved to anything but GoLabelDefinition<br/>
-   * – GoTypeReferenceExpression (not from receiver type) can't be resolved to anything but GoTypeSpec<br/>
+   * – GoTypeReferenceExpression (not from receiver type) can't be resolved to anything but GoTypeSpec or GoImportSpec<br/>
    * – Definition is private and reference in different package<br/>
    * – Definition is public, reference in different package and reference containing file doesn't have an import of definition package
    */
@@ -176,7 +176,7 @@ public class GoUtil {
     if (reference instanceof GoLabelRef && !(definition instanceof GoLabelDefinition)) return false;
     if (reference instanceof GoTypeReferenceExpression &&
         !(reference.getParent() instanceof GoReceiverType) &&
-        !(definition instanceof GoTypeSpec)) {
+        !(definition instanceof GoTypeSpec || definition instanceof GoImportSpec)) {
       return false;
     }
 
