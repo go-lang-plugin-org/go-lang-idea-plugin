@@ -177,6 +177,11 @@ public class GoCompletionTest extends GoCompletionTestBase {
     myFixture.testCompletionVariants(getTestName(true) + ".go", "for", "const", "var", "return", "if", "switch", "go", "defer", "select",
                                      "fallthrough", "goto", "main", "struct", "map");
   }
+  
+  public void testBlockKeywordsInsideCaseStatement() {
+    myFixture.testCompletionVariants(getTestName(true) + ".go", "for", "const", "var", "return", "if", "switch", "go", "defer", "select",
+                                     "fallthrough", "goto", "main", "struct", "map", "case", "default");
+  }
 
   public void testAddSpaceAfterKeyword() {
     doTestCompletion();
@@ -187,11 +192,11 @@ public class GoCompletionTest extends GoCompletionTestBase {
   }
   
   public void testExpressionKeywords() {
-    myFixture.testCompletionVariants(getTestName(true) + ".go", "struct", "map", "main");
+    myFixture.testCompletionVariants(getTestName(true) + ".go", "struct", "map", "main", "func");
   }
 
   public void testTypeKeywordsInsideParentheses() {
-    myFixture.testCompletionVariants(getTestName(true) + ".go", "chan", "map");
+    myFixture.testCompletionVariants(getTestName(true) + ".go", "chan", "map", "interface", "struct");
   }
 
   public void testSelectKeywordInsertHandler() {
@@ -203,6 +208,14 @@ public class GoCompletionTest extends GoCompletionTestBase {
   }
 
   public void testTypeKeywordDoNotInsertBraces() {
+    doTestCompletion();
+  }
+  
+  public void testInterfaceKeywordAsFunctionParameter() {
+    doTestCompletion();
+  }
+  
+  public void testStructKeywordAsFunctionParameter() {
     doTestCompletion();
   }
 
@@ -258,6 +271,14 @@ public class GoCompletionTest extends GoCompletionTestBase {
   public void testFunctionInDefer() {
     doTestCompletion();
   }
+  
+  public void testFunctionAsFunctionArgument() {
+    doTestCompletion();
+  }
+  
+  public void testFunctionAsVariableValue() {
+    doTestCompletion();
+  }
 
   public void testFunctionInGo() {
     doTestCompletion();
@@ -268,6 +289,22 @@ public class GoCompletionTest extends GoCompletionTestBase {
   }
 
   public void testPackageKeywordInEmptyFile() {
+    doTestCompletion();
+  }
+  
+  public void testExpressionCaseKeywordCompletion() {
+    doTestCompletion();
+  }
+  
+  public void testExpressionDefaultKeywordCompletion() {
+    doTestCompletion();
+  }
+  
+  public void testTypeCaseKeywordCompletion() {
+    doTestCompletion();
+  }
+  
+  public void testTypeDefaultKeywordCompletion() {
     doTestCompletion();
   }
 
@@ -431,23 +468,36 @@ public class GoCompletionTest extends GoCompletionTestBase {
                   "package main; func main() {int(<caret>)}; type int int");
   }
 
-  @SuppressWarnings("ConstantConditions")
-  public void testPackageNames() {
-    myFixture.configureByText("test_test.go", "package fromTest_test");
-    myFixture.configureByText("test_file.go", "package fromFile");
-    myFixture.configureByText("test.go", "package <caret>");
-    myFixture.completeBasic();
-    assertSameElements(myFixture.getLookupElementStrings(), "fromTest", "fromTest_test", "fromFile", "main");
+  public void testPreventSOE() throws Exception {
+    doTestInclude("package rubex; const ( IGNORECASE = 1; EXTEND = (IGNORECASE << 1); MULTILINE = (EXTEND << 1)); func m() {<caret>}", "EXTEND");
   }
 
   @SuppressWarnings("ConstantConditions")
+  public void testPackageNames() {
+    myFixture.configureByText("test_test.go", "package myFromTest_test");
+    myFixture.configureByText("test_file.go", "package myFromFile");
+    myFixture.configureByText("test.go", "package m<caret>");
+    myFixture.completeBasic();
+    assertSameElements(myFixture.getLookupElementStrings(), "m", "myFromTest", "myFromFile", "main");
+  }
+
+  @SuppressWarnings("ConstantConditions")
+  public void testPackageNamesInTestFile() {
+    myFixture.configureByText("foo.go", "package foo");
+    myFixture.configureByText("foo_test.go", "package <caret>");
+    myFixture.completeBasic();
+    assertSameElements(myFixture.getLookupElementStrings(), "foo", "foo_test", "main");
+  }
+
   public void testPackageNamesInEmptyDirectory() throws IOException {
     VirtualFile dir = myFixture.getTempDirFixture().findOrCreateDir("directory-name");
     VirtualFile file = dir.createChildData(this, "test.go");
     VfsUtil.saveText(file, "package <caret>");
     myFixture.configureFromExistingVirtualFile(file);
     myFixture.completeBasic();
-    assertSameElements(myFixture.getLookupElementStrings(), "directory_name", "main");
+    List<String> strings = myFixture.getLookupElementStrings();
+    assertNotNull(strings);
+    assertSameElements(strings, "directory_name", "main");
   }
 
   private void doTestEmptyCompletion() {

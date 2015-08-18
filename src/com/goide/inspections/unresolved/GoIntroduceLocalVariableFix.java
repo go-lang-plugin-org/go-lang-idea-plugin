@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,42 +16,19 @@
 
 package com.goide.inspections.unresolved;
 
-import com.goide.psi.GoBlock;
-import com.goide.psi.GoStatement;
-import com.intellij.codeInsight.template.Template;
-import com.intellij.codeInsight.template.TemplateManager;
-import com.intellij.codeInsight.template.impl.TemplateSettings;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
+import com.goide.refactor.GoRefactoringUtil;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoIntroduceLocalVariableFix extends GoUnresolvedFixBase {
   public GoIntroduceLocalVariableFix(@NotNull PsiElement element, @NotNull String name) {
-    super(element, name, "local variable");
+    super(element, name, "local variable", "go_lang_local_var_qf");
   }
 
+  @Nullable
   @Override
-  public void invoke(@NotNull Project project,
-                     @NotNull PsiFile file,
-                     @Nullable("is null when called from inspection") Editor editor,
-                     @NotNull PsiElement startElement,
-                     @NotNull PsiElement endElement) {
-    GoStatement statement = PsiTreeUtil.getParentOfType(startElement, GoStatement.class);
-    while (statement != null && !(statement.getParent() instanceof GoBlock)) {
-      statement = PsiTreeUtil.getParentOfType(statement, GoStatement.class);
-    }
-    if (statement == null || editor == null) return;
-    Template template = TemplateSettings.getInstance().getTemplateById("go_lang_local_var_qf");
-    if (template != null) {
-      int start = statement.getTextRange().getStartOffset();
-      editor.getCaretModel().moveToOffset(start);
-      template.setToReformat(true);
-      TemplateManager.getInstance(project).startTemplate(editor, template, true, ContainerUtil.stringMap("NAME", myName), null);
-    }
+  protected PsiElement findAnchor(@NotNull PsiElement reference) {
+    return GoRefactoringUtil.findLocalAnchor(GoRefactoringUtil.getLocalOccurrences(reference));
   }
 }

@@ -26,60 +26,61 @@ import com.intellij.patterns.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
+import static com.goide.completion.GoCompletionUtil.CONTEXT_KEYWORD_PRIORITY;
+import static com.goide.completion.GoCompletionUtil.KEYWORD_PRIORITY;
 import static com.goide.completion.GoKeywordCompletionProvider.EMPTY_INSERT_HANDLER;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static com.intellij.patterns.PlatformPatterns.psiFile;
 import static com.intellij.patterns.StandardPatterns.*;
 
 public class GoKeywordCompletionContributor extends CompletionContributor implements DumbAware {
-  private static final BracesInsertHandler ADD_BRACES_INSERT_HANDLER = new BracesInsertHandler();
   private static final InsertHandler<LookupElement> ADD_BRACKETS_INSERT_HANDLER = new AddBracketsInsertHandler();
 
   public GoKeywordCompletionContributor() {
-    extend(CompletionType.BASIC, packagePattern(), new GoKeywordCompletionProvider(GoCompletionUtil.KEYWORD_PRIORITY,
+    extend(CompletionType.BASIC, packagePattern(), new GoKeywordCompletionProvider(KEYWORD_PRIORITY,
                                                                                    AutoCompletionPolicy.ALWAYS_AUTOCOMPLETE, "package"));
-    extend(CompletionType.BASIC, importPattern(), new GoKeywordCompletionProvider(GoCompletionUtil.KEYWORD_PRIORITY, "import"));
-    extend(CompletionType.BASIC, topLevelPattern(),
-           new GoKeywordCompletionProvider(GoCompletionUtil.KEYWORD_PRIORITY, "const", "var", "func", "type"));
+    extend(CompletionType.BASIC, importPattern(), new GoKeywordCompletionProvider(KEYWORD_PRIORITY, "import"));
+    extend(CompletionType.BASIC, topLevelPattern(), new GoKeywordCompletionProvider(KEYWORD_PRIORITY, "const", "var", "func", "type"));
     extend(CompletionType.BASIC, insideBlockPattern(GoTypes.IDENTIFIER),
-           new GoKeywordCompletionProvider(GoCompletionUtil.KEYWORD_PRIORITY, "for", "const", "var", "return", "if", "switch", "go",
-                                           "defer", "goto"));
+           new GoKeywordCompletionProvider(KEYWORD_PRIORITY, "for", "const", "var", "return", "if", "switch", "go", "defer", "goto"));
     extend(CompletionType.BASIC, insideBlockPattern(GoTypes.IDENTIFIER),
-           new GoKeywordCompletionProvider(GoCompletionUtil.KEYWORD_PRIORITY, EMPTY_INSERT_HANDLER, "fallthrough"));
+           new GoKeywordCompletionProvider(KEYWORD_PRIORITY, EMPTY_INSERT_HANDLER, "fallthrough"));
     extend(CompletionType.BASIC, insideBlockPattern(GoTypes.IDENTIFIER),
-           new GoKeywordCompletionProvider(GoCompletionUtil.KEYWORD_PRIORITY, ADD_BRACES_INSERT_HANDLER, "select"));
+           new GoKeywordCompletionProvider(KEYWORD_PRIORITY, BracesInsertHandler.INSTANCE, "select"));
     extend(CompletionType.BASIC, typeDeclaration(),
-           new GoKeywordCompletionProvider(GoCompletionUtil.KEYWORD_PRIORITY, ADD_BRACES_INSERT_HANDLER, "interface", "struct"));
+           new GoKeywordCompletionProvider(KEYWORD_PRIORITY, BracesInsertHandler.INSTANCE, "interface", "struct"));
+    extend(CompletionType.BASIC, typeExpression(),
+           new GoKeywordCompletionProvider(KEYWORD_PRIORITY, BracesInsertHandler.ONE_LINER, "interface", "struct"));
     extend(CompletionType.BASIC, insideForStatement(GoTypes.IDENTIFIER),
-           new GoKeywordCompletionProvider(GoCompletionUtil.CONTEXT_KEYWORD_PRIORITY, EMPTY_INSERT_HANDLER, "break", "continue"));
-    extend(CompletionType.BASIC, typeExpression(), new GoKeywordCompletionProvider(GoCompletionUtil.CONTEXT_KEYWORD_PRIORITY, "chan"));
-    extend(CompletionType.BASIC, typeExpression(), new GoKeywordCompletionProvider(GoCompletionUtil.CONTEXT_KEYWORD_PRIORITY, 
+           new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, EMPTY_INSERT_HANDLER, "break", "continue"));
+    extend(CompletionType.BASIC, typeExpression(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, "chan"));
+    extend(CompletionType.BASIC, typeExpression(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY,
                                                                                    ADD_BRACKETS_INSERT_HANDLER, "map"));
     
-    extend(CompletionType.BASIC, referenceExpression(), new GoKeywordCompletionProvider(GoCompletionUtil.CONTEXT_KEYWORD_PRIORITY,
+    extend(CompletionType.BASIC, referenceExpression(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY,
                                                                                         ADD_BRACKETS_INSERT_HANDLER, "map"));
-    extend(CompletionType.BASIC, referenceExpression(), new GoKeywordCompletionProvider(GoCompletionUtil.CONTEXT_KEYWORD_PRIORITY,
-                                                                                        ADD_BRACES_INSERT_HANDLER, "struct"));
+    extend(CompletionType.BASIC, referenceExpression(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY,
+                                                                                        BracesInsertHandler.ONE_LINER, "struct"));
     
-    extend(CompletionType.BASIC, afterIfBlock(GoTypes.IDENTIFIER),
-           new GoKeywordCompletionProvider(GoCompletionUtil.CONTEXT_KEYWORD_PRIORITY, "else"));
-    extend(CompletionType.BASIC, afterElseKeyword(), new GoKeywordCompletionProvider(GoCompletionUtil.CONTEXT_KEYWORD_PRIORITY, "if"));
-    //extend(CompletionType.BASIC, insideSwitchStatement(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, "case", "default"));
-    //  todo: "case", "default", "range"
+    extend(CompletionType.BASIC, afterIfBlock(GoTypes.IDENTIFIER), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, "else"));
+    extend(CompletionType.BASIC, afterElseKeyword(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, "if"));
+    extend(CompletionType.BASIC, insideSwitchStatement(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, "case", "default"));
+    //  todo: "range"
   }
 
   @Override
   public void fillCompletionVariants(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
     super.fillCompletionVariants(parameters, result);
-    if (insideGoOrDeferStatements(GoTypes.IDENTIFIER).accepts(parameters.getPosition())) {
+    final PsiElement position = parameters.getPosition();
+    if (insideGoOrDeferStatements().accepts(position) || anonymousFunction().accepts(position)) {
       InsertHandler<LookupElement> insertHandler = GoKeywordCompletionProvider.createTemplateBasedInsertHandler("go_lang_anonymous_func");
-      result.addElement(
-        GoKeywordCompletionProvider.createKeywordLookupElement("func", GoCompletionUtil.CONTEXT_KEYWORD_PRIORITY, insertHandler));
+      result.addElement(GoKeywordCompletionProvider.createKeywordLookupElement("func", CONTEXT_KEYWORD_PRIORITY, insertHandler));
     }
   }
 
@@ -109,25 +110,30 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
       psiElement(GoReferenceExpression.class).withParent(not(psiElement(GoSelectorExpr.class))).with(new GoNonQualifiedReference()));
   }
 
-
-  //private static ElementPattern<? extends PsiElement> insideSwitchStatement() {
-  //  return insideBlockPattern().inside(GoSwitchStatement.class);
-  //}
+  private static ElementPattern<? extends PsiElement> insideSwitchStatement() {
+    return onStatementBeginning(GoTypes.IDENTIFIER, GoTypes.CASE, GoTypes.DEFAULT).inside(GoCaseClause.class);
+  }
 
   private static ElementPattern<? extends PsiElement> typeDeclaration() {
     return psiElement(GoTypes.IDENTIFIER)
-      .withParent(psiElement(GoTypeReferenceExpression.class).withParent(psiElement(GoType.class).withParent(GoTypeSpec.class)));
+      .withParent(psiElement(GoTypeReferenceExpression.class).withParent(psiElement(GoType.class).withParent(GoSpecType.class)));
   }
 
-  private static PsiElementPattern.Capture<PsiElement> insideGoOrDeferStatements(@NotNull IElementType tokenType) {
-    return psiElement(tokenType)
+  private static PsiElementPattern.Capture<PsiElement> insideGoOrDeferStatements() {
+    return psiElement(GoTypes.IDENTIFIER)
       .withParent(psiElement(GoExpression.class).withParent(or(psiElement(GoDeferStatement.class), psiElement(GoGoStatement.class))));
+  }
+  
+  private static ElementPattern<? extends PsiElement> anonymousFunction() {
+    return and(referenceExpression(), 
+               psiElement().withParent(psiElement(GoReferenceExpression.class)
+                                         .withParent(or(psiElement(GoArgumentList.class), not(psiElement(GoLeftHandExprList.class))))));
   }
 
   private static PsiElementPattern.Capture<PsiElement> insideBlockPattern(@NotNull IElementType tokenType) {
     return onStatementBeginning(tokenType)
       .withParent(psiElement(GoExpression.class).withParent(psiElement(GoLeftHandExprList.class).withParent(
-        psiElement(GoStatement.class).withParent(GoBlock.class))));
+        psiElement(GoStatement.class).inside(GoBlock.class))));
   }
 
   private static PsiElementPattern.Capture<PsiElement> topLevelPattern() {
@@ -145,10 +151,11 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
       .withParent(psiElement(PsiErrorElement.class).withParent(goFileWithoutPackage()).isFirstAcceptedChild(psiElement()));
   }
 
-  private static PsiElementPattern.Capture<PsiElement> onStatementBeginning(@NotNull IElementType tokenType) {
-    return psiElement(tokenType).afterLeafSkipping(psiElement().whitespaceCommentEmptyOrError().withoutText(string().containsChars("\n")),
-                                                   or(psiElement(GoTypes.SEMICOLON), psiElement(GoTypes.LBRACE),
-                                                      psiElement().withText(string().containsChars("\n"))));
+  private static PsiElementPattern.Capture<PsiElement> onStatementBeginning(@NotNull IElementType... tokenTypes) {
+    return psiElement().withElementType(TokenSet.create(tokenTypes))
+      .afterLeafSkipping(psiElement().whitespaceCommentEmptyOrError().withoutText(string().containsChars("\n")),
+                         or(psiElement(GoTypes.SEMICOLON), psiElement(GoTypes.LBRACE), psiElement(GoTypes.COLON),
+                            psiElement().withText(string().containsChars("\n"))));
   }
 
   private static PsiFilePattern.Capture<GoFile> goFileWithPackage() {

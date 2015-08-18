@@ -340,30 +340,32 @@ GO_FILE
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
-      PsiElement(identifier)('Example')
-      STRUCT_TYPE
-        PsiElement(struct)('struct')
-        PsiElement({)('{')
-        FIELD_DECLARATION
-          FIELD_DEFINITION
-            PsiElement(identifier)('Val')
-          TYPE
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(identifier)('string')
-        FIELD_DECLARATION
-          FIELD_DEFINITION
-            PsiElement(identifier)('count')
-          TYPE
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(identifier)('int')
-        PsiElement(})('}')
+      SPEC_TYPE
+        PsiElement(identifier)('Example')
+        STRUCT_TYPE
+          PsiElement(struct)('struct')
+          PsiElement({)('{')
+          FIELD_DECLARATION
+            FIELD_DEFINITION
+              PsiElement(identifier)('Val')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('string')
+          FIELD_DECLARATION
+            FIELD_DEFINITION
+              PsiElement(identifier)('count')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('int')
+          PsiElement(})('}')
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
-      PsiElement(identifier)('integer')
-      TYPE
-        TYPE_REFERENCE_EXPRESSION
-          PsiElement(identifier)('int')
+      SPEC_TYPE
+        PsiElement(identifier)('integer')
+        TYPE
+          TYPE_REFERENCE_EXPRESSION
+            PsiElement(identifier)('int')
   METHOD_DECLARATION
     PsiElement(func)('func')
     RECEIVER
@@ -452,37 +454,39 @@ GO_FILE
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
-      PsiElement(identifier)('cartesianPoint')
-      STRUCT_TYPE
-        PsiElement(struct)('struct')
-        PsiElement({)('{')
-        FIELD_DECLARATION
-          FIELD_DEFINITION
-            PsiElement(identifier)('x')
-          PsiElement(,)(',')
-          FIELD_DEFINITION
-            PsiElement(identifier)('y')
-          TYPE
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(identifier)('float64')
-        PsiElement(})('}')
+      SPEC_TYPE
+        PsiElement(identifier)('cartesianPoint')
+        STRUCT_TYPE
+          PsiElement(struct)('struct')
+          PsiElement({)('{')
+          FIELD_DECLARATION
+            FIELD_DEFINITION
+              PsiElement(identifier)('x')
+            PsiElement(,)(',')
+            FIELD_DEFINITION
+              PsiElement(identifier)('y')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('float64')
+          PsiElement(})('}')
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
-      PsiElement(identifier)('polarPoint')
-      STRUCT_TYPE
-        PsiElement(struct)('struct')
-        PsiElement({)('{')
-        FIELD_DECLARATION
-          FIELD_DEFINITION
-            PsiElement(identifier)('r')
-          PsiElement(,)(',')
-          FIELD_DEFINITION
-            PsiElement(identifier)('θ')
-          TYPE
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(identifier)('float64')
-        PsiElement(})('}')
+      SPEC_TYPE
+        PsiElement(identifier)('polarPoint')
+        STRUCT_TYPE
+          PsiElement(struct)('struct')
+          PsiElement({)('{')
+          FIELD_DECLARATION
+            FIELD_DEFINITION
+              PsiElement(identifier)('r')
+            PsiElement(,)(',')
+            FIELD_DEFINITION
+              PsiElement(identifier)('θ')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('float64')
+          PsiElement(})('}')
   METHOD_DECLARATION
     PsiElement(func)('func')
     RECEIVER
@@ -714,45 +718,47 @@ GO_FILE
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
-      PsiElement(identifier)('Point')
-      INTERFACE_TYPE
-        PsiElement(interface)('interface')
-        PsiElement({)('{')
-        METHOD_SPEC
-          TYPE_REFERENCE_EXPRESSION
-            PsiElement(identifier)('Printer')
-        METHOD_SPEC
-          PsiElement(identifier)('X')
-          SIGNATURE
-            PARAMETERS
-              PsiElement(()('(')
-              PsiElement())(')')
-            RESULT
-              TYPE
-                TYPE_REFERENCE_EXPRESSION
-                  PsiElement(identifier)('float64')
-        METHOD_SPEC
-          PsiElement(identifier)('Y')
-          SIGNATURE
-            PARAMETERS
-              PsiElement(()('(')
-              PsiElement())(')')
-            RESULT
-              TYPE
-                TYPE_REFERENCE_EXPRESSION
-                  PsiElement(identifier)('float64')
-        PsiElement(})('}')
+      SPEC_TYPE
+        PsiElement(identifier)('Point')
+        INTERFACE_TYPE
+          PsiElement(interface)('interface')
+          PsiElement({)('{')
+          METHOD_SPEC
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('Printer')
+          METHOD_SPEC
+            PsiElement(identifier)('X')
+            SIGNATURE
+              PARAMETERS
+                PsiElement(()('(')
+                PsiElement())(')')
+              RESULT
+                TYPE
+                  TYPE_REFERENCE_EXPRESSION
+                    PsiElement(identifier)('float64')
+          METHOD_SPEC
+            PsiElement(identifier)('Y')
+            SIGNATURE
+              PARAMETERS
+                PsiElement(()('(')
+                PsiElement())(')')
+              RESULT
+                TYPE
+                  TYPE_REFERENCE_EXPRESSION
+                    PsiElement(identifier)('float64')
+          PsiElement(})('}')
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
-      PsiElement(identifier)('Printer')
-      INTERFACE_TYPE
-        PsiElement(interface)('interface')
-        PsiElement({)('{')
-        METHOD_SPEC
-          PsiElement(identifier)('Print')
-          SIGNATURE
-            PARAMETERS
-              PsiElement(()('(')
-              PsiElement())(')')
-        PsiElement(})('}')
+      SPEC_TYPE
+        PsiElement(identifier)('Printer')
+        INTERFACE_TYPE
+          PsiElement(interface)('interface')
+          PsiElement({)('{')
+          METHOD_SPEC
+            PsiElement(identifier)('Print')
+            SIGNATURE
+              PARAMETERS
+                PsiElement(()('(')
+                PsiElement())(')')
+          PsiElement(})('}')

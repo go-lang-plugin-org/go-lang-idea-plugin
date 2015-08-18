@@ -24,14 +24,11 @@ import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizerUtil;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
-
 
 public abstract class GoRunConfigurationWithMain<T extends GoRunningState> extends GoRunConfigurationBase<T> {
   private static final String FILE_PATH_ATTRIBUTE_NAME = "filePath";
@@ -58,7 +55,7 @@ public abstract class GoRunConfigurationWithMain<T extends GoRunningState> exten
   }
 
   protected void checkFileConfiguration() throws RuntimeConfigurationError {
-    VirtualFile file = VirtualFileManager.getInstance().findFileByUrl(VfsUtilCore.pathToUrl(getFilePath()));
+    VirtualFile file = findFile(getFilePath());
     if (file == null) {
       throw new RuntimeConfigurationError("Main file is not specified");
     }

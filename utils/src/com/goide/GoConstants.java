@@ -37,8 +37,15 @@ public class GoConstants {
   public static final String TESTDATA_NAME = "testdata";
   public static final String TEST_SUFFIX = "_test";
   public static final String TEST_SUFFIX_WITH_EXTENSION = "_test.go";
+  public static final String TEST_PREFIX = "Test";
+  public static final String BENCHMARK_PREFIX = "Benchmark";
+  public static final String EXAMPLE_PREFIX = "Example";
+  public static final String TEST_MAIN = "TestMain";
   public static final String MAIN = "main";
   public static final String INIT = "init";
+  public static final String DOCUMENTATION = "documentation";
+  public static final String C_PATH = "C";
+  public static final String TESTING_PATH = "testing";
 
   public static final NotificationGroup GO_NOTIFICATION_GROUP = NotificationGroup.balloonGroup("Go plugin notifications");
   public static final NotificationGroup GO_EXECUTION_NOTIFICATION_GROUP = NotificationGroup.toolWindowGroup("Go Execution", ToolWindowId.RUN);
@@ -55,6 +62,7 @@ public class GoConstants {
   @NonNls public static final String GAE_EXECUTABLE_NAME = "goapp";
   @NonNls public static final String GAE_BAT_EXECUTABLE_NAME = "goapp.bat";
   @NonNls public static final String GAE_CMD_EXECUTABLE_NAME = "goapp.cmd";
+  @NonNls public static final String DELVE_EXECUTABLE_NAME = "dlv";
 
   @NonNls public static final String GO_EXECUTABLE_NAME = "go";
   public static final String BUILD_FLAG = "+build";
@@ -65,16 +73,20 @@ public class GoConstants {
   // see "$GOROOT/src/go/build/syslist.go
   public static final Set<String> KNOWN_OS = ContainerUtil.immutableSet("android", "darwin", "dragonfly", "freebsd", "linux", "nacl",
                                                                         "netbsd", "openbsd", "plan9", "solaris", "windows");
-  public static final Set<String> KNOWN_ARCH = ContainerUtil.immutableSet("386", "amd64", "amd64p32", "arm", "arm64");
+  public static final Set<String> KNOWN_ARCH = ContainerUtil.immutableSet("386", "amd64", "amd64p32", "arm", "armbe", "arm64", "arm64be", 
+                                                                          "ppc64", "ppc64le", "mips", "mipsle", "mips64", "mips64le", 
+                                                                          "mips64p32", "mips64p32le", "ppc", "s390", "s390x", "sparc", 
+                                                                          "sparc64");
   public static final Set<String> KNOWN_VERSIONS = ContainerUtil.immutableSet("go1.1", "go1.2", "go1.3", "go1.4");
   public static final Set<String> KNOWN_CGO = ContainerUtil.immutableSet("darwin/386", "darwin/amd64", "dragonfly/386", "dragonfly/amd64",
                                                                          "freebsd/386", "freebsd/amd64", "freebsd/arm", "linux/386",
                                                                          "linux/amd64", "linux/arm", "linux/arm64", "android/386", 
                                                                          "android/amd64", "android/arm", "netbsd/386", "netbsd/amd64", 
                                                                          "netbsd/arm", "openbsd/386", "openbsd/amd64", "windows/386", 
-                                                                         "windows/amd64");
+                                                                         "windows/amd64", "linux/ppc64le");
   public static final Set<String> KNOWN_COMPILERS = ContainerUtil.immutableSet("gc", "gccgo");
 
+  @NonNls public static final String NIL = "nil";
   private GoConstants() {
 
   }

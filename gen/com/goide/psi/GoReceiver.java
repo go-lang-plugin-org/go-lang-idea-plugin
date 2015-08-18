@@ -29,6 +29,6 @@ public interface GoReceiver extends GoNamedElement, StubBasedPsiElement<GoReceiv
   PsiElement getIdentifier();
 
   @Nullable
-  GoType getGoType(ResolveState context);
+  GoType getGoTypeInner(ResolveState context);
 
 }

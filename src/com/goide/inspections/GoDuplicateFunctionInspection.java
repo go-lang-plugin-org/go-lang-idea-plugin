@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import com.goide.psi.GoFunctionDeclaration;
 import com.goide.psi.GoRecursiveVisitor;
 import com.goide.psi.GoSignature;
 import com.goide.psi.impl.GoPsiImplUtil;
+import com.goide.util.GoUtil;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Condition;
@@ -38,11 +39,13 @@ import static com.goide.GoConstants.MAIN;
 public class GoDuplicateFunctionInspection extends GoInspectionBase {
   @Override
   protected void checkFile(@NotNull GoFile file, @NotNull final ProblemsHolder problemsHolder) {
-    final MultiMap<String, GoFunctionDeclaration> map = new MultiMap<String, GoFunctionDeclaration>();
+    final MultiMap<String, GoFunctionDeclaration> map = MultiMap.create();
     List<GoFile> files = GoPsiImplUtil.getAllPackageFiles(file);
     for (GoFile goFile : files) {
-      for (GoFunctionDeclaration function : goFile.getFunctions()) {
-        map.putValue(function.getName(), function);
+      if (GoUtil.allowed(goFile)) {
+        for (GoFunctionDeclaration function : goFile.getFunctions()) {
+          map.putValue(function.getName(), function);
+        }
       }
     }
 

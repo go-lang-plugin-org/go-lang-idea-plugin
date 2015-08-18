@@ -16,6 +16,7 @@
 
 package com.goide.configuration;
 
+import com.goide.codeInsight.imports.GoAutoImportConfigurable;
 import com.goide.sdk.GoSdkService;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurableProvider;
@@ -38,11 +39,12 @@ public class GoConfigurableProvider extends ConfigurableProvider {
     Configurable librariesConfigurable = new GoLibrariesConfigurableProvider(myProject).createConfigurable();
     Configurable sdkConfigurable = GoSdkService.getInstance(myProject).createSdkConfigurable();
     Configurable buildFlagsConfigurable = new GoBuildTargetConfigurable(myProject, false);
+    Configurable autoImportConfigurable = new GoAutoImportConfigurable(myProject, false);
     if (sdkConfigurable != null) {
-      return new GoCompositeConfigurable(sdkConfigurable, buildFlagsConfigurable, librariesConfigurable);
+      return new GoCompositeConfigurable(sdkConfigurable, buildFlagsConfigurable, librariesConfigurable, autoImportConfigurable);
     }
     else {
-      return new GoCompositeConfigurable(buildFlagsConfigurable, librariesConfigurable);
+      return new GoCompositeConfigurable(buildFlagsConfigurable, librariesConfigurable, autoImportConfigurable);
     }
   }
 

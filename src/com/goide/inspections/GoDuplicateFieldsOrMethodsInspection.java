@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,12 +40,16 @@ public class GoDuplicateFieldsOrMethodsInspection extends GoInspectionBase {
         type.accept(new GoRecursiveVisitor() {
           @Override
           public void visitFieldDefinition(@NotNull GoFieldDefinition o) {
-            fields.add(o);
+            addField(o);
           }
 
           @Override
           public void visitAnonymousFieldDefinition(@NotNull GoAnonymousFieldDefinition o) {
-            fields.add(o);
+            addField(o);
+          }
+
+          private void addField(@NotNull GoNamedElement o) {
+            if (!o.isBlank()) fields.add(o);
           }
 
           @Override

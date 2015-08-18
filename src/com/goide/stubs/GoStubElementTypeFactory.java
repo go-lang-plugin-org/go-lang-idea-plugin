@@ -40,6 +40,7 @@ public class GoStubElementTypeFactory {
       put("STRUCT_TYPE", GoStructTypeImpl.class);
       put("TYPE", GoTypeImpl.class);
       put("PAR_TYPE", GoParTypeImpl.class);
+      put("SPEC_TYPE", GoSpecTypeImpl.class);
       put("TYPE_LIST", GoTypeListImpl.class);
     }
   };

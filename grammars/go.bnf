@@ -136,13 +136,13 @@ FieldDefinition ::= identifier {
 
 AnonymousFieldDefinition ::= '*'? TypeName {
   stubClass="com.goide.stubs.GoAnonymousFieldDefinitionStub"
-  methods=[getIdentifier getName getTextOffset getGoType]
+  methods=[getIdentifier getName getTextOffset getGoTypeInner]
 }
 Tag ::= string | raw_string
 
 PointerType ::= '*' Type {pin=1}
 
-FunctionType ::= func Signature {pin=1}
+FunctionType ::= func Signature {pin=1 implements="com.goide.psi.GoSignatureOwner"}
 Signature ::= Parameters Result? {
   pin=1
   stubClass="com.goide.stubs.GoSignatureStub"
@@ -173,7 +173,7 @@ InterfaceType ::= interface '{' MethodSpecs? '}' {
 private MethodSpecs ::= MethodSpec (semi MethodSpec)* semi? {pin=1}
 MethodSpec ::= TypeName &(!'(') | identifier Signature {
   stubClass="com.goide.stubs.GoMethodSpecStub"
-  methods=[getGoType getName]
+  methods=[getGoTypeInner getName]
 }
 
 MapType ::= map '[' Type ']' Type {
@@ -209,7 +209,7 @@ Statement ::=
   | ForStatement
   | DeferStatement {methods=[processDeclarations]}
 
-private StatementRecover ::= !('!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | '*' | '*=' | '+' | '++' | '+=' | '-' | '--' | '-=' | '.' | '...' | '/' | '/=' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex | identifier | if | imaginary | int | interface | map | oct | return | rune | select | string | raw_string | struct | switch | var)
+private StatementRecover ::= !('!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | '*' | '*=' | '+' | '++' | '+=' | '-' | '--' | '-=' | '.' | '...' | '/' | '/=' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex | identifier | if | int | interface | map | oct | return | select | string | raw_string | struct | switch | var)
 
 SimpleStatement ::=
     ShortVarDeclaration
@@ -230,7 +230,7 @@ ConstSpec ::= ConstDefinitionList [ ('=' ExpressionList | Type '=' ExpressionLis
 private ConstDefinitionList ::= ConstDefinition ( ',' ConstDefinition )*
 ConstDefinition ::= identifier {
   stubClass="com.goide.stubs.GoConstDefinitionStub"
-  methods=[getGoType]
+  methods=[getGoTypeInner]
 }
 
 LeftHandExprList ::= ExpressionList
@@ -238,15 +238,16 @@ private ExpressionArgList ::= ExpressionWithRecover2 (',' (ExpressionWithRecover
 private ExpressionWithRecover2 ::= <<withOn "PAR" ExpressionWithRecover>> | (!() Expression) {recoverWhile=ExpressionListRecover}
 private ExpressionList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &')'))* {pin(".*")=1}
 private ExpressionWithRecover ::= Expression {recoverWhile=ExpressionListRecover}
-private ExpressionListRecover ::= !('!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '.' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex | identifier | if | imaginary | int | interface | map | oct | return | rune | select | string | raw_string | struct | switch | var)
+private ExpressionListRecover ::= !('!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '.' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex | identifier | if | int | interface | map | oct | return | select | string | raw_string | struct | switch | var)
 
 TypeDeclaration ::= 'type' ( TypeSpec | '(' TypeSpecs? ')' ) {pin(".*")=1}
 private TypeSpecs ::= TypeSpec (semi TypeSpec)* semi? {pin=1}
-TypeSpec ::= identifier Type {
+TypeSpec ::= SpecType {
   pin=1
-  methods=[getGoType getMethods shouldGoDeeper]
+  methods=[getGoTypeInner getMethods shouldGoDeeper identifier="SpecType/identifier"]
   stubClass="com.goide.stubs.GoTypeSpecStub"
 }
+SpecType ::= identifier Type
 
 VarDeclaration ::= var ( VarSpec | '(' VarSpecs? ')' ) {pin=1}
 private VarSpecs ::= VarSpec (semi VarSpec)* semi? {pin=1}
@@ -256,7 +257,7 @@ VarSpec ::= VarDefinitionList ( Type [ '=' ExpressionList ] | '=' ExpressionList
 }
 private VarDefinitionList ::= VarDefinition ( ',' VarDefinition )*
 VarDefinition ::= identifier {
-  methods=[getGoType getReference]
+  methods=[getGoTypeInner getReference]
   stubClass="com.goide.stubs.GoVarDefinitionStub"
 }
 
@@ -271,7 +272,7 @@ MethodDeclaration ::= func Receiver identifier Signature Block? {
   stubClass="com.goide.stubs.GoMethodDeclarationStub"
 }
 Receiver ::= '(' (identifier ReceiverTail | ReceiverTail) ')' {
-  methods=[getGoType]
+  methods=[getGoTypeInner]
   pin=1
   stubClass="com.goide.stubs.GoReceiverStub"
 }
@@ -285,8 +286,6 @@ Literal ::=
   | decimali
   | hex
   | oct
-  | imaginary
-  | rune
   | StringLiteral
   | char
 
@@ -310,8 +309,9 @@ LiteralTypeExpr ::= LiteralTypeExprInner
 
 LiteralValue ::= (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">> | <<prevIsArrayType>>) '{' ElementList? '}' {pin=2}
 private ElementList  ::= E ( ',' E? )*
-private E::= <<withOn "PAR" Element>> | (!() Element)
-Element ::= First [':' Value] 
+private E ::= <<withOn "PAR" Element>> | (!() Element) {recoverWhile=E_recover}
+private E_recover ::= !('}'|',')
+Element ::= First [':' Value]  {pin(".*")=1}
 private First ::= Key | <<keyOrValueExpression>>
 Key ::= (FieldName &':') | !() Expression // nullability hack for key without reference inside
 FieldName ::= identifier {
@@ -396,13 +396,13 @@ left ExprSwitchStatement ::= Condition '{' ExprCaseClause* '}' {pin=2 extends=Sw
 private Condition ::= <<enterMode "BLOCK?">> SimpleStatementOpt Expression? <<exitModeSafe "BLOCK?">>
 private SimpleStatementOpt ::= [SimpleStatement ';'?] // todo: remove ?
 
-ExprCaseClause ::= !'}' ExprSwitchCase ':' Statements? {pin=1}
+ExprCaseClause ::= !'}' ExprSwitchCase ':' Statements? {pin=1 implements="com.goide.psi.GoCaseClause"}
 private ExprSwitchCase ::= case ExpressionList | default {pin(".*")=1} 
 left TypeSwitchStatement ::= (TypeSwitchGuard | SimpleStatement ';'? TypeSwitchGuard) '{' ( TypeCaseClause )* '}' {pin=1 extends=SwitchStatement}
 TypeSwitchGuard ::= [ VarDefinition ':=' ] Expression '.' TypeGuard
 TypeGuard ::= '(' 'type' ')' {pin=2}
-TypeCaseClause ::= TypeSwitchCase ':' Statements?
-TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
+TypeCaseClause ::= !'}' TypeSwitchCase ':' Statements? {pin=1 implements="com.goide.psi.GoCaseClause"}
+private TypeSwitchCase ::= case TypeList | default {pin(".*")=1}
 TypeList ::= Type ( ',' Type )*
 TypeListNoPin ::= Type ( ',' Type )* {elementType=TypeList}
 ForStatement ::= for <<enterMode "BLOCK?">> (ForOrRangeClause Block | Block | Expression Block) <<exitModeSafe "BLOCK?">> {pin(".*")="for|ForOrRangeClause"}

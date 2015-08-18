@@ -21,6 +21,7 @@ import com.goide.psi.GoMethodDeclaration;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.stubs.index.GoMethodIndex;
 import com.goide.stubs.types.GoMethodDeclarationStubElementType;
+import com.goide.util.GoUtil;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
@@ -52,7 +53,7 @@ public class GoDuplicateMethodInspection extends GoInspectionBase {
       declarations = ContainerUtil.filter(declarations, new Condition<GoMethodDeclaration>() {
         @Override
         public boolean value(GoMethodDeclaration d) {
-          return !method.isEquivalentTo(d) && Comparing.equal(d.getName(), methodName);
+          return !method.isEquivalentTo(d) && Comparing.equal(d.getName(), methodName) && GoUtil.allowed(d.getContainingFile());
         }
       });
 

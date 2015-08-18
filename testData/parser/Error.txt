@@ -11,58 +11,60 @@ GO_FILE
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
-      PsiElement(identifier)('Error')
-      INTERFACE_TYPE
-        PsiElement(interface)('interface')
-        PsiElement({)('{')
-        METHOD_SPEC
-          TYPE_REFERENCE_EXPRESSION
-            PsiElement(identifier)('error')
-        PsiComment(GO_LINE_COMMENT)('// RuntimeError is a no-op function but')
-        PsiComment(GO_LINE_COMMENT)('// serves to distinguish types that are runtime')
-        PsiComment(GO_LINE_COMMENT)('// errors from ordinary errors: a type is a')
-        PsiComment(GO_LINE_COMMENT)('// runtime error if it has a RuntimeError method.')
-        METHOD_SPEC
-          PsiElement(identifier)('RuntimeError')
-          SIGNATURE
-            PARAMETERS
-              PsiElement(()('(')
-              PsiElement())(')')
-        PsiElement(})('}')
+      SPEC_TYPE
+        PsiElement(identifier)('Error')
+        INTERFACE_TYPE
+          PsiElement(interface)('interface')
+          PsiElement({)('{')
+          METHOD_SPEC
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('error')
+          PsiComment(GO_LINE_COMMENT)('// RuntimeError is a no-op function but')
+          PsiComment(GO_LINE_COMMENT)('// serves to distinguish types that are runtime')
+          PsiComment(GO_LINE_COMMENT)('// errors from ordinary errors: a type is a')
+          PsiComment(GO_LINE_COMMENT)('// runtime error if it has a RuntimeError method.')
+          METHOD_SPEC
+            PsiElement(identifier)('RuntimeError')
+            SIGNATURE
+              PARAMETERS
+                PsiElement(()('(')
+                PsiElement())(')')
+          PsiElement(})('}')
   PsiComment(GO_LINE_COMMENT)('// A TypeAssertionError explains a failed type assertion.')
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
-      PsiElement(identifier)('TypeAssertionError')
-      STRUCT_TYPE
-        PsiElement(struct)('struct')
-        PsiElement({)('{')
-        FIELD_DECLARATION
-          FIELD_DEFINITION
-            PsiElement(identifier)('interfaceString')
-          TYPE
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(identifier)('string')
-        FIELD_DECLARATION
-          FIELD_DEFINITION
-            PsiElement(identifier)('concreteString')
-          TYPE
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(identifier)('string')
-        FIELD_DECLARATION
-          FIELD_DEFINITION
-            PsiElement(identifier)('assertedString')
-          TYPE
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(identifier)('string')
-        FIELD_DECLARATION
-          FIELD_DEFINITION
-            PsiElement(identifier)('missingMethod')
-          TYPE
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(identifier)('string')
-        PsiComment(GO_LINE_COMMENT)('// one method needed by Interface, missing from Concrete')
-        PsiElement(})('}')
+      SPEC_TYPE
+        PsiElement(identifier)('TypeAssertionError')
+        STRUCT_TYPE
+          PsiElement(struct)('struct')
+          PsiElement({)('{')
+          FIELD_DECLARATION
+            FIELD_DEFINITION
+              PsiElement(identifier)('interfaceString')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('string')
+          FIELD_DECLARATION
+            FIELD_DEFINITION
+              PsiElement(identifier)('concreteString')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('string')
+          FIELD_DECLARATION
+            FIELD_DEFINITION
+              PsiElement(identifier)('assertedString')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('string')
+          FIELD_DECLARATION
+            FIELD_DEFINITION
+              PsiElement(identifier)('missingMethod')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('string')
+          PsiComment(GO_LINE_COMMENT)('// one method needed by Interface, missing from Concrete')
+          PsiElement(})('}')
   METHOD_DECLARATION
     PsiElement(func)('func')
     RECEIVER
@@ -440,10 +442,11 @@ GO_FILE
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
-      PsiElement(identifier)('errorString')
-      TYPE
-        TYPE_REFERENCE_EXPRESSION
-          PsiElement(identifier)('string')
+      SPEC_TYPE
+        PsiElement(identifier)('errorString')
+        TYPE
+          TYPE_REFERENCE_EXPRESSION
+            PsiElement(identifier)('string')
   METHOD_DECLARATION
     PsiElement(func)('func')
     RECEIVER
@@ -542,21 +545,22 @@ GO_FILE
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
-      PsiElement(identifier)('stringer')
-      INTERFACE_TYPE
-        PsiElement(interface)('interface')
-        PsiElement({)('{')
-        METHOD_SPEC
-          PsiElement(identifier)('String')
-          SIGNATURE
-            PARAMETERS
-              PsiElement(()('(')
-              PsiElement())(')')
-            RESULT
-              TYPE
-                TYPE_REFERENCE_EXPRESSION
-                  PsiElement(identifier)('string')
-        PsiElement(})('}')
+      SPEC_TYPE
+        PsiElement(identifier)('stringer')
+        INTERFACE_TYPE
+          PsiElement(interface)('interface')
+          PsiElement({)('{')
+          METHOD_SPEC
+            PsiElement(identifier)('String')
+            SIGNATURE
+              PARAMETERS
+                PsiElement(()('(')
+                PsiElement())(')')
+              RESULT
+                TYPE
+                  TYPE_REFERENCE_EXPRESSION
+                    PsiElement(identifier)('string')
+          PsiElement(})('}')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
     PsiElement(identifier)('typestring')
@@ -609,11 +613,10 @@ GO_FILE
             PsiElement())(')')
         PsiElement({)('{')
         TYPE_CASE_CLAUSE
-          TYPE_SWITCH_CASE
-            PsiElement(case)('case')
-            TYPE
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('nil')
+          PsiElement(case)('case')
+          TYPE
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('nil')
           PsiElement(:)(':')
           SIMPLE_STATEMENT
             LEFT_HAND_EXPR_LIST
@@ -626,11 +629,10 @@ GO_FILE
                     PsiElement(string)('"nil"')
                   PsiElement())(')')
         TYPE_CASE_CLAUSE
-          TYPE_SWITCH_CASE
-            PsiElement(case)('case')
-            TYPE
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('stringer')
+          PsiElement(case)('case')
+          TYPE
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('stringer')
           PsiElement(:)(':')
           SIMPLE_STATEMENT
             LEFT_HAND_EXPR_LIST
@@ -650,11 +652,10 @@ GO_FILE
                       PsiElement())(')')
                   PsiElement())(')')
         TYPE_CASE_CLAUSE
-          TYPE_SWITCH_CASE
-            PsiElement(case)('case')
-            TYPE
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('error')
+          PsiElement(case)('case')
+          TYPE
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('error')
           PsiElement(:)(':')
           SIMPLE_STATEMENT
             LEFT_HAND_EXPR_LIST
@@ -674,11 +675,10 @@ GO_FILE
                       PsiElement())(')')
                   PsiElement())(')')
         TYPE_CASE_CLAUSE
-          TYPE_SWITCH_CASE
-            PsiElement(case)('case')
-            TYPE
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('int')
+          PsiElement(case)('case')
+          TYPE
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('int')
           PsiElement(:)(':')
           SIMPLE_STATEMENT
             LEFT_HAND_EXPR_LIST
@@ -691,11 +691,10 @@ GO_FILE
                     PsiElement(identifier)('v')
                   PsiElement())(')')
         TYPE_CASE_CLAUSE
-          TYPE_SWITCH_CASE
-            PsiElement(case)('case')
-            TYPE
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('string')
+          PsiElement(case)('case')
+          TYPE
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('string')
           PsiElement(:)(':')
           SIMPLE_STATEMENT
             LEFT_HAND_EXPR_LIST
@@ -708,8 +707,7 @@ GO_FILE
                     PsiElement(identifier)('v')
                   PsiElement())(')')
         TYPE_CASE_CLAUSE
-          TYPE_SWITCH_CASE
-            PsiElement(default)('default')
+          PsiElement(default)('default')
           PsiElement(:)(':')
           SIMPLE_STATEMENT
             LEFT_HAND_EXPR_LIST

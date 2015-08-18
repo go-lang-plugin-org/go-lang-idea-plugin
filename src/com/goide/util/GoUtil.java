@@ -18,13 +18,16 @@ package com.goide.util;
 
 import com.goide.GoConstants;
 import com.goide.project.GoBuildTargetSettings;
+import com.goide.project.GoExcludedPathsSettings;
 import com.goide.psi.*;
+import com.goide.runconfig.testing.GoTestFinder;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -33,6 +36,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.DelegatingGlobalSearchScope;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.util.CachedValue;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.util.Function;
@@ -60,10 +64,24 @@ public class GoUtil {
     }
   };
   private static final String PLUGIN_ID = "ro.redeul.google.go";
+  private static final Key<CachedValue<Collection<String>>> PACKAGES_CACHE = Key.create("packages_cache");
+  private static final Key<CachedValue<Collection<String>>> PACKAGES_TEST_TRIMMED_CACHE = Key.create("packages_test_trimmed_cache");
 
   public static boolean allowed(@NotNull PsiFile file) {
     GoBuildTargetSettings targetSettings = GoBuildTargetSettings.getInstance(file.getProject());
     return new GoBuildMatcher(targetSettings.getTargetSystemDescriptor(ModuleUtilCore.findModuleForPsiElement(file))).matchFile(file);
+  }
+
+  public static boolean isExcludedFile(@NotNull final GoFile file) {
+    return CachedValuesManager.getCachedValue(file, new CachedValueProvider<Boolean>() {
+      @Nullable
+      @Override
+      public Result<Boolean> compute() {
+        String importPath = file.getImportPath();
+        GoExcludedPathsSettings excludedSettings = GoExcludedPathsSettings.getInstance(file.getProject());
+        return Result.create(importPath != null && excludedSettings.isExcluded(importPath), file, excludedSettings);
+      }
+    });
   }
 
   @NotNull
@@ -104,19 +122,22 @@ public class GoUtil {
   }
 
   @Contract("null -> true")
-  public static boolean libraryImportPathToIgnore(@Nullable String importPath) {
+  public static boolean importPathToIgnore(@Nullable String importPath) {
     if (importPath != null) {
       for (String part : StringUtil.split(importPath, "/")) {
-        if (libraryDirectoryToIgnore(part)) return false;
+        if (directoryToIgnore(part)) return false;
       }
     }
     return true;
   }
 
   public static boolean libraryDirectoryToIgnore(@NotNull String name) {
-    return StringUtil.startsWithChar(name, '.') || StringUtil.startsWithChar(name, '_') || GoConstants.TESTDATA_NAME.equals(name);
+    return directoryToIgnore(name) || GoConstants.TESTDATA_NAME.equals(name);
   }
-
+  
+  public static boolean directoryToIgnore(@NotNull String name) {
+    return StringUtil.startsWithChar(name, '_') || StringUtil.startsWithChar(name, '.');
+  }
 
   @NotNull
   public static GlobalSearchScope moduleScope(@NotNull PsiElement element) {
@@ -185,46 +206,55 @@ public class GoUtil {
   }
 
   @NotNull
-  public static Collection<String> getAllPackagesInDirectory(@Nullable final PsiDirectory dir) {
-    if (dir == null) {
-      return Collections.emptyList();
-    }
-    return CachedValuesManager.getCachedValue(dir, new CachedValueProvider<Collection<String>>() {
+  public static Collection<String> getAllPackagesInDirectory(@Nullable final PsiDirectory dir, final boolean trimTestSuffices) {
+    if (dir == null) return Collections.emptyList();
+    Key<CachedValue<Collection<String>>> key = trimTestSuffices ? PACKAGES_TEST_TRIMMED_CACHE : PACKAGES_CACHE;
+    return CachedValuesManager.getManager(dir.getProject()).getCachedValue(dir, key, new CachedValueProvider<Collection<String>>() {
       @Nullable
       @Override
       public Result<Collection<String>> compute() {
         Collection<String> set = ContainerUtil.newLinkedHashSet();
         for (PsiFile file : dir.getFiles()) {
-          if (file instanceof GoFile) {
+          if (file instanceof GoFile && !directoryToIgnore(file.getName())) {
             String name = ((GoFile)file).getPackageName();
-            if (name != null && !GoConstants.MAIN.equals(name)) {
-              set.add(name);
+            if (StringUtil.isNotEmpty(name)) {
+              set.add(trimTestSuffices && GoTestFinder.isTestFile(file) ? StringUtil.trimEnd(name, GoConstants.TEST_SUFFIX) : name);
             }
           }
         }
         return Result.create(set, dir);
       }
-    });
+    }, false);
   }
 
   @NotNull
-  public static GlobalSearchScope moduleScopeExceptContainingFile(@NotNull PsiElement context) {
-    PsiFile file = context.getContainingFile();
-    GlobalSearchScope moduleScope = moduleScope(context);
-    return file != null ? new ExceptFileScope(moduleScope, file.getVirtualFile()) : moduleScope;
+  public static GlobalSearchScope moduleScopeWithoutTests(@NotNull PsiElement context) {
+    return new ExceptTestsScope(moduleScope(context));
   }
 
-  private static class ExceptFileScope extends DelegatingGlobalSearchScope {
-    @Nullable private final VirtualFile myFile;
-
-    public ExceptFileScope(GlobalSearchScope moduleScope, @Nullable VirtualFile file) {
-      super(moduleScope);
-      myFile = file;
+  private static class ExceptTestsScope extends DelegatingGlobalSearchScope {
+    public ExceptTestsScope(@NotNull GlobalSearchScope baseScope) {
+      super(baseScope);
     }
 
     @Override
     public boolean contains(@NotNull VirtualFile file) {
-      return !file.equals(myFile) && super.contains(file);
+      return !GoTestFinder.isTestFile(file) && super.contains(file);
     }
   }
+  
+  public static class ExceptChildOfDirectory extends DelegatingGlobalSearchScope {
+    @NotNull private final VirtualFile myParent;
+
+    public ExceptChildOfDirectory(@NotNull VirtualFile parent, @NotNull GlobalSearchScope baseScope) {
+      super(baseScope);
+      myParent = parent;
+    }
+
+    @Override
+    public boolean contains(@NotNull VirtualFile file) {
+      return !myParent.equals(file.getParent()) && super.contains(file);
+    }
+  }
+
 }

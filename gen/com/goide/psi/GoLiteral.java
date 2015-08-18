@@ -23,15 +23,9 @@ public interface GoLiteral extends GoExpression {
   PsiElement getHex();
 
   @Nullable
-  PsiElement getImaginary();
-
-  @Nullable
   PsiElement getInt();
 
   @Nullable
   PsiElement getOct();
-
-  @Nullable
-  PsiElement getRune();
 
 }

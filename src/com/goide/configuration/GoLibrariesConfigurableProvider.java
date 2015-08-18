@@ -97,7 +97,7 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
           }
         }
         if (dialogMode) {
-          rootPanel.setPreferredSize(new Dimension(400, -1));
+          rootPanel.setPreferredSize(new Dimension(400, 600));
         }
         rootPanel.revalidate();
         return rootPanel;

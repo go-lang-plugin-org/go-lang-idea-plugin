@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 package com.goide.psi.legacy;
 
 import com.goide.GoCodeInsightFixtureTestCase;
+import com.goide.project.GoModuleLibrariesService;
 import com.goide.psi.GoFile;
 import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
@@ -35,64 +35,90 @@ import java.io.File;
 
 public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCase {
   @NotNull public static final String REF_MARK = "/*ref*/";
+  @NotNull public static final String NO_REF_MARK = "/*no ref*/";
   @NotNull public static final String DEF_MARK = "/*def*/";
 
   @Nullable protected PsiReference myReference;
   @Nullable protected PsiElement myDefinition;
+  protected boolean myShouldBeResolved = true;
+
+  @Override
+  public void tearDown() throws Exception {
+    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls();
+    super.tearDown();
+  }
 
   @Override
   protected String getBasePath() {
     return "psi/resolve";
   }
 
-  protected void doResolveTest(boolean lowercase) {
-    doResolveTest(getTestName(lowercase) + ".go");
+  protected void doFileTest() {
+    processPsiFile((GoFile)myFixture.configureByFile(getTestName(false) + ".go"));
+    doResolveTest();
   }
   
   protected void doDirTest() {
     String testDataPath = getTestDataPath();
-    File fromFile = new File(testDataPath + "/" + getTestName(false));
-    if (fromFile.isDirectory()) {
-      VirtualFile dir = LocalFileSystem.getInstance().findFileByPath(fromFile.getPath());
-      assert dir != null;
-      doDirectoryTest(dir);
+    String testName = getTestName(false);
+    File fromDir = new File(testDataPath + "/" + testName);
+    if (!fromDir.isDirectory()) {
+      throw new RuntimeException("Given file is not directory: " + fromDir);
     }
-  }
-
-  private void doResolveTest(@NotNull String filePath) {
-    processPsiFile((GoFile)myFixture.configureByFile(filePath));
-    if (myReference == null) fail("no reference defined in test case");
-    PsiElement resolve = myReference.resolve();
-    if (resolve != null && myDefinition == null && !allowNullDefinition()) fail("element resolved but it shouldn't have");
-    if (resolve == null && myDefinition != null) fail("element didn't resolve when it should have");
-    if (resolve != null) {
-      if (!allowNullDefinition()) {
-        PsiElement def = PsiTreeUtil.getParentOfType(myDefinition, resolve.getClass(), false);
-        assertSame(def, resolve);
+    //noinspection ConstantConditions
+    for (File file : fromDir.listFiles()) {
+      if (file.isDirectory()) {
+        myFixture.copyDirectoryToProject(testName + "/" + file.getName(), file.getName());
+      }
+      else {
+        myFixture.copyFileToProject(testName + "/" + file.getName());
       }
     }
-    else {
-      processNullResolve();
+    VirtualFile dirToTest = myFixture.getTempDirFixture().getFile(".");
+    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(dirToTest.getUrl());
+    doDirectoryTest(dirToTest);
+  }
+
+  private void doResolveTest() {
+    if (myReference == null) fail("no reference defined in test case");
+    if (myShouldBeResolved && !allowNullDefinition() && myDefinition == null) fail("no definition defined in test case");
+    PsiElement resolve = myReference.resolve();
+    if (myShouldBeResolved) {
+      assertNotNull("cannot resolve reference " + myReference.getCanonicalText(), resolve);
+      if (myDefinition != null) {
+        PsiElement def = PsiTreeUtil.getParentOfType(myDefinition, resolve.getClass(), false);
+        assertSame("element resolved in non-expected element from " + getFileName(resolve) + ":\n" + resolve.getText(), 
+                   def, resolve);
+      }
     }
+    else if (resolve != null) {
+        fail("element is resolved but it wasn't should. resolved to element from " + getFileName(resolve) + ":\n" + resolve.getText());
+      }
+  }
+
+  @NotNull
+  private static String getFileName(PsiElement resolve) {
+    return resolve instanceof PsiFile ? ((PsiFile)resolve).getName() : resolve.getContainingFile().getName();
   }
 
   protected boolean allowNullDefinition() {
     return false;
   }
-
-  protected void processNullResolve() {
-  }
-
+  
   private void processPsiFile(@NotNull GoFile file) {
     String fileContent = loadText(file.getVirtualFile());
-    
-    int refIndex = fileContent.indexOf(REF_MARK);
+
     String fileName = file.getName();
+    int refIndex = fileContent.indexOf(REF_MARK);
     if (refIndex != -1) {
-      if (myReference != null) fail("only once reference should be declared in a test case, see file: " + fileName);
       int offset = refIndex + REF_MARK.length();
-      myReference = file.findReferenceAt(offset);
-      if (myReference == null) fail("no reference was found as marked in file: " + fileName + ", offset: " + offset);
+      myReference = findReference(file, offset);
+    }
+    int noRefIndex = fileContent.indexOf(NO_REF_MARK);
+    if (noRefIndex != -1) {
+      int offset = noRefIndex + NO_REF_MARK.length();
+      myReference = findReference(file, offset);
+      myShouldBeResolved = false;
     }
 
     int defIndex = fileContent.indexOf(DEF_MARK);
@@ -100,8 +126,16 @@ public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCa
       if (myDefinition != null) fail("only one definition should be allowed in a resolve test case, see file: " + fileName);
       int offset = defIndex + DEF_MARK.length();
       myDefinition = file.findElementAt(offset);
-      if (myDefinition == null) fail("no definition was found where marked in file: " + fileName + ", offset: " + offset);
+      if (myDefinition == null) fail("no definition was found at mark in file: " + fileName + ", offset: " + offset);
     }
+  }
+
+  @NotNull
+  private PsiReference findReference(@NotNull GoFile file, int offset) {
+    if (myReference != null) fail("only one reference should be declared in a test case, see file: " + file.getName());
+    PsiReference result = file.findReferenceAt(offset);
+    if (result == null) fail("no reference was found at mark in file: " + file.getName() + ", offset: " + offset);
+    return result;
   }
 
   private void doDirectoryTest(@NotNull final VirtualFile file) {
@@ -125,7 +159,6 @@ public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCa
         }
       )
     );
+    doResolveTest();
   }
-
-  protected void doTest() { doResolveTest(false); }
 }

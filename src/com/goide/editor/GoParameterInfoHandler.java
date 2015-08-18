@@ -21,9 +21,7 @@ import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.lang.parameterInfo.*;
-import com.intellij.openapi.project.DumbAware;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
@@ -34,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Set;
 
-public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabActionSupport<GoArgumentList, Object, GoExpression>, DumbAware {
+public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabActionSupport<GoArgumentList, Object, GoExpression> {
   @NotNull
   @Override
   public GoExpression[] getActualParameters(@NotNull GoArgumentList o) {
@@ -107,13 +105,12 @@ public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabAction
     if (!(parent instanceof GoCallExpr)) return;
 
     GoCallExpr call = (GoCallExpr)parent;
-    PsiReference ref = GoPsiImplUtil.getCallReference(call);
-    PsiElement resolve = ref != null ? ref.resolve() : null;
-    if (ref == null && ((call).getExpression() instanceof GoFunctionLit)) {
+    PsiElement resolve = GoPsiImplUtil.resolveCall(call);
+    if (resolve == null && ((call).getExpression() instanceof GoFunctionLit)) { // todo: move inside resolve call
       context.setItemsToShow(new Object[]{((GoFunctionLit)(call).getExpression())});
       context.showHint(argList, argList.getTextRange().getStartOffset(), this);
     }
-    else if (resolve instanceof GoSignatureOwner) {
+    else if (resolve != null) {
       context.setItemsToShow(new Object[]{resolve});
       context.showHint(argList, argList.getTextRange().getStartOffset(), this);
     }

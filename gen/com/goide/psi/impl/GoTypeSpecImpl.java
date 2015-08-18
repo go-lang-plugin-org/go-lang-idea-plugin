@@ -29,20 +29,14 @@ public class GoTypeSpecImpl extends GoNamedElementImpl<GoTypeSpecStub> implement
   }
 
   @Override
-  @Nullable
-  public GoType getType() {
-    return findChildByClass(GoType.class, com.goide.stubs.GoTypeStub.class);
-  }
-
-  @Override
   @NotNull
-  public PsiElement getIdentifier() {
-    return findNotNullChildByType(IDENTIFIER);
+  public GoSpecType getSpecType() {
+    return findNotNullChildByClass(GoSpecType.class);
   }
 
   @Nullable
-  public GoType getGoType(ResolveState context) {
-    return GoPsiImplUtil.getGoType(this, context);
+  public GoType getGoTypeInner(ResolveState context) {
+    return GoPsiImplUtil.getGoTypeInner(this, context);
   }
 
   @NotNull
@@ -52,6 +46,13 @@ public class GoTypeSpecImpl extends GoNamedElementImpl<GoTypeSpecStub> implement
 
   public boolean shouldGoDeeper() {
     return GoPsiImplUtil.shouldGoDeeper(this);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getIdentifier() {
+    GoSpecType p1 = getSpecType();
+    return p1.getIdentifier();
   }
 
 }

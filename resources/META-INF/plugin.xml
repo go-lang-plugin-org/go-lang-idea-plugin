@@ -28,7 +28,8 @@
       It's faster than 0.9.x, refactoring works to some degree and has native support for gopath packages.</p>
 
     <h3>Compatibility</h3>
-    <p>Plugin can be installed on IntelliJ platform 141.2 or greater. It corresponds to IntelliJ IDEA 14.1, WebStorm 10, PhpStorm 9</p>
+    <p>Plugin can be installed on IntelliJ platform 141.1532 or greater. It corresponds to IntelliJ IDEA 14.1.4, WebStorm 10.0.4, 
+      PhpStorm 9.0, RubyMine 7.1.3 and PyCharm 4.5.2</p>
     ]]></description>
 
   <change-notes>
@@ -36,7 +37,7 @@
     ]]>
   </change-notes>
 
-  <idea-version since-build="141.2" until-build="142.9999"/>
+  <idea-version since-build="141.1532" until-build="142.9999"/>
   <depends>com.intellij.modules.lang</depends>
 
   <depends optional="true" config-file="java-deps.xml">com.intellij.modules.java</depends>
@@ -72,6 +73,8 @@
                          bundle="do.not.touch.this.attribute"/>
 
     <projectService serviceImplementation="com.goide.project.GoBuildTargetSettings"/>
+    <projectService serviceImplementation="com.goide.project.GoExcludedPathsSettings"/>
+    <applicationService serviceImplementation="com.goide.codeInsight.imports.GoCodeInsightSettings" />
 
     <defaultLiveTemplatesProvider implementation="com.goide.template.GoLiveTemplatesProvider"/>
     <liveTemplateContext implementation="com.goide.template.GoEverywhereContextType"/>
@@ -87,6 +90,7 @@
     <annotator language="go" implementationClass="com.goide.GoAnnotator"/>
 
     <lang.importOptimizer language="go" implementationClass="com.goide.codeInsight.imports.GoImportOptimizer"/>
+    <referenceImporter implementation="com.goide.psi.impl.imports.GoReferenceImporter"/>
     <psi.fileReferenceHelper implementation="com.goide.psi.impl.imports.GoImportReferenceHelper"/>
     <fileContextProvider implementation="com.goide.psi.impl.imports.GoFileContextProvider"/>
 
@@ -97,6 +101,7 @@
     <colorSettingsPage implementation="com.goide.highlighting.GoColorsAndFontsPage"/>
     <lang.braceMatcher language="go" implementationClass="com.goide.editor.GoBraceMatcher"/>
     <quoteHandler fileType="Go" className="com.goide.editor.GoQuoteHandler"/>
+    <editorTypedHandler implementationClass="com.goide.editor.GoTypedHandler" />
     <lang.commenter language="go" implementationClass="com.goide.GoCommenter"/>
     <lang.elementManipulator forClass="com.goide.psi.impl.GoStringLiteralImpl"
                              implementationClass="com.goide.psi.impl.manipulator.GoStringManipulator"/>
@@ -106,6 +111,7 @@
     <completion.contributor language="go" order="last" implementationClass="com.goide.completion.GoAutoImportCompletionContributor"/>
     <completion.confidence language="go" order="last" implementationClass="com.goide.completion.GoCompletionConfidence"/>
     <lookup.charFilter implementation="com.goide.completion.GoCharFilter"/>
+    <lookup.actionProvider implementation="com.goide.codeInsight.imports.GoExcludePathLookupActionProvider"/>
 
     <lang.refactoringSupport language="go" implementationClass="com.goide.refactor.GoRefactoringSupportProvider"/>
     <spellchecker.support language="go" implementationClass="com.goide.inspections.GoSpellcheckingStrategy"/>
@@ -120,6 +126,7 @@
     <highlightUsagesHandlerFactory implementation="com.goide.highlighting.GoHighlightExitPointsHandlerFactory"/>
     <codeInsight.lineMarkerProvider language="go" implementationClass="com.goide.editor.marker.GoMethodSeparatorProvider"/>
     <analyzeStacktraceFilter implementation="com.goide.runconfig.GoConsoleFilter"/>
+    <lang.implementationTextSelectioner language="go" implementationClass="com.goide.editor.GoImplementationTextSelectioner"/>
 
     <!--formatter-->
     <lang.formatter language="go" implementationClass="com.goide.formatter.GoFormattingModelBuilder"/>
@@ -160,6 +167,7 @@
 
     <!-- debugger -->
     <xdebugger.breakpointType implementation="com.goide.debugger.ideagdb.debug.breakpoints.GdbBreakpointType"/>
+    <xdebugger.breakpointType implementation="com.goide.dlv.breakpoint.DlvBreakpointType"/>
 
     <!-- temporary debugger configurations -->
     <!-- todo: move it to run/test configurations -->
@@ -192,6 +200,9 @@
     <localInspection language="go" displayName="Assignment to constant"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.unresolved.GoAssignmentToConstantInspection"/>
+    <localInspection language="go" displayName="Assignment nil without explicit type"
+                     groupName="Go" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoAssignmentNilWithoutExplicitType" />
     <localInspection language="go" displayName="Duplicate function"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoDuplicateFunctionInspection"/>
@@ -225,6 +236,15 @@
     <localInspection language="go" displayName="Defer/go statements check"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoDeferGoInspection"/>
+    <localInspection language="go" displayName="Multiple packages in directory declaration"
+                     groupName="Go" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoMultiplePackagesInspection" />
+    <localInspection language="go" displayName="Usage of cgo in tests is not supported"
+                     groupName="Go" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoCgoInTestInspection"/>
+    <localInspection language="go" displayName="Wrong test declaration"
+                     groupName="Go" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoTestSignaturesInspection"/>
   </extensions>
   <actions>
     <action id="Go.NewGoFile" class="com.goide.actions.GoCreateFileAction"

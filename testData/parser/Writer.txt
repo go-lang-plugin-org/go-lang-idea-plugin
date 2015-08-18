@@ -110,53 +110,54 @@ GO_FILE
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
-      PsiElement(identifier)('Writer')
-      STRUCT_TYPE
-        PsiElement(struct)('struct')
-        PsiElement({)('{')
-        FIELD_DECLARATION
-          FIELD_DEFINITION
-            PsiElement(identifier)('w')
-          TYPE
-            TYPE_REFERENCE_EXPRESSION
+      SPEC_TYPE
+        PsiElement(identifier)('Writer')
+        STRUCT_TYPE
+          PsiElement(struct)('struct')
+          PsiElement({)('{')
+          FIELD_DECLARATION
+            FIELD_DEFINITION
+              PsiElement(identifier)('w')
+            TYPE
               TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('io')
-              PsiElement(.)('.')
-              PsiElement(identifier)('Writer')
-        FIELD_DECLARATION
-          FIELD_DEFINITION
-            PsiElement(identifier)('err')
-          TYPE
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(identifier)('error')
-        FIELD_DECLARATION
-          FIELD_DEFINITION
-            PsiElement(identifier)('nb')
-          TYPE
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(identifier)('int64')
-        PsiComment(GO_LINE_COMMENT)('// number of unwritten bytes for current file entry')
-        FIELD_DECLARATION
-          FIELD_DEFINITION
-            PsiElement(identifier)('pad')
-          TYPE
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(identifier)('int64')
-        PsiComment(GO_LINE_COMMENT)('// amount of padding to write after current file entry')
-        FIELD_DECLARATION
-          FIELD_DEFINITION
-            PsiElement(identifier)('closed')
-          TYPE
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(identifier)('bool')
-        FIELD_DECLARATION
-          FIELD_DEFINITION
-            PsiElement(identifier)('usedBinary')
-          TYPE
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(identifier)('bool')
-        PsiComment(GO_LINE_COMMENT)('// whether the binary numeric field extension was used')
-        PsiElement(})('}')
+                TYPE_REFERENCE_EXPRESSION
+                  PsiElement(identifier)('io')
+                PsiElement(.)('.')
+                PsiElement(identifier)('Writer')
+          FIELD_DECLARATION
+            FIELD_DEFINITION
+              PsiElement(identifier)('err')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('error')
+          FIELD_DECLARATION
+            FIELD_DEFINITION
+              PsiElement(identifier)('nb')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('int64')
+          PsiComment(GO_LINE_COMMENT)('// number of unwritten bytes for current file entry')
+          FIELD_DECLARATION
+            FIELD_DEFINITION
+              PsiElement(identifier)('pad')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('int64')
+          PsiComment(GO_LINE_COMMENT)('// amount of padding to write after current file entry')
+          FIELD_DECLARATION
+            FIELD_DEFINITION
+              PsiElement(identifier)('closed')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('bool')
+          FIELD_DECLARATION
+            FIELD_DEFINITION
+              PsiElement(identifier)('usedBinary')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('bool')
+          PsiComment(GO_LINE_COMMENT)('// whether the binary numeric field extension was used')
+          PsiElement(})('}')
   PsiComment(GO_LINE_COMMENT)('// NewWriter creates a new Writer writing to w.')
   FUNCTION_DECLARATION
     PsiElement(func)('func')

@@ -1,0 +1,171 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+  ~ Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<templateSet group="GoHiddenTemplate">
+  <!-- KEYWORDS -->
+  <template description='Package declaration' id='go_lang_package' name='go_lang_package' toReformat='true' toShortenFQNames='true'
+            value='package $NAME$'>
+    <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='NAME'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='Import declaration' id='go_lang_import' name='go_lang_import' toReformat='true' toShortenFQNames='true'
+            value='import "$END$"'>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='Defer declaration' id='go_lang_break' name='go_lang_break' toReformat='true' toShortenFQNames='true'
+            value='break'>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='Defer declaration' id='go_lang_continue' name='go_lang_continue' toReformat='true' toShortenFQNames='true'
+            value='continue'>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='Constant declaration' id='go_lang_const' name='go_lang_const' toReformat='true' toShortenFQNames='true'
+            value='const $NAME$ $TYPE$ = $VALUE$'>
+    <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+    <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='TYPE'/>
+    <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='VALUE'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='For loop' id='go_lang_for' name='go_lang_for' toReformat='true' toShortenFQNames='true'
+            value='for $CONDITION$ {&#10;	$END$&#10;}'>
+    <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='CONDITION'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='If statement' id='go_lang_if' name='go_lang_if' toReformat='true' toShortenFQNames='true'
+            value='if $CONDITION$ {&#10;	$END$&#10;}'>
+    <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='CONDITION'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description="Switch statement" id='go_lang_switch' name="go_lang_switch" toReformat="true" toShortenFQNames="true"
+            value="switch $EXPRESSION$ {&#10;	$END$&#10;}">
+    <variable alwaysStopAt='true' defaultValue='&quot;expr&quot;' expression='' name='EXPRESSION'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='Case clause' id='go_lang_case' name='go_lang_case' toReformat='true' toShortenFQNames='true'
+            value='case $CONDITION$: &#10;	$END$'>
+    <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='CONDITION'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='Default clause' id='go_lang_default' name='go_lang_default' toReformat='true' toShortenFQNames='true'
+            value='default: &#10;	$END$'>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='Function or method' id='go_lang_func' name='go_lang_func' toReformat='true' toShortenFQNames='true'
+            value='func $NAME$($PARAMETERS$) $RETURN$ {   &#10;	$END$&#10;}'>
+    <variable alwaysStopAt='true' defaultValue='' expression='' name='NAME'/>
+    <variable alwaysStopAt='true' defaultValue='' expression='' name='PARAMETERS'/>
+    <variable alwaysStopAt='true' defaultValue='' expression='' name='RETURN'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='Anonymous function' id='go_lang_anonymous_func' name='go_lang_anonymous_func' toReformat='true' toShortenFQNames='true'
+            value='func() { $END$ }'>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='Variable declaration' id='go_lang_var' name='go_lang_var' toReformat='true' toShortenFQNames='true'
+            value='var $NAME$ $TYPE$ = $VALUE$'>
+    <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+    <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='TYPE'/>
+    <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='VALUE'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='Interface or struct' id='go_lang_type' name='go_lang_type' toReformat='true' toShortenFQNames='true'
+            value='type $NAME$ $TYPE$ {&#10;	$END$&#10;}'>
+    <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+    <variable alwaysStopAt='true' defaultValue='' expression='complete' name='TYPE'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='Type quick fix' id='go_lang_type_qf' name='type_qf' toReformat='true' toShortenFQNames='true'
+            value='type $NAME$$END$ $TYPE$&#10;&#10;'>
+    <variable alwaysStopAt='true' defaultValue='' expression='complete' name='TYPE'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='Local variable quick fix' id='go_lang_local_var_qf' name='go_lang_var_qf' toReformat='true' toShortenFQNames='true'
+            value='$NAME$$END$ := $VALUE$&#10;'>
+    <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='VALUE'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='Global variable quick fix' id='go_lang_global_var_qf' name='global_var_qf' toReformat='true' toShortenFQNames='true'
+            value='var $NAME$$END$ = $VALUE$&#10;&#10;'>
+    <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='VALUE'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='Global constant quick fix' id='go_lang_global_const_qf' name='global_const_qf' toReformat='true' toShortenFQNames='true'
+            value='const $NAME$$END$ = $VALUE$&#10;&#10;'>
+    <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='VALUE'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='Add return' id='go_lang_add_return' name='add_return' toReformat='true' toShortenFQNames='true'
+            value='return $VALUE$$END$&#10;'>
+    <variable alwaysStopAt='true' defaultValue='' expression='' name='VALUE'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+
+  <!-- TEST GENERATOR -->
+  <template description='Test' id='go_lang_test' name='go_lang_test' toReformat='true' toShortenFQNames='true'
+            value='func Test$NAME$(t *testing.T) {&#10;	$END$&#10;}'>
+    <variable alwaysStopAt='true' defaultValue='&quot;Name&quot;' expression='' name='NAME'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+  <template description='Benchmark' id='go_lang_benchmark' name='go_lang_benchmark' toReformat='true' toShortenFQNames='true'
+            value='func Benchmark$NAME$(b *testing.B) {&#10;	for i := 0; i &lt; b.N; i++ {&#10;	$END$ &#10;	}&#10;}'>
+    <variable alwaysStopAt='true' defaultValue='&quot;Name&quot;' expression='' name='NAME'/>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
+</templateSet>

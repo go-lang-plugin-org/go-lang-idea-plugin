@@ -4,13 +4,13 @@
 ## Pre-release builds
 
 **Supported IDEs**
-Pre-release builds can be installed on IntelliJ platform 141.2 or greater.
+Pre-release builds can be installed on IntelliJ platform 141.1532 or greater.
 
-- IntelliJ IDEA 14.1+ (Ultimate or Community)
-- WebStorm 10+
-- PhpStorm 9+
-- PyCharm 4.5+
-- RubyMine 7.1+
+- IntelliJ IDEA 14.1.4+ (Ultimate or Community)
+- WebStorm 10.0.4+
+- PhpStorm 9.0+
+- PyCharm 4.5.2+
+- RubyMine 7.1.3+
 - CLion 1.0.3+
 - Android Studio 1.2.1+
 

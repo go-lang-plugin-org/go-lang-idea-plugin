@@ -39,7 +39,7 @@ public class GoDefaultHighlightingSettingProvider extends DefaultHighlightingSet
     if (FileIndexFacade.getInstance(project).isInContent(file)) return null;
 
     PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
-    if (psiFile instanceof GoFile && !GoUtil.libraryImportPathToIgnore(((GoFile)psiFile).getImportPath())) {
+    if (psiFile instanceof GoFile && !GoUtil.importPathToIgnore(((GoFile)psiFile).getImportPath())) {
       return FileHighlightingSetting.SKIP_HIGHLIGHTING;
     }
     return null;

@@ -32,7 +32,9 @@ func <warning>main1</warning>(i interface{}) {
     // it fails
     switch t := i.(type) {
         case Par:
+        a := t
         _ = t[0].Key
+        _ = a[0].Key
     }
 }
 

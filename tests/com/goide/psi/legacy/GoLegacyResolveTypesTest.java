@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,13 @@ public class GoLegacyResolveTypesTest extends GoLegacyResolveTestBase {
   @Override
   protected String getBasePath() { return "psi/resolve/types"; }
 
-  public void testLocalType()                                     { doTest(); } 
-  public void testFromMethodReceiver()                            { doTest(); } 
-  public void testResolveTypeNameInTypeSpec()                     { doTest(); } 
-  public void testResolveTypeInCast()                             { doTest(); } 
-  public void testResolveArrayInRange()                           { doTest(); } 
-  public void testMethodsOrder()                                  { doTest(); } 
+  public void testLocalType()                                     { doFileTest(); } 
+  public void testFromMethodReceiver()                            { doFileTest(); } 
+  public void testResolveTypeNameInTypeSpec()                     { doFileTest(); } 
+  public void testResolveTypeInCast()                             { doFileTest(); } 
+  public void testResolveArrayInRange()                           { doFileTest(); } 
+  public void testMethodsOrder()                                  { doFileTest(); }
+
   public void testFromDefaultImportedPackage()                    { doDirTest(); } 
   public void testFromInjectedPackage()                           { doDirTest(); } 
   public void testFromCustomImportedPackage()                     { doDirTest(); } 

@@ -15,7 +15,7 @@ public interface GoVarDefinition extends GoNamedElement, StubBasedPsiElement<GoV
   PsiElement getIdentifier();
 
   @Nullable
-  GoType getGoType(ResolveState context);
+  GoType getGoTypeInner(ResolveState context);
 
   @Nullable
   PsiReference getReference();

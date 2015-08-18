@@ -1,5 +1,5 @@
 package main
 
 func main() {
-    /*ref*/Test()
+    /*no ref*/Test()
 }

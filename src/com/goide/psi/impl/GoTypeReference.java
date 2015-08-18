@@ -16,12 +16,15 @@
 
 package com.goide.psi.impl;
 
+import com.goide.GoConstants;
+import com.goide.GoTypes;
 import com.goide.psi.*;
 import com.goide.sdk.GoSdkUtil;
 import com.goide.util.GoUtil;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
+import com.intellij.psi.formatter.FormatterUtil;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -52,9 +55,8 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
 
   @NotNull
   private ResolveResult[] resolveInner() {
-    String identifierText = getName();
     Collection<ResolveResult> result = new OrderedSet<ResolveResult>();
-    processResolveVariants(GoReference.createResolveProcessor(identifierText, result, myElement));
+    processResolveVariants(GoReference.createResolveProcessor(result, myElement));
     
     if (result.isEmpty() && myElement.getParent() instanceof GoReceiverType) {
       PsiElement resolve = new GoReference(myElement).resolve();
@@ -71,8 +73,9 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
     return GoUtil.couldBeReferenceTo(element, myElement) && super.isReferenceTo(element);
   }
 
-  private String getName() {
-    return myElement.getIdentifier().getText();
+  @NotNull
+  private PsiElement getIdentifier() {
+    return myElement.getIdentifier();
   }
 
   @Override
@@ -126,13 +129,15 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
     if (!GoReference.processDirectory(dir, file, file.getPackageName(), processor, state, true)) return false;
     if (GoReference.processImports(file, processor, state, myElement)) return false;
     if (processBuiltin(processor, state, myElement)) return false;
-    if (PsiTreeUtil.getParentOfType(myElement, GoTypeSwitchCase.class) != null && "nil".equals(getName())) {
+    if (getIdentifier().textMatches(GoConstants.NIL) && PsiTreeUtil.getParentOfType(myElement, GoTypeCaseClause.class) != null) {
+      GoType type = PsiTreeUtil.getParentOfType(myElement, GoType.class);
+      if (FormatterUtil.getPrevious(type != null ? type.getNode() : null, GoTypes.CASE) == null) return true;
       GoFile builtinFile = GoSdkUtil.findBuiltinFile(myElement);
       if (builtinFile == null) return false;
       GoVarDefinition nil = ContainerUtil.find(builtinFile.getVars(), new Condition<GoVarDefinition>() {
         @Override
         public boolean value(GoVarDefinition v) {
-          return "nil".equals(v.getName());
+          return GoConstants.NIL.equals(v.getName());
         }
       });
       if (nil != null && !processor.execute(nil, state)) return false;
@@ -149,7 +154,7 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
 
   @NotNull
   private GoTypeProcessor createDelegate(@NotNull GoScopeProcessor processor) {
-    return new GoTypeProcessor(getName(), myElement, processor.isCompletion());
+    return new GoTypeProcessor(myElement, processor.isCompletion());
   }
 
   private boolean processFileEntities(@NotNull GoFile file,
@@ -171,12 +176,12 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
   }
 
   public boolean allowed(@NotNull GoTypeSpec definition) {
-    return !myInsideInterfaceType || (definition.getType() instanceof GoInterfaceType);
+    return !myInsideInterfaceType || (definition.getSpecType().getType() instanceof GoInterfaceType);
   }
 
   @Override
   public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-    myElement.getIdentifier().replace(GoElementFactory.createIdentifierFromText(myElement.getProject(), newElementName));
+    getIdentifier().replace(GoElementFactory.createIdentifierFromText(myElement.getProject(), newElementName));
     return myElement;
   }
 }

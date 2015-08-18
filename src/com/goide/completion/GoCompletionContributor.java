@@ -19,22 +19,25 @@ package com.goide.completion;
 import com.goide.GoConstants;
 import com.goide.GoParserDefinition;
 import com.goide.GoTypes;
+import com.goide.psi.GoFile;
 import com.goide.psi.GoImportString;
 import com.goide.psi.GoPackageClause;
 import com.goide.psi.GoReferenceExpressionBase;
 import com.goide.psi.impl.GoCachedReference;
+import com.goide.psi.impl.GoPsiImplUtil;
+import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.lang.ASTNode;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -53,18 +56,21 @@ public class GoCompletionContributor extends CompletionContributor {
   @Override
   public void fillCompletionVariants(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
     PsiElement position = parameters.getPosition();
-    if (position.getParent() instanceof GoPackageClause && position.getNode().getElementType() == GoTypes.IDENTIFIER) {
-      PsiDirectory directory = parameters.getOriginalFile().getParent();
-      Collection<String> packagesInDirectory = GoUtil.getAllPackagesInDirectory(directory);
+    PsiFile file = parameters.getOriginalFile();
+    ASTNode node = position.getNode();
+    if (file instanceof GoFile && position.getParent() instanceof GoPackageClause && node.getElementType() == GoTypes.IDENTIFIER) {
+      final boolean isTestFile = GoTestFinder.isTestFile(file);
+      PsiDirectory directory = file.getParent();
+      Collection<String> packagesInDirectory = GoUtil.getAllPackagesInDirectory(directory, true);
       for (String packageName : packagesInDirectory) {
         result.addElement(LookupElementBuilder.create(packageName));
-        if (packageName.endsWith(GoConstants.TEST_SUFFIX)) {
-          result.addElement(LookupElementBuilder.create(StringUtil.trimEnd(packageName, GoConstants.TEST_SUFFIX)));
+        if (isTestFile) {
+          result.addElement(LookupElementBuilder.create(packageName + GoConstants.TEST_SUFFIX));
         }
       }
 
       if (packagesInDirectory.isEmpty() && directory != null) {
-        String packageFromDirectory = FileUtil.sanitizeFileName(directory.getName());
+        String packageFromDirectory = GoPsiImplUtil.getLocalPackageName(directory.getName());
         if (!packageFromDirectory.isEmpty()) {
           result.addElement(LookupElementBuilder.create(packageFromDirectory));
         }

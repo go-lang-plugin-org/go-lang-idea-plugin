@@ -2,7 +2,7 @@ package main
 
 func main() {
     Ok1() + 
-    Ok2<error>()</error> +
+    Ok2(42) +
     Ok3() +
     Ok4() +
     Ok5() +
@@ -19,6 +19,9 @@ func main() {
     NoReturn7(1) +
     NoReturn8(1) +
     NoReturn9(1) 
+    
+    rsaPKCS1v15SignatureAlgorithmForHashID(42)
+    rsaPKCS1v15SignatureAlgorithmForHashID2(42)
     
     func() int {
     <error>}</error>
@@ -85,34 +88,34 @@ func Ok8() bool {
     for a := 0;; a++ {
 
     }
-<error>}</error>
+}
 
 func NoReturn1() int {
-<error>}</error>
+<error descr="Missing return at end of function">}</error>
 
 func NoReturn2() (int, int) {
-<error>}</error>
+<error descr="Missing return at end of function">}</error>
 
 
 func NoReturn3(a int) (int, int) {
     if a == 5 {
         return a, a
     }
-<error>}</error>
+<error descr="Missing return at end of function">}</error>
 
 func NoReturn4(aa int) (int, int) {
     a := 3
     for a > 0 {
 
     }
-<error>}</error>
+<error descr="Missing return at end of function">}</error>
 
 func NoReturn5(aa int) (int, int) {
     a := 3
     if a > 0 {
         return 0, 0
     }
-<error>}</error>
+<error descr="Missing return at end of function">}</error>
 
 func NoReturn6(aa int) (int, int) {
     a := 3
@@ -121,7 +124,7 @@ func NoReturn6(aa int) (int, int) {
     }else if a < 2 {
         return 0, 0
     }
-<error>}</error>
+<error descr="Missing return at end of function">}</error>
 
 func NoReturn65(aa int) (int, int) {
     a := 3
@@ -130,7 +133,7 @@ func NoReturn65(aa int) (int, int) {
     }else {
 
     }
-<error>}</error>
+<error descr="Missing return at end of function">}</error>
 
 func NoReturn7(aa int) (int, int) {
     a := 3
@@ -138,7 +141,7 @@ func NoReturn7(aa int) (int, int) {
         case 1:
         return 0, 0
     }
-<error>}</error>
+<error descr="Missing return at end of function">}</error>
 
 func NoReturn8(aa int) (int, int) {
     a := 3
@@ -147,7 +150,7 @@ func NoReturn8(aa int) (int, int) {
         return 0, 0
         default:
     }
-<error>}</error>
+<error descr="Missing return at end of function">}</error>
 
 func NoReturn9(aa int) (int, int) {
     a := make(chan bool)
@@ -156,9 +159,9 @@ func NoReturn9(aa int) (int, int) {
         return 0, 0
     default:
     }
-<error>}</error>
+<error descr="Missing return at end of function">}</error>
 
-func <warning>rsaPKCS1v15SignatureAlgorithmForHashID</warning>(hashID int) string {
+func rsaPKCS1v15SignatureAlgorithmForHashID(hashID int) string {
 	switch {
 	case hashID == 512: return "asd2"
 	case hashID == 512: return "asd1"
@@ -167,11 +170,11 @@ func <warning>rsaPKCS1v15SignatureAlgorithmForHashID</warning>(hashID int) strin
 	}
 }
 
-func <warning>rsaPKCS1v15SignatureAlgorithmForHashID2</warning>(hashID int) string {
+func rsaPKCS1v15SignatureAlgorithmForHashID2(hashID int) string {
 	switch {
 	case hashID == 512: return "asd2"
 	case hashID == 512: return "asd1"
 	case hashID == 512:
 	default: return "asdas"
 	}
-<error>}</error>
+<error descr="Missing return at end of function">}</error>

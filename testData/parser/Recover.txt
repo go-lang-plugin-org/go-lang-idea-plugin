@@ -19,11 +19,12 @@ GO_FILE
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
-      PsiElement(identifier)('T')
-      STRUCT_TYPE
-        PsiElement(struct)('struct')
-        PsiElement({)('{')
-        PsiElement(})('}')
+      SPEC_TYPE
+        PsiElement(identifier)('T')
+        STRUCT_TYPE
+          PsiElement(struct)('struct')
+          PsiElement({)('{')
+          PsiElement(})('}')
   PsiErrorElement:'bb' unexpected
     PsiElement(identifier)('bb')
   VAR_DECLARATION

@@ -19,11 +19,19 @@ package com.goide.refactor;
 import com.goide.psi.GoNamedElement;
 import com.intellij.lang.refactoring.RefactoringSupportProvider;
 import com.intellij.psi.PsiElement;
+import com.intellij.refactoring.RefactoringActionHandler;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class GoRefactoringSupportProvider extends RefactoringSupportProvider {
   @Override
   public boolean isMemberInplaceRenameAvailable(@NotNull PsiElement element, PsiElement context) {
     return element instanceof GoNamedElement;
+  }
+
+  @Nullable
+  @Override
+  public RefactoringActionHandler getIntroduceVariableHandler() {
+    return new GoIntroduceVariableHandler();
   }
 }

@@ -4520,13 +4520,14 @@ GO_FILE
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
-      PsiElement(identifier)('A')
-      ARRAY_OR_SLICE_TYPE
-        PsiElement([)('[')
-        PsiElement(])(']')
-        TYPE
-          TYPE_REFERENCE_EXPRESSION
-            PsiElement(identifier)('A')
+      SPEC_TYPE
+        PsiElement(identifier)('A')
+        ARRAY_OR_SLICE_TYPE
+          PsiElement([)('[')
+          PsiElement(])(']')
+          TYPE
+            TYPE_REFERENCE_EXPRESSION
+              PsiElement(identifier)('A')
   PsiComment(GO_LINE_COMMENT)('// A sequence of constant indexings.')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
@@ -5249,25 +5250,27 @@ GO_FILE
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
-      PsiElement(identifier)('T')
-      STRUCT_TYPE
-        PsiElement(struct)('struct')
-        PsiElement({)('{')
-        FIELD_DECLARATION
-          FIELD_DEFINITION
-            PsiElement(identifier)('Next')
-          TYPE
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(identifier)('I')
-        PsiElement(})('}')
+      SPEC_TYPE
+        PsiElement(identifier)('T')
+        STRUCT_TYPE
+          PsiElement(struct)('struct')
+          PsiElement({)('{')
+          FIELD_DECLARATION
+            FIELD_DEFINITION
+              PsiElement(identifier)('Next')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('I')
+          PsiElement(})('}')
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
-      PsiElement(identifier)('I')
-      INTERFACE_TYPE
-        PsiElement(interface)('interface')
-        PsiElement({)('{')
-        PsiElement(})('}')
+      SPEC_TYPE
+        PsiElement(identifier)('I')
+        INTERFACE_TYPE
+          PsiElement(interface)('interface')
+          PsiElement({)('{')
+          PsiElement(})('}')
   PsiComment(GO_LINE_COMMENT)('// A chains of type assertions.')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
@@ -5559,20 +5562,21 @@ GO_FILE
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
-      PsiElement(identifier)('U')
-      STRUCT_TYPE
-        PsiElement(struct)('struct')
-        PsiElement({)('{')
-        FIELD_DECLARATION
-          FIELD_DEFINITION
-            PsiElement(identifier)('Children')
-          ARRAY_OR_SLICE_TYPE
-            PsiElement([)('[')
-            PsiElement(])(']')
-            TYPE
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('J')
-        PsiElement(})('}')
+      SPEC_TYPE
+        PsiElement(identifier)('U')
+        STRUCT_TYPE
+          PsiElement(struct)('struct')
+          PsiElement({)('{')
+          FIELD_DECLARATION
+            FIELD_DEFINITION
+              PsiElement(identifier)('Children')
+            ARRAY_OR_SLICE_TYPE
+              PsiElement([)('[')
+              PsiElement(])(']')
+              TYPE
+                TYPE_REFERENCE_EXPRESSION
+                  PsiElement(identifier)('J')
+          PsiElement(})('}')
   METHOD_DECLARATION
     PsiElement(func)('func')
     RECEIVER
@@ -5616,27 +5620,28 @@ GO_FILE
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
-      PsiElement(identifier)('J')
-      INTERFACE_TYPE
-        PsiElement(interface)('interface')
-        PsiElement({)('{')
-        METHOD_SPEC
-          PsiElement(identifier)('Child')
-          SIGNATURE
-            PARAMETERS
-              PsiElement(()('(')
-              PARAMETER_DECLARATION
-                PARAM_DEFINITION
-                  PsiElement(identifier)('n')
+      SPEC_TYPE
+        PsiElement(identifier)('J')
+        INTERFACE_TYPE
+          PsiElement(interface)('interface')
+          PsiElement({)('{')
+          METHOD_SPEC
+            PsiElement(identifier)('Child')
+            SIGNATURE
+              PARAMETERS
+                PsiElement(()('(')
+                PARAMETER_DECLARATION
+                  PARAM_DEFINITION
+                    PsiElement(identifier)('n')
+                  TYPE
+                    TYPE_REFERENCE_EXPRESSION
+                      PsiElement(identifier)('int')
+                PsiElement())(')')
+              RESULT
                 TYPE
                   TYPE_REFERENCE_EXPRESSION
-                    PsiElement(identifier)('int')
-              PsiElement())(')')
-            RESULT
-              TYPE
-                TYPE_REFERENCE_EXPRESSION
-                  PsiElement(identifier)('J')
-        PsiElement(})('}')
+                    PsiElement(identifier)('J')
+          PsiElement(})('}')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
     PsiElement(identifier)('ChainUAssert')
@@ -6610,22 +6615,23 @@ GO_FILE
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
-      PsiElement(identifier)('UArr')
-      STRUCT_TYPE
-        PsiElement(struct)('struct')
-        PsiElement({)('{')
-        FIELD_DECLARATION
-          FIELD_DEFINITION
-            PsiElement(identifier)('Children')
-          ARRAY_OR_SLICE_TYPE
-            PsiElement([)('[')
-            LITERAL
-              PsiElement(int)('2')
-            PsiElement(])(']')
-            TYPE
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('J')
-        PsiElement(})('}')
+      SPEC_TYPE
+        PsiElement(identifier)('UArr')
+        STRUCT_TYPE
+          PsiElement(struct)('struct')
+          PsiElement({)('{')
+          FIELD_DECLARATION
+            FIELD_DEFINITION
+              PsiElement(identifier)('Children')
+            ARRAY_OR_SLICE_TYPE
+              PsiElement([)('[')
+              LITERAL
+                PsiElement(int)('2')
+              PsiElement(])(']')
+              TYPE
+                TYPE_REFERENCE_EXPRESSION
+                  PsiElement(identifier)('J')
+          PsiElement(})('}')
   METHOD_DECLARATION
     PsiElement(func)('func')
     RECEIVER
@@ -6937,24 +6943,25 @@ GO_FILE
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
-      PsiElement(identifier)('UArrPtr')
-      STRUCT_TYPE
-        PsiElement(struct)('struct')
-        PsiElement({)('{')
-        FIELD_DECLARATION
-          FIELD_DEFINITION
-            PsiElement(identifier)('Children')
-          POINTER_TYPE
-            PsiElement(*)('*')
-            ARRAY_OR_SLICE_TYPE
-              PsiElement([)('[')
-              LITERAL
-                PsiElement(int)('2')
-              PsiElement(])(']')
-              TYPE
-                TYPE_REFERENCE_EXPRESSION
-                  PsiElement(identifier)('J')
-        PsiElement(})('}')
+      SPEC_TYPE
+        PsiElement(identifier)('UArrPtr')
+        STRUCT_TYPE
+          PsiElement(struct)('struct')
+          PsiElement({)('{')
+          FIELD_DECLARATION
+            FIELD_DEFINITION
+              PsiElement(identifier)('Children')
+            POINTER_TYPE
+              PsiElement(*)('*')
+              ARRAY_OR_SLICE_TYPE
+                PsiElement([)('[')
+                LITERAL
+                  PsiElement(int)('2')
+                PsiElement(])(']')
+                TYPE
+                  TYPE_REFERENCE_EXPRESSION
+                    PsiElement(identifier)('J')
+          PsiElement(})('}')
   METHOD_DECLARATION
     PsiElement(func)('func')
     RECEIVER

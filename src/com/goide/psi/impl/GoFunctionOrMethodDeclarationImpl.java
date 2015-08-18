@@ -23,6 +23,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.stubs.IStubElementType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 abstract public class GoFunctionOrMethodDeclarationImpl<T extends GoFunctionOrMethodDeclarationStub<?>> extends GoNamedElementImpl<T>
   implements GoFunctionOrMethodDeclaration {
@@ -34,7 +35,8 @@ abstract public class GoFunctionOrMethodDeclarationImpl<T extends GoFunctionOrMe
     super(node);
   }
 
-  public GoType getGoType(ResolveState context) {
-    return GoPsiImplUtil.getGoType(this, context);
+  @Nullable
+  public GoType getGoTypeInner(@Nullable ResolveState context) {
+    return GoPsiImplUtil.getGoTypeInner(this, context);
   }
 }

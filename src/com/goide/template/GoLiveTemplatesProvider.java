@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,6 @@ public class GoLiveTemplatesProvider implements DefaultLiveTemplatesProvider {
   @Nullable
   @Override
   public String[] getHiddenLiveTemplateFiles() {
-    return new String[]{"/liveTemplates/hidden"};
+    return new String[]{"/liveTemplates/goHidden"};
   }
 }

@@ -853,11 +853,12 @@ GO_FILE
         TYPE_DECLARATION
           PsiElement(type)('type')
           TYPE_SPEC
-            PsiElement(identifier)('test')
-            INTERFACE_TYPE
-              PsiElement(interface)('interface')
-              PsiElement({)('{')
-              PsiElement(})('}')
+            SPEC_TYPE
+              PsiElement(identifier)('test')
+              INTERFACE_TYPE
+                PsiElement(interface)('interface')
+                PsiElement({)('{')
+                PsiElement(})('}')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
           VAR_DEFINITION
@@ -1558,19 +1559,20 @@ GO_FILE
   TYPE_DECLARATION
     PsiElement(type)('type')
     TYPE_SPEC
-      PsiElement(identifier)('name')
-      STRUCT_TYPE
-        PsiElement(struct)('struct')
-        PsiElement({)('{')
-        FIELD_DECLARATION
-          FIELD_DEFINITION
-            PsiElement(identifier)('foo')
-          TYPE
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(identifier)('string')
-          TAG
-            PsiElement(raw_string)('`xml:""`')
-        PsiElement(})('}')
+      SPEC_TYPE
+        PsiElement(identifier)('name')
+        STRUCT_TYPE
+          PsiElement(struct)('struct')
+          PsiElement({)('{')
+          FIELD_DECLARATION
+            FIELD_DEFINITION
+              PsiElement(identifier)('foo')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('string')
+            TAG
+              PsiElement(raw_string)('`xml:""`')
+          PsiElement(})('}')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
     PsiElement(identifier)('TestFor')
@@ -1584,11 +1586,12 @@ GO_FILE
         TYPE_DECLARATION
           PsiElement(type)('type')
           TYPE_SPEC
-            PsiElement(identifier)('name1234')
-            INTERFACE_TYPE
-              PsiElement(interface)('interface')
-              PsiElement({)('{')
-              PsiElement(})('}')
+            SPEC_TYPE
+              PsiElement(identifier)('name1234')
+              INTERFACE_TYPE
+                PsiElement(interface)('interface')
+                PsiElement({)('{')
+                PsiElement(})('}')
       STATEMENT
         VAR_DECLARATION
           PsiElement(var)('var')

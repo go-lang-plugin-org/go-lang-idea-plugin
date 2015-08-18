@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,15 +38,10 @@ public class GoLegacyResolveBuiltinTest extends GoLegacyResolveTestBase {
     return createMockProjectDescriptor();
   }
   
-  public void testMethodName()        { doTest(); } 
-  public void testBuiltinTypes()      { doTest(); } 
-  public void testBuiltinConversion() { doTest(); } 
-  public void testVarBuiltinType()    { doTest(); } 
-  public void testVarMethodType()     { doTest(); } 
-  public void testParameterType()     { doTest(); }
-
-  @Override
-  protected void processNullResolve() {
-    fail("Reference " + myReference + " should be resolved");
-  }
+  public void testMethodName()        { doFileTest(); } 
+  public void testBuiltinTypes()      { doFileTest(); } 
+  public void testBuiltinConversion() { doFileTest(); } 
+  public void testVarBuiltinType()    { doFileTest(); } 
+  public void testVarMethodType()     { doFileTest(); } 
+  public void testParameterType()     { doFileTest(); }
 }

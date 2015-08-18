@@ -59,7 +59,7 @@ import java.util.regex.Pattern;
 import static com.intellij.util.containers.ContainerUtil.newLinkedHashSet;
 
 public class GoSdkUtil {
-  private static final Pattern GO_VERSION_PATTERN = Pattern.compile("theVersion\\s*=\\s*`go([\\d.]+(rc\\d+)?)`");
+  private static final Pattern GO_VERSION_PATTERN = Pattern.compile("theVersion\\s*=\\s*`go([\\d.]+\\w+(\\d+)?)`");
   private static final Pattern GAE_VERSION_PATTERN = Pattern.compile("theVersion\\s*=\\s*`go([\\d.]+)( \\(appengine-[\\d.]+\\))?`");
   private static final Pattern GO_DEVEL_VERSION_PATTERN = Pattern.compile("theVersion\\s*=\\s*`(devel.*)`");
 
@@ -229,8 +229,9 @@ public class GoSdkUtil {
   @Nullable
   public static String getPathRelativeToSdkAndLibraries(@NotNull VirtualFile file, @Nullable Project project, @Nullable Module module) {
     if (project != null) {
-      Collection<VirtualFile> roots = newLinkedHashSet(getGoPathSources(project, module));
+      Collection<VirtualFile> roots = newLinkedHashSet();
       ContainerUtil.addIfNotNull(roots, getSdkSrcDir(project, module));
+      roots.addAll(getGoPathSources(project, module));
 
       String result = null;
       for (VirtualFile root : roots) {

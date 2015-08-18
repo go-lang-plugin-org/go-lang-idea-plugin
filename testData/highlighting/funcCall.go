@@ -192,3 +192,14 @@ func _() {
 		handler.Ini(map[string]string{})
 	}
 }
+
+type Decoder func(p int) (size int)
+
+func (e Decoder) ConvertString(s string) string { return s }
+func NewDecoder(name string) Decoder { return nil }
+
+func _() {
+	dc := NewDecoder("GB18030")
+	dc(1)
+ 	fmt.Println(dc.ConvertString("abc123"))
+}

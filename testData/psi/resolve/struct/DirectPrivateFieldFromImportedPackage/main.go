@@ -4,5 +4,5 @@ import "pack"
 
 func main() {
     var x = pack.S{}
-    x./*ref*/a
+    x./*no ref*/a
 }

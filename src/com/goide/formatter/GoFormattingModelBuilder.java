@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,8 +39,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-import static com.goide.GoParserDefinition.LINE_COMMENT;
-import static com.goide.GoParserDefinition.MULTILINE_COMMENT;
+import static com.goide.GoParserDefinition.*;
 import static com.goide.GoTypes.*;
 
 public class GoFormattingModelBuilder implements FormattingModelBuilder {
@@ -119,6 +118,8 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       .betweenInside(LBRACE, RBRACE, INTERFACE_TYPE).none()
       .betweenInside(LBRACE, RBRACE, STRUCT_TYPE).none()
       .betweenInside(LBRACK, RBRACK, ARRAY_OR_SLICE_TYPE).none()
+      .around(ASSIGN_OP).spaces(1)
+      .aroundInside(OPERATORS, TokenSet.create(MUL_EXPR, ADD_EXPR, OR_EXPR, CONDITIONAL_EXPR)).spaces(1)
       ;
   }
 
@@ -303,13 +304,16 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
           parentType == ARGUMENT_LIST) {
         childIndent = Indent.getNormalIndent();
       }
-      if (parentType == EXPR_SWITCH_STATEMENT || parentType == TYPE_SWITCH_STATEMENT) {
+      if (parentType == EXPR_SWITCH_STATEMENT || parentType == TYPE_SWITCH_STATEMENT || parentType == SELECT_STATEMENT) {
         List<Block> subBlocks = getSubBlocks();
         Block block = subBlocks.size() > newChildIndex ? subBlocks.get(newChildIndex - 1) : null;
         if (block instanceof GoFormattingBlock) {
           IElementType type = ((GoFormattingBlock)block).getNode().getElementType();
           if (type == TYPE_CASE_CLAUSE || type == EXPR_CASE_CLAUSE) {
             childIndent = Indent.getNormalIndent();
+          }
+          else if (type == COMM_CLAUSE) {
+            childIndent = Indent.getNormalIndent(true);
           }
         }
       }

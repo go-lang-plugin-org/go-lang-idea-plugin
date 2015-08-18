@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package com.goide.inspections;
 
-import com.goide.GoTypes;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInsight.template.Template;
@@ -93,7 +92,9 @@ public class GoReturnInspection extends GoInspectionBase {
     }
     else if (s instanceof GoForStatement) {
       GoForStatement f = (GoForStatement)s;
-      if (f.getExpression() == null && f.getForClause() == null && f.getRangeClause() == null) return true;
+      GoForClause forClause = f.getForClause();
+      if (forClause != null && forClause.getExpression() == null) return true;
+      if (f.getExpression() == null && forClause == null && f.getRangeClause() == null) return true;
       return isTerminating(f.getBlock());
     }
     else if (s instanceof GoExprSwitchStatement) {
@@ -112,8 +113,7 @@ public class GoReturnInspection extends GoInspectionBase {
       boolean hasDefault = false;
       List<GoTypeCaseClause> list = ((GoTypeSwitchStatement)s).getTypeCaseClauseList();
       for (GoTypeCaseClause clause : list) {
-        PsiElement child = clause.getTypeSwitchCase().getFirstChild();
-        if (child != null && child.getNode().getElementType() == GoTypes.DEFAULT) {
+        if (clause.getDefault() != null) {
           hasDefault = true;
         }
         GoStatement last = ContainerUtil.getLastItem(clause.getStatementList());

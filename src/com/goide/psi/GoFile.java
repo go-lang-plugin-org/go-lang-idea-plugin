@@ -231,7 +231,7 @@ public class GoFile extends PsiFileBase {
       }
       GoImportString string = spec.getImportString();
       PsiDirectory dir = string.resolve();
-      Collection<String> packagesInDirectory = GoUtil.getAllPackagesInDirectory(dir);
+      Collection<String> packagesInDirectory = GoUtil.getAllPackagesInDirectory(dir, true);
       if (!packagesInDirectory.isEmpty()) {
         for (String packageNames : packagesInDirectory) {
           if (!StringUtil.isEmpty(packageNames)) {
@@ -428,6 +428,10 @@ public class GoFile extends PsiFileBase {
   public GoFileStub getStub() {
     //noinspection unchecked
     return (GoFileStub)super.getStub();
+  }
+
+  public boolean hasCPathImport() {
+    return getImportMap().containsKey(GoConstants.C_PATH);
   }
 
   private static boolean processChildrenDummyAware(@NotNull GoFile file, @NotNull final Processor<PsiElement> processor) {

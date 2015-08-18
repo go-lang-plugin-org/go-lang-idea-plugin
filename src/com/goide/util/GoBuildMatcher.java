@@ -53,13 +53,13 @@ public class GoBuildMatcher {
       // TODO support .c, .cpp and other
       return false;
     }
+    if (((GoFile)file).hasCPathImport() && myTarget.cgoEnabled != ThreeState.YES) return false;
+
     return match(file.getName(), ((GoFile)file).getBuildFlags(), checkBuildFlags);
   }
 
   public boolean match(@NotNull String fileName, @Nullable String buildFlags, boolean checkBuildFlags) {
-    if (StringUtil.startsWithChar(fileName, '_') || StringUtil.startsWithChar(fileName, '.')) return false;
-
-    if (!matchFileName(fileName)) return false;
+    if (GoUtil.directoryToIgnore(fileName) || !matchFileName(fileName)) return false;
 
     if (!checkBuildFlags || buildFlags == null) return true;
     for (final String line : StringUtil.split(buildFlags, "|")) {

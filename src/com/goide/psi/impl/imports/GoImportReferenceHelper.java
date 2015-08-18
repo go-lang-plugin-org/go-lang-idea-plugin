@@ -103,8 +103,9 @@ public class GoImportReferenceHelper extends FileReferenceHelper {
   @NotNull
   private static Collection<? extends VirtualFile> getPathsToLookup(@NotNull PsiElement element) {
     Module module = ModuleUtilCore.findModuleForPsiElement(element);
-    Set<VirtualFile> result = ContainerUtil.newLinkedHashSet(GoSdkUtil.getGoPathSources(element.getProject(), module));
+    Set<VirtualFile> result = ContainerUtil.newLinkedHashSet();
     ContainerUtil.addIfNotNull(result, GoSdkUtil.getSdkSrcDir(element));
+    result.addAll(GoSdkUtil.getGoPathSources(element.getProject(), module));
     return result;
   }
 }

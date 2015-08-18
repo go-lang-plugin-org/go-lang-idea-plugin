@@ -32,8 +32,12 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.impl.ElementBase;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.stubs.IStubElementType;
+import com.intellij.psi.util.CachedValueProvider;
+import com.intellij.psi.util.CachedValuesManager;
+import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.RowIcon;
 import com.intellij.usageView.UsageViewUtil;
@@ -46,8 +50,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStubbedElementImpl<T>
-  implements GoCompositeElement, GoNamedElement {
+public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStubbedElementImpl<T> implements GoCompositeElement, GoNamedElement {
 
   public GoNamedElementImpl(@NotNull T stub, @NotNull IStubElementType nodeType) {
     super(stub, nodeType);
@@ -107,7 +110,19 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
 
   @Nullable
   @Override
-  public GoType getGoType(ResolveState context) {
+  public GoType getGoType(@Nullable final ResolveState context) {
+    if (context != null) return getGoTypeInner(context);
+    return CachedValuesManager.getCachedValue(this, new CachedValueProvider<GoType>() {
+      @Nullable
+      @Override
+      public Result<GoType> compute() {
+        return Result.create(getGoTypeInner(null), PsiModificationTracker.MODIFICATION_COUNT);
+      }
+    });
+  }
+
+  @Nullable
+  protected GoType getGoTypeInner(@Nullable ResolveState context) {
     return findSiblingType();
   }
 
@@ -196,6 +211,10 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
       return module != null ? GoUtil.moduleScope(getProject(), module) : super.getUseScope();
     }
     else {
+      if (this instanceof GoVarDefinition || this instanceof GoConstDefinition) {
+        GoBlock block = PsiTreeUtil.getParentOfType(this, GoBlock.class);
+        if (block != null) return new LocalSearchScope(block);
+      }
       return GoPsiImplUtil.packageScope(getContainingFile());
     }
   }

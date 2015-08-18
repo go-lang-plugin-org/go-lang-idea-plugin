@@ -193,23 +193,20 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
         for (GoConstDefinition o : ((GoFile)myElement).getConstants()) result.add(new Element(o));
         for (GoVarDefinition o : ((GoFile)myElement).getVars()) result.add(new Element(o));
         for (GoFunctionDeclaration o : ((GoFile)myElement).getFunctions()) result.add(new Element(o));
-        for (GoMethodDeclaration o : ((GoFile)myElement).getMethods()) result.add(new Element(o));
       }
       else if (myElement instanceof GoTypeSpec) {
-        GoType type = ((GoTypeSpec)myElement).getType();
+        GoTypeSpec typeSpec = (GoTypeSpec)myElement;
+        GoType type = typeSpec.getSpecType().getType();
+        for (GoMethodDeclaration m : GoPsiImplUtil.getMethods(typeSpec)) result.add(new Element(m));
         if (type instanceof GoStructType) {
           for (GoFieldDeclaration field : ((GoStructType)type).getFieldDeclarationList()) {
-            for (GoFieldDefinition definition : field.getFieldDefinitionList()) {
-              result.add(new Element(definition));
-            }
+            for (GoFieldDefinition definition : field.getFieldDefinitionList()) result.add(new Element(definition));
             GoAnonymousFieldDefinition anon = field.getAnonymousFieldDefinition();
-             if (anon != null) result.add(new Element(anon));
+            if (anon != null) result.add(new Element(anon));
           }
         }
         else if (type instanceof GoInterfaceType) {
-          for (GoMethodSpec spec : ((GoInterfaceType)type).getMethodSpecList()) {
-            result.add(new Element(spec));
-          }
+          for (GoMethodSpec m : ((GoInterfaceType)type).getMethodSpecList()) result.add(new Element(m));
         }
       }
       return result.toArray(new TreeElement[result.size()]);
@@ -219,19 +216,17 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
     public String getPresentableText() {
       String separator = ": ";      
       if (myElement instanceof GoFile) return ((GoFile)myElement).getName();
-      else if (myElement instanceof GoFunctionOrMethodDeclaration) {
-        GoType type = myElement instanceof GoMethodDeclaration ? ((GoMethodDeclaration)myElement).getReceiver().getType() : null;
-        String receiver = type != null ? type.getText() + "." : "";
-        GoSignature signature = ((GoFunctionOrMethodDeclaration)myElement).getSignature();
+      else if (myElement instanceof GoNamedSignatureOwner) {
+        GoSignature signature = ((GoNamedSignatureOwner)myElement).getSignature();
         String signatureText = signature != null ? signature.getText() : "";
-        PsiElement id = ((GoFunctionOrMethodDeclaration)myElement).getIdentifier();
-        return receiver + (id != null ? id.getText() : "") + signatureText;
+        PsiElement id = ((GoNamedSignatureOwner)myElement).getIdentifier();
+        return (id != null ? id.getText() : "") + signatureText;
       }
       else if (myElement instanceof GoTypeSpec) {
-        GoType type = ((GoTypeSpec)myElement).getType();
+        GoType type = ((GoTypeSpec)myElement).getSpecType().getType();
         String appendix = type instanceof GoStructType || type instanceof GoInterfaceType ?
                           "" :
-                          (type != null ? separator + GoPsiImplUtil.getText(type) : "");
+                          separator + GoPsiImplUtil.getText(type);
         return ((GoTypeSpec)myElement).getName() + appendix;
       }
       else if (myElement instanceof GoNamedElement) {

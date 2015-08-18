@@ -68,7 +68,9 @@ public class GocheckFramework extends GoTestFramework {
     for (GoFile file : StubIndex.getElements(GoPackagesIndex.KEY, "check", module.getProject(), GoUtil.moduleScope(module), GoFile.class)) {
       String importPath = file.getImportPath();
       if (importPath != null) {
-        return GO_CHECK_IMPORT_PATH.matcher(importPath).matches() || GO_CHECK_GITHUB_IMPORT_PATH.matcher(importPath).matches();
+        if (GO_CHECK_IMPORT_PATH.matcher(importPath).matches() || GO_CHECK_GITHUB_IMPORT_PATH.matcher(importPath).matches()) {
+          return true;
+        }
       }
     }
     return false;

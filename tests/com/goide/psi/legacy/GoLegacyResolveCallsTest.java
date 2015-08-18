@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,39 +20,41 @@ public class GoLegacyResolveCallsTest extends GoLegacyResolveTestBase {
   @Override
   protected String getBasePath() { return "psi/resolve/calls"; }
 
-  public void testCallToLocalMethodByPointer() { doTest(); } 
-  public void testCallToLocalMethod() { doTest(); } 
-  public void testCallToLocalMethodNested() { doTest(); } 
-  public void testCallToLocalMethodViaMap() { doTest(); } 
-  public void testCallToLocalMethodViaShortVarDeclaration() { doTest(); } 
-  public void testCallToLocalMethodViaSlice() { doTest(); } 
-  public void testCallToLocalMethodViaTypeAssert() { doTest(); } 
-  public void testCallToLocalInterfaceMethod() { doTest(); } 
-  public void testCallToLocalInterfaceMethodNested() { doTest(); } 
-  public void testCallToLocalInterfaceMethodViaMap() { doTest(); } 
-  public void testCallToLocalInterfaceMethodViaSlice() { doTest(); } 
-  public void testCallToLocalInterfaceMethodViaTypeAssert() { doTest(); } 
-  public void testCallToLocalFunction() { doTest(); } 
-  public void testCallToFunctionLiteral() { doTest(); } 
-  public void testTypeConversionToLocalType() { doTest(); } 
-  public void testRecursiveMethodCall() { doTest(); } 
-  public void testCallToMethodParameter() { doTest(); } 
-  public void testCallToFunctionVariable() { doTest(); } 
-  public void testDirectlyInheritedMethodSet() { doTest(); } 
-  public void testGrandParentDirectlyInheritedMethodSet() { doTest(); } 
-  public void testCallToEmbeddedInterfaceMethod() { doTest(); } 
-  public void testCallToFunctionWithSameNameAsMethod() { doTest(); } 
-  public void testCallToMethodWithTheSameNameAsFunction() { doTest(); } 
-  
-  public void testConversionToImportedType() { doDirTest(); } 
-  public void testConversionToImportedFunction() { doDirTest(); } 
-  public void testNoConversionToBlankImportedType() { doDirTest(); } 
-  public void testConversionToLocallyImportedType() { doDirTest(); } 
-  public void testFunctionInSamePackageDifferentFile() { doDirTest(); } 
-  public void testRelativePackageReference() { doDirTest(); }
-  public void testRelativePackageReferenceDeep() { doDirTest(); } 
-  public void testCallToFunctionWithSameNameAsMethodAcrossPackages() { doDirTest(); } 
-  public void testCallToMethodViaShortVar() { doDirTest(); } 
-  public void testImportedEmbeddedTypeMethod() { doDirTest(); } 
-  public void testCallToMethodWithTheSameNameAsFunctionAcrossPackages() { doDirTest(); }
+  public void testCallToLocalMethodByPointer()                           { doFileTest(); } 
+  public void testCallToLocalMethod()                                    { doFileTest(); } 
+  public void testCallToLocalMethodNested()                              { doFileTest(); } 
+  public void testCallToLocalMethodViaMap()                              { doFileTest(); } 
+  public void testCallToLocalMethodViaShortVarDeclaration()              { doFileTest(); } 
+  public void testCallToLocalMethodViaSlice()                            { doFileTest(); } 
+  public void testCallToLocalMethodViaTypeAssert()                       { doFileTest(); } 
+  public void testCallToLocalInterfaceMethod()                           { doFileTest(); } 
+  public void testCallToLocalInterfaceMethodNested()                     { doFileTest(); } 
+  public void testCallToLocalInterfaceMethodViaMap()                     { doFileTest(); } 
+  public void testCallToLocalInterfaceMethodViaSlice()                   { doFileTest(); } 
+  public void testCallToLocalInterfaceMethodViaTypeAssert()              { doFileTest(); } 
+  public void testCallToLocalFunction()                                  { doFileTest(); } 
+  public void testCallToFunctionLiteral()                                { doFileTest(); } 
+  public void testTypeConversionToLocalType()                            { doFileTest(); } 
+  public void testRecursiveMethodCall()                                  { doFileTest(); } 
+  public void testCallToMethodParameter()                                { doFileTest(); } 
+  public void testCallToFunctionVariable()                               { doFileTest(); } 
+  public void testDirectlyInheritedMethodSet()                           { doFileTest(); } 
+  public void testGrandParentDirectlyInheritedMethodSet()                { doFileTest(); } 
+  public void testCallToEmbeddedInterfaceMethod()                        { doFileTest(); } 
+  public void testCallToFunctionWithSameNameAsMethod()                   { doFileTest(); } 
+  public void testCallToMethodWithTheSameNameAsFunction()                { doFileTest(); } 
+
+  public void testConversionToImportedType()                             { doDirTest(); } 
+  public void testConversionToImportedFunction()                         { doDirTest(); } 
+  public void testNoConversionToBlankImportedType()                      { doDirTest(); } 
+  public void testConversionToLocallyImportedType()                      { doDirTest(); } 
+  public void testFunctionInSamePackageDifferentFile()                   { doDirTest(); } 
+  public void testRelativePackageReference()                             { doDirTest(); }
+  public void testRelativePackageReferenceDeep()                         { doDirTest(); } 
+  public void testCallToFunctionWithSameNameAsMethodAcrossPackages()     { doDirTest(); } 
+  public void testCallToMethodViaShortVar()                              { doDirTest(); } 
+  public void testImportedEmbeddedTypeMethod()                           { doDirTest(); } 
+  public void testCallToMethodWithTheSameNameAsFunctionAcrossPackages()  { doDirTest(); }
+  public void testCallFromTestToMethodDefinedInTestFile()                { doDirTest(); }
+  public void testCallToMethodDefinedInTestFile()                        { doDirTest(); }
 }

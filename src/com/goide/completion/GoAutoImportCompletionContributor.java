@@ -20,7 +20,6 @@ import com.goide.GoConstants;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.psi.impl.GoTypeReference;
-import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.openapi.progress.ProgressManager;
@@ -29,6 +28,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.PsiElementPattern;
+import com.intellij.patterns.StandardPatterns;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -61,6 +61,14 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         PsiFile file = parameters.getOriginalFile();
         if (!(file instanceof GoFile)) return;
         if (!(parent instanceof GoReferenceExpressionBase)) return;
+        
+        result = adjustMatcher(parameters, result, parent);
+        PrefixMatcher matcher = result.getPrefixMatcher();
+        if (parameters.getInvocationCount() < 2 && matcher.getPrefix().isEmpty()) {
+          result.restartCompletionOnPrefixChange(StandardPatterns.string().longerThan(0));
+          return;
+        }
+        
         GoReferenceExpressionBase qualifier = ((GoReferenceExpressionBase)parent).getQualifier();
         if (qualifier != null && qualifier.getReference() != null && qualifier.getReference().resolve() != null) return;
 
@@ -74,12 +82,13 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         }
         if (processors.isEmpty()) return;
 
-        result = adjustMatcher(parameters, result, parent);
-        Map<String, GoImportSpec> importedPackages = ((GoFile)file).getImportedPackagesMap();
-        NamedElementProcessor processor = new NamedElementProcessor(processors, importedPackages, GoTestFinder.isTestFile(file), result);
+        NamedElementProcessor processor = new NamedElementProcessor(processors, ((GoFile)file).getImportedPackagesMap(), result);
         Project project = position.getProject();
-        GlobalSearchScope scope = GoUtil.moduleScopeExceptContainingFile(file);
-        PrefixMatcher matcher = result.getPrefixMatcher();
+        GlobalSearchScope scope = GoUtil.moduleScopeWithoutTests(file);
+        VirtualFile containingDirectory = file.getVirtualFile().getParent();
+        if (containingDirectory != null) {
+          scope = new GoUtil.ExceptChildOfDirectory(containingDirectory, scope);
+        }
         Set<String> sortedKeys = sortMatching(matcher, StubIndex.getInstance().getAllKeys(ALL_PUBLIC_NAMES, project), ((GoFile)file));
         for (String name : sortedKeys) {
           processor.setName(name);
@@ -97,7 +106,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
     });
   }
 
-  private static Set<String> sortMatching(@NotNull PrefixMatcher matcher, @NotNull Collection<String> names, @NotNull GoFile file) {
+private static Set<String> sortMatching(@NotNull PrefixMatcher matcher, @NotNull Collection<String> names, @NotNull GoFile file) {
     ProgressManager.checkCanceled();
     String prefix = matcher.getPrefix();
     if (prefix.isEmpty()) return ContainerUtil.newLinkedHashSet(names);
@@ -113,7 +122,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
       }
     }
 
-    List<String> sorted = new ArrayList<String>();
+  List<String> sorted = ContainerUtil.newArrayList();
     for (String name : names) {
       if (matcher.prefixMatches(name) || packagesWithAliases.contains(substringBefore(name, '.'))) {
         sorted.add(name);
@@ -154,18 +163,16 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
     return s.substring(i + 1);
   }
   
-  private static boolean allowed(@NotNull GoNamedElement element, boolean isTesting) {
+  private static boolean allowed(@NotNull GoNamedElement element) {
     GoFile file = element.getContainingFile();
-    if (!GoUtil.allowed(file)) return false;
+    if (!GoUtil.allowed(file) || GoUtil.isExcludedFile(file)) return false;
     PsiDirectory directory = file.getContainingDirectory();
     if (directory != null) {
       VirtualFile vFile = directory.getVirtualFile();
       if (vFile.getPath().endsWith("go/doc/testdata")) return false;
     }
 
-    if (!isTesting && GoTestFinder.isTestFile(file)) return false;
-    String packageName = file.getPackageName();
-    if (StringUtil.equals(packageName, GoConstants.MAIN)) return false;
+    if (StringUtil.equals(file.getPackageName(), GoConstants.MAIN)) return false;
     return true;
   }
 
@@ -214,12 +221,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
 
     @Override
     public boolean isMine(@NotNull String name, @NotNull GoNamedElement element) {
-      if (element instanceof GoFunctionDeclaration) {
-        String functionName = substringAfter(name, '.');
-        return !GoTestFinder.isTestFunctionName(functionName) && !GoTestFinder.isBenchmarkFunctionName(functionName) &&
-               !GoTestFinder.isExampleFunctionName(functionName);
-      }
-      return false;
+      return element instanceof GoFunctionDeclaration;
     }
   }
 
@@ -270,18 +272,15 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
 
   private static class NamedElementProcessor implements Processor<GoNamedElement> {
     @NotNull private final Collection<ElementProcessor> myProcessors;
-    private final boolean myTesting;
     @NotNull private final CompletionResultSet myResult;
     @NotNull private String myName = "";
     @NotNull private final Map<String, GoImportSpec> myImportedPackages;
 
     public NamedElementProcessor(@NotNull Collection<ElementProcessor> processors,
                                  @NotNull Map<String, GoImportSpec> packages,
-                                 boolean isTesting,
                                  @NotNull CompletionResultSet result) {
       myProcessors = processors;
       myImportedPackages = packages;
-      myTesting = isTesting;
       myResult = result;
     }
 
@@ -296,8 +295,8 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
       ExistingImportData importData = null;
       for (ElementProcessor processor : myProcessors) {
         if (processor.isMine(myName, element)) {
-          allowed = cachedAllowed(element, allowed);
           importData = cachedImportData(element, importData);
+          allowed = cachedAllowed(element, allowed);
           if (allowed == Boolean.FALSE || importData.isDot) break;
           if (!processor.process(myName, element, importData, myResult)) {
             return false;
@@ -307,9 +306,9 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
       return true;
     }
 
-    private Boolean cachedAllowed(@NotNull GoNamedElement element, @Nullable Boolean existingValue) {
+    private static Boolean cachedAllowed(@NotNull GoNamedElement element, @Nullable Boolean existingValue) {
       if (existingValue != null) return existingValue;
-      return allowed(element, myTesting);
+      return allowed(element);
     }
 
     private ExistingImportData cachedImportData(@NotNull GoNamedElement element, @Nullable ExistingImportData existingValue) {

@@ -91,6 +91,7 @@ public interface GoTypes {
   IElementType SHORT_VAR_DECLARATION = GoStubElementTypeFactory.factory("SHORT_VAR_DECLARATION");
   IElementType SIGNATURE = GoStubElementTypeFactory.factory("SIGNATURE");
   IElementType SIMPLE_STATEMENT = new GoCompositeElementType("SIMPLE_STATEMENT");
+  IElementType SPEC_TYPE = GoStubElementTypeFactory.factory("SPEC_TYPE");
   IElementType STATEMENT = new GoCompositeElementType("STATEMENT");
   IElementType STRING_LITERAL = new GoCompositeElementType("STRING_LITERAL");
   IElementType STRUCT_TYPE = GoStubElementTypeFactory.factory("STRUCT_TYPE");
@@ -105,7 +106,6 @@ public interface GoTypes {
   IElementType TYPE_LIST = GoStubElementTypeFactory.factory("TYPE_LIST");
   IElementType TYPE_REFERENCE_EXPRESSION = new GoCompositeElementType("TYPE_REFERENCE_EXPRESSION");
   IElementType TYPE_SPEC = GoStubElementTypeFactory.factory("TYPE_SPEC");
-  IElementType TYPE_SWITCH_CASE = new GoCompositeElementType("TYPE_SWITCH_CASE");
   IElementType TYPE_SWITCH_GUARD = new GoCompositeElementType("TYPE_SWITCH_GUARD");
   IElementType TYPE_SWITCH_STATEMENT = new GoCompositeElementType("TYPE_SWITCH_STATEMENT");
   IElementType UNARY_EXPR = new GoCompositeElementType("UNARY_EXPR");
@@ -151,7 +151,6 @@ public interface GoTypes {
   IElementType HEX = new GoTokenType("hex");
   IElementType IDENTIFIER = new GoTokenType("identifier");
   IElementType IF = new GoTokenType("if");
-  IElementType IMAGINARY = new GoTokenType("imaginary");
   IElementType IMPORT = new GoTokenType("import");
   IElementType INT = new GoTokenType("int");
   IElementType INTERFACE = new GoTokenType("interface");
@@ -183,7 +182,6 @@ public interface GoTypes {
   IElementType REMAINDER_ASSIGN = new GoTokenType("%=");
   IElementType RETURN = new GoTokenType("return");
   IElementType RPAREN = new GoTokenType(")");
-  IElementType RUNE = new GoTokenType("rune");
   IElementType SELECT = new GoTokenType("select");
   IElementType SEMICOLON = new GoTokenType(";");
   IElementType SEMICOLON_SYNTHETIC = new GoTokenType("<NL>");
@@ -443,6 +441,9 @@ public interface GoTypes {
       else if (type == SIMPLE_STATEMENT) {
         return new GoSimpleStatementImpl(node);
       }
+      else if (type == SPEC_TYPE) {
+        return new GoSpecTypeImpl(node);
+      }
       else if (type == STATEMENT) {
         return new GoStatementImpl(node);
       }
@@ -484,9 +485,6 @@ public interface GoTypes {
       }
       else if (type == TYPE_SPEC) {
         return new GoTypeSpecImpl(node);
-      }
-      else if (type == TYPE_SWITCH_CASE) {
-        return new GoTypeSwitchCaseImpl(node);
       }
       else if (type == TYPE_SWITCH_GUARD) {
         return new GoTypeSwitchGuardImpl(node);
