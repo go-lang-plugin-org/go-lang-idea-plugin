@@ -66,3 +66,17 @@ func Test2() (err error) {
     
     return err
 }
+
+func _(i int) {
+    for i := 1; i < 3; i++ {
+        _ = i
+    }
+
+    if i := 1; i > 0 {
+        _ = i
+    }
+
+    switch i := 1; {
+        case true: _ = i
+    }
+}
