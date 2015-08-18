@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 plugins {
-  id 'org.jetbrains.intellij' version "0.0.17"
+  id 'org.jetbrains.intellij' version "0.0.18"
   id "de.undercouch.download" version "1.2"
 }
 
@@ -61,7 +61,7 @@ dependencies {
 
 // delve packing
 project.afterEvaluate {
-  prepareSandbox << {
+  prepareSandbox.doLast {
     def libraries = "${it.destinationDir}/${intellij.pluginName}/lib/"
     fileTree(dir: libraries, include: 'delve*').files.each { File file ->
       copy {
