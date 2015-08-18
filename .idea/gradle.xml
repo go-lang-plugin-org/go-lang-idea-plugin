@@ -15,6 +15,14 @@
             <option value="$PROJECT_DIR$/utils" />
           </set>
         </option>
+        <option name="myModules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/google-app-engine" />
+            <option value="$PROJECT_DIR$/google-app-engine/google-app-engine-yaml" />
+            <option value="$PROJECT_DIR$/utils" />
+          </set>
+        </option>
       </GradleProjectSettings>
     </option>
   </component>

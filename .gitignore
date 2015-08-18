@@ -8,6 +8,7 @@ build/
 .idea/workspace.xml
 .idea/modules.xml
 .idea/misc.xml
+.idea/gradle.xml
 .idea/shelf/
 .idea/libraries/
 *.iml
