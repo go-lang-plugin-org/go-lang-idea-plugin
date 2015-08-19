@@ -23,6 +23,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.TestOnly;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -44,6 +45,7 @@ public class GoIntroduceOperation {
     myFile = file;
   }
 
+  @TestOnly
   public GoIntroduceOperation(@NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file, boolean replaceAll) {
     myProject = project;
     myEditor = editor;

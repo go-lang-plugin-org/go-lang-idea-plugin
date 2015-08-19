@@ -16,20 +16,10 @@
 
 package com.goide.refactor;
 
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiFile;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
-import org.jetbrains.annotations.NotNull;
 
 public class GoIntroduceVariableTest extends LightPlatformCodeInsightFixtureTestCase {
-  private static class IntroduceTest extends GoIntroduceVariableBase {
-    static void invoke(@NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file, boolean replaceAll) {
-      performAction(new GoIntroduceOperation(project, editor, file, replaceAll));
-    }
-  }
-
   @Override
   protected String getTestDataPath() {
     return "testData/refactor/introduce-variable";
@@ -42,7 +32,7 @@ public class GoIntroduceVariableTest extends LightPlatformCodeInsightFixtureTest
   private void doTest(boolean replaceAll) {
     String testName = getTestName(true);
     myFixture.configureByFile(testName + ".go");
-    IntroduceTest.invoke(myFixture.getProject(), myFixture.getEditor(), myFixture.getFile(), replaceAll);
+    GoIntroduceVariableBase.performAction(new GoIntroduceOperation(getProject(), myFixture.getEditor(), myFixture.getFile(), replaceAll));
     myFixture.checkResultByFile(testName + "-after.go");
   }
 
