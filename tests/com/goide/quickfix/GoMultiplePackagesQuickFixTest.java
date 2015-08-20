@@ -17,6 +17,7 @@
 package com.goide.quickfix;
 
 import com.goide.inspections.GoMultiplePackagesInspection;
+import com.goide.inspections.GoMultiplePackagesQuickFix;
 
 public class GoMultiplePackagesQuickFixTest extends GoQuickFixTestBase {
   @Override
@@ -36,6 +37,7 @@ public class GoMultiplePackagesQuickFixTest extends GoQuickFixTestBase {
     myFixture.configureByFile("b_test.go");
     myFixture.configureByFile("a.go");
 
+    GoMultiplePackagesQuickFix.setTestingPackageName("a", getTestRootDisposable());
     applySingleQuickFix("Rename packages");
 
     myFixture.checkResultByFile("a.go", "a-after.go", true);

@@ -23,11 +23,12 @@ import com.goide.psi.impl.GoElementFactory;
 import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.util.GoUtil;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
-import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
@@ -38,6 +39,7 @@ import com.intellij.ui.components.JBList;
 import com.intellij.util.NotNullFunction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.TestOnly;
 
 import javax.swing.*;
 import java.util.Collection;
@@ -46,6 +48,7 @@ public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionO
   private Collection<String> myPackages;
   private String myPackageName;
   private boolean myIsOneTheFly;
+  private static String myTestingPackageName;
 
   protected GoMultiplePackagesQuickFix(@NotNull PsiElement element, @NotNull String packageName, Collection<String> packages, boolean isOnTheFly) {
     super(element);
@@ -66,12 +69,24 @@ public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionO
             String oldName = ((GoFile)file).getPackageName();
             if (packageClause != null && oldName != null && !oldName.equals(GoConstants.DOCUMENTATION)) {
               String fullName = GoTestFinder.isTestFile(file) && StringUtil.endsWith(oldName, GoConstants.TEST_SUFFIX)
-                                ? newName + GoConstants.TEST_SUFFIX 
+                                ? newName + GoConstants.TEST_SUFFIX
                                 : newName;
               packageClause.replace(GoElementFactory.createPackageClause(project, fullName));
             }
           }
         }
+      }
+    });
+  }
+
+  @TestOnly
+  public static void setTestingPackageName(@NotNull String packageName, @NotNull Disposable disposable) {
+    myTestingPackageName = packageName;
+    Disposer.register(disposable, new Disposable() {
+      @Override
+      public void dispose() {
+        //noinspection AssignmentToStaticFieldFromInstanceMethod
+        myTestingPackageName = null;
       }
     });
   }
@@ -82,8 +97,9 @@ public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionO
                      @Nullable("is null when called from inspection") Editor editor,
                      @NotNull PsiElement startElement,
                      @NotNull PsiElement endElement) {
-    if (editor == null || ApplicationManager.getApplication().isUnitTestMode()) {
-      renamePackagesInDirectory(project, file.getContainingDirectory(), myPackageName);
+    if (editor == null || myTestingPackageName != null) {
+      renamePackagesInDirectory(project, file.getContainingDirectory(),
+                                myTestingPackageName != null ? myTestingPackageName : myPackageName);
       return;
     }
     final JBList list = new JBList(myPackages);
@@ -96,7 +112,7 @@ public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionO
         return label;
       }
     });
-    
+
     JBPopupFactory.getInstance().createListPopupBuilder(list).setTitle("Choose package name").setItemChoosenCallback(new Runnable() {
       @Override
       public void run() {
