@@ -11,6 +11,7 @@ build/
 .idea/gradle.xml
 .idea/shelf/
 .idea/libraries/
+.idea/.name
 *.iml
 
 testData/performance/docker
