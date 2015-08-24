@@ -19,8 +19,10 @@ package com.goide.completion;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.Lookup;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.testFramework.fixtures.TempDirTestFixture;
 
 import java.io.IOException;
+import java.util.List;
 
 public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
   public void testFormatter() {
@@ -303,4 +305,22 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
     myFixture.checkResult("package pack1;\n" +
                           "import \"pack2\" func test() { pack1.MyFunctionFromOtherPath() }");
   }
+
+  public void testImportOwnPathFromTestFile() throws IOException {
+    TempDirTestFixture dir = myFixture.getTempDirFixture();
+    VirtualFile testFile = dir.createFile("fuzz/fuzy_test.go", "package fuzy_test; import \"<caret>\"");
+    myFixture.configureFromExistingVirtualFile(testFile);
+    myFixture.completeBasic();
+    assertContainsElements(myFixture.getLookupElementStrings(), "fuzz");
+  }
+
+  public void testDoNotImportOwnPathFromNonTestPackage() throws IOException {
+    TempDirTestFixture dir = myFixture.getTempDirFixture();
+    VirtualFile testFile = dir.createFile("fuzz/fuzy_test.go", "package fuzy; import \"<caret>\"");
+    myFixture.configureFromExistingVirtualFile(testFile);
+    myFixture.completeBasic();
+    List<String> strings = myFixture.getLookupElementStrings();
+    assertTrue(strings != null && !strings.contains("fuzz"));
+  }
+
 }
