@@ -128,6 +128,8 @@
     <analyzeStacktraceFilter implementation="com.goide.runconfig.GoConsoleFilter"/>
     <lang.implementationTextSelectioner language="go" implementationClass="com.goide.editor.GoImplementationTextSelectioner"/>
 
+    <directoryProjectGenerator implementation="com.goide.GoProjectGenerator"/> <!-- for small IDEs--> 
+
     <!--formatter-->
     <lang.formatter language="go" implementationClass="com.goide.formatter.GoFormattingModelBuilder"/>
     <codeStyleSettingsProvider implementation="com.goide.formatter.settings.GoCodeStyleSettingsProvider"/>
