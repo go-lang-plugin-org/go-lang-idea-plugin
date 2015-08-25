@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 plugins {
-  id 'org.jetbrains.intellij' version "0.0.19"
+  id 'org.jetbrains.intellij' version "0.0.20"
   id "de.undercouch.download" version "1.2"
 }
 
@@ -56,7 +56,7 @@ idea {
 repositories { maven { url "http://dl.bintray.com/jetbrains/golang" } }
 dependencies {
   compile project(':utils'), project(':google-app-engine'), project(':google-app-engine:google-app-engine-yaml')
-  runtime "com.jetbrains:delve:${delveVersion}"
+  runtime(group: 'com.jetbrains', name: 'delve', version: "${delveVersion}", ext: 'zip')
 }
 
 // delve packing
