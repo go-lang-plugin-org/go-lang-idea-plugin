@@ -12,7 +12,7 @@ import com.goide.stubs.GoImportSpecStub;
 import com.goide.psi.*;
 import com.intellij.psi.stubs.IStubElementType;
 
-public class GoImportSpecImpl extends GoStubbedElementImpl<GoImportSpecStub> implements GoImportSpec {
+public class GoImportSpecImpl extends GoNamedElementImpl<GoImportSpecStub> implements GoImportSpec {
 
   public GoImportSpecImpl(ASTNode node) {
     super(node);
@@ -68,6 +68,10 @@ public class GoImportSpecImpl extends GoStubbedElementImpl<GoImportSpecStub> imp
   @NotNull
   public String getPath() {
     return GoPsiImplUtil.getPath(this);
+  }
+
+  public String getName() {
+    return GoPsiImplUtil.getName(this);
   }
 
 }

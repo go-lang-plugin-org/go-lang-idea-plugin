@@ -336,9 +336,11 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
           if (resolved) return true;
         }
         else {
-          PsiDirectory resolve = importString.resolve();
+          if (o.getAlias() == null) {
+            PsiDirectory resolve = importString.resolve();
+            if (resolve != null && !processor.execute(resolve, state.put(ACTUAL_NAME, entry.getKey()))) return true;
+          }
           // todo: multi-resolve into appropriate package clauses
-          if (resolve != null && !processor.execute(resolve, state.put(ACTUAL_NAME, entry.getKey()))) return true; 
           if (!processor.execute(o, state.put(ACTUAL_NAME, entry.getKey()))) return true;
         }
       }
