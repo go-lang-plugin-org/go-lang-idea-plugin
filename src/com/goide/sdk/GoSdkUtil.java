@@ -313,9 +313,19 @@ public class GoSdkUtil {
       String oldStylePath = new File(sdkPath, "src/pkg/" + GoConstants.GO_VERSION_FILE_PATH).getPath();
       String newStylePath = new File(sdkPath, "src/" + GoConstants.GO_VERSION_FILE_PATH).getPath();
       File zVersionFile = FileUtil.findFirstThatExist(oldStylePath, newStylePath);
-      return zVersionFile != null ? parseGoVersion(FileUtil.loadFile(zVersionFile)) : null;
+      if (zVersionFile == null) {
+        GoSdkService.LOG.debug("Cannot find zVersion file at sdk path: " + sdkPath);
+        return null;
+      }
+      String file = FileUtil.loadFile(zVersionFile);
+      String version = parseGoVersion(file);
+      if (version == null) {
+        GoSdkService.LOG.debug("Cannot retrieve go version from zVersion file: " + file);
+      }
+      return version;
     }
     catch (IOException e) {
+      GoSdkService.LOG.debug("Cannot retrieve go version from sdk path: " + sdkPath, e);
       return null;
     }
   }
