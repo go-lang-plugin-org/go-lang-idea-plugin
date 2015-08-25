@@ -16,6 +16,7 @@
 
 package com.goide.project;
 
+import com.goide.GoConstants;
 import com.goide.GoModuleType;
 import com.goide.sdk.GoSdkType;
 import com.intellij.ide.util.importProject.ModuleDescriptor;
@@ -52,7 +53,7 @@ public class GoProjectStructureDetector extends ProjectStructureDetector {
         @NotNull
         @Override
         public String getRootTypeName() {
-          return "Go";
+          return GoConstants.GO;
         }
       });
     }

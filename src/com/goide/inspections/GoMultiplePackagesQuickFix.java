@@ -133,6 +133,6 @@ public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionO
   @NotNull
   @Override
   public String getFamilyName() {
-    return "Go";
+    return GoConstants.GO;
   }
 }

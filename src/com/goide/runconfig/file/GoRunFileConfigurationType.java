@@ -16,6 +16,7 @@
 
 package com.goide.runconfig.file;
 
+import com.goide.GoConstants;
 import com.goide.GoIcons;
 import com.goide.runconfig.GoConfigurationFactoryBase;
 import com.intellij.execution.configurations.ConfigurationTypeBase;
@@ -30,7 +31,7 @@ public class GoRunFileConfigurationType extends ConfigurationTypeBase {
     addFactory(new GoConfigurationFactoryBase(this) {
       @NotNull
       public RunConfiguration createTemplateConfiguration(Project project) {
-        return new GoRunFileConfiguration(project, "Go", getInstance());
+        return new GoRunFileConfiguration(project, GoConstants.GO, getInstance());
       }
     });
   }

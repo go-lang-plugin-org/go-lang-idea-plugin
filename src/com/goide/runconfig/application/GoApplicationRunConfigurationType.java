@@ -16,6 +16,7 @@
 
 package com.goide.runconfig.application;
 
+import com.goide.GoConstants;
 import com.goide.GoIcons;
 import com.goide.runconfig.GoConfigurationFactoryBase;
 import com.intellij.execution.configurations.ConfigurationTypeBase;
@@ -30,7 +31,7 @@ public class GoApplicationRunConfigurationType extends ConfigurationTypeBase {
     addFactory(new GoConfigurationFactoryBase(this) {
       @NotNull
       public RunConfiguration createTemplateConfiguration(Project project) {
-        return new GoApplicationConfiguration(project, "Go", getInstance());
+        return new GoApplicationConfiguration(project, GoConstants.GO, getInstance());
       }
     });
   }

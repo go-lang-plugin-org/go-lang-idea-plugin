@@ -31,7 +31,7 @@ public class GoLanguage extends Language {
   @NotNull
   @Override
   public String getDisplayName() {
-    return "Go";
+    return GoConstants.GO;
   }
 
   @Nullable

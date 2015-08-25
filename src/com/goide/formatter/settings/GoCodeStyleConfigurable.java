@@ -16,6 +16,7 @@
 
 package com.goide.formatter.settings;
 
+import com.goide.GoConstants;
 import com.goide.GoLanguage;
 import com.intellij.application.options.CodeStyleAbstractConfigurable;
 import com.intellij.application.options.CodeStyleAbstractPanel;
@@ -25,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class GoCodeStyleConfigurable extends CodeStyleAbstractConfigurable {
   public GoCodeStyleConfigurable(@NotNull CodeStyleSettings settings, CodeStyleSettings cloneSettings) {
-    super(settings, cloneSettings, "Go");
+    super(settings, cloneSettings, GoConstants.GO);
   }
 
   @NotNull

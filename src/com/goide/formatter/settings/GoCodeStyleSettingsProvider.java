@@ -16,6 +16,7 @@
 
 package com.goide.formatter.settings;
 
+import com.goide.GoConstants;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsProvider;
@@ -24,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 public class GoCodeStyleSettingsProvider extends CodeStyleSettingsProvider {
   @Override
   public String getConfigurableDisplayName() {
-    return "Go";
+    return GoConstants.GO;
   }
 
   @NotNull

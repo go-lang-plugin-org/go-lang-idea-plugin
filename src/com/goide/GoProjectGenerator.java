@@ -33,7 +33,7 @@ public class GoProjectGenerator implements DirectoryProjectGenerator {
   @NotNull
   @Override
   public String getName() {
-    return "Go";
+    return GoConstants.GO;
   }
 
   @Nullable

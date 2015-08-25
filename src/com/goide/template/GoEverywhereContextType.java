@@ -16,6 +16,7 @@
 
 package com.goide.template;
 
+import com.goide.GoConstants;
 import com.goide.GoTypes;
 import com.intellij.codeInsight.template.EverywhereContextType;
 import com.intellij.psi.PsiComment;
@@ -25,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class GoEverywhereContextType extends GoLiveTemplateContextType {
   protected GoEverywhereContextType() {
-    super("GO", "Go", EverywhereContextType.class);
+    super("GO", GoConstants.GO, EverywhereContextType.class);
   }
 
   @Override

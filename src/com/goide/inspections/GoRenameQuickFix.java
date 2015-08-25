@@ -16,6 +16,7 @@
 
 package com.goide.inspections;
 
+import com.goide.GoConstants;
 import com.goide.psi.GoNamedElement;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInspection.LocalQuickFixOnPsiElement;
@@ -79,7 +80,7 @@ public class GoRenameQuickFix extends LocalQuickFixOnPsiElement {
 
   @NotNull
   public String getFamilyName() {
-    return "Go";
+    return GoConstants.GO;
   }
 
   @NotNull

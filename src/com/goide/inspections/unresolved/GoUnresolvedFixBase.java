@@ -16,6 +16,7 @@
 
 package com.goide.inspections.unresolved;
 
+import com.goide.GoConstants;
 import com.goide.psi.GoReferenceExpressionBase;
 import com.goide.refactor.GoRefactoringUtil;
 import com.intellij.codeInsight.template.Template;
@@ -53,7 +54,7 @@ public abstract class GoUnresolvedFixBase extends LocalQuickFixAndIntentionActio
   @NotNull
   @Override
   public String getFamilyName() {
-    return "Go";
+    return GoConstants.GO;
   }
 
   @Override

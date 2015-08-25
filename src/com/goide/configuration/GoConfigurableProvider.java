@@ -16,6 +16,7 @@
 
 package com.goide.configuration;
 
+import com.goide.GoConstants;
 import com.goide.codeInsight.imports.GoAutoImportConfigurable;
 import com.goide.sdk.GoSdkService;
 import com.intellij.openapi.options.Configurable;
@@ -69,7 +70,7 @@ public class GoConfigurableProvider extends ConfigurableProvider {
     @Nls
     @Override
     public String getDisplayName() {
-      return "Go";
+      return GoConstants.GO;
     }
 
     @Nullable

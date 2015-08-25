@@ -16,12 +16,13 @@
 
 package com.goide.codeInsight.imports;
 
+import com.goide.GoConstants;
 import com.intellij.openapi.components.*;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.Nullable;
 
 @State(
-  name = "Go",
+  name = GoConstants.GO,
   storages = @Storage(file = StoragePathMacros.APP_CONFIG + "/editor.codeinsight.xml")
 )
 public class GoCodeInsightSettings implements PersistentStateComponent<GoCodeInsightSettings> {

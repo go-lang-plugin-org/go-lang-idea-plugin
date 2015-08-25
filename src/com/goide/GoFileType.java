@@ -36,7 +36,7 @@ public class GoFileType extends LanguageFileType {
   @NotNull
   @Override
   public String getName() {
-    return "Go";
+    return GoConstants.GO;
   }
 
   @NotNull

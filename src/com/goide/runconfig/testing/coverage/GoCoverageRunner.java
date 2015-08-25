@@ -16,6 +16,7 @@
 
 package com.goide.runconfig.testing.coverage;
 
+import com.goide.GoConstants;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.coverage.BaseCoverageSuite;
 import com.intellij.coverage.CoverageEngine;
@@ -45,7 +46,7 @@ public class GoCoverageRunner extends CoverageRunner {
 
   private static final String ID = "GoCoverage";
   private static final String DATA_FILE_EXTENSION = "out";
-  private static final String PRESENTABLE_NAME = "Go";
+  private static final String PRESENTABLE_NAME = GoConstants.GO;
 
   @Override
   public ProjectData loadCoverageData(@NotNull final File sessionDataFile, @Nullable final CoverageSuite baseCoverageSuite) {
