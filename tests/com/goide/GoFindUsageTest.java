@@ -117,4 +117,15 @@ public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
            "    }\n" +
            "}");
   }
+   public void testNearImportString() {
+     myFixture.configureByText("a.go", "package main; import <caret>\"fmt\"");
+     PsiElement atCaret = myFixture.getElementAtCaret();
+     try {
+       myFixture.findUsages(atCaret);
+       fail("Shouldn't be performed");
+     }
+     catch (AssertionError e) {
+       assertEquals("Cannot find handler for: IMPORT_SPEC", e.getMessage());
+     }
+   }
 }

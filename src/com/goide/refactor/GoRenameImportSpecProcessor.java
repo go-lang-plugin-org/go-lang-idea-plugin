@@ -31,12 +31,12 @@ public class GoRenameImportSpecProcessor extends RenamePsiElementProcessor {
   @Override
   public PsiElement substituteElementToRename(PsiElement element, @Nullable Editor editor) {
     GoImportSpec importSpec = (GoImportSpec)element;
-    if (GoPsiImplUtil.isDot(importSpec)) {
+    if (importSpec.isDot()) {
       String message = RefactoringBundle.message("error.cannot.be.renamed");
       CommonRefactoringUtil.showErrorHint(element.getProject(), editor, message, RefactoringBundle.message("rename.title"), null);
       return null;
     }
-    return GoPsiImplUtil.getAlias(importSpec) != null ? element : GoPsiImplUtil.resolve(importSpec.getImportString());
+    return importSpec.getAlias() != null ? element : importSpec.getImportString().resolve();
   }
 
   @Override
