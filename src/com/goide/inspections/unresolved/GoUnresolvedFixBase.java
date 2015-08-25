@@ -64,7 +64,7 @@ public abstract class GoUnresolvedFixBase extends LocalQuickFixAndIntentionActio
                      @NotNull PsiElement startElement,
                      @NotNull PsiElement endElement) {
     if (editor == null) {
-      LOG.error("Cannot run quickfix without editor: " + getClass().getSimpleName(),
+      LOG.error("Cannot run quick fix without editor: " + getClass().getSimpleName(),
                 AttachmentFactory.createAttachment(file.getVirtualFile()));
       return;
     }
