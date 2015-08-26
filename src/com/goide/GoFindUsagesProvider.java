@@ -40,8 +40,12 @@ public class GoFindUsagesProvider implements FindUsagesProvider {
   }
 
   @Override
-  public boolean canFindUsagesFor(@NotNull PsiElement psiElement) {
-    return psiElement instanceof GoNamedElement && !StringUtil.isEmpty(((GoNamedElement)psiElement).getName());
+  public boolean canFindUsagesFor(@NotNull PsiElement element) {
+    if (element instanceof GoImportSpec) {
+      GoImportSpec importSpec = (GoImportSpec)element;
+      return !StringUtil.isEmpty(importSpec.getAlias()) && !importSpec.isDot() && !importSpec.isForSideEffects();
+    }
+    return element instanceof GoNamedElement;
   }
 
   @Nullable
