@@ -243,6 +243,9 @@
     <localInspection language="go" displayName="Wrong test declaration"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoTestSignaturesInspection"/>
+    <localInspection language="go" displayName="Self import"
+                     groupName="Go" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoSelfImportInspection" />
   </extensions>
   <actions>
     <action id="Go.NewGoFile" class="com.goide.actions.GoCreateFileAction"

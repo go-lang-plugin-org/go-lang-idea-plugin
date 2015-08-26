@@ -111,8 +111,14 @@ public class GoElementFactory {
   }
 
   @NotNull
-  public static GoReferenceExpression createVarReference(@NotNull Project project, @NotNull String name) {
+  public static GoReferenceExpression createReferenceExpression(@NotNull Project project, @NotNull String name) {
     GoFile file = createFileFromText(project, "package a; var a = " + name);
     return PsiTreeUtil.findChildOfType(file, GoReferenceExpression.class);
+  }
+
+  @NotNull
+  public static GoTypeReferenceExpression createTypeReferenceExpression(@NotNull Project project, @NotNull String name) {
+    GoFile file = createFileFromText(project, "package a; type " + name + " struct {}; func f() { " + name + "{} }");
+    return PsiTreeUtil.findChildOfType(file, GoTypeReferenceExpression.class);
   }
 }

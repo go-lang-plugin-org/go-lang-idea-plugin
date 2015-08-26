@@ -182,7 +182,7 @@ public class GoIntroduceVariableBase {
         for (PsiElement occurrence : occurrences) {
           PsiElement occurrenceParent = occurrence.getParent();
           if (occurrenceParent instanceof GoParenthesesExpr) occurrence = occurrenceParent;
-          newOccurrences.add(occurrence.replace(GoElementFactory.createVarReference(project, name)));
+          newOccurrences.add(occurrence.replace(GoElementFactory.createReferenceExpression(project, name)));
         }
       }
     });
