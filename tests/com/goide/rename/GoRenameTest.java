@@ -46,20 +46,11 @@ public class GoRenameTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testDotImportAlias() {
-    myFixture.configureByText("foo.go", "package foo; import <caret>. \"fmt\"");
-    try {
-      myFixture.renameElementAtCaret("bar");
-      fail("Shouldn't be performed");
-    }
-    catch (CommonRefactoringUtil.RefactoringErrorHintException e) {
-      assertEquals("This element cannot be renamed", e.getMessage());
-    }
+    doTestDoNotRename("package foo; import <caret>. \"fmt\"");
   }
 
-  private void doTestDoNotRename(String text) {
-    myFixture.configureByText("foo.go", text);
-    myFixture.renameElementAtCaret("bar");
-    myFixture.checkResult(text);
+  public void testBlankImportAlias() {
+    doTestDoNotRename("package foo; import <caret>_ \"fmt\"");
   }
 
   public void testNullAlias() {
@@ -74,5 +65,17 @@ public class GoRenameTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureByText("foo.go", before);
     myFixture.renameElementAtCaret(newName);
     myFixture.checkResult(after);
+  }
+
+  private void doTestDoNotRename(String text) {
+    myFixture.configureByText("foo.go", text);
+    try {
+      myFixture.renameElementAtCaret("bar");
+      fail("Shouldn't be performed");
+    }
+    catch (CommonRefactoringUtil.RefactoringErrorHintException e) {
+      assertEquals("This element cannot be renamed", e.getMessage());
+    }
+    myFixture.checkResult(text);
   }
 }

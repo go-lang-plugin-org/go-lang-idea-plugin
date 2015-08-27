@@ -17,7 +17,7 @@
 package com.goide.refactor;
 
 import com.goide.psi.GoImportSpec;
-import com.goide.psi.impl.GoPsiImplUtil;
+import com.intellij.find.FindManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.RefactoringBundle;
@@ -30,13 +30,13 @@ public class GoRenameImportSpecProcessor extends RenamePsiElementProcessor {
   @Nullable
   @Override
   public PsiElement substituteElementToRename(PsiElement element, @Nullable Editor editor) {
-    GoImportSpec importSpec = (GoImportSpec)element;
-    if (importSpec.isDot()) {
-      String message = RefactoringBundle.message("error.cannot.be.renamed");
-      CommonRefactoringUtil.showErrorHint(element.getProject(), editor, message, RefactoringBundle.message("rename.title"), null);
-      return null;
+    if (FindManager.getInstance(element.getProject()).canFindUsages(element)) {
+      return element;
     }
-    return importSpec.getAlias() != null ? element : importSpec.getImportString().resolve();
+    
+    String message = RefactoringBundle.message("error.cannot.be.renamed");
+    CommonRefactoringUtil.showErrorHint(element.getProject(), editor, message, RefactoringBundle.message("rename.title"), null);
+    return null;
   }
 
   @Override

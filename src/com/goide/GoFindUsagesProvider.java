@@ -22,7 +22,6 @@ import com.intellij.lang.HelpID;
 import com.intellij.lang.cacheBuilder.DefaultWordsScanner;
 import com.intellij.lang.cacheBuilder.WordsScanner;
 import com.intellij.lang.findUsages.FindUsagesProvider;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.ElementDescriptionUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.TokenSet;
@@ -43,7 +42,7 @@ public class GoFindUsagesProvider implements FindUsagesProvider {
   public boolean canFindUsagesFor(@NotNull PsiElement element) {
     if (element instanceof GoImportSpec) {
       GoImportSpec importSpec = (GoImportSpec)element;
-      return !StringUtil.isEmpty(importSpec.getAlias()) && !importSpec.isDot() && !importSpec.isForSideEffects();
+      return importSpec.getAlias() != null && !importSpec.isDot() && !importSpec.isForSideEffects();
     }
     return element instanceof GoNamedElement;
   }
