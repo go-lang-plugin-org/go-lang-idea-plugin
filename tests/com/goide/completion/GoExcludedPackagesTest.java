@@ -19,7 +19,7 @@ package com.goide.completion;
 import com.goide.project.GoExcludedPathsSettings;
 import com.intellij.util.ArrayUtil;
 
-public class GoExcludePackagesTest extends GoCompletionSdkAwareTest {
+public class GoExcludedPackagesTest extends GoCompletionSdkAwareTestBase {
   @Override
   protected void tearDown() throws Exception {
     GoExcludedPathsSettings.getInstance(getProject()).setExcludedPackages(ArrayUtil.EMPTY_STRING_ARRAY);
