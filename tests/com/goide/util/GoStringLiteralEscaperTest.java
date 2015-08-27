@@ -20,8 +20,11 @@ import com.goide.GoCodeInsightFixtureTestCase;
 import com.goide.psi.GoStringLiteral;
 import com.goide.psi.impl.GoElementFactory;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.psi.LiteralTextEscaper;
 import com.intellij.psi.PsiLanguageInjectionHost;
+import com.intellij.testFramework.PlatformTestCase;
+import com.intellij.testFramework.PlatformTestUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
@@ -167,24 +170,33 @@ public class GoStringLiteralEscaperTest extends GoCodeInsightFixtureTestCase {
     assertEquals("A", a);
   }
 
-  public void _testDecodeShortUnicodeCharString() {
+  public void testDecodeShortUnicodeCharString() {
     final GoStringLiteral expr = createStringFromText("\\u8a9e");
     assertNotNull(expr);
     String a = decodeRange(expr, TextRange.create(1, 7));
     assertEquals("語", a);
   }
 
-  public void _testDecodeLongUnicodeCharString() {
-    final GoStringLiteral expr = createStringFromText("\\U00008a9e");
-    assertNotNull(expr);
-    String a = decodeRange(expr, TextRange.create(1, 11));
-    assertEquals("語", a);
+  public void testDecodeLongUnicodeCharString() {
+    PlatformTestUtil.withEncoding(CharsetToolkit.UTF8, new Runnable() {
+      public void run() {
+        final GoStringLiteral expr = createStringFromText("\\U00008a9e");
+        assertNotNull(expr);
+        String a = decodeRange(expr, TextRange.create(1, 11));
+        assertEquals("語", a);
+      }
+    });
   }
 
   public void testQuote() {
-    final GoStringLiteral expr = createStringFromText("import \\\"fmt\\\"");
-    assertNotNull(expr);
-    assertEquals("\"fmt\"", decodeRange(expr, TextRange.create(8, 15)));
+    PlatformTestUtil.withEncoding(CharsetToolkit.UTF8, new Runnable() {
+      @Override
+      public void run() {
+        final GoStringLiteral expr = createStringFromText("import \\\"fmt\\\"");
+        assertNotNull(expr);
+        assertEquals("\"fmt\"", decodeRange(expr, TextRange.create(8, 15)));
+      }
+    });
   }
 
   // endregion
