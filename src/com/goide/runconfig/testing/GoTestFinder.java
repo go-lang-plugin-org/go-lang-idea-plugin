@@ -46,10 +46,6 @@ public class GoTestFinder implements TestFinder {
     return file != null && file.getFileType() == GoFileType.INSTANCE && file.getNameWithoutExtension().endsWith(GoConstants.TEST_SUFFIX);
   }
 
-  public static boolean isTestPackageName(@Nullable String packageName) {
-    return packageName != null && packageName.endsWith(GoConstants.TEST_SUFFIX);
-  }
-
   @Nullable
   public static String getTestFunctionName(@NotNull GoFunctionOrMethodDeclaration function) {
     return GoTestFunctionType.fromName(function.getName()) == GoTestFunctionType.TEST ? StringUtil.notNullize(function.getName()) : null;

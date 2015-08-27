@@ -25,11 +25,14 @@ import org.jetbrains.annotations.NotNull;
 public class GoSelfImportInspection extends GoInspectionBase {
   @Override
   protected void checkFile(@NotNull GoFile file, @NotNull ProblemsHolder problemsHolder) {
-    if (GoTestFinder.isTestFile(file) && GoTestFinder.isTestPackageName(file.getPackageName())) return;
+    if (GoTestFinder.isTestFile(file) && GoTestFinder.getTestTargetPackage(file) != null) return;
 
-    GoImportSpec selfImportSpec = file.getImportedPackagesMap().get(file.getImportPath());
-    if (selfImportSpec != null) {
-      problemsHolder.registerProblem(selfImportSpec, "Self import is not allowed", new GoSelfImportQuickFix("Remove self import"));
+    String fileImportPath = file.getImportPath();
+    for (GoImportSpec importSpec : file.getImports()) {
+      String path = importSpec.getPath();
+      if (path.equals(fileImportPath) || path.equals(".")) {
+        problemsHolder.registerProblem(importSpec, "Self import is not allowed", new GoSelfImportQuickFix("Remove self import"));
+      }
     }
   }
 }

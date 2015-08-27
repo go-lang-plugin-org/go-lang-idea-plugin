@@ -17,24 +17,15 @@
 package com.goide.quickfix;
 
 import com.goide.inspections.GoSelfImportInspection;
-import com.intellij.testFramework.LightProjectDescriptor;
+import com.intellij.openapi.vfs.VirtualFile;
+
+import java.io.IOException;
 
 public class GoSelfImportQuickFixTest extends GoQuickFixTestBase {
   @Override
   public void setUp() throws Exception {
     super.setUp();
     myFixture.enableInspections(GoSelfImportInspection.class);
-    setUpProjectSdk();
-  }
-
-  @Override
-  protected LightProjectDescriptor getProjectDescriptor() {
-    return createMockProjectDescriptor();
-  }
-
-  @Override
-  protected String getBasePath() {
-    return "quickfixes/self-import";
   }
 
   @Override
@@ -42,9 +33,14 @@ public class GoSelfImportQuickFixTest extends GoQuickFixTestBase {
     return false;
   }
 
-  public void testRemoveSelfImport() {
-    myFixture.configureByFile("b.go");
-    //applySingleQuickFix("Remove self import");
-    //myFixture.checkResultByFile("b-after.go");
+  public void testRemoveSelfImport() throws IOException {
+    VirtualFile file = myFixture.getTempDirFixture().createFile("path/a.go", "package pack; import <caret>\"path\"");
+    myFixture.configureFromExistingVirtualFile(file);
+    applySingleQuickFix("Remove self import");
+  }
+
+  public void testRemoveRelativeSelfImport() {
+    myFixture.configureByText("a.go", "package pack; import <caret>\".\"");
+    applySingleQuickFix("Remove self import");
   }
 }
