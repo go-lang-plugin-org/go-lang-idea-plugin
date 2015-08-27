@@ -19,22 +19,10 @@ package com.goide.completion;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.Lookup;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.testFramework.LightProjectDescriptor;
 
 import java.io.IOException;
 
-public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
-  @Override
-  public void setUp() throws Exception {
-    super.setUp();
-    setUpProjectSdk();
-  }
-
-  @Override
-  protected LightProjectDescriptor getProjectDescriptor() {
-    return createMockProjectDescriptor();
-  }
-
+public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
   public void testFormatter() {
     doTestInclude("package main; import . \"fmt\"; type alias <caret>", "Formatter");
   }
@@ -79,7 +67,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "import \"fmt\"\n" +
                   "func test(){fmt.Fprintln(<caret>)}", "fmt.Fprintln");
   }
-  
+
   public void testVariableAutoImport() {
     doCheckResult("package main; \n" +
                   "func test(){ErrNotSuppor<caret>}",
@@ -87,7 +75,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
                   "import \"net/http\"\n" +
                   "func test(){http.ErrNotSupported}", "http.ErrNotSupported");
   }
-  
+
   public void testConstantAutoImport() {
     doCheckResult("package main; \n" +
                   "func test(){O_RDO<caret>}", "package main;\n" +
@@ -298,14 +286,14 @@ public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
     myFixture.completeBasic();
     myFixture.checkResult("package a; func main() { _ = ExampleF<caret>");
   }
-  
+
   public void testCompleteTestBenchmarkExamplesFromNonTestFiles() throws IOException {
     myFixture.getTempDirFixture().createFile("pack/pack.go", "package pack; func TestFoo() {} func BenchmarkFoo() {} func ExampleFoo() {}");
     myFixture.configureByText("my_test.go", "package a; func main() { _ = Foo<caret>");
     myFixture.completeBasic();
     assertContainsElements(myFixture.getLookupElementStrings(), "pack.TestFoo", "pack.BenchmarkFoo", "pack.ExampleFoo");
   }
-  
+
   public void testDoNotAutoImportWithTheSameImportPath() throws IOException {
     myFixture.getTempDirFixture().createFile("pack1/file2.go", "package pack1; func MyFunctionFromSamePath() {}");
     myFixture.getTempDirFixture().createFile("pack2/file2.go", "package pack1; func MyFunctionFromOtherPath() {}");
