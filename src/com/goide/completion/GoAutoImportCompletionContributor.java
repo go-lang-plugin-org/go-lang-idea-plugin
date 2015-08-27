@@ -87,10 +87,8 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         Project project = position.getProject();
         GlobalSearchScope scope = GoUtil.moduleScopeWithoutTests(file);
         VirtualFile containingDirectory = file.getVirtualFile().getParent();
-        boolean isTestFile = GoTestFinder.isTestFile(file) && GoTestFinder.isTestPackageName(file.getPackageName());
-        String allowedPackageInDirectory = isTestFile ? file.getPackageNameWithoutTestSuffix() : null;
         if (containingDirectory != null) {
-          scope = new GoUtil.ExceptChildOfDirectory(containingDirectory, scope, allowedPackageInDirectory);
+          scope = new GoUtil.ExceptChildOfDirectory(containingDirectory, scope, GoTestFinder.getTestTargetPackage(file));
         }
         Set<String> sortedKeys = sortMatching(matcher, StubIndex.getInstance().getAllKeys(ALL_PUBLIC_NAMES, project), file);
         for (String name : sortedKeys) {
@@ -109,7 +107,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
     });
   }
 
-private static Set<String> sortMatching(@NotNull PrefixMatcher matcher, @NotNull Collection<String> names, @NotNull GoFile file) {
+  private static Set<String> sortMatching(@NotNull PrefixMatcher matcher, @NotNull Collection<String> names, @NotNull GoFile file) {
     ProgressManager.checkCanceled();
     String prefix = matcher.getPrefix();
     if (prefix.isEmpty()) return ContainerUtil.newLinkedHashSet(names);

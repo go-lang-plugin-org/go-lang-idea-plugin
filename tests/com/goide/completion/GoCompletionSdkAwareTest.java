@@ -302,10 +302,26 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
     VirtualFile file = myFixture.getTempDirFixture().createFile("pack1/file1.go", "package pack1; func test() { pack1.MyFunc<caret> }");
     myFixture.configureFromExistingVirtualFile(file);
     myFixture.completeBasic();
-    myFixture.checkResult("package pack1;\n" +
-                          "import \"pack2\" func test() { pack1.MyFunctionFromOtherPath() }");
+    myFixture.checkResult("package pack1;\nimport \"pack2\" func test() { pack1.MyFunctionFromOtherPath() }");
+  }
+  
+  public void testAutoImportOwnImportPathFromTest() throws IOException {
+    myFixture.getTempDirFixture().createFile("pack/a.go", "package myPack; func Func() {}");
+    VirtualFile testFile = myFixture.getTempDirFixture()
+      .createFile("pack/a_test.go", "package myPack_test; func TestFunc() { myPack.Fun<caret> }");
+    myFixture.configureFromExistingVirtualFile(testFile);
+    myFixture.completeBasic();
+    myFixture.checkResult("package myPack_test;\nimport \"pack\" func TestFunc() { myPack.Func() }");
   }
 
+  public void testDoNotAutoImportDifferentPackageInSamePathFromTest() throws IOException {
+    String text = "package foo_test; func TestFunc() { bar.Fun<caret> }";
+    myFixture.getTempDirFixture().createFile("pack/a.go", "package bar; func Func() {}");
+    myFixture.configureFromExistingVirtualFile(myFixture.getTempDirFixture().createFile("pack/a_test.go", text));
+    myFixture.completeBasic();
+    myFixture.checkResult(text);
+  }
+  
   public void testImportOwnPathFromTestFile() throws IOException {
     TempDirTestFixture dir = myFixture.getTempDirFixture();
     VirtualFile testFile = dir.createFile("fuzz/fuzy_test.go", "package fuzy_test; import \"<caret>\"");

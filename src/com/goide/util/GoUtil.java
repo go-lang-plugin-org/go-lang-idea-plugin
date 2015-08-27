@@ -248,7 +248,9 @@ public class GoUtil {
     @NotNull private final VirtualFile myParent;
     @Nullable private final String myAllowedPackageInExcludedDirectory;
 
-    public ExceptChildOfDirectory(@NotNull VirtualFile parent, @NotNull GlobalSearchScope baseScope, @Nullable String allowedPackageInExcludedDirectory) {
+    public ExceptChildOfDirectory(@NotNull VirtualFile parent, 
+                                  @NotNull GlobalSearchScope baseScope, 
+                                  @Nullable String allowedPackageInExcludedDirectory) {
       super(baseScope);
       myParent = parent;
       myAllowedPackageInExcludedDirectory = allowedPackageInExcludedDirectory;
@@ -256,14 +258,20 @@ public class GoUtil {
 
     @Override
     public boolean contains(@NotNull VirtualFile file) {
-      Project project = getProject();
-      PsiFile psiFile = project != null ? PsiManager.getInstance(project).findFile(file) : null;
-      if (!(psiFile instanceof GoFile)) return false;
-
-      return (!myParent.equals(file.getParent()) ||
-              myAllowedPackageInExcludedDirectory != null &&
-              myAllowedPackageInExcludedDirectory.equals(((GoFile)psiFile).getPackageName())) &&
-             super.contains(file);
+      if (myParent.equals(file.getParent())) {
+        if (myAllowedPackageInExcludedDirectory == null) {
+          return false;
+        }
+        Project project = getProject();
+        PsiFile psiFile = project != null ? PsiManager.getInstance(project).findFile(file) : null;
+        if (!(psiFile instanceof GoFile)) {
+          return false;
+        }
+        if (!myAllowedPackageInExcludedDirectory.equals(((GoFile)psiFile).getPackageName())) {
+          return false;
+        }
+      }
+      return super.contains(file);
     }
   }
 

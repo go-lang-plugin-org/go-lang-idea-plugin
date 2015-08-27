@@ -59,7 +59,10 @@ public class GoExcludedPathsSettings extends SimpleModificationTracker implement
     incModificationCount();
   }
 
-  public boolean isExcluded(@NotNull String importPath) {
+  public boolean isExcluded(@Nullable String importPath) {
+    if (importPath == null) {
+      return false;
+    }
     for (String excludedPath : myExcludedPackages) {
       if (FileUtil.isAncestor(excludedPath, importPath, false)) return true;
     }

@@ -75,31 +75,13 @@ public class GoCompletionTest extends GoCompletionTestBase {
     assertSameElements(lookupElementStrings, "package1", "package2");
   }
 
-  private void doTestCompleteOwnPath(String existingFile, String existingText, String newFile, String newText, String result)
-    throws IOException {
-    myFixture.getTempDirFixture().createFile(existingFile, existingText);
-    VirtualFile testFile = myFixture.getTempDirFixture().createFile(newFile, newText);
+  public void testDoNotCompleteOwnImportPath() throws IOException {
+    myFixture.getTempDirFixture().createFile("package/long/long/path/test.go", "package pack");
+    VirtualFile testFile = myFixture.getTempDirFixture()
+      .createFile("package/very/long/path/but/same/package/test.go", "package pack; import `package/<caret>`");
     myFixture.configureFromExistingVirtualFile(testFile);
     myFixture.completeBasic();
-    myFixture.checkResult(result);
-  }
-
-  public void testDoNotCompleteOwnImportPath() throws IOException {
-    doTestCompleteOwnPath("package/long/long/path/test.go", "package pack",
-                          "package/very/long/path/but/same/package/test.go", "package pack; import `package/<caret>`",
-                          "package pack; import `package/long/long/path`");
-  }
-
-  public void testCompleteOwnImportPathFromTest() throws IOException {
-    doTestCompleteOwnPath("pack/a.go", "package myPack; func Func() {}",
-                          "pack/a_test.go", "package myPack_test; func TestFunc() { myPack.Fun<caret> }",
-                          "package myPack_test;\nimport \"pack\" func TestFunc() { myPack.Func() }");
-  }
-
-  public void testDoNotCompleteDifferentPackageInSamePathFromTest() throws IOException {
-    String text = "package foo_test; func TestFunc() { bar.Fun<caret> }";
-    doTestCompleteOwnPath("pack/a.go", "package bar; func Func() {}",
-                          "pack/a_test.go", text, text);
+    myFixture.checkResult("package pack; import `package/long/long/path`");
   }
 
   public void testImportsPriority() throws IOException {

@@ -18,7 +18,6 @@ package com.goide.completion;
 
 import com.goide.GoFileType;
 import com.goide.project.GoExcludedPathsSettings;
-import com.goide.psi.GoFile;
 import com.goide.psi.GoImportString;
 import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.sdk.GoSdkUtil;
@@ -66,13 +65,13 @@ public class GoImportPathsCompletionProvider extends CompletionProvider<Completi
       GoExcludedPathsSettings excludedSettings = GoExcludedPathsSettings.getInstance(project);
       GlobalSearchScope scope = withLibraries ? GoUtil.moduleScope(module) : GoUtil.moduleScopeWithoutLibraries(module);
       PsiFile contextFile = context != null ? context.getContainingFile() : null;
-      boolean isTestFile = GoTestFinder.isTestFile(contextFile) && GoTestFinder.isTestPackageName(((GoFile)contextFile).getPackageName());
+      boolean testFileWithTestPackage = GoTestFinder.isTestFileWithTestPackage(contextFile);
       for (VirtualFile file : FileTypeIndex.getFiles(GoFileType.INSTANCE, scope)) {
         VirtualFile parent = file.getParent();
         if (parent == null) continue;
         String importPath = GoSdkUtil.getPathRelativeToSdkAndLibraries(parent, project, module);
         if (!StringUtil.isEmpty(importPath) && !excludedSettings.isExcluded(importPath) &&
-            (!importPath.equals(contextImportPath) || isTestFile)) {
+            (testFileWithTestPackage || !importPath.equals(contextImportPath))) {
           result.addElement(GoCompletionUtil.createPackageLookupElement(importPath, contextImportPath, false));
         }
       }
