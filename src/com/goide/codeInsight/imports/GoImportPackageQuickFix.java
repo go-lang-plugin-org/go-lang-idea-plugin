@@ -22,6 +22,7 @@ import com.goide.project.GoExcludedPathsSettings;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoReferenceExpression;
 import com.goide.psi.GoTypeReferenceExpression;
+import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.stubs.index.GoPackagesIndex;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.hint.HintManager;
@@ -38,6 +39,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -160,8 +162,11 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
     if (myPackagesToImport == null) {
       final GlobalSearchScope scope = GoUtil.moduleScope(element);
       PsiFile file = element.getContainingFile();
-      final PsiDirectory parentDirectory = file != null ? file.getParent() : null;
+      boolean isTestFile = GoTestFinder.isTestFile(file) && GoTestFinder.isTestPackageName(((GoFile)file).getPackageName());
+      final String packageName = isTestFile ? ((GoFile)file).getPackageNameWithoutTestSuffix() : null;
+      final boolean allowSamePath = !StringUtil.isEmpty(packageName);
       Project project = element.getProject();
+      final PsiDirectory parentDirectory = file != null ? file.getParent() : null;
       final GoExcludedPathsSettings excludedSettings = GoExcludedPathsSettings.getInstance(project);
       Collection<GoFile> es = StubIndex.getElements(GoPackagesIndex.KEY, myPackageName, project, scope, GoFile.class);
       myPackagesToImport = sorted(skipNulls(map2Set(
@@ -170,7 +175,8 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
           @Nullable
           @Override
           public String fun(@NotNull GoFile file) {
-            String importPath = parentDirectory == null || !parentDirectory.isEquivalentTo(file.getParent()) ? file.getImportPath() : null;
+            String importPath = parentDirectory == null || !parentDirectory.isEquivalentTo(file.getParent()) ||
+                                (allowSamePath && packageName.equals(file.getPackageName())) ? file.getImportPath() : null;
             return importPath != null && !excludedSettings.isExcluded(importPath) ? importPath : null;
           }
         }

@@ -424,6 +424,12 @@ public class GoFile extends PsiFileBase {
   }
 
   @Nullable
+  public String getPackageNameWithoutTestSuffix() {
+    String name = getPackageName();
+    return name != null ? StringUtil.trimEnd(name, GoConstants.TEST_SUFFIX) : null;
+  }
+
+  @Nullable
   @Override
   public GoFileStub getStub() {
     //noinspection unchecked
@@ -492,5 +498,4 @@ public class GoFile extends PsiFileBase {
       }
     });
   }
-
 }

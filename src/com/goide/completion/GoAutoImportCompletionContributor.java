@@ -20,6 +20,7 @@ import com.goide.GoConstants;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.psi.impl.GoTypeReference;
+import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.openapi.progress.ProgressManager;
@@ -58,10 +59,10 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         PsiElement position = parameters.getPosition();
         PsiElement parent = position.getParent();
         if (prevDot(parent)) return;
-        PsiFile file = parameters.getOriginalFile();
-        if (!(file instanceof GoFile)) return;
-        if (!(parent instanceof GoReferenceExpressionBase)) return;
-        
+        PsiFile psiFile = parameters.getOriginalFile();
+        if (!(psiFile instanceof GoFile && parent instanceof GoReferenceExpressionBase)) return;
+        GoFile file = (GoFile)psiFile;
+
         result = adjustMatcher(parameters, result, parent);
         PrefixMatcher matcher = result.getPrefixMatcher();
         if (parameters.getInvocationCount() < 2 && matcher.getPrefix().isEmpty()) {
@@ -82,14 +83,16 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         }
         if (processors.isEmpty()) return;
 
-        NamedElementProcessor processor = new NamedElementProcessor(processors, ((GoFile)file).getImportedPackagesMap(), result);
+        NamedElementProcessor processor = new NamedElementProcessor(processors, file.getImportedPackagesMap(), result);
         Project project = position.getProject();
         GlobalSearchScope scope = GoUtil.moduleScopeWithoutTests(file);
         VirtualFile containingDirectory = file.getVirtualFile().getParent();
+        boolean isTestFile = GoTestFinder.isTestFile(file) && GoTestFinder.isTestPackageName(file.getPackageName());
+        String allowedPackageInDirectory = isTestFile ? file.getPackageNameWithoutTestSuffix() : null;
         if (containingDirectory != null) {
-          scope = new GoUtil.ExceptChildOfDirectory(containingDirectory, scope);
+          scope = new GoUtil.ExceptChildOfDirectory(containingDirectory, scope, allowedPackageInDirectory);
         }
-        Set<String> sortedKeys = sortMatching(matcher, StubIndex.getInstance().getAllKeys(ALL_PUBLIC_NAMES, project), ((GoFile)file));
+        Set<String> sortedKeys = sortMatching(matcher, StubIndex.getInstance().getAllKeys(ALL_PUBLIC_NAMES, project), file);
         for (String name : sortedKeys) {
           processor.setName(name);
           StubIndex.getInstance().processElements(ALL_PUBLIC_NAMES, name, project, scope, GoNamedElement.class, processor);
@@ -313,11 +316,11 @@ private static Set<String> sortMatching(@NotNull PrefixMatcher matcher, @NotNull
 
     private ExistingImportData cachedImportData(@NotNull GoNamedElement element, @Nullable ExistingImportData existingValue) {
       if (existingValue != null) return existingValue;
-      
+
       GoFile declarationFile = element.getContainingFile();
       String importPath = declarationFile.getImportPath();
       GoImportSpec existingImport = myImportedPackages.get(importPath);
-      
+
       boolean exists = existingImport != null;
       boolean isDot = exists && existingImport.isDot();
       String alias = existingImport != null ? existingImport.getAlias() : null;
