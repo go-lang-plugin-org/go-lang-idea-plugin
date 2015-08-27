@@ -34,6 +34,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.DelegatingGlobalSearchScope;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.CachedValue;
@@ -245,15 +246,32 @@ public class GoUtil {
   
   public static class ExceptChildOfDirectory extends DelegatingGlobalSearchScope {
     @NotNull private final VirtualFile myParent;
+    @Nullable private final String myAllowedPackageInExcludedDirectory;
 
-    public ExceptChildOfDirectory(@NotNull VirtualFile parent, @NotNull GlobalSearchScope baseScope) {
+    public ExceptChildOfDirectory(@NotNull VirtualFile parent, 
+                                  @NotNull GlobalSearchScope baseScope, 
+                                  @Nullable String allowedPackageInExcludedDirectory) {
       super(baseScope);
       myParent = parent;
+      myAllowedPackageInExcludedDirectory = allowedPackageInExcludedDirectory;
     }
 
     @Override
     public boolean contains(@NotNull VirtualFile file) {
-      return !myParent.equals(file.getParent()) && super.contains(file);
+      if (myParent.equals(file.getParent())) {
+        if (myAllowedPackageInExcludedDirectory == null) {
+          return false;
+        }
+        Project project = getProject();
+        PsiFile psiFile = project != null ? PsiManager.getInstance(project).findFile(file) : null;
+        if (!(psiFile instanceof GoFile)) {
+          return false;
+        }
+        if (!myAllowedPackageInExcludedDirectory.equals(((GoFile)psiFile).getPackageName())) {
+          return false;
+        }
+      }
+      return super.contains(file);
     }
   }
 

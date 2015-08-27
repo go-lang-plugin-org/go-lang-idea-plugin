@@ -492,5 +492,4 @@ public class GoFile extends PsiFileBase {
       }
     });
   }
-
 }

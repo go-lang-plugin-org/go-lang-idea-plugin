@@ -39,7 +39,7 @@ public class GoTestFinder implements TestFinder {
   private static final String EXTENSION = "." + GoFileType.INSTANCE.getDefaultExtension();
 
   public static boolean isTestFile(@Nullable PsiFile file) {
-    return file != null && file instanceof GoFile && file.getName().endsWith(GoConstants.TEST_SUFFIX_WITH_EXTENSION);
+    return file instanceof GoFile && file.getName().endsWith(GoConstants.TEST_SUFFIX_WITH_EXTENSION);
   }
 
   public static boolean isTestFile(@Nullable VirtualFile file) {
@@ -49,6 +49,21 @@ public class GoTestFinder implements TestFinder {
   @Nullable
   public static String getTestFunctionName(@NotNull GoFunctionOrMethodDeclaration function) {
     return GoTestFunctionType.fromName(function.getName()) == GoTestFunctionType.TEST ? StringUtil.notNullize(function.getName()) : null;
+  }
+
+  public static boolean isTestFileWithTestPackage(@Nullable PsiFile file) {
+    return getTestTargetPackage(file) != null;
+  }
+
+  @Nullable
+  public static String getTestTargetPackage(@Nullable PsiFile file) {
+    if (isTestFile(file)) {
+      String packageName = ((GoFile)file).getPackageName();
+      if (packageName != null && packageName.endsWith(GoConstants.TEST_SUFFIX)) {
+        return StringUtil.nullize(StringUtil.trimEnd(packageName, GoConstants.TEST_SUFFIX));
+      }
+    }
+    return null;
   }
 
   @Nullable
