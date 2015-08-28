@@ -19,20 +19,45 @@ package com.goide.inspections;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoImportSpec;
 import com.goide.runconfig.testing.GoTestFinder;
+import com.intellij.codeInspection.LocalQuickFixBase;
+import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.openapi.command.WriteCommandAction;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 
 public class GoSelfImportInspection extends GoInspectionBase {
   @Override
   protected void checkFile(@NotNull GoFile file, @NotNull ProblemsHolder problemsHolder) {
-    if (GoTestFinder.isTestFile(file) && GoTestFinder.getTestTargetPackage(file) != null) return;
+    if (GoTestFinder.getTestTargetPackage(file) != null) return;
 
     String fileImportPath = file.getImportPath();
     for (GoImportSpec importSpec : file.getImports()) {
       String path = importSpec.getPath();
       if (path.equals(fileImportPath) || path.equals(".")) {
-        problemsHolder.registerProblem(importSpec, "Self import is not allowed", new GoSelfImportQuickFix("Remove self import"));
+        problemsHolder.registerProblem(importSpec, "Self import is not allowed", new GoSelfImportQuickFix());
       }
+    }
+  }
+
+  public static class GoSelfImportQuickFix extends LocalQuickFixBase {
+    protected GoSelfImportQuickFix() {
+      super("Remove self import");
+    }
+    @Override
+    public void applyFix(@NotNull final Project project, @NotNull ProblemDescriptor descriptor) {
+      final PsiElement element = descriptor.getPsiElement();
+      final PsiFile file = element != null ? element.getContainingFile() : null;
+      if (!(element instanceof GoImportSpec && file instanceof GoFile)) return;
+  
+      WriteCommandAction.runWriteCommandAction(project, new Runnable() {
+        @Override
+        public void run() {
+          ((GoFile)file).deleteImport((GoImportSpec)element);
+        }
+      });
     }
   }
 }

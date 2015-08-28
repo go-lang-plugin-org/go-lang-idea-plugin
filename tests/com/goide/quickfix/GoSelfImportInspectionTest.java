@@ -21,7 +21,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 
 import java.io.IOException;
 
-public class GoSelfImportQuickFixTest extends GoQuickFixTestBase {
+public class GoSelfImportInspectionTest extends GoQuickFixTestBase {
   @Override
   public void setUp() throws Exception {
     super.setUp();
@@ -34,13 +34,22 @@ public class GoSelfImportQuickFixTest extends GoQuickFixTestBase {
   }
 
   public void testRemoveSelfImport() throws IOException {
-    VirtualFile file = myFixture.getTempDirFixture().createFile("path/a.go", "package pack; import <caret>\"path\"");
+    VirtualFile file = myFixture.getTempDirFixture().createFile("path/a.go", "package pack;" +
+                                                                             "import <error descr=\"Self import is not allowed\"><caret>\"path\"</error>");
     myFixture.configureFromExistingVirtualFile(file);
+    myFixture.checkHighlighting();
     applySingleQuickFix("Remove self import");
   }
 
   public void testRemoveRelativeSelfImport() {
-    myFixture.configureByText("a.go", "package pack; import <caret>\".\"");
+    myFixture.configureByText("a.go", "package pack; import <error descr=\"Self import is not allowed\"><caret>\".\"</error>");
+    myFixture.checkHighlighting();
     applySingleQuickFix("Remove self import");
+  }
+
+  public void testDoNotConsiderImportFromTestPackageAsSelfImport() throws IOException {
+    VirtualFile file = myFixture.getTempDirFixture().createFile("path/a_test.go", "package pack_test; import <caret>\"path\"");
+    myFixture.configureFromExistingVirtualFile(file);
+    myFixture.checkHighlighting();
   }
 }
