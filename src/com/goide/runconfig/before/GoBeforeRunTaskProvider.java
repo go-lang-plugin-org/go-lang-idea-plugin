@@ -134,7 +134,7 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
         if (!sdkService.isGoModule(module)) return;
 
         done.down();
-        GoExecutor.in(module).withParameters(task.getCommand())
+        GoExecutor.in(module).withParameterString(task.getCommand())
           .withWorkDirectory(workingDirectory)
           .showOutputOnError()
           .showNotifications(false)
