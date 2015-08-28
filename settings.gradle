@@ -1,1 +1,2 @@
+rootProject.name = 'intellij-go'
 include 'utils', 'google-app-engine', 'google-app-engine:google-app-engine-yaml'
