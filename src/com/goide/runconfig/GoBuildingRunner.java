@@ -36,6 +36,7 @@ import com.intellij.execution.runners.AsyncGenericProgramRunner;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.RunContentBuilder;
 import com.intellij.execution.ui.RunContentDescriptor;
+import com.intellij.internal.statistic.UsageTrigger;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
@@ -184,6 +185,8 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
         if (executionResult == null) {
           throw new ExecutionException("Cannot run debugger");
         }
+
+        UsageTrigger.trigger("go.dlv.debugger");
       
         return XDebuggerManager.getInstance(env.getProject()).startSession(env, new XDebugProcessStarter() {
           @NotNull
