@@ -429,3 +429,24 @@ func _() {
 		}
 	}
 }
+
+type Params struct { }
+
+type Image interface { }
+
+type ServerFunc func(params Params) (*Image, error)
+
+func (f ServerFunc) Get(params Params) (*Image, error) {
+	return f(params)
+}
+
+type Server interface {
+	Get(Params) (*Image, error)
+}
+
+func _() {
+	server := ServerFunc(func(params Params) (*Image, error) {
+		return nil, nil
+	})
+	server.Get(Params{})
+}
