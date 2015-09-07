@@ -54,8 +54,7 @@ public class GoUnusedVariableInspection extends GoInspectionBase {
               PsiElement grandParent = parent.getParent();
               if (grandParent instanceof GoAssignmentStatement && ((GoAssignmentStatement)grandParent).getAssignOp().getAssign() != null) {
                 GoFunctionLit fn = PsiTreeUtil.getParentOfType(element, GoFunctionLit.class);
-                if (fn != null && PsiTreeUtil.isAncestor(GoVarProcessor.getScope(o), fn, true)) {}
-                else continue;
+                if (fn == null || !PsiTreeUtil.isAncestor(GoVarProcessor.getScope(o), fn, true)) continue;
               }
             }
             if (parent instanceof GoShortVarDeclaration) {
