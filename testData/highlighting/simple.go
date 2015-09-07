@@ -411,3 +411,21 @@ func _() {
 	st.Get("key") // <- unresolved Get
 }
 
+type TestStruct struct {
+	SomeId int
+}
+
+type DataSlice []*TestStruct
+
+func NewDataSlice() *DataSlice {
+	return &DataSlice{}
+}
+
+func _() {
+	data := NewDataSlice()
+	for _, element := range data {
+		if  element.SomeId > 20 {
+			println("some text")
+		}
+	}
+}

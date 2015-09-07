@@ -607,6 +607,9 @@ public class GoPsiImplUtil {
       if (type instanceof GoChannelType) {
         return ((GoChannelType)type).getType();
       }
+      if (type instanceof GoPointerType) {
+        type = ((GoPointerType)type).getType();
+      }
       GoTypeReferenceExpression typeRef = type != null ? type.getTypeReferenceExpression() : null;
       if (typeRef != null) {
         PsiElement resolve = typeRef.getReference().resolve();
