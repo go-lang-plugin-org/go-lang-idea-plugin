@@ -54,12 +54,12 @@ public class GoRefactoringUtil {
   }
 
   @Nullable
-  public static PsiElement findLocalAnchor(List<PsiElement> occurrences) {
+  public static PsiElement findLocalAnchor(@NotNull List<PsiElement> occurrences) {
     return findAnchor(occurrences, PsiTreeUtil.getNonStrictParentOfType(PsiTreeUtil.findCommonParent(occurrences), GoBlock.class));
   }
 
   @Nullable
-  public static PsiElement findAnchor(List<PsiElement> occurrences, PsiElement context) {
+  public static PsiElement findAnchor(@NotNull List<PsiElement> occurrences, @Nullable PsiElement context) {
     PsiElement statement = PsiTreeUtil.getNonStrictParentOfType(ContainerUtil.getFirstItem(occurrences), GoStatement.class);
     while (statement != null && statement.getParent() != context) {
       statement = statement.getParent();
