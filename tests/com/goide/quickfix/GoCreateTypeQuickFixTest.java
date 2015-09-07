@@ -33,5 +33,6 @@ public class GoCreateTypeQuickFixTest extends GoQuickFixTestBase {
   }
 
   public void testSimple()      { doTest(CREATE_TYPE_A);      }
+  public void testGlobal()      { doTest(CREATE_TYPE_A);      }
   public void testProhibited()  { doTestNoFix(CREATE_TYPE_A); }
 }

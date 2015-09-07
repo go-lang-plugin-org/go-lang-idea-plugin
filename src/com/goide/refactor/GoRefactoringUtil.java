@@ -18,6 +18,7 @@ package com.goide.refactor;
 
 import com.goide.psi.GoBlock;
 import com.goide.psi.GoStatement;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInsight.PsiEquivalenceUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiRecursiveElementVisitor;
@@ -60,10 +61,11 @@ public class GoRefactoringUtil {
 
   @Nullable
   public static PsiElement findAnchor(@NotNull List<PsiElement> occurrences, @Nullable PsiElement context) {
-    PsiElement statement = PsiTreeUtil.getNonStrictParentOfType(ContainerUtil.getFirstItem(occurrences), GoStatement.class);
+    PsiElement first = ContainerUtil.getFirstItem(occurrences);
+    PsiElement statement = PsiTreeUtil.getNonStrictParentOfType(first, GoStatement.class);
     while (statement != null && statement.getParent() != context) {
       statement = statement.getParent();
     }
-    return statement;
+    return statement == null ? GoPsiImplUtil.getTopLevelDeclaration(first) : statement;
   }
 }
