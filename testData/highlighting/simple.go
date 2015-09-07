@@ -450,3 +450,19 @@ func _() {
 	})
 	server.Get(Params{})
 }
+
+func _() {
+	type (
+		client struct {
+			message chan string
+		}
+		clientList struct {
+			m (map[string]*client)
+		}
+	)
+	cl := clientList{m: make(map[string]*client)}
+	message := ""
+	for _, c := range cl.m {
+		c.message <- message
+	}
+}
