@@ -12,4 +12,11 @@ func main() {
 
 	sum4 := 0
 	sum4 += 10
+	
+	var       i int
+	f(func() { i  = 0; println("test") })
+}
+
+func f(m func()) {
+	m()
 }

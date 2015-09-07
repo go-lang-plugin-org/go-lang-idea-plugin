@@ -19,6 +19,7 @@ package com.goide.inspections.unresolved;
 import com.goide.inspections.GoInspectionBase;
 import com.goide.inspections.GoRenameToBlankQuickFix;
 import com.goide.psi.*;
+import com.goide.psi.impl.GoVarProcessor;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
@@ -52,7 +53,9 @@ public class GoUnusedVariableInspection extends GoInspectionBase {
             if (parent instanceof GoLeftHandExprList) {
               PsiElement grandParent = parent.getParent();
               if (grandParent instanceof GoAssignmentStatement && ((GoAssignmentStatement)grandParent).getAssignOp().getAssign() != null) {
-                continue;
+                GoFunctionLit fn = PsiTreeUtil.getParentOfType(element, GoFunctionLit.class);
+                if (fn != null && PsiTreeUtil.isAncestor(GoVarProcessor.getScope(o), fn, true)) {}
+                else continue;
               }
             }
             if (parent instanceof GoShortVarDeclaration) {
