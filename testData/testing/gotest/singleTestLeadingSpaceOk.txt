@@ -1,0 +1,4 @@
+=== RUN   TestFlagsGroups
+--- PASS: TestFlagsGroups (0.00s)
+PASS
+ok  	some/package	0.118s

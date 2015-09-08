@@ -1,0 +1,6 @@
+TestStarted
+    - locationHint=gotest://TestFlagsGroups
+    - name=TestFlagsGroups
+TestFinished
+    - duration=42
+    - name=TestFlagsGroups

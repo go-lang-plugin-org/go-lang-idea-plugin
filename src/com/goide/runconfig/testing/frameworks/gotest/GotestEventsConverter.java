@@ -56,7 +56,7 @@ public class GotestEventsConverter extends OutputToGeneralTestEventsConverter im
 
     if ((matcher = RUN.matcher(text)).find()) {
       myOutputAppeared = false;
-      String testName = StringUtil.notNullize(matcher.group(1), "<test>");
+      String testName = StringUtil.notNullize(matcher.group(1), "<test>").trim();
       ServiceMessageBuilder testStarted = ServiceMessageBuilder.testStarted(testName).addAttribute("locationHint", testUrl(testName));
       boolean result = processNotFinishedMessage(testStarted.toString(), outputType, visitor);
       myCurrentTestStart = System.currentTimeMillis();
