@@ -52,7 +52,7 @@ public class DlvBreakpointType extends XLineBreakpointType<DlvBreakpointProperti
 
   @Override
   public boolean canPutAt(@NotNull VirtualFile file, int line, @NotNull Project project) {
-    if (DlvDebugProcess.isDlvDisabled()) return false;
+    if (DlvDebugProcess.isDlvDisabled) return false;
     if (file.getFileType() != GoFileType.INSTANCE) return false;
     return isLineBreakpointAvailable(file, line, project);
   }
