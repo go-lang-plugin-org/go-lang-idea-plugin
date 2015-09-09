@@ -66,13 +66,13 @@ public class GdbRunner extends DefaultProgramRunner {
                                                          @NotNull final RunProfileState state,
                                                          @NotNull ExecutionEnvironment env)
     throws ExecutionException {
-    final ExecutionResult result = state.execute(executor, this);
-    final XDebugSession debugSession = XDebuggerManager.getInstance(project).startSession(env, new XDebugProcessStarter() {
+    ExecutionResult result = state.execute(executor, this);
+    XDebugSession debugSession = XDebuggerManager.getInstance(project).startSession(env, new XDebugProcessStarter() {
       @NotNull
       @Override
       public XDebugProcess start(@NotNull XDebugSession session) throws ExecutionException {
         //session.setAutoInitBreakpoints(false); // todo[vova]: ?
-        final ExecutionResult result = state.execute(executor, GdbRunner.this);
+        ExecutionResult result = state.execute(executor, GdbRunner.this);
         assert result != null;
         return new GdbDebugProcess(session, (GdbExecutionResult)result);
       }

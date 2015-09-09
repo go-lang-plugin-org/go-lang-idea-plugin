@@ -36,7 +36,7 @@ public class GoConstDefinitionStubElementType extends GoNamedStubElementType<GoC
   public static final ArrayFactory<GoConstDefinition> ARRAY_FACTORY = new ArrayFactory<GoConstDefinition>() {
     @NotNull
     @Override
-    public GoConstDefinition[] create(final int count) {
+    public GoConstDefinition[] create(int count) {
       return count == 0 ? EMPTY_ARRAY : new GoConstDefinition[count];
     }
   };

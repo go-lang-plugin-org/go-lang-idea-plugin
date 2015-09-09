@@ -43,7 +43,7 @@ import org.jetbrains.annotations.Nullable;
 public class GoImportPathsCompletionProvider extends CompletionProvider<CompletionParameters> {
   @Override
   protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
-    final GoImportString importString = PsiTreeUtil.getParentOfType(parameters.getPosition(), GoImportString.class);
+    GoImportString importString = PsiTreeUtil.getParentOfType(parameters.getPosition(), GoImportString.class);
     if (importString == null) return;
     String path = importString.getPath();
     if (path.startsWith("./") || path.startsWith("../")) return;

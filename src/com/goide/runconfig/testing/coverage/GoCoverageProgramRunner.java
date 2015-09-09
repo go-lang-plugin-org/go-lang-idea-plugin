@@ -47,12 +47,12 @@ public class GoCoverageProgramRunner extends GenericProgramRunner {
   }
 
   @Override
-  public boolean canRun(@NotNull final String executorId, @NotNull final RunProfile profile) {
+  public boolean canRun(@NotNull String executorId, @NotNull RunProfile profile) {
     return executorId.equals(CoverageExecutor.EXECUTOR_ID) && profile instanceof GoTestRunConfiguration;
   }
 
   @Override
-  public RunnerSettings createConfigurationData(final ConfigurationInfoProvider settingsProvider) {
+  public RunnerSettings createConfigurationData(ConfigurationInfoProvider settingsProvider) {
     return new CoverageRunnerData();
   }
 

@@ -69,7 +69,7 @@ public class GoCreateFileAction extends CreateFileFromTemplateAction implements 
   }
 
   @Override
-  protected void buildDialog(final Project project, PsiDirectory directory, @NotNull CreateFileFromTemplateDialog.Builder builder) {
+  protected void buildDialog(Project project, PsiDirectory directory, @NotNull CreateFileFromTemplateDialog.Builder builder) {
     // todo: check that file already exists
     builder.setTitle(NEW_GO_FILE)
       .addKind("Empty file", GoIcons.ICON, FILE_TEMPLATE)

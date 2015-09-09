@@ -122,12 +122,12 @@ public class GoIntroduceVariableBase {
   }
 
   protected static void performOnElement(final GoIntroduceOperation operation) {
-    final GoExpression expression = operation.getExpression();
+    GoExpression expression = operation.getExpression();
     LinkedHashSet<String> suggestedNames = getSuggestedNames(expression);
     operation.setSuggestedNames(suggestedNames);
     operation.setOccurrences(GoRefactoringUtil.getLocalOccurrences(expression));
 
-    final Editor editor = operation.getEditor();
+    Editor editor = operation.getEditor();
     if (editor.getSettings().isVariableInplaceRenameEnabled()) {
       //noinspection ConstantConditions
       operation.setName(ContainerUtil.getFirstItem(suggestedNames));
@@ -192,7 +192,7 @@ public class GoIntroduceVariableBase {
 
   private static LinkedHashSet<String> getNamesInContext(PsiElement context) {
     if (context == null) return ContainerUtil.newLinkedHashSet();
-    final LinkedHashSet<String> names = ContainerUtil.newLinkedHashSet();
+    LinkedHashSet<String> names = ContainerUtil.newLinkedHashSet();
 
     for (GoNamedElement namedElement : PsiTreeUtil.findChildrenOfType(context, GoNamedElement.class)) {
       names.add(namedElement.getName());

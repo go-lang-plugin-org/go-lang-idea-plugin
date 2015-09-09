@@ -43,7 +43,7 @@ public class BracesInsertHandler implements InsertHandler<LookupElement> {
   @Override
   public void handleInsert(InsertionContext context, LookupElement item) {
     final Editor editor = context.getEditor();
-    final CharSequence documentText = context.getDocument().getImmutableCharSequence();
+    CharSequence documentText = context.getDocument().getImmutableCharSequence();
     int offset = skipWhiteSpaces(editor.getCaretModel().getOffset(), documentText);
     if (documentText.charAt(offset) != '{') {
       Project project = context.getProject();

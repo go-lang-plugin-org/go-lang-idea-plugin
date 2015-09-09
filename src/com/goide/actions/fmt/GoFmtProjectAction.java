@@ -38,7 +38,7 @@ public class GoFmtProjectAction extends DumbAwareAction {
 
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
-    final Project project = e.getProject();
+    Project project = e.getProject();
     assert project != null;
 
     FileDocumentManager.getInstance().saveAllDocuments();

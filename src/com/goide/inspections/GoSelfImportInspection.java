@@ -47,7 +47,7 @@ public class GoSelfImportInspection extends GoInspectionBase {
       super("Remove self import");
     }
     @Override
-    public void applyFix(@NotNull final Project project, @NotNull ProblemDescriptor descriptor) {
+    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
       final PsiElement element = descriptor.getPsiElement();
       final PsiFile file = element != null ? element.getContainingFile() : null;
       if (!(element instanceof GoImportSpec && file instanceof GoFile)) return;

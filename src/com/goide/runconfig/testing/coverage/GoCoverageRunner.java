@@ -49,7 +49,7 @@ public class GoCoverageRunner extends CoverageRunner {
   private static final String PRESENTABLE_NAME = GoConstants.GO;
 
   @Override
-  public ProjectData loadCoverageData(@NotNull final File sessionDataFile, @Nullable final CoverageSuite baseCoverageSuite) {
+  public ProjectData loadCoverageData(@NotNull File sessionDataFile, @Nullable CoverageSuite baseCoverageSuite) {
     if (baseCoverageSuite == null || !(baseCoverageSuite instanceof BaseCoverageSuite)) {
       return null;
     }
@@ -177,7 +177,7 @@ public class GoCoverageRunner extends CoverageRunner {
   }
 
   @Override
-  public boolean acceptsCoverageEngine(@NotNull final CoverageEngine engine) {
+  public boolean acceptsCoverageEngine(@NotNull CoverageEngine engine) {
     return engine instanceof GoCoverageEngine;
   }
 }

@@ -38,7 +38,7 @@ abstract public class GoLiveTemplateContextType extends TemplateContextType {
     super(id, presentableName, baseContextType);
   }
 
-  public boolean isInContext(@NotNull final PsiFile file, final int offset) {
+  public boolean isInContext(@NotNull PsiFile file, int offset) {
     if (PsiUtilCore.getLanguageAtOffset(file, offset).isKindOf(GoLanguage.INSTANCE)) {
       PsiElement element = getFirstCompositeElement(file.findElementAt(offset));
       return element != null && isInContext(element);

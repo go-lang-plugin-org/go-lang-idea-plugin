@@ -90,7 +90,7 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
         if (o.getTextLength() < 2) return;
         if (GoConstants.C_PATH.equals(o.getPath())) return;
         PsiReference[] references = o.getReferences();
-        for (final PsiReference reference : references) {
+        for (PsiReference reference : references) {
           if (reference instanceof FileReference) {
             ResolveResult[] resolveResults = ((FileReference)reference).multiResolve(false);
             if (resolveResults.length == 0) {

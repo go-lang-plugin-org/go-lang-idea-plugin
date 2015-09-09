@@ -21,7 +21,7 @@ import com.intellij.coverage.CoverageRunner;
 import com.intellij.execution.configurations.coverage.CoverageEnabledConfiguration;
 
 public class GoCoverageEnabledConfiguration extends CoverageEnabledConfiguration {
-  public GoCoverageEnabledConfiguration(final GoTestRunConfiguration configuration) {
+  public GoCoverageEnabledConfiguration(GoTestRunConfiguration configuration) {
     super(configuration);
     setCoverageRunner(CoverageRunner.getInstance(GoCoverageRunner.class));
   }

@@ -31,7 +31,7 @@ public class GoPrivateMembersFilter implements Filter {
   @Override
   public boolean isVisible(TreeElement treeNode) {
     if (treeNode instanceof GoStructureViewFactory.Element) {
-      final PsiElement psiElement = ((GoStructureViewFactory.Element)treeNode).getValue();
+      PsiElement psiElement = ((GoStructureViewFactory.Element)treeNode).getValue();
       return !(psiElement instanceof GoNamedElement) || ((GoNamedElement)psiElement).isPublic();
     }
     return true;

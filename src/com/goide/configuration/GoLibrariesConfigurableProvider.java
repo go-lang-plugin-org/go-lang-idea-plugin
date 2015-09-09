@@ -67,26 +67,26 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
       @Nullable
       @Override
       public JComponent createComponent() {
-        final List<UnnamedConfigurable> configurables = getConfigurables();
-        final Collection<HideableDecorator> hideableDecorators = ContainerUtil.newHashSet();
+        List<UnnamedConfigurable> configurables = getConfigurables();
+        Collection<HideableDecorator> hideableDecorators = ContainerUtil.newHashSet();
 
-        final GridLayoutManager layoutManager = new GridLayoutManager(configurables.size() + 1, 1, new Insets(0, 0, 0, 0), -1, -1);
-        final JPanel rootPanel = new JPanel(layoutManager);
-        final Spacer spacer = new Spacer();
+        GridLayoutManager layoutManager = new GridLayoutManager(configurables.size() + 1, 1, new Insets(0, 0, 0, 0), -1, -1);
+        JPanel rootPanel = new JPanel(layoutManager);
+        Spacer spacer = new Spacer();
         rootPanel.add(spacer, new GridConstraints(configurables.size(), 0, 1, 1, GridConstraints.ANCHOR_SOUTH,
                                                   GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED,
                                                   GridConstraints.SIZEPOLICY_FIXED, null, null, null));
 
         for (int i = 0; i < configurables.size(); i++) {
           UnnamedConfigurable configurable = configurables.get(i);
-          final JComponent configurableComponent = configurable.createComponent();
+          JComponent configurableComponent = configurable.createComponent();
           assert configurableComponent != null;
-          final JPanel hideablePanel = new JPanel(new BorderLayout());
+          JPanel hideablePanel = new JPanel(new BorderLayout());
 
           rootPanel.add(hideablePanel, configurableConstrains(i));
 
           if (configurable instanceof Configurable) {
-            final String displayName = ((Configurable)configurable).getDisplayName();
+            String displayName = ((Configurable)configurable).getDisplayName();
             ListenableHideableDecorator decorator = new ListenableHideableDecorator(hideablePanel, displayName, configurableComponent);
             decorator.addListener(new MyHideableDecoratorListener(layoutManager, hideablePanel,
                                                                   spacer, hideableDecorators,
@@ -106,7 +106,7 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
       @NotNull
       @Override
       protected List<UnnamedConfigurable> createConfigurables() {
-        final List<UnnamedConfigurable> result = ContainerUtil.newArrayList();
+        List<UnnamedConfigurable> result = ContainerUtil.newArrayList();
 
         String[] urlsFromEnv = ContainerUtil.map2Array(ContainerUtil.mapNotNull(GoSdkUtil.getGoPathsRootsFromEnvironment(),
                                                                                 new GoSdkUtil.RetrieveSubDirectoryOrSelfFunction("src")),
@@ -166,7 +166,7 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
       }
 
       private String configurableExpandedPropertyKey(@NotNull Configurable configurable) {
-        final String keyName = "configurable " + configurable.getDisplayName() + " is expanded".toLowerCase(Locale.US);
+        String keyName = "configurable " + configurable.getDisplayName() + " is expanded".toLowerCase(Locale.US);
         return StringUtil.replaceChar(keyName, ' ', '.');
       }
 
@@ -191,10 +191,10 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
 
         @Override
         public void on() {
-          final GridConstraints c = myLayoutManager.getConstraintsForComponent(myHideablePanel);
+          GridConstraints c = myLayoutManager.getConstraintsForComponent(myHideablePanel);
           c.setVSizePolicy(c.getVSizePolicy() | GridConstraints.SIZEPOLICY_WANT_GROW);
 
-          final GridConstraints spacerConstraints = myLayoutManager.getConstraintsForComponent(mySpacer);
+          GridConstraints spacerConstraints = myLayoutManager.getConstraintsForComponent(mySpacer);
           spacerConstraints.setVSizePolicy(spacerConstraints.getVSizePolicy() & ~GridConstraints.SIZEPOLICY_WANT_GROW);
 
           storeConfigurableExpandedProperty(myStoreKey, Boolean.TRUE);
@@ -203,14 +203,14 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
 
         @Override
         public void beforeOff() {
-          final GridConstraints c = myLayoutManager.getConstraintsForComponent(myHideablePanel);
+          GridConstraints c = myLayoutManager.getConstraintsForComponent(myHideablePanel);
           c.setVSizePolicy(c.getVSizePolicy() & ~GridConstraints.SIZEPOLICY_WANT_GROW);
         }
 
         @Override
         public void afterOff() {
           if (isAllDecoratorsCollapsed()) {
-            final GridConstraints c = myLayoutManager.getConstraintsForComponent(mySpacer);
+            GridConstraints c = myLayoutManager.getConstraintsForComponent(mySpacer);
             c.setVSizePolicy(c.getVSizePolicy() | GridConstraints.SIZEPOLICY_WANT_GROW);
           }
 

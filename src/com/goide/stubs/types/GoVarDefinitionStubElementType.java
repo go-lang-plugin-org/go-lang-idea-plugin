@@ -36,7 +36,7 @@ public class GoVarDefinitionStubElementType extends GoNamedStubElementType<GoVar
   public static final ArrayFactory<GoVarDefinition> ARRAY_FACTORY = new ArrayFactory<GoVarDefinition>() {
     @NotNull
     @Override
-    public GoVarDefinition[] create(final int count) {
+    public GoVarDefinition[] create(int count) {
       return count == 0 ? EMPTY_ARRAY : new GoVarDefinition[count];
     }
   };

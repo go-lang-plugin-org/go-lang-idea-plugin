@@ -45,7 +45,7 @@ public class GoSmartEnterProcessor extends SmartEnterProcessorWithFixers {
   }
 
   @Override
-  protected void collectAdditionalElements(@NotNull PsiElement element, @NotNull final List<PsiElement> result) {
+  protected void collectAdditionalElements(@NotNull PsiElement element, @NotNull List<PsiElement> result) {
     GoStatement statement = PsiTreeUtil.getParentOfType(element, GoStatement.class);
     if (statement != null) {
       result.add(statement);

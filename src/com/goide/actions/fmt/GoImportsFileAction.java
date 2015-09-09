@@ -75,7 +75,7 @@ public class GoImportsFileAction extends GoExternalToolsAction {
     @Override
     public void hyperlinkUpdate(@NotNull Notification notification, @NotNull HyperlinkEvent event) {
       if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-        final String description = event.getDescription();
+        String description = event.getDescription();
         if (GO_GET_IMPORTS.equals(description)) {
           GoGetPackageFix.applyFix(myProject, myModule, "golang.org/x/tools/cmd/goimports", false);
           notification.expire();

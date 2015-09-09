@@ -39,7 +39,7 @@ public class GoUnusedImportDeclaration extends GoInspectionBase {
       if (element == null) {
         return;
       }
-      final PsiFile file = element.getContainingFile();
+      PsiFile file = element.getContainingFile();
       ImportOptimizer optimizer = new GoImportOptimizer();
       final Runnable runnable = optimizer.processFile(file);
       new WriteCommandAction.Simple(project, getFamilyName(), file) {

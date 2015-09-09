@@ -54,11 +54,11 @@ public class GoRenameQuickFix extends LocalQuickFixOnPsiElement {
 
     Runnable runnable = new Runnable() {
       public void run() {
-        final AsyncResult<DataContext> dataContextContainer = DataManager.getInstance().getDataContextFromFocus();
+        AsyncResult<DataContext> dataContextContainer = DataManager.getInstance().getDataContextFromFocus();
         dataContextContainer.doWhenDone(new Consumer<DataContext>() {
           @Override
           public void consume(DataContext dataContext) {
-            final RenameHandler renameHandler = RenameHandlerRegistry.getInstance().getRenameHandler(dataContext);
+            RenameHandler renameHandler = RenameHandlerRegistry.getInstance().getRenameHandler(dataContext);
             if (renameHandler != null) {
               renameHandler.invoke(project, new PsiElement[]{startElement}, dataContext);
             }

@@ -48,7 +48,7 @@ public class GoTestSignaturesInspection extends GoInspectionBase {
   }
 
   @Override
-  protected void checkFile(@NotNull final GoFile file, @NotNull ProblemsHolder problemsHolder) {
+  protected void checkFile(@NotNull GoFile file, @NotNull ProblemsHolder problemsHolder) {
     if (!GoTestFinder.isTestFile(file)) return;
     GoImportSpec testingImportSpec = file.getImportedPackagesMap().get(GoConstants.TESTING_PATH);
     String testingAlias = getTestingAlias(testingImportSpec);

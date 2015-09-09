@@ -37,7 +37,7 @@ public class GoVarSpecStubElementType extends GoStubElementType<GoVarSpecStub, G
   public static final ArrayFactory<GoVarSpec> ARRAY_FACTORY = new ArrayFactory<GoVarSpec>() {
     @NotNull
     @Override
-    public GoVarSpec[] create(final int count) {
+    public GoVarSpec[] create(int count) {
       return count == 0 ? EMPTY_ARRAY : new GoVarSpec[count];
     }
   };

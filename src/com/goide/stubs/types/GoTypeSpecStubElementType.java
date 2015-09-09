@@ -38,7 +38,7 @@ public class GoTypeSpecStubElementType extends GoNamedStubElementType<GoTypeSpec
   public static final ArrayFactory<GoTypeSpec> ARRAY_FACTORY = new ArrayFactory<GoTypeSpec>() {
     @NotNull
     @Override
-    public GoTypeSpec[] create(final int count) {
+    public GoTypeSpec[] create(int count) {
       return count == 0 ? EMPTY_ARRAY : new GoTypeSpec[count];
     }
   };

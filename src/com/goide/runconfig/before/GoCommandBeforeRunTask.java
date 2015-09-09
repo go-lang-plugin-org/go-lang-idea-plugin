@@ -50,7 +50,7 @@ public class GoCommandBeforeRunTask extends BeforeRunTask<GoCommandBeforeRunTask
   @Override
   public void readExternal(Element element) {
     super.readExternal(element);
-    final String command = element.getAttributeValue(COMMAND_ATTRIBUTE);
+    String command = element.getAttributeValue(COMMAND_ATTRIBUTE);
     if (command != null) {
       myCommand = command;
     }

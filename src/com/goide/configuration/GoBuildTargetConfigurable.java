@@ -102,7 +102,7 @@ public class GoBuildTargetConfigurable implements SearchableConfigurable, Config
 
   @NotNull
   private String selectedCompiler() {
-    final Object item = myCompilerCombo.getSelectedItem();
+    Object item = myCompilerCombo.getSelectedItem();
     return item != null && item instanceof String ? (String)item : GoBuildTargetSettings.ANY_COMPILER;
   }
 
@@ -125,7 +125,7 @@ public class GoBuildTargetConfigurable implements SearchableConfigurable, Config
 
   @NotNull
   private static String selected(@NotNull ComboBox comboBox, @NotNull String defaultValue) {
-    final Object item = comboBox.getSelectedItem();
+    Object item = comboBox.getSelectedItem();
     if (item != null && item instanceof String) {
       return defaultValue.equals(item) ? GoBuildTargetSettings.DEFAULT : (String)item;
     }

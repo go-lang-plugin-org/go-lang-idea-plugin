@@ -253,7 +253,7 @@ public class Gdb {
   private void runGdb(String gdbPath, @Nullable String workingDirectory) {
     try {
       // Launch the process
-      final String[] commandLine = {
+      String[] commandLine = {
         gdbPath,
         "--interpreter=mi2",
         "-d",

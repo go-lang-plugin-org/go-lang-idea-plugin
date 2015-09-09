@@ -73,14 +73,14 @@ public class GoKeywordCompletionProvider extends CompletionProvider<CompletionPa
   }
 
   @NotNull
-  private LookupElement createKeywordLookupElement(@NotNull final String keyword) {
-    final InsertHandler<LookupElement> insertHandler = ObjectUtils.chooseNotNull(myInsertHandler,
+  private LookupElement createKeywordLookupElement(@NotNull String keyword) {
+    InsertHandler<LookupElement> insertHandler = ObjectUtils.chooseNotNull(myInsertHandler,
                                                                                  createTemplateBasedInsertHandler("go_lang_" + keyword));
     LookupElement result = createKeywordLookupElement(keyword, myPriority, insertHandler);
     return myCompletionPolicy != null ? myCompletionPolicy.applyPolicy(result) : result;
   }
 
-  public static LookupElement createKeywordLookupElement(@NotNull final String keyword,
+  public static LookupElement createKeywordLookupElement(@NotNull String keyword,
                                                          int priority,
                                                          @Nullable InsertHandler<LookupElement> insertHandler) {
     LookupElementBuilder builder = LookupElementBuilder.create(keyword).withBoldness(true).withInsertHandler(insertHandler);
@@ -99,8 +99,8 @@ public class GoKeywordCompletionProvider extends CompletionProvider<CompletionPa
           TemplateManager.getInstance(context.getProject()).startTemplate(editor, template);
         }
         else {
-          final int currentOffset = editor.getCaretModel().getOffset();
-          final CharSequence documentText = editor.getDocument().getImmutableCharSequence();
+          int currentOffset = editor.getCaretModel().getOffset();
+          CharSequence documentText = editor.getDocument().getImmutableCharSequence();
           if (documentText.length() <= currentOffset || documentText.charAt(currentOffset) != ' ') {
             EditorModificationUtil.insertStringAtCaret(editor, " ");
           }

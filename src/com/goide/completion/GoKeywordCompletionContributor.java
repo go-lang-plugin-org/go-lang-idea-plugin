@@ -77,7 +77,7 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
   @Override
   public void fillCompletionVariants(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
     super.fillCompletionVariants(parameters, result);
-    final PsiElement position = parameters.getPosition();
+    PsiElement position = parameters.getPosition();
     if (insideGoOrDeferStatements().accepts(position) || anonymousFunction().accepts(position)) {
       InsertHandler<LookupElement> insertHandler = GoKeywordCompletionProvider.createTemplateBasedInsertHandler("go_lang_anonymous_func");
       result.addElement(GoKeywordCompletionProvider.createKeywordLookupElement("func", CONTEXT_KEYWORD_PRIORITY, insertHandler));

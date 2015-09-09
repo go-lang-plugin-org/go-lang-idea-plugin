@@ -101,7 +101,7 @@ class GoIntroduceVariableDialog extends RefactoringDialog {
   }
 
   private JComponent createReplaceAllPanel() {
-    final JPanel panel = new JPanel(new FlowLayout());
+    JPanel panel = new JPanel(new FlowLayout());
 
     String text = UIUtil.replaceMnemonicAmpersand(RefactoringBundle.message("replace.all.occurences", myOccurrencesCount));
     myReplaceAllCheckBox = new JCheckBox(text);

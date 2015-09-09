@@ -44,7 +44,7 @@ public class GoCommandConfigureDialog extends DialogWrapper {
   @Nullable
   @Override
   protected ValidationInfo doValidate() {
-    final String command = getCommand();
+    String command = getCommand();
     if (command.isEmpty()) {
       return new ValidationInfo("Empty Go command is not allowed", myCommandTextField);
     }
@@ -63,7 +63,7 @@ public class GoCommandConfigureDialog extends DialogWrapper {
   @Nullable
   @Override
   protected JComponent createCenterPanel() {
-    final JPanel panel = new JPanel(new BorderLayout());
+    JPanel panel = new JPanel(new BorderLayout());
     panel.add(myCommandTextField, BorderLayout.NORTH);
     return panel;
   }

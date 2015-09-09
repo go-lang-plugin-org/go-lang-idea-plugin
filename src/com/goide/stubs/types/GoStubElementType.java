@@ -37,7 +37,7 @@ public abstract class GoStubElementType<S extends StubBase<T>, T extends GoCompo
     return "go." + super.toString();
   }
 
-  public void indexStub(@NotNull final S stub, @NotNull final IndexSink sink) {
+  public void indexStub(@NotNull S stub, @NotNull IndexSink sink) {
   }
 
   @Override

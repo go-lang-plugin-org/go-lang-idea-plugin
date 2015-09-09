@@ -33,7 +33,7 @@ public class GoImportSpecStubElementType extends GoNamedStubElementType<GoImport
   public static final ArrayFactory<GoImportSpec> ARRAY_FACTORY = new ArrayFactory<GoImportSpec>() {
     @NotNull
     @Override
-    public GoImportSpec[] create(final int count) {
+    public GoImportSpec[] create(int count) {
       return count == 0 ? EMPTY_ARRAY : new GoImportSpec[count];
     }
   };

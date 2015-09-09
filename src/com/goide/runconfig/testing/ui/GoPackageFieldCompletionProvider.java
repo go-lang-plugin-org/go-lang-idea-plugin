@@ -34,7 +34,7 @@ public class GoPackageFieldCompletionProvider extends TextFieldCompletionProvide
   protected void addCompletionVariants(@NotNull String text,
                                        int offset,
                                        @NotNull String prefix,
-                                       @NotNull final CompletionResultSet result) {
+                                       @NotNull CompletionResultSet result) {
     GoImportPathsCompletionProvider.addCompletions(result, myModuleProducer.produce(), null, false);
   }
 }

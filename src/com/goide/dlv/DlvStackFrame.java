@@ -113,7 +113,7 @@ class DlvStackFrame extends XStackFrame {
       public TextRange getExpressionRangeAtOffset(@NotNull final Project project,
                                                   @NotNull final Document document,
                                                   final int offset,
-                                                  final boolean sideEffectsAllowed) {
+                                                  boolean sideEffectsAllowed) {
         final Ref<TextRange> currentRange = Ref.create(null);
         PsiDocumentManager.getInstance(project).commitAndRunReadAction(new Runnable() {
           @Override

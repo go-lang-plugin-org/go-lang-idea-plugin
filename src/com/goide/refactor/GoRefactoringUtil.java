@@ -33,7 +33,7 @@ import java.util.List;
 public class GoRefactoringUtil {
 
   @NotNull
-  public static List<PsiElement> getLocalOccurrences(@NotNull final PsiElement element) {
+  public static List<PsiElement> getLocalOccurrences(@NotNull PsiElement element) {
     return getOccurrences(element, PsiTreeUtil.getTopmostParentOfType(element, GoBlock.class));
   }
 
