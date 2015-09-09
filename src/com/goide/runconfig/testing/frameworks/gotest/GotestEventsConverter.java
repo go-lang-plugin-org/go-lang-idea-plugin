@@ -33,10 +33,10 @@ import java.util.regex.Pattern;
 public class GotestEventsConverter extends OutputToGeneralTestEventsConverter implements GoTestEventsConverterBase {
   private static final String FRAMEWORK_NAME = "gotest";
 
-  private static final Pattern RUN = Pattern.compile("^=== RUN (.+)");
-  private static final Pattern PASSED = Pattern.compile("--- PASS: ([^( ]+)");
-  private static final Pattern SKIP = Pattern.compile("--- SKIP: ([^( ]+)");
-  private static final Pattern FAILED = Pattern.compile("--- FAIL: ([^( ]+)");
+  private static final Pattern RUN = Pattern.compile("^=== RUN\\s+([^ (\n\t\r]+)");
+  private static final Pattern PASSED = Pattern.compile("--- PASS:\\s+([^( \n\t\r]+)");
+  private static final Pattern SKIP = Pattern.compile("--- SKIP:\\s+([^( \n\t\r]+)");
+  private static final Pattern FAILED = Pattern.compile("--- FAIL:\\s+([^( \n\t\r]+)");
   private static final Pattern FINISHED = Pattern.compile("^(PASS)|(FAIL)$");
 
   private boolean myFailed = false;

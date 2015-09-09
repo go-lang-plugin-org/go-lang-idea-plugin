@@ -35,6 +35,10 @@ public class GotestEventsConverterTest extends GoEventsConverterTestCase {
   public void testMultipleTestsOk() throws Exception {
     doTest();
   }
+
+  public void testSingleTestLeadingSpaceOk() throws Exception {
+    doTest();
+  }
   
   public void testSkipTest() throws Exception {
     doTest();
