@@ -183,7 +183,7 @@ public class GdbExecutionStackFrame extends XStackFrame {
    * @param event The event.
    * @param node  The node passed to computeChildren().
    */
-  private void onGdbVariablesReady(GdbEvent event, @NotNull final XCompositeNode node) {
+  private void onGdbVariablesReady(GdbEvent event, @NotNull XCompositeNode node) {
     if (event instanceof GdbErrorEvent) {
       node.setErrorMessage(((GdbErrorEvent)event).message);
       return;

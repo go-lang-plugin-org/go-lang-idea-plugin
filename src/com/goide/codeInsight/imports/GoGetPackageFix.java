@@ -39,9 +39,9 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
   }
 
   @Override
-  public void applyFix(@NotNull final Project project, @NotNull ProblemDescriptor descriptor) {
+  public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
     PsiElement element = descriptor.getPsiElement();
-    final Module module = ModuleUtilCore.findModuleForPsiElement(element);
+    Module module = ModuleUtilCore.findModuleForPsiElement(element);
     if (module == null) {
       return;
     }
@@ -53,7 +53,7 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
                               @Nullable final Module module,
                               @NotNull final String packageName,
                               final boolean startInBackground) {
-    final String sdkPath = GoSdkService.getInstance(project).getSdkHomePath(module);
+    String sdkPath = GoSdkService.getInstance(project).getSdkHomePath(module);
     if (StringUtil.isEmpty(sdkPath)) {
       return;
     }

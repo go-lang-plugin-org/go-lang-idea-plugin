@@ -47,7 +47,7 @@ public class GoApplicationConfigurationEditorForm extends SettingsEditor<GoAppli
   private TextFieldWithBrowseButton myOutputFilePathField;
 
 
-  public GoApplicationConfigurationEditorForm(@NotNull final Project project) {
+  public GoApplicationConfigurationEditorForm(@NotNull Project project) {
     super(null);
     myProject = project;
     myCommonSettingsPanel.init(project);

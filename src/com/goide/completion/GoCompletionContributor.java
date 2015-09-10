@@ -59,7 +59,7 @@ public class GoCompletionContributor extends CompletionContributor {
     PsiFile file = parameters.getOriginalFile();
     ASTNode node = position.getNode();
     if (file instanceof GoFile && position.getParent() instanceof GoPackageClause && node.getElementType() == GoTypes.IDENTIFIER) {
-      final boolean isTestFile = GoTestFinder.isTestFile(file);
+      boolean isTestFile = GoTestFinder.isTestFile(file);
       PsiDirectory directory = file.getParent();
       Collection<String> packagesInDirectory = GoUtil.getAllPackagesInDirectory(directory, true);
       for (String packageName : packagesInDirectory) {

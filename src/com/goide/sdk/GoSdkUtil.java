@@ -137,7 +137,7 @@ public class GoSdkUtil {
   }
 
   @NotNull
-  public static Collection<VirtualFile> getGoPathSources(@NotNull final Project project, @Nullable final Module module) {
+  public static Collection<VirtualFile> getGoPathSources(@NotNull Project project, @Nullable Module module) {
     Collection<VirtualFile> result = newLinkedHashSet();
     if (module != null && GoSdkService.getInstance(project).isAppEngineSdk(module)) {
       ContainerUtil.addAllNotNull(result, ContainerUtil.mapNotNull(YamlFilesModificationTracker.getYamlFiles(project, module),
@@ -308,7 +308,7 @@ public class GoSdkUtil {
   }
 
   @Nullable
-  public static String retrieveGoVersion(@NotNull final String sdkPath) {
+  public static String retrieveGoVersion(@NotNull String sdkPath) {
     try {
       String oldStylePath = new File(sdkPath, "src/pkg/" + GoConstants.GO_VERSION_FILE_PATH).getPath();
       String newStylePath = new File(sdkPath, "src/" + GoConstants.GO_VERSION_FILE_PATH).getPath();

@@ -55,7 +55,7 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   private JRadioButton myGotestFrameworkRadioButton;
   private JRadioButton myGocheckFrameworkRadioButton;
 
-  public GoTestRunConfigurationEditorForm(@NotNull final Project project) {
+  public GoTestRunConfigurationEditorForm(@NotNull Project project) {
     super(null);
     myProject = project;
     myCommonSettingsPanel.init(project);

@@ -70,14 +70,14 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
   public boolean canRun(@NotNull String executorId, @NotNull RunProfile profile) {
     if (profile instanceof GoApplicationConfiguration) {
       return DefaultRunExecutor.EXECUTOR_ID.equals(executorId)
-             || DefaultDebugExecutor.EXECUTOR_ID.equals(executorId) && !DlvDebugProcess.isDlvDisabled();
+             || DefaultDebugExecutor.EXECUTOR_ID.equals(executorId) && !DlvDebugProcess.isDlvDisabled;
     }
     return false;
   }
 
   @NotNull
   @Override
-  protected Promise<RunProfileStarter> prepare(@NotNull final ExecutionEnvironment environment, @NotNull final RunProfileState state)
+  protected Promise<RunProfileStarter> prepare(@NotNull ExecutionEnvironment environment, @NotNull final RunProfileState state)
     throws ExecutionException {
     final File outputFile;
     String outputDirectoryPath = ((GoApplicationRunningState)state).myConfiguration.getOutputFilePath();
@@ -171,7 +171,7 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
 
     @Nullable
     @Override
-    public RunContentDescriptor execute(@NotNull final RunProfileState state, @NotNull final ExecutionEnvironment env)
+    public RunContentDescriptor execute(@NotNull RunProfileState state, @NotNull ExecutionEnvironment env)
       throws ExecutionException {
       if (state instanceof GoApplicationRunningState) {
         final int port = findFreePort();
@@ -215,7 +215,7 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
 
     @Nullable
     @Override
-    public RunContentDescriptor execute(@NotNull final RunProfileState state, @NotNull final ExecutionEnvironment env)
+    public RunContentDescriptor execute(@NotNull RunProfileState state, @NotNull ExecutionEnvironment env)
       throws ExecutionException {
       if (state instanceof GoApplicationRunningState) {
         FileDocumentManager.getInstance().saveAllDocuments();

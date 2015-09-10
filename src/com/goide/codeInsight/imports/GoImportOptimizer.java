@@ -112,7 +112,7 @@ public class GoImportOptimizer implements ImportOptimizer {
   }
 
   public static MultiMap<String, GoImportSpec> filterUnusedImports(@NotNull PsiFile file, 
-                                                                   @NotNull final MultiMap<String, GoImportSpec> importMap) {
+                                                                   @NotNull MultiMap<String, GoImportSpec> importMap) {
     final MultiMap<String, GoImportSpec> result = MultiMap.create();
     result.putAllValues(importMap);
     result.remove("_"); // imports for side effects are always used

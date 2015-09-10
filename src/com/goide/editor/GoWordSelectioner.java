@@ -35,7 +35,7 @@ public class GoWordSelectioner extends AbstractWordSelectioner {
 
   @Override
   public List<TextRange> select(@NotNull PsiElement e, CharSequence editorText, int cursorOffset, Editor editor) {
-    final PsiElement parent = e.getParent();
+    PsiElement parent = e.getParent();
     List<TextRange> result = super.select(e, editorText, cursorOffset, editor);
     if (parent instanceof GoImportString || parent instanceof GoStringLiteral) {
       result.add(ElementManipulators.getValueTextRange(parent).shiftRight(parent.getTextRange().getStartOffset()));

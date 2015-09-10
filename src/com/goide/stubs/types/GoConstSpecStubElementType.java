@@ -36,7 +36,7 @@ public class GoConstSpecStubElementType extends GoStubElementType<GoConstSpecStu
   public static final ArrayFactory<GoConstSpec> ARRAY_FACTORY = new ArrayFactory<GoConstSpec>() {
     @NotNull
     @Override
-    public GoConstSpec[] create(final int count) {
+    public GoConstSpec[] create(int count) {
       return count == 0 ? EMPTY_ARRAY : new GoConstSpec[count];
     }
   };

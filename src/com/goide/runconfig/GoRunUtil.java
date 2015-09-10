@@ -92,7 +92,7 @@ public class GoRunUtil {
         if (file.getFileType() != GoFileType.INSTANCE) {
           return false;
         }
-        final PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
+        PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
         return isMainGoFile(psiFile);
       }
     });

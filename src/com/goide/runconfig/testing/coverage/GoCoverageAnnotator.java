@@ -131,7 +131,7 @@ public class GoCoverageAnnotator extends BaseCoverageAnnotator {
 
   @Nullable
   @Override
-  protected Runnable createRenewRequest(@NotNull final CoverageSuitesBundle bundle, @NotNull final CoverageDataManager manager) {
+  protected Runnable createRenewRequest(@NotNull CoverageSuitesBundle bundle, @NotNull final CoverageDataManager manager) {
     final GoCoverageProjectData data = new GoCoverageProjectData();
     for (CoverageSuite suite : bundle.getSuites()) {
       ProjectData toMerge = suite.getCoverageData(manager);

@@ -41,7 +41,7 @@ public class GoAppEngineRunConfigurationEditor extends SettingsEditor<GoAppEngin
   private JBTextField myAdminPortField;
   private TextFieldWithHistoryWithBrowseButton myConfigFileField;
 
-  public GoAppEngineRunConfigurationEditor(@NotNull final Project project) {
+  public GoAppEngineRunConfigurationEditor(@NotNull Project project) {
     super(null);
     initConfigFileField(project);
     myCommonSettingsPanel.init(project);

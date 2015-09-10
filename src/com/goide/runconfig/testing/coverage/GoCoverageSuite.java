@@ -28,11 +28,11 @@ public class GoCoverageSuite extends BaseCoverageSuite {
   public GoCoverageSuite() {
   }
 
-  public GoCoverageSuite(final String name,
-                         @Nullable final CoverageFileProvider fileProvider,
-                         final long lastCoverageTimeStamp,
-                         final CoverageRunner coverageRunner,
-                         final Project project) {
+  public GoCoverageSuite(String name,
+                         @Nullable CoverageFileProvider fileProvider,
+                         long lastCoverageTimeStamp,
+                         CoverageRunner coverageRunner,
+                         Project project) {
     super(name, fileProvider, lastCoverageTimeStamp, false, false, false, coverageRunner, project);
   }
 

@@ -186,7 +186,7 @@ public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabAction
     List<String> paramPresentations = ContainerUtil.newArrayListWithCapacity(2 * paramDeclarations.size());
     for (GoParameterDeclaration paramDeclaration : paramDeclarations) {
       boolean isVariadic = paramDeclaration.isVariadic();
-      final List<GoParamDefinition> paramDefinitionList = paramDeclaration.getParamDefinitionList();
+      List<GoParamDefinition> paramDefinitionList = paramDeclaration.getParamDefinitionList();
       for (GoParamDefinition paramDefinition : paramDefinitionList) {
         String separator = isVariadic ? " ..." : " ";
         paramPresentations.add(paramDefinition.getText() + separator + paramDeclaration.getType().getText());

@@ -55,7 +55,7 @@ public class GoShowTypeInternalAction extends SelectionBasedPsiElementInternalAc
     int offset = editor.getCaretModel().getOffset();
     PsiElement elementAtCaret = file.findElementAt(offset);
     if (!checkIntroduceContext(editor, elementAtCaret)) return ContainerUtil.emptyList();
-    final List<GoExpression> expressions = ContainerUtil.newArrayList();
+    List<GoExpression> expressions = ContainerUtil.newArrayList();
     while (elementAtCaret != null) {
       if (elementAtCaret instanceof GoStatement) break;
       if (elementAtCaret instanceof GoExpression) expressions.add((GoExpression)elementAtCaret);

@@ -136,10 +136,10 @@ public class GoCompletionUtil {
   }
 
   @NotNull
-  public static LookupElement createFunctionOrMethodLookupElement(@NotNull final GoNamedSignatureOwner f,
-                                                                  @NotNull final String lookupString,
-                                                                  @Nullable final InsertHandler<LookupElement> h,
-                                                                  final double priority) {
+  public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoNamedSignatureOwner f,
+                                                                  @NotNull String lookupString,
+                                                                  @Nullable InsertHandler<LookupElement> h,
+                                                                  double priority) {
     return PrioritizedLookupElement.withPriority(LookupElementBuilder
                                                    .createWithSmartPointer(lookupString, f)
                                                    .withRenderer(FUNCTION_RENDERER)

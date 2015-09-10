@@ -160,7 +160,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
         gdbConsoleContent.setCloseable(false);
 
         // Create the actions
-        final DefaultActionGroup consoleActions = new DefaultActionGroup();
+        DefaultActionGroup consoleActions = new DefaultActionGroup();
         AnAction[] actions = myGdbConsole.getConsole().createConsoleActions();
         for (AnAction action : actions) {
           consoleActions.add(action);
@@ -179,7 +179,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
    * @param ex The exception
    */
   @Override
-  public void onGdbError(final Throwable ex) {
+  public void onGdbError(Throwable ex) {
     LOG.error("GDB error", ex);
   }
 

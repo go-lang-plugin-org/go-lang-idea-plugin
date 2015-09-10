@@ -37,7 +37,7 @@ public class GoSdkType extends SdkType {
 
   @NotNull
   public static GoSdkType getInstance() {
-    final GoSdkType instance = SdkType.findInstance(GoSdkType.class);
+    GoSdkType instance = SdkType.findInstance(GoSdkType.class);
     assert instance != null;
     return instance;
   }

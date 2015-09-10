@@ -159,7 +159,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
   @NotNull
   private Collection<String> getPackagesToImport(@NotNull PsiElement element) {
     if (myPackagesToImport == null) {
-      final GlobalSearchScope scope = GoUtil.moduleScope(element);
+      GlobalSearchScope scope = GoUtil.moduleScope(element);
       PsiFile file = element.getContainingFile();
       Project project = element.getProject();
       final PsiDirectory parentDirectory = file != null ? file.getParent() : null;
@@ -203,7 +203,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
         new Runnable() {
           @Override
           public void run() {
-            final int i = list.getSelectedIndex();
+            int i = list.getSelectedIndex();
             if (i < 0) return;
             perform(file, newArrayList(packagesToImport).get(i));
           }

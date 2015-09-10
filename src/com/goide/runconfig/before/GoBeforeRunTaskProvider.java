@@ -81,7 +81,7 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
 
   @Override
   public boolean configureTask(RunConfiguration configuration, GoCommandBeforeRunTask task) {
-    final Project project = configuration.getProject();
+    Project project = configuration.getProject();
     if (!(configuration instanceof GoRunConfigurationBase)) {
       showAddingTaskErrorMessage(project, "Go Command task supports only Go Run Configurations");
       return false;
@@ -114,8 +114,8 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
   }
 
   @Override
-  public boolean executeTask(final DataContext context,
-                             final RunConfiguration configuration,
+  public boolean executeTask(DataContext context,
+                             RunConfiguration configuration,
                              ExecutionEnvironment env,
                              final GoCommandBeforeRunTask task) {
     final Semaphore done = new Semaphore();
@@ -154,7 +154,7 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
     return result.get();
   }
 
-  private static void showAddingTaskErrorMessage(final Project project, final String message) {
+  private static void showAddingTaskErrorMessage(Project project, String message) {
     Messages.showErrorDialog(project, message, "Go Command Task");
   }
 }

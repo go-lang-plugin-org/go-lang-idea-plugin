@@ -64,16 +64,16 @@ public class GoReferenceImporter implements ReferenceImporter {
   }
 
   @Override
-  public boolean autoImportReferenceAt(@NotNull final Editor editor, @NotNull final PsiFile file, int offset) {
+  public boolean autoImportReferenceAt(@NotNull Editor editor, @NotNull PsiFile file, int offset) {
     if (!file.getViewProvider().getLanguages().contains(GoLanguage.INSTANCE) ||
         !GoCodeInsightSettings.getInstance().isAddUnambiguousImportsOnTheFly()) {
       return false;
     }
 
-    final PsiReference reference = file.findReferenceAt(offset);
+    PsiReference reference = file.findReferenceAt(offset);
     if (reference instanceof GoReference) {
-      final GoImportPackageQuickFix fix = new GoImportPackageQuickFix(reference);
-      final Project project = file.getProject();
+      GoImportPackageQuickFix fix = new GoImportPackageQuickFix(reference);
+      Project project = file.getProject();
       if (fix.isAvailable(project, editor, file)) {
         fix.applyFix();
         return true;

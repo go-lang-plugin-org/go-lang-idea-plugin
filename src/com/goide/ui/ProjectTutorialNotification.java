@@ -33,7 +33,7 @@ public class ProjectTutorialNotification implements ApplicationComponent {
 
   @Override
   public void initComponent() {
-    final PropertiesComponent propertiesComponent = PropertiesComponent.getInstance();
+    PropertiesComponent propertiesComponent = PropertiesComponent.getInstance();
     boolean shownAlready;
     //noinspection SynchronizationOnLocalVariableOrMethodParameter
     synchronized (propertiesComponent) {

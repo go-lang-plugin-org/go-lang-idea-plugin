@@ -36,7 +36,7 @@ import java.util.List;
 
 public class GoExcludePathLookupActionProvider implements LookupActionProvider {
   @Override
-  public void fillActions(LookupElement element, final Lookup lookup, Consumer<LookupElementAction> consumer) {
+  public void fillActions(LookupElement element, Lookup lookup, Consumer<LookupElementAction> consumer) {
     PsiElement psiElement = element.getPsiElement();
     PsiFile file = psiElement != null ? psiElement.getContainingFile() : null;
     String importPath = file instanceof GoFile ? ((GoFile)file).getImportPath() : null;

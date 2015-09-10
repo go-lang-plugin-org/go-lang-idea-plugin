@@ -67,7 +67,7 @@ public abstract class GoExternalToolsAction extends DumbAwareAction {
     assert project != null;
     String title = StringUtil.notNullize(e.getPresentation().getText());
 
-    final Module module = ModuleUtilCore.findModuleForFile(file, project);
+    Module module = ModuleUtilCore.findModuleForFile(file, project);
     try {
       doSomething(file, module, project, title);
     }
@@ -91,7 +91,7 @@ public abstract class GoExternalToolsAction extends DumbAwareAction {
                                 boolean withProgress) throws ExecutionException {
     Document document = FileDocumentManager.getInstance().getDocument(virtualFile);
     assert document != null;
-    final String filePath = virtualFile.getCanonicalPath();
+    String filePath = virtualFile.getCanonicalPath();
     assert filePath != null;
 
     FileDocumentManager.getInstance().saveDocument(document);

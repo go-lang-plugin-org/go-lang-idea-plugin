@@ -62,7 +62,7 @@ public class GoBuildMatcher {
     if (GoUtil.directoryToIgnore(fileName) || !matchFileName(fileName)) return false;
 
     if (!checkBuildFlags || buildFlags == null) return true;
-    for (final String line : StringUtil.split(buildFlags, "|")) {
+    for (String line : StringUtil.split(buildFlags, "|")) {
       if (!matchBuildFlagsLine(line)) return false;
     }
 
@@ -70,7 +70,7 @@ public class GoBuildMatcher {
   }
 
   private boolean matchBuildFlagsLine(@NotNull String line) {
-    for (final String tag : WHITESPACES.split(line)) {
+    for (String tag : WHITESPACES.split(line)) {
       if (matchBuildFlag(tag)) return true;
     }
     return false;
@@ -117,7 +117,7 @@ public class GoBuildMatcher {
     name = StringUtil.trimEnd(FileUtil.getNameWithoutExtension(name), GoConstants.TEST_SUFFIX);
 
     List<String> parts = StringUtil.split(name, "_");
-    final int n = parts.size();
+    int n = parts.size();
 
     if (n >= 2 && GoConstants.KNOWN_OS.contains(parts.get(n - 2)) && GoConstants.KNOWN_ARCH.contains(parts.get(n - 1))) {
       if (!myTarget.arch.equals(parts.get(n - 1))) {

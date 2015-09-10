@@ -35,10 +35,10 @@ import java.util.Collection;
 
 public class GoDuplicateMethodInspection extends GoInspectionBase {
   @Override
-  protected void checkFile(@NotNull GoFile file, @NotNull final ProblemsHolder problemsHolder) {
-    final Project project = file.getProject();
-    final String packageName = file.getPackageName();
-    final GlobalSearchScope scope = GoPsiImplUtil.packageScope(file);
+  protected void checkFile(@NotNull GoFile file, @NotNull ProblemsHolder problemsHolder) {
+    Project project = file.getProject();
+    String packageName = file.getPackageName();
+    GlobalSearchScope scope = GoPsiImplUtil.packageScope(file);
 
     for (final GoMethodDeclaration method : file.getMethods()) {
       if (method.isBlank()) continue;

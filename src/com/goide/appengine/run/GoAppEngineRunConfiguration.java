@@ -114,7 +114,7 @@ public class GoAppEngineRunConfiguration extends GoRunConfigurationBase<GoAppEng
   public void checkConfiguration() throws RuntimeConfigurationException {
     super.checkConfiguration();
 
-    final Module module = getConfigurationModule().getModule();
+    Module module = getConfigurationModule().getModule();
     if (module != null) {
       if (!GoSdkService.isAppEngineSdkPath(GoSdkService.getInstance(module.getProject()).getSdkHomePath(module))) {
         throw new RuntimeConfigurationWarning("Go SDK is not specified for module '" + module.getName() + "'");

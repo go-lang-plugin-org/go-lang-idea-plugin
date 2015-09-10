@@ -73,7 +73,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         GoReferenceExpressionBase qualifier = ((GoReferenceExpressionBase)parent).getQualifier();
         if (qualifier != null && qualifier.getReference() != null && qualifier.getReference().resolve() != null) return;
 
-        final ArrayList<ElementProcessor> processors = ContainerUtil.newArrayList();
+        ArrayList<ElementProcessor> processors = ContainerUtil.newArrayList();
         if (parent instanceof GoReferenceExpression && !GoPsiImplUtil.isUnaryBitAndExpression(parent)) {
           processors.add(new FunctionsProcessor());
           processors.add(new VariablesAndConstantsProcessor());

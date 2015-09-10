@@ -44,7 +44,7 @@ public abstract class GoNamedStubElementType<S extends GoNamedStub<T>, T extends
     return super.shouldCreateStub(node) && psi instanceof GoNamedElement && StringUtil.isNotEmpty(((GoNamedElement)psi).getName());
   }
 
-  public void indexStub(@NotNull final S stub, @NotNull final IndexSink sink) {
+  public void indexStub(@NotNull S stub, @NotNull IndexSink sink) {
     String name = stub.getName();
     if (shouldIndex() && StringUtil.isNotEmpty(name)) {
       String packageName = null;
