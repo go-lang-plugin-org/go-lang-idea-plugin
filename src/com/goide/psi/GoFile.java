@@ -48,7 +48,6 @@ import com.intellij.util.ArrayFactory;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.LinkedMultiMap;
 import com.intellij.util.containers.MultiMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -220,7 +219,7 @@ public class GoFile extends PsiFileBase {
    */
   @NotNull
   public MultiMap<String, GoImportSpec> getImportMap() {
-    MultiMap<String, GoImportSpec> map = LinkedMultiMap.create();
+    MultiMap<String, GoImportSpec> map = MultiMap.createLinked();
     for (GoImportSpec spec : getImports()) {
       String alias = spec.getAlias();
       if (alias != null) {

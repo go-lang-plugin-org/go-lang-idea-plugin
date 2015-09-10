@@ -177,8 +177,8 @@ public class GoImportOptimizer implements ImportOptimizer {
   }
 
   @NotNull
-  public static Collection<GoImportSpec> findDuplicatedEntries(@NotNull MultiMap<String, GoImportSpec> importMap) {
-    List<GoImportSpec> duplicatedEntries = ContainerUtil.newArrayList();
+  public static Set<GoImportSpec> findDuplicatedEntries(@NotNull MultiMap<String, GoImportSpec> importMap) {
+    Set<GoImportSpec> duplicatedEntries = ContainerUtil.newLinkedHashSet();
     for (Map.Entry<String, Collection<GoImportSpec>> imports : importMap.entrySet()) {
       Collection<GoImportSpec> importsWithSameName = imports.getValue();
       if (importsWithSameName.size() > 1) {

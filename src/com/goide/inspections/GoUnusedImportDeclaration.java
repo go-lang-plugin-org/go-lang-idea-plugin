@@ -34,6 +34,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 public class GoUnusedImportDeclaration extends GoInspectionBase {
   @Nullable private final static LocalQuickFix OPTIMIZE_QUICK_FIX = new LocalQuickFixBase("Optimize imports") {
@@ -63,16 +64,13 @@ public class GoUnusedImportDeclaration extends GoInspectionBase {
       problemsHolder.registerProblem(importIdentifier, "Redundant alias", ProblemHighlightType.LIKE_UNUSED_SYMBOL, OPTIMIZE_QUICK_FIX);
     }
 
-    Collection<GoImportSpec> duplicatedEntries = GoImportOptimizer.findDuplicatedEntries(importMap);
+    Set<GoImportSpec> duplicatedEntries = GoImportOptimizer.findDuplicatedEntries(importMap);
     for (GoImportSpec duplicatedImportSpec : duplicatedEntries) {
       problemsHolder.registerProblem(duplicatedImportSpec, "Redeclared import", ProblemHighlightType.GENERIC_ERROR, OPTIMIZE_QUICK_FIX);
     }
 
-    // Find imports that are referred to by the same alias or last pathname component.
     for (Map.Entry<String, Collection<GoImportSpec>> specs : importMap.entrySet()) {
-      // These iterators are guaranteed to be non-empty.
       Iterator<GoImportSpec> imports = specs.getValue().iterator();
-      // Add warnings to the second and subsequent imports.
       imports.next();
       while (imports.hasNext()) {
         GoImportSpec redeclaredImport = imports.next();
