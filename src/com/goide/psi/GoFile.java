@@ -219,7 +219,7 @@ public class GoFile extends PsiFileBase {
    */
   @NotNull
   public MultiMap<String, GoImportSpec> getImportMap() {
-    MultiMap<String, GoImportSpec> map = MultiMap.create();
+    MultiMap<String, GoImportSpec> map = MultiMap.createLinked();
     for (GoImportSpec spec : getImports()) {
       String alias = spec.getAlias();
       if (alias != null) {
