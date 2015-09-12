@@ -201,3 +201,21 @@ func Test(p interface{}) error {
 	}
 	return nil
 }
+
+type x struct {
+	I1 interface{}
+	I2 interface {
+	   }
+	i1 interface{ x() int }
+	i2 interface {
+		   x() int
+	   }
+
+	S2 struct{}
+	S1 struct {
+	   }
+	s1 struct{ x int }
+	s1 struct {
+		   x int
+	   }
+}
