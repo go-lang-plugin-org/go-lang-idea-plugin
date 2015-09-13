@@ -249,6 +249,14 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.checkHighlighting();
   }
 
+  public void testMultiplePackagesWithIgnoredFile() {
+    myFixture.addFileToProject("a.go", "// +build ignored\n\npackage a");
+    // Should be OK to have package b because package a has a non-matching
+    // build tag.
+    myFixture.configureByText("b.go", "package b");
+    myFixture.checkHighlighting();
+  }
+
   public void testDocumentationPackage() {
     myFixture.addFileToProject("a.go", "package a");
     myFixture.configureByText("docs.go", "package documentation");
@@ -308,6 +316,27 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
         myFixture.getTempDirFixture().createFile("b/pack/pack2.go", "package pack");
         return myFixture.getTempDirFixture().createFile("pack3/pack3.go",
                                                         "package main; import \"a/pack\"; import <error>\"b/pack\"</error>; func main() { pack.Foo() }");
+      }
+    });
+    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(file.getParent().getParent().getUrl());
+    myFixture.configureFromExistingVirtualFile(file);
+    myFixture.checkHighlighting();
+  }
+
+  public void testIgnoredBuildTag() throws Throwable {
+    VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
+      @Override
+      public VirtualFile compute() throws Throwable {
+        myFixture.getTempDirFixture().createFile("a/pack1.go", "package a; func Foo() {}");
+        myFixture.getTempDirFixture().createFile("a/pack2.go", "// +build ignored\n\npackage main");
+        myFixture.getTempDirFixture().createFile("b/pack1.go", "package b; func Bar() {}");
+        myFixture.getTempDirFixture().createFile("b/pack2.go", "// +build ignored\n\npackage main");
+        // There should be no errors: package main exists in the a/ and b/
+        // directories, but it is not imported as it has a non-matching build
+        // tag.
+        // For more details see https://github.com/go-lang-plugin-org/go-lang-idea-plugin/issues/1858#issuecomment-139794391.
+        return myFixture.getTempDirFixture().createFile("c/pack1.go",
+                                                        "package main; import \"a\"; import \"b\"; func main() { a.Foo(); b.Bar(); }");
       }
     });
     GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(file.getParent().getParent().getUrl());

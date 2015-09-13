@@ -216,7 +216,7 @@ public class GoUtil {
       public Result<Collection<String>> compute() {
         Collection<String> set = ContainerUtil.newLinkedHashSet();
         for (PsiFile file : dir.getFiles()) {
-          if (file instanceof GoFile && !directoryToIgnore(file.getName())) {
+          if (file instanceof GoFile && !directoryToIgnore(file.getName()) && allowed(file)) {
             String name = ((GoFile)file).getPackageName();
             if (StringUtil.isNotEmpty(name)) {
               set.add(trimTestSuffices && GoTestFinder.isTestFile(file) ? StringUtil.trimEnd(name, GoConstants.TEST_SUFFIX) : name);

@@ -432,7 +432,12 @@ public class GoFile extends PsiFileBase {
   }
 
   public boolean hasCPathImport() {
-    return getImportMap().containsKey(GoConstants.C_PATH);
+    for (GoImportSpec importSpec : getImports()) {
+      if (GoConstants.C_PATH.equals(importSpec.getPath())) {
+        return true;
+      }
+    }
+    return false;
   }
 
   public void deleteImport(@NotNull GoImportSpec importSpec) {
