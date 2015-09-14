@@ -3166,12 +3166,13 @@ public class GoParser implements PsiParser, LightPsiParser {
   // LeftHandExprList (AssignmentStatement | SendStatement | ['++' | '--'])
   private static boolean SimpleStatement_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SimpleStatement_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
     r = LeftHandExprList(b, l + 1);
+    p = r; // pin = LeftHandExprList
     r = r && SimpleStatement_1_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
+    exit_section_(b, l, m, null, r, p, null);
+    return r || p;
   }
 
   // AssignmentStatement | SendStatement | ['++' | '--']

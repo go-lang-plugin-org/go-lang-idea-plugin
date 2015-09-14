@@ -213,7 +213,7 @@ private StatementRecover ::= !('!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^
 
 SimpleStatement ::=
     ShortVarDeclaration
-  | (LeftHandExprList (AssignmentStatement | SendStatement | ['++' | '--'])) {pin(".*")="ExpressionList"}
+  | (LeftHandExprList (AssignmentStatement | SendStatement | ['++' | '--'])) {pin(".*")=LeftHandExprList}
 
 private TopLevelDeclaration ::= OneOfDeclarations semi {pin=1 recoverWhile=TopLevelDeclarationRecover}
 private OneOfDeclarations ::=
