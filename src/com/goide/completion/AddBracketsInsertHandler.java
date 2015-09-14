@@ -23,6 +23,7 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class AddBracketsInsertHandler extends ParenthesesInsertHandler<LookupElement> {
@@ -94,7 +95,7 @@ public class AddBracketsInsertHandler extends ParenthesesInsertHandler<LookupEle
     }
   }
 
-  private static boolean isToken(@Nullable PsiElement element, String text) {
+  private static boolean isToken(@Nullable PsiElement element, @NotNull String text) {
     return element != null && element.textMatches(text);
   }
 }
