@@ -88,7 +88,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
         if (element.equals(o)) return !result.add(new PsiElementResolveResult(element));
         String name = ObjectUtils.chooseNotNull(state.get(ACTUAL_NAME), 
                                                 element instanceof PsiNamedElement ? ((PsiNamedElement)element).getName() : null);
-        if (o.getIdentifier().textMatches(name)) {
+        if (name != null && o.getIdentifier().textMatches(name)) {
           result.add(new PsiElementResolveResult(element));
           return false;
         }
