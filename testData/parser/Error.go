@@ -66,6 +66,7 @@ type errorString string
 func (e errorString) RuntimeError() {}
 
 func (e errorString) Error() string {
+        aaa
 	return "runtime error: " + string(e)
 }
 
