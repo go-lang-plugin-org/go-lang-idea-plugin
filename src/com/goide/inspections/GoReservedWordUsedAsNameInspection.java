@@ -27,7 +27,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.usageView.UsageViewTypeLocation;
 import org.jetbrains.annotations.NotNull;
 
-public class GoReservedWordUsedAsName extends GoInspectionBase {
+public class GoReservedWordUsedAsNameInspection extends GoInspectionBase {
   @NotNull
   @Override
   protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {

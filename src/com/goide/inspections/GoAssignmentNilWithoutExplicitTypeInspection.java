@@ -29,7 +29,7 @@ import java.util.List;
 
 import static com.intellij.codeInspection.ProblemHighlightType.GENERIC_ERROR_OR_WARNING;
 
-public class GoAssignmentNilWithoutExplicitType extends GoInspectionBase {
+public class GoAssignmentNilWithoutExplicitTypeInspection extends GoInspectionBase {
   @NotNull
   @Override
   protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {

@@ -200,7 +200,7 @@
                      implementationClass="com.goide.inspections.unresolved.GoAssignmentToConstantInspection"/>
     <localInspection language="go" displayName="Assignment nil without explicit type"
                      groupName="Go" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.GoAssignmentNilWithoutExplicitType" />
+                     implementationClass="com.goide.inspections.GoAssignmentNilWithoutExplicitTypeInspection" />
     <localInspection language="go" displayName="Duplicate function"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoDuplicateFunctionInspection"/>
@@ -212,7 +212,7 @@
                      implementationClass="com.goide.inspections.GoDuplicateArgumentInspection"/>
     <localInspection language="go" displayName="Reserved word used as name"
                      groupName="Go" enabledByDefault="true" level="WARNING"
-                     implementationClass="com.goide.inspections.GoReservedWordUsedAsName"/>
+                     implementationClass="com.goide.inspections.GoReservedWordUsedAsNameInspection"/>
     <localInspection language="go" displayName="Duplicate return argument"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoDuplicateReturnArgumentInspection"/>

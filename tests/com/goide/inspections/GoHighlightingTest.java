@@ -49,11 +49,11 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       GoReturnInspection.class,
       GoFunctionCallInspection.class,
       GoDeferGoInspection.class,
-      GoReservedWordUsedAsName.class,
+      GoReservedWordUsedAsNameInspection.class,
       GoMultiplePackagesInspection.class,
       GoCgoInTestInspection.class,
       GoTestSignaturesInspection.class,
-      GoAssignmentNilWithoutExplicitType.class
+      GoAssignmentNilWithoutExplicitTypeInspection.class
     );
   }
 
