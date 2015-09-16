@@ -43,7 +43,7 @@
   <depends optional="true" config-file="java-deps.xml">com.intellij.modules.java</depends>
   <depends optional="true" config-file="coverage.xml">Coverage</depends>
   <depends optional="true" config-file="coverage.xml">com.intellij.modules.coverage</depends>
-  <!-- todo[IDEA 15] replace with real dependency -->
+  <!-- todo[IDEA 16] replace with real dependency -->
   <depends optional="true" config-file="app-engine.xml">com.intellij.modules.lang</depends>
 
   <module-components>
@@ -61,6 +61,7 @@
     <stubIndex implementation="com.goide.stubs.index.GoMethodIndex"/>
     <stubIndex implementation="com.goide.stubs.index.GoMethodFingerprintIndex"/>
     <stubElementTypeHolder class="com.goide.GoTypes"/>
+    <indexPatternBuilder implementation="com.goide.GoIndexPatternBuilder"/>
 
     <internalFileTemplate name="Go Application"/>
     <internalFileTemplate name="Go File"/>
@@ -294,7 +295,7 @@
   <!-- GAE -->
 
   <!-- START plugin.xml of future GAE module -->
-  <!-- todo[IDEA 15] It's supposed that GAE-core module will be moved to IDEA source and bundled in IDEA 15 -->
+  <!-- todo[IDEA 16] It's supposed that GAE-core module will be moved to IDEA source and bundled in IDEA 16 -->
   <!--<id>com.intellij.appengine</id>-->
   <depends optional="true" config-file="google-app-engine-core-yaml.xml">org.jetbrains.plugins.yaml</depends>
   <extensionPoints>
