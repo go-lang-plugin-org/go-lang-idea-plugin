@@ -71,7 +71,10 @@ public class GoUnusedImportDeclaration extends GoInspectionBase {
 
     for (Map.Entry<String, Collection<GoImportSpec>> specs : importMap.entrySet()) {
       Iterator<GoImportSpec> imports = specs.getValue().iterator();
-      imports.next();
+      GoImportSpec originalImport = imports.next();
+      if (originalImport.isDot() || originalImport.isForSideEffects()) {
+        continue;
+      }
       while (imports.hasNext()) {
         GoImportSpec redeclaredImport = imports.next();
         if (!duplicatedEntries.contains(redeclaredImport)) {

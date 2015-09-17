@@ -344,6 +344,23 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.checkHighlighting();
   }
 
+  public void testImportUnderscore() throws Throwable {
+    VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
+      @Override
+      public VirtualFile compute() throws Throwable {
+        myFixture.getTempDirFixture().createFile("a/pack/pack1.go", "package pack; func Foo() {}");
+        myFixture.getTempDirFixture().createFile("b/pack/pack2.go", "package pack");
+        myFixture.getTempDirFixture().createFile("c/pack/pack3.go", "package whatever; func Bar() {}");
+        myFixture.getTempDirFixture().createFile("d/pack/pack4.go", "package another; func Baz() {}");
+        return myFixture.getTempDirFixture().createFile("pack3/pack3.go",
+                                                        "package main; import _ \"a/pack\"; import _ \"b/pack\"; import . \"c/pack\"; import . \"d/pack\"; func main() { Bar(); Baz() }");
+      }
+    });
+    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(file.getParent().getParent().getUrl());
+    myFixture.configureFromExistingVirtualFile(file);
+    myFixture.checkHighlighting();
+  }
+
   @Override
   protected LightProjectDescriptor getProjectDescriptor() {
     return createMockProjectDescriptor();
