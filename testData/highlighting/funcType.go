@@ -44,3 +44,19 @@ func _(callback func() error) {
 		err.Error()
 	}
 }
+
+func _(fn func() (i int, e error)) {
+	i, e :=  fn()
+	print(i)
+	print(e.Error())
+}
+
+func _(fn func() (myErr error)) {
+	err := fn()
+	err.Error()
+}
+
+func _(fn func() error) {
+	err := fn()
+	err.Error()
+}
