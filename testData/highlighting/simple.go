@@ -474,3 +474,10 @@ func _() {
 	}{addr: addr}
 	Println(x)
 }
+
+func _() {
+	tests:=[]struct{ want int}{}
+	println(tests)
+	want := ""
+	Println(want)
+}
