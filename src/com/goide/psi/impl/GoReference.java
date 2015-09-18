@@ -371,6 +371,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     return new GoVarProcessor(getIdentifier(), myElement, processor.isCompletion(), true) {
       @Override
       protected boolean condition(@NotNull PsiElement e) {
+        if (e instanceof GoFieldDefinition) return true;
         return super.condition(e) && !(e instanceof GoTypeSpec);
       }
     };

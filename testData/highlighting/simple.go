@@ -466,3 +466,11 @@ func _() {
 		c.message <- message
 	}
 }
+
+func _() {
+	addr := "test"
+	x := struct {
+		addr string
+	}{addr: addr}
+	Println(x)
+}

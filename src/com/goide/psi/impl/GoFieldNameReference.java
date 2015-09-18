@@ -59,9 +59,14 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
 
     type = getType(type);
 
-    if (type instanceof GoStructType && !type.processDeclarations(fieldProcessor, ResolveState.initial(), null, myElement)) return false;
+    if (!processStructType(fieldProcessor, type)) return false;
+    if (type instanceof GoPointerType && !processStructType(fieldProcessor, ((GoPointerType)type).getType())) return false;
 
     return true;
+  }
+
+  private boolean processStructType(@NotNull GoScopeProcessor fieldProcessor, @Nullable GoType type) {
+    return !(type instanceof GoStructType && !type.processDeclarations(fieldProcessor, ResolveState.initial(), null, myElement));
   }
 
   @Nullable
