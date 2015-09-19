@@ -339,7 +339,19 @@ public class GoPsiImplUtil {
         return args != null ? args.getType() : null;
       }
     }
-    else if (o instanceof GoCallExpr) {
+    else if (o instanceof GoCallExpr) { 
+      GoExpression e = ((GoCallExpr)o).getExpression();
+      if (e instanceof GoReferenceExpression) { // todo: unify Type processing
+        if (((GoReferenceExpression)e).getQualifier() == null && "append".equals(((GoReferenceExpression)e).getIdentifier().getText())) {
+          PsiReference ref = e.getReference();
+          PsiElement resolve = ref != null ? ref.resolve() : null;
+          if (resolve instanceof GoFunctionDeclaration && isBuiltinFile(resolve.getContainingFile())) {
+            List<GoExpression> l = ((GoCallExpr)o).getArgumentList().getExpressionList();
+            GoExpression f = ContainerUtil.getFirstItem(l);
+            return f == null ? null : getGoType(f, context);
+          }
+        } 
+      }
       GoType type = ((GoCallExpr)o).getExpression().getGoType(context);
       if (type instanceof GoFunctionType) {
         return funcType(type);
