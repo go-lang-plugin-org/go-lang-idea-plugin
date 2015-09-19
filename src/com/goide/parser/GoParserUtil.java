@@ -167,7 +167,7 @@ public class GoParserUtil extends GeneratedParserUtilBase {
   public static boolean isBuiltin(@NotNull PsiBuilder builder_, @SuppressWarnings("UnusedParameters") int level) {
     LighterASTNode marker = builder_.getLatestDoneMarker();
     if (marker == null) return false;
-    String text = String.valueOf(builder_.getOriginalText().subSequence(marker.getStartOffset(), marker.getEndOffset()));
+    String text = String.valueOf(builder_.getOriginalText().subSequence(marker.getStartOffset(), marker.getEndOffset())).trim();
     return "make".equals(text) || "new".equals(text);
   }
 

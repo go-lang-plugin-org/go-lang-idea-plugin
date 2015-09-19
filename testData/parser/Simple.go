@@ -222,3 +222,13 @@ func TestIf() {
 func call(f func()) {
     f()
 }
+
+type SensorFactory struct {
+	Sensors map[string]string
+}
+
+func InitSensorFactory() *SensorFactory {
+	factory := new (SensorFactory)
+	factory.Sensors = make(map[string]string)
+	return factory
+}

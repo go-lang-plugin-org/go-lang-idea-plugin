@@ -481,3 +481,14 @@ func _() {
 	want := ""
 	Println(want)
 }
+
+type SensorFactory struct {
+	Sensors map[string]string
+}
+
+func _() *SensorFactory {
+	factory := new (SensorFactory)
+	factory.Sensors = make(map[string]string)
+	return factory
+}
+
