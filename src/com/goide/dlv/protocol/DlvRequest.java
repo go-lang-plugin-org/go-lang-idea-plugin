@@ -16,7 +16,7 @@
 
 package com.goide.dlv.protocol;
 
-import com.intellij.util.containers.ContainerUtil;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jsonProtocol.OutMessage;
 import org.jetbrains.jsonProtocol.Request;
@@ -116,14 +116,8 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
 
   private abstract static class Locals<T> extends DlvRequest<T> {
     private Locals() {
-      List<String> objects = ContainerUtil.newArrayListWithCapacity(1);
-      objects.add(null);
-      writeStringList(argumentsKeyName(), objects);
-    }
-
-    @Override
-    protected boolean needObject() {
-      return false;
+      writeInt("GoroutineID", -1);
+      writeInt("Frame", 0);
     }
   }
 
@@ -140,8 +134,17 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
   }
 
   public final static class EvalSymbol extends DlvRequest<DlvApi.Variable> {
-    public EvalSymbol(String symbol) {
-      writeStringList(argumentsKeyName(), ContainerUtil.newSmartList(symbol));
+    public EvalSymbol(@NotNull String symbol) {
+      try { // todo: ask vladimir how to simplify this 
+        writer.name(argumentsKeyName()).beginArray().beginObject()
+          .name("Scope").beginObject()
+          .name("GoroutineID").value(-1)
+          .name("Frame").value(0).endObject()
+          .name("Symbol").value(symbol).endObject().endArray();
+      }
+      catch (IOException e) {
+        throw new RuntimeException(e);
+      }
     }
 
     @Override

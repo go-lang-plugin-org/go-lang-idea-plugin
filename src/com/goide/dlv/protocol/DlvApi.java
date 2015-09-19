@@ -29,6 +29,8 @@ public class DlvApi {
     public Breakpoint breakPoint; //`json:"breakPoint,omitempty"`
     // CurrentThread is the currently selected debugger thread.
     public Thread currentThread; //`json:"currentThread,omitempty"`
+    // SelectedGoroutine is the currently selected goroutine
+    public Goroutine SelectedGoroutine; //`json:"currentGoroutine,omitempty"`
     // Information requested by the current breakpoint
     public BreakpointInfo breakpointInfo; //`json:"breakPointInfo,omitrempty"`
     // Exited indicates whether the debugged process has exited.
@@ -126,6 +128,9 @@ public class DlvApi {
     // ThreadID is used to specify which thread to use with the SwitchThread
     // command.
     public int threadID; //`json:"threadID,omitempty"`
+    // GoroutineID is used to specify which thread to use with the SwitchGoroutine
+    // command.
+    public int GoroutineID; // `json:"goroutineID,omitempty"`
   }
 
   // Informations about the current breakpoint
@@ -136,9 +141,15 @@ public class DlvApi {
     public List<Variable> arguments; //`json:"arguments,omitempty"`
   }
 
+  public static class EvalScope {
+    public int GoroutineID;
+    public int Frame;
+  }
+
   public static final String CONTINUE = "continue";
   public static final String STEP = "step";
   public static final String NEXT = "next";
   public static final String SWITCH_THREAD = "switchThread";
   public static final String HALT = "halt";
+  public static final String SWITCH_GOROUTINE = "switchGoroutine";
 }
