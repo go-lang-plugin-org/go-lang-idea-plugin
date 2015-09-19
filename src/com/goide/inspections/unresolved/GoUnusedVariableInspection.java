@@ -23,6 +23,7 @@ import com.goide.psi.impl.GoVarProcessor;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.searches.ReferencesSearch;
@@ -47,6 +48,7 @@ public class GoUnusedVariableInspection extends GoInspectionBase {
           if (resolve != null) return;
           Query<PsiReference> query = ReferencesSearch.search(o, o.getUseScope());
           for (PsiReference ref : query) {
+            ProgressManager.checkCanceled();
             PsiElement element = ref.getElement();
             if (element == null) continue;
             PsiElement parent = element.getParent();
