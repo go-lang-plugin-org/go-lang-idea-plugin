@@ -21,6 +21,7 @@ import com.goide.psi.*;
 import com.goide.psi.impl.GoReference;
 import com.intellij.lang.ImportOptimizer;
 import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDocumentManager;
@@ -126,7 +127,9 @@ public class GoImportOptimizer implements ImportOptimizer {
           for (PsiElement e : list) {
             if (e.isValid()) {
               result.remove(".", importEntry);
+              break;
             }
+            ProgressManager.checkCanceled();
           }
         }
       }
