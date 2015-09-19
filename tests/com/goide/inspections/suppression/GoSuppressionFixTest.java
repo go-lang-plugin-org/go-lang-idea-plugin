@@ -16,19 +16,30 @@
 
 package com.goide.inspections.suppression;
 
+import com.goide.inspections.GoUnusedImportInspection;
 import com.goide.inspections.unresolved.GoUnresolvedReferenceInspection;
 import com.goide.inspections.unresolved.GoUnusedGlobalVariableInspection;
 import com.goide.inspections.unresolved.GoUnusedVariableInspection;
 import com.goide.quickfix.GoQuickFixTestBase;
+import org.jetbrains.annotations.NotNull;
 
 public class GoSuppressionFixTest extends GoQuickFixTestBase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();
+    myFixture.enableInspections(GoUnusedImportInspection.class);
     myFixture.enableInspections(GoUnresolvedReferenceInspection.class);
     myFixture.enableInspections(GoUnusedGlobalVariableInspection.class);
     myFixture.enableInspections(GoUnusedVariableInspection.class);
   }
+  
+  public void testImportStatement() {
+    doTest("Suppress for import");
+  } 
+  
+  public void testFirstImportStatement() {
+    doTest("Suppress for import");
+  } 
 
   public void testFunctionSuppressionFix() {
     doTest("Suppress for function");
@@ -98,5 +109,11 @@ public class GoSuppressionFixTest extends GoQuickFixTestBase {
   @Override
   protected String getBasePath() {
     return "inspections/suppression/fix";
+  }
+
+  @Override
+  protected void doTest(@NotNull String quickFixName) {
+    super.doTest(quickFixName);
+    myFixture.testHighlighting(String.format("%s-after-highlighting.go", getTestName(true)));
   }
 }
