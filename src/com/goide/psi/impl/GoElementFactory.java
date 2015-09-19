@@ -110,6 +110,11 @@ public class GoElementFactory {
     return PsiTreeUtil.findChildOfType(file, GoSimpleStatement.class);
   }
 
+  public static GoAssignmentStatement createAssignmentStatement(@NotNull Project project, @NotNull String left, @NotNull String right) {
+    GoFile file = createFileFromText(project, "package a; func a() {\n " + left + " = " + right + "}");
+    return PsiTreeUtil.findChildOfType(file, GoAssignmentStatement.class);
+  }
+
   @NotNull
   public static GoReferenceExpression createReferenceExpression(@NotNull Project project, @NotNull String name) {
     GoFile file = createFileFromText(project, "package a; var a = " + name);
