@@ -915,7 +915,17 @@ public class GoPsiImplUtil {
     String text = importString.getText();
     if (StringUtil.isEmpty(text)) return "";
     char quote = text.charAt(0);
-    return isQuote(quote) ? StringUtil.unquoteString(text, quote) : text;
+    int startOffset = isQuote(quote) ? 1 : 0;
+    int endOffset = text.length();
+    if (text.length() > 1) {
+      if (isQuote(quote) && text.charAt(text.length() - 1) == quote) {
+        endOffset = text.length() - 1;
+      }
+      if (!isQuote(quote) && isQuote(text.charAt(text.length()))){
+        endOffset = text.length() - 1;
+      }
+    }
+    return text.substring(startOffset, endOffset);
   }
 
   @NotNull

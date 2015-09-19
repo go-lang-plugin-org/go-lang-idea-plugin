@@ -54,6 +54,16 @@ public class GoCompletionTest extends GoCompletionTestBase {
     assertNotNull(lookupElementStrings);
     assertSameElements(lookupElementStrings, "package1/pack", "package2/pack");
   }
+  
+  public void testImportPackagesWithoutClosingQuote() throws IOException {
+    myFixture.getTempDirFixture().createFile("package1/pack/test.go", "package foo");
+    myFixture.getTempDirFixture().createFile("package2/pack/test.go", "package bar");
+    myFixture.configureByText("test.go", "package foo; import `pack<caret>");
+    myFixture.completeBasic();
+    List<String> lookupElementStrings = myFixture.getLookupElementStrings();
+    assertNotNull(lookupElementStrings);
+    assertSameElements(lookupElementStrings, "package1/pack", "package2/pack");
+  }
 
   public void testImportRelativePackages() throws IOException {
     myFixture.getTempDirFixture().createFile("package1/pack/test.go", "package foo");
