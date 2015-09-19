@@ -37,7 +37,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-public class GoReturnInspection extends GoInspectionBase {
+public class GoMissingReturnInspection extends GoInspectionBase {
   @NotNull
   @Override
   protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder,

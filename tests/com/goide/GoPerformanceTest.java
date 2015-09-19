@@ -16,7 +16,7 @@
 
 package com.goide;
 
-import com.goide.inspections.GoUnusedImportDeclaration;
+import com.goide.inspections.GoUnusedImportInspection;
 import com.goide.inspections.unresolved.GoUnresolvedReferenceInspection;
 import com.goide.inspections.unresolved.GoUnusedFunctionInspection;
 import com.goide.inspections.unresolved.GoUnusedGlobalVariableInspection;
@@ -71,7 +71,7 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testUnusedImport() {
-    doInspectionTest(new GoUnusedImportDeclaration(), TimeUnit.MINUTES.toMillis(1));
+    doInspectionTest(new GoUnusedImportInspection(), TimeUnit.MINUTES.toMillis(1));
   }
 
   public void testPerformanceA() {

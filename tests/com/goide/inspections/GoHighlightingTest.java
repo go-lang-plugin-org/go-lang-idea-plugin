@@ -34,7 +34,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.enableInspections(
       GoUnresolvedReferenceInspection.class,
       GoDuplicateFieldsOrMethodsInspection.class,
-      GoUnusedImportDeclaration.class,
+      GoUnusedImportInspection.class,
       GoUnusedVariableInspection.class,
       GoUnusedGlobalVariableInspection.class,
       GoUnusedFunctionInspection.class,
@@ -46,7 +46,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       GoFunctionVariadicParameterInspection.class,
       GoVarDeclarationInspection.class,
       GoNoNewVariablesInspection.class,
-      GoReturnInspection.class,
+      GoMissingReturnInspection.class,
       GoFunctionCallInspection.class,
       GoDeferGoInspection.class,
       GoReservedWordUsedAsNameInspection.class,

@@ -183,7 +183,7 @@
                      implementationClass="com.goide.inspections.unresolved.GoUnresolvedReferenceInspection"/>
     <localInspection language="go" displayName="Unused import inspection"
                      groupName="Go" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.GoUnusedImportDeclaration"/>
+                     implementationClass="com.goide.inspections.GoUnusedImportInspection"/>
     <localInspection language="go" displayName="Duplicate fields and methods inspection"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoDuplicateFieldsOrMethodsInspection"/>
@@ -228,7 +228,7 @@
                      implementationClass="com.goide.inspections.GoNoNewVariablesInspection"/>
     <localInspection language="go" displayName="Missing return at end of function"
                      groupName="Go" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.GoReturnInspection"/>
+                     implementationClass="com.goide.inspections.GoMissingReturnInspection"/>
     <localInspection language="go" displayName="Function call inspection"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoFunctionCallInspection"/>
