@@ -115,16 +115,22 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
   }
 
   private abstract static class Locals<T> extends DlvRequest<T> {
-    private Locals() {
+    Locals(int frameId) {
       writeInt("GoroutineID", -1);
-      writeInt("Frame", 0);
+      writeInt("Frame", frameId);
     }
   }
 
   public final static class ListLocalVars extends Locals<List<DlvApi.Variable>> {
+    public ListLocalVars(int frameId) {
+      super(frameId);
+    }
   }
 
   public final static class ListFunctionArgs extends Locals<List<DlvApi.Variable>> {
+    public ListFunctionArgs(int frameId) {
+      super(frameId);
+    }
   }
 
   public final static class Command extends DlvRequest<DlvApi.DebuggerState> {
@@ -134,12 +140,12 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
   }
 
   public final static class EvalSymbol extends DlvRequest<DlvApi.Variable> {
-    public EvalSymbol(@NotNull String symbol) {
+    public EvalSymbol(@NotNull String symbol, int frameId) {
       try { // todo: ask vladimir how to simplify this 
         writer.name(argumentsKeyName()).beginArray().beginObject()
           .name("Scope").beginObject()
           .name("GoroutineID").value(-1)
-          .name("Frame").value(0).endObject()
+          .name("Frame").value(frameId).endObject()
           .name("Symbol").value(symbol).endObject().endArray();
       }
       catch (IOException e) {

@@ -54,7 +54,7 @@ import java.util.Set;
 class DlvStackFrame extends XStackFrame {
   private final DlvApi.Location myLocation;
   private final DlvCommandProcessor myProcessor;
-  private final boolean myTop;
+  private final int myId;
   private static final Set<String> NUMBERS = ContainerUtil.newTroveSet(
     "int8",
     "uint8",
@@ -78,22 +78,21 @@ class DlvStackFrame extends XStackFrame {
     "rune"
   );
 
-  public DlvStackFrame(DlvApi.Location location, DlvCommandProcessor processor, boolean top) {
+  public DlvStackFrame(DlvApi.Location location, DlvCommandProcessor processor, int id) {
     myLocation = location;
     myProcessor = processor;
-    myTop = top;
+    myId = id;
   }
 
   @Nullable
   @Override
   public XDebuggerEvaluator getEvaluator() {
-    if (!myTop) return null;
     return new XDebuggerEvaluator() {
       @Override
       public void evaluate(@NotNull String expression,
                            @NotNull final XEvaluationCallback callback,
                            @Nullable XSourcePosition expressionPosition) {
-        myProcessor.send(new DlvRequest.EvalSymbol(expression))
+        myProcessor.send(new DlvRequest.EvalSymbol(expression, myId))
           .done(new Consumer<DlvApi.Variable>() {
             @Override
             public void consume(@NotNull DlvApi.Variable variable) {
@@ -194,16 +193,12 @@ class DlvStackFrame extends XStackFrame {
 
   @Override
   public void computeChildren(@NotNull final XCompositeNode node) {
-    if (!myTop) {
-      super.computeChildren(node);
-      return;
-    }
-    send(new DlvRequest.ListLocalVars()).done(new Consumer<List<DlvApi.Variable>>() {
+    send(new DlvRequest.ListLocalVars(myId)).done(new Consumer<List<DlvApi.Variable>>() {
       @Override
       public void consume(@NotNull List<DlvApi.Variable> variables) {
         final XValueChildrenList xVars = new XValueChildrenList(variables.size());
         for (DlvApi.Variable v : variables) xVars.add(v.name, createXValue(v, GoIcons.VARIABLE));
-        send(new DlvRequest.ListFunctionArgs()).done(new Consumer<List<DlvApi.Variable>>() {
+        send(new DlvRequest.ListFunctionArgs(myId)).done(new Consumer<List<DlvApi.Variable>>() {
           @Override
           public void consume(@NotNull List<DlvApi.Variable> args) {
             for (DlvApi.Variable v : args) xVars.add(v.name, createXValue(v, GoIcons.PARAMETER));
