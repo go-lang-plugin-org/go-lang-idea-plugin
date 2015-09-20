@@ -97,7 +97,7 @@ plugin development on IntelliJ IDEA platform.
 
 ##### IMPORTANT: MacOS X users note
 
-You might get the following error ```Unsupported major.minor version 52```` in the
+You might get the following error ```Unsupported major.minor version 52``` in the
 logs or the plugin might not work at all.
 
 Check the version of Java your IDE is running on. Since in 99.9% of the cases it will
