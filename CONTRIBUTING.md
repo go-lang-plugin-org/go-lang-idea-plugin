@@ -95,7 +95,7 @@ Please don't use class comments with information about author or date and time c
 You can also have a look at some [useful links](#useful-links) for getting started with
 plugin development on IntelliJ IDEA platform.
 
-#### IMPORTANT: MacOS X users note
+##### IMPORTANT: MacOS X users note
 
 You might get the following error ```Unsupported major.minor version 52```` in the
 logs or the plugin might not work at all.
