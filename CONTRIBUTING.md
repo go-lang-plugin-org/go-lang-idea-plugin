@@ -109,6 +109,11 @@ To fix the error, please use Java JDK 6 to compile the plugin and everything sho
 To get the log files, you can go to ```Help | Show Log in File Manager``` and then the
 log will be displayed to you.
 
+### Delve integration
+
+We're syncing the plugin source with the [Delve](https://github.com/derekparker/delve) debugger via https://github.com/ignatov/delve.
+Please use `-Ddlv.path` for setting up the path for your local version of dlv.
+
 ### Checking out the IntelliJ IDEA Platform sources
 
 We start with cloning the idea git repository and checking out the revision
