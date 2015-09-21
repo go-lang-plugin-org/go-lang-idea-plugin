@@ -56,11 +56,7 @@ class DlvSuspendContext extends XSuspendContext {
       myProcessor = processor;
       myStack = ContainerUtil.newArrayListWithCapacity(locations.size());
       for (int i = 0; i < myLocations.size(); i++) {
-        DlvApi.Location location = myLocations.get(i);
-        if (i != 0) {
-          location.line -= 1; // todo: bizarre
-        }
-        myStack.add(new DlvStackFrame(location, myProcessor, i));
+        myStack.add(new DlvStackFrame(myLocations.get(i), myProcessor, i));
       }
     }
 

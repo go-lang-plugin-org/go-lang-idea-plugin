@@ -176,7 +176,7 @@ class DlvStackFrame extends XStackFrame {
     String url = myLocation.file;
     VirtualFile file = LocalFileSystem.getInstance().findFileByPath(url);
     if (file == null) return null;
-    return XDebuggerUtil.getInstance().createPosition(file, myLocation.line);
+    return XDebuggerUtil.getInstance().createPosition(file, myLocation.line - 1);
   }
 
   @Override
