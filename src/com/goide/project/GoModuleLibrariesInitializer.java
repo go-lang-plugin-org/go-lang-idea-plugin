@@ -291,7 +291,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
 
     if (!shownAlready) {
       Notification notification = GoConstants.GO_NOTIFICATION_GROUP.createNotification("GOPATH was detected",
-                                                         "We've been detected some libraries from your GOPATH.\n" +
+                                                         "We've detected some libraries from your GOPATH.\n" +
                                                          "You may want to add extra libraries in <a href='configure'>Go Libraries configuration</a>.",
                                                          NotificationType.INFORMATION, new NotificationListener.Adapter() {
         @Override
