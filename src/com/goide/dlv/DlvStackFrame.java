@@ -27,6 +27,7 @@ import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
@@ -148,7 +149,9 @@ class DlvStackFrame extends XStackFrame {
           node.setPresentation(icon, presentation, false);
           return;
         }
-        node.setPresentation(icon, variable.type, variable.value, false);
+        String value = variable.value;
+        String prefix = variable.type + " ";
+        node.setPresentation(icon, variable.type, StringUtil.startsWith(value, prefix) ? value.replaceFirst(prefix, "") : value, false);
       }
 
       @Nullable
