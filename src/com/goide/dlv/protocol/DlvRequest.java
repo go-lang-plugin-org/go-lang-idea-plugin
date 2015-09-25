@@ -42,6 +42,7 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
     }
   }
 
+  @NotNull
   @Override
   public String getMethodName() {
     return "RPCServer." + getClass().getSimpleName();
