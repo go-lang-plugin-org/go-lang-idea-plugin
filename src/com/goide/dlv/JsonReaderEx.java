@@ -218,57 +218,6 @@ public final class JsonReaderEx implements Closeable {
     return new JsonReader(new CharSequenceReader(sequence));
   }
 
-  public final void setLenient(boolean lenient) {
-    this.lenient = lenient;
-  }
-
-  @NotNull
-  public final JsonReaderEx lenient(boolean lenient) {
-    this.lenient = lenient;
-    return this;
-  }
-
-  @SuppressWarnings("UnusedDeclaration")
-  public final boolean isLenient() {
-    return lenient;
-  }
-
-  /**
-   * Consumes the next token from the JSON stream and asserts that it is the
-   * beginning of a new array.
-   */
-  public void beginArray() {
-    int p = peeked;
-    if (p == PEEKED_NONE) {
-      p = doPeek();
-    }
-    if (p == PEEKED_BEGIN_ARRAY) {
-      push(JsonScope.EMPTY_ARRAY);
-      peeked = PEEKED_NONE;
-    }
-    else {
-      throw createParseError("Expected BEGIN_ARRAY but was " + peek());
-    }
-  }
-
-  /**
-   * Consumes the next token from the JSON stream and asserts that it is the
-   * end of the current array.
-   */
-  public void endArray() {
-    int p = peeked;
-    if (p == PEEKED_NONE) {
-      p = doPeek();
-    }
-    if (p == PEEKED_END_ARRAY) {
-      stackSize--;
-      peeked = PEEKED_NONE;
-    }
-    else {
-      throw createParseError("Expected END_ARRAY but was " + peek());
-    }
-  }
-
   /**
    * Consumes the next token from the JSON stream and asserts that it is the
    * beginning of a new object.
@@ -752,72 +701,6 @@ public final class JsonReaderEx implements Closeable {
   }
 
   @Nullable
-  public CharSequence nextNameAsCharSequence() {
-    // todo
-    return nextName();
-  }
-
-  @SuppressWarnings("UnusedDeclaration")
-  private static final class MyCharSequence implements CharSequence {
-    private final CharSequence in;
-    private final int offset;
-    private final int length;
-
-    public MyCharSequence(CharSequence in, int offset, int length) {
-      this.in = in;
-      this.offset = offset;
-      this.length = length;
-    }
-
-    @Override
-    public int length() {
-      return length;
-    }
-
-    @Override
-    public char charAt(int index) {
-      return in.charAt(offset + index);
-    }
-
-    @NotNull
-    @Override
-    public CharSequence subSequence(int start, int end) {
-      if ((end - start) > length) {
-        throw new StringIndexOutOfBoundsException(end);
-      }
-      return in.subSequence(offset + start, offset + end);
-    }
-
-    @NotNull
-    @Override
-    public String toString() {
-      return in.subSequence(offset, in.length()).toString();
-    }
-
-    @Override
-    public boolean equals(Object object) {
-      if (!(object instanceof CharSequence)) {
-        return false;
-      }
-
-      CharSequence o = (CharSequence)object;
-      if (o.length() != length) {
-        return false;
-      }
-      for (int i = 0; i < length; i++) {
-        if (o.charAt(i) != charAt(i)) {
-          return false;
-        }
-      }
-      return true;
-    }
-  }
-
-  public String nextAsString() {
-    return peek() == JsonToken.STRING ? nextString() : null;
-  }
-
-  @Nullable
   public String nextString() {
     return nextString(false);
   }
@@ -875,29 +758,6 @@ public final class JsonReaderEx implements Closeable {
   }
 
   /**
-   * Returns the {@link JsonToken#BOOLEAN boolean} value of the next token,
-   * consuming it.
-   *
-   * @throws IllegalStateException if the next token is not a boolean or if
-   *                               this reader is closed.
-   */
-  public boolean nextBoolean() {
-    int p = peeked;
-    if (p == PEEKED_NONE) {
-      p = doPeek();
-    }
-    if (p == PEEKED_TRUE) {
-      peeked = PEEKED_NONE;
-      return true;
-    }
-    else if (p == PEEKED_FALSE) {
-      peeked = PEEKED_NONE;
-      return false;
-    }
-    throw createParseError("Expected a boolean but was " + peek());
-  }
-
-  /**
    * Consumes the next token from the JSON stream and asserts that it is a
    * literal null.
    *
@@ -915,104 +775,6 @@ public final class JsonReaderEx implements Closeable {
     else {
       throw createParseError("Expected null but was " + peek());
     }
-  }
-
-  /**
-   * Returns the {@link JsonToken#NUMBER double} value of the next token,
-   * consuming it. If the next token is a string, this method will attempt to
-   * parse it as a double using {@link Double#parseDouble(String)}.
-   *
-   * @throws IllegalStateException if the next token is not a literal value.
-   * @throws NumberFormatException if the next literal value cannot be parsed
-   *                               as a double, or is non-finite.
-   */
-  public double nextDouble() {
-    int p = peeked;
-    if (p == PEEKED_NONE) {
-      p = doPeek();
-    }
-
-    if (p == PEEKED_LONG) {
-      peeked = PEEKED_NONE;
-      return (double)peekedLong;
-    }
-
-    if (p == PEEKED_NUMBER) {
-      int end = position + peekedNumberLength;
-      peekedString = in.subSequence(position, end).toString();
-      position = end;
-    }
-    else if (p == PEEKED_SINGLE_QUOTED || p == PEEKED_DOUBLE_QUOTED) {
-      peekedString = nextQuotedValue(p == PEEKED_SINGLE_QUOTED ? '\'' : '"');
-    }
-    else if (p == PEEKED_UNQUOTED) {
-      peekedString = nextUnquotedValue();
-    }
-    else if (p != PEEKED_BUFFERED) {
-      throw createParseError("Expected a double but was " + peek());
-    }
-
-    peeked = PEEKED_BUFFERED;
-    double result = Double.parseDouble(peekedString); // don't catch this NumberFormatException.
-    if (!lenient && (Double.isNaN(result) || Double.isInfinite(result))) {
-      throw createParseError("JSON forbids NaN and infinities: " + result);
-    }
-    peekedString = null;
-    peeked = PEEKED_NONE;
-    return result;
-  }
-
-  /**
-   * Returns the {@link JsonToken#NUMBER long} value of the next token,
-   * consuming it. If the next token is a string, this method will attempt to
-   * parse it as a long. If the next token's numeric value cannot be exactly
-   * represented by a Java {@code long}, this method throws.
-   *
-   * @throws IllegalStateException if the next token is not a literal value.
-   * @throws NumberFormatException if the next literal value cannot be parsed
-   *                               as a number, or exactly represented as a long.
-   */
-  public long nextLong() {
-    int p = peeked;
-    if (p == PEEKED_NONE) {
-      p = doPeek();
-    }
-
-    if (p == PEEKED_LONG) {
-      peeked = PEEKED_NONE;
-      return peekedLong;
-    }
-
-    if (p == PEEKED_NUMBER) {
-      int end = position + peekedNumberLength;
-      peekedString = in.subSequence(position, end).toString();
-      position = end;
-    }
-    else if (p == PEEKED_SINGLE_QUOTED || p == PEEKED_DOUBLE_QUOTED) {
-      peekedString = nextQuotedValue(p == PEEKED_SINGLE_QUOTED ? '\'' : '"');
-      try {
-        long result = Long.parseLong(peekedString);
-        peeked = PEEKED_NONE;
-        return result;
-      }
-      catch (NumberFormatException ignored) {
-        // Fall back to parse as a double below.
-      }
-    }
-    else {
-      throw createParseError("Expected a long but was " + peek());
-    }
-
-    peeked = PEEKED_BUFFERED;
-    double asDouble = Double.parseDouble(peekedString); // don't catch this NumberFormatException.
-    long result = (long)asDouble;
-    if (result != asDouble) { // Make sure no precision was lost casting to 'long'.
-      throw new NumberFormatException("Expected a long but was " + peekedString
-                                      + " at line " + getLineNumber() + " column " + getColumnNumber());
-    }
-    peekedString = null;
-    peeked = PEEKED_NONE;
-    return result;
   }
 
   /**
@@ -1273,12 +1035,6 @@ public final class JsonReaderEx implements Closeable {
     while (count != 0);
   }
 
-  public void skipValues() {
-    while (hasNext()) {
-      skipValue();
-    }
-  }
-
   private void push(int newTop) {
     if (stackSize == stack.length) {
       int[] newStack = new int[stackSize * 2];
@@ -1336,12 +1092,7 @@ public final class JsonReaderEx implements Closeable {
       }
 
       int c = in.charAt(p++);
-      if (c == '\n') {
-        //lineNumber++;
-        //lineStart = p;
-        continue;
-      }
-      else if (c == ' ' || c == '\r' || c == '\t') {
+      if (c == '\n' || c == ' ' || c == '\r' || c == '\t') {
         continue;
       }
 
