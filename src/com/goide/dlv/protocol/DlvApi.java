@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *

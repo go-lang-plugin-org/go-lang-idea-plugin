@@ -119,7 +119,8 @@ class DlvStackFrame extends XStackFrame {
           @Override
           public void run() {
             try {
-              PsiElement elementAtCursor = DebuggerUtilsEx.findElementAt(PsiDocumentManager.getInstance(project).getPsiFile(document), offset);
+              PsiElement elementAtCursor =
+                DebuggerUtilsEx.findElementAt(PsiDocumentManager.getInstance(project).getPsiFile(document), offset);
               GoTypeOwner e = PsiTreeUtil.getParentOfType(elementAtCursor,
                                                           GoReferenceExpression.class,
                                                           GoVarDefinition.class,

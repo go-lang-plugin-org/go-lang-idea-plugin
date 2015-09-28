@@ -86,11 +86,12 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
           @Override
           public void consume(@NotNull List<Location> locations) {
             DlvSuspendContext context = new DlvSuspendContext(o.currentThread.id, locations, getProcessor());
+            XDebugSession session = getSession();
             if (find == null) {
-              getSession().positionReached(context);
+              session.positionReached(context);
             }
             else {
-              getSession().breakpointReached(find, null, context);
+              session.breakpointReached(find, null, context);
             }
           }
         });
@@ -258,7 +259,8 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
         .rejected(new Consumer<Throwable>() {
           @Override
           public void consume(@Nullable Throwable t) {
-            getSession().updateBreakpointPresentation(breakpoint, AllIcons.Debugger.Db_invalid_breakpoint, t == null ? null : t.getMessage());
+            String message = t == null ? null : t.getMessage();
+            getSession().updateBreakpointPresentation(breakpoint, AllIcons.Debugger.Db_invalid_breakpoint, message);
           }
         });
     }
