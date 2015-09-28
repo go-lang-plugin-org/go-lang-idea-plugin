@@ -18,14 +18,14 @@ func _() {
 
 	var _ = policyTable{
 		{
-			Prefix:     "test", // shouldn't be a error
-			Precedence: 50, // shouldn't be a error
-			Label:      0, // shouldn't be a error
+			Prefix:     "test",
+			Precedence: 50,
+			Label:      0,
 		},
 		{
-			Prefix:     "test2", // shouldn't be a error
-			Precedence: 40, // shouldn't be a error
-			Label:      1, // shouldn't be a error
+			Prefix:     "test2",
+			Precedence: 40,
+			Label:      1,
 		},
 	}
 }
