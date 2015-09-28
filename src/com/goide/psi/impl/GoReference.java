@@ -402,7 +402,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
                                       boolean checkContainingFile) {
     PsiFile contextFile = checkContainingFile ? getContextFile(state) : null;
     for (GoNamedElement definition : elements) {
-      if (checkContainingFile && !allowed(definition.getContainingFile(), contextFile)) continue;
+      if (!definition.isValid() || checkContainingFile && !allowed(definition.getContainingFile(), contextFile)) continue;
       if ((localResolve || definition.isPublic()) && !processor.execute(definition, state)) return false;
     }
     return true;
