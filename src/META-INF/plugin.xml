@@ -119,7 +119,7 @@
         ]]>
     </change-notes>
 
-    <idea-version since-build="139.144.2" until-build="140.0.0" />
+    <idea-version since-build="139.144.2" until-build="141.9999" />
 
     <category>Custom Languages</category>
     <resource-bundle>ro.redeul.google.go.GoBundle</resource-bundle>
