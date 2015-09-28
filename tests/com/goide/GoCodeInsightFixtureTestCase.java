@@ -38,8 +38,12 @@ import java.io.IOException;
 abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsightFixtureTestCase {
   @Override
   protected void tearDown() throws Exception {
-    GoApplicationLibrariesService.getInstance().setLibraryRootUrls();
-    super.tearDown();
+    try {
+      GoApplicationLibrariesService.getInstance().setLibraryRootUrls();
+    }
+    finally {
+      super.tearDown();
+    }
   }
 
   @Override

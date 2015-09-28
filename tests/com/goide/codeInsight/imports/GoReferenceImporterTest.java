@@ -50,8 +50,12 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
 
   @Override
   protected void tearDown() throws Exception {
-    updateSettings(defaultGoOnTheFly, defaultJavaOnTheFly);
-    super.tearDown();
+    try {
+      updateSettings(defaultGoOnTheFly, defaultJavaOnTheFly);
+    }
+    finally {
+      super.tearDown();
+    }
   }
 
   @Override

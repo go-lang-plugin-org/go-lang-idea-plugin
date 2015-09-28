@@ -22,8 +22,12 @@ import com.intellij.util.ArrayUtil;
 public class GoExcludedPackagesTest extends GoCompletionSdkAwareTestBase {
   @Override
   protected void tearDown() throws Exception {
-    GoExcludedPathsSettings.getInstance(getProject()).setExcludedPackages(ArrayUtil.EMPTY_STRING_ARRAY);
-    super.tearDown();
+    try {
+      GoExcludedPathsSettings.getInstance(getProject()).setExcludedPackages(ArrayUtil.EMPTY_STRING_ARRAY);
+    }
+    finally {
+      super.tearDown();
+    }
   }
 
   private void doTestExcluded(String initial, String after, String... excludedPaths) {

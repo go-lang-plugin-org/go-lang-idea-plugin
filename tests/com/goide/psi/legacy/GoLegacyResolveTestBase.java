@@ -43,12 +43,6 @@ public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCa
   protected boolean myShouldBeResolved = true;
 
   @Override
-  public void tearDown() throws Exception {
-    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls();
-    super.tearDown();
-  }
-
-  @Override
   protected String getBasePath() {
     return "psi/resolve";
   }
