@@ -73,15 +73,25 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
   private GoType getType(@Nullable GoType type) { // todo: rethink and unify this algorithm
     boolean inValue = myValue != null;
     
-    if (inValue && type instanceof GoArrayOrSliceType) type = ((GoArrayOrSliceType)type).getType();
-    else if (type instanceof GoMapType) type = inValue ? ((GoMapType)type).getValueType() : ((GoMapType)type).getKeyType();
-    else if (inValue && type instanceof GoSpecType && ((GoSpecType)type).getType() instanceof GoStructType) {
-      GoKey key = PsiTreeUtil.getPrevSiblingOfType(myValue, GoKey.class);
-      GoFieldName field = key != null ? key.getFieldName() : null;
-      PsiReference reference = field != null ? field.getReference() : null;
-      PsiElement resolve = reference != null ? reference.resolve() : null;
-      if (resolve instanceof GoFieldDefinition) {
-        type = PsiTreeUtil.getNextSiblingOfType(resolve, GoType.class);
+    if (inValue && type instanceof GoArrayOrSliceType) {
+      type = ((GoArrayOrSliceType)type).getType();
+    }
+    else if (type instanceof GoMapType) {
+      type = inValue ? ((GoMapType)type).getValueType() : ((GoMapType)type).getKeyType();
+    }
+    else if (inValue && type instanceof GoSpecType) {
+      GoType inner = ((GoSpecType)type).getType();
+      if (inner instanceof GoArrayOrSliceType) {
+        type = ((GoArrayOrSliceType)inner).getType();
+      }
+      else if (inner instanceof GoStructType) {
+        GoKey key = PsiTreeUtil.getPrevSiblingOfType(myValue, GoKey.class);
+        GoFieldName field = key != null ? key.getFieldName() : null;
+        PsiReference reference = field != null ? field.getReference() : null;
+        PsiElement resolve = reference != null ? reference.resolve() : null;
+        if (resolve instanceof GoFieldDefinition) {
+          type = PsiTreeUtil.getNextSiblingOfType(resolve, GoType.class);
+        }
       }
     }
 
