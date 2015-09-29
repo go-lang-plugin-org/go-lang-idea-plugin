@@ -792,7 +792,7 @@ public class GoPsiImplUtil {
         return ((GoTypeList)type).getTypeList().get(0);
       }
       if (type != null) return type;
-      final GoParameters parameters = result.getParameters();
+      GoParameters parameters = result.getParameters();
       if (parameters != null) {
         GoType parametersType = parameters.getType();
         if (parametersType != null) return parametersType;
