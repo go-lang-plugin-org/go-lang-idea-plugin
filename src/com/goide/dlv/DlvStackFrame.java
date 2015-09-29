@@ -51,6 +51,7 @@ import org.jetbrains.concurrency.Promise;
 import javax.swing.*;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 class DlvStackFrame extends XStackFrame {
   private final DlvApi.Location myLocation;
@@ -152,7 +153,8 @@ class DlvStackFrame extends XStackFrame {
         }
         String value = variable.value;
         String prefix = variable.type + " ";
-        node.setPresentation(icon, variable.type, StringUtil.startsWith(value, prefix) ? value.replaceFirst(prefix, "") : value, false);
+        node.setPresentation(icon, variable.type,
+                             StringUtil.startsWith(value, prefix) ? value.replaceFirst(Pattern.quote(prefix), "") : value, false);
       }
 
       @Nullable
