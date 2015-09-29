@@ -141,7 +141,7 @@ class DlvStackFrame extends XStackFrame {
   }
 
   @NotNull
-  private static XValue createXValue(@NotNull final DlvApi.Variable variable, @Nullable final Icon icon) {
+  private XValue createXValue(@NotNull final DlvApi.Variable variable, @Nullable final Icon icon) {
     return new XNamedValue(variable.name) {
       @Override
       public void computePresentation(@NotNull XValueNode node, @NotNull XValuePlace place) {
@@ -153,6 +153,29 @@ class DlvStackFrame extends XStackFrame {
         String value = variable.value;
         String prefix = variable.type + " ";
         node.setPresentation(icon, variable.type, StringUtil.startsWith(value, prefix) ? value.replaceFirst(prefix, "") : value, false);
+      }
+
+      @Nullable
+      @Override
+      public XValueModifier getModifier() {
+        return new XValueModifier() {
+          @Override
+          public void setValue(@NotNull String newValue, @NotNull final XModificationCallback callback) {
+            myProcessor.send(new DlvRequest.SetSymbol(variable.name, newValue, myId))
+              .processed(new Consumer<Object>() {
+              @Override
+              public void consume(Object o) {
+                callback.valueModified();
+              }
+            })
+              .rejected(new Consumer<Throwable>() {
+                @Override
+                public void consume(Throwable throwable) {
+                  callback.errorOccurred(throwable.getMessage());
+                }
+              });
+          }
+        };
       }
 
       @Nullable

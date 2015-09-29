@@ -16,6 +16,7 @@
 
 package com.goide.dlv.protocol;
 
+import com.google.gson.stream.JsonWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jsonProtocol.OutMessage;
@@ -142,12 +143,40 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
 
   public final static class EvalSymbol extends DlvRequest<DlvApi.Variable> {
     public EvalSymbol(@NotNull String symbol, int frameId) {
-      try { // todo: ask vladimir how to simplify this 
-        writer.name(argumentsKeyName()).beginArray().beginObject()
-          .name("Scope").beginObject()
-          .name("GoroutineID").value(-1)
-          .name("Frame").value(frameId).endObject()
-          .name("Symbol").value(symbol).endObject().endArray();
+      try { 
+        writer.name(argumentsKeyName()).beginArray();
+        writeScope(frameId, writer)
+          .name("Symbol").value(symbol)
+          .endObject().endArray();
+      }
+      catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    }
+
+    @Override
+    protected boolean needObject() {
+      return false;
+    }
+  }
+
+  @NotNull
+  private static JsonWriter writeScope(int frameId, @NotNull JsonWriter writer) throws IOException {
+    // todo: ask vladimir how to simplify this
+    return writer.beginObject()
+      .name("Scope").beginObject()
+      .name("GoroutineID").value(-1)
+      .name("Frame").value(frameId).endObject();
+  }
+
+  public final static class SetSymbol extends DlvRequest<Object> {
+    public SetSymbol(@NotNull String symbol, @NotNull String value, int frameId) {
+      try { 
+        writer.name(argumentsKeyName()).beginArray();
+        writeScope(frameId, writer)
+          .name("Symbol").value(symbol)
+          .name("Value").value(value)
+          .endObject().endArray();
       }
       catch (IOException e) {
         throw new RuntimeException(e);
