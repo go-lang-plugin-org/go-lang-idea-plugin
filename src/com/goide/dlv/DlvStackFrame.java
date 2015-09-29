@@ -167,7 +167,9 @@ class DlvStackFrame extends XStackFrame {
               .processed(new Consumer<Object>() {
               @Override
               public void consume(Object o) {
-                callback.valueModified();
+                if (o != null) {
+                  callback.valueModified();
+                }
               }
             })
               .rejected(new Consumer<Throwable>() {
