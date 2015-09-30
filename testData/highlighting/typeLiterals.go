@@ -59,3 +59,14 @@ func Test() Bar {
 	fmt.Println(Zoo{A:1})
 	return Bar{A: 1}
 }
+
+type setAuthRequest auth
+type auth struct {
+	Type   int32
+	Scheme string
+	Auth   []byte
+}
+
+func _(scheme string, auth []byte) *setAuthRequest {
+	return &setAuthRequest{Type: 0, Scheme: scheme, Auth: auth}
+}
