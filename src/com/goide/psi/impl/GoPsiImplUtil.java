@@ -216,7 +216,7 @@ public class GoPsiImplUtil {
 
   @Nullable
   public static GoType getGoTypeInner(@NotNull GoAnonymousFieldDefinition o, @SuppressWarnings("UnusedParameters") @Nullable ResolveState context) {
-    return getType(o.getTypeReferenceExpression());
+    return findTypeFromRef(o.getTypeReferenceExpression());
   }
 
   @Nullable
@@ -326,7 +326,7 @@ public class GoPsiImplUtil {
       GoType type = ((GoCompositeLit)o).getType();
       if (type != null) return type;
       GoTypeReferenceExpression expression = ((GoCompositeLit)o).getTypeReferenceExpression();
-      return getType(expression);
+      return findTypeFromRef(expression);
     }
     else if (o instanceof GoFunctionLit) {
       GoSignature signature = ((GoFunctionLit)o).getSignature();
@@ -378,7 +378,7 @@ public class GoPsiImplUtil {
       if (o.getNode().findChildByType(GoTypes.COLON) != null) return type; // means slice expression, todo: extract if needed
       GoTypeReferenceExpression typeRef = getTypeReference(type);
       if (typeRef != null) {
-        type = getType(typeRef);
+        type = findTypeFromRef(typeRef);
       }
       if (type instanceof GoSpecType) type = ((GoSpecType)type).getType();
       if (type instanceof GoMapType) {
@@ -439,7 +439,7 @@ public class GoPsiImplUtil {
   private static GoType typeFromRefOrType(@Nullable GoType t) {
     if (t == null) return null;
     GoTypeReferenceExpression tr = getTypeReference(t);
-    return tr != null ? getType(tr) : t;
+    return tr != null ? findTypeFromRef(tr) : t;
   }
 
   @Nullable
@@ -522,7 +522,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType getType(@Nullable GoTypeReferenceExpression expression) {
+  public static GoType findTypeFromRef(@Nullable GoTypeReferenceExpression expression) {
     GoType type = findTypeFromRefInner(expression);
     while (type instanceof GoSpecType && ((GoSpecType)type).getType().getTypeReferenceExpression() != null) {
       GoType inner = findTypeFromRefInner(((GoSpecType)type).getType().getTypeReferenceExpression());

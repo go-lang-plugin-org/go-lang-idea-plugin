@@ -54,7 +54,7 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
 
     GoType type = lit != null ? lit.getType() : null;
     if (type == null && lit != null) {
-      type = GoPsiImplUtil.getType(lit.getTypeReferenceExpression());
+      type = GoPsiImplUtil.findTypeFromRef(lit.getTypeReferenceExpression());
     }
 
     type = getType(type);
@@ -96,13 +96,13 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
     }
 
     if (type != null && type.getTypeReferenceExpression() != null) {
-      type = GoPsiImplUtil.getType(type.getTypeReferenceExpression());
+      type = GoPsiImplUtil.findTypeFromRef(type.getTypeReferenceExpression());
     }
 
     if (type instanceof GoPointerType) {
       GoType inner = ((GoPointerType)type).getType();
       if (inner != null && inner.getTypeReferenceExpression() != null) {
-        type = GoPsiImplUtil.getType(inner.getTypeReferenceExpression());
+        type = GoPsiImplUtil.findTypeFromRef(inner.getTypeReferenceExpression());
       }
     }
 
