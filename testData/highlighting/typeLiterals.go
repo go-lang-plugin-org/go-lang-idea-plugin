@@ -29,3 +29,33 @@ func _() {
 		},
 	}
 }
+
+type Response struct { ResponseWriter }
+type ResponseWriter interface { Header() Header }
+type Header int
+
+func (h Header) Add(key, value string) { }
+
+func (r Response) AddHeader(header string, value string) Response {
+	rr := r.Header()
+	rr.Add("", "")
+	r.Header().Add(header, value)
+	return r
+}
+
+type Foo struct {
+	A int
+}
+
+type Zoo Foo
+type Bar Zoo
+
+func _() {
+	fmt.Println(Test())
+}
+
+func Test() Bar {
+	fmt.Println(Foo{A:1})
+	fmt.Println(Zoo{A:1})
+	return Bar{A: 1}
+}

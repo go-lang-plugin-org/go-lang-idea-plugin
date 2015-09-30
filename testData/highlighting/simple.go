@@ -198,19 +198,6 @@ func GetMulti() (map[string]*Item) {
 	return m
 }
 
-type Response struct { ResponseWriter }
-type ResponseWriter interface { Header() Header }
-type Header int
-
-func (h Header) Add(key, value string) { }
-
-func (r Response) AddHeader(header string, value string) Response {
-	rr := r.Header()
-	rr.Add("", "")
-	r.Header().Add(header, value)
-	return r
-}
-
 type WebService struct { rootPath string }
 func (w *WebService) Path(root string) *WebService { return w }
 func (w *WebService) GET(subPath string) *RouteBuilder { return new(RouteBuilder) }

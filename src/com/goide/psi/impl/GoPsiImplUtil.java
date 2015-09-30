@@ -57,7 +57,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class GoPsiImplUtil {
-  public static boolean builtin(@NotNull PsiElement resolve) {
+  public static boolean builtin(@Nullable PsiElement resolve) {
+    if (resolve == null) return false;
     PsiFile file = resolve.getContainingFile();
     if (!(file instanceof GoFile)) return false;
     return isBuiltinFile(file);
@@ -522,6 +523,17 @@ public class GoPsiImplUtil {
 
   @Nullable
   public static GoType getType(@Nullable GoTypeReferenceExpression expression) {
+    GoType type = findTypeFromRefInner(expression);
+    while (type instanceof GoSpecType && ((GoSpecType)type).getType().getTypeReferenceExpression() != null) {
+      GoType inner = findTypeFromRefInner(((GoSpecType)type).getType().getTypeReferenceExpression());
+      if (inner == null || type.isEquivalentTo(inner) || builtin(inner)) return type;
+      type = inner;
+    }
+    return type;
+  }
+
+  @Nullable
+  private static GoType findTypeFromRefInner(@Nullable GoTypeReferenceExpression expression) {
     PsiReference reference = expression != null ? expression.getReference() : null;
     PsiElement resolve = reference != null ? reference.resolve() : null;
     return resolve instanceof GoTypeSpec ? ((GoTypeSpec)resolve).getSpecType() : null;
