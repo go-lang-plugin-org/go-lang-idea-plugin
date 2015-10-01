@@ -398,12 +398,6 @@ public class GoPsiImplUtil {
     else if (o instanceof GoConversionExpr) {
       return ((GoConversionExpr)o).getType();
     }
-    else if (o instanceof GoMethodExpr) {
-      GoReferenceExpression e = ((GoMethodExpr)o).getReferenceExpression();
-      GoReference reference = e != null ? e.getReference() : null;
-      PsiElement resolve = reference != null ? reference.resolve() : null;
-      return resolve instanceof GoTypeOwner ? ((GoTypeOwner)resolve).getGoType(context) : null;
-    }
     else if (o instanceof GoStringLiteral) {
       return getBuiltinType(o, "string");
     }

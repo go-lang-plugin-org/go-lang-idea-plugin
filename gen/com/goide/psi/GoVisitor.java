@@ -233,10 +233,6 @@ public class GoVisitor extends PsiElementVisitor {
     visitFunctionOrMethodDeclaration(o);
   }
 
-  public void visitMethodExpr(@NotNull GoMethodExpr o) {
-    visitExpression(o);
-  }
-
   public void visitMethodSpec(@NotNull GoMethodSpec o) {
     visitNamedSignatureOwner(o);
   }

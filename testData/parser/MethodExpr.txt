@@ -133,12 +133,11 @@ GO_FILE
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
           CALL_EXPR
-            METHOD_EXPR
-              RECEIVER_TYPE
+            SELECTOR_EXPR
+              PARENTHESES_EXPR
                 PsiElement(()('(')
-                RECEIVER_TYPE
-                  TYPE_REFERENCE_EXPRESSION
-                    PsiElement(identifier)('T')
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('T')
                 PsiElement())(')')
               PsiElement(.)('.')
               REFERENCE_EXPRESSION
@@ -180,12 +179,11 @@ GO_FILE
           VAR_DEFINITION
             PsiElement(identifier)('f2')
           PsiElement(:=)(':=')
-          METHOD_EXPR
-            RECEIVER_TYPE
+          SELECTOR_EXPR
+            PARENTHESES_EXPR
               PsiElement(()('(')
-              RECEIVER_TYPE
-                TYPE_REFERENCE_EXPRESSION
-                  PsiElement(identifier)('T')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('T')
               PsiElement())(')')
             PsiElement(.)('.')
             REFERENCE_EXPRESSION

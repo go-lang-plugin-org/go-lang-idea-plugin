@@ -67,7 +67,6 @@ public interface GoTypes {
   IElementType LITERAL_VALUE = new GoCompositeElementType("LITERAL_VALUE");
   IElementType MAP_TYPE = GoStubElementTypeFactory.factory("MAP_TYPE");
   IElementType METHOD_DECLARATION = GoStubElementTypeFactory.factory("METHOD_DECLARATION");
-  IElementType METHOD_EXPR = new GoCompositeElementType("METHOD_EXPR");
   IElementType METHOD_SPEC = GoStubElementTypeFactory.factory("METHOD_SPEC");
   IElementType MUL_EXPR = new GoCompositeElementType("MUL_EXPR");
   IElementType OR_EXPR = new GoCompositeElementType("OR_EXPR");
@@ -368,9 +367,6 @@ public interface GoTypes {
       }
       else if (type == METHOD_DECLARATION) {
         return new GoMethodDeclarationImpl(node);
-      }
-      else if (type == METHOD_EXPR) {
-        return new GoMethodExprImpl(node);
       }
       else if (type == METHOD_SPEC) {
         return new GoMethodSpecImpl(node);

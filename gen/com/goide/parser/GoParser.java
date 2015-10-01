@@ -188,9 +188,6 @@ public class GoParser implements PsiParser, LightPsiParser {
     else if (t == METHOD_DECLARATION) {
       r = MethodDeclaration(b, 0);
     }
-    else if (t == METHOD_EXPR) {
-      r = MethodExpr(b, 0);
-    }
     else if (t == METHOD_SPEC) {
       r = MethodSpec(b, 0);
     }
@@ -355,9 +352,8 @@ public class GoParser implements PsiParser, LightPsiParser {
     create_token_set_(ADD_EXPR, AND_EXPR, BUILTIN_CALL_EXPR, CALL_EXPR,
       COMPOSITE_LIT, CONDITIONAL_EXPR, CONVERSION_EXPR, EXPRESSION,
       FUNCTION_LIT, INDEX_OR_SLICE_EXPR, LITERAL, LITERAL_TYPE_EXPR,
-      METHOD_EXPR, MUL_EXPR, OR_EXPR, PARENTHESES_EXPR,
-      REFERENCE_EXPRESSION, SELECTOR_EXPR, STRING_LITERAL, TYPE_ASSERTION_EXPR,
-      UNARY_EXPR),
+      MUL_EXPR, OR_EXPR, PARENTHESES_EXPR, REFERENCE_EXPRESSION,
+      SELECTOR_EXPR, STRING_LITERAL, TYPE_ASSERTION_EXPR, UNARY_EXPR),
   };
 
   /* ********************************************************** */
@@ -4360,7 +4356,7 @@ public class GoParser implements PsiParser, LightPsiParser {
   // 4: BINARY(MulExpr)
   // 5: PREFIX(UnaryExpr)
   // 6: ATOM(ConversionExpr)
-  // 7: ATOM(CompositeLit) ATOM(OperandName) POSTFIX(BuiltinCallExpr) POSTFIX(CallExpr) POSTFIX(TypeAssertionExpr) BINARY(SelectorExpr) PREFIX(MethodExpr) POSTFIX(IndexOrSliceExpr) ATOM(Literal) ATOM(LiteralTypeExpr) ATOM(FunctionLit)
+  // 7: ATOM(CompositeLit) ATOM(OperandName) POSTFIX(BuiltinCallExpr) POSTFIX(CallExpr) POSTFIX(TypeAssertionExpr) BINARY(SelectorExpr) POSTFIX(IndexOrSliceExpr) ATOM(Literal) ATOM(LiteralTypeExpr) ATOM(FunctionLit)
   // 8: ATOM(ParenthesesExpr)
   public static boolean Expression(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "Expression")) return false;
@@ -4371,7 +4367,6 @@ public class GoParser implements PsiParser, LightPsiParser {
     if (!r) r = ConversionExpr(b, l + 1);
     if (!r) r = CompositeLit(b, l + 1);
     if (!r) r = OperandName(b, l + 1);
-    if (!r) r = MethodExpr(b, l + 1);
     if (!r) r = Literal(b, l + 1);
     if (!r) r = LiteralTypeExpr(b, l + 1);
     if (!r) r = FunctionLit(b, l + 1);
@@ -4598,29 +4593,6 @@ public class GoParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeTokenSmart(b, LPAREN);
     r = r && consumeToken(b, TYPE_);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  public static boolean MethodExpr(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MethodExpr")) return false;
-    if (!nextTokenIsFast(b, LPAREN, IDENTIFIER)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, null);
-    r = MethodExpr_0(b, l + 1);
-    p = r;
-    r = p && Expression(b, l, 7);
-    exit_section_(b, l, m, METHOD_EXPR, r, p, null);
-    return r || p;
-  }
-
-  // ReceiverType '.'
-  private static boolean MethodExpr_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MethodExpr_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = ReceiverType(b, l + 1);
-    r = r && consumeToken(b, DOT);
     exit_section_(b, m, null, r);
     return r;
   }
