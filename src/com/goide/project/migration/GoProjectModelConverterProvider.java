@@ -44,7 +44,6 @@ import java.io.IOException;
 import java.util.Collection;
 
 public class GoProjectModelConverterProvider extends ConverterProvider {
-
   public static final String PROJECT_ROOT_MANAGER = "ProjectRootManager";
 
   protected GoProjectModelConverterProvider() {
@@ -173,7 +172,7 @@ public class GoProjectModelConverterProvider extends ConverterProvider {
       settings.setModuleType(GoConstants.MODULE_TYPE_ID);
       for (Element element : settings.getOrderEntries()) {
         if (isGoSdkType(element.getAttributeValue("jdkType"))) {
-          element.setAttribute("jdkName", GoConstants.SDK_TYPE_ID);
+          element.setAttribute("jdkType", GoConstants.SDK_TYPE_ID);
         }
       }
       convertSdks();
