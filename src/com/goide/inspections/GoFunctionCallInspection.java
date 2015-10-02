@@ -62,6 +62,10 @@ public class GoFunctionCallInspection extends GoInspectionBase {
                 actualSize = GoInspectionUtil.getFunctionResultCount(firstResolve);
               }
             }
+            
+            GoReferenceExpression qualifier = ((GoReferenceExpression)expression).getQualifier();
+            boolean isMethodExpr = qualifier != null && qualifier.getReference().resolve() instanceof GoTypeSpec;
+            if (isMethodExpr) actualSize -= 1; // todo: a temp workaround for method specs
 
             if (actualSize == expectedSize) return;
 

@@ -27,7 +27,7 @@ var t T
 
 func _() {
 	t.Mv(7)
-	T.Mv<error>(t, 7)</error> // shouldn't be a error
+	T.Mv(t, 7) // todo: rework resolve for method expression
 	(T).Mv(t, 7)
 	f1 := T.Mv; f1(t, 7)
 	f2 := (T).Mv; f2(t, 7)
