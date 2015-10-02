@@ -98,7 +98,7 @@ public class GoProjectModelConverterProvider extends ConverterProvider {
 
             File oldGoSettings = new File(context.getSettingsBaseDir(), "go_settings.xml");
             if (oldGoSettings.exists()) {
-              Element oldGoSettingsRoot = JDomConvertingUtil.loadDocument(oldGoSettings).getRootElement();
+              Element oldGoSettingsRoot = rootElement(oldGoSettings);
               if (isAttachProjectDirToLibraries(oldGoSettingsRoot)) {
                 File librariesConfigFile = new File(context.getSettingsBaseDir(), GoConstants.GO_LIBRARIES_CONFIG_FILE);
                 if (librariesConfigFile.exists()) {
@@ -110,7 +110,7 @@ public class GoProjectModelConverterProvider extends ConverterProvider {
                   additionalCreatedFiles.add(librariesConfigFile);
                 }
                 FileUtil.writeToFile(librariesConfigFile, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project></project>");
-                addProjectDirToLibraries(JDomConvertingUtil.loadDocument(librariesConfigFile).getRootElement());
+                addProjectDirToLibraries(librariesConfigFile, rootElement(librariesConfigFile));
               }
             }
             //noinspection ResultOfMethodCallIgnored
@@ -135,6 +135,11 @@ public class GoProjectModelConverterProvider extends ConverterProvider {
     };
   }
 
+  @NotNull
+  private static Element rootElement(File file) throws CannotConvertException {
+    return JDomConvertingUtil.loadDocument(file).getRootElement();
+  }
+
   private static class ProjectFileConverter extends ConversionProcessor<ProjectSettings> {
     @Override
     public boolean isConversionNeeded(ProjectSettings settings) {
@@ -149,7 +154,7 @@ public class GoProjectModelConverterProvider extends ConverterProvider {
         updateSdkType(settings.getFile(), projectRootManager);
       }
       if (isAttachProjectDirToLibraries(settings.getRootElement())) {
-        addProjectDirToLibraries(settings.getRootElement());
+        addProjectDirToLibraries(settings.getFile(), settings.getRootElement());
       }
       convertSdks();
     }
@@ -183,7 +188,7 @@ public class GoProjectModelConverterProvider extends ConverterProvider {
     File miscFile = miscFile(context);
     try {
       if (miscFile.exists()) {
-        return getProjectRootManager(JDomConvertingUtil.loadDocument(miscFile).getRootElement());
+        return getProjectRootManager(rootElement(miscFile));
       }
     }
     catch (CannotConvertException e) {
@@ -198,12 +203,7 @@ public class GoProjectModelConverterProvider extends ConverterProvider {
 
   private static void updateSdkType(File file, Element projectRootManager) throws CannotConvertException {
     projectRootManager.setAttribute(ProjectRootManagerImpl.PROJECT_JDK_TYPE_ATTR, GoConstants.SDK_TYPE_ID);
-    try {
-      JDOMUtil.writeDocument(projectRootManager.getDocument(), file, SystemProperties.getLineSeparator());
-    }
-    catch (IOException e) {
-      throw new CannotConvertException("Cannot save sdk type changing", e);
-    }
+    saveFile(file, projectRootManager, "Cannot save sdk type changing");
   }
 
   @NotNull
@@ -211,11 +211,12 @@ public class GoProjectModelConverterProvider extends ConverterProvider {
     return new File(context.getSettingsBaseDir(), "misc.xml");
   }
 
-  private static void addProjectDirToLibraries(Element rootElement) {
+  private static void addProjectDirToLibraries(File file, Element rootElement) throws CannotConvertException {
     GoProjectLibrariesService librariesService = new GoProjectLibrariesService();
     librariesService.setLibraryRootUrls("file://$PROJECT_DIR$");
     Element componentElement = JDomSerializationUtil.findOrCreateComponentElement(rootElement, GoConstants.GO_LIBRARIES_SERVICE_NAME);
     XmlSerializer.serializeInto(librariesService, componentElement);
+    saveFile(file, rootElement, "Cannot save libraries settings");
   }
 
   private static boolean isAttachProjectDirToLibraries(Element rootElement) {
@@ -230,6 +231,15 @@ public class GoProjectModelConverterProvider extends ConverterProvider {
 
   private static boolean isGoSdkType(String sdkTypeName) {
     return "Google Go SDK".equals(sdkTypeName) || "Google Go App Engine SDK".equals(sdkTypeName);
+  }
+
+  private static void saveFile(File file, Element rootElement, String errorMessage) throws CannotConvertException {
+    try {
+      JDOMUtil.writeDocument(rootElement.getDocument(), file, SystemProperties.getLineSeparator());
+    }
+    catch (IOException e) {
+      throw new CannotConvertException(errorMessage, e);
+    }
   }
 
   private static void convertSdks() {
