@@ -70,6 +70,12 @@ public class GoProjectModelConverterProvider extends ConverterProvider {
         return new ProjectFileConverter();
       }
 
+      @Nullable
+      @Override
+      public ConversionProcessor<ModuleSettings> createModuleFileConverter() {
+        return new ModuleFileConverter();
+      }
+
       @Override
       public boolean isConversionNeeded() {
         Element component = getProjectRootManager(context);
@@ -144,6 +150,30 @@ public class GoProjectModelConverterProvider extends ConverterProvider {
     }
   }
 
+  private static class ModuleFileConverter extends ConversionProcessor<ModuleSettings> {
+    @Override
+    public boolean isConversionNeeded(ModuleSettings settings) {
+      if ("GO_APP_ENGINE_MODULE".equals(settings.getModuleType())) return true;
+      for (Element element : settings.getOrderEntries()) {
+        if (isGoSdkType(element.getAttributeValue("jdkType"))) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    @Override
+    public void process(ModuleSettings settings) throws CannotConvertException {
+      settings.setModuleType(GoConstants.MODULE_TYPE_ID);
+      for (Element element : settings.getOrderEntries()) {
+        if (isGoSdkType(element.getAttributeValue("jdkType"))) {
+          element.setAttribute("jdkName", GoConstants.SDK_TYPE_ID);
+        }
+      }
+      convertSdks();
+    }
+  }
+
   private static Element getProjectRootManager(ConversionContext context) {
     File miscFile = miscFile(context);
     try {
@@ -162,7 +192,7 @@ public class GoProjectModelConverterProvider extends ConverterProvider {
   }
 
   private static void updateSdkType(File file, Element projectRootManager) throws CannotConvertException {
-    projectRootManager.setAttribute(ProjectRootManagerImpl.PROJECT_JDK_TYPE_ATTR, "Go SDK");
+    projectRootManager.setAttribute(ProjectRootManagerImpl.PROJECT_JDK_TYPE_ATTR, GoConstants.SDK_TYPE_ID);
     try {
       JDOMUtil.writeDocument(projectRootManager.getDocument(), file, SystemProperties.getLineSeparator());
     }
