@@ -29,7 +29,6 @@ import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleComponent;
@@ -157,7 +156,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
       ApplicationManager.getApplication().invokeLater(updateRequest);
     }
     else {
-      myAlarm.addRequest(updateRequest, delay, ModalityState.NON_MODAL);
+      myAlarm.addRequest(updateRequest, delay);
     }
   }
 
