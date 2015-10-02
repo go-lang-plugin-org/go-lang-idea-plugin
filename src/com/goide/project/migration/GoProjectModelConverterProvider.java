@@ -76,6 +76,12 @@ public class GoProjectModelConverterProvider extends ConverterProvider {
         return new ModuleFileConverter();
       }
 
+      @Nullable
+      @Override
+      public ConversionProcessor<RunManagerSettings> createRunConfigurationsConverter() {
+        return new RunConfigurationsConverter();
+      }
+
       @Override
       public boolean isConversionNeeded() {
         Element component = getProjectRootManager(context);
@@ -265,6 +271,29 @@ public class GoProjectModelConverterProvider extends ConverterProvider {
     }
     finally {
       l.finish();
+    }
+  }
+
+  private static class RunConfigurationsConverter extends ConversionProcessor<RunManagerSettings> {
+    @Override
+    public boolean isConversionNeeded(RunManagerSettings settings) {
+      for (Element element : settings.getRunConfigurations()) {
+        String confType = element.getAttributeValue("type");
+        if ("GaeLocalAppEngineServer".equals(confType) || "GoTestConfiguration".equals(confType)) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    @Override
+    public void process(RunManagerSettings settings) throws CannotConvertException {
+      for (Element element : settings.getRunConfigurations()) {
+        String confType = element.getAttributeValue("type");
+        if ("GaeLocalAppEngineServer".equals(confType) || "GoTestConfiguration".equals(confType)) {
+          element.detach();
+        }
+      }
     }
   }
 }
