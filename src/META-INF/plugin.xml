@@ -67,6 +67,8 @@
     <internalFileTemplate name="Go File"/>
 
     <!-- project -->
+    <project.converterProvider implementation="com.goide.project.migration.GoProjectModelConverterProvider"/>
+    
     <applicationService serviceImplementation="com.goide.project.GoApplicationLibrariesService"/>
     <projectService serviceImplementation="com.goide.project.GoProjectLibrariesService"/>
     <moduleService serviceImplementation="com.goide.project.GoModuleLibrariesService"/>
