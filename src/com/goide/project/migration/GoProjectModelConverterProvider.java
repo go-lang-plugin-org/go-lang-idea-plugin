@@ -125,11 +125,13 @@ public class GoProjectModelConverterProvider extends ConverterProvider {
         convertSdks();
       }
 
+      @NotNull
       @Override
       public Collection<File> getAdditionalAffectedFiles() {
         return additionalAffectedFiles;
       }
 
+      @NotNull
       @Override
       public Collection<File> getCreatedFiles() {
         return additionalCreatedFiles;
@@ -138,19 +140,19 @@ public class GoProjectModelConverterProvider extends ConverterProvider {
   }
 
   @NotNull
-  private static Element rootElement(File file) throws CannotConvertException {
+  private static Element rootElement(@NotNull File file) throws CannotConvertException {
     return JDomConvertingUtil.loadDocument(file).getRootElement();
   }
 
   private static class ProjectFileConverter extends ConversionProcessor<ProjectSettings> {
     @Override
-    public boolean isConversionNeeded(ProjectSettings settings) {
+    public boolean isConversionNeeded(@NotNull ProjectSettings settings) {
       Element projectRootManager = getProjectRootManager(settings.getRootElement());
       return projectRootManager != null && isGoSdkType(projectRootManager.getAttributeValue(ProjectRootManagerImpl.PROJECT_JDK_TYPE_ATTR));
     }
 
     @Override
-    public void process(ProjectSettings settings) throws CannotConvertException {
+    public void process(@NotNull ProjectSettings settings) throws CannotConvertException {
       Element projectRootManager = getProjectRootManager(settings.getRootElement());
       if (projectRootManager != null) {
         updateSdkType(settings.getFile(), projectRootManager);
@@ -164,7 +166,7 @@ public class GoProjectModelConverterProvider extends ConverterProvider {
 
   private static class ModuleFileConverter extends ConversionProcessor<ModuleSettings> {
     @Override
-    public boolean isConversionNeeded(ModuleSettings settings) {
+    public boolean isConversionNeeded(@NotNull ModuleSettings settings) {
       if ("GO_APP_ENGINE_MODULE".equals(settings.getModuleType())) return true;
       for (Element element : settings.getOrderEntries()) {
         if (isGoSdkType(element.getAttributeValue("jdkType"))) {
@@ -175,7 +177,7 @@ public class GoProjectModelConverterProvider extends ConverterProvider {
     }
 
     @Override
-    public void process(ModuleSettings settings) throws CannotConvertException {
+    public void process(@NotNull ModuleSettings settings) throws CannotConvertException {
       settings.setModuleType(GoConstants.MODULE_TYPE_ID);
       for (Element element : settings.getOrderEntries()) {
         if (isGoSdkType(element.getAttributeValue("jdkType"))) {
@@ -186,7 +188,7 @@ public class GoProjectModelConverterProvider extends ConverterProvider {
     }
   }
 
-  private static Element getProjectRootManager(ConversionContext context) {
+  private static Element getProjectRootManager(@NotNull ConversionContext context) {
     File miscFile = miscFile(context);
     try {
       if (miscFile.exists()) {
@@ -199,21 +201,22 @@ public class GoProjectModelConverterProvider extends ConverterProvider {
     return null;
   }
 
-  private static Element getProjectRootManager(Element rootElement) {
+  @Nullable
+  private static Element getProjectRootManager(@Nullable Element rootElement) {
     return rootElement != null ? JDomSerializationUtil.findComponent(rootElement, PROJECT_ROOT_MANAGER) : null;
   }
 
-  private static void updateSdkType(File file, Element projectRootManager) throws CannotConvertException {
+  private static void updateSdkType(@NotNull File file, @NotNull Element projectRootManager) throws CannotConvertException {
     projectRootManager.setAttribute(ProjectRootManagerImpl.PROJECT_JDK_TYPE_ATTR, GoConstants.SDK_TYPE_ID);
     saveFile(file, projectRootManager, "Cannot save sdk type changing");
   }
 
   @NotNull
-  private static File miscFile(ConversionContext context) {
+  private static File miscFile(@NotNull ConversionContext context) {
     return new File(context.getSettingsBaseDir(), "misc.xml");
   }
 
-  private static void addProjectDirToLibraries(File file, Element rootElement) throws CannotConvertException {
+  private static void addProjectDirToLibraries(@NotNull File file, @NotNull Element rootElement) throws CannotConvertException {
     GoProjectLibrariesService librariesService = new GoProjectLibrariesService();
     librariesService.setLibraryRootUrls("file://$PROJECT_DIR$");
     Element componentElement = JDomSerializationUtil.findOrCreateComponentElement(rootElement, GoConstants.GO_LIBRARIES_SERVICE_NAME);
@@ -240,7 +243,7 @@ public class GoProjectModelConverterProvider extends ConverterProvider {
     return "Google Go SDK".equals(sdkTypeName) || "Google Go App Engine SDK".equals(sdkTypeName);
   }
 
-  private static void saveFile(File file, Element rootElement, String errorMessage) throws CannotConvertException {
+  private static void saveFile(@NotNull File file, @NotNull Element rootElement, String errorMessage) throws CannotConvertException {
     try {
       JDOMUtil.writeDocument(rootElement.getDocument(), file, SystemProperties.getLineSeparator());
     }
@@ -296,7 +299,7 @@ public class GoProjectModelConverterProvider extends ConverterProvider {
 
   private static class RunConfigurationsConverter extends ConversionProcessor<RunManagerSettings> {
     @Override
-    public boolean isConversionNeeded(RunManagerSettings settings) {
+    public boolean isConversionNeeded(@NotNull RunManagerSettings settings) {
       for (Element element : settings.getRunConfigurations()) {
         String confType = element.getAttributeValue("type");
         if ("GaeLocalAppEngineServer".equals(confType) || "GoTestConfiguration".equals(confType)) {
@@ -307,7 +310,7 @@ public class GoProjectModelConverterProvider extends ConverterProvider {
     }
 
     @Override
-    public void process(RunManagerSettings settings) throws CannotConvertException {
+    public void process(@NotNull RunManagerSettings settings) throws CannotConvertException {
       for (Element element : settings.getRunConfigurations()) {
         String confType = element.getAttributeValue("type");
         if ("GaeLocalAppEngineServer".equals(confType) || "GoTestConfiguration".equals(confType)) {
