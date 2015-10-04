@@ -215,16 +215,21 @@ public class GoProjectModelConverterProvider extends ConverterProvider {
     GoProjectLibrariesService librariesService = new GoProjectLibrariesService();
     librariesService.setLibraryRootUrls("file://$PROJECT_DIR$");
     Element componentElement = JDomSerializationUtil.findOrCreateComponentElement(rootElement, GoConstants.GO_LIBRARIES_SERVICE_NAME);
-    XmlSerializer.serializeInto(librariesService, componentElement);
+    XmlSerializer.serializeInto(librariesService.getState(), componentElement);
     saveFile(file, rootElement, "Cannot save libraries settings");
   }
 
+  
   private static boolean isAttachProjectDirToLibraries(Element rootElement) {
     Element goProjectSettings = JDomSerializationUtil.findComponent(rootElement, "GoProjectSettings");
     if (goProjectSettings != null) {
-      String prependGoPath = goProjectSettings.getAttributeValue("prependGoPath");
+      for (Element option : goProjectSettings.getChildren("option")) {
+        if ("prependGoPath".equals(option.getAttributeValue("name"))) {
+          goProjectSettings.detach();
+          return "true".equalsIgnoreCase(option.getAttributeValue("value"));
+        }
+      }
       goProjectSettings.detach();
-      return "true".equalsIgnoreCase(prependGoPath);
     }
     return false;
   }
