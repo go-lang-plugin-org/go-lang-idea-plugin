@@ -1,0 +1,2 @@
+//noinspection GoMultiplePackages
+package otherPackage

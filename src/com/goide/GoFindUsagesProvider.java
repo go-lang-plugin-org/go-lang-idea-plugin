@@ -69,6 +69,7 @@ public class GoFindUsagesProvider implements FindUsagesProvider {
     if (element instanceof GoReceiver) return "receiver";
     if (element instanceof GoMethodSpec) return "method specification";
     if (element instanceof GoLabelDefinition) return "label";
+    if (element instanceof GoPackageClause) return "package statement";
     
     // should be last
     if (element instanceof GoStatement) return "statement";

@@ -45,7 +45,8 @@ public class GoInspectionSuppressor implements InspectionSuppressor {
         && isSuppressedInStatement(element, toolId, GoImportList.class)) {
       return true;
     }
-    return isSuppressedInStatement(element, toolId, GoStatement.class) ||
+    return isSuppressedInStatement(element, toolId, GoPackageClause.class) ||
+           isSuppressedInStatement(element, toolId, GoStatement.class) ||
            isSuppressedInStatement(element, toolId, GoTopLevelDeclaration.class) ||
            isSuppressedInStatement(element, toolId, GoImportDeclaration.class);
   }
@@ -60,6 +61,8 @@ public class GoInspectionSuppressor implements InspectionSuppressor {
       new GoSuppressInspectionFix(toolId, "statement", GoStatement.class, false),
       new GoSuppressInspectionFix("import", GoImportDeclaration.class, false),
       new GoSuppressInspectionFix(toolId, "import", GoImportDeclaration.class, false),
+      new GoSuppressInspectionFix("package statement", GoPackageClause.class, false),
+      new GoSuppressInspectionFix(toolId, "package statement", GoPackageClause.class, false),
     };
   }
 
