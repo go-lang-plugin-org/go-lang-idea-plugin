@@ -20,6 +20,7 @@ import com.goide.GoConstants;
 import com.goide.project.GoApplicationLibrariesService;
 import com.goide.project.GoProjectLibrariesService;
 import com.goide.sdk.GoSdkType;
+import com.goide.sdk.GoSdkUtil;
 import com.intellij.conversion.*;
 import com.intellij.ide.impl.convert.JDomConvertingUtil;
 import com.intellij.openapi.application.AccessToken;
@@ -31,6 +32,7 @@ import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.impl.ProjectRootManagerImpl;
 import com.intellij.openapi.util.JDOMUtil;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.SystemProperties;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.xmlb.XmlSerializer;
@@ -270,6 +272,10 @@ public class GoProjectModelConverterProvider extends ConverterProvider {
           }
         }
       }
+    }
+
+    for (VirtualFile file : GoSdkUtil.getGoPathsRootsFromEnvironment()) {
+      globalGoPathUrls.remove(file.getUrl());
     }
 
     AccessToken l = WriteAction.start();
