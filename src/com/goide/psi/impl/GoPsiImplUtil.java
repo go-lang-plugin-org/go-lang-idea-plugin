@@ -299,13 +299,18 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType getGoType(@NotNull final GoExpression o, @Nullable ResolveState context) {
-    if (context != null) return getGoTypeInner(o, context);
-    return CachedValuesManager.getCachedValue(o, new CachedValueProvider<GoType>() {
-      @Nullable
+  public static GoType getGoType(@NotNull final GoExpression o, @Nullable final ResolveState context) {
+    return RecursionManager.doPreventingRecursion(o, true, new Computable<GoType>() {
       @Override
-      public Result<GoType> compute() {
-        return Result.create(getGoTypeInner(o, null), PsiModificationTracker.MODIFICATION_COUNT);
+      public GoType compute() {
+        if (context != null) return getGoTypeInner(o, context);
+        return CachedValuesManager.getCachedValue(o, new CachedValueProvider<GoType>() {
+          @Nullable
+          @Override
+          public Result<GoType> compute() {
+            return Result.create(getGoTypeInner(o, null), PsiModificationTracker.MODIFICATION_COUNT);
+          }
+        });
       }
     });
   }

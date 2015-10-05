@@ -481,6 +481,10 @@ public class GoCompletionTest extends GoCompletionTestBase {
   public void testPreventSOE() throws Exception {
     doTestInclude("package rubex; const ( IGNORECASE = 1; EXTEND = (IGNORECASE << 1); MULTILINE = (EXTEND << 1)); func m() {<caret>}", "EXTEND");
   }
+  
+  public void testPreventSOE2() throws Exception {
+    doTestInclude("package main; import \"fmt\"; var fmt = &fmt.<caret>");
+  }
 
   @SuppressWarnings("ConstantConditions")
   public void testPackageNames() {
