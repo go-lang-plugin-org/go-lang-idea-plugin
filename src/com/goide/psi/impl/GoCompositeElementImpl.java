@@ -55,6 +55,7 @@ public class GoCompositeElementImpl extends ASTWrapperPsiElement implements GoCo
           o instanceof GoSwitchStatement ||
           o instanceof GoIfStatement ||
           o instanceof GoForStatement ||
+          o instanceof GoCommClause ||
           o instanceof GoBlock
         ) 
         && processor instanceof GoScopeProcessorBase) {

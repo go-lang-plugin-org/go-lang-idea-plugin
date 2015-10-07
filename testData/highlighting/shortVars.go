@@ -80,3 +80,11 @@ func _(i int) {
         case true: _ = i
     }
 }
+
+func _() string {
+	select {
+	case <error>s</error> := <- <error>ch</error>:
+	case <error>a</error> := <- <error>s</error>:
+	}
+	return <error>s</error>
+}

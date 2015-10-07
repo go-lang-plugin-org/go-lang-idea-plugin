@@ -72,7 +72,7 @@ func <warning>test2</warning>() (bool, string) {
 func <warning>Test23</warning>() (err error) {
     var c chan int
     select {
-    case err := (<-c): // err declared and not used
+    case <error>err</error> := (<-c):
     }
     return err
 }
