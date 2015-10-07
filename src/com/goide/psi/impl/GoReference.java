@@ -298,18 +298,35 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     
     if (prevDot(parent)) return false;
 
-    GoScopeProcessorBase delegate = createDelegate(processor);
     if (!processImports(file, processor, state, myElement)) return false;
-    ResolveUtil.treeWalkUp(myElement, delegate);
-    if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
-    processReceiver(delegate);
-    if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
-    processFunctionParameters(myElement, delegate);
-    if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
+    if (!processBlock(processor, state, localResolve)) return false;
+    if (!processReceiver(processor, state, localResolve)) return false;
+    if (!processParameters(processor, state, localResolve)) return false;
     if (!processFileEntities(file, processor, state, localResolve)) return false;
     if (!processDirectory(file.getOriginalFile().getParent(), file, file.getPackageName(), processor, state, true)) return false;
     if (!processBuiltin(processor, state, myElement)) return false;
     return true;
+  }
+
+  private boolean processParameters(@NotNull GoScopeProcessor processor, @NotNull ResolveState state, boolean localResolve) {
+    GoScopeProcessorBase delegate = createDelegate(processor);
+    processFunctionParameters(myElement, delegate);
+    return processNamedElements(processor, state, delegate.getVariants(), localResolve);
+  }
+
+  private boolean processReceiver(@NotNull GoScopeProcessor processor, @NotNull ResolveState state, boolean localResolve) {
+    GoScopeProcessorBase delegate = createDelegate(processor);
+    GoMethodDeclaration method = PsiTreeUtil.getParentOfType(myElement, GoMethodDeclaration.class);
+    GoReceiver receiver = method != null ? method.getReceiver() : null;
+    if (receiver == null) return true;
+    receiver.processDeclarations(delegate, ResolveState.initial(), null, myElement);
+    return processNamedElements(processor, state, delegate.getVariants(), localResolve);
+  }
+
+  private boolean processBlock(@NotNull GoScopeProcessor processor, @NotNull ResolveState state, boolean localResolve) {
+    GoScopeProcessorBase delegate = createDelegate(processor);
+    ResolveUtil.treeWalkUp(myElement, delegate);
+    return processNamedElements(processor, state, delegate.getVariants(), localResolve);
   }
 
   static boolean processBuiltin(@NotNull GoScopeProcessor processor, @NotNull ResolveState state, @NotNull GoCompositeElement element) {
@@ -435,12 +452,6 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
       if (!processNamedElements(processor, ResolveState.initial(), declaration.getParamDefinitionList(), true)) return false;
     }
     return true;
-  }
-
-  private void processReceiver(@NotNull GoScopeProcessorBase processor) {
-    GoMethodDeclaration method = PsiTreeUtil.getParentOfType(myElement, GoMethodDeclaration.class);
-    GoReceiver receiver = method != null ? method.getReceiver() : null;
-    if (receiver != null) receiver.processDeclarations(processor, ResolveState.initial(), null, myElement);
   }
 
   @NotNull
