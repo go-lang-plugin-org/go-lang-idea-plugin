@@ -10,6 +10,8 @@ build_test/
 .idea/workspace.xml
 .idea/shelf/
 
+.gradle/
+
 intellij-go.jar
 
 testData/performance/docker
