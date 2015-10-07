@@ -39,13 +39,13 @@ allprojects {
     version ideaVersion
     pluginName 'Go'
     plugins 'coverage'
-    downloadSources sources
-  }
-  publish {
-    username publishUsername
-    password publishPassword
-    pluginId '5047'
-    channel publishChannel
+    downloadSources sources as boolean
+    publish {
+      username publishUsername
+      password publishPassword
+      pluginId '5047'
+      channel publishChannel
+    }
   }
 }
 
