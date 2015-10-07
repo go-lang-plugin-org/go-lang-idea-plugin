@@ -18,7 +18,7 @@ plugins {
   id "de.undercouch.download" version "1.2"
 }
 
-version = "${version}.${buildNumber}"
+version = "${version}.$buildNumber"
 allprojects {
   apply plugin: 'java'
   sourceCompatibility = javaVersion
@@ -56,13 +56,13 @@ idea {
 repositories { maven { url "http://dl.bintray.com/jetbrains/golang" } }
 dependencies {
   compile project(':utils'), project(':google-app-engine'), project(':google-app-engine:google-app-engine-yaml')
-  runtime(group: 'com.jetbrains', name: 'delve', version: "${delveVersion}", ext: 'zip')
+  runtime "com.jetbrains:delve:$delveVersion@zip"
 }
 
 // delve packing
 project.afterEvaluate {
   prepareSandbox.doLast {
-    def libraries = "${it.destinationDir}/${intellij.pluginName}/lib/"
+    def libraries = "$it.destinationDir/$intellij.pluginName/lib/"
     fileTree(dir: libraries, include: 'delve*').files.each { File file ->
       copy {
         from zipTree(file)
@@ -102,10 +102,10 @@ task performanceTest(type: Test, group: 'Verification', dependsOn: [classes, tes
 check.dependsOn performanceTest
 
 private void downloadAndUnzip(url, sourceDir, targetDir) {
-  def testDataPath = "${projectDir}/testData/performance/"
-  def markerFile = file("${testDataPath}/${targetDir}/markerFile")
-  def tmpPath = "${testDataPath}/tmp/"
-  def tar = file("${tmpPath}/${targetDir}.tar.gz")
+  def testDataPath = "$projectDir/testData/performance/"
+  def markerFile = file("$testDataPath/$targetDir/markerFile")
+  def tmpPath = "$testDataPath/tmp/"
+  def tar = file("$tmpPath/$targetDir.tar.gz")
   if (!markerFile.exists()) {
     download {
       src url
@@ -116,8 +116,8 @@ private void downloadAndUnzip(url, sourceDir, targetDir) {
       into tmpPath
     }
     copy {
-      from "${tmpPath}/${sourceDir}"
-      into "${testDataPath}/${targetDir}"
+      from "$tmpPath/$sourceDir"
+      into "$testDataPath/$targetDir"
     }
     markerFile.createNewFile()
   }
