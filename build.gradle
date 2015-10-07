@@ -39,6 +39,7 @@ allprojects {
     version ideaVersion
     pluginName 'Go'
     plugins 'coverage'
+    downloadSources sources
   }
   publish {
     username publishUsername
