@@ -308,14 +308,13 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
     if (!processFileEntities(file, processor, state, localResolve)) return false;
     if (!processDirectory(file.getOriginalFile().getParent(), file, file.getPackageName(), processor, state, true)) return false;
-    if (processBuiltin(processor, state, myElement)) return false;
+    if (!processBuiltin(processor, state, myElement)) return false;
     return true;
   }
 
   static boolean processBuiltin(@NotNull GoScopeProcessor processor, @NotNull ResolveState state, @NotNull GoCompositeElement element) {
-    GoFile builtinFile = GoSdkUtil.findBuiltinFile(element);
-    if (builtinFile != null && !processFileEntities(builtinFile, processor, state, true)) return true;
-    return false;
+    GoFile builtin = GoSdkUtil.findBuiltinFile(element);
+    return builtin == null || processFileEntities(builtin, processor, state, true);
   }
 
   static boolean processImports(@NotNull GoFile file,
