@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 plugins {
-  id 'org.jetbrains.intellij' version "0.0.20"
+  id 'org.jetbrains.intellij' version "0.0.23"
   id "de.undercouch.download" version "1.2"
 }
 
@@ -39,6 +39,12 @@ allprojects {
     version ideaVersion
     pluginName 'Go'
     plugins 'coverage'
+  }
+  publish {
+    username publishUsername
+    password publishPassword
+    pluginId '5047'
+    channel publishChannel
   }
 }
 
