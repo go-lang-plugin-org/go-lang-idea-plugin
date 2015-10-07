@@ -444,7 +444,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     if (!processParameters(processor, signature.getParameters())) return false;
     GoResult result = signature.getResult();
     GoParameters resultParameters = result != null ? result.getParameters() : null;
-    return !(resultParameters != null && !processParameters(processor, resultParameters));
+    return resultParameters == null || processParameters(processor, resultParameters);
   }
 
   private static boolean processParameters(@NotNull GoScopeProcessorBase processor, @NotNull GoParameters parameters) {
