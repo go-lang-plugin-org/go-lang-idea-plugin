@@ -60,3 +60,18 @@ func _(fn func() error) {
 	err := fn()
 	err.Error()
 }
+
+type TestStruct struct {
+	SomeId int
+}
+
+type DataSlice []*TestStruct
+
+func _() {
+	data := DataSlice{}
+	for _, element := range *data {
+		if element.SomeId > 20 {
+			println("some text")
+		}
+	}
+}

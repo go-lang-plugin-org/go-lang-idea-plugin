@@ -652,6 +652,9 @@ public class GoPsiImplUtil {
       else if (type instanceof GoParType) {
         type = ((GoParType)type).getType();
       }
+      else if (type instanceof GoSpecType) {
+        type = ((GoSpecType)type).getType();
+      }
       GoTypeReferenceExpression typeRef = type != null ? type.getTypeReferenceExpression() : null;
       if (typeRef != null) {
         PsiElement resolve = typeRef.getReference().resolve();
