@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class AddBracketsInsertHandler extends ParenthesesInsertHandler<LookupElement> {
@@ -94,7 +95,7 @@ public class AddBracketsInsertHandler extends ParenthesesInsertHandler<LookupEle
     }
   }
 
-  private static boolean isToken(@Nullable PsiElement element, String text) {
+  private static boolean isToken(@Nullable PsiElement element, @NotNull String text) {
     return element != null && element.textMatches(text);
   }
 }

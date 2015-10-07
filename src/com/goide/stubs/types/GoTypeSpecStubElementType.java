@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ public class GoTypeSpecStubElementType extends GoNamedStubElementType<GoTypeSpec
   public static final ArrayFactory<GoTypeSpec> ARRAY_FACTORY = new ArrayFactory<GoTypeSpec>() {
     @NotNull
     @Override
-    public GoTypeSpec[] create(final int count) {
+    public GoTypeSpec[] create(int count) {
       return count == 0 ? EMPTY_ARRAY : new GoTypeSpec[count];
     }
   };

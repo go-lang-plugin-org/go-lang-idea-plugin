@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -137,7 +137,7 @@ public class GoSdkUtil {
   }
 
   @NotNull
-  public static Collection<VirtualFile> getGoPathSources(@NotNull final Project project, @Nullable final Module module) {
+  public static Collection<VirtualFile> getGoPathSources(@NotNull Project project, @Nullable Module module) {
     Collection<VirtualFile> result = newLinkedHashSet();
     if (module != null && GoSdkService.getInstance(project).isAppEngineSdk(module)) {
       ContainerUtil.addAllNotNull(result, ContainerUtil.mapNotNull(YamlFilesModificationTracker.getYamlFiles(project, module),
@@ -308,14 +308,24 @@ public class GoSdkUtil {
   }
 
   @Nullable
-  public static String retrieveGoVersion(@NotNull final String sdkPath) {
+  public static String retrieveGoVersion(@NotNull String sdkPath) {
     try {
       String oldStylePath = new File(sdkPath, "src/pkg/" + GoConstants.GO_VERSION_FILE_PATH).getPath();
       String newStylePath = new File(sdkPath, "src/" + GoConstants.GO_VERSION_FILE_PATH).getPath();
       File zVersionFile = FileUtil.findFirstThatExist(oldStylePath, newStylePath);
-      return zVersionFile != null ? parseGoVersion(FileUtil.loadFile(zVersionFile)) : null;
+      if (zVersionFile == null) {
+        GoSdkService.LOG.debug("Cannot find zVersion file at sdk path: " + sdkPath);
+        return null;
+      }
+      String file = FileUtil.loadFile(zVersionFile);
+      String version = parseGoVersion(file);
+      if (version == null) {
+        GoSdkService.LOG.debug("Cannot retrieve go version from zVersion file: " + file);
+      }
+      return version;
     }
     catch (IOException e) {
+      GoSdkService.LOG.debug("Cannot retrieve go version from sdk path: " + sdkPath, e);
       return null;
     }
   }

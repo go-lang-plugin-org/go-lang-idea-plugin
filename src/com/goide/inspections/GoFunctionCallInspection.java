@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,6 +62,10 @@ public class GoFunctionCallInspection extends GoInspectionBase {
                 actualSize = GoInspectionUtil.getFunctionResultCount(firstResolve);
               }
             }
+            
+            GoReferenceExpression qualifier = ((GoReferenceExpression)expression).getQualifier();
+            boolean isMethodExpr = qualifier != null && qualifier.getReference().resolve() instanceof GoTypeSpec;
+            if (isMethodExpr) actualSize -= 1; // todo: a temp workaround for method specs
 
             if (actualSize == expectedSize) return;
 

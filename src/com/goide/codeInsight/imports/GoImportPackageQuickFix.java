@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import com.goide.project.GoExcludedPathsSettings;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoReferenceExpression;
 import com.goide.psi.GoTypeReferenceExpression;
+import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.stubs.index.GoPackagesIndex;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.hint.HintManager;
@@ -158,11 +159,12 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
   @NotNull
   private Collection<String> getPackagesToImport(@NotNull PsiElement element) {
     if (myPackagesToImport == null) {
-      final GlobalSearchScope scope = GoUtil.moduleScope(element);
+      GlobalSearchScope scope = GoUtil.moduleScope(element);
       PsiFile file = element.getContainingFile();
-      final PsiDirectory parentDirectory = file != null ? file.getParent() : null;
       Project project = element.getProject();
+      final PsiDirectory parentDirectory = file != null ? file.getParent() : null;
       final GoExcludedPathsSettings excludedSettings = GoExcludedPathsSettings.getInstance(project);
+      final String testTargetPackage = GoTestFinder.getTestTargetPackage(file);
       Collection<GoFile> es = StubIndex.getElements(GoPackagesIndex.KEY, myPackageName, project, scope, GoFile.class);
       myPackagesToImport = sorted(skipNulls(map2Set(
         es,
@@ -170,8 +172,14 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
           @Nullable
           @Override
           public String fun(@NotNull GoFile file) {
-            String importPath = parentDirectory == null || !parentDirectory.isEquivalentTo(file.getParent()) ? file.getImportPath() : null;
-            return importPath != null && !excludedSettings.isExcluded(importPath) ? importPath : null;
+            if (parentDirectory != null && parentDirectory.isEquivalentTo(file.getParent())) {
+              if (testTargetPackage == null || !testTargetPackage.equals(file.getPackageName())) {
+                return null;
+              }
+            }
+
+            String importPath = file.getImportPath();
+            return !excludedSettings.isExcluded(importPath) ? importPath : null;
           }
         }
       )), new MyImportsComparator(element));
@@ -195,7 +203,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
         new Runnable() {
           @Override
           public void run() {
-            final int i = list.getSelectedIndex();
+            int i = list.getSelectedIndex();
             if (i < 0) return;
             perform(file, newArrayList(packagesToImport).get(i));
           }

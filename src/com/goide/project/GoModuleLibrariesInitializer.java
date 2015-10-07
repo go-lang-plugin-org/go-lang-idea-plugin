@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -128,7 +128,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   public void moduleAdded() {
     if (!myModuleInitialized) {
       myConnection.subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
-        public void rootsChanged(final ModuleRootEvent event) {
+        public void rootsChanged(ModuleRootEvent event) {
           scheduleUpdate();
         }
       });
@@ -167,18 +167,18 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
       ApplicationManager.getApplication().runWriteAction(new Runnable() {
         @Override
         public void run() {
-          final ModuleRootManager model = ModuleRootManager.getInstance(myModule);
-          final LibraryOrderEntry goLibraryEntry = OrderEntryUtil.findLibraryOrderEntry(model, getLibraryName());
+          ModuleRootManager model = ModuleRootManager.getInstance(myModule);
+          LibraryOrderEntry goLibraryEntry = OrderEntryUtil.findLibraryOrderEntry(model, getLibraryName());
 
           if (goLibraryEntry != null && goLibraryEntry.isValid()) {
-            final Library library = goLibraryEntry.getLibrary();
+            Library library = goLibraryEntry.getLibrary();
             if (library != null && !((LibraryEx)library).isDisposed()) {
               fillLibrary(library, libraryRoots, exclusions);
             }
           }
           else {
-            final LibraryTable libraryTable = LibraryTablesRegistrar.getInstance().getLibraryTable(myModule.getProject());
-            final Library library = libraryTable.createLibrary(getLibraryName());
+            LibraryTable libraryTable = LibraryTablesRegistrar.getInstance().getLibraryTable(myModule.getProject());
+            Library library = libraryTable.createLibrary(getLibraryName());
             fillLibrary(library, libraryRoots, exclusions);
             ModuleRootModificationUtil.addDependency(myModule, library);
           }
@@ -198,7 +198,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   private static void fillLibrary(@NotNull Library library, @NotNull Collection<VirtualFile> libraryRoots, Set<VirtualFile> exclusions) {
     ApplicationManager.getApplication().assertWriteAccessAllowed();
 
-    final Library.ModifiableModel libraryModel = library.getModifiableModel();
+    Library.ModifiableModel libraryModel = library.getModifiableModel();
     for (String root : libraryModel.getUrls(OrderRootType.CLASSES)) {
       libraryModel.removeRoot(root, OrderRootType.CLASSES);
     }
@@ -221,9 +221,9 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
       ApplicationManager.getApplication().runWriteAction(new Runnable() {
         @Override
         public void run() {
-          final Library library = goLibraryEntry.getLibrary();
+          Library library = goLibraryEntry.getLibrary();
           if (library != null) {
-            final LibraryTable table = library.getTable();
+            LibraryTable table = library.getTable();
             if (table != null) {
               table.removeLibrary(library);
               model.removeOrderEntry(goLibraryEntry);
@@ -247,7 +247,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   }
 
   @NotNull
-  private static Set<VirtualFile> gatherExclusions(@NotNull Collection<VirtualFile> roots, @NotNull final VirtualFile... exclusions) {
+  private static Set<VirtualFile> gatherExclusions(@NotNull Collection<VirtualFile> roots, @NotNull VirtualFile... exclusions) {
     final Set<VirtualFile> result = ContainerUtil.newHashSet(exclusions);
 
     Iterator<VirtualFile> iterator = roots.iterator();
@@ -279,7 +279,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   }
 
   private static void showNotification(@NotNull final Project project) {
-    final PropertiesComponent propertiesComponent = PropertiesComponent.getInstance(project);
+    PropertiesComponent propertiesComponent = PropertiesComponent.getInstance(project);
     boolean shownAlready;
     //noinspection SynchronizationOnLocalVariableOrMethodParameter
     synchronized (propertiesComponent) {
@@ -290,8 +290,8 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     }
 
     if (!shownAlready) {
-      final Notification notification = GoConstants.GO_NOTIFICATION_GROUP.createNotification("GOPATH was detected",
-                                                         "We've been detected some libraries from your GOPATH.\n" +
+      Notification notification = GoConstants.GO_NOTIFICATION_GROUP.createNotification("GOPATH was detected",
+                                                         "We've detected some libraries from your GOPATH.\n" +
                                                          "You may want to add extra libraries in <a href='configure'>Go Libraries configuration</a>.",
                                                          NotificationType.INFORMATION, new NotificationListener.Adapter() {
         @Override

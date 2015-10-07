@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -183,7 +183,7 @@ public class GdbExecutionStackFrame extends XStackFrame {
    * @param event The event.
    * @param node  The node passed to computeChildren().
    */
-  private void onGdbVariablesReady(GdbEvent event, @NotNull final XCompositeNode node) {
+  private void onGdbVariablesReady(GdbEvent event, @NotNull XCompositeNode node) {
     if (event instanceof GdbErrorEvent) {
       node.setErrorMessage(((GdbErrorEvent)event).message);
       return;

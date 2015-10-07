@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ public class GoConstSpecStubElementType extends GoStubElementType<GoConstSpecStu
   public static final ArrayFactory<GoConstSpec> ARRAY_FACTORY = new ArrayFactory<GoConstSpec>() {
     @NotNull
     @Override
-    public GoConstSpec[] create(final int count) {
+    public GoConstSpec[] create(int count) {
       return count == 0 ? EMPTY_ARRAY : new GoConstSpec[count];
     }
   };

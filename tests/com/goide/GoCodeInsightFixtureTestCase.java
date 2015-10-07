@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,14 @@ package com.goide;
 
 import com.goide.project.GoApplicationLibrariesService;
 import com.goide.sdk.GoSdkType;
+import com.goide.sdk.GoSdkUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.projectRoots.ProjectJdkTable;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkModificator;
 import com.intellij.openapi.projectRoots.impl.ProjectJdkImpl;
+import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
@@ -38,8 +40,12 @@ import java.io.IOException;
 abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsightFixtureTestCase {
   @Override
   protected void tearDown() throws Exception {
-    GoApplicationLibrariesService.getInstance().setLibraryRootUrls();
-    super.tearDown();
+    try {
+      GoApplicationLibrariesService.getInstance().setLibraryRootUrls();
+    }
+    finally {
+      super.tearDown();
+    }
   }
 
   @Override
@@ -51,10 +57,10 @@ abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsi
     return new DefaultLightProjectDescriptor() {
       @Override
       public Sdk getSdk() {
-        String version = "1.1.2";
-        return createMockSdk("testData/mockSdk-" + version + "/", version);
+        return createMockSdk("1.1.2");
       }
 
+      @NotNull
       @Override
       public ModuleType getModuleType() {
         return GoModuleType.getInstance();
@@ -74,15 +80,17 @@ abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsi
   }
 
   @NotNull
-  private static Sdk createMockSdk(@NotNull String sdkHome, @NotNull String version) {
-    GoSdkType instance = GoSdkType.getInstance();
-    String release = "Go " + version;
-    Sdk sdk = new ProjectJdkImpl(release, instance);
+  private static Sdk createMockSdk(@NotNull String version) {
+    Sdk sdk = new ProjectJdkImpl("Go " + version, GoSdkType.getInstance());
     SdkModificator sdkModificator = sdk.getSdkModificator();
-    sdkModificator.setHomePath(sdkHome);
+
+    String homePath = new File("testData/mockSdk-" + version + "/").getAbsolutePath();
+    sdkModificator.setHomePath(homePath);
     sdkModificator.setVersionString(version); // must be set after home path, otherwise setting home path clears the version string
+    for (VirtualFile file : GoSdkUtil.getSdkDirectoriesToAttach(homePath, version)) {
+      sdkModificator.addRoot(file, OrderRootType.CLASSES);
+    }
     sdkModificator.commitChanges();
-    instance.setupSdkPaths(sdk);
     return sdk;
   }
 

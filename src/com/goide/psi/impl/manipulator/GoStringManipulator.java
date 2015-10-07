@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,13 +26,13 @@ public class GoStringManipulator extends AbstractElementManipulator<GoStringLite
   @Override
   public GoStringLiteralImpl handleContentChange(@NotNull GoStringLiteralImpl literal, @NotNull TextRange range, String newContent)
     throws IncorrectOperationException {
-    final String newText = range.replace(literal.getText(), newContent);
+    String newText = range.replace(literal.getText(), newContent);
     return literal.updateText(newText);
   }
 
   @NotNull
   @Override
-  public TextRange getRangeInElement(@NotNull final GoStringLiteralImpl element) {
+  public TextRange getRangeInElement(@NotNull GoStringLiteralImpl element) {
     return element.getTextLength() > 2 ? TextRange.from(1, element.getTextLength() - 2) : TextRange.EMPTY_RANGE;
   }
 }

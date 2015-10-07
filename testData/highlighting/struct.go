@@ -11,7 +11,7 @@ func (car Car) numberOfWheels() int { return car.wheelCount }
 
 type Ferrari struct { Car }
 
-func Println(o ...interface{})  {
+func <warning>Println</warning>(o ...interface{})  { // should be redeclared!
 //   fmt.Println(o...)
 }
 

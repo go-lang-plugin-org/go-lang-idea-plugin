@@ -1,4 +1,4 @@
 package foo
 
-func function(struct {<caret>}) {
+func function(struct{<caret>}) {
 }

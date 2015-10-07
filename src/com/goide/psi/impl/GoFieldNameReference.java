@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,40 +54,55 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
 
     GoType type = lit != null ? lit.getType() : null;
     if (type == null && lit != null) {
-      type = GoPsiImplUtil.getType(lit.getTypeReferenceExpression());
+      type = GoPsiImplUtil.findTypeFromRef(lit.getTypeReferenceExpression());
     }
 
     type = getType(type);
 
-    if (type instanceof GoStructType && !type.processDeclarations(fieldProcessor, ResolveState.initial(), null, myElement)) return false;
+    if (!processStructType(fieldProcessor, type)) return false;
+    if (type instanceof GoPointerType && !processStructType(fieldProcessor, ((GoPointerType)type).getType())) return false;
 
     return true;
+  }
+
+  private boolean processStructType(@NotNull GoScopeProcessor fieldProcessor, @Nullable GoType type) {
+    return !(type instanceof GoStructType && !type.processDeclarations(fieldProcessor, ResolveState.initial(), null, myElement));
   }
 
   @Nullable
   private GoType getType(@Nullable GoType type) { // todo: rethink and unify this algorithm
     boolean inValue = myValue != null;
     
-    if (inValue && type instanceof GoArrayOrSliceType) type = ((GoArrayOrSliceType)type).getType();
-    else if (type instanceof GoMapType) type = inValue ? ((GoMapType)type).getValueType() : ((GoMapType)type).getKeyType();
-    else if (inValue && type instanceof GoSpecType && ((GoSpecType)type).getType() instanceof GoStructType) {
-      GoKey key = PsiTreeUtil.getPrevSiblingOfType(myValue, GoKey.class);
-      GoFieldName field = key != null ? key.getFieldName() : null;
-      PsiReference reference = field != null ? field.getReference() : null;
-      PsiElement resolve = reference != null ? reference.resolve() : null;
-      if (resolve instanceof GoFieldDefinition) {
-        type = PsiTreeUtil.getNextSiblingOfType(resolve, GoType.class);
+    if (inValue && type instanceof GoArrayOrSliceType) {
+      type = ((GoArrayOrSliceType)type).getType();
+    }
+    else if (type instanceof GoMapType) {
+      type = inValue ? ((GoMapType)type).getValueType() : ((GoMapType)type).getKeyType();
+    }
+    else if (inValue && type instanceof GoSpecType) {
+      GoType inner = ((GoSpecType)type).getType();
+      if (inner instanceof GoArrayOrSliceType) {
+        type = ((GoArrayOrSliceType)inner).getType();
+      }
+      else if (inner instanceof GoStructType) {
+        GoKey key = PsiTreeUtil.getPrevSiblingOfType(myValue, GoKey.class);
+        GoFieldName field = key != null ? key.getFieldName() : null;
+        PsiReference reference = field != null ? field.getReference() : null;
+        PsiElement resolve = reference != null ? reference.resolve() : null;
+        if (resolve instanceof GoFieldDefinition) {
+          type = PsiTreeUtil.getNextSiblingOfType(resolve, GoType.class);
+        }
       }
     }
 
     if (type != null && type.getTypeReferenceExpression() != null) {
-      type = GoPsiImplUtil.getType(type.getTypeReferenceExpression());
+      type = GoPsiImplUtil.findTypeFromRef(type.getTypeReferenceExpression());
     }
 
     if (type instanceof GoPointerType) {
       GoType inner = ((GoPointerType)type).getType();
       if (inner != null && inner.getTypeReferenceExpression() != null) {
-        type = GoPsiImplUtil.getType(inner.getTypeReferenceExpression());
+        type = GoPsiImplUtil.findTypeFromRef(inner.getTypeReferenceExpression());
       }
     }
 

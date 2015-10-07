@@ -1233,12 +1233,13 @@ GO_FILE
                                                                                                                                                                                           PsiElement(,)(',')
                                                                                                                                                                                           ELEMENT
                                                                                                                                                                                             VALUE
-                                                                                                                                                                                              METHOD_EXPR
-                                                                                                                                                                                                RECEIVER_TYPE
+                                                                                                                                                                                              SELECTOR_EXPR
+                                                                                                                                                                                                PARENTHESES_EXPR
                                                                                                                                                                                                   PsiElement(()('(')
-                                                                                                                                                                                                  PsiElement(*)('*')
-                                                                                                                                                                                                  TYPE_REFERENCE_EXPRESSION
-                                                                                                                                                                                                    PsiElement(identifier)('session')
+                                                                                                                                                                                                  UNARY_EXPR
+                                                                                                                                                                                                    PsiElement(*)('*')
+                                                                                                                                                                                                    REFERENCE_EXPRESSION
+                                                                                                                                                                                                      PsiElement(identifier)('session')
                                                                                                                                                                                                   PsiElement())(')')
                                                                                                                                                                                                 PsiElement(.)('.')
                                                                                                                                                                                                 REFERENCE_EXPRESSION
@@ -1370,12 +1371,13 @@ GO_FILE
                                           PsiElement(,)(',')
                                           ELEMENT
                                             VALUE
-                                              METHOD_EXPR
-                                                RECEIVER_TYPE
+                                              SELECTOR_EXPR
+                                                PARENTHESES_EXPR
                                                   PsiElement(()('(')
-                                                  PsiElement(*)('*')
-                                                  TYPE_REFERENCE_EXPRESSION
-                                                    PsiElement(identifier)('session')
+                                                  UNARY_EXPR
+                                                    PsiElement(*)('*')
+                                                    REFERENCE_EXPRESSION
+                                                      PsiElement(identifier)('session')
                                                   PsiElement())(')')
                                                 PsiElement(.)('.')
                                                 REFERENCE_EXPRESSION
@@ -1536,12 +1538,13 @@ GO_FILE
                                                           PsiElement(,)(',')
                                                           ELEMENT
                                                             VALUE
-                                                              METHOD_EXPR
-                                                                RECEIVER_TYPE
+                                                              SELECTOR_EXPR
+                                                                PARENTHESES_EXPR
                                                                   PsiElement(()('(')
-                                                                  PsiElement(*)('*')
-                                                                  TYPE_REFERENCE_EXPRESSION
-                                                                    PsiElement(identifier)('session')
+                                                                  UNARY_EXPR
+                                                                    PsiElement(*)('*')
+                                                                    REFERENCE_EXPRESSION
+                                                                      PsiElement(identifier)('session')
                                                                   PsiElement())(')')
                                                                 PsiElement(.)('.')
                                                                 REFERENCE_EXPRESSION
@@ -1651,12 +1654,13 @@ GO_FILE
                                                           PsiElement(,)(',')
                                                           ELEMENT
                                                             VALUE
-                                                              METHOD_EXPR
-                                                                RECEIVER_TYPE
+                                                              SELECTOR_EXPR
+                                                                PARENTHESES_EXPR
                                                                   PsiElement(()('(')
-                                                                  PsiElement(*)('*')
-                                                                  TYPE_REFERENCE_EXPRESSION
-                                                                    PsiElement(identifier)('session')
+                                                                  UNARY_EXPR
+                                                                    PsiElement(*)('*')
+                                                                    REFERENCE_EXPRESSION
+                                                                      PsiElement(identifier)('session')
                                                                   PsiElement())(')')
                                                                 PsiElement(.)('.')
                                                                 REFERENCE_EXPRESSION
@@ -1717,12 +1721,13 @@ GO_FILE
                           PsiElement(,)(',')
                           ELEMENT
                             VALUE
-                              METHOD_EXPR
-                                RECEIVER_TYPE
+                              SELECTOR_EXPR
+                                PARENTHESES_EXPR
                                   PsiElement(()('(')
-                                  PsiElement(*)('*')
-                                  TYPE_REFERENCE_EXPRESSION
-                                    PsiElement(identifier)('session')
+                                  UNARY_EXPR
+                                    PsiElement(*)('*')
+                                    REFERENCE_EXPRESSION
+                                      PsiElement(identifier)('session')
                                   PsiElement())(')')
                                 PsiElement(.)('.')
                                 REFERENCE_EXPRESSION
@@ -1987,12 +1992,13 @@ GO_FILE
                                                                                           PsiElement(,)(',')
                                                                                           ELEMENT
                                                                                             VALUE
-                                                                                              METHOD_EXPR
-                                                                                                RECEIVER_TYPE
+                                                                                              SELECTOR_EXPR
+                                                                                                PARENTHESES_EXPR
                                                                                                   PsiElement(()('(')
-                                                                                                  PsiElement(*)('*')
-                                                                                                  TYPE_REFERENCE_EXPRESSION
-                                                                                                    PsiElement(identifier)('session')
+                                                                                                  UNARY_EXPR
+                                                                                                    PsiElement(*)('*')
+                                                                                                    REFERENCE_EXPRESSION
+                                                                                                      PsiElement(identifier)('session')
                                                                                                   PsiElement())(')')
                                                                                                 PsiElement(.)('.')
                                                                                                 REFERENCE_EXPRESSION
@@ -2159,12 +2165,13 @@ GO_FILE
                                                           PsiElement(,)(',')
                                                           ELEMENT
                                                             VALUE
-                                                              METHOD_EXPR
-                                                                RECEIVER_TYPE
+                                                              SELECTOR_EXPR
+                                                                PARENTHESES_EXPR
                                                                   PsiElement(()('(')
-                                                                  PsiElement(*)('*')
-                                                                  TYPE_REFERENCE_EXPRESSION
-                                                                    PsiElement(identifier)('session')
+                                                                  UNARY_EXPR
+                                                                    PsiElement(*)('*')
+                                                                    REFERENCE_EXPRESSION
+                                                                      PsiElement(identifier)('session')
                                                                   PsiElement())(')')
                                                                 PsiElement(.)('.')
                                                                 REFERENCE_EXPRESSION

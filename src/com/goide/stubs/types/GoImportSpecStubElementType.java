@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,12 +28,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-public class GoImportSpecStubElementType extends GoStubElementType<GoImportSpecStub, GoImportSpec> {
+public class GoImportSpecStubElementType extends GoNamedStubElementType<GoImportSpecStub, GoImportSpec> {
   public static final GoImportSpec[] EMPTY_ARRAY = new GoImportSpec[0];
   public static final ArrayFactory<GoImportSpec> ARRAY_FACTORY = new ArrayFactory<GoImportSpec>() {
     @NotNull
     @Override
-    public GoImportSpec[] create(final int count) {
+    public GoImportSpec[] create(int count) {
       return count == 0 ? EMPTY_ARRAY : new GoImportSpec[count];
     }
   };

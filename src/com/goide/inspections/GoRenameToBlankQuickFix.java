@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.goide.inspections;
 
+import com.goide.GoConstants;
 import com.goide.psi.GoNamedElement;
 import com.intellij.codeInspection.LocalQuickFixOnPsiElement;
 import com.intellij.openapi.project.Project;
@@ -46,6 +47,6 @@ public class GoRenameToBlankQuickFix extends LocalQuickFixOnPsiElement {
   @NotNull
   @Override
   public String getFamilyName() {
-    return "Go";
+    return GoConstants.GO;
   }
 }

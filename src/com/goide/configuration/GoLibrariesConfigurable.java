@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,12 +63,12 @@ public class GoLibrariesConfigurable implements SearchableConfigurable, Configur
     filesList.setCellRenderer(new ColoredListCellRenderer() {
       @Override
       protected void customizeCellRenderer(JList list, Object value, int index, boolean selected, boolean hasFocus) {
-        final ListItem item = (ListItem)value;
-        final String url = item.url;
+        ListItem item = (ListItem)value;
+        String url = item.url;
         if (item.readOnly) {
           append("[GOPATH] ", SimpleTextAttributes.GRAY_ATTRIBUTES);
         }
-        final VirtualFile file = VirtualFileManager.getInstance().findFileByUrl(url);
+        VirtualFile file = VirtualFileManager.getInstance().findFileByUrl(url);
         if (file != null) {
           append(file.getPresentableUrl(), item.readOnly ? SimpleTextAttributes.GRAY_ATTRIBUTES : SimpleTextAttributes.REGULAR_ATTRIBUTES);
           setIcon(IconUtil.getIcon(file, Iconable.ICON_FLAG_READ_STATUS, null));
@@ -79,23 +79,23 @@ public class GoLibrariesConfigurable implements SearchableConfigurable, Configur
       }
     });
 
-    final ToolbarDecorator decorator = ToolbarDecorator.createDecorator(filesList)
+    ToolbarDecorator decorator = ToolbarDecorator.createDecorator(filesList)
       .setAddAction(new AnActionButtonRunnable() {
         @Override
         public void run(AnActionButton button) {
-          final FileChooserDialog fileChooser = FileChooserFactory.getInstance()
+          FileChooserDialog fileChooser = FileChooserFactory.getInstance()
             .createFileChooser(createMultipleFoldersDescriptor(), null, filesList);
 
           VirtualFile fileToSelect = null;
-          final ListItem lastItem = ContainerUtil.getLastItem(myListModel.getItems());
+          ListItem lastItem = ContainerUtil.getLastItem(myListModel.getItems());
           if (lastItem != null) {
             fileToSelect = VirtualFileManager.getInstance().findFileByUrl(lastItem.url);
           }
 
-          final VirtualFile[] newDirectories = fileChooser.choose(null, fileToSelect);
+          VirtualFile[] newDirectories = fileChooser.choose(null, fileToSelect);
           if (newDirectories.length > 0) {
-            for (final VirtualFile newDirectory : newDirectories) {
-              final String newDirectoryUrl = newDirectory.getUrl();
+            for (VirtualFile newDirectory : newDirectories) {
+              String newDirectoryUrl = newDirectory.getUrl();
               boolean alreadyAdded = false;
               for (ListItem item : myListModel.getItems()) {
                 if (newDirectoryUrl.equals(item.url) && !item.readOnly) {
@@ -236,7 +236,7 @@ public class GoLibrariesConfigurable implements SearchableConfigurable, Configur
 
   @NotNull
   private Set<String> getUserDefinedUrls() {
-    final Set<String> libraryUrls = ContainerUtil.newHashSet();
+    Set<String> libraryUrls = ContainerUtil.newHashSet();
     for (ListItem item : myListModel.getItems()) {
       if (!item.readOnly) {
         libraryUrls.add(item.url);

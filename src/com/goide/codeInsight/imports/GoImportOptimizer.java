@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import com.goide.psi.*;
 import com.goide.psi.impl.GoReference;
 import com.intellij.lang.ImportOptimizer;
 import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDocumentManager;
@@ -112,7 +113,7 @@ public class GoImportOptimizer implements ImportOptimizer {
   }
 
   public static MultiMap<String, GoImportSpec> filterUnusedImports(@NotNull PsiFile file, 
-                                                                   @NotNull final MultiMap<String, GoImportSpec> importMap) {
+                                                                   @NotNull MultiMap<String, GoImportSpec> importMap) {
     final MultiMap<String, GoImportSpec> result = MultiMap.create();
     result.putAllValues(importMap);
     result.remove("_"); // imports for side effects are always used
@@ -126,7 +127,9 @@ public class GoImportOptimizer implements ImportOptimizer {
           for (PsiElement e : list) {
             if (e.isValid()) {
               result.remove(".", importEntry);
+              break;
             }
+            ProgressManager.checkCanceled();
           }
         }
       }
@@ -177,8 +180,8 @@ public class GoImportOptimizer implements ImportOptimizer {
   }
 
   @NotNull
-  public static Collection<GoImportSpec> findDuplicatedEntries(@NotNull MultiMap<String, GoImportSpec> importMap) {
-    List<GoImportSpec> duplicatedEntries = ContainerUtil.newArrayList();
+  public static Set<GoImportSpec> findDuplicatedEntries(@NotNull MultiMap<String, GoImportSpec> importMap) {
+    Set<GoImportSpec> duplicatedEntries = ContainerUtil.newLinkedHashSet();
     for (Map.Entry<String, Collection<GoImportSpec>> imports : importMap.entrySet()) {
       Collection<GoImportSpec> importsWithSameName = imports.getValue();
       if (importsWithSameName.size() > 1) {

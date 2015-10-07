@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,6 +49,16 @@ public class GoCompletionTest extends GoCompletionTestBase {
     myFixture.getTempDirFixture().createFile("package1/pack/test.go", "package foo");
     myFixture.getTempDirFixture().createFile("package2/pack/test.go", "package bar");
     myFixture.configureByText("test.go", "package foo; import `pack<caret>`");
+    myFixture.completeBasic();
+    List<String> lookupElementStrings = myFixture.getLookupElementStrings();
+    assertNotNull(lookupElementStrings);
+    assertSameElements(lookupElementStrings, "package1/pack", "package2/pack");
+  }
+  
+  public void testImportPackagesWithoutClosingQuote() throws IOException {
+    myFixture.getTempDirFixture().createFile("package1/pack/test.go", "package foo");
+    myFixture.getTempDirFixture().createFile("package2/pack/test.go", "package bar");
+    myFixture.configureByText("test.go", "package foo; import `pack<caret>");
     myFixture.completeBasic();
     List<String> lookupElementStrings = myFixture.getLookupElementStrings();
     assertNotNull(lookupElementStrings);
@@ -470,6 +480,10 @@ public class GoCompletionTest extends GoCompletionTestBase {
 
   public void testPreventSOE() throws Exception {
     doTestInclude("package rubex; const ( IGNORECASE = 1; EXTEND = (IGNORECASE << 1); MULTILINE = (EXTEND << 1)); func m() {<caret>}", "EXTEND");
+  }
+  
+  public void testPreventSOE2() throws Exception {
+    doTestInclude("package main; import \"fmt\"; var fmt = &fmt.<caret>");
   }
 
   @SuppressWarnings("ConstantConditions")

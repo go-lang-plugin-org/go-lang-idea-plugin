@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,11 +24,11 @@ import com.goide.stubs.index.GoTypesIndex;
 import com.intellij.execution.Location;
 import com.intellij.execution.PsiLocation;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.testIntegration.TestLocationProvider;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
-import freemarker.template.utility.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -45,10 +45,10 @@ public class GoTestLocationProvider implements TestLocationProvider {
       return Collections.emptyList();
     }
 
-    String[] locationDataItems = StringUtil.split(locationData, '.');
+    List<String> locationDataItems = StringUtil.split(locationData, ".");
 
     // Location is a function name, e.g. `TestCheckItOut`
-    if (locationDataItems.length == 1) {
+    if (locationDataItems.size() == 1) {
       return ContainerUtil.mapNotNull(GoFunctionIndex.find(locationData, project, GlobalSearchScope.projectScope(project)),
                                       new Function<GoFunctionDeclaration, Location>() {
                                         @Override
@@ -59,11 +59,11 @@ public class GoTestLocationProvider implements TestLocationProvider {
     }
 
     // Location is a method name, e.g. `FooSuite.TestCheckItOut`
-    if (locationDataItems.length == 2) {
+    if (locationDataItems.size() == 2) {
       List<Location> locations = ContainerUtil.newArrayList();
-      for (GoTypeSpec typeSpec : GoTypesIndex.find(locationDataItems[0], project, GlobalSearchScope.projectScope(project))) {
+      for (GoTypeSpec typeSpec : GoTypesIndex.find(locationDataItems.get(0), project, GlobalSearchScope.projectScope(project))) {
         for (GoMethodDeclaration method : typeSpec.getMethods()) {
-          if (locationDataItems[1].equals(method.getName())) {
+          if (locationDataItems.get(1).equals(method.getName())) {
             ContainerUtil.addIfNotNull(locations, PsiLocation.fromPsiElement(method));
           }
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,15 @@ package com.goide.completion;
 import com.goide.project.GoExcludedPathsSettings;
 import com.intellij.util.ArrayUtil;
 
-public class GoExcludePackagesTest extends GoCompletionSdkAwareTest {
+public class GoExcludedPackagesTest extends GoCompletionSdkAwareTestBase {
   @Override
   protected void tearDown() throws Exception {
-    GoExcludedPathsSettings.getInstance(getProject()).setExcludedPackages(ArrayUtil.EMPTY_STRING_ARRAY);
-    super.tearDown();
+    try {
+      GoExcludedPathsSettings.getInstance(getProject()).setExcludedPackages(ArrayUtil.EMPTY_STRING_ARRAY);
+    }
+    finally {
+      super.tearDown();
+    }
   }
 
   private void doTestExcluded(String initial, String after, String... excludedPaths) {

@@ -484,6 +484,10 @@ GO_FILE
             PsiElement(identifier)('string')
     BLOCK
       PsiElement({)('{')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('aaa')
       RETURN_STATEMENT
         PsiElement(return)('return')
         ADD_EXPR

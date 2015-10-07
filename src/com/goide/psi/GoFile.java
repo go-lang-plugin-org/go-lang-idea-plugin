@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,6 +43,7 @@ import com.intellij.psi.stubs.StubTree;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayFactory;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Processor;
@@ -218,7 +219,7 @@ public class GoFile extends PsiFileBase {
    */
   @NotNull
   public MultiMap<String, GoImportSpec> getImportMap() {
-    MultiMap<String, GoImportSpec> map = MultiMap.create();
+    MultiMap<String, GoImportSpec> map = MultiMap.createLinked();
     for (GoImportSpec spec : getImports()) {
       String alias = spec.getAlias();
       if (alias != null) {
@@ -431,7 +432,19 @@ public class GoFile extends PsiFileBase {
   }
 
   public boolean hasCPathImport() {
-    return getImportMap().containsKey(GoConstants.C_PATH);
+    for (GoImportSpec importSpec : getImports()) {
+      if (GoConstants.C_PATH.equals(importSpec.getPath())) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public void deleteImport(@NotNull GoImportSpec importSpec) {
+    GoImportDeclaration importDeclaration = PsiTreeUtil.getParentOfType(importSpec, GoImportDeclaration.class);
+    assert importDeclaration != null;
+    PsiElement elementToDelete = importDeclaration.getImportSpecList().size() == 1 ? importDeclaration : importSpec;
+    elementToDelete.delete();
   }
 
   private static boolean processChildrenDummyAware(@NotNull GoFile file, @NotNull final Processor<PsiElement> processor) {
@@ -492,5 +505,4 @@ public class GoFile extends PsiFileBase {
       }
     });
   }
-
 }

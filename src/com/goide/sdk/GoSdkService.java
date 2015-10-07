@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import com.goide.GoConstants;
 import com.goide.GoEnvironmentUtil;
 import com.intellij.execution.configurations.PathEnvironmentVariableUtil;
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.project.Project;
@@ -39,6 +40,7 @@ import java.io.File;
 import java.util.Set;
 
 public abstract class GoSdkService extends SimpleModificationTracker {
+  public static final Logger LOG = Logger.getInstance(GoSdkService.class);
   private static final Set<String> FEDORA_SUBDIRECTORIES = ContainerUtil.newHashSet("linux_amd64", "linux_386", "linux_arm");
   
   @NotNull
@@ -94,11 +96,13 @@ public abstract class GoSdkService extends SimpleModificationTracker {
   public static String getGoExecutablePath(@Nullable String sdkHomePath) {
     if (sdkHomePath != null) {
       if (isAppEngineSdkPath(sdkHomePath)) {
+        LOG.debug("Detected GAE sdk at " + sdkHomePath);
         String goExecutablePath = PathUtil.toSystemIndependentName(sdkHomePath);
         goExecutablePath = StringUtil.trimEnd(goExecutablePath, GoConstants.APP_ENGINE_GO_ROOT_DIRECTORY_PATH);
         
         boolean gcloudInstallation = goExecutablePath.endsWith(GoConstants.GCLOUD_APP_ENGINE_DIRECTORY_PATH);
         if (gcloudInstallation) {
+          LOG.debug("Detected gcloud GAE installation at " + goExecutablePath);
           goExecutablePath = FileUtil.join(StringUtil.trimEnd(goExecutablePath, GoConstants.GCLOUD_APP_ENGINE_DIRECTORY_PATH), "bin");
         }
         return FileUtil.join(goExecutablePath, GoEnvironmentUtil.getGaeExecutableFileName(gcloudInstallation));
@@ -106,21 +110,30 @@ public abstract class GoSdkService extends SimpleModificationTracker {
       else {
         File binDirectory = new File(sdkHomePath, "bin");
         if (!binDirectory.exists() && SystemInfo.isLinux) {
+          LOG.debug(sdkHomePath + "/bin doesn't exist, checking linux-specific paths");
           // failed to define executable path in old linux and old go
           File goFromPath = PathEnvironmentVariableUtil.findInPath(GoConstants.GO_EXECUTABLE_NAME);
-          if (goFromPath != null && goFromPath.exists()) return goFromPath.getAbsolutePath();
+          if (goFromPath != null && goFromPath.exists()) {
+            LOG.debug("Go executable found at " + goFromPath.getAbsolutePath());
+            return goFromPath.getAbsolutePath();
+          }
         }
 
         String executableName = GoEnvironmentUtil.getBinaryFileNameForPath(GoConstants.GO_EXECUTABLE_NAME);
         String executable = FileUtil.join(sdkHomePath, "bin", executableName);
         
         if (!new File(executable).exists() && SystemInfo.isLinux) {
+          LOG.debug(executable + " doesn't exists. Looking for binaries in fedora-specific directories");
           // fedora
           for (String directory : FEDORA_SUBDIRECTORIES) {
             File file = new File(binDirectory, directory);
-            if (file.exists() && file.isDirectory()) return FileUtil.join(file.getAbsolutePath(), executableName);
+            if (file.exists() && file.isDirectory()) {
+              LOG.debug("Go executable found at " + file.getAbsolutePath());
+              return FileUtil.join(file.getAbsolutePath(), executableName);
+            }
           }
         }
+        LOG.debug("Go executable found at " + executable);
         return executable;
       }
     }

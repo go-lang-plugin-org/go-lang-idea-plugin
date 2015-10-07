@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,17 @@ import com.goide.GoCodeInsightFixtureTestCase;
 import com.goide.inspections.unresolved.GoUnresolvedReferenceInspection;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzerSettings;
+import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.command.undo.UndoManager;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.LightProjectDescriptor;
+import com.intellij.testFramework.fixtures.TempDirTestFixture;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
+
+import java.io.IOException;
+import java.util.List;
 
 
 public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
@@ -44,8 +50,12 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
 
   @Override
   protected void tearDown() throws Exception {
-    updateSettings(defaultGoOnTheFly, defaultJavaOnTheFly);
-    super.tearDown();
+    try {
+      updateSettings(defaultGoOnTheFly, defaultJavaOnTheFly);
+    }
+    finally {
+      super.tearDown();
+    }
   }
 
   @Override
@@ -103,5 +113,35 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
 
   public void testOnTheFlyDisabledJavaOnTheFlyDisabled() {
     doTestAddOnTheFly(false, false);
+  }
+
+  private void doTestImportOwnPath(String file, String text, String testFile, String testText, String path, boolean shouldImport)
+    throws IOException {
+    DaemonCodeAnalyzerSettings.getInstance().setImportHintEnabled(true);
+    updateSettings(true, true);
+
+    TempDirTestFixture dir = myFixture.getTempDirFixture();
+    dir.createFile(path + "/" + file, text);
+    VirtualFile test = dir.createFile(path + "/" + testFile, testText);
+    myFixture.configureFromExistingVirtualFile(test);
+    List<IntentionAction> actions = myFixture.filterAvailableIntentions("Import " + path + "?");
+    assertTrue(shouldImport != actions.isEmpty());
+  }
+
+  public void testOwnAddPathFromTest() throws IOException {
+    doTestImportOwnPath("a.go", "package myPack; func Func() {}",
+                        "a_test.go", "package myPack_test; func TestFunc() { my<caret>Pack.Func() }",
+                        "pack", true);
+  }
+
+  public void testDoNotImportOwnPathFromDifferentPackage() throws IOException {
+    doTestImportOwnPath("a.go", "package pack1; func Func() {}",
+                        "a_test.go", "package pack2_test; func TestFunc() { pack<caret>1.Func() }",
+                        "pack", false);
+  }
+
+  public void testCompleteDifferentPackageFromTest() {
+    myFixture.configureByText("a.go", "package foo; func a() { fmt.Print<caret> }");
+    assertNotEmpty(myFixture.getLookupElementStrings());
   }
 }

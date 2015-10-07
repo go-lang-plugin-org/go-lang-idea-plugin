@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -122,12 +122,12 @@ public class GoIntroduceVariableBase {
   }
 
   protected static void performOnElement(final GoIntroduceOperation operation) {
-    final GoExpression expression = operation.getExpression();
+    GoExpression expression = operation.getExpression();
     LinkedHashSet<String> suggestedNames = getSuggestedNames(expression);
     operation.setSuggestedNames(suggestedNames);
     operation.setOccurrences(GoRefactoringUtil.getLocalOccurrences(expression));
 
-    final Editor editor = operation.getEditor();
+    Editor editor = operation.getEditor();
     if (editor.getSettings().isVariableInplaceRenameEnabled()) {
       //noinspection ConstantConditions
       operation.setName(ContainerUtil.getFirstItem(suggestedNames));
@@ -182,7 +182,7 @@ public class GoIntroduceVariableBase {
         for (PsiElement occurrence : occurrences) {
           PsiElement occurrenceParent = occurrence.getParent();
           if (occurrenceParent instanceof GoParenthesesExpr) occurrence = occurrenceParent;
-          newOccurrences.add(occurrence.replace(GoElementFactory.createVarReference(project, name)));
+          newOccurrences.add(occurrence.replace(GoElementFactory.createReferenceExpression(project, name)));
         }
       }
     });
@@ -192,7 +192,7 @@ public class GoIntroduceVariableBase {
 
   private static LinkedHashSet<String> getNamesInContext(PsiElement context) {
     if (context == null) return ContainerUtil.newLinkedHashSet();
-    final LinkedHashSet<String> names = ContainerUtil.newLinkedHashSet();
+    LinkedHashSet<String> names = ContainerUtil.newLinkedHashSet();
 
     for (GoNamedElement namedElement : PsiTreeUtil.findChildrenOfType(context, GoNamedElement.class)) {
       names.add(namedElement.getName());

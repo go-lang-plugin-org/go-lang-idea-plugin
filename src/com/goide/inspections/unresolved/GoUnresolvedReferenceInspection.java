@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -90,7 +90,7 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
         if (o.getTextLength() < 2) return;
         if (GoConstants.C_PATH.equals(o.getPath())) return;
         PsiReference[] references = o.getReferences();
-        for (final PsiReference reference : references) {
+        for (PsiReference reference : references) {
           if (reference instanceof FileReference) {
             ResolveResult[] resolveResults = ((FileReference)reference).multiResolve(false);
             if (resolveResults.length == 0) {

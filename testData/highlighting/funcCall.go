@@ -203,3 +203,26 @@ func _() {
 	dc(1)
  	fmt.Println(dc.ConvertString("abc123"))
 }
+
+type dnsNameTest struct {
+	name   string
+	result bool
+}
+
+var dnsNameTests = []dnsNameTest{
+	{"_xmpp-server._tcp.google.com", true},
+}
+
+func _() {
+	for _, tc := range dnsNameTests {
+		println(tc.name)
+		println(tc.result)
+	}
+
+	// append loses return type
+	dnsNameTests2 := append(dnsNameTests, []dnsNameTest{})
+	for _, tc := range dnsNameTests2 {
+		println(tc.name)
+		println(tc.result)
+	}
+}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,8 @@ public class GoLegacyResolveStructTest extends GoLegacyResolveTestBase {
   public void testPromotedStructField()                     { doFileTest(); } 
   public void testFieldVsParam()                            { doFileTest(); } 
   public void testFieldVsParam2()                           { doFileTest(); }
+  public void testFieldVsParam3()                           { doFileTest(); }
+  public void testFieldVsParam4()                           { doFileTest(); }
 
   public void testDirectExportedFieldFromImportedPackage()  { doDirTest(); } 
   public void testDirectPrivateFieldFromImportedPackage()   { doDirTest(); }

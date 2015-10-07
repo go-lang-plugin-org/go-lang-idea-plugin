@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,16 +64,16 @@ public class GoReferenceImporter implements ReferenceImporter {
   }
 
   @Override
-  public boolean autoImportReferenceAt(@NotNull final Editor editor, @NotNull final PsiFile file, int offset) {
+  public boolean autoImportReferenceAt(@NotNull Editor editor, @NotNull PsiFile file, int offset) {
     if (!file.getViewProvider().getLanguages().contains(GoLanguage.INSTANCE) ||
         !GoCodeInsightSettings.getInstance().isAddUnambiguousImportsOnTheFly()) {
       return false;
     }
 
-    final PsiReference reference = file.findReferenceAt(offset);
+    PsiReference reference = file.findReferenceAt(offset);
     if (reference instanceof GoReference) {
-      final GoImportPackageQuickFix fix = new GoImportPackageQuickFix(reference);
-      final Project project = file.getProject();
+      GoImportPackageQuickFix fix = new GoImportPackageQuickFix(reference);
+      Project project = file.getProject();
       if (fix.isAvailable(project, editor, file)) {
         fix.applyFix();
         return true;

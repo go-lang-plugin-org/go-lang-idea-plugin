@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ abstract public class GoLiveTemplateContextType extends TemplateContextType {
     super(id, presentableName, baseContextType);
   }
 
-  public boolean isInContext(@NotNull final PsiFile file, final int offset) {
+  public boolean isInContext(@NotNull PsiFile file, int offset) {
     if (PsiUtilCore.getLanguageAtOffset(file, offset).isKindOf(GoLanguage.INSTANCE)) {
       PsiElement element = getFirstCompositeElement(file.findElementAt(offset));
       return element != null && isInContext(element);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -136,10 +136,10 @@ public class GoCompletionUtil {
   }
 
   @NotNull
-  public static LookupElement createFunctionOrMethodLookupElement(@NotNull final GoNamedSignatureOwner f,
-                                                                  @NotNull final String lookupString,
-                                                                  @Nullable final InsertHandler<LookupElement> h,
-                                                                  final double priority) {
+  public static LookupElement createFunctionOrMethodLookupElement(@NotNull GoNamedSignatureOwner f,
+                                                                  @NotNull String lookupString,
+                                                                  @Nullable InsertHandler<LookupElement> h,
+                                                                  double priority) {
     return PrioritizedLookupElement.withPriority(LookupElementBuilder
                                                    .createWithSmartPointer(lookupString, f)
                                                    .withRenderer(FUNCTION_RENDERER)

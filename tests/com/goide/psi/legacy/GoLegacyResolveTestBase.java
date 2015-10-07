@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,12 +41,6 @@ public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCa
   @Nullable protected PsiReference myReference;
   @Nullable protected PsiElement myDefinition;
   protected boolean myShouldBeResolved = true;
-
-  @Override
-  public void tearDown() throws Exception {
-    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls();
-    super.tearDown();
-  }
 
   @Override
   protected String getBasePath() {

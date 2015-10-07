@@ -178,7 +178,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitImportSpec(@NotNull GoImportSpec o) {
-    visitCompositeElement(o);
+    visitNamedElement(o);
   }
 
   public void visitImportString(@NotNull GoImportString o) {
@@ -231,10 +231,6 @@ public class GoVisitor extends PsiElementVisitor {
 
   public void visitMethodDeclaration(@NotNull GoMethodDeclaration o) {
     visitFunctionOrMethodDeclaration(o);
-  }
-
-  public void visitMethodExpr(@NotNull GoMethodExpr o) {
-    visitExpression(o);
   }
 
   public void visitMethodSpec(@NotNull GoMethodSpec o) {

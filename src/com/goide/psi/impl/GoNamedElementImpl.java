@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -110,7 +110,7 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
 
   @Nullable
   @Override
-  public GoType getGoType(@Nullable final ResolveState context) {
+  public GoType getGoType(@Nullable ResolveState context) {
     if (context != null) return getGoTypeInner(context);
     return CachedValuesManager.getCachedValue(this, new CachedValueProvider<GoType>() {
       @Nullable
@@ -150,7 +150,7 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
 
   @Override
   public ItemPresentation getPresentation() {
-    final String text = UsageViewUtil.createNodeText(this);
+    String text = UsageViewUtil.createNodeText(this);
     if (text != null) {
       return new ItemPresentation() {
         @Nullable
@@ -194,7 +194,7 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
     else if (this instanceof GoLabelDefinition) icon = GoIcons.LABEL;
     if (icon != null) {
       if ((flags & Iconable.ICON_FLAG_VISIBILITY) != 0) {
-        final RowIcon rowIcon = ElementBase.createLayeredIcon(this, icon, flags);
+        RowIcon rowIcon = ElementBase.createLayeredIcon(this, icon, flags);
         rowIcon.setIcon(isPublic() ? PlatformIcons.PUBLIC_ICON : PlatformIcons.PRIVATE_ICON, 1);
         return rowIcon;
       }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -84,6 +84,7 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       .after(CONST).spaces(1)
       .after(VAR).spaces(1)
       .after(STRUCT).spaces(1)
+      .after(INTERFACE).spaces(1)
       .after(RETURN).spaces(1)
       .after(GO).spaces(1)
       .after(DEFER).spaces(1)
@@ -275,9 +276,14 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
         ASTNode n1 = ((GoFormattingBlock)child1).getNode();
         ASTNode n2 = ((GoFormattingBlock)child2).getNode();
         if (n1.getElementType() == FIELD_DEFINITION && n2.getPsi() instanceof GoType) return one();
-        if (n1.getElementType() == INTERFACE && n2.getElementType() == LBRACE) {
-          ASTNode next = FormatterUtil.getNextNonWhitespaceSibling(n2);
-          return next != null && next.getElementType() == RBRACE ? none() : one();
+        if ((n1.getElementType() == STRUCT || n1.getElementType() == INTERFACE) && n2.getElementType() == LBRACE) {
+          ASTNode next = n2;
+          while ((next = FormatterUtil.getNext(next)) != null) {
+            if (next.getElementType() == RBRACE) return none();
+            if (next.getElementType() == TokenType.WHITE_SPACE && next.textContains('\n')) {
+              break;
+            }
+          }
         }
       }
       return mySpacingBuilder.getSpacing(this, child1, child2);

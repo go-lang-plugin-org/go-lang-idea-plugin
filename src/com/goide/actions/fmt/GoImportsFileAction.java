@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,7 +75,7 @@ public class GoImportsFileAction extends GoExternalToolsAction {
     @Override
     public void hyperlinkUpdate(@NotNull Notification notification, @NotNull HyperlinkEvent event) {
       if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-        final String description = event.getDescription();
+        String description = event.getDescription();
         if (GO_GET_IMPORTS.equals(description)) {
           GoGetPackageFix.applyFix(myProject, myModule, "golang.org/x/tools/cmd/goimports", false);
           notification.expire();

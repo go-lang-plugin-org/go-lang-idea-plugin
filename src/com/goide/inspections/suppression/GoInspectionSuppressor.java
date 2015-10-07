@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,32 +16,39 @@
 
 package com.goide.inspections.suppression;
 
-import com.goide.psi.GoCompositeElement;
-import com.goide.psi.GoImportDeclaration;
-import com.goide.psi.GoStatement;
-import com.goide.psi.GoTopLevelDeclaration;
+import com.goide.psi.*;
 import com.intellij.codeInsight.daemon.impl.actions.AbstractBatchSuppressByNoInspectionCommentFix;
 import com.intellij.codeInspection.InspectionSuppressor;
 import com.intellij.codeInspection.SuppressQuickFix;
 import com.intellij.codeInspection.SuppressionUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.ElementDescriptionUtil;
+import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.usageView.UsageViewTypeLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.regex.Matcher;
+
 public class GoInspectionSuppressor implements InspectionSuppressor {
   @Override
   public boolean isSuppressedFor(@NotNull PsiElement element, @NotNull String toolId) {
     GoTopLevelDeclaration topLevelDeclaration = PsiTreeUtil.getTopmostParentOfType(element, GoTopLevelDeclaration.class);
-    if (topLevelDeclaration != null && SuppressionUtil.isSuppressedInStatement(element, toolId, GoTopLevelDeclaration.class)) {
+    if (topLevelDeclaration != null && isSuppressedInStatement(toolId, topLevelDeclaration)) {
       return true;
     }
-    return SuppressionUtil.isSuppressedInStatement(element, toolId, GoStatement.class) ||
-           SuppressionUtil.isSuppressedInStatement(element, toolId, GoTopLevelDeclaration.class) ||
-           SuppressionUtil.isSuppressedInStatement(element, toolId, GoImportDeclaration.class);
+    GoImportDeclaration importDeclaration = PsiTreeUtil.getNonStrictParentOfType(element, GoImportDeclaration.class);
+    if (importDeclaration != null && importDeclaration.getPrevSibling() == null 
+        && isSuppressedInStatement(element, toolId, GoImportList.class)) {
+      return true;
+    }
+    return isSuppressedInStatement(element, toolId, GoPackageClause.class) ||
+           isSuppressedInStatement(element, toolId, GoStatement.class) ||
+           isSuppressedInStatement(element, toolId, GoTopLevelDeclaration.class) ||
+           isSuppressedInStatement(element, toolId, GoImportDeclaration.class);
   }
 
   @NotNull
@@ -54,6 +61,8 @@ public class GoInspectionSuppressor implements InspectionSuppressor {
       new GoSuppressInspectionFix(toolId, "statement", GoStatement.class, false),
       new GoSuppressInspectionFix("import", GoImportDeclaration.class, false),
       new GoSuppressInspectionFix(toolId, "import", GoImportDeclaration.class, false),
+      new GoSuppressInspectionFix("package statement", GoPackageClause.class, false),
+      new GoSuppressInspectionFix(toolId, "package statement", GoPackageClause.class, false),
     };
   }
 
@@ -104,5 +113,23 @@ public class GoInspectionSuppressor implements InspectionSuppressor {
       }
       return container;
     }
+  }
+
+  private static boolean isSuppressedInStatement(@NotNull PsiElement place,
+                                                @NotNull String toolId,
+                                                @NotNull Class<? extends PsiElement> statementClass) {
+    return isSuppressedInStatement(toolId, PsiTreeUtil.getNonStrictParentOfType(place, statementClass));
+  }
+
+  private static boolean isSuppressedInStatement(@NotNull String toolId, @Nullable PsiElement statement) {
+    if (statement != null) {
+      PsiElement prev = PsiTreeUtil.skipSiblingsBackward(statement, PsiWhiteSpace.class);
+      if (prev instanceof PsiComment) {
+        String text = prev.getText();
+        Matcher matcher = SuppressionUtil.SUPPRESS_IN_LINE_COMMENT_PATTERN.matcher(text);
+        return matcher.matches() && SuppressionUtil.isInspectionToolIdMentioned(matcher.group(1), toolId);
+      }
+    }
+    return false;
   }
 }

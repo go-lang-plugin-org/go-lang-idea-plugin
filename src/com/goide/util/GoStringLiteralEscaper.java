@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ public class GoStringLiteralEscaper extends LiteralTextEscaper<GoStringLiteral> 
   }
 
   @Override
-  public boolean decode(@NotNull final TextRange rangeInsideHost, @NotNull final StringBuilder outChars) {
+  public boolean decode(@NotNull TextRange rangeInsideHost, @NotNull StringBuilder outChars) {
     TextRange.assertProperRange(rangeInsideHost);
 
     String subText = rangeInsideHost.substring(myHost.getText());
@@ -46,7 +46,7 @@ public class GoStringLiteralEscaper extends LiteralTextEscaper<GoStringLiteral> 
   }
 
   @Override
-  public int getOffsetInHost(final int offsetInDecoded, @NotNull final TextRange rangeInsideHost) {
+  public int getOffsetInHost(int offsetInDecoded, @NotNull TextRange rangeInsideHost) {
     TextRange.assertProperRange(rangeInsideHost);
 
     if (myHost.getRawString() != null) {

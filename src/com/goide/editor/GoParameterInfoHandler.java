@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -186,7 +186,7 @@ public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabAction
     List<String> paramPresentations = ContainerUtil.newArrayListWithCapacity(2 * paramDeclarations.size());
     for (GoParameterDeclaration paramDeclaration : paramDeclarations) {
       boolean isVariadic = paramDeclaration.isVariadic();
-      final List<GoParamDefinition> paramDefinitionList = paramDeclaration.getParamDefinitionList();
+      List<GoParamDefinition> paramDefinitionList = paramDeclaration.getParamDefinitionList();
       for (GoParamDefinition paramDefinition : paramDefinitionList) {
         String separator = isVariadic ? " ..." : " ";
         paramPresentations.add(paramDefinition.getText() + separator + paramDeclaration.getType().getText());

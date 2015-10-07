@@ -1,0 +1,2 @@
+//noinspection ALL
+package otherPackage

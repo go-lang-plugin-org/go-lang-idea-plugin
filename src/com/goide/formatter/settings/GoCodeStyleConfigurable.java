@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.goide.formatter.settings;
 
+import com.goide.GoConstants;
 import com.goide.GoLanguage;
 import com.intellij.application.options.CodeStyleAbstractConfigurable;
 import com.intellij.application.options.CodeStyleAbstractPanel;
@@ -25,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class GoCodeStyleConfigurable extends CodeStyleAbstractConfigurable {
   public GoCodeStyleConfigurable(@NotNull CodeStyleSettings settings, CodeStyleSettings cloneSettings) {
-    super(settings, cloneSettings, "Go");
+    super(settings, cloneSettings, GoConstants.GO);
   }
 
   @NotNull

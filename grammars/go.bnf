@@ -71,14 +71,14 @@
   extends("(Or|Add|Conversion|Mul|Selector)Expr")=BinaryExpr
   extends(".*(Expr|Literal|Lit|OperandName)")=Expression
 
-  implements("TypeSpec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver")="com.goide.psi.GoNamedElement"
+  implements("(Type|Import)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver")="com.goide.psi.GoNamedElement"
   implements("FunctionLit")="com.goide.psi.GoSignatureOwner"
   implements("MethodSpec")="com.goide.psi.GoNamedSignatureOwner"
   implements("(Function|Method)Declaration")="com.goide.psi.GoFunctionOrMethodDeclaration"
   implements("(Const|Type|Var)Declaration")="com.goide.psi.GoTopLevelDeclaration"
   implements(".*ReferenceExpression|FieldName")="com.goide.psi.GoReferenceExpressionBase"
   extends("(Function|Method)Declaration")="com.goide.psi.impl.GoFunctionOrMethodDeclarationImpl<?>"
-  extends("(Type|Method)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver")="com.goide.psi.impl.GoNamedElementImpl<?>"
+  extends("(Type|Import|Method)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver")="com.goide.psi.impl.GoNamedElementImpl<?>"
   extends("Parameters|Signature|ParameterDeclaration|Result|Type|(Const|Var|Import)Spec")="com.goide.psi.impl.GoStubbedElementImpl<?>"
   elementTypeFactory("(Function|Method|Parameter)Declaration|(Type|Import|Method|Const|Var)Spec|RangeClause|RecvStatement|ShortVarDeclaration|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver|Parameters|Signature|Result|.*Type|TypeList.*")='com.goide.stubs.GoStubElementTypeFactory.factory'
   pin(".*Statement")=1
@@ -105,7 +105,7 @@ ImportDeclaration ::= import ( ImportSpec | '(' ImportSpecs? ')' ) {
 private ImportSpecs ::= ImportSpec (semi ImportSpec)* semi? {pin=1}
 ImportSpec ::= [ '.' | identifier ] ImportString {
   stubClass="com.goide.stubs.GoImportSpecStub"
-  methods=[getAlias getLocalPackageName shouldGoDeeper isForSideEffects isDot getPath]
+  methods=[getAlias getLocalPackageName shouldGoDeeper isForSideEffects isDot getPath getName]
 }
 ImportString ::= string | raw_string {methods=[getReferences resolve getPath getPathTextRange]}
 
@@ -213,7 +213,7 @@ private StatementRecover ::= !('!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^
 
 SimpleStatement ::=
     ShortVarDeclaration
-  | (LeftHandExprList (AssignmentStatement | SendStatement | ['++' | '--'])) {pin(".*")="ExpressionList"}
+  | (LeftHandExprList (AssignmentStatement | SendStatement | ['++' | '--'])) {pin(".*")=LeftHandExprList}
 
 private TopLevelDeclaration ::= OneOfDeclarations semi {pin=1 recoverWhile=TopLevelDeclarationRecover}
 private OneOfDeclarations ::=
@@ -354,7 +354,6 @@ private MaxGroup ::=
   | CallExpr
   | TypeAssertionExpr
   | SelectorExpr
-  | MethodExpr
   | IndexOrSliceExpr
   | Literal
   | LiteralTypeExpr
@@ -365,7 +364,6 @@ private add_op ::= '+' | '-' | '|' | '^'
 private mul_op ::= '*' | '/' | '%' | '<<' | '>>' | '&' | '&^'
 private unary_op ::= '+' | '-' | '!' | '^' | '*' | '&' | '<-'
 
-MethodExpr ::= ReceiverType '.' ReferenceExpression // todo: rewrite with qualification not with siblings
 ReceiverType ::= TypeName | '(' '*' TypeName ')' | '(' ReceiverType ')'
 SelectorExpr ::= Expression '.' !('(' 'type') Expression
 IndexOrSliceExpr ::= Expression '[' <<enterMode "PAR">> (SliceExprBody | IndexExprBody) <<exitModeSafe "PAR">> ']' {pin=2}

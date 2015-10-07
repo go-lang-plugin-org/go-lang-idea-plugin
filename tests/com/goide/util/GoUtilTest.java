@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ public class GoUtilTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureByText("docs.go", "package documentation");
     myFixture.configureByText("bar_test.go", "package tricky_package_name");
     myFixture.configureByText("non_test_file.go", "package non_test");
+    myFixture.configureByText("ignored.go", "// +build ignored\n\npackage ignored");
     
     assertSameElements(GoUtil.getAllPackagesInDirectory(myFixture.getFile().getContainingDirectory(), true), 
                        "foo", "main", "non_test", "documentation", "tricky_package_name");

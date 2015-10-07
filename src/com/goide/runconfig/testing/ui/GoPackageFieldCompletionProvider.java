@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ public class GoPackageFieldCompletionProvider extends TextFieldCompletionProvide
   protected void addCompletionVariants(@NotNull String text,
                                        int offset,
                                        @NotNull String prefix,
-                                       @NotNull final CompletionResultSet result) {
+                                       @NotNull CompletionResultSet result) {
     GoImportPathsCompletionProvider.addCompletions(result, myModuleProducer.produce(), null, false);
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.goide.inspections;
 
+import com.goide.GoConstants;
 import com.goide.psi.GoNamedElement;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInspection.LocalQuickFixOnPsiElement;
@@ -53,11 +54,11 @@ public class GoRenameQuickFix extends LocalQuickFixOnPsiElement {
 
     Runnable runnable = new Runnable() {
       public void run() {
-        final AsyncResult<DataContext> dataContextContainer = DataManager.getInstance().getDataContextFromFocus();
+        AsyncResult<DataContext> dataContextContainer = DataManager.getInstance().getDataContextFromFocus();
         dataContextContainer.doWhenDone(new Consumer<DataContext>() {
           @Override
           public void consume(DataContext dataContext) {
-            final RenameHandler renameHandler = RenameHandlerRegistry.getInstance().getRenameHandler(dataContext);
+            RenameHandler renameHandler = RenameHandlerRegistry.getInstance().getRenameHandler(dataContext);
             if (renameHandler != null) {
               renameHandler.invoke(project, new PsiElement[]{startElement}, dataContext);
             }
@@ -79,7 +80,7 @@ public class GoRenameQuickFix extends LocalQuickFixOnPsiElement {
 
   @NotNull
   public String getFamilyName() {
-    return "Go";
+    return GoConstants.GO;
   }
 
   @NotNull

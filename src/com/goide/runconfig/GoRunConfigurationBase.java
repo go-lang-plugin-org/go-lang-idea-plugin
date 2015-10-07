@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -92,15 +92,15 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
 
   @Override
   public void checkConfiguration() throws RuntimeConfigurationException {
-    final GoModuleBasedConfiguration configurationModule = getConfigurationModule();
-    final Module module = configurationModule.getModule();
+    GoModuleBasedConfiguration configurationModule = getConfigurationModule();
+    Module module = configurationModule.getModule();
     if (module != null) {
       if (GoSdkService.getInstance(module.getProject()).getSdkHomePath(module) == null) {
         throw new RuntimeConfigurationWarning("Go SDK is not specified for module '" + module.getName() + "'");
       }
     }
     else {
-      final String moduleName = configurationModule.getModuleName();
+      String moduleName = configurationModule.getModuleName();
       if (moduleName != null) {
         throw new RuntimeConfigurationError(ExecutionBundle.message("module.doesn.t.exist.in.project.error.text", moduleName));
       }
@@ -112,7 +112,7 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
   }
 
   @Override
-  public void writeExternal(final Element element) throws WriteExternalException {
+  public void writeExternal(Element element) throws WriteExternalException {
     super.writeExternal(element);
     writeModule(element);
     if (StringUtil.isNotEmpty(myWorkingDirectory)) {
@@ -133,7 +133,7 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
   }
 
   @Override
-  public void readExternal(@NotNull final Element element) throws InvalidDataException {
+  public void readExternal(@NotNull Element element) throws InvalidDataException {
     super.readExternal(element);
     readModule(element);
     myGoParams = StringUtil.notNullize(JDOMExternalizerUtil.getFirstChildValueAttribute(element, GO_PARAMETERS_NAME));

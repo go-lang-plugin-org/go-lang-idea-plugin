@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ public abstract class GoNamedStubElementType<S extends GoNamedStub<T>, T extends
     return super.shouldCreateStub(node) && psi instanceof GoNamedElement && StringUtil.isNotEmpty(((GoNamedElement)psi).getName());
   }
 
-  public void indexStub(@NotNull final S stub, @NotNull final IndexSink sink) {
+  public void indexStub(@NotNull S stub, @NotNull IndexSink sink) {
     String name = stub.getName();
     if (shouldIndex() && StringUtil.isNotEmpty(name)) {
       String packageName = null;

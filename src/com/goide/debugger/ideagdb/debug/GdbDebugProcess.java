@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -160,7 +160,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
         gdbConsoleContent.setCloseable(false);
 
         // Create the actions
-        final DefaultActionGroup consoleActions = new DefaultActionGroup();
+        DefaultActionGroup consoleActions = new DefaultActionGroup();
         AnAction[] actions = myGdbConsole.getConsole().createConsoleActions();
         for (AnAction action : actions) {
           consoleActions.add(action);
@@ -179,7 +179,7 @@ public class GdbDebugProcess extends XDebugProcess implements GdbListener {
    * @param ex The exception
    */
   @Override
-  public void onGdbError(final Throwable ex) {
+  public void onGdbError(Throwable ex) {
     LOG.error("GDB error", ex);
   }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ public class GoSmallIDEsSdkService extends GoSdkService {
 
   @Nullable
   @Override
-  public String getSdkHomePath(@Nullable final Module module) {
+  public String getSdkHomePath(@Nullable Module module) {
     ComponentManager holder = ObjectUtils.notNull(module, myProject);
     return CachedValuesManager.getManager(myProject).getCachedValue(holder, new CachedValueProvider<String>() {
       @Nullable
@@ -58,9 +58,9 @@ public class GoSmallIDEsSdkService extends GoSdkService {
           public String compute() {
             LibraryTable table = LibraryTablesRegistrar.getInstance().getLibraryTable(myProject);
             for (Library library : table.getLibraries()) {
-              final String libraryName = library.getName();
+              String libraryName = library.getName();
               if (libraryName != null && libraryName.startsWith(LIBRARY_NAME)) {
-                for (final VirtualFile root : library.getFiles(OrderRootType.CLASSES)) {
+                for (VirtualFile root : library.getFiles(OrderRootType.CLASSES)) {
                   if (isGoSdkLibRoot(root)) {
                     return libraryRootToSdkPath(root);
                   }
@@ -83,7 +83,7 @@ public class GoSmallIDEsSdkService extends GoSdkService {
       @Override
       public Result<String> compute() {
         String result = null;
-        final String sdkHomePath = getSdkHomePath(module);
+        String sdkHomePath = getSdkHomePath(module);
         if (sdkHomePath != null) {
           result = GoSdkUtil.retrieveGoVersion(sdkHomePath);
         }

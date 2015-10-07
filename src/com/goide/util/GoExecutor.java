@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,8 @@ import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.*;
+import com.intellij.openapi.util.Disposer;
+import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.openapi.vfs.VirtualFileManager;
@@ -200,9 +201,9 @@ public class GoExecutor {
         myProcessHandler.addProcessListener(listener);
       }
 
-      final CapturingProcessAdapter processAdapter = new CapturingProcessAdapter(myProcessOutput) {
+      CapturingProcessAdapter processAdapter = new CapturingProcessAdapter(myProcessOutput) {
         @Override
-        public void processTerminated(@NotNull final ProcessEvent event) {
+        public void processTerminated(@NotNull ProcessEvent event) {
           super.processTerminated(event);
           final boolean success = event.getExitCode() == 0 && myProcessOutput.getStderr().isEmpty();
           result.set(success);
@@ -234,7 +235,7 @@ public class GoExecutor {
       LOGGER.debug("Finished `" + getPresentableName() + "` with result: " + result.get());
       return result.get();
     }
-    catch (final ExecutionException e) {
+    catch (ExecutionException e) {
       if (myShowOutputOnError) {
         ExecutionHelper.showErrors(myProject, Collections.singletonList(e), getPresentableName(), null);
       }

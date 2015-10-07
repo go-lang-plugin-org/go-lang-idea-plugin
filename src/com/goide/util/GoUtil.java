@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.DelegatingGlobalSearchScope;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.CachedValue;
@@ -166,17 +167,17 @@ public class GoUtil {
   /**
    * isReferenceTo optimization. Before complex checking via resolve we can say for sure that element
    * can't be a reference to given declaration in following cases:<br/>
-   * - GoLabelRef can't be resolved to anything but GoLabelDefinition<br/>
-   * - GoTypeReferenceExpression (not from receiver type) can't be resolved to anything but GoTypeSpec<br/>
-   * - Definition is private and reference in different package<br/>
-   * - Definition is public, reference in different package and reference containing file doesn't have an import of definition package
+   * – GoLabelRef can't be resolved to anything but GoLabelDefinition<br/>
+   * – GoTypeReferenceExpression (not from receiver type) can't be resolved to anything but GoTypeSpec or GoImportSpec<br/>
+   * – Definition is private and reference in different package<br/>
+   * – Definition is public, reference in different package and reference containing file doesn't have an import of definition package
    */
   public static boolean couldBeReferenceTo(@NotNull PsiElement definition, @NotNull PsiElement reference) {
     if (definition instanceof PsiDirectory && reference instanceof GoReferenceExpressionBase) return true;
     if (reference instanceof GoLabelRef && !(definition instanceof GoLabelDefinition)) return false;
     if (reference instanceof GoTypeReferenceExpression &&
         !(reference.getParent() instanceof GoReceiverType) &&
-        !(definition instanceof GoTypeSpec)) {
+        !(definition instanceof GoTypeSpec || definition instanceof GoImportSpec)) {
       return false;
     }
 
@@ -215,7 +216,7 @@ public class GoUtil {
       public Result<Collection<String>> compute() {
         Collection<String> set = ContainerUtil.newLinkedHashSet();
         for (PsiFile file : dir.getFiles()) {
-          if (file instanceof GoFile && !directoryToIgnore(file.getName())) {
+          if (file instanceof GoFile && !directoryToIgnore(file.getName()) && allowed(file)) {
             String name = ((GoFile)file).getPackageName();
             if (StringUtil.isNotEmpty(name)) {
               set.add(trimTestSuffices && GoTestFinder.isTestFile(file) ? StringUtil.trimEnd(name, GoConstants.TEST_SUFFIX) : name);
@@ -245,15 +246,32 @@ public class GoUtil {
   
   public static class ExceptChildOfDirectory extends DelegatingGlobalSearchScope {
     @NotNull private final VirtualFile myParent;
+    @Nullable private final String myAllowedPackageInExcludedDirectory;
 
-    public ExceptChildOfDirectory(@NotNull VirtualFile parent, @NotNull GlobalSearchScope baseScope) {
+    public ExceptChildOfDirectory(@NotNull VirtualFile parent, 
+                                  @NotNull GlobalSearchScope baseScope, 
+                                  @Nullable String allowedPackageInExcludedDirectory) {
       super(baseScope);
       myParent = parent;
+      myAllowedPackageInExcludedDirectory = allowedPackageInExcludedDirectory;
     }
 
     @Override
     public boolean contains(@NotNull VirtualFile file) {
-      return !myParent.equals(file.getParent()) && super.contains(file);
+      if (myParent.equals(file.getParent())) {
+        if (myAllowedPackageInExcludedDirectory == null) {
+          return false;
+        }
+        Project project = getProject();
+        PsiFile psiFile = project != null ? PsiManager.getInstance(project).findFile(file) : null;
+        if (!(psiFile instanceof GoFile)) {
+          return false;
+        }
+        if (!myAllowedPackageInExcludedDirectory.equals(((GoFile)psiFile).getPackageName())) {
+          return false;
+        }
+      }
+      return super.contains(file);
     }
   }
 

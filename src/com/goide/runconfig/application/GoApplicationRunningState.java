@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.goide.runconfig.application;
 
+import com.goide.GoConstants;
 import com.goide.runconfig.GoRunningState;
 import com.goide.util.GoExecutor;
 import com.goide.util.GoHistoryProcessListener;
@@ -97,13 +98,16 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
   @Override
   protected GoExecutor patchExecutor(@NotNull GoExecutor executor) throws ExecutionException {
     if (isDebug()) {
-      File dlv = new File(GoUtil.getPlugin().getPath(), "lib/dlv/" + (SystemInfo.isMac ? "mac" : "linux") + "/dlv");
+      String dlvPath = System.getProperty("dlv.path");
+      File dlv = dlvPath != null ? 
+                 new File(dlvPath) : 
+                 new File(GoUtil.getPlugin().getPath(), "lib/dlv/" + (SystemInfo.isMac ? "mac" : "linux") + "/" + GoConstants.DELVE_EXECUTABLE_NAME);
       if (dlv.exists() && !dlv.canExecute()) {
         //noinspection ResultOfMethodCallIgnored
         dlv.setExecutable(true, false);
       }
       return executor.withExePath(dlv.getAbsolutePath())
-        .withParameters("--listen=localhost:" + myDebugPort, "--headless=true", "run", myOutputFilePath, "--");
+        .withParameters("--listen=localhost:" + myDebugPort, "--headless=true", "exec", myOutputFilePath, "--");
     }
     return executor.withExePath(myOutputFilePath);
   }

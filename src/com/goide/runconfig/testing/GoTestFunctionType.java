@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +54,7 @@ public enum GoTestFunctionType {
     // https://github.com/golang/go/blob/master/src/cmd/go/test.go#L1161 – isTest()
     if (name == null || !name.startsWith(prefix)) return false;
     if (prefix.length() == name.length()) return true;
-    final char c = name.charAt(prefix.length());
+    char c = name.charAt(prefix.length());
     return !Character.isLetter(c) || !Character.isLowerCase(c);
   }
 }

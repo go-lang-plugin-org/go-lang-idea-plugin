@@ -50,7 +50,7 @@ var t T
 
 func <warning>bar</warning>() {
     t.Mv(7)
-    T.Mv<error>(t, 7)</error> // todo: it's a greed code
+    T.Mv(t, 7)
     (T).Mv(t, 7)
     f1 := T.Mv; f1(t, 7)
     f2 := (T).Mv; f2(t, 7)
@@ -196,19 +196,6 @@ func GetMulti() (map[string]*Item) {
 	m := make(map[string]*Item)
 	m["AA"] = &Item{}
 	return m
-}
-
-type Response struct { ResponseWriter }
-type ResponseWriter interface { Header() Header }
-type Header int
-
-func (h Header) Add(key, value string) { }
-
-func (r Response) AddHeader(header string, value string) Response {
-	rr := r.Header()
-	rr.Add("", "")
-	r.Header().Add(header, value)
-	return r
 }
 
 type WebService struct { rootPath string }
@@ -409,5 +396,86 @@ func (t MyType) Get(key string) string { return "hello" }
 func _() {
 	st := MyType("tag")
 	st.Get("key") // <- unresolved Get
+}
+
+type TestStruct struct {
+	SomeId int
+}
+
+type DataSlice []*TestStruct
+
+func NewDataSlice() *DataSlice {
+	return &DataSlice{}
+}
+
+func _() {
+	data := NewDataSlice()
+	for _, element := range data {
+		if  element.SomeId > 20 {
+			println("some text")
+		}
+	}
+}
+
+type Params struct { }
+
+type Image interface { }
+
+type ServerFunc func(params Params) (*Image, error)
+
+func (f ServerFunc) Get(params Params) (*Image, error) {
+	return f(params)
+}
+
+type Server interface {
+	Get(Params) (*Image, error)
+}
+
+func _() {
+	server := ServerFunc(func(params Params) (*Image, error) {
+		return nil, nil
+	})
+	server.Get(Params{})
+}
+
+func _() {
+	type (
+		client struct {
+			message chan string
+		}
+		clientList struct {
+			m (map[string]*client)
+		}
+	)
+	cl := clientList{m: make(map[string]*client)}
+	message := ""
+	for _, c := range cl.m {
+		c.message <- message
+	}
+}
+
+func _() {
+	addr := "test"
+	x := struct {
+		addr string
+	}{addr: addr}
+	Println(x)
+}
+
+func _() {
+	tests:=[]struct{ want int}{}
+	println(tests)
+	want := ""
+	Println(want)
+}
+
+type SensorFactory struct {
+	Sensors map[string]string
+}
+
+func _() *SensorFactory {
+	factory := new (SensorFactory)
+	factory.Sensors = make(map[string]string)
+	return factory
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,7 +60,7 @@ public abstract class GoLibrariesService<T extends GoLibrariesState> extends Sim
 
   @NotNull
   public static Collection<? extends VirtualFile> getUserDefinedLibraries(@NotNull Module module) {
-    final Set<VirtualFile> result = ContainerUtil.newLinkedHashSet();
+    Set<VirtualFile> result = ContainerUtil.newLinkedHashSet();
     result.addAll(goRootsFromUrls(GoModuleLibrariesService.getInstance(module).getLibraryRootUrls()));
     result.addAll(getUserDefinedLibraries(module.getProject()));
     return result;
@@ -68,7 +68,7 @@ public abstract class GoLibrariesService<T extends GoLibrariesState> extends Sim
 
   @NotNull
   public static Collection<? extends VirtualFile> getUserDefinedLibraries(@NotNull Project project) {
-    final Set<VirtualFile> result = ContainerUtil.newLinkedHashSet();
+    Set<VirtualFile> result = ContainerUtil.newLinkedHashSet();
     result.addAll(goRootsFromUrls(GoProjectLibrariesService.getInstance(project).getLibraryRootUrls()));
     result.addAll(getUserDefinedLibraries());
     return result;

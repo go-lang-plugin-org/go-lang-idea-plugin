@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ public class GoTestSignaturesInspection extends GoInspectionBase {
   }
 
   @Override
-  protected void checkFile(@NotNull final GoFile file, @NotNull ProblemsHolder problemsHolder) {
+  protected void checkFile(@NotNull GoFile file, @NotNull ProblemsHolder problemsHolder) {
     if (!GoTestFinder.isTestFile(file)) return;
     GoImportSpec testingImportSpec = file.getImportedPackagesMap().get(GoConstants.TESTING_PATH);
     String testingAlias = getTestingAlias(testingImportSpec);

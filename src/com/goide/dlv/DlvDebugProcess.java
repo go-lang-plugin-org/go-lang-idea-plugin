@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,6 +60,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static com.goide.dlv.protocol.DlvApi.*;
 
 public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> implements Disposable {
+  public static boolean isDlvDisabled = SystemInfo.isWindows || SystemInfo.is32Bit;
+
   final static Logger LOG = Logger.getInstance(DlvDebugProcess.class);
   private final AtomicBoolean breakpointsInitiated = new AtomicBoolean();
   private final AtomicBoolean connectedListenerAdded = new AtomicBoolean();
@@ -84,11 +86,12 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
           @Override
           public void consume(@NotNull List<Location> locations) {
             DlvSuspendContext context = new DlvSuspendContext(o.currentThread.id, locations, getProcessor());
+            XDebugSession session = getSession();
             if (find == null) {
-              getSession().positionReached(context);
+              session.positionReached(context);
             }
             else {
-              getSession().breakpointReached(find, null, context);
+              session.breakpointReached(find, null, context);
             }
           }
         });
@@ -99,10 +102,6 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
       return point == null ? null : breakpoints.get(point.id);
     }
   };
-
-  public static boolean isDlvDisabled() {
-    return SystemInfo.isWindows || SystemInfo.is32Bit;
-  }
 
   @NotNull
   private <T> Promise<T> send(@NotNull DlvRequest<T> request) {
@@ -260,7 +259,8 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
         .rejected(new Consumer<Throwable>() {
           @Override
           public void consume(@Nullable Throwable t) {
-            getSession().updateBreakpointPresentation(breakpoint, AllIcons.Debugger.Db_invalid_breakpoint, t == null ? null : t.getMessage());
+            String message = t == null ? null : t.getMessage();
+            getSession().updateBreakpointPresentation(breakpoint, AllIcons.Debugger.Db_invalid_breakpoint, message);
           }
         });
     }

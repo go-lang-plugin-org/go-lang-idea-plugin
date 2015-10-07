@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
@@ -50,11 +51,12 @@ import org.jetbrains.concurrency.Promise;
 import javax.swing.*;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 class DlvStackFrame extends XStackFrame {
   private final DlvApi.Location myLocation;
   private final DlvCommandProcessor myProcessor;
-  private final boolean myTop;
+  private final int myId;
   private static final Set<String> NUMBERS = ContainerUtil.newTroveSet(
     "int8",
     "uint8",
@@ -78,22 +80,21 @@ class DlvStackFrame extends XStackFrame {
     "rune"
   );
 
-  public DlvStackFrame(DlvApi.Location location, DlvCommandProcessor processor, boolean top) {
+  public DlvStackFrame(DlvApi.Location location, DlvCommandProcessor processor, int id) {
     myLocation = location;
     myProcessor = processor;
-    myTop = top;
+    myId = id;
   }
 
   @Nullable
   @Override
   public XDebuggerEvaluator getEvaluator() {
-    if (!myTop) return null;
     return new XDebuggerEvaluator() {
       @Override
       public void evaluate(@NotNull String expression,
                            @NotNull final XEvaluationCallback callback,
                            @Nullable XSourcePosition expressionPosition) {
-        myProcessor.send(new DlvRequest.EvalSymbol(expression))
+        myProcessor.send(new DlvRequest.EvalSymbol(expression, myId))
           .done(new Consumer<DlvApi.Variable>() {
             @Override
             public void consume(@NotNull DlvApi.Variable variable) {
@@ -113,13 +114,14 @@ class DlvStackFrame extends XStackFrame {
       public TextRange getExpressionRangeAtOffset(@NotNull final Project project,
                                                   @NotNull final Document document,
                                                   final int offset,
-                                                  final boolean sideEffectsAllowed) {
+                                                  boolean sideEffectsAllowed) {
         final Ref<TextRange> currentRange = Ref.create(null);
         PsiDocumentManager.getInstance(project).commitAndRunReadAction(new Runnable() {
           @Override
           public void run() {
             try {
-              PsiElement elementAtCursor = DebuggerUtilsEx.findElementAt(PsiDocumentManager.getInstance(project).getPsiFile(document), offset);
+              PsiElement elementAtCursor =
+                DebuggerUtilsEx.findElementAt(PsiDocumentManager.getInstance(project).getPsiFile(document), offset);
               GoTypeOwner e = PsiTreeUtil.getParentOfType(elementAtCursor,
                                                           GoReferenceExpression.class,
                                                           GoVarDefinition.class,
@@ -140,7 +142,7 @@ class DlvStackFrame extends XStackFrame {
   }
 
   @NotNull
-  private static XValue createXValue(@NotNull final DlvApi.Variable variable, @Nullable final Icon icon) {
+  private XValue createXValue(@NotNull final DlvApi.Variable variable, @Nullable final Icon icon) {
     return new XNamedValue(variable.name) {
       @Override
       public void computePresentation(@NotNull XValueNode node, @NotNull XValuePlace place) {
@@ -149,7 +151,35 @@ class DlvStackFrame extends XStackFrame {
           node.setPresentation(icon, presentation, false);
           return;
         }
-        node.setPresentation(icon, variable.type, variable.value, false);
+        String value = variable.value;
+        String prefix = variable.type + " ";
+        node.setPresentation(icon, variable.type,
+                             StringUtil.startsWith(value, prefix) ? value.replaceFirst(Pattern.quote(prefix), "") : value, false);
+      }
+
+      @Nullable
+      @Override
+      public XValueModifier getModifier() {
+        return new XValueModifier() {
+          @Override
+          public void setValue(@NotNull String newValue, @NotNull final XModificationCallback callback) {
+            myProcessor.send(new DlvRequest.SetSymbol(variable.name, newValue, myId))
+              .processed(new Consumer<Object>() {
+              @Override
+              public void consume(Object o) {
+                if (o != null) {
+                  callback.valueModified();
+                }
+              }
+            })
+              .rejected(new Consumer<Throwable>() {
+                @Override
+                public void consume(Throwable throwable) {
+                  callback.errorOccurred(throwable.getMessage());
+                }
+              });
+          }
+        };
       }
 
       @Nullable
@@ -177,7 +207,7 @@ class DlvStackFrame extends XStackFrame {
     String url = myLocation.file;
     VirtualFile file = LocalFileSystem.getInstance().findFileByPath(url);
     if (file == null) return null;
-    return XDebuggerUtil.getInstance().createPosition(file, myLocation.line);
+    return XDebuggerUtil.getInstance().createPosition(file, myLocation.line - 1);
   }
 
   @Override
@@ -194,16 +224,12 @@ class DlvStackFrame extends XStackFrame {
 
   @Override
   public void computeChildren(@NotNull final XCompositeNode node) {
-    if (!myTop) {
-      super.computeChildren(node);
-      return;
-    }
-    send(new DlvRequest.ListLocalVars()).done(new Consumer<List<DlvApi.Variable>>() {
+    send(new DlvRequest.ListLocalVars(myId)).done(new Consumer<List<DlvApi.Variable>>() {
       @Override
       public void consume(@NotNull List<DlvApi.Variable> variables) {
         final XValueChildrenList xVars = new XValueChildrenList(variables.size());
         for (DlvApi.Variable v : variables) xVars.add(v.name, createXValue(v, GoIcons.VARIABLE));
-        send(new DlvRequest.ListFunctionArgs()).done(new Consumer<List<DlvApi.Variable>>() {
+        send(new DlvRequest.ListFunctionArgs(myId)).done(new Consumer<List<DlvApi.Variable>>() {
           @Override
           public void consume(@NotNull List<DlvApi.Variable> args) {
             for (DlvApi.Variable v : args) xVars.add(v.name, createXValue(v, GoIcons.PARAMETER));

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package com.goide;
 
 import com.goide.categories.Performance;
-import com.goide.inspections.GoUnusedImportDeclaration;
+import com.goide.inspections.GoUnusedImportInspection;
 import com.goide.inspections.unresolved.GoUnresolvedReferenceInspection;
 import com.goide.inspections.unresolved.GoUnusedFunctionInspection;
 import com.goide.inspections.unresolved.GoUnusedGlobalVariableInspection;
@@ -57,8 +57,8 @@ import java.util.concurrent.TimeUnit;
 @Category(Performance.class)
 public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
 
-  public void testUnusedVariable() {
-    doInspectionTest(new GoUnusedVariableInspection(), (int)TimeUnit.MINUTES.toMillis(4));
+  public void _testUnusedVariable() {
+    doInspectionTest(new GoUnusedVariableInspection(), TimeUnit.MINUTES.toMillis(4));
   }
 
   public void _testUnusedGlobalVariable() {
@@ -74,7 +74,7 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testUnusedImport() {
-    doInspectionTest(new GoUnusedImportDeclaration(), TimeUnit.MINUTES.toMillis(1));
+    doInspectionTest(new GoUnusedImportInspection(), TimeUnit.MINUTES.toMillis(1));
   }
 
   public void testPerformanceA() {

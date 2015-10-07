@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,41 +61,41 @@ public class GoCoverageEngine extends CoverageEngine {
   private static final String PRESENTABLE_TEXT = "Go Coverage";
 
   @Override
-  public boolean isApplicableTo(@Nullable final RunConfigurationBase conf) {
+  public boolean isApplicableTo(@Nullable RunConfigurationBase conf) {
     return conf instanceof GoTestRunConfiguration;
   }
 
   @Override
-  public boolean canHavePerTestCoverage(@Nullable final RunConfigurationBase conf) {
+  public boolean canHavePerTestCoverage(@Nullable RunConfigurationBase conf) {
     return false;
   }
 
   @NotNull
   @Override
-  public CoverageEnabledConfiguration createCoverageEnabledConfiguration(@Nullable final RunConfigurationBase conf) {
+  public CoverageEnabledConfiguration createCoverageEnabledConfiguration(@Nullable RunConfigurationBase conf) {
     return new GoCoverageEnabledConfiguration((GoTestRunConfiguration)conf);
   }
 
   @Override
-  public CoverageSuite createCoverageSuite(@NotNull final CoverageRunner runner,
-                                           @NotNull final String name,
-                                           @NotNull final CoverageFileProvider coverageDataFileProvider,
-                                           @Nullable final String[] filters,
-                                           final long lastCoverageTimeStamp,
-                                           @Nullable final String suiteToMerge,
-                                           final boolean coverageByTestEnabled,
-                                           final boolean tracingEnabled,
-                                           final boolean trackTestFolders,
-                                           final Project project) {
+  public CoverageSuite createCoverageSuite(@NotNull CoverageRunner runner,
+                                           @NotNull String name,
+                                           @NotNull CoverageFileProvider coverageDataFileProvider,
+                                           @Nullable String[] filters,
+                                           long lastCoverageTimeStamp,
+                                           @Nullable String suiteToMerge,
+                                           boolean coverageByTestEnabled,
+                                           boolean tracingEnabled,
+                                           boolean trackTestFolders,
+                                           Project project) {
     // unable on teamcity
     return null;
   }
 
   @Override
-  public CoverageSuite createCoverageSuite(@NotNull final CoverageRunner runner,
-                                           @NotNull final String name,
-                                           @NotNull final CoverageFileProvider coverageDataFileProvider,
-                                           @NotNull final CoverageEnabledConfiguration config) {
+  public CoverageSuite createCoverageSuite(@NotNull CoverageRunner runner,
+                                           @NotNull String name,
+                                           @NotNull CoverageFileProvider coverageDataFileProvider,
+                                           @NotNull CoverageEnabledConfiguration config) {
     if (config instanceof GoCoverageEnabledConfiguration) {
       return new GoCoverageSuite(name, coverageDataFileProvider, new Date().getTime(), runner, config.getConfiguration().getProject());
     }
@@ -103,23 +103,23 @@ public class GoCoverageEngine extends CoverageEngine {
   }
 
   @Override
-  public CoverageSuite createEmptyCoverageSuite(@NotNull final CoverageRunner coverageRunner) {
+  public CoverageSuite createEmptyCoverageSuite(@NotNull CoverageRunner coverageRunner) {
     return new GoCoverageSuite();
   }
 
   @NotNull
   @Override
-  public CoverageAnnotator getCoverageAnnotator(final Project project) {
+  public CoverageAnnotator getCoverageAnnotator(Project project) {
     return GoCoverageAnnotator.getInstance(project);
   }
 
   @Override
-  public boolean coverageEditorHighlightingApplicableTo(@NotNull final PsiFile psiFile) {
+  public boolean coverageEditorHighlightingApplicableTo(@NotNull PsiFile psiFile) {
     return isProductionGoFile(psiFile);
   }
 
   @Override
-  public boolean acceptedByFilters(@NotNull final PsiFile psiFile, @NotNull final CoverageSuitesBundle suite) {
+  public boolean acceptedByFilters(@NotNull PsiFile psiFile, @NotNull CoverageSuitesBundle suite) {
     return isProductionGoFile(psiFile);
   }
 
@@ -128,43 +128,43 @@ public class GoCoverageEngine extends CoverageEngine {
   }
 
   @Override
-  public boolean recompileProjectAndRerunAction(@NotNull final Module module,
-                                                @NotNull final CoverageSuitesBundle suite,
-                                                @NotNull final Runnable chooseSuiteAction) {
+  public boolean recompileProjectAndRerunAction(@NotNull Module module,
+                                                @NotNull CoverageSuitesBundle suite,
+                                                @NotNull Runnable chooseSuiteAction) {
     return false;
   }
 
   @Override
-  public String getQualifiedName(@NotNull final File outputFile, @NotNull final PsiFile sourceFile) {
+  public String getQualifiedName(@NotNull File outputFile, @NotNull PsiFile sourceFile) {
     return sourceFile.getVirtualFile().getPath();
   }
 
   @NotNull
   @Override
-  public Set<String> getQualifiedNames(@NotNull final PsiFile sourceFile) {
+  public Set<String> getQualifiedNames(@NotNull PsiFile sourceFile) {
     return Collections.singleton(sourceFile.getVirtualFile().getPath());
   }
 
   @Override
-  public boolean includeUntouchedFileInCoverage(@NotNull final String qualifiedName,
-                                                @NotNull final File outputFile,
-                                                @NotNull final PsiFile sourceFile,
-                                                @NotNull final CoverageSuitesBundle suite) {
+  public boolean includeUntouchedFileInCoverage(@NotNull String qualifiedName,
+                                                @NotNull File outputFile,
+                                                @NotNull PsiFile sourceFile,
+                                                @NotNull CoverageSuitesBundle suite) {
     return false;
   }
 
   @Override
-  public List<Integer> collectSrcLinesForUntouchedFile(@NotNull final File classFile, @NotNull final CoverageSuitesBundle suite) {
+  public List<Integer> collectSrcLinesForUntouchedFile(@NotNull File classFile, @NotNull CoverageSuitesBundle suite) {
     return null;
   }
 
   @Override
-  public List<PsiElement> findTestsByNames(@NotNull final String[] testNames, @NotNull final Project project) {
+  public List<PsiElement> findTestsByNames(@NotNull String[] testNames, @NotNull Project project) {
     return Collections.emptyList();
   }
 
   @Override
-  public String getTestMethodName(@NotNull final PsiElement element, @NotNull final AbstractTestProxy testProxy) {
+  public String getTestMethodName(@NotNull PsiElement element, @NotNull AbstractTestProxy testProxy) {
     return null;
   }
 
@@ -174,7 +174,7 @@ public class GoCoverageEngine extends CoverageEngine {
   }
 
   @Override
-  public boolean coverageProjectViewStatisticsApplicableTo(final VirtualFile fileOrDir) {
+  public boolean coverageProjectViewStatisticsApplicableTo(VirtualFile fileOrDir) {
     return !(fileOrDir.isDirectory()) && fileOrDir.getFileType() == GoFileType.INSTANCE && !GoTestFinder.isTestFile(fileOrDir);
   }
 

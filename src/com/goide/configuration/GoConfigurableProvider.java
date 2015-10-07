@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.goide.configuration;
 
+import com.goide.GoConstants;
 import com.goide.codeInsight.imports.GoAutoImportConfigurable;
 import com.goide.sdk.GoSdkService;
 import com.intellij.openapi.options.Configurable;
@@ -69,7 +70,7 @@ public class GoConfigurableProvider extends ConfigurableProvider {
     @Nls
     @Override
     public String getDisplayName() {
-      return "Go";
+      return GoConstants.GO;
     }
 
     @Nullable

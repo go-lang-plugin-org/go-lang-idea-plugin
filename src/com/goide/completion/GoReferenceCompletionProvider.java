@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,7 +49,7 @@ public class GoReferenceCompletionProvider extends CompletionProvider<Completion
     }
   }
 
-  private static void fillVariantsByReference(@Nullable PsiReference reference, @NotNull final CompletionResultSet result) {
+  private static void fillVariantsByReference(@Nullable PsiReference reference, @NotNull CompletionResultSet result) {
     if (reference == null) return;
     if (reference instanceof PsiMultiReference) {
       PsiReference[] references = ((PsiMultiReference)reference).getReferences();

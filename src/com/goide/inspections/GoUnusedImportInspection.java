@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,12 @@ import com.intellij.util.containers.MultiMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class GoUnusedImportDeclaration extends GoInspectionBase {
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
+public class GoUnusedImportInspection extends GoInspectionBase {
   @Nullable private final static LocalQuickFix OPTIMIZE_QUICK_FIX = new LocalQuickFixBase("Optimize imports") {
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
@@ -39,7 +44,7 @@ public class GoUnusedImportDeclaration extends GoInspectionBase {
       if (element == null) {
         return;
       }
-      final PsiFile file = element.getContainingFile();
+      PsiFile file = element.getContainingFile();
       ImportOptimizer optimizer = new GoImportOptimizer();
       final Runnable runnable = optimizer.processFile(file);
       new WriteCommandAction.Simple(project, getFamilyName(), file) {
@@ -59,9 +64,25 @@ public class GoUnusedImportDeclaration extends GoInspectionBase {
       problemsHolder.registerProblem(importIdentifier, "Redundant alias", ProblemHighlightType.LIKE_UNUSED_SYMBOL, OPTIMIZE_QUICK_FIX);
     }
 
-    for (GoImportSpec duplicatedImportSpec : GoImportOptimizer.findDuplicatedEntries(importMap)) {
+    Set<GoImportSpec> duplicatedEntries = GoImportOptimizer.findDuplicatedEntries(importMap);
+    for (GoImportSpec duplicatedImportSpec : duplicatedEntries) {
       problemsHolder.registerProblem(duplicatedImportSpec, "Redeclared import", ProblemHighlightType.GENERIC_ERROR, OPTIMIZE_QUICK_FIX);
     }
+
+    for (Map.Entry<String, Collection<GoImportSpec>> specs : importMap.entrySet()) {
+      Iterator<GoImportSpec> imports = specs.getValue().iterator();
+      GoImportSpec originalImport = imports.next();
+      if (originalImport.isDot() || originalImport.isForSideEffects()) {
+        continue;
+      }
+      while (imports.hasNext()) {
+        GoImportSpec redeclaredImport = imports.next();
+        if (!duplicatedEntries.contains(redeclaredImport)) {
+          problemsHolder.registerProblem(redeclaredImport, "Redeclared import", ProblemHighlightType.GENERIC_ERROR);
+        }
+      }
+    }
+
     if (!problemsHolder.isOnTheFly()) {
       resolveAllReferences(file);
     }

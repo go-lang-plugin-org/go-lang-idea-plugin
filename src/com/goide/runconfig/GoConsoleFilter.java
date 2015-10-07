@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,7 +68,7 @@ public class GoConsoleFilter implements Filter {
   public Result applyFilter(@NotNull String line, int entireLength) {
     Matcher goGetMatcher = GO_GET_MESSAGE_PATTERN.matcher(line);
     if (goGetMatcher.find() && myModule != null) {
-      final String packageName = goGetMatcher.group(2).trim();
+      String packageName = goGetMatcher.group(2).trim();
       HyperlinkInfo hyperlinkInfo = new GoGetHyperlinkInfo(packageName, myModule);
       int lineStart = entireLength - line.length();
       return new Result(lineStart + goGetMatcher.start(1), lineStart + goGetMatcher.end(2), hyperlinkInfo);

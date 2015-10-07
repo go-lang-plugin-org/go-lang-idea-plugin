@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,7 +63,7 @@ public class GoVarProcessor extends GoScopeProcessorBase {
   }
 
   @Nullable
-  private static GoCompositeElement getScope(@Nullable PsiElement o) {
+  public static GoCompositeElement getScope(@Nullable PsiElement o) {
     GoForStatement forStatement = PsiTreeUtil.getParentOfType(o, GoForStatement.class);
     if (forStatement != null) return forStatement.getBlock();
     GoIfStatement ifStatement = PsiTreeUtil.getParentOfType(o, GoIfStatement.class);

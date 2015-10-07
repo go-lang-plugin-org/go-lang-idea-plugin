@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.goide.project;
 
+import com.goide.GoConstants;
 import com.goide.GoModuleType;
 import com.goide.sdk.GoSdkType;
 import com.intellij.ide.util.importProject.ModuleDescriptor;
@@ -52,7 +53,7 @@ public class GoProjectStructureDetector extends ProjectStructureDetector {
         @NotNull
         @Override
         public String getRootTypeName() {
-          return "Go";
+          return GoConstants.GO;
         }
       });
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,8 +39,12 @@ public class GoFindUsagesProvider implements FindUsagesProvider {
   }
 
   @Override
-  public boolean canFindUsagesFor(@NotNull PsiElement psiElement) {
-    return psiElement instanceof GoNamedElement;
+  public boolean canFindUsagesFor(@NotNull PsiElement element) {
+    if (element instanceof GoImportSpec) {
+      GoImportSpec importSpec = (GoImportSpec)element;
+      return importSpec.getAlias() != null && !importSpec.isDot() && !importSpec.isForSideEffects();
+    }
+    return element instanceof GoNamedElement;
   }
 
   @Nullable
@@ -65,6 +69,7 @@ public class GoFindUsagesProvider implements FindUsagesProvider {
     if (element instanceof GoReceiver) return "receiver";
     if (element instanceof GoMethodSpec) return "method specification";
     if (element instanceof GoLabelDefinition) return "label";
+    if (element instanceof GoPackageClause) return "package statement";
     
     // should be last
     if (element instanceof GoStatement) return "statement";

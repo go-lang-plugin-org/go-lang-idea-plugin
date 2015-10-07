@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,12 +55,8 @@ class DlvSuspendContext extends XSuspendContext {
       myLocations = locations;
       myProcessor = processor;
       myStack = ContainerUtil.newArrayListWithCapacity(locations.size());
-      for (DlvApi.Location location : myLocations) {
-        boolean top = myStack.isEmpty();
-        if (!top) {
-          location.line -= 1; // todo: bizarre
-        }
-        myStack.add(new DlvStackFrame(location, myProcessor, top));
+      for (int i = 0; i < myLocations.size(); i++) {
+        myStack.add(new DlvStackFrame(myLocations.get(i), myProcessor, i));
       }
     }
 

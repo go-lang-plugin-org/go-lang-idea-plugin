@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.goide.runconfig.file;
 
+import com.goide.GoConstants;
 import com.goide.GoIcons;
 import com.goide.runconfig.GoConfigurationFactoryBase;
 import com.intellij.execution.configurations.ConfigurationTypeBase;
@@ -30,7 +31,7 @@ public class GoRunFileConfigurationType extends ConfigurationTypeBase {
     addFactory(new GoConfigurationFactoryBase(this) {
       @NotNull
       public RunConfiguration createTemplateConfiguration(Project project) {
-        return new GoRunFileConfiguration(project, "Go", getInstance());
+        return new GoRunFileConfiguration(project, GoConstants.GO, getInstance());
       }
     });
   }

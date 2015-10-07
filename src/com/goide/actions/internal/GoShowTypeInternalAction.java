@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ public class GoShowTypeInternalAction extends SelectionBasedPsiElementInternalAc
     int offset = editor.getCaretModel().getOffset();
     PsiElement elementAtCaret = file.findElementAt(offset);
     if (!checkIntroduceContext(editor, elementAtCaret)) return ContainerUtil.emptyList();
-    final List<GoExpression> expressions = ContainerUtil.newArrayList();
+    List<GoExpression> expressions = ContainerUtil.newArrayList();
     while (elementAtCaret != null) {
       if (elementAtCaret instanceof GoStatement) break;
       if (elementAtCaret instanceof GoExpression) expressions.add((GoExpression)elementAtCaret);

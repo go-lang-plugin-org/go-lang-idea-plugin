@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ public class GoAppEngineRunConfigurationEditor extends SettingsEditor<GoAppEngin
   private JBTextField myAdminPortField;
   private TextFieldWithHistoryWithBrowseButton myConfigFileField;
 
-  public GoAppEngineRunConfigurationEditor(@NotNull final Project project) {
+  public GoAppEngineRunConfigurationEditor(@NotNull Project project) {
     super(null);
     initConfigFileField(project);
     myCommonSettingsPanel.init(project);

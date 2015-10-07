@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ public class GoSmartEnterProcessor extends SmartEnterProcessorWithFixers {
   }
 
   @Override
-  protected void collectAdditionalElements(@NotNull PsiElement element, @NotNull final List<PsiElement> result) {
+  protected void collectAdditionalElements(@NotNull PsiElement element, @NotNull List<PsiElement> result) {
     GoStatement statement = PsiTreeUtil.getParentOfType(element, GoStatement.class);
     if (statement != null) {
       result.add(statement);

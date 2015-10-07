@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ public class GoSdkType extends SdkType {
 
   @NotNull
   public static GoSdkType getInstance() {
-    final GoSdkType instance = SdkType.findInstance(GoSdkType.class);
+    GoSdkType instance = SdkType.findInstance(GoSdkType.class);
     assert instance != null;
     return instance;
   }
@@ -63,8 +63,21 @@ public class GoSdkType extends SdkType {
 
   @Override
   public boolean isValidSdkHome(@NotNull String path) {
+    GoSdkService.LOG.debug("Validating sdk path: " + path);
     String executablePath = GoSdkService.getGoExecutablePath(path);
-    return executablePath != null && new File(executablePath).canExecute() && getVersionString(path) != null;
+    if (executablePath == null) {
+      GoSdkService.LOG.debug("Go executable is not found: ");
+      return false;
+    }
+    if (!new File(executablePath).canExecute()) {
+      GoSdkService.LOG.debug("Go binary cannot be executed: " + path);
+      return false;
+    }
+    if (getVersionString(path) != null) {
+      GoSdkService.LOG.debug("Cannot retrieve version for sdk: " + path);
+      return true;
+    }
+    return false;
   }
 
   @Override

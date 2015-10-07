@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ public class GoCompletionContributor extends CompletionContributor {
     PsiFile file = parameters.getOriginalFile();
     ASTNode node = position.getNode();
     if (file instanceof GoFile && position.getParent() instanceof GoPackageClause && node.getElementType() == GoTypes.IDENTIFIER) {
-      final boolean isTestFile = GoTestFinder.isTestFile(file);
+      boolean isTestFile = GoTestFinder.isTestFile(file);
       PsiDirectory directory = file.getParent();
       Collection<String> packagesInDirectory = GoUtil.getAllPackagesInDirectory(directory, true);
       for (String packageName : packagesInDirectory) {

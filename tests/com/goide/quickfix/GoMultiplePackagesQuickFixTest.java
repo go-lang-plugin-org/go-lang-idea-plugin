@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package com.goide.quickfix;
 
 import com.goide.inspections.GoMultiplePackagesInspection;
+import com.goide.inspections.GoMultiplePackagesQuickFix;
 
 public class GoMultiplePackagesQuickFixTest extends GoQuickFixTestBase {
   @Override
@@ -36,6 +37,7 @@ public class GoMultiplePackagesQuickFixTest extends GoQuickFixTestBase {
     myFixture.configureByFile("b_test.go");
     myFixture.configureByFile("a.go");
 
+    GoMultiplePackagesQuickFix.setTestingPackageName("a", getTestRootDisposable());
     applySingleQuickFix("Rename packages");
 
     myFixture.checkResultByFile("a.go", "a-after.go", true);

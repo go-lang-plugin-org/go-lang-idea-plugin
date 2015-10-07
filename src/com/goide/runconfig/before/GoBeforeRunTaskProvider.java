@@ -1,3 +1,19 @@
+/*
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.goide.runconfig.before;
 
 import com.goide.GoIcons;
@@ -65,7 +81,7 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
 
   @Override
   public boolean configureTask(RunConfiguration configuration, GoCommandBeforeRunTask task) {
-    final Project project = configuration.getProject();
+    Project project = configuration.getProject();
     if (!(configuration instanceof GoRunConfigurationBase)) {
       showAddingTaskErrorMessage(project, "Go Command task supports only Go Run Configurations");
       return false;
@@ -98,8 +114,8 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
   }
 
   @Override
-  public boolean executeTask(final DataContext context,
-                             final RunConfiguration configuration,
+  public boolean executeTask(DataContext context,
+                             RunConfiguration configuration,
                              ExecutionEnvironment env,
                              final GoCommandBeforeRunTask task) {
     final Semaphore done = new Semaphore();
@@ -118,7 +134,7 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
         if (!sdkService.isGoModule(module)) return;
 
         done.down();
-        GoExecutor.in(module).withParameters(task.getCommand())
+        GoExecutor.in(module).withParameterString(task.getCommand())
           .withWorkDirectory(workingDirectory)
           .showOutputOnError()
           .showNotifications(false)
@@ -138,7 +154,7 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
     return result.get();
   }
 
-  private static void showAddingTaskErrorMessage(final Project project, final String message) {
+  private static void showAddingTaskErrorMessage(Project project, String message) {
     Messages.showErrorDialog(project, message, "Go Command Task");
   }
 }

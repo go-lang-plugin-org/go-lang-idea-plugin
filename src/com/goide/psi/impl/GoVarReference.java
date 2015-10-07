@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,7 @@
 
 package com.goide.psi.impl;
 
-import com.goide.psi.GoBlock;
-import com.goide.psi.GoFunctionOrMethodDeclaration;
-import com.goide.psi.GoStatement;
-import com.goide.psi.GoVarDefinition;
+import com.goide.psi.*;
 import com.goide.util.GoUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
@@ -39,7 +36,13 @@ public class GoVarReference extends GoCachedReference<GoVarDefinition> {
   @Nullable
   @Override
   public PsiElement resolveInner() {
-    GoVarProcessor p = new GoVarProcessor(myElement, false);
+    GoVarProcessor p = new GoVarProcessor(myElement, false) {
+      @Override
+      protected boolean condition(@NotNull PsiElement e) {
+        if (e instanceof GoFieldDefinition) return true;
+        return super.condition(e);
+      }
+    };
     processResolveVariants(p);
     return p.getResult(); 
   }

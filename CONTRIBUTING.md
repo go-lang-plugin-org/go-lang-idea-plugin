@@ -14,7 +14,7 @@
 + [Profit](#profit)
 + [Useful links](#useful-links)
 
-### Reporting errors
+## Reporting errors
 
 Before reporting an error, please read the [FAQ](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/wiki/FAQ)
 and search for the issue in the issue tracker. Also, please don't bump, +1
@@ -54,9 +54,19 @@ you, we can't copy paste code from screenshots either.
 Please ensure that the bug is not reported already, this helps us focusing on
 working on bug fixes not triage work.
 
-### Contributing to the code
+## Contributing to the code
 
-If you want to contribute to the code, go to GitHub and check out the latest version and follow the instructions on how to build the plugin from source. After that, you can start picking some [pending tasks](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/issues) on the issue tracker. Make sure you look for issues tags with [up for grabs](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/labels/up%20for%20grabs) as these are some of the easier ones to get started with.
+If you want to contribute to the code, go to GitHub and check out the latest version
+and follow the instructions on how to build the plugin from source. After that, you
+can start picking some [pending tasks](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/issues) on the issue tracker.
+
+Make sure you look for issues tags with [up for grabs](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/labels/up%20for%20grabs)
+as these are some of the easier ones to get started with.
+
+### CLA requirement
+
+Contributing to the plugin requires a signed CLA with JetBrains.
+You can view the steps necessary for this at [this page](http://www.jetbrains.org/display/IJOS/Contribute#Contribute-ContributeCode).
 
 ### Submitting test cases
 
@@ -69,12 +79,12 @@ for existing issues or for issues that you come across will make a huge differen
 in the way we spend time to understand the problems and thus solve them.
 
 ### Getting started with the plugin development
-1. [Download](http://www.jetbrains.com/idea/download/) the latest 14 IntelliJ IDEA build and install it
+1. [Download](http://www.jetbrains.com/idea/download/) the latest 14.1 IntelliJ IDEA build and install it
 1. Checkout plugin repo and open the project
 1. Setup [IDEA SDK](http://confluence.jetbrains.net/display/IDEADEV/Getting+Started+with+Plugin+Development#GettingStartedwithPluginDevelopment-anchor2):
 select the IDEA installation directory as SDK root (should be named ```IDEA sdk```)
 1. If you want to run Go Plugin in WebStorm or in IDEA EAP setup corresponding additional SDKs (should be named  ```WebStorm sdk``` and ```IDEA EAP sdk```)
-1. Setup the right version of [Grammar-Kit](https://www.dropbox.com/s/tqmj3urcnmt22a2/GrammarKit-14-01-2015.zip?dl=0) plugin (for [140.2500+](https://www.dropbox.com/s/3a80wo77684dr0d/GrammarKit-02-19-2015.zip?dl=0))
+1. Setup the right version of [Grammar-Kit](https://dl.dropboxusercontent.com/u/4294872/GrammarKit-21-08-2015.zip)
 1. Setup **Ant Support** and **UI Designer** plugins
 1. Run the **Go** run configuration
 
@@ -85,19 +95,25 @@ Please don't use class comments with information about author or date and time c
 You can also have a look at some [useful links](#useful-links) for getting started with
 plugin development on IntelliJ IDEA platform.
 
-#### IMPORTANT: MacOS X users note
+##### IMPORTANT: MacOS X users note
 
-You might get the following error ```Unsupported major.minor version 52```` in the 
+You might get the following error ```Unsupported major.minor version 52``` in the
 logs or the plugin might not work at all.
 
 Check the version of Java your IDE is running on. Since in 99.9% of the cases it will
-be Java 6, this means that you compiled the plugin with a different version of Java, 
+be Java 6, this means that you compiled the plugin with a different version of Java,
 for example Java 8.
 
 To fix the error, please use Java JDK 6 to compile the plugin and everything should work.
 
 To get the log files, you can go to ```Help | Show Log in File Manager``` and then the
 log will be displayed to you.
+
+### Delve integration
+
+We're syncing the plugin source with the [Delve](https://github.com/derekparker/delve) debugger via https://github.com/ignatov/delve.
+
+Please use `-Ddlv.path` for setting up the path to your local version of dlv.
 
 ### Checking out the IntelliJ IDEA Platform sources
 
@@ -107,7 +123,7 @@ used to build IDEA 14:
 ```bash
     git clone git@github.com:JetBrains/intellij-community.git idea
     cd idea
-    git checkout idea/141.177.4
+    git checkout idea/141.1532.4
     # and we build it using ant
     ant
 ```
@@ -129,7 +145,7 @@ Use the artifact from your target OS to run the built version of IDEA.
 
 ### Checking out and building Google Go
 
-While we support Go from 1.0 to 1.4.1, we prefer to work with the latest release
+While we support Go from 1.0 to 1.5.1, we prefer to work with the latest release
 installed from sources by following the page source installation page from here:
 <http://golang.org/doc/install/source>.
 
@@ -138,7 +154,7 @@ This will work even with a binary installation (as a result of following the
 
 ### Checking out the plugin sources
 
-Fork the repository using the github web interface and do a clone of your fork 
+Fork the repository using the github web interface and do a clone of your fork
 on the local machine.
 
 ### Building and running the unit tests
@@ -157,7 +173,7 @@ checked out) with it (the default project module config should work with a
 recent IDEA 14.1 version).
 * Open the Project Settings (Command + ; on Mac or File -> Project Settings on
 other platforms), go to the SDKs entry, click the `+` (and select IntelliJ IDEA
-Plugin SDK). 
+Plugin SDK).
 * If it says you need a Java SDK first. You should add a java SDK with the same
 version that you used for build idea. If you use mac,you should check follow path:
 ```
@@ -178,12 +194,12 @@ SDK.
 Now you can use the run configurations provided by the plugin source code to
 run and play.
 
-Going to ``` Run -> Run... ``` will provide you with the following run configurations: 
+Going to ``` Run -> Run... ``` will provide you with the following run configurations:
 
 + `Go` will spawn a new IDEA with the latest version of the plugin enabled
 + `Go in WebStorm` will spawn a new WebStorm with the latest version of the plugin enabled (requires SDK named ```WebStorm sdk```)
 + `Go in IDEA EAP` will spawn a new unstable IDEA with the latest version of the plugin enabled (requires SDK named ```IDEA EAP sdk```)
-+ `All in intellij-go` will run all the test cases available in the project. Please make 
++ `All in intellij-go` will run all the test cases available in the project. Please make
 sure that all the test cases pass before committing anything (or making a pull request).
 
 ### Profit

@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+  ~ Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -37,13 +37,13 @@
     ]]>
   </change-notes>
 
-  <idea-version since-build="141.1532" until-build="142.9999"/>
+  <idea-version since-build="141.1532" until-build="141.9999"/>
   <depends>com.intellij.modules.lang</depends>
 
   <depends optional="true" config-file="java-deps.xml">com.intellij.modules.java</depends>
   <depends optional="true" config-file="coverage.xml">Coverage</depends>
   <depends optional="true" config-file="coverage.xml">com.intellij.modules.coverage</depends>
-  <!-- todo[IDEA 15] replace with real dependency -->
+  <!-- todo[IDEA 16] replace with real dependency -->
   <depends optional="true" config-file="app-engine.xml">com.intellij.modules.lang</depends>
 
   <module-components>
@@ -61,11 +61,14 @@
     <stubIndex implementation="com.goide.stubs.index.GoMethodIndex"/>
     <stubIndex implementation="com.goide.stubs.index.GoMethodFingerprintIndex"/>
     <stubElementTypeHolder class="com.goide.GoTypes"/>
+    <indexPatternBuilder implementation="com.goide.GoIndexPatternBuilder"/>
 
     <internalFileTemplate name="Go Application"/>
     <internalFileTemplate name="Go File"/>
 
     <!-- project -->
+    <project.converterProvider implementation="com.goide.project.migration.GoProjectModelConverterProvider"/>
+    
     <applicationService serviceImplementation="com.goide.project.GoApplicationLibrariesService"/>
     <projectService serviceImplementation="com.goide.project.GoProjectLibrariesService"/>
     <moduleService serviceImplementation="com.goide.project.GoModuleLibrariesService"/>
@@ -128,6 +131,10 @@
     <analyzeStacktraceFilter implementation="com.goide.runconfig.GoConsoleFilter"/>
     <lang.implementationTextSelectioner language="go" implementationClass="com.goide.editor.GoImplementationTextSelectioner"/>
 
+    <directoryProjectGenerator implementation="com.goide.GoProjectGenerator"/> <!-- for small IDEs-->
+
+    <renamePsiElementProcessor implementation="com.goide.refactor.GoRenameImportSpecProcessor"/>
+
     <!--formatter-->
     <lang.formatter language="go" implementationClass="com.goide.formatter.GoFormattingModelBuilder"/>
     <codeStyleSettingsProvider implementation="com.goide.formatter.settings.GoCodeStyleSettingsProvider"/>
@@ -166,13 +173,7 @@
     <testSrcLocator implementation="com.goide.runconfig.testing.GoTestLocationProvider"/>
 
     <!-- debugger -->
-    <xdebugger.breakpointType implementation="com.goide.debugger.ideagdb.debug.breakpoints.GdbBreakpointType"/>
     <xdebugger.breakpointType implementation="com.goide.dlv.breakpoint.DlvBreakpointType"/>
-
-    <!-- temporary debugger configurations -->
-    <!-- todo: move it to run/test configurations -->
-    <configurationType implementation="com.goide.debugger.ideagdb.run.GdbRunConfigurationType"/>
-    <programRunner implementation="com.goide.debugger.ideagdb.run.GdbRunner"/>
 
     <checkinHandlerFactory implementation="com.goide.actions.fmt.GoFmtCheckinFactory" order="last"/>
 
@@ -184,7 +185,7 @@
                      implementationClass="com.goide.inspections.unresolved.GoUnresolvedReferenceInspection"/>
     <localInspection language="go" displayName="Unused import inspection"
                      groupName="Go" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.GoUnusedImportDeclaration"/>
+                     implementationClass="com.goide.inspections.GoUnusedImportInspection"/>
     <localInspection language="go" displayName="Duplicate fields and methods inspection"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoDuplicateFieldsOrMethodsInspection"/>
@@ -202,7 +203,7 @@
                      implementationClass="com.goide.inspections.unresolved.GoAssignmentToConstantInspection"/>
     <localInspection language="go" displayName="Assignment nil without explicit type"
                      groupName="Go" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.GoAssignmentNilWithoutExplicitType" />
+                     implementationClass="com.goide.inspections.GoAssignmentNilWithoutExplicitTypeInspection" />
     <localInspection language="go" displayName="Duplicate function"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoDuplicateFunctionInspection"/>
@@ -214,7 +215,7 @@
                      implementationClass="com.goide.inspections.GoDuplicateArgumentInspection"/>
     <localInspection language="go" displayName="Reserved word used as name"
                      groupName="Go" enabledByDefault="true" level="WARNING"
-                     implementationClass="com.goide.inspections.GoReservedWordUsedAsName"/>
+                     implementationClass="com.goide.inspections.GoReservedWordUsedAsNameInspection"/>
     <localInspection language="go" displayName="Duplicate return argument"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoDuplicateReturnArgumentInspection"/>
@@ -229,7 +230,7 @@
                      implementationClass="com.goide.inspections.GoNoNewVariablesInspection"/>
     <localInspection language="go" displayName="Missing return at end of function"
                      groupName="Go" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.GoReturnInspection"/>
+                     implementationClass="com.goide.inspections.GoMissingReturnInspection"/>
     <localInspection language="go" displayName="Function call inspection"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoFunctionCallInspection"/>
@@ -245,6 +246,9 @@
     <localInspection language="go" displayName="Wrong test declaration"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoTestSignaturesInspection"/>
+    <localInspection language="go" displayName="Self import"
+                     groupName="Go" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoSelfImportInspection" />
   </extensions>
   <actions>
     <action id="Go.NewGoFile" class="com.goide.actions.GoCreateFileAction"
@@ -293,7 +297,7 @@
   <!-- GAE -->
 
   <!-- START plugin.xml of future GAE module -->
-  <!-- todo[IDEA 15] It's supposed that GAE-core module will be moved to IDEA source and bundled in IDEA 15 -->
+  <!-- todo[IDEA 16] It's supposed that GAE-core module will be moved to IDEA source and bundled in IDEA 16 -->
   <!--<id>com.intellij.appengine</id>-->
   <depends optional="true" config-file="google-app-engine-core-yaml.xml">org.jetbrains.plugins.yaml</depends>
   <extensionPoints>

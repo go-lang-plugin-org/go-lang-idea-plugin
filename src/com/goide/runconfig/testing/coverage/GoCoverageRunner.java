@@ -1,5 +1,22 @@
+/*
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.goide.runconfig.testing.coverage;
 
+import com.goide.GoConstants;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.coverage.BaseCoverageSuite;
 import com.intellij.coverage.CoverageEngine;
@@ -29,10 +46,10 @@ public class GoCoverageRunner extends CoverageRunner {
 
   private static final String ID = "GoCoverage";
   private static final String DATA_FILE_EXTENSION = "out";
-  private static final String PRESENTABLE_NAME = "Go";
+  private static final String PRESENTABLE_NAME = GoConstants.GO;
 
   @Override
-  public ProjectData loadCoverageData(@NotNull final File sessionDataFile, @Nullable final CoverageSuite baseCoverageSuite) {
+  public ProjectData loadCoverageData(@NotNull File sessionDataFile, @Nullable CoverageSuite baseCoverageSuite) {
     if (baseCoverageSuite == null || !(baseCoverageSuite instanceof BaseCoverageSuite)) {
       return null;
     }
@@ -160,7 +177,7 @@ public class GoCoverageRunner extends CoverageRunner {
   }
 
   @Override
-  public boolean acceptsCoverageEngine(@NotNull final CoverageEngine engine) {
+  public boolean acceptsCoverageEngine(@NotNull CoverageEngine engine) {
     return engine instanceof GoCoverageEngine;
   }
 }

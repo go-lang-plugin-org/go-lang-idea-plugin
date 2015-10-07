@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.goide.refactor;
 
 import com.goide.psi.GoBlock;
 import com.goide.psi.GoStatement;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInsight.PsiEquivalenceUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiRecursiveElementVisitor;
@@ -32,7 +33,7 @@ import java.util.List;
 public class GoRefactoringUtil {
 
   @NotNull
-  public static List<PsiElement> getLocalOccurrences(@NotNull final PsiElement element) {
+  public static List<PsiElement> getLocalOccurrences(@NotNull PsiElement element) {
     return getOccurrences(element, PsiTreeUtil.getTopmostParentOfType(element, GoBlock.class));
   }
 
@@ -54,16 +55,17 @@ public class GoRefactoringUtil {
   }
 
   @Nullable
-  public static PsiElement findLocalAnchor(List<PsiElement> occurrences) {
+  public static PsiElement findLocalAnchor(@NotNull List<PsiElement> occurrences) {
     return findAnchor(occurrences, PsiTreeUtil.getNonStrictParentOfType(PsiTreeUtil.findCommonParent(occurrences), GoBlock.class));
   }
 
   @Nullable
-  public static PsiElement findAnchor(List<PsiElement> occurrences, PsiElement context) {
-    PsiElement statement = PsiTreeUtil.getNonStrictParentOfType(ContainerUtil.getFirstItem(occurrences), GoStatement.class);
+  public static PsiElement findAnchor(@NotNull List<PsiElement> occurrences, @Nullable PsiElement context) {
+    PsiElement first = ContainerUtil.getFirstItem(occurrences);
+    PsiElement statement = PsiTreeUtil.getNonStrictParentOfType(first, GoStatement.class);
     while (statement != null && statement.getParent() != context) {
       statement = statement.getParent();
     }
-    return statement;
+    return statement == null ? GoPsiImplUtil.getTopLevelDeclaration(first) : statement;
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -111,7 +111,6 @@ public class DlvVm extends VmBase implements StandaloneVmHelper.VmEx {
   }
 
   // stubs
-  
   private static class DummyScriptManager extends ScriptManagerBaseEx<ScriptBase> {
     @Override
     public boolean containsScript(@NotNull Script script) {
@@ -147,11 +146,11 @@ public class DlvVm extends VmBase implements StandaloneVmHelper.VmEx {
     @Nullable
     @Override
     protected BreakpointBase<?> createBreakpoint(@NotNull BreakpointTarget target,
-                                             int line,
-                                             int column,
-                                             @Nullable String condition,
-                                             int ignoreCount,
-                                             boolean enabled) {
+                                                 int line,
+                                                 int column,
+                                                 @Nullable String condition,
+                                                 int ignoreCount,
+                                                 boolean enabled) {
       return null;
     }
 
@@ -180,13 +179,13 @@ public class DlvVm extends VmBase implements StandaloneVmHelper.VmEx {
     protected DebugEventListener getDebugListener() {
       return DlvVm.this.getDebugListener();
     }
-  
+
     @NotNull
     @Override
     protected Promise<?> doSuspend() {
       return Promise.resolve(null);
     }
-  
+
     @NotNull
     @Override
     public Promise<Void> continueVm(@NotNull StepAction stepAction, int stepCount) {

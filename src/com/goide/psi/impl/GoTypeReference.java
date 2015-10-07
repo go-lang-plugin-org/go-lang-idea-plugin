@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,7 +80,7 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
 
   @Override
   @NotNull
-  public ResolveResult[] multiResolve(final boolean incompleteCode) {
+  public ResolveResult[] multiResolve(boolean incompleteCode) {
     return myElement.isValid()
            ? ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, MY_RESOLVER, false, false)
            : ResolveResult.EMPTY_ARRAY;
@@ -127,8 +127,8 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
     if (!processFileEntities(file, processor, state, localResolve)) return false;
     PsiDirectory dir = file.getOriginalFile().getParent();
     if (!GoReference.processDirectory(dir, file, file.getPackageName(), processor, state, true)) return false;
-    if (GoReference.processImports(file, processor, state, myElement)) return false;
-    if (processBuiltin(processor, state, myElement)) return false;
+    if (!GoReference.processImports(file, processor, state, myElement)) return false;
+    if (!processBuiltin(processor, state, myElement)) return false;
     if (getIdentifier().textMatches(GoConstants.NIL) && PsiTreeUtil.getParentOfType(myElement, GoTypeCaseClause.class) != null) {
       GoType type = PsiTreeUtil.getParentOfType(myElement, GoType.class);
       if (FormatterUtil.getPrevious(type != null ? type.getNode() : null, GoTypes.CASE) == null) return true;
@@ -148,8 +148,7 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
   // todo: unify references, extract base class
   private boolean processBuiltin(@NotNull GoScopeProcessor processor, @NotNull ResolveState state, @NotNull GoCompositeElement element) {
     GoFile builtinFile = GoSdkUtil.findBuiltinFile(element);
-    if (builtinFile != null && !processFileEntities(builtinFile, processor, state, true)) return true;
-    return false;
+    return builtinFile == null || processFileEntities(builtinFile, processor, state, true);
   }
 
   @NotNull
@@ -161,8 +160,7 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
                                       @NotNull GoScopeProcessor processor,
                                       @NotNull ResolveState state,
                                       boolean localProcessing) {
-    if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
-    return true;
+    return processNamedElements(processor, state, file.getTypes(), localProcessing);
   }
 
   private boolean processNamedElements(@NotNull PsiScopeProcessor processor,

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ public class BracesInsertHandler implements InsertHandler<LookupElement> {
   @Override
   public void handleInsert(InsertionContext context, LookupElement item) {
     final Editor editor = context.getEditor();
-    final CharSequence documentText = context.getDocument().getImmutableCharSequence();
+    CharSequence documentText = context.getDocument().getImmutableCharSequence();
     int offset = skipWhiteSpaces(editor.getCaretModel().getOffset(), documentText);
     if (documentText.charAt(offset) != '{') {
       Project project = context.getProject();

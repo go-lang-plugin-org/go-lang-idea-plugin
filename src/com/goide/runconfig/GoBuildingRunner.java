@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ import com.intellij.execution.runners.AsyncGenericProgramRunner;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.RunContentBuilder;
 import com.intellij.execution.ui.RunContentDescriptor;
+import com.intellij.internal.statistic.UsageTrigger;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
@@ -69,14 +70,14 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
   public boolean canRun(@NotNull String executorId, @NotNull RunProfile profile) {
     if (profile instanceof GoApplicationConfiguration) {
       return DefaultRunExecutor.EXECUTOR_ID.equals(executorId)
-             || DefaultDebugExecutor.EXECUTOR_ID.equals(executorId) && !DlvDebugProcess.isDlvDisabled();
+             || DefaultDebugExecutor.EXECUTOR_ID.equals(executorId) && !DlvDebugProcess.isDlvDisabled;
     }
     return false;
   }
 
   @NotNull
   @Override
-  protected Promise<RunProfileStarter> prepare(@NotNull final ExecutionEnvironment environment, @NotNull final RunProfileState state)
+  protected Promise<RunProfileStarter> prepare(@NotNull ExecutionEnvironment environment, @NotNull final RunProfileState state)
     throws ExecutionException {
     final File outputFile;
     String outputDirectoryPath = ((GoApplicationRunningState)state).myConfiguration.getOutputFilePath();
@@ -170,7 +171,7 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
 
     @Nullable
     @Override
-    public RunContentDescriptor execute(@NotNull final RunProfileState state, @NotNull final ExecutionEnvironment env)
+    public RunContentDescriptor execute(@NotNull RunProfileState state, @NotNull ExecutionEnvironment env)
       throws ExecutionException {
       if (state instanceof GoApplicationRunningState) {
         final int port = findFreePort();
@@ -184,6 +185,8 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
         if (executionResult == null) {
           throw new ExecutionException("Cannot run debugger");
         }
+
+        UsageTrigger.trigger("go.dlv.debugger");
       
         return XDebuggerManager.getInstance(env.getProject()).startSession(env, new XDebugProcessStarter() {
           @NotNull
@@ -212,7 +215,7 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
 
     @Nullable
     @Override
-    public RunContentDescriptor execute(@NotNull final RunProfileState state, @NotNull final ExecutionEnvironment env)
+    public RunContentDescriptor execute(@NotNull RunProfileState state, @NotNull ExecutionEnvironment env)
       throws ExecutionException {
       if (state instanceof GoApplicationRunningState) {
         FileDocumentManager.getInstance().saveAllDocuments();

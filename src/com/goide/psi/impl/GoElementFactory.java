@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -110,9 +110,20 @@ public class GoElementFactory {
     return PsiTreeUtil.findChildOfType(file, GoSimpleStatement.class);
   }
 
+  public static GoAssignmentStatement createAssignmentStatement(@NotNull Project project, @NotNull String left, @NotNull String right) {
+    GoFile file = createFileFromText(project, "package a; func a() {\n " + left + " = " + right + "}");
+    return PsiTreeUtil.findChildOfType(file, GoAssignmentStatement.class);
+  }
+
   @NotNull
-  public static GoReferenceExpression createVarReference(@NotNull Project project, @NotNull String name) {
+  public static GoReferenceExpression createReferenceExpression(@NotNull Project project, @NotNull String name) {
     GoFile file = createFileFromText(project, "package a; var a = " + name);
     return PsiTreeUtil.findChildOfType(file, GoReferenceExpression.class);
+  }
+
+  @NotNull
+  public static GoTypeReferenceExpression createTypeReferenceExpression(@NotNull Project project, @NotNull String name) {
+    GoFile file = createFileFromText(project, "package a; type " + name + " struct {}; func f() { " + name + "{} }");
+    return PsiTreeUtil.findChildOfType(file, GoTypeReferenceExpression.class);
   }
 }

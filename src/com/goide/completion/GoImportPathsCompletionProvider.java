@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package com.goide.completion;
 import com.goide.GoFileType;
 import com.goide.project.GoExcludedPathsSettings;
 import com.goide.psi.GoImportString;
+import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.sdk.GoSdkUtil;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.completion.CompletionParameters;
@@ -31,6 +32,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -41,7 +43,7 @@ import org.jetbrains.annotations.Nullable;
 public class GoImportPathsCompletionProvider extends CompletionProvider<CompletionParameters> {
   @Override
   protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
-    final GoImportString importString = PsiTreeUtil.getParentOfType(parameters.getPosition(), GoImportString.class);
+    GoImportString importString = PsiTreeUtil.getParentOfType(parameters.getPosition(), GoImportString.class);
     if (importString == null) return;
     String path = importString.getPath();
     if (path.startsWith("./") || path.startsWith("../")) return;
@@ -62,11 +64,14 @@ public class GoImportPathsCompletionProvider extends CompletionProvider<Completi
       String contextImportPath = GoCompletionUtil.getContextImportPath(context);
       GoExcludedPathsSettings excludedSettings = GoExcludedPathsSettings.getInstance(project);
       GlobalSearchScope scope = withLibraries ? GoUtil.moduleScope(module) : GoUtil.moduleScopeWithoutLibraries(module);
+      PsiFile contextFile = context != null ? context.getContainingFile() : null;
+      boolean testFileWithTestPackage = GoTestFinder.isTestFileWithTestPackage(contextFile);
       for (VirtualFile file : FileTypeIndex.getFiles(GoFileType.INSTANCE, scope)) {
         VirtualFile parent = file.getParent();
         if (parent == null) continue;
         String importPath = GoSdkUtil.getPathRelativeToSdkAndLibraries(parent, project, module);
-        if (!StringUtil.isEmpty(importPath) && !importPath.equals(contextImportPath) && !excludedSettings.isExcluded(importPath)) {
+        if (!StringUtil.isEmpty(importPath) && !excludedSettings.isExcluded(importPath) &&
+            (testFileWithTestPackage || !importPath.equals(contextImportPath))) {
           result.addElement(GoCompletionUtil.createPackageLookupElement(importPath, contextImportPath, false));
         }
       }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,32 @@
 
 package com.goide.inspections.suppression;
 
+import com.goide.inspections.GoMultiplePackagesInspection;
+import com.goide.inspections.GoUnusedImportInspection;
 import com.goide.inspections.unresolved.GoUnresolvedReferenceInspection;
 import com.goide.inspections.unresolved.GoUnusedGlobalVariableInspection;
 import com.goide.inspections.unresolved.GoUnusedVariableInspection;
 import com.goide.quickfix.GoQuickFixTestBase;
+import org.jetbrains.annotations.NotNull;
 
 public class GoSuppressionFixTest extends GoQuickFixTestBase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();
+    myFixture.enableInspections(GoUnusedImportInspection.class);
     myFixture.enableInspections(GoUnresolvedReferenceInspection.class);
     myFixture.enableInspections(GoUnusedGlobalVariableInspection.class);
     myFixture.enableInspections(GoUnusedVariableInspection.class);
+    myFixture.enableInspections(GoMultiplePackagesInspection.class);
   }
+  
+  public void testImportStatement() {
+    doTest("Suppress for import");
+  } 
+  
+  public void testFirstImportStatement() {
+    doTest("Suppress for import");
+  } 
 
   public void testFunctionSuppressionFix() {
     doTest("Suppress for function");
@@ -86,8 +99,19 @@ public class GoSuppressionFixTest extends GoQuickFixTestBase {
     doTest("Suppress for statement");
   }
   
+  
   public void testInnerVariableDeclarationSuppressionFix3() {
     doTest("Suppress for function");
+  }
+  
+  public void testPackageClause() {
+    myFixture.configureByText("a.go", "package somePackage");
+    doTest("Suppress for package statement");
+  }
+  
+  public void testPackageClauseSuppressAll() {
+    myFixture.configureByText("a.go", "package somePackage");
+    doTest("Suppress all inspections for package statement");
   }
   
   @Override
@@ -98,5 +122,11 @@ public class GoSuppressionFixTest extends GoQuickFixTestBase {
   @Override
   protected String getBasePath() {
     return "inspections/suppression/fix";
+  }
+
+  @Override
+  protected void doTest(@NotNull String quickFixName) {
+    super.doTest(quickFixName);
+    myFixture.testHighlighting(String.format("%s-after-highlighting.go", getTestName(true)));
   }
 }

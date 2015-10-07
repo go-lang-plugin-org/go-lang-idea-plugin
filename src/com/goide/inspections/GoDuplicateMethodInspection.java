@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,10 +35,10 @@ import java.util.Collection;
 
 public class GoDuplicateMethodInspection extends GoInspectionBase {
   @Override
-  protected void checkFile(@NotNull GoFile file, @NotNull final ProblemsHolder problemsHolder) {
-    final Project project = file.getProject();
-    final String packageName = file.getPackageName();
-    final GlobalSearchScope scope = GoPsiImplUtil.packageScope(file);
+  protected void checkFile(@NotNull GoFile file, @NotNull ProblemsHolder problemsHolder) {
+    Project project = file.getProject();
+    String packageName = file.getPackageName();
+    GlobalSearchScope scope = GoPsiImplUtil.packageScope(file);
 
     for (final GoMethodDeclaration method : file.getMethods()) {
       if (method.isBlank()) continue;

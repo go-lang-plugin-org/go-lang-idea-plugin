@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -114,7 +114,7 @@ public class GoAppEngineRunConfiguration extends GoRunConfigurationBase<GoAppEng
   public void checkConfiguration() throws RuntimeConfigurationException {
     super.checkConfiguration();
 
-    final Module module = getConfigurationModule().getModule();
+    Module module = getConfigurationModule().getModule();
     if (module != null) {
       if (!GoSdkService.isAppEngineSdkPath(GoSdkService.getInstance(module.getProject()).getSdkHomePath(module))) {
         throw new RuntimeConfigurationWarning("Go SDK is not specified for module '" + module.getName() + "'");
