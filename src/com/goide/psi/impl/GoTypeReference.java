@@ -127,7 +127,7 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
     if (!processFileEntities(file, processor, state, localResolve)) return false;
     PsiDirectory dir = file.getOriginalFile().getParent();
     if (!GoReference.processDirectory(dir, file, file.getPackageName(), processor, state, true)) return false;
-    if (GoReference.processImports(file, processor, state, myElement)) return false;
+    if (!GoReference.processImports(file, processor, state, myElement)) return false;
     if (processBuiltin(processor, state, myElement)) return false;
     if (getIdentifier().textMatches(GoConstants.NIL) && PsiTreeUtil.getParentOfType(myElement, GoTypeCaseClause.class) != null) {
       GoType type = PsiTreeUtil.getParentOfType(myElement, GoType.class);

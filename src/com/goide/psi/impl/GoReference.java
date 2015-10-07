@@ -299,7 +299,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     if (prevDot(parent)) return false;
 
     GoScopeProcessorBase delegate = createDelegate(processor);
-    if (processImports(file, processor, state, myElement)) return false;
+    if (!processImports(file, processor, state, myElement)) return false;
     ResolveUtil.treeWalkUp(myElement, delegate);
     if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
     processReceiver(delegate);
@@ -333,19 +333,19 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
           if (resolved && !processor.isCompletion()) {
             putIfAbsent(o, element);
           }
-          if (resolved) return true;
+          if (resolved) return false;
         }
         else {
           if (o.getAlias() == null) {
             PsiDirectory resolve = importString.resolve();
-            if (resolve != null && !processor.execute(resolve, state.put(ACTUAL_NAME, entry.getKey()))) return true;
+            if (resolve != null && !processor.execute(resolve, state.put(ACTUAL_NAME, entry.getKey()))) return false;
           }
           // todo: multi-resolve into appropriate package clauses
-          if (!processor.execute(o, state.put(ACTUAL_NAME, entry.getKey()))) return true;
+          if (!processor.execute(o, state.put(ACTUAL_NAME, entry.getKey()))) return false;
         }
       }
     }
-    return false;
+    return true;
   }
 
   private boolean processSelector(@NotNull GoSelectorExpr parent,
