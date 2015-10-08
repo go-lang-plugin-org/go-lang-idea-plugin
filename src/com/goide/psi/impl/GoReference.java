@@ -117,7 +117,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     GoReferenceExpressionBase qualifier = myElement.getQualifier();
     return qualifier != null
            ? processQualifierExpression(((GoFile)file), qualifier, processor, state)
-           : processUnqualifiedResolve(((GoFile)file), processor, state, true);
+           : processUnqualifiedResolve(((GoFile)file), processor, state);
   }
 
   private boolean processQualifierExpression(@NotNull GoFile file,
@@ -280,8 +280,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
   private boolean processUnqualifiedResolve(@NotNull GoFile file,
                                             @NotNull GoScopeProcessor processor,
-                                            @NotNull ResolveState state,
-                                            boolean localResolve) {
+                                            @NotNull ResolveState state) {
     // todo: rewrite with qualification not with siblings
     GoReceiverType receiverType = PsiTreeUtil.getPrevSiblingOfType(myElement, GoReceiverType.class);
     if (receiverType != null) {
@@ -304,10 +303,10 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     if (prevDot(parent)) return false;
 
     if (!processImports(file, processor, state, myElement)) return false;
-    if (!processBlock(processor, state, localResolve)) return false;
-    if (!processReceiver(processor, state, localResolve)) return false;
-    if (!processParameters(processor, state, localResolve)) return false;
-    if (!processFileEntities(file, processor, state, localResolve)) return false;
+    if (!processBlock(processor, state, true)) return false;
+    if (!processReceiver(processor, state, true)) return false;
+    if (!processParameters(processor, state, true)) return false;
+    if (!processFileEntities(file, processor, state, true)) return false;
     if (!processDirectory(file.getOriginalFile().getParent(), file, file.getPackageName(), processor, state, true)) return false;
     if (!processBuiltin(processor, state, myElement)) return false;
     return true;
