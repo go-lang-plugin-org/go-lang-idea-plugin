@@ -23,6 +23,7 @@ allprojects {
   apply plugin: 'java'
   sourceCompatibility = javaVersion
   targetCompatibility = javaVersion
+  tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
 
   sourceSets {
     main {
@@ -39,7 +40,7 @@ allprojects {
     version ideaVersion
     pluginName 'Go'
     plugins 'coverage'
-    downloadSources sources as boolean
+    downloadSources Boolean.valueOf(sources)
     publish {
       username publishUsername
       password publishPassword
