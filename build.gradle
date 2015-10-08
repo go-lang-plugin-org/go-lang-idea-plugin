@@ -113,7 +113,7 @@ private void downloadAndUnzip(url, sourceDir, targetDir) {
   def testDataPath = "$projectDir/testData/performance/"
   def markerFile = file("$testDataPath/$targetDir/markerFile")
   def tmpPath = "$testDataPath/tmp/"
-  def tar = file("$tmpPath/$targetDir.tar.gz")
+  def tar = file("$tmpPath/${targetDir}.tar.gz")
   if (!markerFile.exists()) {
     download {
       src url
