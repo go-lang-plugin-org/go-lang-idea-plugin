@@ -479,3 +479,21 @@ func _() *SensorFactory {
 	return factory
 }
 
+type Conn1 interface {
+	Close() error
+}
+
+func _() {
+	clientList := make(map[int]struct{
+		message chan string
+		conn *Conn1
+	})
+	message := ""
+	for _, c := range clientList {
+		select {
+		case c.message <- message:
+		default:
+			(*c.conn).Close()
+		}
+	}
+}
