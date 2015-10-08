@@ -107,7 +107,7 @@ public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabAction
     GoCallExpr call = (GoCallExpr)parent;
     PsiElement resolve = GoPsiImplUtil.resolveCall(call);
     if (resolve == null && ((call).getExpression() instanceof GoFunctionLit)) { // todo: move inside resolve call
-      context.setItemsToShow(new Object[]{((GoFunctionLit)(call).getExpression())});
+      context.setItemsToShow(new Object[]{(call).getExpression()});
       context.showHint(argList, argList.getTextRange().getStartOffset(), this);
     }
     else if (resolve != null) {
