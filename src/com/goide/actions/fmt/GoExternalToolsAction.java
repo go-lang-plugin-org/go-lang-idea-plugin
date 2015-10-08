@@ -88,7 +88,7 @@ public abstract class GoExternalToolsAction extends DumbAwareAction {
                                 @Nullable Module module,
                                 @NotNull Project project,
                                 @NotNull String title,
-                                boolean withProgress) throws ExecutionException {
+                                boolean withProgress) {
     Document document = FileDocumentManager.getInstance().getDocument(virtualFile);
     assert document != null;
     String filePath = virtualFile.getCanonicalPath();

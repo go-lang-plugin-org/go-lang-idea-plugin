@@ -17,7 +17,6 @@
 package com.goide.actions.fmt;
 
 import com.goide.psi.GoFile;
-import com.intellij.execution.ExecutionException;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -75,12 +74,8 @@ public class GoFmtCheckinFactory extends CheckinHandlerFactory {
         if (enabled(panel)) {
           FileDocumentManager.getInstance().saveAllDocuments();
           for (PsiFile file : getPsiFiles()) {
-            try {
-              VirtualFile virtualFile = file.getVirtualFile();
-              new GoFmtFileAction().doSomething(virtualFile, ModuleUtilCore.findModuleForPsiElement(file), file.getProject(), "Go fmt", true);
-            }
-            catch (ExecutionException ignored) {
-            }
+            VirtualFile virtualFile = file.getVirtualFile();
+            new GoFmtFileAction().doSomething(virtualFile, ModuleUtilCore.findModuleForPsiElement(file), file.getProject(), "Go fmt", true);
           }
         }
         return super.beforeCheckin();
