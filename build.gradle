@@ -35,7 +35,6 @@ allprojects {
     }
   }
 
-  apply plugin: 'org.jetbrains.intellij'
   intellij {
     version ideaVersion
     pluginName 'Go'
