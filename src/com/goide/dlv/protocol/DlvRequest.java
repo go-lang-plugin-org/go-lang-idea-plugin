@@ -32,7 +32,9 @@ import java.util.List;
  * @see com.goide.dlv.DlvCommandProcessor#getResultType(String)
  */
 public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
-  protected boolean argumentsObjectStarted;
+  private static final String PARAMS = "params";
+  private static final String ID = "id";
+  private boolean argumentsObjectStarted;
 
   private DlvRequest() {
     try {
@@ -54,7 +56,7 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
     if (!argumentsObjectStarted) {
       argumentsObjectStarted = true;
       if (needObject()) {
-        writer.name(argumentsKeyName());
+        writer.name(PARAMS);
         writer.beginArray();
         writer.beginObject();
       }
@@ -74,7 +76,7 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
           writer.endArray();
         }
       }
-      writer.name(getIdKeyName()).value(id);
+      writer.name(ID).value(id);
       writer.endObject();
       writer.close();
     }
@@ -83,17 +85,9 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
     }
   }
 
-  protected final String getIdKeyName() {
-    return "id";
-  }
-
-  protected final String argumentsKeyName() {
-    return "params";
-  }
-
   public final static class ClearBreakpoint extends DlvRequest<DlvApi.Breakpoint> {
     public ClearBreakpoint(int id) {
-      writeSingletonIntArray(argumentsKeyName(), id);
+      writeSingletonIntArray(PARAMS, id);
     }
 
     @Override
@@ -143,8 +137,8 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
 
   public final static class EvalSymbol extends DlvRequest<DlvApi.Variable> {
     public EvalSymbol(@NotNull String symbol, int frameId) {
-      try { 
-        writer.name(argumentsKeyName()).beginArray();
+      try {
+        writer.name(PARAMS).beginArray();
         writeScope(frameId, writer)
           .name("Symbol").value(symbol)
           .endObject().endArray();
@@ -171,8 +165,8 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
 
   public final static class SetSymbol extends DlvRequest<Object> {
     public SetSymbol(@NotNull String symbol, @NotNull String value, int frameId) {
-      try { 
-        writer.name(argumentsKeyName()).beginArray();
+      try {
+        writer.name(PARAMS).beginArray();
         writeScope(frameId, writer)
           .name("Symbol").value(symbol)
           .name("Value").value(value)
