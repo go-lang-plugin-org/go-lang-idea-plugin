@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
   ~
@@ -14,11 +13,10 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
 <problems>
   <problem>
     <file>docker_utils.go</file>
-    <line>473</line>
+    <line>457</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/integration-cli/docker_utils.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -26,7 +24,7 @@
   </problem>
   <problem>
     <file>docker_utils.go</file>
-    <line>493</line>
+    <line>477</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/integration-cli/docker_utils.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -34,7 +32,7 @@
   </problem>
   <problem>
     <file>docker_utils.go</file>
-    <line>651</line>
+    <line>635</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/integration-cli/docker_utils.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -42,15 +40,7 @@
   </problem>
   <problem>
     <file>utils.go</file>
-    <line>241</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/integration-cli/utils.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'fileServer'</description>
-  </problem>
-  <problem>
-    <file>utils.go</file>
-    <line>261</line>
+    <line>225</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/integration-cli/utils.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -114,7 +104,7 @@
   </problem>
   <problem>
     <file>graph_test.go</file>
-    <line>313</line>
+    <line>312</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/integration/graph_test.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -146,7 +136,7 @@
   </problem>
   <problem>
     <file>parse.go</file>
-    <line>365</line>
+    <line>364</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/runconfig/parse.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -217,6 +207,14 @@
     <description>Unused function 'Register'</description>
   </problem>
   <problem>
+    <file>repository.go</file>
+    <line>22</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/volumes/repository.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
+    <description>Unused function 'NewRepository'</description>
+  </problem>
+  <problem>
     <file>dispatchers.go</file>
     <line>31</line>
     <module>light_idea_test_case</module>
@@ -249,22 +247,6 @@
     <description>Unused function 'NewBackup'</description>
   </problem>
   <problem>
-    <file>examplehandler_test.go</file>
-    <line>20</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/websocket/examplehandler_test.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ExampleHandler'</description>
-  </problem>
-  <problem>
-    <file>exampledial_test.go</file>
-    <line>15</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/websocket/exampledial_test.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ExampleDial'</description>
-  </problem>
-  <problem>
     <file>client.go</file>
     <line>70</line>
     <module>light_idea_test_case</module>
@@ -289,252 +271,12 @@
     <description>Unused function 'RegisterDialerType'</description>
   </problem>
   <problem>
-    <file>sockopt_rfc3542_windows.go</file>
-    <line>9</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3542_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv6ReceiveTrafficClass'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3542_windows.go</file>
-    <line>14</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3542_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv6ReceiveTrafficClass'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3542_windows.go</file>
-    <line>19</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3542_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv6ReceiveHopLimit'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3542_windows.go</file>
-    <line>24</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3542_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv6ReceiveHopLimit'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3542_windows.go</file>
-    <line>29</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3542_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv6ReceivePacketInfo'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3542_windows.go</file>
-    <line>34</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3542_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv6ReceivePacketInfo'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3542_windows.go</file>
-    <line>39</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3542_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv6PathMTU'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3542_windows.go</file>
-    <line>44</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3542_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv6ReceivePathMTU'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3542_windows.go</file>
-    <line>49</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3542_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv6ReceivePathMTU'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3542_windows.go</file>
-    <line>54</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3542_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv6ICMPFilter'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3542_windows.go</file>
-    <line>59</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3542_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv6ICMPFilter'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3493_windows.go</file>
-    <line>14</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3493_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv6TrafficClass'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3493_windows.go</file>
-    <line>19</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3493_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv6TrafficClass'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3493_windows.go</file>
-    <line>24</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3493_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv6HopLimit'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3493_windows.go</file>
-    <line>33</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3493_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv6HopLimit'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3493_windows.go</file>
-    <line>38</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3493_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv6Checksum'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3493_windows.go</file>
-    <line>43</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3493_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv6MulticastHopLimit'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3493_windows.go</file>
-    <line>52</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3493_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv6MulticastHopLimit'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3493_windows.go</file>
-    <line>57</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3493_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv6MulticastInterface'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3493_windows.go</file>
-    <line>73</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3493_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv6MulticastInterface'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3493_windows.go</file>
-    <line>81</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3493_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv6MulticastLoopback'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3493_windows.go</file>
-    <line>90</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3493_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv6MulticastLoopback'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3493_windows.go</file>
-    <line>95</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3493_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'joinIPv6Group'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3493_windows.go</file>
-    <line>104</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3493_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'leaveIPv6Group'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3493_windows.go</file>
-    <line>113</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3493_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv6Checksum'</description>
-  </problem>
-  <problem>
-    <file>control_rfc3542_windows.go</file>
-    <line>9</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/control_rfc3542_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setControlMessage'</description>
-  </problem>
-  <problem>
-    <file>control_rfc3542_windows.go</file>
-    <line>14</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/control_rfc3542_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'newControlMessage'</description>
-  </problem>
-  <problem>
-    <file>control_rfc3542_windows.go</file>
-    <line>19</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/control_rfc3542_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'parseControlMessage'</description>
-  </problem>
-  <problem>
-    <file>control_rfc3542_windows.go</file>
-    <line>24</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/control_rfc3542_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'marshalControlMessage'</description>
-  </problem>
-  <problem>
     <file>sockopt_rfc2292_darwin.go</file>
     <line>12</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc2292_darwin.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
     <description>Unused function 'ipv6ReceiveTrafficClass'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc2292_darwin.go</file>
-    <line>16</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc2292_darwin.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv6ReceiveTrafficClass'</description>
   </problem>
   <problem>
     <file>sockopt_rfc2292_darwin.go</file>
@@ -546,35 +288,11 @@
   </problem>
   <problem>
     <file>sockopt_rfc2292_darwin.go</file>
-    <line>28</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc2292_darwin.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv6ReceiveHopLimit'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc2292_darwin.go</file>
     <line>32</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc2292_darwin.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
     <description>Unused function 'ipv6ReceivePacketInfo'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc2292_darwin.go</file>
-    <line>40</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc2292_darwin.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv6ReceivePacketInfo'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc2292_darwin.go</file>
-    <line>44</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc2292_darwin.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv6PathMTU'</description>
   </problem>
   <problem>
     <file>sockopt_rfc2292_darwin.go</file>
@@ -585,220 +303,12 @@
     <description>Unused function 'ipv6ReceivePathMTU'</description>
   </problem>
   <problem>
-    <file>sockopt_rfc2292_darwin.go</file>
-    <line>52</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc2292_darwin.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv6ReceivePathMTU'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc2292_darwin.go</file>
-    <line>56</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc2292_darwin.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv6ICMPFilter'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc2292_darwin.go</file>
-    <line>64</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc2292_darwin.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv6ICMPFilter'</description>
-  </problem>
-  <problem>
-    <file>control_rfc2292_darwin.go</file>
-    <line>16</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/control_rfc2292_darwin.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setControlMessage'</description>
-  </problem>
-  <problem>
-    <file>control_rfc2292_darwin.go</file>
-    <line>42</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/control_rfc2292_darwin.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'newControlMessage'</description>
-  </problem>
-  <problem>
-    <file>control_rfc2292_darwin.go</file>
-    <line>72</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/control_rfc2292_darwin.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'parseControlMessage'</description>
-  </problem>
-  <problem>
-    <file>control_rfc2292_darwin.go</file>
-    <line>97</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/control_rfc2292_darwin.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'marshalControlMessage'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3542_plan9.go</file>
-    <line>9</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3542_plan9.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv6PathMTU'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3542_linux.go</file>
-    <line>12</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3542_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv6PathMTU'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3542_linux.go</file>
-    <line>20</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3542_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv6ReceivePathMTU'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3542_linux.go</file>
-    <line>28</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3542_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv6ReceivePathMTU'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3542_linux.go</file>
-    <line>32</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3542_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv6ICMPFilter'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3542_linux.go</file>
-    <line>40</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3542_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv6ICMPFilter'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3493_linux.go</file>
-    <line>12</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3493_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv6Checksum'</description>
-  </problem>
-  <problem>
-    <file>control_rfc3542_plan9.go</file>
-    <line>9</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/control_rfc3542_plan9.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setControlMessage'</description>
-  </problem>
-  <problem>
-    <file>control_rfc3542_plan9.go</file>
-    <line>14</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/control_rfc3542_plan9.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'newControlMessage'</description>
-  </problem>
-  <problem>
-    <file>control_rfc3542_plan9.go</file>
-    <line>19</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/control_rfc3542_plan9.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'parseControlMessage'</description>
-  </problem>
-  <problem>
-    <file>control_rfc3542_plan9.go</file>
-    <line>24</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/control_rfc3542_plan9.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'marshalControlMessage'</description>
-  </problem>
-  <problem>
-    <file>control_rfc3542_linux.go</file>
-    <line>23</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/control_rfc3542_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setControlMessage'</description>
-  </problem>
-  <problem>
-    <file>control_rfc3542_linux.go</file>
-    <line>69</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/control_rfc3542_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'newControlMessage'</description>
-  </problem>
-  <problem>
-    <file>control_rfc3542_linux.go</file>
-    <line>119</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/control_rfc3542_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'parseControlMessage'</description>
-  </problem>
-  <problem>
-    <file>control_rfc3542_linux.go</file>
-    <line>151</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/control_rfc3542_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'marshalControlMessage'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3542_unix.go</file>
-    <line>14</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3542_unix.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv6ReceiveTrafficClass'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3542_unix.go</file>
-    <line>26</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3542_unix.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv6ReceiveHopLimit'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3542_unix.go</file>
-    <line>38</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3542_unix.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv6ReceivePacketInfo'</description>
-  </problem>
-  <problem>
     <file>mocktransponder_test.go</file>
     <line>90</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/mocktransponder_test.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
     <description>Unused function 'transponder'</description>
-  </problem>
-  <problem>
-    <file>sockopt_rfc3542_bsd.go</file>
-    <line>22</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv6/sockopt_rfc3542_bsd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv6ReceivePathMTU'</description>
   </problem>
   <problem>
     <file>endpoint.go</file>
@@ -817,390 +327,6 @@
     <description>Unused function 'NewPacketConn'</description>
   </problem>
   <problem>
-    <file>sockopt_windows.go</file>
-    <line>17</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv4TOS'</description>
-  </problem>
-  <problem>
-    <file>sockopt_windows.go</file>
-    <line>26</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv4TOS'</description>
-  </problem>
-  <problem>
-    <file>sockopt_windows.go</file>
-    <line>31</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv4TTL'</description>
-  </problem>
-  <problem>
-    <file>sockopt_windows.go</file>
-    <line>40</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv4TTL'</description>
-  </problem>
-  <problem>
-    <file>sockopt_windows.go</file>
-    <line>45</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv4MulticastTTL'</description>
-  </problem>
-  <problem>
-    <file>sockopt_windows.go</file>
-    <line>54</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv4MulticastTTL'</description>
-  </problem>
-  <problem>
-    <file>sockopt_windows.go</file>
-    <line>59</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv4ReceiveTTL'</description>
-  </problem>
-  <problem>
-    <file>sockopt_windows.go</file>
-    <line>64</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv4ReceiveTTL'</description>
-  </problem>
-  <problem>
-    <file>sockopt_windows.go</file>
-    <line>69</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv4ReceiveDestinationAddress'</description>
-  </problem>
-  <problem>
-    <file>sockopt_windows.go</file>
-    <line>74</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv4ReceiveDestinationAddress'</description>
-  </problem>
-  <problem>
-    <file>sockopt_windows.go</file>
-    <line>79</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv4HeaderPrepend'</description>
-  </problem>
-  <problem>
-    <file>sockopt_windows.go</file>
-    <line>84</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv4HeaderPrepend'</description>
-  </problem>
-  <problem>
-    <file>sockopt_windows.go</file>
-    <line>89</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv4ReceiveInterface'</description>
-  </problem>
-  <problem>
-    <file>sockopt_windows.go</file>
-    <line>94</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv4ReceiveInterface'</description>
-  </problem>
-  <problem>
-    <file>sockopt_windows.go</file>
-    <line>99</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv4MulticastInterface'</description>
-  </problem>
-  <problem>
-    <file>sockopt_windows.go</file>
-    <line>108</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv4MulticastInterface'</description>
-  </problem>
-  <problem>
-    <file>sockopt_windows.go</file>
-    <line>118</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv4MulticastLoopback'</description>
-  </problem>
-  <problem>
-    <file>sockopt_windows.go</file>
-    <line>127</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv4MulticastLoopback'</description>
-  </problem>
-  <problem>
-    <file>sockopt_windows.go</file>
-    <line>132</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'joinIPv4Group'</description>
-  </problem>
-  <problem>
-    <file>sockopt_windows.go</file>
-    <line>140</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'leaveIPv4Group'</description>
-  </problem>
-  <problem>
-    <file>sockopt_freebsd.go</file>
-    <line>12</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_freebsd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv4SendSourceAddress'</description>
-  </problem>
-  <problem>
-    <file>sockopt_freebsd.go</file>
-    <line>20</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_freebsd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv4SendSourceAddress'</description>
-  </problem>
-  <problem>
-    <file>control_windows.go</file>
-    <line>9</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/control_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setControlMessage'</description>
-  </problem>
-  <problem>
-    <file>control_windows.go</file>
-    <line>14</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/control_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'newControlMessage'</description>
-  </problem>
-  <problem>
-    <file>control_windows.go</file>
-    <line>19</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/control_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'parseControlMessage'</description>
-  </problem>
-  <problem>
-    <file>control_windows.go</file>
-    <line>24</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/control_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'marshalControlMessage'</description>
-  </problem>
-  <problem>
-    <file>sockopt_plan9.go</file>
-    <line>9</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_plan9.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv4HeaderPrepend'</description>
-  </problem>
-  <problem>
-    <file>sockopt_plan9.go</file>
-    <line>14</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_plan9.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv4HeaderPrepend'</description>
-  </problem>
-  <problem>
-    <file>sockopt_linux.go</file>
-    <line>13</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv4ReceiveTOS'</description>
-  </problem>
-  <problem>
-    <file>sockopt_linux.go</file>
-    <line>21</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv4ReceiveTOS'</description>
-  </problem>
-  <problem>
-    <file>sockopt_linux.go</file>
-    <line>25</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv4MulticastTTL'</description>
-  </problem>
-  <problem>
-    <file>sockopt_linux.go</file>
-    <line>33</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv4MulticastTTL'</description>
-  </problem>
-  <problem>
-    <file>sockopt_linux.go</file>
-    <line>37</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv4PacketInfo'</description>
-  </problem>
-  <problem>
-    <file>sockopt_linux.go</file>
-    <line>45</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv4PacketInfo'</description>
-  </problem>
-  <problem>
-    <file>sockopt_linux.go</file>
-    <line>49</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv4MulticastInterface'</description>
-  </problem>
-  <problem>
-    <file>sockopt_linux.go</file>
-    <line>60</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv4MulticastInterface'</description>
-  </problem>
-  <problem>
-    <file>sockopt_linux.go</file>
-    <line>68</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv4MulticastLoopback'</description>
-  </problem>
-  <problem>
-    <file>sockopt_linux.go</file>
-    <line>76</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv4MulticastLoopback'</description>
-  </problem>
-  <problem>
-    <file>sockopt_linux.go</file>
-    <line>80</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'joinIPv4Group'</description>
-  </problem>
-  <problem>
-    <file>sockopt_linux.go</file>
-    <line>88</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'leaveIPv4Group'</description>
-  </problem>
-  <problem>
-    <file>control_plan9.go</file>
-    <line>9</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/control_plan9.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setControlMessage'</description>
-  </problem>
-  <problem>
-    <file>control_plan9.go</file>
-    <line>14</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/control_plan9.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'newControlMessage'</description>
-  </problem>
-  <problem>
-    <file>control_plan9.go</file>
-    <line>19</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/control_plan9.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'parseControlMessage'</description>
-  </problem>
-  <problem>
-    <file>control_plan9.go</file>
-    <line>24</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/control_plan9.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'marshalControlMessage'</description>
-  </problem>
-  <problem>
-    <file>control_linux.go</file>
-    <line>17</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/control_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setControlMessage'</description>
-  </problem>
-  <problem>
-    <file>control_linux.go</file>
-    <line>43</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/control_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'newControlMessage'</description>
-  </problem>
-  <problem>
-    <file>control_linux.go</file>
-    <line>73</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/control_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'parseControlMessage'</description>
-  </problem>
-  <problem>
-    <file>control_linux.go</file>
-    <line>98</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/control_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'marshalControlMessage'</description>
-  </problem>
-  <problem>
     <file>sockopt_unix.go</file>
     <line>38</line>
     <module>light_idea_test_case</module>
@@ -1217,54 +343,6 @@
     <description>Unused function 'ipv4HeaderPrepend'</description>
   </problem>
   <problem>
-    <file>example_test.go</file>
-    <line>13</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/example_test.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ExampleUnicastTCPListener'</description>
-  </problem>
-  <problem>
-    <file>example_test.go</file>
-    <line>38</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/example_test.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ExampleMulticastUDPListener'</description>
-  </problem>
-  <problem>
-    <file>example_test.go</file>
-    <line>140</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/example_test.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ExampleIPOSPFListener'</description>
-  </problem>
-  <problem>
-    <file>example_test.go</file>
-    <line>225</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/example_test.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ExampleWriteIPOSPFHello'</description>
-  </problem>
-  <problem>
-    <file>sockopt_bsd.go</file>
-    <line>15</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_bsd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv4MulticastTTL'</description>
-  </problem>
-  <problem>
-    <file>sockopt_bsd.go</file>
-    <line>23</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_bsd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv4MulticastTTL'</description>
-  </problem>
-  <problem>
     <file>sockopt_bsd.go</file>
     <line>27</line>
     <module>light_idea_test_case</module>
@@ -1274,107 +352,11 @@
   </problem>
   <problem>
     <file>sockopt_bsd.go</file>
-    <line>35</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_bsd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv4ReceiveDestinationAddress'</description>
-  </problem>
-  <problem>
-    <file>sockopt_bsd.go</file>
     <line>39</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_bsd.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
     <description>Unused function 'ipv4ReceiveInterface'</description>
-  </problem>
-  <problem>
-    <file>sockopt_bsd.go</file>
-    <line>47</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_bsd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv4ReceiveInterface'</description>
-  </problem>
-  <problem>
-    <file>sockopt_bsd.go</file>
-    <line>51</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_bsd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv4MulticastInterface'</description>
-  </problem>
-  <problem>
-    <file>sockopt_bsd.go</file>
-    <line>59</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_bsd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv4MulticastInterface'</description>
-  </problem>
-  <problem>
-    <file>sockopt_bsd.go</file>
-    <line>69</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_bsd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ipv4MulticastLoopback'</description>
-  </problem>
-  <problem>
-    <file>sockopt_bsd.go</file>
-    <line>77</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_bsd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setIPv4MulticastLoopback'</description>
-  </problem>
-  <problem>
-    <file>sockopt_bsd.go</file>
-    <line>81</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_bsd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'joinIPv4Group'</description>
-  </problem>
-  <problem>
-    <file>sockopt_bsd.go</file>
-    <line>89</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/sockopt_bsd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'leaveIPv4Group'</description>
-  </problem>
-  <problem>
-    <file>control_bsd.go</file>
-    <line>16</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/control_bsd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setControlMessage'</description>
-  </problem>
-  <problem>
-    <file>control_bsd.go</file>
-    <line>52</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/control_bsd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'newControlMessage'</description>
-  </problem>
-  <problem>
-    <file>control_bsd.go</file>
-    <line>92</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/control_bsd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'parseControlMessage'</description>
-  </problem>
-  <problem>
-    <file>control_bsd.go</file>
-    <line>118</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/ipv4/control_bsd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'marshalControlMessage'</description>
   </problem>
   <problem>
     <file>endpoint.go</file>
@@ -1401,14 +383,6 @@
     <description>Unused function 'NewRawConn'</description>
   </problem>
   <problem>
-    <file>example_test.go</file>
-    <line>16</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/html/example_test.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ExampleParse'</description>
-  </problem>
-  <problem>
     <file>atom.go</file>
     <line>73</line>
     <module>light_idea_test_case</module>
@@ -1423,62 +397,6 @@
     <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go.net/dict/dict.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
     <description>Unused function 'Dial'</description>
-  </problem>
-  <problem>
-    <file>stat_atimespec.go</file>
-    <line>14</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go/src/pkg/archive/tar/stat_atimespec.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'statAtime'</description>
-  </problem>
-  <problem>
-    <file>stat_atimespec.go</file>
-    <line>18</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go/src/pkg/archive/tar/stat_atimespec.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'statCtime'</description>
-  </problem>
-  <problem>
-    <file>example_test.go</file>
-    <line>16</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/code.google.com/p/go/src/pkg/archive/tar/example_test.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Example'</description>
-  </problem>
-  <problem>
-    <file>example_test.go</file>
-    <line>15</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/go-fsnotify/fsnotify/example_test.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ExampleNewWatcher'</description>
-  </problem>
-  <problem>
-    <file>windows.go</file>
-    <line>33</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/go-fsnotify/fsnotify/windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'NewWatcher'</description>
-  </problem>
-  <problem>
-    <file>inotify.go</file>
-    <line>33</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/go-fsnotify/fsnotify/inotify.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'NewWatcher'</description>
-  </problem>
-  <problem>
-    <file>terminal_windows.go</file>
-    <line>22</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/Sirupsen/logrus/terminal_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'IsTerminal'</description>
   </problem>
   <problem>
     <file>exported.go</file>
@@ -1753,62 +671,6 @@
     <description>Unused function 'CurrentRoute'</description>
   </problem>
   <problem>
-    <file>capability_linux.go</file>
-    <line>67</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/syndtr/gocapability/capability/capability_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'newPid'</description>
-  </problem>
-  <problem>
-    <file>capability_linux.go</file>
-    <line>409</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/syndtr/gocapability/capability/capability_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'newFile'</description>
-  </problem>
-  <problem>
-    <file>syscall_linux.go</file>
-    <line>25</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/syndtr/gocapability/capability/syscall_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'capget'</description>
-  </problem>
-  <problem>
-    <file>syscall_linux.go</file>
-    <line>33</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/syndtr/gocapability/capability/syscall_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'capset'</description>
-  </problem>
-  <problem>
-    <file>syscall_linux.go</file>
-    <line>41</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/syndtr/gocapability/capability/syscall_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'prctl'</description>
-  </problem>
-  <problem>
-    <file>syscall_linux.go</file>
-    <line>81</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/syndtr/gocapability/capability/syscall_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'getVfsCap'</description>
-  </problem>
-  <problem>
-    <file>syscall_linux.go</file>
-    <line>117</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/syndtr/gocapability/capability/syscall_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setVfsCap'</description>
-  </problem>
-  <problem>
     <file>capability.go</file>
     <line>64</line>
     <module>light_idea_test_case</module>
@@ -1825,52 +687,20 @@
     <description>Unused function 'NewFile'</description>
   </problem>
   <problem>
-    <file>homedir_dynamic.go</file>
-    <line>9</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/godbus/dbus/homedir_dynamic.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'lookupHomeDir'</description>
-  </problem>
-  <problem>
-    <file>examples_test.go</file>
-    <line>5</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/godbus/dbus/examples_test.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ExampleConn_Emit'</description>
-  </problem>
-  <problem>
-    <file>examples_test.go</file>
-    <line>14</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/godbus/dbus/examples_test.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ExampleObject_Call'</description>
-  </problem>
-  <problem>
-    <file>examples_test.go</file>
-    <line>31</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/godbus/dbus/examples_test.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ExampleObject_Go'</description>
-  </problem>
-  <problem>
-    <file>conn_darwin.go</file>
-    <line>8</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/godbus/dbus/conn_darwin.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'sessionBusPlatform'</description>
-  </problem>
-  <problem>
     <file>introspectable.go</file>
     <line>19</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/godbus/dbus/introspect/introspectable.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
     <description>Unused function 'NewIntrospectable'</description>
+  </problem>
+  <problem>
+    <file>introspectable.go</file>
+    <line>44</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/godbus/dbus/introspect/introspectable.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
+    <description>Unused function 'Methods'</description>
   </problem>
   <problem>
     <file>call.go</file>
@@ -1921,60 +751,12 @@
     <description>Unused function 'New'</description>
   </problem>
   <problem>
-    <file>notify_linux.go</file>
-    <line>18</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/notify_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'NotifyOnOOM'</description>
-  </problem>
-  <problem>
     <file>api_temp.go</file>
     <line>14</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/api_temp.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
     <description>Unused function 'GetStats'</description>
-  </problem>
-  <problem>
-    <file>execin.go</file>
-    <line>24</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/namespaces/execin.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ExecIn'</description>
-  </problem>
-  <problem>
-    <file>execin.go</file>
-    <line>99</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/namespaces/execin.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'FinalizeSetns'</description>
-  </problem>
-  <problem>
-    <file>init.go</file>
-    <line>33</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/namespaces/init.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Init'</description>
-  </problem>
-  <problem>
-    <file>exec.go</file>
-    <line>28</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/namespaces/exec.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Exec'</description>
-  </problem>
-  <problem>
-    <file>exec.go</file>
-    <line>179</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/namespaces/exec.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'DefaultCreateCommand'</description>
   </problem>
   <problem>
     <file>state.go</file>
@@ -2033,34 +815,10 @@
     <description>Unused function 'Restrict'</description>
   </problem>
   <problem>
-    <file>restrict.go</file>
-    <line>41</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/security/restrict/restrict.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Restrict'</description>
-  </problem>
-  <problem>
-    <file>apparmor_disabled.go</file>
-    <line>5</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/apparmor/apparmor_disabled.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'IsEnabled'</description>
-  </problem>
-  <problem>
     <file>apparmor_disabled.go</file>
     <line>9</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/apparmor/apparmor_disabled.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ApplyProfile'</description>
-  </problem>
-  <problem>
-    <file>apparmor.go</file>
-    <line>23</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/apparmor/apparmor.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
     <description>Unused function 'ApplyProfile'</description>
   </problem>
@@ -2073,204 +831,12 @@
     <description>Unused function 'InstallDefaultProfile'</description>
   </problem>
   <problem>
-    <file>selinux_test.go</file>
-    <line>12</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/selinux/selinux_test.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'testSetfilecon'</description>
-  </problem>
-  <problem>
-    <file>selinux.go</file>
-    <line>47</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/selinux/selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'SetDisabled'</description>
-  </problem>
-  <problem>
-    <file>selinux.go</file>
-    <line>153</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/selinux/selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Getfilecon'</description>
-  </problem>
-  <problem>
-    <file>selinux.go</file>
-    <line>158</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/selinux/selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Setfscreatecon'</description>
-  </problem>
-  <problem>
-    <file>selinux.go</file>
-    <line>162</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/selinux/selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Getfscreatecon'</description>
-  </problem>
-  <problem>
-    <file>selinux.go</file>
-    <line>171</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/selinux/selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Getpidcon'</description>
-  </problem>
-  <problem>
-    <file>selinux.go</file>
-    <line>175</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/selinux/selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Getexeccon'</description>
-  </problem>
-  <problem>
-    <file>selinux.go</file>
-    <line>194</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/selinux/selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Setexeccon'</description>
-  </problem>
-  <problem>
-    <file>selinux.go</file>
-    <line>215</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/selinux/selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ReserveLabel'</description>
-  </problem>
-  <problem>
-    <file>selinux.go</file>
-    <line>222</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/selinux/selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'SelinuxGetEnforce'</description>
-  </problem>
-  <problem>
-    <file>selinux.go</file>
-    <line>237</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/selinux/selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'SelinuxGetEnforceMode'</description>
-  </problem>
-  <problem>
-    <file>selinux.go</file>
-    <line>259</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/selinux/selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'mcsExists'</description>
-  </problem>
-  <problem>
-    <file>selinux.go</file>
-    <line>263</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/selinux/selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'IntToMcs'</description>
-  </problem>
-  <problem>
-    <file>selinux.go</file>
-    <line>313</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/selinux/selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'FreeLxcContexts'</description>
-  </problem>
-  <problem>
-    <file>selinux.go</file>
-    <line>320</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/selinux/selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'GetLxcContexts'</description>
-  </problem>
-  <problem>
-    <file>selinux.go</file>
-    <line>387</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/selinux/selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'CopyLevel'</description>
-  </problem>
-  <problem>
-    <file>selinux.go</file>
-    <line>420</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/selinux/selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Chcon'</description>
-  </problem>
-  <problem>
-    <file>selinux.go</file>
-    <line>440</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/selinux/selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'DupSecOpt'</description>
-  </problem>
-  <problem>
-    <file>selinux.go</file>
-    <line>459</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/selinux/selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'DisableSecOpt'</description>
-  </problem>
-  <problem>
-    <file>strategy.go</file>
-    <line>28</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/network/strategy.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'GetStrategy'</description>
-  </problem>
-  <problem>
-    <file>network.go</file>
-    <line>47</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/network/network.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'SetInterfaceInNamespaceFd'</description>
-  </problem>
-  <problem>
-    <file>network.go</file>
-    <line>91</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/network/network.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'DeleteInterfaceIp'</description>
-  </problem>
-  <problem>
-    <file>network.go</file>
-    <line>111</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/network/network.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'SetHairpinMode'</description>
-  </problem>
-  <problem>
     <file>stats.go</file>
     <line>22</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/network/stats.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
     <description>Unused function 'GetStats'</description>
-  </problem>
-  <problem>
-    <file>netlink_linux_notarm.go</file>
-    <line>5</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/netlink/netlink_linux_notarm.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ifrDataByte'</description>
   </problem>
   <problem>
     <file>netlink_unsupported.go</file>
@@ -2321,252 +887,12 @@
     <description>Unused function 'AddToBridge'</description>
   </problem>
   <problem>
-    <file>netlink_linux_arm.go</file>
-    <line>3</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/netlink/netlink_linux_arm.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ifrDataByte'</description>
-  </problem>
-  <problem>
-    <file>netlink_linux.go</file>
-    <line>400</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/netlink/netlink_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'NetworkLinkAdd'</description>
-  </problem>
-  <problem>
-    <file>netlink_linux.go</file>
-    <line>432</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/netlink/netlink_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'NetworkLinkDel'</description>
-  </problem>
-  <problem>
-    <file>netlink_linux.go</file>
-    <line>463</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/netlink/netlink_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'NetworkLinkUp'</description>
-  </problem>
-  <problem>
-    <file>netlink_linux.go</file>
-    <line>487</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/netlink/netlink_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'NetworkLinkDown'</description>
-  </problem>
-  <problem>
-    <file>netlink_linux.go</file>
-    <line>511</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/netlink/netlink_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'NetworkSetMacAddress'</description>
-  </problem>
-  <problem>
-    <file>netlink_linux.go</file>
-    <line>555</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/netlink/netlink_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'NetworkSetMTU'</description>
-  </problem>
-  <problem>
-    <file>netlink_linux.go</file>
-    <line>580</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/netlink/netlink_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'NetworkSetTxQueueLen'</description>
-  </problem>
-  <problem>
-    <file>netlink_linux.go</file>
-    <line>629</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/netlink/netlink_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'NetworkSetMaster'</description>
-  </problem>
-  <problem>
-    <file>netlink_linux.go</file>
-    <line>636</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/netlink/netlink_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'NetworkSetNoMaster'</description>
-  </problem>
-  <problem>
-    <file>netlink_linux.go</file>
-    <line>663</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/netlink/netlink_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'NetworkSetNsPid'</description>
-  </problem>
-  <problem>
-    <file>netlink_linux.go</file>
-    <line>671</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/netlink/netlink_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'NetworkSetNsFd'</description>
-  </problem>
-  <problem>
-    <file>netlink_linux.go</file>
-    <line>679</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/netlink/netlink_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'NetworkChangeName'</description>
-  </problem>
-  <problem>
-    <file>netlink_linux.go</file>
-    <line>709</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/netlink/netlink_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'NetworkCreateVethPair'</description>
-  </problem>
-  <problem>
-    <file>netlink_linux.go</file>
-    <line>761</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/netlink/netlink_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'NetworkLinkAddVlan'</description>
-  </problem>
-  <problem>
-    <file>netlink_linux.go</file>
-    <line>853</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/netlink/netlink_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'NetworkLinkAddMacVlan'</description>
-  </problem>
-  <problem>
-    <file>netlink_linux.go</file>
-    <line>861</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/netlink/netlink_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'NetworkLinkAddMacVtap'</description>
-  </problem>
-  <problem>
-    <file>netlink_linux.go</file>
-    <line>908</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/netlink/netlink_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'NetworkLinkDelIp'</description>
-  </problem>
-  <problem>
-    <file>netlink_linux.go</file>
-    <line>918</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/netlink/netlink_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'NetworkLinkAddIp'</description>
-  </problem>
-  <problem>
-    <file>netlink_linux.go</file>
-    <line>928</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/netlink/netlink_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'NetworkGetRoutes'</description>
-  </problem>
-  <problem>
-    <file>netlink_linux.go</file>
-    <line>1115</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/netlink/netlink_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'AddDefaultGw'</description>
-  </problem>
-  <problem>
-    <file>netlink_linux.go</file>
-    <line>1140</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/netlink/netlink_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'CreateBridge'</description>
-  </problem>
-  <problem>
-    <file>netlink_linux.go</file>
-    <line>1165</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/netlink/netlink_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'DeleteBridge'</description>
-  </problem>
-  <problem>
-    <file>netlink_linux.go</file>
-    <line>1193</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/netlink/netlink_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'AddToBridge'</description>
-  </problem>
-  <problem>
-    <file>netlink_linux.go</file>
-    <line>1255</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/netlink/netlink_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'SetHairpinMode'</description>
-  </problem>
-  <problem>
-    <file>netlink_linux.go</file>
-    <line>1277</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/netlink/netlink_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ChangeName'</description>
-  </problem>
-  <problem>
     <file>number.go</file>
     <line>24</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/devices/number.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
     <description>Unused function 'Mkdev'</description>
-  </problem>
-  <problem>
-    <file>console.go</file>
-    <line>16</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/console/console.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Setup'</description>
-  </problem>
-  <problem>
-    <file>console.go</file>
-    <line>50</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/console/console.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'OpenAndDup'</description>
-  </problem>
-  <problem>
-    <file>console.go</file>
-    <line>88</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/console/console.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'CreateMasterAndConsole'</description>
-  </problem>
-  <problem>
-    <file>console.go</file>
-    <line>107</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/console/console.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'OpenPtmx'</description>
   </problem>
   <problem>
     <file>cgroups.go</file>
@@ -2673,54 +999,6 @@
     <description>Unused function 'Freeze'</description>
   </problem>
   <problem>
-    <file>apply_systemd.go</file>
-    <line>43</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/cgroups/systemd/apply_systemd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'UseSystemd'</description>
-  </problem>
-  <problem>
-    <file>apply_systemd.go</file>
-    <line>74</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/cgroups/systemd/apply_systemd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'getIfaceForUnit'</description>
-  </problem>
-  <problem>
-    <file>apply_systemd.go</file>
-    <line>84</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/cgroups/systemd/apply_systemd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Apply'</description>
-  </problem>
-  <problem>
-    <file>apply_systemd.go</file>
-    <line>210</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/cgroups/systemd/apply_systemd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Freeze'</description>
-  </problem>
-  <problem>
-    <file>apply_systemd.go</file>
-    <line>232</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/cgroups/systemd/apply_systemd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'GetPids'</description>
-  </problem>
-  <problem>
-    <file>apply_systemd.go</file>
-    <line>285</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/cgroups/systemd/apply_systemd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ApplyDevices'</description>
-  </problem>
-  <problem>
     <file>apply_raw.go</file>
     <line>60</line>
     <module>light_idea_test_case</module>
@@ -2761,148 +1039,12 @@
     <description>Unused function 'GetPids'</description>
   </problem>
   <problem>
-    <file>syscall_linux_arm.go</file>
-    <line>9</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/system/syscall_linux_arm.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Setuid'</description>
-  </problem>
-  <problem>
-    <file>syscall_linux_arm.go</file>
-    <line>18</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/system/syscall_linux_arm.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Setgid'</description>
-  </problem>
-  <problem>
-    <file>syscall_linux_386.go</file>
-    <line>9</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/system/syscall_linux_386.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Setuid'</description>
-  </problem>
-  <problem>
-    <file>syscall_linux_386.go</file>
-    <line>18</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/system/syscall_linux_386.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Setgid'</description>
-  </problem>
-  <problem>
-    <file>sysconfig_notcgo.go</file>
-    <line>5</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/system/sysconfig_notcgo.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'GetClockTicks'</description>
-  </problem>
-  <problem>
-    <file>syscall_linux_64.go</file>
-    <line>10</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/system/syscall_linux_64.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Setuid'</description>
-  </problem>
-  <problem>
-    <file>syscall_linux_64.go</file>
-    <line>19</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/system/syscall_linux_64.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Setgid'</description>
-  </problem>
-  <problem>
-    <file>xattrs_linux.go</file>
-    <line>12</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/system/xattrs_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Llistxattr'</description>
-  </problem>
-  <problem>
-    <file>xattrs_linux.go</file>
-    <line>35</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/system/xattrs_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Lgetxattr'</description>
-  </problem>
-  <problem>
-    <file>xattrs_linux.go</file>
-    <line>79</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/system/xattrs_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Lsetxattr'</description>
-  </problem>
-  <problem>
-    <file>setns_linux.go</file>
-    <line>22</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/system/setns_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Setns'</description>
-  </problem>
-  <problem>
     <file>sysconfig.go</file>
     <line>10</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/system/sysconfig.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
     <description>Unused function 'GetClockTicks'</description>
-  </problem>
-  <problem>
-    <file>linux.go</file>
-    <line>11</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/system/linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Execv'</description>
-  </problem>
-  <problem>
-    <file>linux.go</file>
-    <line>20</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/system/linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ParentDeathSignal'</description>
-  </problem>
-  <problem>
-    <file>linux.go</file>
-    <line>27</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/system/linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'GetParentDeathSignal'</description>
-  </problem>
-  <problem>
-    <file>linux.go</file>
-    <line>39</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/system/linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'SetKeepCaps'</description>
-  </problem>
-  <problem>
-    <file>linux.go</file>
-    <line>47</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/system/linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ClearKeepCaps'</description>
-  </problem>
-  <problem>
-    <file>linux.go</file>
-    <line>55</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/system/linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Setctty'</description>
   </problem>
   <problem>
     <file>proc.go</file>
@@ -2937,38 +1079,6 @@
     <description>Unused function 'Setxattr'</description>
   </problem>
   <problem>
-    <file>xattr_linux.go</file>
-    <line>11</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/xattr/xattr_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'XattrEnabled'</description>
-  </problem>
-  <problem>
-    <file>xattr_linux.go</file>
-    <line>29</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/xattr/xattr_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Listxattr'</description>
-  </problem>
-  <problem>
-    <file>xattr_linux.go</file>
-    <line>43</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/xattr/xattr_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Getxattr'</description>
-  </problem>
-  <problem>
-    <file>xattr_test.go</file>
-    <line>12</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/xattr/xattr_test.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'testXattr'</description>
-  </problem>
-  <problem>
     <file>utils.go</file>
     <line>25</line>
     <module>light_idea_test_case</module>
@@ -2985,148 +1095,12 @@
     <description>Unused function 'CloseExecFrom'</description>
   </problem>
   <problem>
-    <file>remount.go</file>
-    <line>7</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/mount/remount.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'RemountProc'</description>
-  </problem>
-  <problem>
-    <file>remount.go</file>
-    <line>19</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/mount/remount.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'RemountSys'</description>
-  </problem>
-  <problem>
-    <file>init.go</file>
-    <line>28</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/mount/init.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'InitializeMountNamespace'</description>
-  </problem>
-  <problem>
     <file>nodes_unsupported.go</file>
     <line>11</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/mount/nodes/nodes_unsupported.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
     <description>Unused function 'CreateDeviceNodes'</description>
-  </problem>
-  <problem>
-    <file>nodes.go</file>
-    <line>15</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/mount/nodes/nodes.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'CreateDeviceNodes'</description>
-  </problem>
-  <problem>
-    <file>label_selinux.go</file>
-    <line>44</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/label/label_selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'GenLabels'</description>
-  </problem>
-  <problem>
-    <file>label_selinux.go</file>
-    <line>54</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/label/label_selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'FormatMountLabel'</description>
-  </problem>
-  <problem>
-    <file>label_selinux.go</file>
-    <line>68</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/label/label_selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'SetProcessLabel'</description>
-  </problem>
-  <problem>
-    <file>label_selinux.go</file>
-    <line>78</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/label/label_selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'GetProcessLabel'</description>
-  </problem>
-  <problem>
-    <file>label_selinux.go</file>
-    <line>83</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/label/label_selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'SetFileLabel'</description>
-  </problem>
-  <problem>
-    <file>label_selinux.go</file>
-    <line>91</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/label/label_selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'SetFileCreateLabel'</description>
-  </problem>
-  <problem>
-    <file>label_selinux.go</file>
-    <line>103</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/label/label_selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Relabel'</description>
-  </problem>
-  <problem>
-    <file>label_selinux.go</file>
-    <line>116</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/label/label_selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'GetPidLabel'</description>
-  </problem>
-  <problem>
-    <file>label_selinux.go</file>
-    <line>121</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/label/label_selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Init'</description>
-  </problem>
-  <problem>
-    <file>label_selinux.go</file>
-    <line>128</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/label/label_selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ReserveLabel'</description>
-  </problem>
-  <problem>
-    <file>label_selinux.go</file>
-    <line>136</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/label/label_selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'UnreserveLabel'</description>
-  </problem>
-  <problem>
-    <file>label_selinux.go</file>
-    <line>143</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/label/label_selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'DupSecOpt'</description>
-  </problem>
-  <problem>
-    <file>label_selinux.go</file>
-    <line>149</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/label/label_selinux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'DisableSecOpt'</description>
   </problem>
   <problem>
     <file>label.go</file>
@@ -3207,38 +1181,6 @@
     <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/label/label.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
     <description>Unused function 'UnreserveLabel'</description>
-  </problem>
-  <problem>
-    <file>lookup_unsupported.go</file>
-    <line>7</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/user/lookup_unsupported.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'GetPasswdPath'</description>
-  </problem>
-  <problem>
-    <file>lookup_unsupported.go</file>
-    <line>11</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/user/lookup_unsupported.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'GetPasswd'</description>
-  </problem>
-  <problem>
-    <file>lookup_unsupported.go</file>
-    <line>15</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/user/lookup_unsupported.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'GetGroupPath'</description>
-  </problem>
-  <problem>
-    <file>lookup_unsupported.go</file>
-    <line>19</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libcontainer/user/lookup_unsupported.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'GetGroup'</description>
   </problem>
   <problem>
     <file>lookup_unix.go</file>
@@ -3561,46 +1503,6 @@
     <description>Unused function 'PropSlice'</description>
   </problem>
   <problem>
-    <file>patricia_sparse_test.go</file>
-    <line>583</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/tchap/go-patricia/patricia/patricia_sparse_test.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ExampleTrie'</description>
-  </problem>
-  <problem>
-    <file>pty_unsupported.go</file>
-    <line>9</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/kr/pty/pty_unsupported.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'open'</description>
-  </problem>
-  <problem>
-    <file>pty_freebsd.go</file>
-    <line>19</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/kr/pty/pty_freebsd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'open'</description>
-  </problem>
-  <problem>
-    <file>pty_linux.go</file>
-    <line>10</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/kr/pty/pty_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'open'</description>
-  </problem>
-  <problem>
-    <file>ioctl_bsd.go</file>
-    <line>17</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/kr/pty/ioctl_bsd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function '_IOC_PARM_LEN'</description>
-  </problem>
-  <problem>
     <file>ioctl_bsd.go</file>
     <line>25</line>
     <module>light_idea_test_case</module>
@@ -3615,14 +1517,6 @@
     <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/kr/pty/ioctl_bsd.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
     <description>Unused function '_IOR'</description>
-  </problem>
-  <problem>
-    <file>ioctl_bsd.go</file>
-    <line>33</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/kr/pty/ioctl_bsd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function '_IOW'</description>
   </problem>
   <problem>
     <file>ioctl_bsd.go</file>
@@ -3657,44 +1551,12 @@
     <description>Unused function 'lastLine'</description>
   </problem>
   <problem>
-    <file>daemon.go</file>
-    <line>78</line>
+    <file>engine.go</file>
+    <line>63</line>
     <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/docker/daemon.go"/>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/engine/engine.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'mainDaemon'</description>
-  </problem>
-  <problem>
-    <file>daemon_no_aufs.go</file>
-    <line>9</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/daemon/daemon_no_aufs.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'migrateIfAufs'</description>
-  </problem>
-  <problem>
-    <file>utils_linux.go</file>
-    <line>7</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/daemon/utils_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'selinuxSetDisabled'</description>
-  </problem>
-  <problem>
-    <file>utils_linux.go</file>
-    <line>11</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/daemon/utils_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'selinuxFreeLxcContexts'</description>
-  </problem>
-  <problem>
-    <file>utils_linux.go</file>
-    <line>15</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/daemon/utils_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'selinuxEnabled'</description>
+    <description>Unused function 't'</description>
   </problem>
   <problem>
     <file>utils.go</file>
@@ -3721,16 +1583,8 @@
     <description>Unused function 'GetFSMagic'</description>
   </problem>
   <problem>
-    <file>driver_linux.go</file>
-    <line>8</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/daemon/graphdriver/driver_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'GetFSMagic'</description>
-  </problem>
-  <problem>
     <file>graphtest.go</file>
-    <line>26</line>
+    <line>27</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/daemon/graphdriver/graphtest/graphtest.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -3761,16 +1615,8 @@
     <description>Unused function 'DriverTestCreateSnap'</description>
   </problem>
   <problem>
-    <file>fsdiff.go</file>
-    <line>30</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/daemon/graphdriver/fsdiff.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'NaiveDiffDriver'</description>
-  </problem>
-  <problem>
     <file>driver.go</file>
-    <line>125</line>
+    <line>123</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/daemon/graphdriver/driver.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -3778,43 +1624,11 @@
   </problem>
   <problem>
     <file>driver.go</file>
-    <line>141</line>
+    <line>139</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/daemon/graphdriver/driver.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
     <description>Unused function 'New'</description>
-  </problem>
-  <problem>
-    <file>mount.go</file>
-    <line>16</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/daemon/graphdriver/devmapper/mount.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Mounted'</description>
-  </problem>
-  <problem>
-    <file>version_none.go</file>
-    <line>8</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/daemon/graphdriver/btrfs/version_none.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'BtrfsBuildVersion'</description>
-  </problem>
-  <problem>
-    <file>version_none.go</file>
-    <line>11</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/daemon/graphdriver/btrfs/version_none.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'BtrfsLibVersion'</description>
-  </problem>
-  <problem>
-    <file>mount_linux.go</file>
-    <line>7</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/daemon/graphdriver/aufs/mount_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'mount'</description>
   </problem>
   <problem>
     <file>termconsole.go</file>
@@ -3833,30 +1647,6 @@
     <description>Unused function 'NewDriver'</description>
   </problem>
   <problem>
-    <file>driver.go</file>
-    <line>161</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/daemon/execdriver/driver.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'InitContainer'</description>
-  </problem>
-  <problem>
-    <file>driver.go</file>
-    <line>191</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/daemon/execdriver/driver.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'SetupCgroups'</description>
-  </problem>
-  <problem>
-    <file>driver.go</file>
-    <line>203</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/daemon/execdriver/driver.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Stats'</description>
-  </problem>
-  <problem>
     <file>utils.go</file>
     <line>11</line>
     <module>light_idea_test_case</module>
@@ -3873,26 +1663,10 @@
     <description>Unused function 'NewPipes'</description>
   </problem>
   <problem>
-    <file>driver_unsupported_nocgo.go</file>
-    <line>11</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/daemon/execdriver/native/driver_unsupported_nocgo.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'NewDriver'</description>
-  </problem>
-  <problem>
     <file>driver_unsupported.go</file>
     <line>11</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/daemon/execdriver/native/driver_unsupported.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'NewDriver'</description>
-  </problem>
-  <problem>
-    <file>driver.go</file>
-    <line>49</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/daemon/execdriver/native/driver.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
     <description>Unused function 'NewDriver'</description>
   </problem>
@@ -3905,16 +1679,8 @@
     <description>Unused function 'New'</description>
   </problem>
   <problem>
-    <file>lxc_init_unsupported.go</file>
-    <line>5</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/daemon/execdriver/lxc/lxc_init_unsupported.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'finalizeNamespace'</description>
-  </problem>
-  <problem>
     <file>lxc_template.go</file>
-    <line>221</line>
+    <line>218</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/daemon/execdriver/lxc/lxc_template.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -3930,7 +1696,7 @@
   </problem>
   <problem>
     <file>daemon.go</file>
-    <line>794</line>
+    <line>780</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/daemon/daemon.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -3943,22 +1709,6 @@
     <entry_point TYPE="file" FQNAME="temp:///src/docker/utils/progressreader.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
     <description>Unused function 'ProgressReader'</description>
-  </problem>
-  <problem>
-    <file>utils_daemon.go</file>
-    <line>12</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/utils/utils_daemon.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'TreeSize'</description>
-  </problem>
-  <problem>
-    <file>utils_daemon.go</file>
-    <line>42</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/utils/utils_daemon.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'IsFileOwner'</description>
   </problem>
   <problem>
     <file>jsonmessage.go</file>
@@ -3994,7 +1744,7 @@
   </problem>
   <problem>
     <file>utils.go</file>
-    <line>39</line>
+    <line>40</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/utils/utils.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -4002,7 +1752,7 @@
   </problem>
   <problem>
     <file>utils.go</file>
-    <line>49</line>
+    <line>50</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/utils/utils.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -4010,7 +1760,7 @@
   </problem>
   <problem>
     <file>utils.go</file>
-    <line>117</line>
+    <line>118</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/utils/utils.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -4018,7 +1768,7 @@
   </problem>
   <problem>
     <file>utils.go</file>
-    <line>157</line>
+    <line>158</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/utils/utils.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -4026,7 +1776,15 @@
   </problem>
   <problem>
     <file>utils.go</file>
-    <line>166</line>
+    <line>180</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/utils/utils.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
+    <description>Unused function 'GenerateRandomID'</description>
+  </problem>
+  <problem>
+    <file>utils.go</file>
+    <line>197</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/utils/utils.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -4034,7 +1792,7 @@
   </problem>
   <problem>
     <file>utils.go</file>
-    <line>175</line>
+    <line>206</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/utils/utils.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -4042,7 +1800,7 @@
   </problem>
   <problem>
     <file>utils.go</file>
-    <line>217</line>
+    <line>248</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/utils/utils.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -4050,7 +1808,7 @@
   </problem>
   <problem>
     <file>utils.go</file>
-    <line>256</line>
+    <line>287</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/utils/utils.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -4058,7 +1816,7 @@
   </problem>
   <problem>
     <file>utils.go</file>
-    <line>297</line>
+    <line>328</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/utils/utils.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -4066,7 +1824,7 @@
   </problem>
   <problem>
     <file>utils.go</file>
-    <line>313</line>
+    <line>344</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/utils/utils.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -4074,7 +1832,7 @@
   </problem>
   <problem>
     <file>utils.go</file>
-    <line>345</line>
+    <line>376</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/utils/utils.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -4082,7 +1840,7 @@
   </problem>
   <problem>
     <file>utils.go</file>
-    <line>403</line>
+    <line>434</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/utils/utils.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -4090,7 +1848,7 @@
   </problem>
   <problem>
     <file>utils.go</file>
-    <line>437</line>
+    <line>468</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/utils/utils.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -4098,7 +1856,7 @@
   </problem>
   <problem>
     <file>utils.go</file>
-    <line>478</line>
+    <line>509</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/utils/utils.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -4106,7 +1864,7 @@
   </problem>
   <problem>
     <file>utils.go</file>
-    <line>490</line>
+    <line>521</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/utils/utils.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -4178,7 +1936,7 @@
   </problem>
   <problem>
     <file>graph.go</file>
-    <line>255</line>
+    <line>254</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/graph/graph.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -4186,7 +1944,7 @@
   </problem>
   <problem>
     <file>graph.go</file>
-    <line>309</line>
+    <line>308</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/graph/graph.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -4281,8 +2039,16 @@
     <description>Unused function 'ValidateEnv'</description>
   </problem>
   <problem>
+    <file>opts.go</file>
+    <line>206</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/opts/opts.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
+    <description>Unused function 'ValidateExtraHost'</description>
+  </problem>
+  <problem>
     <file>archive.go</file>
-    <line>91</line>
+    <line>85</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/chrootarchive/archive.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -4290,7 +2056,7 @@
   </problem>
   <problem>
     <file>archive.go</file>
-    <line>99</line>
+    <line>93</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/chrootarchive/archive.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -4298,7 +2064,7 @@
   </problem>
   <problem>
     <file>archive.go</file>
-    <line>109</line>
+    <line>103</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/chrootarchive/archive.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -4306,7 +2072,7 @@
   </problem>
   <problem>
     <file>archive.go</file>
-    <line>115</line>
+    <line>109</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/chrootarchive/archive.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -4319,190 +2085,6 @@
     <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/listenbuffer/buffer.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
     <description>Unused function 'NewListenBuffer'</description>
-  </problem>
-  <problem>
-    <file>attach_loopback.go</file>
-    <line>87</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/devicemapper/attach_loopback.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'AttachLoopDevice'</description>
-  </problem>
-  <problem>
-    <file>devmapper_log.go</file>
-    <line>15</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/devicemapper/devmapper_log.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'DevmapperLogCallback'</description>
-  </problem>
-  <problem>
-    <file>devmapper.go</file>
-    <line>107</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/devicemapper/devmapper.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'DeviceIdExists'</description>
-  </problem>
-  <problem>
-    <file>devmapper.go</file>
-    <line>246</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/devicemapper/devmapper.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'LoopbackSetCapacity'</description>
-  </problem>
-  <problem>
-    <file>devmapper.go</file>
-    <line>254</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/devicemapper/devmapper.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'FindLoopDeviceFor'</description>
-  </problem>
-  <problem>
-    <file>devmapper.go</file>
-    <line>294</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/devicemapper/devmapper.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'LogInitVerbose'</description>
-  </problem>
-  <problem>
-    <file>devmapper.go</file>
-    <line>301</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/devicemapper/devmapper.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'LogInit'</description>
-  </problem>
-  <problem>
-    <file>devmapper.go</file>
-    <line>306</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/devicemapper/devmapper.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'SetDevDir'</description>
-  </problem>
-  <problem>
-    <file>devmapper.go</file>
-    <line>314</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/devicemapper/devmapper.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'GetLibraryVersion'</description>
-  </problem>
-  <problem>
-    <file>devmapper.go</file>
-    <line>332</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/devicemapper/devmapper.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'UdevSetSyncSupport'</description>
-  </problem>
-  <problem>
-    <file>devmapper.go</file>
-    <line>345</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/devicemapper/devmapper.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'CookieSupported'</description>
-  </problem>
-  <problem>
-    <file>devmapper.go</file>
-    <line>350</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/devicemapper/devmapper.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'RemoveDevice'</description>
-  </problem>
-  <problem>
-    <file>devmapper.go</file>
-    <line>384</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/devicemapper/devmapper.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'BlockDeviceDiscard'</description>
-  </problem>
-  <problem>
-    <file>devmapper.go</file>
-    <line>408</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/devicemapper/devmapper.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'CreatePool'</description>
-  </problem>
-  <problem>
-    <file>devmapper.go</file>
-    <line>438</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/devicemapper/devmapper.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ReloadPool'</description>
-  </problem>
-  <problem>
-    <file>devmapper.go</file>
-    <line>461</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/devicemapper/devmapper.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'GetDeps'</description>
-  </problem>
-  <problem>
-    <file>devmapper.go</file>
-    <line>483</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/devicemapper/devmapper.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'GetDriverVersion'</description>
-  </problem>
-  <problem>
-    <file>devmapper.go</file>
-    <line>494</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/devicemapper/devmapper.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'GetStatus'</description>
-  </problem>
-  <problem>
-    <file>devmapper.go</file>
-    <line>519</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/devicemapper/devmapper.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'SetTransactionId'</description>
-  </problem>
-  <problem>
-    <file>devmapper.go</file>
-    <line>569</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/devicemapper/devmapper.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'CreateDevice'</description>
-  </problem>
-  <problem>
-    <file>devmapper.go</file>
-    <line>596</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/devicemapper/devmapper.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'DeleteDevice'</description>
-  </problem>
-  <problem>
-    <file>devmapper.go</file>
-    <line>616</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/devicemapper/devmapper.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ActivateDevice'</description>
-  </problem>
-  <problem>
-    <file>devmapper.go</file>
-    <line>644</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/devicemapper/devmapper.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'CreateSnapDevice'</description>
   </problem>
   <problem>
     <file>json.go</file>
@@ -4625,14 +2207,6 @@
     <description>Unused function 'ParseKeyValueOpt'</description>
   </problem>
   <problem>
-    <file>uname_linux.go</file>
-    <line>9</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/parsers/kernel/uname_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'uname'</description>
-  </problem>
-  <problem>
     <file>kernel.go</file>
     <line>44</line>
     <module>light_idea_test_case</module>
@@ -4681,14 +2255,6 @@
     <description>Unused function 'NewBufReaderWithDrainbufAndBuffer'</description>
   </problem>
   <problem>
-    <file>conn_unsupported.go</file>
-    <line>5</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/graphdb/conn_unsupported.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'NewSqliteConn'</description>
-  </problem>
-  <problem>
     <file>conn_sqlite3.go</file>
     <line>11</line>
     <module>light_idea_test_case</module>
@@ -4705,32 +2271,8 @@
     <description>Unused function 'IsNonUniqueNameError'</description>
   </problem>
   <problem>
-    <file>archive_windows.go</file>
-    <line>15</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/archive/archive_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'CanonicalTarNameForPath'</description>
-  </problem>
-  <problem>
-    <file>archive_windows.go</file>
-    <line>26</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/archive/archive_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'setHeaderForSpecialDevice'</description>
-  </problem>
-  <problem>
-    <file>time_linux.go</file>
-    <line>8</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/archive/time_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'timeToTimespec'</description>
-  </problem>
-  <problem>
     <file>changes.go</file>
-    <line>71</line>
+    <line>63</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/archive/changes.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -4738,7 +2280,7 @@
   </problem>
   <problem>
     <file>changes.go</file>
-    <line>358</line>
+    <line>350</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/archive/changes.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -4754,7 +2296,7 @@
   </problem>
   <problem>
     <file>archive.go</file>
-    <line>378</line>
+    <line>363</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/archive/archive.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -4762,7 +2304,7 @@
   </problem>
   <problem>
     <file>archive.go</file>
-    <line>637</line>
+    <line>622</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/archive/archive.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -4770,7 +2312,7 @@
   </problem>
   <problem>
     <file>archive.go</file>
-    <line>662</line>
+    <line>647</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/archive/archive.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -4778,7 +2320,7 @@
   </problem>
   <problem>
     <file>archive.go</file>
-    <line>723</line>
+    <line>708</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/archive/archive.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -4849,132 +2391,12 @@
     <description>Unused function 'Lsetxattr'</description>
   </problem>
   <problem>
-    <file>utimes_unsupported.go</file>
-    <line>7</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/system/utimes_unsupported.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'LUtimesNano'</description>
-  </problem>
-  <problem>
-    <file>utimes_unsupported.go</file>
-    <line>11</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/system/utimes_unsupported.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'UtimesNano'</description>
-  </problem>
-  <problem>
-    <file>utimes_freebsd.go</file>
-    <line>8</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/system/utimes_freebsd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'LUtimesNano'</description>
-  </problem>
-  <problem>
-    <file>utimes_freebsd.go</file>
-    <line>22</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/system/utimes_freebsd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'UtimesNano'</description>
-  </problem>
-  <problem>
     <file>utimes_darwin.go</file>
     <line>9</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/system/utimes_darwin.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
     <description>Unused function 'UtimesNano'</description>
-  </problem>
-  <problem>
-    <file>umask_windows.go</file>
-    <line>5</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/system/umask_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Umask'</description>
-  </problem>
-  <problem>
-    <file>mknod_windows.go</file>
-    <line>5</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/system/mknod_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Mknod'</description>
-  </problem>
-  <problem>
-    <file>mknod_windows.go</file>
-    <line>10</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/system/mknod_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Mkdev'</description>
-  </problem>
-  <problem>
-    <file>meminfo_linux.go</file>
-    <line>20</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/system/meminfo_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'ReadMemInfo'</description>
-  </problem>
-  <problem>
-    <file>lstat_windows.go</file>
-    <line>5</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/system/lstat_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Lstat'</description>
-  </problem>
-  <problem>
-    <file>xattrs_linux.go</file>
-    <line>9</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/system/xattrs_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Lgetxattr'</description>
-  </problem>
-  <problem>
-    <file>xattrs_linux.go</file>
-    <line>39</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/system/xattrs_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Lsetxattr'</description>
-  </problem>
-  <problem>
-    <file>utimes_linux.go</file>
-    <line>8</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/system/utimes_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'LUtimesNano'</description>
-  </problem>
-  <problem>
-    <file>utimes_linux.go</file>
-    <line>26</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/system/utimes_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'UtimesNano'</description>
-  </problem>
-  <problem>
-    <file>stat_windows.go</file>
-    <line>10</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/system/stat_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'fromStatT'</description>
-  </problem>
-  <problem>
-    <file>stat_linux.go</file>
-    <line>7</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/system/stat_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'fromStatT'</description>
   </problem>
   <problem>
     <file>umask.go</file>
@@ -5033,14 +2455,6 @@
     <description>Unused function 'Command'</description>
   </problem>
   <problem>
-    <file>command_linux.go</file>
-    <line>10</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/reexec/command_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'Command'</description>
-  </problem>
-  <problem>
     <file>reexec.go</file>
     <line>13</line>
     <module>light_idea_test_case</module>
@@ -5065,128 +2479,8 @@
     <description>Unused function 'NewStubProxy'</description>
   </problem>
   <problem>
-    <file>sharedsubtree_linux.go</file>
-    <line>5</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mount/sharedsubtree_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'MakeShared'</description>
-  </problem>
-  <problem>
-    <file>sharedsubtree_linux.go</file>
-    <line>9</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mount/sharedsubtree_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'MakeRShared'</description>
-  </problem>
-  <problem>
-    <file>sharedsubtree_linux.go</file>
-    <line>13</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mount/sharedsubtree_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'MakePrivate'</description>
-  </problem>
-  <problem>
-    <file>sharedsubtree_linux.go</file>
-    <line>17</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mount/sharedsubtree_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'MakeRPrivate'</description>
-  </problem>
-  <problem>
-    <file>sharedsubtree_linux.go</file>
-    <line>21</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mount/sharedsubtree_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'MakeSlave'</description>
-  </problem>
-  <problem>
-    <file>sharedsubtree_linux.go</file>
-    <line>25</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mount/sharedsubtree_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'MakeRSlave'</description>
-  </problem>
-  <problem>
-    <file>sharedsubtree_linux.go</file>
-    <line>29</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mount/sharedsubtree_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'MakeUnbindable'</description>
-  </problem>
-  <problem>
-    <file>sharedsubtree_linux.go</file>
-    <line>33</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mount/sharedsubtree_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'MakeRUnbindable'</description>
-  </problem>
-  <problem>
-    <file>mountinfo_freebsd.go</file>
-    <line>17</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mount/mountinfo_freebsd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'parseMountTable'</description>
-  </problem>
-  <problem>
-    <file>mountinfo_linux.go</file>
-    <line>32</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mount/mountinfo_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'parseMountTable'</description>
-  </problem>
-  <problem>
-    <file>mountinfo_linux.go</file>
-    <line>84</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mount/mountinfo_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'PidMountInfo'</description>
-  </problem>
-  <problem>
-    <file>mounter_freebsd.go</file>
-    <line>29</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mount/mounter_freebsd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'mount'</description>
-  </problem>
-  <problem>
-    <file>mounter_freebsd.go</file>
-    <line>57</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mount/mounter_freebsd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'unmount'</description>
-  </problem>
-  <problem>
-    <file>mounter_linux.go</file>
-    <line>7</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mount/mounter_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'mount'</description>
-  </problem>
-  <problem>
-    <file>mounter_linux.go</file>
-    <line>19</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mount/mounter_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'unmount'</description>
-  </problem>
-  <problem>
     <file>flag.go</file>
-    <line>418</line>
+    <line>415</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mflag/flag.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -5194,7 +2488,7 @@
   </problem>
   <problem>
     <file>flag.go</file>
-    <line>423</line>
+    <line>420</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mflag/flag.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -5202,7 +2496,7 @@
   </problem>
   <problem>
     <file>flag.go</file>
-    <line>593</line>
+    <line>578</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mflag/flag.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -5210,7 +2504,7 @@
   </problem>
   <problem>
     <file>flag.go</file>
-    <line>614</line>
+    <line>599</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mflag/flag.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -5218,7 +2512,7 @@
   </problem>
   <problem>
     <file>flag.go</file>
-    <line>630</line>
+    <line>615</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mflag/flag.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -5226,7 +2520,7 @@
   </problem>
   <problem>
     <file>flag.go</file>
-    <line>656</line>
+    <line>641</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mflag/flag.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -5234,7 +2528,7 @@
   </problem>
   <problem>
     <file>flag.go</file>
-    <line>682</line>
+    <line>667</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mflag/flag.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -5242,7 +2536,7 @@
   </problem>
   <problem>
     <file>flag.go</file>
-    <line>708</line>
+    <line>693</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mflag/flag.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -5250,7 +2544,7 @@
   </problem>
   <problem>
     <file>flag.go</file>
-    <line>734</line>
+    <line>719</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mflag/flag.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -5258,7 +2552,7 @@
   </problem>
   <problem>
     <file>flag.go</file>
-    <line>760</line>
+    <line>745</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mflag/flag.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -5266,7 +2560,7 @@
   </problem>
   <problem>
     <file>flag.go</file>
-    <line>786</line>
+    <line>771</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mflag/flag.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -5274,7 +2568,7 @@
   </problem>
   <problem>
     <file>flag.go</file>
-    <line>812</line>
+    <line>797</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mflag/flag.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -5282,7 +2576,7 @@
   </problem>
   <problem>
     <file>flag.go</file>
-    <line>865</line>
+    <line>850</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mflag/flag.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -5290,107 +2584,11 @@
   </problem>
   <problem>
     <file>flag.go</file>
-    <line>1074</line>
+    <line>1059</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mflag/flag.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
     <description>Unused function 'Parsed'</description>
-  </problem>
-  <problem>
-    <file>termios_freebsd.go</file>
-    <line>45</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/term/termios_freebsd.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'MakeRaw'</description>
-  </problem>
-  <problem>
-    <file>console_windows.go</file>
-    <line>32</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/term/console_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'GetConsoleMode'</description>
-  </problem>
-  <problem>
-    <file>console_windows.go</file>
-    <line>38</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/term/console_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'SetConsoleMode'</description>
-  </problem>
-  <problem>
-    <file>console_windows.go</file>
-    <line>77</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/term/console_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'GetConsoleScreenBufferInfo'</description>
-  </problem>
-  <problem>
-    <file>termios_linux.go</file>
-    <line>28</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/term/termios_linux.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'MakeRaw'</description>
-  </problem>
-  <problem>
-    <file>term_windows.go</file>
-    <line>16</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/term/term_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'GetWinsize'</description>
-  </problem>
-  <problem>
-    <file>term_windows.go</file>
-    <line>32</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/term/term_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'SetWinsize'</description>
-  </problem>
-  <problem>
-    <file>term_windows.go</file>
-    <line>37</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/term/term_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'IsTerminal'</description>
-  </problem>
-  <problem>
-    <file>term_windows.go</file>
-    <line>44</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/term/term_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'RestoreTerminal'</description>
-  </problem>
-  <problem>
-    <file>term_windows.go</file>
-    <line>57</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/term/term_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'DisableEcho'</description>
-  </problem>
-  <problem>
-    <file>term_windows.go</file>
-    <line>63</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/term/term_windows.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'SetRawTerminal'</description>
-  </problem>
-  <problem>
-    <file>tc_linux_cgo.go</file>
-    <line>18</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/term/tc_linux_cgo.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 'MakeRaw'</description>
   </problem>
   <problem>
     <file>term.go</file>
@@ -5458,11 +2656,19 @@
   </problem>
   <problem>
     <file>common.go</file>
-    <line>114</line>
+    <line>57</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/api/common.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
     <description>Unused function 'LoadOrCreateTrustKey'</description>
+  </problem>
+  <problem>
+    <file>server_unit_test.go</file>
+    <line>44</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/api/server/server_unit_test.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
+    <description>Unused function 'TesthttpError'</description>
   </problem>
   <problem>
     <file>server_unit_test.go</file>
@@ -5482,7 +2688,7 @@
   </problem>
   <problem>
     <file>server.go</file>
-    <line>1609</line>
+    <line>1607</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/api/server/server.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -5490,7 +2696,7 @@
   </problem>
   <problem>
     <file>server.go</file>
-    <line>1645</line>
+    <line>1643</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/api/server/server.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
@@ -5498,11 +2704,10 @@
   </problem>
   <problem>
     <file>cli.go</file>
-    <line>125</line>
+    <line>124</line>
     <module>light_idea_test_case</module>
     <entry_point TYPE="file" FQNAME="temp:///src/docker/api/client/cli.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
     <description>Unused function 'NewDockerCli'</description>
   </problem>
 </problems>
-
