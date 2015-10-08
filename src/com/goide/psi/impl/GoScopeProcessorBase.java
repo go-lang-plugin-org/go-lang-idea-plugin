@@ -35,8 +35,8 @@ public abstract class GoScopeProcessorBase extends GoScopeProcessor {
   @NotNull private final PsiElement myRequestedNameElement;
   protected final boolean myIsCompletion;
 
-  public GoScopeProcessorBase(@NotNull PsiElement origin, boolean completion) {
-    this(origin, origin, completion);
+  public GoScopeProcessorBase(@NotNull PsiElement origin) {
+    this(origin, origin, false);
   }
 
   public GoScopeProcessorBase(@NotNull PsiElement requestedNameElement, @NotNull PsiElement origin, boolean completion) {
