@@ -49,6 +49,7 @@ import com.intellij.util.Alarm;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.ui.AsyncProcessIcon;
+import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -78,6 +79,7 @@ public class GoSdkConfigurable implements SearchableConfigurable, Configurable.N
     FileChooserDescriptor chooserDescriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor().withTitle("Select GOROOT");
     mySdkPathField.addBrowseFolderListener(myProject, new MyBrowseFolderListener(chooserDescriptor));
     listenForPathUpdate();
+    Disposer.register(myDisposable, mySdkPathField);
   }
 
   @Override
@@ -238,6 +240,9 @@ public class GoSdkConfigurable implements SearchableConfigurable, Configurable.N
 
   @Override
   public void disposeUIResources() {
+    UIUtil.dispose(myVersionLabel);
+    UIUtil.dispose(myVersionPanel);
+    UIUtil.dispose(myComponent);
     myVersionLabel = null;
     myVersionPanel = null;
     myDefaultLabelColor = null;

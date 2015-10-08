@@ -143,8 +143,13 @@ public class GoAutoImportConfigurable implements SearchableConfigurable {
 
   @Override
   public void disposeUIResources() {
+    UIUtil.dispose(myCbShowImportPopup);
+    UIUtil.dispose(myCbAddUnambiguousImports);
     UIUtil.dispose(myExcludePackagesList);
+    myCbShowImportPopup = null;
+    myCbAddUnambiguousImports = null;
     myExcludePackagesList = null;
+    myExcludePackagesModel.removeAllElements();
     myExcludePackagesModel = null;
   }
 

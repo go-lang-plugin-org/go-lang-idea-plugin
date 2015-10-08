@@ -31,6 +31,7 @@ import com.intellij.ui.components.JBTextField;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ThreeState;
 import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -182,7 +183,13 @@ public class GoBuildTargetConfigurable implements SearchableConfigurable, Config
 
   @Override
   public void disposeUIResources() {
-
+    UIUtil.dispose(myPanel);
+    UIUtil.dispose(myOSCombo);
+    UIUtil.dispose(myArchCombo);
+    UIUtil.dispose(myGoVersionCombo);
+    UIUtil.dispose(myCompilerCombo);
+    UIUtil.dispose(myCgoCombo);
+    UIUtil.dispose(myCustomFlagsField);
   }
 
   @Nls

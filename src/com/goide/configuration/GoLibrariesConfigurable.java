@@ -33,6 +33,7 @@ import com.intellij.ui.components.JBCheckBox;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.IconUtil;
 import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -218,7 +219,9 @@ public class GoLibrariesConfigurable implements SearchableConfigurable, Configur
 
   @Override
   public void disposeUIResources() {
-
+    UIUtil.dispose(myUseEnvGoPathCheckBox);
+    UIUtil.dispose(myPanel);
+    myListModel.removeAll();
   }
 
   @NotNull
