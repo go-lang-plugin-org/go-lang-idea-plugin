@@ -53,7 +53,7 @@ public abstract class GoRunningState<T extends GoRunConfigurationBase<?>> extend
   }
 
   @NotNull
-  public GoExecutor createCommonExecutor() throws ExecutionException {
+  public GoExecutor createCommonExecutor() {
     return GoExecutor.in(myModule).withWorkDirectory(myConfiguration.getWorkingDirectory())
       .withExtraEnvironment(myConfiguration.getCustomEnvironment())
       .withPassParentEnvironment(myConfiguration.isPassParentEnvironment());
