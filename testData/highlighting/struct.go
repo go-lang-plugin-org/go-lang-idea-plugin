@@ -1,6 +1,7 @@
 package main
 
 import . "fmt"
+import "net/url"
 
 type alias Formatter
 
@@ -115,4 +116,11 @@ func <warning>NewA</warning>(b int) *A {
         b: b, // Reported error: "unknown field b", but that is not correct
         c: 1,
     }
+}
+
+func _() {
+	tr := &url.Userinfo{
+		<error>username</error>:"Name",
+	}
+	_ = tr
 }

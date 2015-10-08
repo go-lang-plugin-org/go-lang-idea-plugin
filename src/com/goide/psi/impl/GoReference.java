@@ -167,10 +167,8 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     if (!(file instanceof GoFile)) return true;
     PsiFile myFile = ObjectUtils.notNull(getContextFile(state), myElement.getContainingFile());
     if (!(myFile instanceof GoFile) || !allowed(file, myFile)) return true;
-    
-    GoFile o1 = (GoFile)myFile.getOriginalFile();
-    GoFile o2 = (GoFile)file.getOriginalFile();
-    boolean localResolve = Comparing.equal(o1.getImportPath(), o2.getImportPath()) && Comparing.equal(o1.getPackageName(), o2.getPackageName());
+
+    boolean localResolve = isLocalResolve(myFile, file);
 
     GoTypeStub stub = type.getStub();
     PsiElement parent = stub == null ? type.getParent() : stub.getParentStub().getPsi();
@@ -204,6 +202,13 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
       if (resultType != null && !processGoType(resultType, processor, state)) return false;
     }
     return true;
+  }
+
+  public static boolean isLocalResolve(@NotNull PsiFile originFile, @NotNull PsiFile externalFile) {
+    if (!(originFile instanceof GoFile) || !(externalFile instanceof GoFile)) return false;
+    GoFile o1 = (GoFile)originFile.getOriginalFile();
+    GoFile o2 = (GoFile)externalFile.getOriginalFile();
+    return Comparing.equal(o1.getImportPath(), o2.getImportPath()) && Comparing.equal(o1.getPackageName(), o2.getPackageName());
   }
 
   private boolean processCollectedRefs(@NotNull GoType type,
@@ -268,7 +273,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     return file instanceof GoFile && (!GoTestFinder.isTestFile(file) || isTesting) && GoUtil.allowed(file);
   }
   
-  private static boolean allowed(@NotNull PsiFile file, @Nullable PsiFile contextFile) {
+  public static boolean allowed(@NotNull PsiFile file, @Nullable PsiFile contextFile) {
     if (contextFile == null || !(contextFile instanceof GoFile)) return true; 
     return allowed(file, GoTestFinder.isTestFile(contextFile));
   }
