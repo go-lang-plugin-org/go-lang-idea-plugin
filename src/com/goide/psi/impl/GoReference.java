@@ -391,9 +391,9 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   private GoVarProcessor createDelegate(@NotNull GoScopeProcessor processor) {
     return new GoVarProcessor(getIdentifier(), myElement, processor.isCompletion(), true) {
       @Override
-      protected boolean condition(@NotNull PsiElement e) {
+      protected boolean crossOff(@NotNull PsiElement e) {
         if (e instanceof GoFieldDefinition) return true;
-        return super.condition(e) && !(e instanceof GoTypeSpec);
+        return super.crossOff(e) && !(e instanceof GoTypeSpec);
       }
     };
   }

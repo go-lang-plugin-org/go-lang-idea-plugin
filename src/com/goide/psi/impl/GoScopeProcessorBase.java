@@ -46,14 +46,14 @@ public abstract class GoScopeProcessorBase extends GoScopeProcessor {
   }
 
   @Override
-  public boolean execute(@NotNull PsiElement psiElement, @NotNull ResolveState resolveState) {
-    if (psiElement instanceof GoFunctionOrMethodDeclaration) return false;
-    if (!(psiElement instanceof GoNamedElement)) return true;
-    String name = ((GoNamedElement)psiElement).getName();
+  public boolean execute(@NotNull PsiElement e, @NotNull ResolveState state) {
+    if (e instanceof GoFunctionOrMethodDeclaration) return false;
+    if (!(e instanceof GoNamedElement)) return true;
+    String name = ((GoNamedElement)e).getName();
     if (StringUtil.isEmpty(name) || !myIsCompletion && !myRequestedNameElement.textMatches(name)) return true;
-    if (condition(psiElement)) return true;
-    if (psiElement.equals(myOrigin)) return true;
-    return add((GoNamedElement)psiElement) || myIsCompletion;
+    if (crossOff(e)) return true;
+    if (e.equals(myOrigin)) return true;
+    return add((GoNamedElement)e) || myIsCompletion;
   }
 
   protected boolean add(@NotNull GoNamedElement psiElement) {
@@ -70,5 +70,5 @@ public abstract class GoScopeProcessorBase extends GoScopeProcessor {
     return myResult;
   }
 
-  protected abstract boolean condition(@NotNull PsiElement element);
+  protected abstract boolean crossOff(@NotNull PsiElement e);
 }

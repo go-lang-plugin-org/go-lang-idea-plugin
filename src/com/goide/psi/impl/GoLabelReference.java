@@ -30,8 +30,8 @@ import java.util.Collection;
 public class GoLabelReference extends GoCachedReference<GoLabelRef> {
   private final GoScopeProcessorBase myProcessor = new GoScopeProcessorBase(myElement, false) {
     @Override
-    protected boolean condition(@NotNull PsiElement element) {
-      return !(element instanceof GoLabelDefinition);
+    protected boolean crossOff(@NotNull PsiElement e) {
+      return !(e instanceof GoLabelDefinition);
     }
   };
 

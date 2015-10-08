@@ -43,8 +43,8 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
   public boolean processResolveVariants(@NotNull final GoScopeProcessor processor) {
     GoScopeProcessor fieldProcessor = processor instanceof GoFieldProcessor ? processor : new GoFieldProcessor(myElement) {
       @Override
-      public boolean execute(@NotNull PsiElement e, @NotNull ResolveState resolveState) {
-        return super.execute(e, resolveState) && processor.execute(e, resolveState);
+      public boolean execute(@NotNull PsiElement e, @NotNull ResolveState state) {
+        return super.execute(e, state) && processor.execute(e, state);
       }
     };
     GoKey key = PsiTreeUtil.getParentOfType(myElement, GoKey.class);
@@ -124,7 +124,7 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
     }
 
     @Override
-    protected boolean condition(@NotNull PsiElement e) {
+    protected boolean crossOff(@NotNull PsiElement e) {
       if (!(e instanceof GoFieldDefinition) && !(e instanceof GoAnonymousFieldDefinition)) return true;
       GoNamedElement named = (GoNamedElement)e;
       PsiFile myFile = myOrigin.getContainingFile();

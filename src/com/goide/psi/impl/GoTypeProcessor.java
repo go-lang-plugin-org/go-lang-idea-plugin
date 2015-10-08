@@ -27,7 +27,7 @@ public class GoTypeProcessor extends GoScopeProcessorBase {
   }
 
   @Override
-  protected boolean condition(@NotNull PsiElement element) {
-    return !(element instanceof GoTypeSpec);
+  protected boolean crossOff(@NotNull PsiElement e) {
+    return !(e instanceof GoTypeSpec);
   }
 }

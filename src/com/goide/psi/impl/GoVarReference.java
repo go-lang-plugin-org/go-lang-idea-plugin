@@ -38,9 +38,8 @@ public class GoVarReference extends GoCachedReference<GoVarDefinition> {
   public PsiElement resolveInner() {
     GoVarProcessor p = new GoVarProcessor(myElement, false) {
       @Override
-      protected boolean condition(@NotNull PsiElement e) {
-        if (e instanceof GoFieldDefinition) return true;
-        return super.condition(e);
+      protected boolean crossOff(@NotNull PsiElement e) {
+        return e instanceof GoFieldDefinition || super.crossOff(e);
       }
     };
     processResolveVariants(p);
@@ -53,8 +52,8 @@ public class GoVarReference extends GoCachedReference<GoVarDefinition> {
                        ? ((GoVarProcessor)processor)
                        : new GoVarProcessor(myElement, processor.isCompletion()) {
                          @Override
-                         public boolean execute(@NotNull PsiElement psiElement, @NotNull ResolveState resolveState) {
-                           return super.execute(psiElement, resolveState) && processor.execute(psiElement, resolveState);
+                         public boolean execute(@NotNull PsiElement e, @NotNull ResolveState state) {
+                           return super.execute(e, state) && processor.execute(e, state);
                          }
                        };
 

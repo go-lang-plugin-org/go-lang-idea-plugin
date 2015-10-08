@@ -77,12 +77,12 @@ public class GoVarProcessor extends GoScopeProcessorBase {
     return PsiTreeUtil.getParentOfType(o, GoBlock.class);
   }
 
-  protected boolean condition(@NotNull PsiElement psiElement) {
-    return !(psiElement instanceof GoVarDefinition) &&
-           !(psiElement instanceof GoParamDefinition) &&
-           !(psiElement instanceof GoReceiver) &&
-           !(psiElement instanceof GoFieldDefinition) &&
-           !(psiElement instanceof GoAnonymousFieldDefinition) &&
-           !(psiElement instanceof GoConstDefinition);
+  protected boolean crossOff(@NotNull PsiElement e) {
+    return !(e instanceof GoVarDefinition) &&
+           !(e instanceof GoParamDefinition) &&
+           !(e instanceof GoReceiver) &&
+           !(e instanceof GoFieldDefinition) &&
+           !(e instanceof GoAnonymousFieldDefinition) &&
+           !(e instanceof GoConstDefinition);
   }
 }
