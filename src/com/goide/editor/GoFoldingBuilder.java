@@ -74,6 +74,31 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
       foldTypes(type.getSpecType().getType(), result);
     }
 
+    for (GoVarDeclaration varDeclaration : PsiTreeUtil.findChildrenOfType(file, GoVarDeclaration.class)) {
+      TextRange range = processList(varDeclaration.getLparen(), varDeclaration.getRparen(), varDeclaration.getVarSpecList().size());
+      if (range == null) {
+        continue;
+      }
+      result.add(new FoldingDescriptor(varDeclaration, range));
+    }
+
+    for (GoTypeDeclaration typeDeclaration : PsiTreeUtil.findChildrenOfType(file, GoTypeDeclaration.class)) {
+      TextRange range = processList(typeDeclaration.getLparen(), typeDeclaration.getRparen(), typeDeclaration.getTypeSpecList().size());
+      if (range == null) {
+        continue;
+      }
+      result.add(new FoldingDescriptor(typeDeclaration, range));
+    }
+
+    for (GoCompositeLit compositeLit : PsiTreeUtil.findChildrenOfType(file, GoCompositeLit.class)) {
+      GoLiteralValue literalValue = compositeLit.getLiteralValue();
+      TextRange range = processList(literalValue.getLbrace(), literalValue.getRbrace(), literalValue.getElementList().size());
+      if (range == null) {
+        continue;
+      }
+      result.add(new FoldingDescriptor(literalValue, range));
+    }
+
     if (!quick) {
       final Set<PsiElement> processedComments = ContainerUtil.newHashSet();
       PsiTreeUtil.processElements(file, new PsiElementProcessor() {
@@ -94,11 +119,22 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
     return result.toArray(new FoldingDescriptor[result.size()]);
   }
 
+  @Nullable
+  private static TextRange processList(@Nullable PsiElement left, @Nullable PsiElement right, int size) {
+    if (left == null || right == null || size < 2) {
+      return null;
+    }
+
+    int startOffset = left.getTextRange().getStartOffset();
+    int endOffset = right.getTextRange().getEndOffset();
+    return TextRange.create(startOffset, endOffset);
+  }
+
   private static void foldBlock(@NotNull List<FoldingDescriptor> result, @Nullable GoBlock block) {
     if (block != null && block.getTextRange().getLength() > 1) result.add(new FoldingDescriptor(block, block.getTextRange()));
   }
 
-  private static void foldTypes(@Nullable PsiElement e, List<FoldingDescriptor> result) {
+  private static void foldTypes(@Nullable PsiElement e, @NotNull List<FoldingDescriptor> result) {
     if (e instanceof GoStructType) {
       if (((GoStructType)e).getFieldDeclarationList().isEmpty()) return;
       addTypeBlock(e, ((GoStructType)e).getLbrace(), ((GoStructType)e).getRbrace(), result);
@@ -148,7 +184,9 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
   public String getPlaceholderText(@NotNull ASTNode node) {
     PsiElement psi = node.getPsi();
     IElementType type = node.getElementType();
-    if (psi instanceof GoBlock || psi instanceof GoStructType || psi instanceof GoInterfaceType) return "{...}";
+    if (psi instanceof GoBlock || psi instanceof GoStructType ||
+        psi instanceof GoInterfaceType || psi instanceof GoLiteralValue) return "{...}";
+    if (psi instanceof GoVarDeclaration || psi instanceof GoTypeDeclaration) return "(...)";
     if (psi instanceof GoImportDeclaration) return "...";
     if (GoParserDefinition.LINE_COMMENT == type) return "/.../";
     if (GoParserDefinition.MULTILINE_COMMENT == type) return "/*...*/";
