@@ -215,14 +215,17 @@ public class GoExecutor {
           if (success && myShowNotificationsOnSuccess) {
             showNotification("Finished successfully", NotificationType.INFORMATION);
           }
-          ApplicationManager.getApplication().invokeLater(new Runnable() {
-            @Override
-            public void run() {
-              if (!success && !cancelledByUser && myShowOutputOnError) {
+          else if (cancelledByUser && myShowNotificationsOnError) {
+            showNotification("Interrupted", NotificationType.WARNING);
+          }
+          if (!success && !cancelledByUser && myShowOutputOnError) {
+            ApplicationManager.getApplication().invokeLater(new Runnable() {
+              @Override
+              public void run() {
                 showOutput(myProcessHandler, historyProcessListener);
               }
-            }
-          });
+            });
+          }
         }
       };
 
