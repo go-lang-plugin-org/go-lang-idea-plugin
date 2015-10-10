@@ -327,6 +327,15 @@ public class GoPsiImplUtil {
       }
       return null;
     }
+    else if (o instanceof GoAddExpr) {
+      return ((GoAddExpr)o).getLeft().getGoType(context);
+    }
+    else if (o instanceof GoMulExpr) {
+      GoExpression left = ((GoMulExpr)o).getLeft();
+      if (!(left instanceof GoLiteral)) return left.getGoType(context);
+      GoExpression right = ((GoBinaryExpr)o).getRight();
+      if (right != null) return right.getGoType(context);
+    }
     else if (o instanceof GoCompositeLit) {
       GoType type = ((GoCompositeLit)o).getType();
       if (type != null) return type;
@@ -345,7 +354,7 @@ public class GoPsiImplUtil {
         return args != null ? args.getType() : null;
       }
     }
-    else if (o instanceof GoCallExpr) { 
+    else if (o instanceof GoCallExpr) {
       GoExpression e = ((GoCallExpr)o).getExpression();
       if (e instanceof GoReferenceExpression) { // todo: unify Type processing
         if (((GoReferenceExpression)e).getQualifier() == null && "append".equals(((GoReferenceExpression)e).getIdentifier().getText())) {
@@ -356,7 +365,7 @@ public class GoPsiImplUtil {
             GoExpression f = ContainerUtil.getFirstItem(l);
             return f == null ? null : getGoType(f, context);
           }
-        } 
+        }
       }
       GoType type = ((GoCallExpr)o).getExpression().getGoType(context);
       if (type instanceof GoFunctionType) {
@@ -408,8 +417,8 @@ public class GoPsiImplUtil {
     }
     else if (o instanceof GoLiteral) {
       GoLiteral l = (GoLiteral)o;
-      if (l.getChar() != null) return getBuiltinType(o, "rune"); 
-      if (l.getInt() != null) return getBuiltinType(o, "int"); 
+      if (l.getChar() != null) return getBuiltinType(o, "rune");
+      if (l.getInt() != null) return getBuiltinType(o, "int");
       if (l.getFloat() != null) return getBuiltinType(o, "float64");
       if (l.getFloati() != null) return getBuiltinType(o, "complex64");
       if (l.getDecimali() != null) return getBuiltinType(o, "complex128");

@@ -2,6 +2,7 @@ package main
 
 import "fmt"
 import "net/http"
+import "time"
 
 func main() {
 	b := 1
@@ -51,4 +52,28 @@ func _() {
 		fmt.Println("default")
 		q.At(0, 0)
 	}
+}
+
+
+var (
+	interval1 = time.Second
+	interval2 = time.Second * 5
+)
+
+func TestIdeaTimeApi() {
+	interval1.Nanoseconds()
+	fmt.Println("%T %T", interval1, interval2)
+	fmt.Println("%d %d", interval1.Nanoseconds(), interval2.Nanoseconds())
+}
+
+func _() {
+	fmt.Println(interval2)
+	fmt.Println(time.Second * 5)
+	f(time.Second)
+	TestIdeaTimeApi()
+}
+
+func f(d time.Duration) {
+	fmt.Println((d * time.Second).Nanoseconds())
+	fmt.Println(d * time.Second * time.Second)
 }
