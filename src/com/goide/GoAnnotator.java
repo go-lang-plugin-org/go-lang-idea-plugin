@@ -147,13 +147,7 @@ public class GoAnnotator implements Annotator {
   }
 
   private static TextAttributesKey getColor(GoNamedSignatureOwner o) {
-    boolean isPublic = o.isPublic();
-
-    if (o instanceof GoMethodDeclaration) {
-      return isPublic ? STRUCT_EXPORTED_METHOD : STRUCT_LOCAL_METHOD;
-    }
-
-    return isPublic ? PACKAGE_EXPORTED_FUNCTION : PACKAGE_LOCAL_FUNCTION;
+    return o.isPublic() ? EXPORTED_FUNCTION : LOCAL_FUNCTION;
   }
 
   private static TextAttributesKey getColor(@Nullable GoTypeSpec o) {
