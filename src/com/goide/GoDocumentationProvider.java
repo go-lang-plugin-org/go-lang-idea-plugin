@@ -92,21 +92,21 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
   @NotNull
   private static String getCommentText(@NotNull List<PsiComment> comments) {
     return StringUtil.join(ContainerUtil.map(comments, new Function<PsiComment, String>() {
-        @Override
-        public String fun(@NotNull PsiComment c) {
-          IElementType type = c.getTokenType();
-          String text = c.getText();
-          if (type == GoParserDefinition.LINE_COMMENT) {
-            text = text.replaceAll("//", "");
-          }
-          else if (type == GoParserDefinition.MULTILINE_COMMENT) {
-            text = StringUtil.trimEnd(text, "*/");
-            text = StringUtil.trimStart(text, "/*");
-            text = LEADING_TAB.matcher(text).replaceAll("");
-          }
-          return "<p>" + XmlStringUtil.escapeString(text.trim()) + "</p>";
+      @Override
+      public String fun(@NotNull PsiComment c) {
+        IElementType type = c.getTokenType();
+        String text = c.getText();
+        if (type == GoParserDefinition.LINE_COMMENT) {
+          text = text.replaceAll("//", "");
         }
-      }), "\n");
+        else if (type == GoParserDefinition.MULTILINE_COMMENT) {
+          text = StringUtil.trimEnd(text, "*/");
+          text = StringUtil.trimStart(text, "/*");
+          text = LEADING_TAB.matcher(text).replaceAll("");
+        }
+        return "<p>" + XmlStringUtil.escapeString(text.trim()) + "</p>";
+      }
+    }), "\n");
   }
 
   @NotNull
@@ -125,32 +125,31 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       return "";
     }
 
-    StringBuilder result = new StringBuilder("<p><b>func ").append(identifier != null ? identifier.getText() : "").append('(');
+    StringBuilder builder = new StringBuilder("<p><b>func ").append(identifier != null ? identifier.getText() : "").append('(');
     if (signature != null) {
-      result.append(getParametersAsString(signature.getParameters()));
+      builder.append(getParametersAsString(signature.getParameters()));
     }
-    result.append(')');
+    builder.append(')');
 
-    if (signature != null && signature.getResult() != null) {
-      GoResult signatureResult = signature.getResult();
-      if (signatureResult.getParameters() != null){
-        String signatureParameters = getParametersAsString(signatureResult.getParameters());
+    GoResult result = signature != null ? signature.getResult() : null;
+    GoParameters parameters = result != null ? result.getParameters() : null;
+    GoType type = result != null ? result.getType() : null;
 
-        if (!signatureParameters.isEmpty()) {
-          result.append(" (").append(signatureParameters).append(')');
-        }
-      }
-      else if (signatureResult.getType() != null) {
-        GoType signatureResultType = signatureResult.getType();
-        if (signatureResultType instanceof GoTypeList) {
-          result.append(" (").append(XmlStringUtil.escapeString(signatureResult.getType().getText())).append(')');
-        } else {
-          result.append(' ').append(XmlStringUtil.escapeString(signatureResult.getType().getText()));
-        }
+    if (parameters != null) {
+      String signatureParameters = getParametersAsString(parameters);
+      if (!signatureParameters.isEmpty()) {
+        builder.append(" (").append(signatureParameters).append(')');
       }
     }
-
-    return result.append("</b></p>\n").toString();
+    else if (type != null) {
+      if (type instanceof GoTypeList) {
+        builder.append(" (").append(XmlStringUtil.escapeString(type.getText())).append(')');
+      }
+      else {
+        builder.append(' ').append(XmlStringUtil.escapeString(type.getText()));
+      }
+    }
+    return builder.append("</b></p>\n").toString();
   }
 
   @NotNull
