@@ -1,0 +1,1 @@
+package a; import "fmt"; func foo() {fmt.Fprintl<caret>n("Hello")}

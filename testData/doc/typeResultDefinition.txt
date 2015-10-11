@@ -1,0 +1,1 @@
+<pre> <b>func TypeResult(s string) string</b><br/> TypeResult func comment</pre>

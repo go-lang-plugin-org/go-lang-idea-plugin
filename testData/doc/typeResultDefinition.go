@@ -1,0 +1,1 @@
+package a; import "docs"; func foo() {docs.Type<caret>Result()}
