@@ -146,8 +146,8 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
   public static class Element implements StructureViewTreeElement, ItemPresentation, NavigationItem {
     @NotNull private final PsiElement myElement;
 
-    public Element(@NotNull PsiElement element) {
-      myElement = element;
+    public Element(@NotNull PsiElement e) {
+      myElement = e;
     }
 
     @NotNull
@@ -194,8 +194,11 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
         for (GoVarDefinition o : ((GoFile)myElement).getVars()) result.add(new Element(o));
         for (GoFunctionDeclaration o : ((GoFile)myElement).getFunctions()) result.add(new Element(o));
         for (GoMethodDeclaration o : ((GoFile)myElement).getMethods()) {
-          PsiReference ref = o.getReceiver().getReference();
-          PsiElement resolve = ref != null ? ref.resolve() : null;
+          GoReceiver receiver = o.getReceiver();
+          GoType type = receiver.getType();
+          GoTypeReferenceExpression expression = type != null ? type.getTypeReferenceExpression() : null;
+          PsiReference reference = expression != null ? expression.getReference() : null;
+          PsiElement resolve = reference != null ? reference.resolve() : null;
           if (resolve == null) {
             result.add(new Element(o));
           }
