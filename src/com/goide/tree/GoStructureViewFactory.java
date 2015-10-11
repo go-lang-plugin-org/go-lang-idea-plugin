@@ -32,6 +32,7 @@ import com.intellij.openapi.util.Iconable;
 import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiReference;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
@@ -193,6 +194,13 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
         for (GoConstDefinition o : ((GoFile)myElement).getConstants()) result.add(new Element(o));
         for (GoVarDefinition o : ((GoFile)myElement).getVars()) result.add(new Element(o));
         for (GoFunctionDeclaration o : ((GoFile)myElement).getFunctions()) result.add(new Element(o));
+        for (GoMethodDeclaration o : ((GoFile)myElement).getMethods()) {
+          PsiReference ref = o.getReceiver().getReference();
+          PsiElement resolve = ref != null ? ref.resolve() : null;
+          if (resolve == null) {
+            result.add(new Element(o));
+          }
+        }
       }
       else if (myElement instanceof GoTypeSpec) {
         GoTypeSpec typeSpec = (GoTypeSpec)myElement;
