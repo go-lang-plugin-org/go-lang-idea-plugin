@@ -20,7 +20,9 @@ import com.goide.GoCodeInsightFixtureTestCase;
 
 public class GoFoldingBuilderTest extends GoCodeInsightFixtureTestCase {
   @Override
-  protected String getTestDataPath() { return "testData/folding/"; }
+  protected String getBasePath() {
+    return "folding";
+  }
 
   private void doTest() { myFixture.testFolding(getTestDataPath() + "/" + getTestName(true) + ".go"); }
 

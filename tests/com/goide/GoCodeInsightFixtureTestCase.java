@@ -49,7 +49,7 @@ abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsi
   }
 
   @Override
-  protected String getTestDataPath() {
+  protected final String getTestDataPath() {
     return new File("testData/" + getBasePath()).getAbsolutePath();
   }
 
