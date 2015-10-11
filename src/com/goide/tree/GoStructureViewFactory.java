@@ -62,18 +62,17 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
   }
 
   public static class Model extends StructureViewModelBase implements StructureViewModel.ElementInfoProvider {
-
     public static final List<NodeProvider> PROVIDERS = ContainerUtil.<NodeProvider>newSmartList(new TreeElementFileStructureNodeProvider());
 
-    public Model(@NotNull PsiFile psiFile) {
-      super(psiFile, new Element(psiFile));
+    public Model(@NotNull PsiFile file) {
+      super(file, new Element(file));
       withSuitableClasses(GoFile.class).withSorters(ExportabilitySorter.INSTANCE, Sorter.ALPHA_SORTER);
     }
 
     @NotNull
     @Override
     public Filter[] getFilters() {
-      return new Filter[] {new GoPrivateMembersFilter()};
+      return new Filter[]{new GoPrivateMembersFilter()};
     }
 
     @Override
@@ -222,8 +221,10 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
 
     @Override
     public String getPresentableText() {
-      String separator = ": ";      
-      if (myElement instanceof GoFile) return ((GoFile)myElement).getName();
+      String separator = ": ";
+      if (myElement instanceof GoFile) {
+        return ((GoFile)myElement).getName();
+      }
       else if (myElement instanceof GoNamedSignatureOwner) {
         GoSignature signature = ((GoNamedSignatureOwner)myElement).getSignature();
         String signatureText = signature != null ? signature.getText() : "";
