@@ -45,10 +45,10 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       GoTopLevelDeclaration topLevel = PsiTreeUtil.getParentOfType(element, GoTopLevelDeclaration.class);
       Collection<PsiElement> children = PsiTreeUtil.findChildrenOfType(topLevel, element.getClass());
       boolean alone = children.size() == 1 && children.iterator().next().equals(element);
-      List<PsiComment> comments = getPreviousNonWsComment(alone ? topLevel : element);
       String result = getSignature(element);
+      List<PsiComment> comments = getPreviousNonWsComment(alone ? topLevel : element);
       if (!comments.isEmpty()) result += getCommentText(comments);
-      return !result.isEmpty() ? "<pre>" + result + "</pre>" : "";
+      return result;
     }
     else if (element instanceof PsiDirectory) {
       String comments = getPackageComment(((PsiDirectory)element).findFile("doc.go"));
@@ -64,7 +64,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       // todo: remove after correct stubbing (comments needed in stubs)
       GoPackageClause pack = PsiTreeUtil.findChildOfType(file, GoPackageClause.class);
       List<PsiComment> comments = getPreviousNonWsComment(pack);
-      if (!comments.isEmpty()) return "<pre>" + getCommentText(comments) + "</pre>";
+      if (!comments.isEmpty()) return getCommentText(comments);
     }
     return null;
   }
@@ -91,8 +91,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
 
   @NotNull
   private static String getCommentText(@NotNull List<PsiComment> comments) {
-    return XmlStringUtil.escapeString(
-      StringUtil.join(ContainerUtil.map(comments, new Function<PsiComment, String>() {
+    return StringUtil.join(ContainerUtil.map(comments, new Function<PsiComment, String>() {
         @Override
         public String fun(@NotNull PsiComment c) {
           IElementType type = c.getTokenType();
@@ -105,9 +104,9 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
             text = StringUtil.trimStart(text, "/*");
             text = LEADING_TAB.matcher(text).replaceAll("");
           }
-          return text;
+          return "<p>" + XmlStringUtil.escapeString(text.trim()) + "</p>";
         }
-      }), "\n"));
+      }), "\n");
   }
 
   @NotNull
@@ -126,7 +125,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       return "";
     }
 
-    StringBuilder result = new StringBuilder(" <b>func ").append(identifier != null ? identifier.getText() : "").append('(');
+    StringBuilder result = new StringBuilder("<p><b>func ").append(identifier != null ? identifier.getText() : "").append('(');
     if (signature != null) {
       result.append(getParametersAsString(signature.getParameters()));
     }
@@ -151,7 +150,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       }
     }
 
-    return result.append("</b><br/>").toString();
+    return result.append("</b></p>\n").toString();
   }
 
   @NotNull

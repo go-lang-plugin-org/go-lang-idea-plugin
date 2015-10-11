@@ -1,1 +1,2 @@
-<pre> <b>func MultiType(demo interface{}, err error) ([]interface{}, error)</b><br/> MultiType is a function like all other functions</pre>
+<p><b>func MultiType(demo interface{}, err error) ([]interface{}, error)</b></p>
+<p>MultiType is a function like all other functions</p>
