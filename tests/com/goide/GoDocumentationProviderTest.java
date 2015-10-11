@@ -30,51 +30,16 @@ public class GoDocumentationProviderTest extends GoCodeInsightFixtureTestCase {
     return createMockProjectDescriptor();
   }
 
-  public void testPrintln() {
-    doTest(
-    );
-  }
-
-  public void testFprintln() {
-    doTest(
-    );
-  }
-
-  public void testVariable() {
-    doTest(
-    );
-  }
-
-  public void testEscape() {
-    doTest(
-    );
-  }
-
-  public void testEscapeReturnValues() {
-    doTest(
-    );
-  }
-
-  public void testPackageWithDoc() {
-    doTest(
-    );
-  }
-
-  public void testPackage() {
-    doTest(
-    );
-  }
-
-  public void testTypeResultDefinition() {
-    doTest(
-    );
-  }
-
-  public void testMultilineTypeListDefinition() {
-    doTest(
-    );
-  }
-
+  public void testPrintln()                     { doTest(); } 
+  public void testFprintln()                    { doTest(); } 
+  public void testVariable()                    { doTest(); } 
+  public void testEscape()                      { doTest(); } 
+  public void testEscapeReturnValues()          { doTest(); } 
+  public void testPackageWithDoc()              { doTest(); } 
+  public void testPackage()                     { doTest(); } 
+  public void testTypeResultDefinition()        { doTest(); } 
+  public void testMultilineTypeListDefinition() { doTest(); }
+  
   @Override
   protected String getBasePath() {
     return "doc";
