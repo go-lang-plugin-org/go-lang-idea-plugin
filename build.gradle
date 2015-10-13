@@ -1,10 +1,10 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *                  
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -15,7 +15,7 @@
  */
 plugins {
   id 'org.jetbrains.intellij' version "0.0.23"
-  id "de.undercouch.download" version "1.2"
+  id "de.undercouch.download" version "2.0.0"
 }
 
 version = "${version}.$buildNumber"
