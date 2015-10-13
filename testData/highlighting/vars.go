@@ -77,3 +77,8 @@ func f(d time.Duration) {
 	fmt.Println((d * time.Second).Nanoseconds())
 	fmt.Println(d * time.Second * time.Second)
 }
+
+func _() {
+	time := time.Now();
+	fmt.Println(time) 
+}
