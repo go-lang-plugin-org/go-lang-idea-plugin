@@ -106,6 +106,7 @@ task performanceTest(type: Test, group: 'Verification', dependsOn: [classes, tes
   testLogging {
     exceptionFormat = 'full'
   }
+  outputs.upToDateWhen { false }
 }
 check.dependsOn performanceTest
 
