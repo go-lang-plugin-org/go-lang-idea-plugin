@@ -16,6 +16,7 @@
 
 package com.goide;
 
+import com.goide.categories.Performance;
 import com.goide.inspections.GoUnusedImportInspection;
 import com.goide.inspections.unresolved.GoUnresolvedReferenceInspection;
 import com.goide.inspections.unresolved.GoUnusedFunctionInspection;
@@ -46,12 +47,14 @@ import com.intellij.util.ThrowableRunnable;
 import com.intellij.util.indexing.FileContentImpl;
 import com.intellij.util.indexing.IndexingDataKeys;
 import org.jetbrains.annotations.NotNull;
+import org.junit.experimental.categories.Category;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+@Category(Performance.class)
 public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
 
   public void _testUnusedVariable() {

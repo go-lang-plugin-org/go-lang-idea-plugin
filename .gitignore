@@ -1,18 +1,18 @@
 out/
-bin/
 system-test/
 config-test/
 
-idea-IC/
 build/
-build_test/
+.gradle
 
 .idea/workspace.xml
+.idea/modules.xml
+.idea/misc.xml
+.idea/gradle.xml
 .idea/shelf/
-
-.gradle/
-
-intellij-go.jar
+.idea/libraries/
+.idea/.name
+*.iml
 
 testData/performance/docker
 testData/performance/go

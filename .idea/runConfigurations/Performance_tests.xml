@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Go" type="GradleRunConfiguration" factoryName="Gradle" singleton="true">
+  <configuration default="false" name="Performance tests" type="GradleRunConfiguration" factoryName="Gradle" singleton="true">
     <ExternalSystemSettings>
       <option name="executionName" />
       <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -10,7 +10,7 @@
       </option>
       <option name="taskNames">
         <list>
-          <option value=":runIdea" />
+          <option value="performanceTest" />
         </list>
       </option>
       <option name="vmOptions" value="" />

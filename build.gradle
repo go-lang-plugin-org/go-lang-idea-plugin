@@ -1,0 +1,134 @@
+/*
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *                  
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+plugins {
+  id 'org.jetbrains.intellij' version "0.0.23"
+  id "de.undercouch.download" version "1.2"
+}
+
+version = "${version}.$buildNumber"
+allprojects {
+  apply plugin: 'java'
+  sourceCompatibility = javaVersion
+  targetCompatibility = javaVersion
+  tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
+
+  sourceSets {
+    main {
+      java.srcDirs 'src', 'gen'
+      resources.srcDir 'resources'
+    }
+    test {
+      java.srcDir 'tests'
+    }
+  }
+
+  apply plugin: 'org.jetbrains.intellij'
+  intellij {
+    version ideaVersion
+    pluginName 'Go'
+    plugins 'coverage'
+    downloadSources Boolean.valueOf(sources)
+    publish {
+      username publishUsername
+      password publishPassword
+      pluginId '5047'
+      channel publishChannel
+    }
+  }
+}
+
+apply plugin: 'idea'
+idea {
+  project {
+    jdkName = javaVersion
+    languageLevel = javaVersion
+  }
+  module {
+    generatedSourceDirs += file('gen')
+  }
+}
+
+repositories { maven { url "http://dl.bintray.com/jetbrains/golang" } }
+dependencies {
+  compile project(':utils'), project(':google-app-engine'), project(':google-app-engine:google-app-engine-yaml')
+  runtime "com.jetbrains:delve:$delveVersion@zip"
+}
+
+// delve packing
+project.afterEvaluate {
+  prepareSandbox.doLast {
+    def libraries = "$it.destinationDir/$intellij.pluginName/lib/"
+    fileTree(dir: libraries, include: 'delve*').files.each { File file ->
+      copy {
+        from zipTree(file)
+        into libraries
+      }
+      file.delete()
+    }
+  }
+}
+
+test {
+  useJUnit {
+    excludeCategories 'com.goide.categories.Performance'
+  }
+  testLogging {
+    exceptionFormat = 'full'
+  }
+}
+
+task preparePerformanceTestData << {
+  downloadAndUnzip('https://storage.googleapis.com/golang/go1.4.2.src.tar.gz', 'go', 'go')
+  downloadAndUnzip('https://github.com/docker/docker/archive/v1.5.0.tar.gz', 'docker-1.5.0', 'docker')
+}
+
+task performanceTest(type: Test, group: 'Verification', dependsOn: [classes, testClasses, preparePerformanceTestData]) {
+  maxHeapSize = '512m'
+  minHeapSize = '256m'
+
+  useJUnit {
+    includeCategories 'com.goide.categories.Performance'
+    reports.html.destination = "$buildDir/reports/performanceTests"
+  }
+  testLogging {
+    exceptionFormat = 'full'
+  }
+  outputs.upToDateWhen { false }
+}
+check.dependsOn performanceTest
+
+private void downloadAndUnzip(url, sourceDir, targetDir) {
+  def testDataPath = "$projectDir/testData/performance/"
+  def markerFile = file("$testDataPath/$targetDir/markerFile")
+  def tmpPath = "$testDataPath/tmp/"
+  def tar = file("$tmpPath/${targetDir}.tar.gz")
+  if (!markerFile.exists()) {
+    download {
+      src url
+      dest tar
+    }
+    copy {
+      from tarTree(tar)
+      into tmpPath
+    }
+    copy {
+      from "$tmpPath/$sourceDir"
+      into "$testDataPath/$targetDir"
+    }
+    markerFile.createNewFile()
+  }
+  delete file(tmpPath)
+}

@@ -1,7 +1,0 @@
-language: java
-jdk:
-  - oraclejdk8
-script: "./travis.sh"
-cache:
-  directories:
-  - idea-IC
