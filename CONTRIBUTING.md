@@ -132,7 +132,7 @@ The steps:
 * [Download](http://www.jetbrains.com/idea/) IDEA Community or Ultimate.
 * Open the copy of go-lang-idea-plugin repository (`File | New | Project from Existing Sources...`) 
 with it. Then import Gradle project. The default project module config should work with a recent IDEA 15 version.
-* Open the Project Settings (Command + ; on Mac or File -> Project Settings on
+* Open the Project Settings (`Command + ;` on Mac or `File -> Project Settings` on
 other platforms), go to the SDKs entry, click the `+` and select JDK 1.6. 
 If you use mac, you may check follow path:
 ```
