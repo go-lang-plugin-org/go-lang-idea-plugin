@@ -129,8 +129,7 @@ In order to build the sources you need to download an IDEA Community version.
 
 The steps:
 
-* Download the IDEA Community (or you can use your licensed IDEA Ultimate copy)
-from here: <http://www.jetbrains.com/idea/>.
+* [Download](http://www.jetbrains.com/idea/) IDEA Community or Ultimate.
 * Open the copy of go-lang-idea-plugin repository (`File | New | Project from Existing Sources...`) 
 with it. Then import Gradle project. The default project module config should work with a recent IDEA 15 version.
 * Open the Project Settings (Command + ; on Mac or File -> Project Settings on
