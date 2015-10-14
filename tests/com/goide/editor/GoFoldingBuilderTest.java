@@ -26,12 +26,12 @@ public class GoFoldingBuilderTest extends GoCodeInsightFixtureTestCase {
 
   private void doTest() { myFixture.testFolding(getTestDataPath() + "/" + getTestName(true) + ".go"); }
 
-  public void testSimple() { doTest(); }
-  public void testImportList() { doTest(); }
-  public void testImportListWithJustSingleImportKeyword() { doTest(); }
+  public void testSimple()                                        { doTest(); }
+  public void testImportList()                                    { doTest(); }
+  public void testImportListWithJustSingleImportKeyword()         { doTest(); }
   public void testImportListWithoutSpaceBetweenKeywordAndString() { doTest(); }
-  public void testImportListWithoutSpaceBetweenKeywordAndParen() { doTest(); }
-  public void testEmptyImportList() { doTest(); }
-  public void testImportListWithNewLineAfterKeyword() { doTest(); }
-  public void testImportListWithOnlyThreeSymbolsToFold() { doTest(); }
+  public void testImportListWithoutSpaceBetweenKeywordAndParen()  { doTest(); }
+  public void testEmptyImportList()                               { doTest(); }
+  public void testImportListWithNewLineAfterKeyword()             { doTest(); }
+  public void testImportListWithOnlyThreeSymbolsToFold()          { doTest(); }
 }
