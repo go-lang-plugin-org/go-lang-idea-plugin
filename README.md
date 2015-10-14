@@ -21,11 +21,11 @@ nightly builds are released every night, using the latest buildable source.
 To use them, you'll need to follow these steps:
 
 1. Follow [the instructions](https://www.jetbrains.com/idea/help/managing-enterprise-plugin-repositories.html)
-1. Paste the url for the version you desire:
+1. Paste the URL for the version you desire:
  - alpha: https://plugins.jetbrains.com/plugins/alpha/5047
  - nightly: https://plugins.jetbrains.com/plugins/nightly/5047
 
-As always, please remember that this is an preview release and while efforts are
+As always, please remember that this is a preview release and while efforts are
 made to ensure the best possible experience, sometimes things might be broken.
 
 **NOTE**
@@ -58,11 +58,11 @@ When reporting a bug, please include the following:
 ## Bumping or +1 or me as well comments
 
 As annoying as things might be when they don't work, please don't comment with
-"bump", "+1", "same for me" or other form of comments which is not relevant for
+"bump", "+1", "same for me" or another form of comments which is not relevant for
 either better identifying the issue providing a solution to it.
 
 If you want to mark that the said issue is meaningful for you, go ahead and
-contact Github support to add a issue voting feature to the repositories by
+contact Github support to add an issue voting feature to the repositories by
 writing them here: https://github.com/contact
 
 Contributions are always welcomed and we'll do our best to help you out to add
