@@ -82,7 +82,7 @@ in the way we spend time to understand the problems and thus solve them.
 1. Checkout plugin repo and open the project
 1. Import the project from gradle
 1. Setup the right version of [Grammar-Kit](https://dl.dropboxusercontent.com/u/4294872/GrammarKit-21-08-2015.zip)
-1. Setup **Ant Support** and **UI Designer** plugins
+1. Setup **Ant Support**, **UI Designer**, and **Gradle** plugins
 1. Run the **Go** run configuration
 
 Please don't use class comments with information about author or date and time creation.
