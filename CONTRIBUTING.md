@@ -108,7 +108,7 @@ log will be displayed to you.
 
 We're syncing the plugin source with the [Delve](https://github.com/derekparker/delve) debugger via https://github.com/ignatov/delve.
 
-Please use `-Ddlv.path` for setting up the path to your local version of dlv.
+If you want to customize delve distribution that's used in plugin you can use `-Ddlv.path` for setting up the path to your local version of dlv.
 
 ### Checking out the IntelliJ IDEA Platform sources
 
