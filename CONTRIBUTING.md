@@ -7,7 +7,6 @@
 + [Contributing to the code](#contributing-to-the-code)
 + [Submitting test cases](#submitting-test-cases)
 + [Getting started with the plugin development](#getting-started-with-the-plugin-development)
-+ [Checking out the IntellJ IDEA Platform sources](#checking-out-the-intellij-idea-platform-sources)
 + [Checking out and building Google Go](#checking-out-and-building-google-go)
 + [Checking out the plugin sources](#checking-out-the-plugin-sources)
 + [Building and running the unit tests](#building-and-running-the-unit-tests)
@@ -110,34 +109,6 @@ We're syncing the plugin source with the [Delve](https://github.com/derekparker/
 
 If you want to customize delve distribution that's used in plugin you can use `-Ddlv.path` for setting up the path to your local version of dlv.
 
-### Checking out the IntelliJ IDEA Platform sources
-
-We start with cloning the idea git repository and checking out the revision
-used to build IDEA 14:
-
-```bash
-    git clone git@github.com:JetBrains/intellij-community.git idea
-    cd idea
-    git checkout idea/141.1532.4
-    # and we build it using ant
-    ant
-```
-
-The build will take around 5 to 20 minutes (depending on the machine) and at the
-end it should put the build artifacts into `out/artifacts` folder.
-
-    $ ls -al out/artifacts/
-    total 728672
-    drwxr-xr-x   7 mtoader  staff        238 Jun  1 22:34 .
-    drwxr-xr-x   8 mtoader  staff        272 Jun  1 22:25 ..
-    drwxr-xr-x  10 mtoader  staff        340 Jun  1 22:34 core
-    -rw-r--r--   1 mtoader  staff  112106975 Jun  1 22:34 ideaIC-141.SNAPSHOT.mac.zip
-    -rw-r--r--   1 mtoader  staff  110192607 Jun  1 22:34 ideaIC-141.SNAPSHOT.tar.gz
-    -rw-r--r--   1 mtoader  staff  110468031 Jun  1 22:34 ideaIC-141.SNAPSHOT.win.zip
-    -rw-r--r--   1 mtoader  staff   40308058 Jun  1 22:34 sources.zip
-
-Use the artifact from your target OS to run the built version of IDEA.
-
 ### Checking out and building Google Go
 
 While we support Go from 1.0 to 1.5.1, we prefer to work with the latest release
@@ -154,34 +125,21 @@ on the local machine.
 
 ### Building and running the unit tests
 
-In order to build the sources you need to download an IDEA Community version,
-open the project and add the built IDEA artifact as a Idea SDK for the plugin.
-It's also helpful to add the idea sources to the IDEA SDK as it helps
-tremendously with debugging.
+In order to build the sources you need to download an IDEA Community version.
 
 The steps:
 
 * Download the IDEA Community (or you can use your licensed IDEA Ultimate copy)
 from here: <http://www.jetbrains.com/idea/>.
-* Open the copy of google-go-lang-idea-plugin repository (that was previously
-checked out) with it (the default project module config should work with a
-recent IDEA 14.1 version).
+* Open the copy of go-lang-idea-plugin repository (`File | New | Project from Existing Sources...`) 
+with it. Then import Gradle project. The default project module config should work with a recent IDEA 15 version.
 * Open the Project Settings (Command + ; on Mac or File -> Project Settings on
-other platforms), go to the SDKs entry, click the `+` (and select IntelliJ IDEA
-Plugin SDK).
-* If it says you need a Java SDK first. You should add a java SDK with the same
-version that you used for build idea. If you use mac,you should check follow path:
+other platforms), go to the SDKs entry, click the `+` and select JDK 1.6. 
+If you use mac, you may check follow path:
 ```
 /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/
 /Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/
 ```
-* After setup java SDK. go to the SDKs entry, click the `+` (and select IntelliJ IDEA
-Plugin SDK) navigate to the unzipped location of the IDEA build that you
-created before. It will recognize a new IDEA Plugin SDK with the name
-`IDEA IC-141.SNAPSHOT`. After that you should add the IDEA sources to it by
-selecting the SDK, going to the `Sourcepath` tab, clicking `+` in the lower
-panel and navigating to the checkout out sources of IDEA. Press add, let it
-inspect the folders for sources and add all the found sources to the SDK.
 * Go to the Project entry and make sure that the Project SDK is set to selected
 SDK.
 * Wait until the source files of the SDK are indexed.
@@ -192,10 +150,10 @@ run and play.
 Going to ``` Run -> Run... ``` will provide you with the following run configurations:
 
 + `Go` will spawn a new IDEA with the latest version of the plugin enabled
-+ `Go in WebStorm` will spawn a new WebStorm with the latest version of the plugin enabled (requires SDK named ```WebStorm sdk```)
-+ `Go in IDEA EAP` will spawn a new unstable IDEA with the latest version of the plugin enabled (requires SDK named ```IDEA EAP sdk```)
-+ `All in intellij-go` will run all the test cases available in the project. Please make
++ `All tests` will run all the test cases available in the project. Please make
 sure that all the test cases pass before committing anything (or making a pull request).
++ `Performance tests` will run all performance test cases available in the project.
++ `Build plugin` will build plugin distribution archive. All artifacts are stored in `gradle/distributions` directory.
 
 ### Profit
 
