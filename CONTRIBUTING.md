@@ -79,16 +79,11 @@ for existing issues or for issues that you come across will make a huge differen
 in the way we spend time to understand the problems and thus solve them.
 
 ### Getting started with the plugin development
-1. [Download](http://www.jetbrains.com/idea/download/) the latest 14.1 IntelliJ IDEA build and install it
 1. Checkout plugin repo and open the project
-1. Setup [IDEA SDK](http://confluence.jetbrains.net/display/IDEADEV/Getting+Started+with+Plugin+Development#GettingStartedwithPluginDevelopment-anchor2):
-select the IDEA installation directory as SDK root (should be named ```IDEA sdk```)
-1. If you want to run Go Plugin in WebStorm or in IDEA EAP setup corresponding additional SDKs (should be named  ```WebStorm sdk``` and ```IDEA EAP sdk```)
+1. Import the project from gradle
 1. Setup the right version of [Grammar-Kit](https://dl.dropboxusercontent.com/u/4294872/GrammarKit-21-08-2015.zip)
 1. Setup **Ant Support** and **UI Designer** plugins
 1. Run the **Go** run configuration
-
-Note: if you'd like to build only artifact please run ```Build > Build Artifacts...``` action.
 
 Please don't use class comments with information about author or date and time creation.
 
