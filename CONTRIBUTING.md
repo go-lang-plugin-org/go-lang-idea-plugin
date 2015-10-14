@@ -19,7 +19,7 @@ Before reporting an error, please read the [FAQ](https://github.com/go-lang-plug
 and search for the issue in the issue tracker. Also, please don't bump, +1
 or "me too" issues. Thank you.
 
-The simples way to contribute to the plugin is to report issues you encounter
+The simplest way to contribute to the plugin is to report issues you encounter
 in your day to day use.
 
 As a rule of thumb, always keep in mind that we are developers just like you. So,
@@ -31,11 +31,11 @@ details from you.
 
 As of 0.9.16 release, the plugin has a way to catch the exceptions it generates
 and send them to us as an issue on Github but we still need to understand the
-context in which the error happens. As such, whenever you are using the builtin
+context in which the error happens. As such, whenever you are using the built-in
 error reporting facility, be as descriptive as possible.
 
 This information applies also when you don't have an error that is caught by the
-builtin facility but it's something that happens and shouldn't happen (say for
+built-in facility but it's something that happens and shouldn't happen (say for
 example, a formatting issue).
 
 First and foremost, we really need to know the following:
@@ -107,7 +107,7 @@ log will be displayed to you.
 
 We're syncing the plugin source with the [Delve](https://github.com/derekparker/delve) debugger via https://github.com/ignatov/delve.
 
-If you want to customize delve distribution that's used in plugin you can use `-Ddlv.path` for setting up the path to your local version of dlv.
+If you want to customize delve distribution that's used in the plugin you can use `-Ddlv.path` for setting up the path to your local version of dlv.
 
 ### Checking out and building Google Go
 
@@ -120,12 +120,12 @@ This will work even with a binary installation (as a result of following the
 
 ### Checking out the plugin sources
 
-Fork the repository using the github web interface and do a clone of your fork
+Fork the repository using the GitHub web interface and do a clone of your fork
 on the local machine.
 
 ### Building and running the unit tests
 
-In order to build the sources you need to download an IDEA Community version.
+In order to build the sources, you need to download an IDEA Community version.
 
 The steps:
 
@@ -163,8 +163,8 @@ That's it. Enjoy your play time.
 
 For further information please see [the official plugin development page](http://confluence.jetbrains.net/display/IDEADEV/PluginDevelopment).
 
-Also you can read some [tips and tricks](http://tomaszdziurko.pl/2011/09/developing-plugin-intellij-idea-some-tips-and-links/).
+Also, you can read some [tips and tricks](http://tomaszdziurko.pl/2011/09/developing-plugin-intellij-idea-some-tips-and-links/).
 
-For all development questions and proposals you can mail to our [Open API and Plugin Development forum](https://devnet.jetbrains.com/community/idea/open_api_and_plugin_development).
+For all development questions and proposals, you can mail to our [Open API and Plugin Development forum](https://devnet.jetbrains.com/community/idea/open_api_and_plugin_development).
 
 Happy hacking!
