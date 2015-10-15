@@ -1,8 +1,11 @@
-out/
-system-test/
-config-test/
+/system-test/
+/config-test/
 
-build/
+/build/
+/google-app-engine/build/
+/google-app-engine/google-app-engine-yaml/build/
+/utils/build/
+
 .gradle
 
 .idea/workspace.xml
@@ -14,5 +17,5 @@ build/
 .idea/.name
 *.iml
 
-testData/performance/docker
-testData/performance/go
+/testData/performance/docker
+/testData/performance/go
