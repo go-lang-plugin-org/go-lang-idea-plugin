@@ -35,6 +35,7 @@ import static com.goide.highlighting.GoSyntaxHighlightingColors.*;
 public class GoAnnotator implements Annotator {
   @Override
   public void annotate(@NotNull PsiElement o, @NotNull AnnotationHolder holder) {
+    if (!o.isValid()) return;
     if (o instanceof GoImportSpec) {
       if (((GoImportSpec)o).isDot()) {
         o.putUserData(GoReference.IMPORT_USERS, ContainerUtil.<PsiElement>newArrayListWithCapacity(0));
