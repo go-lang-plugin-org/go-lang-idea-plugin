@@ -67,6 +67,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   
   @NotNull
   private ResolveResult[] resolveInner() {
+    if (!myElement.isValid()) return ResolveResult.EMPTY_ARRAY;
     Collection<ResolveResult> result = new OrderedSet<ResolveResult>();
     processResolveVariants(createResolveProcessor(result, myElement));
     return result.toArray(new ResolveResult[result.size()]);
