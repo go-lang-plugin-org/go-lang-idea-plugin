@@ -1,6 +1,11 @@
 package main
 
 import "fmt"
+import "go/ast"
+
+type Ref struct {
+	Expr    *ast.Expr
+}
 
 type Closer interface {
     Close()
@@ -40,3 +45,14 @@ func <warning>Add3</warning>(users ...User)  { users.<error>Name</error>() }
 
 func <warning>Add4</warning>(users *User)    { (*users).Name() }
 func <warning>Add5</warning>(users User)     { users.Name() }
+
+func (r *Ref) Pos() {
+	l1 := *r.Expr
+	l1.Pos()
+
+	l2 := (*r.Expr)
+	l2.Pos()
+
+	*r.Expr.<error>Pos</error> ()
+	(*r.Expr).Pos()
+}
