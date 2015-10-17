@@ -33,6 +33,10 @@ public class GoHighlightingAnnotatorTest extends GoCodeInsightFixtureTestCase {
   public void testReceiver() {
     doTest();
   }
+  
+  public void testFuncAndMethod() {
+    doTest();
+  }
 
   @Override
   protected boolean isWriteActionRequired() {
