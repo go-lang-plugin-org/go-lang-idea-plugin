@@ -262,11 +262,16 @@ public class GoSdkUtil {
       if (fromEnv != null) {
         return LocalFileSystem.getInstance().findFileByPath(fromEnv);
       }
-      return LocalFileSystem.getInstance().findFileByPath("/usr/local/go");
+      VirtualFile usrLocal = LocalFileSystem.getInstance().findFileByPath("/usr/local/go");
+      if (usrLocal != null) return usrLocal;
     }
     if (SystemInfo.isMac) {
       String macPorts = "/opt/local/lib/go";
-      return LocalFileSystem.getInstance().findFileByPath(macPorts);
+      String homeBrew = "/usr/local/Cellar/go";
+      File file = FileUtil.findFirstThatExist(macPorts, homeBrew);
+      if (file != null) {
+        return LocalFileSystem.getInstance().findFileByIoFile(file);
+      }
     }
     return null;
   }
