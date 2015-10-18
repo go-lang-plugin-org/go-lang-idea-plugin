@@ -20,21 +20,20 @@ import com.goide.runconfig.testing.frameworks.gocheck.GocheckFramework;
 import org.jetbrains.annotations.NotNull;
 
 public class GocheckEventsConverterTest extends GoEventsConverterTestCase {
-
-  public void testPass() throws Exception { doTest(); }
-  public void testAssertions() throws Exception { doTest(); }
-  public void testAssertionsInvalidFormat() throws Exception { doTest(); }
-  public void testPanic() throws Exception { doTest(); }
-  public void testPanicInvalidFormat() throws Exception { doTest(); }
-  public void testFixtureStdOut() throws Exception { doTest(); }
-  public void testSuiteSetUpError() throws Exception { doTest(); }
-  public void testSuiteTearDownError() throws Exception { doTest(); }
-  public void testTestSetUpError() throws Exception { doTest(); }
-  public void testTestTearDownError() throws Exception { doTest(); }
-  public void testTestErrorWithFixtures() throws Exception { doTest(); }
-  public void testTestAndTestTearDownError() throws Exception { doTest(); }
-  public void testTestBothFixturesError() throws Exception { doTest(); }
-  public void testSkippingTests() throws Exception { doTest(); }
+  public void testPass()                      throws Exception { doTest(); }
+  public void testAssertions()                throws Exception { doTest(); }
+  public void testAssertionsInvalidFormat()   throws Exception { doTest(); }
+  public void testPanic()                     throws Exception { doTest(); }
+  public void testPanicInvalidFormat()        throws Exception { doTest(); }
+  public void testFixtureStdOut()             throws Exception { doTest(); }
+  public void testSuiteSetUpError()           throws Exception { doTest(); }
+  public void testSuiteTearDownError()        throws Exception { doTest(); }
+  public void testTestSetUpError()            throws Exception { doTest(); }
+  public void testTestTearDownError()         throws Exception { doTest(); }
+  public void testTestErrorWithFixtures()     throws Exception { doTest(); }
+  public void testTestAndTestTearDownError()  throws Exception { doTest(); }
+  public void testTestBothFixturesError()     throws Exception { doTest(); }
+  public void testSkippingTests()             throws Exception { doTest(); }
 
   @NotNull
   @Override
