@@ -31,14 +31,14 @@ import static com.intellij.util.containers.ContainerUtil.newArrayList;
 public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
   private static final String USAGE = "/*usage*/";
 
-  private void doTest(String text) {
+  private void doTest(@NotNull String text) {
     List<Integer> offsets = allOccurrences(StringUtil.replace(text, "<caret>", ""), USAGE);
     String replace = StringUtil.replace(text, USAGE, "");
     myFixture.configureByText("a.go", replace);
     PsiElement atCaret = myFixture.getElementAtCaret();
     List<Integer> actual = ContainerUtil.map(myFixture.findUsages(atCaret), new Function<UsageInfo, Integer>() {
       @Override
-      public Integer fun(UsageInfo info) {
+      public Integer fun(@NotNull UsageInfo info) {
         return info.getNavigationOffset();
       }
     });
@@ -118,7 +118,7 @@ public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
            "}");
   }
 
-  private void doTestDoNotFind(String text) {
+  private void doTestDoNotFind(@NotNull String text) {
     myFixture.configureByText("a.go", text);
     PsiElement atCaret = myFixture.getElementAtCaret();
     try {

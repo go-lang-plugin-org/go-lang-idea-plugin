@@ -17,6 +17,7 @@
 package com.goide.quickfix;
 
 import com.goide.inspections.GoNoNewVariablesInspection;
+import org.jetbrains.annotations.NotNull;
 
 public class GoReplaceWithAssignmentStatementQuickFixTest extends GoQuickFixTestBase {
   @Override
@@ -25,6 +26,7 @@ public class GoReplaceWithAssignmentStatementQuickFixTest extends GoQuickFixTest
     myFixture.enableInspections(GoNoNewVariablesInspection.class);
   }
 
+  @NotNull
   @Override
   protected String getBasePath() {
     return "quickfixes/replace-with-assignment";

@@ -118,6 +118,7 @@ public class GoCoverageCalculationTest extends GoCodeInsightFixtureTestCase {
     return getTestName(true) + ".go";
   }
 
+  @NotNull
   protected String getBasePath() {
     return "coverage";
   }

@@ -23,6 +23,7 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.util.ThrowableComputable;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.LightProjectDescriptor;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -61,6 +62,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.testHighlighting(true, false, false, getTestName(true) + ".go");
   }
 
+  @NotNull
   @Override
   protected String getBasePath() {
     return "highlighting";
@@ -218,6 +220,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
 
   public void testPackageWithTestPrefix() throws Throwable {
     VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
+      @NotNull
       @Override
       public VirtualFile compute() throws Throwable {
         myFixture.getTempDirFixture().createFile("pack1/pack1_test.go", "package pack1_test; func Test() {}");
@@ -232,6 +235,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   
   public void testPackageWithTestPrefixNotInsideTestFile() throws Throwable {
     VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
+      @NotNull
       @Override
       public VirtualFile compute() throws Throwable {
         myFixture.getTempDirFixture().createFile("pack1/pack1.go", "package pack1_test; func Test() {}");
@@ -283,6 +287,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
 
   public void testDuplicatePackageAlias() throws Throwable {
     VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
+      @NotNull
       @Override
       public VirtualFile compute() throws Throwable {
         myFixture.getTempDirFixture().createFile("pack1/pack1.go", "package pack1; func Foo() {}");
@@ -298,6 +303,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
 
   public void testDuplicatePackageImport() throws Throwable {
     VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
+      @NotNull
       @Override
       public VirtualFile compute() throws Throwable {
         myFixture.getTempDirFixture().createFile("pack/pack1.go", "package pack; func Foo() {}");
@@ -312,6 +318,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
 
   public void testDuplicateFinalPackageComponent() throws Throwable {
     VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
+      @NotNull
       @Override
       public VirtualFile compute() throws Throwable {
         myFixture.getTempDirFixture().createFile("a/pack/pack1.go", "package pack; func Foo() {}");
@@ -327,6 +334,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
 
   public void testIgnoredBuildTag() throws Throwable {
     VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
+      @NotNull
       @Override
       public VirtualFile compute() throws Throwable {
         myFixture.getTempDirFixture().createFile("a/pack1.go", "package a; func Foo() {}");
@@ -348,6 +356,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
 
   public void testImportUnderscore() throws Throwable {
     VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
+      @NotNull
       @Override
       public VirtualFile compute() throws Throwable {
         myFixture.getTempDirFixture().createFile("a/pack/pack1.go", "package pack; func Foo() {}");

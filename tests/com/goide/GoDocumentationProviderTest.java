@@ -23,6 +23,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.testFramework.LightProjectDescriptor;
+import org.jetbrains.annotations.NotNull;
 
 public class GoDocumentationProviderTest extends GoCodeInsightFixtureTestCase {
   @Override
@@ -40,6 +41,7 @@ public class GoDocumentationProviderTest extends GoCodeInsightFixtureTestCase {
   public void testTypeResultDefinition()        { doTest(); } 
   public void testMultilineTypeListDefinition() { doTest(); }
   
+  @NotNull
   @Override
   protected String getBasePath() {
     return "doc";

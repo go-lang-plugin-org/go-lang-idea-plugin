@@ -127,6 +127,7 @@ public class GoConsoleFilterTest extends GoCodeInsightFixtureTestCase {
   @NotNull
   private VirtualFile createTestRoot(@NotNull final String rootName) throws IOException {
     return ApplicationManager.getApplication().runWriteAction(new ThrowableComputable<VirtualFile, IOException>() {
+      @NotNull
       @Override
       public VirtualFile compute() throws IOException {
         VirtualFile workingDirectory = myFixture.getTempDirFixture().findOrCreateDir(rootName);

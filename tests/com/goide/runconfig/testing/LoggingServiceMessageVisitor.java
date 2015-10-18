@@ -28,6 +28,7 @@ public class LoggingServiceMessageVisitor implements ServiceMessageVisitor {
   private final StringBuilder myLog = new StringBuilder();
   private String myIndent = "";
 
+  @NotNull
   public String getLog() {
     return myLog.toString();
   }
@@ -40,7 +41,7 @@ public class LoggingServiceMessageVisitor implements ServiceMessageVisitor {
     myIndent = StringUtil.trimEnd(myIndent, MY_INDENT);
   }
 
-  private void append(MessageWithAttributes message) {
+  private void append(@NotNull MessageWithAttributes message) {
     myLog.append(myIndent).append(message.getClass().getSimpleName()).append('\n');
     increaseIndent();
     increaseIndent();

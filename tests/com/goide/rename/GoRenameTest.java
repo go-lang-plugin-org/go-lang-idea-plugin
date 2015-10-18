@@ -18,6 +18,7 @@ package com.goide.rename;
 
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
+import org.jetbrains.annotations.NotNull;
 
 public class GoRenameTest extends GoCodeInsightFixtureTestCase {
   public void testAnonymousField() {
@@ -61,13 +62,13 @@ public class GoRenameTest extends GoCodeInsightFixtureTestCase {
     doTestDoNotRename("package foo; import \"fmt\" func foo() { <caret>fmt.Println() }");
   }
 
-  private void doTest(String before, String newName, String after) {
+  private void doTest(@NotNull String before, @NotNull String newName, @NotNull String after) {
     myFixture.configureByText("foo.go", before);
     myFixture.renameElementAtCaret(newName);
     myFixture.checkResult(after);
   }
 
-  private void doTestDoNotRename(String text) {
+  private void doTestDoNotRename(@NotNull String text) {
     myFixture.configureByText("foo.go", text);
     try {
       myFixture.renameElementAtCaret("bar");

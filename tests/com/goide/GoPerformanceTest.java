@@ -47,8 +47,8 @@ import com.intellij.util.ThrowableRunnable;
 import com.intellij.util.indexing.FileContentImpl;
 import com.intellij.util.indexing.IndexingDataKeys;
 import org.jetbrains.annotations.NotNull;
-import org.junit.experimental.categories.Category;
 import org.jetbrains.annotations.Nullable;
+import org.junit.experimental.categories.Category;
 
 import java.io.File;
 import java.io.IOException;
@@ -93,7 +93,7 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
     doCompletionTest("package main; func main() { slee<caret> }", 1, TimeUnit.SECONDS.toMillis(10));
   }
 
-  private void doCompletionTest(String source, final int invocationCount, long expectation) {
+  private void doCompletionTest(@NotNull String source, final int invocationCount, long expectation) {
     VirtualFile go = installTestData("go");
     if (go == null) return;
     
@@ -138,7 +138,7 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
   }
 
   @Nullable
-  private VirtualFile installTestData(String testData) {
+  private VirtualFile installTestData(@NotNull String testData) {
     if (!new File(myFixture.getTestDataPath(), testData).exists()) {
       System.err.println("For performance tests you need to have a docker project inside testData/" + getBasePath() + " directory");
       return null;
@@ -194,6 +194,7 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
     }).usesAllCPUCores().assertTiming();
   }
 
+  @NotNull
   @Override
   protected String getBasePath() {
     return "performance";

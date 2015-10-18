@@ -17,6 +17,7 @@
 package com.goide.quickfix;
 
 import com.goide.inspections.unresolved.GoUnresolvedReferenceInspection;
+import org.jetbrains.annotations.NotNull;
 
 public class GoCreateLocalVariableQuickFixTest extends GoQuickFixTestBase {
   public static final String CREATE_LOCAL_VARIABLE_A = "Create local variable 'a'";
@@ -27,6 +28,7 @@ public class GoCreateLocalVariableQuickFixTest extends GoQuickFixTestBase {
     myFixture.enableInspections(GoUnresolvedReferenceInspection.class);
   }
 
+  @NotNull
   @Override
   protected String getBasePath() {
     return "quickfixes/local-variable";

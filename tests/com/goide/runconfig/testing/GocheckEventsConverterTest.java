@@ -36,6 +36,7 @@ public class GocheckEventsConverterTest extends GoEventsConverterTestCase {
   public void testTestBothFixturesError() throws Exception { doTest(); }
   public void testSkippingTests() throws Exception { doTest(); }
 
+  @NotNull
   @Override
   protected String getBasePath() {
     return "testing/gocheck";

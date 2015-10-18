@@ -17,6 +17,7 @@
 package com.goide.quickfix;
 
 import com.goide.inspections.unresolved.GoUnresolvedReferenceInspection;
+import org.jetbrains.annotations.NotNull;
 
 public class GoCreateTypeQuickFixTest extends GoQuickFixTestBase {
   public static final String CREATE_TYPE_A = "Create type 'A'";
@@ -27,6 +28,7 @@ public class GoCreateTypeQuickFixTest extends GoQuickFixTestBase {
     myFixture.enableInspections(GoUnresolvedReferenceInspection.class);
   }
 
+  @NotNull
   @Override
   protected String getBasePath() {
     return "quickfixes/create-type";

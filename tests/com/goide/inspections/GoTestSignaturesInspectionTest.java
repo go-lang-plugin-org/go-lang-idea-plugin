@@ -18,6 +18,7 @@ package com.goide.inspections;
 
 import com.goide.quickfix.GoQuickFixTestBase;
 import com.intellij.testFramework.LightProjectDescriptor;
+import org.jetbrains.annotations.NotNull;
 
 public class GoTestSignaturesInspectionTest extends GoQuickFixTestBase {
   @Override
@@ -32,6 +33,7 @@ public class GoTestSignaturesInspectionTest extends GoQuickFixTestBase {
     return createMockProjectDescriptor();
   }
 
+  @NotNull
   @Override
   protected String getBasePath() {
     return "inspections/test-signatures";

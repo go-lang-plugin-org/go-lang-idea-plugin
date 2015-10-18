@@ -20,6 +20,7 @@ import com.intellij.lexer.Lexer;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.testFramework.LexerTestCase;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,8 +52,10 @@ public class GoLexerTest extends LexerTestCase {
     }
   }
 
+  @NotNull
   @Override
   protected Lexer createLexer() { return new GoLexer(); }
+  @NotNull
   @Override
   protected String getDirPath() { 
     return "../testData/lexer"; 

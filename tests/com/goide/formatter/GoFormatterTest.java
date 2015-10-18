@@ -19,9 +19,11 @@ package com.goide.formatter;
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.psi.codeStyle.CodeStyleManager;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoFormatterTest extends GoCodeInsightFixtureTestCase {
+  @NotNull
   @Override
   protected String getBasePath() {
     return "formatting";

@@ -39,6 +39,7 @@ public abstract class GoCompletionTestBase extends GoCodeInsightFixtureTestCase 
     GoModuleLibrariesService.getInstance(myModule).setLibraryRootUrls(url);
   }
 
+  @NotNull
   @Override
   protected String getBasePath() {
     return "completion";
@@ -50,7 +51,7 @@ public abstract class GoCompletionTestBase extends GoCodeInsightFixtureTestCase 
 
   protected enum CheckType {EQUALS, INCLUDES, EXCLUDES}
 
-  protected void doTestVariantsInner(CompletionType type, int count, CheckType checkType, String... variants) {
+  protected void doTestVariantsInner(@NotNull CompletionType type, int count, CheckType checkType, String... variants) {
     myFixture.complete(type, count);
     List<String> stringList = myFixture.getLookupElementStrings();
 
@@ -73,21 +74,21 @@ public abstract class GoCompletionTestBase extends GoCodeInsightFixtureTestCase 
     }
   }
 
-  protected void doTestVariants(String txt, CompletionType type, int count, CheckType checkType, String... variants) {
+  protected void doTestVariants(@NotNull String txt, @NotNull CompletionType type, int count, CheckType checkType, String... variants) {
     myFixture.configureByText("a.go", txt);
     failOnFileLoading();
     doTestVariantsInner(type, count, checkType, variants);
   }
 
-  protected void doTestInclude(String txt, String... variants) {
+  protected void doTestInclude(@NotNull String txt, String... variants) {
     doTestVariants(txt, CompletionType.BASIC, 1, CheckType.INCLUDES, variants);
   }
 
-  protected void doTestExclude(String txt, String... variants) {
+  protected void doTestExclude(@NotNull String txt, String... variants) {
     doTestVariants(txt, CompletionType.BASIC, 1, CheckType.EXCLUDES, variants);
   }
 
-  protected void doTestEquals(String txt, String... variants) {
+  protected void doTestEquals(@NotNull String txt, String... variants) {
     doTestVariants(txt, CompletionType.BASIC, 1, CheckType.EQUALS, variants);
   }
 

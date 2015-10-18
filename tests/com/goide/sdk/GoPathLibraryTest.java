@@ -33,6 +33,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.testFramework.fixtures.DefaultLightProjectDescriptor;
 import com.intellij.util.ui.UIUtil;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -41,9 +42,11 @@ import java.util.Collections;
 
 @SuppressWarnings("ConstantConditions")
 public class GoPathLibraryTest extends GoCodeInsightFixtureTestCase {
+  @NotNull
   @Override
   protected LightProjectDescriptor getProjectDescriptor() {
     return new DefaultLightProjectDescriptor() {
+      @NotNull
       @Override
       public ModuleType getModuleType() {
         return GoModuleType.getInstance();
@@ -162,7 +165,7 @@ public class GoPathLibraryTest extends GoCodeInsightFixtureTestCase {
     assertLibrary(Collections.singletonList(subdir.getUrl()), "temp:///src", newDirectory.getUrl());
   }
 
-  private void addContentRoot(VirtualFile contentRoot) {
+  private void addContentRoot(@NotNull VirtualFile contentRoot) {
     ModifiableRootModel model = ModuleRootManager.getInstance(myModule).getModifiableModel();
     try {
       model.addContentEntry(contentRoot);
@@ -173,7 +176,7 @@ public class GoPathLibraryTest extends GoCodeInsightFixtureTestCase {
     }
   }
 
-  private void assertLibrary(Collection<String> libUrls, String... exclusionUrls) {
+  private void assertLibrary(@NotNull Collection<String> libUrls, String... exclusionUrls) {
     UIUtil.dispatchAllInvocationEvents();
 
     GoModuleLibrariesInitializer initializer = myModule.getComponent(GoModuleLibrariesInitializer.class);

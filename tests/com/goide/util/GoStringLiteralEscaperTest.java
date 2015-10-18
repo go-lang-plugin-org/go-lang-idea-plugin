@@ -23,15 +23,13 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.psi.LiteralTextEscaper;
 import com.intellij.psi.PsiLanguageInjectionHost;
-import com.intellij.testFramework.PlatformTestCase;
 import com.intellij.testFramework.PlatformTestUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
 public class GoStringLiteralEscaperTest extends GoCodeInsightFixtureTestCase {
-
-  private static String decodeRange(GoStringLiteral expr, TextRange range) {
+  private static String decodeRange(@NotNull GoStringLiteral expr, @NotNull TextRange range) {
     final StringBuilder builder = new StringBuilder();
     expr.createLiteralTextEscaper().decode(range, builder);
     return builder.toString();

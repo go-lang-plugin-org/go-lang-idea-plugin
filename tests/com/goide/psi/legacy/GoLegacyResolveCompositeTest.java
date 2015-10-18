@@ -16,7 +16,10 @@
 
 package com.goide.psi.legacy;
 
+import org.jetbrains.annotations.NotNull;
+
 public class GoLegacyResolveCompositeTest extends GoLegacyResolveTestBase {
+  @NotNull
   @Override
   protected String getBasePath() { return "psi/resolve/composite"; }
 

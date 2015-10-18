@@ -119,7 +119,7 @@ public class GoBuildMatcherTest extends GoCodeInsightFixtureTestCase {
     assertFalse(matcher.matchBuildFlag("linux,amd64,bar"));
   }
 
-  private void checkMatchFile(GoBuildMatcher matcher, boolean expected, @NotNull String fileName, @NotNull String text) {
+  private void checkMatchFile(@NotNull GoBuildMatcher matcher, boolean expected, @NotNull String fileName, @NotNull String text) {
     myFixture.configureByText(fileName, text + "\n\n package main\n\n func main() {}");
     assertEquals(fileName + ":" + text, expected, matcher.matchFile(myFixture.getFile()));
   }

@@ -18,6 +18,7 @@ package com.goide.editor;
 
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.intellij.testFramework.TestDataPath;
+import org.jetbrains.annotations.NotNull;
 
 @TestDataPath("$PROJECT_ROOT/testData/colorHighlighting")
 public class GoHighlightingAnnotatorTest extends GoCodeInsightFixtureTestCase {
@@ -47,6 +48,7 @@ public class GoHighlightingAnnotatorTest extends GoCodeInsightFixtureTestCase {
     myFixture.testHighlighting(false, true, false, getTestName(true) + ".go");
   }
 
+  @NotNull
   @Override
   protected String getBasePath() {
     return "colorHighlighting";

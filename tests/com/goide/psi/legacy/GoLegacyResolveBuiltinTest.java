@@ -17,8 +17,10 @@
 package com.goide.psi.legacy;
 
 import com.intellij.testFramework.LightProjectDescriptor;
+import org.jetbrains.annotations.NotNull;
 
 public class GoLegacyResolveBuiltinTest extends GoLegacyResolveTestBase {
+  @NotNull
   @Override
   protected String getBasePath() { return "psi/resolve/builtin"; }
 

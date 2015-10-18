@@ -26,6 +26,7 @@ import com.intellij.openapi.util.ThrowableComputable;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
+import org.jetbrains.annotations.NotNull;
 
 public class GoImportOptimizerTest extends GoCodeInsightFixtureTestCase {
   public void testUnusedImports() { doTest(); }
@@ -50,6 +51,7 @@ public class GoImportOptimizerTest extends GoCodeInsightFixtureTestCase {
   }
   public void testImportWithMultiplePackages() throws Throwable {
     VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
+      @NotNull
       @Override
       public VirtualFile compute() throws Throwable {
         VirtualFile pack = myFixture.getTempDirFixture().findOrCreateDir("pack");
@@ -92,6 +94,7 @@ public class GoImportOptimizerTest extends GoCodeInsightFixtureTestCase {
     }
   
 
+  @NotNull
   @Override
   protected String getBasePath() {
     return "imports/optimize";

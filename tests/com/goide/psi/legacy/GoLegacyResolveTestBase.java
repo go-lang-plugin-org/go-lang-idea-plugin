@@ -91,7 +91,7 @@ public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCa
   }
 
   @NotNull
-  private static String getFileName(PsiElement resolve) {
+  private static String getFileName(@NotNull PsiElement resolve) {
     return resolve instanceof PsiFile ? ((PsiFile)resolve).getName() : resolve.getContainingFile().getName();
   }
 
@@ -138,13 +138,13 @@ public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCa
       new FilteringProcessor<VirtualFile>(
         new Condition<VirtualFile>() {
           @Override
-          public boolean value(VirtualFile virtualFile) {
+          public boolean value(@NotNull VirtualFile virtualFile) {
             return !virtualFile.isDirectory() && virtualFile.getName().endsWith(".go");
           }
         },
         new Processor<VirtualFile>() {
           @Override
-          public boolean process(VirtualFile virtualFile) {
+          public boolean process(@NotNull VirtualFile virtualFile) {
             PsiFile goFile = myFixture.getPsiManager().findFile(virtualFile);
             assert goFile instanceof GoFile;
             processPsiFile((GoFile)goFile);

@@ -21,12 +21,14 @@ import com.intellij.core.CoreApplicationEnvironment;
 import com.intellij.lang.LanguageExtensionPoint;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.testFramework.ParsingTestCase;
+import org.jetbrains.annotations.NotNull;
 
 public class GoParserTest extends ParsingTestCase {
   public GoParserTest() {
     super("parser", "go", new GoParserDefinition());
   }
 
+  @NotNull
   @Override
   protected String getTestDataPath() {
     return "testData";

@@ -53,8 +53,10 @@ abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsi
     return new File("testData/" + getBasePath()).getAbsolutePath();
   }
 
+  @NotNull
   protected static DefaultLightProjectDescriptor createMockProjectDescriptor() {
     return new DefaultLightProjectDescriptor() {
+      @NotNull
       @Override
       public Sdk getSdk() {
         return createMockSdk("1.1.2");

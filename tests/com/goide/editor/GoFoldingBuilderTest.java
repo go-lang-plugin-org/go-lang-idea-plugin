@@ -17,8 +17,10 @@
 package com.goide.editor;
 
 import com.goide.GoCodeInsightFixtureTestCase;
+import org.jetbrains.annotations.NotNull;
 
 public class GoFoldingBuilderTest extends GoCodeInsightFixtureTestCase {
+  @NotNull
   @Override
   protected String getBasePath() {
     return "folding";

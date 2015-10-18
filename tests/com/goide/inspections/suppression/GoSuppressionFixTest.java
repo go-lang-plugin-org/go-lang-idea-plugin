@@ -119,6 +119,7 @@ public class GoSuppressionFixTest extends GoQuickFixTestBase {
     return false;
   }
 
+  @NotNull
   @Override
   protected String getBasePath() {
     return "inspections/suppression/fix";

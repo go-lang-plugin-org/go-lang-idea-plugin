@@ -17,6 +17,7 @@
 package com.goide.quickfix;
 
 import com.goide.inspections.unresolved.GoUnresolvedReferenceInspection;
+import org.jetbrains.annotations.NotNull;
 
 public class GoCreateGlobalVariableQuickFixTest extends GoQuickFixTestBase {
   @Override
@@ -25,6 +26,7 @@ public class GoCreateGlobalVariableQuickFixTest extends GoQuickFixTestBase {
     myFixture.enableInspections(GoUnresolvedReferenceInspection.class);
   }
 
+  @NotNull
   @Override
   protected String getBasePath() {
     return "quickfixes/global-variable";
