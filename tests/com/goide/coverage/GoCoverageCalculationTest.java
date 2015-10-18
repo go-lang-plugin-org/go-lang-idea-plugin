@@ -94,7 +94,7 @@ public class GoCoverageCalculationTest extends GoCodeInsightFixtureTestCase {
   }
 
   @NotNull
-  private GoCoverageAnnotator annotate(@NotNull GoCoverageProjectData data) throws IOException {
+  private GoCoverageAnnotator annotate(@NotNull GoCoverageProjectData data) {
     GoCoverageAnnotator annotator = new GoCoverageAnnotator(myFixture.getProject());
     annotator.annotateAllFiles(data, getRoot());
     return annotator;
