@@ -37,15 +37,11 @@ public class GoFormatterTest extends GoCodeInsightFixtureTestCase {
   public void testTypeEnter()                       { doTestEnter(); }
   public void testSpacesInArithmeticExpressions()   { doTest(); }
 
-  public void doTest() {
-    doTest(null);
-  }
+  private void doTest() { doTest(null); }
 
-  public void doTestEnter() {
-    doTest('\n');
-  }
+  private void doTestEnter() { doTest('\n'); }
 
-  public void doTest(@Nullable Character c) {
+  private void doTest(@Nullable Character c) {
     String testName = getTestName(true);
     myFixture.configureByFile(testName + ".go");
     String after = doTest(c, testName);

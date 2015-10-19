@@ -51,7 +51,7 @@ public abstract class GoCompletionTestBase extends GoCodeInsightFixtureTestCase 
 
   protected enum CheckType {EQUALS, INCLUDES, EXCLUDES}
 
-  protected void doTestVariantsInner(@NotNull CompletionType type, int count, CheckType checkType, String... variants) {
+  private void doTestVariantsInner(@NotNull CompletionType type, int count, CheckType checkType, String... variants) {
     myFixture.complete(type, count);
     List<String> stringList = myFixture.getLookupElementStrings();
 

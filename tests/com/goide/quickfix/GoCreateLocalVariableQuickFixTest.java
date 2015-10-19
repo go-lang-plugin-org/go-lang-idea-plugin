@@ -20,7 +20,7 @@ import com.goide.inspections.unresolved.GoUnresolvedReferenceInspection;
 import org.jetbrains.annotations.NotNull;
 
 public class GoCreateLocalVariableQuickFixTest extends GoQuickFixTestBase {
-  public static final String CREATE_LOCAL_VARIABLE_A = "Create local variable 'a'";
+  private static final String CREATE_LOCAL_VARIABLE_A = "Create local variable 'a'";
 
   @Override
   protected void setUp() throws Exception {

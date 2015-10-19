@@ -20,7 +20,7 @@ import com.goide.inspections.unresolved.GoUnresolvedReferenceInspection;
 import org.jetbrains.annotations.NotNull;
 
 public class GoCreateTypeQuickFixTest extends GoQuickFixTestBase {
-  public static final String CREATE_TYPE_A = "Create type 'A'";
+  private static final String CREATE_TYPE_A = "Create type 'A'";
 
   @Override
   protected void setUp() throws Exception {

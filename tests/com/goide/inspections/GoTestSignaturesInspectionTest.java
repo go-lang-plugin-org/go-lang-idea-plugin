@@ -39,7 +39,7 @@ public class GoTestSignaturesInspectionTest extends GoQuickFixTestBase {
     return "inspections/test-signatures";
   }
 
-  protected void doTest() {
+  private void doTest() {
     String testName = getTestName(true);
     myFixture.configureByFile(testName + "_test.go");
     myFixture.checkHighlighting();
