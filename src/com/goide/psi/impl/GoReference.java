@@ -305,14 +305,10 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     
     if (prevDot(parent)) return false;
 
-    PsiElement next =  PsiTreeUtil.nextVisibleLeaf(myElement);
-    boolean nextDot = next instanceof LeafElement && ((LeafElement)next).getElementType() == GoTypes.DOT;
-
-    if (nextDot && !processImports(file, processor, state, myElement)) return false;
     if (!processBlock(processor, state, true)) return false;
     if (!processReceiver(processor, state, true)) return false;
     if (!processParameters(processor, state, true)) return false;
-    if (!nextDot && !processImports(file, processor, state, myElement)) return false;
+    if (!processImports(file, processor, state, myElement)) return false;
     if (!processFileEntities(file, processor, state, true)) return false;
     if (!processDirectory(file.getOriginalFile().getParent(), file, file.getPackageName(), processor, state, true)) return false;
     if (!processBuiltin(processor, state, myElement)) return false;
