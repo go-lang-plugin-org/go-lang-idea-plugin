@@ -62,6 +62,8 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.goide.dlv.protocol.DlvApi.*;
+import static com.intellij.util.ObjectUtils.assertNotNull;
+import static com.intellij.util.ObjectUtils.tryCast;
 
 public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> implements Disposable {
   public static boolean isDlvDisabled = SystemInfo.isWindows || SystemInfo.is32Bit;
@@ -119,7 +121,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
 
   @NotNull
   private DlvCommandProcessor getProcessor() {
-    return ((DlvVm)getVm()).getCommandProcessor();
+    return assertNotNull(tryCast(getVm(), DlvVm.class)).getCommandProcessor();
   }
 
   public DlvDebugProcess(@NotNull XDebugSession session, @NotNull RemoteVmConnection connection, @Nullable ExecutionResult er) {
