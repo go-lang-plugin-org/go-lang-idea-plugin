@@ -99,9 +99,9 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
   protected GoExecutor patchExecutor(@NotNull GoExecutor executor) throws ExecutionException {
     if (isDebug()) {
       String dlvPath = System.getProperty("dlv.path");
-      File dlv = dlvPath != null ? 
-                 new File(dlvPath) : 
-                 new File(GoUtil.getPlugin().getPath(), "lib/dlv/" + (SystemInfo.isMac ? "mac" : "linux") + "/" + GoConstants.DELVE_EXECUTABLE_NAME);
+      File dlv = StringUtil.isNotEmpty(dlvPath) 
+                 ? new File(dlvPath) 
+                 : new File(GoUtil.getPlugin().getPath(), "lib/dlv/" + (SystemInfo.isMac ? "mac" : "linux") + "/" + GoConstants.DELVE_EXECUTABLE_NAME);
       if (dlv.exists() && !dlv.canExecute()) {
         //noinspection ResultOfMethodCallIgnored
         dlv.setExecutable(true, false);
