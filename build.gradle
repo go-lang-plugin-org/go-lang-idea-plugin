@@ -43,6 +43,7 @@ allprojects {
     pluginName 'Go'
     plugins 'coverage'
     downloadSources Boolean.valueOf(sources)
+    updateSinceUntilBuild = false
     publish {
       username publishUsername
       password publishPassword
