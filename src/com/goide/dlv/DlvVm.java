@@ -44,18 +44,13 @@ public class DlvVm extends VmBase {
     commandProcessor = new DlvCommandProcessor() {
       @Override
       public boolean write(@NotNull Request message) throws IOException {
-        return vmHelper.fun(message);
+        ByteBuf content = message.getBuffer();
+        LOG.info("OUT: " + content.toString(CharsetToolkit.UTF8_CHARSET));
+        return vmHelper.write(content);
       }
     };
 
-    vmHelper = new StandaloneVmHelper(this, commandProcessor) {
-      @Override
-      public boolean fun(@NotNull Request message) {
-        ByteBuf content = message.getBuffer();
-        LOG.info("OUT: " + content.toString(CharsetToolkit.UTF8_CHARSET));
-        return write(content);
-      }
-    };
+    vmHelper = new StandaloneVmHelper(this, commandProcessor);
     vmHelper.setChannel(channel);
 
     channel.pipeline().addLast(new JsonObjectDecoder(), new SimpleChannelInboundHandlerAdapter() {
