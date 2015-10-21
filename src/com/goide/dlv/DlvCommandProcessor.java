@@ -49,6 +49,10 @@ public abstract class DlvCommandProcessor extends CommandProcessor<JsonReaderEx,
   public void acceptNonSequence(JsonReaderEx message) {
   }
 
+  public void processIncomingJson(@NotNull JsonReaderEx reader) {
+    getMessageManager().processIncoming(reader);
+  }
+
   @Override
   public void call(@NotNull DlvResponse response, @NotNull RequestCallback<DlvResponse> callback) {
     if (response.result() != null) {

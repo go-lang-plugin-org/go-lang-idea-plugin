@@ -65,7 +65,7 @@ public class DlvVm extends VmBase {
           LOG.info("IN: " + ((ByteBuf)message).toString(CharsetToolkit.UTF8_CHARSET));
           CharSequence string = ChannelBufferToString.readChars((ByteBuf)message);
           JsonReaderEx ex = new JsonReaderEx(string);
-          getCommandProcessor().getMessageManager().processIncoming(ex);
+          getCommandProcessor().processIncomingJson(ex);
         }
       }
     });
