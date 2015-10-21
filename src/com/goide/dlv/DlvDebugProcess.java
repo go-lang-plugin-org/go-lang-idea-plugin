@@ -19,6 +19,7 @@ package com.goide.dlv;
 import com.goide.GoFileType;
 import com.goide.dlv.breakpoint.DlvBreakpointProperties;
 import com.goide.dlv.breakpoint.DlvBreakpointType;
+import com.goide.dlv.protocol.DlvApi;
 import com.goide.dlv.protocol.DlvRequest;
 import com.intellij.execution.ExecutionResult;
 import com.intellij.execution.ui.ExecutionConsole;
@@ -51,8 +52,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.concurrency.Promise;
 import org.jetbrains.debugger.DebugProcessImpl;
+import org.jetbrains.debugger.Location;
+import org.jetbrains.debugger.StepAction;
 import org.jetbrains.debugger.connection.RemoteVmConnection;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -82,9 +86,9 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
 
       final XBreakpoint<DlvBreakpointProperties> find = findBreak(o.breakPoint);
       send(new DlvRequest.StacktraceGoroutine())
-        .done(new Consumer<List<Location>>() {
+        .done(new Consumer<List<DlvApi.Location>>() {
           @Override
-          public void consume(@NotNull List<Location> locations) {
+          public void consume(@NotNull List<DlvApi.Location> locations) {
             DlvSuspendContext context = new DlvSuspendContext(o.currentThread.id, locations, getProcessor());
             XDebugSession session = getSession();
             if (find == null) {
@@ -120,12 +124,18 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
 
   public DlvDebugProcess(@NotNull XDebugSession session, @NotNull RemoteVmConnection connection, @Nullable ExecutionResult er) {
     super(session, connection, new MyEditorsProvider(), null, er);
-    breakpointHandlers = new XBreakpointHandler[]{new MyBreakpointHandler()};
+  }
+
+  @NotNull
+  @Override
+  protected XBreakpointHandler<?>[] createBreakpointHandlers() {
+    return new XBreakpointHandler[]{new MyBreakpointHandler()};
   }
 
   @NotNull
   @Override
   public ExecutionConsole createConsole() {
+    ExecutionResult executionResult = getExecutionResult();
     return executionResult == null ? super.createConsole() : executionResult.getExecutionConsole();
   }
 
@@ -141,13 +151,13 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
 
   @Override
   public boolean checkCanInitBreakpoints() {
-    if (connection.getState().getStatus() == ConnectionStatus.CONNECTED) {
+    if (getConnection().getState().getStatus() == ConnectionStatus.CONNECTED) {
       // breakpointsInitiated could be set in another thread and at this point work (init breakpoints) could be not yet performed
       return initBreakpointHandlersAndSetBreakpoints(false);
     }
 
     if (connectedListenerAdded.compareAndSet(false, true)) {
-      connection.addListener(new SocketConnectionListener() {
+      getConnection().addListener(new SocketConnectionListener() {
         @Override
         public void statusChanged(@NotNull ConnectionStatus status) {
           if (status == ConnectionStatus.CONNECTED) {
@@ -187,23 +197,27 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
   }
 
   @Override
-  public void startStepOver() {
-    command(NEXT);
+  protected void continueVm(@NotNull StepAction stepAction) {
+    switch (stepAction) {
+      case CONTINUE:
+        command(CONTINUE);
+        break;
+      case IN:
+        command(STEP);
+        break;
+      case OVER:
+        command(NEXT);
+        break;
+      case OUT:
+        // todo
+        break;
+    }
   }
 
+  @NotNull
   @Override
-  public void startStepInto() {
-    command(STEP);
-  }
-
-  @Override
-  public void startStepOut() {
-    // todo
-  }
-
-  @Override
-  public void resume() {
-    command(CONTINUE);
+  public List<Location> getLocationsForBreakpoint(@NotNull XLineBreakpoint<?> breakpoint, boolean b) {
+    return Collections.emptyList();
   }
 
   @Override

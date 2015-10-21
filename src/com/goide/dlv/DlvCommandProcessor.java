@@ -25,29 +25,15 @@ import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.concurrency.Promise;
-import org.jetbrains.jsonProtocol.Request;
 import org.jetbrains.rpc.CommandProcessor;
-import org.jetbrains.rpc.MessageManager;
-import org.jetbrains.rpc.MessageWriter;
+import org.jetbrains.rpc.CommandProcessorKt;
 import org.jetbrains.rpc.RequestCallback;
 
-import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, DlvResponse, DlvResponse> {
-  @NotNull private final MessageWriter myWriter;
-
-  public DlvCommandProcessor(@NotNull MessageWriter writer) {
-    myWriter = writer;
-  }
-
-  @Override
-  public boolean write(@NotNull Request message) throws IOException {
-    return myWriter.fun(message);
-  }
-
+public abstract class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, DlvResponse, DlvResponse> {
   @Nullable
   @Override
   public DlvResponse readIfHasSequence(@NotNull JsonReaderEx message) {
@@ -61,10 +47,6 @@ public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, DlvRespo
 
   @Override
   public void acceptNonSequence(JsonReaderEx message) {
-  }
-
-  public MessageManager<Request, JsonReaderEx, DlvResponse, DlvResponse> getMessageManager() {
-    return messageManager;
   }
 
   @Override
@@ -111,7 +93,7 @@ public class DlvCommandProcessor extends CommandProcessor<JsonReaderEx, DlvRespo
         return arguments[0];
       }
     }
-    LOG.error("Unknown response " + method + ", please register an appropriate request into com.goide.dlv.protocol.DlvRequest");
+    CommandProcessorKt.getLOG().error("Unknown response " + method + ", please register an appropriate request into com.goide.dlv.protocol.DlvRequest");
     return Object.class;
   }
 }

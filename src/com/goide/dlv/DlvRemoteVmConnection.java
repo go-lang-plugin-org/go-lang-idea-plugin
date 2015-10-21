@@ -20,10 +20,10 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.concurrency.AsyncPromise;
 import org.jetbrains.debugger.Vm;
 import org.jetbrains.debugger.connection.RemoteVmConnection;
 import org.jetbrains.io.NettyUtil;
+import org.jetbrains.util.concurrency.AsyncPromise;
 
 import java.net.InetSocketAddress;
 
