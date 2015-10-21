@@ -52,6 +52,12 @@ allprojects {
   }
 }
 
+afterEvaluate {
+    tasks.getByName('runIdea') {
+        systemProperty 'dlv.path', customDlvPath
+    }
+}
+
 apply plugin: 'idea'
 idea {
   project {
