@@ -22,12 +22,7 @@
   <category>Custom Languages</category>
 
   <description><![CDATA[
-    <h2>Support for Go programming language.</h2>
-    <p>Alpha pre-release of the 1.0.0 version.</p>
-
-    <h3>Compatibility</h3>
-    <p>Plugin can be installed on IntelliJ platform 141.1532 or greater and less than 141.9999.
-    It corresponds to IntelliJ IDEA 14.1.4, WebStorm 10.0.4, PhpStorm 9.0, RubyMine 7.1.3 and PyCharm 4.5.2</p>
+    Support for Go programming language.
     ]]></description>
 
   <change-notes>
