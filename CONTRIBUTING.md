@@ -107,7 +107,7 @@ log will be displayed to you.
 
 We're syncing the plugin source with the [Delve](https://github.com/derekparker/delve) debugger via https://github.com/ignatov/delve.
 
-If you want to customize delve distribution that's used in the plugin you can use `-Ddlv.path` for setting up the path to your local version of dlv.
+If you want to customize delve distribution that's used in the plugin you can use `-Dorg.gradle.project.customDlvPath` for setting up the path to your local version of dlv.
 
 ### Checking out and building Google Go
 
