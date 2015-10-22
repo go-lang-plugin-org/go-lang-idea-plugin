@@ -216,12 +216,7 @@ public class GoExecutor {
               if (!success && myShowOutputOnError) {
                 showOutput(myProcessHandler, historyProcessListener);
               }
-              ApplicationManager.getApplication().runWriteAction(new Runnable() {
-                @Override
-                public void run() {
-                  VirtualFileManager.getInstance().syncRefresh();
-                }
-              });
+              VirtualFileManager.getInstance().asyncRefresh(null);
             }
           });
         }
