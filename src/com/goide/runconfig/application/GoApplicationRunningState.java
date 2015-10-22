@@ -98,10 +98,7 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
   @Override
   protected GoExecutor patchExecutor(@NotNull GoExecutor executor) throws ExecutionException {
     if (isDebug()) {
-      String dlvPath = System.getProperty("dlv.path");
-      File dlv = StringUtil.isNotEmpty(dlvPath) ? 
-                 new File(dlvPath) :
-                 new File(GoUtil.getPlugin().getPath(), "lib/dlv/" + (SystemInfo.isMac ? "mac" : "linux") + "/" + GoConstants.DELVE_EXECUTABLE_NAME);
+      File dlv = dlv();
       if (dlv.exists() && !dlv.canExecute()) {
         //noinspection ResultOfMethodCallIgnored
         dlv.setExecutable(true, false);
@@ -110,6 +107,14 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
         .withParameters("--listen=localhost:" + myDebugPort, "--headless=true", "exec", myOutputFilePath, "--");
     }
     return executor.withExePath(myOutputFilePath);
+  }
+
+  @NotNull
+  private static File dlv() {
+    String dlvPath = System.getProperty("dlv.path");
+    if (StringUtil.isNotEmpty(dlvPath)) return new File(dlvPath);
+    return new File(GoUtil.getPlugin().getPath(),
+                    "lib/dlv/" + (SystemInfo.isMac ? "mac" : "linux") + "/" + GoConstants.DELVE_EXECUTABLE_NAME);
   }
 
   public void setOutputFilePath(@NotNull String outputFilePath) {
