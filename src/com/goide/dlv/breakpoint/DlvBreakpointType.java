@@ -59,7 +59,7 @@ public class DlvBreakpointType extends XLineBreakpointType<DlvBreakpointProperti
 
   private static boolean isLineBreakpointAvailable(@NotNull VirtualFile file, int line, @NotNull Project project) {
     Document document = FileDocumentManager.getInstance().getDocument(file);
-    if (document == null || document.getLineEndOffset(line) == document.getLineStartOffset(line)) return false;
+    if (document == null || line == -1 || document.getLineEndOffset(line) == document.getLineStartOffset(line)) return false;
     Checker canPutAtChecker = new Checker();
     XDebuggerUtil.getInstance().iterateLine(project, document, line, canPutAtChecker);
     return canPutAtChecker.isLineBreakpointAvailable();
