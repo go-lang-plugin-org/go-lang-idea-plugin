@@ -145,12 +145,12 @@ public class GoBuildTargetSettings implements PersistentStateComponent<GoBuildTa
   }
 
   static class GoBuildTargetSettingsState {
-    @NotNull private String os = DEFAULT;
-    @NotNull private String arch = DEFAULT;
-    @NotNull private ThreeState cgo = ThreeState.UNSURE;
-    @NotNull private String compiler = ANY_COMPILER;
-    @NotNull private String goVersion = DEFAULT;
-    @NotNull private String[] customFlags = ArrayUtil.EMPTY_STRING_ARRAY;
+    @NotNull public String os = DEFAULT;
+    @NotNull public String arch = DEFAULT;
+    @NotNull public ThreeState cgo = ThreeState.UNSURE;
+    @NotNull public String compiler = ANY_COMPILER;
+    @NotNull public String goVersion = DEFAULT;
+    @NotNull public String[] customFlags = ArrayUtil.EMPTY_STRING_ARRAY;
   }
   
   private void notifyChange() {
