@@ -76,27 +76,24 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
 
     for (GoVarDeclaration varDeclaration : PsiTreeUtil.findChildrenOfType(file, GoVarDeclaration.class)) {
       TextRange range = processList(varDeclaration.getLparen(), varDeclaration.getRparen(), varDeclaration.getVarSpecList().size());
-      if (range == null) {
-        continue;
+      if (range != null) {
+        result.add(new FoldingDescriptor(varDeclaration, range));
       }
-      result.add(new FoldingDescriptor(varDeclaration, range));
     }
 
     for (GoTypeDeclaration typeDeclaration : PsiTreeUtil.findChildrenOfType(file, GoTypeDeclaration.class)) {
       TextRange range = processList(typeDeclaration.getLparen(), typeDeclaration.getRparen(), typeDeclaration.getTypeSpecList().size());
-      if (range == null) {
-        continue;
+      if (range != null) {
+        result.add(new FoldingDescriptor(typeDeclaration, range));
       }
-      result.add(new FoldingDescriptor(typeDeclaration, range));
     }
 
     for (GoCompositeLit compositeLit : PsiTreeUtil.findChildrenOfType(file, GoCompositeLit.class)) {
       GoLiteralValue literalValue = compositeLit.getLiteralValue();
       TextRange range = processList(literalValue.getLbrace(), literalValue.getRbrace(), literalValue.getElementList().size());
-      if (range == null) {
-        continue;
+      if (range != null) {
+        result.add(new FoldingDescriptor(literalValue, range));
       }
-      result.add(new FoldingDescriptor(literalValue, range));
     }
 
     if (!quick) {
