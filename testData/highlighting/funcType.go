@@ -75,3 +75,15 @@ func _() {
 		}
 	}
 }
+
+func FA() (int, string) {
+	return 0, "abc"
+}
+
+func FB(a int, s string) {
+}
+
+func _() {
+	FB(123, "abc")
+	FB(FA())
+}
