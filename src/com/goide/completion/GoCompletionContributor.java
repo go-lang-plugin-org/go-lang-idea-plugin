@@ -42,6 +42,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
+import static com.intellij.codeInsight.completion.PrioritizedLookupElement.withPriority;
+
 public class GoCompletionContributor extends CompletionContributor {
   public GoCompletionContributor() {
     extend(CompletionType.BASIC, importString(), new GoImportPathsCompletionProvider());
@@ -63,19 +65,20 @@ public class GoCompletionContributor extends CompletionContributor {
       PsiDirectory directory = file.getParent();
       Collection<String> packagesInDirectory = GoUtil.getAllPackagesInDirectory(directory, true);
       for (String packageName : packagesInDirectory) {
-        result.addElement(LookupElementBuilder.create(packageName));
+        result.addElement(withPriority(LookupElementBuilder.create(packageName), GoCompletionUtil.PACKAGE_PRIORITY - 1));
         if (isTestFile) {
-          result.addElement(LookupElementBuilder.create(packageName + GoConstants.TEST_SUFFIX));
+          result.addElement(withPriority(LookupElementBuilder.create(packageName + GoConstants.TEST_SUFFIX),
+                                         GoCompletionUtil.PACKAGE_PRIORITY));
         }
       }
 
       if (packagesInDirectory.isEmpty() && directory != null) {
         String packageFromDirectory = GoPsiImplUtil.getLocalPackageName(directory.getName());
         if (!packageFromDirectory.isEmpty()) {
-          result.addElement(LookupElementBuilder.create(packageFromDirectory));
+          result.addElement(withPriority(LookupElementBuilder.create(packageFromDirectory), GoCompletionUtil.PACKAGE_PRIORITY - 1));
         }
       }
-      result.addElement(LookupElementBuilder.create(GoConstants.MAIN));
+      result.addElement(withPriority(LookupElementBuilder.create(GoConstants.MAIN), GoCompletionUtil.PACKAGE_PRIORITY - 2));
     }
     super.fillCompletionVariants(parameters, result);
   }
