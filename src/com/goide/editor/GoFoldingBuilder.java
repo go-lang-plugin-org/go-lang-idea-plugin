@@ -21,7 +21,7 @@ import com.goide.GoTypes;
 import com.goide.psi.*;
 import com.intellij.codeInsight.folding.CodeFoldingSettings;
 import com.intellij.lang.ASTNode;
-import com.intellij.lang.folding.FoldingBuilderEx;
+import com.intellij.lang.folding.CustomFoldingBuilder;
 import com.intellij.lang.folding.FoldingDescriptor;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.DumbAware;
@@ -39,14 +39,15 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Set;
 
-public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
-  @NotNull
+public class GoFoldingBuilder extends CustomFoldingBuilder implements DumbAware {
   @Override
-  public FoldingDescriptor[] buildFoldRegions(@NotNull PsiElement root, @NotNull Document document, boolean quick) {
-    if (!(root instanceof GoFile)) return FoldingDescriptor.EMPTY;
+  protected void buildLanguageFoldRegions(@NotNull final List<FoldingDescriptor> result,
+                                          @NotNull PsiElement root,
+                                          @NotNull Document document,
+                                          boolean quick) {
+    if (!(root instanceof GoFile)) return;
     GoFile file = (GoFile)root;
-    if (!file.isContentsLoaded()) return FoldingDescriptor.EMPTY;
-    final List<FoldingDescriptor> result = ContainerUtil.newArrayList();
+    if (!file.isContentsLoaded()) return;
 
     GoImportList importList = ((GoFile)root).getImportList();
     if (importList != null) {
@@ -113,7 +114,6 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
         }
       });
     }
-    return result.toArray(new FoldingDescriptor[result.size()]);
   }
 
   @Nullable
@@ -178,7 +178,7 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
 
   @Nullable
   @Override
-  public String getPlaceholderText(@NotNull ASTNode node) {
+  protected String getLanguagePlaceholderText(@NotNull ASTNode node, @NotNull TextRange range) {
     PsiElement psi = node.getPsi();
     IElementType type = node.getElementType();
     if (psi instanceof GoBlock || psi instanceof GoStructType ||
@@ -191,7 +191,7 @@ public class GoFoldingBuilder extends FoldingBuilderEx implements DumbAware {
   }
 
   @Override
-  public boolean isCollapsedByDefault(@NotNull ASTNode node) {
+  protected boolean isRegionCollapsedByDefault(@NotNull ASTNode node) {
     IElementType type = node.getElementType();
     if (type == GoParserDefinition.LINE_COMMENT || type == GoParserDefinition.MULTILINE_COMMENT) {
       return CodeFoldingSettings.getInstance().COLLAPSE_DOC_COMMENTS;
