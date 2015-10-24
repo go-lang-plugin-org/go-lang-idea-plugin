@@ -16,7 +16,7 @@
 
 package com.goide.psi.impl;
 
-import com.goide.GoTypes;
+import com.goide.GoConstants;
 import com.goide.psi.*;
 import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.sdk.GoSdkUtil;
@@ -28,7 +28,6 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
-import com.intellij.psi.impl.source.tree.LeafElement;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
@@ -130,11 +129,18 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     PsiReference reference = qualifier.getReference();
     PsiElement target = reference != null ? reference.resolve() : null;
     if (target == null || target == qualifier) return false;
-    if (target instanceof GoImportSpec) target = ((GoImportSpec)target).getImportString().resolve();
+    if (target instanceof GoImportSpec) {
+      if (GoConstants.C_PATH.equals(((GoImportSpec)target).getPath())) return processor.execute(myElement, state);
+      target = ((GoImportSpec)target).getImportString().resolve();
+    }
     if (target instanceof PsiDirectory && !processDirectory((PsiDirectory)target, file, null, processor, state, false)) return false;
     if (target instanceof GoTypeOwner) {
       GoType type = typeOrParameterType((GoTypeOwner)target, createContext());
-      if (type != null && !processGoType(type, processor, state)) return false;
+      if (type != null) {
+        if (!processGoType(type, processor, state)) return false;
+        GoTypeReferenceExpression ref = type.getTypeReferenceExpression();
+        if (ref != null && ref.getReference().resolve() == ref) return processor.execute(myElement, state); // a bit hacky resolve for: var a C.foo; a.b
+      }
     }
     return true;
   }
