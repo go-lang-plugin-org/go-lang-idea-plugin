@@ -103,13 +103,16 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
     return processUnqualifiedResolve(((GoFile)file), processor, state, true);
   }
 
-  private static boolean processQualifierExpression(@NotNull GoFile file,
-                                                    @NotNull GoTypeReferenceExpression qualifier,
-                                                    @NotNull GoScopeProcessor processor,
-                                                    @NotNull ResolveState state) {
+  private boolean processQualifierExpression(@NotNull GoFile file,
+                                             @NotNull GoTypeReferenceExpression qualifier,
+                                             @NotNull GoScopeProcessor processor,
+                                             @NotNull ResolveState state) {
     PsiElement target = qualifier.getReference().resolve();
     if (target == null || target == qualifier) return false;
-    if (target instanceof GoImportSpec) target = ((GoImportSpec)target).getImportString().resolve();
+    if (target instanceof GoImportSpec) {
+      if (GoConstants.C_PATH.equals(((GoImportSpec)target).getPath())) return processor.execute(myElement, state);
+      target = ((GoImportSpec)target).getImportString().resolve();
+    }
     if (target instanceof PsiDirectory) {
       GoReference.processDirectory((PsiDirectory)target, file, null, processor, state, false);
     }
