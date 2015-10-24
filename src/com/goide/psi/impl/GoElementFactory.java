@@ -114,6 +114,12 @@ public class GoElementFactory {
     GoFile file = createFileFromText(project, "package a; func a() {\n " + left + " = " + right + "}");
     return PsiTreeUtil.findChildOfType(file, GoAssignmentStatement.class);
   }
+  
+  @NotNull
+  public static GoExpression createExpression(@NotNull Project project, @NotNull String text) {
+    GoFile file = createFileFromText(project, "package a; func a() {\n a := " + text + "}");
+    return PsiTreeUtil.findChildOfType(file, GoExpression.class);
+  }
 
   @NotNull
   public static GoReferenceExpression createReferenceExpression(@NotNull Project project, @NotNull String name) {
