@@ -50,7 +50,9 @@ public class GoIntroduceVariableBase {
   protected static void performAction(final GoIntroduceOperation operation) {
     SelectionModel selectionModel = operation.getEditor().getSelectionModel();
     boolean hasSelection = selectionModel.hasSelection();
-    GoExpression expression = hasSelection ? findExpressionInSelection(operation, selectionModel) : findExpressionAtOffset(operation);
+    GoExpression expression =
+      hasSelection ? findExpressionInSelection(operation.getFile(), selectionModel.getSelectionStart(), selectionModel.getSelectionEnd())
+                   : findExpressionAtOffset(operation);
     if (expression instanceof GoParenthesesExpr) expression = ((GoParenthesesExpr)expression).getExpression();
     if (expression == null) {
       String message =
@@ -91,10 +93,8 @@ public class GoIntroduceVariableBase {
   }
 
   @Nullable
-  private static GoExpression findExpressionInSelection(GoIntroduceOperation operation, SelectionModel selectionModel) {
-    int start = selectionModel.getSelectionStart();
-    int end = selectionModel.getSelectionEnd();
-    return PsiTreeUtil.findElementOfClassAtRange(operation.getFile(), start, end, GoExpression.class);
+  public static GoExpression findExpressionInSelection(@NotNull PsiFile file, int start, int end) {
+    return PsiTreeUtil.findElementOfClassAtRange(file, start, end, GoExpression.class);
   }
 
   @Nullable

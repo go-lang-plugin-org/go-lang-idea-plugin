@@ -123,6 +123,7 @@
     <codeInsight.lineMarkerProvider language="go" implementationClass="com.goide.editor.marker.GoMethodSeparatorProvider"/>
     <analyzeStacktraceFilter implementation="com.goide.runconfig.GoConsoleFilter"/>
     <lang.implementationTextSelectioner language="go" implementationClass="com.goide.editor.GoImplementationTextSelectioner"/>
+    <lang.surroundDescriptor language="go" implementationClass="com.goide.editor.surround.GoSurroundDescriptor"/>
 
     <directoryProjectGenerator implementation="com.goide.GoProjectGenerator"/> <!-- for small IDEs-->
 
