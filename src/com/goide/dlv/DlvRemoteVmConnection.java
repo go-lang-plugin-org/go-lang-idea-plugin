@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.debugger.Vm;
 import org.jetbrains.debugger.connection.RemoteVmConnection;
 import org.jetbrains.io.NettyUtil;
-import org.jetbrains.util.concurrency.AsyncPromise;
+import org.jetbrains.concurrency.AsyncPromise;
 
 import java.net.InetSocketAddress;
 
