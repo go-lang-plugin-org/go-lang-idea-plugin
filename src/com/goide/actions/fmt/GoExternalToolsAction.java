@@ -33,6 +33,7 @@ import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.ExceptionUtil;
 import org.jetbrains.annotations.NotNull;
@@ -105,6 +106,7 @@ public abstract class GoExternalToolsAction extends DumbAwareAction {
 
     FileDocumentManager.getInstance().saveDocument(document);
     createExecutor(project, module, title, filePath).executeWithProgress(withProgress, callback);
+    VfsUtil.markDirtyAndRefresh(true, true, true, virtualFile);
     return true;
   }
 
