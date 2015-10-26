@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Mihai Toader, Florin Patan
+  ~ Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -1549,14 +1549,6 @@
     <entry_point TYPE="file" FQNAME="temp:///src/docker/engine/streams_test.go"/>
     <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
     <description>Unused function 'lastLine'</description>
-  </problem>
-  <problem>
-    <file>engine.go</file>
-    <line>63</line>
-    <module>light_idea_test_case</module>
-    <entry_point TYPE="file" FQNAME="temp:///src/docker/engine/engine.go"/>
-    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused function inspection</problem_class>
-    <description>Unused function 't'</description>
   </problem>
   <problem>
     <file>utils.go</file>
