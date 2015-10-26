@@ -16,7 +16,6 @@
 
 package com.goide.inspections;
 
-import com.goide.GoConstants;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoImportSpec;
 import com.goide.runconfig.testing.GoTestFinder;
@@ -28,7 +27,7 @@ public class GoCgoInTestInspection extends GoInspectionBase {
   protected void checkFile(@NotNull GoFile file, @NotNull ProblemsHolder problemsHolder) {
     if (!GoTestFinder.isTestFile(file)) return;
     for (GoImportSpec importSpec : file.getImports()) {
-      if (GoConstants.C_PATH.equals(importSpec.getPath())) {
+      if (importSpec.isCImport()) {
         problemsHolder.registerProblem(importSpec, "Usage of cgo in tests is not supported.", new GoDeleteQuickFix("Remove 'C' import"));
       }
     }

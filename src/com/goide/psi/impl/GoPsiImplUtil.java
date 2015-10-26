@@ -843,9 +843,9 @@ public class GoPsiImplUtil {
       if (existingImport.getRparen() == null && importSpecList.size() == 1) {
         GoImportSpec firstItem = ContainerUtil.getFirstItem(importSpecList);
         assert firstItem != null;
+        if (firstItem.isCImport()) continue;
         String path = firstItem.getPath();
         String oldAlias = firstItem.getAlias();
-        if (GoConstants.C_PATH.equals(path)) continue;
 
         GoImportDeclaration importWithParens = GoElementFactory.createImportDeclaration(project, path, oldAlias, true);
         existingImport = (GoImportDeclaration)existingImport.replace(importWithParens);
@@ -903,6 +903,10 @@ public class GoPsiImplUtil {
 
   public static String getLocalPackageName(@NotNull GoImportSpec importSpec) {
     return getLocalPackageName(importSpec.getPath());
+  }
+  
+  public static boolean isCImport(@NotNull GoImportSpec importSpec) {
+    return GoConstants.C_PATH.equals(importSpec.getPath());
   }
   
   public static boolean isDot(@NotNull GoImportSpec importSpec) {

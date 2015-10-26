@@ -433,7 +433,7 @@ public class GoFile extends PsiFileBase {
 
   public boolean hasCPathImport() {
     for (GoImportSpec importSpec : getImports()) {
-      if (GoConstants.C_PATH.equals(importSpec.getPath())) {
+      if (importSpec.isCImport()) {
         return true;
       }
     }
