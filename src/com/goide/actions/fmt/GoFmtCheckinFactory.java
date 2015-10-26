@@ -17,9 +17,14 @@
 package com.goide.actions.fmt;
 
 import com.goide.psi.GoFile;
+import com.goide.util.GoExecutor;
+import com.intellij.CommonBundle;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.util.Ref;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vcs.CheckinProjectPanel;
 import com.intellij.openapi.vcs.changes.CommitContext;
 import com.intellij.openapi.vcs.changes.CommitExecutor;
@@ -30,6 +35,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.util.PairConsumer;
+import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -72,13 +78,39 @@ public class GoFmtCheckinFactory extends CheckinHandlerFactory {
       @Override
       public ReturnResult beforeCheckin(@Nullable CommitExecutor executor, PairConsumer<Object, Object> additionalDataConsumer) {
         if (enabled(panel)) {
+          final Ref<Boolean> success = new Ref<Boolean>(true);
           FileDocumentManager.getInstance().saveAllDocuments();
           for (PsiFile file : getPsiFiles()) {
             VirtualFile virtualFile = file.getVirtualFile();
-            new GoFmtFileAction().doSomething(virtualFile, ModuleUtilCore.findModuleForPsiElement(file), file.getProject(), "Go fmt", true);
+            new GoFmtFileAction().doSomething(virtualFile, ModuleUtilCore.findModuleForPsiElement(file), file.getProject(), "Go fmt", true,
+                                              new GoExecutor.Callback() {
+                                                @Override
+                                                public void finished(boolean result) {
+                                                  if (!result) success.set(false);
+                                                }
+                                              });
+          }
+          if (!success.get()) {
+            return showErrorMessage(executor);
           }
         }
         return super.beforeCheckin();
+      }
+
+      @NotNull
+      private ReturnResult showErrorMessage(@Nullable CommitExecutor executor) {
+        String[] buttons = new String[]{"&Details...", commitButtonMessage(executor, panel), CommonBundle.getCancelButtonText()};
+        final int answer = Messages.showDialog(panel.getProject(),
+                                               "<html><body>GoFmt returned non-zero code on some of the files.<br/>" +
+                                               "Would you like to commit anyway?</body></html>\n",
+                                               "Go Fmt", null, buttons, 0, 1, UIUtil.getWarningIcon());
+        if (answer == Messages.OK) {
+          return ReturnResult.CLOSE_WINDOW;
+        }
+        if (answer == Messages.NO) {
+          return ReturnResult.COMMIT;
+        }
+        return ReturnResult.CANCEL;
       }
 
       @NotNull
@@ -95,6 +127,11 @@ public class GoFmtCheckinFactory extends CheckinHandlerFactory {
         return psiFiles;
       }
     };
+  }
+
+  @NotNull
+  private static String commitButtonMessage(@Nullable CommitExecutor executor, @NotNull CheckinProjectPanel panel) {
+    return StringUtil.trimEnd(executor != null ? executor.getActionText() : panel.getCommitActionName(), "...");
   }
 
   private static boolean enabled(@NotNull CheckinProjectPanel panel) {
