@@ -105,7 +105,7 @@ ImportDeclaration ::= import ( ImportSpec | '(' ImportSpecs? ')' ) {
 private ImportSpecs ::= ImportSpec (semi ImportSpec)* semi? {pin=1}
 ImportSpec ::= [ '.' | identifier ] ImportString {
   stubClass="com.goide.stubs.GoImportSpecStub"
-  methods=[getAlias getLocalPackageName shouldGoDeeper isForSideEffects isDot getPath getName]
+  methods=[getAlias getLocalPackageName shouldGoDeeper isForSideEffects isDot getPath getName isCImport]
 }
 ImportString ::= string | raw_string {methods=[getReferences resolve getPath getPathTextRange]}
 

@@ -16,7 +16,6 @@
 
 package com.goide.inspections.unresolved;
 
-import com.goide.GoConstants;
 import com.goide.GoTypes;
 import com.goide.codeInsight.imports.GoImportPackageQuickFix;
 import com.goide.inspections.GoInspectionBase;
@@ -86,10 +85,11 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
       }
 
       @Override
-      public void visitImportString(@NotNull GoImportString o) {
-        if (o.getTextLength() < 2) return;
-        if (GoConstants.C_PATH.equals(o.getPath())) return;
-        PsiReference[] references = o.getReferences();
+      public void visitImportSpec(@NotNull GoImportSpec o) {
+        if (o.isCImport()) return;
+        GoImportString string = o.getImportString();
+        if (string.getTextLength() < 2) return;
+        PsiReference[] references = string.getReferences();
         for (PsiReference reference : references) {
           if (reference instanceof FileReference) {
             ResolveResult[] resolveResults = ((FileReference)reference).multiResolve(false);
