@@ -244,6 +244,10 @@ public class GoExecutor {
   }
 
   public void executeWithProgress(final boolean modal) {
+    executeWithProgress(modal, null);
+  }
+
+  public void executeWithProgress(final boolean modal, @Nullable final Callback callback) {
     ProgressManager.getInstance().run(new Task.Backgroundable(myProject, getPresentableName(), true) {
       private boolean doNotStart = false;
 
@@ -271,7 +275,10 @@ public class GoExecutor {
           return;
         }
         indicator.setIndeterminate(true);
-        execute();
+        boolean result = execute();
+        if (callback != null) {
+          callback.finished(result);
+        }
       }
     });
   }
@@ -336,5 +343,9 @@ public class GoExecutor {
   @NotNull
   private String getPresentableName() {
     return ObjectUtils.notNull(myPresentableName, "go");
+  }
+  
+  public interface Callback {
+    void finished(boolean result);
   }
 }
