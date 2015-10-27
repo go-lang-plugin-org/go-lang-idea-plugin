@@ -210,13 +210,13 @@ public class GoExecutor {
           if (success && myShowNotificationsOnSuccess) {
             showNotification("Finished successfully", NotificationType.INFORMATION);
           }
+          VirtualFileManager.getInstance().asyncRefresh(null);
           ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
               if (!success && myShowOutputOnError) {
                 showOutput(myProcessHandler, historyProcessListener);
               }
-              VirtualFileManager.getInstance().asyncRefresh(null);
             }
           });
         }
