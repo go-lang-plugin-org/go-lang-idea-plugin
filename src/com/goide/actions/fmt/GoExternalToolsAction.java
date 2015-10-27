@@ -93,20 +93,25 @@ public abstract class GoExternalToolsAction extends DumbAwareAction {
     return doSomething(virtualFile, module, project, title, withProgress, null);
   }
 
-  protected boolean doSomething(@NotNull VirtualFile virtualFile,
+  protected boolean doSomething(@NotNull final VirtualFile virtualFile,
                                 @Nullable Module module,
                                 @NotNull Project project,
                                 @NotNull String title,
                                 boolean withProgress,
-                                @Nullable GoExecutor.Callback callback) {
+                                @Nullable final GoExecutor.Callback callback) {
     Document document = FileDocumentManager.getInstance().getDocument(virtualFile);
     assert document != null;
     String filePath = virtualFile.getCanonicalPath();
     assert filePath != null;
 
     FileDocumentManager.getInstance().saveDocument(document);
-    createExecutor(project, module, title, filePath).executeWithProgress(withProgress, callback);
-    VfsUtil.markDirtyAndRefresh(true, true, true, virtualFile);
+    createExecutor(project, module, title, filePath).executeWithProgress(withProgress, new GoExecutor.Callback() {
+      @Override
+      public void finished(boolean result) {
+        if (callback != null) callback.finished(result);
+        VfsUtil.markDirtyAndRefresh(true, true, true, virtualFile);
+      }
+    });
     return true;
   }
 
