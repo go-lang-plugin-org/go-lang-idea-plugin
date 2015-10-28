@@ -35,6 +35,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.util.Consumer;
 import com.intellij.util.ExceptionUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -79,8 +80,8 @@ public abstract class GoExternalToolsAction extends DumbAwareAction {
   }
 
   protected boolean doSomething(@NotNull VirtualFile virtualFile,
-                                @Nullable Module module, 
-                                @NotNull Project project, 
+                                @Nullable Module module,
+                                @NotNull Project project,
                                 @NotNull String title) throws ExecutionException {
     return doSomething(virtualFile, module, project, title, false);
   }
@@ -90,7 +91,8 @@ public abstract class GoExternalToolsAction extends DumbAwareAction {
                                 @NotNull Project project,
                                 @NotNull String title,
                                 boolean withProgress) {
-    return doSomething(virtualFile, module, project, title, withProgress, null);
+    //noinspection unchecked
+    return doSomething(virtualFile, module, project, title, withProgress, Consumer.EMPTY_CONSUMER);
   }
 
   protected boolean doSomething(@NotNull final VirtualFile virtualFile,
@@ -98,17 +100,17 @@ public abstract class GoExternalToolsAction extends DumbAwareAction {
                                 @NotNull Project project,
                                 @NotNull String title,
                                 boolean withProgress,
-                                @Nullable final GoExecutor.Callback callback) {
+                                @NotNull final Consumer<Boolean> consumer) {
     Document document = FileDocumentManager.getInstance().getDocument(virtualFile);
     assert document != null;
     String filePath = virtualFile.getCanonicalPath();
     assert filePath != null;
 
     FileDocumentManager.getInstance().saveDocument(document);
-    createExecutor(project, module, title, filePath).executeWithProgress(withProgress, new GoExecutor.Callback() {
+    createExecutor(project, module, title, filePath).executeWithProgress(withProgress, new Consumer<Boolean>() {
       @Override
-      public void finished(boolean result) {
-        if (callback != null) callback.finished(result);
+      public void consume(Boolean result) {
+        consumer.consume(result);
         VfsUtil.markDirtyAndRefresh(true, true, true, virtualFile);
       }
     });

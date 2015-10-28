@@ -43,6 +43,7 @@ import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.util.Consumer;
 import com.intellij.util.EnvironmentUtil;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
@@ -54,7 +55,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
-public class GoExecutor {  
+public class GoExecutor {
   private static final Logger LOGGER = Logger.getInstance(GoExecutor.class);
   @NotNull private final Map<String, String> myExtraEnvironment = ContainerUtil.newHashMap();
   @NotNull private final ParametersList myParameterList = new ParametersList();
@@ -83,7 +84,7 @@ public class GoExecutor {
   public static GoExecutor in(@NotNull Project project, @Nullable Module module) {
     return module != null ? in(module) : in(project);
   }
-  
+
   @NotNull
   public static GoExecutor in(@NotNull Project project) {
     return new GoExecutor(project, null)
@@ -130,13 +131,13 @@ public class GoExecutor {
     myGoPath = goPath;
     return this;
   }
-  
+
   @NotNull
   public GoExecutor withEnvPath(@Nullable String envPath) {
     myEnvPath = envPath;
     return this;
   }
-  
+
   public GoExecutor withProcessListener(@NotNull ProcessListener listener) {
     myProcessListeners.add(listener);
     return this;
@@ -226,7 +227,7 @@ public class GoExecutor {
       myProcessHandler.startNotify();
       ExecutionModes.SameThreadMode sameThreadMode = new ExecutionModes.SameThreadMode(getPresentableName());
       ExecutionHelper.executeExternalProcess(myProject, myProcessHandler, sameThreadMode, commandLine);
-      
+
       LOGGER.debug("Finished `" + getPresentableName() + "` with result: " + result.get());
       return result.get();
     }
@@ -244,10 +245,11 @@ public class GoExecutor {
   }
 
   public void executeWithProgress(final boolean modal) {
-    executeWithProgress(modal, null);
+    //noinspection unchecked
+    executeWithProgress(modal, Consumer.EMPTY_CONSUMER);
   }
 
-  public void executeWithProgress(final boolean modal, @Nullable final Callback callback) {
+  public void executeWithProgress(final boolean modal, @NotNull final Consumer<Boolean> consumer) {
     ProgressManager.getInstance().run(new Task.Backgroundable(myProject, getPresentableName(), true) {
       private boolean doNotStart = false;
 
@@ -275,10 +277,7 @@ public class GoExecutor {
           return;
         }
         indicator.setIndeterminate(true);
-        boolean result = execute();
-        if (callback != null) {
-          callback.finished(result);
-        }
+        consumer.consume(execute());
       }
     });
   }
@@ -331,7 +330,7 @@ public class GoExecutor {
     ContainerUtil.addIfNotNull(paths, StringUtil.nullize(EnvironmentUtil.getValue(GoConstants.PATH), true));
     ContainerUtil.addIfNotNull(paths, StringUtil.nullize(myEnvPath, true));
     commandLine.getEnvironment().put(GoConstants.PATH, StringUtil.join(paths, File.pathSeparator));
-    
+
     commandLine.withWorkDirectory(myWorkDirectory);
     commandLine.addParameters(myParameterList.getList());
     commandLine.setPassParentEnvironment(myPassParentEnvironment);
@@ -343,9 +342,5 @@ public class GoExecutor {
   @NotNull
   private String getPresentableName() {
     return ObjectUtils.notNull(myPresentableName, "go");
-  }
-  
-  public interface Callback {
-    void finished(boolean result);
   }
 }

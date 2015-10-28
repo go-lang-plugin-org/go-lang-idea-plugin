@@ -17,7 +17,6 @@
 package com.goide.actions.fmt;
 
 import com.goide.psi.GoFile;
-import com.goide.util.GoExecutor;
 import com.intellij.CommonBundle;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
@@ -34,6 +33,7 @@ import com.intellij.openapi.vcs.ui.RefreshableOnComponent;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
+import com.intellij.util.Consumer;
 import com.intellij.util.PairConsumer;
 import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.NotNull;
@@ -83,9 +83,9 @@ public class GoFmtCheckinFactory extends CheckinHandlerFactory {
           for (PsiFile file : getPsiFiles()) {
             VirtualFile virtualFile = file.getVirtualFile();
             new GoFmtFileAction().doSomething(virtualFile, ModuleUtilCore.findModuleForPsiElement(file), file.getProject(), "Go fmt", true,
-                                              new GoExecutor.Callback() {
+                                              new Consumer<Boolean>() {
                                                 @Override
-                                                public void finished(boolean result) {
+                                                public void consume(Boolean result) {
                                                   if (!result) success.set(false);
                                                 }
                                               });
