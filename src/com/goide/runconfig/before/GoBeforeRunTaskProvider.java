@@ -32,6 +32,8 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.util.Consumer;
 import com.intellij.util.concurrency.Semaphore;
 import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.Nullable;
@@ -146,7 +148,12 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
               result.set(event.getExitCode() == 0);
             }
           })
-          .executeWithProgress(false);
+          .executeWithProgress(false, new Consumer<Boolean>() {
+            @Override
+            public void consume(Boolean result) {
+              VirtualFileManager.getInstance().asyncRefresh(null);
+            }
+          });
       }
     });
 
