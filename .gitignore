@@ -1,6 +1,3 @@
-/system-test/
-/config-test/
-
 /build/
 /google-app-engine/build/
 /google-app-engine/google-app-engine-yaml/build/
@@ -17,5 +14,5 @@
 .idea/.name
 *.iml
 
-/testData/performance/docker
-/testData/performance/go
+/testData/performance/docker/
+/testData/performance/go/
