@@ -25,7 +25,9 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.util.Consumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,13 +46,18 @@ public class GoFmtProjectAction extends DumbAwareAction {
     FileDocumentManager.getInstance().saveAllDocuments();
     for (Module module : GoSdkUtil.getGoModules(project)) {
       for (VirtualFile file : ModuleRootManager.getInstance(module).getContentRoots()) {
-        fmt(project, module, "go fmt " + file.getPath(), file.getPath());
+        fmt(project, module, "go fmt " + file.getPath(), file);
       }
     }
   }
 
-  private static void fmt(@NotNull Project project, @Nullable Module module, @NotNull String presentableName, @NotNull String directory) {
-    GoExecutor.in(project, module).withPresentableName(presentableName).withWorkDirectory(directory)
-      .withParameters("fmt", "./...").showOutputOnError().executeWithProgress(false);
+  private static void fmt(@NotNull Project project, @Nullable Module module, @NotNull String presentation, @NotNull final VirtualFile dir) {
+    GoExecutor.in(project, module).withPresentableName(presentation).withWorkDirectory(dir.getPath())
+      .withParameters("fmt", "./...").showOutputOnError().executeWithProgress(false, new Consumer<Boolean>() {
+      @Override
+      public void consume(Boolean result) {
+        VfsUtil.markDirtyAndRefresh(true, true, true, dir);
+      }
+    });
   }
 }

@@ -26,7 +26,9 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.PsiElement;
+import com.intellij.util.Consumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,10 +44,7 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
   public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
     PsiElement element = descriptor.getPsiElement();
     Module module = ModuleUtilCore.findModuleForPsiElement(element);
-    if (module == null) {
-      return;
-    }
-
+    if (module == null) return;
     applyFix(project, module, myPackage, true);
   }
 
@@ -54,14 +53,19 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
                               @NotNull final String packageName,
                               final boolean startInBackground) {
     String sdkPath = GoSdkService.getInstance(project).getSdkHomePath(module);
-    if (StringUtil.isEmpty(sdkPath)) {
-      return;
-    }
+    if (StringUtil.isEmpty(sdkPath)) return;
     CommandProcessor.getInstance().runUndoTransparentAction(new Runnable() {
       @Override
       public void run() {
+        Consumer<Boolean> consumer = new Consumer<Boolean>() {
+          @Override
+          public void consume(Boolean aBoolean) {
+            VirtualFileManager.getInstance().asyncRefresh(null);
+          }
+        };
         GoExecutor.in(project, module).withPresentableName("go get " + packageName)
-          .withParameters("get", packageName).showNotifications(false).showOutputOnError().executeWithProgress(!startInBackground);
+          .withParameters("get", packageName).showNotifications(false).showOutputOnError()
+          .executeWithProgress(!startInBackground, consumer);
       }
     });
   }

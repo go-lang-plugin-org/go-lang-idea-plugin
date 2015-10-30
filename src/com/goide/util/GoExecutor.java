@@ -42,7 +42,6 @@ import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.CharsetToolkit;
-import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.util.Consumer;
 import com.intellij.util.EnvironmentUtil;
 import com.intellij.util.ObjectUtils;
@@ -211,7 +210,6 @@ public class GoExecutor {
           if (success && myShowNotificationsOnSuccess) {
             showNotification("Finished successfully", NotificationType.INFORMATION);
           }
-          VirtualFileManager.getInstance().asyncRefresh(null);
           ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
