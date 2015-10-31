@@ -107,7 +107,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testMismatch()    { doTest(); }
   public void testStubParams()  { doTest(); }
   public void testNil()         { doTest(); }
-  public void testAssignmentUsages()  { doTest(); }
+  public void testAssignUsages(){ doTest(); }
   public void testMethodExpr()  { doTest(); }
   public void testVarToImport() { doTest(); }
   public void testCgotest()     { doTest(); }
