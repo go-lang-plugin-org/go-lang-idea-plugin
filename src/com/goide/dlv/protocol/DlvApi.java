@@ -25,85 +25,85 @@ public class DlvApi {
   public static class DebuggerState {
     // Breakpoint is the current breakpoint at which the debugged process is
     // suspended, and may be empty if the process is not suspended.
-    public Breakpoint breakPoint; //`json:"breakPoint,omitempty"`
+    public Breakpoint breakPoint;
     // CurrentThread is the currently selected debugger thread.
-    public Thread currentThread; //`json:"currentThread,omitempty"`
+    public Thread currentThread;
     // SelectedGoroutine is the currently selected goroutine
-    public Goroutine currentGoroutine; //`json:"currentGoroutine,omitempty"`
+    public Goroutine currentGoroutine;
     // Information requested by the current breakpoint
-    public BreakpointInfo breakPointInfo; //`json:"breakPointInfo,omitrempty"`
+    public BreakpointInfo breakPointInfo;
     // Exited indicates whether the debugged process has exited.
-    public boolean exited; //`json:"exited"`
-    public int exitStatus; //`json:"exitStatus"`
+    public boolean exited;
+    public int exitStatus;
     // Filled by RPCClient.Continue, indicates an error
-    public String err; //`json:"-"` // todo: should be error
+    public String err;
   }
 
   // Breakpoint addresses a location at which process execution may be
   // suspended.
   public static class Breakpoint {
     // ID is a unique identifier for the breakpoint.
-    public int id; //`json:"id"`
+    public int id;
     // Addr is the address of the breakpoint.
-    public int addr; //`json:"addr"`
+    public int addr;
     // File is the source file for the breakpoint.
-    public String file; //`json:"file"`
+    public String file;
     // Line is a line in File for the breakpoint.
-    public int line; //`json:"line"`
+    public int line;
     // FunctionName is the name of the function at the current breakpoint, and
     // may not always be available.
-    public String functionName; //`json:"functionName,omitempty"`
+    public String functionName;
     // tracepoint flag
     @SerializedName("continue")
-    public boolean tracepoint; //`json:"continue"`
+    public boolean tracepoint;
     // number of stack frames to retrieve
-    public int stacktrace; //`json:"stacktrace"`
+    public int stacktrace;
     // retrieve goroutine information
-    public boolean goroutine; //`json:"goroutine"`
+    public boolean goroutine;
     // variables to evaluate
-    public List<String> variables; //`json:"variables,omitempty"`
+    public List<String> variables;
   }
 
   // Thread is a thread within the debugged process.
   public static class Thread {
     // ID is a unique identifier for the thread.
-    public int id; //`json:"id"`
+    public int id;
     // PC is the current program counter for the thread.
-    public int pc; //`json:"pc"`
+    public int pc;
     // File is the file for the program counter.
-    public String file; //`json:"file"`
+    public String file;
     // Line is the line number for the program counter.
-    public int line; //`json:"line"`
+    public int line;
     // Function is function information at the program counter. May be nil.
-    public Function function; //`json:"function,omitempty"`
+    public Function function;
   }
 
   public static class Location {
-    public int pc; //`json:"pc"`
-    public String file; //`json:"file"`
-    public int line; //`json:"line"`
-    public Function function; //`json:"function,omitempty"`
+    public int pc;
+    public String file;
+    public int line;
+    public Function function;
   }
 
   // Function represents thread-scoped function information.
   public static class Function {
     // Name is the function name.
-    public String name; //`json:"name"`
-    public int value; //`json:"value"`
-    public byte type; //`json:"type"`
-    public int goclass; //`json:"goclass"`
+    public String name;
+    public int value;
+    public byte type;
+    public int goclass;
     // Args are the function arguments in a thread context.
-    public List<Variable> args; //`json:"args"`
+    public List<Variable> args;
     // Locals are the thread local variables.
-    public List<Variable> locals; //`json:"locals"`
+    public List<Variable> locals;
   }
 
   // Variable describes a variable.
   public static class Variable {
     // Name of the variable or struct member
-    public String name; //`json:"name"`
+    public String name;
     // Go type of the variable
-    public String type; //`json:"type"`
+    public String type;
     // Address of the variable or struct member
     public Object addr;
     // Type of the variable after resolving any typedefs
@@ -113,7 +113,7 @@ public class DlvApi {
 
     //Strings have their length capped at proc.maxArrayValues, use Len for the real length of a string
     //Function variables will store the name of the function in this field
-    public String value; //`json:"value"`
+    public String value;
 
     // Number of elements in an array or a slice, number of keys for a map, number of struct members for a struct, length of strings
     public long len;
@@ -133,24 +133,24 @@ public class DlvApi {
   // internal G structure.
   public static class Goroutine {
     // ID is a unique identifier for the goroutine.
-    public int id; //`json:"id"`
+    public int id;
     // PC is the current program counter for the goroutine.
-    public int pc; //`json:"pc"`
+    public int pc;
     // File is the file for the program counter.
-    public String file; //`json:"file"`
+    public String file;
     // Line is the line number for the program counter.
-    public int line; //`json:"line"`
+    public int line;
     // Function is function information at the program counter. May be nil.
-    public Function function; //`json:"function,omitempty"`
+    public Function function;
   }
 
   // DebuggerCommand is a command which changes the debugger's execution state.
   public static class DebuggerCommand {
     // Name is the command to run.
-    public String name; //`json:"name"`
+    public String name;
     // ThreadID is used to specify which thread to use with the SwitchThread
     // command.
-    public int threadID; //`json:"threadID,omitempty"`
+    public int threadID;
     // GoroutineID is used to specify which thread to use with the SwitchGoroutine
     // command.
     public int goroutineID; // `json:"goroutineID,omitempty"`
@@ -158,10 +158,10 @@ public class DlvApi {
 
   // Informations about the current breakpoint
   public static class BreakpointInfo {
-    public List<Location> stacktrace; //`json:"stacktrace,omitempty"`
-    public Goroutine goroutine; //`json:"goroutine,omitempty"`
-    public List<Variable> variables; //`json:"variables,omitempty"`
-    public List<Variable> arguments; //`json:"arguments,omitempty"`
+    public List<Location> stacktrace;
+    public Goroutine goroutine;
+    public List<Variable> variables;
+    public List<Variable> arguments;
   }
 
   public static class EvalScope {
