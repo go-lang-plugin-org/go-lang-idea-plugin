@@ -29,9 +29,9 @@ public class DlvApi {
     // CurrentThread is the currently selected debugger thread.
     public Thread currentThread; //`json:"currentThread,omitempty"`
     // SelectedGoroutine is the currently selected goroutine
-    public Goroutine SelectedGoroutine; //`json:"currentGoroutine,omitempty"`
+    public Goroutine currentGoroutine; //`json:"currentGoroutine,omitempty"`
     // Information requested by the current breakpoint
-    public BreakpointInfo breakpointInfo; //`json:"breakPointInfo,omitrempty"`
+    public BreakpointInfo breakPointInfo; //`json:"breakPointInfo,omitrempty"`
     // Exited indicates whether the debugged process has exited.
     public boolean exited; //`json:"exited"`
     public int exitStatus; //`json:"exitStatus"`
@@ -153,7 +153,7 @@ public class DlvApi {
     public int threadID; //`json:"threadID,omitempty"`
     // GoroutineID is used to specify which thread to use with the SwitchGoroutine
     // command.
-    public int GoroutineID; // `json:"goroutineID,omitempty"`
+    public int goroutineID; // `json:"goroutineID,omitempty"`
   }
 
   // Informations about the current breakpoint
