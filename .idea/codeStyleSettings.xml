@@ -122,6 +122,7 @@
           <option name="BLOCK_COMMENT_AT_FIRST_COLUMN" value="false" />
           <option name="KEEP_FIRST_COLUMN_COMMENT" value="false" />
           <option name="KEEP_BLANK_LINES_BEFORE_RBRACE" value="0" />
+          <option name="BLANK_LINES_AROUND_METHOD" value="0" />
           <option name="ELSE_ON_NEW_LINE" value="true" />
           <option name="WHILE_ON_NEW_LINE" value="true" />
           <option name="CATCH_ON_NEW_LINE" value="true" />
@@ -133,6 +134,7 @@
           <option name="ALIGN_MULTILINE_THROWS_LIST" value="true" />
           <option name="ALIGN_MULTILINE_EXTENDS_LIST" value="true" />
           <option name="ALIGN_MULTILINE_PARENTHESIZED_EXPRESSION" value="true" />
+          <option name="ALIGN_SUBSEQUENT_SIMPLE_METHODS" value="true" />
           <option name="SPACE_WITHIN_BRACES" value="true" />
           <option name="SPACE_AFTER_TYPE_CAST" value="false" />
           <option name="CALL_PARAMETERS_WRAP" value="1" />
@@ -145,6 +147,7 @@
           <option name="BINARY_OPERATION_WRAP" value="5" />
           <option name="TERNARY_OPERATION_WRAP" value="5" />
           <option name="TERNARY_OPERATION_SIGNS_ON_NEXT_LINE" value="true" />
+          <option name="KEEP_SIMPLE_METHODS_IN_ONE_LINE" value="true" />
           <option name="FOR_STATEMENT_WRAP" value="5" />
           <option name="ARRAY_INITIALIZER_WRAP" value="1" />
           <option name="ASSIGNMENT_WRAP" value="1" />
