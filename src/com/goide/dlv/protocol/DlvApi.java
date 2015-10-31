@@ -140,8 +140,12 @@ public class DlvApi {
     public String file;
     // Line is the line number for the program counter.
     public int line;
-    // Function is function information at the program counter. May be nil.
-    public Function function;
+    // Current location of the goroutine
+    Location currentLoc;
+    // Current location of the goroutine, excluding calls inside runtime
+    Location userCurrentLoc;
+    // Location of the go instruction that started this goroutine
+    Location goStatementLoc;
   }
 
   // DebuggerCommand is a command which changes the debugger's execution state.
