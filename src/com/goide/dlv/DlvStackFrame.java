@@ -27,7 +27,6 @@ import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
@@ -36,49 +35,24 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.ColoredTextContainer;
 import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.util.Consumer;
-import com.intellij.util.containers.ContainerUtil;
 import com.intellij.xdebugger.XDebuggerUtil;
 import com.intellij.xdebugger.XSourcePosition;
 import com.intellij.xdebugger.evaluation.XDebuggerEvaluator;
-import com.intellij.xdebugger.frame.*;
-import com.intellij.xdebugger.frame.presentation.XNumericValuePresentation;
-import com.intellij.xdebugger.frame.presentation.XStringValuePresentation;
-import com.intellij.xdebugger.frame.presentation.XValuePresentation;
+import com.intellij.xdebugger.frame.XCompositeNode;
+import com.intellij.xdebugger.frame.XStackFrame;
+import com.intellij.xdebugger.frame.XValue;
+import com.intellij.xdebugger.frame.XValueChildrenList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.concurrency.Promise;
 
 import javax.swing.*;
 import java.util.List;
-import java.util.Set;
-import java.util.regex.Pattern;
 
 class DlvStackFrame extends XStackFrame {
   private final DlvApi.Location myLocation;
   private final DlvCommandProcessor myProcessor;
   private final int myId;
-  private static final Set<String> NUMBERS = ContainerUtil.newTroveSet(
-    "int8",
-    "uint8",
-    "uint8",
-    "int16",
-    "uint16",
-    "int32",
-    "uint32",
-    "int32",
-    "float32",
-    "float64",
-    "int32",
-    "int64",
-    "uint64",
-    "complex64",
-    "complex128",
-    "int",
-    "uint",
-    "uintptr",
-    "byte",
-    "rune"
-  );
 
   public DlvStackFrame(DlvApi.Location location, DlvCommandProcessor processor, int id) {
     myLocation = location;
@@ -142,63 +116,8 @@ class DlvStackFrame extends XStackFrame {
   }
 
   @NotNull
-  private XValue createXValue(@NotNull final DlvApi.Variable variable, @Nullable final Icon icon) {
-    return new XNamedValue(variable.name) {
-      @Override
-      public void computePresentation(@NotNull XValueNode node, @NotNull XValuePlace place) {
-        XValuePresentation presentation = getPresentation();
-        if (presentation != null) {
-          node.setPresentation(icon, presentation, false);
-          return;
-        }
-        String value = variable.value;
-        String prefix = variable.type + " ";
-        node.setPresentation(icon, variable.type,
-                             StringUtil.startsWith(value, prefix) ? value.replaceFirst(Pattern.quote(prefix), "") : value, false);
-      }
-
-      @Nullable
-      @Override
-      public XValueModifier getModifier() {
-        return new XValueModifier() {
-          @Override
-          public void setValue(@NotNull String newValue, @NotNull final XModificationCallback callback) {
-            myProcessor.send(new DlvRequest.SetSymbol(variable.name, newValue, myId))
-              .processed(new Consumer<Object>() {
-              @Override
-              public void consume(Object o) {
-                if (o != null) {
-                  callback.valueModified();
-                }
-              }
-            })
-              .rejected(new Consumer<Throwable>() {
-                @Override
-                public void consume(Throwable throwable) {
-                  callback.errorOccurred(throwable.getMessage());
-                }
-              });
-          }
-        };
-      }
-
-      @Nullable
-      private XValuePresentation getPresentation() {
-        String type = variable.type;
-        final String value = variable.value;
-        if (NUMBERS.contains(type)) return new XNumericValuePresentation(value);
-        if ("struct string".equals(type)) return new XStringValuePresentation(value);
-        if ("bool".equals(type)) {
-          return new XValuePresentation() {
-            @Override
-            public void renderValue(@NotNull XValueTextRenderer renderer) {
-              renderer.renderValue(value);
-            }
-          };
-        }
-        return null;
-      }
-    };
+  private XValue createXValue(@NotNull DlvApi.Variable variable, @Nullable Icon icon) {
+    return new DlvXValue(variable, icon, myProcessor, myId);
   }
 
   @Nullable
