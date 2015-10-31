@@ -62,6 +62,10 @@ public class DlvApi {
     public boolean goroutine;
     // variables to evaluate
     public List<String> variables;
+    // number of times a breakpoint has been reached in a certain goroutine
+    public Object hitCount; // todo: check type map[string]uint64
+    // number of times a breakpoint has been reached
+    public long totalHitCount;
   }
 
   // Thread is a thread within the debugged process.
