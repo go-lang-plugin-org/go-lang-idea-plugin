@@ -21,16 +21,15 @@ import com.goide.dlv.protocol.DlvRequest;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.Consumer;
-import com.intellij.util.containers.ContainerUtil;
 import com.intellij.xdebugger.frame.*;
 import com.intellij.xdebugger.frame.presentation.XNumericValuePresentation;
+import com.intellij.xdebugger.frame.presentation.XRegularValuePresentation;
 import com.intellij.xdebugger.frame.presentation.XStringValuePresentation;
 import com.intellij.xdebugger.frame.presentation.XValuePresentation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 class DlvXValue extends XNamedValue {
@@ -50,15 +49,8 @@ class DlvXValue extends XNamedValue {
   @Override
   public void computePresentation(@NotNull XValueNode node, @NotNull XValuePlace place) {
     XValuePresentation presentation = getPresentation();
-    boolean children = myVariable.children.length > 0;
-    if (presentation != null) {
-      node.setPresentation(myIcon, presentation, children);
-      return;
-    }
-    String value = myVariable.value;
-    String prefix = myVariable.type + " ";
-    node.setPresentation(myIcon, myVariable.type,
-                         StringUtil.startsWith(value, prefix) ? value.replaceFirst(Pattern.quote(prefix), "") : value, children);
+    boolean hasChildren = myVariable.children.length > 0;
+    node.setPresentation(myIcon, presentation, hasChildren);
   }
 
   @Override
@@ -99,42 +91,19 @@ class DlvXValue extends XNamedValue {
     };
   }
 
-  @Nullable
+  @NotNull
   private XValuePresentation getPresentation() {
-    String type = myVariable.type;
     final String value = myVariable.value;
-    if (NUMBERS.contains(type)) return new XNumericValuePresentation(value);
-    if ("struct string".equals(type)) return new XStringValuePresentation(value);
-    if ("bool".equals(type)) return new XValuePresentation() {
+    if (myVariable.isNumber()) return new XNumericValuePresentation(value);
+    if (myVariable.isString()) return new XStringValuePresentation(value);
+    if (myVariable.isBool()) return new XValuePresentation() {
         @Override
         public void renderValue(@NotNull XValueTextRenderer renderer) {
           renderer.renderValue(value);
         }
       };
-    return null;
+    String type = myVariable.type;
+    String prefix = myVariable.type + " ";
+    return new XRegularValuePresentation(StringUtil.startsWith(value, prefix) ? value.replaceFirst(Pattern.quote(prefix), "") : value, type);
   }
-
-  private static final Set<String> NUMBERS = ContainerUtil.newTroveSet(
-    "int8",
-    "uint8",
-    "uint8",
-    "int16",
-    "uint16",
-    "int32",
-    "uint32",
-    "int32",
-    "float32",
-    "float64",
-    "int32",
-    "int64",
-    "uint64",
-    "complex64",
-    "complex128",
-    "int",
-    "uint",
-    "uintptr",
-    "byte",
-    "rune"
-  );
-
 }

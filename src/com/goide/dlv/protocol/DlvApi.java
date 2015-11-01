@@ -17,11 +17,15 @@
 package com.goide.dlv.protocol;
 
 import com.google.gson.annotations.SerializedName;
+import com.intellij.openapi.diagnostic.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 @SuppressWarnings("unused")
 public class DlvApi {
+  private final static Logger LOG = Logger.getInstance(DlvApi.class);
+
   // DebuggerState represents the current context of the debugger.
   public static class DebuggerState {
     // Breakpoint is the current breakpoint at which the debugged process is
@@ -114,7 +118,7 @@ public class DlvApi {
     // Type of the variable after resolving any typedefs
     public String realType;
 
-    public Object kind;
+    public int kind;
 
     //Strings have their length capped at proc.maxArrayValues, use Len for the real length of a string
     //Function variables will store the name of the function in this field
@@ -132,6 +136,38 @@ public class DlvApi {
     public Variable[] children;
     // Unreadable addresses will have this field set
     public String unreadable;
+
+    @NotNull
+    private Kind getKind() {
+      try {
+        return Kind.values()[kind];
+      }
+      catch (Exception e) {
+        LOG.warn("Unknown kind '" + kind + "' of variable '" + name + "'");
+        return Kind.Invalid;
+      }
+    }
+
+    private enum Kind {
+      Invalid,
+      Bool,
+      Int, Int8, Int16, Int32, Int64, Uint, Uint8, Uint16, Uint32, Uint64,
+      Uintptr,
+      Float32, Float64,
+      Complex64, Complex128,
+      Array, Chan, Func, Interface, Map, Ptr, Slice, String, Struct,
+      UnsafePointer;
+
+      private boolean isNumber() {
+        return compareTo(Int) >= 0 && compareTo(Complex128) <= 0;
+      }
+    }
+
+    public boolean isNumber() { return getKind().isNumber(); }
+
+    public boolean isString() { return getKind() == Kind.String; }
+
+    public boolean isBool() { return getKind() == Kind.Bool; }
   }
 
   // Goroutine represents the information relevant to Delve from the runtime's
