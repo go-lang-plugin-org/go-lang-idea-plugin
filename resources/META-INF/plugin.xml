@@ -226,6 +226,9 @@
     <localInspection language="go" displayName="Missing return at end of function" groupPath="Go"
                      groupName="Control flow issues" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoMissingReturnInspection"/>
+    <localInspection language="go" displayName="Used as value in condition"
+                     groupName="Control flow issues" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoUsedAsValueInCondition"/>
     <!-- /control flow issues -->
 
     <!-- general -->

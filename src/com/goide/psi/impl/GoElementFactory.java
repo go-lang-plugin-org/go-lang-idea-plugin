@@ -138,4 +138,10 @@ public class GoElementFactory {
     GoFile file = createFileFromText(project, "package a; type " + name + " struct {}; func f() { " + name + "{} }");
     return PsiTreeUtil.findChildOfType(file, GoTypeReferenceExpression.class);
   }
+
+  @NotNull
+  public static GoSimpleStatement createComparison(@NotNull Project project, @NotNull String text) {
+    GoFile file = createFileFromText(project, "package a; func a() {\n " + text + "}");
+    return PsiTreeUtil.findChildOfType(file, GoSimpleStatement.class);
+  }
 }
