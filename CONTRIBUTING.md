@@ -80,6 +80,7 @@ in the way we spend time to understand the problems and thus solve them.
 ### Getting started with the plugin development
 1. Checkout plugin repo and open the project
 1. Import the project from gradle
+1. Git revert changes to the .idea folder because IDEA Gradle import blows it away (https://youtrack.jetbrains.com/issue/IDEA-146295)
 1. Setup the right version of [Grammar-Kit](https://dl.dropboxusercontent.com/u/4294872/GrammarKit-21-08-2015.zip)
 1. Setup **Ant Support**, **UI Designer**, and **Gradle** plugins
 1. Run the **Go** run configuration
