@@ -67,7 +67,7 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
                                                                                         consoleProperties, getEnvironment(),
                                                                                         new GoTestLocationProvider());
     consoleView.attachToProcess(processHandler);
-    consoleView.addMessageFilter(new GoConsoleFilter(myConfiguration.getProject(), myModule, myConfiguration.getWorkingDirectory()));
+    consoleView.addMessageFilter(new GoConsoleFilter(myConfiguration.getProject(), myModule, myConfiguration.getWorkingDirectoryUrl()));
 
     DefaultExecutionResult executionResult = new DefaultExecutionResult(consoleView, processHandler);
     executionResult.setRestartActions(new ToggleAutoTestAction());

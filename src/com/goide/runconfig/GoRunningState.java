@@ -40,7 +40,7 @@ public abstract class GoRunningState<T extends GoRunConfigurationBase<?>> extend
     super(env);
     myModule = module;
     myConfiguration = configuration;
-    addConsoleFilters(new GoConsoleFilter(myConfiguration.getProject(), myModule, myConfiguration.getWorkingDirectory()));
+    addConsoleFilters(new GoConsoleFilter(myConfiguration.getProject(), myModule, myConfiguration.getWorkingDirectoryUrl()));
   }
 
   @NotNull
