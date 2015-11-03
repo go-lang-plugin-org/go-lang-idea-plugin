@@ -46,6 +46,9 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       Collection<PsiElement> children = PsiTreeUtil.findChildrenOfType(topLevel, element.getClass());
       boolean alone = children.size() == 1 && children.iterator().next().equals(element);
       String result = getSignature(element);
+      if (result != "") {
+        result = "<p><b>"+result+"</b></p>\n";
+      }
       List<PsiComment> comments = getPreviousNonWsComment(alone ? topLevel : element);
       if (!comments.isEmpty()) result += getCommentText(comments);
       return result;
@@ -125,7 +128,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       return "";
     }
 
-    StringBuilder builder = new StringBuilder("<p><b>func ").append(identifier != null ? identifier.getText() : "").append('(');
+    StringBuilder builder = new StringBuilder("func ").append(identifier != null ? identifier.getText() : "").append('(');
     if (signature != null) {
       builder.append(getParametersAsString(signature.getParameters()));
     }
@@ -149,11 +152,23 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
         builder.append(' ').append(XmlStringUtil.escapeString(type.getText()));
       }
     }
-    return builder.append("</b></p>\n").toString();
+    return builder.toString().trim();
   }
 
   @NotNull
   private static String getParametersAsString(@NotNull GoParameters parameters) {
     return StringUtil.join(GoParameterInfoHandler.getParameterPresentations(parameters), ", ");
+  }
+
+  @Nullable
+  @Override
+  public String getQuickNavigateInfo(PsiElement element, PsiElement originalElement) {
+    if (element instanceof GoNamedElement) {
+      String result = getSignature(element);
+      if (result != "") {
+        return result;
+      }
+    }
+    return super.getQuickNavigateInfo(element, originalElement);
   }
 }
