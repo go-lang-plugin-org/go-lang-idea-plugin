@@ -213,6 +213,11 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
     return myWorkingDirectory;
   }
 
+  @NotNull
+  public String getWorkingDirectoryUrl() {
+    return VfsUtilCore.pathToUrl(myWorkingDirectory);
+  }
+
   public void setWorkingDirectory(@NotNull String workingDirectory) {
     myWorkingDirectory = workingDirectory;
   }

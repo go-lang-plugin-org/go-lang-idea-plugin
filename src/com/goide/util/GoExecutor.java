@@ -42,6 +42,7 @@ import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.CharsetToolkit;
+import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.util.Consumer;
 import com.intellij.util.EnvironmentUtil;
 import com.intellij.util.ObjectUtils;
@@ -301,7 +302,7 @@ public class GoExecutor {
       RunContentExecutor runContentExecutor = new RunContentExecutor(myProject, outputHandler)
         .withTitle(getPresentableName())
         .withActivateToolWindow(myShowOutputOnError)
-        .withFilter(new GoConsoleFilter(myProject, myModule, myWorkDirectory));
+        .withFilter(new GoConsoleFilter(myProject, myModule, myWorkDirectory != null ? VfsUtilCore.pathToUrl(myWorkDirectory) : null));
       Disposer.register(myProject, runContentExecutor);
       runContentExecutor.run();
       historyProcessListener.apply(outputHandler);
