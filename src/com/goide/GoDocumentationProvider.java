@@ -46,8 +46,8 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       Collection<PsiElement> children = PsiTreeUtil.findChildrenOfType(topLevel, element.getClass());
       boolean alone = children.size() == 1 && children.iterator().next().equals(element);
       String result = getSignature(element);
-      if (result != "") {
-        result = "<p><b>"+result+"</b></p>\n";
+      if (!result.isEmpty()) {
+        result = "<p><b>" + result + "</b></p>\n";
       }
       List<PsiComment> comments = getPreviousNonWsComment(alone ? topLevel : element);
       if (!comments.isEmpty()) result += getCommentText(comments);
@@ -165,7 +165,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
   public String getQuickNavigateInfo(PsiElement element, PsiElement originalElement) {
     if (element instanceof GoNamedElement) {
       String result = getSignature(element);
-      if (result != "") {
+      if (!result.isEmpty()) {
         return result;
       }
     }
