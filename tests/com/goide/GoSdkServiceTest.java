@@ -21,9 +21,12 @@ import com.intellij.openapi.Disposable;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.testFramework.UsefulTestCase;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
@@ -34,30 +37,42 @@ public class GoSdkServiceTest extends UsefulTestCase {
     assertEquals("/path/to/sdk/bin/go", getExecutablePath("/path/to/sdk"));
   }
   
+  public void testRegularSdkPathWithGorootName() {
+    setIsWindows(false);
+    setIsLinux(false);
+    String sdkPath = createDir("goroot/").getAbsolutePath();
+    assertEquals(sdkPath + "/goroot/bin/go", getExecutablePath(sdkPath + "/goroot"));
+  }
+
   public void testSingletonAppEngineSdkPath() {
     setIsWindows(false);
-    assertEquals("/path/to/sdk/goapp", getExecutablePath("/path/to/sdk/goroot"));
+    String sdkPath = createDir("goroot/", "goapp").getAbsolutePath();
+    assertEquals(sdkPath + "/goapp", getExecutablePath(sdkPath + "/goroot"));
   }
-  
+
   public void testGcloudAppEngineSdkPath() {
     setIsWindows(false);
-    assertEquals("/path/to/sdk/bin/goapp", getExecutablePath("/path/to/sdk/platform/google_appengine/goroot"));
+    String sdkPath = createDir("platform/google_appengine/goroot/", "bin/goapp").getAbsolutePath();
+    assertEquals(sdkPath + "/bin/goapp", getExecutablePath(sdkPath + "/platform/google_appengine/goroot"));
   }
-  
+
   public void testRegularSdkPathWindows() {
     setIsWindows(true);
     setIsLinux(false);
-    assertEquals("/path/to/sdk/bin/go.exe", getExecutablePath("/path/to/sdk"));
+    String sdkPath = createDir("platform/google_appengine/goroot/", "bin/goapp").getAbsolutePath();
+    assertEquals(sdkPath + "/bin/go.exe", getExecutablePath(sdkPath));
   }
-  
+
   public void testSingletonAppEngineSdkPathWindows() {
     setIsWindows(true);
-    assertEquals("/path/to/sdk/goapp.bat", getExecutablePath("/path/to/sdk/goroot"));
+    String sdkPath = createDir("goroot/", "goapp.bat").getAbsolutePath();
+    assertEquals(sdkPath + "/goapp.bat", getExecutablePath(sdkPath + "/goroot"));
   }
-  
+
   public void testGcloudAppEngineSdkPathWindows() {
     setIsWindows(true);
-    assertEquals("/path/to/sdk/bin/goapp.cmd", getExecutablePath("/path/to/sdk/platform/google_appengine/goroot"));
+    String sdkPath = createDir("platform/google_appengine/goroot/", "bin/goapp.cmd").getAbsolutePath();
+    assertEquals(sdkPath + "/bin/goapp.cmd", getExecutablePath(sdkPath + "/platform/google_appengine/goroot"));
   }
 
   private static String getExecutablePath(@NotNull String sdkPath) {
@@ -67,8 +82,7 @@ public class GoSdkServiceTest extends UsefulTestCase {
   private void setIsWindows(boolean value) {
     setIsWindows(value, SystemInfo.isWindows, "isWindows");
   }
-  
-  
+
   private void setIsLinux(boolean value) {
     setIsWindows(value, SystemInfo.isLinux, "isLinux");
   }
@@ -81,7 +95,7 @@ public class GoSdkServiceTest extends UsefulTestCase {
       modifiersField.setAccessible(true);
       modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
       field.set(null, value);
-      
+
       Disposer.register(getTestRootDisposable(), new Disposable() {
         @Override
         public void dispose() {
@@ -100,5 +114,25 @@ public class GoSdkServiceTest extends UsefulTestCase {
     catch (NoSuchFieldException e) {
       throw new RuntimeException(e);
     }
-  }  
+  }
+
+  private static File createDir(String... children) {
+    try {
+      final File dir = FileUtil.createTempDirectory("goSdk", "test");
+      for (String child : children) {
+        File file = new File(dir, child);
+        FileUtil.createParentDirs(file);
+        if (StringUtil.endsWithChar(child, '/')) {
+          assertTrue(file.mkdir());
+        }
+        else {
+          assertTrue(file.createNewFile());
+        }
+      }
+      return dir;
+    }
+    catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
 }
