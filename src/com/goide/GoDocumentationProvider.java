@@ -46,8 +46,8 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       Collection<PsiElement> children = PsiTreeUtil.findChildrenOfType(topLevel, element.getClass());
       boolean alone = children.size() == 1 && children.iterator().next().equals(element);
       String result = getSignature(element);
-      if (!result.isEmpty()) {
-        result = "<p><b>" + result + "</b></p>\n";
+      if (StringUtil.isNotEmpty(result)) {
+        result = "<p><b>" + result + "</b></p>";
       }
       List<PsiComment> comments = getPreviousNonWsComment(alone ? topLevel : element);
       if (!comments.isEmpty()) result += getCommentText(comments);
@@ -114,9 +114,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
 
   @NotNull
   private static String getSignature(PsiElement element) {
-    if (!(element instanceof GoSignatureOwner)) {
-      return "";
-    }
+    if (!(element instanceof GoSignatureOwner)) return "";
 
     PsiElement identifier = null;
     if (element instanceof GoNamedSignatureOwner) {
@@ -152,7 +150,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
         builder.append(' ').append(XmlStringUtil.escapeString(type.getText()));
       }
     }
-    return builder.toString().trim();
+    return builder.append("</b></p>\n").toString();
   }
 
   @NotNull
@@ -165,9 +163,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
   public String getQuickNavigateInfo(PsiElement element, PsiElement originalElement) {
     if (element instanceof GoNamedElement) {
       String result = getSignature(element);
-      if (!result.isEmpty()) {
-        return result;
-      }
+      if (StringUtil.isNotEmpty(result)) return result;
     }
     return super.getQuickNavigateInfo(element, originalElement);
   }
