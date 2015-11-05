@@ -45,13 +45,11 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       GoTopLevelDeclaration topLevel = PsiTreeUtil.getParentOfType(element, GoTopLevelDeclaration.class);
       Collection<PsiElement> children = PsiTreeUtil.findChildrenOfType(topLevel, element.getClass());
       boolean alone = children.size() == 1 && children.iterator().next().equals(element);
-      String result = getSignature(element);
-      if (StringUtil.isNotEmpty(result)) {
-        result = "<p><b>" + result + "</b></p>";
-      }
-      List<PsiComment> comments = getPreviousNonWsComment(alone ? topLevel : element);
-      if (!comments.isEmpty()) result += getCommentText(comments);
-      return result;
+      String signature = getSignature(element);
+      String result = StringUtil.isNotEmpty(signature) ? "<b>" + signature + "</b>" : signature;
+      String commentText = getCommentText(getPreviousNonWsComment(alone ? topLevel : element));
+      String br = StringUtil.isNotEmpty(result) ? "<br/>" : "";
+      return StringUtil.isNotEmpty(commentText) ? result + br + commentText : result;
     }
     else if (element instanceof PsiDirectory) {
       String comments = getPackageComment(((PsiDirectory)element).findFile("doc.go"));
@@ -107,9 +105,9 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
           text = StringUtil.trimStart(text, "/*");
           text = LEADING_TAB.matcher(text).replaceAll("");
         }
-        return "<p>" + XmlStringUtil.escapeString(text.trim()) + "</p>";
+        return XmlStringUtil.escapeString(text.trim());
       }
-    }), "\n");
+    }), "<br/>");
   }
 
   @NotNull
@@ -150,7 +148,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
         builder.append(' ').append(XmlStringUtil.escapeString(type.getText()));
       }
     }
-    return builder.append("</b></p>\n").toString();
+    return builder.append("</b>").toString();
   }
 
   @NotNull

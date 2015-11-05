@@ -1,4 +1,1 @@
-<p><b>func Println(a ...interface{}) (n int, err error)</b></p>
-<p>Println formats using the default formats for its operands and writes to standard output.</p>
-<p>Spaces are always added between operands and a newline is appended.</p>
-<p>It returns the number of bytes written and any write error encountered.</p>
+<b>func Println(a ...interface{}) (n int, err error)</b></b><br/>Println formats using the default formats for its operands and writes to standard output.<br/>Spaces are always added between operands and a newline is appended.<br/>It returns the number of bytes written and any write error encountered.

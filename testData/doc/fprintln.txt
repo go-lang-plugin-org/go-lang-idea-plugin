@@ -1,4 +1,1 @@
-<p><b>func Fprintln(w io.Writer, a ...interface{}) (n int, err error)</b></p>
-<p>Fprintln formats using the default formats for its operands and writes to w.</p>
-<p>Spaces are always added between operands and a newline is appended.</p>
-<p>It returns the number of bytes written and any write error encountered.</p>
+<b>func Fprintln(w io.Writer, a ...interface{}) (n int, err error)</b></b><br/>Fprintln formats using the default formats for its operands and writes to w.<br/>Spaces are always added between operands and a newline is appended.<br/>It returns the number of bytes written and any write error encountered.
