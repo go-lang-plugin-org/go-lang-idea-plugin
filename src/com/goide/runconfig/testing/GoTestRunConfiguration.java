@@ -111,19 +111,22 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
           throw new RuntimeConfigurationError("Cannot find package '" + myPackage + "'");
         }
         for (VirtualFile file : packageDirectory.getChildren()) {
-          if (GoTestFinder.isTestFile(file)) {
+          PsiFile psiFile = PsiManager.getInstance(getProject()).findFile(file);
+          if (psiFile != null && myTestFramework.isAvailableOnFile(psiFile)) {
             return;
           }
         }
-        throw new RuntimeConfigurationError("Cannot find Go test files in '" + myPackage + "'");
+        String message = "Cannot find Go test files in '" + myPackage + "' compatible with `" + myTestFramework.getName() + "` framework";
+        throw new RuntimeConfigurationError(message);
       case FILE:
         VirtualFile virtualFile = findFile(getFilePath());
         if (virtualFile == null) {
           throw new RuntimeConfigurationError("Test file doesn't exist");
         }
         PsiFile file = PsiManager.getInstance(getProject()).findFile(virtualFile);
-        if (file == null || !GoTestFinder.isTestFile(file)) {
-          throw new RuntimeConfigurationError("File '" + myFilePath + "' is not test");
+        if (file == null || !myTestFramework.isAvailableOnFile(file)) {
+          message = "Framework `" + myTestFramework.getName() + "` is not available on file `" + myFilePath + "`";
+          throw new RuntimeConfigurationError(message);
         }
         break;
     }

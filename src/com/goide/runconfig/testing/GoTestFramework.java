@@ -22,6 +22,7 @@ import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.testframework.TestConsoleProperties;
 import com.intellij.execution.testframework.sm.runner.OutputToGeneralTestEventsConverter;
 import com.intellij.openapi.module.Module;
+import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,6 +39,8 @@ public abstract class GoTestFramework {
   public abstract String getName();
 
   public abstract boolean isAvailable(@Nullable Module module);
+  
+  public abstract boolean isAvailableOnFile(@NotNull PsiFile file);
 
   @NotNull
   protected abstract GoTestRunningState newRunningState(@NotNull ExecutionEnvironment env,

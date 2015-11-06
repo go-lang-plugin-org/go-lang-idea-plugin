@@ -29,6 +29,7 @@ import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.testframework.TestConsoleProperties;
 import com.intellij.execution.testframework.sm.runner.OutputToGeneralTestEventsConverter;
 import com.intellij.openapi.module.Module;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.stubs.StubIndex;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -67,10 +68,26 @@ public class GocheckFramework extends GoTestFramework {
     if (module == null) return false;
     for (GoFile file : StubIndex.getElements(GoPackagesIndex.KEY, "check", module.getProject(), GoUtil.moduleScope(module), GoFile.class)) {
       String importPath = file.getImportPath();
-      if (importPath != null) {
-        if (GO_CHECK_IMPORT_PATH.matcher(importPath).matches() || GO_CHECK_GITHUB_IMPORT_PATH.matcher(importPath).matches()) {
-          return true;
-        }
+      if (isGoCheckImportPath(importPath)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private static boolean isGoCheckImportPath(String importPath) {
+    if (importPath == null) return false;
+    return GO_CHECK_IMPORT_PATH.matcher(importPath).matches() || GO_CHECK_GITHUB_IMPORT_PATH.matcher(importPath).matches();
+  }
+
+  @Override
+  public boolean isAvailableOnFile(@NotNull PsiFile file) {
+    if (!GoTestFinder.isTestFile(file)) {
+      return false;
+    }
+    for (String importPath : ((GoFile)file).getImportedPackagesMap().keySet()) {
+      if (isGoCheckImportPath(importPath)) {
+        return true;
       }
     }
     return false;

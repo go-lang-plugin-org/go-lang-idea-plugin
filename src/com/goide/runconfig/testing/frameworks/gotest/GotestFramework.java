@@ -16,6 +16,7 @@
 
 package com.goide.runconfig.testing.frameworks.gotest;
 
+import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.runconfig.testing.GoTestFramework;
 import com.goide.runconfig.testing.GoTestRunConfiguration;
 import com.goide.runconfig.testing.GoTestRunningState;
@@ -23,6 +24,7 @@ import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.testframework.TestConsoleProperties;
 import com.intellij.execution.testframework.sm.runner.OutputToGeneralTestEventsConverter;
 import com.intellij.openapi.module.Module;
+import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,6 +44,11 @@ public class GotestFramework extends GoTestFramework {
   @Override
   public boolean isAvailable(@Nullable Module module) {
     return true;
+  }
+
+  @Override
+  public boolean isAvailableOnFile(@NotNull PsiFile file) {
+    return GoTestFinder.isTestFile(file);
   }
 
   @NotNull
