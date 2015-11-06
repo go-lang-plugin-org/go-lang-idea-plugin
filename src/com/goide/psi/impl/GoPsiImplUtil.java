@@ -957,10 +957,11 @@ public class GoPsiImplUtil {
     int startOffset = isQuote(quote) ? 1 : 0;
     int endOffset = text.length();
     if (text.length() > 1) {
-      if (isQuote(quote) && text.charAt(text.length() - 1) == quote) {
+      char lastChar = text.charAt(text.length() - 1);
+      if (isQuote(quote) && lastChar == quote) {
         endOffset = text.length() - 1;
       }
-      if (!isQuote(quote) && isQuote(text.charAt(text.length()))){
+      if (!isQuote(quote) && isQuote(lastChar)){
         endOffset = text.length() - 1;
       }
     }
