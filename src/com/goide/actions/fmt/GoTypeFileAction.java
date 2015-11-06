@@ -23,9 +23,14 @@ import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class GoImportsFileAction extends GoDownloadableFileAction {
-  public GoImportsFileAction() {
-    super("goimports", "golang.org/x/tools/cmd/goimports");
+public class GoTypeFileAction extends GoDownloadableFileAction {
+  public GoTypeFileAction() {
+    super("gotype", "golang.org/x/tools/cmd/gotype");
+  }
+
+  @Override
+  protected boolean isAvailableOnFile(VirtualFile file) {
+    return super.isAvailableOnFile(file) || file.isDirectory();
   }
 
   @NotNull
@@ -33,6 +38,6 @@ public class GoImportsFileAction extends GoDownloadableFileAction {
   protected GoExecutor createExecutor(@NotNull Project project, @Nullable Module module, @NotNull String title, @NotNull String filePath) {
     VirtualFile executable = getExecutable(project, module);
     assert executable != null;
-    return GoExecutor.in(project, module).withExePath(executable.getPath()).withParameters("-w", filePath).showOutputOnError();
+    return GoExecutor.in(project, module).withExePath(executable.getPath()).withParameters("-e", "-a", "-v", filePath).showOutputOnError();
   }
 }

@@ -279,6 +279,10 @@
             description="Optimizes imports for selected file with goimports util">
       <add-to-group group-id="CodeMenu" anchor="last"/>
     </action>
+      <action id="GoTypeFileAction" class="com.goide.actions.fmt.GoTypeFileAction" text="Gotype file"
+            description="Analyze types for selected file with gotype util">
+      <add-to-group group-id="CodeMenu" anchor="last"/>
+    </action>
   </actions>
 
   <application-components>
