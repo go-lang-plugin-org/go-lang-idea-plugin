@@ -61,7 +61,7 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
     configuration.setTestFramework(myFramework);
     if (contextElement instanceof PsiDirectory) {
       for (PsiFile file : ((PsiDirectory)contextElement).getFiles()) {
-        if (GoTestFinder.isTestFile(file)) {
+        if (myFramework.isAvailableOnFile(file)) {
           configuration.setName(getPackageConfigurationName(((PsiDirectory)contextElement).getName()));
           configuration.setKind(GoTestRunConfiguration.Kind.DIRECTORY);
           String directoryPath = ((PsiDirectory)contextElement).getVirtualFile().getPath();
@@ -74,7 +74,7 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
     }
     else {
       PsiFile file = contextElement.getContainingFile();
-      if (GoTestFinder.isTestFile(file)) {
+      if (myFramework.isAvailableOnFile(file)) {
         if (GoRunUtil.isPackageContext(contextElement)) {
           String packageName = StringUtil.notNullize(((GoFile)file).getImportPath());
           configuration.setKind(GoTestRunConfiguration.Kind.PACKAGE);
