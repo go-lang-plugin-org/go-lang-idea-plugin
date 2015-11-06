@@ -46,11 +46,6 @@ public class DlvBreakpointType extends XLineBreakpointType<DlvBreakpointProperti
   }
 
   @Override
-  public int getPriority() {
-    return 100; // in case of conflicts with gdb
-  }
-
-  @Override
   public boolean canPutAt(@NotNull VirtualFile file, int line, @NotNull Project project) {
     if (line < 0 || DlvDebugProcess.isDlvDisabled || file.getFileType() != GoFileType.INSTANCE) return false;
     return isLineBreakpointAvailable(file, line, project);
