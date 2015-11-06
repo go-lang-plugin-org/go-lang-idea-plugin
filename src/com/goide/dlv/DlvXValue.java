@@ -33,12 +33,13 @@ import javax.swing.*;
 import java.util.regex.Pattern;
 
 class DlvXValue extends XNamedValue {
+  @NotNull
   private final DlvApi.Variable myVariable;
   private final Icon myIcon;
   private final DlvCommandProcessor myProcessor;
   private final int myFrameId;
 
-  public DlvXValue(DlvApi.Variable variable, Icon icon, DlvCommandProcessor processor, int frameId) {
+  public DlvXValue(@NotNull DlvApi.Variable variable, Icon icon, DlvCommandProcessor processor, int frameId) {
     super(variable.name);
     myVariable = variable;
     myIcon = icon;
@@ -56,7 +57,9 @@ class DlvXValue extends XNamedValue {
   @Override
   public void computeChildren(@NotNull XCompositeNode node) {
     DlvApi.Variable[] children = myVariable.children;
-    if (children.length == 0) super.computeChildren(node);
+    if (children.length == 0) {
+      super.computeChildren(node);
+    }
     else {
       XValueChildrenList list = new XValueChildrenList();
       for (DlvApi.Variable child : children) {
@@ -74,16 +77,16 @@ class DlvXValue extends XNamedValue {
       public void setValue(@NotNull String newValue, @NotNull final XModificationCallback callback) {
         myProcessor.send(new DlvRequest.SetSymbol(myVariable.name, newValue, myFrameId))
           .processed(new Consumer<Object>() {
-          @Override
-          public void consume(Object o) {
-            if (o != null) {
-              callback.valueModified();
+            @Override
+            public void consume(@Nullable Object o) {
+              if (o != null) {
+                callback.valueModified();
+              }
             }
-          }
-        })
+          })
           .rejected(new Consumer<Throwable>() {
             @Override
-            public void consume(Throwable throwable) {
+            public void consume(@NotNull Throwable throwable) {
               callback.errorOccurred(throwable.getMessage());
             }
           });
@@ -96,14 +99,17 @@ class DlvXValue extends XNamedValue {
     final String value = myVariable.value;
     if (myVariable.isNumber()) return new XNumericValuePresentation(value);
     if (myVariable.isString()) return new XStringValuePresentation(value);
-    if (myVariable.isBool()) return new XValuePresentation() {
+    if (myVariable.isBool()) {
+      return new XValuePresentation() {
         @Override
         public void renderValue(@NotNull XValueTextRenderer renderer) {
           renderer.renderValue(value);
         }
       };
+    }
     String type = myVariable.type;
     String prefix = myVariable.type + " ";
-    return new XRegularValuePresentation(StringUtil.startsWith(value, prefix) ? value.replaceFirst(Pattern.quote(prefix), "") : value, type);
+    return new XRegularValuePresentation(StringUtil.startsWith(value, prefix) ? value.replaceFirst(Pattern.quote(prefix), "") : value,
+                                         type);
   }
 }

@@ -99,6 +99,7 @@ public class DlvVm extends VmBase {
         return Promise.DONE;
       }
 
+      @NotNull
       @Override
       protected DebugEventListener getDebugListener() {
         return DlvVm.this.getDebugListener();

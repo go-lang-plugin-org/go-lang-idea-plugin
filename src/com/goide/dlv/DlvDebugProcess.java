@@ -78,6 +78,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     }
   };
 
+  @NotNull
   private final Consumer<DebuggerState> myStateConsumer = new Consumer<DebuggerState>() {
     @Override
     public void consume(@NotNull final DebuggerState o) {
