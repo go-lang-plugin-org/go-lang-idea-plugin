@@ -119,7 +119,7 @@ public class GoSdkUtil {
     executableName = GoEnvironmentUtil.getBinaryFileNameForPath(executableName);
     Collection<VirtualFile> roots = getGoPathRoots(project, module);
     for (VirtualFile file : roots) {
-      VirtualFile child = file.findChild("bin/" + executableName);
+      VirtualFile child = VfsUtil.findRelativeFile(file, "bin", executableName);
       if (child != null) return child;
     }
     File fromPath = PathEnvironmentVariableUtil.findInPath(executableName);
