@@ -97,12 +97,11 @@ class DlvStackFrame extends XStackFrame {
               PsiElement elementAtCursor =
                 DebuggerUtilsEx.findElementAt(PsiDocumentManager.getInstance(project).getPsiFile(document), offset);
               GoTypeOwner e = PsiTreeUtil.getParentOfType(elementAtCursor,
-                                                          GoReferenceExpression.class,
+                                                          GoExpression.class,
                                                           GoVarDefinition.class,
                                                           GoConstDefinition.class,
                                                           GoParamDefinition.class);
-              if (e instanceof GoReferenceExpression && ((GoReferenceExpression)e).getQualifier() == null ||
-                  e != null && !(e instanceof GoReferenceExpression)) {
+              if (e != null) {
                 currentRange.set(e.getTextRange());
               }
             }
