@@ -54,12 +54,16 @@ public abstract class GoExternalToolsAction extends DumbAwareAction {
     super.update(e);
     Project project = e.getProject();
     VirtualFile file = e.getData(CommonDataKeys.VIRTUAL_FILE);
-    if (project == null || file == null || !file.isInLocalFileSystem() || file.getFileType() != GoFileType.INSTANCE) {
+    if (project == null || file == null || !file.isInLocalFileSystem() || !isAvailableOnFile(file)) {
       e.getPresentation().setEnabled(false);
       return;
     }
     Module module = ModuleUtilCore.findModuleForFile(file, project);
     e.getPresentation().setEnabled(GoSdkService.getInstance(project).isGoModule(module));
+  }
+
+  protected boolean isAvailableOnFile(VirtualFile file) {
+    return file.getFileType() == GoFileType.INSTANCE;
   }
 
   @Override
@@ -102,11 +106,15 @@ public abstract class GoExternalToolsAction extends DumbAwareAction {
                                 boolean withProgress,
                                 @NotNull final Consumer<Boolean> consumer) {
     Document document = FileDocumentManager.getInstance().getDocument(virtualFile);
-    assert document != null;
+    if (document != null) {
+      FileDocumentManager.getInstance().saveDocument(document);
+    }
+    else {
+      FileDocumentManager.getInstance().saveAllDocuments();
+    }
     String filePath = virtualFile.getCanonicalPath();
     assert filePath != null;
 
-    FileDocumentManager.getInstance().saveDocument(document);
     createExecutor(project, module, title, filePath).executeWithProgress(withProgress, new Consumer<Boolean>() {
       @Override
       public void consume(Boolean result) {
