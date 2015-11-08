@@ -86,7 +86,7 @@ public class GoRunUtil {
   }
 
   public static void installGoWithMainFileChooser(final Project project, @NotNull TextFieldWithBrowseButton fileField) {
-    installFileChooser(project, fileField, false, new Condition<VirtualFile>() {
+    installFileChooser(project, fileField, false, false, new Condition<VirtualFile>() {
       @Override
       public boolean value(VirtualFile file) {
         if (file.getFileType() != GoFileType.INSTANCE) {
@@ -105,19 +105,27 @@ public class GoRunUtil {
     return false;
   }
 
-  public static void installFileChooser(@NotNull Project project, @NotNull ComponentWithBrowseButton field, boolean directory) {
-    installFileChooser(project, field, directory, null);
+  public static void installFileChooser(@NotNull Project project,
+                                        @NotNull ComponentWithBrowseButton field,
+                                        boolean directory) {
+    installFileChooser(project, field, directory, false);
+  }
+
+  public static void installFileChooser(@NotNull Project project, @NotNull ComponentWithBrowseButton field, boolean directory,
+                                        boolean showFileSystemRoots) {
+    installFileChooser(project, field, directory, showFileSystemRoots, null);
   }
 
   public static void installFileChooser(@NotNull Project project,
                                         @NotNull ComponentWithBrowseButton field,
                                         boolean directory,
+                                        boolean showFileSystemRoots,
                                         @Nullable Condition<VirtualFile> fileFilter) {
     FileChooserDescriptor chooseDirectoryDescriptor = directory
                                                       ? FileChooserDescriptorFactory.createSingleFolderDescriptor()
                                                       : FileChooserDescriptorFactory.createSingleLocalFileDescriptor();
     chooseDirectoryDescriptor.setRoots(project.getBaseDir());
-    chooseDirectoryDescriptor.setShowFileSystemRoots(false);
+    chooseDirectoryDescriptor.setShowFileSystemRoots(showFileSystemRoots);
     chooseDirectoryDescriptor.withFileFilter(fileFilter);
     if (field instanceof TextFieldWithBrowseButton) {
       ((TextFieldWithBrowseButton)field).addBrowseFolderListener(new TextBrowseFolderListener(chooseDirectoryDescriptor, project));
