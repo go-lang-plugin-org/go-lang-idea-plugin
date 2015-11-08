@@ -79,39 +79,7 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
   @Override
   protected Promise<RunProfileStarter> prepare(@NotNull ExecutionEnvironment environment, @NotNull final RunProfileState state)
     throws ExecutionException {
-    final File outputFile;
-    String outputDirectoryPath = ((GoApplicationRunningState)state).myConfiguration.getOutputFilePath();
-    RunnerAndConfigurationSettings settings = environment.getRunnerAndConfigurationSettings();
-    String configurationName = settings != null ? settings.getName() : "application";
-    if (StringUtil.isEmpty(outputDirectoryPath)) {
-      try {
-        outputFile = FileUtil.createTempFile(configurationName, "go", true);
-      }
-      catch (IOException e) {
-        throw new ExecutionException("Cannot create temporary output file", e);
-      }
-    }
-    else {
-      File outputDirectory = new File(outputDirectoryPath);
-      if (outputDirectory.isDirectory() || !outputDirectory.exists() && outputDirectory.mkdirs()) {
-        outputFile = new File(outputDirectoryPath, GoEnvironmentUtil.getBinaryFileNameForPath(configurationName));
-        try {
-          if (!outputFile.exists() && !outputFile.createNewFile()) {
-            throw new ExecutionException("Cannot create output file " + outputFile.getAbsolutePath());
-          }
-        }
-        catch (IOException e) {
-          throw new ExecutionException("Cannot create output file " + outputFile.getAbsolutePath());
-        }
-      }
-      else {
-        throw new ExecutionException("Cannot create output file in " + outputDirectory.getAbsolutePath());
-      }
-    }
-    if (!prepareFile(outputFile)) {
-      throw new ExecutionException("Cannot make temporary file executable " + outputFile.getAbsolutePath());
-    }
-
+    final File outputFile = getOutputFile(environment, (GoApplicationRunningState)state);
     FileDocumentManager.getInstance().saveAllDocuments();
 
     final AsyncPromise<RunProfileStarter> buildingPromise = new AsyncPromise<RunProfileStarter>();
@@ -147,6 +115,44 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
         }
       }).executeWithProgress(false);
     return buildingPromise;
+  }
+
+  @NotNull
+  private static File getOutputFile(@NotNull ExecutionEnvironment environment, @NotNull GoApplicationRunningState state)
+    throws ExecutionException {
+    final File outputFile;
+    String outputDirectoryPath = state.getConfiguration().getOutputFilePath();
+    RunnerAndConfigurationSettings settings = environment.getRunnerAndConfigurationSettings();
+    String configurationName = settings != null ? settings.getName() : "application";
+    if (StringUtil.isEmpty(outputDirectoryPath)) {
+      try {
+        outputFile = FileUtil.createTempFile(configurationName, "go", true);
+      }
+      catch (IOException e) {
+        throw new ExecutionException("Cannot create temporary output file", e);
+      }
+    }
+    else {
+      File outputDirectory = new File(outputDirectoryPath);
+      if (outputDirectory.isDirectory() || !outputDirectory.exists() && outputDirectory.mkdirs()) {
+        outputFile = new File(outputDirectoryPath, GoEnvironmentUtil.getBinaryFileNameForPath(configurationName));
+        try {
+          if (!outputFile.exists() && !outputFile.createNewFile()) {
+            throw new ExecutionException("Cannot create output file " + outputFile.getAbsolutePath());
+          }
+        }
+        catch (IOException e) {
+          throw new ExecutionException("Cannot create output file " + outputFile.getAbsolutePath());
+        }
+      }
+      else {
+        throw new ExecutionException("Cannot create output file in " + outputDirectory.getAbsolutePath());
+      }
+    }
+    if (!prepareFile(outputFile)) {
+      throw new ExecutionException("Cannot make temporary file executable " + outputFile.getAbsolutePath());
+    }
+    return outputFile;
   }
 
   private static boolean prepareFile(@NotNull File file) {
