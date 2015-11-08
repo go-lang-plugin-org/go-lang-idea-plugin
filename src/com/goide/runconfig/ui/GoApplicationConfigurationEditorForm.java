@@ -34,6 +34,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Locale;
 
 public class GoApplicationConfigurationEditorForm extends SettingsEditor<GoApplicationConfiguration> {
   @NotNull private final Project myProject;
@@ -54,7 +55,7 @@ public class GoApplicationConfigurationEditorForm extends SettingsEditor<GoAppli
 
     installRunKindComboBox();
     GoRunUtil.installGoWithMainFileChooser(myProject, myFileField);
-    GoRunUtil.installFileChooser(myProject, myOutputFilePathField, true);
+    GoRunUtil.installFileChooser(myProject, myOutputFilePathField, true, true);
   }
 
   private void onRunKindChanged() {
@@ -105,7 +106,7 @@ public class GoApplicationConfigurationEditorForm extends SettingsEditor<GoAppli
       @Override
       public void customize(JList list, @Nullable GoApplicationConfiguration.Kind kind, int index, boolean selected, boolean hasFocus) {
         if (kind != null) {
-          String kindName = StringUtil.capitalize(kind.toString().toLowerCase());
+          String kindName = StringUtil.capitalize(kind.toString().toLowerCase(Locale.US));
           setText(kindName);
         }
       }
