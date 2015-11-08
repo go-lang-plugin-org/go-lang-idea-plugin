@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 plugins {
   id 'org.jetbrains.intellij' version "0.0.27"
   id "de.undercouch.download" version "2.0.0"
