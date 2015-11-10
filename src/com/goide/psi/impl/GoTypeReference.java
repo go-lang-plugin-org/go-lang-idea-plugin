@@ -69,7 +69,7 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
   }
   
   @Override
-  public boolean isReferenceTo(PsiElement element) {
+  public boolean isReferenceTo(@NotNull PsiElement element) {
     return GoUtil.couldBeReferenceTo(element, myElement) && super.isReferenceTo(element);
   }
 
@@ -139,7 +139,7 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
       if (builtinFile == null) return false;
       GoVarDefinition nil = ContainerUtil.find(builtinFile.getVars(), new Condition<GoVarDefinition>() {
         @Override
-        public boolean value(GoVarDefinition v) {
+        public boolean value(@NotNull GoVarDefinition v) {
           return GoConstants.NIL.equals(v.getName());
         }
       });

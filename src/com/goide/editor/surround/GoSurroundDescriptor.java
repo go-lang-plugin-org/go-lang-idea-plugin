@@ -46,7 +46,7 @@ public class GoSurroundDescriptor implements SurroundDescriptor {
 
   @NotNull
   @Override
-  public PsiElement[] getElementsToSurround(PsiFile file, int startOffset, int endOffset) {
+  public PsiElement[] getElementsToSurround(@NotNull PsiFile file, int startOffset, int endOffset) {
     GoExpression expr = GoIntroduceVariableBase.findExpressionInSelection(file, startOffset, endOffset);
     if (expr == null) return PsiElement.EMPTY_ARRAY;
     UsageTrigger.trigger("go.surroundwith.expression");
@@ -60,6 +60,7 @@ public class GoSurroundDescriptor implements SurroundDescriptor {
   }
 
   public static class GoParenthesisSurrounder implements Surrounder {
+    @NotNull
     @Override
     public String getTemplateDescription() {
       return "(expression)";

@@ -47,7 +47,7 @@ import java.util.Collection;
 public class WrongSdkConfigurationNotificationProvider extends EditorNotifications.Provider<EditorNotificationPanel> implements DumbAware {
   private static final Key<EditorNotificationPanel> KEY = Key.create("Setup Go SDK");
 
-  private final Project myProject;
+  @NotNull private final Project myProject;
 
   public WrongSdkConfigurationNotificationProvider(@NotNull Project project, @NotNull final EditorNotifications notifications) {
     myProject = project;

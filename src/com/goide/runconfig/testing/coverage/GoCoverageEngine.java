@@ -48,7 +48,7 @@ import java.util.Set;
 public class GoCoverageEngine extends CoverageEngine {
   private static final Condition<AbstractTreeNode> NODE_TO_COVERAGE = new Condition<AbstractTreeNode>() {
     @Override
-    public boolean value(AbstractTreeNode node) {
+    public boolean value(@NotNull AbstractTreeNode node) {
       Object value = node.getValue();
       if (value instanceof PsiFile) {
         return isProductionGoFile(((PsiFile)value));
@@ -158,6 +158,7 @@ public class GoCoverageEngine extends CoverageEngine {
     return null;
   }
 
+  @NotNull
   @Override
   public List<PsiElement> findTestsByNames(@NotNull String[] testNames, @NotNull Project project) {
     return Collections.emptyList();
@@ -168,21 +169,24 @@ public class GoCoverageEngine extends CoverageEngine {
     return null;
   }
 
+  @NotNull
   @Override
   public String getPresentableText() {
     return PRESENTABLE_TEXT;
   }
 
   @Override
-  public boolean coverageProjectViewStatisticsApplicableTo(VirtualFile fileOrDir) {
+  public boolean coverageProjectViewStatisticsApplicableTo(@NotNull VirtualFile fileOrDir) {
     return !(fileOrDir.isDirectory()) && fileOrDir.getFileType() == GoFileType.INSTANCE && !GoTestFinder.isTestFile(fileOrDir);
   }
 
+  @NotNull
   @Override
   public CoverageViewExtension createCoverageViewExtension(Project project,
                                                            CoverageSuitesBundle suiteBundle,
                                                            CoverageViewManager.StateBean stateBean) {
     return new DirectoryCoverageViewExtension(project, getCoverageAnnotator(project), suiteBundle, stateBean) {
+      @NotNull
       @Override
       public List<AbstractTreeNode> getChildrenNodes(AbstractTreeNode node) {
         return ContainerUtil.filter(super.getChildrenNodes(node), NODE_TO_COVERAGE);

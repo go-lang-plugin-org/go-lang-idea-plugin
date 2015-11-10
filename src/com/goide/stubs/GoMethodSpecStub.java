@@ -20,16 +20,17 @@ import com.goide.psi.GoMethodSpec;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.io.StringRef;
+import org.jetbrains.annotations.NotNull;
 
 public class GoMethodSpecStub extends GoNamedStub<GoMethodSpec> {
   private final int myArity;
 
-  public GoMethodSpecStub(StubElement parent, IStubElementType elementType, StringRef name, boolean isPublic, int arity) {
+  public GoMethodSpecStub(StubElement parent, @NotNull IStubElementType elementType, StringRef name, boolean isPublic, int arity) {
     super(parent, elementType, name, isPublic);
     myArity = arity;
   }
 
-  public GoMethodSpecStub(StubElement parent, IStubElementType elementType, String name, boolean isPublic, int arity) {
+  public GoMethodSpecStub(StubElement parent, @NotNull IStubElementType elementType, String name, boolean isPublic, int arity) {
     super(parent, elementType, name, isPublic);
     myArity = arity;
   }

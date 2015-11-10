@@ -112,7 +112,8 @@ public class GoImportOptimizer implements ImportOptimizer {
     return importIdentifiersToDelete;
   }
 
-  public static MultiMap<String, GoImportSpec> filterUnusedImports(@NotNull PsiFile file, 
+  @NotNull
+  public static MultiMap<String, GoImportSpec> filterUnusedImports(@NotNull PsiFile file,
                                                                    @NotNull MultiMap<String, GoImportSpec> importMap) {
     final MultiMap<String, GoImportSpec> result = MultiMap.create();
     result.putAllValues(importMap);

@@ -98,7 +98,7 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
       .withProcessListener(new ProcessAdapter() {
 
         @Override
-        public void processTerminated(ProcessEvent event) {
+        public void processTerminated(@NotNull ProcessEvent event) {
           super.processTerminated(event);
           if (event.getExitCode() == 0) {
             if (((GoApplicationRunningState)state).isDebug()) {
@@ -166,8 +166,8 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
   }
   
   private class MyDebugStarter extends RunProfileStarter {
-    private final String myOutputFilePath;
-    private final GoHistoryProcessListener myHistoryProcessListener;
+    @NotNull private final String myOutputFilePath;
+    @NotNull private final GoHistoryProcessListener myHistoryProcessListener;
 
 
     private MyDebugStarter(@NotNull String outputFilePath, @NotNull GoHistoryProcessListener historyProcessListener) {
@@ -210,8 +210,8 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
   }
 
   private class MyRunStarter extends RunProfileStarter {
-    private final String myOutputFilePath;
-    private final GoHistoryProcessListener myHistoryProcessListener;
+    @NotNull private final String myOutputFilePath;
+    @NotNull private final GoHistoryProcessListener myHistoryProcessListener;
 
 
     private MyRunStarter(@NotNull String outputFilePath, @NotNull GoHistoryProcessListener historyProcessListener) {

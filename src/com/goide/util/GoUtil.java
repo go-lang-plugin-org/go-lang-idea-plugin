@@ -54,13 +54,13 @@ public class GoUtil {
   public static final String PLUGIN_VERSION = getPlugin().getVersion();
   public static final Function<VirtualFile, String> RETRIEVE_FILE_PATH_FUNCTION = new Function<VirtualFile, String>() {
     @Override
-    public String fun(VirtualFile file) {
+    public String fun(@NotNull VirtualFile file) {
       return file.getPath();
     }
   };
   public static final Function<VirtualFile, VirtualFile> RETRIEVE_FILE_PARENT_FUNCTION = new Function<VirtualFile, VirtualFile>() {
     @Override
-    public VirtualFile fun(VirtualFile file) {
+    public VirtualFile fun(@NotNull VirtualFile file) {
       return file.getParent();
     }
   };
@@ -160,6 +160,7 @@ public class GoUtil {
     return GlobalSearchScope.moduleWithDependenciesScope(module).uniteWith(module.getModuleContentWithDependenciesScope());
   }
 
+  @Nullable
   public static IdeaPluginDescriptor getPlugin() {
     return PluginManager.getPlugin(PluginId.getId(PLUGIN_ID));
   }

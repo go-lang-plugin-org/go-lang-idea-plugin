@@ -29,7 +29,7 @@ public class GoTypeFileAction extends GoDownloadableFileAction {
   }
 
   @Override
-  protected boolean isAvailableOnFile(VirtualFile file) {
+  protected boolean isAvailableOnFile(@NotNull VirtualFile file) {
     return super.isAvailableOnFile(file) || file.isDirectory();
   }
 

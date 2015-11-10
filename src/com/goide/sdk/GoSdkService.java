@@ -97,6 +97,7 @@ public abstract class GoSdkService extends SimpleModificationTracker {
     return getGoExecutablePath(getSdkHomePath(module));
   }
 
+  @Nullable
   public static String getGoExecutablePath(@Nullable String sdkHomePath) {
     if (sdkHomePath != null) {
       if (isLooksLikeAppEngineSdkPath(sdkHomePath)) {

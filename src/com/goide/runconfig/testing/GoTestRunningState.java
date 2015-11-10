@@ -48,7 +48,7 @@ import java.io.File;
 import java.util.Collection;
 
 public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
-  private String myCoverageFilePath;
+  @Nullable private String myCoverageFilePath;
 
   public GoTestRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module, @NotNull GoTestRunConfiguration configuration) {
     super(env, module, configuration);
@@ -74,6 +74,7 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
     return executionResult;
   }
 
+  @NotNull
   @Override
   protected GoExecutor patchExecutor(@NotNull GoExecutor executor) throws ExecutionException {
     executor.withParameters("test", "-v");
@@ -125,7 +126,7 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
   }
 
   @NotNull
-  protected String buildFilePattern(GoFile file) {
+  protected String buildFilePattern(@NotNull GoFile file) {
     Collection<String> testNames = ContainerUtil.newLinkedHashSet();
     for (GoFunctionDeclaration function : file.getFunctions()) {
       ContainerUtil.addIfNotNull(testNames, GoTestFinder.getTestFunctionName(function));

@@ -29,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
 public class GoRenameImportSpecProcessor extends RenamePsiElementProcessor {
   @Nullable
   @Override
-  public PsiElement substituteElementToRename(PsiElement element, @Nullable Editor editor) {
+  public PsiElement substituteElementToRename(@NotNull PsiElement element, @Nullable Editor editor) {
     if (FindManager.getInstance(element.getProject()).canFindUsages(element)) {
       return element;
     }

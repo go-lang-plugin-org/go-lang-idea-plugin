@@ -31,6 +31,7 @@ public class GoAppEngineRunningState extends GoRunningState<GoAppEngineRunConfig
     super(env, module, configuration);
   }
 
+  @NotNull
   @Override
   protected GoExecutor patchExecutor(@NotNull GoExecutor executor) throws ExecutionException {
     executor.withParameters("serve");

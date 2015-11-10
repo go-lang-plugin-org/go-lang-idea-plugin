@@ -37,13 +37,13 @@ public class GoRunFileConfigurationEditorForm extends SettingsEditor<GoRunFileCo
   }
 
   @Override
-  protected void resetEditorFrom(GoRunFileConfiguration configuration) {
+  protected void resetEditorFrom(@NotNull GoRunFileConfiguration configuration) {
     myFileField.setText(configuration.getFilePath());
     myCommonSettingsPanel.resetEditorFrom(configuration);
   }
 
   @Override
-  protected void applyEditorTo(GoRunFileConfiguration configuration) throws ConfigurationException {
+  protected void applyEditorTo(@NotNull GoRunFileConfiguration configuration) throws ConfigurationException {
     configuration.setFilePath(myFileField.getText());
     myCommonSettingsPanel.applyEditorTo(configuration);
   }

@@ -94,7 +94,7 @@ public class GoAppEngineRunConfiguration extends GoRunConfigurationBase<GoAppEng
   }
 
   @Override
-  public void writeExternal(Element element) throws WriteExternalException {
+  public void writeExternal(@NotNull Element element) throws WriteExternalException {
     super.writeExternal(element);
     if (StringUtil.isNotEmpty(myHost)) {
       JDOMExternalizerUtil.addElementWithValueAttribute(element, HOST_NAME, myHost);

@@ -65,7 +65,7 @@ public class GoEnvironmentGoPathModificationTracker {
         handleEvent(event);
       }
 
-      private void handleEvent(VirtualFileEvent event) {
+      private void handleEvent(@NotNull VirtualFileEvent event) {
         if (pathsToTrack.contains(event.getFile().getPath())) {
           recalculateFiles();
         }
@@ -73,6 +73,7 @@ public class GoEnvironmentGoPathModificationTracker {
     });
   }
 
+  @NotNull
   private Collection<VirtualFile> recalculateFiles() {
     Collection<VirtualFile> result = ContainerUtil.newLinkedHashSet();
     for (String path : pathsToTrack) {
@@ -82,15 +83,17 @@ public class GoEnvironmentGoPathModificationTracker {
     return result;
   }
 
-  private synchronized void updateGoPathRoots(Collection<VirtualFile> newRoots) {
+  private synchronized void updateGoPathRoots(@NotNull Collection<VirtualFile> newRoots) {
     goPathRoots.clear();
     goPathRoots.addAll(newRoots);
   }
   
+  @NotNull
   private synchronized Collection<VirtualFile> getGoPathRoots() {
     return goPathRoots;
   }
 
+  @NotNull
   public static Collection<VirtualFile> getGoEnvironmentGoPathRoots() {
     return ServiceManager.getService(GoEnvironmentGoPathModificationTracker.class).getGoPathRoots();
   }

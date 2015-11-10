@@ -79,6 +79,7 @@ public class YamlFilesModificationTracker extends SimpleModificationTracker {
       @Override
       public Result<Collection<VirtualFile>> compute() {
         Collection<VirtualFile> yamlFiles = ApplicationManager.getApplication().runReadAction(new Computable<Collection<VirtualFile>>() {
+          @NotNull
           @Override
           public Collection<VirtualFile> compute() {
             GlobalSearchScope scope = module != null ? GoUtil.moduleScopeWithoutLibraries(module) : GlobalSearchScope.projectScope(project);

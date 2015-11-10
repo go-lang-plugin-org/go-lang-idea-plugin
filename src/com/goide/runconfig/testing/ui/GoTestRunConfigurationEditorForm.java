@@ -41,7 +41,7 @@ import java.awt.event.ActionListener;
 public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunConfiguration> {
   @NotNull private final Project myProject;
   private JPanel myComponent;
-  private EditorTextField myPatternEditor;
+  @Nullable private EditorTextField myPatternEditor;
 
   private JComboBox myTestKindComboBox;
   private JLabel myFileLabel;

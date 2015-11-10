@@ -45,7 +45,7 @@ import java.util.Set;
 public class GoImportReferenceHelper extends FileReferenceHelper {
   @NotNull
   @Override
-  public List<? extends LocalQuickFix> registerFixes(FileReference reference) {
+  public List<? extends LocalQuickFix> registerFixes(@NotNull FileReference reference) {
     LocalQuickFix goGetFix = new GoGetPackageFix(reference.getFileReferenceSet().getPathString());
     List<LocalQuickFix> result = ContainerUtil.newArrayList(goGetFix);
     int index = reference.getIndex();
@@ -78,7 +78,7 @@ public class GoImportReferenceHelper extends FileReferenceHelper {
 
   @NotNull
   @Override
-  public Collection<PsiFileSystemItem> getContexts(final Project project, @NotNull VirtualFile file) {
+  public Collection<PsiFileSystemItem> getContexts(@NotNull final Project project, @NotNull VirtualFile file) {
     PsiFileSystemItem psiFile = getPsiFileSystemItem(project, file);
     if (psiFile == null) {
       return Collections.emptyList();
@@ -87,7 +87,7 @@ public class GoImportReferenceHelper extends FileReferenceHelper {
     ContainerUtil.addAllNotNull(result, ContainerUtil.map(getPathsToLookup(psiFile), new Function<VirtualFile, PsiFileSystemItem>() {
       @Nullable
       @Override
-      public PsiFileSystemItem fun(VirtualFile file) {
+      public PsiFileSystemItem fun(@NotNull VirtualFile file) {
         return getPsiFileSystemItem(project, file);
       }
     }));
@@ -95,7 +95,7 @@ public class GoImportReferenceHelper extends FileReferenceHelper {
   }
 
   @Override
-  public boolean isMine(Project project, @NotNull VirtualFile file) {
+  public boolean isMine(@NotNull Project project, @NotNull VirtualFile file) {
     PsiFileSystemItem psiFile = getPsiFileSystemItem(project, file);
     return psiFile != null && psiFile instanceof GoFile;
   }

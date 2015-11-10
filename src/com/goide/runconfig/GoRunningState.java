@@ -59,6 +59,7 @@ public abstract class GoRunningState<T extends GoRunConfigurationBase<?>> extend
       .withPassParentEnvironment(myConfiguration.isPassParentEnvironment());
   }
 
+  @NotNull
   protected GoExecutor patchExecutor(@NotNull GoExecutor executor) throws ExecutionException {
     return executor;
   }

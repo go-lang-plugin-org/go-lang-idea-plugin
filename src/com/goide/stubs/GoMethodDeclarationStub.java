@@ -23,7 +23,7 @@ import com.intellij.util.io.StringRef;
 import org.jetbrains.annotations.Nullable;
 
 public class GoMethodDeclarationStub extends GoFunctionOrMethodDeclarationStub<GoMethodDeclaration> {
-  private final StringRef myTypeName;
+  @Nullable private final StringRef myTypeName;
 
   public GoMethodDeclarationStub(StubElement parent, IStubElementType elementType, StringRef name, boolean isPublic, StringRef typeName) {
     super(parent, elementType, name, isPublic);

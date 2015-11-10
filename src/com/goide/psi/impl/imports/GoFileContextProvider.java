@@ -35,7 +35,7 @@ public class GoFileContextProvider extends FileContextProvider {
 
   @NotNull
   @Override
-  public Collection<PsiFileSystemItem> getContextFolders(PsiFile file) {
+  public Collection<PsiFileSystemItem> getContextFolders(@NotNull PsiFile file) {
     VirtualFile virtualFile = file.getVirtualFile();
     return virtualFile != null
            ? new GoImportReferenceHelper().getContexts(file.getProject(), virtualFile)

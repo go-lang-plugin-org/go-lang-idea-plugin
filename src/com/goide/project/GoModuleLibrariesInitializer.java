@@ -64,8 +64,8 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   private static boolean isTestingMode = false;
 
   private final Set<VirtualFile> myFilesToWatch = ContainerUtil.newConcurrentSet();
-  private final Alarm myAlarm;
-  private final MessageBusConnection myConnection;
+  @NotNull private final Alarm myAlarm;
+  @NotNull private final MessageBusConnection myConnection;
   private boolean myModuleInitialized = false;
 
   @NotNull private final Set<VirtualFile> myLastHandledRoots = ContainerUtil.newHashSet();
@@ -88,7 +88,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
       handleEvent(event);
     }
 
-    private void handleEvent(VirtualFileEvent event) {
+    private void handleEvent(@NotNull VirtualFileEvent event) {
       if (myFilesToWatch.contains(event.getFile())) {
         scheduleUpdate();
       }
@@ -160,7 +160,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     }
   }
 
-  private void attachLibraries(@NotNull final Collection<VirtualFile> libraryRoots, final Set<VirtualFile> exclusions) {
+  private void attachLibraries(@NotNull final Collection<VirtualFile> libraryRoots, @NotNull final Set<VirtualFile> exclusions) {
     ApplicationManager.getApplication().assertIsDispatchThread();
 
     if (!libraryRoots.isEmpty()) {
@@ -191,11 +191,12 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     }
   }
 
+  @NotNull
   public String getLibraryName() {
     return GO_LIB_NAME + " <" + myModule.getName() + ">";
   }
 
-  private static void fillLibrary(@NotNull Library library, @NotNull Collection<VirtualFile> libraryRoots, Set<VirtualFile> exclusions) {
+  private static void fillLibrary(@NotNull Library library, @NotNull Collection<VirtualFile> libraryRoots, @NotNull Set<VirtualFile> exclusions) {
     ApplicationManager.getApplication().assertWriteAccessAllowed();
 
     Library.ModifiableModel libraryModel = library.getModifiableModel();

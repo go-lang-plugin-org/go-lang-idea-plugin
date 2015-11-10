@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 
 public class GoStubElementTypeFactory {
-  private static Map<String, Class> TYPES = new HashMap<String, Class>() {
+  @NotNull private static Map<String, Class> TYPES = new HashMap<String, Class>() {
     {
       put("ARRAY_OR_SLICE_TYPE", GoArrayOrSliceTypeImpl.class);
       put("CHANNEL_TYPE", GoChannelTypeImpl.class);

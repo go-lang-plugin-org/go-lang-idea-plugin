@@ -41,7 +41,7 @@ public class WrongModuleTypeNotificationProvider extends EditorNotifications.Pro
   private static final Key<EditorNotificationPanel> KEY = Key.create("Wrong module type");
   private static final String DONT_ASK_TO_CHANGE_MODULE_TYPE_KEY = "do.not.ask.to.change.module.type";
 
-  private final Project myProject;
+  @NotNull private final Project myProject;
 
   public WrongModuleTypeNotificationProvider(@NotNull Project project) {
     myProject = project;

@@ -62,7 +62,7 @@ public class GoConstSpecStubElementType extends GoStubElementType<GoConstSpecStu
   }
 
   @Override
-  public boolean shouldCreateStub(ASTNode node) {
+  public boolean shouldCreateStub(@NotNull ASTNode node) {
     return super.shouldCreateStub(node) && PsiTreeUtil.getParentOfType(node.getPsi(), GoFunctionOrMethodDeclaration.class) == null;
   }
 

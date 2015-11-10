@@ -68,7 +68,7 @@ public abstract class GoStubbedElementImpl<T extends StubBase<?>> extends StubBa
   }
   
   @Nullable
-  protected <C, S> C findChildByClass(Class<C> c, Class<S> s) {
+  protected <C, S> C findChildByClass(Class<C> c, @NotNull Class<S> s) {
     T stub = getStub();
     if (stub != null) {
       for (StubElement stubElement : stub.getChildrenStubs()) {
@@ -83,12 +83,12 @@ public abstract class GoStubbedElementImpl<T extends StubBase<?>> extends StubBa
   }
 
   @Nullable
-  protected <C, S> C findNotNullChildByClass(Class<C> c, Class<S> s) {
+  protected <C, S> C findNotNullChildByClass(Class<C> c, @NotNull Class<S> s) {
     return notNullChild(findChildByClass(c, s));
   }
 
   @NotNull
-  protected <C extends PsiElement, S> List<C> findChildrenByClass(Class<C> c, Class<S> s) {
+  protected <C extends PsiElement, S> List<C> findChildrenByClass(@NotNull Class<C> c, @NotNull Class<S> s) {
     T stub = getStub();
     if (stub != null) {
       List<C> result = new SmartList<C>();

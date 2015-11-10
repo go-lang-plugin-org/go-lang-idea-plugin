@@ -60,7 +60,7 @@ public class GoApplicationConfiguration extends GoRunConfigurationWithMain<GoApp
   }
 
   @Override
-  public void writeExternal(Element element) throws WriteExternalException {
+  public void writeExternal(@NotNull Element element) throws WriteExternalException {
     super.writeExternal(element);
     JDOMExternalizerUtil.addElementWithValueAttribute(element, KIND_ATTRIBUTE_NAME, myKind.name());
     if (!myPackage.isEmpty()) {

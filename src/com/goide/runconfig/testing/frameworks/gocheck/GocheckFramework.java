@@ -75,7 +75,7 @@ public class GocheckFramework extends GoTestFramework {
     return false;
   }
 
-  private static boolean isGoCheckImportPath(String importPath) {
+  private static boolean isGoCheckImportPath(@Nullable String importPath) {
     if (importPath == null) return false;
     return GO_CHECK_IMPORT_PATH.matcher(importPath).matches() || GO_CHECK_GITHUB_IMPORT_PATH.matcher(importPath).matches();
   }

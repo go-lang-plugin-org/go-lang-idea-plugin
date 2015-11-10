@@ -24,12 +24,14 @@ import com.intellij.openapi.components.StoragePathMacros;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleServiceManager;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @State(
   name = GoConstants.GO_LIBRARIES_SERVICE_NAME,
   storages = @Storage(file = StoragePathMacros.MODULE_FILE)
 )
 public class GoModuleLibrariesService extends GoLibrariesService<GoLibrariesState> {
+  @Nullable
   public static GoModuleLibrariesService getInstance(@NotNull Module module) {
     return ModuleServiceManager.getService(module, GoModuleLibrariesService.class);
   }

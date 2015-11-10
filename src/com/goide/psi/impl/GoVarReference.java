@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoVarReference extends GoCachedReference<GoVarDefinition> {
-  private final GoBlock myPotentialStopBlock;
+  @Nullable private final GoBlock myPotentialStopBlock;
 
   public GoVarReference(@NotNull GoVarDefinition element) {
     super(element);
@@ -75,7 +75,7 @@ public class GoVarReference extends GoCachedReference<GoVarDefinition> {
   }
 
   @Override
-  public boolean isReferenceTo(PsiElement element) {
+  public boolean isReferenceTo(@NotNull PsiElement element) {
     return GoUtil.couldBeReferenceTo(element, myElement) && super.isReferenceTo(element);
   }
 }

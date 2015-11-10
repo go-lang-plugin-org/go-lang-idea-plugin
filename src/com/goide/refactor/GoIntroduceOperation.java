@@ -29,9 +29,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 public class GoIntroduceOperation {
-  final private Project myProject;
-  final private Editor myEditor;
-  final private PsiFile myFile;
+  @NotNull final private Project myProject;
+  @NotNull final private Editor myEditor;
+  @NotNull final private PsiFile myFile;
   private GoExpression myExpression;
   private List<PsiElement> myOccurrences;
   private LinkedHashSet<String> mySuggestedNames;

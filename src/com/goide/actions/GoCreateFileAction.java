@@ -41,7 +41,7 @@ public class GoCreateFileAction extends CreateFileFromTemplateAction implements 
   private static final String PACKAGE = "PACKAGE";
 
   @Override
-  protected PsiFile createFile(String name, @NotNull String templateName, @NotNull PsiDirectory dir) {
+  protected PsiFile createFile(@NotNull String name, @NotNull String templateName, @NotNull PsiDirectory dir) {
     FileTemplateManager templateManager = FileTemplateManager.getInstance(dir.getProject());
     FileTemplate template = templateManager.getInternalTemplate(templateName);
     Properties properties = templateManager.getDefaultProperties();

@@ -80,8 +80,9 @@ public class GoSdkType extends SdkType {
     return false;
   }
 
+  @NotNull
   @Override
-  public String adjustSelectedSdkHome(String homePath) {
+  public String adjustSelectedSdkHome(@NotNull String homePath) {
     return GoSdkUtil.adjustSdkPath(homePath);
   }
 

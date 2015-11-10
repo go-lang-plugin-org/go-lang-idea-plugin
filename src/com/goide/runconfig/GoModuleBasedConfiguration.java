@@ -18,9 +18,10 @@ package com.goide.runconfig;
 
 import com.intellij.execution.configurations.RunConfigurationModule;
 import com.intellij.openapi.project.Project;
+import org.jetbrains.annotations.NotNull;
 
 public class GoModuleBasedConfiguration extends RunConfigurationModule {
-  public GoModuleBasedConfiguration(Project project) {
+  public GoModuleBasedConfiguration(@NotNull Project project) {
     super(project);
   }
 }

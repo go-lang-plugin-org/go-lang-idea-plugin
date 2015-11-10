@@ -47,7 +47,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 public class GoIntroduceVariableBase {
-  protected static void performAction(final GoIntroduceOperation operation) {
+  protected static void performAction(@NotNull final GoIntroduceOperation operation) {
     SelectionModel selectionModel = operation.getEditor().getSelectionModel();
     boolean hasSelection = selectionModel.hasSelection();
     GoExpression expression =
@@ -79,13 +79,13 @@ public class GoIntroduceVariableBase {
     else {
       IntroduceTargetChooser.showChooser(operation.getEditor(), expressions, new Pass<GoExpression>() {
         @Override
-        public void pass(GoExpression expression) {
+        public void pass(@NotNull GoExpression expression) {
           operation.setExpression(expression);
           performOnElement(operation);
         }
       }, new Function<GoExpression, String>() {
         @Override
-        public String fun(GoExpression expression) {
+        public String fun(@NotNull GoExpression expression) {
           return expression.getText();
         }
       });
@@ -98,7 +98,7 @@ public class GoIntroduceVariableBase {
   }
 
   @Nullable
-  private static GoExpression findExpressionAtOffset(GoIntroduceOperation operation) {
+  private static GoExpression findExpressionAtOffset(@NotNull GoIntroduceOperation operation) {
     PsiFile file = operation.getFile();
     int offset = operation.getEditor().getCaretModel().getOffset();
 
@@ -109,7 +109,7 @@ public class GoIntroduceVariableBase {
   }
 
   @NotNull
-  private static List<GoExpression> collectNestedExpressions(GoExpression expression) {
+  private static List<GoExpression> collectNestedExpressions(@Nullable GoExpression expression) {
     List<GoExpression> expressions = ContainerUtil.newArrayList();
     while (expression != null) {
       if (!(expression instanceof GoParenthesesExpr) && GoInspectionUtil.getExpressionResultCount(expression) == 1 &&
@@ -121,7 +121,7 @@ public class GoIntroduceVariableBase {
     return expressions;
   }
 
-  protected static void performOnElement(final GoIntroduceOperation operation) {
+  protected static void performOnElement(@NotNull final GoIntroduceOperation operation) {
     GoExpression expression = operation.getExpression();
     LinkedHashSet<String> suggestedNames = getSuggestedNames(expression);
     operation.setSuggestedNames(suggestedNames);
@@ -154,12 +154,12 @@ public class GoIntroduceVariableBase {
     }
   }
 
-  private static void performInplaceIntroduce(GoIntroduceOperation operation) {
+  private static void performInplaceIntroduce(@NotNull GoIntroduceOperation operation) {
     performReplace(operation);
     new GoInplaceVariableIntroducer(operation).performInplaceRefactoring(operation.getSuggestedNames());
   }
 
-  protected static void performReplace(final GoIntroduceOperation operation) {
+  protected static void performReplace(@NotNull final GoIntroduceOperation operation) {
     final Project project = operation.getProject();
     final PsiElement expression = operation.getExpression();
     final List<PsiElement> occurrences = operation.isReplaceAll() ? operation.getOccurrences() : Collections.singletonList(expression);
@@ -190,7 +190,8 @@ public class GoIntroduceVariableBase {
     PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(operation.getEditor().getDocument());
   }
 
-  private static LinkedHashSet<String> getNamesInContext(PsiElement context) {
+  @NotNull
+  private static LinkedHashSet<String> getNamesInContext(@Nullable PsiElement context) {
     if (context == null) return ContainerUtil.newLinkedHashSet();
     LinkedHashSet<String> names = ContainerUtil.newLinkedHashSet();
 
@@ -234,7 +235,7 @@ public class GoIntroduceVariableBase {
     return names;
   }
 
-  protected static void showCannotPerform(GoIntroduceOperation operation, String message) {
+  protected static void showCannotPerform(@NotNull GoIntroduceOperation operation, String message) {
     message = RefactoringBundle.getCannotRefactorMessage(message);
     CommonRefactoringUtil
       .showErrorHint(operation.getProject(), operation.getEditor(), message, RefactoringBundle.getCannotRefactorMessage(null),
@@ -242,7 +243,7 @@ public class GoIntroduceVariableBase {
   }
 
   private static class GoInplaceVariableIntroducer extends InplaceVariableIntroducer<PsiElement> {
-    public GoInplaceVariableIntroducer(GoIntroduceOperation operation) {
+    public GoInplaceVariableIntroducer(@NotNull GoIntroduceOperation operation) {
       super(operation.getVar(), operation.getEditor(), operation.getProject(), "Introduce Variable",
             ArrayUtil.toObjectArray(operation.getOccurrences(), PsiElement.class), null);
     }

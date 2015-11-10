@@ -67,9 +67,9 @@ public class GoSdkConfigurable implements SearchableConfigurable, Configurable.N
   @NotNull private final Alarm myAlarm = new Alarm(Alarm.ThreadToUse.POOLED_THREAD, myDisposable);
   private JPanel myComponent;
   private TextFieldWithBrowseButton mySdkPathField;
-  private JPanel myVersionPanel;
-  private JBLabel myVersionLabel;
-  private Color myDefaultLabelColor;
+  @Nullable private JPanel myVersionPanel;
+  @Nullable private JBLabel myVersionLabel;
+  @Nullable private Color myDefaultLabelColor;
 
   public GoSdkConfigurable(@NotNull Project project, boolean dialogMode) {
     myProject = project;
@@ -150,6 +150,7 @@ public class GoSdkConfigurable implements SearchableConfigurable, Configurable.N
     return null;
   }
 
+  @NotNull
   @Nls
   @Override
   public String getDisplayName() {

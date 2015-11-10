@@ -31,7 +31,7 @@ public class GoCodeStyleConfigurable extends CodeStyleAbstractConfigurable {
 
   @NotNull
   @Override
-  protected CodeStyleAbstractPanel createPanel(CodeStyleSettings settings) {
+  protected CodeStyleAbstractPanel createPanel(@NotNull CodeStyleSettings settings) {
     return new GoCodeStyleMainPanel(getCurrentSettings(), settings);
   }
 
@@ -41,7 +41,7 @@ public class GoCodeStyleConfigurable extends CodeStyleAbstractConfigurable {
   }
 
   private static class GoCodeStyleMainPanel extends TabbedLanguageCodeStylePanel {
-    private GoCodeStyleMainPanel(CodeStyleSettings currentSettings, CodeStyleSettings settings) {
+    private GoCodeStyleMainPanel(CodeStyleSettings currentSettings, @NotNull CodeStyleSettings settings) {
       super(GoLanguage.INSTANCE, currentSettings, settings);
     }
 

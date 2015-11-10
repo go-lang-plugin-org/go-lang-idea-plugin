@@ -192,6 +192,7 @@ public class GoBuildTargetConfigurable implements SearchableConfigurable, Config
     UIUtil.dispose(myCustomFlagsField);
   }
 
+  @NotNull
   @Nls
   @Override
   public String getDisplayName() {

@@ -20,6 +20,7 @@ import com.intellij.execution.BeforeRunTask;
 import com.intellij.openapi.util.text.StringUtil;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 
 public class GoCommandBeforeRunTask extends BeforeRunTask<GoCommandBeforeRunTask> {
   @NonNls
@@ -40,7 +41,7 @@ public class GoCommandBeforeRunTask extends BeforeRunTask<GoCommandBeforeRunTask
   }
   
   @Override
-  public void writeExternal(Element element) {
+  public void writeExternal(@NotNull Element element) {
     super.writeExternal(element);
     if (myCommand != null) {
       element.setAttribute(COMMAND_ATTRIBUTE, myCommand);
@@ -48,7 +49,7 @@ public class GoCommandBeforeRunTask extends BeforeRunTask<GoCommandBeforeRunTask
   }
 
   @Override
-  public void readExternal(Element element) {
+  public void readExternal(@NotNull Element element) {
     super.readExternal(element);
     String command = element.getAttributeValue(COMMAND_ATTRIBUTE);
     if (command != null) {
@@ -56,6 +57,7 @@ public class GoCommandBeforeRunTask extends BeforeRunTask<GoCommandBeforeRunTask
     }
   }
 
+  @NotNull
   @Override
   public String toString() {
     return "go " + StringUtil.notNullize(myCommand);

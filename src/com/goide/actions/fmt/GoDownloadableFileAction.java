@@ -63,8 +63,8 @@ public abstract class GoDownloadableFileAction extends GoExternalToolsAction {
   }
 
   private class MyNotificationListener implements NotificationListener {
-    private final Project myProject;
-    private final Module myModule;
+    @NotNull private final Project myProject;
+    @Nullable private final Module myModule;
 
     private MyNotificationListener(@NotNull Project project, @Nullable Module module) {
       myProject = project;

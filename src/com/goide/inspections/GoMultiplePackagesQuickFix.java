@@ -48,7 +48,7 @@ public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionO
   private Collection<String> myPackages;
   private String myPackageName;
   private boolean myIsOneTheFly;
-  private static String myTestingPackageName;
+  @Nullable private static String myTestingPackageName;
 
   protected GoMultiplePackagesQuickFix(@NotNull PsiElement element, @NotNull String packageName, Collection<String> packages, boolean isOnTheFly) {
     super(element);

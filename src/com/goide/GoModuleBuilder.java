@@ -34,11 +34,12 @@ import java.util.List;
 
 public class GoModuleBuilder extends JavaModuleBuilder implements SourcePathsBuilder, ModuleBuilderListener {
   @Override
-  public void setupRootModel(ModifiableRootModel modifiableRootModel) throws ConfigurationException {
+  public void setupRootModel(@NotNull ModifiableRootModel modifiableRootModel) throws ConfigurationException {
     addListener(this);
     super.setupRootModel(modifiableRootModel);
   }
 
+  @NotNull
   @Override
   public List<Pair<String, String>> getSourcePaths() {
     return ContainerUtil.emptyList();

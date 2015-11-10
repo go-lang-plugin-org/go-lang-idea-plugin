@@ -48,7 +48,7 @@ public abstract class GoLibrariesService<T extends GoLibrariesState> extends Sim
   }
 
   @Override
-  public void loadState(T state) {
+  public void loadState(@NotNull T state) {
     XmlSerializerUtil.copyBean(state, myState);
   }
 
@@ -106,8 +106,9 @@ public abstract class GoLibrariesService<T extends GoLibrariesState> extends Sim
   @NotNull
   private static Collection<? extends VirtualFile> goRootsFromUrls(@NotNull Collection<String> urls) {
     return ContainerUtil.skipNulls(ContainerUtil.map(urls, new Function<String, VirtualFile>() {
+      @Nullable
       @Override
-      public VirtualFile fun(String url) {
+      public VirtualFile fun(@NotNull String url) {
         VirtualFile file = VirtualFileManager.getInstance().findFileByUrl(url);
         return file != null && GoSdkUtil.retrieveGoVersion(file.getPath()) == null ? file : null;
       }

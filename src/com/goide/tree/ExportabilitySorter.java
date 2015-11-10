@@ -21,6 +21,7 @@ import com.intellij.ide.util.treeView.smartTree.ActionPresentation;
 import com.intellij.ide.util.treeView.smartTree.Sorter;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.Comparator;
@@ -29,7 +30,7 @@ public class ExportabilitySorter implements Sorter {
 
   public static final Sorter INSTANCE = new ExportabilitySorter();
 
-  private static final ActionPresentation PRESENTATION = new ActionPresentation() {
+  @Nullable private static final ActionPresentation PRESENTATION = new ActionPresentation() {
     @Override
     @NotNull
     public String getText() {

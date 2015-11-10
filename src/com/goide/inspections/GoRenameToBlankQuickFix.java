@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 public class GoRenameToBlankQuickFix extends LocalQuickFixOnPsiElement {
   public static final String NAME = "Rename to _";
   
-  public GoRenameToBlankQuickFix(GoNamedElement o) {
+  public GoRenameToBlankQuickFix(@NotNull GoNamedElement o) {
     super(o);
   }
 

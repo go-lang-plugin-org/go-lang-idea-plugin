@@ -58,7 +58,7 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
   @NotNull private final Map<String, String> myCustomEnvironment = ContainerUtil.newHashMap();
   private boolean myPassParentEnvironment = true;
 
-  public GoRunConfigurationBase(String name, GoModuleBasedConfiguration configurationModule, ConfigurationFactory factory) {
+  public GoRunConfigurationBase(String name, @NotNull GoModuleBasedConfiguration configurationModule, @NotNull ConfigurationFactory factory) {
     super(name, configurationModule, factory);
 
     Module module = configurationModule.getModule();
@@ -112,7 +112,7 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
   }
 
   @Override
-  public void writeExternal(Element element) throws WriteExternalException {
+  public void writeExternal(@NotNull Element element) throws WriteExternalException {
     super.writeExternal(element);
     writeModule(element);
     if (StringUtil.isNotEmpty(myWorkingDirectory)) {

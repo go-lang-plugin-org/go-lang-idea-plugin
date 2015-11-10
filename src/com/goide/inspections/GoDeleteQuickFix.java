@@ -24,7 +24,7 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
 public class GoDeleteQuickFix extends LocalQuickFixBase {
-  public GoDeleteQuickFix(String name) {
+  public GoDeleteQuickFix(@NotNull String name) {
     super(name);
   }
 

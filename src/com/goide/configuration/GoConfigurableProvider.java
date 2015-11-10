@@ -50,12 +50,13 @@ public class GoConfigurableProvider extends ConfigurableProvider {
   }
 
   private static class GoCompositeConfigurable extends SearchableConfigurable.Parent.Abstract {
-    private Configurable[] myConfigurables;
+    @Nullable private Configurable[] myConfigurables;
 
     public GoCompositeConfigurable(Configurable... configurables) {
       myConfigurables = configurables;
     }
 
+    @Nullable
     @Override
     protected Configurable[] buildConfigurables() {
       return myConfigurables;

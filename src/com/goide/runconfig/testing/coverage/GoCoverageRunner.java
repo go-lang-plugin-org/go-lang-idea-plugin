@@ -48,6 +48,7 @@ public class GoCoverageRunner extends CoverageRunner {
   private static final String DATA_FILE_EXTENSION = "out";
   private static final String PRESENTABLE_NAME = GoConstants.GO;
 
+  @Nullable
   @Override
   public ProjectData loadCoverageData(@NotNull File sessionDataFile, @Nullable CoverageSuite baseCoverageSuite) {
     if (baseCoverageSuite == null || !(baseCoverageSuite instanceof BaseCoverageSuite)) {
@@ -122,7 +123,7 @@ public class GoCoverageRunner extends CoverageRunner {
 
     result.processFiles(new Processor<GoCoverageProjectData.FileData>() {
       @Override
-      public boolean process(GoCoverageProjectData.FileData fileData) {
+      public boolean process(@NotNull GoCoverageProjectData.FileData fileData) {
         ClassData classData = result.getOrCreateClassData(fileData.myFilePath);
         int max = -1;
         TIntObjectHashMap<LineData> linesMap = new TIntObjectHashMap<LineData>();
@@ -147,7 +148,7 @@ public class GoCoverageRunner extends CoverageRunner {
         final LineData[] linesArray = new LineData[max + 1];
         linesMap.forEachValue(new TObjectProcedure<LineData>() {
           @Override
-          public boolean execute(LineData data) {
+          public boolean execute(@NotNull LineData data) {
             data.fillArrays();
             linesArray[data.getLineNumber()] = data;
             return true;
@@ -166,11 +167,13 @@ public class GoCoverageRunner extends CoverageRunner {
     return PRESENTABLE_NAME;
   }
 
+  @NotNull
   @Override
   public String getId() {
     return ID;
   }
 
+  @NotNull
   @Override
   public String getDataFileExtension() {
     return DATA_FILE_EXTENSION;
