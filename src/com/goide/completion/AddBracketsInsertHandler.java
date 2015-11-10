@@ -33,7 +33,7 @@ public class AddBracketsInsertHandler extends ParenthesesInsertHandler<LookupEle
   }
 
   @Override
-  public void handleInsert(InsertionContext context, LookupElement item) {
+  public void handleInsert(@NotNull InsertionContext context, LookupElement item) {
     Editor editor = context.getEditor();
     Document document = editor.getDocument();
     context.commitDocument();

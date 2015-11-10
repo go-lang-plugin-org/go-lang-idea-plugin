@@ -125,7 +125,7 @@ public class GoReferenceCompletionProvider extends CompletionProvider<Completion
   }
 
   private static class MyGoScopeProcessor extends GoScopeProcessor {
-    private final CompletionResultSet myResult;
+    @NotNull private final CompletionResultSet myResult;
     private final boolean myForTypes;
 
     public MyGoScopeProcessor(@NotNull CompletionResultSet result, boolean forTypes) {

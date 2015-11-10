@@ -32,8 +32,9 @@ public class GoAutoImportInsertHandler<T extends GoNamedElement> implements Inse
   public static final InsertHandler<LookupElement> SIMPLE_INSERT_HANDLER = new GoAutoImportInsertHandler<GoNamedElement>();
   public static final InsertHandler<LookupElement> TYPE_CONVERSION_INSERT_HANDLER = new GoAutoImportInsertHandler<GoTypeSpec>(
     new Function<GoTypeSpec, InsertHandler<LookupElement>>() {
+      @NotNull
       @Override
-      public InsertHandler<LookupElement> fun(GoTypeSpec spec) {
+      public InsertHandler<LookupElement> fun(@NotNull GoTypeSpec spec) {
         return GoCompletionUtil.getTypeConversionInsertHandler(spec);
       }
     }, GoTypeSpec.class);
@@ -49,6 +50,7 @@ public class GoAutoImportInsertHandler<T extends GoNamedElement> implements Inse
 
   public GoAutoImportInsertHandler(@Nullable final InsertHandler<LookupElement> delegate, @Nullable Class<T> clazz) {
     this(new Function<T, InsertHandler<LookupElement>>() {
+      @Nullable
       @Override
       public InsertHandler<LookupElement> fun(T o) {
         return delegate;
@@ -63,7 +65,7 @@ public class GoAutoImportInsertHandler<T extends GoNamedElement> implements Inse
   }
 
   @Override
-  public void handleInsert(InsertionContext context, LookupElement item) {
+  public void handleInsert(@NotNull InsertionContext context, @NotNull LookupElement item) {
     PsiElement element = item.getPsiElement();
     if (element instanceof GoNamedElement) {
       if (myClass != null && myDelegateGetter != null && myClass.isInstance(element)) {

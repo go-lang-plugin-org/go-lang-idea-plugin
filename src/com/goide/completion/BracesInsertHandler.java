@@ -29,6 +29,7 @@ import com.intellij.openapi.editor.actionSystem.EditorActionManager;
 import com.intellij.openapi.editor.ex.EditorEx;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
+import org.jetbrains.annotations.NotNull;
 
 public class BracesInsertHandler implements InsertHandler<LookupElement> {
   public static final BracesInsertHandler ONE_LINER = new BracesInsertHandler(true);
@@ -41,7 +42,7 @@ public class BracesInsertHandler implements InsertHandler<LookupElement> {
   }
 
   @Override
-  public void handleInsert(InsertionContext context, LookupElement item) {
+  public void handleInsert(@NotNull InsertionContext context, LookupElement item) {
     final Editor editor = context.getEditor();
     CharSequence documentText = context.getDocument().getImmutableCharSequence();
     int offset = skipWhiteSpaces(editor.getCaretModel().getOffset(), documentText);
@@ -63,7 +64,7 @@ public class BracesInsertHandler implements InsertHandler<LookupElement> {
     }
   }
 
-  private static int skipWhiteSpaces(int offset, CharSequence documentText) {
+  private static int skipWhiteSpaces(int offset, @NotNull CharSequence documentText) {
     while (offset < documentText.length() && StringUtil.isWhiteSpace(documentText.charAt(offset))) {
       offset += 1;
     }

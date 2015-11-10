@@ -107,6 +107,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
     });
   }
 
+  @NotNull
   private static Set<String> sortMatching(@NotNull PrefixMatcher matcher, @NotNull Collection<String> names, @NotNull GoFile file) {
     ProgressManager.checkCanceled();
     String prefix = matcher.getPrefix();
@@ -227,7 +228,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
   }
 
   private static class TypesProcessor implements ElementProcessor {
-    private final PsiElement myParent;
+    @Nullable private final PsiElement myParent;
 
     public TypesProcessor(@Nullable PsiElement parent) {
       myParent = parent;
@@ -290,7 +291,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
     }
 
     @Override
-    public boolean process(GoNamedElement element) {
+    public boolean process(@NotNull GoNamedElement element) {
       ProgressManager.checkCanceled();
       Boolean allowed = null;
       ExistingImportData importData = null;
@@ -307,11 +308,13 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
       return true;
     }
 
+    @Nullable
     private static Boolean cachedAllowed(@NotNull GoNamedElement element, @Nullable Boolean existingValue) {
       if (existingValue != null) return existingValue;
       return allowed(element);
     }
 
+    @Nullable
     private ExistingImportData cachedImportData(@NotNull GoNamedElement element, @Nullable ExistingImportData existingValue) {
       if (existingValue != null) return existingValue;
 

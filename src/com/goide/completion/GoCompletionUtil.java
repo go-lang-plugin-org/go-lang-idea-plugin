@@ -58,7 +58,7 @@ public class GoCompletionUtil {
   public static final int PACKAGE_PRIORITY = 5;
   public static final InsertHandler<LookupElement> FUNCTION_INSERT_HANDLER = new InsertHandler<LookupElement>() {
     @Override
-    public void handleInsert(InsertionContext context, LookupElement item) {
+    public void handleInsert(InsertionContext context, @NotNull LookupElement item) {
       PsiElement element = item.getPsiElement();
       if (!(element instanceof GoSignatureOwner)) return;
       GoSignatureOwner f = (GoSignatureOwner)element;
@@ -71,7 +71,7 @@ public class GoCompletionUtil {
   };
   public static final LookupElementRenderer<LookupElement> FUNCTION_RENDERER = new LookupElementRenderer<LookupElement>() {
     @Override
-    public void renderElement(LookupElement element, LookupElementPresentation p) {
+    public void renderElement(@NotNull LookupElement element, @NotNull LookupElementPresentation p) {
       PsiElement o = element.getPsiElement();
       if (!(o instanceof GoNamedSignatureOwner)) return;
       GoNamedSignatureOwner f = (GoNamedSignatureOwner)o;
@@ -94,7 +94,7 @@ public class GoCompletionUtil {
   };
   public static final LookupElementRenderer<LookupElement> VARIABLE_RENDERER = new LookupElementRenderer<LookupElement>() {
     @Override
-    public void renderElement(LookupElement element, LookupElementPresentation p) {
+    public void renderElement(@NotNull LookupElement element, @NotNull LookupElementPresentation p) {
       PsiElement o = element.getPsiElement();
       if (!(o instanceof GoNamedElement)) return;
       GoNamedElement v = (GoNamedElement)o;
