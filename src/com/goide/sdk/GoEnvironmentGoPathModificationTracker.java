@@ -37,9 +37,13 @@ public class GoEnvironmentGoPathModificationTracker {
     if (goPath != null) {
       String home = SystemProperties.getUserHome();
       for (String s : StringUtil.split(goPath, File.pathSeparator)) {
-        if (home != null) {
-          pathsToTrack.add(s.replaceAll("\\$HOME", home));
+        if (s.contains("$HOME")) {
+          if (home == null) {
+            continue;
+          }
+          s = s.replaceAll("\\$HOME", home);
         }
+        pathsToTrack.add(s);
       }
     }
     recalculateFiles();
