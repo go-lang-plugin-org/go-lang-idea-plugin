@@ -68,7 +68,7 @@ public class GoInspectionSuppressor implements InspectionSuppressor {
 
   public static class GoSuppressInspectionFix extends AbstractBatchSuppressByNoInspectionCommentFix {
     private final Class<? extends GoCompositeElement> myContainerClass;
-    @NotNull private final String myBaseText;
+    private final String myBaseText;
     private final boolean myTopMost;
 
     public GoSuppressInspectionFix(@NotNull String elementDescription,

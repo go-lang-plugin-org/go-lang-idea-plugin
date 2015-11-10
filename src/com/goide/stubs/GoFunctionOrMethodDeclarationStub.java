@@ -20,14 +20,13 @@ import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.io.StringRef;
-import org.jetbrains.annotations.NotNull;
 
 abstract public class GoFunctionOrMethodDeclarationStub<T extends GoFunctionOrMethodDeclaration> extends GoNamedStub<T> {
-  protected GoFunctionOrMethodDeclarationStub(StubElement parent, @NotNull IStubElementType elementType, StringRef name, boolean isPublic) {
+  protected GoFunctionOrMethodDeclarationStub(StubElement parent, IStubElementType elementType, StringRef name, boolean isPublic) {
     super(parent, elementType, name, isPublic);
   }
 
-  protected GoFunctionOrMethodDeclarationStub(StubElement parent, @NotNull IStubElementType elementType, String name, boolean isPublic) {
+  protected GoFunctionOrMethodDeclarationStub(StubElement parent, IStubElementType elementType, String name, boolean isPublic) {
     super(parent, elementType, name, isPublic);
   }
 }

@@ -49,7 +49,7 @@ import static com.intellij.openapi.fileChooser.FileChooserDescriptorFactory.crea
 
 public class GoLibrariesConfigurable implements SearchableConfigurable, Configurable.NoScroll {
   @NotNull private final String myDisplayName;
-  @NotNull private final GoLibrariesService<?> myLibrariesService;
+  private final GoLibrariesService<?> myLibrariesService;
   private final String[] myReadOnlyPaths;
   private final JBCheckBox myUseEnvGoPathCheckBox = new JBCheckBox("Use GOPATH that's defined in system environment");
   private final JPanel myPanel = new JPanel(new BorderLayout());
@@ -151,7 +151,7 @@ public class GoLibrariesConfigurable implements SearchableConfigurable, Configur
     }
   }
 
-  private static void scrollToSelection(@NotNull JList list) {
+  private static void scrollToSelection(JList list) {
     int selectedRow = list.getSelectedIndex();
     if (selectedRow >= 0) {
       list.scrollRectToVisible(list.getCellBounds(selectedRow, 0));

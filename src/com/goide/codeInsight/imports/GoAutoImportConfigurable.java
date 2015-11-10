@@ -36,10 +36,10 @@ import java.awt.*;
 import java.util.Arrays;
 
 public class GoAutoImportConfigurable implements SearchableConfigurable {
-  @Nullable private JCheckBox myCbShowImportPopup;
-  @Nullable private JCheckBox myCbAddUnambiguousImports;
-  @Nullable private JBList myExcludePackagesList;
-  @Nullable private DefaultListModel myExcludePackagesModel;
+  private JCheckBox myCbShowImportPopup;
+  private JCheckBox myCbAddUnambiguousImports;
+  private JBList myExcludePackagesList;
+  private DefaultListModel myExcludePackagesModel;
 
   @NotNull private GoCodeInsightSettings myCodeInsightSettings;
   @NotNull private GoExcludedPathsSettings myExcludedSettings;
@@ -82,7 +82,6 @@ public class GoAutoImportConfigurable implements SearchableConfigurable {
     myExcludePackagesList.requestFocus();
   }
 
-  @NotNull
   private String[] getExcludedPackages() {
     String[] excludedPackages = new String[myExcludePackagesModel.size()];
     for (int i = 0; i < myExcludePackagesModel.size(); i++) {
@@ -130,7 +129,6 @@ public class GoAutoImportConfigurable implements SearchableConfigurable {
     return null;
   }
 
-  @NotNull
   @Nls
   @Override
   public String getDisplayName() {

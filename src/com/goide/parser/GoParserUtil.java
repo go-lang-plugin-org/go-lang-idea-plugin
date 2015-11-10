@@ -47,7 +47,7 @@ public class GoParserUtil extends GeneratedParserUtilBase {
     return flags;
   }
 
-  public static boolean consumeBlock(@NotNull PsiBuilder builder_, @SuppressWarnings("UnusedParameters") int level) {
+  public static boolean consumeBlock(PsiBuilder builder_, @SuppressWarnings("UnusedParameters") int level) {
     PsiFile file = builder_.getUserDataUnprotected(FileContextUtil.CONTAINING_FILE_KEY);
     if (file == null) return false;
     VirtualFile data = file.getUserData(IndexingDataKeys.VIRTUAL_FILE);
@@ -82,11 +82,11 @@ public class GoParserUtil extends GeneratedParserUtilBase {
     return getParsingModes(builder_).get(mode) > 0;
   }
 
-  public static boolean withOn(@NotNull PsiBuilder builder_, int level_, String mode, Parser parser) {
+  public static boolean withOn(PsiBuilder builder_, int level_, String mode, Parser parser) {
     return withImpl(builder_, level_, mode, true, parser, parser);
   }
 
-  public static boolean withOff(@NotNull PsiBuilder builder_, int level_, @NotNull Parser parser, @NotNull String... modes) {
+  public static boolean withOff(PsiBuilder builder_, int level_, Parser parser, String... modes) {
     final TObjectIntHashMap<String> map = getParsingModes(builder_);
 
     TObjectIntHashMap<String> prev = new TObjectIntHashMap<String>();
@@ -112,7 +112,7 @@ public class GoParserUtil extends GeneratedParserUtilBase {
     return result;
   }
 
-  private static boolean withImpl(@NotNull PsiBuilder builder_, int level_, String mode, boolean onOff, Parser whenOn, Parser whenOff) {
+  private static boolean withImpl(PsiBuilder builder_, int level_, String mode, boolean onOff, Parser whenOn, Parser whenOff) {
     TObjectIntHashMap<String> map = getParsingModes(builder_);
     int prev = map.get(mode);
     boolean change = ((prev & 1) == 0) == onOff;

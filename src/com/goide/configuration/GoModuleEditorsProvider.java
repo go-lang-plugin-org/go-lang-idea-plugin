@@ -45,7 +45,7 @@ public class GoModuleEditorsProvider implements ModuleConfigurationEditorProvide
   }
 
   static class OutputEditorEx extends OutputEditor {
-    protected OutputEditorEx(@NotNull ModuleConfigurationState state) {
+    protected OutputEditorEx(ModuleConfigurationState state) {
       super(state);
     }
 

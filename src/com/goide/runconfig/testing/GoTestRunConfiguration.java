@@ -54,24 +54,22 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
 
   @NotNull private String myPattern = "";
   @NotNull private Kind myKind = Kind.DIRECTORY;
-  @NotNull private GoTestFramework myTestFramework = GotestFramework.INSTANCE;
+  private GoTestFramework myTestFramework = GotestFramework.INSTANCE;
 
   public GoTestRunConfiguration(@NotNull Project project, String name, @NotNull ConfigurationType configurationType) {
     super(name, new GoModuleBasedConfiguration(project), configurationType.getConfigurationFactories()[0]);
   }
 
-  @NotNull
   public OutputToGeneralTestEventsConverter createTestEventsConverter(@NotNull TestConsoleProperties consoleProperties) {
     return myTestFramework.createTestEventsConverter(consoleProperties);
   }
 
   @NotNull
   @Override
-  protected GoTestRunningState newRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module) {
+  protected GoTestRunningState newRunningState(ExecutionEnvironment env, Module module) {
     return myTestFramework.newRunningState(env, module, this);
   }
 
-  @NotNull
   @Override
   protected ModuleBasedConfiguration createInstance() {
     return new GoTestRunConfiguration(getProject(), getName(), GoTestRunConfigurationType.getInstance());
@@ -135,7 +133,7 @@ public class GoTestRunConfiguration extends GoRunConfigurationBase<GoTestRunning
   }
 
   @Override
-  public void writeExternal(@NotNull Element element) throws WriteExternalException {
+  public void writeExternal(Element element) throws WriteExternalException {
     super.writeExternal(element);
     JDOMExternalizerUtil.addElementWithValueAttribute(element, FRAMEWORK_ATTRIBUTE_NAME, myTestFramework.getName());
     JDOMExternalizerUtil.addElementWithValueAttribute(element, KIND_ATTRIBUTE_NAME, myKind.name());

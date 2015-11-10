@@ -37,7 +37,7 @@ import com.intellij.util.Consumer;
 import org.jetbrains.annotations.NotNull;
 
 public class GoRenameQuickFix extends LocalQuickFixOnPsiElement {
-  @NotNull private final String myText;
+  private final String myText;
 
   protected GoRenameQuickFix(@NotNull GoNamedElement element) {
     super(element);

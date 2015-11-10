@@ -180,7 +180,6 @@ public class GoFile extends PsiFileBase {
     });
   }
   
-  @Nullable
   public GoImportSpec addImport(String path, String alias) {
     GoImportList importList = getImportList();
     if (importList != null) {
@@ -501,7 +500,7 @@ public class GoFile extends PsiFileBase {
     final int finalLastEmptyLineOffset = lastEmptyLineOffset;
     return ContainerUtil.filter(commentsToConsider, new Condition<PsiComment>() {
       @Override
-      public boolean value(@NotNull PsiComment comment) {
+      public boolean value(PsiComment comment) {
         return comment.getTextRange().getStartOffset() < finalLastEmptyLineOffset;
       }
     });

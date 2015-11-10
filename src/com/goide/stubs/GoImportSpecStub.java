@@ -31,7 +31,7 @@ public class GoImportSpecStub extends GoNamedStub<GoImportSpec> {
   private final StringRef myPathRef;
   private final boolean myIsDot;
 
-  public GoImportSpecStub(StubElement parent, @NotNull IStubElementType elementType, @Nullable String alias, @NotNull String path, boolean isDot) {
+  public GoImportSpecStub(StubElement parent, IStubElementType elementType, @Nullable String alias, @NotNull String path, boolean isDot) {
     super(parent, elementType, (String)null, false);
     myAliasRef = StringRef.fromString(alias);
     myPathRef = StringRef.fromString(path);

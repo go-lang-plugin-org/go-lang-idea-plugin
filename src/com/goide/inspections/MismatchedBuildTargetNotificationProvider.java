@@ -44,7 +44,7 @@ import java.util.Set;
 public class MismatchedBuildTargetNotificationProvider extends EditorNotifications.Provider<EditorNotificationPanel> implements DumbAware {
   private static final Key<EditorNotificationPanel> KEY = Key.create("Mismatched build target");
 
-  @NotNull private final Project myProject;
+  private final Project myProject;
 
   public MismatchedBuildTargetNotificationProvider(@NotNull Project project, 
                                                    @NotNull final EditorNotifications notifications,

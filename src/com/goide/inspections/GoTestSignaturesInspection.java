@@ -43,8 +43,7 @@ public class GoTestSignaturesInspection extends GoInspectionBase {
     return GoConstants.TESTING_PATH;
   }
 
-  @NotNull
-  private static String getProperParamType(@NotNull String testingAlias, @NotNull GoTestFunctionType type) {
+  private static String getProperParamType(@NotNull String testingAlias, GoTestFunctionType type) {
     return "*" + (testingAlias.isEmpty() ? "" : testingAlias + ".") + type.getParamType();
   }
 

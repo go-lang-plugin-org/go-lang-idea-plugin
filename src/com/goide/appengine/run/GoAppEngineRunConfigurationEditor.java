@@ -79,7 +79,7 @@ public class GoAppEngineRunConfigurationEditor extends SettingsEditor<GoAppEngin
   private void initConfigFileField(@NotNull Project project) {
     GoRunUtil.installFileChooser(project, myConfigFileField, false, false, new Condition<VirtualFile>() {
       @Override
-      public boolean value(@NotNull VirtualFile file) {
+      public boolean value(VirtualFile file) {
         return "yaml".equals(file.getExtension());
       }
     });

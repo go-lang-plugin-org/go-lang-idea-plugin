@@ -52,7 +52,7 @@ public class GoDuplicateMethodInspection extends GoInspectionBase {
       Collection<GoMethodDeclaration> declarations = GoMethodIndex.find(packageName + "." + typeText, project, scope);
       declarations = ContainerUtil.filter(declarations, new Condition<GoMethodDeclaration>() {
         @Override
-        public boolean value(@NotNull GoMethodDeclaration d) {
+        public boolean value(GoMethodDeclaration d) {
           return !method.isEquivalentTo(d) && Comparing.equal(d.getName(), methodName) && GoUtil.allowed(d.getContainingFile());
         }
       });

@@ -71,7 +71,7 @@ public class GoApplicationRunConfigurationProducer extends GoRunConfigurationPro
   }
 
   @Override
-  public boolean isConfigurationFromContext(@NotNull GoApplicationConfiguration configuration, @NotNull ConfigurationContext context) {
+  public boolean isConfigurationFromContext(@NotNull GoApplicationConfiguration configuration, ConfigurationContext context) {
     PsiElement contextElement = GoRunUtil.getContextElement(context);
     if (contextElement == null) return false;
 

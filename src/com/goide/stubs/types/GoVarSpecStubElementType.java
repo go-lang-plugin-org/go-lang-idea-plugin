@@ -59,7 +59,7 @@ public class GoVarSpecStubElementType extends GoStubElementType<GoVarSpecStub, G
   }
 
   @Override
-  public boolean shouldCreateStub(@NotNull ASTNode node) {
+  public boolean shouldCreateStub(ASTNode node) {
     return super.shouldCreateStub(node) &&
            node.getElementType() == GoTypes.VAR_SPEC &&
            PsiTreeUtil.getParentOfType(node.getPsi(), GoFunctionOrMethodDeclaration.class) == null;

@@ -36,7 +36,6 @@ import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.util.Consumer;
 import com.intellij.util.concurrency.Semaphore;
 import com.intellij.util.ui.UIUtil;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -44,21 +43,18 @@ import javax.swing.*;
 public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBeforeRunTask> {
   public static final Key<GoCommandBeforeRunTask> ID = Key.create("GoBeforeRunTask");
 
-  @NotNull
   @Override
   public Key<GoCommandBeforeRunTask> getId() {
     return ID;
   }
 
-  @NotNull
   @Override
   public String getName() {
     return "Go Command";
   }
 
-  @NotNull
   @Override
-  public String getDescription(@NotNull GoCommandBeforeRunTask task) {
+  public String getDescription(GoCommandBeforeRunTask task) {
     return "Run `" + task.toString() + "`";
   }
 
@@ -86,7 +82,7 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
   }
 
   @Override
-  public boolean configureTask(@NotNull RunConfiguration configuration, @NotNull GoCommandBeforeRunTask task) {
+  public boolean configureTask(RunConfiguration configuration, GoCommandBeforeRunTask task) {
     Project project = configuration.getProject();
     if (!(configuration instanceof GoRunConfigurationBase)) {
       showAddingTaskErrorMessage(project, "Go Command task supports only Go Run Configurations");
@@ -108,7 +104,7 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
   }
 
   @Override
-  public boolean canExecuteTask(RunConfiguration configuration, @NotNull GoCommandBeforeRunTask task) {
+  public boolean canExecuteTask(RunConfiguration configuration, GoCommandBeforeRunTask task) {
     if (configuration instanceof GoRunConfigurationBase) {
       Module module = ((GoRunConfigurationBase)configuration).getConfigurationModule().getModule();
       GoSdkService sdkService = GoSdkService.getInstance(configuration.getProject());
@@ -121,9 +117,9 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
 
   @Override
   public boolean executeTask(DataContext context,
-                             @NotNull RunConfiguration configuration,
+                             RunConfiguration configuration,
                              ExecutionEnvironment env,
-                             @NotNull final GoCommandBeforeRunTask task) {
+                             final GoCommandBeforeRunTask task) {
     final Semaphore done = new Semaphore();
     final Ref<Boolean> result = new Ref<Boolean>(false);
 
@@ -147,7 +143,7 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
           .withPresentableName("Executing `" + task.toString() + "`")
           .withProcessListener(new ProcessAdapter() {
             @Override
-            public void processTerminated(@NotNull ProcessEvent event) {
+            public void processTerminated(ProcessEvent event) {
               done.up();
               result.set(event.getExitCode() == 0);
             }

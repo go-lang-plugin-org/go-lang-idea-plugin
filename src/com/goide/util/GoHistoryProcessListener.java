@@ -21,7 +21,6 @@ import com.intellij.execution.process.ProcessEvent;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Pair;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -33,7 +32,7 @@ public class GoHistoryProcessListener extends ProcessAdapter {
     myHistory.add(Pair.create(event, outputType));
   }
 
-  public void apply(@NotNull ProcessHandler listener) {
+  public void apply(ProcessHandler listener) {
     for (Pair<ProcessEvent, Key> pair : myHistory) {
       listener.notifyTextAvailable(pair.getFirst().getText(), pair.getSecond());
     }

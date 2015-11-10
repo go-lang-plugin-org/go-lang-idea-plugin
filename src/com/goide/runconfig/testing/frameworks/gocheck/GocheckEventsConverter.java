@@ -74,19 +74,19 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter i
   private static final Pattern ERROR_CONTINUATION = Pattern.compile("\\.\\.\\. {5}(.*?)( +\\+)?\\s*$");
   private static final Pattern PANIC_VALUE = Pattern.compile("(.*)\\.\\.\\. (Panic: .* \\(.*\\)\\s*)$");
 
-  @NotNull private Scope myScope = Scope.GLOBAL;
+  private Scope myScope = Scope.GLOBAL;
   private String mySuiteName;
   private String myTestName;
   private long myCurrentTestStart;
-  @Nullable private TestResult myFixtureFailure;
-  @Nullable private List<String> myStdOut;
+  private TestResult myFixtureFailure;
+  private List<String> myStdOut;
 
   private enum Status {
     PASSED, FAILED, PANICKED, MISSED, SKIPPED
   }
 
   private static final class TestResult {
-    @NotNull private final Status myStatus;
+    private final Status myStatus;
     private final Map<String, String> myAttributes = ContainerUtil.newHashMap();
 
     TestResult(@NotNull Status status) {
@@ -234,7 +234,7 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter i
   }
 
   @Nullable
-  private TestResult detectTestResult(@NotNull String text, boolean parseDetails) {
+  private TestResult detectTestResult(String text, boolean parseDetails) {
     Matcher matcher;
     if ((matcher = TEST_PASSED.matcher(text)).matches()) {
       myStdOut.add(StringUtil.notNullize(matcher.group(1)).trim());
@@ -416,8 +416,8 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter i
                                     pair("details", details));
   }
 
-  private static int collectErrorMessage(@NotNull List<String> lines, int currentLine, @NotNull Pattern continuationPattern, @NotNull Pattern messagePattern,
-                                         @NotNull StringBuilder result) {
+  private static int collectErrorMessage(List<String> lines, int currentLine, Pattern continuationPattern, Pattern messagePattern,
+                                         StringBuilder result) {
     while (currentLine >= 0) {
       String line = lines.get(currentLine);
 

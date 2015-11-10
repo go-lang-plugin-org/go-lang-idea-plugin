@@ -85,10 +85,10 @@ public class GoRunUtil {
     return psiElement;
   }
 
-  public static void installGoWithMainFileChooser(@NotNull final Project project, @NotNull TextFieldWithBrowseButton fileField) {
+  public static void installGoWithMainFileChooser(final Project project, @NotNull TextFieldWithBrowseButton fileField) {
     installFileChooser(project, fileField, false, false, new Condition<VirtualFile>() {
       @Override
-      public boolean value(@NotNull VirtualFile file) {
+      public boolean value(VirtualFile file) {
         if (file.getFileType() != GoFileType.INSTANCE) {
           return false;
         }

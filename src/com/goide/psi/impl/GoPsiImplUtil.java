@@ -86,7 +86,7 @@ public class GoPsiImplUtil {
     List<GoFile> files = getAllPackageFiles(file);
     return GlobalSearchScope.filesScope(file.getProject(), ContainerUtil.map(files, new Function<GoFile, VirtualFile>() {
       @Override
-      public VirtualFile fun(@NotNull GoFile file) {
+      public VirtualFile fun(GoFile file) {
         return file.getVirtualFile();
       }
     }));
@@ -169,7 +169,7 @@ public class GoPsiImplUtil {
         return refs.length > 1 ? refs[1].resolve() : null;
       }
 
-      public boolean isReferenceTo(@NotNull PsiElement element) {
+      public boolean isReferenceTo(PsiElement element) {
         return GoUtil.couldBeReferenceTo(element, getElement()) && getElement().getManager().areElementsEquivalent(resolve(), element);
       }
     };
@@ -301,7 +301,6 @@ public class GoPsiImplUtil {
   @Nullable
   public static GoType getGoType(@NotNull final GoExpression o, @Nullable final ResolveState context) {
     return RecursionManager.doPreventingRecursion(o, true, new Computable<GoType>() {
-      @Nullable
       @Override
       public GoType compute() {
         if (context != null) return getGoTypeInner(o, context);
@@ -433,7 +432,7 @@ public class GoPsiImplUtil {
     if (builtin != null) {
       GoTypeSpec spec = ContainerUtil.find(builtin.getTypes(), new Condition<GoTypeSpec>() {
         @Override
-        public boolean value(@NotNull GoTypeSpec spec) {
+        public boolean value(GoTypeSpec spec) {
           return name.equals(spec.getName());
         }
       });
@@ -463,7 +462,6 @@ public class GoPsiImplUtil {
           myType = type;
         }
 
-        @Nullable
         @Override
         public String getText() {
           return myType != null ? ("[]" + myType.getText()) : null;
@@ -506,19 +504,16 @@ public class GoPsiImplUtil {
           return null;
         }
 
-        @Nullable
         @Override
         public String toString() {
           return null;
         }
 
-        @Nullable
         @Override
         public IStubElementType getElementType() {
           return null;
         }
 
-        @Nullable
         @Override
         public GoTypeStub getStub() {
           return null;
@@ -789,19 +784,16 @@ public class GoPsiImplUtil {
       return null;
     }
 
-    @NotNull
     @Override
     public String toString() {
       return "MyGoTypeList{myTypes=" + myTypes + '}';
     }
 
-    @Nullable
     @Override
     public IStubElementType getElementType() {
       return null;
     }
 
-    @Nullable
     @Override
     public GoTypeStub getStub() {
       return null;
@@ -891,7 +883,6 @@ public class GoPsiImplUtil {
     return spec;
   }
 
-  @NotNull
   public static String getLocalPackageName(@NotNull String importPath) {
     StringBuilder name = null;
     for (int i = 0; i < importPath.length(); i++) {
@@ -910,7 +901,6 @@ public class GoPsiImplUtil {
     return name == null ? importPath : name.toString();
   }
 
-  @NotNull
   public static String getLocalPackageName(@NotNull GoImportSpec importSpec) {
     return getLocalPackageName(importSpec.getPath());
   }
@@ -930,7 +920,6 @@ public class GoPsiImplUtil {
     return stub != null ? stub.getPath() : importSpec.getImportString().getPath();
   }
 
-  @Nullable
   public static String getName(@NotNull GoImportSpec importSpec) {
     return getAlias(importSpec);
   }

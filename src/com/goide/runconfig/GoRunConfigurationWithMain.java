@@ -35,7 +35,7 @@ public abstract class GoRunConfigurationWithMain<T extends GoRunningState> exten
 
   @NotNull private String myFilePath = "";
 
-  public GoRunConfigurationWithMain(String name, @NotNull GoModuleBasedConfiguration configurationModule, @NotNull ConfigurationFactory factory) {
+  public GoRunConfigurationWithMain(String name, GoModuleBasedConfiguration configurationModule, ConfigurationFactory factory) {
     super(name, configurationModule, factory);
     myFilePath = getWorkingDirectory();
   }
@@ -47,7 +47,7 @@ public abstract class GoRunConfigurationWithMain<T extends GoRunningState> exten
   }
 
   @Override
-  public void writeExternal(@NotNull Element element) throws WriteExternalException {
+  public void writeExternal(Element element) throws WriteExternalException {
     super.writeExternal(element);
     if (StringUtil.isNotEmpty(myFilePath)) {
       JDOMExternalizerUtil.addElementWithValueAttribute(element, FILE_PATH_ATTRIBUTE_NAME, myFilePath);

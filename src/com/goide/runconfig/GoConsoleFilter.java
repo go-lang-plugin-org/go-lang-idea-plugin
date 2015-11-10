@@ -182,8 +182,8 @@ public class GoConsoleFilter implements Filter {
   }
 
   public static class GoGetHyperlinkInfo implements HyperlinkInfo {
-    @NotNull private final String myPackageName;
-    @NotNull private final Module myModule;
+    private final String myPackageName;
+    private final Module myModule;
 
     public GoGetHyperlinkInfo(@NotNull String packageName, @NotNull Module module) {
       myPackageName = packageName;
@@ -196,7 +196,7 @@ public class GoConsoleFilter implements Filter {
     }
 
     @Override
-    public void navigate(@NotNull Project project) {
+    public void navigate(Project project) {
       GoGetPackageFix.applyFix(project, myModule, myPackageName, false);
     }
   }

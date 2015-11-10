@@ -37,7 +37,6 @@ public class GocheckRunningState extends GoTestRunningState {
     super(env, module, configuration);
   }
 
-  @NotNull
   @Override
   protected GoExecutor patchExecutor(@NotNull GoExecutor executor) throws ExecutionException {
     return super.patchExecutor(executor).withParameters("-check.vv");
@@ -45,7 +44,7 @@ public class GocheckRunningState extends GoTestRunningState {
 
   @NotNull
   @Override
-  protected String buildFilePattern(@NotNull GoFile file) {
+  protected String buildFilePattern(GoFile file) {
     Collection<String> testNames = ContainerUtil.newLinkedHashSet();
     for (GoMethodDeclaration method : file.getMethods()) {
       ContainerUtil.addIfNotNull(testNames, GocheckFramework.getGocheckTestName(method));

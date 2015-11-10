@@ -143,7 +143,6 @@ public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabAction
     updatePresentation(p, context);
   }
 
-  @Nullable
   String updatePresentation(@Nullable Object p, @NotNull ParameterInfoUIContext context) {
     if (p == null) {
       context.setUIComponentEnabled(false);

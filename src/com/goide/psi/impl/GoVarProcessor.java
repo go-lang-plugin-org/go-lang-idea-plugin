@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class GoVarProcessor extends GoScopeProcessorBase {
   private final boolean myImShortVarDeclaration;
-  @Nullable private final PsiElement myParentGuard; 
+  private final PsiElement myParentGuard; 
   @Nullable private final GoCompositeElement myScope;
   
   public GoVarProcessor(@NotNull PsiElement origin, boolean completion) {

@@ -35,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
 public class GoExcludedPathsSettings extends SimpleModificationTracker implements PersistentStateComponent<GoExcludedPathsSettings> {
   private String[] myExcludedPackages = ArrayUtil.EMPTY_STRING_ARRAY;
 
-  public static GoExcludedPathsSettings getInstance(@NotNull Project project) {
+  public static GoExcludedPathsSettings getInstance(Project project) {
     return ServiceManager.getService(project, GoExcludedPathsSettings.class);
   }
 
@@ -46,7 +46,7 @@ public class GoExcludedPathsSettings extends SimpleModificationTracker implement
   }
 
   @Override
-  public void loadState(@NotNull GoExcludedPathsSettings state) {
+  public void loadState(GoExcludedPathsSettings state) {
     XmlSerializerUtil.copyBean(state, this);
   }
 

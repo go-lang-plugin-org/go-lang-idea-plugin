@@ -55,7 +55,7 @@ public class GoCoverageAnnotator extends BaseCoverageAnnotator {
     super(project);
   }
 
-  public static GoCoverageAnnotator getInstance(@NotNull Project project) {
+  public static GoCoverageAnnotator getInstance(Project project) {
     return ServiceManager.getService(project, GoCoverageAnnotator.class);
   }
 
@@ -143,7 +143,6 @@ public class GoCoverageAnnotator extends BaseCoverageAnnotator {
     return new Runnable() {
       public void run() {
         annotateAllFiles(data, (VirtualFile[])manager.doInReadActionIfProjectOpen(new Computable() {
-          @NotNull
           public VirtualFile[] compute() {
             return ProjectRootManager.getInstance(getProject()).getContentRoots();
           }
@@ -154,9 +153,8 @@ public class GoCoverageAnnotator extends BaseCoverageAnnotator {
   }
 
   @NotNull
-  private DirCoverageInfo getOrCreateDirectoryInfo(@NotNull VirtualFile file) {
+  private DirCoverageInfo getOrCreateDirectoryInfo(VirtualFile file) {
     return ContainerUtil.getOrCreate(myDirCoverageInfos, file.getPath(), new Factory<DirCoverageInfo>() {
-      @NotNull
       @Override
       public DirCoverageInfo create() {
         return new DirCoverageInfo();
@@ -165,9 +163,8 @@ public class GoCoverageAnnotator extends BaseCoverageAnnotator {
   }
 
   @NotNull
-  private FileCoverageInfo getOrCreateFileInfo(@NotNull VirtualFile file) {
+  private FileCoverageInfo getOrCreateFileInfo(VirtualFile file) {
     return ContainerUtil.getOrCreate(myFileCoverageInfos, file.getPath(), new Factory<FileCoverageInfo>() {
-      @NotNull
       @Override
       public FileCoverageInfo create() {
         return new FileCoverageInfo();
@@ -212,7 +209,7 @@ public class GoCoverageAnnotator extends BaseCoverageAnnotator {
               final FileCoverageInfo fileCoverageInfo = getOrCreateFileInfo(file);
               data.processFile(file.getPath(), new Processor<GoCoverageProjectData.RangeData>() {
                 @Override
-                public boolean process(@NotNull GoCoverageProjectData.RangeData rangeData) {
+                public boolean process(GoCoverageProjectData.RangeData rangeData) {
                   if (rangeData.hits > 0) {
                     fileCoverageInfo.coveredLineCount += rangeData.statements;
                   }

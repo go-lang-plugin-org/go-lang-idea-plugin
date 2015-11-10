@@ -68,7 +68,7 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
   protected ProcessHandler startProcess() throws ExecutionException {
     final ProcessHandler processHandler = super.startProcess();
     processHandler.addProcessListener(new ProcessAdapter() {
-      @NotNull private AtomicBoolean firstOutput = new AtomicBoolean(true);
+      private AtomicBoolean firstOutput = new AtomicBoolean(true);
 
       @Override
       public void onTextAvailable(ProcessEvent event, Key outputType) {
@@ -95,7 +95,6 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
     return processHandler;
   }
 
-  @NotNull
   @Override
   protected GoExecutor patchExecutor(@NotNull GoExecutor executor) throws ExecutionException {
     if (isDebug()) {

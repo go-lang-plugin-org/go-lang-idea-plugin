@@ -62,7 +62,7 @@ public abstract class GoExternalToolsAction extends DumbAwareAction {
     e.getPresentation().setEnabled(GoSdkService.getInstance(project).isGoModule(module));
   }
 
-  protected boolean isAvailableOnFile(@NotNull VirtualFile file) {
+  protected boolean isAvailableOnFile(VirtualFile file) {
     return file.getFileType() == GoFileType.INSTANCE;
   }
 

@@ -62,7 +62,6 @@ public class GoDuplicateArgumentInspection extends GoInspectionBase {
     }
   }
 
-  @NotNull
   private static String errorText(@NotNull String name) {
     return "Duplicate argument " + "'" + name + "'";
   }

@@ -23,9 +23,8 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 
 public class GoStringManipulator extends AbstractElementManipulator<GoStringLiteralImpl> {
-  @NotNull
   @Override
-  public GoStringLiteralImpl handleContentChange(@NotNull GoStringLiteralImpl literal, @NotNull TextRange range, @NotNull String newContent)
+  public GoStringLiteralImpl handleContentChange(@NotNull GoStringLiteralImpl literal, @NotNull TextRange range, String newContent)
     throws IncorrectOperationException {
     String newText = range.replace(literal.getText(), newContent);
     return literal.updateText(newText);

@@ -31,7 +31,7 @@ import java.util.Collection;
 public class GoCommandConfigureDialog extends DialogWrapper {
   private static final Collection<String> PREDEFINED_COMMANDS = Arrays.asList("vet", "test -i");
 
-  @NotNull private final TextFieldWithAutoCompletion<String> myCommandTextField;
+  private final TextFieldWithAutoCompletion<String> myCommandTextField;
 
   public GoCommandConfigureDialog(@NotNull Project project) {
     super(project);

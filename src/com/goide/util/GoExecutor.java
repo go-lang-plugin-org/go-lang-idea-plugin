@@ -75,15 +75,14 @@ public class GoExecutor {
   private boolean myPtyDisabled = false;
   @Nullable private String myExePath = null;
   @Nullable private String myPresentableName;
-  @Nullable private OSProcessHandler myProcessHandler;
-  @NotNull private Collection<ProcessListener> myProcessListeners = ContainerUtil.newArrayList();
+  private OSProcessHandler myProcessHandler;
+  private Collection<ProcessListener> myProcessListeners = ContainerUtil.newArrayList();
 
   private GoExecutor(@NotNull Project project, @Nullable Module module) {
     myProject = project;
     myModule = module;
   }
 
-  @NotNull
   public static GoExecutor in(@NotNull Project project, @Nullable Module module) {
     return module != null ? in(module) : in(project);
   }
@@ -141,7 +140,6 @@ public class GoExecutor {
     return this;
   }
 
-  @NotNull
   public GoExecutor withProcessListener(@NotNull ProcessListener listener) {
     myProcessListeners.add(listener);
     return this;
@@ -295,7 +293,7 @@ public class GoExecutor {
     return myProcessHandler;
   }
 
-  private void showNotification(@NotNull final String message, @NotNull final NotificationType type) {
+  private void showNotification(@NotNull final String message, final NotificationType type) {
     ApplicationManager.getApplication().invokeLater(new Runnable() {
       @Override
       public void run() {

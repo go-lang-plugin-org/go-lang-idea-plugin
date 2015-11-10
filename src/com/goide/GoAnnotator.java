@@ -121,21 +121,18 @@ public class GoAnnotator implements Annotator {
     }
   }
 
-  @NotNull
-  private static TextAttributesKey getColor(@NotNull GoConstDefinition o) {
+  private static TextAttributesKey getColor(GoConstDefinition o) {
     if (isPackageWide(o)) {
       return o.isPublic() ? PACKAGE_EXPORTED_CONSTANT : PACKAGE_LOCAL_CONSTANT;
     }
     return LOCAL_CONSTANT;
   }
 
-  @NotNull
-  private static TextAttributesKey getColor(@NotNull GoFieldDefinition o) {
+  private static TextAttributesKey getColor(GoFieldDefinition o) {
     return o.isPublic() ? STRUCT_EXPORTED_MEMBER : STRUCT_LOCAL_MEMBER;
   }
 
-  @NotNull
-  private static TextAttributesKey getColor(@NotNull GoVarDefinition o) {
+  private static TextAttributesKey getColor(GoVarDefinition o) {
     if (PsiTreeUtil.getParentOfType(o, GoForStatement.class) != null ||
         PsiTreeUtil.getParentOfType(o, GoIfStatement.class) != null ||
          PsiTreeUtil.getParentOfType(o, GoSwitchStatement.class) != null) {
@@ -149,12 +146,10 @@ public class GoAnnotator implements Annotator {
     return LOCAL_VARIABLE;
   }
 
-  @NotNull
-  private static TextAttributesKey getColor(@NotNull GoNamedSignatureOwner o) {
+  private static TextAttributesKey getColor(GoNamedSignatureOwner o) {
     return o.isPublic() ? EXPORTED_FUNCTION : LOCAL_FUNCTION;
   }
 
-  @NotNull
   private static TextAttributesKey getColor(@Nullable GoTypeSpec o) {
     GoType type = o == null ? null : o.getGoType(null);
     if (type == null) {

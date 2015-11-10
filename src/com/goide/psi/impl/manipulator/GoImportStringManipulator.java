@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 public class GoImportStringManipulator extends AbstractElementManipulator<GoImportString> {
   @NotNull
   @Override
-  public GoImportString handleContentChange(@NotNull GoImportString string, @NotNull TextRange range, @NotNull String s) throws IncorrectOperationException {
+  public GoImportString handleContentChange(@NotNull GoImportString string, @NotNull TextRange range, String s) throws IncorrectOperationException {
     String newPackage = range.replace(string.getText(), s);
     return (GoImportString)string.replace(GoElementFactory.createImportString(string.getProject(), newPackage));
   }

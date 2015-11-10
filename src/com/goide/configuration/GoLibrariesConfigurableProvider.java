@@ -111,9 +111,8 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
         String[] urlsFromEnv = ContainerUtil.map2Array(ContainerUtil.mapNotNull(GoSdkUtil.getGoPathsRootsFromEnvironment(),
                                                                                 new GoSdkUtil.RetrieveSubDirectoryOrSelfFunction("src")),
                                                        String.class, new Function<VirtualFile, String>() {
-            @NotNull
             @Override
-            public String fun(@NotNull VirtualFile file) {
+            public String fun(VirtualFile file) {
               return file.getUrl();
             }
           });
@@ -172,11 +171,11 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
       }
 
       class MyHideableDecoratorListener extends ListenableHideableDecorator.MyListener {
-        @NotNull private final GridLayoutManager myLayoutManager;
-        @NotNull private final JPanel myHideablePanel;
+        private final GridLayoutManager myLayoutManager;
+        private final JPanel myHideablePanel;
         @NotNull private final String myStoreKey;
-        @NotNull private final Spacer mySpacer;
-        @NotNull private final Collection<HideableDecorator> myHideableDecorators;
+        private final Spacer mySpacer;
+        private final Collection<HideableDecorator> myHideableDecorators;
 
         public MyHideableDecoratorListener(@NotNull GridLayoutManager layoutManager,
                                            @NotNull JPanel hideablePanel,

@@ -368,7 +368,7 @@ public class GoSdkUtil {
   }
 
   @NotNull
-  public static Collection<Object> getSdkAndLibrariesCacheDependencies(@NotNull PsiElement context, @NotNull Object... extra) {
+  public static Collection<Object> getSdkAndLibrariesCacheDependencies(@NotNull PsiElement context, Object... extra) {
     return getSdkAndLibrariesCacheDependencies(context.getProject(), ModuleUtilCore.findModuleForPsiElement(context),
                                                ArrayUtil.append(extra, context));
   }
@@ -400,9 +400,8 @@ public class GoSdkUtil {
       mySubdirName = subdirName;
     }
 
-    @Nullable
     @Override
-    public VirtualFile fun(@Nullable VirtualFile file) {
+    public VirtualFile fun(VirtualFile file) {
       return file == null || FileUtil.namesEqual(mySubdirName, file.getName()) ? file : file.findChild(mySubdirName);
     }
   }

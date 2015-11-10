@@ -116,7 +116,6 @@ public class GoBuildTargetSettings implements PersistentStateComponent<GoBuildTa
     notifyChange();
   }
 
-  @NotNull
   public GoTargetSystem getTargetSystemDescriptor(@Nullable Module module) {
     String os = realValue(myState.os, GoUtil.systemOS());
     String arch = realValue(myState.arch, GoUtil.systemArch());
@@ -129,7 +128,6 @@ public class GoBuildTargetSettings implements PersistentStateComponent<GoBuildTa
     return new GoTargetSystem(os, arch, realValue(myState.goVersion, moduleSdkVersion), compiler, cgo, customFlags);
   }
 
-  @Nullable
   @Contract("_,null->!null")
   private static String realValue(@NotNull String value, @Nullable String defaultValue) {
     return DEFAULT.equals(value) ? defaultValue : value;
@@ -142,7 +140,7 @@ public class GoBuildTargetSettings implements PersistentStateComponent<GoBuildTa
   }
 
   @Override
-  public void loadState(@NotNull GoBuildTargetSettingsState state) {
+  public void loadState(GoBuildTargetSettingsState state) {
     XmlSerializerUtil.copyBean(state, myState);
   }
 

@@ -48,9 +48,8 @@ public class GoCoverageProjectData extends ProjectData {
     }
   }
 
-  public void addData(@NotNull final String filePath, int startLine, int startColumn, int endLine, int endColumn, int statements, int hits) {
+  public void addData(final String filePath, int startLine, int startColumn, int endLine, int endColumn, int statements, int hits) {
     FileData fileData = ContainerUtil.getOrCreate(myFilesData, filePath, new Factory<FileData>() {
-      @NotNull
       @Override
       public FileData create() {
         return new FileData(filePath);
@@ -60,7 +59,7 @@ public class GoCoverageProjectData extends ProjectData {
   }
 
   @Override
-  public void merge(@NotNull CoverageData data) {
+  public void merge(CoverageData data) {
     super.merge(data);
     if (data instanceof GoCoverageProjectData) {
       for (Map.Entry<String, FileData> entry : ((GoCoverageProjectData)data).myFilesData.entrySet()) {
@@ -186,14 +185,12 @@ public class GoCoverageProjectData extends ProjectData {
       return result;
     }
 
-    @NotNull
     @Override
     public String toString() {
       return rangeKey(startLine, startColumn, endLine, endColumn) + "; hits: " + hits + "; statements: " + statements;
     }
   }
 
-  @NotNull
   private static String rangeKey(int startLine, int startColumn, int endLine, int endColumn) {
     return startLine + ":" + startColumn + "-" + endLine + ":" + endColumn;
   }

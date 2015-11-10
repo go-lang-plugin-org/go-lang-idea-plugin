@@ -24,11 +24,10 @@ import com.intellij.openapi.module.Module;
 import org.jetbrains.annotations.NotNull;
 
 public class GoRunFileRunningState extends GoRunningState<GoRunFileConfiguration> {
-  public GoRunFileRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module, @NotNull GoRunFileConfiguration configuration) {
+  public GoRunFileRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module, GoRunFileConfiguration configuration) {
     super(env, module, configuration);
   }
 
-  @NotNull
   @Override
   protected GoExecutor patchExecutor(@NotNull GoExecutor executor) throws ExecutionException {
     return executor

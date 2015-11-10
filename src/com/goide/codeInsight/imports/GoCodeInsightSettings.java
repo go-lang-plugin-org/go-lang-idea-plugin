@@ -19,7 +19,6 @@ package com.goide.codeInsight.imports;
 import com.goide.GoConstants;
 import com.intellij.openapi.components.*;
 import com.intellij.util.xmlb.XmlSerializerUtil;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @State(
@@ -41,7 +40,7 @@ public class GoCodeInsightSettings implements PersistentStateComponent<GoCodeIns
   }
 
   @Override
-  public void loadState(@NotNull GoCodeInsightSettings state) {
+  public void loadState(GoCodeInsightSettings state) {
     XmlSerializerUtil.copyBean(state, this);
   }
 

@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class GoIntroduceVariableHandler extends GoIntroduceVariableBase implements RefactoringActionHandler {
   @Override
-  public void invoke(@NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file, DataContext dataContext) {
+  public void invoke(@NotNull Project project, Editor editor, PsiFile file, DataContext dataContext) {
     if (!CommonRefactoringUtil.checkReadOnlyStatus(file)) return;
     performAction(new GoIntroduceOperation(project, editor, file));
   }

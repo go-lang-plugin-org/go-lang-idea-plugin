@@ -41,7 +41,7 @@ public abstract class GoStubElementType<S extends StubBase<T>, T extends GoCompo
   }
 
   @Override
-  public boolean shouldCreateStub(@NotNull ASTNode node) {
+  public boolean shouldCreateStub(ASTNode node) {
     return super.shouldCreateStub(node) && PsiTreeUtil.getParentOfType(node.getPsi(), GoBlock.class) == null;
   }
 }

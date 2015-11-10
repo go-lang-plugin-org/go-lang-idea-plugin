@@ -60,7 +60,7 @@ public class GoDuplicateFunctionInspection extends GoInspectionBase {
         if ((MAIN.equals(name) && MAIN.equals(o.getContainingFile().getPackageName()) && zeroArity(o))) {
           byKey = ContainerUtil.filter(byKey, new Condition<GoFunctionDeclaration>() {
             @Override
-            public boolean value(@NotNull GoFunctionDeclaration declaration) {
+            public boolean value(GoFunctionDeclaration declaration) {
               return Comparing.equal(declaration.getContainingFile(), o.getContainingFile());
             }
           });

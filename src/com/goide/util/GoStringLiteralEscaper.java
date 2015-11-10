@@ -135,7 +135,7 @@ public class GoStringLiteralEscaper extends LiteralTextEscaper<GoStringLiteral> 
     }
   }
 
-  private boolean parseStringCharacters(@NotNull String chars, @NotNull StringBuilder outChars) {
+  private boolean parseStringCharacters(String chars, StringBuilder outChars) {
     outSourceOffsets = new int[chars.length() + 1];
     outSourceOffsets[chars.length()] = -1;
 

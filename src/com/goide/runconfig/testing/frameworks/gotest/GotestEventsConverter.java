@@ -51,7 +51,7 @@ public class GotestEventsConverter extends OutputToGeneralTestEventsConverter im
   }
 
   @Override
-  public boolean processServiceMessages(@NotNull String text, @NotNull Key outputType, @NotNull ServiceMessageVisitor visitor) throws ParseException {
+  public boolean processServiceMessages(@NotNull String text, Key outputType, ServiceMessageVisitor visitor) throws ParseException {
     Matcher matcher;
 
     if ((matcher = RUN.matcher(text)).find()) {
@@ -98,7 +98,7 @@ public class GotestEventsConverter extends OutputToGeneralTestEventsConverter im
   }
 
   @NotNull
-  private String testFinishedMessage(@NotNull String testName) {
+  private String testFinishedMessage(String testName) {
     long duration = System.currentTimeMillis() - myCurrentTestStart;
     return ServiceMessageBuilder.testFinished(testName).addAttribute("duration", Long.toString(duration)).toString();
   }
@@ -108,7 +108,7 @@ public class GotestEventsConverter extends OutputToGeneralTestEventsConverter im
     return GoTestLocationProvider.PROTOCOL + "://" + testName;
   }
 
-  private boolean processNotFinishedMessage(@NotNull String message, Key outputType, ServiceMessageVisitor visitor) throws ParseException {
+  private boolean processNotFinishedMessage(String message, Key outputType, ServiceMessageVisitor visitor) throws ParseException {
     if (myFailed || mySkipped) {
       processFailedMessage(outputType, visitor);
     }
@@ -128,7 +128,7 @@ public class GotestEventsConverter extends OutputToGeneralTestEventsConverter im
            && super.processServiceMessages(testFinishedMessage(myCurrentTest), outputType, visitor);
   }
 
-  private boolean handleFinishTest(@NotNull String text, @NotNull Matcher matcher, @NotNull String testName, @NotNull Key outputType, @NotNull ServiceMessageVisitor visitor)
+  private boolean handleFinishTest(String text, Matcher matcher, String testName, Key outputType, ServiceMessageVisitor visitor)
     throws ParseException {
     addNewLineIfNeeded(testName, outputType, visitor);
     if (matcher.start() > 0) {

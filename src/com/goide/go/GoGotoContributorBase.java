@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoGotoContributorBase<T extends GoNamedElement> implements GotoClassContributor, ChooseByNameContributorEx {
-  @NotNull protected final StubIndexKey<String, T>[] myIndexKeys;
+  protected final StubIndexKey<String, T>[] myIndexKeys;
   @NotNull private final Class<T> myClazz;
 
   public GoGotoContributorBase(@NotNull Class<T> clazz, @NotNull StubIndexKey<String, T>... key) {

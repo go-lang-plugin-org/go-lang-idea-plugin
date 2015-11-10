@@ -25,19 +25,18 @@ import com.intellij.refactoring.ui.RefactoringDialog;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ui.UIUtil;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
 
 class GoIntroduceVariableDialog extends RefactoringDialog {
-  @NotNull private final GoIntroduceOperation myOperation;
+  private final GoIntroduceOperation myOperation;
   private final int myOccurrencesCount;
   private NameSuggestionsField myNameField;
   private JCheckBox myReplaceAllCheckBox;
 
-  protected GoIntroduceVariableDialog(@NotNull GoIntroduceOperation operation) {
+  protected GoIntroduceVariableDialog(GoIntroduceOperation operation) {
     super(operation.getProject(), true);
     myOperation = operation;
     myOccurrencesCount = operation.getOccurrences().size();
@@ -80,7 +79,6 @@ class GoIntroduceVariableDialog extends RefactoringDialog {
     return panel;
   }
 
-  @NotNull
   private JComponent createNamePanel() {
     JPanel panel = new JPanel(new BorderLayout());
 
@@ -102,7 +100,6 @@ class GoIntroduceVariableDialog extends RefactoringDialog {
     return panel;
   }
 
-  @NotNull
   private JComponent createReplaceAllPanel() {
     JPanel panel = new JPanel(new FlowLayout());
 

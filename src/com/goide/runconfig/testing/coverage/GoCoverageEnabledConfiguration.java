@@ -19,10 +19,9 @@ package com.goide.runconfig.testing.coverage;
 import com.goide.runconfig.testing.GoTestRunConfiguration;
 import com.intellij.coverage.CoverageRunner;
 import com.intellij.execution.configurations.coverage.CoverageEnabledConfiguration;
-import org.jetbrains.annotations.NotNull;
 
 public class GoCoverageEnabledConfiguration extends CoverageEnabledConfiguration {
-  public GoCoverageEnabledConfiguration(@NotNull GoTestRunConfiguration configuration) {
+  public GoCoverageEnabledConfiguration(GoTestRunConfiguration configuration) {
     super(configuration);
     setCoverageRunner(CoverageRunner.getInstance(GoCoverageRunner.class));
   }
