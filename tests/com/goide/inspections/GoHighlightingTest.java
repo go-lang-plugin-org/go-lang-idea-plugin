@@ -56,6 +56,8 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       GoTestSignaturesInspection.class,
       GoAssignmentNilWithoutExplicitTypeInspection.class,
       GoStructTagInspection.class
+      GoAssignmentNilWithoutExplicitTypeInspection.class,
+      GoRedeclareImportAsFunctionInspection.class
     );
   }
 
@@ -74,45 +76,46 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     return false;
   }
 
-  public void testSimple()      { doTest(); }
-  public void testStruct()      { doTest(); }
-  public void testBoxes()       { doTest(); }
-  public void testRanges()      { doTest(); }
-  public void testSelector()    { doTest(); }
-  public void testComposite()   { doTest(); }
-  public void testVars()        { doTest(); }
-  public void testRecv()        { doTest(); }
-  public void testPointers()    { doTest(); }
-  public void testSlices()      { doTest(); }
-  public void testShortVars()   { doTest(); }
-  public void testReturns()     { doTest(); }
-  public void testRequest()     { doTest(); }
-  public void testStop()        { doTest(); }
-  public void testVarBlocks()   { doTest(); }
-  public void testBlankImport() { doTest(); }
-  public void testVariadic()    { doTest(); }
-  public void testCheck()       { doTest(); }
-  public void testCheck_test()  { doTest(); }
-  public void testFuncCall()    { doTest(); }
-  public void testBackticks()   { doTest(); }
-  public void testConsts()      { doTest(); }
-  public void testFields()      { doTest(); }
-  public void testBlankFields() { doTest(); }
-  public void testFuncLiteral() { doTest(); }
-  public void testTypeLiterals(){ doTest(); }
-  public void testFuncType()    { doTest(); }
-  public void testTemplates()   { doTest(); }
-  public void testInterfaces()  { doTest(); }
-  public void testReceiverType(){ doTest(); }
-  public void testForRange()    { doTest(); }
-  public void testMismatch()    { doTest(); }
-  public void testStubParams()  { doTest(); }
-  public void testNil()         { doTest(); }
-  public void testAssignUsages(){ doTest(); }
-  public void testMethodExpr()  { doTest(); }
-  public void testVarToImport() { doTest(); }
-  public void testCgotest()     { doTest(); }
-  public void testStructTags()  { doTest(); }
+  public void testSimple()                    { doTest(); }
+  public void testStruct()                    { doTest(); }
+  public void testBoxes()                     { doTest(); }
+  public void testRanges()                    { doTest(); }
+  public void testSelector()                  { doTest(); }
+  public void testComposite()                 { doTest(); }
+  public void testVars()                      { doTest(); }
+  public void testRecv()                      { doTest(); }
+  public void testPointers()                  { doTest(); }
+  public void testSlices()                    { doTest(); }
+  public void testShortVars()                 { doTest(); }
+  public void testReturns()                   { doTest(); }
+  public void testRequest()                   { doTest(); }
+  public void testStop()                      { doTest(); }
+  public void testVarBlocks()                 { doTest(); }
+  public void testBlankImport()               { doTest(); }
+  public void testVariadic()                  { doTest(); }
+  public void testCheck()                     { doTest(); }
+  public void testCheck_test()                { doTest(); }
+  public void testFuncCall()                  { doTest(); }
+  public void testBackticks()                 { doTest(); }
+  public void testConsts()                    { doTest(); }
+  public void testFields()                    { doTest(); }
+  public void testBlankFields()               { doTest(); }
+  public void testFuncLiteral()               { doTest(); }
+  public void testTypeLiterals()              { doTest(); }
+  public void testFuncType()                  { doTest(); }
+  public void testTemplates()                 { doTest(); }
+  public void testInterfaces()                { doTest(); }
+  public void testReceiverType()              { doTest(); }
+  public void testForRange()                  { doTest(); }
+  public void testMismatch()                  { doTest(); }
+  public void testStubParams()                { doTest(); }
+  public void testNil()                       { doTest(); }
+  public void testAssignUsages()              { doTest(); }
+  public void testMethodExpr()                { doTest(); }
+  public void testVarToImport()               { doTest(); }
+  public void testCgotest()                   { doTest(); }
+  public void testRedeclaredImportAsFunction(){ doTest(); }
+  public void testStructTags()                { doTest(); }
 
   public void testRelativeImportIgnoringDirectories() throws IOException {
     myFixture.getTempDirFixture().findOrCreateDir("to_import/testdata");
@@ -156,13 +159,13 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureByText("c.go", "package foo; func init() {bar(); buzz();}; func <error>bar</error>() {}; func buzz() {}");
     myFixture.checkHighlighting();
   }
-  
+
   public void testDuplicateFunctionsInDifferentPackages() {
     myFixture.configureByText("a.go", "package foo; func init() {bar()}; func bar() {};");
     myFixture.configureByText("b_test.go", "package foo_test; func init() {bar(); buzz();}; func bar() {}; func buzz() {}");
     myFixture.checkHighlighting();
   }
-  
+
   public void testDoNotSearchFunctionDuplicatesForNotTargetMatchingFiles() {
     myFixture.configureByText("a.go", "//+build appengine\n\npackage foo; func init() {buzz()}; func buzz() {}");
     myFixture.configureByText("b.go", "//+build appengine\n\npackage foo; func init() {buzz()}; func buzz() {}");
@@ -175,7 +178,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureByText("c.go", "package main; func (a *Foo) <error>bar</error>() {};func (a *Foo) buzz() {}");
     myFixture.checkHighlighting();
   }
-  
+
   public void testDoNotSearchMethodDuplicatesForNotTargetMatchingFiles() {
     myFixture.configureByText("a.go", "package main; type Foo int; func (f Foo) bar(a, b string) {}");
     myFixture.configureByText("b.go", "//+build appengine\n\npackage main; func (a *Foo) bar() {}");
@@ -235,7 +238,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureFromExistingVirtualFile(file);
     myFixture.checkHighlighting();
   }
-  
+
   public void testPackageWithTestPrefixNotInsideTestFile() throws Throwable {
     VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
       @NotNull

@@ -244,6 +244,9 @@
     <localInspection language="go" displayName="Self import"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoSelfImportInspection" />
+    <localInspection language="go" displayName="Redeclare import as function"
+                     groupName="Go" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoRedeclareImportAsFunctionInspection"/>
     <localInspection language="go" displayName="Malformed struct tag"
                      groupName="Go" enabledByDefault="true" level="WARNING"
                      implementationClass="com.goide.inspections.GoStructTagInspection"/>
