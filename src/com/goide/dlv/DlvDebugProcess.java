@@ -60,7 +60,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static com.goide.dlv.protocol.DlvApi.*;
 
 public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> implements Disposable {
-  public static boolean isDlvDisabled = SystemInfo.isWindows || SystemInfo.is32Bit;
+  public static final boolean IS_DLV_DISABLED = SystemInfo.isWindows || SystemInfo.is32Bit;
 
   final static Logger LOG = Logger.getInstance(DlvDebugProcess.class);
   private final AtomicBoolean breakpointsInitiated = new AtomicBoolean();
