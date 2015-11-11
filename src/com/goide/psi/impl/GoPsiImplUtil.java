@@ -1064,10 +1064,6 @@ public class GoPsiImplUtil {
     return new GoStringLiteralEscaper(o);
   }
 
-  public static boolean shouldGoDeeper(@SuppressWarnings("UnusedParameters") GoSignature o) {
-    return true;
-  }
-
   public static boolean prevDot(@Nullable PsiElement e) {
     PsiElement prev = e == null ? null : PsiTreeUtil.prevVisibleLeaf(e);
     return prev instanceof LeafElement && ((LeafElement)prev).getElementType() == GoTypes.DOT;
