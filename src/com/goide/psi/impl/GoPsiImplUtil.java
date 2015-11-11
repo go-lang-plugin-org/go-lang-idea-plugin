@@ -29,6 +29,7 @@ import com.goide.stubs.index.GoMethodIndex;
 import com.goide.util.GoStringLiteralEscaper;
 import com.goide.util.GoUtil;
 import com.intellij.lang.ASTNode;
+import com.intellij.lang.Language;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.*;
 import com.intellij.openapi.util.text.StringUtil;
@@ -316,7 +317,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType getGoTypeInner(@NotNull GoExpression o, @Nullable ResolveState context) {
+  public static GoType getGoTypeInner(@NotNull final GoExpression o, @Nullable ResolveState context) {
     if (o instanceof GoUnaryExpr) {
       GoExpression expression = ((GoUnaryExpr)o).getExpression();
       if (expression != null) {
@@ -343,9 +344,59 @@ public class GoPsiImplUtil {
       return findTypeFromRef(expression);
     }
     else if (o instanceof GoFunctionLit) {
-      GoSignature signature = ((GoFunctionLit)o).getSignature();
-      GoResult result = signature != null ? signature.getResult() : null;
-      return result != null ? result.getType() : null;
+      class MyFunType extends LightElement implements GoFunctionType {
+        @NotNull private final GoFunctionLit myLit;
+
+        protected MyFunType(@NotNull GoFunctionLit o) {
+          super(o.getManager(), o.getLanguage());
+          myLit = o;
+        }
+
+        @Nullable
+        @Override
+        public GoSignature getSignature() {
+          return myLit.getSignature();
+        }
+
+        @NotNull
+        @Override
+        public PsiElement getFunc() {
+          return myLit.getFunc();
+        }
+
+        @Nullable
+        @Override
+        public GoTypeReferenceExpression getTypeReferenceExpression() {
+          return null;
+        }
+
+        @Override
+        public boolean shouldGoDeeper() {
+          return false;
+        }
+
+        @Override
+        public String toString() {
+          return null;
+        }
+
+        @Override
+        public IStubElementType getElementType() {
+          return null;
+        }
+
+        @Override
+        public GoTypeStub getStub() {
+          return null;
+        }
+
+        @Override
+        public String getText() {
+          GoSignature signature = getSignature();
+          return getFunc().getText() + (signature != null ? signature.getText() : "");
+        }
+      }
+      return new MyFunType((GoFunctionLit)o);
     }
     else if (o instanceof GoBuiltinCallExpr) {
       String text = ((GoBuiltinCallExpr)o).getReferenceExpression().getText();
