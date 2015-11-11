@@ -29,7 +29,6 @@ import com.goide.stubs.index.GoMethodIndex;
 import com.goide.util.GoStringLiteralEscaper;
 import com.goide.util.GoUtil;
 import com.intellij.lang.ASTNode;
-import com.intellij.lang.Language;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.*;
 import com.intellij.openapi.util.text.StringUtil;
@@ -344,58 +343,6 @@ public class GoPsiImplUtil {
       return findTypeFromRef(expression);
     }
     else if (o instanceof GoFunctionLit) {
-      class MyFunType extends LightElement implements GoFunctionType {
-        @NotNull private final GoFunctionLit myLit;
-
-        protected MyFunType(@NotNull GoFunctionLit o) {
-          super(o.getManager(), o.getLanguage());
-          myLit = o;
-        }
-
-        @Nullable
-        @Override
-        public GoSignature getSignature() {
-          return myLit.getSignature();
-        }
-
-        @NotNull
-        @Override
-        public PsiElement getFunc() {
-          return myLit.getFunc();
-        }
-
-        @Nullable
-        @Override
-        public GoTypeReferenceExpression getTypeReferenceExpression() {
-          return null;
-        }
-
-        @Override
-        public boolean shouldGoDeeper() {
-          return false;
-        }
-
-        @Override
-        public String toString() {
-          return null;
-        }
-
-        @Override
-        public IStubElementType getElementType() {
-          return null;
-        }
-
-        @Override
-        public GoTypeStub getStub() {
-          return null;
-        }
-
-        @Override
-        public String getText() {
-          GoSignature signature = getSignature();
-          return getFunc().getText() + (signature != null ? signature.getText() : "");
-        }
-      }
       return new MyFunType((GoFunctionLit)o);
     }
     else if (o instanceof GoBuiltinCallExpr) {
@@ -684,7 +631,7 @@ public class GoPsiImplUtil {
           for (GoParameterDeclaration declaration : list) {
             types.add(declaration.getType());
           }
-          return new MyGoTypeList(types, parameters);
+          return new MyGoTypeList(parameters, types);
         }
       }
     }
@@ -814,13 +761,36 @@ public class GoPsiImplUtil {
     return Collections.emptyList();
   }
 
-  static class MyGoTypeList extends LightElement implements GoTypeList {
+  static class MyFunType extends GoLightType<GoFunctionLit> implements GoFunctionType {
+    protected MyFunType(@NotNull GoFunctionLit o) {
+      super(o);
+    }
+
+    @Nullable
+    @Override
+    public GoSignature getSignature() {
+      return myElement.getSignature();
+    }
+
+    @NotNull
+    @Override
+    public PsiElement getFunc() {
+      return myElement.getFunc();
+    }
+
+    @Override
+    public String getText() {
+      GoSignature signature = getSignature();
+      return getFunc().getText() + (signature != null ? signature.getText() : "");
+    }
+  }
+
+  static class MyGoTypeList extends GoLightType<GoCompositeElement> implements GoTypeList {
     @NotNull private final List<GoType> myTypes;
 
-    public MyGoTypeList(@NotNull List<GoType> types, @NotNull PsiElement o) {
-      super(o.getManager(), o.getLanguage());
+    public MyGoTypeList(@NotNull GoCompositeElement o, @NotNull List<GoType> types) {
+      super(o);
       myTypes = types;
-      setNavigationElement(o);
     }
 
     @NotNull
@@ -829,30 +799,9 @@ public class GoPsiImplUtil {
       return myTypes;
     }
 
-    @Nullable
-    @Override
-    public GoTypeReferenceExpression getTypeReferenceExpression() {
-      return null;
-    }
-
     @Override
     public String toString() {
       return "MyGoTypeList{myTypes=" + myTypes + '}';
-    }
-
-    @Override
-    public IStubElementType getElementType() {
-      return null;
-    }
-
-    @Override
-    public GoTypeStub getStub() {
-      return null;
-    }
-
-    @Override
-    public boolean shouldGoDeeper() {
-      return false;
     }
   }
 
@@ -877,7 +826,7 @@ public class GoPsiImplUtil {
           }
         }
         if (composite.size() == 1) return composite.get(0);
-        return new MyGoTypeList(composite, parameters);
+        return new MyGoTypeList(parameters, composite);
       }
     }
     return null;
