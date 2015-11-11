@@ -58,9 +58,6 @@ public class GoVarReference extends GoCachedReference<GoVarDefinition> {
                        };
 
     if (myPotentialStopBlock != null) {
-      if (myPotentialStopBlock.getParent() instanceof GoFunctionOrMethodDeclaration) {
-        GoReference.processFunctionParameters(myElement, p);
-      }
       myPotentialStopBlock.processDeclarations(p, ResolveState.initial(), PsiTreeUtil.getParentOfType(myElement, GoStatement.class),
                                                myElement);
       return true;
