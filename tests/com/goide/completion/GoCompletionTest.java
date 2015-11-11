@@ -402,6 +402,16 @@ public class GoCompletionTest extends GoCompletionTestBase {
     String theSame = "package foo; func foo() {_ := 1; <caret>}";
     doCheckResult(theSame, theSame);
   }
+  
+  public void testVarFuncTypeZeroParam() {
+    doCheckResult("package foo; var abc = func() {}; func main() {ab<caret>}",
+                  "package foo; var abc = func() {}; func main() {abc()<caret>}");
+  }
+  
+  public void testVarFuncTypeOneParam() {
+    doCheckResult("package foo; var abc = func(o int) {}; func main() {ab<caret>}",
+                  "package foo; var abc = func(o int) {}; func main() {abc(<caret>)}");
+  }
 
   public void testCaseInsensitiveVariable() {
     doCheckResult("package main; func test(BBA int){b<caret>}",

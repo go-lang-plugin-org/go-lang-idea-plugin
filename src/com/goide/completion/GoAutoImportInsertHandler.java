@@ -58,7 +58,6 @@ public class GoAutoImportInsertHandler<T extends GoNamedElement> implements Inse
     }, clazz);
   }
 
-
   public GoAutoImportInsertHandler(@Nullable Function<T, InsertHandler<LookupElement>> delegateGetter, @Nullable Class<T> clazz) {
     myDelegateGetter = delegateGetter;
     myClass = clazz;

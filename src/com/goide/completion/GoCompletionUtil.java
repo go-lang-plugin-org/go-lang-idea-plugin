@@ -60,12 +60,22 @@ public class GoCompletionUtil {
     @Override
     public void handleInsert(InsertionContext context, @NotNull LookupElement item) {
       PsiElement element = item.getPsiElement();
-      if (!(element instanceof GoSignatureOwner)) return;
-      GoSignatureOwner f = (GoSignatureOwner)element;
-      GoSignature signature = f.getSignature();
+      if (element instanceof GoSignatureOwner) {
+        GoSignatureOwner f = (GoSignatureOwner)element;
+        GoSignature signature = f.getSignature();
+        doInsert(context, item, signature);
+      }
+      else if (element instanceof GoNamedElement) {
+        GoType type = ((GoNamedElement)element).getGoType(null);
+        if (type instanceof GoFunctionType) {
+          doInsert(context, item, ((GoFunctionType)type).getSignature());   
+        }
+      }
+    }
+
+    private void doInsert(InsertionContext context, @NotNull LookupElement item, GoSignature signature) {
       int paramsCount = signature != null ? signature.getParameters().getParameterDeclarationList().size() : 0;
-      InsertHandler<LookupElement> handler =
-        paramsCount == 0 ? ParenthesesInsertHandler.NO_PARAMETERS : ParenthesesInsertHandler.WITH_PARAMETERS;
+      InsertHandler<LookupElement> handler = paramsCount == 0 ? ParenthesesInsertHandler.NO_PARAMETERS : ParenthesesInsertHandler.WITH_PARAMETERS;
       handler.handleInsert(context, item);
     }
   };
@@ -229,7 +239,7 @@ public class GoCompletionUtil {
         if (value == null || PsiTreeUtil.getPrevSiblingOfType(value, GoKey.class) != null) return;
         super.handleInsert(context, item);
       }
-    } : null, VAR_PRIORITY);
+    } : v.getGoType(null) instanceof GoFunctionType ? FUNCTION_INSERT_HANDLER : null, VAR_PRIORITY);
   }
 
   @NotNull
