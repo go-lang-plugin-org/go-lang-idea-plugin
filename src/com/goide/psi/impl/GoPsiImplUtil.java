@@ -20,6 +20,7 @@ import com.goide.GoConstants;
 import com.goide.GoTypes;
 import com.goide.psi.*;
 import com.goide.psi.impl.imports.GoImportReferenceSet;
+import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.sdk.GoSdkUtil;
 import com.goide.stubs.GoImportSpecStub;
 import com.goide.stubs.GoNamedStub;
@@ -57,6 +58,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class GoPsiImplUtil {
+  public static final Key<SmartPsiElementPointer<GoReferenceExpressionBase>> CONTEXT = Key.create("CONTEXT");
+
   public static boolean builtin(@Nullable PsiElement resolve) {
     if (resolve == null) return false;
     PsiFile file = resolve.getContainingFile();
@@ -578,7 +581,7 @@ public class GoPsiImplUtil {
     if (siblingType != null) return siblingType;
 
     if (parent instanceof GoTypeSwitchGuard) {
-      SmartPsiElementPointer<GoReferenceExpressionBase> pointer = context == null ? null : context.get(GoReference.CONTEXT);
+      SmartPsiElementPointer<GoReferenceExpressionBase> pointer = context == null ? null : context.get(CONTEXT);
       GoTypeCaseClause typeCase = PsiTreeUtil.getParentOfType(pointer != null ? pointer.getElement() : null, GoTypeCaseClause.class);
       if (typeCase != null && typeCase.getDefault() != null) {
         return ((GoTypeSwitchGuard)parent).getExpression().getGoType(context);  
@@ -737,6 +740,57 @@ public class GoPsiImplUtil {
       });
     }
     return calcMethods(o);
+  }
+
+  static boolean allowed(@NotNull PsiFile file, boolean isTesting) {
+    return file instanceof GoFile && (!GoTestFinder.isTestFile(file) || isTesting) && GoUtil.allowed(file);
+  }
+
+  public static boolean allowed(@NotNull PsiFile file, @Nullable PsiFile contextFile) {
+    if (contextFile == null || !(contextFile instanceof GoFile)) return true; 
+    return allowed(file, GoTestFinder.isTestFile(contextFile));
+  }
+
+  static boolean processNamedElements(@NotNull PsiScopeProcessor processor,
+                                      @NotNull ResolveState state,
+                                      @NotNull Collection<? extends GoNamedElement> elements,
+                                      boolean localResolve) {
+    return processNamedElements(processor, state, elements, localResolve, false);
+  }
+
+  static boolean processNamedElements(@NotNull PsiScopeProcessor processor,
+                                      @NotNull ResolveState state,
+                                      @NotNull Collection<? extends GoNamedElement> elements,
+                                      boolean localResolve,
+                                      boolean checkContainingFile) {
+    PsiFile contextFile = checkContainingFile ? getContextFile(state) : null;
+    for (GoNamedElement definition : elements) {
+      if (!definition.isValid() || checkContainingFile && !allowed(definition.getContainingFile(), contextFile)) continue;
+      if ((localResolve || definition.isPublic()) && !processor.execute(definition, state)) return false;
+    }
+    return true;
+  }
+
+  @Nullable
+  static PsiFile getContextFile(@NotNull ResolveState state) {
+    SmartPsiElementPointer<GoReferenceExpressionBase> context = state.get(CONTEXT);
+    return context != null ? context.getContainingFile() : null;
+  }
+
+  public static boolean processSignatureOwner(@NotNull GoSignatureOwner o, @NotNull GoScopeProcessorBase processor) {
+    GoSignature signature = o.getSignature();
+    if (signature == null) return true;
+    if (!processParameters(processor, signature.getParameters())) return false;
+    GoResult result = signature.getResult();
+    GoParameters resultParameters = result != null ? result.getParameters() : null;
+    return resultParameters == null || processParameters(processor, resultParameters);
+  }
+
+  private static boolean processParameters(@NotNull GoScopeProcessorBase processor, @NotNull GoParameters parameters) {
+    for (GoParameterDeclaration declaration : parameters.getParameterDeclarationList()) {
+      if (!processNamedElements(processor, ResolveState.initial(), declaration.getParamDefinitionList(), true)) return false;
+    }
+    return true;
   }
 
   @NotNull

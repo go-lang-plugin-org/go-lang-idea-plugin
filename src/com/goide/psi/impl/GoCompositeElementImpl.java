@@ -71,14 +71,12 @@ public class GoCompositeElementImpl extends ASTWrapperPsiElement implements GoCo
                                       @NotNull PsiScopeProcessor processor,
                                       @NotNull ResolveState state,
                                       @Nullable PsiElement lastParent, @NotNull PsiElement place) {
-    if (!ResolveUtil.processChildrenFromTop(o, processor, state, lastParent, place)) return false;
-    return processParameters(o, processor);
+    return ResolveUtil.processChildrenFromTop(o, processor, state, lastParent, place) && processParameters(o, processor);
   }
 
-  private static boolean processParameters(GoBlock b,
-                                           PsiScopeProcessor processor) {
-    if (b.getParent() instanceof GoSignatureOwner && processor instanceof GoScopeProcessorBase) {
-      return GoReference.processSignatureOwner((GoSignatureOwner)b.getParent(), (GoScopeProcessorBase)processor);
+  private static boolean processParameters(@NotNull GoBlock b, @NotNull PsiScopeProcessor processor) {
+    if (processor instanceof GoScopeProcessorBase && b.getParent() instanceof GoSignatureOwner) {
+      return GoPsiImplUtil.processSignatureOwner((GoSignatureOwner)b.getParent(), (GoScopeProcessorBase)processor);
     }
     return true;
   }
