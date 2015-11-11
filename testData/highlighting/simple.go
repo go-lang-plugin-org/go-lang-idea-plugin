@@ -501,7 +501,7 @@ func _() {
 type inner_t struct{}
 func (aa inner_t) foo() { }
 
-func main() {
+func _() {
 	c := 10
 	var fun = func(c inner_t) {
 		c.foo();
