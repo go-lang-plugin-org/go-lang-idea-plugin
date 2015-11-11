@@ -419,7 +419,7 @@ public class GoPsiImplUtil {
     else if (o instanceof GoLiteral) {
       GoLiteral l = (GoLiteral)o;
       if (l.getChar() != null) return getBuiltinType(o, "rune");
-      if (l.getInt() != null || l.getHex() != null) return getBuiltinType(o, "int");
+      if (l.getInt() != null || l.getHex() != null || ((GoLiteral)o).getOct() != null) return getBuiltinType(o, "int");
       if (l.getFloat() != null) return getBuiltinType(o, "float64");
       if (l.getFloati() != null) return getBuiltinType(o, "complex64");
       if (l.getDecimali() != null) return getBuiltinType(o, "complex128");
