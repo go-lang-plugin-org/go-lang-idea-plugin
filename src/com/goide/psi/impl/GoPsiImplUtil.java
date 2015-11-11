@@ -1011,7 +1011,7 @@ public class GoPsiImplUtil {
   }
 
   public static boolean shouldGoDeeper(@SuppressWarnings("UnusedParameters") GoSignature o) {
-    return false;
+    return true;
   }
 
   public static boolean prevDot(@Nullable PsiElement e) {

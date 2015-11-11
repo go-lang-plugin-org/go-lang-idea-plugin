@@ -313,18 +313,11 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
     if (!processBlock(processor, state, true)) return false;
     if (!processReceiver(processor, state, true)) return false;
-    if (!processParameters(processor, state, true)) return false;
     if (!processImports(file, processor, state, myElement)) return false;
     if (!processFileEntities(file, processor, state, true)) return false;
     if (!processDirectory(file.getOriginalFile().getParent(), file, file.getPackageName(), processor, state, true)) return false;
     if (!processBuiltin(processor, state, myElement)) return false;
     return true;
-  }
-
-  private boolean processParameters(@NotNull GoScopeProcessor processor, @NotNull ResolveState state, boolean localResolve) {
-    GoScopeProcessorBase delegate = createDelegate(processor);
-    processFunctionParameters(myElement, delegate);
-    return processNamedElements(processor, state, delegate.getVariants(), localResolve);
   }
 
   private boolean processReceiver(@NotNull GoScopeProcessor processor, @NotNull ResolveState state, boolean localResolve) {
@@ -451,7 +444,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     }
   }
 
-  private static boolean processSignatureOwner(@NotNull GoSignatureOwner o, @NotNull GoScopeProcessorBase processor) {
+  public static boolean processSignatureOwner(@NotNull GoSignatureOwner o, @NotNull GoScopeProcessorBase processor) {
     GoSignature signature = o.getSignature();
     if (signature == null) return true;
     if (!processParameters(processor, signature.getParameters())) return false;
