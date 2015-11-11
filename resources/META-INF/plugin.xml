@@ -244,6 +244,9 @@
     <localInspection language="go" displayName="Self import"
                      groupName="Go" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoSelfImportInspection" />
+    <localInspection language="go" displayName="Redeclare import as function"
+                     groupName="Go" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoRedeclareImportAsFunctionInspection"/>
   </extensions>
   <actions>
     <action id="Go.NewGoFile" class="com.goide.actions.GoCreateFileAction"
