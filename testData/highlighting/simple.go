@@ -497,3 +497,15 @@ func _() {
 		}
 	}
 }
+
+type inner_t struct{}
+func (aa inner_t) foo() { }
+
+func main() {
+	c := 10
+	var fun = func(c inner_t) {
+		c.foo();
+	}
+	fun(inner_t{})
+	print(c)
+}
