@@ -25,18 +25,7 @@ import com.intellij.util.PathUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
-
 public class GoEnvironmentUtil {
-
-  private GoEnvironmentUtil() {
-  }
-
-  @NotNull
-  public static String getExecutableResultForModule(@NotNull String modulePath, @NotNull String outputDirectory) {
-    return outputDirectory + File.separatorChar + getBinaryFileNameForPath(modulePath);
-  }
-
   @NotNull
   public static String getBinaryFileNameForPath(@NotNull String path) {
     String resultBinaryName = FileUtil.getNameWithoutExtension(PathUtil.getFileName(path));
