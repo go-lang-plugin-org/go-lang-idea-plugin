@@ -59,14 +59,12 @@ public class GoCompletionUtil {
   public static final InsertHandler<LookupElement> FUNCTION_INSERT_HANDLER = new InsertHandler<LookupElement>() {
     @Override
     public void handleInsert(InsertionContext context, @NotNull LookupElement item) {
-      PsiElement element = item.getPsiElement();
-      if (element instanceof GoSignatureOwner) {
-        GoSignatureOwner f = (GoSignatureOwner)element;
-        GoSignature signature = f.getSignature();
-        doInsert(context, item, signature);
+      PsiElement e = item.getPsiElement();
+      if (e instanceof GoSignatureOwner) {
+        doInsert(context, item, ((GoSignatureOwner)e).getSignature());
       }
-      else if (element instanceof GoNamedElement) {
-        GoType type = ((GoNamedElement)element).getGoType(null);
+      else if (e instanceof GoNamedElement) {
+        GoType type = ((GoNamedElement)e).getGoType(null);
         if (type instanceof GoFunctionType) {
           doInsert(context, item, ((GoFunctionType)type).getSignature());   
         }
