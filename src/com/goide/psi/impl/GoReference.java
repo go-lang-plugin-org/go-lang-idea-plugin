@@ -28,7 +28,6 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
-import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
@@ -49,8 +48,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   public static final Key<String> ACTUAL_NAME = Key.create("ACTUAL_NAME");
   public static final Key<Object> POINTER = Key.create("POINTER");
   public static final Key<Object> RECEIVER = Key.create("RECEIVER");
-  public static final Key<SmartPsiElementPointer<GoReferenceExpressionBase>> CONTEXT = Key.create("CONTEXT");
-  
+
   private static final ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase> MY_RESOLVER =
     new ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase>() {
       @NotNull
@@ -277,15 +275,6 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     }
     return true;
   }
-  
-  private static boolean allowed(@NotNull PsiFile file, boolean isTesting) {
-    return file instanceof GoFile && (!GoTestFinder.isTestFile(file) || isTesting) && GoUtil.allowed(file);
-  }
-  
-  public static boolean allowed(@NotNull PsiFile file, @Nullable PsiFile contextFile) {
-    if (contextFile == null || !(contextFile instanceof GoFile)) return true; 
-    return allowed(file, GoTestFinder.isTestFile(contextFile));
-  }
 
   private boolean processUnqualifiedResolve(@NotNull GoFile file,
                                             @NotNull GoScopeProcessor processor,
@@ -410,54 +399,12 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     return true;
   }
 
-  static boolean processNamedElements(@NotNull PsiScopeProcessor processor,
-                                      @NotNull ResolveState state,
-                                      @NotNull Collection<? extends GoNamedElement> elements,
-                                      boolean localResolve) {
-    return processNamedElements(processor, state, elements, localResolve, false);
-  }
-
-  static boolean processNamedElements(@NotNull PsiScopeProcessor processor,
-                                      @NotNull ResolveState state,
-                                      @NotNull Collection<? extends GoNamedElement> elements,
-                                      boolean localResolve,
-                                      boolean checkContainingFile) {
-    PsiFile contextFile = checkContainingFile ? getContextFile(state) : null;
-    for (GoNamedElement definition : elements) {
-      if (!definition.isValid() || checkContainingFile && !allowed(definition.getContainingFile(), contextFile)) continue;
-      if ((localResolve || definition.isPublic()) && !processor.execute(definition, state)) return false;
-    }
-    return true;
-  }
-
-  @Nullable
-  private static PsiFile getContextFile(@NotNull ResolveState state) {
-    SmartPsiElementPointer<GoReferenceExpressionBase> context = state.get(CONTEXT);
-    return context != null ? context.getContainingFile() : null;
-  }
-
   // todo: return boolean for better performance 
   public static void processFunctionParameters(@NotNull GoCompositeElement e, @NotNull GoScopeProcessorBase processor) {
     GoSignatureOwner signatureOwner = PsiTreeUtil.getParentOfType(e, GoSignatureOwner.class);
     while (signatureOwner != null && processSignatureOwner(signatureOwner, processor)) {
       signatureOwner = PsiTreeUtil.getParentOfType(signatureOwner, GoSignatureOwner.class);
     }
-  }
-
-  public static boolean processSignatureOwner(@NotNull GoSignatureOwner o, @NotNull GoScopeProcessorBase processor) {
-    GoSignature signature = o.getSignature();
-    if (signature == null) return true;
-    if (!processParameters(processor, signature.getParameters())) return false;
-    GoResult result = signature.getResult();
-    GoParameters resultParameters = result != null ? result.getParameters() : null;
-    return resultParameters == null || processParameters(processor, resultParameters);
-  }
-
-  private static boolean processParameters(@NotNull GoScopeProcessorBase processor, @NotNull GoParameters parameters) {
-    for (GoParameterDeclaration declaration : parameters.getParameterDeclarationList()) {
-      if (!processNamedElements(processor, ResolveState.initial(), declaration.getParamDefinitionList(), true)) return false;
-    }
-    return true;
   }
 
   @NotNull

@@ -129,7 +129,7 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
       GoNamedElement named = (GoNamedElement)e;
       PsiFile myFile = myOrigin.getContainingFile();
       PsiFile file = e.getContainingFile();
-      if (!(myFile instanceof GoFile) || !GoReference.allowed(file, myFile)) return true;
+      if (!(myFile instanceof GoFile) || !GoPsiImplUtil.allowed(file, myFile)) return true;
       boolean localResolve = GoReference.isLocalResolve(myFile, file);
       return !e.isValid() || !(named.isPublic() || localResolve);
     }
