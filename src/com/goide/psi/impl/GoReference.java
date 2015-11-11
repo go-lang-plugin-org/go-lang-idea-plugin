@@ -399,14 +399,6 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     return true;
   }
 
-  // todo: return boolean for better performance 
-  public static void processFunctionParameters(@NotNull GoCompositeElement e, @NotNull GoScopeProcessorBase processor) {
-    GoSignatureOwner signatureOwner = PsiTreeUtil.getParentOfType(e, GoSignatureOwner.class);
-    while (signatureOwner != null && processSignatureOwner(signatureOwner, processor)) {
-      signatureOwner = PsiTreeUtil.getParentOfType(signatureOwner, GoSignatureOwner.class);
-    }
-  }
-
   @NotNull
   @Override
   public PsiElement handleElementRename(@NotNull String newElementName) throws IncorrectOperationException {

@@ -103,7 +103,7 @@ public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
            "func aaa(<caret>a int) {\n" +
            "    /*usage*/a\n" +
            "    var a int\n" +
-           "    /*usage*/a := 1\n" +
+           "    a := 1\n" +
            "}\n");
   }
   
