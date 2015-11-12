@@ -509,3 +509,15 @@ func _() {
 	fun(inner_t{})
 	print(c)
 }
+
+type B1 struct {a string}
+type B2 B1
+
+func (b B2) method() B2 {
+	return B2{}
+}
+
+func _() {
+	b := B2{a:""}
+ 	b.method()
+}
