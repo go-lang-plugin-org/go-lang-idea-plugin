@@ -62,7 +62,7 @@ public class UpdateComponent implements ApplicationComponent, Disposable {
   private static void checkForUpdates() {
     PropertiesComponent propertiesComponent = PropertiesComponent.getInstance();
     long lastUpdate = propertiesComponent.getOrInitLong(KEY, 0);
-    if (lastUpdate == 0 || System.currentTimeMillis() - lastUpdate > TimeUnit.SECONDS.toMillis(1)) {
+    if (lastUpdate == 0 || System.currentTimeMillis() - lastUpdate > TimeUnit.DAYS.toMillis(1)) {
       ApplicationManager.getApplication().executeOnPooledThread(new Runnable() {
         @Override
         public void run() {
