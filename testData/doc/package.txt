@@ -1,3 +1,5 @@
+<b>Package io</b>
+<p><code>import "io"</code></p>
 <p>Package io provides basic interfaces to I/O primitives.
 Its primary job is to wrap existing implementations of such primitives,
 such as those in package os, into shared public interfaces that

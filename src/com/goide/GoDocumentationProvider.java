@@ -18,6 +18,7 @@ package com.goide;
 
 import com.goide.editor.GoParameterInfoHandler;
 import com.goide.psi.*;
+import com.goide.util.GoUtil;
 import com.intellij.lang.documentation.AbstractDocumentationProvider;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
@@ -63,8 +64,9 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
     if (file instanceof GoFile) {
       // todo: remove after correct stubbing (comments needed in stubs)
       GoPackageClause pack = PsiTreeUtil.findChildOfType(file, GoPackageClause.class);
-      List<PsiComment> comments = getPreviousNonWsComment(pack);
-      if (!comments.isEmpty()) return getCommentText(comments);
+      String title = "<b>Package " + GoUtil.suggestPackageForDirectory(file.getParent()) + "</b>\n";
+      String importPath = "<p><code>import \"" + StringUtil.notNullize(((GoFile)file).getImportPath()) + "\"</code></p>\n";
+      return title + importPath + getCommentText(getPreviousNonWsComment(pack));
     }
     return null;
   }

@@ -20,6 +20,7 @@ import com.goide.GoConstants;
 import com.goide.project.GoBuildTargetSettings;
 import com.goide.project.GoExcludedPathsSettings;
 import com.goide.psi.*;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.runconfig.testing.GoTestFinder;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManager;
@@ -206,6 +207,17 @@ public class GoUtil {
       }
     }
     return true;
+  }
+  
+  @NotNull
+  public static String suggestPackageForDirectory(@Nullable PsiDirectory directory) {
+    String packageName = GoPsiImplUtil.getLocalPackageName(directory != null ? directory.getName() : "");
+    for (String p : getAllPackagesInDirectory(directory, true)) {
+      if (!GoConstants.MAIN.equals(p)) {
+        return p;
+      }
+    }
+    return packageName;
   }
 
   @NotNull
