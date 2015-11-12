@@ -18,7 +18,6 @@ package com.goide.actions;
 
 import com.goide.GoConstants;
 import com.goide.GoIcons;
-import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.util.GoUtil;
 import com.intellij.ide.actions.CreateFileFromTemplateAction;
 import com.intellij.ide.actions.CreateFileFromTemplateDialog;
@@ -30,7 +29,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Properties;
@@ -45,10 +43,7 @@ public class GoCreateFileAction extends CreateFileFromTemplateAction implements 
     FileTemplateManager templateManager = FileTemplateManager.getInstance(dir.getProject());
     FileTemplate template = templateManager.getInternalTemplate(templateName);
     Properties properties = templateManager.getDefaultProperties();
-    String packageName = ContainerUtil.getFirstItem(GoUtil.getAllPackagesInDirectory(dir, true));
-    if (packageName == null) {
-      packageName = GoPsiImplUtil.getLocalPackageName(dir.getName());
-    }
+    String packageName = GoUtil.suggestPackageForDirectory(dir);
     if (name.endsWith(GoConstants.TEST_SUFFIX) || name.endsWith(GoConstants.TEST_SUFFIX_WITH_EXTENSION)) {
       packageName += GoConstants.TEST_SUFFIX;
     }
