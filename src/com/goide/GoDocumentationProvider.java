@@ -23,13 +23,13 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.xml.util.XmlStringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -46,10 +46,9 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       Collection<PsiElement> children = PsiTreeUtil.findChildrenOfType(topLevel, element.getClass());
       boolean alone = children.size() == 1 && children.iterator().next().equals(element);
       String signature = getSignature(element);
-      String result = StringUtil.isNotEmpty(signature) ? "<b>" + signature + "</b>" : signature;
+      signature = StringUtil.isNotEmpty(signature) ? "<b>" + signature + "</b>\n" : signature;
       String commentText = getCommentText(getPreviousNonWsComment(alone ? topLevel : element));
-      String br = StringUtil.isNotEmpty(result) ? "<br/>" : "";
-      return StringUtil.isNotEmpty(commentText) ? result + br + commentText : result;
+      return StringUtil.isNotEmpty(commentText) ? signature + commentText : signature;
     }
     else if (element instanceof PsiDirectory) {
       String comments = getPackageComment(((PsiDirectory)element).findFile("doc.go"));
@@ -92,22 +91,32 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
 
   @NotNull
   private static String getCommentText(@NotNull List<PsiComment> comments) {
-    return StringUtil.join(ContainerUtil.map(comments, new Function<PsiComment, String>() {
-      @Override
-      public String fun(@NotNull PsiComment c) {
-        IElementType type = c.getTokenType();
-        String text = c.getText();
-        if (type == GoParserDefinition.LINE_COMMENT) {
-          text = text.replaceAll("//", "");
-        }
-        else if (type == GoParserDefinition.MULTILINE_COMMENT) {
-          text = StringUtil.trimEnd(text, "*/");
-          text = StringUtil.trimStart(text, "/*");
-          text = LEADING_TAB.matcher(text).replaceAll("");
-        }
-        return XmlStringUtil.escapeString(text.trim());
+    StringBuilder result = new StringBuilder();
+    StringBuilder currentBlock = new StringBuilder();
+    Iterator<PsiComment> iterator = comments.iterator();
+    while (iterator.hasNext()) {
+      PsiComment comment = iterator.next();
+      IElementType type = comment.getTokenType();
+      String text = comment.getText();
+      if (type == GoParserDefinition.LINE_COMMENT) {
+        text = text.replaceAll("//", "");
       }
-    }), "<br/>");
+      else if (type == GoParserDefinition.MULTILINE_COMMENT) {
+        text = StringUtil.trimEnd(text, "*/");
+        text = StringUtil.trimStart(text, "/*");
+        text = LEADING_TAB.matcher(text).replaceAll("");
+      }
+      text = XmlStringUtil.escapeString(text.trim());
+      currentBlock.append(text);
+      if ((text.isEmpty() || !iterator.hasNext()) && currentBlock.length() > 0) {
+        result.append("<p>").append(currentBlock).append("</p>\n");
+        currentBlock.setLength(0);
+      }
+      else {
+        currentBlock.append('\n'); // just for prettier testdata
+      }
+    }
+    return result.toString();
   }
 
   @NotNull
@@ -148,7 +157,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
         builder.append(' ').append(XmlStringUtil.escapeString(type.getText()));
       }
     }
-    return builder.append("</b>").toString();
+    return builder.toString();
   }
 
   @NotNull
