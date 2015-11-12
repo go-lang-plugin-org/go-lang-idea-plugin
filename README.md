@@ -7,12 +7,12 @@
 
 Pre-release builds can be installed on IntelliJ platform versions 141.1532 – 141.9999 and 143.380 – 143.9999:
 
-- IntelliJ IDEA 14.1.4 or 15 RC (Ultimate or Community)
-- WebStorm 10.0.4 or 11 RC
-- PhpStorm 9.0 or 10 RC
-- PyCharm 4.5.2+ or 5 RC
-- RubyMine 7.1.3+ or 8 RC
-- CLion 1.0.3+ or 1.2 RC
+- IntelliJ IDEA 14.1.4 or 15 (Ultimate or Community)
+- WebStorm 10.0.4 or 11
+- PhpStorm 9.0 or 10
+- PyCharm 4.5.2+ or 5
+- RubyMine 7.1.3+ or 8
+- CLion 1.0.3+ or 1.2
 - Android Studio 1.2.1+
 
 Pre-release builds are available in two forms: nightly and alphas. Alpha builds are usually released at the beginning of every week while nightly builds are released every night.
