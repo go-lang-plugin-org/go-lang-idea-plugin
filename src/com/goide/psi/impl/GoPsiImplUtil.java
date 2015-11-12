@@ -218,11 +218,6 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType getGoTypeInner(@NotNull GoAnonymousFieldDefinition o, @SuppressWarnings("UnusedParameters") @Nullable ResolveState context) {
-    return findTypeFromRef(o.getTypeReferenceExpression());
-  }
-
-  @Nullable
   public static PsiElement getIdentifier(@SuppressWarnings("UnusedParameters") @NotNull GoAnonymousFieldDefinition o) {
     return null;
   }
@@ -343,7 +338,7 @@ public class GoPsiImplUtil {
       GoType type = ((GoCompositeLit)o).getType();
       if (type != null) return type;
       GoTypeReferenceExpression expression = ((GoCompositeLit)o).getTypeReferenceExpression();
-      return findTypeFromRefInner(expression);
+      return findTypeFromTypeRef(expression);
     }
     else if (o instanceof GoFunctionLit) {
       return new MyFunType((GoFunctionLit)o);
@@ -393,7 +388,7 @@ public class GoPsiImplUtil {
       if (o.getNode().findChildByType(GoTypes.COLON) != null) return type; // means slice expression, todo: extract if needed
       GoTypeReferenceExpression typeRef = getTypeReference(type);
       if (typeRef != null) {
-        type = findTypeFromRef(typeRef);
+        type = findTypeFromTypeRef(typeRef);
       }
       if (type instanceof GoSpecType) type = ((GoSpecType)type).getType();
       if (type instanceof GoMapType) {
@@ -448,7 +443,7 @@ public class GoPsiImplUtil {
   private static GoType typeFromRefOrType(@Nullable GoType t) {
     if (t == null) return null;
     GoTypeReferenceExpression tr = getTypeReference(t);
-    return tr != null ? findTypeFromRef(tr) : t;
+    return tr != null ? findTypeFromTypeRef(tr) : t;
   }
 
   @Nullable
@@ -531,18 +526,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType findTypeFromRef(@Nullable GoTypeReferenceExpression expression) {
-    GoType type = findTypeFromRefInner(expression);
-    while (type instanceof GoSpecType && ((GoSpecType)type).getType().getTypeReferenceExpression() != null) {
-      GoType inner = findTypeFromRefInner(((GoSpecType)type).getType().getTypeReferenceExpression());
-      if (inner == null || type.isEquivalentTo(inner) || builtin(inner)) return type;
-      type = inner;
-    }
-    return type;
-  }
-
-  @Nullable
-  private static GoType findTypeFromRefInner(@Nullable GoTypeReferenceExpression expression) {
+  public static GoType findTypeFromTypeRef(@Nullable GoTypeReferenceExpression expression) {
     PsiReference reference = expression != null ? expression.getReference() : null;
     PsiElement resolve = reference != null ? reference.resolve() : null;
     return resolve instanceof GoTypeSpec ? ((GoTypeSpec)resolve).getSpecType() : null;
