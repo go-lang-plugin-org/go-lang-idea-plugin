@@ -56,7 +56,9 @@ public class UpdateComponent implements ApplicationComponent, Disposable {
 
   @Override
   public void initComponent() {
-    EditorFactory.getInstance().addEditorFactoryListener(myListener, this);
+    if (!ApplicationManager.getApplication().isUnitTestMode()) {
+      EditorFactory.getInstance().addEditorFactoryListener(myListener, this);
+    }
   }
 
   private static void checkForUpdates() {
