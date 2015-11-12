@@ -285,6 +285,9 @@
     <component>
       <implementation-class>com.goide.ui.ProjectTutorialNotification</implementation-class>
     </component>
+    <component>
+      <implementation-class>com.goide.UpdateComponent</implementation-class>
+    </component>
   </application-components>
 
 
