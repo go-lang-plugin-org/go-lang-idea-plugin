@@ -40,6 +40,7 @@ public class GoDocumentationProviderTest extends GoCodeInsightFixtureTestCase {
   public void testPackage()                     { doTest(); } 
   public void testTypeResultDefinition()        { doTest(); } 
   public void testMultilineTypeListDefinition() { doTest(); }
+  public void testMultiBlockDoc()               { doTest(); }
   
   @NotNull
   @Override
