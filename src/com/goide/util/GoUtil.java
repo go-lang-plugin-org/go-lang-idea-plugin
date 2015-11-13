@@ -160,6 +160,8 @@ public class GoUtil {
     return GlobalSearchScope.moduleWithDependenciesScope(module).uniteWith(module.getModuleContentWithDependenciesScope());
   }
 
+  @NotNull
+  @SuppressWarnings("ConstantConditions")
   public static IdeaPluginDescriptor getPlugin() {
     return PluginManager.getPlugin(PluginId.getId(PLUGIN_ID));
   }

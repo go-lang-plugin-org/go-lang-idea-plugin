@@ -16,6 +16,7 @@
 
 package com.goide;
 
+import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ApplicationInfo;
@@ -70,8 +71,9 @@ public class UpdateComponent implements ApplicationComponent, Disposable {
         public void run() {
           try {
             String buildNumber = ApplicationInfo.getInstance().getBuild().asString();
-            String pluginVersion = getPlugin().getVersion();
-            String pluginId = getPlugin().getPluginId().getIdString();
+            IdeaPluginDescriptor plugin = getPlugin();
+            String pluginVersion = plugin.getVersion();
+            String pluginId = plugin.getPluginId().getIdString();
             String os = URLEncoder.encode(SystemInfo.OS_NAME + " " + SystemInfo.OS_VERSION, CharsetToolkit.UTF8);
             String uid = UpdateChecker.getInstallationUID(PropertiesComponent.getInstance());
             final String url =
