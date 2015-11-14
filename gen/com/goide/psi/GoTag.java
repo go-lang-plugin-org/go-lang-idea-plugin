@@ -7,10 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface GoTag extends GoCompositeElement {
 
-  @Nullable
-  PsiElement getRawString();
-
-  @Nullable
-  PsiElement getString();
+  @NotNull
+  GoStringLiteral getStringLiteral();
 
 }
