@@ -1571,7 +1571,8 @@ GO_FILE
               TYPE_REFERENCE_EXPRESSION
                 PsiElement(identifier)('string')
             TAG
-              PsiElement(raw_string)('`xml:""`')
+              STRING_LITERAL
+                PsiElement(raw_string)('`xml:""`')
           PsiElement(})('}')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
