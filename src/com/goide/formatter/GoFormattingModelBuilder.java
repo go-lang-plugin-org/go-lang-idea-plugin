@@ -121,6 +121,10 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       .betweenInside(LBRACK, RBRACK, ARRAY_OR_SLICE_TYPE).none()
       .around(ASSIGN_OP).spaces(1)
       .aroundInside(OPERATORS, TokenSet.create(MUL_EXPR, ADD_EXPR, OR_EXPR, CONDITIONAL_EXPR)).spaces(1)
+      .between(FUNCTION_DECLARATION, TYPE_DECLARATION).blankLines(1)
+      .between(TYPE_DECLARATION, FUNCTION_DECLARATION).blankLines(1)
+      .between(METHOD_DECLARATION, TYPE_DECLARATION).blankLines(1)
+      .between(TYPE_DECLARATION, METHOD_DECLARATION).blankLines(1)
       ;
   }
 

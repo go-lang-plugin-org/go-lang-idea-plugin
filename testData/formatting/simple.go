@@ -214,3 +214,28 @@ type x struct {
 		x int
 	}
 }
+
+
+type B1 struct{ a string }
+type B2 B1
+func (b B2) method() B2 {
+	return B2{}
+}
+func main() {
+	b := B2{a: ""}
+	b.method()
+}
+type ArrayType struct {
+	Type Type
+}
+type ArrayType struct {
+	Type Type
+}
+func zeroArray(t *Type) {
+	at, _ := (*t).(*ArrayType)
+	println(at.Type)
+	println(at.Type.Size)
+}
+type ArrayType struct {
+	Type Type
+}
