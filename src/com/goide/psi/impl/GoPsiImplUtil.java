@@ -993,22 +993,26 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
-  public static String getPath(@NotNull GoImportString importString) {
-    String text = importString.getText();
-    if (StringUtil.isEmpty(text)) return "";
-    char quote = text.charAt(0);
+  public static String getPath(@NotNull GoImportString o) {
+    return unquote(o.getText());
+  }
+
+  @NotNull
+  public static String unquote(@Nullable String s) {
+    if (StringUtil.isEmpty(s)) return "";
+    char quote = s.charAt(0);
     int startOffset = isQuote(quote) ? 1 : 0;
-    int endOffset = text.length();
-    if (text.length() > 1) {
-      char lastChar = text.charAt(text.length() - 1);
+    int endOffset = s.length();
+    if (s.length() > 1) {
+      char lastChar = s.charAt(s.length() - 1);
       if (isQuote(quote) && lastChar == quote) {
-        endOffset = text.length() - 1;
+        endOffset = s.length() - 1;
       }
       if (!isQuote(quote) && isQuote(lastChar)){
-        endOffset = text.length() - 1;
+        endOffset = s.length() - 1;
       }
     }
-    return text.substring(startOffset, endOffset);
+    return s.substring(startOffset, endOffset);
   }
 
   @NotNull
