@@ -800,7 +800,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType getGoTypeInner(GoAnonymousFieldDefinition o) {
+  public static GoType getGoTypeInner(@NotNull GoAnonymousFieldDefinition o, @SuppressWarnings("UnusedParameters") @Nullable ResolveState context) {
     return GoFieldNameReference.findTypeFromRef(o.getTypeReferenceExpression());
   }
 
