@@ -49,3 +49,75 @@ GO_FILE
       PsiElement(=)('=')
       LITERAL
         PsiElement(int)('1')
+  FUNCTION_DECLARATION
+    PsiElement(func)('func')
+    PsiElement(identifier)('main')
+    SIGNATURE
+      PARAMETERS
+        PsiElement(()('(')
+        PsiElement())(')')
+    BLOCK
+      PsiElement({)('{')
+      STATEMENT
+        TYPE_DECLARATION
+          PsiElement(type)('type')
+          TYPE_SPEC
+            SPEC_TYPE
+              PsiElement(identifier)('aa')
+              INTERFACE_TYPE
+                PsiElement(interface)('interface')
+                PsiElement({)('{')
+                PsiElement(})('}')
+      SIMPLE_STATEMENT
+        SHORT_VAR_DECLARATION
+          VAR_DEFINITION
+            PsiElement(identifier)('b')
+          PsiElement(:=)(':=')
+          LITERAL
+            PsiElement(int)('0')
+      STATEMENT
+        VAR_DECLARATION
+          PsiElement(var)('var')
+          VAR_SPEC
+            VAR_DEFINITION
+              PsiElement(identifier)('a')
+            PsiElement(=)('=')
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('b')
+            PsiElement(.)('.')
+            PsiErrorElement:'(' or identifier expected, got '('
+              <empty list>
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          PARENTHESES_EXPR
+            PsiElement(()('(')
+            PsiErrorElement:'*', <-, <expression>, '[', chan, func, interface, map or struct expected, got 'type'
+              <empty list>
+      STATEMENT
+        TYPE_DECLARATION
+          PsiElement(type)('type')
+          PsiErrorElement:'(' or identifier expected, got ')'
+            <empty list>
+      PsiElement())(')')
+      ASSIGNMENT_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('_')
+        ASSIGN_OP
+          PsiElement(=)('=')
+        REFERENCE_EXPRESSION
+          PsiElement(identifier)('a')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
+            REFERENCE_EXPRESSION
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('fmt')
+              PsiElement(.)('.')
+              PsiElement(identifier)('Println')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              REFERENCE_EXPRESSION
+                PsiElement(identifier)('b')
+              PsiElement())(')')
+      PsiElement(})('}')
