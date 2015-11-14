@@ -55,7 +55,6 @@ public class GoAnonymousFieldDefinitionImpl extends GoNamedElementImpl<GoAnonymo
 
   @Nullable
   public GoType getGoTypeInner(ResolveState context) {
-    return GoFieldNameReference.findTypeFromRef(getTypeReferenceExpression());
+    return GoPsiImplUtil.getGoTypeInner(this);
   }
-
 }

@@ -799,6 +799,11 @@ public class GoPsiImplUtil {
     return Collections.emptyList();
   }
 
+  @Nullable
+  public static GoType getGoTypeInner(GoAnonymousFieldDefinition o) {
+    return GoFieldNameReference.findTypeFromRef(o.getTypeReferenceExpression());
+  }
+
   static class MyFunType extends GoLightType<GoFunctionLit> implements GoFunctionType {
     protected MyFunType(@NotNull GoFunctionLit o) {
       super(o);
