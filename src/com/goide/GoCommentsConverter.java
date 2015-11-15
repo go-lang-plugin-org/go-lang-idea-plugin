@@ -20,6 +20,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.io.URLUtil;
 import com.intellij.xml.util.XmlStringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -138,6 +140,19 @@ public class GoCommentsConverter {
      */
     private static String emphasize(@NotNull String text, boolean nice) {
       text = XmlStringUtil.escapeString(text);
+      StringBuilder textWithLinks = null;
+      Matcher matcher = URLUtil.URL_PATTERN.matcher(text);
+      while (matcher.find()) {
+        if (textWithLinks == null) {
+          textWithLinks = new StringBuilder();
+        }
+        textWithLinks.append(text.substring(0, matcher.start()))
+          .append("<a href=\"").append(matcher.group()).append("\">").append(matcher.group()).append("</a>");
+      }
+      if (textWithLinks != null) {
+        text = textWithLinks.toString();
+      }
+      
       return nice ? StringUtil.replace(text, new String[]{"``", "''"}, new String[]{"&ldquo;", "&rdquo"}) : text;
     }
 
