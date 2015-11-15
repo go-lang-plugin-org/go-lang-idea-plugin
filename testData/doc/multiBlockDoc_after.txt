@@ -1,8 +1,7 @@
-<b>func MultiBlock(s string) string</b>
 <p>MultiBlock func comment
 </p>
 <p>Second block
 Second block
 </p>
-<p>
-Third block</p>
+<p>Third block
+</p>

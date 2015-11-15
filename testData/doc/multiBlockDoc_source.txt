@@ -1,0 +1,7 @@
+MultiBlock func comment
+
+Second block
+Second block
+
+
+Third block

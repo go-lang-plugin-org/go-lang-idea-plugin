@@ -1,2 +1,3 @@
 <b>func TypeResult(s string) string</b>
-<p>TypeResult func comment</p>
+<p>TypeResult func comment
+</p>

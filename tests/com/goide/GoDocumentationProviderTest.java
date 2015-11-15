@@ -19,33 +19,49 @@ package com.goide;
 import com.intellij.codeInsight.documentation.DocumentationManager;
 import com.intellij.lang.documentation.DocumentationProvider;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.testFramework.LightProjectDescriptor;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+import java.util.List;
+
 public class GoDocumentationProviderTest extends GoCodeInsightFixtureTestCase {
   @Override
   protected LightProjectDescriptor getProjectDescriptor() {
     return createMockProjectDescriptor();
   }
-
-  public void testPrintln()                     { doTest(); } 
-  public void testFprintln()                    { doTest(); } 
-  public void testVariable()                    { doTest(); } 
-  public void testEscape()                      { doTest(); } 
-  public void testEscapeReturnValues()          { doTest(); } 
-  public void testPackageWithDoc()              { doTest(); } 
-  public void testPackage()                     { doTest(); } 
-  public void testTypeResultDefinition()        { doTest(); } 
+  public void testPrintln()                     { doTest(); }
+  public void testFprintln()                    { doTest(); }
+  public void testVariable()                    { doTest(); }
+  public void testEscape()                      { doTest(); }
+  public void testEscapeReturnValues()          { doTest(); }
+  public void testPackageWithDoc()              { doTest(); }
+  public void testPackage()                     { doTest(); }
+  public void testTypeResultDefinition()        { doTest(); }
   public void testMultilineTypeListDefinition() { doTest(); }
-  public void testMultiBlockDoc()               { doTest(); }
-  
+
+  public void testMultiBlockDoc()                 { doConverterTest(); }
+  public void testIndentedBlock()                 { doConverterTest(); }
+  public void testCommentEndsWithIndentedBlock()  { doConverterTest(); }
+
   @NotNull
   @Override
   protected String getBasePath() {
     return "doc";
+  }
+
+  private void doConverterTest() {
+    try {
+      List<String> lines = FileUtil.loadLines(getTestDataPath() + "/" + getTestName(true) + "_source.txt");
+      assertSameLinesWithFile(getTestDataPath() + "/" + getTestName(true) + "_after.txt", new GoCommentsConverter().textToHtml(lines));
+    }
+    catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   private void doTest() {
