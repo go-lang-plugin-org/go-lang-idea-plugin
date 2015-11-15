@@ -29,6 +29,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
+/**
+ * See https://golang.org/src/go/doc/comment.go
+ */
 public class GoCommentsConverter {
   private static final Pattern LEADING_TAB = Pattern.compile("^\\t", Pattern.MULTILINE);
 
@@ -65,12 +68,13 @@ public class GoCommentsConverter {
   }
 
   private static void processSimpleBlock(@NotNull State state) {
-    state.append(state.text);
-    if (StringUtil.isEmpty(state.text)) {
+    if (state.isBlank()) {
       state.flushBlock("p");
-      return;
     }
-    state.append("\n"); // just for prettier testdata
+    else {
+      state.append(state.text, true);
+      state.append("\n"); // just for prettier testdata
+    }
   }
 
   private static void processIndentedBlock(@NotNull State state) {
@@ -78,12 +82,12 @@ public class GoCommentsConverter {
     int emptyLines = 1;
     String text;
     while ((text = state.next()) != null) {
-      if (state.indented()) {
+      if (state.isBlank()) {
+        emptyLines++;
+      }
+      else if (state.indented()) {
         state.append(StringUtil.repeatSymbol('\n', emptyLines)).append(text);
         emptyLines = 1;
-      }
-      else if (text.isEmpty()) {
-        emptyLines++;
       }
       else {
         break;
@@ -91,8 +95,6 @@ public class GoCommentsConverter {
     }
     state.flushBlock("pre");
   }
-
-  private static String emphasize(@NotNull String text) {return XmlStringUtil.escapeString(text);}
 
   private static class State {
     @NotNull private final StringBuilder currentBlock = new StringBuilder();
@@ -108,6 +110,10 @@ public class GoCommentsConverter {
       return text = iterator.hasNext() ? iterator.next() : null;
     }
 
+    boolean isBlank() {
+      return text != null && text.trim().isEmpty();
+    }
+
     boolean hasNext() {
       return iterator.hasNext();
     }
@@ -116,11 +122,23 @@ public class GoCommentsConverter {
       return text != null && (StringUtil.startsWithChar(text, ' ') || StringUtil.startsWithChar(text, '\t'));
     }
 
-    State append(@Nullable String text) {
+    State append(@Nullable String text, boolean nice) {
       if (StringUtil.isNotEmpty(text)) {
-        currentBlock.append(emphasize(text));
+        currentBlock.append(emphasize(text, nice));
       }
       return this;
+    }
+
+    State append(@Nullable String text) {
+      return append(text, false);
+    }
+
+    /**
+     * Escape comment text for HTML. If nice is set, also turn `` into &ldquo; and '' into &rdquo;.
+     */
+    private static String emphasize(@NotNull String text, boolean nice) {
+      text = XmlStringUtil.escapeString(text);
+      return nice ? StringUtil.replace(text, new String[]{"``", "''"}, new String[]{"&ldquo;", "&rdquo"}) : text;
     }
 
     void flushBlock(@NotNull String wrapTag) {
