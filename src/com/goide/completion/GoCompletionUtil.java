@@ -255,21 +255,24 @@ public class GoCompletionUtil {
   @Nullable
   public static LookupElement createPackageLookupElement(@NotNull GoImportSpec spec, @Nullable String name) {
     name = name != null ? name : ObjectUtils.notNull(spec.getAlias(), spec.getLocalPackageName());
-    return createPackageLookupElement(name, spec, true);
+    return createPackageLookupElement(name, spec.getImportString().resolve(), spec, true);
   }
 
   @NotNull
   public static LookupElement createPackageLookupElement(@NotNull String importPath,
+                                                         @Nullable PsiDirectory directory,
                                                          @Nullable PsiElement context,
                                                          boolean forType) {
-    return createPackageLookupElement(importPath, getContextImportPath(context), forType);
+    return createPackageLookupElement(importPath, getContextImportPath(context), directory, forType);
   }
 
   @NotNull
-  public static LookupElement createPackageLookupElement(@NotNull String importPath, @Nullable String contextImportPath, boolean forType) {
-    return PrioritizedLookupElement.withPriority(
-      LookupElementBuilder.create(importPath)
-        .withLookupString(importPath.substring(Math.max(0, importPath.lastIndexOf('/'))))
+  public static LookupElement createPackageLookupElement(@NotNull String importPath, @Nullable String contextImportPath, 
+                                                         @Nullable PsiDirectory directory, boolean forType) {
+    LookupElementBuilder builder = directory != null 
+                                   ? LookupElementBuilder.create(directory, importPath) 
+                                   : LookupElementBuilder.create(importPath);
+    return PrioritizedLookupElement.withPriority(builder.withLookupString(importPath.substring(Math.max(0, importPath.lastIndexOf('/'))))
         .withIcon(GoIcons.PACKAGE).withInsertHandler(forType ? Lazy.PACKAGE_INSERT_HANDLER : null),
       calculatePackagePriority(importPath, contextImportPath));
   }

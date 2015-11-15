@@ -111,7 +111,7 @@ public class GoReferenceCompletionProvider extends CompletionProvider<Completion
                : GoCompletionUtil.createTypeConversionLookupElement((GoTypeSpec)o);
       }
       else if (o instanceof PsiDirectory) {
-        return GoCompletionUtil.createPackageLookupElement(((PsiDirectory)o).getName(), o, true);
+        return GoCompletionUtil.createPackageLookupElement(((PsiDirectory)o).getName(), ((PsiDirectory)o), o, true);
       }
       else if (o instanceof GoLabelDefinition) {
         String name = ((GoLabelDefinition)o).getName();
