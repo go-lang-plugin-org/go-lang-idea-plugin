@@ -138,7 +138,7 @@ AnonymousFieldDefinition ::= '*'? TypeName {
   stubClass="com.goide.stubs.GoAnonymousFieldDefinitionStub"
   methods=[getIdentifier getName getTextOffset getGoTypeInner]
 }
-Tag ::= string | raw_string
+Tag ::= StringLiteral
 
 PointerType ::= '*' Type {pin=1}
 

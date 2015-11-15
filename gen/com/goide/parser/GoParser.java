@@ -3567,14 +3567,13 @@ public class GoParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // string | raw_string
+  // StringLiteral
   public static boolean Tag(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Tag")) return false;
     if (!nextTokenIs(b, "<tag>", RAW_STRING, STRING)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, "<tag>");
-    r = consumeToken(b, STRING);
-    if (!r) r = consumeToken(b, RAW_STRING);
+    r = StringLiteral(b, l + 1);
     exit_section_(b, l, m, TAG, r, false, null);
     return r;
   }
