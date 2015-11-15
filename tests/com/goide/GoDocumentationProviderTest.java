@@ -48,6 +48,7 @@ public class GoDocumentationProviderTest extends GoCodeInsightFixtureTestCase {
   public void testIndentedBlock()                 { doConverterTest(); }
   public void testCommentEndsWithIndentedBlock()  { doConverterTest(); }
   public void testQuotedStrings()                 { doConverterTest(); }
+  public void testLinks()                         { doConverterTest(); }
 
   @NotNull
   @Override
