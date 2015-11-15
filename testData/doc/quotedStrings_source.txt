@@ -1,0 +1,4 @@
+Escape comment text for HTML. If nice is set,
+also turn `` into &ldquo; and '' into &rdquo;.
+   Escape comment text for HTML. If nice is set,
+   also turn `` into &ldquo; and '' into &rdquo;.

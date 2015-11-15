@@ -10,3 +10,5 @@ iteratively until no further processing can be done:
 
 	4. Eliminate .. elements that begin a rooted path:
 	   that is, replace &quot;/..&quot; by &quot;/&quot; at the beginning of a path.</pre>
+<p>
+</p>
