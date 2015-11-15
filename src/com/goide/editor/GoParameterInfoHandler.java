@@ -19,6 +19,7 @@ package com.goide.editor;
 import com.goide.GoTypes;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
+import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.lang.parameterInfo.*;
 import com.intellij.psi.PsiElement;
@@ -152,27 +153,33 @@ public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabAction
     if (signature == null) return null;
     GoParameters parameters = signature.getParameters();
     List<String> parametersPresentations = getParameterPresentations(parameters);
-    // Figure out what particular presentation is actually selected. Take in
-    // account possibility of the last variadic parameter.
-    int selected = isLastParameterVariadic(parameters.getParameterDeclarationList())
-                   ? Math.min(context.getCurrentParameterIndex(), parametersPresentations.size() - 1)
-                   : context.getCurrentParameterIndex();
-    // Build the parameter presentation string.
+    
     StringBuilder builder = new StringBuilder();
     int start = 0;
     int end = 0;
-    for (int i = 0; i < parametersPresentations.size(); ++i) {
-      if (i != 0) {
-        builder.append(", ");
-      }
-      if (i == selected) {
-        start = builder.length();
-      }
-      builder.append(parametersPresentations.get(i));
+    if (!parametersPresentations.isEmpty()) {
+      // Figure out what particular presentation is actually selected. Take in
+      // account possibility of the last variadic parameter.
+      int selected = isLastParameterVariadic(parameters.getParameterDeclarationList())
+                     ? Math.min(context.getCurrentParameterIndex(), parametersPresentations.size() - 1)
+                     : context.getCurrentParameterIndex();
+      
+      for (int i = 0; i < parametersPresentations.size(); ++i) {
+        if (i != 0) {
+          builder.append(", ");
+        }
+        if (i == selected) {
+          start = builder.length();
+        }
+        builder.append(parametersPresentations.get(i));
 
-      if (i == selected) {
-        end = builder.length();
+        if (i == selected) {
+          end = builder.length();
+        }
       }
+    }
+    else {
+      builder.append(CodeInsightBundle.message("parameter.info.no.parameters"));
     }
     return context.setupUIComponentPresentation(builder.toString(), start, end, false, false, false, context.getDefaultParameterColor());
   }
