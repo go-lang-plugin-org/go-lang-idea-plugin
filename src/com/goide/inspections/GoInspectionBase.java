@@ -49,7 +49,7 @@ abstract public class GoInspectionBase extends LocalInspectionTool {
   }
 
   @NotNull
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @SuppressWarnings({"UnusedParameters", "For future"}) @NotNull LocalInspectionToolSession session) {
+  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
       public void visitFile(PsiFile file) {

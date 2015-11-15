@@ -70,7 +70,7 @@
 
     <projectService serviceImplementation="com.goide.project.GoBuildTargetSettings"/>
     <projectService serviceImplementation="com.goide.project.GoExcludedPathsSettings"/>
-    <applicationService serviceImplementation="com.goide.codeInsight.imports.GoCodeInsightSettings" />
+    <applicationService serviceImplementation="com.goide.codeInsight.imports.GoCodeInsightSettings"/>
 
     <defaultLiveTemplatesProvider implementation="com.goide.template.GoLiveTemplatesProvider"/>
     <liveTemplateContext implementation="com.goide.template.GoEverywhereContextType"/>
@@ -97,7 +97,7 @@
     <colorSettingsPage implementation="com.goide.highlighting.GoColorsAndFontsPage"/>
     <lang.braceMatcher language="go" implementationClass="com.goide.editor.GoBraceMatcher"/>
     <quoteHandler fileType="Go" className="com.goide.editor.GoQuoteHandler"/>
-    <editorTypedHandler implementationClass="com.goide.editor.GoTypedHandler" />
+    <editorTypedHandler implementationClass="com.goide.editor.GoTypedHandler"/>
     <lang.commenter language="go" implementationClass="com.goide.GoCommenter"/>
     <lang.elementManipulator forClass="com.goide.psi.impl.GoStringLiteralImpl"
                              implementationClass="com.goide.psi.impl.manipulator.GoStringManipulator"/>
@@ -175,78 +175,95 @@
     <defaultHighlightingSettingProvider implementation="com.goide.highlighting.GoDefaultHighlightingSettingProvider"/>
     <lang.inspectionSuppressor language="go" implementationClass="com.goide.inspections.suppression.GoInspectionSuppressor"/>
 
-    <localInspection language="go" displayName="Unresolved reference inspection"
-                     groupName="Go" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.unresolved.GoUnresolvedReferenceInspection"/>
-    <localInspection language="go" displayName="Unused import inspection"
-                     groupName="Go" enabledByDefault="true" level="ERROR"
+    <!-- unused inspections -->
+    <localInspection language="go" displayName="Unused import inspection" groupPath="Go"
+                     groupName="Declaration redundancy" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoUnusedImportInspection"/>
-    <localInspection language="go" displayName="Duplicate fields and methods inspection"
-                     groupName="Go" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.GoDuplicateFieldsOrMethodsInspection"/>
-    <localInspection language="go" displayName="Unused variables inspection"
-                     groupName="Go" enabledByDefault="true" level="ERROR"
+    <localInspection language="go" displayName="Unused variables inspection" groupPath="Go"
+                     groupName="Declaration redundancy" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.unresolved.GoUnusedVariableInspection"/>
-    <localInspection language="go" displayName="Unused global variables inspection"
-                     groupName="Go" enabledByDefault="true" level="WARNING"
+    <localInspection language="go" displayName="Unused global variables inspection" groupPath="Go"
+                     groupName="Declaration redundancy" enabledByDefault="true" level="WARNING"
                      implementationClass="com.goide.inspections.unresolved.GoUnusedGlobalVariableInspection"/>
-    <localInspection language="go" displayName="Unused function inspection"
-                     groupName="Go" enabledByDefault="true" level="WARNING"
+    <localInspection language="go" displayName="Unused function inspection" groupPath="Go"
+                     groupName="Declaration redundancy" enabledByDefault="true" level="WARNING"
                      implementationClass="com.goide.inspections.unresolved.GoUnusedFunctionInspection"/>
-    <localInspection language="go" displayName="Assignment to constant"
-                     groupName="Go" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.unresolved.GoAssignmentToConstantInspection"/>
-    <localInspection language="go" displayName="Assignment nil without explicit type"
-                     groupName="Go" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.GoAssignmentNilWithoutExplicitTypeInspection" />
-    <localInspection language="go" displayName="Duplicate function"
-                     groupName="Go" enabledByDefault="true" level="ERROR"
+    <!-- /unused inspections -->
+
+    <!-- redeclare inspections -->
+    <localInspection language="go" displayName="Duplicate fields and methods inspection" groupPath="Go"
+                     groupName="Redeclared symbols" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoDuplicateFieldsOrMethodsInspection"/>
+    <localInspection language="go" displayName="Duplicate function" groupPath="Go"
+                     groupName="Redeclared symbols" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoDuplicateFunctionInspection"/>
-    <localInspection language="go" displayName="Duplicate method"
-                     groupName="Go" enabledByDefault="true" level="ERROR"
+    <localInspection language="go" displayName="Duplicate method" groupPath="Go"
+                     groupName="Redeclared symbols" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoDuplicateMethodInspection"/>
-    <localInspection language="go" displayName="Duplicate argument"
-                     groupName="Go" enabledByDefault="true" level="ERROR"
+    <localInspection language="go" displayName="Duplicate argument" groupPath="Go"
+                     groupName="Redeclared symbols" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoDuplicateArgumentInspection"/>
+    <localInspection language="go" displayName="Duplicate return argument" groupPath="Go"
+                     groupName="Redeclared symbols" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoDuplicateReturnArgumentInspection"/>
+    <localInspection language="go" displayName="Redeclare import as function" groupPath="Go"
+                     groupName="Redeclared symbols" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoRedeclareImportAsFunctionInspection"/>
+    <!-- /redeclare inspections -->
+
+    <!-- probable bugs -->
     <localInspection language="go" displayName="Reserved word used as name"
                      groupName="Go" enabledByDefault="true" level="WARNING"
                      implementationClass="com.goide.inspections.GoReservedWordUsedAsNameInspection"/>
-    <localInspection language="go" displayName="Duplicate return argument"
-                     groupName="Go" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.GoDuplicateReturnArgumentInspection"/>
-    <localInspection language="go" displayName="Incorrect variadic parameter"
-                     groupName="Go" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.GoFunctionVariadicParameterInspection"/>
-    <localInspection language="go" displayName="Incorrect variable declaration"
-                     groupName="Go" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.GoVarDeclarationInspection"/>
-    <localInspection language="go" displayName="No new variables on left side of :="
-                     groupName="Go" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.GoNoNewVariablesInspection"/>
-    <localInspection language="go" displayName="Missing return at end of function"
-                     groupName="Go" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.GoMissingReturnInspection"/>
-    <localInspection language="go" displayName="Function call inspection"
-                     groupName="Go" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.GoFunctionCallInspection"/>
-    <localInspection language="go" displayName="Defer/go statements check"
-                     groupName="Go" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.GoDeferGoInspection"/>
-    <localInspection language="go" displayName="Multiple packages in directory declaration"
-                     groupName="Go" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.GoMultiplePackagesInspection" />
-    <localInspection language="go" displayName="Usage of cgo in tests is not supported"
-                     groupName="Go" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.GoCgoInTestInspection"/>
-    <localInspection language="go" displayName="Wrong test declaration"
-                     groupName="Go" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.GoTestSignaturesInspection"/>
-    <localInspection language="go" displayName="Self import"
-                     groupName="Go" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.GoSelfImportInspection" />
     <localInspection language="go" displayName="Malformed struct tag"
                      groupName="Go" enabledByDefault="true" level="WARNING"
                      implementationClass="com.goide.inspections.GoStructTagInspection"/>
+    <!-- /probable bugs -->
+
+    <!-- control flow issues -->
+    <localInspection language="go" displayName="Missing return at end of function" groupPath="Go"
+                     groupName="Control flow issues" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoMissingReturnInspection"/>
+    <!-- /control flow issues -->
+
+    <!-- general -->
+    <localInspection language="go" displayName="Unresolved reference inspection" groupPath="Go"
+                     groupName="General" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.unresolved.GoUnresolvedReferenceInspection"/>
+    <localInspection language="go" displayName="Assignment to constant" groupPath="Go"
+                     groupName="General" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.unresolved.GoAssignmentToConstantInspection"/>
+    <localInspection language="go" displayName="Assignment nil without explicit type" groupPath="Go"
+                     groupName="General" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoAssignmentNilWithoutExplicitTypeInspection"/>
+    <localInspection language="go" displayName="Incorrect variadic parameter" groupPath="Go"
+                     groupName="General" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoFunctionVariadicParameterInspection"/>
+    <localInspection language="go" displayName="Incorrect variable declaration" groupPath="Go"
+                     groupName="General" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoVarDeclarationInspection"/>
+    <localInspection language="go" displayName="No new variables on left side of :=" groupPath="Go"
+                     groupName="General" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoNoNewVariablesInspection"/>
+    <localInspection language="go" displayName="Function call inspection" groupPath="Go"
+                     groupName="General" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoFunctionCallInspection"/>
+    <localInspection language="go" displayName="Defer/go statements check" groupPath="Go"
+                     groupName="General" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoDeferGoInspection"/>
+    <localInspection language="go" displayName="Multiple packages in directory declaration" groupPath="Go"
+                     groupName="General" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoMultiplePackagesInspection"/>
+    <localInspection language="go" displayName="Usage of cgo in tests is not supported" groupPath="Go"
+                     groupName="General" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoCgoInTestInspection"/>
+    <localInspection language="go" displayName="Wrong test declaration" groupPath="Go"
+                     groupName="General" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoTestSignaturesInspection"/>
+    <localInspection language="go" displayName="Self import" groupPath="Go"
+                     groupName="General" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoSelfImportInspection"/>
+    <!-- /general -->
   </extensions>
   <actions>
     <action id="Go.NewGoFile" class="com.goide.actions.GoCreateFileAction"
@@ -283,7 +300,7 @@
             description="Optimizes imports for selected file with goimports util">
       <add-to-group group-id="CodeMenu" anchor="last"/>
     </action>
-      <action id="GoTypeFileAction" class="com.goide.actions.fmt.GoTypeFileAction" text="Gotype file"
+    <action id="GoTypeFileAction" class="com.goide.actions.fmt.GoTypeFileAction" text="Gotype file"
             description="Analyze types for selected file with gotype util">
       <add-to-group group-id="CodeMenu" anchor="last"/>
     </action>
