@@ -31,8 +31,7 @@ import org.jetbrains.annotations.NotNull;
 public class GoSelfImportInspection extends GoInspectionBase {
   @Override
   protected void checkFile(@NotNull GoFile file, @NotNull ProblemsHolder problemsHolder) {
-    if (GoTestFinder.getTestTargetPackage(file) != null) return;
-
+    if (GoTestFinder.isTestFileWithTestPackage(file)) return;
     String fileImportPath = file.getImportPath();
     for (GoImportSpec importSpec : file.getImports()) {
       String path = importSpec.getPath();
@@ -42,7 +41,7 @@ public class GoSelfImportInspection extends GoInspectionBase {
     }
   }
 
-  public static class GoSelfImportQuickFix extends LocalQuickFixBase {
+  private static class GoSelfImportQuickFix extends LocalQuickFixBase {
     protected GoSelfImportQuickFix() {
       super("Remove self import");
     }

@@ -16,41 +16,25 @@
 
 package com.goide.inspections;
 
-import com.goide.psi.GoFile;
 import com.goide.psi.GoFunctionDeclaration;
-import com.goide.psi.GoImportSpec;
-import com.goide.runconfig.testing.GoTestFinder;
-import com.intellij.codeInspection.LocalQuickFixBase;
-import com.intellij.codeInspection.ProblemDescriptor;
+import com.goide.psi.GoVisitor;
+import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import com.intellij.openapi.util.text.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 public class GoRedeclareImportAsFunctionInspection extends GoInspectionBase {
+  @NotNull
   @Override
-  protected void checkFile(@NotNull GoFile file, @NotNull ProblemsHolder problemsHolder) {
-    if (GoTestFinder.getTestTargetPackage(file) != null) return;
-
-    List<GoFunctionDeclaration> functions = file.getFunctions();
-    String funcName;
-
-    for (GoFunctionDeclaration function : functions) {
-      funcName = function.getName();
-      if (funcName == null) continue;
-      for (GoImportSpec importSpec : file.getImports()) {
-        if (funcName.equals(importSpec.getLocalPackageName())) {
-          problemsHolder.registerProblem(function.getIdentifier(), getMessage(importSpec.getLocalPackageName()), new GoRenameQuickFix(function));
+  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
+    return new GoVisitor() {
+      @Override
+      public void visitFunctionDeclaration(@NotNull GoFunctionDeclaration o) {
+        String functionName = o.getName();
+        if (StringUtil.isNotEmpty(functionName) && o.getContainingFile().getImportMap().containsKey(functionName)) {
+          holder.registerProblem(o.getIdentifier(), "import \"" + functionName + "\" redeclared in this block", new GoRenameQuickFix(o));
         }
       }
-    }
-  }
-
-  private static String getMessage(String name) {
-    return "import \"" + name + "\" redeclared in this block";
+    };
   }
 }

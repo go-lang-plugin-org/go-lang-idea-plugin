@@ -1,6 +1,10 @@
 package demo
 
-import <error descr="Unused import">"fmt"</error>
+import "fmt"
+
+func _() {
+  fmt.Println("Hello")
+}
 
 func <error descr="import \"fmt\" redeclared in this block">fmt</error>() {}
 
