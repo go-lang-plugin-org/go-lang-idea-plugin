@@ -146,13 +146,13 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
   private boolean processGoType(@NotNull GoType type, @NotNull GoScopeProcessor processor, @NotNull ResolveState state) {
     if (type instanceof GoParType) return processGoType(((GoParType)type).getType(), processor, state);
-    if (type instanceof GoReceiverType) state = state.put(RECEIVER, Boolean.TRUE);
+    if (type instanceof GoReceiverType) state = state.put(RECEIVER, true);
     if (!processExistingType(type, processor, state)) return false;
     if (type instanceof GoPointerType) {
-      if (!processPointer((GoPointerType)type, processor, state.put(POINTER, Boolean.TRUE))) return false;
+      if (!processPointer((GoPointerType)type, processor, state.put(POINTER, true))) return false;
       GoType pointer = ((GoPointerType)type).getType();
       if (pointer instanceof GoPointerType) {
-        return processPointer((GoPointerType)pointer, processor, state.put(POINTER, Boolean.TRUE));
+        return processPointer((GoPointerType)pointer, processor, state.put(POINTER, true));
       }
       else if (pointer != null && state.get(RECEIVER) != null && !processGoType(pointer, processor, state)) return false;
     }
