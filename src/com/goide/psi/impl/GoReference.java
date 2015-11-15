@@ -48,6 +48,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   public static final Key<String> ACTUAL_NAME = Key.create("ACTUAL_NAME");
   public static final Key<Object> POINTER = Key.create("POINTER");
   public static final Key<Object> RECEIVER = Key.create("RECEIVER");
+  public static final Key<Object> DONT_PROCESS_METHODS = Key.create("DONT_PROCESS_METHODS");
 
   private static final ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase> MY_RESOLVER =
     new ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase>() {
@@ -179,7 +180,8 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
     GoTypeStub stub = type.getStub();
     PsiElement parent = stub == null ? type.getParent() : stub.getParentStub().getPsi();
-    if (parent instanceof GoTypeSpec && !processNamedElements(processor, state, ((GoTypeSpec)parent).getMethods(), localResolve, true)) return false;
+    boolean canProcessMethods = state.get(DONT_PROCESS_METHODS) == null;
+    if (parent instanceof GoTypeSpec && canProcessMethods && !processNamedElements(processor, state, ((GoTypeSpec)parent).getMethods(), localResolve, true)) return false;
 
     if (type instanceof GoSpecType) type = ((GoSpecType)type).getType();
     if (type instanceof GoStructType) {
@@ -238,7 +240,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
       GoType type = ((GoTypeOwner)resolve).getGoType(state);
       if (notMatchRecursiveStopper(recursiveStopper, type)) {
         if (!processGoType(type, processor, state)) return false;
-        if (type instanceof GoSpecType && !processGoType(((GoSpecType)type).getType(), processor, state)) return false;
+        if (type instanceof GoSpecType && !processGoType(((GoSpecType)type).getType(), processor, state.put(DONT_PROCESS_METHODS, true))) return false;
       }
     }
     return true;

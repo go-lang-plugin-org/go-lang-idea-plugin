@@ -335,6 +335,19 @@ func <warning>name</warning>(col Color) string {
     Println(testdata.a)
 <error>}</error>
 
+type Name struct {
+}
+
+type B Name
+
+func (self *Name) Foo(a int) {
+}
+
+func _(b B, c Color) {
+	b.<error>Foo</error>(1)
+	c.A
+}
+
 var <warning>Name11</warning> string  = ""
 var <warning>nmame11</warning> string  = ""
 
