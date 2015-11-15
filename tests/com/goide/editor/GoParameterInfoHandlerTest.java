@@ -18,7 +18,6 @@ package com.goide.editor;
 
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.goide.psi.GoArgumentList;
-import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.hint.ParameterInfoComponent;
 import com.intellij.lang.parameterInfo.CreateParameterInfoContext;
 import com.intellij.lang.parameterInfo.ParameterInfoUIContextEx;
@@ -38,9 +37,9 @@ public class GoParameterInfoHandlerTest extends GoCodeInsightFixtureTestCase {
   // @formatter:off
   public void testUnnamedParameters()         { doTest("<html><b>string</b>, interface{}</html>"); }
   public void testUnnamedAndNamedParameters() { doTest("<html><b>a string</b>, interface{}</html>"); }
-  public void testFuncParamNone()             { doTest(CodeInsightBundle.message("parameter.info.no.parameters")); }
+  public void testFuncParamNone()             { doTest("<html>&lt;no parameters&gt;</html>"); }
   public void testChainedCall()               { doTest("<html><b>param1 string</b>, param2 int</html>"); }
-  public void testMethParamNone()             { doTest(CodeInsightBundle.message("parameter.info.no.parameters")); }
+  public void testMethParamNone()             { doTest("<html>&lt;no parameters&gt;</html>"); }
   public void testFieldMethCall()             { doTest("<html><b>a int</b>, b int</html>"); }
   public void testFuncTypes()                 { doTest("<html><b>string</b></html>"); }
   public void testFuncParam()                 { doTest(1, "<html>num int, <b>text string</b></html>"); }
