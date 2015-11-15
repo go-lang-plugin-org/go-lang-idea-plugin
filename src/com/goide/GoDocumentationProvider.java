@@ -22,7 +22,6 @@ import com.goide.util.GoUtil;
 import com.intellij.lang.documentation.AbstractDocumentationProvider;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.xml.util.XmlStringUtil;
@@ -30,12 +29,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class GoDocumentationProvider extends AbstractDocumentationProvider {
-  private static final Pattern LEADING_TAB = Pattern.compile("^\\t", Pattern.MULTILINE);
+  private static final GoCommentsConverter COMMENTS_CONVERTER = new GoCommentsConverter();
 
   @Override
   public String generateDoc(PsiElement element, PsiElement originalElement) {
@@ -48,7 +45,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       boolean alone = children.size() == 1 && children.iterator().next().equals(element);
       String signature = getSignature(element);
       signature = StringUtil.isNotEmpty(signature) ? "<b>" + signature + "</b>\n" : signature;
-      String commentText = getCommentText(getPreviousNonWsComment(alone ? topLevel : element));
+      String commentText = getCommentText(getCommentsForElement(alone ? topLevel : element));
       return StringUtil.isNotEmpty(commentText) ? signature + commentText : signature;
     }
     else if (element instanceof PsiDirectory) {
@@ -66,13 +63,13 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       GoPackageClause pack = PsiTreeUtil.findChildOfType(file, GoPackageClause.class);
       String title = "<b>Package " + GoUtil.suggestPackageForDirectory(file.getParent()) + "</b>\n";
       String importPath = "<p><code>import \"" + StringUtil.notNullize(((GoFile)file).getImportPath()) + "\"</code></p>\n";
-      return title + importPath + getCommentText(getPreviousNonWsComment(pack));
+      return title + importPath + getCommentText(getCommentsForElement(pack));
     }
     return null;
   }
 
   @NotNull
-  private static List<PsiComment> getPreviousNonWsComment(@Nullable PsiElement element) {
+  private static List<PsiComment> getCommentsForElement(@Nullable PsiElement element) {
     if (element == null) return ContainerUtil.emptyList();
     List<PsiComment> result = ContainerUtil.newArrayList();
     PsiElement e;
@@ -93,32 +90,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
 
   @NotNull
   private static String getCommentText(@NotNull List<PsiComment> comments) {
-    StringBuilder result = new StringBuilder();
-    StringBuilder currentBlock = new StringBuilder();
-    Iterator<PsiComment> iterator = comments.iterator();
-    while (iterator.hasNext()) {
-      PsiComment comment = iterator.next();
-      IElementType type = comment.getTokenType();
-      String text = comment.getText();
-      if (type == GoParserDefinition.LINE_COMMENT) {
-        text = text.replaceAll("//", "");
-      }
-      else if (type == GoParserDefinition.MULTILINE_COMMENT) {
-        text = StringUtil.trimEnd(text, "*/");
-        text = StringUtil.trimStart(text, "/*");
-        text = LEADING_TAB.matcher(text).replaceAll("");
-      }
-      text = XmlStringUtil.escapeString(text.trim());
-      currentBlock.append(text);
-      if ((text.isEmpty() || !iterator.hasNext()) && currentBlock.length() > 0) {
-        result.append("<p>").append(currentBlock).append("</p>\n");
-        currentBlock.setLength(0);
-      }
-      else {
-        currentBlock.append('\n'); // just for prettier testdata
-      }
-    }
-    return result.toString();
+    return COMMENTS_CONVERTER.toHtml(comments);
   }
 
   @NotNull

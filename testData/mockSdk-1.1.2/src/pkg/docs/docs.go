@@ -15,14 +15,3 @@ func MultiType(
     ) {
     return []interface{}{}, err
 }
-
-// MultiBlock func comment
-//
-// Second block
-// Second block
-//
-//
-// Third block
-func MultiBlock(s string) string {
-    return s
-}

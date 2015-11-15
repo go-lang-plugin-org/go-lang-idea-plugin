@@ -7,4 +7,5 @@ abstract the functionality, plus some other related primitives.
 </p>
 <p>Because these interfaces and primitives wrap lower-level operations with
 various implementations, unless otherwise informed clients should not
-assume they are safe for parallel execution.</p>
+assume they are safe for parallel execution.
+</p>

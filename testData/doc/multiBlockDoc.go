@@ -1,1 +1,0 @@
-package a; import "docs"; func foo() {docs.Multi<caret>Block()}

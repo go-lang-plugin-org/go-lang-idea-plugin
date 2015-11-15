@@ -1,2 +1,3 @@
 <b>func Replace(s string, old string, new string, n int) &lt;-chan string</b>
-<p>If n &lt; 0, there is no limit on the number of replacements.</p>
+<p>If n &lt; 0, there is no limit on the number of replacements.
+</p>
