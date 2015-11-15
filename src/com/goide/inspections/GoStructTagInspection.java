@@ -21,7 +21,6 @@ import com.goide.psi.GoStructType;
 import com.goide.psi.GoTag;
 import com.goide.psi.GoVisitor;
 import com.goide.psi.impl.GoPsiImplUtil;
-import com.goide.util.GoStringLiteralEscaper;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
 import org.jetbrains.annotations.NotNull;
@@ -39,11 +38,10 @@ public class GoStructTagInspection extends GoInspectionBase {
       @Override
       public void visitStructType(@NotNull GoStructType o) {
         for (GoFieldDeclaration field : o.getFieldDeclarationList()) {
-          if (field.getTag() == null) {
-            continue;
-          }
-          if (!isValidTag(field.getTag())) {
-            holder.registerProblem(field.getTag(), "Bad syntax for struct tag value");
+          GoTag tag = field.getTag();
+          if (tag == null) continue;
+          if (!isValidTag(tag)) {
+            holder.registerProblem(tag, "Bad syntax for struct tag value");
           }
         }
       }
@@ -52,15 +50,14 @@ public class GoStructTagInspection extends GoInspectionBase {
 
   // Implementation based on validateStructTag from the go vet tool:
   // https://github.com/golang/tools/blob/master/cmd/vet/structtag.go.
-  private boolean isValidTag(GoTag tag) {
+  private static boolean isValidTag(@NotNull GoTag tag) {
     StringBuilder tagText = new StringBuilder(GoPsiImplUtil.unquote(tag.getText()));
     if (tagText.length() != tag.getText().length() - 2) {
-      // In this case, the tag was not quoted and therefore is invalid.
-      return false;
+      // We already have a parsing error in this case, so no need to add an additional warning.
+      return true;
     }
     while (tagText.length() > 0) {
-      int i;
-      i = 0;
+      int i = 0;
 
       // Skip leading spaces.
       while (i < tagText.length() && tagText.charAt(i) == ' ') {
@@ -68,9 +65,7 @@ public class GoStructTagInspection extends GoInspectionBase {
       }
 
       tagText.delete(0, i);
-      if (tagText.length() == 0) {
-        return true;
-      }
+      if (tagText.length() == 0) return true;
 
       // Scan to colon. A space, a quote or a control character is a syntax error.
       // Strictly speaking, control chars include the range [0x7f, 0x9f], not just
@@ -84,9 +79,7 @@ public class GoStructTagInspection extends GoInspectionBase {
              tagText.charAt(i) != 0x7f) {
         i++;
       }
-      if (i == 0 || (i + 1) > tagText.length() || tagText.charAt(i) != ':') {
-        return false;
-      }
+      if (i == 0 || (i + 1) > tagText.length() || tagText.charAt(i) != ':') return false;
       tagText.delete(0, i + 1);
 
       // Scan quoted string to find value.
@@ -98,9 +91,7 @@ public class GoStructTagInspection extends GoInspectionBase {
         i++;
       }
 
-      if (i >= tagText.length()) {
-        return false;
-      }
+      if (i >= tagText.length()) return false;
 
       String unquotedValue = GoPsiImplUtil.unquote(tagText.substring(0, i + 1));
       if (unquotedValue.length() != i - 1) {

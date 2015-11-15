@@ -10,6 +10,6 @@ type demoBrokenTags struct {
 	WrongTag5           string <warning>"json:demo"</warning>
 	WrongTag6           string <warning>"json:'demo'"</warning>
 	WrongTag7           string <warning>`json:"demo"; bson:"demo"`</warning>
-	WrongTag8			string <warning>`
+	WrongTag8           string `
 }
-</warning><EOLError></EOLError>
+<EOLError></EOLError>
