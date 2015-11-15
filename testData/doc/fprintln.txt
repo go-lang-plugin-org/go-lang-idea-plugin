@@ -3,3 +3,6 @@
 Spaces are always added between operands and a newline is appended.
 It returns the number of bytes written and any write error encountered.
 </p>
+
+=====
+https://godoc.org/fmt#Fprintln

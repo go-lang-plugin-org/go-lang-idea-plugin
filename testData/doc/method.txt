@@ -1,0 +1,6 @@
+<b>func Name() string</b>
+<p>Name returns the name of the file as presented to Open.
+</p>
+
+=====
+https://godoc.org/os#File.Name

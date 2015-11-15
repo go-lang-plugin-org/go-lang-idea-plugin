@@ -4,3 +4,6 @@
 to C's printf and scanf.  The format 'verbs' are derived from C's but
 are simpler.
 </p>
+
+=====
+https://godoc.org/fmt
