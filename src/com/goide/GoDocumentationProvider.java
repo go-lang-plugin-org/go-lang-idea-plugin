@@ -36,9 +36,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
 
   @Override
   public String generateDoc(PsiElement element, PsiElement originalElement) {
-    if (element instanceof GoImportSpec) {
-      element = ((GoImportSpec)element).getImportString().resolve();
-    }
+    element = adjustDocElement(element);
     if (element instanceof GoNamedElement) {
       GoTopLevelDeclaration topLevel = PsiTreeUtil.getParentOfType(element, GoTopLevelDeclaration.class);
       Collection<PsiElement> children = PsiTreeUtil.findChildrenOfType(topLevel, element.getClass());
@@ -66,6 +64,10 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       return title + importPath + getCommentText(getCommentsForElement(pack));
     }
     return null;
+  }
+  
+  private static PsiElement adjustDocElement(PsiElement element) {
+    return element instanceof GoImportSpec ? ((GoImportSpec)element).getImportString().resolve() : element;
   }
 
   @NotNull
