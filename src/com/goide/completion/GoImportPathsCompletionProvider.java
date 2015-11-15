@@ -31,8 +31,10 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -72,7 +74,8 @@ public class GoImportPathsCompletionProvider extends CompletionProvider<Completi
         String importPath = GoSdkUtil.getPathRelativeToSdkAndLibraries(parent, project, module);
         if (!StringUtil.isEmpty(importPath) && !excludedSettings.isExcluded(importPath) &&
             (testFileWithTestPackage || !importPath.equals(contextImportPath))) {
-          result.addElement(GoCompletionUtil.createPackageLookupElement(importPath, contextImportPath, false));
+          PsiDirectory directory = PsiManager.getInstance(project).findDirectory(parent);
+          result.addElement(GoCompletionUtil.createPackageLookupElement(importPath, contextImportPath, directory, false));
         }
       }
     }
