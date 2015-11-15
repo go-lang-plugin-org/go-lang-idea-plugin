@@ -18,6 +18,7 @@ package com.goide;
 
 import com.goide.editor.GoParameterInfoHandler;
 import com.goide.psi.*;
+import com.goide.sdk.GoSdkUtil;
 import com.goide.util.GoUtil;
 import com.intellij.lang.documentation.AbstractDocumentationProvider;
 import com.intellij.openapi.util.text.StringUtil;
@@ -29,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class GoDocumentationProvider extends AbstractDocumentationProvider {
@@ -47,20 +49,60 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       return StringUtil.isNotEmpty(commentText) ? signature + commentText : signature;
     }
     else if (element instanceof PsiDirectory) {
-      String comments = getPackageComment(((PsiDirectory)element).findFile("doc.go"));
-      if (comments != null) return comments;
-      return getPackageComment(((PsiDirectory)element).findFile(((PsiDirectory)element).getName() + ".go"));
+      return getPackageComment(findDocFileForDirectory(((PsiDirectory)element)));
     }
     return null;
   }
 
+  @Override
+  public List<String> getUrlFor(PsiElement element, PsiElement originalElement) {
+    element = adjustDocElement(element);
+    if (element instanceof GoNamedElement && ((GoNamedElement)element).isPublic()) {
+      PsiFile file = element.getContainingFile();
+      if (file instanceof GoFile) {
+        String importPath = ((GoFile)file).getImportPath();
+        if (element instanceof GoFunctionDeclaration || element instanceof GoTypeSpec) {
+          String name = ((GoNamedElement)element).getName();
+          if (StringUtil.isNotEmpty(name)) {
+            return Collections.singletonList(String.format("https://godoc.org/%s#%s", importPath, name));
+          }
+        }
+        else if (element instanceof GoMethodDeclaration) {
+          GoType receiverType = ((GoMethodDeclaration)element).getReceiver().getType();
+          String receiver = receiverType != null ? receiverType.getText() : null;
+          String name = ((GoMethodDeclaration)element).getName();
+          if (StringUtil.isNotEmpty(receiver) && StringUtil.isNotEmpty(name)) {
+            return Collections.singletonList(String.format("https://godoc.org/%s#%s.%s", importPath, receiver, name));
+          }
+        }
+      }
+    }
+    if (element instanceof PsiDirectory && findDocFileForDirectory((PsiDirectory)element) != null) {
+      String importPath = GoSdkUtil.getImportPath(((PsiDirectory)element));
+      if (importPath != null) {
+        return Collections.singletonList("https://godoc.org/" + importPath);
+      }
+    }
+    return super.getUrlFor(element, originalElement);
+  }
+
   @Nullable
-  private static String getPackageComment(@Nullable PsiFile file) {
+  private static GoFile findDocFileForDirectory(@NotNull PsiDirectory directory) {
+    PsiFile file = directory.findFile("doc.go");
     if (file instanceof GoFile) {
+      return ((GoFile)file);
+    }
+    PsiFile directoryFile = directory.findFile(GoUtil.suggestPackageForDirectory(directory) + ".go");
+    return directoryFile instanceof GoFile ? ((GoFile)directoryFile) : null;
+  }
+
+  @Nullable
+  private static String getPackageComment(@Nullable GoFile file) {
+    if (file != null) {
       // todo: remove after correct stubbing (comments needed in stubs)
       GoPackageClause pack = PsiTreeUtil.findChildOfType(file, GoPackageClause.class);
       String title = "<b>Package " + GoUtil.suggestPackageForDirectory(file.getParent()) + "</b>\n";
-      String importPath = "<p><code>import \"" + StringUtil.notNullize(((GoFile)file).getImportPath()) + "\"</code></p>\n";
+      String importPath = "<p><code>import \"" + StringUtil.notNullize(file.getImportPath()) + "\"</code></p>\n";
       return title + importPath + getCommentText(getCommentsForElement(pack));
     }
     return null;

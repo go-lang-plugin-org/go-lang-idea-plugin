@@ -9,3 +9,6 @@ abstract the functionality, plus some other related primitives.
 various implementations, unless otherwise informed clients should not
 assume they are safe for parallel execution.
 </p>
+
+=====
+https://godoc.org/io

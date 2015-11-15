@@ -36,6 +36,7 @@ public class GoDocumentationProviderTest extends GoCodeInsightFixtureTestCase {
   }
   public void testPrintln()                       { doTest(); }
   public void testFprintln()                      { doTest(); }
+  public void testMethod()                        { doTest(); }
   public void testVariable()                      { doTest(); }
   public void testEscape()                        { doTest(); }
   public void testEscapeReturnValues()            { doTest(); }
@@ -78,6 +79,9 @@ public class GoDocumentationProviderTest extends GoCodeInsightFixtureTestCase {
     PsiElement docElement = DocumentationManager.getInstance(getProject()).findTargetElement(editor, file);
     DocumentationProvider documentationProvider = DocumentationManager.getProviderFromElement(originalElement);
     String actualDoc = StringUtil.notNullize(documentationProvider.generateDoc(docElement, originalElement));
+    
+    List<String> urls = documentationProvider.getUrlFor(docElement, originalElement);
+    actualDoc += "\n=====\n" + (urls != null ? StringUtil.join(urls, "\n") : "No urls");
     assertSameLinesWithFile(getTestDataPath() + "/" + getTestName(true) + ".txt", actualDoc);
   }
 }

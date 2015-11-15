@@ -1,3 +1,6 @@
 <b>func TypeResult(s string) string</b>
 <p>TypeResult func comment
 </p>
+
+=====
+https://godoc.org/docs#TypeResult
