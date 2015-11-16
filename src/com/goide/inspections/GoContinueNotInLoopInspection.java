@@ -19,9 +19,11 @@ package com.goide.inspections;
 import com.goide.psi.GoContinueStatement;
 import com.goide.psi.GoForStatement;
 import com.goide.psi.GoVisitor;
-import com.intellij.codeInspection.LocalInspectionToolSession;
-import com.intellij.codeInspection.ProblemHighlightType;
-import com.intellij.codeInspection.ProblemsHolder;
+import com.goide.psi.impl.GoElementFactory;
+import com.intellij.codeInspection.*;
+import com.intellij.openapi.command.WriteCommandAction;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,6 +31,8 @@ import org.jetbrains.annotations.NotNull;
  * Raises an error when a 'continue' statement is found outside of a for loop.
  */
 public class GoContinueNotInLoopInspection extends GoInspectionBase {
+  public static String QUICK_FIX_NAME = "Replace with 'return'";
+
   @NotNull
   @Override
   protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
@@ -37,9 +41,28 @@ public class GoContinueNotInLoopInspection extends GoInspectionBase {
       public void visitContinueStatement(@NotNull GoContinueStatement o) {
         if (PsiTreeUtil.getParentOfType(o.getContinue(), GoForStatement.class) == null) {
           holder
-            .registerProblem(o.getContinue(), "Continue statement not inside a for loop.", ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+            .registerProblem(o.getContinue(), "Continue statement not inside a for loop.", ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
+                             new ReplaceWithReturnQuickFix());
         }
       }
     };
+  }
+
+  private static class ReplaceWithReturnQuickFix extends LocalQuickFixBase {
+    private ReplaceWithReturnQuickFix() {
+      super(QUICK_FIX_NAME);
+    }
+
+    @Override
+    public void applyFix(@NotNull final Project project, @NotNull ProblemDescriptor descriptor) {
+      final PsiElement element = descriptor.getPsiElement();
+      if (element == null) return;
+      new WriteCommandAction.Simple(project, getName(), element.getContainingFile()) {
+        @Override
+        protected void run() throws Throwable {
+          element.replace(GoElementFactory.createReturnStatement(project));
+        }
+      }.execute();
+    }
   }
 }

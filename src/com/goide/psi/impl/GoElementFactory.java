@@ -39,6 +39,12 @@ public class GoElementFactory {
   }
 
   @NotNull
+  public static PsiElement createReturnStatement(@NotNull Project project) {
+    GoFile file = createFileFromText(project, "package main\nfunc _() { return; }");
+    return PsiTreeUtil.findChildOfType(file, GoReturnStatement.class);
+  }
+
+  @NotNull
   public static PsiElement createIdentifierFromText(@NotNull Project project, String text) {
     GoFile file = createFileFromText(project, "package " + text);
     return file.getPackage().getIdentifier();
