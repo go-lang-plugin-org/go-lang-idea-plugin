@@ -44,7 +44,7 @@ import static com.goide.util.GoUtil.getPlugin;
 public class UpdateComponent implements ApplicationComponent, Disposable {
   private static Logger LOG = Logger.getInstance(UpdateComponent.class);
   private static final String KEY = "go.last.update.timestamp";
-  private EditorFactoryAdapter myListener = new EditorFactoryAdapter() {
+  private final EditorFactoryAdapter myListener = new EditorFactoryAdapter() {
     @Override
     public void editorCreated(@NotNull EditorFactoryEvent event) {
       Document document = event.getEditor().getDocument();
@@ -88,8 +88,9 @@ public class UpdateComponent implements ApplicationComponent, Disposable {
               new HttpRequests.RequestProcessor<Object>() {
                 @Override
                 public Object process(@NotNull HttpRequests.Request request) throws IOException {
-                  LOG.info("Updating: " + url);
-                  return null;
+                  boolean successful = request.isSuccessful();
+                  LOG.info((successful ? "Successful" : "Unsuccessful") + " update: " + url);
+                  return successful;
                 }
               }
             );
