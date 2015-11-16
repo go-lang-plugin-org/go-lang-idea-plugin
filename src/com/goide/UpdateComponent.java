@@ -92,11 +92,11 @@ public class UpdateComponent implements ApplicationComponent, Disposable {
                 public Object process(@NotNull HttpRequests.Request request) throws IOException {
                   try {
                     JDOMUtil.load(request.getReader());
+                    LOG.info((request.isSuccessful() ? "Successful" : "Unsuccessful") + " update: " + url);
                   }
                   catch (JDOMException e) {
                     LOG.warn(e);
                   }
-                  LOG.info((request.isSuccessful() ? "Successful" : "Unsuccessful") + " update: " + url);
                   return null;
                 }
               }
