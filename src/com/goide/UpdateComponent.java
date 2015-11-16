@@ -29,10 +29,12 @@ import com.intellij.openapi.editor.event.EditorFactoryAdapter;
 import com.intellij.openapi.editor.event.EditorFactoryEvent;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.updateSettings.impl.UpdateChecker;
+import com.intellij.openapi.util.JDOMUtil;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.io.HttpRequests;
+import org.jdom.JDOMException;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -88,9 +90,14 @@ public class UpdateComponent implements ApplicationComponent, Disposable {
               new HttpRequests.RequestProcessor<Object>() {
                 @Override
                 public Object process(@NotNull HttpRequests.Request request) throws IOException {
-                  boolean successful = request.isSuccessful();
-                  LOG.info((successful ? "Successful" : "Unsuccessful") + " update: " + url);
-                  return successful;
+                  try {
+                    JDOMUtil.load(request.getReader());
+                  }
+                  catch (JDOMException e) {
+                    LOG.warn(e);
+                  }
+                  LOG.info((request.isSuccessful() ? "Successful" : "Unsuccessful") + " update: " + url);
+                  return null;
                 }
               }
             );
