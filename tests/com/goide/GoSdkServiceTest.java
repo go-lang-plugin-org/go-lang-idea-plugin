@@ -22,6 +22,7 @@ import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.testFramework.PlatformTestUtil;
 import com.intellij.testFramework.UsefulTestCase;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,49 +35,49 @@ public class GoSdkServiceTest extends UsefulTestCase {
   public void testRegularSdkPath() {
     setIsWindows(false);
     setIsLinux(false);
-    assertEquals("/path/to/sdk/bin/go", getExecutablePath("/path/to/sdk"));
+    PlatformTestUtil.assertPathsEqual("/path/to/sdk/bin/go", executable("/path/to/sdk"));
   }
   
   public void testRegularSdkPathWithGorootName() {
     setIsWindows(false);
     setIsLinux(false);
     String sdkPath = createDir("goroot/").getAbsolutePath();
-    assertEquals(sdkPath + "/goroot/bin/go", getExecutablePath(sdkPath + "/goroot"));
+    PlatformTestUtil.assertPathsEqual(sdkPath + "/goroot/bin/go", executable(sdkPath + "/goroot"));
   }
 
   public void testSingletonAppEngineSdkPath() {
     setIsWindows(false);
     String sdkPath = createDir("goroot/", "goapp").getAbsolutePath();
-    assertEquals(sdkPath + "/goapp", getExecutablePath(sdkPath + "/goroot"));
+    PlatformTestUtil.assertPathsEqual(sdkPath + "/goapp", executable(sdkPath + "/goroot"));
   }
 
   public void testGcloudAppEngineSdkPath() {
     setIsWindows(false);
     String sdkPath = createDir("platform/google_appengine/goroot/", "bin/goapp").getAbsolutePath();
-    assertEquals(sdkPath + "/bin/goapp", getExecutablePath(sdkPath + "/platform/google_appengine/goroot"));
+    PlatformTestUtil.assertPathsEqual(sdkPath + "/bin/goapp", executable(sdkPath + "/platform/google_appengine/goroot"));
   }
 
   public void testRegularSdkPathWindows() {
     setIsWindows(true);
     setIsLinux(false);
     String sdkPath = createDir("platform/google_appengine/goroot/", "bin/goapp").getAbsolutePath();
-    assertEquals(sdkPath + "/bin/go.exe", getExecutablePath(sdkPath));
+    PlatformTestUtil.assertPathsEqual(sdkPath + "/bin/go.exe", executable(sdkPath));
   }
 
   public void testSingletonAppEngineSdkPathWindows() {
     setIsWindows(true);
     String sdkPath = createDir("goroot/", "goapp.bat").getAbsolutePath();
-    assertEquals(sdkPath + "/goapp.bat", getExecutablePath(sdkPath + "/goroot"));
+    PlatformTestUtil.assertPathsEqual(sdkPath + "/goapp.bat", executable(sdkPath + "/goroot"));
   }
 
   public void testGcloudAppEngineSdkPathWindows() {
     setIsWindows(true);
     String sdkPath = createDir("platform/google_appengine/goroot/", "bin/goapp.cmd").getAbsolutePath();
-    assertEquals(sdkPath + "/bin/goapp.cmd", getExecutablePath(sdkPath + "/platform/google_appengine/goroot"));
+    PlatformTestUtil.assertPathsEqual(sdkPath + "/bin/goapp.cmd", executable(sdkPath + "/platform/google_appengine/goroot"));
   }
 
-  private static String getExecutablePath(@NotNull String sdkPath) {
-    return FileUtil.toSystemIndependentName(GoSdkService.getGoExecutablePath(sdkPath));
+  private static String executable(@NotNull String sdkPath) {
+    return GoSdkService.getGoExecutablePath(sdkPath);
   }
 
   private void setIsWindows(boolean value) {
