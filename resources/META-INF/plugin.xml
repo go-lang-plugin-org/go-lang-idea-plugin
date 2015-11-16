@@ -263,6 +263,9 @@
     <localInspection language="go" displayName="Self import" groupPath="Go"
                      groupName="General" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoSelfImportInspection"/>
+    <localInspection language="go" displayName="Continue statement outside for loop" groupPath="Go"
+                     groupName="General" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoContinueNotInLoopInspection"/>
     <!-- /general -->
   </extensions>
   <actions>
