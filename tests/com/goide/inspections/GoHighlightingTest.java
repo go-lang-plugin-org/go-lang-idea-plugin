@@ -56,7 +56,8 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       GoTestSignaturesInspection.class,
       GoAssignmentNilWithoutExplicitTypeInspection.class,
       GoRedeclareImportAsFunctionInspection.class,
-      GoStructTagInspection.class
+      GoStructTagInspection.class,
+      GoContinueNotInLoopInspection.class
     );
   }
 
@@ -114,7 +115,8 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testVarToImport()               { doTest(); }
   public void testCgotest()                   { doTest(); }
   public void testRedeclaredImportAsFunction(){ doTest(); }
-  public void testStructTags()  { doTest(); }
+  public void testStructTags()                { doTest(); }
+  public void testContinue()                  { doTest(); }
 
   public void testRelativeImportIgnoringDirectories() throws IOException {
     myFixture.getTempDirFixture().findOrCreateDir("to_import/testdata");
