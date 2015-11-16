@@ -16,11 +16,11 @@
 
 package com.goide;
 
+import com.intellij.execution.filters.UrlFilter;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.io.URLUtil;
 import com.intellij.xml.util.XmlStringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -141,7 +141,7 @@ public class GoCommentsConverter {
     private static String emphasize(@NotNull String text, boolean nice) {
       text = XmlStringUtil.escapeString(text);
       StringBuilder textWithLinks = null;
-      Matcher matcher = URLUtil.URL_PATTERN.matcher(text);
+      Matcher matcher = UrlFilter.URL_PATTERN.matcher(text);
       while (matcher.find()) {
         if (textWithLinks == null) {
           textWithLinks = new StringBuilder();
