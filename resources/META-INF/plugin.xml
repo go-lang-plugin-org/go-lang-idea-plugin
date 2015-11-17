@@ -307,6 +307,17 @@
             description="Analyze types for selected file with gotype util">
       <add-to-group group-id="CodeMenu" anchor="last"/>
     </action>
+    <group id="Go.Tools" popup="true" text="Go Tools"
+           description="Go tools" icon="/icons/go.png" class="com.goide.actions.NewGoGroup">
+
+      <action id="Go.Package.Manager"
+              class="com.goide.ui.pm.ManagerAction"
+              text="go get manager" description="go get manager">
+        <keyboard-shortcut first-keystroke="alt shift p" keymap="$default"/>
+      </action>
+
+      <add-to-group group-id="ToolsMenu" anchor="last"/>
+    </group>
   </actions>
 
   <application-components>
