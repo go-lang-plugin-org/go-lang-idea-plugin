@@ -39,10 +39,9 @@ public class GoContinueNotInLoopInspection extends GoInspectionBase {
     return new GoVisitor() {
       @Override
       public void visitContinueStatement(@NotNull GoContinueStatement o) {
-        if (PsiTreeUtil.getParentOfType(o.getContinue(), GoForStatement.class) == null) {
-          holder
-            .registerProblem(o.getContinue(), "Continue statement not inside a for loop.", ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-                             new ReplaceWithReturnQuickFix());
+        if (PsiTreeUtil.getParentOfType(o, GoForStatement.class) == null) {
+          holder.registerProblem(o, "Continue statement not inside a for loop.", ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
+                                 new ReplaceWithReturnQuickFix());
         }
       }
     };
