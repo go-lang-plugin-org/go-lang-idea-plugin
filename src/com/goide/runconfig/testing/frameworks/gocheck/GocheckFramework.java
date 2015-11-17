@@ -19,10 +19,7 @@ package com.goide.runconfig.testing.frameworks.gocheck;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoMethodDeclaration;
 import com.goide.psi.impl.GoPsiImplUtil;
-import com.goide.runconfig.testing.GoTestFinder;
-import com.goide.runconfig.testing.GoTestFramework;
-import com.goide.runconfig.testing.GoTestRunConfiguration;
-import com.goide.runconfig.testing.GoTestRunningState;
+import com.goide.runconfig.testing.*;
 import com.goide.stubs.index.GoPackagesIndex;
 import com.goide.util.GoUtil;
 import com.intellij.execution.runners.ExecutionEnvironment;
@@ -47,7 +44,7 @@ public class GocheckFramework extends GoTestFramework {
 
   @Nullable
   public static String getGocheckTestName(@NotNull GoMethodDeclaration method) {
-    String methodName = GoTestFinder.getTestFunctionName(method);
+    String methodName = GoTestFunctionType.fromName(method.getName()) == GoTestFunctionType.TEST ? method.getName() : null;
     if (methodName != null) {
       String suiteName = GoPsiImplUtil.getText(method.getReceiver().getType());
       if (!suiteName.isEmpty()) {
