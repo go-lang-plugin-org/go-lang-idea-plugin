@@ -128,7 +128,7 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
   protected String buildFilePattern(GoFile file) {
     Collection<String> testNames = ContainerUtil.newLinkedHashSet();
     for (GoFunctionDeclaration function : file.getFunctions()) {
-      ContainerUtil.addIfNotNull(testNames, GoTestFinder.getTestFunctionName(function));
+      ContainerUtil.addIfNotNull(testNames, GoTestFinder.isTestOrExampleFunction(function) ? function.getName() : null);
     }
     return "^" + StringUtil.join(testNames, "|") + "$";
   }
