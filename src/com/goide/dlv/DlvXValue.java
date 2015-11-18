@@ -235,7 +235,7 @@ class DlvXValue extends XNamedValue {
     Project project = getProject();
     if (project == null) return;
     String dlvType = myVariable.type;
-    String fqn = isPtr ? dlvType.replaceFirst("\\*struct ", "") : dlvType;
+    String fqn = isPtr ? dlvType.replaceFirst("\\*struct ", "") : dlvType.replaceFirst("struct ", "");
     List<String> split = StringUtil.split(fqn, ".");
     boolean noFqn = split.size() == 1;
     if (split.size() == 2 || noFqn) {
