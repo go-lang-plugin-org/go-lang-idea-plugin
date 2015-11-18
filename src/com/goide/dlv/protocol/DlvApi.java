@@ -161,6 +161,11 @@ public class DlvApi {
       private boolean isNumber() {
         return compareTo(Int) >= 0 && compareTo(Complex128) <= 0;
       }
+
+    }
+    public boolean isSliceOrSlice() {
+      Kind kind = getKind();
+      return kind == Kind.Slice || kind == Kind.Array;
     }
 
     public boolean isNumber() { return getKind().isNumber(); }

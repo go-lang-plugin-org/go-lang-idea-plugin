@@ -141,6 +141,9 @@ class DlvXValue extends XNamedValue {
       };
     }
     String type = myVariable.type;
+    if (myVariable.isSliceOrSlice()) {
+      return new XRegularValuePresentation(value, type.replaceFirst("struct ", ""));
+    }
     String prefix = myVariable.type + " ";
     return new XRegularValuePresentation(StringUtil.startsWith(value, prefix) ? value.replaceFirst(Pattern.quote(prefix), "") : value,
                                          type);
