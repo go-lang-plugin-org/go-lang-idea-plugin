@@ -20,6 +20,8 @@ import com.goide.dlv.protocol.DlvApi;
 import com.goide.dlv.protocol.DlvRequest;
 import com.goide.psi.GoNamedElement;
 import com.goide.psi.GoTopLevelDeclaration;
+import com.goide.psi.GoTypeSpec;
+import com.goide.stubs.index.GoTypesIndex;
 import com.intellij.icons.AllIcons;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.application.ApplicationManager;
@@ -35,6 +37,7 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.SyntaxTraverser;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.ThreeState;
@@ -50,7 +53,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.regex.Pattern;
 
 class DlvXValue extends XNamedValue {
@@ -171,7 +176,7 @@ class DlvXValue extends XNamedValue {
 
       @Nullable
       private XSourcePosition findPosition() {
-        XDebugSession debugSession = myProcess.getSession();
+        XDebugSession debugSession = getSession();
         if (debugSession == null) return null;
         XStackFrame stackFrame = debugSession.getCurrentStackFrame();
         if (stackFrame == null) return null;
@@ -186,6 +191,17 @@ class DlvXValue extends XNamedValue {
         return XDebuggerUtil.getInstance().createPositionByOffset(virtualFile, resolved.getTextOffset());
       }
     });
+  }
+
+  @Nullable
+  private Project getProject() {
+    XDebugSession session = getSession();
+    return session != null ? session.getProject() : null;
+  }
+
+  @Nullable
+  private XDebugSession getSession() {
+    return myProcess.getSession();
   }
 
   @NotNull
@@ -203,5 +219,30 @@ class DlvXValue extends XNamedValue {
   @Override
   public boolean canNavigateToSource() {
     return true; // for the future compatibility
+  }
+
+  @Override
+  public boolean canNavigateToTypeSource() {
+    return myVariable.isStructure() && getProject() != null;
+  }
+
+  @Override
+  public void computeTypeSourcePosition(@NotNull XNavigatable navigatable) {
+    if (!myVariable.isStructure()) return;
+    Project project = getProject();
+    if (project == null) return;
+    String fqn = myVariable.type;
+    List<String> split = StringUtil.split(fqn, ".");
+    if (split.size() == 2) {
+      String name = split.get(1);
+      Collection<GoTypeSpec> types = GoTypesIndex.find(name, project, GlobalSearchScope.allScope(project));
+      for (GoTypeSpec type : types) {
+        if (Comparing.equal(fqn, type.getQualifiedName())) {
+          navigatable.setSourcePosition(XDebuggerUtil.getInstance().createPositionByOffset(
+            type.getContainingFile().getVirtualFile(), type.getTextOffset()));
+          return;
+        }
+      }
+    }
   }
 }
