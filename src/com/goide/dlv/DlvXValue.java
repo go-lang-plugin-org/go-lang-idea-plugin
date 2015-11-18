@@ -199,4 +199,9 @@ class DlvXValue extends XNamedValue {
     });
     return ThreeState.YES;
   }
+
+  @Override
+  public boolean canNavigateToSource() {
+    return true; // for the future compatibility
+  }
 }
