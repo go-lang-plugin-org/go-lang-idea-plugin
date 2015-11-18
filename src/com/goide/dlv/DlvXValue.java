@@ -18,9 +18,29 @@ package com.goide.dlv;
 
 import com.goide.dlv.protocol.DlvApi;
 import com.goide.dlv.protocol.DlvRequest;
+import com.goide.psi.GoNamedElement;
+import com.goide.psi.GoTopLevelDeclaration;
 import com.intellij.icons.AllIcons;
+import com.intellij.lang.ASTNode;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.fileEditor.impl.FileEditorManagerImpl;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Comparing;
+import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.SyntaxTraverser;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Consumer;
+import com.intellij.util.ThreeState;
+import com.intellij.xdebugger.XDebugSession;
+import com.intellij.xdebugger.XDebuggerUtil;
+import com.intellij.xdebugger.XSourcePosition;
 import com.intellij.xdebugger.frame.*;
 import com.intellij.xdebugger.frame.presentation.XNumericValuePresentation;
 import com.intellij.xdebugger.frame.presentation.XRegularValuePresentation;
@@ -30,6 +50,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.Iterator;
 import java.util.regex.Pattern;
 
 class DlvXValue extends XNamedValue {
@@ -117,5 +138,65 @@ class DlvXValue extends XNamedValue {
     String prefix = myVariable.type + " ";
     return new XRegularValuePresentation(StringUtil.startsWith(value, prefix) ? value.replaceFirst(Pattern.quote(prefix), "") : value,
                                          type);
+  }
+
+  @Nullable
+  private static PsiElement findTargetElement(@NotNull Project project,
+                                              @NotNull XSourcePosition position,
+                                              @NotNull Editor editor,
+                                              @NotNull final String name) {
+    PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument());
+    if (file == null || !file.getVirtualFile().equals(position.getFile())) return null;
+    ASTNode leafElement = file.getNode().findLeafElementAt(position.getOffset());
+    if (leafElement == null) return null;
+    GoTopLevelDeclaration topLevel = PsiTreeUtil.getTopmostParentOfType(leafElement.getPsi(), GoTopLevelDeclaration.class);
+    SyntaxTraverser<PsiElement> traverser = SyntaxTraverser.psiTraverser(topLevel)
+      .filter(new Condition<PsiElement>() {
+        @Override
+        public boolean value(PsiElement e) {
+          return e instanceof GoNamedElement && Comparing.equal(name, ((GoNamedElement)e).getName());
+        }
+      });
+    Iterator<PsiElement> iterator = traverser.iterator();
+    return iterator.hasNext() ? iterator.next() : null;
+  }
+
+  @Override
+  public void computeSourcePosition(@NotNull final XNavigatable navigatable) {
+    ApplicationManager.getApplication().invokeLater(new Runnable() {
+      @Override
+      public void run() {
+        navigatable.setSourcePosition(findPosition());
+      }
+
+      @Nullable
+      private XSourcePosition findPosition() {
+        XDebugSession debugSession = myProcess.getSession();
+        if (debugSession == null) return null;
+        XStackFrame stackFrame = debugSession.getCurrentStackFrame();
+        if (stackFrame == null) return null;
+        Project project = debugSession.getProject();
+        XSourcePosition position = debugSession.getCurrentPosition();
+        Editor editor = ((FileEditorManagerImpl)FileEditorManager.getInstance(project)).getSelectedTextEditor(true);
+        if (editor == null || position == null) return null;
+        String name = myName.startsWith("&") ? myName.replaceFirst("&\\w+", "") : myName;
+        PsiElement resolved = findTargetElement(project, position, editor, name);
+        if (resolved == null) return null;
+        VirtualFile virtualFile = resolved.getContainingFile().getVirtualFile();
+        return XDebuggerUtil.getInstance().createPositionByOffset(virtualFile, resolved.getTextOffset());
+      }
+    });
+  }
+
+  @NotNull
+  @Override
+  public ThreeState computeInlineDebuggerData(@NotNull final XInlineDebuggerDataCallback callback) {
+    computeSourcePosition(new XNavigatable() {
+      @Override
+      public void setSourcePosition(@Nullable XSourcePosition sourcePosition) {
+        callback.computed(sourcePosition);
+      }
+    });
+    return ThreeState.YES;
   }
 }
