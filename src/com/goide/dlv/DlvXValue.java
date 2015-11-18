@@ -179,7 +179,7 @@ class DlvXValue extends XNamedValue {
         XSourcePosition position = debugSession.getCurrentPosition();
         Editor editor = ((FileEditorManagerImpl)FileEditorManager.getInstance(project)).getSelectedTextEditor(true);
         if (editor == null || position == null) return null;
-        String name = myName.startsWith("&") ? myName.replaceFirst("&\\w+", "") : myName;
+        String name = myName.startsWith("&") ? myName.replaceFirst("\\&", "") : myName;
         PsiElement resolved = findTargetElement(project, position, editor, name);
         if (resolved == null) return null;
         VirtualFile virtualFile = resolved.getContainingFile().getVirtualFile();
