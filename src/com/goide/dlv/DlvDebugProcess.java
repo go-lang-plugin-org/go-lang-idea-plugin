@@ -92,7 +92,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
         .done(new Consumer<List<DlvApi.Location>>() {
           @Override
           public void consume(@NotNull List<DlvApi.Location> locations) {
-            DlvSuspendContext context = new DlvSuspendContext(o.currentThread.id, locations, getProcessor());
+            DlvSuspendContext context = new DlvSuspendContext(DlvDebugProcess.this, o.currentThread.id, locations, getProcessor());
             XDebugSession session = getSession();
             if (find == null) {
               session.positionReached(context);

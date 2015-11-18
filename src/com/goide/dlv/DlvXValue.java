@@ -36,11 +36,17 @@ class DlvXValue extends XNamedValue {
   @NotNull
   private final DlvApi.Variable myVariable;
   private final Icon myIcon;
+  private final DlvDebugProcess myProcess;
   private final DlvCommandProcessor myProcessor;
   private final int myFrameId;
 
-  public DlvXValue(@NotNull DlvApi.Variable variable, Icon icon, DlvCommandProcessor processor, int frameId) {
+  public DlvXValue(@NotNull DlvDebugProcess process,
+                   @NotNull DlvApi.Variable variable,
+                   @NotNull DlvCommandProcessor processor, 
+                   int frameId, 
+                   @Nullable Icon icon) {
     super(variable.name);
+    myProcess = process;
     myVariable = variable;
     myIcon = icon;
     myProcessor = processor;
@@ -63,7 +69,7 @@ class DlvXValue extends XNamedValue {
     else {
       XValueChildrenList list = new XValueChildrenList();
       for (DlvApi.Variable child : children) {
-        list.add(child.name, new DlvXValue(child, AllIcons.Nodes.Field, myProcessor, myFrameId));
+        list.add(child.name, new DlvXValue(myProcess, child, myProcessor, myFrameId, AllIcons.Nodes.Field));
       }
       node.addChildren(list, true);
     }

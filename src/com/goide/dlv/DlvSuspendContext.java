@@ -29,8 +29,11 @@ import java.util.List;
 class DlvSuspendContext extends XSuspendContext {
   @NotNull private final DlvExecutionStack myStack;
 
-  public DlvSuspendContext(int threadId, @NotNull List<DlvApi.Location> locations, @NotNull DlvCommandProcessor processor) {
-    myStack = new DlvExecutionStack(threadId, locations, processor);
+  public DlvSuspendContext(@NotNull DlvDebugProcess process,
+                           int threadId,
+                           @NotNull List<DlvApi.Location> locations,
+                           @NotNull DlvCommandProcessor processor) {
+    myStack = new DlvExecutionStack(process, threadId, locations, processor);
   }
 
   @Nullable
@@ -46,17 +49,22 @@ class DlvSuspendContext extends XSuspendContext {
   }
 
   private static class DlvExecutionStack extends XExecutionStack {
+    @NotNull private final DlvDebugProcess myProcess;
     @NotNull private final List<DlvApi.Location> myLocations;
-    private final DlvCommandProcessor myProcessor;
+    @NotNull private final DlvCommandProcessor myProcessor;
     @NotNull private final List<DlvStackFrame> myStack;
 
-    public DlvExecutionStack(int threadId, @NotNull List<DlvApi.Location> locations, DlvCommandProcessor processor) {
+    public DlvExecutionStack(@NotNull DlvDebugProcess process,
+                             int threadId,
+                             @NotNull List<DlvApi.Location> locations,
+                             @NotNull DlvCommandProcessor processor) {
       super("Thread #" + threadId);
+      myProcess = process;
       myLocations = locations;
       myProcessor = processor;
       myStack = ContainerUtil.newArrayListWithCapacity(locations.size());
       for (int i = 0; i < myLocations.size(); i++) {
-        myStack.add(new DlvStackFrame(myLocations.get(i), myProcessor, i));
+        myStack.add(new DlvStackFrame(myProcess, myLocations.get(i), myProcessor, i));
       }
     }
 

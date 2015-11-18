@@ -50,11 +50,16 @@ import javax.swing.*;
 import java.util.List;
 
 class DlvStackFrame extends XStackFrame {
+  private final DlvDebugProcess myProcess;
   private final DlvApi.Location myLocation;
   private final DlvCommandProcessor myProcessor;
   private final int myId;
 
-  public DlvStackFrame(DlvApi.Location location, DlvCommandProcessor processor, int id) {
+  public DlvStackFrame(@NotNull DlvDebugProcess process, 
+                       @NotNull DlvApi.Location location, 
+                       @NotNull DlvCommandProcessor processor, 
+                       int id) {
+    myProcess = process;
     myLocation = location;
     myProcessor = processor;
     myId = id;
@@ -116,7 +121,7 @@ class DlvStackFrame extends XStackFrame {
 
   @NotNull
   private XValue createXValue(@NotNull DlvApi.Variable variable, @Nullable Icon icon) {
-    return new DlvXValue(variable, icon, myProcessor, myId);
+    return new DlvXValue(myProcess, variable, myProcessor, myId, icon);
   }
 
   @Nullable
