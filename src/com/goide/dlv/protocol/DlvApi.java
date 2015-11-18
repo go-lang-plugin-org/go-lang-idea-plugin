@@ -172,6 +172,10 @@ public class DlvApi {
     public boolean isStructure() {
       return getKind() == Kind.Struct;
     }
+
+    public boolean isPtr() {
+      return getKind() == Kind.Ptr;
+    }
   }
 
   // Goroutine represents the information relevant to Delve from the runtime's

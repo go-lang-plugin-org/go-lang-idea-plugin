@@ -41,6 +41,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.ThreeState;
+import com.intellij.util.containers.ContainerUtil;
 import com.intellij.xdebugger.XDebugSession;
 import com.intellij.xdebugger.XDebuggerUtil;
 import com.intellij.xdebugger.XSourcePosition;
@@ -223,21 +224,26 @@ class DlvXValue extends XNamedValue {
 
   @Override
   public boolean canNavigateToTypeSource() {
-    return myVariable.isStructure() && getProject() != null;
+    return (myVariable.isStructure() || myVariable.isPtr()) && getProject() != null;
   }
 
   @Override
   public void computeTypeSourcePosition(@NotNull XNavigatable navigatable) {
-    if (!myVariable.isStructure()) return;
+    boolean isStructure = myVariable.isStructure();
+    boolean isPtr = myVariable.isPtr();
+    if (!isStructure && !isPtr) return;
     Project project = getProject();
     if (project == null) return;
-    String fqn = myVariable.type;
+    String dlvType = myVariable.type;
+    String fqn = isPtr ? dlvType.replaceFirst("\\*struct ", "") : dlvType;
     List<String> split = StringUtil.split(fqn, ".");
-    if (split.size() == 2) {
-      String name = split.get(1);
+    boolean noFqn = split.size() == 1;
+    if (split.size() == 2 || noFqn) {
+      String name = ContainerUtil.getLastItem(split);
+      assert name != null;
       Collection<GoTypeSpec> types = GoTypesIndex.find(name, project, GlobalSearchScope.allScope(project));
       for (GoTypeSpec type : types) {
-        if (Comparing.equal(fqn, type.getQualifiedName())) {
+        if (noFqn || Comparing.equal(fqn, type.getQualifiedName())) {
           navigatable.setSourcePosition(XDebuggerUtil.getInstance().createPositionByOffset(
             type.getContainingFile().getVirtualFile(), type.getTextOffset()));
           return;
