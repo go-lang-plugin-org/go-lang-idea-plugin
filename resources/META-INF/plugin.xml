@@ -172,7 +172,7 @@
     <!-- debugger -->
     <xdebugger.breakpointType implementation="com.goide.dlv.breakpoint.DlvBreakpointType"/>
 
-    <checkinHandlerFactory implementation="com.goide.actions.fmt.GoFmtCheckinFactory" order="last"/>
+    <checkinHandlerFactory implementation="com.goide.actions.tool.GoFmtCheckinFactory" order="last"/>
 
     <defaultHighlightingSettingProvider implementation="com.goide.highlighting.GoDefaultHighlightingSettingProvider"/>
     <lang.inspectionSuppressor language="go" implementationClass="com.goide.inspections.suppression.GoInspectionSuppressor"/>
@@ -291,21 +291,21 @@
       <add-to-group group-id="GenerateGroup" anchor="first"/>
     </group>
 
-    <action id="GoFmtFileAction" class="com.goide.actions.fmt.GoFmtFileAction" text="Go fmt file"
+    <action id="GoFmtFileAction" class="com.goide.actions.tool.GoFmtFileAction" text="Go fmt file"
             description="Format selected file with go fmt util">
       <add-to-group group-id="CodeMenu" anchor="last"/>
       <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt F"/>
     </action>
-    <action id="GoFmtProjectAction" class="com.goide.actions.fmt.GoFmtProjectAction" text="Go fmt project"
+    <action id="GoFmtProjectAction" class="com.goide.actions.tool.GoFmtProjectAction" text="Go fmt project"
             description="Format project with go fmt util">
       <add-to-group group-id="CodeMenu" anchor="last"/>
       <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt P"/>
     </action>
-    <action id="GoImportsFileAction" class="com.goide.actions.fmt.GoImportsFileAction" text="Goimports file"
+    <action id="GoImportsFileAction" class="com.goide.actions.tool.GoImportsFileAction" text="Goimports file"
             description="Optimizes imports for selected file with goimports util">
       <add-to-group group-id="CodeMenu" anchor="last"/>
     </action>
-    <action id="GoTypeFileAction" class="com.goide.actions.fmt.GoTypeFileAction" text="Gotype file"
+    <action id="GoTypeFileAction" class="com.goide.actions.tool.GoTypeFileAction" text="Gotype file"
             description="Analyze types for selected file with gotype util">
       <add-to-group group-id="CodeMenu" anchor="last"/>
     </action>
