@@ -17,13 +17,22 @@
 package com.goide.actions.file;
 
 import com.goide.GoIcons;
+import com.goide.psi.GoFile;
+import com.goide.psi.GoPackageClause;
 import com.intellij.ide.actions.CreateFileFromTemplateAction;
 import com.intellij.ide.actions.CreateFileFromTemplateDialog;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Map;
 
 public class GoCreateFileAction extends CreateFileFromTemplateAction implements DumbAware {
   public static final String FILE_TEMPLATE = "Go File";
@@ -53,6 +62,29 @@ public class GoCreateFileAction extends CreateFileFromTemplateAction implements 
   @Override
   protected String getActionName(PsiDirectory directory, String newName, String templateName) {
     return NEW_GO_FILE;
+  }
+
+
+  @Override
+  protected void postProcess(PsiFile createdElement, String templateName, Map<String, String> customProperties) {
+    if (createdElement instanceof GoFile) {
+      GoPackageClause packageClause = ((GoFile)createdElement).getPackage();
+      if (packageClause == null) {
+        return;
+      }
+      Project project = createdElement.getProject();
+      Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+      if (editor == null) {
+        return;
+      }
+      VirtualFile virtualFile = createdElement.getContainingFile().getVirtualFile();
+      if (virtualFile == null) {
+        return;
+      }
+      if (FileDocumentManager.getInstance().getDocument(virtualFile) == editor.getDocument()) {
+        editor.getCaretModel().moveToOffset(packageClause.getTextRange().getEndOffset());
+      }
+    }
   }
 
   @Override
