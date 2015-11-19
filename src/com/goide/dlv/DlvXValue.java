@@ -141,8 +141,11 @@ class DlvXValue extends XNamedValue {
       };
     }
     String type = myVariable.type;
-    if (myVariable.isSliceOrSlice()) {
-      return new XRegularValuePresentation(value, type.replaceFirst("struct ", ""));
+    boolean isSlice = myVariable.isSlice();
+    boolean isArray = myVariable.isArray();
+    if (isSlice || isArray) {
+      return new XRegularValuePresentation("len:" + myVariable.len + (isSlice ? ", cap:" + myVariable.cap : ""),
+                                           type.replaceFirst("struct ", ""));
     }
     String prefix = myVariable.type + " ";
     return new XRegularValuePresentation(StringUtil.startsWith(value, prefix) ? value.replaceFirst(Pattern.quote(prefix), "") : value,

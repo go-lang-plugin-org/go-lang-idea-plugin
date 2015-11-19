@@ -163,9 +163,13 @@ public class DlvApi {
       }
 
     }
-    public boolean isSliceOrSlice() {
-      Kind kind = getKind();
-      return kind == Kind.Slice || kind == Kind.Array;
+    
+    public boolean isSlice() {
+      return getKind() == Kind.Slice;
+    }
+    
+    public boolean isArray() {
+      return getKind() == Kind.Array;
     }
 
     public boolean isNumber() { return getKind().isNumber(); }
