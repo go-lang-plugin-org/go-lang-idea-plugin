@@ -13,3 +13,13 @@ func main() {
   y.M()
   z.<error>M</error>()
 }
+
+type Name struct {
+	aaa int
+}
+
+type B *Name
+
+func _(b *B) {
+	b.<error>aaa</error>
+}
