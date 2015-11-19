@@ -23,3 +23,8 @@ type B *Name
 func _(b *B) {
 	b.<error>aaa</error>
 }
+
+func _() {
+        b := new(B)
+	b.<error>aaa</error>
+}
