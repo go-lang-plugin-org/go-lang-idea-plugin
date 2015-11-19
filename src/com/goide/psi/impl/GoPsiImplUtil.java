@@ -345,9 +345,12 @@ public class GoPsiImplUtil {
     }
     else if (o instanceof GoBuiltinCallExpr) {
       String text = ((GoBuiltinCallExpr)o).getReferenceExpression().getText();
-      if ("new".equals(text) || "make".equals(text)) {
+      boolean isNew = "new".equals(text);
+      boolean isMake = "make".equals(text);
+      if (isNew || isMake) {
         GoBuiltinArgs args = ((GoBuiltinCallExpr)o).getBuiltinArgs();
-        return args != null ? args.getType() : null;
+        GoType type = args != null ? args.getType() : null;
+        return isNew ? type == null ? null : new MyPointerType(type) : type;
       }
     }
     else if (o instanceof GoCallExpr) {
@@ -825,6 +828,29 @@ public class GoPsiImplUtil {
     public String getText() {
       GoSignature signature = getSignature();
       return getFunc().getText() + (signature != null ? signature.getText() : "");
+    }
+  }
+  
+  static class MyPointerType extends GoLightType<GoType> implements GoPointerType {
+    protected MyPointerType(@NotNull GoType o) {
+      super(o);
+    }
+
+    @Override
+    public String getText() {
+      return "*" + myElement.getText();
+    }
+
+    @Nullable
+    @Override
+    public GoType getType() {
+      return myElement;
+    }
+
+    @NotNull
+    @Override
+    public PsiElement getMul() {
+      return myElement; // todo: mock it?
     }
   }
 
