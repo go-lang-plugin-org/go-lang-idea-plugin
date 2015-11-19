@@ -58,6 +58,8 @@
 
     <internalFileTemplate name="Go Application"/>
     <internalFileTemplate name="Go File"/>
+    <defaultTemplatePropertiesProvider implementation="com.goide.actions.file.GoTemplatePropertiesProvider"/>
+    <createFromTemplateHandler implementation="com.goide.actions.file.GoCreateFromTemplateHandler"/>
 
     <!-- project -->
     <project.converterProvider implementation="com.goide.project.migration.GoProjectModelConverterProvider"/>
@@ -269,7 +271,7 @@
     <!-- /general -->
   </extensions>
   <actions>
-    <action id="Go.NewGoFile" class="com.goide.actions.GoCreateFileAction"
+    <action id="Go.NewGoFile" class="com.goide.actions.file.GoCreateFileAction"
             text="Go File" description="Create new Go file">
       <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
     </action>
