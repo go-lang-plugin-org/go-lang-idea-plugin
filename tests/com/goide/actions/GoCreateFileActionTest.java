@@ -17,6 +17,7 @@
 package com.goide.actions;
 
 import com.goide.GoCodeInsightFixtureTestCase;
+import com.goide.actions.file.GoCreateFileAction;
 import com.goide.psi.GoFile;
 import com.intellij.psi.PsiDirectory;
 import org.jetbrains.annotations.NotNull;

@@ -14,61 +14,45 @@
  * limitations under the License.
  */
 
-package com.goide.actions;
+package com.goide.actions.file;
 
-import com.goide.GoConstants;
 import com.goide.GoIcons;
-import com.goide.util.GoUtil;
 import com.intellij.ide.actions.CreateFileFromTemplateAction;
 import com.intellij.ide.actions.CreateFileFromTemplateDialog;
-import com.intellij.ide.fileTemplates.FileTemplate;
-import com.intellij.ide.fileTemplates.FileTemplateManager;
-import com.intellij.ide.fileTemplates.FileTemplateUtil;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Properties;
+import org.jetbrains.annotations.Nullable;
 
 public class GoCreateFileAction extends CreateFileFromTemplateAction implements DumbAware {
   public static final String FILE_TEMPLATE = "Go File";
-  private static final String NEW_GO_FILE = "New Go File";
-  private static final String PACKAGE = "PACKAGE";
+  public static final String APPLICATION_TEMPLATE = "Go Application";
 
-  @Override
-  protected PsiFile createFile(String name, @NotNull String templateName, @NotNull PsiDirectory dir) {
-    FileTemplateManager templateManager = FileTemplateManager.getInstance(dir.getProject());
-    FileTemplate template = templateManager.getInternalTemplate(templateName);
-    Properties properties = templateManager.getDefaultProperties();
-    String packageName = GoUtil.suggestPackageForDirectory(dir);
-    if (name.endsWith(GoConstants.TEST_SUFFIX) || name.endsWith(GoConstants.TEST_SUFFIX_WITH_EXTENSION)) {
-      packageName += GoConstants.TEST_SUFFIX;
-    }
-    properties.setProperty(PACKAGE, packageName);
-    try {
-      PsiElement element = FileTemplateUtil.createFromTemplate(template, name, properties, dir);
-      if (element instanceof PsiFile) return (PsiFile)element;
-    }
-    catch (Exception e) {
-      LOG.warn(e);
-      return null;
-    }
-    return super.createFile(name, templateName, dir);
-  }
+  private static final String NEW_GO_FILE = "New Go File";
+  private static final String DEFAULT_GO_TEMPLATE_PROPERTY = "DefaultGoTemplateProperty";
 
   public GoCreateFileAction() {
     super(NEW_GO_FILE, "", GoIcons.ICON);
   }
 
   @Override
+  public PsiFile createFile(String name, String templateName, PsiDirectory dir) {
+    return super.createFile(name, templateName, dir);
+  }
+
+  @Override
   protected void buildDialog(Project project, PsiDirectory directory, @NotNull CreateFileFromTemplateDialog.Builder builder) {
-    // todo: check that file already exists
     builder.setTitle(NEW_GO_FILE)
       .addKind("Empty file", GoIcons.ICON, FILE_TEMPLATE)
-      .addKind("Simple Application", GoIcons.ICON, "Go Application");
+      .addKind("Simple Application", GoIcons.ICON, APPLICATION_TEMPLATE);
+  }
+
+  @Nullable
+  @Override
+  protected String getDefaultTemplateProperty() {
+    return DEFAULT_GO_TEMPLATE_PROPERTY;
   }
 
   @NotNull
@@ -79,7 +63,7 @@ public class GoCreateFileAction extends CreateFileFromTemplateAction implements 
 
   @Override
   public int hashCode() {
-    return 0;
+    return getClass().hashCode();
   }
 
   @Override
