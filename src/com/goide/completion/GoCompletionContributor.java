@@ -31,6 +31,8 @@ import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionType;
+import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
+import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.lang.ASTNode;
 import com.intellij.patterns.PlatformPatterns;
@@ -63,24 +65,32 @@ public class GoCompletionContributor extends CompletionContributor {
     if (file instanceof GoFile && position.getParent() instanceof GoPackageClause && node.getElementType() == GoTypes.IDENTIFIER) {
       boolean isTestFile = GoTestFinder.isTestFile(file);
       PsiDirectory directory = file.getParent();
+      String currentPackageName = ((GoFile)file).getPackageName();
       Collection<String> packagesInDirectory = GoUtil.getAllPackagesInDirectory(directory, true);
       for (String packageName : packagesInDirectory) {
-        result.addElement(withPriority(LookupElementBuilder.create(packageName), GoCompletionUtil.PACKAGE_PRIORITY - 1));
+        if (!packageName.equals(currentPackageName)) {
+          result.addElement(packageLookup(packageName, GoCompletionUtil.PACKAGE_PRIORITY - 1));
+        }
         if (isTestFile) {
-          result.addElement(withPriority(LookupElementBuilder.create(packageName + GoConstants.TEST_SUFFIX),
-                                         GoCompletionUtil.PACKAGE_PRIORITY));
+          result.addElement(packageLookup(packageName + GoConstants.TEST_SUFFIX, GoCompletionUtil.PACKAGE_PRIORITY));
         }
       }
 
       if (packagesInDirectory.isEmpty() && directory != null) {
         String packageFromDirectory = GoPsiImplUtil.getLocalPackageName(directory.getName());
         if (!packageFromDirectory.isEmpty()) {
-          result.addElement(withPriority(LookupElementBuilder.create(packageFromDirectory), GoCompletionUtil.PACKAGE_PRIORITY - 1));
+          result.addElement(packageLookup(packageFromDirectory, GoCompletionUtil.PACKAGE_PRIORITY - 1));
         }
       }
-      result.addElement(withPriority(LookupElementBuilder.create(GoConstants.MAIN), GoCompletionUtil.PACKAGE_PRIORITY - 2));
+      result.addElement(packageLookup(GoConstants.MAIN, GoCompletionUtil.PACKAGE_PRIORITY - 2));
     }
     super.fillCompletionVariants(parameters, result);
+  }
+
+  @NotNull
+  private static LookupElement packageLookup(@NotNull  String packageName, int priority) {
+    LookupElement element = withPriority(LookupElementBuilder.create(packageName), priority);
+    return AutoCompletionPolicy.NEVER_AUTOCOMPLETE.applyPolicy(element);
   }
 
   private static PsiElementPattern.Capture<PsiElement> importString() {
