@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.goide.actions.fmt;
+package com.goide.actions.tool;
 
 import com.goide.GoConstants;
 import com.goide.GoFileType;

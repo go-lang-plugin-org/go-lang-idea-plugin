@@ -14,17 +14,25 @@
  * limitations under the License.
  */
 
-package com.goide.actions.fmt;
+package com.goide.actions.tool;
 
 import com.goide.util.GoExecutor;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class GoFmtFileAction extends GoExternalToolsAction {
+public class GoImportsFileAction extends GoDownloadableFileAction {
+  public GoImportsFileAction() {
+    super("goimports", "golang.org/x/tools/cmd/goimports");
+  }
+
   @NotNull
+  @Override
   protected GoExecutor createExecutor(@NotNull Project project, @Nullable Module module, @NotNull String title, @NotNull String filePath) {
-    return GoExecutor.in(project, module).withPresentableName(title).withParameters("fmt", filePath).showOutputOnError();
+    VirtualFile executable = getExecutable(project, module);
+    assert executable != null;
+    return GoExecutor.in(project, module).withExePath(executable.getPath()).withParameters("-w", filePath).showOutputOnError();
   }
 }
