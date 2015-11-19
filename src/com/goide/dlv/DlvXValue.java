@@ -172,7 +172,7 @@ class DlvXValue extends XNamedValue {
 
   @Override
   public void computeSourcePosition(@NotNull final XNavigatable navigatable) {
-    ApplicationManager.getApplication().invokeLater(new Runnable() {
+    readActionInPooledThread(new Runnable() {
       @Override
       public void run() {
         navigatable.setSourcePosition(findPosition());
@@ -193,6 +193,15 @@ class DlvXValue extends XNamedValue {
         if (resolved == null) return null;
         VirtualFile virtualFile = resolved.getContainingFile().getVirtualFile();
         return XDebuggerUtil.getInstance().createPositionByOffset(virtualFile, resolved.getTextOffset());
+      }
+    });
+  }
+
+  private static void readActionInPooledThread(@NotNull final Runnable runnable) {
+    ApplicationManager.getApplication().executeOnPooledThread(new Runnable() {
+      @Override
+      public void run() {
+        ApplicationManager.getApplication().runReadAction(runnable);
       }
     });
   }
@@ -231,27 +240,31 @@ class DlvXValue extends XNamedValue {
   }
 
   @Override
-  public void computeTypeSourcePosition(@NotNull XNavigatable navigatable) {
-    boolean isStructure = myVariable.isStructure();
-    boolean isPtr = myVariable.isPtr();
-    if (!isStructure && !isPtr) return;
-    Project project = getProject();
-    if (project == null) return;
-    String dlvType = myVariable.type;
-    String fqn = isPtr ? dlvType.replaceFirst("\\*struct ", "") : dlvType.replaceFirst("struct ", "");
-    List<String> split = StringUtil.split(fqn, ".");
-    boolean noFqn = split.size() == 1;
-    if (split.size() == 2 || noFqn) {
-      String name = ContainerUtil.getLastItem(split);
-      assert name != null;
-      Collection<GoTypeSpec> types = GoTypesIndex.find(name, project, GlobalSearchScope.allScope(project));
-      for (GoTypeSpec type : types) {
-        if (noFqn || Comparing.equal(fqn, type.getQualifiedName())) {
-          navigatable.setSourcePosition(XDebuggerUtil.getInstance().createPositionByOffset(
-            type.getContainingFile().getVirtualFile(), type.getTextOffset()));
-          return;
+  public void computeTypeSourcePosition(@NotNull final XNavigatable navigatable) {
+    readActionInPooledThread(new Runnable() {
+      public void run() {
+        boolean isStructure = myVariable.isStructure();
+        boolean isPtr = myVariable.isPtr();
+        if (!isStructure && !isPtr) return;
+        Project project = getProject();
+        if (project == null) return;
+        String dlvType = myVariable.type;
+        String fqn = isPtr ? dlvType.replaceFirst("\\*struct ", "") : dlvType.replaceFirst("struct ", "");
+        List<String> split = StringUtil.split(fqn, ".");
+        boolean noFqn = split.size() == 1;
+        if (split.size() == 2 || noFqn) {
+          String name = ContainerUtil.getLastItem(split);
+          assert name != null;
+          Collection<GoTypeSpec> types = GoTypesIndex.find(name, project, GlobalSearchScope.allScope(project));
+          for (GoTypeSpec type : types) {
+            if (noFqn || Comparing.equal(fqn, type.getQualifiedName())) {
+              navigatable.setSourcePosition(XDebuggerUtil.getInstance().createPositionByOffset(
+                type.getContainingFile().getVirtualFile(), type.getTextOffset()));
+              return;
+            }
+          }
         }
       }
-    }
+    });
   }
 }
