@@ -1,1 +1,1 @@
-package ${GO_PACKAGE_NAME_WITH_TEST_SUFFIX}
+package ${GO_PACKAGE_NAME}

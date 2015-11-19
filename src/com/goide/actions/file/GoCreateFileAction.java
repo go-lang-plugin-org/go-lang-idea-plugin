@@ -22,7 +22,6 @@ import com.intellij.ide.actions.CreateFileFromTemplateDialog;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,11 +34,6 @@ public class GoCreateFileAction extends CreateFileFromTemplateAction implements 
 
   public GoCreateFileAction() {
     super(NEW_GO_FILE, "", GoIcons.ICON);
-  }
-
-  @Override
-  public PsiFile createFile(String name, String templateName, PsiDirectory dir) {
-    return super.createFile(name, templateName, dir);
   }
 
   @Override
