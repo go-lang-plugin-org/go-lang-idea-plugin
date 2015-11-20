@@ -1,4 +1,5 @@
 TestSuiteStarted
+    - locationHint=gosuite://SomeFailSuite
     - name=SomeFailSuite
   TestStarted
       - locationHint=gotest://SomeFailSuite.TestA
