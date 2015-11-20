@@ -36,39 +36,49 @@ import java.util.List;
 
 // todo: deprecated, remove in IDEA 15.1
 public class GoTestLocationProvider implements TestLocationProvider {
+  public static final String SUITE_PROTOCOL = "gosuite";
   public static final String PROTOCOL = "gotest";
 
   @NotNull
   @Override
   public List<Location> getLocation(@NotNull String protocolId, @NotNull String locationData, @NotNull final Project project) {
-    if (!PROTOCOL.equals(protocolId)) {
-      return Collections.emptyList();
+    if (PROTOCOL.equals(protocolId)) {
+      List<String> locationDataItems = StringUtil.split(locationData, ".");
+      // Location is a function name, e.g. `TestCheckItOut`
+      if (locationDataItems.size() == 1) {
+        return ContainerUtil.mapNotNull(GoFunctionIndex.find(locationData, project, GlobalSearchScope.projectScope(project)),
+                                        new Function<GoFunctionDeclaration, Location>() {
+                                          @Override
+                                          public Location fun(GoFunctionDeclaration function) {
+                                            return PsiLocation.fromPsiElement(project, function);
+                                          }
+                                        });
+      }
+
+      // Location is a method name, e.g. `FooSuite.TestCheckItOut`
+      if (locationDataItems.size() == 2) {
+        List<Location> locations = ContainerUtil.newArrayList();
+        for (GoTypeSpec typeSpec : GoTypesIndex.find(locationDataItems.get(0), project, GlobalSearchScope.projectScope(project))) {
+          for (GoMethodDeclaration method : typeSpec.getMethods()) {
+            if (locationDataItems.get(1).equals(method.getName())) {
+              ContainerUtil.addIfNotNull(locations, PsiLocation.fromPsiElement(method));
+            }
+          }
+        }
+        return locations;
+      }
     }
-
-    List<String> locationDataItems = StringUtil.split(locationData, ".");
-
-    // Location is a function name, e.g. `TestCheckItOut`
-    if (locationDataItems.size() == 1) {
-      return ContainerUtil.mapNotNull(GoFunctionIndex.find(locationData, project, GlobalSearchScope.projectScope(project)),
-                                      new Function<GoFunctionDeclaration, Location>() {
+    else if (SUITE_PROTOCOL.equals(protocolId)) {
+      return ContainerUtil.mapNotNull(GoTypesIndex.find(locationData, project, GlobalSearchScope.projectScope(project)),
+                                      new Function<GoTypeSpec, Location>() {
                                         @Override
-                                        public Location fun(GoFunctionDeclaration function) {
-                                          return PsiLocation.fromPsiElement(project, function);
+                                        public Location fun(GoTypeSpec spec) {
+                                          return PsiLocation.fromPsiElement(project, spec);
                                         }
                                       });
     }
-
-    // Location is a method name, e.g. `FooSuite.TestCheckItOut`
-    if (locationDataItems.size() == 2) {
-      List<Location> locations = ContainerUtil.newArrayList();
-      for (GoTypeSpec typeSpec : GoTypesIndex.find(locationDataItems.get(0), project, GlobalSearchScope.projectScope(project))) {
-        for (GoMethodDeclaration method : typeSpec.getMethods()) {
-          if (locationDataItems.get(1).equals(method.getName())) {
-            ContainerUtil.addIfNotNull(locations, PsiLocation.fromPsiElement(method));
-          }
-        }
-      }
-      return locations;
+    else {
+      return Collections.emptyList();
     }
 
     throw new RuntimeException("Unsupported location: " + locationData);

@@ -326,7 +326,8 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter i
         super.processServiceMessages(suiteFinishedMsg, outputType, visitor);
       }
       mySuiteName = suiteName;
-      String suiteStartedMsg = ServiceMessageBuilder.testSuiteStarted(suiteName).toString();
+      String suiteStartedMsg = ServiceMessageBuilder.testSuiteStarted(suiteName)
+        .addAttribute("locationHint", suiteUrl(suiteName)).toString();
       super.processServiceMessages(suiteStartedMsg, outputType, visitor);
     }
   }
@@ -499,6 +500,11 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter i
     return ContainerUtil.newArrayList();
   }
 
+  @NotNull
+  private static String suiteUrl(@NotNull String suiteName) {
+    return GoTestLocationProvider.SUITE_PROTOCOL + "://" + suiteName;
+  }
+  
   @NotNull
   private static String testUrl(@NotNull String testName) {
     return GoTestLocationProvider.PROTOCOL + "://" + testName;

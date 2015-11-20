@@ -1,4 +1,5 @@
 TestSuiteStarted
+    - locationHint=gosuite://FixtureTestSetUpErrorSuite
     - name=FixtureTestSetUpErrorSuite
   TestStarted
       - locationHint=gotest://FixtureTestSetUpErrorSuite.TestA

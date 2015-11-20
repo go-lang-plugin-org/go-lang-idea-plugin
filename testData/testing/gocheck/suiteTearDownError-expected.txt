@@ -1,4 +1,5 @@
 TestSuiteStarted
+    - locationHint=gosuite://FixtureSuiteTearDownErrorSuite
     - name=FixtureSuiteTearDownErrorSuite
   TestStarted
       - locationHint=gotest://FixtureSuiteTearDownErrorSuite.TestA

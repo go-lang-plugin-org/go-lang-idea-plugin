@@ -1,4 +1,5 @@
 TestSuiteStarted
+    - locationHint=gosuite://AllPassSuite
     - name=AllPassSuite
   TestStarted
       - locationHint=gotest://AllPassSuite.TestA
