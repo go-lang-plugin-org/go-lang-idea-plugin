@@ -23,7 +23,9 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StringStubIndexExtension;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.psi.stubs.StubIndexKey;
+import com.intellij.util.Processor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -42,7 +44,14 @@ public class GoFunctionIndex extends StringStubIndexExtension<GoFunctionDeclarat
   }
 
   @NotNull
-  public static Collection<GoFunctionDeclaration> find(@NotNull String name, @NotNull Project project, GlobalSearchScope scope) {
+  public static Collection<GoFunctionDeclaration> find(@NotNull String name, @NotNull Project project, @Nullable GlobalSearchScope scope) {
     return StubIndex.getElements(KEY, name, project, scope, GoFunctionDeclaration.class);
+  }
+
+  public static boolean process(@NotNull String name,
+                                @NotNull Project project,
+                                @Nullable GlobalSearchScope scope,
+                                @NotNull Processor<GoFunctionDeclaration> processor) {
+    return StubIndex.getInstance().processElements(KEY, name, project, scope, GoFunctionDeclaration.class, processor);
   }
 }
