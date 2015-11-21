@@ -86,7 +86,7 @@ public class GoCreateFileActionTest extends GoCodeInsightFixtureTestCase {
   }
 
   private static void doTemplateTest(@NotNull PsiDirectory dir, @NotNull String newFileName, @NotNull String expectedPackage, @NotNull  CustomFileTemplate template) {
-    GoFile file = ((GoFile)CreateFileFromTemplateAction.createFileFromTemplate(newFileName, template, dir, null, true));
+    GoFile file = ((GoFile)CreateFileFromTemplateAction.createFileFromTemplate(newFileName, template, dir, null));
     assertNotNull(file);
     assertEquals(expectedPackage, file.getPackageName());
     file.delete();
