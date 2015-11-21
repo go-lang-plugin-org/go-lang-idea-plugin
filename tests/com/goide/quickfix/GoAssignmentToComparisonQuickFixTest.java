@@ -32,7 +32,11 @@ public class GoAssignmentToComparisonQuickFixTest extends GoQuickFixTestBase {
     return "quickfixes/assignment-to-comparison";
   }
 
-  public void testSimple() {
+  public void testAssignment() {
+    doTest(GoUsedAsValueInCondition.QUICK_FIX_NAME);
+  }
+
+  public void testShortVar() {
     doTest(GoUsedAsValueInCondition.QUICK_FIX_NAME);
   }
 }
