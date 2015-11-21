@@ -142,19 +142,26 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     return true;
   }
 
-  private boolean processGoType(@NotNull GoType type, @NotNull GoScopeProcessor processor, @NotNull ResolveState state) {
-    if (type instanceof GoParType) return processGoType(((GoParType)type).getType(), processor, state);
-    if (type instanceof GoReceiverType) state = state.put(RECEIVER, true);
-    if (!processExistingType(type, processor, state)) return false;
-    if (type instanceof GoPointerType) {
-      if (!processPointer((GoPointerType)type, processor, state.put(POINTER, true))) return false;
-      GoType pointer = ((GoPointerType)type).getType();
-      if (pointer instanceof GoPointerType) {
-        return processPointer((GoPointerType)pointer, processor, state.put(POINTER, true));
+  private boolean processGoType(@NotNull final GoType type, @NotNull final GoScopeProcessor processor, final @NotNull ResolveState resolveState) {
+    Boolean result = RecursionManager.doPreventingRecursion(type, true, new Computable<Boolean>() {
+      @Override
+      public Boolean compute() {
+        ResolveState state = resolveState;
+        if (type instanceof GoParType) return processGoType(((GoParType)type).getType(), processor, state);
+        if (type instanceof GoReceiverType) state = state.put(RECEIVER, true);
+        if (!processExistingType(type, processor, state)) return false;
+        if (type instanceof GoPointerType) {
+          if (!processPointer((GoPointerType)type, processor, state.put(POINTER, true))) return false;
+          GoType pointer = ((GoPointerType)type).getType();
+          if (pointer instanceof GoPointerType) {
+            return processPointer((GoPointerType)pointer, processor, state.put(POINTER, true));
+          }
+          else if (pointer != null && state.get(RECEIVER) != null && !processGoType(pointer, processor, state)) return false;
+        }
+        return processTypeRef(type, processor, state);
       }
-      else if (pointer != null && state.get(RECEIVER) != null && !processGoType(pointer, processor, state)) return false;
-    }
-    return processTypeRef(type, processor, state);
+    });
+    return result != null && result.booleanValue();
   }
 
   private boolean processPointer(@NotNull GoPointerType type, @NotNull GoScopeProcessor processor, @NotNull ResolveState state) {
@@ -163,7 +170,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   }
 
   private boolean processTypeRef(@Nullable GoType type, @NotNull GoScopeProcessor processor, @NotNull ResolveState state) {
-    return type == null || processInTypeRef(getTypeReference(type), type, processor, state);
+    return type == null || processInTypeRef(getTypeReference(type), processor, state);
   }
 
   private boolean processExistingType(@NotNull GoType type,
@@ -195,12 +202,12 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
           if (!processNamedElements(processor, state, ContainerUtil.createMaybeSingletonList(anon), localResolve)) return false;
         }
       }
-      if (!processCollectedRefs(type, interfaceRefs, processor, state.put(POINTER, null))) return false;
-      if (!processCollectedRefs(type, structRefs, processor, state)) return false;
+      if (!processCollectedRefs(interfaceRefs, processor, state.put(POINTER, null))) return false;
+      if (!processCollectedRefs(structRefs, processor, state)) return false;
     }
     else if (state.get(POINTER) == null && type instanceof GoInterfaceType) {
       if (!processNamedElements(processor, state, ((GoInterfaceType)type).getMethods(), localResolve, true)) return false;
-      if (!processCollectedRefs(type, ((GoInterfaceType)type).getBaseTypesReferences(), processor, state)) return false;
+      if (!processCollectedRefs(((GoInterfaceType)type).getBaseTypesReferences(), processor, state)) return false;
     }
     else if (type instanceof GoFunctionType) {
       GoSignature signature = ((GoFunctionType)type).getSignature();
@@ -218,39 +225,28 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     return Comparing.equal(o1.getImportPath(), o2.getImportPath()) && Comparing.equal(o1.getPackageName(), o2.getPackageName());
   }
 
-  private boolean processCollectedRefs(@NotNull GoType type,
-                                       @NotNull List<GoTypeReferenceExpression> refs,
+  private boolean processCollectedRefs(@NotNull List<GoTypeReferenceExpression> refs,
                                        @NotNull GoScopeProcessor processor,
                                        @NotNull ResolveState state) {
     for (GoTypeReferenceExpression ref : refs) {
-      if (!processInTypeRef(ref, type, processor, state)) return false;
+      if (!processInTypeRef(ref, processor, state)) return false;
     }
     return true;
   }
 
-  private boolean processInTypeRef(@Nullable GoTypeReferenceExpression refExpr,
-                                   @NotNull GoType recursiveStopper,
-                                   @NotNull final GoScopeProcessor processor,
-                                   @NotNull final ResolveState state) {
+  private boolean processInTypeRef(@Nullable GoTypeReferenceExpression refExpr, @NotNull final GoScopeProcessor processor, @NotNull final ResolveState state) {
     PsiReference reference = refExpr != null ? refExpr.getReference() : null;
     PsiElement resolve = reference != null ? reference.resolve() : null;
     if (resolve instanceof GoTypeOwner) {
       final GoType type = ((GoTypeOwner)resolve).getGoType(state);
       if (type == null) return true;
-      Boolean result = RecursionManager.doPreventingRecursion(recursiveStopper, true, new Computable<Boolean>() {
-        @NotNull
-        @Override
-        public Boolean compute() {
-          if (!processGoType(type, processor, state)) return false;
-          if (type instanceof GoSpecType) {
-            GoType inner = ((GoSpecType)type).getType();
-            if (inner instanceof GoPointerType && state.get(POINTER) != null) return true;
-            if (!processGoType(inner, processor, state.put(DONT_PROCESS_METHODS, true))) return false;
-          }
-          return true;
-        }
-      });
-      if (result != null && !result) return false;
+      if (!processGoType(type, processor, state)) return false;
+      if (type instanceof GoSpecType) {
+        GoType inner = ((GoSpecType)type).getType();
+        if (inner instanceof GoPointerType && state.get(POINTER) != null) return true;
+        if (!processGoType(inner, processor, state.put(DONT_PROCESS_METHODS, true))) return false;
+      }
+      return true;
     }
     return true;
   }
