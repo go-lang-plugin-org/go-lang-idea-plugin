@@ -49,6 +49,7 @@ import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Function;
+import com.intellij.util.NotNullFunction;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -59,6 +60,13 @@ import java.util.List;
 
 public class GoPsiImplUtil {
   public static final Key<SmartPsiElementPointer<GoReferenceExpressionBase>> CONTEXT = Key.create("CONTEXT");
+  public static final NotNullFunction<PsiElement, String> GET_TEXT_FUNCTION = new NotNullFunction<PsiElement, String>() {
+    @NotNull
+    @Override
+    public String fun(@NotNull PsiElement element) {
+      return element.getText();
+    }
+  };
 
   public static boolean builtin(@Nullable PsiElement resolve) {
     if (resolve == null) return false;
@@ -778,6 +786,11 @@ public class GoPsiImplUtil {
       if (!processNamedElements(processor, ResolveState.initial(), declaration.getParamDefinitionList(), true)) return false;
     }
     return true;
+  }
+
+  @NotNull
+  public static String joinPsiElementText(List<? extends PsiElement> items) {
+    return StringUtil.join(items, GET_TEXT_FUNCTION, ", ");
   }
 
   @NotNull
