@@ -46,7 +46,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       String signature = getSignature(element);
       signature = StringUtil.isNotEmpty(signature) ? "<b>" + signature + "</b>\n" : signature;
       String commentText = getCommentText(getCommentsForElement(alone ? topLevel : element));
-      return StringUtil.isNotEmpty(commentText) ? signature + commentText : signature;
+      return StringUtil.nullize(signature + commentText);
     }
     else if (element instanceof PsiDirectory) {
       return getPackageComment(findDocFileForDirectory(((PsiDirectory)element)));
