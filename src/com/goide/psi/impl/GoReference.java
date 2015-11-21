@@ -45,7 +45,6 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   public static final Key<List<? extends PsiElement>> IMPORT_USERS = Key.create("IMPORT_USERS");
   public static final Key<String> ACTUAL_NAME = Key.create("ACTUAL_NAME");
   public static final Key<Object> POINTER = Key.create("POINTER");
-  public static final Key<Object> RECEIVER = Key.create("RECEIVER");
   public static final Key<Object> DONT_PROCESS_METHODS = Key.create("DONT_PROCESS_METHODS");
 
   private static final ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase> MY_RESOLVER =
@@ -142,13 +141,11 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     return true;
   }
 
-  private boolean processGoType(@NotNull final GoType type, @NotNull final GoScopeProcessor processor, final @NotNull ResolveState resolveState) {
+  private boolean processGoType(@NotNull final GoType type, @NotNull final GoScopeProcessor processor, final @NotNull ResolveState state) {
     Boolean result = RecursionManager.doPreventingRecursion(type, true, new Computable<Boolean>() {
       @Override
       public Boolean compute() {
-        ResolveState state = resolveState;
         if (type instanceof GoParType) return processGoType(((GoParType)type).getType(), processor, state);
-        if (type instanceof GoReceiverType) state = state.put(RECEIVER, true);
         if (!processExistingType(type, processor, state)) return false;
         if (type instanceof GoPointerType) {
           if (!processPointer((GoPointerType)type, processor, state.put(POINTER, true))) return false;
@@ -156,7 +153,6 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
           if (pointer instanceof GoPointerType) {
             return processPointer((GoPointerType)pointer, processor, state.put(POINTER, true));
           }
-          else if (pointer != null && state.get(RECEIVER) != null && !processGoType(pointer, processor, state)) return false;
         }
         return processTypeRef(type, processor, state);
       }
