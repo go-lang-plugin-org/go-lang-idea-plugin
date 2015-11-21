@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <problems>
-  
+  <problem>
+    <file>criurpc.pb.go</file>
+    <line>28</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/opencontainers/runc/libcontainer/criurpc/criurpc.pb.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused import inspection</problem_class>
+    <description>Redundant alias</description>
+  </problem>
 </problems>
 

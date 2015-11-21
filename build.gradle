@@ -99,8 +99,8 @@ test {
 }
 
 task preparePerformanceTestData << {
-  downloadAndUnzip('https://storage.googleapis.com/golang/go1.4.2.src.tar.gz', 'go', 'go')
-  downloadAndUnzip('https://github.com/docker/docker/archive/v1.5.0.tar.gz', 'docker-1.5.0', 'docker')
+  downloadAndUnzip('https://storage.googleapis.com/golang/go1.5.1.src.tar.gz', 'go', 'go')
+  downloadAndUnzip('https://github.com/docker/docker/archive/v1.9.1.tar.gz', 'docker-1.9.1', 'docker')
 }
 
 task performanceTest(type: Test, group: 'Verification', dependsOn: [classes, testClasses, preparePerformanceTestData]) {
