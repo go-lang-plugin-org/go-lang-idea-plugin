@@ -226,6 +226,9 @@
     <localInspection language="go" displayName="Used as value in condition"
                      groupName="Control flow issues" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoUsedAsValueInCondition"/>
+    <localInspection language="go" displayName="Defer in loop"
+                     groupName="Control flow issues" enabledByDefault="true" level="WEAK WARNING"
+                     implementationClass="com.goide.inspections.GoDeferInLoop"/>
     <!-- /control flow issues -->
 
     <!-- general -->
