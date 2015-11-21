@@ -264,7 +264,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
       if (breakpointPosition == null) return;
       VirtualFile file = breakpointPosition.getFile();
       int line = breakpointPosition.getLine();
-      send(new DlvRequest.CreateBreakpoint(file.getCanonicalPath(), line + 1))
+      send(new DlvRequest.CreateBreakpoint(file.getPath(), line + 1))
         .done(new Consumer<Breakpoint>() {
           @Override
           public void consume(@NotNull Breakpoint b) {
