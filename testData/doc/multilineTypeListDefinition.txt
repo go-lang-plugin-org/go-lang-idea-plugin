@@ -1,4 +1,4 @@
-<b>func MultiType(demo interface{}, err error) ([]interface{}, error)</b>
+<b>func MultiType(demo interface{}, err <a href="psi_element://builtin#error">error</a>) ([]interface{}, <a href="psi_element://builtin#error">error</a>)</b>
 <p>MultiType is a function like all other functions
 </p>
 
