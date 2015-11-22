@@ -26,7 +26,6 @@ import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFileSystemItem;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceHelper;
@@ -40,7 +39,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 public class GoImportReferenceHelper extends FileReferenceHelper {
   @NotNull
@@ -84,13 +82,16 @@ public class GoImportReferenceHelper extends FileReferenceHelper {
       return Collections.emptyList();
     }
     Collection<PsiFileSystemItem> result = ContainerUtil.newArrayList();
-    ContainerUtil.addAllNotNull(result, ContainerUtil.map(getPathsToLookup(psiFile), new Function<VirtualFile, PsiFileSystemItem>() {
-      @Nullable
-      @Override
-      public PsiFileSystemItem fun(VirtualFile file) {
-        return getPsiFileSystemItem(project, file);
-      }
-    }));
+
+    Module module = ModuleUtilCore.findModuleForFile(file, project);
+    ContainerUtil.addAllNotNull(result, ContainerUtil.map(GoSdkUtil.getSourcesPathsToLookup(project, module),
+                                                          new Function<VirtualFile, PsiFileSystemItem>() {
+                                                            @Nullable
+                                                            @Override
+                                                            public PsiFileSystemItem fun(VirtualFile file) {
+                                                              return getPsiFileSystemItem(project, file);
+                                                            }
+                                                          }));
     return result;
   }
 
@@ -98,14 +99,5 @@ public class GoImportReferenceHelper extends FileReferenceHelper {
   public boolean isMine(Project project, @NotNull VirtualFile file) {
     PsiFileSystemItem psiFile = getPsiFileSystemItem(project, file);
     return psiFile != null && psiFile instanceof GoFile;
-  }
-
-  @NotNull
-  private static Collection<? extends VirtualFile> getPathsToLookup(@NotNull PsiElement element) {
-    Module module = ModuleUtilCore.findModuleForPsiElement(element);
-    Set<VirtualFile> result = ContainerUtil.newLinkedHashSet();
-    ContainerUtil.addIfNotNull(result, GoSdkUtil.getSdkSrcDir(element));
-    result.addAll(GoSdkUtil.getGoPathSources(element.getProject(), module));
-    return result;
   }
 }

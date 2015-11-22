@@ -174,11 +174,7 @@ public class GoConsoleFilter implements Filter {
 
   @Nullable
   private VirtualFile findInGoPath(@NotNull String fileName) {
-    for (VirtualFile goPathSrc : GoSdkUtil.getGoPathSources(myProject, myModule)) {
-      VirtualFile virtualFile = goPathSrc.findFileByRelativePath(fileName);
-      if (virtualFile != null) return virtualFile;
-    }
-    return null;
+    return GoSdkUtil.findFileByRelativeToLibrariesPath(fileName, myProject, myModule);
   }
 
   public static class GoGetHyperlinkInfo implements HyperlinkInfo {
