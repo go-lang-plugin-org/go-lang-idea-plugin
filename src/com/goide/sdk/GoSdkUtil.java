@@ -28,7 +28,6 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.UserDataHolder;
@@ -53,6 +52,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,15 +62,6 @@ public class GoSdkUtil {
   private static final Pattern GO_VERSION_PATTERN = Pattern.compile("theVersion\\s*=\\s*`go([\\d.]+\\w+(\\d+)?)`");
   private static final Pattern GAE_VERSION_PATTERN = Pattern.compile("theVersion\\s*=\\s*`go([\\d.]+)( \\(appengine-[\\d.]+\\))?`");
   private static final Pattern GO_DEVEL_VERSION_PATTERN = Pattern.compile("theVersion\\s*=\\s*`(devel.*)`");
-
-
-  // todo: caching
-  @Nullable
-  public static VirtualFile getSdkSrcDir(@NotNull PsiElement context) {
-    Module module = ModuleUtilCore.findModuleForPsiElement(context);
-    VirtualFile sdkSrcDir = getSdkSrcDir(context.getProject(), module);
-    return sdkSrcDir != null ? sdkSrcDir : guessSkdSrcDir(context);
-  }
 
   @Nullable
   private static VirtualFile getSdkSrcDir(@NotNull Project project, @Nullable Module module) {
@@ -124,6 +115,17 @@ public class GoSdkUtil {
     }
     File fromPath = PathEnvironmentVariableUtil.findInPath(executableName);
     return fromPath != null ? VfsUtil.findFileByIoFile(fromPath, true) : null;
+  }
+
+  /**
+   * @return concatination of {@link this#getSdkSrcDir(Project, Module)} and {@link this#getGoPathSources(Project, Module)}
+   */
+  @NotNull
+  public static Collection<VirtualFile> getSourcesPathsToLookup(@NotNull Project project, @Nullable Module module) {
+    Set<VirtualFile> result = newLinkedHashSet();
+    ContainerUtil.addIfNotNull(result, getSdkSrcDir(project, module));
+    result.addAll(getGoPathSources(project, module));
+    return result;
   }
 
   @NotNull
@@ -192,14 +194,8 @@ public class GoSdkUtil {
   }
 
   @Nullable
-  private static VirtualFile guessSkdSrcDir(@NotNull PsiElement context) {
-    VirtualFile virtualFile = context.getContainingFile().getOriginalFile().getVirtualFile();
-    return ProjectRootManager.getInstance(context.getProject()).getFileIndex().getClassRootForFile(virtualFile);
-  }
-
-  @Nullable
   public static VirtualFile findFileByRelativeToLibrariesPath(@NotNull String path, @NotNull Project project, @Nullable Module module) {
-    for (VirtualFile root : getGoPathSources(project, module)) {
+    for (VirtualFile root : getSourcesPathsToLookup(project, module)) {
       VirtualFile file = root.findFileByRelativePath(path);
       if (file != null) {
         return file;
@@ -229,12 +225,8 @@ public class GoSdkUtil {
   @Nullable
   public static String getPathRelativeToSdkAndLibraries(@NotNull VirtualFile file, @Nullable Project project, @Nullable Module module) {
     if (project != null) {
-      Collection<VirtualFile> roots = newLinkedHashSet();
-      ContainerUtil.addIfNotNull(roots, getSdkSrcDir(project, module));
-      roots.addAll(getGoPathSources(project, module));
-
       String result = null;
-      for (VirtualFile root : roots) {
+      for (VirtualFile root : getSourcesPathsToLookup(project, module)) {
         String relativePath = VfsUtilCore.getRelativePath(file, root, '/');
         if (StringUtil.isNotEmpty(relativePath) && (result == null || result.length() > relativePath.length())) {
           result = relativePath;
