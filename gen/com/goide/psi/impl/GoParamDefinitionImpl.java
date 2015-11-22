@@ -22,8 +22,12 @@ public class GoParamDefinitionImpl extends GoNamedElementImpl<GoParamDefinitionS
     super(stub, nodeType);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitParamDefinition(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitParamDefinition(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

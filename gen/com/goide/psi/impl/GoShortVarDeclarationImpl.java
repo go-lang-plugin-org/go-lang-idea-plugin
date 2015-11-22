@@ -21,8 +21,12 @@ public class GoShortVarDeclarationImpl extends GoVarSpecImpl implements GoShortV
     super(stub, nodeType);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitShortVarDeclaration(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitShortVarDeclaration(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

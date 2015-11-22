@@ -16,8 +16,12 @@ public class GoValueImpl extends GoCompositeElementImpl implements GoValue {
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitValue(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitValue(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

@@ -16,8 +16,12 @@ public class GoCallExprImpl extends GoExpressionImpl implements GoCallExpr {
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitCallExpr(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitCallExpr(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

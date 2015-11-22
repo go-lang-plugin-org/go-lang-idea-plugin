@@ -17,8 +17,12 @@ public class GoTypeReferenceExpressionImpl extends GoCompositeElementImpl implem
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitTypeReferenceExpression(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitTypeReferenceExpression(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

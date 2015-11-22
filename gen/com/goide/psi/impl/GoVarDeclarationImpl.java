@@ -16,8 +16,12 @@ public class GoVarDeclarationImpl extends GoCompositeElementImpl implements GoVa
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitVarDeclaration(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitVarDeclaration(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

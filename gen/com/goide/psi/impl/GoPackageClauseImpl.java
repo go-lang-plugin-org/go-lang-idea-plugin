@@ -16,8 +16,12 @@ public class GoPackageClauseImpl extends GoCompositeElementImpl implements GoPac
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitPackageClause(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitPackageClause(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

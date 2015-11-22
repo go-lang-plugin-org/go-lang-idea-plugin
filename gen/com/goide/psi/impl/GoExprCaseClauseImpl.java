@@ -16,8 +16,12 @@ public class GoExprCaseClauseImpl extends GoCompositeElementImpl implements GoEx
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitExprCaseClause(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitExprCaseClause(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

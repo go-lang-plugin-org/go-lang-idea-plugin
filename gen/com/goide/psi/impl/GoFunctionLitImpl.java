@@ -18,8 +18,12 @@ public class GoFunctionLitImpl extends GoExpressionImpl implements GoFunctionLit
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitFunctionLit(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitFunctionLit(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

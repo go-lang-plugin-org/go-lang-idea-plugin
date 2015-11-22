@@ -16,8 +16,12 @@ public class GoAddExprImpl extends GoBinaryExprImpl implements GoAddExpr {
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitAddExpr(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitAddExpr(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

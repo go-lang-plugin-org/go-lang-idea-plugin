@@ -16,8 +16,12 @@ public class GoIndexOrSliceExprImpl extends GoExpressionImpl implements GoIndexO
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitIndexOrSliceExpr(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitIndexOrSliceExpr(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

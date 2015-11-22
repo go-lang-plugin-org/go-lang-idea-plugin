@@ -18,8 +18,12 @@ public class GoBlockImpl extends GoCompositeElementImpl implements GoBlock {
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitBlock(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitBlock(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

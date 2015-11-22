@@ -16,8 +16,12 @@ public class GoTypeSwitchGuardImpl extends GoCompositeElementImpl implements GoT
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitTypeSwitchGuard(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitTypeSwitchGuard(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

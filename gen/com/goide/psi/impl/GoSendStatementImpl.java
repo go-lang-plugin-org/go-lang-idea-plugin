@@ -16,8 +16,12 @@ public class GoSendStatementImpl extends GoStatementImpl implements GoSendStatem
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitSendStatement(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitSendStatement(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 
