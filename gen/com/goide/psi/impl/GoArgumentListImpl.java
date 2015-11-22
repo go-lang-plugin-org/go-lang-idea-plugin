@@ -16,8 +16,12 @@ public class GoArgumentListImpl extends GoCompositeElementImpl implements GoArgu
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitArgumentList(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitArgumentList(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

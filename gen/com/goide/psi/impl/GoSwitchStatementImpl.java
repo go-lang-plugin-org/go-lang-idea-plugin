@@ -16,8 +16,12 @@ public class GoSwitchStatementImpl extends GoStatementImpl implements GoSwitchSt
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitSwitchStatement(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitSwitchStatement(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

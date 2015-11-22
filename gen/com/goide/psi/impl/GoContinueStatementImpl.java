@@ -16,8 +16,12 @@ public class GoContinueStatementImpl extends GoStatementImpl implements GoContin
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitContinueStatement(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitContinueStatement(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

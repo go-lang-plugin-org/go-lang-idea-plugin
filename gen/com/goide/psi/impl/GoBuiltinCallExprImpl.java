@@ -16,8 +16,12 @@ public class GoBuiltinCallExprImpl extends GoExpressionImpl implements GoBuiltin
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitBuiltinCallExpr(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitBuiltinCallExpr(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

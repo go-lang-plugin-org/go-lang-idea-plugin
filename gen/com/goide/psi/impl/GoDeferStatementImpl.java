@@ -16,8 +16,12 @@ public class GoDeferStatementImpl extends GoStatementImpl implements GoDeferStat
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitDeferStatement(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitDeferStatement(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

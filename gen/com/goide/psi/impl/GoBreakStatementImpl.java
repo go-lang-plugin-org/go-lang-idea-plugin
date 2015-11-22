@@ -16,8 +16,12 @@ public class GoBreakStatementImpl extends GoStatementImpl implements GoBreakStat
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitBreakStatement(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitBreakStatement(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

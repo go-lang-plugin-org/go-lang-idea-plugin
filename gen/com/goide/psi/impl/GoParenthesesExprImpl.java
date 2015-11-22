@@ -16,8 +16,12 @@ public class GoParenthesesExprImpl extends GoExpressionImpl implements GoParenth
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitParenthesesExpr(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitParenthesesExpr(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

@@ -16,8 +16,12 @@ public class GoConversionExprImpl extends GoBinaryExprImpl implements GoConversi
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitConversionExpr(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitConversionExpr(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 
