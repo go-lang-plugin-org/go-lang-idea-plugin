@@ -99,9 +99,7 @@ public class GoHighlightExitPointsHandlerFactory extends HighlightUsagesHandlerF
         LeafPsiElement leaf = (LeafPsiElement)element;
         return leaf.getElementType() == GoTypes.RETURN || leaf.getElementType() == GoTypes.FUNC || isPanicCall(leaf);
       }
-      else {
-        return false;
-      }
+      return false;
     }
 
     private static boolean isPanicCall(@NotNull PsiElement e) {
