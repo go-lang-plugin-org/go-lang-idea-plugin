@@ -26,6 +26,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
+import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,6 +35,7 @@ import java.util.List;
 import java.util.Set;
 
 public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabActionSupport<GoArgumentList, Object, GoExpression> {
+
   @NotNull
   @Override
   public GoExpression[] getActualParameters(@NotNull GoArgumentList o) {
@@ -152,7 +154,7 @@ public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabAction
     GoSignature signature = p instanceof GoSignatureOwner ? ((GoSignatureOwner)p).getSignature() : null;
     if (signature == null) return null;
     GoParameters parameters = signature.getParameters();
-    List<String> parametersPresentations = getParameterPresentations(parameters);
+    List<String> parametersPresentations = getParameterPresentations(parameters, GoPsiImplUtil.GET_TEXT_FUNCTION);
     
     StringBuilder builder = new StringBuilder();
     int start = 0;
@@ -188,7 +190,8 @@ public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabAction
    * Creates a list of parameter presentations. For clarity we expand parameters declared as `a, b, c int` into `a int, b int, c int`.
    */
   @NotNull
-  public static List<String> getParameterPresentations(@NotNull GoParameters parameters) {
+  public static List<String> getParameterPresentations(@NotNull GoParameters parameters, 
+                                                       @NotNull Function<PsiElement, String> typePresentationFunction) {
     List<GoParameterDeclaration> paramDeclarations = parameters.getParameterDeclarationList();
     List<String> paramPresentations = ContainerUtil.newArrayListWithCapacity(2 * paramDeclarations.size());
     for (GoParameterDeclaration paramDeclaration : paramDeclarations) {
@@ -196,11 +199,11 @@ public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabAction
       List<GoParamDefinition> paramDefinitionList = paramDeclaration.getParamDefinitionList();
       for (GoParamDefinition paramDefinition : paramDefinitionList) {
         String separator = isVariadic ? " ..." : " ";
-        paramPresentations.add(paramDefinition.getText() + separator + paramDeclaration.getType().getText());
+        paramPresentations.add(paramDefinition.getText() + separator + typePresentationFunction.fun(paramDeclaration.getType()));
       }
       if (paramDefinitionList.isEmpty()) {
         String separator = isVariadic ? "..." : "";
-        paramPresentations.add(separator + paramDeclaration.getType().getText());
+        paramPresentations.add(separator + typePresentationFunction.fun(paramDeclaration.getType()));
       }
     }
     return paramPresentations;

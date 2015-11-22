@@ -1,4 +1,4 @@
-<b>func Name() string</b>
+<b>func Name() <a href="psi_element://builtin#string">string</a></b>
 <p>Name returns the name of the file as presented to Open.
 </p>
 
