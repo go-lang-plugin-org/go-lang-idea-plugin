@@ -18,6 +18,7 @@ package com.goide.inspections;
 
 import com.goide.psi.GoContinueStatement;
 import com.goide.psi.GoForStatement;
+import com.goide.psi.GoFunctionLit;
 import com.goide.psi.GoVisitor;
 import com.goide.psi.impl.GoElementFactory;
 import com.intellij.codeInspection.*;
@@ -39,9 +40,9 @@ public class GoContinueNotInLoopInspection extends GoInspectionBase {
     return new GoVisitor() {
       @Override
       public void visitContinueStatement(@NotNull GoContinueStatement o) {
-        if (PsiTreeUtil.getParentOfType(o, GoForStatement.class) == null) {
-          holder.registerProblem(o, "Continue statement not inside a for loop.", ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-                                 new ReplaceWithReturnQuickFix());
+        if (!(PsiTreeUtil.getParentOfType(o, GoForStatement.class, GoFunctionLit.class) instanceof GoForStatement)) {
+          holder.registerProblem(o, "Continue statement not inside a for loop.",
+                                 ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new ReplaceWithReturnQuickFix());
         }
       }
     };
