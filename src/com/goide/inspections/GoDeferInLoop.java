@@ -16,11 +16,13 @@
 
 package com.goide.inspections;
 
-import com.goide.psi.*;
+import com.goide.psi.GoDeferStatement;
+import com.goide.psi.GoForStatement;
+import com.goide.psi.GoFunctionLit;
+import com.goide.psi.GoVisitor;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,11 +33,9 @@ public class GoDeferInLoop extends GoInspectionBase {
     return new GoVisitor() {
       @Override
       public void visitDeferStatement(@NotNull GoDeferStatement o) {
-        PsiElement parent = PsiTreeUtil
-          .getParentOfType(o, GoForStatement.class, GoFunctionLit.class);
-
-        if (parent instanceof GoForStatement) {
-          holder.registerProblem(o, "Possible resource leak, \"defer\" is called in a for loop.", ProblemHighlightType.WEAK_WARNING);
+        if (PsiTreeUtil.getParentOfType(o, GoForStatement.class, GoFunctionLit.class) instanceof GoForStatement) {
+          holder.registerProblem(o.getDefer(), "Possible resource leak, \"defer\" is called in a for loop.", 
+                                 ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
         }
       }
     };
