@@ -78,7 +78,7 @@ public class GocheckFramework extends GoTestFramework {
   }
 
   @Override
-  public boolean isAvailableOnFile(@NotNull PsiFile file) {
+  public boolean isAvailableOnFile(@Nullable PsiFile file) {
     if (!GoTestFinder.isTestFile(file)) {
       return false;
     }
