@@ -40,7 +40,7 @@ public abstract class GoTestFramework {
 
   public abstract boolean isAvailable(@Nullable Module module);
   
-  public abstract boolean isAvailableOnFile(@NotNull PsiFile file);
+  public abstract boolean isAvailableOnFile(@Nullable PsiFile file);
 
   @NotNull
   protected abstract GoTestRunningState newRunningState(@NotNull ExecutionEnvironment env,

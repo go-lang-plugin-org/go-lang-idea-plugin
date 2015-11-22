@@ -47,7 +47,7 @@ public class GotestFramework extends GoTestFramework {
   }
 
   @Override
-  public boolean isAvailableOnFile(@NotNull PsiFile file) {
+  public boolean isAvailableOnFile(@Nullable PsiFile file) {
     return GoTestFinder.isTestFile(file);
   }
 
