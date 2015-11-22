@@ -84,7 +84,7 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
                                                        myConfiguration.getDirectoryPath(),
                                                        File.separatorChar);
         if (relativePath != null) {
-          executor.withParameters(relativePath + "/...");
+          executor.withParameters("./" + relativePath + "/...");
         }
         else {
           executor.withParameters("./...");
