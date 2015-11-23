@@ -16,8 +16,12 @@ public class GoCommCaseImpl extends GoCompositeElementImpl implements GoCommCase
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitCommCase(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitCommCase(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

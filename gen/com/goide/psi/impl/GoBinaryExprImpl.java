@@ -16,8 +16,12 @@ public class GoBinaryExprImpl extends GoExpressionImpl implements GoBinaryExpr {
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitBinaryExpr(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitBinaryExpr(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

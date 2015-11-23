@@ -16,8 +16,12 @@ public class GoReferenceExpressionImpl extends GoExpressionImpl implements GoRef
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitReferenceExpression(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitReferenceExpression(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

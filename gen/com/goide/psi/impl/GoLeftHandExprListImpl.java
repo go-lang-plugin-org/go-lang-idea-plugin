@@ -16,8 +16,12 @@ public class GoLeftHandExprListImpl extends GoCompositeElementImpl implements Go
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitLeftHandExprList(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitLeftHandExprList(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

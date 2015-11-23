@@ -16,8 +16,12 @@ public class GoTypeCaseClauseImpl extends GoCompositeElementImpl implements GoTy
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitTypeCaseClause(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitTypeCaseClause(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

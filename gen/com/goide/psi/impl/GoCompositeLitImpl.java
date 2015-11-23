@@ -16,8 +16,12 @@ public class GoCompositeLitImpl extends GoExpressionImpl implements GoCompositeL
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitCompositeLit(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitCompositeLit(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

@@ -16,8 +16,12 @@ public class GoTypeGuardImpl extends GoCompositeElementImpl implements GoTypeGua
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitTypeGuard(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitTypeGuard(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

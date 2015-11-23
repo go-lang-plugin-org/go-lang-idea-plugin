@@ -16,8 +16,12 @@ public class GoElseStatementImpl extends GoStatementImpl implements GoElseStatem
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitElseStatement(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitElseStatement(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

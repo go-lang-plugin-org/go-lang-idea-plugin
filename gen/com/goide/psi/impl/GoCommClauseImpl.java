@@ -16,8 +16,12 @@ public class GoCommClauseImpl extends GoCompositeElementImpl implements GoCommCl
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitCommClause(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitCommClause(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

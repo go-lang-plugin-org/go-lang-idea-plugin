@@ -16,8 +16,12 @@ public class GoTypeAssertionExprImpl extends GoExpressionImpl implements GoTypeA
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitTypeAssertionExpr(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitTypeAssertionExpr(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

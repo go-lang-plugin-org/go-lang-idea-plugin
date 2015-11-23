@@ -22,8 +22,12 @@ public class GoConstSpecImpl extends GoStubbedElementImpl<GoConstSpecStub> imple
     super(stub, nodeType);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitConstSpec(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitConstSpec(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

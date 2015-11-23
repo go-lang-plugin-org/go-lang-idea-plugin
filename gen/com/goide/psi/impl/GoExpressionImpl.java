@@ -17,8 +17,12 @@ public class GoExpressionImpl extends GoCompositeElementImpl implements GoExpres
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitExpression(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitExpression(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

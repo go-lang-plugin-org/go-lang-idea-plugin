@@ -16,8 +16,12 @@ public class GoAssignOpImpl extends GoCompositeElementImpl implements GoAssignOp
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitAssignOp(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitAssignOp(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

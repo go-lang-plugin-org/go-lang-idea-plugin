@@ -16,8 +16,12 @@ public class GoSimpleStatementImpl extends GoStatementImpl implements GoSimpleSt
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitSimpleStatement(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitSimpleStatement(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

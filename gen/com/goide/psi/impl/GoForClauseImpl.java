@@ -18,8 +18,12 @@ public class GoForClauseImpl extends GoCompositeElementImpl implements GoForClau
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitForClause(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitForClause(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

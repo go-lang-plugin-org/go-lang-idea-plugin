@@ -16,8 +16,12 @@ public class GoFieldDeclarationImpl extends GoCompositeElementImpl implements Go
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitFieldDeclaration(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitFieldDeclaration(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

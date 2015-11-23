@@ -16,8 +16,12 @@ public class GoImportListImpl extends GoCompositeElementImpl implements GoImport
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitImportList(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitImportList(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

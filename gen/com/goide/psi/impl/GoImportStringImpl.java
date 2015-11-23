@@ -19,8 +19,12 @@ public class GoImportStringImpl extends GoCompositeElementImpl implements GoImpo
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitImportString(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitImportString(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

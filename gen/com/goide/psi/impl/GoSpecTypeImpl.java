@@ -21,8 +21,12 @@ public class GoSpecTypeImpl extends GoTypeImpl implements GoSpecType {
     super(stub, nodeType);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitSpecType(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitSpecType(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

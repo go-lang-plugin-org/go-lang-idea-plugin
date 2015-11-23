@@ -16,8 +16,12 @@ public class GoBuiltinArgsImpl extends GoCompositeElementImpl implements GoBuilt
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitBuiltinArgs(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitBuiltinArgs(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

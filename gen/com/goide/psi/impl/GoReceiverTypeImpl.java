@@ -21,8 +21,12 @@ public class GoReceiverTypeImpl extends GoTypeImpl implements GoReceiverType {
     super(stub, nodeType);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitReceiverType(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitReceiverType(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 

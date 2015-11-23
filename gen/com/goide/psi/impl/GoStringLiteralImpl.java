@@ -17,8 +17,12 @@ public class GoStringLiteralImpl extends GoExpressionImpl implements GoStringLit
     super(node);
   }
 
+  public void accept(@NotNull GoVisitor visitor) {
+    visitor.visitStringLiteral(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof GoVisitor) ((GoVisitor)visitor).visitStringLiteral(this);
+    if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
   }
 
