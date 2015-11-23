@@ -82,6 +82,13 @@ public class GoFoldingBuilder extends CustomFoldingBuilder implements DumbAware 
       }
     }
 
+    for (GoConstDeclaration constDeclaration : PsiTreeUtil.findChildrenOfType(file, GoConstDeclaration.class)) {
+      TextRange range = processList(constDeclaration.getLparen(), constDeclaration.getRparen(), constDeclaration.getConstSpecList().size());
+      if (range != null) {
+        result.add(new FoldingDescriptor(constDeclaration, range));
+      }
+    }
+
     for (GoTypeDeclaration typeDeclaration : PsiTreeUtil.findChildrenOfType(file, GoTypeDeclaration.class)) {
       TextRange range = processList(typeDeclaration.getLparen(), typeDeclaration.getRparen(), typeDeclaration.getTypeSpecList().size());
       if (range != null) {
@@ -172,7 +179,8 @@ public class GoFoldingBuilder extends CustomFoldingBuilder implements DumbAware 
     }
 
     if (end != null) {
-      foldElements.add(new FoldingDescriptor(comment, new TextRange(comment.getTextRange().getStartOffset(), end.getTextRange().getEndOffset())));
+      foldElements
+        .add(new FoldingDescriptor(comment, new TextRange(comment.getTextRange().getStartOffset(), end.getTextRange().getEndOffset())));
     }
   }
 
@@ -182,8 +190,13 @@ public class GoFoldingBuilder extends CustomFoldingBuilder implements DumbAware 
     PsiElement psi = node.getPsi();
     IElementType type = node.getElementType();
     if (psi instanceof GoBlock || psi instanceof GoStructType ||
-        psi instanceof GoInterfaceType || psi instanceof GoLiteralValue) return "{...}";
-    if (psi instanceof GoVarDeclaration || psi instanceof GoTypeDeclaration) return "(...)";
+        psi instanceof GoInterfaceType || psi instanceof GoLiteralValue) {
+      return "{...}";
+    }
+    if (psi instanceof GoVarDeclaration || psi instanceof GoConstDeclaration
+        || psi instanceof GoTypeDeclaration) {
+      return "(...)";
+    }
     if (psi instanceof GoImportDeclaration) return "...";
     if (GoParserDefinition.LINE_COMMENT == type) return "/.../";
     if (GoParserDefinition.MULTILINE_COMMENT == type) return "/*...*/";
