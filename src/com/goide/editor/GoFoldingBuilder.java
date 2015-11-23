@@ -179,8 +179,8 @@ public class GoFoldingBuilder extends CustomFoldingBuilder implements DumbAware 
     }
 
     if (end != null) {
-      foldElements
-        .add(new FoldingDescriptor(comment, new TextRange(comment.getTextRange().getStartOffset(), end.getTextRange().getEndOffset())));
+      TextRange textRange = TextRange.create(comment.getTextRange().getStartOffset(), end.getTextRange().getEndOffset());
+      foldElements.add(new FoldingDescriptor(comment, textRange));
     }
   }
 
