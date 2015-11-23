@@ -63,6 +63,9 @@ public class GoHighlightExitPointsHandlerFactory extends HighlightUsagesHandlerF
 
     @Override
     public void computeUsages(List<PsiElement> targets) {
+      if (myTarget instanceof LeafPsiElement && ((LeafPsiElement)myTarget).getElementType() == GoTypes.FUNC) {
+        addOccurrence(myTarget);
+      }
       new GoRecursiveVisitor() {
         @Override
         public void visitFunctionLit(@NotNull GoFunctionLit literal) {
@@ -85,10 +88,18 @@ public class GoHighlightExitPointsHandlerFactory extends HighlightUsagesHandlerF
     public static MyHandler createForElement(@NotNull Editor editor, PsiFile file, PsiElement element) {
       GoTypeOwner function = PsiTreeUtil.getParentOfType(element, GoFunctionLit.class, GoFunctionOrMethodDeclaration.class);
       if (function == null) return null;
-      if (element instanceof LeafPsiElement && ((LeafPsiElement)element).getElementType() == GoTypes.RETURN || isPanicCall(element)) {
+      if (shouldCreateMyHandler(element)) {
         return new MyHandler(editor, file, element, function);
       }
       return null;
+    }
+
+    private static boolean shouldCreateMyHandler(PsiElement element) {
+      if (element instanceof LeafPsiElement) {
+        LeafPsiElement leaf = (LeafPsiElement)element;
+        return leaf.getElementType() == GoTypes.RETURN || leaf.getElementType() == GoTypes.FUNC || isPanicCall(leaf);
+      }
+      return false;
     }
 
     private static boolean isPanicCall(@NotNull PsiElement e) {
