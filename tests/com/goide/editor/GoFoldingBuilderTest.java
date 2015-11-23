@@ -37,6 +37,7 @@ public class GoFoldingBuilderTest extends GoCodeInsightFixtureTestCase {
   public void testImportListWithNewLineAfterKeyword()             { doTest(); }
   public void testImportListWithOnlyThreeSymbolsToFold()          { doTest(); }
   public void testVarDeclaration()                                { doTest(); }
+  public void testConstDeclaration()                              { doTest(); }
   public void testTypeDeclaration()                               { doTest(); }
   public void testCompositeLiteral()                              { doTest(); }
 }
