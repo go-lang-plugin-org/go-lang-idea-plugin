@@ -22,10 +22,10 @@ import com.intellij.codeInsight.highlighting.HighlightUsagesHandlerBase;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.testFramework.LightProjectDescriptor;
+import com.intellij.util.Function;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -89,16 +89,13 @@ public class GoExitPointsHighlightingTest extends GoCodeInsightFixtureTestCase {
     assertNotNull(handler);
     List<PsiElement> targets = handler.getTargets();
     assertEquals(1, targets.size());
-
     handler.computeUsages(targets);
-    List<TextRange> readUsages = handler.getReadUsages();
-    assertEquals(usages.length, readUsages.size());
-
-    List<String> textUsages = new ArrayList<String>();
-    for (TextRange usage : readUsages) {
-      String usageText = myFixture.getFile().getText().substring(usage.getStartOffset(), usage.getEndOffset());
-      textUsages.add(usageText);
-    }
-    assertSameElements(textUsages, Arrays.asList(usages));
+    List<String> textUsages = ContainerUtil.map(handler.getReadUsages(), new Function<TextRange, String>() {
+      @Override
+      public String fun(TextRange range) {
+        return range.substring(myFixture.getFile().getText());
+      }
+    });
+    assertSameElements(textUsages, usages);
   }
 }
