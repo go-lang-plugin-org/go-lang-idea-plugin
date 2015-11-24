@@ -46,6 +46,7 @@ public class GoDocumentationProviderTest extends GoCodeInsightFixtureTestCase {
   public void testPackageOnImportAlias()          { doTest(); }
   public void testTypeResultDefinition()          { doTest(); }
   public void testMultilineTypeListDefinition()   { doTest(); }
+  public void testSignature()                     { doTest(); }
 
   public void testMultiBlockDoc()                 { doConverterTest(); }
   public void testIndentedBlock()                 { doConverterTest(); }
