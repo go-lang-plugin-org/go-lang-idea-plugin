@@ -68,10 +68,7 @@ idea {
   }
 }
 
-repositories { 
-  maven { url "http://dl.bintray.com/jetbrains/golang" }
-  mavenCentral()
-}
+repositories { maven { url "http://dl.bintray.com/jetbrains/golang" } }
 dependencies {
   compile project(':utils'), project(':google-app-engine'), project(':google-app-engine:google-app-engine-yaml')
   runtime "com.jetbrains:delve:$delveVersion@zip"
@@ -91,7 +88,6 @@ project.afterEvaluate {
   }
 }
 
-apply plugin: "jacoco"
 test {
   useJUnit {
     excludeCategories 'com.goide.categories.Performance'
