@@ -1,0 +1,6 @@
+<b>type MyType1</b>
+<p>my inner comment
+</p>
+
+=====
+https://godoc.org/null#MyType1
