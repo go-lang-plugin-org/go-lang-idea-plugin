@@ -34,7 +34,7 @@ public class GoDeferInLoop extends GoInspectionBase {
       @Override
       public void visitDeferStatement(@NotNull GoDeferStatement o) {
         if (PsiTreeUtil.getParentOfType(o, GoForStatement.class, GoFunctionLit.class) instanceof GoForStatement) {
-          holder.registerProblem(o.getDefer(), "Possible resource leak, \"defer\" is called in a for loop.", 
+          holder.registerProblem(o.getDefer(), "Possible resource leak, 'defer' is called in a for loop.", 
                                  ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
         }
       }
