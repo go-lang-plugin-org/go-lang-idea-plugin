@@ -3,4 +3,6 @@
 </p>
 
 =====
+type MyType
+=====
 https://godoc.org/null#MyType

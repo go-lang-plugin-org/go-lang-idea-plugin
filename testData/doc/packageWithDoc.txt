@@ -6,4 +6,6 @@ are simpler.
 </p>
 
 =====
+No navigation info
+=====
 https://godoc.org/fmt

@@ -48,9 +48,8 @@ public class GoDocumentationProviderTest extends GoCodeInsightFixtureTestCase {
   public void testMultilineTypeListDefinition()   { doTest(); }
   public void testSignature()                     { doTest(); }
   public void testTypeSpec()                      { doTest(); }
-  public void testTypeTopDefinition()                 { doTest(); }
+  public void testTypeTopDefinition()             { doTest(); }
   
-
   public void testMultiBlockDoc()                 { doConverterTest(); }
   public void testIndentedBlock()                 { doConverterTest(); }
   public void testCommentEndsWithIndentedBlock()  { doConverterTest(); }
@@ -83,6 +82,9 @@ public class GoDocumentationProviderTest extends GoCodeInsightFixtureTestCase {
     PsiElement docElement = DocumentationManager.getInstance(getProject()).findTargetElement(editor, file);
     DocumentationProvider documentationProvider = DocumentationManager.getProviderFromElement(originalElement);
     String actualDoc = StringUtil.notNullize(documentationProvider.generateDoc(docElement, originalElement));
+    
+    String quickNavigateInfo = documentationProvider.getQuickNavigateInfo(docElement, originalElement);
+    actualDoc += "\n=====\n" + StringUtil.notNullize(quickNavigateInfo, "No navigation info");
     
     List<String> urls = documentationProvider.getUrlFor(docElement, originalElement);
     actualDoc += "\n=====\n" + (urls != null ? StringUtil.join(urls, "\n") : "No urls");

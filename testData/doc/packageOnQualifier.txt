@@ -11,4 +11,6 @@ assume they are safe for parallel execution.
 </p>
 
 =====
+No navigation info
+=====
 https://godoc.org/io

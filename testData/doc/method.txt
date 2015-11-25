@@ -3,4 +3,6 @@
 </p>
 
 =====
+func Name() <a href="psi_element://builtin#string">string</a>
+=====
 https://godoc.org/os#File.Name
