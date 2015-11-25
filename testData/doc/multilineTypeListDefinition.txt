@@ -3,4 +3,6 @@
 </p>
 
 =====
+func MultiType(demo interface{}, err <a href="psi_element://builtin#error">error</a>) ([]interface{}, <a href="psi_element://builtin#error">error</a>)
+=====
 https://godoc.org/docs#MultiType

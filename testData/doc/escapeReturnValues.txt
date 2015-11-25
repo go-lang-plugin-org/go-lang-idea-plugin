@@ -3,4 +3,6 @@
 </p>
 
 =====
+func Replace(s <a href="psi_element://builtin#string">string</a>, old <a href="psi_element://builtin#string">string</a>, new <a href="psi_element://builtin#string">string</a>, n <a href="psi_element://builtin#int">int</a>) &lt;-chan <a href="psi_element://builtin#string">string</a>
+=====
 https://godoc.org/null#Replace

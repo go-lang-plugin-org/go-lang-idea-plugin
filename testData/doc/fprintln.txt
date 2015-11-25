@@ -5,4 +5,6 @@ It returns the number of bytes written and any write error encountered.
 </p>
 
 =====
+func Fprintln(w io.Writer, a ...interface{}) (n <a href="psi_element://builtin#int">int</a>, err <a href="psi_element://builtin#error">error</a>)
+=====
 https://godoc.org/fmt#Fprintln
