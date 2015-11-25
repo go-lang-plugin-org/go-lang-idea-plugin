@@ -118,7 +118,7 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
     }
 
     if (myCoverageFilePath != null) {
-      executor.withParameters("-coverprofile=" + myCoverageFilePath, "-covermode=count");
+      executor.withParameters("-coverprofile=" + myCoverageFilePath, "-covermode=atomic");
     }
 
     return executor;
