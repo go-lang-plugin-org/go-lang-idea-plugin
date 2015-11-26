@@ -48,7 +48,7 @@ public class GoExitPointsHighlightingTest extends GoCodeInsightFixtureTestCase {
                   "  }" +
                   "  return x\n" +
                   "}";
-    doTest(text, "return -1", "return x");
+    doTest(text, "func", "return -1", "return x");
   }
 
   public void testCaretOnFuncWithReturnAndPanic() {
