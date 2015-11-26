@@ -26,6 +26,7 @@ import com.intellij.codeInsight.documentation.DocumentationManagerProtocol;
 import com.intellij.lang.documentation.AbstractDocumentationProvider;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.TextRange;
@@ -95,7 +96,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
 
   @Override
   public PsiElement getDocumentationElementForLink(PsiManager psiManager, String link, PsiElement context) {
-    if (context != null) {
+    if (context != null && !DumbService.isDumb(psiManager.getProject())) {
       Module module = ModuleUtilCore.findModuleForPsiElement(context);
       int hash = link.indexOf('#');
       String importPath = hash >= 0 ? link.substring(0, hash) : link;
