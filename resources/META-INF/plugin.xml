@@ -121,7 +121,7 @@
     <typeDeclarationProvider implementation="com.goide.editor.GoTypeDeclarationProvider"/>
     <codeInsight.parameterInfo language="go" implementationClass="com.goide.editor.GoParameterInfoHandler"/>
     <lang.smartEnterProcessor language="go" implementationClass="com.goide.editor.smart.GoSmartEnterProcessor"/>
-    <highlightUsagesHandlerFactory implementation="com.goide.highlighting.GoHighlightExitPointsHandlerFactory"/>
+    <highlightUsagesHandlerFactory implementation="com.goide.highlighting.exitpoint.GoHighlightExitPointsHandlerFactory"/>
     <codeInsight.lineMarkerProvider language="go" implementationClass="com.goide.editor.marker.GoMethodSeparatorProvider"/>
     <analyzeStacktraceFilter implementation="com.goide.runconfig.GoConsoleFilter"/>
     <lang.implementationTextSelectioner language="go" implementationClass="com.goide.editor.GoImplementationTextSelectioner"/>
