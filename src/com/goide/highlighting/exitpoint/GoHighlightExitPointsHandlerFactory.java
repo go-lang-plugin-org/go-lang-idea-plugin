@@ -39,13 +39,13 @@ class GoHighlightExitPointsHandlerFactory extends HighlightUsagesHandlerFactoryB
     if (target instanceof LeafPsiElement) {
       IElementType elementType = ((LeafPsiElement)target).getElementType();
       if (elementType == GoTypes.RETURN || elementType == GoTypes.FUNC || isPanicCall(target)) {
-        return FunctionExitPointHandler.createForElement(editor, file, target);
+        return GoFunctionExitPointHandler.createForElement(editor, file, target);
       }
       else if (elementType == GoTypes.BREAK ||
                elementType == GoTypes.SWITCH ||
                elementType == GoTypes.FOR ||
                elementType == GoTypes.SELECT) {
-        return BreakStmtExitPointHandler.createForElement(editor, file, target);
+        return GoBreakStatementExitPointHandler.createForElement(editor, file, target);
       }
     }
     return null;

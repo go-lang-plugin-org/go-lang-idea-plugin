@@ -17,7 +17,6 @@
 package com.goide.highlighting.exitpoint;
 
 import com.goide.psi.*;
-import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInsight.highlighting.HighlightUsagesHandlerBase;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
@@ -30,19 +29,19 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-class BreakStmtExitPointHandler extends HighlightUsagesHandlerBase<PsiElement> {
-  private final PsiElement myTarget;
-  @Nullable private final GoBreakStatement myBreakStmt;
+public class GoBreakStatementExitPointHandler extends HighlightUsagesHandlerBase<PsiElement> {
+  @NotNull private final PsiElement myTarget;
+  @Nullable private final GoBreakStatement myBreakStatement;
   @Nullable private PsiElement myOwner;
 
-  private BreakStmtExitPointHandler(Editor editor,
-                                    PsiFile file,
-                                    PsiElement target,
-                                    @Nullable GoBreakStatement breakStmt,
-                                    @Nullable PsiElement owner) {
+  private GoBreakStatementExitPointHandler(Editor editor,
+                                           PsiFile file,
+                                           @NotNull PsiElement target,
+                                           @Nullable GoBreakStatement breakStatement,
+                                           @Nullable PsiElement owner) {
     super(editor, file);
     myTarget = target;
-    myBreakStmt = breakStmt;
+    myBreakStatement = breakStatement;
     myOwner = owner;
   }
 
@@ -63,8 +62,8 @@ class BreakStmtExitPointHandler extends HighlightUsagesHandlerBase<PsiElement> {
     if (myOwner != null) {
       breakStmtOwner = myOwner;
     }
-    else if (myBreakStmt != null) {
-      breakStmtOwner = GoPsiImplUtil.getBreakStatementOwner(myBreakStmt);
+    else if (myBreakStatement != null) {
+      breakStmtOwner = getBreakStatementOwner(myBreakStatement);
     }
     else {
       breakStmtOwner = null;
@@ -80,7 +79,7 @@ class BreakStmtExitPointHandler extends HighlightUsagesHandlerBase<PsiElement> {
 
       @Override
       public void visitBreakStatement(@NotNull GoBreakStatement o) {
-        if (o == myBreakStmt || GoPsiImplUtil.getBreakStatementOwner(o) == breakStmtOwner) {
+        if (o == myBreakStatement || getBreakStatementOwner(o) == breakStmtOwner) {
           addOccurrence(o);
         }
         super.visitBreakStatement(o);
@@ -121,13 +120,30 @@ class BreakStmtExitPointHandler extends HighlightUsagesHandlerBase<PsiElement> {
     }
   }
 
+
   @Nullable
-  public static BreakStmtExitPointHandler createForElement(@NotNull Editor editor, @NotNull PsiFile file, @NotNull PsiElement element) {
+  private static PsiElement getBreakStatementOwner(@NotNull GoBreakStatement breakStmt) {
+    GoLabelRef label = breakStmt.getLabelRef();
+    if (label != null) {
+      return label.getReference().resolve();
+    }
+    GoCompositeElement breaksOutOf =
+      PsiTreeUtil.getParentOfType(breakStmt, GoSwitchStatement.class, GoForStatement.class, GoSelectStatement.class,
+                                  GoFunctionLit.class);
+    if (breaksOutOf instanceof GoFunctionLit) {
+      return null;
+    }
+    return breaksOutOf;
+  }
+
+  @Nullable
+  public static GoBreakStatementExitPointHandler createForElement(@NotNull Editor editor, @NotNull PsiFile file, @NotNull PsiElement element) {
     PsiElement target =
       PsiTreeUtil.getParentOfType(element, GoBreakStatement.class, GoSwitchStatement.class, GoSelectStatement.class, GoForStatement.class);
+    if (target == null) return null;
     if (target instanceof GoBreakStatement) {
-      return new BreakStmtExitPointHandler(editor, file, element, (GoBreakStatement)target, null);
+      return new GoBreakStatementExitPointHandler(editor, file, element, (GoBreakStatement)target, null);
     }
-    return new BreakStmtExitPointHandler(editor, file, element, null, target);
+    return new GoBreakStatementExitPointHandler(editor, file, element, null, target);
   }
 }

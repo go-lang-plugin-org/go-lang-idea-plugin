@@ -30,11 +30,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-class FunctionExitPointHandler extends HighlightUsagesHandlerBase<PsiElement> {
-  private final PsiElement myTarget;
-  private final GoTypeOwner myFunction;
+public class GoFunctionExitPointHandler extends HighlightUsagesHandlerBase<PsiElement> {
+  @NotNull private final PsiElement myTarget;
+  @NotNull private final GoTypeOwner myFunction;
 
-  private FunctionExitPointHandler(Editor editor, PsiFile file, PsiElement target, GoTypeOwner function) {
+  private GoFunctionExitPointHandler(Editor editor, PsiFile file, @NotNull PsiElement target, @NotNull GoTypeOwner function) {
     super(editor, file);
     myTarget = target;
     myFunction = function;
@@ -75,9 +75,9 @@ class FunctionExitPointHandler extends HighlightUsagesHandlerBase<PsiElement> {
   }
 
   @Nullable
-  public static FunctionExitPointHandler createForElement(@NotNull Editor editor, PsiFile file, PsiElement element) {
+  public static GoFunctionExitPointHandler createForElement(@NotNull Editor editor, @NotNull PsiFile file, @NotNull PsiElement element) {
     GoTypeOwner function = PsiTreeUtil.getParentOfType(element, GoFunctionLit.class, GoFunctionOrMethodDeclaration.class);
     if (function == null) return null;
-    return new FunctionExitPointHandler(editor, file, element, function);
+    return new GoFunctionExitPointHandler(editor, file, element, function);
   }
 }
