@@ -1131,4 +1131,19 @@ public class GoPsiImplUtil {
     PsiElement grandParent = parent != null ? parent.getParent() : null;
     return grandParent instanceof GoUnaryExpr && ((GoUnaryExpr)grandParent).getBitAnd() != null;
   }
+
+  @Nullable
+  public static PsiElement getBreakStatementOwner(@NotNull GoBreakStatement breakStmt) {
+    GoLabelRef label = breakStmt.getLabelRef();
+    if (label != null) {
+      return label.getReference().resolve();
+    }
+    GoCompositeElement breaksOutOf =
+      PsiTreeUtil.getParentOfType(breakStmt, GoSwitchStatement.class, GoForStatement.class, GoSelectStatement.class,
+                                  GoFunctionOrMethodDeclaration.class);
+    if (breaksOutOf instanceof GoFunctionOrMethodDeclaration) {
+      return null;
+    }
+    return breaksOutOf;
+  }
 }

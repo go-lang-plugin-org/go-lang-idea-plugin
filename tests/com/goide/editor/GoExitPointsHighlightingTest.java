@@ -82,6 +82,103 @@ public class GoExitPointsHighlightingTest extends GoCodeInsightFixtureTestCase {
     doTest(text, "func", "return -1");
   }
 
+  public void testBreakSwitch() {
+    String text = "package main\n" +
+                  "import \"fmt\"\n" +
+                  "\n" +
+                  "type Demo struct {}\n" +
+                  "\n" +
+                  "\n" +
+                  "func (a Demo) demo() int {\n" +
+                  "    i := 2\n" +
+                  "    n := 10\n" +
+                  "    var j int\n" +
+                  "    var m int = 10\n" +
+                  "    var a [][]int\n" +
+                  "    var item = 10\n" +
+                  "    for i = 0; i < n; i++ {\n" +
+                  "        for j = 0; j < m; j++ {\n" +
+                  "            switch a[i][j] {\n" +
+                  "            case nil:\n" +
+                  "                fmt.Println()\n" +
+                  "                break\n" +
+                  "            case item:\n" +
+                  "                fmt.Println()\n" +
+                  "                br<caret>eak\n" +
+                  "            }\n" +
+                  "        }\n" +
+                  "    }\n" +
+                  "    return -1\n" +
+                  "}";
+    doTest(text, "break", "break", "switch");
+  }
+
+  public void testBreakFor() {
+    String text = "package main\n" +
+                  "import \"fmt\"\n" +
+                  "\n" +
+                  "type Demo struct {}\n" +
+                  "\n" +
+                  "\n" +
+                  "func (a Demo) demo() int {\n" +
+                  "    i := 2\n" +
+                  "    n := 10\n" +
+                  "    var j int\n" +
+                  "    var m int = 10\n" +
+                  "    for i = 0; i < n; i++ {\n" +
+                  "        fo<caret>r j = 0; j < m; j++ {\n" +
+                  "            if j < 10 {\n" +
+                  "                break\n" +
+                  "            }\n" +
+                  "        }\n" +
+                  "    }\n" +
+                  "    return -1\n" +
+                  "}";
+    doTest(text, "for", "break");
+  }
+
+  public void testBreakSelect() {
+    String text = "package main\n" +
+                  "\n" +
+                  "import \"fmt\"\n" +
+                  "\n" +
+                  "func main() {\n" +
+                  "    fmt.Println(\"FOO\")\n" +
+                  "    c1 := make(chan string)\n" +
+                  "    c2 := make(chan string)\n" +
+                  "    for i := 0; i < 2; i++ {\n" +
+                  "        sele<caret>ct {\n" +
+                  "        case msg1 := <-c1:\n" +
+                  "            fmt.Println(\"received\", msg1)\n" +
+                  "            break\n" +
+                  "        case msg2 := <-c2:\n" +
+                  "            fmt.Println(\"received\", msg2)\n" +
+                  "        }\n" +
+                  "    }\n" +
+                  "}\n";
+    doTest(text, "select", "break");
+  }
+
+  public void testBreakWithLabel() {
+    String text = "package main\n" +
+                  "\n" +
+                  "func main() {\n" +
+                  "\n" +
+                  "    L:\n" +
+                  "    for i := 0; i < 2; i++ {\n" +
+                  "        switch i {\n" +
+                  "        case 2:\n" +
+                  "            break\n" +
+                  "        case 1:\n" +
+                  "            b<caret>reak L\n" +
+                  "        default:\n" +
+                  "            break L\n" +
+                  "        }\n" +
+                  "    }\n" +
+                  "}\n";
+    doTest(text, "L", "break L", "break L");
+  }
+
   private void doTest(@NotNull String text, String... usages) {
     myFixture.configureByText("foo.go", text);
     @SuppressWarnings("unchecked")
