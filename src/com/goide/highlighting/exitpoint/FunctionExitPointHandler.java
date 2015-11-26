@@ -16,14 +16,12 @@
 
 package com.goide.highlighting.exitpoint;
 
-import com.goide.GoTypes;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInsight.highlighting.HighlightUsagesHandlerBase;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.containers.ContainerUtil;
@@ -55,8 +53,8 @@ class FunctionExitPointHandler extends HighlightUsagesHandlerBase<PsiElement> {
 
   @Override
   public void computeUsages(List<PsiElement> targets) {
-    if (myTarget instanceof LeafPsiElement && ((LeafPsiElement)myTarget).getElementType() == GoTypes.FUNC) {
-      addOccurrence(myTarget);
+    if (myFunction instanceof GoFunctionOrMethodDeclaration) {
+      addOccurrence(((GoFunctionOrMethodDeclaration)myFunction).getFunc());
     }
     new GoRecursiveVisitor() {
       @Override
