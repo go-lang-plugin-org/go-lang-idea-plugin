@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
  * Raises an error when a 'continue' statement is found outside of a for loop.
  */
 public class GoContinueNotInLoopInspection extends GoInspectionBase {
-  public static String QUICK_FIX_NAME = "Replace with 'return'";
+  public static final String QUICK_FIX_NAME = "Replace with 'return'";
 
   @NotNull
   @Override
