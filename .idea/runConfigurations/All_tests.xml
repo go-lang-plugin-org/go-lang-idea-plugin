@@ -10,6 +10,7 @@
       </option>
       <option name="taskNames">
         <list>
+          <option value="cleanTest" />
           <option value="test" />
         </list>
       </option>
