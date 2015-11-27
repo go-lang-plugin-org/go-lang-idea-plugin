@@ -78,13 +78,12 @@ dependencies {
 project.afterEvaluate {
   prepareSandbox.doLast {
     def libraries = "$it.destinationDir/lib/"
-    fileTree(dir: libraries, include: 'delve*').files.each { File file ->
-      copy {
-        from zipTree(file)
-        into libraries
-      }
-      file.delete()
+    def delveFile = fileTree(dir: libraries, include: 'delve*').singleFile
+    copy {
+      from zipTree(delveFile)
+      into libraries
     }
+    delveFile.delete()
   }
 }
 
