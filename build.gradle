@@ -78,7 +78,7 @@ dependencies {
 // delve packing
 project.afterEvaluate {
   prepareSandbox.doLast {
-    def libraries = "$it.destinationDir/$intellij.pluginName/lib/"
+    def libraries = "$it.destinationDir/lib/"
     fileTree(dir: libraries, include: 'delve*').files.each { File file ->
       copy {
         from zipTree(file)
