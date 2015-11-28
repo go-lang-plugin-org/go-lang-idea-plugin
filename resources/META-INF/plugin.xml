@@ -85,7 +85,7 @@
 
     <errorHandler implementation="com.intellij.diagnostic.ITNReporter"/>
     <extendWordSelectionHandler implementation="com.goide.editor.GoWordSelectioner"/>
-    <annotator language="go" implementationClass="com.goide.GoAnnotator"/>
+    <annotator language="go" implementationClass="com.goide.GoHighlightingAnnotator"/>
 
     <lang.importOptimizer language="go" implementationClass="com.goide.codeInsight.imports.GoImportOptimizer"/>
     <referenceImporter implementation="com.goide.psi.impl.imports.GoReferenceImporter"/>
