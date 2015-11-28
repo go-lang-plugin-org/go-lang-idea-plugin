@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static com.goide.highlighting.GoSyntaxHighlightingColors.*;
 
-public class GoAnnotator implements Annotator {
+public class GoHighlightingAnnotator implements Annotator {
   @Override
   public void annotate(@NotNull PsiElement o, @NotNull AnnotationHolder holder) {
     if (!o.isValid()) return;
