@@ -16,22 +16,14 @@
 
 package com.goide.quickfix;
 
-import com.goide.inspections.GoContinueNotInLoopInspection;
-import com.goide.inspections.GoRenameToBlankQuickFix;
 import org.jetbrains.annotations.NotNull;
 
 public class GoContinueNotInLoopQuickFixTest extends GoQuickFixTestBase {
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    myFixture.enableInspections(GoContinueNotInLoopInspection.class);
-  }
-
   @NotNull
   @Override
   protected String getBasePath() {
     return "quickfixes/continue-outside-loop";
   }
 
-  public void testSimple()      { doTest(GoContinueNotInLoopInspection.QUICK_FIX_NAME);      }
+  public void testSimple() { doTest(GoReplaceWithReturnStatementQuickFix.QUICK_FIX_NAME); }
 }
