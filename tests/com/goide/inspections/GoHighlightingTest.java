@@ -56,7 +56,6 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       GoAssignmentNilWithoutExplicitTypeInspection.class,
       GoRedeclareImportAsFunctionInspection.class,
       GoStructTagInspection.class,
-      GoContinueNotInLoopInspection.class,
       GoUsedAsValueInCondition.class,
       GoDeferInLoop.class
     );
