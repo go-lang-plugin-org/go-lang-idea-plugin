@@ -23,10 +23,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Consumer;
-import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
 
 public class GoBreakStatementExitPointHandler extends HighlightUsagesHandlerBase<PsiElement> {
@@ -48,7 +48,7 @@ public class GoBreakStatementExitPointHandler extends HighlightUsagesHandlerBase
   @NotNull
   @Override
   public List<PsiElement> getTargets() {
-    return ContainerUtil.newSmartList(myTarget);
+    return Collections.singletonList(myTarget);
   }
 
   @Override
@@ -140,10 +140,11 @@ public class GoBreakStatementExitPointHandler extends HighlightUsagesHandlerBase
   public static GoBreakStatementExitPointHandler createForElement(@NotNull Editor editor, @NotNull PsiFile file, @NotNull PsiElement element) {
     PsiElement target =
       PsiTreeUtil.getParentOfType(element, GoBreakStatement.class, GoSwitchStatement.class, GoSelectStatement.class, GoForStatement.class);
-    if (target == null) return null;
-    if (target instanceof GoBreakStatement) {
-      return new GoBreakStatementExitPointHandler(editor, file, element, (GoBreakStatement)target, null);
+    if (target == null) {
+      return null;
     }
-    return new GoBreakStatementExitPointHandler(editor, file, element, null, target);
+    return target instanceof GoBreakStatement
+           ? new GoBreakStatementExitPointHandler(editor, file, element, (GoBreakStatement)target, null)
+           : new GoBreakStatementExitPointHandler(editor, file, element, null, target);
   }
 }

@@ -24,10 +24,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Consumer;
-import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
 
 public class GoFunctionExitPointHandler extends HighlightUsagesHandlerBase<PsiElement> {
@@ -43,7 +43,7 @@ public class GoFunctionExitPointHandler extends HighlightUsagesHandlerBase<PsiEl
   @NotNull
   @Override
   public List<PsiElement> getTargets() {
-    return ContainerUtil.newSmartList(myTarget);
+    return Collections.singletonList(myTarget);
   }
 
   @Override
@@ -77,7 +77,6 @@ public class GoFunctionExitPointHandler extends HighlightUsagesHandlerBase<PsiEl
   @Nullable
   public static GoFunctionExitPointHandler createForElement(@NotNull Editor editor, @NotNull PsiFile file, @NotNull PsiElement element) {
     GoTypeOwner function = PsiTreeUtil.getParentOfType(element, GoFunctionLit.class, GoFunctionOrMethodDeclaration.class);
-    if (function == null) return null;
-    return new GoFunctionExitPointHandler(editor, file, element, function);
+    return function != null ? new GoFunctionExitPointHandler(editor, file, element, function) : null;
   }
 }
