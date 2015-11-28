@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.goide;
+package com.goide.highlighting;
 
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
