@@ -57,7 +57,8 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       GoRedeclareImportAsFunctionInspection.class,
       GoStructTagInspection.class,
       GoUsedAsValueInCondition.class,
-      GoDeferInLoop.class
+      GoDeferInLoop.class,
+      GoCommentStartInspection.class
     );
   }
 
@@ -291,6 +292,10 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testDeferInLoop() {
+    myFixture.testHighlighting(true, false, true, getTestName(true) + ".go");
+  }
+
+  public void testCommentStart() {
     myFixture.testHighlighting(true, false, true, getTestName(true) + ".go");
   }
 
