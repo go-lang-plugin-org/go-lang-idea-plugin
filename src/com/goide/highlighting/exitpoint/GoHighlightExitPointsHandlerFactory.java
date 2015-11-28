@@ -27,10 +27,13 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.tree.TokenSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-class GoHighlightExitPointsHandlerFactory extends HighlightUsagesHandlerFactoryBase {
+public class GoHighlightExitPointsHandlerFactory extends HighlightUsagesHandlerFactoryBase {
+  private static final TokenSet BREAK_HIGHLIGHTING_TOKENS = TokenSet.create(GoTypes.BREAK, GoTypes.SWITCH, GoTypes.FOR, GoTypes.SELECT);
+
   @Nullable
   @Override
   public HighlightUsagesHandlerBase createHighlightUsagesHandler(@NotNull Editor editor,
@@ -41,10 +44,7 @@ class GoHighlightExitPointsHandlerFactory extends HighlightUsagesHandlerFactoryB
       if (elementType == GoTypes.RETURN || elementType == GoTypes.FUNC || isPanicCall(target)) {
         return GoFunctionExitPointHandler.createForElement(editor, file, target);
       }
-      else if (elementType == GoTypes.BREAK ||
-               elementType == GoTypes.SWITCH ||
-               elementType == GoTypes.FOR ||
-               elementType == GoTypes.SELECT) {
+      else if (BREAK_HIGHLIGHTING_TOKENS.contains(elementType)) {
         return GoBreakStatementExitPointHandler.createForElement(editor, file, target);
       }
     }
