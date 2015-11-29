@@ -43,6 +43,7 @@ public class GoApplicationRunConfigurationProducer extends GoRunConfigurationPro
                                                   Ref<PsiElement> sourceElement) {
     String importPath = getImportPathFromContext(context);
     if (StringUtil.isNotEmpty(importPath)) {
+      configuration.setModule(context.getModule());
       configuration.setKind(GoApplicationConfiguration.Kind.PACKAGE);
       configuration.setPackage(importPath);
       configuration.setName("Build " + importPath + " and run");
