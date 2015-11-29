@@ -793,6 +793,13 @@ public class GoPsiImplUtil {
     return StringUtil.join(items, GET_TEXT_FUNCTION, ", ");
   }
 
+  @Nullable
+  public static PsiElement getBreakStatementOwner(@NotNull PsiElement breakStatement) {
+    GoCompositeElement owner = PsiTreeUtil.getParentOfType(breakStatement, GoSwitchStatement.class, GoForStatement.class,
+                                                           GoSelectStatement.class, GoFunctionLit.class);
+    return owner instanceof GoFunctionLit ? null : owner;
+  }
+
   @NotNull
   public PsiElement getType(@NotNull GoTypeSpec o) {
     return o.getSpecType();

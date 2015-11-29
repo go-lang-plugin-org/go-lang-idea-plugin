@@ -16,10 +16,8 @@
 
 package com.goide.highlighting;
 
-import com.goide.psi.GoCompositeElement;
-import com.goide.psi.GoContinueStatement;
-import com.goide.psi.GoForStatement;
-import com.goide.psi.GoFunctionLit;
+import com.goide.psi.*;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.quickfix.GoReplaceWithReturnStatementQuickFix;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
@@ -39,6 +37,12 @@ public class GoAnnotator implements Annotator {
     if (element instanceof GoContinueStatement) {
       if (!(PsiTreeUtil.getParentOfType(element, GoForStatement.class, GoFunctionLit.class) instanceof GoForStatement)) {
         Annotation annotation = holder.createErrorAnnotation(element, "Continue statement not inside a for loop.");
+        annotation.registerFix(new GoReplaceWithReturnStatementQuickFix(element));
+      }
+    }
+    else if (element instanceof GoBreakStatement) {
+      if (GoPsiImplUtil.getBreakStatementOwner(element) == null) {
+        Annotation annotation = holder.createErrorAnnotation(element, "Break statement not inside a for loop, select or switch.");
         annotation.registerFix(new GoReplaceWithReturnStatementQuickFix(element));
       }
     }

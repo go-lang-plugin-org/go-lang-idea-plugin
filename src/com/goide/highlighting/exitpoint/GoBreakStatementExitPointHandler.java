@@ -17,6 +17,7 @@
 package com.goide.highlighting.exitpoint;
 
 import com.goide.psi.*;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInsight.highlighting.HighlightUsagesHandlerBase;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
@@ -63,7 +64,7 @@ public class GoBreakStatementExitPointHandler extends HighlightUsagesHandlerBase
       breakStmtOwner = myOwner;
     }
     else if (myBreakStatement != null) {
-      breakStmtOwner = getBreakStatementOwner(myBreakStatement);
+      breakStmtOwner = getBreakStatementOwnerOrResolve(myBreakStatement);
     }
     else {
       breakStmtOwner = null;
@@ -79,7 +80,7 @@ public class GoBreakStatementExitPointHandler extends HighlightUsagesHandlerBase
 
       @Override
       public void visitBreakStatement(@NotNull GoBreakStatement o) {
-        if (o == myBreakStatement || getBreakStatementOwner(o) == breakStmtOwner) {
+        if (o == myBreakStatement || getBreakStatementOwnerOrResolve(o) == breakStmtOwner) {
           addOccurrence(o);
         }
         super.visitBreakStatement(o);
@@ -122,24 +123,20 @@ public class GoBreakStatementExitPointHandler extends HighlightUsagesHandlerBase
 
 
   @Nullable
-  private static PsiElement getBreakStatementOwner(@NotNull GoBreakStatement breakStmt) {
-    GoLabelRef label = breakStmt.getLabelRef();
+  private static PsiElement getBreakStatementOwnerOrResolve(@NotNull GoBreakStatement breakStatement) {
+    GoLabelRef label = breakStatement.getLabelRef();
     if (label != null) {
       return label.getReference().resolve();
     }
-    GoCompositeElement breaksOutOf =
-      PsiTreeUtil.getParentOfType(breakStmt, GoSwitchStatement.class, GoForStatement.class, GoSelectStatement.class,
-                                  GoFunctionLit.class);
-    if (breaksOutOf instanceof GoFunctionLit) {
-      return null;
-    }
-    return breaksOutOf;
+    return GoPsiImplUtil.getBreakStatementOwner(breakStatement);
   }
 
   @Nullable
-  public static GoBreakStatementExitPointHandler createForElement(@NotNull Editor editor, @NotNull PsiFile file, @NotNull PsiElement element) {
-    PsiElement target =
-      PsiTreeUtil.getParentOfType(element, GoBreakStatement.class, GoSwitchStatement.class, GoSelectStatement.class, GoForStatement.class);
+  public static GoBreakStatementExitPointHandler createForElement(@NotNull Editor editor,
+                                                                  @NotNull PsiFile file,
+                                                                  @NotNull PsiElement element) {
+    PsiElement target = PsiTreeUtil.getParentOfType(element, GoBreakStatement.class, GoSwitchStatement.class, GoSelectStatement.class, 
+                                                    GoForStatement.class);
     if (target == null) {
       return null;
     }
