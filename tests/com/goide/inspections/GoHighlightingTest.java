@@ -117,6 +117,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testRedeclaredImportAsFunction(){ doTest(); }
   public void testStructTags()                { doTest(); }
   public void testContinue()                  { doTest(); }
+  public void testBreak()                     { doTest(); }
   public void testEqualinif()                 { doTest(); }
 
   public void testRelativeImportIgnoringDirectories() throws IOException {
