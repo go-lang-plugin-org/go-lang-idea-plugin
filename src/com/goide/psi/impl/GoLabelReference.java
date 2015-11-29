@@ -16,9 +16,7 @@
 
 package com.goide.psi.impl;
 
-import com.goide.psi.GoBlock;
-import com.goide.psi.GoLabelDefinition;
-import com.goide.psi.GoLabelRef;
+import com.goide.psi.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -52,11 +50,34 @@ public class GoLabelReference extends GoCachedReference<GoLabelRef> {
 
   @Override
   public boolean processResolveVariants(@NotNull GoScopeProcessor processor) {
+    GoBreakStatement breakStatement = PsiTreeUtil.getParentOfType(myElement, GoBreakStatement.class);
+    if (breakStatement != null) {
+      return processDefinitionsForBreakReference(breakStatement, processor);
+    }
+    return processAllDefinitions(processor);
+  }
+
+  private boolean processAllDefinitions(@NotNull GoScopeProcessor processor) {
     Collection<GoLabelDefinition> defs = getLabelDefinitions();
     for (GoLabelDefinition def : defs) {
       if (!processor.execute(def, ResolveState.initial())) {
         return false;
       }
+    }
+    return true;
+  }
+
+  private static boolean processDefinitionsForBreakReference(@NotNull GoBreakStatement breakStatement,
+                                                             @NotNull GoScopeProcessor processor) {
+    PsiElement breakStatementOwner = GoPsiImplUtil.getBreakStatementOwner(breakStatement);
+    while (breakStatementOwner != null) {
+      PsiElement parent = breakStatementOwner.getParent();
+      if (parent instanceof GoLabeledStatement) {
+        if (!processor.execute(((GoLabeledStatement)parent).getLabelDefinition(), ResolveState.initial())) {
+          return false;
+        }
+      }
+      breakStatementOwner = GoPsiImplUtil.getBreakStatementOwner(breakStatementOwner);
     }
     return true;
   }

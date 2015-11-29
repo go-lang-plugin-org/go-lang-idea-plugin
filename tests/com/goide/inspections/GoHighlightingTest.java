@@ -77,6 +77,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testSimple()                    { doTest(); }
+  public void testLabels()                    { doTest(); }
   public void testStruct()                    { doTest(); }
   public void testBoxes()                     { doTest(); }
   public void testRanges()                    { doTest(); }
