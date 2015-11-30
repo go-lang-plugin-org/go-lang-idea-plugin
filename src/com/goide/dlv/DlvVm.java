@@ -89,10 +89,15 @@ public class DlvVm extends VmBase {
     return breakpointManager;
   }
 
+  /**
+   * Changed API between minor versions, runtime is compatible
+   * Todo: uncomment since 15.1, when only the last build of 15.0 will be supported
+   */
+  @SuppressWarnings("unchecked")
   @NotNull
   @Override
-  public SuspendContextManagerBase<SuspendContextBase, CallFrame> getSuspendContextManager() {
-    return new SuspendContextManagerBase<SuspendContextBase, CallFrame>() {
+  public SuspendContextManagerBase getSuspendContextManager() {
+    return new SuspendContextManagerBase() {
       @NotNull
       @Override
       public Promise<Void> continueVm(@NotNull StepAction stepAction, int stepCount) {
