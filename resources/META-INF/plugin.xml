@@ -116,7 +116,7 @@
     <spellchecker.support language="go" implementationClass="com.goide.inspections.GoSpellcheckingStrategy"/>
     <elementDescriptionProvider implementation="com.goide.refactor.GoDescriptionProvider"/>
     <lang.namesValidator language="go" implementationClass="com.goide.GoNamesValidator"/>
-    <lang.findUsagesProvider language="go" implementationClass="com.goide.GoFindUsagesProvider"/>
+    <lang.findUsagesProvider language="go" implementationClass="com.goide.usages.GoFindUsagesProvider"/>
     <lang.documentationProvider language="go" implementationClass="com.goide.GoDocumentationProvider"/>
     <lang.foldingBuilder language="go" implementationClass="com.goide.editor.GoFoldingBuilder"/>
     <typeDeclarationProvider implementation="com.goide.editor.GoTypeDeclarationProvider"/>
