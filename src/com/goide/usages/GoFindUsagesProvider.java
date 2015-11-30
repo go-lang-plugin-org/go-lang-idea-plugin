@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package com.goide;
+package com.goide.usages;
 
+import com.goide.GoParserDefinition;
+import com.goide.GoTypes;
 import com.goide.lexer.GoLexer;
 import com.goide.psi.*;
 import com.intellij.lang.HelpID;
