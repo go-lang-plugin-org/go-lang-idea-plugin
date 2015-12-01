@@ -43,9 +43,7 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
   @Override
   public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
     PsiElement element = descriptor.getPsiElement();
-    Module module = ModuleUtilCore.findModuleForPsiElement(element);
-    if (module == null) return;
-    applyFix(project, module, myPackage, true);
+    applyFix(project, ModuleUtilCore.findModuleForPsiElement(element), myPackage, true);
   }
 
   public static void applyFix(@NotNull final Project project,
