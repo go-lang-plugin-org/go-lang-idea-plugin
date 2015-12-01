@@ -30,11 +30,10 @@ public class GoDescriptionProvider implements ElementDescriptionProvider {
   @Nullable
   @Override
   public String getElementDescription(@NotNull PsiElement o, @NotNull ElementDescriptionLocation location) {
-    if (o instanceof GoNamedElement && (location == UsageViewShortNameLocation.INSTANCE || location == UsageViewLongNameLocation.INSTANCE)) {
-      return ((GoNamedElement)o).getName();
-    }
-    if (location == HighlightUsagesDescriptionLocation.INSTANCE) {
-      return getElementDescription(o, UsageViewShortNameLocation.INSTANCE);
+    if (location == UsageViewShortNameLocation.INSTANCE ||
+        location == UsageViewLongNameLocation.INSTANCE ||
+        location == HighlightUsagesDescriptionLocation.INSTANCE) {
+      return o instanceof GoNamedElement ? ((GoNamedElement)o).getName() : null;
     }
     return null;
   }
