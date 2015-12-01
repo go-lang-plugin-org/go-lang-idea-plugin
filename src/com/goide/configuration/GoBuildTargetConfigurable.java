@@ -195,7 +195,7 @@ public class GoBuildTargetConfigurable implements SearchableConfigurable, Config
   @Nls
   @Override
   public String getDisplayName() {
-    return "Build Flags";
+    return "Build Tags";
   }
 
   @NotNull
