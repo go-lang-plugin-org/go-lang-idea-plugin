@@ -36,7 +36,7 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
   @NotNull private final String myPackage;
 
   public GoGetPackageFix(@NotNull String packageName) {
-    super("Go get '" + packageName + "'");
+    super("go get -t " + packageName + "/...");
     myPackage = packageName;
   }
 
@@ -63,8 +63,8 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
             VirtualFileManager.getInstance().asyncRefresh(null);
           }
         };
-        GoExecutor.in(project, module).withPresentableName("go get " + packageName)
-          .withParameters("get", packageName).showNotifications(false).showOutputOnError()
+        GoExecutor.in(project, module).withPresentableName("go get -t " + packageName + "/...")
+          .withParameters("get", "-t", packageName+"/...").showNotifications(false).showOutputOnError()
           .executeWithProgress(!startInBackground, consumer);
       }
     });
