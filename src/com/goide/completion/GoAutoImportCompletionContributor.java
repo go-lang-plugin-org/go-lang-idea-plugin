@@ -308,13 +308,13 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
       return true;
     }
 
-    @Nullable
+    @NotNull
     private static Boolean cachedAllowed(@NotNull GoNamedElement element, @Nullable Boolean existingValue) {
       if (existingValue != null) return existingValue;
       return allowed(element);
     }
 
-    @Nullable
+    @NotNull
     private ExistingImportData cachedImportData(@NotNull GoNamedElement element, @Nullable ExistingImportData existingValue) {
       if (existingValue != null) return existingValue;
 
