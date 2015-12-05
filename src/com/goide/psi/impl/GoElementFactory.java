@@ -160,12 +160,12 @@ public class GoElementFactory {
   @NotNull
   public static GoConstDeclaration createConstDeclaration(@NotNull Project project, List<GoConstSpec> constSpecs) {
     String specs = "";
-    for (int i=0; i<constSpecs.size(); i++) {
+    for (int i = 0; i < constSpecs.size(); i++) {
       specs += "\ta = 1\n";
     }
     GoFile file = createFileFromText(project, "package a\n const (\n" + specs + ")");
     GoConstDeclaration element = PsiTreeUtil.findChildOfType(file, GoConstDeclaration.class);
-    for (int i=0; i<constSpecs.size(); i++) {
+    for (int i = 0; i < constSpecs.size(); i++) {
       element.getConstSpecList().get(i).replace(constSpecs.get(i));
     }
     return element;
@@ -184,12 +184,12 @@ public class GoElementFactory {
   @NotNull
   public static GoVarDeclaration createVarDeclaration(@NotNull Project project, List<GoVarSpec> varSpecs) {
     String specs = "";
-    for (int i=0; i<varSpecs.size(); i++) {
+    for (int i = 0; i < varSpecs.size(); i++) {
       specs += "\ta = 1\n";
     }
     GoFile file = createFileFromText(project, "package a\n var (\n" + specs + ")");
     GoVarDeclaration element = PsiTreeUtil.findChildOfType(file, GoVarDeclaration.class);
-    for (int i=0; i<varSpecs.size(); i++) {
+    for (int i = 0; i < varSpecs.size(); i++) {
       element.getVarSpecList().get(i).replace(varSpecs.get(i));
     }
     return element;
