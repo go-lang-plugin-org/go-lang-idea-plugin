@@ -20,6 +20,8 @@ import com.goide.inspections.GoExportedOwnDeclarationInspection;
 import org.jetbrains.annotations.NotNull;
 
 public class GoExportedOwnDeclarationQuickFixTest extends GoQuickFixTestBase {
+  private final String quickfixName = GoExportedOwnDeclarationInspection.QUICK_FIX_NAME;
+
   @Override
   protected void setUp() throws Exception {
     super.setUp();
@@ -32,12 +34,12 @@ public class GoExportedOwnDeclarationQuickFixTest extends GoQuickFixTestBase {
     return "quickfixes/exported-own-declaration";
   }
 
-  public void testVariation1() { doTest(GoExportedOwnDeclarationInspection.QUICK_FIX_NAME); }
-  public void testVariation2() { doTest(GoExportedOwnDeclarationInspection.QUICK_FIX_NAME); }
-  public void testVariation3() { doTest(GoExportedOwnDeclarationInspection.QUICK_FIX_NAME); }
-  public void testVariation4() { doTest(GoExportedOwnDeclarationInspection.QUICK_FIX_NAME); }
-  public void testVariation5() { doTest(GoExportedOwnDeclarationInspection.QUICK_FIX_NAME); }
-  public void testVariation6() { doTest(GoExportedOwnDeclarationInspection.QUICK_FIX_NAME); }
-  public void testVariation7() { doTest(GoExportedOwnDeclarationInspection.QUICK_FIX_NAME); }
-  public void testVariation8() { doTest(GoExportedOwnDeclarationInspection.QUICK_FIX_NAME); }
+  public void testSingleLineMultipleExportedAndPrivateConsts() { doTest(quickfixName); }
+  public void testSingleLineMultipleConsts()                   { doTest(quickfixName); }
+  public void testSingleLineMultipleVars()                     { doTest(quickfixName); }
+  public void testMultiLineMultipleConstsWithType()            { doTest(quickfixName); }
+  public void testMultiLineMultipleConstsWithoutType()         { doTest(quickfixName); }
+  public void testMultiLineMultipleVarsOnlyType()              { doTest(quickfixName); }
+  public void testMultiLineMultipleVarsWithTypeAndValues()     { doTest(quickfixName); }
+  public void testMultiLineMultipleVarsOnlyValues()            { doTest(quickfixName); }
 }

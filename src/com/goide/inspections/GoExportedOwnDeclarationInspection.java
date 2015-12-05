@@ -22,6 +22,7 @@ import com.intellij.codeInspection.*;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -90,7 +91,7 @@ public class GoExportedOwnDeclarationInspection extends GoInspectionBase {
     @Override
     public void applyFix(@NotNull final Project project, @NotNull ProblemDescriptor descriptor) {
       final PsiElement element = descriptor.getPsiElement();
-      if (element == null) return;
+      if (!element.isValid()) return;
       new WriteCommandAction.Simple(project, getName(), element.getContainingFile()) {
         @Override
         protected void run() throws Throwable {
@@ -114,15 +115,15 @@ public class GoExportedOwnDeclarationInspection extends GoInspectionBase {
             return;
           }
 
-          if (elementValueList.size() != 0 &&
+          if (!elementValueList.isEmpty() &&
               elementValueList.size() <= index) {
             return;
           }
 
-          PsiElement elementParent = element.getParent();
+          PsiElement elementSpec = element.getParent();
           PsiElement newElement;
           PsiElement afterElement;
-          if (elementValueList.size() > 0) {
+          if (!elementValueList.isEmpty()) {
             PsiElement elementValue = elementValueList.get(index);
             if (element instanceof GoConstDefinition) {
               newElement = GoElementFactory.createConstSpec(project, element.getText(), elementType, elementValue.getText());
@@ -141,38 +142,38 @@ public class GoExportedOwnDeclarationInspection extends GoInspectionBase {
           }
 
           afterElement = getAfterElement(element);
-          PsiElement grandParent = elementParent.getParent();
-          elementParent.addAfter(newElement, afterElement);
-          elementParent.addAfter(GoElementFactory.createNewLine(project), afterElement);
+          elementSpec.addAfter(newElement, afterElement);
+          elementSpec.addAfter(GoElementFactory.createNewLine(project), afterElement);
 
-          if (elementParent instanceof GoConstSpec) {
-            List<GoConstDefinition> elementList = ((GoConstSpec)elementParent).getConstDefinitionList();
-            elementParent.deleteChildRange(elementList.get(index - 1).getNextSibling(), elementList.get(index));
-            elementValueList = ((GoConstSpec)elementParent).getExpressionList();
+          if (elementSpec instanceof GoConstSpec) {
+            List<GoConstDefinition> elementList = ((GoConstSpec)elementSpec).getConstDefinitionList();
+            elementSpec.deleteChildRange(elementList.get(index - 1).getNextSibling(), elementList.get(index));
+            elementValueList = ((GoConstSpec)elementSpec).getExpressionList();
           }
           else {
-            List<GoVarDefinition> elementList = ((GoVarSpec)elementParent).getVarDefinitionList();
-            elementParent.deleteChildRange(elementList.get(index - 1).getNextSibling(), elementList.get(index));
-            elementValueList = ((GoVarSpec)elementParent).getExpressionList();
+            List<GoVarDefinition> elementList = ((GoVarSpec)elementSpec).getVarDefinitionList();
+            elementSpec.deleteChildRange(elementList.get(index - 1).getNextSibling(), elementList.get(index));
+            elementValueList = ((GoVarSpec)elementSpec).getExpressionList();
           }
 
-          if (elementValueList.size() != 0) {
-            elementParent.deleteChildRange(elementValueList.get(index - 1).getNextSibling(), elementValueList.get(index));
+          if (!elementValueList.isEmpty()) {
+            elementSpec.deleteChildRange(elementValueList.get(index - 1).getNextSibling(), elementValueList.get(index));
           }
 
-          if (grandParent instanceof GoConstDeclaration &&
-              newElement instanceof GoConstSpec) {
-            if (((GoConstDeclaration)grandParent).getConstSpecList().size() == 1) {
-              List<GoConstSpec> elementList = ((GoConstDeclaration)grandParent).getConstSpecList();
-              grandParent.replace(GoElementFactory.createConstDeclaration(project, elementList));
-            }
+          PsiElement elementDeclaration = elementSpec.getParent();
+          if (elementDeclaration instanceof GoConstDeclaration &&
+              newElement instanceof GoConstSpec &&
+              ((GoConstDeclaration)elementDeclaration).getConstSpecList().size() == 1) {
+
+            List<GoConstSpec> elementList = ((GoConstDeclaration)elementDeclaration).getConstSpecList();
+            elementDeclaration.replace(GoElementFactory.createConstDeclaration(project, elementList));
           }
-          else if (grandParent instanceof GoVarDeclaration &&
-                   newElement instanceof GoVarSpec) {
-            if (((GoVarDeclaration)grandParent).getVarSpecList().size() == 1) {
-              List<GoVarSpec> elementList = ((GoVarDeclaration)grandParent).getVarSpecList();
-              grandParent.replace(GoElementFactory.createVarDeclaration(project, elementList));
-            }
+          else if (elementDeclaration instanceof GoVarDeclaration &&
+                   newElement instanceof GoVarSpec &&
+                   ((GoVarDeclaration)elementDeclaration).getVarSpecList().size() == 1) {
+
+            List<GoVarSpec> elementList = ((GoVarDeclaration)elementDeclaration).getVarSpecList();
+            elementDeclaration.replace(GoElementFactory.createVarDeclaration(project, elementList));
           }
         }
       }.execute();
@@ -182,25 +183,21 @@ public class GoExportedOwnDeclarationInspection extends GoInspectionBase {
       PsiElement elementParent = element.getParent();
 
       if (element instanceof GoConstDefinition) {
-        if (((GoConstSpec)elementParent).getExpressionList().size() > 0) {
-          return ((GoConstSpec)elementParent).getExpressionList()
-            .get(((GoConstSpec)elementParent).getExpressionList().size() - 1);
+        if (!((GoConstSpec)elementParent).getExpressionList().isEmpty()) {
+          return ContainerUtil.getLastItem(((GoConstSpec)elementParent).getExpressionList());
         }
 
         return ((GoConstSpec)elementParent).getType() == null
-               ? ((GoConstSpec)elementParent).getConstDefinitionList()
-                 .get(((GoConstSpec)elementParent).getConstDefinitionList().size() - 1)
+               ? ContainerUtil.getLastItem(((GoConstSpec)elementParent).getConstDefinitionList())
                : ((GoConstSpec)elementParent).getType();
       }
 
-      if (((GoVarSpec)elementParent).getExpressionList().size() > 0) {
-        return ((GoVarSpec)elementParent).getExpressionList()
-          .get(((GoVarSpec)elementParent).getExpressionList().size() - 1);
+      if (!((GoVarSpec)elementParent).getExpressionList().isEmpty()) {
+        return ContainerUtil.getLastItem(((GoVarSpec)elementParent).getExpressionList());
       }
 
       return ((GoVarSpec)elementParent).getType() == null
-             ? ((GoVarSpec)elementParent).getVarDefinitionList()
-               .get(((GoVarSpec)elementParent).getVarDefinitionList().size() - 1)
+             ? ContainerUtil.getLastItem(((GoVarSpec)elementParent).getVarDefinitionList())
              : ((GoVarSpec)elementParent).getType();
     }
   }

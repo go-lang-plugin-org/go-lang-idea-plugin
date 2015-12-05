@@ -1,9 +1,6 @@
 package demo2049
 
-const (
-	Hello1, hello2 = 1, 2
-	Helllllo = 3
-) // This is valid
+const Hello1, hello2, Hell<caret>lllo, help = 1, 2, 3, 4 // This is valid
 
 const Hello3, Hello4 = 3, 4 // exported const Hello4 should have its own declaration
 
