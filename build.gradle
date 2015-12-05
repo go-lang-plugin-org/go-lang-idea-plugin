@@ -15,7 +15,7 @@
  */
 
 plugins {
-  id 'org.jetbrains.intellij' version "0.0.31"
+  id 'org.jetbrains.intellij' version "0.0.32"
   id "de.undercouch.download" version "2.0.0"
 }
 
@@ -48,13 +48,8 @@ allprojects {
       pluginId '5047'
       channel publishChannel
     }
+    systemProperty 'dlv.path', customDlvPath
   }
-}
-
-afterEvaluate {
-    tasks.getByName('runIdea') {
-        systemProperty 'dlv.path', customDlvPath
-    }
 }
 
 apply plugin: 'idea'
