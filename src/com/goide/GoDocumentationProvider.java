@@ -189,6 +189,22 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       String name = ((GoTypeSpec)element).getName();
       return StringUtil.isNotEmpty(name) ? "type " + name : "";
     }
+    if (element instanceof GoConstDefinition) {
+      if (element.getParent() instanceof GoConstSpec) {
+        GoConstSpec spec = (GoConstSpec) element.getParent();
+        StringBuilder result = new StringBuilder();
+        result.append(StringUtil.join(spec.getConstDefinitionList(), GoPsiImplUtil.GET_TEXT_FUNCTION, ","));
+        result.append(" ");
+        result.append(getTypePresentation(spec.getType()));
+        if (spec.getAssign() != null) {
+          result.append(" ");
+          result.append(spec.getAssign().getText());
+          result.append(" ");
+        }
+        result.append(StringUtil.join(spec.getExpressionList(), GoPsiImplUtil.GET_TEXT_FUNCTION, ","));
+        return result.toString();
+      }
+    }
     if (!(element instanceof GoSignatureOwner)) return "";
 
     PsiElement identifier = null;
