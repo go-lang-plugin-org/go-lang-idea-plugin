@@ -545,6 +545,18 @@ func _() {
  	b.method()
 }
 
+func z(int) {}
+
+func _() {
+    var f float64
+    f = 12.345
+    var i int
+    i = int(f)
+    z(i)
+    i = <error descr="Missing argument to conversion to int: int().">int()</error>
+    z(i)
+    i = <error descr="Too many arguments to conversion to int: int(3, 4).">int(3, 4)</error>
+}
 func _() {
     var x map[string]string
     x = map[string]string{<error descr="Missing key in map literal">"a"</error>, <error descr="Missing key in map literal">"b"</error>}

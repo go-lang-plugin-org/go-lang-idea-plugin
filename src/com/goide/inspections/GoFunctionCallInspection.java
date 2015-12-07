@@ -44,7 +44,15 @@ public class GoFunctionCallInspection extends GoInspectionBase {
 
           List<GoExpression> list = o.getArgumentList().getExpressionList();
           int actualSize = list.size();
-          if (resolve instanceof GoSignatureOwner) {
+          if (resolve instanceof GoTypeSpec && actualSize != 1) {
+            StringBuilder message = new StringBuilder(actualSize == 0 ? "Missing argument " : "Too many arguments ");
+            message.append("to conversion to ");
+            message.append(expression.getText());
+            message.append(": ");
+            message.append(o.getText());
+            message.append(".");
+            holder.registerProblem(o, message.toString());
+          } else if (resolve instanceof GoSignatureOwner) {
             GoSignature signature = ((GoSignatureOwner)resolve).getSignature();
             if (signature == null) return;
             int expectedSize = 0;
