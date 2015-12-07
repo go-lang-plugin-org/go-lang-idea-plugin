@@ -325,7 +325,9 @@ public class GoExecutor {
       throw new ExecutionException("Sdk is not set or Sdk home path is empty for module");
     }
 
-    GeneralCommandLine commandLine = !myPtyDisabled ? new PtyCommandLine() : new GeneralCommandLine();
+    GeneralCommandLine commandLine = !myPtyDisabled && (!SystemInfo.isWindows || PtyCommandLine.isEnabled()) 
+                                     ? new PtyCommandLine() 
+                                     : new GeneralCommandLine();
     commandLine.setExePath(ObjectUtils.notNull(myExePath, GoSdkService.getGoExecutablePath(myGoRoot)));
     commandLine.getEnvironment().putAll(myExtraEnvironment);
     commandLine.getEnvironment().put(GoConstants.GO_ROOT, StringUtil.notNullize(myGoRoot));
