@@ -535,3 +535,9 @@ func _() {
 	b := B2{a:""}
  	b.method()
 }
+
+func _() {
+    var x map[string]string
+    x = map[string]string{<error descr="Missing key in map literal.">"a"</error>, <error descr="Missing key in map literal.">"b"</error>}
+    if len(x) > 2 {}
+}

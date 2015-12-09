@@ -58,5 +58,15 @@ public class GoAnnotator implements Annotator {
         }
       }
     }
+    else if (element instanceof GoCompositeLit) {
+      GoCompositeLit literal = (GoCompositeLit)element;
+      if (literal.getType() instanceof GoMapType) {
+        for (GoElement literalElement : literal.getLiteralValue().getElementList()) {
+          if (literalElement.getKey() == null) {
+            holder.createErrorAnnotation(literalElement, "Missing key in map literal.");
+          }
+        }
+      }
+    }
   }
 }
