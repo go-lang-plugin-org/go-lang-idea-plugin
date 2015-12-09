@@ -46,9 +46,9 @@ public class GoLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSettin
   public CommonCodeStyleSettings getDefaultCommonSettings() {
     CommonCodeStyleSettings defaultSettings = new CommonCodeStyleSettings(getLanguage());
     CommonCodeStyleSettings.IndentOptions indentOptions = defaultSettings.initIndentOptions();
-    indentOptions.INDENT_SIZE = 4;
-    indentOptions.CONTINUATION_INDENT_SIZE = 4;
-    indentOptions.TAB_SIZE = 4;
+    indentOptions.INDENT_SIZE = 8;
+    indentOptions.CONTINUATION_INDENT_SIZE = 8;
+    indentOptions.TAB_SIZE = 8;
     indentOptions.USE_TAB_CHARACTER = true;
     return defaultSettings;
   }
