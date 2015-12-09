@@ -23,7 +23,7 @@ version = "${version}.$buildNumber"
 allprojects {
   apply plugin: 'java'
   sourceCompatibility = javaVersion
-  targetCompatibility = javaVersion
+  targetCompatibility = javaTargetVersion
   tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
 
   sourceSets {
