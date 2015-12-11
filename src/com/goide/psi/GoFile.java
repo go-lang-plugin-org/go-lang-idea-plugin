@@ -413,15 +413,8 @@ public class GoFile extends PsiFileBase {
   public String getPackageName() {
     GoFileStub stub = getStub();
     if (stub != null) return stub.getPackageName();
-
     GoPackageClause packageClause = getPackage();
-    if (packageClause != null) {
-      PsiElement packageIdentifier = packageClause.getIdentifier();
-      if (packageIdentifier != null) {
-        return packageIdentifier.getText().trim();
-      }
-    }
-    return null;
+    return packageClause != null ? packageClause.getName() : null;
   }
 
   @Nullable
