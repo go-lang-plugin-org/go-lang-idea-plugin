@@ -46,14 +46,10 @@ public class GoCommentStartInspection extends GoInspectionBase {
         if (GoConstants.MAIN.equals(packageName)) {
           return;
         }
-
         List<PsiComment> comments = GoDocumentationProvider.getCommentsForElement(o);
         String commentText = GoDocumentationProvider.getCommentText(comments, false);
         if (!comments.isEmpty() && !commentText.isEmpty() && !commentText.startsWith("Package " + packageName)) {
-          String description = "Package comment should be of the form \"Package " + packageName + " ...\"";
-          for (PsiComment comment : comments) {
-            holder.registerProblem(comment, description, ProblemHighlightType.WEAK_WARNING);
-          }
+          registerProblem(comments, "Package comment should be of the form \"Package " + packageName + " ...\"", holder);
         }
       }
 
@@ -62,27 +58,26 @@ public class GoCommentStartInspection extends GoInspectionBase {
         if (!(o instanceof GoNamedElement) || !((GoNamedElement)o).isPublic()) {
           return;
         }
-
         List<PsiComment> comments = GoDocumentationProvider.getCommentsForElement(o);
         String commentText = GoDocumentationProvider.getCommentText(comments, false);
         String elementName = ((GoNamedElement)o).getName();
         if (elementName != null && !comments.isEmpty() && !commentText.isEmpty()) {
           if (!isCorrectComment(commentText, elementName)) {
-            String description = "Comment should start with '" + elementName + "'";
-            for (PsiComment comment : comments) {
-              holder.registerProblem(comment, description, ProblemHighlightType.WEAK_WARNING);
-            }
+            registerProblem(comments, "Comment should start with '" + elementName + "'", holder);
           }
           // +1 stands for Element_Name<space>
           else if (commentText.length() <= elementName.length() + 1) {
-            String description = "Comment should be meaningful or it should be removed";
-            for (PsiComment comment : comments) {
-              holder.registerProblem(comment, description, ProblemHighlightType.WEAK_WARNING);
-            }
+            registerProblem(comments, "Comment should be meaningful or it should be removed", holder);
           }
         }
       }
     };
+  }
+
+  private static void registerProblem(List<PsiComment> comments, String description, @NotNull ProblemsHolder holder) {
+    for (PsiComment comment : comments) {
+      holder.registerProblem(comment, description, ProblemHighlightType.WEAK_WARNING);
+    }
   }
 
   private static boolean isCorrectComment(String commentText, String elementName) {
