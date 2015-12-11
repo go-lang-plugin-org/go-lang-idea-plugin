@@ -16,15 +16,19 @@
 
 package com.goide.inspections;
 
-import com.goide.psi.*;
+import com.goide.GoConstants;
+import com.goide.GoDocumentationProvider;
+import com.goide.psi.GoCompositeElement;
+import com.goide.psi.GoNamedElement;
+import com.goide.psi.GoPackageClause;
+import com.goide.psi.GoVisitor;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiWhiteSpace;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * golint inspection from:
@@ -35,118 +39,56 @@ public class GoCommentStartInspection extends GoInspectionBase {
   @Override
   protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
+
       @Override
-      public void visitComment(PsiComment comment) {
-        super.visitComment(comment);
-
-        if (comment.getPrevSibling() instanceof PsiWhiteSpace &&
-            comment.getPrevSibling().getPrevSibling() instanceof PsiComment &&
-            comment.getPrevSibling().getTextLength() == 1) {
+      public void visitPackageClause(@NotNull GoPackageClause o) {
+        String packageName = o.getName();
+        if (GoConstants.MAIN.equals(packageName)) {
           return;
         }
 
-        PsiElement commentParent = comment.getParent();
-        if ((!(commentParent instanceof GoFile)) &&
-            (!(commentParent instanceof GoTopLevelDeclaration))) {
-          return;
-        }
-
-        String elementName = null;
-        PsiElement nextElement = comment;
-        boolean hadMoreThanOneSpace = false;
-        boolean hadNewComment = false;
-        while (true) {
-          nextElement = nextElement.getNextSibling();
-          if (nextElement instanceof PsiWhiteSpace) {
-            if (nextElement.getTextLength() > 1) {
-              hadMoreThanOneSpace = true;
-            }
-            continue;
-          }
-          if (!(nextElement instanceof PsiComment)) {
-            break;
-          }
-          else if (hadMoreThanOneSpace) {
-            hadNewComment = true;
-          }
-        }
-
-        if (hadNewComment) {
-          return;
-        }
-
-        if ((nextElement instanceof GoNamedElement)) {
-          elementName = ((GoNamedElement)nextElement).getName();
-        }
-        else if (nextElement instanceof GoPackageClause) {
-          PsiElement identifier = ((GoPackageClause)nextElement).getIdentifier();
-          if (identifier == null) {
-            return;
-          }
-          elementName = identifier.getText();
-        }
-        else if (nextElement instanceof GoTypeDeclaration) {
-          if (((GoTypeDeclaration)nextElement).getTypeSpecList().size() == 0) {
-            return;
-          }
-          elementName = ((GoTypeDeclaration)nextElement).getTypeSpecList().get(0).getName();
-        }
-        else if (nextElement instanceof GoConstSpec) {
-          if (((GoConstSpec)nextElement).getConstDefinitionList().size() == 0) {
-            return;
-          }
-          elementName = ((GoConstSpec)nextElement).getConstDefinitionList().get(0).getName();
-        }
-        else if (nextElement instanceof GoConstDeclaration) {
-          if (((GoConstDeclaration)nextElement).getConstSpecList().size() == 0) {
-            return;
-          }
-          elementName = ((GoConstDeclaration)nextElement).getConstSpecList().get(0).getConstDefinitionList().get(0).getName();
-        }
-        else if (nextElement instanceof GoVarSpec) {
-          if (((GoVarSpec)nextElement).getVarDefinitionList().size() == 0) {
-            return;
-          }
-          elementName = ((GoVarSpec)nextElement).getVarDefinitionList().get(0).getName();
-        }
-        else if (nextElement instanceof GoVarDeclaration) {
-          if (((GoVarDeclaration)nextElement).getVarSpecList().size() == 0) {
-            return;
-          }
-          elementName = ((GoVarDeclaration)nextElement).getVarSpecList().get(0).getVarDefinitionList().get(0).getName();
-        }
-
-        if (elementName == null ||
-            (!(nextElement instanceof GoPackageClause)) && !StringUtil.isCapitalized(elementName)) {
-          return;
-        }
-
-        String commentText = comment.getText();
-        if (nextElement instanceof GoPackageClause) {
-          if (!elementName.equals("main") && !commentText.startsWith("// Package " + elementName)) {
-            String description = "Package comment should be of the form \"Package " + elementName + " ...\"\n";
+        List<PsiComment> comments = GoDocumentationProvider.getCommentsForElement(o);
+        String commentText = GoDocumentationProvider.getCommentText(comments, false);
+        if (!comments.isEmpty() && !commentText.isEmpty() && !commentText.startsWith("Package " + packageName)) {
+          String description = "Package comment should be of the form \"Package " + packageName + " ...\"";
+          for (PsiComment comment : comments) {
             holder.registerProblem(comment, description, ProblemHighlightType.WEAK_WARNING);
           }
         }
-        else if (!correctCommentStart(commentText, elementName)) {
-          holder.registerProblem(comment, "Comment should start with '" + elementName + "'", ProblemHighlightType.WEAK_WARNING);
-        }
-        // +4 stands for //<space>Element_Name<space>
-        else if (commentText.length() <= elementName.length() + 4) {
-          holder.registerProblem(comment, "Comment should be meaningful or it should be removed", ProblemHighlightType.WEAK_WARNING);
+      }
+
+      @Override
+      public void visitCompositeElement(@NotNull GoCompositeElement o) {
+        if (!(o instanceof GoNamedElement) || !((GoNamedElement)o).isPublic()) {
+          return;
         }
 
-        if (hadMoreThanOneSpace) {
-          holder.registerProblem(comment, "Comment is detached from the element", ProblemHighlightType.WEAK_WARNING);
+        List<PsiComment> comments = GoDocumentationProvider.getCommentsForElement(o);
+        String commentText = GoDocumentationProvider.getCommentText(comments, false);
+        String elementName = ((GoNamedElement)o).getName();
+        if (elementName != null && !comments.isEmpty() && !commentText.isEmpty()) {
+          if (!isCorrectComment(commentText, elementName)) {
+            String description = "Comment should start with '" + elementName + "'";
+            for (PsiComment comment : comments) {
+              holder.registerProblem(comment, description, ProblemHighlightType.WEAK_WARNING);
+            }
+          }
+          // +1 stands for Element_Name<space>
+          else if (commentText.length() <= elementName.length() + 1) {
+            String description = "Comment should be meaningful or it should be removed";
+            for (PsiComment comment : comments) {
+              holder.registerProblem(comment, description, ProblemHighlightType.WEAK_WARNING);
+            }
+          }
         }
       }
     };
   }
 
-  private static boolean correctCommentStart(String commentText, String elementName) {
-    return commentText.startsWith("// " + elementName) ||
-           commentText.startsWith("// A " + elementName) ||
-           commentText.startsWith("// An " + elementName) ||
-           commentText.startsWith("// The " + elementName);
+  private static boolean isCorrectComment(String commentText, String elementName) {
+    return commentText.startsWith(elementName)
+           || commentText.startsWith("A " + elementName)
+           || commentText.startsWith("An " + elementName)
+           || commentText.startsWith("The " + elementName);
   }
 }

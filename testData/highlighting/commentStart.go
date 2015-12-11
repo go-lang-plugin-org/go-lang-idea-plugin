@@ -24,7 +24,7 @@ const (
 const Hellloc, hellloc2 = 1, 2
 
 var (
-	<weak_warning descr="Comment should start with 'Hello1'">// help</weak_warning>
+	<weak_warning descr="Comment should start with 'Hello1'"><weak_warning descr="Comment should start with 'Hellow1'">// help</weak_warning></weak_warning>
 	Hello1, Hellow1 int
 )
 
@@ -72,7 +72,7 @@ func Demo6() {}
 // Deprecated: use other thing
 func Demo7() {}
 
-<weak_warning descr="Comment is detached from the element">// Demo8 does things  -> correct</weak_warning>
+// Demo8 does things  -> correct
 //
 // Deprecated: use other thing
 
