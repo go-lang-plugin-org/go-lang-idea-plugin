@@ -298,6 +298,11 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testCommentStart() {
     myFixture.testHighlighting(true, false, true, getTestName(true) + ".go");
   }
+  
+  public void testDoNotHighlightCommentOfMainPackage() {
+    myFixture.configureByText("a.go", "// Some comment\npackage main; func main() {}");
+    myFixture.checkHighlighting(true, false, true);
+  }
 
   public void testCGOImportInNonTestFile() {
     myFixture.configureByText("a.go", "package a; import \"C\"");
