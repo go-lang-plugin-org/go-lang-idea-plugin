@@ -122,8 +122,14 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
   public static List<PsiComment> getCommentsForElement(@Nullable PsiElement element) {
     List<PsiComment> comments = getCommentsInner(element);
     if (comments.isEmpty() && element instanceof GoNamedElement) {
-      GoTopLevelDeclaration topLevel = PsiTreeUtil.getParentOfType(element, GoTopLevelDeclaration.class);
-      return getCommentsInner(topLevel);
+      PsiElement parent = element.getParent();
+      while (parent != null) {
+        comments = getCommentsInner(parent);
+        if (!comments.isEmpty() || parent instanceof GoTopLevelDeclaration) {
+          break;
+        }
+        parent = parent.getParent();
+      }
     }
     return comments;
   }

@@ -15,3 +15,16 @@ func MultiType(
     ) {
     return []interface{}{}, err
 }
+
+// Global comment
+var (
+	// InnerVariable_1
+	InnerVariable_1,
+	// InnerVariable_2 
+	InnerVariable_2,
+	// InnerVariable_3 
+	InnerVariable_3 int
+	// InnerVariable_4
+	InnerVariable_4 int
+	InnerVariable_5 int
+)
