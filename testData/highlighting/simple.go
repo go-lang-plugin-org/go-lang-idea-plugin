@@ -538,6 +538,6 @@ func _() {
 
 func _() {
     var x map[string]string
-    x = map[string]string{<error descr="Missing key in map literal.">"a"</error>, <error descr="Missing key in map literal.">"b"</error>}
+    x = map[string]string{<error descr="Missing key in map literal">"a"</error>, <error descr="Missing key in map literal">"b"</error>}
     if len(x) > 2 {}
 }

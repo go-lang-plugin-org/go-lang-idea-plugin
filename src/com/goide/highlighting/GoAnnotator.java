@@ -63,7 +63,7 @@ public class GoAnnotator implements Annotator {
       if (literal.getType() instanceof GoMapType) {
         for (GoElement literalElement : literal.getLiteralValue().getElementList()) {
           if (literalElement.getKey() == null) {
-            holder.createErrorAnnotation(literalElement, "Missing key in map literal.");
+            holder.createErrorAnnotation(literalElement, "Missing key in map literal");
           }
         }
       }
