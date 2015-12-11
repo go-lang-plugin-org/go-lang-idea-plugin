@@ -298,7 +298,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testCommentStart() {
     myFixture.testHighlighting(true, false, true, getTestName(true) + ".go");
   }
-  
+
   public void testDoNotHighlightCommentOfMainPackage() {
     myFixture.configureByText("a.go", "// Some comment\npackage main; func main() {}");
     myFixture.checkHighlighting(true, false, true);
@@ -317,7 +317,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
         myFixture.getTempDirFixture().createFile("pack1/pack1.go", "package pack1; func Foo() {}");
         myFixture.getTempDirFixture().createFile("pack2/pack2.go", "package pack2");
         return myFixture.getTempDirFixture().createFile("pack3/pack3.go",
-                                                 "package main; import p \"pack1\"; import <error>p \"pack2\"</error>; func main() { p.Foo() }");
+                                                        "package main; import p \"pack1\"; import <error>p \"pack2\"</error>; func main() { p.Foo() }");
       }
     });
     GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(file.getParent().getParent().getUrl());
