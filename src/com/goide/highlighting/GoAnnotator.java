@@ -37,24 +37,24 @@ public class GoAnnotator implements Annotator {
 
     if (element instanceof GoContinueStatement) {
       if (!(PsiTreeUtil.getParentOfType(element, GoForStatement.class, GoFunctionLit.class) instanceof GoForStatement)) {
-        Annotation annotation = holder.createErrorAnnotation(element, "Continue statement not inside a for loop.");
+        Annotation annotation = holder.createErrorAnnotation(element, "Continue statement not inside a for loop");
         annotation.registerFix(new GoReplaceWithReturnStatementQuickFix(element));
       }
     }
     else if (element instanceof GoBreakStatement) {
       if (GoPsiImplUtil.getBreakStatementOwner(element) == null) {
-        Annotation annotation = holder.createErrorAnnotation(element, "Break statement not inside a for loop, select or switch.");
+        Annotation annotation = holder.createErrorAnnotation(element, "Break statement not inside a for loop, select or switch");
         annotation.registerFix(new GoReplaceWithReturnStatementQuickFix(element));
       }
     }
     else if (element instanceof GoReferenceExpression) {
-      GoReferenceExpression reference = (GoReferenceExpression) element;
+      GoReferenceExpression reference = (GoReferenceExpression)element;
       PsiElement resolvedReference = reference.getReference().resolve();
       if (resolvedReference instanceof PsiDirectory || resolvedReference instanceof GoImportSpec) {
         // It's a package reference. It should either be inside a package clause or part of a larger reference expression.
         if (!(element.getParent() instanceof GoReferenceExpression) &&
             PsiTreeUtil.getParentOfType(reference, GoPackageClause.class) == null) {
-          holder.createErrorAnnotation(element, "Use of package " + element.getText() + " without selector.");
+          holder.createErrorAnnotation(element, "Use of package " + element.getText() + " without selector");
         }
       }
     }

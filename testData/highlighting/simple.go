@@ -54,10 +54,9 @@ func <warning descr="Unused function 'bar'">bar</warning>() {
     (T).Mv(t, 7)
     f1 := T.Mv; f1(t, 7)
     f2 := (T).Mv; f2(t, 7)
-    <error descr="Use of package fmt without selector.">fmt</error>
-    f1(<error descr="Use of package fmt without selector.">fmt</error>)
+    <error descr="Use of package fmt without selector">fmt</error>
+    f1(<error descr="Use of package fmt without selector">fmt</error>)
 }
-
 
 func <error descr="Duplicate function name">foo</error>() {
     a := &A{}

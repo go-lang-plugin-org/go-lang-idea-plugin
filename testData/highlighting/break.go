@@ -6,25 +6,25 @@ func _() {
 	for i := 0; i < 10; i++ {
 		fmt.Printf("%d\n", i)
 		f := func() {
-			<error descr="Break statement not inside a for loop, select or switch.">break</error>
+			<error descr="Break statement not inside a for loop, select or switch">break</error>
 		}
         f()
 		break
 	}
 
-	<error descr="Break statement not inside a for loop, select or switch.">break</error>
+	<error descr="Break statement not inside a for loop, select or switch">break</error>
 
 	if 1 > 0 {
-		<error descr="Break statement not inside a for loop, select or switch.">break</error>
+		<error descr="Break statement not inside a for loop, select or switch">break</error>
 	}
 
 	for i := 0; i < 10; i++ {
 		defer func() {
-			<error descr="Break statement not inside a for loop, select or switch.">break</error>
+			<error descr="Break statement not inside a for loop, select or switch">break</error>
 		}()
 
 		go func() {
-			<error descr="Break statement not inside a for loop, select or switch.">break</error>
+			<error descr="Break statement not inside a for loop, select or switch">break</error>
 		}()
 
 		break
