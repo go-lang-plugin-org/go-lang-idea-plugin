@@ -34,27 +34,28 @@ public class GoDocumentationProviderTest extends GoCodeInsightFixtureTestCase {
   protected LightProjectDescriptor getProjectDescriptor() {
     return createMockProjectDescriptor();
   }
-  public void testPrintln()                       { doTest(); }
-  public void testFprintln()                      { doTest(); }
-  public void testMethod()                        { doTest(); }
-  public void testVariable()                      { doTest(); }
-  public void testEscape()                        { doTest(); }
-  public void testEscapeReturnValues()            { doTest(); }
-  public void testPackageWithDoc()                { doTest(); }
-  public void testPackage()                       { doTest(); }
-  public void testPackageOnQualifier()            { doTest(); }
-  public void testPackageOnImportAlias()          { doTest(); }
-  public void testTypeResultDefinition()          { doTest(); }
-  public void testMultilineTypeListDefinition()   { doTest(); }
-  public void testSignature()                     { doTest(); }
-  public void testTypeSpec()                      { doTest(); }
-  public void testTypeTopDefinition()             { doTest(); }
+  public void testPrintln()                           { doTest(); }
+  public void testFprintln()                          { doTest(); }
+  public void testMethod()                            { doTest(); }
+  public void testVariable()                          { doTest(); }
+  public void testEscape()                            { doTest(); }
+  public void testEscapeReturnValues()                { doTest(); }
+  public void testPackageWithDoc()                    { doTest(); }
+  public void testPackage()                           { doTest(); }
+  public void testPackageOnQualifier()                { doTest(); }
+  public void testPackageOnImportAlias()              { doTest(); }
+  public void testTypeResultDefinition()              { doTest(); }
+  public void testMultilineTypeListDefinition()       { doTest(); }
+  public void testSignature()                         { doTest(); }
+  public void testTypeSpec()                          { doTest(); }
+  public void testTypeTopDefinition()                 { doTest(); }
+  public void testTypeInnerDefinitionWithoutComment() { doTest(); }
   
-  public void testMultiBlockDoc()                 { doConverterTest(); }
-  public void testIndentedBlock()                 { doConverterTest(); }
-  public void testCommentEndsWithIndentedBlock()  { doConverterTest(); }
-  public void testQuotedStrings()                 { doConverterTest(); }
-  public void testLinks()                         { doConverterTest(); }
+  public void testMultiBlockDoc()                     { doConverterTest(); }
+  public void testIndentedBlock()                     { doConverterTest(); }
+  public void testCommentEndsWithIndentedBlock()      { doConverterTest(); }
+  public void testQuotedStrings()                     { doConverterTest(); }
+  public void testLinks()                             { doConverterTest(); }
 
   @NotNull
   @Override

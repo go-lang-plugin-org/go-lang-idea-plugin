@@ -36,8 +36,19 @@ import java.util.regex.Pattern;
  */
 public class GoCommentsConverter {
   private static final Pattern LEADING_TAB = Pattern.compile("^\\t", Pattern.MULTILINE);
+  
+  @NotNull
+  public String toText(@NotNull List<PsiComment> comments) {
+    return StringUtil.join(getStrings(comments), "\n");
+  }
 
+  @NotNull
   public String toHtml(@NotNull List<PsiComment> comments) {
+    return textToHtml(getStrings(comments));
+  }
+
+  @NotNull
+  private static List<String> getStrings(@NotNull List<PsiComment> comments) {
     List<String> strings = ContainerUtil.newArrayList();
     for (PsiComment comment : comments) {
       IElementType type = comment.getTokenType();
@@ -51,7 +62,7 @@ public class GoCommentsConverter {
         Collections.addAll(strings, StringUtil.splitByLines(text, false));
       }
     }
-    return textToHtml(strings);
+    return strings;
   }
 
   @NotNull

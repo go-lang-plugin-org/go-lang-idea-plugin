@@ -41,7 +41,10 @@ import com.intellij.xml.util.XmlStringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class GoDocumentationProvider extends AbstractDocumentationProvider {
   private static final GoCommentsConverter COMMENTS_CONVERTER = new GoCommentsConverter();
@@ -61,13 +64,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
     if (element instanceof GoNamedElement) {
       String signature = getSignature(element);
       signature = StringUtil.isNotEmpty(signature) ? "<b>" + signature + "</b>\n" : signature;
-
-      GoTopLevelDeclaration topLevel = PsiTreeUtil.getParentOfType(element, GoTopLevelDeclaration.class);
-      Collection<PsiElement> children = PsiTreeUtil.findChildrenOfType(topLevel, element.getClass());
-      boolean alone = children.size() == 1 && children.iterator().next().equals(element);
-      String commentText = getCommentText(getCommentsForElement(alone ? topLevel : element));
-
-      return StringUtil.nullize(signature + commentText);
+      return StringUtil.nullize(signature + getCommentText(getCommentsForElement(element), true));
     }
     else if (element instanceof PsiDirectory) {
       return getPackageComment(findDocFileForDirectory(((PsiDirectory)element)));
@@ -116,36 +113,26 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
     return super.getDocumentationElementForLink(psiManager, link, context);
   }
 
-  @Nullable
-  private static GoFile findDocFileForDirectory(@NotNull PsiDirectory directory) {
-    PsiFile file = directory.findFile("doc.go");
-    if (file instanceof GoFile) {
-      return ((GoFile)file);
-    }
-    PsiFile directoryFile = directory.findFile(GoUtil.suggestPackageForDirectory(directory) + ".go");
-    return directoryFile instanceof GoFile ? ((GoFile)directoryFile) : null;
-  }
-
-  @Nullable
-  private static String getPackageComment(@Nullable GoFile file) {
-    if (file != null) {
-      // todo: remove after correct stubbing (comments needed in stubs)
-      GoPackageClause pack = PsiTreeUtil.findChildOfType(file, GoPackageClause.class);
-      String title = "<b>Package " + GoUtil.suggestPackageForDirectory(file.getParent()) + "</b>\n";
-      String importPath = "<p><code>import \"" + StringUtil.notNullize(file.getImportPath()) + "\"</code></p>\n";
-      return title + importPath + getCommentText(getCommentsForElement(pack));
-    }
-    return null;
-  }
-
-  @Nullable
-  private static PsiElement adjustDocElement(@Nullable PsiElement element) {
-    return element instanceof GoImportSpec ? ((GoImportSpec)element).getImportString().resolve() : element;
+  @NotNull
+  public static String getCommentText(@NotNull List<PsiComment> comments, boolean withHtml) {
+    return withHtml ? COMMENTS_CONVERTER.toHtml(comments) : COMMENTS_CONVERTER.toText(comments);
   }
 
   @NotNull
-  private static List<PsiComment> getCommentsForElement(@Nullable PsiElement element) {
-    if (element == null) return ContainerUtil.emptyList();
+  public static List<PsiComment> getCommentsForElement(@Nullable PsiElement element) {
+    List<PsiComment> comments = getCommentsInner(element);
+    if (comments.isEmpty() && element instanceof GoNamedElement) {
+      GoTopLevelDeclaration topLevel = PsiTreeUtil.getParentOfType(element, GoTopLevelDeclaration.class);
+      return getCommentsInner(topLevel);
+    }
+    return comments;
+  }
+
+  @NotNull
+  private static List<PsiComment> getCommentsInner(@Nullable PsiElement element) {
+    if (element == null) {
+      return ContainerUtil.emptyList();
+    }
     List<PsiComment> result = ContainerUtil.newArrayList();
     PsiElement e;
     for (e = element.getPrevSibling(); e != null; e = e.getPrevSibling()) {
@@ -163,9 +150,31 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
     return result;
   }
 
-  @NotNull
-  private static String getCommentText(@NotNull List<PsiComment> comments) {
-    return COMMENTS_CONVERTER.toHtml(comments);
+  @Nullable
+  private static GoFile findDocFileForDirectory(@NotNull PsiDirectory directory) {
+    PsiFile file = directory.findFile("doc.go");
+    if (file instanceof GoFile) {
+      return ((GoFile)file);
+    }
+    PsiFile directoryFile = directory.findFile(GoUtil.suggestPackageForDirectory(directory) + ".go");
+    return directoryFile instanceof GoFile ? ((GoFile)directoryFile) : null;
+  }
+
+  @Nullable
+  private static String getPackageComment(@Nullable GoFile file) {
+    if (file != null) {
+      // todo: remove after correct stubbing (comments needed in stubs)
+      GoPackageClause pack = PsiTreeUtil.findChildOfType(file, GoPackageClause.class);
+      String title = "<b>Package " + GoUtil.suggestPackageForDirectory(file.getParent()) + "</b>\n";
+      String importPath = "<p><code>import \"" + StringUtil.notNullize(file.getImportPath()) + "\"</code></p>\n";
+      return title + importPath + getCommentText(getCommentsForElement(pack), true);
+    }
+    return null;
+  }
+
+  @Nullable
+  private static PsiElement adjustDocElement(@Nullable PsiElement element) {
+    return element instanceof GoImportSpec ? ((GoImportSpec)element).getImportString().resolve() : element;
   }
 
   @NotNull
@@ -259,7 +268,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
   private static String replaceInnerTypes(@NotNull GoType type, GoType... innerTypes) {
     return replaceInnerTypes(type, Arrays.asList(innerTypes));
   }
-  
+
   @NotNull
   private static String replaceInnerTypes(@NotNull GoType type, @NotNull List<GoType> innerTypes) {
     StringBuilder result = new StringBuilder();
