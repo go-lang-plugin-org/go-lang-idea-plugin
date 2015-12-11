@@ -28,6 +28,8 @@ import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 @SuppressWarnings("ConstantConditions")
 public class GoElementFactory {
   private GoElementFactory() {
@@ -120,7 +122,7 @@ public class GoElementFactory {
     GoFile file = createFileFromText(project, "package a; func a() {\n " + left + " = " + right + "}");
     return PsiTreeUtil.findChildOfType(file, GoAssignmentStatement.class);
   }
-  
+
   @NotNull
   public static GoExpression createExpression(@NotNull Project project, @NotNull String text) {
     GoFile file = createFileFromText(project, "package a; func a() {\n a := " + text + "}");
@@ -143,5 +145,53 @@ public class GoElementFactory {
   public static GoSimpleStatement createComparison(@NotNull Project project, @NotNull String text) {
     GoFile file = createFileFromText(project, "package a; func a() {\n " + text + "}");
     return PsiTreeUtil.findChildOfType(file, GoSimpleStatement.class);
+  }
+
+  @NotNull
+  public static GoConstSpec createConstSpec(@NotNull Project project,
+                                            @NotNull String constName,
+                                            @NotNull String goType,
+                                            @NotNull String constValue) {
+    goType = (goType.isEmpty() ? "" : " " + goType);
+    GoFile file = createFileFromText(project, "package a\n const " + constName + goType + (constValue.isEmpty() ? "" : " = " + constValue));
+    return PsiTreeUtil.findChildOfType(file, GoConstSpec.class);
+  }
+
+  @NotNull
+  public static GoConstDeclaration createConstDeclaration(@NotNull Project project, List<GoConstSpec> constSpecs) {
+    String specs = "";
+    for (int i = 0; i < constSpecs.size(); i++) {
+      specs += "\ta = 1\n";
+    }
+    GoFile file = createFileFromText(project, "package a\n const (\n" + specs + ")");
+    GoConstDeclaration element = PsiTreeUtil.findChildOfType(file, GoConstDeclaration.class);
+    for (int i = 0; i < constSpecs.size(); i++) {
+      element.getConstSpecList().get(i).replace(constSpecs.get(i));
+    }
+    return element;
+  }
+
+  @NotNull
+  public static GoVarSpec createVarSpec(@NotNull Project project,
+                                        @NotNull String varName,
+                                        @NotNull String goType,
+                                        @NotNull String varValue) {
+    goType = (goType.isEmpty() ? "" : " " + goType);
+    GoFile file = createFileFromText(project, "package a\n var " + varName + goType + (varValue.isEmpty() ? "" : " = " + varValue));
+    return PsiTreeUtil.findChildOfType(file, GoVarSpec.class);
+  }
+
+  @NotNull
+  public static GoVarDeclaration createVarDeclaration(@NotNull Project project, List<GoVarSpec> varSpecs) {
+    String specs = "";
+    for (int i = 0; i < varSpecs.size(); i++) {
+      specs += "\ta = 1\n";
+    }
+    GoFile file = createFileFromText(project, "package a\n var (\n" + specs + ")");
+    GoVarDeclaration element = PsiTreeUtil.findChildOfType(file, GoVarDeclaration.class);
+    for (int i = 0; i < varSpecs.size(); i++) {
+      element.getVarSpecList().get(i).replace(varSpecs.get(i));
+    }
+    return element;
   }
 }
