@@ -96,7 +96,7 @@ ImportList ::= (ImportDeclaration semi)+|<<emptyImportList>> {
 }
 private semi ::= '<NL>' | ';' | <<eof>>
 
-PackageClause ::= package identifier {pin=1}
+PackageClause ::= package identifier {pin=1;methods=[getName]}
 
 ImportDeclaration ::= import ( ImportSpec | '(' ImportSpecs? ')' ) {
   pin(".*")=1

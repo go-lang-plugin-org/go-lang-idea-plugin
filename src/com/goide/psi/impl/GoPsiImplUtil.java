@@ -230,6 +230,15 @@ public class GoPsiImplUtil {
     return null;
   }
 
+  @Nullable
+  public static String getName(@NotNull GoPackageClause packageClause) {
+    PsiElement packageIdentifier = packageClause.getIdentifier();
+    if (packageIdentifier != null) {
+      return packageIdentifier.getText().trim();
+    }
+    return null;
+  }
+  
   @NotNull
   public static String getName(@NotNull GoAnonymousFieldDefinition o) {
     return o.getTypeReferenceExpression().getIdentifier().getText();
@@ -799,7 +808,7 @@ public class GoPsiImplUtil {
                                                            GoSelectStatement.class, GoFunctionLit.class);
     return owner instanceof GoFunctionLit ? null : owner;
   }
-
+  
   @NotNull
   public PsiElement getType(@NotNull GoTypeSpec o) {
     return o.getSpecType();
