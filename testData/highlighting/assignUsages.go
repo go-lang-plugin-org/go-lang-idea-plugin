@@ -20,3 +20,11 @@ func main() {
 func f(m func()) {
 	m()
 }
+
+func foo() (int, int) {
+	return 4, 5
+}
+
+func _() {
+	<error descr="Assignment count mismatch: 1 = 2"><error descr="Unused variable 'x'">x</error> := foo(), foo()</error>
+}
