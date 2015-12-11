@@ -18,6 +18,10 @@ func main() {
     }
 }
 
+func _() {
+    []string
+}
+
 func User(createBase base.AuthFunc) base.Ajaxer {
 
 	log.Println("Restful user request.")

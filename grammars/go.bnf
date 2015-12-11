@@ -233,8 +233,11 @@ ConstDefinition ::= identifier {
 }
 
 LeftHandExprList ::= ExpressionList
-private ExpressionArgList ::= ExpressionWithRecover2 (',' (ExpressionWithRecover2 | &')'))* {pin(".*")=1}
-private ExpressionWithRecover2 ::= <<withOn "PAR" ExpressionWithRecover>> | (!() Expression) {recoverWhile=ExpressionListRecover}
+private ExpressionArgList ::= ExpressionOrTypeWithRecover2 (',' (ExpressionOrTypeWithRecover2 | &')'))* {pin(".*")=1}
+private ExpressionOrTypeWithRecover2 ::= <<withOn "PAR" ExpressionOrTypeWithRecover>> | (!() ExpressionOrLiteralTypeExpr) {recoverWhile=ExpressionListRecover}
+private ExpressionOrTypeWithRecover ::= ExpressionOrLiteralTypeExpr {recoverWhile=ExpressionListRecover}
+private ExpressionOrLiteralTypeExpr ::= Expression | LiteralTypeExpr
+
 private ExpressionList ::= ExpressionWithRecover (',' (ExpressionWithRecover | &')'))* {pin(".*")=1}
 private ExpressionWithRecover ::= Expression {recoverWhile=ExpressionListRecover}
 private ExpressionListRecover ::= !('!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex | identifier | if | int | interface | map | oct | return | select | string | raw_string | struct | switch | var)
@@ -355,7 +358,6 @@ private MaxGroup ::=
   | SelectorExpr
   | IndexOrSliceExpr
   | Literal
-  | LiteralTypeExpr
   | FunctionLit
 
 private rel_op ::= '==' | '!=' | '<' | '<=' | '>' | '>='

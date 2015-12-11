@@ -1334,19 +1334,19 @@ public class GoParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ExpressionWithRecover2 (',' (ExpressionWithRecover2 | &')'))*
+  // ExpressionOrTypeWithRecover2 (',' (ExpressionOrTypeWithRecover2 | &')'))*
   static boolean ExpressionArgList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExpressionArgList")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
-    r = ExpressionWithRecover2(b, l + 1);
+    r = ExpressionOrTypeWithRecover2(b, l + 1);
     p = r; // pin = 1
     r = r && ExpressionArgList_1(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
-  // (',' (ExpressionWithRecover2 | &')'))*
+  // (',' (ExpressionOrTypeWithRecover2 | &')'))*
   private static boolean ExpressionArgList_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExpressionArgList_1")) return false;
     int c = current_position_(b);
@@ -1358,7 +1358,7 @@ public class GoParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // ',' (ExpressionWithRecover2 | &')')
+  // ',' (ExpressionOrTypeWithRecover2 | &')')
   private static boolean ExpressionArgList_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExpressionArgList_1_0")) return false;
     boolean r, p;
@@ -1370,12 +1370,12 @@ public class GoParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // ExpressionWithRecover2 | &')'
+  // ExpressionOrTypeWithRecover2 | &')'
   private static boolean ExpressionArgList_1_0_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExpressionArgList_1_0_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = ExpressionWithRecover2(b, l + 1);
+    r = ExpressionOrTypeWithRecover2(b, l + 1);
     if (!r) r = ExpressionArgList_1_0_1_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -1548,6 +1548,67 @@ public class GoParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // Expression | LiteralTypeExpr
+  static boolean ExpressionOrLiteralTypeExpr(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExpressionOrLiteralTypeExpr")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Expression(b, l + 1, -1);
+    if (!r) r = LiteralTypeExpr(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // ExpressionOrLiteralTypeExpr
+  static boolean ExpressionOrTypeWithRecover(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExpressionOrTypeWithRecover")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = ExpressionOrLiteralTypeExpr(b, l + 1);
+    exit_section_(b, l, m, r, false, ExpressionListRecover_parser_);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // <<withOn "PAR" ExpressionOrTypeWithRecover>> | (!() ExpressionOrLiteralTypeExpr)
+  static boolean ExpressionOrTypeWithRecover2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExpressionOrTypeWithRecover2")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = withOn(b, l + 1, "PAR", ExpressionOrTypeWithRecover_parser_);
+    if (!r) r = ExpressionOrTypeWithRecover2_1(b, l + 1);
+    exit_section_(b, l, m, r, false, ExpressionListRecover_parser_);
+    return r;
+  }
+
+  // !() ExpressionOrLiteralTypeExpr
+  private static boolean ExpressionOrTypeWithRecover2_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExpressionOrTypeWithRecover2_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = ExpressionOrTypeWithRecover2_1_0(b, l + 1);
+    r = r && ExpressionOrLiteralTypeExpr(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // !()
+  private static boolean ExpressionOrTypeWithRecover2_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExpressionOrTypeWithRecover2_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NOT_);
+    r = !ExpressionOrTypeWithRecover2_1_0_0(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // ()
+  private static boolean ExpressionOrTypeWithRecover2_1_0_0(PsiBuilder b, int l) {
+    return true;
+  }
+
+  /* ********************************************************** */
   // Expression
   static boolean ExpressionWithRecover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExpressionWithRecover")) return false;
@@ -1556,44 +1617,6 @@ public class GoParser implements PsiParser, LightPsiParser {
     r = Expression(b, l + 1, -1);
     exit_section_(b, l, m, r, false, ExpressionListRecover_parser_);
     return r;
-  }
-
-  /* ********************************************************** */
-  // <<withOn "PAR" ExpressionWithRecover>> | (!() Expression)
-  static boolean ExpressionWithRecover2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ExpressionWithRecover2")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_);
-    r = withOn(b, l + 1, "PAR", ExpressionWithRecover_parser_);
-    if (!r) r = ExpressionWithRecover2_1(b, l + 1);
-    exit_section_(b, l, m, r, false, ExpressionListRecover_parser_);
-    return r;
-  }
-
-  // !() Expression
-  private static boolean ExpressionWithRecover2_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ExpressionWithRecover2_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = ExpressionWithRecover2_1_0(b, l + 1);
-    r = r && Expression(b, l + 1, -1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // !()
-  private static boolean ExpressionWithRecover2_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ExpressionWithRecover2_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NOT_);
-    r = !ExpressionWithRecover2_1_0_0(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // ()
-  private static boolean ExpressionWithRecover2_1_0_0(PsiBuilder b, int l) {
-    return true;
   }
 
   /* ********************************************************** */
@@ -2344,6 +2367,17 @@ public class GoParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, LEFT_HAND_EXPR_LIST, "<left hand expr list>");
     r = ExpressionList(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // LiteralTypeExprInner
+  public static boolean LiteralTypeExpr(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LiteralTypeExpr")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, LITERAL_TYPE_EXPR, "<literal type expr>");
+    r = LiteralTypeExprInner(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -4353,7 +4387,7 @@ public class GoParser implements PsiParser, LightPsiParser {
   // 4: BINARY(MulExpr)
   // 5: PREFIX(UnaryExpr)
   // 6: ATOM(ConversionExpr)
-  // 7: ATOM(CompositeLit) ATOM(OperandName) POSTFIX(BuiltinCallExpr) POSTFIX(CallExpr) POSTFIX(TypeAssertionExpr) BINARY(SelectorExpr) POSTFIX(IndexOrSliceExpr) ATOM(Literal) ATOM(LiteralTypeExpr) ATOM(FunctionLit)
+  // 7: ATOM(CompositeLit) ATOM(OperandName) POSTFIX(BuiltinCallExpr) POSTFIX(CallExpr) POSTFIX(TypeAssertionExpr) BINARY(SelectorExpr) POSTFIX(IndexOrSliceExpr) ATOM(Literal) ATOM(FunctionLit)
   // 8: ATOM(ParenthesesExpr)
   public static boolean Expression(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "Expression")) return false;
@@ -4365,7 +4399,6 @@ public class GoParser implements PsiParser, LightPsiParser {
     if (!r) r = CompositeLit(b, l + 1);
     if (!r) r = OperandName(b, l + 1);
     if (!r) r = Literal(b, l + 1);
-    if (!r) r = LiteralTypeExpr(b, l + 1);
     if (!r) r = FunctionLit(b, l + 1);
     if (!r) r = ParenthesesExpr(b, l + 1);
     p = r;
@@ -4643,16 +4676,6 @@ public class GoParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // LiteralTypeExprInner
-  public static boolean LiteralTypeExpr(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "LiteralTypeExpr")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, LITERAL_TYPE_EXPR, "<literal type expr>");
-    r = LiteralTypeExprInner(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
   // func Signature Block
   public static boolean FunctionLit(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionLit")) return false;
@@ -4698,9 +4721,9 @@ public class GoParser implements PsiParser, LightPsiParser {
       return ExpressionListRecover(b, l + 1);
     }
   };
-  final static Parser ExpressionWithRecover_parser_ = new Parser() {
+  final static Parser ExpressionOrTypeWithRecover_parser_ = new Parser() {
     public boolean parse(PsiBuilder b, int l) {
-      return ExpressionWithRecover(b, l + 1);
+      return ExpressionOrTypeWithRecover(b, l + 1);
     }
   };
   final static Parser StatementRecover_parser_ = new Parser() {
