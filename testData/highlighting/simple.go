@@ -8,7 +8,7 @@ import "io"
 func  main() {
 	test := <error descr="Unresolved reference 'test'">test</error>
 	Println(test)
-	fmt.<EOLError descr="'(', <expression> or identifier expected, got '}'"></EOLError>
+	test.<EOLError descr="'(', <expression> or identifier expected, got '}'"></EOLError>
 }
 
 type aaa aaa
@@ -54,6 +54,8 @@ func <warning descr="Unused function 'bar'">bar</warning>() {
     (T).Mv(t, 7)
     f1 := T.Mv; f1(t, 7)
     f2 := (T).Mv; f2(t, 7)
+    <error descr="Use of package fmt without selector.">fmt</error>
+    f1(<error descr="Use of package fmt without selector.">fmt</error>)
 }
 
 
