@@ -229,7 +229,7 @@ func <warning descr="Unused function 'typeAssert'">typeAssert</warning>() {
   err := nil
   switch err.(type) {
     case ServiceError:
-            ser := err.(ServiceError)
+            ser := <error descr="Invalid type assertion: err.(ServiceError), (non-interface type int on left).">err</error>.(ServiceError)
             Println(ser.Code)
             Println([]byte(ser.Message))
     }
@@ -556,6 +556,53 @@ func _() {
     i = <error descr="Missing argument to conversion to int: int().">int()</error>
     z(i)
     i = <error descr="Too many arguments to conversion to int: int(3, 4).">int(3, 4)</error>
+}
+type myIFace string
+
+func (myIFace) Boo() int {
+    return 444
+}
+
+type someInterface interface {
+    Foo() string
+}
+
+type someStringType string
+
+type anotherStringType someStringType
+
+func (someStringType) Foo() string {
+    return "what"
+}
+
+func (anotherStringType) Foo() string {
+    return "what"
+}
+
+func _() {
+    var x someInterface
+    x = someStringType("something")
+    if z, ok := x.(someStringType); ok {
+        if len(string(z)) > 0 {}
+    }
+
+    x = anotherStringType
+    if z, ok := x.(someStringType); ok {
+        if len(string(z)) > 0 {}
+    }
+}
+
+type interf1 interface{}
+type interf2 interf1
+type interf3 interf2
+
+func _() {
+    var x string
+    if _, ok := <error descr="Invalid type assertion: x.(string), (non-interface type string on left).">x</error>.(string); ok {
+    }
+    var y interf3
+    if _, ok := y.(string); ok {
+    }
 }
 func _() {
     var x map[string]string
