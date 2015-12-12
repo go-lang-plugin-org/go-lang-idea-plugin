@@ -3,9 +3,8 @@ package demo2049
 const Hello1, hello2, Helllllo = 1, 2, 3 // This is valid
 
 const (
-	Hello3 = 3
 	Hello4 = 4
-) // exported const Hello4 should have its own declaration
+	Hello3 = 3) // exported const Hello4 should have its own declaration
 
 var Hello5, hello6 int // This is valid
 
