@@ -33,9 +33,6 @@ public interface GoConstDefinition extends GoNamedElement, StubBasedPsiElement<G
   GoType getGoTypeInner(ResolveState context);
 
   @Nullable
-  GoType getType();
-
-  @Nullable
   GoExpression getValue();
 
 }
