@@ -68,5 +68,16 @@ public class GoAnnotator implements Annotator {
         }
       }
     }
+    else if (element instanceof GoTypeAssertionExpr) {
+      GoType type = ((GoTypeAssertionExpr)element).getExpression().getGoType(null);
+      if (type != null) {
+        GoType baseType = GoPsiImplUtil.findBaseTypeFromRef(type.getTypeReferenceExpression());
+        if (baseType instanceof GoSpecType && !(((GoSpecType) baseType).getType() instanceof GoInterfaceType)) {
+          String message =
+            String.format("Invalid type assertion: %s, (non-interface type %s on left).", element.getText(), type.getText());
+          holder.createErrorAnnotation(((GoTypeAssertionExpr)element).getExpression(), message);
+        }
+      }
+    }
   }
 }

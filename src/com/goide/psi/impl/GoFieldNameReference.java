@@ -39,17 +39,6 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
     }
   }
 
-  @Nullable
-  static GoType findTypeFromRef(@Nullable GoTypeReferenceExpression expression) { // todo: simplify
-    GoType type = GoPsiImplUtil.findTypeFromTypeRef(expression);
-    while (type instanceof GoSpecType && ((GoSpecType)type).getType().getTypeReferenceExpression() != null) {
-      GoType inner = GoPsiImplUtil.findTypeFromTypeRef(((GoSpecType)type).getType().getTypeReferenceExpression());
-      if (inner == null || type.isEquivalentTo(inner) || GoPsiImplUtil.builtin(inner)) return type;
-      type = inner;
-    }
-    return type;
-  }
-
   @Override
   public boolean processResolveVariants(@NotNull final GoScopeProcessor processor) {
     GoScopeProcessor fieldProcessor = processor instanceof GoFieldProcessor ? processor : new GoFieldProcessor(myElement) {
@@ -66,7 +55,7 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
 
     GoType type = lit != null ? lit.getType() : null;
     if (type == null && lit != null) {
-      type = findTypeFromRef(lit.getTypeReferenceExpression());
+      type = GoPsiImplUtil.findBaseTypeFromRef(lit.getTypeReferenceExpression());
     }
 
     type = getType(type);
@@ -108,13 +97,13 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
     }
 
     if (type != null && type.getTypeReferenceExpression() != null) {
-      type = findTypeFromRef(type.getTypeReferenceExpression());
+      type = GoPsiImplUtil.findBaseTypeFromRef(type.getTypeReferenceExpression());
     }
 
     if (type instanceof GoPointerType) {
       GoType inner = ((GoPointerType)type).getType();
       if (inner != null && inner.getTypeReferenceExpression() != null) {
-        type = findTypeFromRef(inner.getTypeReferenceExpression());
+        type = GoPsiImplUtil.findBaseTypeFromRef(inner.getTypeReferenceExpression());
       }
     }
 
