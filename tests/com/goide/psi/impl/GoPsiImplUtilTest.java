@@ -17,10 +17,7 @@
 package com.goide.psi.impl;
 
 import com.goide.GoCodeInsightFixtureTestCase;
-import com.goide.psi.GoConstDeclaration;
-import com.goide.psi.GoConstSpec;
-import com.goide.psi.GoVarDeclaration;
-import com.goide.psi.GoVarSpec;
+import com.goide.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 
 public class GoPsiImplUtilTest extends GoCodeInsightFixtureTestCase {
@@ -144,5 +141,41 @@ public class GoPsiImplUtilTest extends GoCodeInsightFixtureTestCase {
     GoConstDeclaration declaration = (GoConstDeclaration)spec.getParent();
     declaration.addSpec("bar", "string", "`1`", spec);
     myFixture.checkResult("package main\n\nconst (\nbar string = `1`\nfoo int\n)");
+  }
+
+  public void testGetTypeOfSingleVarDefinition() {
+    myFixture.configureByText("a.go", "package main\n\n var f<caret>oo int");
+    GoVarDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarDefinition.class);
+    assertNotNull(definition);                      
+    GoType type = definition.getType();
+    assertNotNull(type);
+    assertEquals("int", type.getText());
+  }
+
+  public void testGetTypeOfMultipleVarDefinition() {
+    myFixture.configureByText("a.go", "package main\n\n var fo<caret>o, bar int");
+    GoVarDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarDefinition.class);
+    assertNotNull(definition);
+    GoType type = definition.getType();
+    assertNotNull(type);
+    assertEquals("int", type.getText());
+  }
+
+  public void testGetTypeOfSingleConstDefinition() {
+    myFixture.configureByText("a.go", "package main\n\n const fo<caret>o int = 1");
+    GoConstDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoConstDefinition.class);
+    assertNotNull(definition);
+    GoType type = definition.getType();
+    assertNotNull(type);
+    assertEquals("int", type.getText());
+  }
+
+  public void testGetTypeOfMultipleConstDefinition() {
+    myFixture.configureByText("a.go", "package main\n\n const fo<caret>o, bar int = 1, 2");
+    GoConstDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoConstDefinition.class);
+    assertNotNull(definition);
+    GoType type = definition.getType();
+    assertNotNull(type);
+    assertEquals("int", type.getText());
   }
 }

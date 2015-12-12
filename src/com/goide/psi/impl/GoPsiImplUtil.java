@@ -1219,4 +1219,18 @@ public class GoPsiImplUtil {
     }
     return false; 
   }
+
+  @Nullable
+  public static GoType getType(@NotNull GoVarDefinition definition) {
+    PsiElement parent = definition.getParent();
+    assert parent instanceof GoVarSpec;
+    return ((GoVarSpec)parent).getType();
+  }
+  
+  @Nullable
+  public static GoType getType(@NotNull GoConstDefinition definition) {
+    PsiElement parent = definition.getParent();
+    assert parent instanceof GoConstSpec;
+    return ((GoConstSpec)parent).getType();
+  }
 }
