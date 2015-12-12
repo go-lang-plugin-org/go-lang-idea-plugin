@@ -135,8 +135,8 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
     return null;
   }
 
-  public static class GoFormattingBlock extends UserDataHolderBase implements ASTBlock {
-    public static final TokenSet BLOCKS_TOKEN_SET = TokenSet.create(
+  private static class GoFormattingBlock extends UserDataHolderBase implements ASTBlock {
+    private static final TokenSet BLOCKS_TOKEN_SET = TokenSet.create(
       BLOCK,
       STRUCT_TYPE,
       INTERFACE_TYPE,
@@ -146,7 +146,7 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       LITERAL_VALUE
     );
 
-    public static final TokenSet BRACES_TOKEN_SET = TokenSet.create(
+    private static final TokenSet BRACES_TOKEN_SET = TokenSet.create(
       LBRACE,
       RBRACE,
       LBRACK,
@@ -154,7 +154,7 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       LPAREN,
       RPAREN
     );
-    public static final Key<Alignment> TYPE_ALIGNMENT_INSIDE_STRUCT = Key.create("TYPE_ALIGNMENT_INSIDE_STRUCT");
+    private static final Key<Alignment> TYPE_ALIGNMENT_INSIDE_STRUCT = Key.create("TYPE_ALIGNMENT_INSIDE_STRUCT");
 
     @NotNull private final ASTNode myNode;
     @Nullable private final Alignment myAlignment;
@@ -164,12 +164,12 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
     @NotNull private final SpacingBuilder mySpacingBuilder;
     @Nullable private List<Block> mySubBlocks;
 
-    public GoFormattingBlock(@NotNull ASTNode node,
-                             @Nullable Alignment alignment,
-                             @Nullable Indent indent,
-                             @Nullable Wrap wrap,
-                             @NotNull CodeStyleSettings settings,
-                             @NotNull SpacingBuilder spacingBuilder) {
+    private GoFormattingBlock(@NotNull ASTNode node,
+                              @Nullable Alignment alignment,
+                              @Nullable Indent indent,
+                              @Nullable Wrap wrap,
+                              @NotNull CodeStyleSettings settings,
+                              @NotNull SpacingBuilder spacingBuilder) {
       myNode = node;
       myAlignment = alignment;
       myIndent = indent;
