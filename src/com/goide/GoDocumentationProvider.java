@@ -58,61 +58,6 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
     }
   };
 
-  @Override
-  public String generateDoc(PsiElement element, PsiElement originalElement) {
-    element = adjustDocElement(element);
-    if (element instanceof GoNamedElement) {
-      String signature = getSignature(element);
-      signature = StringUtil.isNotEmpty(signature) ? "<b>" + signature + "</b>\n" : signature;
-      return StringUtil.nullize(signature + getCommentText(getCommentsForElement(element), true));
-    }
-    else if (element instanceof PsiDirectory) {
-      return getPackageComment(findDocFileForDirectory(((PsiDirectory)element)));
-    }
-    return null;
-  }
-
-  @Override
-  public List<String> getUrlFor(PsiElement element, PsiElement originalElement) {
-    String referenceText = getReferenceText(adjustDocElement(element));
-    if (StringUtil.isNotEmpty(referenceText)) {
-      return Collections.singletonList("https://godoc.org/" + referenceText);
-    }
-    return super.getUrlFor(element, originalElement);
-  }
-
-  @Nullable
-  @Override
-  public String getQuickNavigateInfo(PsiElement element, PsiElement originalElement) {
-    if (element instanceof GoNamedElement) {
-      String result = getSignature(element);
-      if (StringUtil.isNotEmpty(result)) return result;
-    }
-    return super.getQuickNavigateInfo(element, originalElement);
-  }
-
-  @Override
-  public PsiElement getDocumentationElementForLink(PsiManager psiManager, String link, PsiElement context) {
-    if (context != null && !DumbService.isDumb(psiManager.getProject())) {
-      Module module = ModuleUtilCore.findModuleForPsiElement(context);
-      int hash = link.indexOf('#');
-      String importPath = hash >= 0 ? link.substring(0, hash) : link;
-      Project project = psiManager.getProject();
-      VirtualFile directory = GoSdkUtil.findFileByRelativeToLibrariesPath(importPath, project, module);
-      if (directory != null) {
-        PsiDirectory psiDirectory = psiManager.findDirectory(directory);
-        if (psiDirectory != null) {
-          String anchor = link.substring(Math.min(hash + 1, link.length()));
-          if (anchor.isEmpty()) {
-            return psiDirectory;
-          }
-          return ContainerUtil.getFirstItem(GoTypesIndex.find(anchor, project, GlobalSearchScopesCore.directoryScope(psiDirectory, false)));
-        }
-      }
-    }
-    return super.getDocumentationElementForLink(psiManager, link, context);
-  }
-
   @NotNull
   public static String getCommentText(@NotNull List<PsiComment> comments, boolean withHtml) {
     return withHtml ? COMMENTS_CONVERTER.toHtml(comments) : COMMENTS_CONVERTER.toText(comments);
@@ -191,15 +136,12 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
     }
     if (element instanceof GoConstDefinition) {
       if (element.getParent() instanceof GoConstSpec) {
-        GoConstSpec spec = (GoConstSpec) element.getParent();
+        GoConstSpec spec = (GoConstSpec)element.getParent();
         StringBuilder result = new StringBuilder();
-        result.append(StringUtil.join(spec.getConstDefinitionList(), GoPsiImplUtil.GET_TEXT_FUNCTION, ","));
-        result.append(" ");
-        result.append(getTypePresentation(spec.getType()));
+        result.append(StringUtil.join(spec.getConstDefinitionList(), GoPsiImplUtil.GET_TEXT_FUNCTION, ","))
+          .append(" ").append(getTypePresentation(spec.getType()));
         if (spec.getAssign() != null) {
-          result.append(" ");
-          result.append(spec.getAssign().getText());
-          result.append(" ");
+          result.append(" ").append(spec.getAssign().getText()).append(" ");
         }
         result.append(StringUtil.join(spec.getExpressionList(), GoPsiImplUtil.GET_TEXT_FUNCTION, ","));
         return result.toString();
@@ -338,5 +280,60 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
     }
 
     return null;
+  }
+
+  @Override
+  public String generateDoc(PsiElement element, PsiElement originalElement) {
+    element = adjustDocElement(element);
+    if (element instanceof GoNamedElement) {
+      String signature = getSignature(element);
+      signature = StringUtil.isNotEmpty(signature) ? "<b>" + signature + "</b>\n" : signature;
+      return StringUtil.nullize(signature + getCommentText(getCommentsForElement(element), true));
+    }
+    else if (element instanceof PsiDirectory) {
+      return getPackageComment(findDocFileForDirectory(((PsiDirectory)element)));
+    }
+    return null;
+  }
+
+  @Override
+  public List<String> getUrlFor(PsiElement element, PsiElement originalElement) {
+    String referenceText = getReferenceText(adjustDocElement(element));
+    if (StringUtil.isNotEmpty(referenceText)) {
+      return Collections.singletonList("https://godoc.org/" + referenceText);
+    }
+    return super.getUrlFor(element, originalElement);
+  }
+
+  @Nullable
+  @Override
+  public String getQuickNavigateInfo(PsiElement element, PsiElement originalElement) {
+    if (element instanceof GoNamedElement) {
+      String result = getSignature(element);
+      if (StringUtil.isNotEmpty(result)) return result;
+    }
+    return super.getQuickNavigateInfo(element, originalElement);
+  }
+
+  @Override
+  public PsiElement getDocumentationElementForLink(PsiManager psiManager, String link, PsiElement context) {
+    if (context != null && !DumbService.isDumb(psiManager.getProject())) {
+      Module module = ModuleUtilCore.findModuleForPsiElement(context);
+      int hash = link.indexOf('#');
+      String importPath = hash >= 0 ? link.substring(0, hash) : link;
+      Project project = psiManager.getProject();
+      VirtualFile directory = GoSdkUtil.findFileByRelativeToLibrariesPath(importPath, project, module);
+      if (directory != null) {
+        PsiDirectory psiDirectory = psiManager.findDirectory(directory);
+        if (psiDirectory != null) {
+          String anchor = link.substring(Math.min(hash + 1, link.length()));
+          if (anchor.isEmpty()) {
+            return psiDirectory;
+          }
+          return ContainerUtil.getFirstItem(GoTypesIndex.find(anchor, project, GlobalSearchScopesCore.directoryScope(psiDirectory, false)));
+        }
+      }
+    }
+    return super.getDocumentationElementForLink(psiManager, link, context);
   }
 }
