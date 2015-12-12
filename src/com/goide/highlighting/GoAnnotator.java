@@ -26,7 +26,6 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class GoAnnotator implements Annotator {
 
@@ -94,7 +93,7 @@ public class GoAnnotator implements Annotator {
    * Returns {@code true} if the given element is in an invalid location for a type literal or type reference.
    */
   private static boolean isIllegalUseOfTypeAsExpression(@NotNull PsiElement element) {
-    PsiElement parent = getParentSkippingParensAndUnaryExpr(element);
+    PsiElement parent = PsiTreeUtil.skipParentsOfType(element, GoParenthesesExpr.class, GoUnaryExpr.class);
 
     if (parent instanceof GoReferenceExpression || parent instanceof GoSelectorExpr) {
       // Part of a selector such as T.method
@@ -107,13 +106,5 @@ public class GoAnnotator implements Annotator {
     }
 
     return true;
-  }
-
-  private static @Nullable PsiElement getParentSkippingParensAndUnaryExpr(PsiElement element) {
-    PsiElement parent = element.getParent();
-    while (parent instanceof GoParenthesesExpr || parent instanceof GoUnaryExpr) {
-      parent = parent.getParent();
-    }
-    return parent;
   }
 }
