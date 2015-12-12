@@ -44,13 +44,6 @@ import static com.goide.GoTypes.*;
 
 public class GoFormattingModelBuilder implements FormattingModelBuilder {
   @NotNull
-  @Override
-  public FormattingModel createModel(@NotNull PsiElement element, @NotNull CodeStyleSettings settings) {
-    Block block = new GoFormattingBlock(element.getNode(), null, Indent.getNoneIndent(), null, settings, createSpacingBuilder(settings));
-    return FormattingModelProvider.createFormattingModelForPsiFile(element.getContainingFile(), block, settings);
-  }
-
-  @NotNull
   private static SpacingBuilder createSpacingBuilder(@NotNull CodeStyleSettings settings) {
     return new SpacingBuilder(settings, GoLanguage.INSTANCE)
       .before(COMMA).spaceIf(false)
@@ -110,6 +103,7 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       .beforeInside(LBRACE, LITERAL_VALUE).none()
       .afterInside(BIT_AND, UNARY_EXPR).none()
       .beforeInside(TYPE, VAR_SPEC).spaces(1)
+      .beforeInside(TYPE, CONST_SPEC).spaces(1)
       .after(LINE_COMMENT).lineBreakInCodeIf(true)
       .after(MULTILINE_COMMENT).lineBreakInCodeIf(true)
       .between(COMM_CASE, COLON).none()
@@ -126,6 +120,13 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       .between(METHOD_DECLARATION, TYPE_DECLARATION).blankLines(1)
       .between(TYPE_DECLARATION, METHOD_DECLARATION).blankLines(1)
       ;
+  }
+
+  @NotNull
+  @Override
+  public FormattingModel createModel(@NotNull PsiElement element, @NotNull CodeStyleSettings settings) {
+    Block block = new GoFormattingBlock(element.getNode(), null, Indent.getNoneIndent(), null, settings, createSpacingBuilder(settings));
+    return FormattingModelProvider.createFormattingModelForPsiFile(element.getContainingFile(), block, settings);
   }
 
   @Nullable
@@ -175,6 +176,11 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       myWrap = wrap;
       mySettings = settings;
       mySpacingBuilder = spacingBuilder;
+    }
+
+    @NotNull
+    private static Indent indentIfNotBrace(@NotNull ASTNode child) {
+      return BRACES_TOKEN_SET.contains(child.getElementType()) ? Indent.getNoneIndent() : Indent.getNormalIndent();
     }
 
     @NotNull
@@ -267,11 +273,6 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       if (parentType == TYPE_DECLARATION && type == TYPE_SPEC) return Indent.getNormalIndent();
       if (parentType == COMM_CLAUSE && child.getPsi() instanceof GoStatement) return Indent.getNormalIndent();
       return Indent.getNoneIndent();
-    }
-
-    @NotNull
-    private static Indent indentIfNotBrace(@NotNull ASTNode child) {
-      return BRACES_TOKEN_SET.contains(child.getElementType()) ? Indent.getNoneIndent() : Indent.getNormalIndent();
     }
 
     @Override
