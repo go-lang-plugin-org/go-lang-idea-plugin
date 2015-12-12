@@ -1,7 +1,8 @@
+<b>var InnerVariable_2 <a href="psi_element://builtin#int">int</a></b>
 <p>InnerVariable_2 
 </p>
 
 =====
-No navigation info
+var InnerVariable_2 <a href="psi_element://builtin#int">int</a>
 =====
 No urls
