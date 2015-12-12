@@ -154,6 +154,8 @@ public class GoElementFactory {
 
   @NotNull
   public static GoConstSpec createConstSpec(@NotNull Project project, @NotNull String name, @Nullable String type, @Nullable String value) {
+    type = StringUtil.trim(type);
+    value = StringUtil.trim(value);
     type = StringUtil.isNotEmpty(type) ? " " + type : "";
     value = StringUtil.isNotEmpty(value) ? " = " + value : "";
     GoConstDeclaration constDeclaration = createConstDeclaration(project, name + type + value);
@@ -168,6 +170,8 @@ public class GoElementFactory {
 
   @NotNull
   public static GoVarSpec createVarSpec(@NotNull Project project, @NotNull String name, @Nullable String type, @Nullable String value) {
+    type = StringUtil.trim(type);
+    value = StringUtil.trim(value);
     type = StringUtil.isNotEmpty(type) ? " " + type : "";
     value = StringUtil.isNotEmpty(value) ? " = " + value : "";
     GoVarDeclaration varDeclaration = createVarDeclaration(project, name + type + value);

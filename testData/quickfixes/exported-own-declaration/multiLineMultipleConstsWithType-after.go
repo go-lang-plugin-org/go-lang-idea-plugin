@@ -11,8 +11,8 @@ var Hello7, Hello8 int // exported var Hello8 should have its own declaration
 
 const (
 	Foo            = 1
-	Bar   int = 1
 	Baz int = 2
+	Bar    int = 1
 	Bar2, Baz2     = 1, 2
 )
 

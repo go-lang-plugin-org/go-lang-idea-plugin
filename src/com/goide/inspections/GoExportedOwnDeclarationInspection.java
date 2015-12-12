@@ -17,15 +17,14 @@
 package com.goide.inspections;
 
 import com.goide.psi.*;
-import com.goide.psi.impl.GoElementFactory;
 import com.intellij.codeInspection.*;
+import com.intellij.diagnostic.AttachmentFactory;
 import com.intellij.openapi.command.WriteCommandAction;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
-import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * Part of the golint tool
@@ -33,7 +32,7 @@ import java.util.List;
  * https://github.com/golang/lint/blob/32a87160691b3c96046c0c678fe57c5bef761456/lint.go#L827
  */
 public class GoExportedOwnDeclarationInspection extends GoInspectionBase {
-  public static final String QUICK_FIX_NAME = "Extract to own declaration...";
+  public static final String QUICK_FIX_NAME = "Extract to own declaration";
 
   @NotNull
   @Override
@@ -41,164 +40,113 @@ public class GoExportedOwnDeclarationInspection extends GoInspectionBase {
     return new GoVisitor() {
       @Override
       public void visitConstDeclaration(@NotNull GoConstDeclaration o) {
-        if (!(o.getParent() instanceof GoFile)) {
-          return;
-        }
-
-        for (int i = 0; i < o.getConstSpecList().size(); i++) {
-          int index = 0;
-          for (GoConstDefinition constDefinition : o.getConstSpecList().get(i).getConstDefinitionList()) {
-            checkElement(holder, "const", constDefinition, index);
-            index++;
+        if (o.getParent() instanceof GoFile) {
+          for (GoConstSpec spec : o.getConstSpecList()) {
+            boolean first = true;
+            for (GoConstDefinition constDefinition : spec.getConstDefinitionList()) {
+              if (!first && constDefinition.isPublic()) {
+                String errorText = "Exported const '" + constDefinition.getName() + "' should have its own declaration";
+                holder.registerProblem(constDefinition, errorText, ProblemHighlightType.WEAK_WARNING, new ExtractConstantDefinitionFix());
+              }
+              first = false;
+            }
           }
         }
       }
 
       @Override
       public void visitVarDeclaration(@NotNull GoVarDeclaration o) {
-        if (!(o.getParent() instanceof GoFile)) {
-          return;
-        }
-
-        for (int i = 0; i < o.getVarSpecList().size(); i++) {
-          int index = 0;
-          for (GoVarDefinition varDefinition : o.getVarSpecList().get(i).getVarDefinitionList()) {
-            checkElement(holder, "var", varDefinition, index);
-            index++;
+        if (o.getParent() instanceof GoFile) {
+          for (GoVarSpec spec : o.getVarSpecList()) {
+            boolean first = true;
+            for (GoVarDefinition varDefinition : spec.getVarDefinitionList()) {
+              if (!first && varDefinition.isPublic()) {
+                String errorText = "Exported variable '" + varDefinition.getName() + "' should have its own declaration";
+                holder.registerProblem(varDefinition, errorText, ProblemHighlightType.WEAK_WARNING, new ExtractVarDefinitionFix());
+              }
+              first = false;
+            }
           }
         }
       }
     };
   }
 
-  public static void checkElement(ProblemsHolder holder, String type, GoNamedElement namedElement, int index) {
-    if (index < 1 || !namedElement.isPublic()) {
-      return;
-    }
+  private static class ExtractConstantDefinitionFix extends LocalQuickFixBase {
+    private static final Logger LOG = Logger.getInstance(ExtractConstantDefinitionFix.class);
 
-    String errorText = "Exported " + type + " '" + namedElement.getName() + "' should have its own declaration";
-    holder.registerProblem(namedElement, errorText, ProblemHighlightType.WEAK_WARNING, new MyLocalQuickFixBase(index));
-  }
-
-  private static class MyLocalQuickFixBase extends LocalQuickFixBase {
-    private int index;
-
-    public MyLocalQuickFixBase(int index) {
+    ExtractConstantDefinitionFix() {
       super(QUICK_FIX_NAME);
-      this.index = index;
     }
 
     @Override
-    public void applyFix(@NotNull final Project project, @NotNull ProblemDescriptor descriptor) {
+    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
       final PsiElement element = descriptor.getPsiElement();
-      if (!element.isValid()) return;
-      new WriteCommandAction.Simple(project, getName(), element.getContainingFile()) {
+      if (!element.isValid() || !(element instanceof GoConstDefinition)) {
+        return;
+      }
+      final String name = ((GoConstDefinition)element).getName();
+      if (StringUtil.isEmpty(name)) {
+        return;
+      }
+      final GoType type = ((GoConstDefinition)element).getType();
+      final GoExpression value = ((GoConstDefinition)element).getValue();
+      WriteCommandAction.runWriteCommandAction(project, new Runnable() {
         @Override
-        protected void run() throws Throwable {
-          List<GoExpression> elementValueList;
-          String elementType = "";
-          if (element instanceof GoConstDefinition) {
-            elementValueList = ((GoConstSpec)element.getParent()).getExpressionList();
-            GoType elemType = ((GoConstSpec)element.getParent()).getType();
-            if (elemType != null) {
-              elementType = elemType.getText();
+        public void run() {
+          PsiElement parent = element.getParent();
+          PsiElement grandParent = parent != null ? parent.getParent() : null;
+          if (parent instanceof GoConstSpec && grandParent instanceof GoConstDeclaration) {
+            String typeText = type != null ? type.getText() : "";
+            String valueText = value != null ? value.getText() : "";
+            ((GoConstSpec)parent).deleteDefinition(((GoConstDefinition)element));
+            if (grandParent.isValid()) {
+              ((GoConstDeclaration)grandParent).addSpec(name, typeText, valueText, (GoConstSpec)parent);
+              return;
             }
           }
-          else if (element instanceof GoVarDefinition) {
-            elementValueList = ((GoVarSpec)element.getParent()).getExpressionList();
-            GoType elemType = ((GoVarSpec)element.getParent()).getType();
-            if (elemType != null) {
-              elementType = elemType.getText();
-            }
-          }
-          else {
-            return;
-          }
-
-          if (!elementValueList.isEmpty() &&
-              elementValueList.size() <= index) {
-            return;
-          }
-
-          PsiElement elementSpec = element.getParent();
-          PsiElement newElement;
-          PsiElement afterElement;
-          if (!elementValueList.isEmpty()) {
-            PsiElement elementValue = elementValueList.get(index);
-            if (element instanceof GoConstDefinition) {
-              newElement = GoElementFactory.createConstSpec(project, element.getText(), elementType, elementValue.getText());
-            }
-            else {
-              newElement = GoElementFactory.createVarSpec(project, element.getText(), elementType, elementValue.getText());
-            }
-          }
-          else {
-            if (element instanceof GoConstDefinition) {
-              newElement = GoElementFactory.createConstSpec(project, element.getText(), elementType, "");
-            }
-            else {
-              newElement = GoElementFactory.createVarSpec(project, element.getText(), elementType, "");
-            }
-          }
-
-          afterElement = getAfterElement(element);
-          elementSpec.addAfter(newElement, afterElement);
-          elementSpec.addAfter(GoElementFactory.createNewLine(project), afterElement);
-
-          if (elementSpec instanceof GoConstSpec) {
-            List<GoConstDefinition> elementList = ((GoConstSpec)elementSpec).getConstDefinitionList();
-            elementSpec.deleteChildRange(elementList.get(index - 1).getNextSibling(), elementList.get(index));
-            elementValueList = ((GoConstSpec)elementSpec).getExpressionList();
-          }
-          else {
-            List<GoVarDefinition> elementList = ((GoVarSpec)elementSpec).getVarDefinitionList();
-            elementSpec.deleteChildRange(elementList.get(index - 1).getNextSibling(), elementList.get(index));
-            elementValueList = ((GoVarSpec)elementSpec).getExpressionList();
-          }
-
-          if (!elementValueList.isEmpty()) {
-            elementSpec.deleteChildRange(elementValueList.get(index - 1).getNextSibling(), elementValueList.get(index));
-          }
-
-          PsiElement elementDeclaration = elementSpec.getParent();
-          if (elementDeclaration instanceof GoConstDeclaration &&
-              newElement instanceof GoConstSpec &&
-              ((GoConstDeclaration)elementDeclaration).getConstSpecList().size() == 1) {
-
-            List<GoConstSpec> elementList = ((GoConstDeclaration)elementDeclaration).getConstSpecList();
-            elementDeclaration.replace(GoElementFactory.createConstDeclaration(project, elementList));
-          }
-          else if (elementDeclaration instanceof GoVarDeclaration &&
-                   newElement instanceof GoVarSpec &&
-                   ((GoVarDeclaration)elementDeclaration).getVarSpecList().size() == 1) {
-
-            List<GoVarSpec> elementList = ((GoVarDeclaration)elementDeclaration).getVarSpecList();
-            elementDeclaration.replace(GoElementFactory.createVarDeclaration(project, elementList));
-          }
+          LOG.error("Cannot run quick fix", AttachmentFactory.createAttachment(element.getContainingFile().getVirtualFile()));
         }
-      }.execute();
+      });
+    }
+  }
+
+  private static class ExtractVarDefinitionFix extends LocalQuickFixBase {
+    private static final Logger LOG = Logger.getInstance(ExtractVarDefinitionFix.class);
+
+    ExtractVarDefinitionFix() {
+      super(QUICK_FIX_NAME);
     }
 
-    private static PsiElement getAfterElement(PsiElement element) {
-      PsiElement elementParent = element.getParent();
-
-      if (element instanceof GoConstDefinition) {
-        if (!((GoConstSpec)elementParent).getExpressionList().isEmpty()) {
-          return ContainerUtil.getLastItem(((GoConstSpec)elementParent).getExpressionList());
+    @Override
+    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+      final PsiElement element = descriptor.getPsiElement();
+      if (!element.isValid() || !(element instanceof GoVarDefinition)) {
+        return;
+      }
+      final String name = ((GoVarDefinition)element).getName();
+      if (StringUtil.isEmpty(name)) {
+        return;
+      }
+      final GoType type = ((GoVarDefinition)element).getType();
+      final GoExpression value = ((GoVarDefinition)element).getValue();
+      WriteCommandAction.runWriteCommandAction(project, new Runnable() {
+        @Override
+        public void run() {
+          PsiElement parent = element.getParent();
+          PsiElement grandParent = parent != null ? parent.getParent() : null;
+          if (parent instanceof GoVarSpec && grandParent instanceof GoVarDeclaration) {
+            String typeText = type != null ? type.getText() : "";
+            String valueText = value != null ? value.getText() : "";
+            ((GoVarSpec)parent).deleteDefinition(((GoVarDefinition)element));
+            if (grandParent.isValid()) {
+              ((GoVarDeclaration)grandParent).addSpec(name, typeText, valueText, (GoVarSpec)parent);
+              return;
+            }
+          }
+          LOG.error("Cannot run quick fix", AttachmentFactory.createAttachment(element.getContainingFile().getVirtualFile()));
         }
-
-        return ((GoConstSpec)elementParent).getType() == null
-               ? ContainerUtil.getLastItem(((GoConstSpec)elementParent).getConstDefinitionList())
-               : ((GoConstSpec)elementParent).getType();
-      }
-
-      if (!((GoVarSpec)elementParent).getExpressionList().isEmpty()) {
-        return ContainerUtil.getLastItem(((GoVarSpec)elementParent).getExpressionList());
-      }
-
-      return ((GoVarSpec)elementParent).getType() == null
-             ? ContainerUtil.getLastItem(((GoVarSpec)elementParent).getVarDefinitionList())
-             : ((GoVarSpec)elementParent).getType();
+      });
     }
   }
 }

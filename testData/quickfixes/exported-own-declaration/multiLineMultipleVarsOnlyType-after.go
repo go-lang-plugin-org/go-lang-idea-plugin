@@ -16,8 +16,8 @@ const (
 )
 
 var (
-	Hello9  int
 	Hello10 int
+	Hello9 int
 	Hello11, Hello12 int
 	Hello13, Hello14 = 1, 2
 )

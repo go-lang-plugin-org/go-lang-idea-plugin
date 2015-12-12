@@ -18,8 +18,8 @@ const (
 var (
 	Hello9, Hello10  int
 	Hello11, Hello12 int
-	Hello13 = 1
 	Hello14 = 2
+	Hello13 = 1
 )
 
 func _() {
