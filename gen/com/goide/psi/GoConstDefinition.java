@@ -35,4 +35,7 @@ public interface GoConstDefinition extends GoNamedElement, StubBasedPsiElement<G
   @Nullable
   GoType getType();
 
+  @Nullable
+  GoExpression getValue();
+
 }
