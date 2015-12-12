@@ -1233,4 +1233,25 @@ public class GoPsiImplUtil {
     assert parent instanceof GoConstSpec;
     return ((GoConstSpec)parent).getType();
   }
+  
+  @Nullable
+  public static GoExpression getValue(@NotNull GoVarDefinition definition) {
+    PsiElement parent = definition.getParent();
+    assert parent instanceof GoVarSpec;
+    int index = ((GoVarSpec)parent).getVarDefinitionList().indexOf(definition);
+    return getByIndex(((GoVarSpec)parent).getExpressionList(), index);
+  }
+  
+  @Nullable
+  public static GoExpression getValue(@NotNull GoConstDefinition definition) {
+    PsiElement parent = definition.getParent();
+    assert parent instanceof GoConstSpec;
+    int index = ((GoConstSpec)parent).getConstDefinitionList().indexOf(definition);
+    return getByIndex(((GoConstSpec)parent).getExpressionList(), index);
+  }
+  
+  public static <T> T getByIndex(@NotNull List<T> list, int index) {
+    return 0 <= index && index < list.size()? list.get(index) : null;
+  }
+  
 }

@@ -70,4 +70,9 @@ public class GoVarDefinitionImpl extends GoNamedElementImpl<GoVarDefinitionStub>
     return GoPsiImplUtil.getType(this);
   }
 
+  @Nullable
+  public GoExpression getValue() {
+    return GoPsiImplUtil.getValue(this);
+  }
+
 }

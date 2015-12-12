@@ -178,4 +178,72 @@ public class GoPsiImplUtilTest extends GoCodeInsightFixtureTestCase {
     assertNotNull(type);
     assertEquals("int", type.getText());
   }
+  
+  public void testGetValueOfSingleVarDefinition() {
+    myFixture.configureByText("a.go", "package main\n\n var fo<caret>o int = 1");
+    GoVarDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarDefinition.class);
+    assertNotNull(definition);
+    GoExpression value = definition.getValue();
+    assertNotNull(value);
+    assertEquals("1", value.getText());
+  }
+  
+  public void testGetValueOfMultipleVarDefinition_1() {
+    myFixture.configureByText("a.go", "package main\n\n var fo<caret>o, bar int = 1, 2");
+    GoVarDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarDefinition.class);
+    assertNotNull(definition);
+    GoExpression value = definition.getValue();
+    assertNotNull(value);
+    assertEquals("1", value.getText());
+  }
+  
+  public void testGetValueOfMultipleVarDefinition_2() {
+    myFixture.configureByText("a.go", "package main\n\n var foo, b<caret>ar int = 1, 2");
+    GoVarDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarDefinition.class);
+    assertNotNull(definition);
+    GoExpression value = definition.getValue();
+    assertNotNull(value);
+    assertEquals("2", value.getText());
+  }
+  
+  public void testGetValueOfMultipleVarDefinitionWithoutValues() {
+    myFixture.configureByText("a.go", "package main\n\n var f<caret>oo, bar int");
+    GoVarDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarDefinition.class);
+    assertNotNull(definition);
+    assertNull(definition.getValue());
+  }
+  
+  public void testGetValueOfMultipleInvalidVarDefinition() {
+    myFixture.configureByText("a.go", "package main\n\n var foo, b<caret>ar int = 1");
+    GoVarDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarDefinition.class);
+    assertNotNull(definition);
+    assertNull(definition.getValue());
+  }
+  
+  public void testGetValueOfSingleConstDefinition() {
+    myFixture.configureByText("a.go", "package main\n\n const fo<caret>o int = 1");
+    GoConstDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoConstDefinition.class);
+    assertNotNull(definition);
+    GoExpression value = definition.getValue();
+    assertNotNull(value);
+    assertEquals("1", value.getText());
+  }
+  
+  public void testGetValueOfMultipleConstDefinition_1() {
+    myFixture.configureByText("a.go", "package main\n\n const fo<caret>o, bar int = 1, 2");
+    GoConstDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoConstDefinition.class);
+    assertNotNull(definition);
+    GoExpression value = definition.getValue();
+    assertNotNull(value);
+    assertEquals("1", value.getText());
+  }
+  
+  public void testGetValueOfMultipleConstDefinition_2() {
+    myFixture.configureByText("a.go", "package main\n\n const foo, b<caret>ar int = 1, 2");
+    GoConstDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoConstDefinition.class);
+    assertNotNull(definition);
+    GoExpression value = definition.getValue();
+    assertNotNull(value);
+    assertEquals("2", value.getText());
+  }
 }

@@ -39,4 +39,7 @@ public interface GoVarDefinition extends GoNamedElement, StubBasedPsiElement<GoV
   @Nullable
   GoType getType();
 
+  @Nullable
+  GoExpression getValue();
+
 }

@@ -229,7 +229,7 @@ ConstSpec ::= ConstDefinitionList [ ('=' ExpressionList | Type '=' ExpressionLis
 private ConstDefinitionList ::= ConstDefinition ( ',' ConstDefinition )*
 ConstDefinition ::= identifier {
   stubClass="com.goide.stubs.GoConstDefinitionStub"
-  methods=[getGoTypeInner getType]
+  methods=[getGoTypeInner getType getValue]
 }
 
 LeftHandExprList ::= ExpressionList
@@ -259,7 +259,7 @@ VarSpec ::= VarDefinitionList ( Type [ '=' ExpressionList ] | '=' ExpressionList
 }
 private VarDefinitionList ::= VarDefinition ( ',' VarDefinition )*
 VarDefinition ::= identifier {
-  methods=[getGoTypeInner getReference getType]
+  methods=[getGoTypeInner getReference getType getValue]
   stubClass="com.goide.stubs.GoVarDefinitionStub"
 }
 
