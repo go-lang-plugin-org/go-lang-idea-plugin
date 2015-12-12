@@ -20,8 +20,6 @@ import com.goide.inspections.GoExportedOwnDeclarationInspection;
 import org.jetbrains.annotations.NotNull;
 
 public class GoExportedOwnDeclarationQuickFixTest extends GoQuickFixTestBase {
-  private final String quickfixName = GoExportedOwnDeclarationInspection.QUICK_FIX_NAME;
-
   @Override
   protected void setUp() throws Exception {
     super.setUp();
@@ -34,12 +32,12 @@ public class GoExportedOwnDeclarationQuickFixTest extends GoQuickFixTestBase {
     return "quickfixes/exported-own-declaration";
   }
 
-  public void testSingleLineMultipleExportedAndPrivateConsts() { doTest(quickfixName); }
-  public void testSingleLineMultipleConsts()                   { doTest(quickfixName); }
-  public void testSingleLineMultipleVars()                     { doTest(quickfixName); }
-  public void testMultiLineMultipleConstsWithType()            { doTest(quickfixName); }
-  public void testMultiLineMultipleConstsWithoutType()         { doTest(quickfixName); }
-  public void testMultiLineMultipleVarsOnlyType()              { doTest(quickfixName); }
-  public void testMultiLineMultipleVarsWithTypeAndValues()     { doTest(quickfixName); }
-  public void testMultiLineMultipleVarsOnlyValues()            { doTest(quickfixName); }
+  public void testSingleLineMultipleExportedAndPrivateConsts() { doTest(GoExportedOwnDeclarationInspection.QUICK_FIX_NAME); }
+  public void testSingleLineMultipleConsts()                   { doTest(GoExportedOwnDeclarationInspection.QUICK_FIX_NAME); }
+  public void testSingleLineMultipleVars()                     { doTest(GoExportedOwnDeclarationInspection.QUICK_FIX_NAME); }
+  public void testMultiLineMultipleConstsWithType()            { doTest(GoExportedOwnDeclarationInspection.QUICK_FIX_NAME); }
+  public void testMultiLineMultipleConstsWithoutType()         { doTest(GoExportedOwnDeclarationInspection.QUICK_FIX_NAME); }
+  public void testMultiLineMultipleVarsOnlyType()              { doTest(GoExportedOwnDeclarationInspection.QUICK_FIX_NAME); }
+  public void testMultiLineMultipleVarsWithTypeAndValues()     { doTest(GoExportedOwnDeclarationInspection.QUICK_FIX_NAME); }
+  public void testMultiLineMultipleVarsOnlyValues()            { doTest(GoExportedOwnDeclarationInspection.QUICK_FIX_NAME); }
 }
