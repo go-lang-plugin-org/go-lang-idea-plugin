@@ -577,7 +577,7 @@ func _() {
         if len(string(z)) > 0 {}
     }
 
-    x = anotherStringType
+    x = <error descr="Type anotherStringType is not an expression.">anotherStringType</error>
     if z, ok := x.(someStringType); ok {
         if len(string(z)) > 0 {}
     }
