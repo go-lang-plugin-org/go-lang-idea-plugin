@@ -70,4 +70,8 @@ public class GoConstDeclarationImpl extends GoCompositeElementImpl implements Go
     return GoPsiImplUtil.addSpec(this, name, type, value, specAnchor);
   }
 
+  public void deleteSpec(GoConstSpec specToDelete) {
+    GoPsiImplUtil.deleteSpec(this, specToDelete);
+  }
+
 }

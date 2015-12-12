@@ -38,4 +38,6 @@ public interface GoConstDeclaration extends GoTopLevelDeclaration {
   @NotNull
   GoConstSpec addSpec(String name, String type, String value, GoConstSpec specAnchor);
 
+  void deleteSpec(GoConstSpec specToDelete);
+
 }
