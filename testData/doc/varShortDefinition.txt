@@ -1,0 +1,6 @@
+<b>var err <a href="psi_element://builtin#error">error</a></b>
+
+=====
+var err <a href="psi_element://builtin#error">error</a>
+=====
+No urls
