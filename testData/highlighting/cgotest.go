@@ -18,9 +18,11 @@ import "C"
 type X struct{ Y, Z int32 }
 
 var s C.struct_x
+var s1 *C.struct_x
 
 func main() {
 	a := &X{5, 7}
 	fmt.Println(s.y)
+	fmt.Println(s1)
 	fmt.Println(a, "->", C.sum(*((*C.struct_x)(unsafe.Pointer(a)))))
 }

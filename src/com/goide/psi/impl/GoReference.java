@@ -134,11 +134,20 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
       GoType type = typeOrParameterType((GoTypeOwner)target, createContext());
       if (type != null) {
         if (!processGoType(type, processor, state)) return false;
-        GoTypeReferenceExpression ref = type.getTypeReferenceExpression();
+        GoTypeReferenceExpression ref = getTypeRefExpression(type);
         if (ref != null && ref.getReference().resolve() == ref) return processor.execute(myElement, state); // a bit hacky resolve for: var a C.foo; a.b
       }
     }
     return true;
+  }
+
+  @Nullable
+  private static GoTypeReferenceExpression getTypeRefExpression(@NotNull GoType type) {
+    if (type instanceof GoPointerType) {
+      GoType inner = ((GoPointerType)type).getType();
+      return inner == null ? null : inner.getTypeReferenceExpression();
+    }
+    return type.getTypeReferenceExpression();
   }
 
   private boolean processGoType(@NotNull final GoType type, @NotNull final GoScopeProcessor processor, final @NotNull ResolveState state) {
