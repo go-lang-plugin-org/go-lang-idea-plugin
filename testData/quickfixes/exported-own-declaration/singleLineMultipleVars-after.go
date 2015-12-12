@@ -8,9 +8,8 @@ var Hello5, hello6 int // This is valid
 
 // exported var Hello8 should have its own declaration
 var (
-	Hello7 int
 	Hello8 int
-) // exported var Hello8 should have its own declaration
+	Hello7 int) // exported var Hello8 should have its own declaration
 
 const (
 	Foo            = 1
