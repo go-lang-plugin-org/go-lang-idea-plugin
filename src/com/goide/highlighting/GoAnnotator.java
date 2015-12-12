@@ -19,6 +19,7 @@ package com.goide.highlighting;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.quickfix.GoReplaceWithReturnStatementQuickFix;
+import com.google.common.collect.Sets;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
@@ -27,7 +28,22 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+import java.util.Set;
+
 public class GoAnnotator implements Annotator {
+  private static final Set<String> intTypeNames = Sets.newHashSet(
+    "int",
+    "int8",
+    "int16",
+    "int32",
+    "int64",
+    "uint",
+    "uint8",
+    "uint16",
+    "uint32",
+    "uintptr"
+  );
 
   @Override
   public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
@@ -80,13 +96,111 @@ public class GoAnnotator implements Annotator {
       GoType type = ((GoTypeAssertionExpr)element).getExpression().getGoType(null);
       if (type != null) {
         GoType baseType = GoPsiImplUtil.findBaseTypeFromRef(type.getTypeReferenceExpression());
-        if (baseType instanceof GoSpecType && !(((GoSpecType) baseType).getType() instanceof GoInterfaceType)) {
+        if (baseType instanceof GoSpecType && !(((GoSpecType)baseType).getType() instanceof GoInterfaceType)) {
           String message =
             String.format("Invalid type assertion: %s, (non-interface type %s on left)", element.getText(), type.getText());
           holder.createErrorAnnotation(((GoTypeAssertionExpr)element).getExpression(), message);
         }
       }
     }
+    else if (element instanceof GoBuiltinCallExpr) {
+      GoBuiltinCallExpr call = (GoBuiltinCallExpr)element;
+      if ("make".equals(call.getReferenceExpression().getText())) {
+        checkMakeCall(call, holder);
+      }
+    }
+  }
+
+  private static void checkMakeCall(GoBuiltinCallExpr call, AnnotationHolder holder) {
+    if (call.getBuiltinArgs() == null) {
+      holder.createErrorAnnotation(call, "Missing argument to make");
+    }
+    else {
+      GoBuiltinArgs args = call.getBuiltinArgs();
+      if (args.getType() == null) {
+        if (!args.getExpressionList().isEmpty()) {
+          holder.createErrorAnnotation(call, args.getExpressionList().get(0).getText() + " is not a type");
+        }
+      }
+      else {
+        // We have a type, is it valid?
+        GoType baseType = getBaseType(args.getType());
+        if (!canMakeType(baseType)) {
+          holder.createErrorAnnotation(args.getType(), "Cannot make " + args.getType().getText());
+        }
+        else {
+          // We have a type and we can make the type, are the parameters to make valid?
+          checkMakeArgs(call, baseType, args.getExpressionList(), holder);
+        }
+      }
+    }
+  }
+
+  private static boolean canMakeType(GoType type) {
+    if (type instanceof GoArrayOrSliceType) {
+      // Only slices (no size expression) can be make()'d.
+      return ((GoArrayOrSliceType)type).getExpression() == null;
+    }
+
+    if (type instanceof GoChannelType || type instanceof GoMapType) {
+      return true;
+    }
+
+    return false;
+  }
+
+  private static void checkMakeArgs(GoBuiltinCallExpr call,
+                                    GoType baseType,
+                                    List<GoExpression> list,
+                                    AnnotationHolder holder) {
+    if (baseType instanceof GoArrayOrSliceType) {
+      if (list.isEmpty()) {
+        holder.createErrorAnnotation(call, "Missing len argument to make");
+        return;
+      }
+      else if (list.size() > 2) {
+        holder.createErrorAnnotation(call, "Too many arguments to make");
+        return;
+      }
+    }
+
+    if (baseType instanceof GoChannelType || baseType instanceof GoMapType) {
+      if (list.size() > 1) {
+        holder.createErrorAnnotation(call, "Too many arguments to make");
+        return;
+      }
+    }
+
+    for (int i = 0; i < list.size(); i++) {
+      GoExpression expression = list.get(i);
+      GoType expressionType = expression.getGoType(null);
+      if (expressionType != null) {
+        GoType expressionBaseType = getBaseType(expressionType);
+        if (!isIntegerType(expressionBaseType)) {
+          String argName = i == 0 ? "size" : "capacity";
+          holder.createErrorAnnotation(expression, "Non-integer " + argName + " argument to make");
+        }
+      }
+    }
+  }
+
+  private static GoType getBaseType(GoType type) {
+    if (type.getTypeReferenceExpression() != null) {
+      type = GoPsiImplUtil.findBaseTypeFromRef(type.getTypeReferenceExpression());
+    }
+
+    if (type instanceof GoSpecType) {
+      type = ((GoSpecType)type).getType();
+    }
+
+    return type;
+  }
+
+  private static boolean isIntegerType(GoType type) {
+    if (type.getTypeReferenceExpression() == null) {
+      return false;
+    }
+    return intTypeNames.contains(type.getTypeReferenceExpression().getText());
   }
 
   /**

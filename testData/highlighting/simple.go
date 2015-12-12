@@ -71,7 +71,7 @@ func <error descr="Duplicate function name">foo</error>() {
     a := &A{}
     b := &B{b:"bbb"}
     e := &Empty{}
-    y := make(A, 10)
+    y := make(<error descr="Cannot make A">A</error>, 10)
     z := new(A)
 
     y.hola()
