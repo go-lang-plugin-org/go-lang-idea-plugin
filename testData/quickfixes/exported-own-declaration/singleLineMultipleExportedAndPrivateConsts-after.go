@@ -2,7 +2,8 @@ package demo2049
 
 const (
 	Helllllo = 3
-	Hello1, hello2, help = 1, 2, 4) // This is valid
+	Hello1, hello2, help = 1, 2, 4
+) // This is valid
 
 const Hello3, Hello4 = 3, 4 // exported const Hello4 should have its own declaration
 
