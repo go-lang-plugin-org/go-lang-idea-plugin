@@ -5,16 +5,7 @@ import fmt "<error descr="Cannot resolve file ''"></error>"
 import "net/http"
 import "io"
 
-func x(string) {}
-
 func  main() {
-    println(<error descr="Type []string is not an expression">[]string</error>)
-    ((<error descr="Type string is not an expression">string</error>))
-    x((string)("foo"))
-    x(<error descr="Type string is not an expression">string</error> + <error descr="Type string is not an expression">string</error>)
-    var b Boom
-    Boom.Run(b, aaa{})
-    <error descr="Type string is not an expression">string</error>
 	test := <error descr="Unresolved reference 'test'">test</error>
 	Println(test)
 	test.<EOLError descr="'(', <expression> or identifier expected, got '}'"></EOLError>
@@ -229,7 +220,7 @@ func <warning descr="Unused function 'typeAssert'">typeAssert</warning>() {
   err := nil
   switch err.(type) {
     case ServiceError:
-            ser := <error descr="Invalid type assertion: err.(ServiceError), (non-interface type int on left)">err</error>.(ServiceError)
+            ser := <error descr="Invalid type assertion: err.(ServiceError), (non-interface type int on left).">err</error>.(ServiceError)
             Println(ser.Code)
             Println([]byte(ser.Message))
     }
@@ -586,7 +577,7 @@ func _() {
         if len(string(z)) > 0 {}
     }
 
-    x = <error descr="Type anotherStringType is not an expression">anotherStringType</error>
+    x = anotherStringType
     if z, ok := x.(someStringType); ok {
         if len(string(z)) > 0 {}
     }
@@ -598,7 +589,7 @@ type interf3 interf2
 
 func _() {
     var x string
-    if _, ok := <error descr="Invalid type assertion: x.(string), (non-interface type string on left)">x</error>.(string); ok {
+    if _, ok := <error descr="Invalid type assertion: x.(string), (non-interface type string on left).">x</error>.(string); ok {
     }
     var y interf3
     if _, ok := y.(string); ok {
@@ -608,21 +599,4 @@ func _() {
     var x map[string]string
     x = map[string]string{<error descr="Missing key in map literal">"a"</error>, <error descr="Missing key in map literal">"b"</error>}
     if len(x) > 2 {}
-}
-
-type someInterface interface{}
-
-func _() {
-    var x Boom
-    var y someInterface
-    y = x
-    if _, ok := y.(Boom); ok {
-
-    }
-    switch z := y.(type) {
-    case Boom:
-        z.Run(aaa{})
-    case *Boom:
-        z.Run(aaa{})
-    }
 }

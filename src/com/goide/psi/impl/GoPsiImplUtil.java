@@ -50,7 +50,6 @@ import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Function;
 import com.intellij.util.NotNullFunction;
-import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -811,6 +810,11 @@ public class GoPsiImplUtil {
   }
   
   @NotNull
+  public PsiElement getType(@NotNull GoTypeSpec o) {
+    return o.getSpecType();
+  }
+
+  @NotNull
   private static List<GoMethodDeclaration> calcMethods(@NotNull GoTypeSpec o) {
     PsiFile file = o.getContainingFile().getOriginalFile();
     if (file instanceof GoFile) {
@@ -844,6 +848,73 @@ public class GoPsiImplUtil {
       type = inner;
     }
     return type;
+  }
+
+  static class MyFunType extends GoLightType<GoFunctionLit> implements GoFunctionType {
+    protected MyFunType(@NotNull GoFunctionLit o) {
+      super(o);
+    }
+
+    @Nullable
+    @Override
+    public GoSignature getSignature() {
+      return myElement.getSignature();
+    }
+
+    @NotNull
+    @Override
+    public PsiElement getFunc() {
+      return myElement.getFunc();
+    }
+
+    @Override
+    public String getText() {
+      GoSignature signature = getSignature();
+      return getFunc().getText() + (signature != null ? signature.getText() : "");
+    }
+  }
+  
+  static class MyPointerType extends GoLightType<GoType> implements GoPointerType {
+    protected MyPointerType(@NotNull GoType o) {
+      super(o);
+    }
+
+    @Override
+    public String getText() {
+      return "*" + myElement.getText();
+    }
+
+    @Nullable
+    @Override
+    public GoType getType() {
+      return myElement;
+    }
+
+    @NotNull
+    @Override
+    public PsiElement getMul() {
+      return myElement; // todo: mock it?
+    }
+  }
+
+  static class MyGoTypeList extends GoLightType<GoCompositeElement> implements GoTypeList {
+    @NotNull private final List<GoType> myTypes;
+
+    public MyGoTypeList(@NotNull GoCompositeElement o, @NotNull List<GoType> types) {
+      super(o);
+      myTypes = types;
+    }
+
+    @NotNull
+    @Override
+    public List<GoType> getTypeList() {
+      return myTypes;
+    }
+
+    @Override
+    public String toString() {
+      return "MyGoTypeList{myTypes=" + myTypes + '}';
+    }
   }
 
   @Nullable
@@ -895,7 +966,7 @@ public class GoPsiImplUtil {
     }
     return addImportDeclaration(importList, newDeclaration);
   }
-  
+
   @NotNull
   private static GoImportSpec addImportDeclaration(@NotNull GoImportList importList, @NotNull GoImportDeclaration newImportDeclaration) {
     GoImportDeclaration lastImport = ContainerUtil.getLastItem(importList.getImportDeclarationList());
@@ -945,16 +1016,16 @@ public class GoPsiImplUtil {
   public static String getLocalPackageName(@NotNull GoImportSpec importSpec) {
     return getLocalPackageName(importSpec.getPath());
   }
-
+  
   public static boolean isCImport(@NotNull GoImportSpec importSpec) {
     return GoConstants.C_PATH.equals(importSpec.getPath());
   }
-
+  
   public static boolean isDot(@NotNull GoImportSpec importSpec) {
     GoImportSpecStub stub = importSpec.getStub();
     return stub != null ? stub.isDot() : importSpec.getDot() != null;
   }
-
+  
   @NotNull
   public static String getPath(@NotNull GoImportSpec importSpec) {
     GoImportSpecStub stub = importSpec.getStub();
@@ -964,7 +1035,7 @@ public class GoPsiImplUtil {
   public static String getName(@NotNull GoImportSpec importSpec) {
     return getAlias(importSpec);
   }
-  
+
   public static String getAlias(@NotNull GoImportSpec importSpec) {
     GoImportSpecStub stub = importSpec.getStub();
     if (stub != null) {
@@ -981,7 +1052,7 @@ public class GoPsiImplUtil {
   public static boolean shouldGoDeeper(@SuppressWarnings("UnusedParameters") GoImportSpec o) {
     return false;
   }
-  
+
   public static boolean shouldGoDeeper(@SuppressWarnings("UnusedParameters") GoTypeSpec o) {
     return false;
   }
@@ -994,7 +1065,7 @@ public class GoPsiImplUtil {
   public static String getPath(@NotNull GoImportString o) {
     return unquote(o.getText());
   }
-  
+
   @NotNull
   public static String unquote(@Nullable String s) {
     if (StringUtil.isEmpty(s)) return "";
@@ -1018,11 +1089,11 @@ public class GoPsiImplUtil {
     String text = importString.getText();
     return !text.isEmpty() && isQuote(text.charAt(0)) ? TextRange.create(1, text.length() - 1) : TextRange.EMPTY_RANGE;
   }
-
+  
   public static boolean isQuotedImportString(@NotNull String s) {
     return s.length() > 1 && isQuote(s.charAt(0)) && s.charAt(0) == s.charAt(s.length() - 1);
   }
-
+  
   public static boolean isQuote(char ch) {
     return ch == '"' || ch == '\'' || ch == '`';
   }
@@ -1049,12 +1120,12 @@ public class GoPsiImplUtil {
     ((LeafElement)valueNode).replaceWithText(text);
     return (GoStringLiteralImpl)o;
   }
-  
+
   @NotNull
   public static GoStringLiteralEscaper createLiteralTextEscaper(@NotNull GoStringLiteral o) {
     return new GoStringLiteralEscaper(o);
   }
-  
+
   public static boolean prevDot(@Nullable PsiElement e) {
     PsiElement prev = e == null ? null : PsiTreeUtil.prevVisibleLeaf(e);
     return prev instanceof LeafElement && ((LeafElement)prev).getElementType() == GoTypes.DOT;
@@ -1090,270 +1161,4 @@ public class GoPsiImplUtil {
     PsiElement grandParent = parent != null ? parent.getParent() : null;
     return grandParent instanceof GoUnaryExpr && ((GoUnaryExpr)grandParent).getBitAnd() != null;
   }
-
-  @NotNull
-  public static GoVarSpec addSpec(@NotNull GoVarDeclaration declaration,
-                                  @NotNull String name,
-                                  @Nullable String type,
-                                  @Nullable String value,
-                                  @Nullable GoVarSpec specAnchor) {
-    Project project = declaration.getProject();
-    GoVarSpec newSpec = GoElementFactory.createVarSpec(project, name, type, value);
-    PsiElement rParen = declaration.getRparen();
-    if (rParen == null) {
-      GoVarSpec item = ContainerUtil.getFirstItem(declaration.getVarSpecList());
-      assert item != null;
-      boolean updateAnchor = specAnchor == item;
-      declaration = (GoVarDeclaration)declaration.replace(GoElementFactory.createVarDeclaration(project, "(" + item.getText() + ")"));
-      rParen = declaration.getRparen();
-      if (updateAnchor) {
-        specAnchor = ContainerUtil.getFirstItem(declaration.getVarSpecList());
-      }
-    }
-
-    assert rParen != null;
-    PsiElement anchor = ObjectUtils.notNull(specAnchor, rParen);
-    if (!hasNewLineBefore(anchor)) {
-      declaration.addBefore(GoElementFactory.createNewLine(declaration.getProject()), anchor);
-    }
-    GoVarSpec spec = (GoVarSpec)declaration.addBefore(newSpec, anchor);
-    declaration.addBefore(GoElementFactory.createNewLine(declaration.getProject()), anchor);
-    return spec;
-  }
-
-  @NotNull
-  public static GoConstSpec addSpec(@NotNull GoConstDeclaration declaration,
-                                    @NotNull String name,
-                                    @Nullable String type,
-                                    @Nullable String value,
-                                    @Nullable GoConstSpec specAnchor) {
-    Project project = declaration.getProject();
-    GoConstSpec newSpec = GoElementFactory.createConstSpec(project, name, type, value);
-    PsiElement rParen = declaration.getRparen();
-    if (rParen == null) {
-      GoConstSpec item = ContainerUtil.getFirstItem(declaration.getConstSpecList());
-      assert item != null;
-      boolean updateAnchor = specAnchor == item;
-      declaration = (GoConstDeclaration)declaration.replace(GoElementFactory.createConstDeclaration(project, "(" + item.getText() + ")"));
-      rParen = declaration.getRparen();
-      if (updateAnchor) {
-        specAnchor = ContainerUtil.getFirstItem(declaration.getConstSpecList());
-      }
-    }
-
-    assert rParen != null;
-    PsiElement anchor = ObjectUtils.notNull(specAnchor, rParen);
-    if (!hasNewLineBefore(anchor)) {
-      declaration.addBefore(GoElementFactory.createNewLine(declaration.getProject()), anchor);
-    }
-    GoConstSpec spec = (GoConstSpec)declaration.addBefore(newSpec, anchor);
-    declaration.addBefore(GoElementFactory.createNewLine(declaration.getProject()), anchor);
-    return spec;
-  }
-
-  public static void deleteSpec(@NotNull GoVarDeclaration declaration, @NotNull GoVarSpec specToDelete) {
-    List<GoVarSpec> specList = declaration.getVarSpecList();
-    int index = specList.indexOf(specToDelete);
-    assert index >= 0;
-    if (specList.size() == 1) {
-      declaration.delete();
-      return;
-    }
-    specToDelete.delete();
-  }
-
-  public static void deleteSpec(@NotNull GoConstDeclaration declaration, @NotNull GoConstSpec specToDelete) {
-    List<GoConstSpec> specList = declaration.getConstSpecList();
-    int index = specList.indexOf(specToDelete);
-    assert index >= 0;
-    if (specList.size() == 1) {
-      declaration.delete();
-      return;
-    }
-    specToDelete.delete();
-  }
-
-  public static void deleteDefinition(@NotNull GoVarSpec spec, @NotNull GoVarDefinition definitionToDelete) {
-    List<GoVarDefinition> definitionList = spec.getVarDefinitionList();
-    int index = definitionList.indexOf(definitionToDelete);
-    assert index >= 0;
-    if (definitionList.size() == 1) {
-      PsiElement parent = spec.getParent();
-      if (parent instanceof GoVarDeclaration) {
-        ((GoVarDeclaration)parent).deleteSpec(spec);
-      } 
-      else {
-        spec.delete();
-      }
-      return;
-    }
-
-    GoExpression value = definitionToDelete.getValue();
-    if (value != null && spec.getExpressionList().size() <= 1) {
-      PsiElement assign = spec.getAssign();
-      if (assign != null) {
-        assign.delete();
-      }
-    }
-    deleteElementFromCommaSeparatedList(value);
-    deleteElementFromCommaSeparatedList(definitionToDelete);
-  }
-
-  public static void deleteDefinition(@NotNull GoConstSpec spec, @NotNull GoConstDefinition definitionToDelete) {
-    List<GoConstDefinition> definitionList = spec.getConstDefinitionList();
-    int index = definitionList.indexOf(definitionToDelete);
-    assert index >= 0;
-    if (definitionList.size() == 1) {
-      PsiElement parent = spec.getParent();
-      if (parent instanceof GoConstDeclaration) {
-        ((GoConstDeclaration)parent).deleteSpec(spec);
-      } 
-      else {
-        spec.delete();
-      }
-      return;
-    }
-    GoExpression value = definitionToDelete.getValue();
-    if (value != null && spec.getExpressionList().size() <= 1) {
-      PsiElement assign = spec.getAssign();
-      if (assign != null) {
-        assign.delete();
-      }
-    }
-    deleteElementFromCommaSeparatedList(value);
-    deleteElementFromCommaSeparatedList(definitionToDelete);
-  }
-
-  private static void deleteElementFromCommaSeparatedList(@Nullable PsiElement element) {
-    if (element == null) {
-      return;
-    }
-    PsiElement prevVisibleLeaf = PsiTreeUtil.prevVisibleLeaf(element);
-    PsiElement nextVisibleLeaf = PsiTreeUtil.nextVisibleLeaf(element);
-    if (prevVisibleLeaf != null && prevVisibleLeaf.textMatches(",")) {
-      prevVisibleLeaf.delete();
-    }
-    else if (nextVisibleLeaf != null && nextVisibleLeaf.textMatches(",")) {
-      nextVisibleLeaf.delete();
-    }
-    element.delete();
-  }
-  
-  private static boolean hasNewLineBefore(@NotNull PsiElement anchor) {
-    PsiElement prevSibling = anchor.getPrevSibling();
-    while (prevSibling != null && prevSibling instanceof PsiWhiteSpace) {
-      if (prevSibling.textContains('\n')) {
-        return true;
-      }
-      prevSibling = prevSibling.getPrevSibling();
-    }
-    return false; 
-  }
-
-  @Nullable
-  public static GoType getType(@NotNull GoVarDefinition definition) {
-    PsiElement parent = definition.getParent();
-    assert parent instanceof GoVarSpec;
-    return ((GoVarSpec)parent).getType();
-  }
-  
-  @Nullable
-  public static GoType getType(@NotNull GoConstDefinition definition) {
-    PsiElement parent = definition.getParent();
-    assert parent instanceof GoConstSpec;
-    return ((GoConstSpec)parent).getType();
-  }
-
-  @Nullable
-  public static GoExpression getValue(@NotNull GoVarDefinition definition) {
-    PsiElement parent = definition.getParent();
-    assert parent instanceof GoVarSpec;
-    int index = ((GoVarSpec)parent).getVarDefinitionList().indexOf(definition);
-    return getByIndex(((GoVarSpec)parent).getExpressionList(), index);
-  }
-
-  @Nullable
-  public static GoExpression getValue(@NotNull GoConstDefinition definition) {
-    PsiElement parent = definition.getParent();
-    assert parent instanceof GoConstSpec;
-    int index = ((GoConstSpec)parent).getConstDefinitionList().indexOf(definition);
-    return getByIndex(((GoConstSpec)parent).getExpressionList(), index);
-  }
-
-  public static <T> T getByIndex(@NotNull List<T> list, int index) {
-    return 0 <= index && index < list.size()? list.get(index) : null;
-  }
-  
-  @NotNull
-  public PsiElement getType(@NotNull GoTypeSpec o) {
-    return o.getSpecType();
-  }
-  
-  static class MyFunType extends GoLightType<GoFunctionLit> implements GoFunctionType {
-    protected MyFunType(@NotNull GoFunctionLit o) {
-      super(o);
-    }
-
-    @Nullable
-    @Override
-    public GoSignature getSignature() {
-      return myElement.getSignature();
-    }
-
-    @NotNull
-    @Override
-    public PsiElement getFunc() {
-      return myElement.getFunc();
-    }
-
-    @Override
-    public String getText() {
-      GoSignature signature = getSignature();
-      return getFunc().getText() + (signature != null ? signature.getText() : "");
-    }
-  }
-  
-  static class MyPointerType extends GoLightType<GoType> implements GoPointerType {
-    protected MyPointerType(@NotNull GoType o) {
-      super(o);
-    }
-
-    @Override
-    public String getText() {
-      return "*" + myElement.getText();
-    }
-
-    @Nullable
-    @Override
-    public GoType getType() {
-      return myElement;
-    }
-
-    @NotNull
-    @Override
-    public PsiElement getMul() {
-      return myElement; // todo: mock it?
-    }
-  }
-  
-  static class MyGoTypeList extends GoLightType<GoCompositeElement> implements GoTypeList {
-    @NotNull private final List<GoType> myTypes;
-
-    public MyGoTypeList(@NotNull GoCompositeElement o, @NotNull List<GoType> types) {
-      super(o);
-      myTypes = types;
-    }
-
-    @NotNull
-    @Override
-    public List<GoType> getTypeList() {
-      return myTypes;
-    }
-
-    @Override
-    public String toString() {
-      return "MyGoTypeList{myTypes=" + myTypes + '}';
-    }
-  }
-  
 }
