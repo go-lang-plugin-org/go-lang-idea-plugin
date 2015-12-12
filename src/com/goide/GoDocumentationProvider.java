@@ -137,20 +137,23 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       return StringUtil.isNotEmpty(name) ? "type " + name : "";
     }
     if (element instanceof GoConstDefinition) {
-      if (element.getParent() instanceof GoConstSpec) {
-        GoConstSpec spec = (GoConstSpec)element.getParent();
-        StringBuilder result = new StringBuilder();
-        result.append(StringUtil.join(spec.getConstDefinitionList(), GoPsiImplUtil.GET_TEXT_FUNCTION, ","))
-          .append(" ").append(getTypePresentation(spec.getType()));
-        if (spec.getAssign() != null) {
-          result.append(" ").append(spec.getAssign().getText()).append(" ");
-        }
-        result.append(StringUtil.join(spec.getExpressionList(), GoPsiImplUtil.GET_TEXT_FUNCTION, ","));
-        return result.toString();
+      String name = ((GoConstDefinition)element).getName();
+      if (StringUtil.isNotEmpty(name)) {
+        String type = getTypePresentation(((GoConstDefinition)element).getType());
+        GoExpression value = ((GoConstDefinition)element).getValue();
+        return "const " + name + (!type.isEmpty() ? " " + type : "") + (value != null ? " = " + value.getText() : "");
       }
     }
+    if (element instanceof GoVarDefinition) {
+      String name = ((GoVarDefinition)element).getName();
+      if (StringUtil.isNotEmpty(name)) {
+        String type = getTypePresentation(((GoVarDefinition)element).getType());
+        GoExpression value = ((GoVarDefinition)element).getValue();
+        return "var " + name + (!type.isEmpty() ? " " + type : "") + (value != null ? " = " + value.getText() : "");
+      }
+    }
+    
     if (!(element instanceof GoSignatureOwner)) return "";
-
     PsiElement identifier = null;
     if (element instanceof GoNamedSignatureOwner) {
       identifier = ((GoNamedSignatureOwner)element).getIdentifier();
