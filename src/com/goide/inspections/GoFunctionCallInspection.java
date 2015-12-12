@@ -45,14 +45,11 @@ public class GoFunctionCallInspection extends GoInspectionBase {
           List<GoExpression> list = o.getArgumentList().getExpressionList();
           int actualSize = list.size();
           if (resolve instanceof GoTypeSpec && actualSize != 1) {
-            StringBuilder message = new StringBuilder(actualSize == 0 ? "Missing argument " : "Too many arguments ");
-            message.append("to conversion to ");
-            message.append(expression.getText());
-            message.append(": ");
-            message.append(o.getText());
-            message.append(".");
-            holder.registerProblem(o, message.toString());
-          } else if (resolve instanceof GoSignatureOwner) {
+            String message = String.format("%sto conversion to %s: %s.", actualSize == 0 ? "Missing argument " : "Too many arguments ",
+                                           expression.getText(), o.getText());
+            holder.registerProblem(o, message);
+          }
+          else if (resolve instanceof GoSignatureOwner) {
             GoSignature signature = ((GoSignatureOwner)resolve).getSignature();
             if (signature == null) return;
             int expectedSize = 0;
@@ -70,7 +67,7 @@ public class GoFunctionCallInspection extends GoInspectionBase {
                 actualSize = GoInspectionUtil.getFunctionResultCount(firstResolve);
               }
             }
-            
+
             GoReferenceExpression qualifier = ((GoReferenceExpression)expression).getQualifier();
             boolean isMethodExpr = qualifier != null && qualifier.getReference().resolve() instanceof GoTypeSpec;
             if (isMethodExpr) actualSize -= 1; // todo: a temp workaround for method specs
@@ -78,7 +75,7 @@ public class GoFunctionCallInspection extends GoInspectionBase {
             if (actualSize == expectedSize) return;
 
             String tail = " arguments in call to " + expression.getText();
-            holder.registerProblem(o.getArgumentList(), actualSize > expectedSize ? "too many" + tail : "not enough" + tail);
+            holder.registerProblem(o.getArgumentList(), (actualSize > expectedSize ? "too many" : "not enough") + tail);
           }
         }
       }
