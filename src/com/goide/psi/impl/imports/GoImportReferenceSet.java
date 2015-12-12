@@ -33,7 +33,7 @@ public class GoImportReferenceSet extends FileReferenceSet {
 
   @Override
   protected Condition<PsiFileSystemItem> getReferenceCompletionFilter() {
-    if (!getPathString().startsWith("./") && !getPathString().startsWith("../")) {
+    if (!isRelativeImport()) {
       return Conditions.alwaysFalse();
     }
     return super.getReferenceCompletionFilter();
@@ -42,11 +42,7 @@ public class GoImportReferenceSet extends FileReferenceSet {
   @Nullable
   @Override
   public PsiFileSystemItem resolve() {
-    if (isAbsolutePathReference()) {
-      return null;
-    }
-
-    return super.resolve();
+    return isAbsolutePathReference() ? null : super.resolve();
   }
 
   @Override
@@ -54,9 +50,18 @@ public class GoImportReferenceSet extends FileReferenceSet {
     return false;
   }
 
+  @Override
+  public boolean isEndingSlashNotAllowed() {
+    return !isRelativeImport();
+  }
+
   @NotNull
   @Override
   public FileReference createFileReference(TextRange range, int index, String text) {
     return new GoImportReference(this, range, index, text);
+  }
+
+  private boolean isRelativeImport() {
+    return getPathString().startsWith("./") || getPathString().startsWith("../");
   }
 }

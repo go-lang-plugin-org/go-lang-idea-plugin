@@ -128,6 +128,21 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.getTempDirFixture().findOrCreateDir("to_import/_name");
     doTest();
   }
+  
+  public void testImportWithSlashAtTheEnd() throws Throwable {
+    VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
+      @NotNull
+      @Override
+      public VirtualFile compute() throws Throwable {
+        myFixture.getTempDirFixture().createFile("a/pack/pack.go", "package pack; func Foo() {}");
+        return myFixture.getTempDirFixture().createFile("pack2/pack2.go",
+                                                        "package main; import \"a/pack/<error descr=\"Cannot resolve file ''\"></error>\"; import \"../a/pack/\"; func main() { pack.Foo() }");
+      }
+    });
+    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(file.getParent().getParent().getUrl());
+    myFixture.configureFromExistingVirtualFile(file);
+    myFixture.checkHighlighting();
+  }
 
   public void testDoNotReportNonLastMultiResolvedImport() throws IOException {
     final VirtualFile root1 = myFixture.getTempDirFixture().findOrCreateDir("root1");
