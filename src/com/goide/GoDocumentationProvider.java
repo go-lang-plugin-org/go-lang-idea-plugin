@@ -220,6 +220,11 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       else if (type instanceof GoTypeList) {
         return "(" + replaceInnerTypes(type, ((GoTypeList)type).getTypeList()) + ")";
       }
+      else if (type instanceof GoSpecType) {
+        String name = ((GoSpecType)type).getIdentifier().getText();
+        String ref = getReferenceText(type.getParent());
+        return String.format("<a href=\"%s%s\">%s</a>", DocumentationManagerProtocol.PSI_ELEMENT_PROTOCOL, ref, name); 
+      }
 
       GoTypeReferenceExpression typeRef = GoPsiImplUtil.getTypeReference(type);
       if (typeRef != null) {
