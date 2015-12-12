@@ -17,6 +17,11 @@
 package com.goide.psi.impl;
 
 import com.goide.GoCodeInsightFixtureTestCase;
+import com.goide.psi.GoConstDeclaration;
+import com.goide.psi.GoConstSpec;
+import com.goide.psi.GoVarDeclaration;
+import com.goide.psi.GoVarSpec;
+import com.intellij.psi.util.PsiTreeUtil;
 
 public class GoPsiImplUtilTest extends GoCodeInsightFixtureTestCase {
   public void testGetLocalPackageNameDash() {
@@ -29,5 +34,115 @@ public class GoPsiImplUtilTest extends GoCodeInsightFixtureTestCase {
 
   public void testGetLocalPackageNameUnderscore() {
     assertEquals("_", GoPsiImplUtil.getLocalPackageName("_"));
+  }
+
+  public void testAddVarSpec() {
+    myFixture.configureByText("a.go", "package main\n\nvar (\n" +
+                                      "  fo<caret>o int\n" +
+                                      ")");
+    GoVarDeclaration declaration = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarDeclaration.class);
+    assertNotNull(declaration);
+    declaration.addSpec("bar", "string", "`1`", null);
+    myFixture.checkResult("package main\n\nvar (\n  foo int\nbar string = `1`\n)");
+  }
+
+  public void testAddVarSpecWithoutParens() {
+    myFixture.configureByText("a.go", "package main\n\nvar fo<caret>o int\n");
+    GoVarDeclaration declaration = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarDeclaration.class);
+    assertNotNull(declaration);
+    declaration.addSpec("bar", "string", "`1`", null);
+    myFixture.checkResult("package main\n\nvar (foo int\nbar string = `1`\n)\n");
+  }
+
+  public void testAddVarSpecNoNewLines() {
+    myFixture.configureByText("a.go", "package main\n\nvar (fo<caret>o int\n)");
+    GoVarDeclaration declaration = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarDeclaration.class);
+    assertNotNull(declaration);
+    declaration.addSpec("bar", "string", "`1`", null);
+    myFixture.checkResult("package main\n\nvar (foo int\nbar string = `1`\n)");
+  }
+
+  public void testAddVarSpecWithAnchor() {
+    myFixture.configureByText("a.go", "package main\n\nvar (\n" +
+                                      "  fo<caret>o int\n" +
+                                      ")");
+    GoVarSpec spec = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarSpec.class);
+    assertNotNull(spec);
+    GoVarDeclaration declaration = (GoVarDeclaration)spec.getParent();
+    declaration.addSpec("bar", "string", "`1`", spec);
+    myFixture.checkResult("package main\n\nvar (\n  bar string = `1`\nfoo int\n)");
+  }
+
+  public void testAddVarSpecWithoutParensWithAnchor() {
+    myFixture.configureByText("a.go", "package main\n\nvar fo<caret>o int\n");
+    GoVarSpec spec = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarSpec.class);
+    assertNotNull(spec);
+    GoVarDeclaration declaration = (GoVarDeclaration)spec.getParent();
+    declaration.addSpec("bar", "string", "`1`", spec);
+    myFixture.checkResult("package main\n\nvar (\nbar string = `1`\nfoo int)\n");
+  }
+
+  public void testAddVarSpecNoNewLinesWithAnchor() {
+    myFixture.configureByText("a.go", "package main\n\nvar (fo<caret>o int\n)");
+    GoVarSpec spec = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarSpec.class);
+    assertNotNull(spec);
+    GoVarDeclaration declaration = (GoVarDeclaration)spec.getParent();
+    declaration.addSpec("bar", "string", "`1`", spec);
+    myFixture.checkResult("package main\n\nvar (\nbar string = `1`\nfoo int\n)");
+  }
+
+  public void testAddConstSpec() {
+    myFixture.configureByText("a.go", "package main\n\nconst (\n" +
+                                      "  fo<caret>o int\n" +
+                                      ")");
+    GoConstDeclaration declaration = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoConstDeclaration.class);
+    assertNotNull(declaration);
+    declaration.addSpec("bar", "string", "`1`", null);
+    myFixture.checkResult("package main\n\nconst (\n  foo int\nbar string = `1`\n)");
+  }
+
+  public void testAddConstSpecWithoutParens() {
+    myFixture.configureByText("a.go", "package main\n\nconst fo<caret>o int\n");
+    GoConstDeclaration declaration = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoConstDeclaration.class);
+    assertNotNull(declaration);
+    declaration.addSpec("bar", "string", "`1`", null);
+    myFixture.checkResult("package main\n\nconst (foo int\nbar string = `1`\n)\n");
+  }
+
+  public void testAddConstSpecNoNewLines() {
+    myFixture.configureByText("a.go", "package main\n\nconst (fo<caret>o int\n)");
+    GoConstDeclaration declaration = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoConstDeclaration.class);
+    assertNotNull(declaration);
+    declaration.addSpec("bar", "string", "`1`", null);
+    myFixture.checkResult("package main\n\nconst (foo int\nbar string = `1`\n)");
+  }
+
+  public void testAddConstSpecWithAnchor() {
+    myFixture.configureByText("a.go", "package main\n\nconst (\n" +
+                                      "  fo<caret>o int\n" +
+                                      ")");
+    GoConstSpec spec = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoConstSpec.class);
+    assertNotNull(spec);
+    GoConstDeclaration declaration = (GoConstDeclaration)spec.getParent();
+    declaration.addSpec("bar", "string", "`1`", spec);
+    myFixture.checkResult("package main\n\nconst (\n  bar string = `1`\nfoo int\n)");
+  }
+
+  public void testAddConstSpecWithoutParensWithAnchor() {
+    myFixture.configureByText("a.go", "package main\n\nconst fo<caret>o int\n");
+    GoConstSpec spec = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoConstSpec.class);
+    assertNotNull(spec);
+    GoConstDeclaration declaration = (GoConstDeclaration)spec.getParent();
+    declaration.addSpec("bar", "string", "`1`", spec);
+    myFixture.checkResult("package main\n\nconst (\nbar string = `1`\nfoo int)\n");
+  }
+
+  public void testAddConstSpecNoNewLinesWithAnchor() {
+    myFixture.configureByText("a.go", "package main\n\nconst (fo<caret>o int\n)");
+    GoConstSpec spec = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoConstSpec.class);
+    assertNotNull(spec);
+    GoConstDeclaration declaration = (GoConstDeclaration)spec.getParent();
+    declaration.addSpec("bar", "string", "`1`", spec);
+    myFixture.checkResult("package main\n\nconst (\nbar string = `1`\nfoo int\n)");
   }
 }

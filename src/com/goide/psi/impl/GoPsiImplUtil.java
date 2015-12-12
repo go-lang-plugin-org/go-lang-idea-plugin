@@ -50,6 +50,7 @@ import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Function;
 import com.intellij.util.NotNullFunction;
+import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -1146,5 +1147,76 @@ public class GoPsiImplUtil {
   public static boolean isUnaryBitAndExpression(@Nullable PsiElement parent) {
     PsiElement grandParent = parent != null ? parent.getParent() : null;
     return grandParent instanceof GoUnaryExpr && ((GoUnaryExpr)grandParent).getBitAnd() != null;
+  }
+
+  @NotNull
+  public static GoVarSpec addSpec(@NotNull GoVarDeclaration declaration,
+                                  @NotNull String name,
+                                  @Nullable String type,
+                                  @Nullable String value,
+                                  @Nullable GoVarSpec specAnchor) {
+    Project project = declaration.getProject();
+    GoVarSpec newSpec = GoElementFactory.createVarSpec(project, name, type, value);
+    PsiElement rParen = declaration.getRparen();
+    if (rParen == null) {
+      GoVarSpec item = ContainerUtil.getFirstItem(declaration.getVarSpecList());
+      assert item != null;
+      boolean updateAnchor = specAnchor == item;
+      declaration = (GoVarDeclaration)declaration.replace(GoElementFactory.createVarDeclaration(project, "(" + item.getText() + ")"));
+      rParen = declaration.getRparen();
+      if (updateAnchor) {
+        specAnchor = ContainerUtil.getFirstItem(declaration.getVarSpecList());
+      }
+    }
+
+    assert rParen != null;
+    PsiElement anchor = ObjectUtils.notNull(specAnchor, rParen);
+    if (!hasNewLineBefore(anchor)) {
+      declaration.addBefore(GoElementFactory.createNewLine(declaration.getProject()), anchor);
+    }
+    GoVarSpec spec = (GoVarSpec)declaration.addBefore(newSpec, anchor);
+    declaration.addBefore(GoElementFactory.createNewLine(declaration.getProject()), anchor);
+    return spec;
+  }
+
+  @NotNull
+  public static GoConstSpec addSpec(@NotNull GoConstDeclaration declaration,
+                                    @NotNull String name,
+                                    @Nullable String type,
+                                    @Nullable String value,
+                                    @Nullable GoConstSpec specAnchor) {
+    Project project = declaration.getProject();
+    GoConstSpec newSpec = GoElementFactory.createConstSpec(project, name, type, value);
+    PsiElement rParen = declaration.getRparen();
+    if (rParen == null) {
+      GoConstSpec item = ContainerUtil.getFirstItem(declaration.getConstSpecList());
+      assert item != null;
+      boolean updateAnchor = specAnchor == item;
+      declaration = (GoConstDeclaration)declaration.replace(GoElementFactory.createConstDeclaration(project, "(" + item.getText() + ")"));
+      rParen = declaration.getRparen();
+      if (updateAnchor) {
+        specAnchor = ContainerUtil.getFirstItem(declaration.getConstSpecList());
+      }
+    }
+
+    assert rParen != null;
+    PsiElement anchor = ObjectUtils.notNull(specAnchor, rParen);
+    if (!hasNewLineBefore(anchor)) {
+      declaration.addBefore(GoElementFactory.createNewLine(declaration.getProject()), anchor);
+    }
+    GoConstSpec spec = (GoConstSpec)declaration.addBefore(newSpec, anchor);
+    declaration.addBefore(GoElementFactory.createNewLine(declaration.getProject()), anchor);
+    return spec;
+  }
+
+  private static boolean hasNewLineBefore(@NotNull PsiElement anchor) {
+    PsiElement prevSibling = anchor.getPrevSibling();
+    while (prevSibling != null && prevSibling instanceof PsiWhiteSpace) {
+      if (prevSibling.textContains('\n')) {
+        return true;
+      }
+      prevSibling = prevSibling.getPrevSibling();
+    }
+    return false; 
   }
 }
