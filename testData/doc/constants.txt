@@ -1,0 +1,6 @@
+<b>x <a href="psi_element://null#FooBar">FooBar</a> = "something"</b>
+
+=====
+x <a href="psi_element://null#FooBar">FooBar</a> = "something"
+=====
+No urls
