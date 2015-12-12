@@ -246,4 +246,124 @@ public class GoPsiImplUtilTest extends GoCodeInsightFixtureTestCase {
     assertNotNull(value);
     assertEquals("2", value.getText());
   }
+  
+  public void testDeleteSingleVarDefinition() {
+    myFixture.configureByText("a.go", "package main\n\n var b<caret>ar int = 1, 2");
+    GoVarDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarDefinition.class);
+    assertNotNull(definition);
+    GoVarSpec spec = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarSpec.class);
+    assertNotNull(spec);
+    spec.deleteDefinition(definition);
+    myFixture.checkResult("package main\n\n ");
+  }
+
+  public void testDeleteFirstMultipleVarDefinitionWithValue() {
+    myFixture.configureByText("a.go", "package main\n\n var fo<caret>o, bar int = 1, 2");
+    GoVarDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarDefinition.class);
+    assertNotNull(definition);
+    GoVarSpec spec = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarSpec.class);
+    assertNotNull(spec);
+    spec.deleteDefinition(definition);
+    myFixture.checkResult("package main\n\n var bar int =  2");
+  }
+  
+  public void testDeleteMiddleMultipleVarDefinitionWithValue() {
+    myFixture.configureByText("a.go", "package main\n\n var buzz, fo<caret>o, bar int = 1, 2, 3");
+    GoVarDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarDefinition.class);
+    assertNotNull(definition);
+    GoVarSpec spec = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarSpec.class);
+    assertNotNull(spec);
+    spec.deleteDefinition(definition);
+    myFixture.checkResult("package main\n\n var buzz , bar int = 1 , 3");
+  }
+  
+  public void testDeleteLastMultipleVarDefinitionWithValue() {
+    myFixture.configureByText("a.go", "package main\n\n var foo, b<caret>ar int = 1, 2");
+    GoVarDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarDefinition.class);
+    assertNotNull(definition);
+    GoVarSpec spec = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarSpec.class);
+    assertNotNull(spec);
+    spec.deleteDefinition(definition);
+    myFixture.checkResult("package main\n\n var foo  int = 1 ");
+  }
+
+  public void testDeleteLastMultipleVarDefinitionWithoutValue() {
+    myFixture.configureByText("a.go", "package main\n\n var foo, b<caret>ar int = 1");
+    GoVarDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarDefinition.class);
+    assertNotNull(definition);
+    GoVarSpec spec = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarSpec.class);
+    assertNotNull(spec);
+    spec.deleteDefinition(definition);
+    myFixture.checkResult("package main\n\n var foo  int = 1");
+  }
+  
+  public void testDeleteFirstMultipleVarDefinitionWithoutValue() {
+    myFixture.configureByText("a.go", "package main\n\n var f<caret>oo, bar int = 1");
+    GoVarDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarDefinition.class);
+    assertNotNull(definition);
+    GoVarSpec spec = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarSpec.class);
+    assertNotNull(spec);
+    spec.deleteDefinition(definition);
+    myFixture.checkResult("package main\n\n var bar int  ");
+  }
+  
+  public void testDeleteSingleConstDefinition() {
+    myFixture.configureByText("a.go", "package main\n\n const b<caret>ar int = 1, 2");
+    GoConstDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoConstDefinition.class);
+    assertNotNull(definition);
+    GoConstSpec spec = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoConstSpec.class);
+    assertNotNull(spec);
+    spec.deleteDefinition(definition);
+    myFixture.checkResult("package main\n\n ");
+  }
+
+  public void testDeleteFirstMultipleConstDefinitionWithValue() {
+    myFixture.configureByText("a.go", "package main\n\n const fo<caret>o, bar int = 1, 2");
+    GoConstDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoConstDefinition.class);
+    assertNotNull(definition);
+    GoConstSpec spec = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoConstSpec.class);
+    assertNotNull(spec);
+    spec.deleteDefinition(definition);
+    myFixture.checkResult("package main\n\n const bar int =  2");
+  }
+  
+  public void testDeleteMiddleMultipleConstDefinitionWithValue() {
+    myFixture.configureByText("a.go", "package main\n\n const buzz, fo<caret>o, bar int = 1, 2, 3");
+    GoConstDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoConstDefinition.class);
+    assertNotNull(definition);
+    GoConstSpec spec = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoConstSpec.class);
+    assertNotNull(spec);
+    spec.deleteDefinition(definition);
+    myFixture.checkResult("package main\n\n const buzz , bar int = 1 , 3");
+  }
+  
+  public void testDeleteLastMultipleConstDefinitionWithValue() {
+    myFixture.configureByText("a.go", "package main\n\n const foo, b<caret>ar int = 1, 2");
+    GoConstDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoConstDefinition.class);
+    assertNotNull(definition);
+    GoConstSpec spec = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoConstSpec.class);
+    assertNotNull(spec);
+    spec.deleteDefinition(definition);
+    myFixture.checkResult("package main\n\n const foo  int = 1 ");
+  }
+
+  public void testDeleteLastMultipleConstDefinitionWithoutValue() {
+    myFixture.configureByText("a.go", "package main\n\n const foo, b<caret>ar int = 1");
+    GoConstDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoConstDefinition.class);
+    assertNotNull(definition);
+    GoConstSpec spec = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoConstSpec.class);
+    assertNotNull(spec);
+    spec.deleteDefinition(definition);
+    myFixture.checkResult("package main\n\n const foo  int = 1");
+  }
+  
+  public void testDeleteFirstMultipleConstDefinitionWithoutValue() {
+    myFixture.configureByText("a.go", "package main\n\n const f<caret>oo, bar int = 1");
+    GoConstDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoConstDefinition.class);
+    assertNotNull(definition);
+    GoConstSpec spec = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoConstSpec.class);
+    assertNotNull(spec);
+    spec.deleteDefinition(definition);
+    myFixture.checkResult("package main\n\n const bar int  ");
+  }
 }

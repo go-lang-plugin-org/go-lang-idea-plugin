@@ -38,4 +38,6 @@ public interface GoVarDeclaration extends GoTopLevelDeclaration {
   @NotNull
   GoVarSpec addSpec(String name, String type, String value, GoVarSpec specAnchor);
 
+  void deleteSpec(GoVarSpec specToDelete);
+
 }

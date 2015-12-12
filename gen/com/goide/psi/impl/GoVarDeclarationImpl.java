@@ -70,4 +70,8 @@ public class GoVarDeclarationImpl extends GoCompositeElementImpl implements GoVa
     return GoPsiImplUtil.addSpec(this, name, type, value, specAnchor);
   }
 
+  public void deleteSpec(GoVarSpec specToDelete) {
+    GoPsiImplUtil.deleteSpec(this, specToDelete);
+  }
+
 }
