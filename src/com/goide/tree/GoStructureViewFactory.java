@@ -62,9 +62,9 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
   }
 
   public static class Model extends StructureViewModelBase implements StructureViewModel.ElementInfoProvider {
-    public static final List<NodeProvider> PROVIDERS = ContainerUtil.<NodeProvider>newSmartList(new TreeElementFileStructureNodeProvider());
+    private static final List<NodeProvider> PROVIDERS = ContainerUtil.<NodeProvider>newSmartList(new TreeElementFileStructureNodeProvider());
 
-    public Model(@NotNull PsiFile file) {
+    Model(@NotNull PsiFile file) {
       super(file, new Element(file));
       withSuitableClasses(GoFile.class).withSorters(ExportabilitySorter.INSTANCE, Sorter.ALPHA_SORTER);
     }
@@ -224,6 +224,11 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
 
     @Override
     public String getPresentableText() {
+      return getPresentationTextInner().replaceAll("\\(\\n", "(").replaceAll("\\n\\)", ")");
+    }
+
+    @NotNull
+    private String getPresentationTextInner() {
       String separator = ": ";
       if (myElement instanceof GoFile) {
         return ((GoFile)myElement).getName();
