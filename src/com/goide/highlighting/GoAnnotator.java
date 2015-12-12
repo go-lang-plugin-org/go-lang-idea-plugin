@@ -57,6 +57,14 @@ public class GoAnnotator implements Annotator {
           holder.createErrorAnnotation(element, "Use of package " + element.getText() + " without selector");
         }
       }
+      if (resolvedReference instanceof GoTypeSpec && isIllegalUseOfTypeAsExpression(reference)) {
+        holder.createErrorAnnotation(element, "Type " + element.getText() + " is not an expression.");
+      }
+    }
+    else if (element instanceof GoLiteralTypeExpr) {
+      if (isIllegalUseOfTypeAsExpression(element)) {
+        holder.createErrorAnnotation(element, "Type " + element.getText() + " is not an expression.");
+      }
     }
     else if (element instanceof GoCompositeLit) {
       GoCompositeLit literal = (GoCompositeLit)element;
@@ -79,5 +87,24 @@ public class GoAnnotator implements Annotator {
         }
       }
     }
+  }
+
+  /**
+   * Returns {@code true} if the given element is in an invalid location for a type literal or type reference.
+   */
+  private static boolean isIllegalUseOfTypeAsExpression(@NotNull PsiElement element) {
+    PsiElement parent = PsiTreeUtil.skipParentsOfType(element, GoParenthesesExpr.class, GoUnaryExpr.class);
+
+    if (parent instanceof GoReferenceExpression || parent instanceof GoSelectorExpr) {
+      // Part of a selector such as T.method
+      return false;
+    }
+
+    if (parent instanceof GoCallExpr) {
+      // A situation like T("foo").
+      return false;
+    }
+
+    return true;
   }
 }
