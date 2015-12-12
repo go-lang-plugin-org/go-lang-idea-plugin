@@ -60,11 +60,6 @@ public class GoConstDefinitionImpl extends GoNamedElementImpl<GoConstDefinitionS
   }
 
   @Nullable
-  public GoType getType() {
-    return GoPsiImplUtil.getType(this);
-  }
-
-  @Nullable
   public GoExpression getValue() {
     return GoPsiImplUtil.getValue(this);
   }

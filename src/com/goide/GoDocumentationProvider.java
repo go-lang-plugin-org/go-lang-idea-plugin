@@ -139,7 +139,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
     if (element instanceof GoConstDefinition) {
       String name = ((GoConstDefinition)element).getName();
       if (StringUtil.isNotEmpty(name)) {
-        String type = getTypePresentation(((GoConstDefinition)element).getType());
+        String type = getTypePresentation(((GoConstDefinition)element).getGoTypeInner(null));
         GoExpression value = ((GoConstDefinition)element).getValue();
         return "const " + name + (!type.isEmpty() ? " " + type : "") + (value != null ? " = " + value.getText() : "");
       }
@@ -147,7 +147,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
     if (element instanceof GoVarDefinition) {
       String name = ((GoVarDefinition)element).getName();
       if (StringUtil.isNotEmpty(name)) {
-        String type = getTypePresentation(((GoVarDefinition)element).getType());
+        String type = getTypePresentation(((GoVarDefinition)element).getGoTypeInner(null));
         GoExpression value = ((GoVarDefinition)element).getValue();
         return "var " + name + (!type.isEmpty() ? " " + type : "") + (value != null ? " = " + value.getText() : "");
       }

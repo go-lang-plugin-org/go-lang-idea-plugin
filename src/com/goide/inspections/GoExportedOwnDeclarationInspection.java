@@ -89,7 +89,7 @@ public class GoExportedOwnDeclarationInspection extends GoInspectionBase {
       if (StringUtil.isEmpty(name)) {
         return;
       }
-      final GoType type = ((GoConstDefinition)element).getType();
+      final GoType type = ((GoConstDefinition)element).findSiblingType();
       final GoExpression value = ((GoConstDefinition)element).getValue();
       WriteCommandAction.runWriteCommandAction(project, new Runnable() {
         @Override
@@ -128,7 +128,7 @@ public class GoExportedOwnDeclarationInspection extends GoInspectionBase {
       if (StringUtil.isEmpty(name)) {
         return;
       }
-      final GoType type = ((GoVarDefinition)element).getType();
+      final GoType type = ((GoVarDefinition)element).findSiblingType();
       final GoExpression value = ((GoVarDefinition)element).getValue();
       WriteCommandAction.runWriteCommandAction(project, new Runnable() {
         @Override

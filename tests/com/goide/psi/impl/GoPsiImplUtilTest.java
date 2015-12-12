@@ -147,7 +147,7 @@ public class GoPsiImplUtilTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureByText("a.go", "package main\n\n var f<caret>oo int");
     GoVarDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarDefinition.class);
     assertNotNull(definition);                      
-    GoType type = definition.getType();
+    GoType type = definition.findSiblingType();
     assertNotNull(type);
     assertEquals("int", type.getText());
   }
@@ -156,7 +156,7 @@ public class GoPsiImplUtilTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureByText("a.go", "package main\n\n var fo<caret>o, bar int");
     GoVarDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarDefinition.class);
     assertNotNull(definition);
-    GoType type = definition.getType();
+    GoType type = definition.findSiblingType();
     assertNotNull(type);
     assertEquals("int", type.getText());
   }
@@ -165,7 +165,7 @@ public class GoPsiImplUtilTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureByText("a.go", "package main\n\n const fo<caret>o int = 1");
     GoConstDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoConstDefinition.class);
     assertNotNull(definition);
-    GoType type = definition.getType();
+    GoType type = definition.findSiblingType();
     assertNotNull(type);
     assertEquals("int", type.getText());
   }
@@ -174,7 +174,7 @@ public class GoPsiImplUtilTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureByText("a.go", "package main\n\n const fo<caret>o, bar int = 1, 2");
     GoConstDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoConstDefinition.class);
     assertNotNull(definition);
-    GoType type = definition.getType();
+    GoType type = definition.findSiblingType();
     assertNotNull(type);
     assertEquals("int", type.getText());
   }
