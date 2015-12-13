@@ -35,8 +35,8 @@ public class GoBreakStatementExitPointHandler extends HighlightUsagesHandlerBase
   @Nullable private final GoBreakStatement myBreakStatement;
   @Nullable private PsiElement myOwner;
 
-  private GoBreakStatementExitPointHandler(Editor editor,
-                                           PsiFile file,
+  private GoBreakStatementExitPointHandler(@NotNull Editor editor,
+                                           @NotNull PsiFile file,
                                            @NotNull PsiElement target,
                                            @Nullable GoBreakStatement breakStatement,
                                            @Nullable PsiElement owner) {
@@ -59,16 +59,7 @@ public class GoBreakStatementExitPointHandler extends HighlightUsagesHandlerBase
 
   @Override
   public void computeUsages(List<PsiElement> targets) {
-    final PsiElement breakStmtOwner;
-    if (myOwner != null) {
-      breakStmtOwner = myOwner;
-    }
-    else if (myBreakStatement != null) {
-      breakStmtOwner = getBreakStatementOwnerOrResolve(myBreakStatement);
-    }
-    else {
-      breakStmtOwner = null;
-    }
+    final PsiElement breakStmtOwner = findBreakStatementOwner();
     GoRecursiveVisitor visitor = new GoRecursiveVisitor() {
       @Override
       public void visitLabelDefinition(@NotNull GoLabelDefinition o) {
@@ -121,6 +112,12 @@ public class GoBreakStatementExitPointHandler extends HighlightUsagesHandlerBase
     }
   }
 
+  @Nullable
+  private PsiElement findBreakStatementOwner() {
+    if (myOwner != null) return myOwner;
+    if (myBreakStatement != null) return getBreakStatementOwnerOrResolve(myBreakStatement);
+    return null;
+  }
 
   @Nullable
   private static PsiElement getBreakStatementOwnerOrResolve(@NotNull GoBreakStatement breakStatement) {
@@ -135,7 +132,7 @@ public class GoBreakStatementExitPointHandler extends HighlightUsagesHandlerBase
   public static GoBreakStatementExitPointHandler createForElement(@NotNull Editor editor,
                                                                   @NotNull PsiFile file,
                                                                   @NotNull PsiElement element) {
-    PsiElement target = PsiTreeUtil.getParentOfType(element, GoBreakStatement.class, GoSwitchStatement.class, GoSelectStatement.class, 
+    PsiElement target = PsiTreeUtil.getParentOfType(element, GoBreakStatement.class, GoSwitchStatement.class, GoSelectStatement.class,
                                                     GoForStatement.class);
     if (target == null) {
       return null;
