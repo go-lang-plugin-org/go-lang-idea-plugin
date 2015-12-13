@@ -1048,28 +1048,29 @@ public class GoPsiImplUtil {
 
   @Nullable
   public static GoSignatureOwner resolveCall(@Nullable GoExpression call) {
+    return ObjectUtils.tryCast(resolveCallRaw(call), GoSignatureOwner.class);
+  }
+
+  public static PsiElement resolveCallRaw(@Nullable GoExpression call) {
     if (!(call instanceof GoCallExpr)) return null;
     GoExpression e = ((GoCallExpr)call).getExpression();
     if (e instanceof GoSelectorExpr) {
       GoExpression right = ((GoSelectorExpr)e).getRight();
       PsiReference reference = right instanceof GoReferenceExpression ? right.getReference() : null;
-      PsiElement element = reference != null ? reference.resolve() : null;
-      return element instanceof GoSignatureOwner ? ((GoSignatureOwner)element) : null;
+      return reference != null ? reference.resolve() : null;
     }
     else if (e instanceof GoCallExpr) {
       GoSignatureOwner resolve = resolveCall(e);
       if (resolve != null) {
         GoSignature signature = resolve.getSignature();
         GoResult result = signature != null ? signature.getResult() : null;
-        GoType type = result != null ? result.getType() : null;
-        return type instanceof GoSignatureOwner ? ((GoSignatureOwner)type) : null;
+        return result != null ? result.getType() : null;
       }
       return null;
     }
     GoReferenceExpression r = e instanceof GoReferenceExpression ? ((GoReferenceExpression)e) : PsiTreeUtil.getChildOfType(e, GoReferenceExpression.class);
     PsiReference reference = (r != null ? r : e).getReference();
-    PsiElement element = reference != null ? reference.resolve() : null;
-    return element instanceof GoSignatureOwner ? (GoSignatureOwner)element : null;
+    return reference != null ? reference.resolve() : null;
   }
 
   public static boolean isUnaryBitAndExpression(@Nullable PsiElement parent) {

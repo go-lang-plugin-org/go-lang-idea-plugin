@@ -21,7 +21,6 @@ import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,13 +34,9 @@ public class GoFunctionCallInspection extends GoInspectionBase {
       @Override
       public void visitCallExpr(@NotNull GoCallExpr o) {
         super.visitCallExpr(o);
-
+        PsiElement resolve = GoPsiImplUtil.resolveCallRaw(o); 
         GoExpression expression = o.getExpression();
-        if (expression instanceof GoReferenceExpression) {
-          PsiReference reference = expression.getReference();
-          PsiElement resolve = reference != null ? reference.resolve() : null;
-          if (resolve == null) return;
-
+        if (resolve != null && expression instanceof GoReferenceExpression) {
           List<GoExpression> list = o.getArgumentList().getExpressionList();
           int actualSize = list.size();
           if (resolve instanceof GoTypeSpec && actualSize != 1) {
