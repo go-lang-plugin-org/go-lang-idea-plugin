@@ -17,11 +17,11 @@ type Hellloi interface{}
 
 const (
 	<weak_warning descr="Comment should start with 'Helloc'">// help</weak_warning>
-	Helloc = 3
+	<error descr="Unused constant 'Helloc'">Helloc</error> = 3
 )
 
 <weak_warning descr="Comment should start with 'Hellloc'">// help</weak_warning>
-const Hellloc, hellloc2 = 1, 2
+const <error descr="Unused constant 'Hellloc'">Hellloc</error>, <error descr="Unused constant 'hellloc2'">hellloc2</error> = 1, 2
 
 var (
 	<weak_warning descr="Comment should start with 'Hello1'"><weak_warning descr="Comment should start with 'Hellow1'">// help</weak_warning></weak_warning>
