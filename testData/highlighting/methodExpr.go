@@ -43,6 +43,10 @@ type ArrayType struct {
     Type Type
 }
 
+func (t ArrayType) Size() int64 {
+	return 1
+}
+
 func _(t *Type) {
     at, _ := (*t).(*ArrayType)
     println(at.Type)
