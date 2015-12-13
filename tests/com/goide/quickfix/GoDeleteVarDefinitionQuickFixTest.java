@@ -34,6 +34,8 @@ public class GoDeleteVarDefinitionQuickFixTest extends GoQuickFixTestBase {
   public void testRemoveFromMultiSpec() {
     myFixture.configureByText("a.go", "package main; func main() { var (\nfo<caret>o, bar int = 2, 3\n) }");
     applySingleQuickFix("Delete variable 'foo'");
-    myFixture.checkResult("package pack; import _ \"fmt\"");
+    myFixture.checkResult("package main; func main() { var (\n" +
+                          "bar int = 3\n" +
+                          ") }");
   }
 }

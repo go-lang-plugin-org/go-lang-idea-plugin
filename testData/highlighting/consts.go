@@ -5,7 +5,7 @@ type T int
 type TT int
 
 const (
-    A , <error descr="Unused constant 'X'">X</error>, <error descr="Unused constant 'Y'">Y</error> = T(iota), 1, T(1)
+    A , <warning descr="Unused constant 'X'">X</warning>, <warning descr="Unused constant 'Y'">Y</warning> = T(iota), 1, T(1)
 )
 const (
     B = T(iota)

@@ -26,14 +26,15 @@ public class GoDeleteConstDefinitionQuickFixTest extends GoQuickFixTestBase {
   }
   
   public void testSimple() {
-    myFixture.configureByText("a.go", "package main; func main() { const vari<caret>able int = 2 }");
-    applySingleQuickFix("Delete const 'const'");
-    myFixture.checkResult("package pack; import _ \"fmt\"");
+    myFixture.configureByText("a.go", "package main; func main() { const fo<caret>o int = 2 }");
+    applySingleQuickFix("Delete const 'foo'");
+    myFixture.checkResult("package main; func main() {  }");
   }
   
   public void testRemoveFromMultiSpec() {
     myFixture.configureByText("a.go", "package main; func main() { const (fo<caret>o, bar int = 2, 3) }");
-    applySingleQuickFix("Delete const 'const'");
-    myFixture.checkResult("package pack; import _ \"fmt\"");
+    applySingleQuickFix("Delete const 'foo'");
+    myFixture.checkResult("package main; func main() { const (\n" +
+                          "\tbar int = 3) }");
   }
 }
