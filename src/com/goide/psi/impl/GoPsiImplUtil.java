@@ -1269,7 +1269,14 @@ public class GoPsiImplUtil {
   public static <T> T getByIndex(@NotNull List<T> list, int index) {
     return 0 <= index && index < list.size()? list.get(index) : null;
   }
-  
+
+  @Nullable
+  public static GoTypeSpec getTypeSpecSafe(@NotNull GoType type) {
+    GoTypeStub stub = type.getStub();
+    PsiElement parent = stub == null ? type.getParent() : stub.getParentStub().getPsi();
+    return ObjectUtils.tryCast(parent, GoTypeSpec.class);
+  }
+
   @NotNull
   public PsiElement getType(@NotNull GoTypeSpec o) {
     return o.getSpecType();
