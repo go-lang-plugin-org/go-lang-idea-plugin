@@ -183,13 +183,13 @@
     <localInspection language="go" displayName="Unused import inspection" groupPath="Go"
                      groupName="Declaration redundancy" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoUnusedImportInspection"/>
-    <localInspection language="go" displayName="Unused variables inspection" groupPath="Go"
+    <localInspection language="go" displayName="Unused variable inspection" groupPath="Go"
                      groupName="Declaration redundancy" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.unresolved.GoUnusedVariableInspection"/>
-    <localInspection language="go" displayName="Unused constants inspection" groupPath="Go"
-                     groupName="Declaration redundancy" enabledByDefault="true" level="ERROR"
+    <localInspection language="go" displayName="Unused constant inspection" groupPath="Go"
+                     groupName="Declaration redundancy" enabledByDefault="true" level="WARNING"
                      implementationClass="com.goide.inspections.unresolved.GoUnusedConstInspection"/>
-    <localInspection language="go" displayName="Unused global variables inspection" groupPath="Go"
+    <localInspection language="go" displayName="Unused global variable inspection" groupPath="Go"
                      groupName="Declaration redundancy" enabledByDefault="true" level="WARNING"
                      implementationClass="com.goide.inspections.unresolved.GoUnusedGlobalVariableInspection"/>
     <localInspection language="go" displayName="Unused function inspection" groupPath="Go"
@@ -219,14 +219,17 @@
     <localInspection language="go" displayName="Comment of exported element starts with incorrect name" groupPath="Go" 
                      groupName="Code style issues" enabledByDefault="true" level="WEAK WARNING"
                      implementationClass="com.goide.inspections.GoCommentStartInspection"/>
+    <localInspection language="go" displayName="Exported element should have its own declaration" groupPath="Go"
+                     groupName="Code style issues" enabledByDefault="true" level="WEAK WARNING"
+                     implementationClass="com.goide.inspections.GoExportedOwnDeclarationInspection"/>
     <!-- /code style issues -->
 
     <!-- probable bugs -->
-    <localInspection language="go" displayName="Reserved word used as name"
-                     groupName="Go" enabledByDefault="true" level="WARNING"
+    <localInspection language="go" displayName="Reserved word used as name" groupPath="Go"
+                     groupName="Probable bugs" enabledByDefault="true" level="WARNING"
                      implementationClass="com.goide.inspections.GoReservedWordUsedAsNameInspection"/>
-    <localInspection language="go" displayName="Malformed struct tag"
-                     groupName="Go" enabledByDefault="true" level="WARNING"
+    <localInspection language="go" displayName="Malformed struct tag" groupPath="Go"
+                     groupName="Probable bugs" enabledByDefault="true" level="WARNING"
                      implementationClass="com.goide.inspections.GoStructTagInspection"/>
     <!-- /probable bugs -->
 
@@ -279,9 +282,6 @@
     <localInspection language="go" displayName="Self import" groupPath="Go"
                      groupName="General" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoSelfImportInspection"/>
-    <localInspection language="go" displayName="Exported element should have its own declaration" groupPath="Go"
-                     groupName="General" enabledByDefault="true" level="WEAK WARNING"
-                     implementationClass="com.goide.inspections.GoExportedOwnDeclarationInspection"/>
     <!-- /general -->
   </extensions>
   <actions>
