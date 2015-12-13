@@ -97,6 +97,9 @@ public class GoExportedOwnDeclarationInspection extends GoInspectionBase {
           PsiElement parent = element.getParent();
           PsiElement grandParent = parent != null ? parent.getParent() : null;
           if (parent instanceof GoConstSpec && grandParent instanceof GoConstDeclaration) {
+            if (!parent.isValid() || ((GoConstSpec)parent).getConstDefinitionList().indexOf(element) <= 0) {
+              return;
+            }
             String typeText = type != null ? type.getText() : "";
             String valueText = value != null ? value.getText() : "";
             ((GoConstSpec)parent).deleteDefinition(((GoConstDefinition)element));
@@ -136,6 +139,9 @@ public class GoExportedOwnDeclarationInspection extends GoInspectionBase {
           PsiElement parent = element.getParent();
           PsiElement grandParent = parent != null ? parent.getParent() : null;
           if (parent instanceof GoVarSpec && grandParent instanceof GoVarDeclaration) {
+            if (!parent.isValid() || ((GoVarSpec)parent).getVarDefinitionList().indexOf(element) <= 0) {
+              return;
+            }
             String typeText = type != null ? type.getText() : "";
             String valueText = value != null ? value.getText() : "";
             ((GoVarSpec)parent).deleteDefinition(((GoVarDefinition)element));
