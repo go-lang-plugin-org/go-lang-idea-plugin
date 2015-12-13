@@ -20,7 +20,6 @@ import com.goide.GoConstants;
 import com.goide.psi.*;
 import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.sdk.GoSdkUtil;
-import com.goide.stubs.GoTypeStub;
 import com.goide.util.GoUtil;
 import com.intellij.openapi.util.*;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -188,10 +187,9 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
     boolean localResolve = isLocalResolve(myFile, file);
 
-    GoTypeStub stub = type.getStub();
-    PsiElement parent = stub == null ? type.getParent() : stub.getParentStub().getPsi();
+    GoTypeSpec parent = getTypeSpecSafe(type);
     boolean canProcessMethods = state.get(DONT_PROCESS_METHODS) == null;
-    if (parent instanceof GoTypeSpec && canProcessMethods && !processNamedElements(processor, state, ((GoTypeSpec)parent).getMethods(), localResolve, true)) return false;
+    if (canProcessMethods && parent != null && !processNamedElements(processor, state, parent.getMethods(), localResolve, true)) return false;
 
     if (type instanceof GoSpecType) type = ((GoSpecType)type).getType();
     if (type instanceof GoStructType) {
