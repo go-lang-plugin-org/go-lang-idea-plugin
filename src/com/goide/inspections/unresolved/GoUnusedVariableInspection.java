@@ -20,6 +20,7 @@ import com.goide.inspections.GoInspectionBase;
 import com.goide.inspections.GoRenameToBlankQuickFix;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoVarProcessor;
+import com.goide.quickfix.GoDeleteVarDefinitionQuickFix;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
@@ -66,14 +67,16 @@ public class GoUnusedVariableInspection extends GoInspectionBase {
             return;
           }
           boolean globalVar = decl != null && decl.getParent() instanceof GoFile;
+          String varName = o.getName();
           if (globalVar) {
             if (!checkGlobal()) return;
-            holder.registerProblem(o, "Unused variable " + "'" + o.getName() + "'", ProblemHighlightType.LIKE_UNUSED_SYMBOL);
+            holder.registerProblem(o, "Unused variable " + "'" + varName + "'", ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+                                   new GoDeleteVarDefinitionQuickFix(varName));
           }
           else {
             if (checkGlobal()) return;
-            holder.registerProblem(o, "Unused variable " + "'" + o.getName() + "'", ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-                                   new GoRenameToBlankQuickFix(o));
+            holder.registerProblem(o, "Unused variable " + "'" + varName + "'", ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
+                                   new GoRenameToBlankQuickFix(o), new GoDeleteVarDefinitionQuickFix(varName));
           }
         }
       }
