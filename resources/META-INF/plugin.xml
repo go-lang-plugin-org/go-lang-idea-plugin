@@ -186,6 +186,9 @@
     <localInspection language="go" displayName="Unused variables inspection" groupPath="Go"
                      groupName="Declaration redundancy" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.unresolved.GoUnusedVariableInspection"/>
+    <localInspection language="go" displayName="Unused constants inspection" groupPath="Go"
+                     groupName="Declaration redundancy" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.unresolved.GoUnusedConstInspection"/>
     <localInspection language="go" displayName="Unused global variables inspection" groupPath="Go"
                      groupName="Declaration redundancy" enabledByDefault="true" level="WARNING"
                      implementationClass="com.goide.inspections.unresolved.GoUnusedGlobalVariableInspection"/>
