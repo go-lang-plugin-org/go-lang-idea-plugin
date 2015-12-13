@@ -19,8 +19,6 @@ package com.goide.quickfix;
 import com.goide.inspections.GoUnusedImportInspection;
 import com.intellij.testFramework.LightProjectDescriptor;
 
-import java.io.IOException;
-
 public class GoReplaceWithImportForSideEffectsQuickFixTest extends GoQuickFixTestBase {
   @Override
   public void setUp() throws Exception {
@@ -34,12 +32,7 @@ public class GoReplaceWithImportForSideEffectsQuickFixTest extends GoQuickFixTes
     return createMockProjectDescriptor();
   }
 
-  @Override
-  protected void setUpProjectSdk() {
-    super.setUpProjectSdk();
-  }
-
-  public void testSimple() throws IOException {
+  public void testSimple() {
     myFixture.configureByText("a.go", "package pack; import \"fm<caret>t\"");
     applySingleQuickFix("Import for side-effects");
     myFixture.checkResult("package pack; import _ \"fmt\"");
