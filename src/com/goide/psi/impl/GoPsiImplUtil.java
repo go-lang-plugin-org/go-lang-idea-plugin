@@ -702,10 +702,10 @@ public class GoPsiImplUtil {
       }
     }
     else if (o instanceof GoStructType) {
-      return "struct {...}";
+      return ((GoStructType)o).getFieldDeclarationList().isEmpty() ? "struct{}" : "struct {...}";
     }
     else if (o instanceof GoInterfaceType) {
-      return "interface {...}";
+      return ((GoInterfaceType)o).getMethodSpecList().isEmpty() ? "interface{}" : "interface {...}";
     }
     String text = o.getText();
     if (text == null) return "";
