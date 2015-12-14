@@ -693,16 +693,19 @@ public class GoPsiImplUtil {
   @NotNull
   public static String getText(@Nullable GoType o) {
     if (o == null) return "";
-    boolean s = o instanceof GoStructType;
-    boolean i = o instanceof GoInterfaceType;
-    if (s || i) {
+    if (o instanceof GoSpecType) {
       GoTypeSpec typeSpec = getTypeSpecSafe(o);
       if (typeSpec != null) {
         String n = typeSpec.getName();
         String p = typeSpec.getContainingFile().getPackageName();
         if (n != null && p != null) return p + "." + n;
       }
-      return s ? "struct {...}" : "interface {...}";
+    }
+    else if (o instanceof GoStructType) {
+      return "struct {...}";
+    }
+    else if (o instanceof GoInterfaceType) {
+      return "interface {...}";
     }
     String text = o.getText();
     if (text == null) return "";
