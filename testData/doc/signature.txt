@@ -5,4 +5,4 @@
 =====
 func Foo(a map[<a href="psi_element://builtin#int">int</a>]*<a href="psi_element://builtin#string">string</a>, b (<a href="psi_element://builtin#string">string</a>), c <a href="psi_element://builtin#string">string</a>, <a href="psi_element://builtin#int">int</a>) (&lt;-chan <a href="psi_element://builtin#string">string</a>, <a href="psi_element://builtin#int">int</a>)
 =====
-https://godoc.org/null#Foo
+https://godoc.org/#Foo

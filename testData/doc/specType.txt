@@ -1,6 +1,6 @@
-<b>var client <a href="psi_element://null#MyType">MyType</a> = &MyType{}</b>
+<b>var client <a href="psi_element://#MyType">MyType</a> = &MyType{}</b>
 
 =====
-var client <a href="psi_element://null#MyType">MyType</a> = &MyType{}
+var client <a href="psi_element://#MyType">MyType</a> = &MyType{}
 =====
 No urls
