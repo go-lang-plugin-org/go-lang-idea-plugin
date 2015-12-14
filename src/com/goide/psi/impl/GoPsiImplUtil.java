@@ -550,7 +550,11 @@ public class GoPsiImplUtil {
   public static GoType findTypeFromTypeRef(@Nullable GoTypeReferenceExpression expression) {
     PsiReference reference = expression != null ? expression.getReference() : null;
     PsiElement resolve = reference != null ? reference.resolve() : null;
-    return resolve instanceof GoTypeSpec ? ((GoTypeSpec)resolve).getSpecType() : null;
+    if (resolve instanceof GoTypeSpec) return ((GoTypeSpec)resolve).getSpecType();
+    if (resolve == expression && expression != null) {  // hacky C resolve
+      return new MyCType(expression);
+    }
+    return null;
   }
 
   public static boolean isVariadic(@NotNull GoParamDefinition o) {
@@ -1315,6 +1319,12 @@ public class GoPsiImplUtil {
     @Override
     public PsiElement getMul() {
       return myElement; // todo: mock it?
+    }
+  }
+  
+  static class MyCType extends GoLightType<GoTypeReferenceExpression> {
+    protected MyCType(@NotNull GoTypeReferenceExpression expression) {
+      super(expression);
     }
   }
   

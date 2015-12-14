@@ -13,6 +13,13 @@ import (
 // 	return a.y + a.z;
 // }
 //
+/*
+typedef struct {
+int x;
+unsigned char y;
+char *name;
+} S;
+*/
 import "C"
 
 type X struct{ Y, Z int32 }
@@ -25,4 +32,9 @@ func main() {
 	fmt.Println(s.y)
 	fmt.Println(s1)
 	fmt.Println(a, "->", C.sum(*((*C.struct_x)(unsafe.Pointer(a)))))
+
+	cs := C.S{}
+	fmt.Println(cs.x)
+	fmt.Println(cs.y)
+	fmt.Println(cs.name)
 }

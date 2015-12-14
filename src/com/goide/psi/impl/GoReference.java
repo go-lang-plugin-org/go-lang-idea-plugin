@@ -131,6 +131,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     if (target instanceof PsiDirectory && !processDirectory((PsiDirectory)target, file, null, processor, state, false)) return false;
     if (target instanceof GoTypeOwner) {
       GoType type = typeOrParameterType((GoTypeOwner)target, createContext());
+      if (type instanceof MyCType) return processor.execute(myElement, state);
       if (type != null) {
         if (!processGoType(type, processor, state)) return false;
         GoTypeReferenceExpression ref = getTypeRefExpression(type);
