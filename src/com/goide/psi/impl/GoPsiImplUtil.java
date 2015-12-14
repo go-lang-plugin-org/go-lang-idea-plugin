@@ -701,11 +701,9 @@ public class GoPsiImplUtil {
   public static String getText(@Nullable GoType o) {
     if (o == null) return "";
     if (o instanceof GoSpecType) {
-      GoTypeSpec typeSpec = getTypeSpecSafe(o);
-      if (typeSpec != null) {
-        String n = typeSpec.getName();
-        String p = typeSpec.getContainingFile().getPackageName();
-        if (n != null && p != null) return p + "." + n;
+      String fqn = getFqn(getTypeSpecSafe(o));
+      if (fqn != null) {
+        return fqn;
       }
     }
     else if (o instanceof GoStructType) {
@@ -719,6 +717,18 @@ public class GoPsiImplUtil {
     return text.replaceAll("\\s+", " ");
   }
 
+  @Nullable
+  private static String getFqn(@Nullable GoTypeSpec typeSpec) {
+    if (typeSpec == null) return null;
+    String name = typeSpec.getName();
+    GoFile file = typeSpec.getContainingFile();
+    String packageName = file.getPackageName();
+    if (name != null) {
+      return packageName != null && !isBuiltinFile(file) ? packageName + "." + name : name;
+    }
+    return null;
+  }
+  
   @NotNull
   public static List<GoMethodSpec> getMethods(@NotNull GoInterfaceType o) {
     return ContainerUtil.filter(o.getMethodSpecList(), new Condition<GoMethodSpec>() {
