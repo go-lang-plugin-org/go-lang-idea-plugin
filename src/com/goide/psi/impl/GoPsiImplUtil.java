@@ -696,11 +696,10 @@ public class GoPsiImplUtil {
     boolean s = o instanceof GoStructType;
     boolean i = o instanceof GoInterfaceType;
     if (s || i) {
-      GoTypeStub stub = o.getStub();
-      PsiElement parent = stub != null ? stub.getParentStub().getPsi() : o.getParent();
-      if (parent instanceof GoTypeSpec) {
-        String n = ((GoTypeSpec)parent).getName();
-        String p = ((GoTypeSpec)parent).getContainingFile().getPackageName();
+      GoTypeSpec typeSpec = getTypeSpecSafe(o);
+      if (typeSpec != null) {
+        String n = typeSpec.getName();
+        String p = typeSpec.getContainingFile().getPackageName();
         if (n != null && p != null) return p + "." + n;
       }
       return s ? "struct {...}" : "interface {...}";
