@@ -5,4 +5,4 @@
 =====
 type MyType2
 =====
-https://godoc.org/null#MyType2
+https://godoc.org/#MyType2
