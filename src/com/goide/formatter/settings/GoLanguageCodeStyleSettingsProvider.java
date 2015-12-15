@@ -25,6 +25,15 @@ import com.intellij.psi.codeStyle.LanguageCodeStyleSettingsProvider;
 import org.jetbrains.annotations.NotNull;
 
 public class GoLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSettingsProvider {
+  private static final String DEFAULT_CODE_SAMPLE =
+    "package main\n" +
+    "\n" +
+    "import \"fmt\"\n" +
+    "\n" +
+    "func main() {\n" +
+    "\tfmt.Println(\"Hello\")\n" +
+    "}";
+
   @NotNull
   @Override
   public Language getLanguage() {
@@ -50,15 +59,9 @@ public class GoLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSettin
     indentOptions.CONTINUATION_INDENT_SIZE = 8;
     indentOptions.TAB_SIZE = 8;
     indentOptions.USE_TAB_CHARACTER = true;
+    
+    defaultSettings.KEEP_LINE_BREAKS = false;
+    defaultSettings.KEEP_BLANK_LINES_IN_CODE = 1;
     return defaultSettings;
   }
-
-  private static final String DEFAULT_CODE_SAMPLE =
-    "package main\n" +
-    "\n" +
-    "import \"fmt\"\n" +
-    "\n" +
-    "func main() {\n" +
-    "\tfmt.Println(\"Hello\")\n" +
-    "}";
 }
