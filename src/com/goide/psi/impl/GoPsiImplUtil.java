@@ -374,14 +374,17 @@ public class GoPsiImplUtil {
     else if (o instanceof GoCallExpr) {
       GoExpression e = ((GoCallExpr)o).getExpression();
       if (e instanceof GoReferenceExpression) { // todo: unify Type processing
+        PsiReference ref = e.getReference();
+        PsiElement resolve = ref != null ? ref.resolve() : null;
         if (((GoReferenceExpression)e).getQualifier() == null && "append".equals(((GoReferenceExpression)e).getIdentifier().getText())) {
-          PsiReference ref = e.getReference();
-          PsiElement resolve = ref != null ? ref.resolve() : null;
           if (resolve instanceof GoFunctionDeclaration && isBuiltinFile(resolve.getContainingFile())) {
             List<GoExpression> l = ((GoCallExpr)o).getArgumentList().getExpressionList();
             GoExpression f = ContainerUtil.getFirstItem(l);
             return f == null ? null : getGoType(f, context);
           }
+        }
+        else if (resolve == e) { // C.call()
+          return new MyCType(e);
         }
       }
       GoType type = ((GoCallExpr)o).getExpression().getGoType(context);
@@ -1322,8 +1325,8 @@ public class GoPsiImplUtil {
     }
   }
   
-  static class MyCType extends GoLightType<GoTypeReferenceExpression> {
-    protected MyCType(@NotNull GoTypeReferenceExpression expression) {
+  static class MyCType extends GoLightType<GoCompositeElement> {
+    protected MyCType(@NotNull GoCompositeElement expression) {
       super(expression);
     }
   }
