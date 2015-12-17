@@ -45,7 +45,7 @@ public class GoExcludedPackagesTest extends GoCompletionSdkAwareTestBase {
 
   public void testExcludedPathSameBeginning() {
     String initial = "package a; func b() {\n fmt.Printl<caret> \n}";
-    String after = "package a;\nimport \"fmt\" func b() {\n fmt.Println(<caret>) \n}";
+    String after = "package a;\n\nimport \"fmt\"\n\nfunc b() {\n fmt.Println(<caret>) \n}";
     doTestExcluded(initial, after, "fm");
   }
 }

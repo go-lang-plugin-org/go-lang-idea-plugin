@@ -30,7 +30,7 @@ public class GoSurroundDescriptorTest extends GoCodeInsightFixtureTestCase {
   public void testParenthesis() {
     doTest(PARENTHESIS_SURROUNDER,
            "package main; func main() {a := <selection>1 + 2</selection>}",
-           "package main; func main() {a := (1 + 2)}"
+           "package main; func main() {a := (1 + 2)\n}"
     );
   }
 

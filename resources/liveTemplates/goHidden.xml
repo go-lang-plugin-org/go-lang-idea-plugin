@@ -73,20 +73,20 @@
     </context>
   </template>
   <template description='Case clause' id='go_lang_case' name='go_lang_case' toReformat='true' toShortenFQNames='true'
-            value='case $CONDITION$: &#10;	$END$'>
+            value='case $CONDITION$:&#10;	$END$'>
     <variable alwaysStopAt='true' defaultValue='' expression='complete()' name='CONDITION'/>
     <context>
       <option name='GO' value='true'/>
     </context>
   </template>
   <template description='Default clause' id='go_lang_default' name='go_lang_default' toReformat='true' toShortenFQNames='true'
-            value='default: &#10;	$END$'>
+            value='default:&#10;	$END$'>
     <context>
       <option name='GO' value='true'/>
     </context>
   </template>
   <template description='Function or method' id='go_lang_func' name='go_lang_func' toReformat='true' toShortenFQNames='true'
-            value='func $NAME$($PARAMETERS$) $RETURN$ {   &#10;	$END$&#10;}'>
+            value='func $NAME$($PARAMETERS$) $RETURN$ {&#10;	$END$&#10;}'>
     <variable alwaysStopAt='true' defaultValue='' expression='' name='NAME'/>
     <variable alwaysStopAt='true' defaultValue='' expression='' name='PARAMETERS'/>
     <variable alwaysStopAt='true' defaultValue='' expression='' name='RETURN'/>
@@ -95,7 +95,7 @@
     </context>
   </template>
   <template description='Anonymous function' id='go_lang_anonymous_func' name='go_lang_anonymous_func' toReformat='true' toShortenFQNames='true'
-            value='func() { $END$ }'>
+            value='func() {$END$}'>
     <context>
       <option name='GO' value='true'/>
     </context>

@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 public class GoRenameTest extends GoCodeInsightFixtureTestCase {
   public void testAnonymousField() {
     doTest("package foo; type A struct {*A}; func foo(a A) {a.<caret>A}", "B",
-           "package foo; type B struct {*B}; func foo(a B) {a.<caret>B}");
+           "package foo; type B struct {*B}; func foo(a B) {a.B}");
   }
 
   public void testType() {
@@ -32,8 +32,7 @@ public class GoRenameTest extends GoCodeInsightFixtureTestCase {
   }
   
   public void testLabel() {
-    doTest("package foo; func foo() {a:{}; goto <caret>a}", "b",
-           "package foo; func foo() {b:{}; goto <caret>b}");
+    doTest("package foo; func foo() {a:{}; goto <caret>a}", "b", "package foo; func foo() {b:{}; goto b}");
   }
 
   public void testAliasQualifier() {

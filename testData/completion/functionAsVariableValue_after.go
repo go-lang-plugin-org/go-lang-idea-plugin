@@ -1,5 +1,5 @@
 package main
 
 func main() {
-  a := func() { <caret> }
+  a := func() {<caret>}
 }

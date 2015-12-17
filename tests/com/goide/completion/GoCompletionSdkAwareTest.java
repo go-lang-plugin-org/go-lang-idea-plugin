@@ -32,8 +32,8 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
   public void testCamelHumpTypeCompletion() {
     doCheckResult("package main;\n" +
                   "func test(){io.reWSC<caret>}",
-                  "package main;\n" +
-                  "import \"idea_io\"\n" +
+                  "package main;\n\n" +
+                  "import \"idea_io\"\n\n" +
                   "func test(){idea_io.ReadWriteSeekerCustom()}", Lookup.NORMAL_SELECT_CHAR);
   }
 
@@ -41,61 +41,61 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
   public void testCamelHumpFunctionCompletion() {
     doCheckResult("package main;\n" +
                   "func test(){io.reALC<caret>}",
-                  "package main;\n" +
-                  "import \"idea_io\"\n" +
+                  "package main;\n\n" +
+                  "import \"idea_io\"\n\n" +
                   "func test(){idea_io.ReadAtLeastCustom()}", Lookup.NORMAL_SELECT_CHAR);
   }
 
   public void testTypeAutoImport() {
     doCheckResult("package main; \n" +
                   "func test(){Templat<caret>}",
-                  "package main;\n" +
-                  "import \"text/template\"\n" +
+                  "package main;\n\n" +
+                  "import \"text/template\"\n\n" +
                   "func test(){template.Template{<caret>}}", "template.Template");
   }
 
   public void testTypeAutoImportOnQualifiedName() {
     doCheckResult("package main; \n" +
                   "func test(){template.Templat<caret>}",
-                  "package main;\n" +
-                  "import \"text/template\"\n" +
+                  "package main;\n\n" +
+                  "import \"text/template\"\n\n" +
                   "func test(){template.Template{<caret>}}");
   }
 
   public void testFunctionAutoImport() {
     doCheckResult("package main; \n" +
                   "func test(){Fprintl<caret>}",
-                  "package main;\n" +
-                  "import \"fmt\"\n" +
+                  "package main;\n\n" +
+                  "import \"fmt\"\n\n" +
                   "func test(){fmt.Fprintln(<caret>)}", "fmt.Fprintln");
   }
 
   public void testVariableAutoImport() {
     doCheckResult("package main; \n" +
                   "func test(){ErrNotSuppor<caret>}",
-                  "package main;\n" +
-                  "import \"net/http\"\n" +
+                  "package main;\n\n" +
+                  "import \"net/http\"\n\n" +
                   "func test(){http.ErrNotSupported}", "http.ErrNotSupported");
   }
 
   public void testConstantAutoImport() {
     doCheckResult("package main; \n" +
-                  "func test(){O_RDO<caret>}", "package main;\n" +
-                                               "import \"os\"\n" +
+                  "func test(){O_RDO<caret>}", "package main;\n\n" +
+                                               "import \"os\"\n\n" +
                                                "func test(){os.O_RDONLY}");
   }
 
   public void testDuplicateAutoImport() {
     doCheckResult("package main; \n" +
                   "func test(){Fprintl<caret>}",
-                  "package main;\n" +
-                  "import \"fmt\"\n" +
+                  "package main;\n\n" +
+                  "import \"fmt\"\n\n" +
                   "func test(){fmt.Fprintln(<caret>)}", "fmt.Fprintln");
     myFixture.type(");Fprintl");
     myFixture.completeBasic();
     selectLookupItem("fmt.Fprintln");
-    myFixture.checkResult("package main;\n" +
-                          "import \"fmt\"\n" +
+    myFixture.checkResult("package main;\n\n" +
+                          "import \"fmt\"\n\n" +
                           "func test(){fmt.Fprintln();fmt.Fprintln()}");
   }
 
@@ -103,7 +103,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
     doCheckResult("package main; \n" +
                   "import _ \"fmt\"\n" +
                   "func test(){Fprintl<caret>}",
-                  "package main;\n" +
+                  "package main;\n\n" +
                   "import (\n" +
                   "\t_ \"fmt\"\n" +
                   "\t\"fmt\"\n" +
@@ -261,8 +261,8 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
                   "func main() {\n" +
                   "    f.fprintl<caret>\n" +
                   "}",
-                  "package main\n" +
-                  "import \"fmt\"\n" +
+                  "package main\n\n" +
+                  "import \"fmt\"\n\n" +
                   "func main() {\n" +
                   "    fmt.Fprintln()\n" +
                   "}");
@@ -293,6 +293,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
     myFixture.getTempDirFixture().createFile("pack/pack.go", "package pack; func TestFoo() {} func BenchmarkFoo() {} func ExampleFoo() {}");
     myFixture.configureByText("my_test.go", "package a; func main() { _ = Foo<caret>");
     myFixture.completeBasic();
+    //noinspection ConstantConditions
     assertContainsElements(myFixture.getLookupElementStrings(), "pack.TestFoo", "pack.BenchmarkFoo", "pack.ExampleFoo");
   }
 
@@ -302,7 +303,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
     VirtualFile file = myFixture.getTempDirFixture().createFile("pack1/file1.go", "package pack1; func test() { pack1.MyFunc<caret> }");
     myFixture.configureFromExistingVirtualFile(file);
     myFixture.completeBasic();
-    myFixture.checkResult("package pack1;\nimport \"pack2\" func test() { pack1.MyFunctionFromOtherPath() }");
+    myFixture.checkResult("package pack1;\n\nimport \"pack2\"\n\nfunc test() { pack1.MyFunctionFromOtherPath() }");
   }
   
   public void testAutoImportOwnImportPathFromTest() throws IOException {
@@ -311,7 +312,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
       .createFile("pack/a_test.go", "package myPack_test; func TestFunc() { myPack.Fun<caret> }");
     myFixture.configureFromExistingVirtualFile(testFile);
     myFixture.completeBasic();
-    myFixture.checkResult("package myPack_test;\nimport \"pack\" func TestFunc() { myPack.Func() }");
+    myFixture.checkResult("package myPack_test;\n\nimport \"pack\"\n\nfunc TestFunc() { myPack.Func() }");
   }
 
   public void testDoNotAutoImportDifferentPackageInSamePathFromTest() throws IOException {
@@ -327,6 +328,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
     VirtualFile testFile = dir.createFile("fuzz/fuzy_test.go", "package fuzy_test; import \"<caret>\"");
     myFixture.configureFromExistingVirtualFile(testFile);
     myFixture.completeBasic();
+    //noinspection ConstantConditions
     assertContainsElements(myFixture.getLookupElementStrings(), "fuzz");
   }
 

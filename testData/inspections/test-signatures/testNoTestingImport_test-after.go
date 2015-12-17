@@ -1,4 +1,5 @@
 package a
+
 import "testing"
 
 func TestNoImportEmptySignature(t *testing.T) {
