@@ -38,6 +38,7 @@ public class GoFormatterTest extends GoCodeInsightFixtureTestCase {
   public void testSpacesInArithmeticExpressions()   { doTest(); }
   public void testConstDeclaration()                { doTest(); }
   public void testVarDeclaration()                  { doTest(); }
+  public void testBreakLines()                      { doTest(); }
 
   private void doTest() { doTest(null); }
 

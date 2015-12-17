@@ -62,8 +62,6 @@ public class GoLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSettin
     
     defaultSettings.BLOCK_COMMENT_AT_FIRST_COLUMN = false;
     defaultSettings.LINE_COMMENT_AT_FIRST_COLUMN = false;
-    defaultSettings.KEEP_LINE_BREAKS = false;
-    defaultSettings.KEEP_BLANK_LINES_IN_CODE = 1;
     return defaultSettings;
   }
 }

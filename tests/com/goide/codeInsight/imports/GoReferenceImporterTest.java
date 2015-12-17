@@ -37,6 +37,11 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
   private boolean defaultJavaOnTheFly;
   private boolean defaultGoOnTheFly;
 
+  private static void updateSettings(boolean goOnTheFlyEnabled, boolean javaOnTheFlyEnabled) {
+    CodeInsightSettings.getInstance().ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY = javaOnTheFlyEnabled;
+    GoCodeInsightSettings.getInstance().setAddUnambiguousImportsOnTheFly(goOnTheFlyEnabled);
+  }
+
   @Override
   protected void setUp() throws Exception {
     super.setUp();
@@ -46,7 +51,6 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
     defaultJavaOnTheFly = CodeInsightSettings.getInstance().ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY;
     defaultGoOnTheFly = GoCodeInsightSettings.getInstance().isAddUnambiguousImportsOnTheFly();
   }
-
 
   @Override
   protected void tearDown() throws Exception {
@@ -76,14 +80,9 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureByText("a.go", initial);
     myFixture.doHighlighting();
     myFixture.doHighlighting();
-    String after = "package a;\nimport \"fmt\" func a() {\n fmt.Println() <caret> \n}";
+    String after = "package a;\nimport \"fmt\" func a() {\n fmt.Println()  \n}";
     String result = goOnTheFlyEnabled && javaOnTheFlyEnabled ? after : initial;
     myFixture.checkResult(result);
-  }
-
-  private static void updateSettings(boolean goOnTheFlyEnabled, boolean javaOnTheFlyEnabled) {
-    CodeInsightSettings.getInstance().ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY = javaOnTheFlyEnabled;
-    GoCodeInsightSettings.getInstance().setAddUnambiguousImportsOnTheFly(goOnTheFlyEnabled);
   }
 
   public void testUndo() {
@@ -95,6 +94,11 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
     myFixture.doHighlighting();
     myFixture.checkResult("package main\nimport \"fmt\"\n\nfunc main() { fmt. }");
     FileEditor editor = FileEditorManager.getInstance(myFixture.getProject()).getSelectedEditor(myFixture.getFile().getVirtualFile());
+    UndoManager.getInstance(myFixture.getProject()).undo(editor);
+    myFixture.checkResult("package main\n" +
+                          "import \"fmt\"\n" +
+                          "\n" +
+                          "func main() { fmt. }");
     UndoManager.getInstance(myFixture.getProject()).undo(editor);
     myFixture.checkResult("package main\n\nfunc main() { <caret> }");
   }

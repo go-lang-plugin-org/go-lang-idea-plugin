@@ -28,7 +28,7 @@ public class GoDeleteConstDefinitionQuickFixTest extends GoQuickFixTestBase {
   public void testSimple() {
     myFixture.configureByText("a.go", "package main; func main() { const fo<caret>o int = 2 }");
     applySingleQuickFix("Delete const 'foo'");
-    myFixture.checkResult("package main; func main() {  }");
+    myFixture.checkResult("package main; func main() {}");
   }
   
   public void testRemoveFromMultiSpec() {

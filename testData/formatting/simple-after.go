@@ -1,4 +1,5 @@
 package main
+
 import "fmt"
 import "os"
 import . "database/sql"
@@ -7,7 +8,6 @@ import (
 	"aaa"
 	"bbb"
 )
-
 
 const (
 	defaultBufSize = 4096
@@ -26,11 +26,9 @@ func main(aaa string, rd io.Reader, error) (ok, ok) {
 
 	fmt.Sprintln("Hello", "oghet")
 
-
 	sql.DB()
 	const aaa = iota
 	var bbb = iota
-
 
 	switch name {
 
@@ -51,7 +49,6 @@ func main(aaa string, rd io.Reader, error) (ok, ok) {
 
 var b = map[string]int{}
 
-
 func f(n int) {
 	for i := 0; i < 10; i++ {
 		fmt.Println(n, ":", i)
@@ -63,7 +60,6 @@ func main() {
 	var input string
 	fmt.Scanln(&input)
 }
-
 
 func main23() {
 	i := 1
@@ -94,11 +90,9 @@ func main() {
 	}
 }
 
-
 func main() {
 	tick := time.Tick(100 * time.Millisecond)
 	boom := time.After(500 * time.Millisecond)
-
 
 	example23123(
 		"test",
@@ -117,7 +111,6 @@ func main() {
 			time.Sleep(50 * time.Millisecond)
 		}
 	}
-
 
 	response := make(chan *http.Response, 1)
 	errors := make(chan *error)
@@ -144,7 +137,6 @@ func main() {
 		}
 	}
 }
-
 
 type T struct {
 	name        []string // name of the object
@@ -219,7 +211,6 @@ type x struct {
 		   x int
 	   }
 }
-
 
 type B1 struct{ a string }
 type B2 B1
