@@ -123,7 +123,8 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
                                              @NotNull ResolveState state) {
     PsiReference reference = qualifier.getReference();
     PsiElement target = reference != null ? reference.resolve() : null;
-    if (target == null || target == qualifier) return false;
+    if (target == null) return false;
+    if (target == qualifier) return processor.execute(myElement, state);
     if (target instanceof GoImportSpec) {
       if (GoConstants.C_PATH.equals(((GoImportSpec)target).getPath())) return processor.execute(myElement, state);
       target = ((GoImportSpec)target).getImportString().resolve();
@@ -368,7 +369,13 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
                                   @Nullable PsiElement another) {
     List<GoExpression> list = parent.getExpressionList();
     if (list.size() > 1 && list.get(1).isEquivalentTo(another)) {
-      GoType type = list.get(0).getGoType(createContext());
+      GoExpression e = list.get(0);
+      List<GoReferenceExpression> refs = ContainerUtil.newArrayList(PsiTreeUtil.findChildrenOfType(e, GoReferenceExpression.class));
+      GoExpression o = refs.size() > 1 ? refs.get(refs.size() - 1) : e;
+      PsiReference ref = o.getReference();
+      PsiElement resolve = ref != null ? ref.resolve() : null;
+      if (resolve == o) return processor.execute(myElement, state); // var c = C.call(); c.a.b.d;
+      GoType type = e.getGoType(createContext());
       if (type != null && !processGoType(type, processor, state)) return false;
     }
     return true;

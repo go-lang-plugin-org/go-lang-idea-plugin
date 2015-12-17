@@ -35,6 +35,7 @@ func main() {
 	s2 := C.some_C_function_call()
 	if (false) {
 		fmt.Println(s2.x)
+                fmt.Println(s2.x.y.y.wad.sd.asd.ad()) // todo[ignatov]: update test data with a valid sample
 	}
 
 	a := &X{5, 7}
