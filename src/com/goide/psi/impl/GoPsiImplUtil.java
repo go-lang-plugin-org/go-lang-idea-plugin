@@ -359,7 +359,7 @@ public class GoPsiImplUtil {
       return findTypeFromTypeRef(expression);
     }
     else if (o instanceof GoFunctionLit) {
-      return new MyFunType((GoFunctionLit)o);
+      return new MyFunctionType((GoFunctionLit)o);
     }
     else if (o instanceof GoBuiltinCallExpr) {
       String text = ((GoBuiltinCallExpr)o).getReferenceExpression().getText();
@@ -546,6 +546,9 @@ public class GoPsiImplUtil {
       }
       return new MyArrayType(type);
     }
+    if (resolve instanceof GoSignatureOwner) {
+      return new MyFunctionType((GoSignatureOwner)resolve);
+    }
     return type;
   }
 
@@ -642,6 +645,7 @@ public class GoPsiImplUtil {
         GoParameters parameters = result.getParameters();
         if (parameters != null) {
           List<GoParameterDeclaration> list = parameters.getParameterDeclarationList();
+          if (list.size() == 1) return list.get(0).getType();
           List<GoType> types = ContainerUtil.newArrayListWithCapacity(list.size());
           for (GoParameterDeclaration declaration : list) {
             types.add(declaration.getType());
@@ -1302,30 +1306,6 @@ public class GoPsiImplUtil {
     return o.getSpecType();
   }
   
-  static class MyFunType extends GoLightType<GoFunctionLit> implements GoFunctionType {
-    protected MyFunType(@NotNull GoFunctionLit o) {
-      super(o);
-    }
-
-    @Nullable
-    @Override
-    public GoSignature getSignature() {
-      return myElement.getSignature();
-    }
-
-    @NotNull
-    @Override
-    public PsiElement getFunc() {
-      return myElement.getFunc();
-    }
-
-    @Override
-    public String getText() {
-      GoSignature signature = getSignature();
-      return getFunc().getText() + (signature != null ? signature.getText() : "");
-    }
-  }
-  
   static class MyPointerType extends GoLightType<GoType> implements GoPointerType {
     protected MyPointerType(@NotNull GoType o) {
       super(o);
@@ -1374,5 +1354,28 @@ public class GoPsiImplUtil {
       return "MyGoTypeList{myTypes=" + myTypes + '}';
     }
   }
-  
+
+  private static class MyFunctionType extends GoLightType<GoSignatureOwner> implements GoFunctionType {
+    public MyFunctionType(@NotNull GoSignatureOwner o) {
+      super(o);
+    }
+
+    @Nullable
+    @Override
+    public GoSignature getSignature() {
+      return myElement.getSignature();
+    }
+
+    @NotNull
+    @Override
+    public PsiElement getFunc() {
+      return myElement instanceof GoFunctionOrMethodDeclaration ? ((GoFunctionOrMethodDeclaration)myElement).getFunc() : myElement;
+    }
+
+    @Override
+    public String getText() {
+      GoSignature signature = myElement.getSignature();
+      return "func " + (signature != null ? signature.getText() : "<null>");
+    }
+  }
 }
