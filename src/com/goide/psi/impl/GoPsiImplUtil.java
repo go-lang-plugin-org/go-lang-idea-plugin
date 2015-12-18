@@ -35,7 +35,6 @@ import com.intellij.openapi.util.*;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.light.LightElement;
 import com.intellij.psi.impl.source.resolve.reference.impl.PsiMultiReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileReference;
@@ -43,7 +42,6 @@ import com.intellij.psi.impl.source.tree.LeafElement;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.GlobalSearchScopesCore;
-import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiModificationTracker;
@@ -476,77 +474,7 @@ public class GoPsiImplUtil {
   public static GoType typeOrParameterType(@NotNull final GoTypeOwner resolve, @Nullable ResolveState context) {
     GoType type = resolve.getGoType(context);
     if (resolve instanceof GoParamDefinition && ((GoParamDefinition)resolve).isVariadic()) {
-      class MyArrayType extends LightElement implements GoArrayOrSliceType {
-        private GoType myType;
-
-        protected MyArrayType(GoType type) {
-          super(resolve.getManager(), resolve.getLanguage());
-          myType = type;
-        }
-
-        @Override
-        public String getText() {
-          return myType != null ? ("[]" + myType.getText()) : null;
-        }
-
-        @Nullable
-        @Override
-        public GoExpression getExpression() {
-          return null;
-        }
-
-        @Nullable
-        @Override
-        public GoType getType() {
-          return myType;
-        }
-
-        @Nullable
-        @Override
-        public GoTypeReferenceExpression getTypeReferenceExpression() {
-          return null;
-        }
-
-        @NotNull
-        @Override
-        public PsiElement getLbrack() {
-          //noinspection ConstantConditions
-          return null; // todo: mock?
-        }
-
-        @Nullable
-        @Override
-        public PsiElement getRbrack() {
-          return null;
-        }
-
-        @Nullable
-        @Override
-        public PsiElement getTripleDot() {
-          return null;
-        }
-
-        @Override
-        public String toString() {
-          return null;
-        }
-
-        @Override
-        public IStubElementType getElementType() {
-          return null;
-        }
-
-        @Override
-        public GoTypeStub getStub() {
-          return null;
-        }
-
-        @Override
-        public boolean shouldGoDeeper() {
-          return false;
-        }
-      }
-      return new MyArrayType(type);
+      return type == null ? null : new MyArrayType(type);
     }
     if (resolve instanceof GoSignatureOwner) {
       return new MyFunctionType((GoSignatureOwner)resolve);

@@ -133,4 +133,47 @@ class GoLightType<E extends GoCompositeElement> extends LightElement implements 
       return "func " + (signature != null ? signature.getText() : "<null>");
     }
   }
+
+  static class MyArrayType extends GoLightType<GoType> implements GoArrayOrSliceType {
+    protected MyArrayType(GoType type) {
+      super(type);
+    }
+
+    @Override
+    public String getText() {
+      return ("[]" + myElement.getText());
+    }
+
+    @Nullable
+    @Override
+    public GoExpression getExpression() {
+      return null;
+    }
+
+    @Nullable
+    @Override
+    public GoType getType() {
+      return myElement;
+    }
+
+    @NotNull
+    @Override
+    public PsiElement getLbrack() {
+      //noinspection ConstantConditions
+      return null; // todo: mock?
+    }
+
+    @Nullable
+    @Override
+    public PsiElement getRbrack() {
+      return null;
+    }
+
+    @Nullable
+    @Override
+    public PsiElement getTripleDot() {
+      return null;
+    }
+  }
+
 }
