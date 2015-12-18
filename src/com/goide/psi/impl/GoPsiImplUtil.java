@@ -391,6 +391,10 @@ public class GoPsiImplUtil {
       if (type instanceof GoFunctionType) {
         return funcType(type);
       }
+      GoType byRef = type == null ? null : findBaseTypeFromRef(type.getTypeReferenceExpression());
+      if (byRef instanceof GoSpecType && ((GoSpecType)byRef).getType() instanceof GoFunctionType) {
+        return funcType(((GoSpecType)byRef).getType());
+      }
       return type;
     }
     else if (o instanceof GoReferenceExpression) {

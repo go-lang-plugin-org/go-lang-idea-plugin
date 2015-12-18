@@ -29,6 +29,7 @@ public class GoLegacyResolveTypesTest extends GoLegacyResolveTestBase {
   public void testResolveTypeInCast()                             { doFileTest(); } 
   public void testResolveArrayInRange()                           { doFileTest(); } 
   public void testMethodsOrder()                                  { doFileTest(); }
+  public void testFunctionTypeByRef()                             { doFileTest(); }
 
   public void testFromDefaultImportedPackage()                    { doDirTest(); } 
   public void testFromInjectedPackage()                           { doDirTest(); } 
