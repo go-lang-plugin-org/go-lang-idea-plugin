@@ -65,7 +65,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
   final static Logger LOG = Logger.getInstance(DlvDebugProcess.class);
   private final AtomicBoolean breakpointsInitiated = new AtomicBoolean();
   private final AtomicBoolean connectedListenerAdded = new AtomicBoolean();
-  static final Consumer<Throwable> THROWABLE_CONSUMER = new Consumer<Throwable>() {
+  private static final Consumer<Throwable> THROWABLE_CONSUMER = new Consumer<Throwable>() {
     @Override
     public void consume(@NotNull Throwable throwable) {
       LOG.info(throwable);
