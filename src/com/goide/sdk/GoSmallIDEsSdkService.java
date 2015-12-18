@@ -109,6 +109,10 @@ public class GoSmallIDEsSdkService extends GoSdkService {
   }
 
   public static boolean isGoSdkLibRoot(@NotNull VirtualFile root) {
-    return root.isInLocalFileSystem() && root.isDirectory() && VfsUtilCore.findRelativeFile(GoConstants.GO_VERSION_FILE_PATH, root) != null;
+    return root.isInLocalFileSystem() &&
+           root.isDirectory() &&
+           (VfsUtilCore.findRelativeFile(GoConstants.GO_VERSION_FILE_PATH, root) != null ||
+            VfsUtilCore.findRelativeFile(GoConstants.GO_VERSION_NEW_FILE_PATH, root) != null
+           );
   }
 }
