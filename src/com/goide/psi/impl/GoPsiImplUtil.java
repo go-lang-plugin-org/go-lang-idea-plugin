@@ -59,6 +59,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import static com.goide.psi.impl.GoLightType.*;
+
 public class GoPsiImplUtil {
   public static final Key<SmartPsiElementPointer<GoReferenceExpressionBase>> CONTEXT = Key.create("CONTEXT");
   public static final NotNullFunction<PsiElement, String> GET_TEXT_FUNCTION = new NotNullFunction<PsiElement, String>() {
@@ -1304,78 +1306,5 @@ public class GoPsiImplUtil {
   @NotNull
   public PsiElement getType(@NotNull GoTypeSpec o) {
     return o.getSpecType();
-  }
-  
-  static class MyPointerType extends GoLightType<GoType> implements GoPointerType {
-    protected MyPointerType(@NotNull GoType o) {
-      super(o);
-    }
-
-    @Override
-    public String getText() {
-      return "*" + myElement.getText();
-    }
-
-    @Nullable
-    @Override
-    public GoType getType() {
-      return myElement;
-    }
-
-    @NotNull
-    @Override
-    public PsiElement getMul() {
-      return myElement; // todo: mock it?
-    }
-  }
-  
-  static class MyCType extends GoLightType<GoCompositeElement> {
-    protected MyCType(@NotNull GoCompositeElement expression) {
-      super(expression);
-    }
-  }
-  
-  static class MyGoTypeList extends GoLightType<GoCompositeElement> implements GoTypeList {
-    @NotNull private final List<GoType> myTypes;
-
-    public MyGoTypeList(@NotNull GoCompositeElement o, @NotNull List<GoType> types) {
-      super(o);
-      myTypes = types;
-    }
-
-    @NotNull
-    @Override
-    public List<GoType> getTypeList() {
-      return myTypes;
-    }
-
-    @Override
-    public String toString() {
-      return "MyGoTypeList{myTypes=" + myTypes + '}';
-    }
-  }
-
-  private static class MyFunctionType extends GoLightType<GoSignatureOwner> implements GoFunctionType {
-    public MyFunctionType(@NotNull GoSignatureOwner o) {
-      super(o);
-    }
-
-    @Nullable
-    @Override
-    public GoSignature getSignature() {
-      return myElement.getSignature();
-    }
-
-    @NotNull
-    @Override
-    public PsiElement getFunc() {
-      return myElement instanceof GoFunctionOrMethodDeclaration ? ((GoFunctionOrMethodDeclaration)myElement).getFunc() : myElement;
-    }
-
-    @Override
-    public String getText() {
-      GoSignature signature = myElement.getSignature();
-      return "func " + (signature != null ? signature.getText() : "<null>");
-    }
   }
 }
