@@ -195,7 +195,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     if (canProcessMethods && parent != null && !processNamedElements(processor, state, parent.getMethods(), localResolve, true)) return false;
 
     if (type instanceof GoSpecType) {
-      GoType theLatestSpec = findBaseType(type);
+      GoType theLatestSpec = findBaseSpecType(type);
       type = theLatestSpec instanceof GoSpecType ? ((GoSpecType)theLatestSpec).getType() : theLatestSpec;
     }
     if (type instanceof GoStructType) {
