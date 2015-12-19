@@ -48,7 +48,7 @@ class GoLightType<E extends GoCompositeElement> extends LightElement implements 
 
   @Override
   public String toString() {
-    return null;
+    return getClass().getSimpleName() + "{" + myElement + "}";
   }
 
   @Override
