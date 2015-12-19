@@ -42,6 +42,7 @@ public class GoParameterInfoHandlerTest extends GoCodeInsightFixtureTestCase {
   public void testMethParamNone()             { doTest("<html>&lt;no parameters&gt;</html>"); }
   public void testFieldMethCall()             { doTest("<html><b>a int</b>, b int</html>"); }
   public void testFuncTypes()                 { doTest("<html><b>string</b></html>"); }
+  public void testFunctionTypeByRef()         { doTest("<html><b>intParam int</b></html>"); }
   public void testFuncParam()                 { doTest(1, "<html>num int, <b>text string</b></html>"); }
   public void testFuncParamMulti()            { doTest(4, "<html>a int, b int, c int, d string, <b>e string</b>, f string</html>"); }
   public void testFuncParamEllipsis()         { doTest(5, "<html>num int, text string, <b>more ...int</b></html>"); }

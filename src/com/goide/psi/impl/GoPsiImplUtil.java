@@ -786,7 +786,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType findBaseType(@Nullable GoType type) {
+  public static GoType findBaseSpecType(@Nullable GoType type) {
     while (type instanceof GoSpecType && ((GoSpecType)type).getType().getTypeReferenceExpression() != null) {
       GoType inner = findTypeFromTypeRef(((GoSpecType)type).getType().getTypeReferenceExpression());
       if (inner == null || type.isEquivalentTo(inner) || builtin(inner)) return type;
@@ -800,7 +800,7 @@ public class GoPsiImplUtil {
    */  
   @Nullable
   public static GoType findBaseTypeFromRef(@Nullable GoTypeReferenceExpression expression) {
-    return findBaseType(findTypeFromTypeRef(expression));
+    return findBaseSpecType(findTypeFromTypeRef(expression));
   }
 
   @Nullable
