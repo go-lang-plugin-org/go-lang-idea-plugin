@@ -22,6 +22,7 @@ import com.goide.psi.GoStatement;
 import com.goide.psi.GoType;
 import com.intellij.internal.SelectionBasedPsiElementInternalAction;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -40,7 +41,7 @@ public class GoShowTypeInternalAction extends SelectionBasedPsiElementInternalAc
   @Override
   protected String getInformationHint(@NotNull GoExpression element) {
     GoType type = element.getGoType(null);
-    return type != null ? type.getText() : "<null>";
+    return StringUtil.escapeXml(type != null ? type.getText() : "<null>");
   }
 
   @NotNull
