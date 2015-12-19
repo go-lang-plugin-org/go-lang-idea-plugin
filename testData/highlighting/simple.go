@@ -139,7 +139,24 @@ func <warning descr="Unused function 'innerTypes'">innerTypes</warning>() {
 		cn  int
 	}
 	ch := make(chan connError)
-	Println(ch.cn)
+	Println(ch.<error descr="Unresolved reference 'cn'">cn</error>)
+}
+
+type ConnStatus interface {
+	Status() int32
+	Error() error
+}
+
+func Bind() <-chan ConnStatus {
+	ch := make(chan ConnStatus, 1)
+	return ch
+}
+
+func _() {
+	a := Bind()
+	for c := range a {
+		Println("Connection status:", c.Status())
+	}
 }
 
 type Iface interface {
