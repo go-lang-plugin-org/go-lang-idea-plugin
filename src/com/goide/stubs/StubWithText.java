@@ -24,7 +24,7 @@ import com.intellij.util.io.StringRef;
 import org.jetbrains.annotations.Nullable;
 
 abstract public class StubWithText<T extends PsiElement> extends StubBase<T> implements TextHolder {
-  @Nullable protected final StringRef myText;
+  @Nullable private final StringRef myText;
 
   protected StubWithText(StubElement parent, IStubElementType elementType, @Nullable StringRef ref) {
     super(parent, elementType);
