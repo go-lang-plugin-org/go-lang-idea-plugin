@@ -16,12 +16,13 @@
 
 package com.goide.psi.impl;
 
-import com.goide.psi.*;
-import com.goide.util.GoUtil;
+import com.goide.psi.GoBlock;
+import com.goide.psi.GoFieldDefinition;
+import com.goide.psi.GoStatement;
+import com.goide.psi.GoVarDefinition;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,7 +44,7 @@ public class GoVarReference extends GoCachedReference<GoVarDefinition> {
       }
     };
     processResolveVariants(p);
-    return p.getResult(); 
+    return p.getResult();
   }
 
   @Override
@@ -58,21 +59,9 @@ public class GoVarReference extends GoCachedReference<GoVarDefinition> {
                        };
 
     if (myPotentialStopBlock != null) {
-      myPotentialStopBlock.processDeclarations(p, ResolveState.initial(), PsiTreeUtil.getParentOfType(myElement, GoStatement.class),
-                                               myElement);
+      myPotentialStopBlock.processDeclarations(p, ResolveState.initial(), PsiTreeUtil.getParentOfType(myElement, GoStatement.class), myElement);
       return true;
     }
     return false;
-  }
-  
-  @Override
-  public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-    myElement.replace(GoElementFactory.createVarDefinitionFromText(myElement.getProject(), newElementName));
-    return myElement;
-  }
-
-  @Override
-  public boolean isReferenceTo(PsiElement element) {
-    return GoUtil.couldBeReferenceTo(element, myElement) && super.isReferenceTo(element);
   }
 }
