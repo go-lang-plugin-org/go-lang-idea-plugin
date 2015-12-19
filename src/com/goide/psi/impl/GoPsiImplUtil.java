@@ -575,11 +575,14 @@ public class GoPsiImplUtil {
         GoParameters parameters = result.getParameters();
         if (parameters != null) {
           List<GoParameterDeclaration> list = parameters.getParameterDeclarationList();
-          if (list.size() == 1) return list.get(0).getType();
           List<GoType> types = ContainerUtil.newArrayListWithCapacity(list.size());
           for (GoParameterDeclaration declaration : list) {
-            types.add(declaration.getType());
+            GoType declarationType = declaration.getType();
+            for (GoParamDefinition definition : declaration.getParamDefinitionList()) {
+              types.add(declarationType);
+            }
           }
+          if (types.size() == 1) return types.get(0);
           return new MyGoTypeList(parameters, types);
         }
       }
