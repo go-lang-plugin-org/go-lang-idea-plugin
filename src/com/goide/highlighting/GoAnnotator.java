@@ -26,30 +26,21 @@ import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Set;
 
 public class GoAnnotator implements Annotator {
-  private static final Set<String> intTypeNames = Sets.newHashSet(
-    "int",
-    "int8",
-    "int16",
-    "int32",
-    "int64",
-    "uint",
-    "uint8",
-    "uint16",
-    "uint32",
-    "uintptr"
-  );
+  private static final Set<String> INT_TYPE_NAMES = Sets.newHashSet(
+    "int", "int8", "int16", "int32", "int64", "uint", "uint8", "uint16", "uint32", "uintptr"
+  ); // todo: unify with DlvApi.Variable.Kind
 
   @Override
   public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
-    if (!(element instanceof GoCompositeElement) || !element.isValid()) {
-      return;
-    }
+    if (!(element instanceof GoCompositeElement) || !element.isValid()) return;
 
     if (element instanceof GoContinueStatement) {
       if (!(PsiTreeUtil.getParentOfType(element, GoForStatement.class, GoFunctionLit.class) instanceof GoForStatement)) {
@@ -111,48 +102,44 @@ public class GoAnnotator implements Annotator {
     }
   }
 
-  private static void checkMakeCall(GoBuiltinCallExpr call, AnnotationHolder holder) {
-    if (call.getBuiltinArgs() == null) {
+  private static void checkMakeCall(@NotNull GoBuiltinCallExpr call, @NotNull AnnotationHolder holder) {
+    GoBuiltinArgs args = call.getBuiltinArgs();
+    if (args == null) {
       holder.createErrorAnnotation(call, "Missing argument to make");
+      return;
+    }
+    GoType type = args.getType();
+    if (type == null) {
+      GoExpression first = ContainerUtil.getFirstItem(args.getExpressionList());
+      if (first != null) {
+        holder.createErrorAnnotation(call, first.getText() + " is not a type");
+      }
     }
     else {
-      GoBuiltinArgs args = call.getBuiltinArgs();
-      if (args.getType() == null) {
-        if (!args.getExpressionList().isEmpty()) {
-          holder.createErrorAnnotation(call, args.getExpressionList().get(0).getText() + " is not a type");
-        }
+      // We have a type, is it valid?
+      GoType baseType = getBaseType(type);
+      if (canMakeType(baseType)) {
+        // We have a type and we can make the type, are the parameters to make valid?
+        checkMakeArgs(call, baseType, args.getExpressionList(), holder);
       }
       else {
-        // We have a type, is it valid?
-        GoType baseType = getBaseType(args.getType());
-        if (!canMakeType(baseType)) {
-          holder.createErrorAnnotation(args.getType(), "Cannot make " + args.getType().getText());
-        }
-        else {
-          // We have a type and we can make the type, are the parameters to make valid?
-          checkMakeArgs(call, baseType, args.getExpressionList(), holder);
-        }
+        holder.createErrorAnnotation(type, "Cannot make " + type.getText());
       }
     }
   }
 
-  private static boolean canMakeType(GoType type) {
+  private static boolean canMakeType(@Nullable GoType type) {
     if (type instanceof GoArrayOrSliceType) {
       // Only slices (no size expression) can be make()'d.
       return ((GoArrayOrSliceType)type).getExpression() == null;
     }
-
-    if (type instanceof GoChannelType || type instanceof GoMapType) {
-      return true;
-    }
-
-    return false;
+    return type instanceof GoChannelType || type instanceof GoMapType;
   }
 
-  private static void checkMakeArgs(GoBuiltinCallExpr call,
-                                    GoType baseType,
-                                    List<GoExpression> list,
-                                    AnnotationHolder holder) {
+  private static void checkMakeArgs(@NotNull GoBuiltinCallExpr call,
+                                    @Nullable GoType baseType,
+                                    @NotNull List<GoExpression> list,
+                                    @NotNull AnnotationHolder holder) {
     if (baseType instanceof GoArrayOrSliceType) {
       if (list.isEmpty()) {
         holder.createErrorAnnotation(call, "Missing len argument to make");
@@ -173,9 +160,9 @@ public class GoAnnotator implements Annotator {
 
     for (int i = 0; i < list.size(); i++) {
       GoExpression expression = list.get(i);
-      GoType expressionType = expression.getGoType(null);
-      if (expressionType != null) {
-        GoType expressionBaseType = getBaseType(expressionType);
+      GoType type = expression.getGoType(null); // todo: context
+      if (type != null) {
+        GoType expressionBaseType = getBaseType(type);
         if (!isIntegerType(expressionBaseType)) {
           String argName = i == 0 ? "size" : "capacity";
           holder.createErrorAnnotation(expression, "Non-integer " + argName + " argument to make");
@@ -184,41 +171,29 @@ public class GoAnnotator implements Annotator {
     }
   }
 
-  private static GoType getBaseType(GoType type) {
+  @Nullable
+  private static GoType getBaseType(@NotNull GoType type) {
     if (type.getTypeReferenceExpression() != null) {
       type = GoPsiImplUtil.findBaseTypeFromRef(type.getTypeReferenceExpression());
     }
-
-    if (type instanceof GoSpecType) {
-      type = ((GoSpecType)type).getType();
-    }
-
-    return type;
+    return type instanceof GoSpecType ? ((GoSpecType)type).getType() : type;
   }
 
-  private static boolean isIntegerType(GoType type) {
-    if (type.getTypeReferenceExpression() == null) {
-      return false;
-    }
-    return intTypeNames.contains(type.getTypeReferenceExpression().getText());
+  private static boolean isIntegerType(@Nullable GoType type) {
+    if (type == null) return false;
+    GoTypeReferenceExpression ref = type.getTypeReferenceExpression();
+    if (ref == null) return false;
+    return GoPsiImplUtil.builtin(type) && INT_TYPE_NAMES.contains(ref.getText());
   }
 
   /**
    * Returns {@code true} if the given element is in an invalid location for a type literal or type reference.
    */
-  private static boolean isIllegalUseOfTypeAsExpression(@NotNull PsiElement element) {
-    PsiElement parent = PsiTreeUtil.skipParentsOfType(element, GoParenthesesExpr.class, GoUnaryExpr.class);
-
-    if (parent instanceof GoReferenceExpression || parent instanceof GoSelectorExpr) {
-      // Part of a selector such as T.method
-      return false;
-    }
-
-    if (parent instanceof GoCallExpr) {
-      // A situation like T("foo").
-      return false;
-    }
-
-    return true;
+  private static boolean isIllegalUseOfTypeAsExpression(@NotNull PsiElement e) {
+    PsiElement parent = PsiTreeUtil.skipParentsOfType(e, GoParenthesesExpr.class, GoUnaryExpr.class);
+    // Part of a selector such as T.method
+    if (parent instanceof GoReferenceExpression || parent instanceof GoSelectorExpr) return false;
+    // A situation like T("foo").
+    return !(parent instanceof GoCallExpr);
   }
 }
