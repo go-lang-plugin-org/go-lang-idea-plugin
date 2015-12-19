@@ -57,7 +57,7 @@ func (tp *T) Mp(f float32) float32 { return 1 }  // pointer receiver
 
 var t T
 
-func <warning descr="Unused function 'bar'">bar</warning>() {
+func _() {
     t.Mv(7)
     T.Mv(t, 7)
     (T).Mv(t, 7)
@@ -99,21 +99,21 @@ func (this *Empty) hola() {
 type AA struct {
     N int
 }
-func <warning descr="Unused function 'BenchmarkName'">BenchmarkName</warning>(b *AA) {
+func _(b *AA) {
      b.N
 }
 
-func <warning descr="Function 'make' collides with builtin function">make</warning>(o interface{}, args ...interface{}) {
+func _(o interface{}, args ...interface{}) {
 }
 
-func <warning descr="Function 'new' collides with builtin function">new</warning>(o interface{}) {
+func _(o interface{}) {
   func(i interface{}) {
     Println(o)
     Println(i)
   }
 }
 
-func <warning descr="Unused function 'concurrently'">concurrently</warning>(integers []int) []int {
+func _(integers []int) []int {
   ch := make(chan int)
   <error descr="Unused variable 'responses'">responses</error> := []int{}
   for _, <error descr="Unused variable 'i'">i</error> := range integers {
@@ -134,7 +134,7 @@ func <warning descr="Unused function 'concurrently'">concurrently</warning>(inte
 func Println(o ...interface{})  {
 }
 
-func <warning descr="Unused function 'innerTypes'">innerTypes</warning>() {
+func _() {
 	type connError struct {
 		cn  int
 	}
@@ -165,7 +165,7 @@ type Iface interface {
 
 const name1 int = 10
 
-func <warning descr="Unused function 'goo'">goo</warning>(st interface {Foo()}, st1 Iface) {
+func _(st interface {Foo()}, st1 Iface) {
     <error descr="Cannot assign to constant 'name1'">name1</error>, <error descr="Cannot assign to constant 'name1'">name1</error> = 1, 2
     Println(st.Foo() + st1.Boo())
     if <error descr="_ := 1 used as value"><error descr="No new variables on left side of :=">_</error> := 1</error> {
@@ -173,12 +173,12 @@ func <warning descr="Unused function 'goo'">goo</warning>(st interface {Foo()}, 
     }
 }
 
-func <warning descr="Unused function 'labelsCheck'">labelsCheck</warning>() { goto Label1; Label1: 1; goto <error descr="Unresolved label 'Label2'">Label2</error>}
+func _() { goto Label1; Label1: 1; goto <error descr="Unresolved label 'Label2'">Label2</error>}
 
 type compositeA struct { int }
 type compositeB struct { byte }
 
-func <warning descr="Unused function 'composite'">composite</warning> () {
+func _ () {
 	a0, b0 := composite1()
 	Println(a0.int, b0.byte)
 	a1, b1 := new(compositeA), new(compositeB)
@@ -194,11 +194,11 @@ func composite2() (a *compositeA, b *compositeB) {
 	return new(compositeA), new(compositeB)
 }
 
-func <warning descr="Unused function 'do'">do</warning>(o interface {test1() int}) {
+func _(o interface {test1() int}) {
 	Println(o.test1())
 }
 
-func <warning descr="Unused function 'dial'">dial</warning>() (int) {
+func _() (int) {
 	 type connError struct { err int }
 	ch := make(chan connError)
   select {
@@ -212,7 +212,7 @@ type Item struct {
 	Value []byte
 }
 
-func <warning descr="Unused function 'main2'">main2</warning>() {
+func _() {
 	m := GetMulti()
 	v := m["AA"].Value
 	Println(v)
@@ -230,7 +230,7 @@ func (w *WebService) Path(root string) *WebService { return w }
 func (w *WebService) GET(subPath string) *RouteBuilder { return new(RouteBuilder) }
 type RouteBuilder struct { bool }
 func (w *WebService) Route(builder *RouteBuilder) *WebService { return w }
-func <warning descr="Unused function 'WebServiceTest'">WebServiceTest</warning>() {
+func _() {
 	ws1 := new(WebService).Path("/")
 	ws1.GET("").bool
 	ws1.Route(ws1.GET("/{type}/{id}"))
@@ -242,7 +242,7 @@ type ServiceError struct {
 }
 
 
-func <warning descr="Unused function 'typeAssert'">typeAssert</warning>() {
+func _() {
   err := nil
   switch err.(type) {
     case ServiceError:
@@ -256,7 +256,7 @@ type Request struct {
     Request *http.Request
 }
 
-func <warning descr="Unused function 'typeClashes'">typeClashes</warning>(r *Request)  {
+func _(r *Request)  {
     r.Request.URL
 }
 
@@ -265,12 +265,12 @@ type ReadCloser interface {
     io.Closer
 }
 
-func <warning descr="Unused function 'processReadCloser'">processReadCloser</warning>(b ReadCloser)  {
+func _(b ReadCloser)  {
     b.<error descr="Unresolved reference 'Closer'">Closer</error>()
     b.Close()
 }
 
-func <warning descr="Unused function 'TestTemplateToRegularExpression'">TestTemplateToRegularExpression</warning>() {
+func _() {
 var tempregexs = []struct {
     template, regex         string
     literalCount, varCount int
@@ -291,7 +291,7 @@ type Route struct {
 func (r Route) matchesContentType() {
 }
 
-func <warning descr="Unused function 'eachProcessing'">eachProcessing</warning>() {
+func _() {
     rs := []Route{}
     for _, each := range rs {
         if each.matchesContentType() {
@@ -313,7 +313,7 @@ type Greeting struct {
     Content string
 }
 
-func <warning descr="Unused function 'moreRanges'">moreRanges</warning>() {
+func _() {
     greetings := make([]Greeting, 0, 10)
     for i, value := range greetings {
         if (value.Content == "") {
@@ -326,22 +326,22 @@ type R struct {
     Body int 
 }
 
-func <warning descr="Unused function 'main123'">main123</warning>() {
+func _() {
     response := make(chan *R, 1)
     r := <- response
     Println(r.Body)
     Println(response.<error descr="Unresolved reference 'Body'">Body</error>)
 }
 
-func <warning descr="Unused function 'duplicates'">duplicates</warning>(a int, <error descr="Duplicate argument 'a'">a</error> int, c, d, <error descr="Duplicate argument 'c'">c</error> int) (<error descr="Duplicate argument 'a'">a</error>, <error descr="Duplicate argument 'd'">d</error>, x int) {
+func _(a int, <error descr="Duplicate argument 'a'">a</error> int, c, d, <error descr="Duplicate argument 'c'">c</error> int) (<error descr="Duplicate argument 'a'">a</error>, <error descr="Duplicate argument 'd'">d</error>, x int) {
   return 1,1,1
 }
 
-func <warning descr="Unused function 'variadic'">variadic</warning>(a int,  d<error descr="Can only use ... as final argument in list">...</error> int, c string) (y,x,z int) {
+func _(a int,  d<error descr="Can only use ... as final argument in list">...</error> int, c string) (y,x,z int) {
     return 1,1,1
 }
 
-func <warning descr="Unused function 'variadic2'">variadic2</warning>(a int, c, d<error descr="Can only use ... as final argument in list">...</error> int) (y,x,z <error descr="Cannot use ... in output argument list">...</error>int) {
+func _(a int, c, d<error descr="Can only use ... as final argument in list">...</error> int) (y,x,z <error descr="Cannot use ... in output argument list">...</error>int) {
     return 1,1,1
 }
 
@@ -353,7 +353,7 @@ type (
     Color RGBA
 )
 
-func <warning descr="Unused function 'name'">name</warning>(col Color) string {
+func _(col Color) string {
     Println(col.B)  
     
     var testdata *struct {
@@ -378,7 +378,7 @@ func _(b B, c Color) {
 var <warning descr="Unused variable 'Name11'">Name11</warning> string  = ""
 var <warning descr="Unused variable 'nmame11'">nmame11</warning> string  = ""
 
-func <warning descr="Unused function 'testRedeclare'">testRedeclare</warning>() int {
+func _() int {
       y, z := 1,3
       if y == z {}  // Just to avoid unused variable error
       {
@@ -392,13 +392,13 @@ func init() {
     
 }
 
-func <warning descr="Unused function 'nestedReturn'">nestedReturn</warning>() int {
+func _() int {
     {
         return 1
     }
 }
 
-func <warning descr="Unused function 'defer_go'">defer_go</warning>() {
+func _() {
     defer <error descr="Argument to defer must be function call">(func(){}())</error>
     defer <error descr="Argument to defer must be function call">1</error>
     go <error descr="Argument to go must be function call">func(){}</error>
@@ -406,7 +406,7 @@ func <warning descr="Unused function 'defer_go'">defer_go</warning>() {
     go func(){}()
 }
 
-func <warning descr="Unused function 'foo_bar_'">foo_bar_</warning>(bar func(baz    int)) {
+func _(bar func(baz    int)) {
       <error descr="Unresolved reference 'baz'">baz</error>
 }
 
@@ -414,7 +414,7 @@ type Ormer interface {
 	Insert(interface{})
 }
 
-func <warning descr="Unused function 'Save'">Save</warning>(o Ormer) {
+func _(o Ormer) {
 	(*o).Insert(1)
 }
 
