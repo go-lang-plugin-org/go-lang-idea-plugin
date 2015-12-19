@@ -59,9 +59,9 @@ import java.util.regex.Pattern;
 import static com.intellij.util.containers.ContainerUtil.newLinkedHashSet;
 
 public class GoSdkUtil {
-  private static final Pattern GO_VERSION_PATTERN = Pattern.compile("theVersion\\s*=\\s*`go([\\d.]+\\w+(\\d+)?)`");
-  private static final Pattern GAE_VERSION_PATTERN = Pattern.compile("theVersion\\s*=\\s*`go([\\d.]+)( \\(appengine-[\\d.]+\\))?`");
-  private static final Pattern GO_DEVEL_VERSION_PATTERN = Pattern.compile("theVersion\\s*=\\s*`(devel.*)`");
+  private static final Pattern GO_VERSION_PATTERN = Pattern.compile("(?:t|T)heVersion\\s*=\\s*`go([\\d.]+\\w+(\\d+)?)`");
+  private static final Pattern GAE_VERSION_PATTERN = Pattern.compile("(?:t|T)heVersion\\s*=\\s*`go([\\d.]+)( \\(appengine-[\\d.]+\\))?`");
+  private static final Pattern GO_DEVEL_VERSION_PATTERN = Pattern.compile("(?:t|T)heVersion\\s*=\\s*`(devel.*)`");
 
   @Nullable
   private static VirtualFile getSdkSrcDir(@NotNull Project project, @Nullable Module module) {
@@ -307,9 +307,10 @@ public class GoSdkUtil {
   @Nullable
   public static String retrieveGoVersion(@NotNull String sdkPath) {
     try {
-      String oldStylePath = new File(sdkPath, "src/pkg/" + GoConstants.GO_VERSION_FILE_PATH).getPath();
-      String newStylePath = new File(sdkPath, "src/" + GoConstants.GO_VERSION_FILE_PATH).getPath();
-      File zVersionFile = FileUtil.findFirstThatExist(oldStylePath, newStylePath);
+      String legacyStylePath = new File(sdkPath, "src/pkg/" + GoConstants.GO_VERSION_FILE_PATH).getPath();
+      String oldStylePath = new File(sdkPath, "src/" + GoConstants.GO_VERSION_FILE_PATH).getPath();
+      String newStylePath = new File(sdkPath, "src/" + GoConstants.GO_VERSION_NEW_FILE_PATH).getPath();
+      File zVersionFile = FileUtil.findFirstThatExist(legacyStylePath, oldStylePath, newStylePath);
       if (zVersionFile == null) {
         GoSdkService.LOG.debug("Cannot find zVersion file at sdk path: " + sdkPath);
         return null;

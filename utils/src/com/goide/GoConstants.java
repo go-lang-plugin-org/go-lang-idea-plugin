@@ -52,6 +52,7 @@ public class GoConstants {
 
   @NonNls public static final String LIB_EXEC_DIRECTORY = "libexec";
   @NonNls public static final String GO_VERSION_FILE_PATH = "runtime/zversion.go";
+  @NonNls public static final String GO_VERSION_NEW_FILE_PATH = "runtime/internal/sys/zversion.go";
   public static final String BUILTIN_FILE_NAME = "builtin.go";
   public static final String BUILTIN_PACKAGE_NAME = "builtin";
   public static final String BUILTIN_FILE_PATH = BUILTIN_PACKAGE_NAME + "/" + BUILTIN_FILE_NAME;
