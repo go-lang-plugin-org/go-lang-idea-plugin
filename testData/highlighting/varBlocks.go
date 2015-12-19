@@ -60,3 +60,15 @@ func test5() {
         fmt.Println("and here!", xy)
     }
 }
+
+func _() {
+	fs := *(*func(width int) struct{})(nil)
+	width := 1
+	_, _ = fs, width
+}
+
+func _() {
+	*(*func(width int) struct{})(nil)
+	width := 1
+	_ = width
+}

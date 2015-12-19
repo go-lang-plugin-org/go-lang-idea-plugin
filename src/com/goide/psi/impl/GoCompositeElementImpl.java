@@ -49,6 +49,8 @@ public class GoCompositeElementImpl extends ASTWrapperPsiElement implements GoCo
                                                    @NotNull ResolveState state,
                                                    @Nullable PsiElement lastParent,
                                                    @NotNull PsiElement place) {
+    if (o instanceof GoLeftHandExprList || o instanceof GoExpression) return true;
+
     if (!o.shouldGoDeeper()) return processor.execute(o, state);
     if (!processor.execute(o, state)) return false;
     if ((

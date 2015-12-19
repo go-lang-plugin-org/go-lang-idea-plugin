@@ -62,6 +62,7 @@ public class GoLegacyResolveVarsTest extends GoLegacyResolveTestBase {
   public void testVarVsInnerTypes()                                 { doFileTest(); }
   public void testVarTypeGuard()                                    { doFileTest(); }
   public void testResolveMethodReceiver()                           { doFileTest(); }
+  public void testDontProcessExpressions()                          { doFileTest(); }
 
   public void testFromDefaultImportedPackage()                      { doDirTest(); }
   public void testLocalPackageDefinitionsShouldBeResolvedFirst()    { doDirTest(); }
