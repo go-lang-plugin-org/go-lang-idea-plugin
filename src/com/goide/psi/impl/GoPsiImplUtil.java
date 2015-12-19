@@ -786,7 +786,25 @@ public class GoPsiImplUtil {
 
   @Nullable
   public static GoType getGoTypeInner(@NotNull GoAnonymousFieldDefinition o, @SuppressWarnings("UnusedParameters") @Nullable ResolveState context) {
-    return GoFieldNameReference.findTypeFromRef(o.getTypeReferenceExpression());
+    return findBaseTypeFromRef(o.getTypeReferenceExpression());
+  }
+
+  @Nullable
+  public static GoType findBaseType(@Nullable GoType type) {
+    while (type instanceof GoSpecType && ((GoSpecType)type).getType().getTypeReferenceExpression() != null) {
+      GoType inner = findTypeFromTypeRef(((GoSpecType)type).getType().getTypeReferenceExpression());
+      if (inner == null || type.isEquivalentTo(inner) || builtin(inner)) return type;
+      type = inner;
+    }
+    return type;
+  }
+
+  /**
+   * Finds the "base" type of {@code expression}, resolving type references iteratively until a type spec is found.
+   */  
+  @Nullable
+  public static GoType findBaseTypeFromRef(@Nullable GoTypeReferenceExpression expression) {
+    return findBaseType(findTypeFromTypeRef(expression));
   }
 
   @Nullable

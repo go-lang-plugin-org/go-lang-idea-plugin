@@ -194,7 +194,10 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     boolean canProcessMethods = state.get(DONT_PROCESS_METHODS) == null;
     if (canProcessMethods && parent != null && !processNamedElements(processor, state, parent.getMethods(), localResolve, true)) return false;
 
-    if (type instanceof GoSpecType) type = ((GoSpecType)type).getType();
+    if (type instanceof GoSpecType) {
+      GoType theLatestSpec = findBaseType(type);
+      type = theLatestSpec instanceof GoSpecType ? ((GoSpecType)theLatestSpec).getType() : theLatestSpec;
+    }
     if (type instanceof GoStructType) {
       GoScopeProcessorBase delegate = createDelegate(processor);
       type.processDeclarations(delegate, ResolveState.initial(), null, myElement);
