@@ -483,7 +483,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType findTypeFromTypeRef(@Nullable GoTypeReferenceExpression expression) {
+  private static GoType findTypeFromTypeRef(@Nullable GoTypeReferenceExpression expression) {
     PsiReference reference = expression != null ? expression.getReference() : null;
     PsiElement resolve = reference != null ? reference.resolve() : null;
     if (resolve instanceof GoTypeSpec) return ((GoTypeSpec)resolve).getSpecType();
@@ -578,7 +578,7 @@ public class GoPsiImplUtil {
           List<GoType> types = ContainerUtil.newArrayListWithCapacity(list.size());
           for (GoParameterDeclaration declaration : list) {
             GoType declarationType = declaration.getType();
-            for (GoParamDefinition definition : declaration.getParamDefinitionList()) {
+            for (GoParamDefinition ignored : declaration.getParamDefinitionList()) {
               types.add(declarationType);
             }
           }
@@ -848,8 +848,8 @@ public class GoPsiImplUtil {
         String path = firstItem.getPath();
         String oldAlias = firstItem.getAlias();
 
-        GoImportDeclaration importWithParens = GoElementFactory.createImportDeclaration(project, path, oldAlias, true);
-        existingImport = (GoImportDeclaration)existingImport.replace(importWithParens);
+        GoImportDeclaration importWithParentheses = GoElementFactory.createImportDeclaration(project, path, oldAlias, true);
+        existingImport = (GoImportDeclaration)existingImport.replace(importWithParentheses);
       }
       return existingImport.addImportSpec(packagePath, alias);
     }
@@ -983,7 +983,7 @@ public class GoPsiImplUtil {
     return s.length() > 1 && isQuote(s.charAt(0)) && s.charAt(0) == s.charAt(s.length() - 1);
   }
 
-  public static boolean isQuote(char ch) {
+  private static boolean isQuote(char ch) {
     return ch == '"' || ch == '\'' || ch == '`';
   }
 
@@ -1227,7 +1227,7 @@ public class GoPsiImplUtil {
     return getByIndex(((GoConstSpec)parent).getExpressionList(), index);
   }
 
-  public static <T> T getByIndex(@NotNull List<T> list, int index) {
+  private static <T> T getByIndex(@NotNull List<T> list, int index) {
     return 0 <= index && index < list.size()? list.get(index) : null;
   }
 
