@@ -17,12 +17,49 @@
 package com.goide.stubs;
 
 import com.goide.psi.GoConstSpec;
+import com.goide.psi.GoExpression;
+import com.goide.psi.impl.GoElementFactory;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.stubs.StubBase;
 import com.intellij.psi.stubs.StubElement;
+import com.intellij.util.Function;
+import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.io.StringRef;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class GoConstSpecStub extends StubBase<GoConstSpec> {
-  public GoConstSpecStub(StubElement parent, IStubElementType elementType) {
+  private final StringRef myExpressionsRef;
+  private List<GoExpression> myList;
+
+  public GoConstSpecStub(StubElement parent, IStubElementType elementType, StringRef ref) {
     super(parent, elementType);
+    myExpressionsRef = ref;
+  }
+
+  @Nullable
+  public String getExpressionsText() {
+    return myExpressionsRef == null? null : myExpressionsRef.getString();
+  }
+
+  @NotNull
+  public List<GoExpression> getExpressionList() {
+    if (myList == null) {
+      String text = getExpressionsText();
+      if (!StringUtil.isNotEmpty(text)) return myList = ContainerUtil.emptyList();
+      final Project project = getPsi().getProject();
+      List<String> split = StringUtil.split(text, ";");
+      myList = ContainerUtil.map(split, new Function<String, GoExpression>() {
+        @Override
+        public GoExpression fun(@NotNull String s) {
+          return GoElementFactory.createExpression(project, s);
+        }
+      });
+    }
+    return myList;
   }
 }

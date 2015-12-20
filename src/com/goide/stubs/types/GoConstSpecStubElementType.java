@@ -17,15 +17,19 @@
 package com.goide.stubs.types;
 
 import com.goide.psi.GoConstSpec;
+import com.goide.psi.GoExpression;
 import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.goide.psi.impl.GoConstSpecImpl;
 import com.goide.stubs.GoConstSpecStub;
 import com.intellij.lang.ASTNode;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayFactory;
+import com.intellij.util.Function;
+import com.intellij.util.io.StringRef;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -54,11 +58,18 @@ public class GoConstSpecStubElementType extends GoStubElementType<GoConstSpecStu
   @NotNull
   @Override
   public GoConstSpecStub createStub(@NotNull GoConstSpec psi, StubElement parentStub) {
-    return new GoConstSpecStub(parentStub, this);
+    String join = StringUtil.join(psi.getExpressionList(), new Function<GoExpression, String>() {
+      @Override
+      public String fun(GoExpression e) {
+        return e.getText();
+      }
+    }, ";");
+    return new GoConstSpecStub(parentStub, this, StringRef.fromString(join));
   }
 
   @Override
   public void serialize(@NotNull GoConstSpecStub stub, @NotNull StubOutputStream dataStream) throws IOException {
+    dataStream.writeName(stub.getExpressionsText());
   }
 
   @Override
@@ -69,6 +80,6 @@ public class GoConstSpecStubElementType extends GoStubElementType<GoConstSpecStu
   @NotNull
   @Override
   public GoConstSpecStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException {
-    return new GoConstSpecStub(parentStub, this);
+    return new GoConstSpecStub(parentStub, this, dataStream.readName());
   }
 }
