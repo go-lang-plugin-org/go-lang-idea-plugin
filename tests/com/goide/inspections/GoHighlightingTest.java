@@ -129,6 +129,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testGithubIssue2099()           { doTest(); }
   public void testPlaceholderCount()          { doTest(); }
   public void testDeclaredButNotUsed()        { doTest(); }
+  public void testCyclicDefinition()          { doTest(); }
 
   public void testRelativeImportIgnoringDirectories() throws IOException {
     myFixture.getTempDirFixture().findOrCreateDir("to_import/testdata");

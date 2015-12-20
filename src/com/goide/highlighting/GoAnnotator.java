@@ -67,6 +67,16 @@ public class GoAnnotator implements Annotator {
       if (resolvedReference instanceof GoTypeSpec && isIllegalUseOfTypeAsExpression(reference)) {
         holder.createErrorAnnotation(element, "Type " + element.getText() + " is not an expression.");
       }
+      if (resolvedReference instanceof GoConstDefinition &&
+          resolvedReference.getParent() instanceof GoConstSpec &&
+          PsiTreeUtil.getParentOfType(element, GoConstDeclaration.class) != null) {
+        checkSelfReference((GoReferenceExpression)element, resolvedReference, holder);
+      }
+      if (resolvedReference instanceof GoVarDefinition &&
+          resolvedReference.getParent() instanceof GoVarSpec &&
+          PsiTreeUtil.getParentOfType(element, GoVarDeclaration.class) != null) {
+        checkSelfReference((GoReferenceExpression)element, resolvedReference, holder);
+      }
     }
     else if (element instanceof GoLiteralTypeExpr) {
       if (isIllegalUseOfTypeAsExpression(element)) {
@@ -187,6 +197,21 @@ public class GoAnnotator implements Annotator {
     GoTypeReferenceExpression ref = type.getTypeReferenceExpression();
     if (ref == null) return false;
     return INT_TYPE_NAMES.contains(ref.getText()) && GoPsiImplUtil.builtin(ref.getReference().resolve());
+  }
+
+  private static void checkSelfReference(@NotNull GoReferenceExpression o, PsiElement definition, AnnotationHolder holder) {
+    GoExpression value = null;
+    if (definition instanceof GoVarDefinition) {
+      value = ((GoVarDefinition)definition).getValue();
+    }
+    else if (definition instanceof GoConstDefinition) {
+      value = ((GoConstDefinition)definition).getValue();
+    }
+
+    if (value != null &&
+        value.equals(PsiTreeUtil.getTopmostParentOfType(o, GoExpression.class))) {
+      holder.createErrorAnnotation(o, "Cyclic definition detected");
+    }
   }
 
   /**
