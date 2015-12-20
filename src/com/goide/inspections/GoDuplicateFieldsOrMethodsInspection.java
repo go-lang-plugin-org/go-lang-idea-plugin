@@ -72,6 +72,10 @@ public class GoDuplicateFieldsOrMethodsInspection extends GoInspectionBase {
   private static void check(@NotNull List<? extends GoNamedElement> fields, @NotNull ProblemsHolder problemsHolder, @NotNull String what) {
     Set<String> names = ContainerUtil.newHashSet();
     for (GoCompositeElement field : fields) {
+      if (field instanceof GoMethodSpec && ((GoMethodSpec) field).getSignature() == null) {
+        // It's an embedded type, not a method or a field.
+        continue;
+      }
       if (field instanceof GoNamedElement) {
         String name = ((GoNamedElement)field).getName();
         if (names.contains(name)) {
