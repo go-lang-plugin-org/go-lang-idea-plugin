@@ -272,10 +272,7 @@ public class GoPsiImplUtil {
 
   @Nullable
   public static GoType getGoTypeInner(@NotNull final GoConstDefinition o, @Nullable final ResolveState context) {
-    GoType sibling = o.findSiblingType();
-    if (sibling != null) return sibling;
-    
-    // todo: stubs 
+    // todo: stubs
     GoType fromSpec = findTypeInConstSpec(o);
     if (fromSpec != null) return fromSpec;
 
@@ -298,7 +295,7 @@ public class GoPsiImplUtil {
 
   @Nullable
   private static GoType findTypeInConstSpec(@NotNull GoConstDefinition o) {
-    PsiElement parent = o.getParent();
+    PsiElement parent = PsiTreeUtil.getStubOrPsiParent(o);
     if (!(parent instanceof GoConstSpec)) return null;
     GoConstSpec spec = (GoConstSpec)parent;
     GoType commonType = spec.getType();
