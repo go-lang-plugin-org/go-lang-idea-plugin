@@ -534,7 +534,8 @@ public class GoPsiImplUtil {
 
   @Nullable
   private static GoType findTypeInVarSpec(@NotNull GoVarDefinition o, @Nullable ResolveState context) {
-    GoVarSpec parent = (GoVarSpec)o.getParent();
+    GoVarSpec parent = (GoVarSpec)PsiTreeUtil.getStubOrPsiParent(o);
+    if (parent == null) return null;
     GoType commonType = parent.getType();
     if (commonType != null) return commonType;
     List<GoVarDefinition> varList = parent.getVarDefinitionList();
