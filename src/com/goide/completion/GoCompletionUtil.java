@@ -54,7 +54,7 @@ public class GoCompletionUtil {
   public static final int TYPE_CONVERSION = NOT_IMPORTED_TYPE_CONVERSION + 10;
   public static final int NOT_IMPORTED_VAR_PRIORITY = 5;
   public static final int VAR_PRIORITY = NOT_IMPORTED_VAR_PRIORITY + 10;
-  public static final int LABEL_PRIORITY = 15;
+  private static final int LABEL_PRIORITY = 15;
   public static final int PACKAGE_PRIORITY = 5;
   public static final InsertHandler<LookupElement> FUNCTION_INSERT_HANDLER = new InsertHandler<LookupElement>() {
     @Override
@@ -77,7 +77,7 @@ public class GoCompletionUtil {
       handler.handleInsert(context, item);
     }
   };
-  public static final LookupElementRenderer<LookupElement> FUNCTION_RENDERER = new LookupElementRenderer<LookupElement>() {
+  private static final LookupElementRenderer<LookupElement> FUNCTION_RENDERER = new LookupElementRenderer<LookupElement>() {
     @Override
     public void renderElement(@NotNull LookupElement element, @NotNull LookupElementPresentation p) {
       PsiElement o = element.getPsiElement();
@@ -100,7 +100,7 @@ public class GoCompletionUtil {
       p.setItemText(element.getLookupString() + paramText);
     }
   };
-  public static final LookupElementRenderer<LookupElement> VARIABLE_RENDERER = new LookupElementRenderer<LookupElement>() {
+  private static final LookupElementRenderer<LookupElement> VARIABLE_RENDERER = new LookupElementRenderer<LookupElement>() {
     @Override
     public void renderElement(@NotNull LookupElement element, @NotNull LookupElementPresentation p) {
       PsiElement o = element.getPsiElement();
@@ -221,7 +221,7 @@ public class GoCompletionUtil {
     String name = v.getName();
     if (StringUtil.isEmpty(name)) return null;
     return createVariableLikeLookupElement(v, name, v instanceof GoFieldDefinition
-                                                        ? new SingleCharInsertHandler(':') {
+                                                    ? new SingleCharInsertHandler(':') {
       @Override
       public void handleInsert(@NotNull InsertionContext context, LookupElement item) {
         PsiFile file = context.getFile();
