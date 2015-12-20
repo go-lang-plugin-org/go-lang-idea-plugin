@@ -22,10 +22,7 @@ import com.goide.psi.*;
 import com.goide.psi.impl.imports.GoImportReferenceSet;
 import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.sdk.GoSdkUtil;
-import com.goide.stubs.GoImportSpecStub;
-import com.goide.stubs.GoNamedStub;
-import com.goide.stubs.GoParameterDeclarationStub;
-import com.goide.stubs.GoTypeStub;
+import com.goide.stubs.*;
 import com.goide.stubs.index.GoMethodIndex;
 import com.goide.util.GoStringLiteralEscaper;
 import com.goide.util.GoUtil;
@@ -272,10 +269,9 @@ public class GoPsiImplUtil {
 
   @Nullable
   public static GoType getGoTypeInner(@NotNull final GoConstDefinition o, @Nullable final ResolveState context) {
-    // todo: stubs
     GoType fromSpec = findTypeInConstSpec(o);
     if (fromSpec != null) return fromSpec;
-
+    // todo: stubs 
     return RecursionManager.doPreventingRecursion(o, true, new NullableComputable<GoType>() {
       @Nullable
       @Override
@@ -295,6 +291,7 @@ public class GoPsiImplUtil {
 
   @Nullable
   private static GoType findTypeInConstSpec(@NotNull GoConstDefinition o) {
+    GoConstDefinitionStub stub = o.getStub();
     PsiElement parent = PsiTreeUtil.getStubOrPsiParent(o);
     if (!(parent instanceof GoConstSpec)) return null;
     GoConstSpec spec = (GoConstSpec)parent;
@@ -302,7 +299,9 @@ public class GoPsiImplUtil {
     if (commonType != null) return commonType;
     List<GoConstDefinition> varList = spec.getConstDefinitionList();
     int i = Math.max(varList.indexOf(o), 0);
-    List<GoExpression> es = spec.getExpressionList();
+    if (stub != null) return null;
+    GoConstSpecStub specStub = spec.getStub();
+    List<GoExpression> es = specStub != null ? specStub.getExpressionList() : spec.getExpressionList(); // todo: move to constant spec
     if (es.size() <= i) return null;
     return es.get(i).getGoType(null);
   }
@@ -508,7 +507,7 @@ public class GoPsiImplUtil {
   @Nullable
   public static GoType getGoTypeInner(@NotNull GoVarDefinition o, @Nullable ResolveState context) {
     // see http://golang.org/ref/spec#RangeClause
-    PsiElement parent = o.getParent();
+    PsiElement parent = PsiTreeUtil.getStubOrPsiParent(o);
     if (parent instanceof GoRangeClause) {
       return processRangeClause(o, (GoRangeClause)parent, context);
     }
