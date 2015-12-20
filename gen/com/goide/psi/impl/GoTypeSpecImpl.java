@@ -35,7 +35,7 @@ public class GoTypeSpecImpl extends GoNamedElementImpl<GoTypeSpecStub> implement
   @Override
   @NotNull
   public GoSpecType getSpecType() {
-    return findNotNullChildByClass(GoSpecType.class);
+    return findNotNullChildByClass(GoSpecType.class, com.goide.stubs.GoTypeStub.class);
   }
 
   @Nullable

@@ -253,7 +253,7 @@ TypeSpec ::= SpecType {
   methods=[getGoTypeInner getMethods shouldGoDeeper identifier="SpecType/identifier"]
   stubClass="com.goide.stubs.GoTypeSpecStub"
 }
-SpecType ::= identifier Type
+SpecType ::= identifier Type {stubClass="com.goide.stubs.GoTypeStub" extends="GoTypeImpl" implements=Type}
 
 VarDeclaration ::= var ( VarSpec | '(' VarSpecs? ')' ) {pin=1 methods=[addSpec deleteSpec]}
 private VarSpecs ::= VarSpec (semi VarSpec)* semi? {pin=1}
