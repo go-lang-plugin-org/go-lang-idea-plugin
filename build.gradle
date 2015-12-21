@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-
 plugins {
-  id 'org.jetbrains.intellij' version "0.0.31"
+  id 'org.jetbrains.intellij' version "0.0.35"
   id "de.undercouch.download" version "2.0.0"
 }
 
@@ -24,7 +23,7 @@ version = "${version}.$buildNumber"
 allprojects {
   apply plugin: 'java'
   sourceCompatibility = javaVersion
-  targetCompatibility = javaVersion
+  targetCompatibility = javaTargetVersion
   tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
 
   sourceSets {
@@ -49,13 +48,8 @@ allprojects {
       pluginId '5047'
       channel publishChannel
     }
+    systemProperty 'dlv.path', customDlvPath
   }
-}
-
-afterEvaluate {
-    tasks.getByName('runIdea') {
-        systemProperty 'dlv.path', customDlvPath
-    }
 }
 
 apply plugin: 'idea'
@@ -79,13 +73,12 @@ dependencies {
 project.afterEvaluate {
   prepareSandbox.doLast {
     def libraries = "$it.destinationDir/lib/"
-    fileTree(dir: libraries, include: 'delve*').files.each { File file ->
-      copy {
-        from zipTree(file)
-        into libraries
-      }
-      file.delete()
+    def delveFile = fileTree(dir: libraries, include: 'delve*').singleFile
+    copy {
+      from zipTree(delveFile)
+      into libraries
     }
+    delveFile.delete()
   }
 }
 
