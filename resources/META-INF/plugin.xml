@@ -223,6 +223,9 @@
     <localInspection language="go" displayName="Exported element should have its own declaration" groupPath="Go"
                      groupName="Code style issues" enabledByDefault="true" level="WEAK WARNING"
                      implementationClass="com.goide.inspections.GoExportedOwnDeclarationInspection"/>
+    <localInspection language="go" displayName="Struct initialization without field names" groupPath="Go"
+                     groupName="Code style issues" enabledByDefault="true" level="WEAK WARNING"
+                     implementationClass="com.goide.inspections.GoStructInitializationInspection"/>
     <!-- /code style issues -->
 
     <!-- probable bugs -->
