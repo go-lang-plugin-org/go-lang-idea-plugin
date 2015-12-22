@@ -22,6 +22,7 @@ import com.goide.project.GoModuleLibrariesService;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.util.ThrowableComputable;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.testFramework.LightProjectDescriptor;
 import org.jetbrains.annotations.NotNull;
 
@@ -62,7 +63,8 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       GoCommentStartInspection.class,
       GoPlaceholderCountInspection.class,
       GoEmbeddedInterfacePointerInspection.class,
-      GoStructInitializationInspection.class
+      GoStructInitializationInspection.class,
+      GoMethodOnNonLocalTypeInspection.class
     );
   }
 
@@ -264,6 +266,20 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
         myFixture.getTempDirFixture().createFile("pack1/pack1_test.go", "package pack1_test; func Test() {}");
         return myFixture.getTempDirFixture().createFile("pack2/pack2_test.go",
                                                         "package pack2_test; import \"testing\"; func TestTest(t *testing.T) {<error>pack1_test</error>.Test()}");
+      }
+    });
+    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(file.getParent().getParent().getUrl());
+    myFixture.configureFromExistingVirtualFile(file);
+    myFixture.checkHighlighting();
+  }
+
+  public void testMethodOnNonLocalType() throws Throwable {
+    myFixture.configureByFile(getTestName(true)+".go");
+    VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
+      @NotNull
+      @Override
+      public VirtualFile compute() throws Throwable {
+        return myFixture.getTempDirFixture().copyFile(myFixture.getFile().getVirtualFile(), "method/nonlocaltype.go");
       }
     });
     GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(file.getParent().getParent().getUrl());
