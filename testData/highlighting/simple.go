@@ -35,7 +35,7 @@ func <error descr="Duplicate function name">foo</error>() {
     for (i) {return 0}
     if (i) {return <error descr="Unresolved reference 'j'">j</error>}
 
-    headers := 1
+    headers := []int{1}
     for _, h := range headers {
       h++
     }
