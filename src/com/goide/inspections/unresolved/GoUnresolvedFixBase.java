@@ -16,7 +16,6 @@
 
 package com.goide.inspections.unresolved;
 
-import com.goide.GoConstants;
 import com.goide.psi.GoReferenceExpressionBase;
 import com.goide.refactor.GoRefactoringUtil;
 import com.intellij.codeInsight.template.Template;
@@ -34,9 +33,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class GoUnresolvedFixBase extends LocalQuickFixAndIntentionActionOnPsiElement {
-  @NotNull protected final String myName;
-  @NotNull protected final String myWhat;
-  @NotNull protected final String myTemplateId;
+  @NotNull private final String myName;
+  @NotNull private final String myWhat;
+  @NotNull private final String myTemplateId;
 
   public GoUnresolvedFixBase(@NotNull PsiElement element, @NotNull String name, @NotNull String what, @NotNull String templateId) {
     super(element);
@@ -54,7 +53,7 @@ public abstract class GoUnresolvedFixBase extends LocalQuickFixAndIntentionActio
   @NotNull
   @Override
   public String getFamilyName() {
-    return GoConstants.GO;
+    return "Create " + myWhat;
   }
 
   @Override

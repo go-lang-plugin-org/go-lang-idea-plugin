@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class GoDeleteConstDefinitionQuickFix extends LocalQuickFixBase {
   public GoDeleteConstDefinitionQuickFix(@Nullable String constName) {
-    super("Delete const " + (constName != null ? "'" + constName + "'" : ""));
+    super("Delete const " + (constName != null ? "'" + constName + "'" : ""), "Delete constant");
   }
 
   @Override

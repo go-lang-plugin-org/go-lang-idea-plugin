@@ -45,10 +45,10 @@ import javax.swing.*;
 import java.util.Collection;
 
 public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionOnPsiElement {
+  private static String myTestingPackageName;
   private Collection<String> myPackages;
   private String myPackageName;
   private boolean myIsOneTheFly;
-  private static String myTestingPackageName;
 
   protected GoMultiplePackagesQuickFix(@NotNull PsiElement element, @NotNull String packageName, Collection<String> packages, boolean isOnTheFly) {
     super(element);
@@ -133,6 +133,6 @@ public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionO
   @NotNull
   @Override
   public String getFamilyName() {
-    return GoConstants.GO;
+    return "Rename packages";
   }
 }
