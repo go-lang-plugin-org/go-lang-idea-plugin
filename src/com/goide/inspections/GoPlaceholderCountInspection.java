@@ -29,7 +29,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -52,56 +51,15 @@ public class GoPlaceholderCountInspection extends GoInspectionBase {
     Pair.pair("fatalf", 0),
     Pair.pair("panicf", 0));
 
-  @NotNull
-  @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
-    return new GoVisitor() {
-      @Override
-      public void visitCallExpr(@NotNull GoCallExpr o) {
-        PsiReference psiReference = o.getExpression().getReference();
-
-        if (psiReference == null) return;
-
-        PsiElement resolved = psiReference.resolve();
-        if (!(resolved instanceof GoFunctionOrMethodDeclaration)) return;
-        if (!isInCorrectPackage((GoFunctionOrMethodDeclaration)resolved)) return;
-
-        String name = getName((GoFunctionOrMethodDeclaration)resolved);
-        Integer placeholderPosition = FORMATTING_FUNCTIONS.get(name);
-        List<GoExpression> arguments = o.getArgumentList().getExpressionList();
-        if (arguments.size() <= placeholderPosition) return;
-
-        GoExpression placeholder = arguments.get(placeholderPosition);
-        if (!isStringPlaceholder(placeholder)) {
-          String message = "Value used for formatting text does not appear to be a string";
-          holder.registerProblem(placeholder, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
-          return;
-        }
-
-        int parameterCount = arguments.size() - placeholderPosition - 1;
-        int placeholdersCount = getPlaceholders(placeholder);
-        if (placeholdersCount == -1 || placeholdersCount == parameterCount) return;
-
-        String message = String.format("Got %d placeholder(s) for %d arguments(s)", placeholdersCount, parameterCount);
-        holder.registerProblem(placeholder, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+  private static int getPlaceholderPosition(@NotNull GoFunctionOrMethodDeclaration function) {
+    Integer position = FORMATTING_FUNCTIONS.get(StringUtil.toLowerCase(function.getName()));
+    if (position != null) {
+      String importPath = function.getContainingFile().getImportPath();
+      if ("fmt".equals(importPath) || "log".equals(importPath)) {
+        return position;
       }
-    };
-  }
-
-  private static boolean isInCorrectPackage(@NotNull GoFunctionOrMethodDeclaration element) {
-    GoFile containingFile = element.getContainingFile();
-
-    return FORMATTING_FUNCTIONS.containsKey(getName(element)) &&
-           ("fmt".equals(containingFile.getImportPath()) ||
-            "log".equals(containingFile.getImportPath()));
-  }
-
-  @Nullable
-  private static String getName(@NotNull GoFunctionOrMethodDeclaration element) {
-    String name = element.getName();
-    if (name == null) return null;
-
-    return name.toLowerCase(Locale.getDefault());
+    }
+    return -1;
   }
 
   private static int getPlaceholders(@Nullable GoExpression argument) {
@@ -109,7 +67,6 @@ public class GoPlaceholderCountInspection extends GoInspectionBase {
 
     String placeholderText = resolve(argument);
     if (placeholderText == null) return -1;
-
 
     Matcher placeholders = PLACEHOLDER_PATTERN.matcher(placeholderText);
     Matcher countPlaceholders;
@@ -137,16 +94,15 @@ public class GoPlaceholderCountInspection extends GoInspectionBase {
 
     return maxIndexCount;
   }
-
+  
   private static boolean isStringPlaceholder(GoExpression argument) {
     GoType goType = argument.getGoType(null);
-    if (goType == null || goType.getTypeReferenceExpression() == null) return false;
-
-    return goType.getTypeReferenceExpression().getText().equals("string");
+    GoTypeReferenceExpression typeReferenceExpression = goType != null ? goType.getTypeReferenceExpression() : null;
+    return typeReferenceExpression != null && typeReferenceExpression.textMatches("string");
   }
 
   @Nullable
-  private static String resolve(GoExpression argument) {
+  private static String resolve(@NotNull GoExpression argument) {
     if (argument instanceof GoStringLiteral) return argument.getText();
 
     if (argument.getReference() == null) return null;
@@ -162,6 +118,7 @@ public class GoPlaceholderCountInspection extends GoInspectionBase {
     return null;
   }
 
+  // todo: implement ConstEvaluator
   @Nullable
   private static String getValue(@Nullable GoExpression expression) {
     if (expression instanceof GoStringLiteral) {
@@ -175,6 +132,7 @@ public class GoPlaceholderCountInspection extends GoInspectionBase {
     return null;
   }
 
+  // todo: implement ConstEvaluator
   @NotNull
   private static String getValue(@Nullable GoAddExpr expression) {
     if (expression == null) return "";
@@ -189,5 +147,35 @@ public class GoPlaceholderCountInspection extends GoInspectionBase {
     }
 
     return result;
+  }
+
+  @NotNull
+  @Override
+  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
+    return new GoVisitor() {
+      @Override
+      public void visitCallExpr(@NotNull GoCallExpr o) {
+        PsiReference psiReference = o.getExpression().getReference();
+        PsiElement resolved = psiReference != null ? psiReference.resolve() : null;
+        if (!(resolved instanceof GoFunctionOrMethodDeclaration)) return;
+        int placeholderPosition = getPlaceholderPosition(((GoFunctionOrMethodDeclaration)resolved));
+        List<GoExpression> arguments = o.getArgumentList().getExpressionList();
+        if (placeholderPosition < 0 || arguments.size() <= placeholderPosition) return;
+        
+        GoExpression placeholder = arguments.get(placeholderPosition);
+        if (!isStringPlaceholder(placeholder)) {
+          String message = "Value used for formatting text does not appear to be a string";
+          holder.registerProblem(placeholder, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+          return;
+        }
+
+        int parameterCount = arguments.size() - placeholderPosition - 1;
+        int placeholdersCount = getPlaceholders(placeholder);
+        if (placeholdersCount == -1 || placeholdersCount == parameterCount) return;
+
+        String message = String.format("Got %d placeholder(s) for %d arguments(s)", placeholdersCount, parameterCount);
+        holder.registerProblem(placeholder, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+      }
+    };
   }
 }
