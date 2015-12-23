@@ -42,27 +42,27 @@ public class GoHighlightingAnnotator implements Annotator {
       if (o.getParent() instanceof GoType && o.getParent().getParent() instanceof GoReceiver) {
         key = TYPE_REFERENCE;
       }
-      setHighlighting(o.getIdentifier(), holder, key, key.getExternalName());
+      setHighlighting(o.getIdentifier(), holder, key);
     }
     else if (resolve instanceof GoConstDefinition) {
       TextAttributesKey color = GoPsiImplUtil.builtin(resolve) ? BUILTIN_TYPE_REFERENCE : getColor((GoConstDefinition)resolve);
-      setHighlighting(o.getIdentifier(), holder, color, "const");
+      setHighlighting(o.getIdentifier(), holder, color);
     }
     else if (resolve instanceof GoVarDefinition) {
       TextAttributesKey color = GoPsiImplUtil.builtin(resolve) ? BUILTIN_TYPE_REFERENCE : getColor((GoVarDefinition)resolve);
-      setHighlighting(o.getIdentifier(), holder, color, "var");
+      setHighlighting(o.getIdentifier(), holder, color);
     }
     else if (resolve instanceof GoFieldDefinition) {
-      setHighlighting(o.getIdentifier(), holder, getColor((GoFieldDefinition)resolve), "field");
+      setHighlighting(o.getIdentifier(), holder, getColor((GoFieldDefinition)resolve));
     }
     else if (resolve instanceof GoFunctionOrMethodDeclaration || resolve instanceof GoMethodSpec) {
-      setHighlighting(o.getIdentifier(), holder, getColor((GoNamedSignatureOwner)resolve), "func");
+      setHighlighting(o.getIdentifier(), holder, getColor((GoNamedSignatureOwner)resolve));
     }
     else if (resolve instanceof GoReceiver) {
-      setHighlighting(o.getIdentifier(), holder, METHOD_RECEIVER, "receiver");
+      setHighlighting(o.getIdentifier(), holder, METHOD_RECEIVER);
     }
     else if (resolve instanceof GoParamDefinition) {
-      setHighlighting(o.getIdentifier(), holder, FUNCTION_PARAMETER, "param");
+      setHighlighting(o.getIdentifier(), holder, FUNCTION_PARAMETER);
     }
   }
 
@@ -110,12 +110,10 @@ public class GoHighlightingAnnotator implements Annotator {
     return TYPE_SPECIFICATION;
   }
 
-  private static void setHighlighting(@NotNull PsiElement element,
-                                      @NotNull AnnotationHolder holder,
-                                      @NotNull TextAttributesKey key,
-                                      @Nullable String description) {
+  private static void setHighlighting(@NotNull PsiElement element, @NotNull AnnotationHolder holder, @NotNull TextAttributesKey key) {
     holder.createInfoAnnotation(element, null).setEnforcedTextAttributes(TextAttributes.ERASE_MARKER);
-    holder.createInfoAnnotation(element, ApplicationManager.getApplication().isUnitTestMode() ? description : null).setTextAttributes(key);
+    String description = ApplicationManager.getApplication().isUnitTestMode() ? key.getExternalName() : null;
+    holder.createInfoAnnotation(element, description).setTextAttributes(key);
   }
 
   private static boolean isPackageWide(@NotNull GoVarDefinition o) {
@@ -138,7 +136,7 @@ public class GoHighlightingAnnotator implements Annotator {
     }
     else if (o instanceof GoLiteral) {
       if (((GoLiteral)o).getHex() != null || ((GoLiteral)o).getOct() != null) {
-        setHighlighting(o, holder, NUMBER, "hex_oct");
+        setHighlighting(o, holder, NUMBER);
       }
     }
     else if (o instanceof GoReferenceExpression) {
@@ -151,33 +149,33 @@ public class GoHighlightingAnnotator implements Annotator {
     }
     else if (o instanceof GoTypeSpec) {
       TextAttributesKey key = getColor((GoTypeSpec)o);
-      setHighlighting(((GoTypeSpec)o).getIdentifier(), holder, key, key.getExternalName());
+      setHighlighting(((GoTypeSpec)o).getIdentifier(), holder, key);
     }
     else if (o instanceof GoConstDefinition) {
-      setHighlighting(o, holder, getColor((GoConstDefinition)o), "const");
+      setHighlighting(o, holder, getColor((GoConstDefinition)o));
     }
     else if (o instanceof GoVarDefinition) {
-      setHighlighting(o, holder, getColor((GoVarDefinition)o), "var");
+      setHighlighting(o, holder, getColor((GoVarDefinition)o));
     }
     else if (o instanceof GoFieldDefinition) {
-      setHighlighting(o, holder, getColor((GoFieldDefinition)o), "field");
+      setHighlighting(o, holder, getColor((GoFieldDefinition)o));
     }
     else if (o instanceof GoParamDefinition) {
-      setHighlighting(o, holder, FUNCTION_PARAMETER, "param");
+      setHighlighting(o, holder, FUNCTION_PARAMETER);
     }
     else if (o instanceof GoReceiver) {
       PsiElement identifier = ((GoReceiver)o).getIdentifier();
       if (identifier != null) {
-        setHighlighting(identifier, holder, METHOD_RECEIVER, "receiver");
+        setHighlighting(identifier, holder, METHOD_RECEIVER);
       }
     }
     else if (o instanceof GoLabelDefinition || o instanceof GoLabelRef) {
-      setHighlighting(o, holder, LABEL, "label");
+      setHighlighting(o, holder, LABEL);
     }
     else if (o instanceof GoNamedSignatureOwner) {
       PsiElement identifier = ((GoNamedSignatureOwner)o).getIdentifier();
       if (identifier != null) {
-        setHighlighting(identifier, holder, getColor((GoNamedSignatureOwner)o), "signature_owner");
+        setHighlighting(identifier, holder, getColor((GoNamedSignatureOwner)o));
       }
     }
   }
