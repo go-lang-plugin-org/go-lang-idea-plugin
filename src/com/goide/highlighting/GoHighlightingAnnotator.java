@@ -38,13 +38,11 @@ public class GoHighlightingAnnotator implements Annotator {
                                            @NotNull AnnotationHolder holder) {
 
     if (resolve instanceof GoTypeSpec) {
-      TextAttributesKey key = GoPsiImplUtil.builtin(resolve)
-                              ? BUILTIN_TYPE_REFERENCE
-                              : getColor((GoTypeSpec)resolve);
+      TextAttributesKey key = GoPsiImplUtil.builtin(resolve) ? BUILTIN_TYPE_REFERENCE : getColor((GoTypeSpec)resolve);
       if (o.getParent() instanceof GoType && o.getParent().getParent() instanceof GoReceiver) {
         key = TYPE_REFERENCE;
       }
-      setHighlighting(o.getIdentifier(), holder, key, "type");
+      setHighlighting(o.getIdentifier(), holder, key, key.getExternalName());
     }
     else if (resolve instanceof GoConstDefinition) {
       TextAttributesKey color = GoPsiImplUtil.builtin(resolve) ? BUILTIN_TYPE_REFERENCE : getColor((GoConstDefinition)resolve);
@@ -100,6 +98,7 @@ public class GoHighlightingAnnotator implements Annotator {
   private static TextAttributesKey getColor(@Nullable GoTypeSpec o) {
     GoType type = o != null ? o.getGoType(null) : null;
     if (type != null) {
+      type = type instanceof GoSpecType ? ((GoSpecType)type).getType() : type;
       boolean isPublic = o.isPublic();
       if (type instanceof GoInterfaceType) {
         return isPublic ? PACKAGE_EXPORTED_INTERFACE : PACKAGE_LOCAL_INTERFACE;
@@ -151,7 +150,8 @@ public class GoHighlightingAnnotator implements Annotator {
       highlightRefIfNeeded((GoTypeReferenceExpression)o, resolve, holder);
     }
     else if (o instanceof GoTypeSpec) {
-      setHighlighting(((GoTypeSpec)o).getIdentifier(), holder, getColor((GoTypeSpec)o), "type");
+      TextAttributesKey key = getColor((GoTypeSpec)o);
+      setHighlighting(((GoTypeSpec)o).getIdentifier(), holder, key, key.getExternalName());
     }
     else if (o instanceof GoConstDefinition) {
       setHighlighting(o, holder, getColor((GoConstDefinition)o), "const");
