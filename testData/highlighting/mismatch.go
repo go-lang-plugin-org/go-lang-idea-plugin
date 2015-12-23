@@ -11,4 +11,6 @@ func main() {
     _ = err
     v := <error descr="s.void() doesn't return a value">s.void()</error>
     _ = v
+    shortDeclarationWithoutExpressions :=<error descr="<expression> expected, got ';'"> </error>;
+    _ = shortDeclarationWithoutExpressions
 }

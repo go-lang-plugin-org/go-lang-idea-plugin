@@ -67,13 +67,15 @@ public class GoVarDeclarationInspection extends GoInspectionBase {
         List<GoExpression> list = p.second;
         int idCount = p.first.size();
         int expressionsSize = list.size();
+        if (expressionsSize == 0) {
+          return;
+        }
         if (idCount == expressionsSize) {
           checkExpressionShouldReturnOneResult(list, holder);
           return;
         }
-
+        
         int exprCount = expressionsSize;
-
         if (o instanceof GoRangeClause && idCount == 2) {
           // range clause can be assigned to two variables
           return;
