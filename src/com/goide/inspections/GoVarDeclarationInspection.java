@@ -72,11 +72,6 @@ public class GoVarDeclarationInspection extends GoInspectionBase {
           return;
         }
 
-        // var declaration could has no initialization expression, but short var declaration couldn't
-        if (expressionsSize == 0 && !(o instanceof GoShortVarDeclaration)) {
-          return;
-        }
-
         int exprCount = expressionsSize;
 
         if (o instanceof GoRangeClause && idCount == 2) {
