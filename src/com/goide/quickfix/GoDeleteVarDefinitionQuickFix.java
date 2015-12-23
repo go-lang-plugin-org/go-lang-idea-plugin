@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class GoDeleteVarDefinitionQuickFix extends LocalQuickFixBase {
   public GoDeleteVarDefinitionQuickFix(@Nullable String variableName) {
-    super("Delete variable " + (variableName != null ? "'" + variableName + "'" : ""));
+    super("Delete variable " + (variableName != null ? "'" + variableName + "'" : ""), "Delete variable");
   }
 
   @Override

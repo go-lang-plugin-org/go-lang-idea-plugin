@@ -36,14 +36,8 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
   @NotNull private final String myPackage;
 
   public GoGetPackageFix(@NotNull String packageName) {
-    super("go get -t " + packageName + "/...");
+    super("go get -t " + packageName + "/...", "go get");
     myPackage = packageName;
-  }
-
-  @Override
-  public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-    PsiElement element = descriptor.getPsiElement();
-    applyFix(project, ModuleUtilCore.findModuleForPsiElement(element), myPackage, true);
   }
 
   public static void applyFix(@NotNull final Project project,
@@ -66,5 +60,11 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
           .executeWithProgress(!startInBackground, consumer);
       }
     });
+  }
+
+  @Override
+  public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+    PsiElement element = descriptor.getPsiElement();
+    applyFix(project, ModuleUtilCore.findModuleForPsiElement(element), myPackage, true);
   }
 }

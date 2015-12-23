@@ -38,23 +38,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class GoMissingReturnInspection extends GoInspectionBase {
-  @NotNull
-  @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder,
-                                     @SuppressWarnings({"UnusedParameters", "For future"}) @NotNull LocalInspectionToolSession session) {
-    return new GoVisitor() {
-      @Override
-      public void visitFunctionOrMethodDeclaration(@NotNull GoFunctionOrMethodDeclaration o) { // todo: extract common interface
-        check(o.getSignature(), o.getBlock(), holder);
-      }
-
-      @Override
-      public void visitFunctionLit(@NotNull GoFunctionLit o) {
-        check(o.getSignature(), o.getBlock(), holder);
-      }
-    };
-  }
-
   private static void check(@Nullable GoSignature signature, @Nullable GoBlock block, @NotNull ProblemsHolder holder) {
     if (block == null) return;
     GoResult result = signature != null ? signature.getResult() : null;
@@ -144,7 +127,24 @@ public class GoMissingReturnInspection extends GoInspectionBase {
     return false;
   }
 
-  public static class AddReturnFix extends LocalQuickFixAndIntentionActionOnPsiElement {
+  @NotNull
+  @Override
+  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder,
+                                     @SuppressWarnings({"UnusedParameters", "For future"}) @NotNull LocalInspectionToolSession session) {
+    return new GoVisitor() {
+      @Override
+      public void visitFunctionOrMethodDeclaration(@NotNull GoFunctionOrMethodDeclaration o) { // todo: extract common interface
+        check(o.getSignature(), o.getBlock(), holder);
+      }
+
+      @Override
+      public void visitFunctionLit(@NotNull GoFunctionLit o) {
+        check(o.getSignature(), o.getBlock(), holder);
+      }
+    };
+  }
+
+  private static class AddReturnFix extends LocalQuickFixAndIntentionActionOnPsiElement {
     public AddReturnFix(@NotNull GoBlock block) {
       super(block);
     }
@@ -158,7 +158,7 @@ public class GoMissingReturnInspection extends GoInspectionBase {
     @NotNull
     @Override
     public String getFamilyName() {
-      return "Function declaration";
+      return getName();
     }
 
     @Override
