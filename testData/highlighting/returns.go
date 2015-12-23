@@ -22,9 +22,9 @@ func main() {
     
     rsaPKCS1v15SignatureAlgorithmForHashID(42)
     rsaPKCS1v15SignatureAlgorithmForHashID2(42)
-    
-    func() int {
-    <error>}</error>
+
+    <error descr="Function literal evaluated but not used">func</error>() int {
+    <error descr="Missing return at end of function">}</error>
 }
 
 func Ok1() int {

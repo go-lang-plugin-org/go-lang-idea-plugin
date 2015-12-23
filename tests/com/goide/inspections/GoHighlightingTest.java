@@ -128,6 +128,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testFunctionTypes()             { doTest(); }
   public void testGithubIssue2099()           { doTest(); }
   public void testPlaceholderCount()          { doTest(); }
+  public void testDeclaredButNotUsed()        { doTest(); }
 
   public void testRelativeImportIgnoringDirectories() throws IOException {
     myFixture.getTempDirFixture().findOrCreateDir("to_import/testdata");
@@ -135,7 +136,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.getTempDirFixture().findOrCreateDir("to_import/_name");
     doTest();
   }
-
+  
   public void testImportWithSlashAtTheEnd() throws Throwable {
     VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
       @NotNull
