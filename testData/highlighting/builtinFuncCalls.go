@@ -24,4 +24,19 @@ func main() {
 
 	foo(make(map[string]string))
 	foo(make(map[string]string, y))
+
+	type test uint32
+	foo(make([]int, test(4)))
+	foo(make([]int, uint64(2)))
+
+	type c uint32
+	type b c
+	type a b
+	type d []c
+	type e d
+	foo(make([]int32, a(2)))
+	foo(make(e, a(4)))
+
+	var xyz interface{} = 1
+	foo(make(chan int, xyz.(int)))
 }
