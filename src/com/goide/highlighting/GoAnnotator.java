@@ -35,7 +35,7 @@ import java.util.Set;
 
 public class GoAnnotator implements Annotator {
   private static final Set<String> INT_TYPE_NAMES = Sets.newHashSet(
-    "int", "int8", "int16", "int32", "int64", "uint", "uint8", "uint16", "uint32", "uintptr"
+    "int", "int8", "int16", "int32", "int64", "uint", "uint8", "uint16", "uint32", "uint64", "uintptr"
   ); // todo: unify with DlvApi.Variable.Kind
 
   @Override
@@ -176,6 +176,9 @@ public class GoAnnotator implements Annotator {
     if (type.getTypeReferenceExpression() != null) {
       type = GoPsiImplUtil.findBaseTypeFromRef(type.getTypeReferenceExpression());
     }
+    if (type instanceof GoSpecType) {
+      type = GoPsiImplUtil.findBaseSpecType(type);
+    }
     return type instanceof GoSpecType ? ((GoSpecType)type).getType() : type;
   }
 
@@ -183,7 +186,7 @@ public class GoAnnotator implements Annotator {
     if (type == null) return false;
     GoTypeReferenceExpression ref = type.getTypeReferenceExpression();
     if (ref == null) return false;
-    return GoPsiImplUtil.builtin(type) && INT_TYPE_NAMES.contains(ref.getText());
+    return INT_TYPE_NAMES.contains(ref.getText()) && GoPsiImplUtil.builtin(ref.getReference().resolve());
   }
 
   /**
