@@ -283,6 +283,9 @@
     <localInspection language="go" displayName="Self import" groupPath="Go"
                      groupName="General" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoSelfImportInspection"/>
+    <localInspection language="go" displayName="Embedded interface pointer" groupPath="Go"
+                     groupName="General" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoEmbeddedInterfacePointerInspection"/>
     <!-- /general -->
   </extensions>
   <actions>

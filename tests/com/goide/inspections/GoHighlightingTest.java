@@ -59,7 +59,8 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       GoStructTagInspection.class,
       GoUsedAsValueInCondition.class,
       GoDeferInLoop.class,
-      GoCommentStartInspection.class
+      GoCommentStartInspection.class,
+      GoEmbeddedInterfacePointerInspection.class
     );
   }
 
@@ -127,6 +128,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testFunctionTypes()             { doTest(); }
   public void testGithubIssue2099()           { doTest(); }
   public void testCyclicDefinition()          { doTest(); }
+  public void testEmbeddedInterfacePointer()  { doTest(); }
 
   public void testRelativeImportIgnoringDirectories() throws IOException {
     myFixture.getTempDirFixture().findOrCreateDir("to_import/testdata");
