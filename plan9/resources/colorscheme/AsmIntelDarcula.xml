@@ -1,0 +1,30 @@
+<?xml version='1.0'?>
+<list>
+  <option name="com.plan9.IDENTIFIER">
+    <value>
+      <option name="FOREGROUND" value="20999D"/>
+    </value>
+  </option>
+  <option name="com.plan9.PSEUDO_INSTRUCTION">
+    <value>
+      <option name="FOREGROUND" value="8A799B"/>
+      <option name="FONT_TYPE" value="1" />
+    </value>
+  </option>
+  <option name="com.plan9.INSTRUCTION">
+    <value>
+      <option name="FOREGROUND" value="CDA3E6"/>
+    </value>
+  </option>
+  <option name="com.plan9.REGISTER">
+    <value>
+      <option name="FOREGROUND" value="9E6128"/>
+    </value>
+  </option>
+  <option name="com.plan9.LABEL">
+    <value>
+      <option name="FOREGROUND" value="4EADE5"/>
+      <option name="EFFECT_TYPE" value="1" />
+    </value>
+  </option>
+</list>

@@ -1,0 +1,7 @@
+LINE_COMMENT ('// a comment line')
+WHITE_SPACE ('\n\n')
+import ('#import')
+WHITE_SPACE (' ')
+STRING ('"a-file.h"')
+WHITE_SPACE ('\n\n')
+LINE_COMMENT ('// another comment line')

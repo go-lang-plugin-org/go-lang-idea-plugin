@@ -354,6 +354,10 @@
   <!-- todo[IDEA 16] It's supposed that GAE-core module will be moved to IDEA source and bundled in IDEA 16 -->
   <!--<id>com.intellij.appengine</id>-->
   <depends optional="true" config-file="google-app-engine-core-yaml.xml">org.jetbrains.plugins.yaml</depends>
+
+  <!-- plan9 assembler -->
+  <depends optional="true" config-file="plan9.xml">com.intellij.modules.lang</depends>
+
   <extensionPoints>
     <extensionPoint name="appengine.Extension" interface="com.intellij.appengine.AppEngineExtension"/>
   </extensionPoints>

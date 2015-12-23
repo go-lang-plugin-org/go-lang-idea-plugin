@@ -1,0 +1,23 @@
+x86 File
+  PsiComment(LINE_COMMENT)('// foo()')
+  STATEMENT
+    FUNCTION
+      FUNCTION_HEADER
+        PsiElement(TEXT)('TEXT')
+        PsiElement(identifier)('foo')
+        PsiElement(()('(')
+        PsiElement(PSEUDO_REG)('SB')
+        PsiElement())(')')
+        PsiElement(,)(',')
+        FUNCTION_FLAGS
+          PsiElement(()('(')
+          PsiElement(FLAG)('NOSPLIT')
+          PsiElement(|)('|')
+          PsiElement(FLAG)('NOPROF')
+          PsiElement())(')')
+      FUNCTION_BODY
+        PsiElement(LABEL)('loop:')
+        INSTRUCTION_STMT
+          PsiElement(INSTRUCTION)('MOVL')
+          OPERANDS
+            <empty list>
