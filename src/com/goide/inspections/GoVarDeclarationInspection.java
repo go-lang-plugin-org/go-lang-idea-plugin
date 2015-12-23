@@ -32,14 +32,15 @@ import static com.goide.inspections.GoInspectionUtil.*;
 public class GoVarDeclarationInspection extends GoInspectionBase {
   @NotNull
   private static Pair<List<? extends GoCompositeElement>, List<GoExpression>> getPair(@NotNull GoVarSpec varDeclaration) {
-    PsiElement assign = varDeclaration instanceof GoShortVarDeclaration 
-                        ? ((GoShortVarDeclaration)varDeclaration).getVarAssign() 
+    PsiElement assign = varDeclaration instanceof GoShortVarDeclaration
+                        ? ((GoShortVarDeclaration)varDeclaration).getVarAssign()
                         : varDeclaration.getAssign();
     if (assign == null) {
-      return Pair.<List<? extends GoCompositeElement>, List<GoExpression>>create(ContainerUtil.<GoCompositeElement>emptyList(), ContainerUtil.<GoExpression>emptyList());
+      return Pair.<List<? extends GoCompositeElement>, List<GoExpression>>create(ContainerUtil.<GoCompositeElement>emptyList(),
+                                                                                 ContainerUtil.<GoExpression>emptyList());
     }
     if (varDeclaration instanceof GoRecvStatement || varDeclaration instanceof GoRangeClause) {
-      List<GoCompositeElement> v= ContainerUtil.newArrayList();
+      List<GoCompositeElement> v = ContainerUtil.newArrayList();
       List<GoExpression> e = ContainerUtil.newArrayList();
       for (PsiElement c : varDeclaration.getChildren()) {
         if (!(c instanceof GoCompositeElement)) continue;
@@ -52,7 +53,8 @@ public class GoVarDeclarationInspection extends GoInspectionBase {
       }
       return Pair.<List<? extends GoCompositeElement>, List<GoExpression>>create(v, e);
     }
-    return Pair.<List<? extends GoCompositeElement>, List<GoExpression>>create(varDeclaration.getVarDefinitionList(), varDeclaration.getExpressionList());
+    return Pair.<List<? extends GoCompositeElement>, List<GoExpression>>create(varDeclaration.getVarDefinitionList(),
+                                                                               varDeclaration.getExpressionList());
   }
 
   @NotNull
@@ -79,7 +81,7 @@ public class GoVarDeclarationInspection extends GoInspectionBase {
 
         if (o instanceof GoRangeClause && idCount == 2) {
           // range clause can be assigned to two variables
-          return;  
+          return;
         }
         if (expressionsSize == 1) {
           exprCount = getExpressionResultCount(list.get(0));
