@@ -31,60 +31,10 @@ import static com.goide.inspections.GoInspectionUtil.*;
 
 public class GoVarDeclarationInspection extends GoInspectionBase {
   @NotNull
-  @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder,
-                                     @SuppressWarnings({"UnusedParameters", "For future"}) @NotNull LocalInspectionToolSession session) {
-    return new GoVisitor() {
-      @Override
-      public void visitVarSpec(@NotNull GoVarSpec o) {
-        List<GoExpression> list = o.getExpressionList();
-        List<GoVarDefinition> vars = o.getVarDefinitionList();
-
-        if (list.size() == vars.size()) {
-          checkExpressionShouldReturnOneResult(list, holder);
-          return;
-        }
-
-        if (list.size() == 0 && !(o instanceof GoShortVarDeclaration)) return;
-        checkVar(o, holder);
-      }
-    };
-  }
-
-  public static void checkVar(@NotNull GoVarSpec varDeclaration, @NotNull ProblemsHolder holder) {
-    Pair<? extends List<? extends GoCompositeElement>, List<GoExpression>> p = getPair(varDeclaration);
-    List<GoExpression> list = p.second;
-    int idCount = p.first.size();
-    int expressionsSize = list.size();
-    if (idCount == expressionsSize) {
-      checkExpressionShouldReturnOneResult(list, holder);
-      return;
-    }
-
-    // var declaration could has no initialization expression, but short var declaration couldn't
-    if (expressionsSize == 0 && !(varDeclaration instanceof GoShortVarDeclaration)) {
-      return;
-    }
-
-    int exprCount = expressionsSize;
-
-    if (varDeclaration instanceof GoRangeClause && idCount == 2) {
-      // range clause can be assigned to two variables
-      return;  
-    }
-    if (expressionsSize == 1) {
-      exprCount = getExpressionResultCount(list.get(0));
-      if (exprCount == UNKNOWN_COUNT || exprCount == idCount) return;
-    }
-
-    String msg = String.format("Assignment count mismatch: %d = %d", idCount, exprCount);
-    holder.registerProblem(varDeclaration, msg, ProblemHighlightType.GENERIC_ERROR);
-  }
-
-  @NotNull
   private static Pair<List<? extends GoCompositeElement>, List<GoExpression>> getPair(@NotNull GoVarSpec varDeclaration) {
-    PsiElement assign =
-      varDeclaration instanceof GoShortVarDeclaration ? ((GoShortVarDeclaration)varDeclaration).getVarAssign() : varDeclaration.getAssign();
+    PsiElement assign = varDeclaration instanceof GoShortVarDeclaration 
+                        ? ((GoShortVarDeclaration)varDeclaration).getVarAssign() 
+                        : varDeclaration.getAssign();
     if (assign == null) {
       return Pair.<List<? extends GoCompositeElement>, List<GoExpression>>create(ContainerUtil.<GoCompositeElement>emptyList(), ContainerUtil.<GoExpression>emptyList());
     }
@@ -103,5 +53,42 @@ public class GoVarDeclarationInspection extends GoInspectionBase {
       return Pair.<List<? extends GoCompositeElement>, List<GoExpression>>create(v, e);
     }
     return Pair.<List<? extends GoCompositeElement>, List<GoExpression>>create(varDeclaration.getVarDefinitionList(), varDeclaration.getExpressionList());
+  }
+
+  @NotNull
+  @Override
+  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
+    return new GoVisitor() {
+      @Override
+      public void visitVarSpec(@NotNull GoVarSpec o) {
+        Pair<? extends List<? extends GoCompositeElement>, List<GoExpression>> p = getPair(o);
+        List<GoExpression> list = p.second;
+        int idCount = p.first.size();
+        int expressionsSize = list.size();
+        if (idCount == expressionsSize) {
+          checkExpressionShouldReturnOneResult(list, holder);
+          return;
+        }
+
+        // var declaration could has no initialization expression, but short var declaration couldn't
+        if (expressionsSize == 0 && !(o instanceof GoShortVarDeclaration)) {
+          return;
+        }
+
+        int exprCount = expressionsSize;
+
+        if (o instanceof GoRangeClause && idCount == 2) {
+          // range clause can be assigned to two variables
+          return;  
+        }
+        if (expressionsSize == 1) {
+          exprCount = getExpressionResultCount(list.get(0));
+          if (exprCount == UNKNOWN_COUNT || exprCount == idCount) return;
+        }
+
+        String msg = String.format("Assignment count mismatch: %d = %d", idCount, exprCount);
+        holder.registerProblem(o, msg, ProblemHighlightType.GENERIC_ERROR);
+      }
+    };
   }
 }
