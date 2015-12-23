@@ -107,7 +107,7 @@ func _(o interface{}, args ...interface{}) {
 }
 
 func _(o interface{}) {
-  func(i interface{}) {
+  <error descr="Function literal evaluated but not used">func</error>(i interface{}) {
     Println(o)
     Println(i)
   }
