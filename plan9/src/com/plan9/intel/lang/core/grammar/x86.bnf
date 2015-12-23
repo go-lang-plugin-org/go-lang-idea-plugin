@@ -1,0 +1,46 @@
+{
+  parserClass="com.plan9.intel.lang.core.parser.AsmIntelParser"
+
+  extends='com.plan9.intel.lang.core.psi.impl.AsmIntelElementImpl'
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="AsmIntel"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.plan9.intel.lang.core.psi"
+  psiImplPackage="com.plan9.intel.lang.core.psi.impl"
+
+  elementTypeHolderClass="com.plan9.intel.lang.core.psi.AsmIntelTypes"
+  elementTypeClass="com.plan9.intel.lang.core.psi.AsmIntelElementType"
+  tokenTypeClass="com.plan9.intel.lang.core.lexer.AsmIntelTokenType"
+
+  tokens = [
+    COLON               = ':'
+    LPAREN              = '('
+    RPAREN              = ')'
+    COMMA               = ','
+    COMMA               = ','
+    BIT_OR              = '|'
+  ]
+}
+
+File ::= Statement*
+
+Statement ::= PreprocessorDirective | Function
+
+PreprocessorDirective ::= import STRING
+
+Function ::= FunctionHeader FunctionBody
+
+FunctionHeader ::= TEXT identifier '(' PSEUDO_REG ')' ',' FunctionFlags ( ',' FrameSize )?
+
+FunctionFlags ::= FLAG | '(' FLAG ( '|' FLAG )* ')'
+
+FrameSize ::= '$' Literal ( '-' Literal )?
+
+FunctionBody ::= ( InstructionStmt | LABEL )*
+
+InstructionStmt ::= INSTRUCTION Operands
+
+Operands ::=
+
+Literal ::= int | hex

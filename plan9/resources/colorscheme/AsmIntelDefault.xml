@@ -1,0 +1,14 @@
+<?xml version='1.0'?>
+<list>
+  <option name="com.plan9.INSTRUCTION">
+    <value>
+      <option name="FOREGROUND" value="20999d"/>
+    </value>
+  </option>
+  <option name="com.plan9.LABEL">
+    <value>
+      <option name="FOREGROUND" value="DD6718"/>
+      <option name="EFFECT_TYPE" value="1" />
+    </value>
+  </option>
+</list>
