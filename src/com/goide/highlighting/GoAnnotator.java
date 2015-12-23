@@ -100,33 +100,6 @@ public class GoAnnotator implements Annotator {
         checkMakeCall(call, holder);
       }
     }
-    else if (element instanceof GoFunctionLit) {
-      checkEvaluatedButNotUsed(holder, element, "Function literal evaluated but not used");
-    }
-    else if (element instanceof GoStringLiteral) {
-      checkEvaluatedButNotUsed(holder, element, "String literal evaluated but not used");
-    }
-  }
-
-  private static void checkEvaluatedButNotUsed(AnnotationHolder holder, PsiElement element, String message) {
-    PsiElement parent = element.getParent();
-    if (element instanceof GoFunctionLit) {
-      if (parent instanceof GoCallExpr) return;
-
-      element = ((GoFunctionLit)element).getFunc();
-    }
-    else if (element instanceof GoStringLiteral) {
-      if (parent instanceof GoIndexOrSliceExpr ||
-          parent instanceof GoConditionalExpr) return;
-    }
-
-    parent = PsiTreeUtil.getParentOfType(element, GoLeftHandExprList.class, GoArgumentList.class);
-    if (parent == null) return;
-    if (parent instanceof GoArgumentList) return;
-    if (parent instanceof GoLeftHandExprList &&
-        ((GoLeftHandExprList)parent).getExpressionList().size() != 1) return;
-
-    holder.createErrorAnnotation(element, message);
   }
 
   private static void checkMakeCall(@NotNull GoBuiltinCallExpr call, @NotNull AnnotationHolder holder) {
