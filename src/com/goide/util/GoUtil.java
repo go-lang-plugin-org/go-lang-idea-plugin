@@ -52,7 +52,6 @@ import java.util.Collection;
 import java.util.Collections;
 
 public class GoUtil {
-  public static final String PLUGIN_VERSION = getPlugin().getVersion();
   public static final Function<VirtualFile, String> RETRIEVE_FILE_PATH_FUNCTION = new Function<VirtualFile, String>() {
     @Override
     public String fun(VirtualFile file) {
@@ -66,6 +65,7 @@ public class GoUtil {
     }
   };
   private static final String PLUGIN_ID = "ro.redeul.google.go";
+  public static final String PLUGIN_VERSION = getPlugin().getVersion();
   private static final Key<CachedValue<Collection<String>>> PACKAGES_CACHE = Key.create("packages_cache");
   private static final Key<CachedValue<Collection<String>>> PACKAGES_TEST_TRIMMED_CACHE = Key.create("packages_test_trimmed_cache");
 
@@ -123,14 +123,14 @@ public class GoUtil {
     return GoConstants.KNOWN_CGO.contains(os + "/" + arch) ? ThreeState.YES : ThreeState.NO;
   }
 
-  @Contract("null -> true")
+  @Contract("null -> false")
   public static boolean importPathToIgnore(@Nullable String importPath) {
     if (importPath != null) {
       for (String part : StringUtil.split(importPath, "/")) {
-        if (directoryToIgnore(part)) return false;
+        if (directoryToIgnore(part)) return true;
       }
     }
-    return true;
+    return false;
   }
 
   public static boolean libraryDirectoryToIgnore(@NotNull String name) {

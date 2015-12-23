@@ -19,8 +19,11 @@ package com.goide.inspections;
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.goide.inspections.unresolved.*;
 import com.goide.project.GoModuleLibrariesService;
+import com.intellij.codeInsight.daemon.impl.analysis.HighlightingSettingsPerFile;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.util.ThrowableComputable;
+import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.testFramework.LightProjectDescriptor;
@@ -354,6 +357,39 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testCGOImportInNonTestFile() {
     myFixture.configureByText("a.go", "package a; import \"C\"");
     myFixture.checkHighlighting();
+  }
+  
+  @SuppressWarnings("ConstantConditions")
+  public void testDoNotHighlightCodeFromIgnoredImportPaths() throws Throwable {
+    final VirtualFile tmp = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
+        @NotNull
+        @Override
+        public VirtualFile compute() throws Throwable {
+          return VfsUtil.findFileByIoFile(FileUtil.createTempDirectory("go", "test"), true).createChildDirectory(this, "src");
+        }
+      });
+    VirtualFile ignoredFile = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
+        @NotNull
+        @Override
+        public VirtualFile compute() throws Throwable {
+          VirtualFile file = tmp.createChildDirectory(this, "_pack1").createChildData(this, "pack1.go");
+          VfsUtil.saveText(file, "package pack1; func unusedFunction() {}");
+          return file;
+        }
+      });
+    VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
+      @NotNull
+      @Override
+      public VirtualFile compute() throws Throwable {
+        VirtualFile file = tmp.createChildDirectory(this, "pack1").createChildData(this, "pack.go");
+        VfsUtil.saveText(file, "package pack1; func <warning descr=\"Unused function 'unusedFunction'\">unusedFunction</warning>() {}");
+        return file;
+      }
+    });
+    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(tmp.getUrl());
+    HighlightingSettingsPerFile settingsPerFile = HighlightingSettingsPerFile.getInstance(myFixture.getProject());
+    assertFalse(settingsPerFile.shouldHighlight(myFixture.getPsiManager().findFile(ignoredFile)));
+    assertTrue(settingsPerFile.shouldHighlight(myFixture.getPsiManager().findFile(file)));
   }
 
   public void testDuplicatePackageAlias() throws Throwable {
