@@ -6,6 +6,8 @@ type stringType string
 type mapType map[string]string
 
 func main() {
+	foo(<error descr="Missing argument to make">make()</error>)
+	foo(<error descr="\"notAType\" is not a type">make("notAType")</error>)
 	foo(make(<error descr="Cannot make stringType">stringType</error>))
 	foo(<error descr="Missing len argument to make">make([]stringType)</error>)
 	foo(make([]stringType, 2))
