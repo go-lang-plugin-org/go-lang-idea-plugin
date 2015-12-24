@@ -122,7 +122,7 @@ public class GoAnnotator implements Annotator {
       String message = ((GoLiteral)element).getChar() != null ? "Rune literal" : "Numeric value";
       checkLiteralEvaluatedButNotUsed(holder, element, message);
     }
-    else if(element instanceof GoConversionExpr) {
+    else if (element instanceof GoConversionExpr) {
       checkLiteralEvaluatedButNotUsed(holder, element, "Type conversion");
     }
   }
