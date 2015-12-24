@@ -68,7 +68,7 @@ func _() {
 }
 
 func _() {
-	*(*func(width int) struct{})(nil)
+	_ = *(*func(width int) struct{})(nil)
 	width := 1
 	_ = width
 }

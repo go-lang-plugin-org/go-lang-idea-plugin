@@ -104,6 +104,7 @@ public class GoAnnotator implements Annotator {
           holder.createErrorAnnotation(((GoTypeAssertionExpr)element).getExpression(), message);
         }
       }
+      checkLiteralEvaluatedButNotUsed(holder, element, "Type assertion");
     }
     else if (element instanceof GoBuiltinCallExpr) {
       GoBuiltinCallExpr call = (GoBuiltinCallExpr)element;
@@ -112,14 +113,17 @@ public class GoAnnotator implements Annotator {
       }
     }
     else if (element instanceof GoFunctionLit) {
-      checkLiteralEvaluatedButNotUsed(holder, element, "Function");
+      checkLiteralEvaluatedButNotUsed(holder, element, "Function literal");
     }
     else if (element instanceof GoStringLiteral) {
-      checkLiteralEvaluatedButNotUsed(holder, element, "String");
+      checkLiteralEvaluatedButNotUsed(holder, element, "String literal");
     }
     else if (element instanceof GoLiteral) {
-      String message = ((GoLiteral)element).getChar() != null ? "Rune" : "Number";
+      String message = ((GoLiteral)element).getChar() != null ? "Rune literal" : "Numeric value";
       checkLiteralEvaluatedButNotUsed(holder, element, message);
+    }
+    else if(element instanceof GoConversionExpr) {
+      checkLiteralEvaluatedButNotUsed(holder, element, "Type conversion");
     }
   }
 
@@ -134,7 +138,7 @@ public class GoAnnotator implements Annotator {
     if (lhe.getParent().getParent() instanceof GoSwitchStatement) return; // todo: check this again
 
     PsiElement place = e instanceof GoFunctionLit ? ((GoFunctionLit)e).getFunc() : e;
-    holder.createErrorAnnotation(place, message + " literal evaluated but not used");
+    holder.createErrorAnnotation(place, message + " evaluated but not used");
   }
 
   private static void checkMakeCall(@NotNull GoBuiltinCallExpr call, @NotNull AnnotationHolder holder) {
