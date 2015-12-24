@@ -84,12 +84,6 @@ class GoLightType<E extends GoCompositeElement> extends LightElement implements 
     }
   }
 
-  static class MyCType extends GoLightType<GoCompositeElement> {
-    protected MyCType(@NotNull GoCompositeElement expression) {
-      super(expression);
-    }
-  }
-
   static class MyGoTypeList extends GoLightType<GoCompositeElement> implements GoTypeList {
     @NotNull private final List<GoType> myTypes;
 

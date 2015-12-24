@@ -17,6 +17,7 @@
 package com.goide.highlighting;
 
 import com.goide.psi.*;
+import com.goide.psi.impl.GoCType;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.quickfix.GoReplaceWithReturnStatementQuickFix;
 import com.google.common.collect.Sets;
@@ -173,7 +174,7 @@ public class GoAnnotator implements Annotator {
       GoType type = expression.getGoType(null); // todo: context
       if (type != null) {
         GoType expressionBaseType = getBaseType(type);
-        if (!isIntegerType(expressionBaseType)) {
+        if (!(isIntegerType(expressionBaseType) || isCType(type))) {
           String argName = i == 0 ? "size" : "capacity";
           holder.createErrorAnnotation(expression, "Non-integer " + argName + " argument to make");
         }
@@ -190,6 +191,10 @@ public class GoAnnotator implements Annotator {
       type = GoPsiImplUtil.findBaseSpecType(type);
     }
     return type instanceof GoSpecType ? ((GoSpecType)type).getType() : type;
+  }
+
+  private static boolean isCType(@Nullable GoType type) {
+    return type instanceof GoCType;
   }
 
   private static boolean isIntegerType(@Nullable GoType type) {
