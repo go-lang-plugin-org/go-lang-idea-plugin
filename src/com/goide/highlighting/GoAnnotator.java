@@ -122,35 +122,18 @@ public class GoAnnotator implements Annotator {
     }
   }
 
-  private static void checkLiteralEvaluatedButNotUsed(@NotNull AnnotationHolder holder, @NotNull PsiElement element, String message) {
-    PsiElement parent = element.getParent();
-    if (element instanceof GoFunctionLit) {
-      if (parent instanceof GoCallExpr) return;
-    }
-    else if (element instanceof GoStringLiteral ||
-             element instanceof GoLiteral) {
-      if (parent instanceof GoIndexOrSliceExpr ||
-          parent instanceof GoConditionalExpr) {
-        return;
-      }
-    }
+  private static void checkLiteralEvaluatedButNotUsed(@NotNull AnnotationHolder holder, @NotNull PsiElement e, @NotNull String message) {
+    PsiElement parent = e.getParent();
+    if (e instanceof GoFunctionLit && parent instanceof GoCallExpr) return;
+    if ((e instanceof GoStringLiteral || e instanceof GoLiteral) && (parent instanceof GoIndexOrSliceExpr || parent instanceof GoConditionalExpr)) return;
 
-    parent = PsiTreeUtil.getParentOfType(element, GoLeftHandExprList.class, GoArgumentList.class);
-    if (parent == null) return;
-    if (parent instanceof GoArgumentList) return;
-    if (parent instanceof GoLeftHandExprList &&
-        ((GoLeftHandExprList)parent).getExpressionList().size() != 1) {
-      return;
-    }
+    PsiElement lhe = PsiTreeUtil.getParentOfType(e, GoLeftHandExprList.class, GoArgumentList.class);
+    if (lhe == null || lhe instanceof GoArgumentList) return;
+    if (lhe instanceof GoLeftHandExprList && ((GoLeftHandExprList)lhe).getExpressionList().size() != 1) return;
+    if (lhe.getParent().getParent() instanceof GoSwitchStatement) return; // todo: check this again
 
-    if (element instanceof GoFunctionLit) {
-      element = ((GoFunctionLit)element).getFunc();
-    }
-    else if (parent.getParent().getParent() instanceof GoSwitchStatement) {
-      return;
-    }
-
-    holder.createErrorAnnotation(element, message + " literal evaluated but not used");
+    PsiElement place = e instanceof GoFunctionLit ? ((GoFunctionLit)e).getFunc() : e;
+    holder.createErrorAnnotation(place, message + " literal evaluated but not used");
   }
 
   private static void checkMakeCall(@NotNull GoBuiltinCallExpr call, @NotNull AnnotationHolder holder) {
