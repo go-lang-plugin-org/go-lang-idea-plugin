@@ -376,7 +376,7 @@ public class GoPsiImplUtil {
           }
         }
         else if (resolve == e) { // C.call()
-          return new MyCType(e);
+          return new GoCType(e);
         }
       }
       GoType type = ((GoCallExpr)o).getExpression().getGoType(context);
@@ -484,7 +484,7 @@ public class GoPsiImplUtil {
     PsiElement resolve = reference != null ? reference.resolve() : null;
     if (resolve instanceof GoTypeSpec) return ((GoTypeSpec)resolve).getSpecType();
     if (resolve == expression && expression != null) {  // hacky C resolve
-      return new MyCType(expression);
+      return new GoCType(expression);
     }
     return null;
   }

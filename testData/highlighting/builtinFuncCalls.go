@@ -1,5 +1,7 @@
 package main
 
+import "C"
+
 func foo(interface{}) {}
 
 type stringType string
@@ -41,4 +43,7 @@ func main() {
 
 	var xyz interface{} = 1
 	foo(make(chan int, xyz.(int)))
+
+	i := C.int(1)
+	foo(make([]*C.char, i))
 }
