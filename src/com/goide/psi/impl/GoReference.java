@@ -44,7 +44,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   public static final Key<List<? extends PsiElement>> IMPORT_USERS = Key.create("IMPORT_USERS");
   public static final Key<String> ACTUAL_NAME = Key.create("ACTUAL_NAME");
   public static final Key<Object> POINTER = Key.create("POINTER");
-  public static final Key<Object> DONT_PROCESS_METHODS = Key.create("DONT_PROCESS_METHODS");
+  private static final Key<Object> DONT_PROCESS_METHODS = Key.create("DONT_PROCESS_METHODS");
 
   private static final ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase> MY_RESOLVER =
     new ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase>() {
@@ -331,7 +331,9 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     return processNamedElements(processor, state, delegate.getVariants(), localResolve);
   }
 
-  static boolean processBuiltin(@NotNull GoScopeProcessor processor, @NotNull ResolveState state, @NotNull GoCompositeElement element) {
+  private static boolean processBuiltin(@NotNull GoScopeProcessor processor,
+                                        @NotNull ResolveState state,
+                                        @NotNull GoCompositeElement element) {
     GoFile builtin = GoSdkUtil.findBuiltinFile(element);
     return builtin == null || processFileEntities(builtin, processor, state, true);
   }
@@ -385,7 +387,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   }
 
   @NotNull
-  public ResolveState createContext() {
+  private ResolveState createContext() {
     return ResolveState.initial().put(CONTEXT,
                                       SmartPointerManager.getInstance(myElement.getProject()).createSmartPsiElementPointer(myElement));
   }
@@ -419,7 +421,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     return myElement;
   }
 
-  static void putIfAbsent(@NotNull PsiElement importElement, @NotNull PsiElement usage) {
+  private static void putIfAbsent(@NotNull PsiElement importElement, @NotNull PsiElement usage) {
     List<PsiElement> newList = ContainerUtil.newSmartList(usage);
     List<? extends PsiElement> list = importElement.getUserData(IMPORT_USERS);
     if (list != null) {
