@@ -159,7 +159,7 @@ public class GoIntroduceVariableBase {
     new GoInplaceVariableIntroducer(operation).performInplaceRefactoring(operation.getSuggestedNames());
   }
 
-  protected static void performReplace(final GoIntroduceOperation operation) {
+  private static void performReplace(final GoIntroduceOperation operation) {
     final Project project = operation.getProject();
     final PsiElement expression = operation.getExpression();
     final List<PsiElement> occurrences = operation.isReplaceAll() ? operation.getOccurrences() : Collections.singletonList(expression);
@@ -177,7 +177,9 @@ public class GoIntroduceVariableBase {
         GoStatement declarationStatement = GoElementFactory.createShortVarDeclarationStatement(project, name, (GoExpression)expression);
         PsiElement newLine = GoElementFactory.createNewLine(project);
         PsiElement statement = context.addBefore(declarationStatement, context.addBefore(newLine, anchor));
-        operation.setVar(PsiTreeUtil.findChildOfType(statement, GoVarDefinition.class));
+        GoVarDefinition varDefinition = PsiTreeUtil.findChildOfType(statement, GoVarDefinition.class);
+        assert varDefinition != null;
+        operation.setVar(varDefinition);
 
         for (PsiElement occurrence : occurrences) {
           PsiElement occurrenceParent = occurrence.getParent();
@@ -234,7 +236,7 @@ public class GoIntroduceVariableBase {
     return names;
   }
 
-  protected static void showCannotPerform(GoIntroduceOperation operation, String message) {
+  private static void showCannotPerform(GoIntroduceOperation operation, String message) {
     message = RefactoringBundle.getCannotRefactorMessage(message);
     CommonRefactoringUtil
       .showErrorHint(operation.getProject(), operation.getEditor(), message, RefactoringBundle.getCannotRefactorMessage(null),
