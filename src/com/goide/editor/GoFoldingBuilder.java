@@ -40,89 +40,6 @@ import java.util.List;
 import java.util.Set;
 
 public class GoFoldingBuilder extends CustomFoldingBuilder implements DumbAware {
-  @Override
-  protected void buildLanguageFoldRegions(@NotNull final List<FoldingDescriptor> result,
-                                          @NotNull PsiElement root,
-                                          @NotNull Document document,
-                                          boolean quick) {
-    if (!(root instanceof GoFile)) return;
-    GoFile file = (GoFile)root;
-    if (!file.isContentsLoaded()) return;
-
-    GoImportList importList = ((GoFile)root).getImportList();
-    if (importList != null) {
-      GoImportDeclaration firstImport = ContainerUtil.getFirstItem(importList.getImportDeclarationList());
-      if (firstImport != null) {
-        PsiElement importKeyword = firstImport.getImport();
-        int offset = importKeyword.getTextRange().getEndOffset();
-        int startOffset = importKeyword.getNextSibling() instanceof PsiWhiteSpace ? offset + 1 : offset;
-        TextRange range = TextRange.create(startOffset, importList.getTextRange().getEndOffset());
-        if (range.getLength() > 3) {
-          result.add(new FoldingDescriptor(importList, range));
-        }
-      }
-    }
-
-    for (GoFunctionOrMethodDeclaration method : ContainerUtil.concat(file.getMethods(), file.getFunctions())) {
-      foldBlock(result, method.getBlock());
-    }
-
-    for (GoFunctionLit function : PsiTreeUtil.findChildrenOfType(file, GoFunctionLit.class)) {
-      foldBlock(result, function.getBlock());
-    }
-
-    for (GoTypeSpec type : file.getTypes()) {
-      foldTypes(type.getSpecType().getType(), result);
-    }
-
-    for (GoVarDeclaration varDeclaration : PsiTreeUtil.findChildrenOfType(file, GoVarDeclaration.class)) {
-      TextRange range = processList(varDeclaration.getLparen(), varDeclaration.getRparen(), varDeclaration.getVarSpecList().size());
-      if (range != null) {
-        result.add(new FoldingDescriptor(varDeclaration, range));
-      }
-    }
-
-    for (GoConstDeclaration constDeclaration : PsiTreeUtil.findChildrenOfType(file, GoConstDeclaration.class)) {
-      TextRange range = processList(constDeclaration.getLparen(), constDeclaration.getRparen(), constDeclaration.getConstSpecList().size());
-      if (range != null) {
-        result.add(new FoldingDescriptor(constDeclaration, range));
-      }
-    }
-
-    for (GoTypeDeclaration typeDeclaration : PsiTreeUtil.findChildrenOfType(file, GoTypeDeclaration.class)) {
-      TextRange range = processList(typeDeclaration.getLparen(), typeDeclaration.getRparen(), typeDeclaration.getTypeSpecList().size());
-      if (range != null) {
-        result.add(new FoldingDescriptor(typeDeclaration, range));
-      }
-    }
-
-    for (GoCompositeLit compositeLit : PsiTreeUtil.findChildrenOfType(file, GoCompositeLit.class)) {
-      GoLiteralValue literalValue = compositeLit.getLiteralValue();
-      TextRange range = processList(literalValue.getLbrace(), literalValue.getRbrace(), literalValue.getElementList().size());
-      if (range != null) {
-        result.add(new FoldingDescriptor(literalValue, range));
-      }
-    }
-
-    if (!quick) {
-      final Set<PsiElement> processedComments = ContainerUtil.newHashSet();
-      PsiTreeUtil.processElements(file, new PsiElementProcessor() {
-        @Override
-        public boolean execute(@NotNull PsiElement element) {
-          IElementType type = element.getNode().getElementType();
-          if (type == GoParserDefinition.MULTILINE_COMMENT && element.getTextRange().getLength() > 2) {
-            result.add(new FoldingDescriptor(element, element.getTextRange()));
-          }
-          if (type == GoParserDefinition.LINE_COMMENT) {
-            addCommentFolds(element, processedComments, result);
-          }
-          foldTypes(element, result); // folding for inner types
-          return true;
-        }
-      });
-    }
-  }
-
   @Nullable
   private static TextRange processList(@Nullable PsiElement left, @Nullable PsiElement right, int size) {
     if (left == null || right == null || size < 2) {
@@ -181,6 +98,97 @@ public class GoFoldingBuilder extends CustomFoldingBuilder implements DumbAware 
     if (end != null) {
       TextRange textRange = TextRange.create(comment.getTextRange().getStartOffset(), end.getTextRange().getEndOffset());
       foldElements.add(new FoldingDescriptor(comment, textRange));
+    }
+  }
+
+  @Override
+  protected void buildLanguageFoldRegions(@NotNull final List<FoldingDescriptor> result,
+                                          @NotNull PsiElement root,
+                                          @NotNull Document document,
+                                          boolean quick) {
+    if (!(root instanceof GoFile)) return;
+    GoFile file = (GoFile)root;
+    if (!file.isContentsLoaded()) return;
+
+    GoImportList importList = ((GoFile)root).getImportList();
+    if (importList != null) {
+      GoImportDeclaration firstImport = ContainerUtil.getFirstItem(importList.getImportDeclarationList());
+      if (firstImport != null) {
+        PsiElement importKeyword = firstImport.getImport();
+        int offset = importKeyword.getTextRange().getEndOffset();
+        int startOffset = importKeyword.getNextSibling() instanceof PsiWhiteSpace ? offset + 1 : offset;
+        TextRange range = TextRange.create(startOffset, importList.getTextRange().getEndOffset());
+        if (range.getLength() > 3) {
+          result.add(new FoldingDescriptor(importList, range));
+        }
+      }
+    }
+
+    for (GoFunctionOrMethodDeclaration method : ContainerUtil.concat(file.getMethods(), file.getFunctions())) {
+      foldBlock(result, method.getBlock());
+    }
+
+    for (GoFunctionLit function : PsiTreeUtil.findChildrenOfType(file, GoFunctionLit.class)) {
+      foldBlock(result, function.getBlock());
+    }
+    
+    for (GoIfStatement ifStatement : PsiTreeUtil.findChildrenOfType(file, GoIfStatement.class)) {
+      foldBlock(result, ifStatement.getBlock());
+      GoElseStatement elseStatement = ifStatement.getElseStatement();
+      if (elseStatement != null) {
+        foldBlock(result, elseStatement.getBlock());
+      }
+    }
+
+    for (GoTypeSpec type : file.getTypes()) {
+      foldTypes(type.getSpecType().getType(), result);
+    }
+
+    for (GoVarDeclaration varDeclaration : PsiTreeUtil.findChildrenOfType(file, GoVarDeclaration.class)) {
+      TextRange range = processList(varDeclaration.getLparen(), varDeclaration.getRparen(), varDeclaration.getVarSpecList().size());
+      if (range != null) {
+        result.add(new FoldingDescriptor(varDeclaration, range));
+      }
+    }
+
+    for (GoConstDeclaration constDeclaration : PsiTreeUtil.findChildrenOfType(file, GoConstDeclaration.class)) {
+      TextRange range = processList(constDeclaration.getLparen(), constDeclaration.getRparen(), constDeclaration.getConstSpecList().size());
+      if (range != null) {
+        result.add(new FoldingDescriptor(constDeclaration, range));
+      }
+    }
+
+    for (GoTypeDeclaration typeDeclaration : PsiTreeUtil.findChildrenOfType(file, GoTypeDeclaration.class)) {
+      TextRange range = processList(typeDeclaration.getLparen(), typeDeclaration.getRparen(), typeDeclaration.getTypeSpecList().size());
+      if (range != null) {
+        result.add(new FoldingDescriptor(typeDeclaration, range));
+      }
+    }
+
+    for (GoCompositeLit compositeLit : PsiTreeUtil.findChildrenOfType(file, GoCompositeLit.class)) {
+      GoLiteralValue literalValue = compositeLit.getLiteralValue();
+      TextRange range = processList(literalValue.getLbrace(), literalValue.getRbrace(), literalValue.getElementList().size());
+      if (range != null) {
+        result.add(new FoldingDescriptor(literalValue, range));
+      }
+    }
+
+    if (!quick) {
+      final Set<PsiElement> processedComments = ContainerUtil.newHashSet();
+      PsiTreeUtil.processElements(file, new PsiElementProcessor() {
+        @Override
+        public boolean execute(@NotNull PsiElement element) {
+          IElementType type = element.getNode().getElementType();
+          if (type == GoParserDefinition.MULTILINE_COMMENT && element.getTextRange().getLength() > 2) {
+            result.add(new FoldingDescriptor(element, element.getTextRange()));
+          }
+          if (type == GoParserDefinition.LINE_COMMENT) {
+            addCommentFolds(element, processedComments, result);
+          }
+          foldTypes(element, result); // folding for inner types
+          return true;
+        }
+      });
     }
   }
 
