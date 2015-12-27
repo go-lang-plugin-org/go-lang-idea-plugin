@@ -104,7 +104,6 @@ public class GoAnnotator implements Annotator {
           holder.createErrorAnnotation(((GoTypeAssertionExpr)element).getExpression(), message);
         }
       }
-      checkLiteralEvaluatedButNotUsed(holder, element, "Type assertion");
     }
     else if (element instanceof GoBuiltinCallExpr) {
       GoBuiltinCallExpr call = (GoBuiltinCallExpr)element;
@@ -112,33 +111,6 @@ public class GoAnnotator implements Annotator {
         checkMakeCall(call, holder);
       }
     }
-    else if (element instanceof GoFunctionLit) {
-      checkLiteralEvaluatedButNotUsed(holder, element, "Function literal");
-    }
-    else if (element instanceof GoStringLiteral) {
-      checkLiteralEvaluatedButNotUsed(holder, element, "String literal");
-    }
-    else if (element instanceof GoLiteral) {
-      String message = ((GoLiteral)element).getChar() != null ? "Rune literal" : "Numeric value";
-      checkLiteralEvaluatedButNotUsed(holder, element, message);
-    }
-    else if (element instanceof GoConversionExpr) {
-      checkLiteralEvaluatedButNotUsed(holder, element, "Type conversion");
-    }
-  }
-
-  private static void checkLiteralEvaluatedButNotUsed(@NotNull AnnotationHolder holder, @NotNull PsiElement e, @NotNull String message) {
-    PsiElement parent = e.getParent();
-    if (e instanceof GoFunctionLit && parent instanceof GoCallExpr) return;
-    if ((e instanceof GoStringLiteral || e instanceof GoLiteral) && (parent instanceof GoIndexOrSliceExpr || parent instanceof GoConditionalExpr)) return;
-
-    PsiElement lhe = PsiTreeUtil.getParentOfType(e, GoLeftHandExprList.class, GoArgumentList.class);
-    if (lhe == null || lhe instanceof GoArgumentList) return;
-    if (lhe instanceof GoLeftHandExprList && ((GoLeftHandExprList)lhe).getExpressionList().size() != 1) return;
-    if (lhe.getParent().getParent() instanceof GoSwitchStatement) return; // todo: check this again
-
-    PsiElement place = e instanceof GoFunctionLit ? ((GoFunctionLit)e).getFunc() : e;
-    holder.createErrorAnnotation(place, message + " evaluated but not used");
   }
 
   private static void checkMakeCall(@NotNull GoBuiltinCallExpr call, @NotNull AnnotationHolder holder) {
