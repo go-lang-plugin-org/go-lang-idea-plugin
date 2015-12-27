@@ -98,7 +98,7 @@ func _(o interface{}, args ...interface{}) {
 }
 
 func _(o interface{}) {
-  <error descr="Function literal evaluated but not used">func</error>(i interface{}) {
+  func(i interface{}) {
     Println(o)
     Println(i)
   }
@@ -164,7 +164,7 @@ func _(st interface {Foo()}, st1 Iface) {
     }
 }
 
-func _() { goto Label1; Label1: _ = 1; goto <error descr="Unresolved label 'Label2'">Label2</error>}
+func _() { goto Label1; Label1: 1; goto <error descr="Unresolved label 'Label2'">Label2</error>}
 
 type compositeA struct { int }
 type compositeB struct { byte }

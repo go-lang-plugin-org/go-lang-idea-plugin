@@ -19,7 +19,7 @@ func _() {
 		break <error descr="Unresolved label 'invalid'">invalid</error>;
 		break <error descr="Unresolved label 'inner'">inner</error>;
 		break outer;
-		<error descr="Function literal evaluated but not used">func</error> () {
+		func () {
 			funcLit:
 			for {
 				break <error descr="Unresolved label 'invalid'">invalid</error>;
