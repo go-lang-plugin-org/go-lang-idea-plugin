@@ -26,27 +26,29 @@ import java.io.File;
 import java.io.IOException;
 
 public class GoLexerTest extends LexerTestCase {
-  public void testBasicTypes() { doTest(); }
-  public void testConstants() { doTest(); }
-  public void testFor() { doTest(); }
+  private static final String PATH = "testData/lexer";
+
+  public void testBasicTypes()        { doTest(); }
+  public void testConstants()         { doTest(); }
+  public void testFor()               { doTest(); }
   public void testFunctionArguments() { doTest(); }
-  public void testHelloWorld() { doTest(); }
-  public void testIf() { doTest(); }
-  public void testImports() { doTest(); }
-  public void testMultipleResult() { doTest(); }
-  public void testNamedResult() { doTest(); }
-  public void testPointers() { doTest(); }
-  public void testRangeFor() { doTest(); }
-  public void testSlices() { doTest(); }
-  public void testStructs() { doTest(); }
-  public void testVariables() { doTest(); }
-  public void testEscapedQuote() { doTest(); }
+  public void testHelloWorld()        { doTest(); }
+  public void testIf()                { doTest(); }
+  public void testImports()           { doTest(); }
+  public void testMultipleResult()    { doTest(); }
+  public void testNamedResult()       { doTest(); }
+  public void testPointers()          { doTest(); }
+  public void testRangeFor()          { doTest(); }
+  public void testSlices()            { doTest(); }
+  public void testStructs()           { doTest(); }
+  public void testVariables()         { doTest(); }
+  public void testEscapedQuote()      { doTest(); }
 
   private void doTest() {
     try {
-      String text = FileUtil.loadFile(new File("./testData/lexer/" + getTestName(true) + ".go"));
+      String text = FileUtil.loadFile(new File("./" + PATH + "/" + getTestName(true) + ".go"));
       String actual = printTokens(StringUtil.convertLineSeparators(text.trim()), 0);
-      assertSameLinesWithFile(new File("testData/lexer/" + getTestName(true) + ".txt").getAbsolutePath(), actual);
+      assertSameLinesWithFile(new File(PATH + "/" + getTestName(true) + ".txt").getAbsolutePath(), actual);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -55,9 +57,10 @@ public class GoLexerTest extends LexerTestCase {
   @NotNull
   @Override
   protected Lexer createLexer() { return new GoLexer(); }
+
   @NotNull
   @Override
   protected String getDirPath() { 
-    return "../testData/lexer"; 
+    return "../" + PATH; 
   }
 }
