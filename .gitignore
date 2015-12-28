@@ -2,6 +2,7 @@
 /google-app-engine/build/
 /google-app-engine/google-app-engine-yaml/build/
 /utils/build/
+/plan9/build/
 
 .gradle
 
