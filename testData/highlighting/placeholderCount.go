@@ -54,6 +54,10 @@ func _() {
 		1, 2, 3, 4, 5, 6, 7, 8, 9,
 	)
 
+	fmt.Printf("#%02X%02X%02X", 1, 2, 3)
+
+	fmt.Printf(<warning descr="Got 3 placeholder(s) for 4 arguments(s)">"#%02X%02X%02X"</warning>, 1, 2, 3, 4)
+
 	myFormatVar := "%d %d %#[1]x %#x %2.f %d %2.2f %.f %.3f %[9]*.[2]*[3]f %d %f %#[1]x %#x %[2]d %v % d"
 	log.Printf(myFormatVar, 1, 2, 3, 4, 5, 6, 7, 8, 9)
 
