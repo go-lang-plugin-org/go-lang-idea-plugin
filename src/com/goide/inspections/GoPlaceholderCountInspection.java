@@ -35,7 +35,7 @@ import java.util.regex.Pattern;
 
 public class GoPlaceholderCountInspection extends GoInspectionBase {
   private static final Pattern PLACEHOLDER_PATTERN =
-    Pattern.compile("(%#?((\\[\\d+\\]|\\*?)?\\.?)*(\\d*\\.\\d*)*\\s?(v|T|t|b|c|d|o|q|x|X|U|b|e|E|f|F|g|G|s|q|x|X|p))");
+    Pattern.compile("(%#?((\\[\\d+\\]|\\*?)?\\.?)*(\\d*\\.?\\d*)*\\s?(v|T|t|b|c|d|o|q|x|X|U|b|e|E|f|F|g|G|s|q|x|X|p))");
 
   private static final Pattern INDEXED_PLACEHOLDER_PATTERN = Pattern.compile("(?:\\[(\\d+)\\])");
 
