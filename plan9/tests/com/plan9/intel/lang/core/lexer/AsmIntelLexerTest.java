@@ -27,15 +27,17 @@ import java.io.IOException;
 import java.io.Reader;
 
 public class AsmIntelLexerTest extends LexerTestCase {
-  public void _testSimpleFile() { doTest(); }
+  private static final String PATH = "testData/intel/lexer";
+
+  public void _testSimpleFile()           { doTest(); }
   public void testCommentsAndWhitespace() { doTest(); }
-  public void testIdentifiers() { doTest(); }
+  public void testIdentifiers()           { doTest(); }
 
   private void doTest() {
     try {
-      String text = FileUtil.loadFile(new File("./testData/intel/lexer/" + getTestName(true) + ".s"));
+      String text = FileUtil.loadFile(new File("./" + PATH + "/" + getTestName(true) + ".s"));
       String actual = printTokens(StringUtil.convertLineSeparators(text.trim()), 0);
-      assertSameLinesWithFile(new File("testData/intel/lexer/" + getTestName(true) + ".txt").getAbsolutePath(), actual);
+      assertSameLinesWithFile(new File(PATH + "/" + getTestName(true) + ".txt").getAbsolutePath(), actual);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -48,6 +50,6 @@ public class AsmIntelLexerTest extends LexerTestCase {
 
   @Override
   protected String getDirPath() {
-    return "../testData/intel/lexer";
+    return "../" + PATH;
   }
 }
