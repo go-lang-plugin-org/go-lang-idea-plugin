@@ -26,20 +26,16 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 
-/**
- * Created by stuartcarnie on 12/22/15.
- */
 public class AsmIntelLexerTest extends LexerTestCase {
-
-  //public void testSimpleFile() { doTest(); }
+  public void _testSimpleFile() { doTest(); }
   public void testCommentsAndWhitespace() { doTest(); }
   public void testIdentifiers() { doTest(); }
 
   private void doTest() {
     try {
-      String text = FileUtil.loadFile(new File("./plan9/testData/intel/lexer/" + getTestName(true) + ".s"));
+      String text = FileUtil.loadFile(new File("./testData/intel/lexer/" + getTestName(true) + ".s"));
       String actual = printTokens(StringUtil.convertLineSeparators(text.trim()), 0);
-      assertSameLinesWithFile(new File("plan9/testData/intel/lexer/" + getTestName(true) + ".txt").getAbsolutePath(), actual);
+      assertSameLinesWithFile(new File("testData/intel/lexer/" + getTestName(true) + ".txt").getAbsolutePath(), actual);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -52,6 +48,6 @@ public class AsmIntelLexerTest extends LexerTestCase {
 
   @Override
   protected String getDirPath() {
-    return "../plan9/testData/intel/lexer";
+    return "../testData/intel/lexer";
   }
 }
