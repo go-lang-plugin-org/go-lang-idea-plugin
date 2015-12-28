@@ -24,7 +24,7 @@ DIGIT         = [:digit:]
 
 HEX_DIGIT     = [0-9A-Fa-f]
 INT_DIGIT     = [0-9]
-OPERATOR      = [|+\^-]
+OPERATOR      = [*/%&|+~\^-]
 
 NUM_INT       = "0" | ([1-9] {INT_DIGIT}*)
 NUM_HEX       = ("0x" | "0X") {HEX_DIGIT}+
@@ -124,11 +124,11 @@ FLAG          = "NOPROF" | "DUPOK" | "NOSPLIT" | "RODATA" | "NOPTR" | "WRAPPER" 
 {WS}                  { return TokenType.WHITE_SPACE; }
 {WSNL}                { return TokenType.WHITE_SPACE; }
 {LABEL}               { return LABEL; }
-":"                   { return COLON; }
 "("                   { return PAREN; }
 ")"                   { return PAREN; }
 ","                   { return COMMA; }
 {OPERATOR}            { return OPERATOR; }
+"<<" | ">>"           { return OPERATOR; }
 
 {NUM_HEX}             { return HEX; }
 {NUM_INT}             { return INT; }
