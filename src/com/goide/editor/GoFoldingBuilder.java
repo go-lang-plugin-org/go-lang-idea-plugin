@@ -41,8 +41,8 @@ import java.util.Set;
 
 public class GoFoldingBuilder extends CustomFoldingBuilder implements DumbAware {
   @Nullable
-  private static TextRange processList(@Nullable PsiElement left, @Nullable PsiElement right, int size) {
-    if (left == null || right == null || size < 2) {
+  private static TextRange processList(@Nullable PsiElement left, @Nullable PsiElement right, int size, int minSize) {
+    if (left == null || right == null || size < minSize) {
       return null;
     }
 
@@ -130,22 +130,60 @@ public class GoFoldingBuilder extends CustomFoldingBuilder implements DumbAware 
       foldTypes(type.getSpecType().getType(), result);
     }
 
+    for (GoExprCaseClause caseClause : PsiTreeUtil.findChildrenOfType(file, GoExprCaseClause.class)) {
+      if (caseClause.getColon() == null) continue;
+      TextRange range = processList(caseClause.getColon().getNextSibling(),
+                                    ContainerUtil.getLastItem(caseClause.getStatementList()),
+                                    caseClause.getStatementList().size(), 1);
+      if (range != null) {
+        result.add(new FoldingDescriptor(caseClause, range));
+      }
+    }
+
+    for (GoExprSwitchStatement switchStatement : PsiTreeUtil.findChildrenOfType(file, GoExprSwitchStatement.class)) {
+      TextRange range = processList(switchStatement.getLbrace(),
+                                    switchStatement.getRbrace(),
+                                    switchStatement.getExprCaseClauseList().size(), 1);
+      if (range != null) {
+        result.add(new FoldingDescriptor(switchStatement, range));
+      }
+    }
+
+    for (GoCommClause commClause : PsiTreeUtil.findChildrenOfType(file, GoCommClause.class)) {
+      if (commClause.getColon() == null) continue;
+      TextRange range = processList(commClause.getColon().getNextSibling(),
+                                    ContainerUtil.getLastItem(commClause.getStatementList()),
+                                    commClause.getStatementList().size(), 1);
+      if (range != null) {
+        result.add(new FoldingDescriptor(commClause, range));
+      }
+    }
+
+    for (GoSelectStatement selectStatement : PsiTreeUtil.findChildrenOfType(file, GoSelectStatement.class)) {
+      TextRange range = processList(selectStatement.getLbrace(),
+                                    selectStatement.getRbrace(),
+                                    selectStatement.getCommClauseList().size(), 1);
+      if (range != null) {
+        result.add(new FoldingDescriptor(selectStatement, range));
+      }
+    }
+
     for (GoVarDeclaration varDeclaration : PsiTreeUtil.findChildrenOfType(file, GoVarDeclaration.class)) {
-      TextRange range = processList(varDeclaration.getLparen(), varDeclaration.getRparen(), varDeclaration.getVarSpecList().size());
+      TextRange range = processList(varDeclaration.getLparen(), varDeclaration.getRparen(), varDeclaration.getVarSpecList().size(), 2);
       if (range != null) {
         result.add(new FoldingDescriptor(varDeclaration, range));
       }
     }
 
     for (GoConstDeclaration constDeclaration : PsiTreeUtil.findChildrenOfType(file, GoConstDeclaration.class)) {
-      TextRange range = processList(constDeclaration.getLparen(), constDeclaration.getRparen(), constDeclaration.getConstSpecList().size());
+      TextRange range = processList(constDeclaration.getLparen(), constDeclaration.getRparen(), constDeclaration.getConstSpecList().size(), 2);
       if (range != null) {
         result.add(new FoldingDescriptor(constDeclaration, range));
       }
     }
 
     for (GoTypeDeclaration typeDeclaration : PsiTreeUtil.findChildrenOfType(file, GoTypeDeclaration.class)) {
-      TextRange range = processList(typeDeclaration.getLparen(), typeDeclaration.getRparen(), typeDeclaration.getTypeSpecList().size());
+      TextRange range = processList(typeDeclaration.getLparen(), typeDeclaration.getRparen(), typeDeclaration.getTypeSpecList().size(), 2);
       if (range != null) {
         result.add(new FoldingDescriptor(typeDeclaration, range));
       }
@@ -153,7 +191,7 @@ public class GoFoldingBuilder extends CustomFoldingBuilder implements DumbAware 
 
     for (GoCompositeLit compositeLit : PsiTreeUtil.findChildrenOfType(file, GoCompositeLit.class)) {
       GoLiteralValue literalValue = compositeLit.getLiteralValue();
-      TextRange range = processList(literalValue.getLbrace(), literalValue.getRbrace(), literalValue.getElementList().size());
+      TextRange range = processList(literalValue.getLbrace(), literalValue.getRbrace(), literalValue.getElementList().size(), 2);
       if (range != null) {
         result.add(new FoldingDescriptor(literalValue, range));
       }
@@ -184,14 +222,15 @@ public class GoFoldingBuilder extends CustomFoldingBuilder implements DumbAware 
     PsiElement psi = node.getPsi();
     IElementType type = node.getElementType();
     if (psi instanceof GoBlock || psi instanceof GoStructType ||
-        psi instanceof GoInterfaceType || psi instanceof GoLiteralValue) {
+        psi instanceof GoInterfaceType || psi instanceof GoLiteralValue ||
+        psi instanceof GoSelectStatement || psi instanceof GoExprSwitchStatement) {
       return "{...}";
     }
     if (psi instanceof GoVarDeclaration || psi instanceof GoConstDeclaration
         || psi instanceof GoTypeDeclaration) {
       return "(...)";
     }
-    if (psi instanceof GoImportDeclaration) return "...";
+    if (psi instanceof GoImportDeclaration || psi instanceof GoCommClause || psi instanceof GoCaseClause) return "...";
     if (GoParserDefinition.LINE_COMMENT == type) return "/.../";
     if (GoParserDefinition.MULTILINE_COMMENT == type) return "/*...*/";
     return null;
