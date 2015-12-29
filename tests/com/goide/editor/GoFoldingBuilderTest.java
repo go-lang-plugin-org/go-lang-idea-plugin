@@ -41,4 +41,5 @@ public class GoFoldingBuilderTest extends GoCodeInsightFixtureTestCase {
   public void testTypeDeclaration()                               { doTest(); }
   public void testCompositeLiteral()                              { doTest(); }
   public void testIfStatement()                                   { doTest(); }
+  public void testForStatement()                                  { doTest(); }
 }

@@ -51,10 +51,6 @@ public class GoFoldingBuilder extends CustomFoldingBuilder implements DumbAware 
     return TextRange.create(startOffset, endOffset);
   }
 
-  private static void foldBlock(@NotNull List<FoldingDescriptor> result, @Nullable GoBlock block) {
-    if (block != null && block.getTextRange().getLength() > 1) result.add(new FoldingDescriptor(block, block.getTextRange()));
-  }
-
   private static void foldTypes(@Nullable PsiElement e, @NotNull List<FoldingDescriptor> result) {
     if (e instanceof GoStructType) {
       if (((GoStructType)e).getFieldDeclarationList().isEmpty()) return;
@@ -124,19 +120,9 @@ public class GoFoldingBuilder extends CustomFoldingBuilder implements DumbAware 
       }
     }
 
-    for (GoFunctionOrMethodDeclaration method : ContainerUtil.concat(file.getMethods(), file.getFunctions())) {
-      foldBlock(result, method.getBlock());
-    }
-
-    for (GoFunctionLit function : PsiTreeUtil.findChildrenOfType(file, GoFunctionLit.class)) {
-      foldBlock(result, function.getBlock());
-    }
-    
-    for (GoIfStatement ifStatement : PsiTreeUtil.findChildrenOfType(file, GoIfStatement.class)) {
-      foldBlock(result, ifStatement.getBlock());
-      GoElseStatement elseStatement = ifStatement.getElseStatement();
-      if (elseStatement != null) {
-        foldBlock(result, elseStatement.getBlock());
+    for (GoBlock block : PsiTreeUtil.findChildrenOfType(file, GoBlock.class)) {
+      if (block.getTextRange().getLength() > 1) {
+        result.add(new FoldingDescriptor(block, block.getTextRange()));
       }
     }
 
