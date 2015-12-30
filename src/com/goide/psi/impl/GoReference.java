@@ -409,7 +409,13 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
                                              boolean localProcessing) {
     if (!processNamedElements(processor, state, file.getConstants(), localProcessing)) return false;
     if (!processNamedElements(processor, state, file.getVars(), localProcessing)) return false;
-    if (!processNamedElements(processor, state, file.getFunctions(), localProcessing)) return false;
+    Condition<GoNamedElement> dontProcessInit = new Condition<GoNamedElement>() {
+      @Override
+      public boolean value(@NotNull GoNamedElement o) {
+        return o instanceof GoFunctionDeclaration && !Comparing.equal(o.getName(), GoConstants.INIT);
+      }
+    };
+    if (!processNamedElements(processor, state, file.getFunctions(), dontProcessInit, localProcessing, false)) return false;
     if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
     return true;
   }

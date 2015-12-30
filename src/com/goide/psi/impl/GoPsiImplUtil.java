@@ -713,7 +713,8 @@ public class GoPsiImplUtil {
                                       @NotNull ResolveState state,
                                       @NotNull Collection<? extends GoNamedElement> elements,
                                       boolean localResolve) {
-    return processNamedElements(processor, state, elements, localResolve, false);
+    //noinspection unchecked
+    return processNamedElements(processor, state, elements, Condition.TRUE, localResolve, false);
   }
 
   static boolean processNamedElements(@NotNull PsiScopeProcessor processor,
@@ -721,8 +722,19 @@ public class GoPsiImplUtil {
                                       @NotNull Collection<? extends GoNamedElement> elements,
                                       boolean localResolve,
                                       boolean checkContainingFile) {
+    //noinspection unchecked
+    return processNamedElements(processor, state, elements, Condition.TRUE, localResolve, checkContainingFile);
+  }
+
+  static boolean processNamedElements(@NotNull PsiScopeProcessor processor,
+                                      @NotNull ResolveState state,
+                                      @NotNull Collection<? extends GoNamedElement> elements,
+                                      @NotNull Condition<GoNamedElement> condition,
+                                      boolean localResolve,
+                                      boolean checkContainingFile) {
     PsiFile contextFile = checkContainingFile ? getContextFile(state) : null;
     for (GoNamedElement definition : elements) {
+      if (!condition.value(definition)) continue;
       if (!definition.isValid() || checkContainingFile && !allowed(definition.getContainingFile(), contextFile)) continue;
       if ((localResolve || definition.isPublic()) && !processor.execute(definition, state)) return false;
     }

@@ -25,7 +25,6 @@ import com.intellij.openapi.util.ThrowableComputable;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.testFramework.LightProjectDescriptor;
 import org.jetbrains.annotations.NotNull;
 
@@ -139,6 +138,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testEmbeddedInterfacePointer()  { doTest(); }
   public void testPlaceholderCount()          { doTest(); }
   public void testTypeConversion()            { doTest(); }
+  public void testInit()                      { doTest(); }
 
   public void testRelativeImportIgnoringDirectories() throws IOException {
     myFixture.getTempDirFixture().findOrCreateDir("to_import/testdata");
