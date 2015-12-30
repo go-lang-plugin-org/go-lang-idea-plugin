@@ -1,6 +1,8 @@
-<b>const x <a href="psi_element://#FooBar">FooBar</a> = "something"</b>
+<b>const x <a href="psi_element://#a.FooBar">FooBar</a> = "something"</b>
 
 =====
-const x <a href="psi_element://#FooBar">FooBar</a> = "something"
+const x <a href="psi_element://#a.FooBar">FooBar</a> = "something"
 =====
 No urls
+=====
+No local urls

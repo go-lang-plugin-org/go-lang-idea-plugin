@@ -195,6 +195,9 @@ public class GoSdkUtil {
 
   @Nullable
   public static VirtualFile findFileByRelativeToLibrariesPath(@NotNull String path, @NotNull Project project, @Nullable Module module) {
+    if (path.isEmpty()) {
+      return null;
+    }
     for (VirtualFile root : getSourcesPathsToLookup(project, module)) {
       VirtualFile file = root.findFileByRelativePath(path);
       if (file != null) {

@@ -6,3 +6,5 @@
 type MyType
 =====
 https://godoc.org/#MyType
+=====
+#main.MyType

@@ -1,8 +1,10 @@
-<b>func Name() <a href="psi_element://builtin#string">string</a></b>
+<b>func Name() <a href="psi_element://builtin#builtin.string">string</a></b>
 <p>Name returns the name of the file as presented to Open.
 </p>
 
 =====
-func Name() <a href="psi_element://builtin#string">string</a>
+func Name() <a href="psi_element://builtin#builtin.string">string</a>
 =====
 https://godoc.org/os#File.Name
+=====
+No local urls

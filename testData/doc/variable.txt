@@ -1,8 +1,10 @@
-<b>var an <a href="psi_element://builtin#int">int</a> = 1</b>
+<b>var an <a href="psi_element://builtin#builtin.int">int</a> = 1</b>
 <p>test
 </p>
 
 =====
-var an <a href="psi_element://builtin#int">int</a> = 1
+var an <a href="psi_element://builtin#builtin.int">int</a> = 1
 =====
 No urls
+=====
+No local urls

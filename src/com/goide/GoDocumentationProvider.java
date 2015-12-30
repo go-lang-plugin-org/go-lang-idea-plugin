@@ -20,7 +20,8 @@ import com.goide.editor.GoParameterInfoHandler;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.sdk.GoSdkUtil;
-import com.goide.stubs.index.GoTypesIndex;
+import com.goide.stubs.index.GoAllPrivateNamesIndex;
+import com.goide.stubs.index.GoAllPublicNamesIndex;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.documentation.DocumentationManagerProtocol;
 import com.intellij.lang.documentation.AbstractDocumentationProvider;
@@ -33,7 +34,9 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.GlobalSearchScopesCore;
+import com.intellij.psi.stubs.StubIndex;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
@@ -41,10 +44,7 @@ import com.intellij.xml.util.XmlStringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class GoDocumentationProvider extends AbstractDocumentationProvider {
   private static final GoCommentsConverter COMMENTS_CONVERTER = new GoCommentsConverter();
@@ -239,7 +239,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       }
     }
     else if (element instanceof GoTypeSpec) {
-      String ref = getReferenceText(element);
+      String localUrl = getLocalUrlToElement(element);
       String name = ((GoTypeSpec)element).getName();
       if (StringUtil.isNotEmpty(name)) {
         String importPath = getImportPathForElement(element);
@@ -247,13 +247,21 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
         if (StringUtil.isNotEmpty(packageName) && !GoPsiImplUtil.builtin(element) && !Comparing.equal(importPath, contextImportPath)) {
           return String.format("<a href=\"%s%s\">%s</a>.<a href=\"%s%s\">%s</a>",
                                DocumentationManagerProtocol.PSI_ELEMENT_PROTOCOL, StringUtil.notNullize(importPath), packageName,
-                               DocumentationManagerProtocol.PSI_ELEMENT_PROTOCOL, ref, name);
+                               DocumentationManagerProtocol.PSI_ELEMENT_PROTOCOL, localUrl, name);
         }
-        return String.format("<a href=\"%s%s\">%s</a>", DocumentationManagerProtocol.PSI_ELEMENT_PROTOCOL, ref, name);
+        return String.format("<a href=\"%s%s\">%s</a>", DocumentationManagerProtocol.PSI_ELEMENT_PROTOCOL, localUrl, name);
       }
     }
 
     return element != null ? element.getText() : "";
+  }
+
+  @Nullable
+  public static String getLocalUrlToElement(@NotNull PsiElement element) {
+    if (element instanceof GoTypeSpec || element instanceof PsiDirectory) {
+      return getReferenceText(element, true);
+    }
+    return null;
   }
 
   @NotNull
@@ -282,7 +290,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
   }
 
   @Nullable
-  private static String getReferenceText(@Nullable PsiElement element) {
+  private static String getReferenceText(@Nullable PsiElement element, boolean includePackageName) {
     if (element instanceof GoNamedElement) {
       PsiFile file = element.getContainingFile();
       if (file instanceof GoFile) {
@@ -290,7 +298,8 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
         if (element instanceof GoFunctionDeclaration || element instanceof GoTypeSpec) {
           String name = ((GoNamedElement)element).getName();
           if (StringUtil.isNotEmpty(name)) {
-            return String.format("%s#%s", StringUtil.notNullize(importPath), name);
+            String fqn = getElementFqn((GoNamedElement)element, name, includePackageName);
+            return String.format("%s#%s", StringUtil.notNullize(importPath), fqn);
           }
         }
         else if (element instanceof GoMethodDeclaration) {
@@ -298,7 +307,8 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
           String receiver = receiverType != null ? receiverType.getText() : null;
           String name = ((GoMethodDeclaration)element).getName();
           if (StringUtil.isNotEmpty(receiver) && StringUtil.isNotEmpty(name)) {
-            return String.format("%s#%s.%s", StringUtil.notNullize(importPath), receiver, name);
+            String fqn = getElementFqn((GoNamedElement)element, name, includePackageName);
+            return String.format("%s#%s.%s", StringUtil.notNullize(importPath), receiver, fqn);
           }
         }
       }
@@ -308,6 +318,17 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
     }
 
     return null;
+  }
+
+  @NotNull
+  private static String getElementFqn(@NotNull GoNamedElement element, @NotNull String name, boolean includePackageName) {
+    if (includePackageName) {
+      String packageName = element.getContainingFile().getPackageName();
+      if (!StringUtil.isEmpty(packageName)) {
+        return packageName + "." + name;
+      }
+    }
+    return name;
   }
 
   @Override
@@ -326,7 +347,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
 
   @Override
   public List<String> getUrlFor(PsiElement element, PsiElement originalElement) {
-    String referenceText = getReferenceText(adjustDocElement(element));
+    String referenceText = getReferenceText(adjustDocElement(element), false);
     if (StringUtil.isNotEmpty(referenceText)) {
       return Collections.singletonList("https://godoc.org/" + referenceText);
     }
@@ -351,15 +372,22 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       String importPath = hash >= 0 ? link.substring(0, hash) : link;
       Project project = psiManager.getProject();
       VirtualFile directory = GoSdkUtil.findFileByRelativeToLibrariesPath(importPath, project, module);
-      if (directory != null) {
-        PsiDirectory psiDirectory = psiManager.findDirectory(directory);
-        if (psiDirectory != null) {
-          String anchor = link.substring(Math.min(hash + 1, link.length()));
-          if (anchor.isEmpty()) {
-            return psiDirectory;
-          }
-          return ContainerUtil.getFirstItem(GoTypesIndex.find(anchor, project, GlobalSearchScopesCore.directoryScope(psiDirectory, false)));
+      PsiDirectory psiDirectory = directory != null ? psiManager.findDirectory(directory) : null;
+      String anchor = hash >= 0 ? link.substring(Math.min(hash + 1, link.length())) : null;
+      if (StringUtil.isNotEmpty(anchor)) {
+        GlobalSearchScope scope = psiDirectory != null 
+                                  ? GlobalSearchScopesCore.directoryScope(psiDirectory, false) 
+                                  : GlobalSearchScope.projectScope(project);
+        GoNamedElement element = ContainerUtil.getFirstItem(StubIndex.getElements(GoAllPublicNamesIndex.ALL_PUBLIC_NAMES, anchor, project, 
+                                                                                  scope, GoNamedElement.class));
+        if (element != null) {
+          return element;
         }
+        return ContainerUtil.getFirstItem(StubIndex.getElements(GoAllPrivateNamesIndex.ALL_PRIVATE_NAMES, anchor, project, scope,
+                                                                GoNamedElement.class));
+      }
+      else {
+        return psiDirectory; 
       }
     }
     return super.getDocumentationElementForLink(psiManager, link, context);

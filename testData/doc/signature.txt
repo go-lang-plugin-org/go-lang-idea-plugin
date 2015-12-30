@@ -1,8 +1,10 @@
-<b>func Foo(a map[<a href="psi_element://builtin#int">int</a>]*<a href="psi_element://builtin#string">string</a>, b (<a href="psi_element://builtin#string">string</a>), c <a href="psi_element://builtin#string">string</a>, <a href="psi_element://builtin#int">int</a>) (&lt;-chan <a href="psi_element://builtin#string">string</a>, <a href="psi_element://builtin#int">int</a>)</b>
+<b>func Foo(a map[<a href="psi_element://builtin#builtin.int">int</a>]*<a href="psi_element://builtin#builtin.string">string</a>, b (<a href="psi_element://builtin#builtin.string">string</a>), c <a href="psi_element://builtin#builtin.string">string</a>, <a href="psi_element://builtin#builtin.int">int</a>) (&lt;-chan <a href="psi_element://builtin#builtin.string">string</a>, <a href="psi_element://builtin#builtin.int">int</a>)</b>
 <p>If n &lt; 0, there is no limit on the number of replacements.
 </p>
 
 =====
-func Foo(a map[<a href="psi_element://builtin#int">int</a>]*<a href="psi_element://builtin#string">string</a>, b (<a href="psi_element://builtin#string">string</a>), c <a href="psi_element://builtin#string">string</a>, <a href="psi_element://builtin#int">int</a>) (&lt;-chan <a href="psi_element://builtin#string">string</a>, <a href="psi_element://builtin#int">int</a>)
+func Foo(a map[<a href="psi_element://builtin#builtin.int">int</a>]*<a href="psi_element://builtin#builtin.string">string</a>, b (<a href="psi_element://builtin#builtin.string">string</a>), c <a href="psi_element://builtin#builtin.string">string</a>, <a href="psi_element://builtin#builtin.int">int</a>) (&lt;-chan <a href="psi_element://builtin#builtin.string">string</a>, <a href="psi_element://builtin#builtin.int">int</a>)
 =====
 https://godoc.org/#Foo
+=====
+No local urls
