@@ -1,8 +1,10 @@
-<b>func Replace(s <a href="psi_element://builtin#string">string</a>, old <a href="psi_element://builtin#string">string</a>, new <a href="psi_element://builtin#string">string</a>, n <a href="psi_element://builtin#int">int</a>) &lt;-chan <a href="psi_element://builtin#string">string</a></b>
+<b>func Replace(s <a href="psi_element://builtin#builtin.string">string</a>, old <a href="psi_element://builtin#builtin.string">string</a>, new <a href="psi_element://builtin#builtin.string">string</a>, n <a href="psi_element://builtin#builtin.int">int</a>) &lt;-chan <a href="psi_element://builtin#builtin.string">string</a></b>
 <p>If n &lt; 0, there is no limit on the number of replacements.
 </p>
 
 =====
-func Replace(s <a href="psi_element://builtin#string">string</a>, old <a href="psi_element://builtin#string">string</a>, new <a href="psi_element://builtin#string">string</a>, n <a href="psi_element://builtin#int">int</a>) &lt;-chan <a href="psi_element://builtin#string">string</a>
+func Replace(s <a href="psi_element://builtin#builtin.string">string</a>, old <a href="psi_element://builtin#builtin.string">string</a>, new <a href="psi_element://builtin#builtin.string">string</a>, n <a href="psi_element://builtin#builtin.int">int</a>) &lt;-chan <a href="psi_element://builtin#builtin.string">string</a>
 =====
 https://godoc.org/#Replace
+=====
+No local urls

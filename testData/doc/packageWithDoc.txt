@@ -9,3 +9,5 @@ are simpler.
 No navigation info
 =====
 https://godoc.org/fmt
+=====
+fmt

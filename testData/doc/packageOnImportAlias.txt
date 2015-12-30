@@ -14,3 +14,5 @@ assume they are safe for parallel execution.
 No navigation info
 =====
 https://godoc.org/io
+=====
+No local urls

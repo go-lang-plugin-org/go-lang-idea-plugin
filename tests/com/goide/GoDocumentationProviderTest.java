@@ -98,6 +98,16 @@ public class GoDocumentationProviderTest extends GoCodeInsightFixtureTestCase {
     
     List<String> urls = documentationProvider.getUrlFor(docElement, originalElement);
     actualDoc += "\n=====\n" + (urls != null ? StringUtil.join(urls, "\n") : "No urls");
+    
+    String localUrl = GoDocumentationProvider.getLocalUrlToElement(docElement);
+    actualDoc += "\n=====\n" + StringUtil.notNullize(localUrl, "No local urls");
     assertSameLinesWithFile(getTestDataPath() + "/" + getTestName(true) + ".txt", actualDoc);
+    
+    if (localUrl != null) {
+      PsiElement elementForLink = documentationProvider.getDocumentationElementForLink(myFixture.getPsiManager(), localUrl, originalElement);
+      assertNotNull("Link '" + localUrl + "' wasn't resolved", elementForLink);
+      assertEquals("Link was resolved to unexpected element.\nExpected: " + docElement.getText() + "\n" +
+                   "Actual: " + elementForLink.getText(), docElement, elementForLink);
+    }
   }
 }

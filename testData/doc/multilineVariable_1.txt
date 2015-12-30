@@ -1,8 +1,10 @@
-<b>var InnerVariable_1 <a href="psi_element://builtin#int">int</a></b>
+<b>var InnerVariable_1 <a href="psi_element://builtin#builtin.int">int</a></b>
 <p>InnerVariable_1
 </p>
 
 =====
-var InnerVariable_1 <a href="psi_element://builtin#int">int</a>
+var InnerVariable_1 <a href="psi_element://builtin#builtin.int">int</a>
 =====
 No urls
+=====
+No local urls
