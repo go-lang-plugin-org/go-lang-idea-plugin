@@ -46,4 +46,11 @@ func main() {
 
 	i := C.int(1)
 	foo(make([]*C.char, i))
+	
+	foo(make(chan func(), 1.0))
+	foo(make(chan func(), 1e5))
+	foo(make(chan func(), '1'))
+	foo(make(chan func(), true)) // should be an error
+	foo(make(chan func(), <error descr="Non-integer size argument to make">complex(17,4)</error>))
+	foo(make(chan func(), <error descr="Non-integer size argument to make">"1"</error>))
 }
