@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoConditionalExprImpl extends GoExpressionImpl implements GoConditionalExpr {
+public class GoConditionalExprImpl extends GoBinaryExprImpl implements GoConditionalExpr {
 
   public GoConditionalExprImpl(ASTNode node) {
     super(node);

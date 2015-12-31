@@ -72,7 +72,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitConditionalExpr(@NotNull GoConditionalExpr o) {
-    visitExpression(o);
+    visitBinaryExpr(o);
   }
 
   public void visitConstDeclaration(@NotNull GoConstDeclaration o) {
