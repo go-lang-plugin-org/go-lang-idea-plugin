@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoConditionalExpr extends GoExpression {
+public interface GoConditionalExpr extends GoBinaryExpr {
 
   @NotNull
   List<GoExpression> getExpressionList();

@@ -68,7 +68,7 @@
     raw_string           = 'raw_string'
   ]
 
-  extends("(Or|Add|Conversion|Mul|Selector)Expr")=BinaryExpr
+  extends("(Or|Add|Conversion|Mul|Selector|Conditional)Expr")=BinaryExpr
   extends(".*(Expr|Literal|Lit|OperandName)")=Expression
 
   implements("(Type|Import)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver")="com.goide.psi.GoNamedElement"

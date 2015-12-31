@@ -339,8 +339,8 @@ public class GoParser implements PsiParser, LightPsiParser {
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
     create_token_set_(EXPR_SWITCH_STATEMENT, SWITCH_STATEMENT, TYPE_SWITCH_STATEMENT),
     create_token_set_(RANGE_CLAUSE, RECV_STATEMENT, SHORT_VAR_DECLARATION, VAR_SPEC),
-    create_token_set_(ADD_EXPR, CONVERSION_EXPR, MUL_EXPR, OR_EXPR,
-      SELECTOR_EXPR),
+    create_token_set_(ADD_EXPR, CONDITIONAL_EXPR, CONVERSION_EXPR, MUL_EXPR,
+      OR_EXPR, SELECTOR_EXPR),
     create_token_set_(ARRAY_OR_SLICE_TYPE, CHANNEL_TYPE, FUNCTION_TYPE, INTERFACE_TYPE,
       MAP_TYPE, PAR_TYPE, POINTER_TYPE, RECEIVER_TYPE,
       STRUCT_TYPE, TYPE, TYPE_LIST),
