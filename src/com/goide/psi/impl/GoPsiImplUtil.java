@@ -439,6 +439,9 @@ public class GoPsiImplUtil {
       if (l.getFloati() != null) return getBuiltinType(o, "complex64");
       if (l.getDecimali() != null) return getBuiltinType(o, "complex128");
     }
+    else if (o instanceof GoConditionalExpr) {
+      return getBuiltinType(o, "bool");
+    }
     return null;
   }
 
