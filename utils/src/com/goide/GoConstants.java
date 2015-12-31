@@ -43,6 +43,7 @@ public class GoConstants {
   public static final String TEST_MAIN = "TestMain";
   public static final String MAIN = "main";
   public static final String INIT = "init";
+  public static final String IOTA = "iota";
   public static final String DOCUMENTATION = "documentation";
   public static final String C_PATH = "C";
   public static final String TESTING_PATH = "testing";

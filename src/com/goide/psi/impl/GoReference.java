@@ -58,7 +58,19 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   public GoReference(@NotNull GoReferenceExpressionBase o) {
     super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(), o.getIdentifier().getTextLength()));
   }
+
+  @Nullable
+  static PsiFile getContextFile(@NotNull ResolveState state) {
+    PsiElement element = getContext(state);
+    return element != null ? element.getContainingFile() : null;
+  }
   
+  @Nullable
+  private static PsiElement getContext(@NotNull ResolveState state) {
+    SmartPsiElementPointer<GoReferenceExpressionBase> context = state.get(CONTEXT);
+    return context != null ? context.getElement() : null;
+  }
+
   @NotNull
   private ResolveResult[] resolveInner() {
     if (!myElement.isValid()) return ResolveResult.EMPTY_ARRAY;
@@ -405,9 +417,15 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
   private static boolean processFileEntities(@NotNull GoFile file,
                                              @NotNull GoScopeProcessor processor,
-                                             @NotNull ResolveState state,
+                                             @NotNull final ResolveState state,
                                              boolean localProcessing) {
-    if (!processNamedElements(processor, state, file.getConstants(), localProcessing)) return false;
+    if (!processNamedElements(processor, state, file.getConstants(), new Condition<GoNamedElement>() {
+        @Override
+        public boolean value(GoNamedElement o) {
+          return !Comparing.equal(GoConstants.IOTA, o.getName()) ||
+                 PsiTreeUtil.getParentOfType(getContext(state), GoConstSpec.class) != null;
+        }
+      }, localProcessing, false)) return false;
     if (!processNamedElements(processor, state, file.getVars(), localProcessing)) return false;
     Condition<GoNamedElement> dontProcessInit = new Condition<GoNamedElement>() {
       @Override
