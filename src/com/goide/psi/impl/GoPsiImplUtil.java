@@ -732,19 +732,13 @@ public class GoPsiImplUtil {
                                       @NotNull Condition<GoNamedElement> condition,
                                       boolean localResolve,
                                       boolean checkContainingFile) {
-    PsiFile contextFile = checkContainingFile ? getContextFile(state) : null;
+    PsiFile contextFile = checkContainingFile ? GoReference.getContextFile(state) : null;
     for (GoNamedElement definition : elements) {
       if (!condition.value(definition)) continue;
       if (!definition.isValid() || checkContainingFile && !allowed(definition.getContainingFile(), contextFile)) continue;
       if ((localResolve || definition.isPublic()) && !processor.execute(definition, state)) return false;
     }
     return true;
-  }
-
-  @Nullable
-  static PsiFile getContextFile(@NotNull ResolveState state) {
-    SmartPsiElementPointer<GoReferenceExpressionBase> context = state.get(CONTEXT);
-    return context != null ? context.getContainingFile() : null;
   }
 
   public static boolean processSignatureOwner(@NotNull GoSignatureOwner o, @NotNull GoScopeProcessorBase processor) {
