@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,6 +60,8 @@ public class GoLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSettin
     indentOptions.TAB_SIZE = 8;
     indentOptions.USE_TAB_CHARACTER = true;
     
+    defaultSettings.KEEP_BLANK_LINES_IN_CODE = 1;
+    defaultSettings.KEEP_BLANK_LINES_IN_DECLARATIONS = 1;
     defaultSettings.BLOCK_COMMENT_AT_FIRST_COLUMN = false;
     defaultSettings.LINE_COMMENT_AT_FIRST_COLUMN = false;
     return defaultSettings;
