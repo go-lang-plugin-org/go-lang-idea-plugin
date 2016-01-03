@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,13 @@
 
 package com.goide.dlv;
 
+import com.goide.GoConstants;
 import com.goide.GoFileType;
 import com.goide.dlv.breakpoint.DlvBreakpointProperties;
 import com.goide.dlv.breakpoint.DlvBreakpointType;
 import com.goide.dlv.protocol.DlvApi;
 import com.goide.dlv.protocol.DlvRequest;
+import com.goide.util.GoUtil;
 import com.intellij.execution.ExecutionResult;
 import com.intellij.execution.ui.ExecutionConsole;
 import com.intellij.icons.AllIcons;
@@ -66,7 +68,7 @@ import static com.intellij.util.ObjectUtils.assertNotNull;
 import static com.intellij.util.ObjectUtils.tryCast;
 
 public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> implements Disposable {
-  public static final boolean IS_DLV_DISABLED = SystemInfo.isWindows || SystemInfo.is32Bit;
+  public static final boolean IS_DLV_DISABLED = SystemInfo.isWindows || !GoConstants.AMD64.equals(GoUtil.systemArch());
 
   final static Logger LOG = Logger.getInstance(DlvDebugProcess.class);
   private final AtomicBoolean breakpointsInitiated = new AtomicBoolean();

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -91,6 +91,7 @@ public class GoConstants {
   @NonNls public static final String NIL = "nil";
 
   @NonNls public static final String GO = "Go";
+  @NonNls public static final String AMD64 = "amd64";
 
   private GoConstants() {
 
