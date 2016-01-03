@@ -238,6 +238,10 @@ public class GoCompletionTest extends GoCompletionTestBase {
     myFixture.testCompletionVariants(getTestName(true) + ".go", "a");
   }
 
+  public void testDoNotCompleteKeywordsInsideSelectorExpression() {
+    myFixture.testCompletionVariants(getTestName(true) + ".go", "FuncA", "FuncB");
+  }
+
   public void testChanKeyword() {
     doTestCompletion();
   }
