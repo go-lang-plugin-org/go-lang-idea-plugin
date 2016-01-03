@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,9 +59,9 @@ import java.util.regex.Pattern;
 import static com.intellij.util.containers.ContainerUtil.newLinkedHashSet;
 
 public class GoSdkUtil {
-  private static final Pattern GO_VERSION_PATTERN = Pattern.compile("(?:t|T)heVersion\\s*=\\s*`go([\\d.]+\\w+(\\d+)?)`");
-  private static final Pattern GAE_VERSION_PATTERN = Pattern.compile("(?:t|T)heVersion\\s*=\\s*`go([\\d.]+)( \\(appengine-[\\d.]+\\))?`");
-  private static final Pattern GO_DEVEL_VERSION_PATTERN = Pattern.compile("(?:t|T)heVersion\\s*=\\s*`(devel.*)`");
+  private static final Pattern GO_VERSION_PATTERN = Pattern.compile("[tT]heVersion\\s*=\\s*`go([\\d.]+\\w+(\\d+)?)`");
+  private static final Pattern GAE_VERSION_PATTERN = Pattern.compile("[tT]heVersion\\s*=\\s*`go([\\d.]+)( \\(appengine-[\\d.]+\\))?`");
+  private static final Pattern GO_DEVEL_VERSION_PATTERN = Pattern.compile("[tT]heVersion\\s*=\\s*`(devel.*)`");
 
   @Nullable
   private static VirtualFile getSdkSrcDir(@NotNull Project project, @Nullable Module module) {
@@ -150,7 +150,7 @@ public class GoSdkUtil {
   }
 
   @NotNull
-  public static Collection<VirtualFile> getGoPathBins(@NotNull Project project, @Nullable Module module) {
+  private static Collection<VirtualFile> getGoPathBins(@NotNull Project project, @Nullable Module module) {
     Collection<VirtualFile> result = newLinkedHashSet(ContainerUtil.mapNotNull(getGoPathRoots(project, module),
                                                                                new RetrieveSubDirectoryOrSelfFunction("bin")));
     String executableGoPath = GoSdkService.getInstance(project).getGoExecutablePath(module);
