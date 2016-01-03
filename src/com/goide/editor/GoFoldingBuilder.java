@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,8 +41,8 @@ import java.util.Set;
 
 public class GoFoldingBuilder extends CustomFoldingBuilder implements DumbAware {
   @Nullable
-  private static TextRange processList(@Nullable PsiElement left, @Nullable PsiElement right, int size, int minSize) {
-    if (left == null || right == null || size < minSize) {
+  private static TextRange processList(@Nullable PsiElement left, @Nullable PsiElement right, int size) {
+    if (left == null || right == null || size < 2) {
       return null;
     }
 
@@ -54,20 +54,17 @@ public class GoFoldingBuilder extends CustomFoldingBuilder implements DumbAware 
   private static void foldTypes(@Nullable PsiElement e, @NotNull List<FoldingDescriptor> result) {
     if (e instanceof GoStructType) {
       if (((GoStructType)e).getFieldDeclarationList().isEmpty()) return;
-      addTypeBlock(e, ((GoStructType)e).getLbrace(), ((GoStructType)e).getRbrace(), result);
+      fold(e, ((GoStructType)e).getLbrace(), ((GoStructType)e).getRbrace(), result);
     }
     if (e instanceof GoInterfaceType) {
       if (e.getChildren().length == 0) return;
-      addTypeBlock(e, ((GoInterfaceType)e).getLbrace(), ((GoInterfaceType)e).getRbrace(), result);
+      fold(e, ((GoInterfaceType)e).getLbrace(), ((GoInterfaceType)e).getRbrace(), result);
     }
   }
 
-  private static void addTypeBlock(@NotNull PsiElement element,
-                                   @Nullable PsiElement l,
-                                   @Nullable PsiElement r,
-                                   @NotNull List<FoldingDescriptor> result) {
+  private static void fold(@NotNull PsiElement e, @Nullable PsiElement l, @Nullable PsiElement r, @NotNull List<FoldingDescriptor> result) {
     if (l != null && r != null) {
-      result.add(new FoldingDescriptor(element, TextRange.create(l.getTextRange().getStartOffset(), r.getTextRange().getEndOffset())));
+      result.add(new FoldingDescriptor(e, TextRange.create(l.getTextRange().getStartOffset(), r.getTextRange().getEndOffset())));
     }
   }
 
@@ -126,64 +123,48 @@ public class GoFoldingBuilder extends CustomFoldingBuilder implements DumbAware 
       }
     }
 
+    for (GoExprSwitchStatement switchStatement : PsiTreeUtil.findChildrenOfType(file, GoExprSwitchStatement.class)) {
+      fold(switchStatement, switchStatement.getLbrace(), switchStatement.getRbrace(), result);
+    }
+    
+    for (GoSelectStatement selectStatement : PsiTreeUtil.findChildrenOfType(file, GoSelectStatement.class)) {
+      fold(selectStatement, selectStatement.getLbrace(), selectStatement.getRbrace(), result);
+    }
+
     for (GoTypeSpec type : file.getTypes()) {
       foldTypes(type.getSpecType().getType(), result);
     }
 
     for (GoExprCaseClause caseClause : PsiTreeUtil.findChildrenOfType(file, GoExprCaseClause.class)) {
-      if (caseClause.getColon() == null) continue;
-      TextRange range = processList(caseClause.getColon().getNextSibling(),
-                                    ContainerUtil.getLastItem(caseClause.getStatementList()),
-                                    caseClause.getStatementList().size(), 1);
-      if (range != null) {
-        result.add(new FoldingDescriptor(caseClause, range));
-      }
-    }
-
-    for (GoExprSwitchStatement switchStatement : PsiTreeUtil.findChildrenOfType(file, GoExprSwitchStatement.class)) {
-      TextRange range = processList(switchStatement.getLbrace(),
-                                    switchStatement.getRbrace(),
-                                    switchStatement.getExprCaseClauseList().size(), 1);
-      if (range != null) {
-        result.add(new FoldingDescriptor(switchStatement, range));
+      PsiElement colon = caseClause.getColon();
+      if (colon != null && !caseClause.getStatementList().isEmpty()) {
+        fold(caseClause, colon.getNextSibling(), caseClause, result);
       }
     }
 
     for (GoCommClause commClause : PsiTreeUtil.findChildrenOfType(file, GoCommClause.class)) {
-      if (commClause.getColon() == null) continue;
-      TextRange range = processList(commClause.getColon().getNextSibling(),
-                                    ContainerUtil.getLastItem(commClause.getStatementList()),
-                                    commClause.getStatementList().size(), 1);
-      if (range != null) {
-        result.add(new FoldingDescriptor(commClause, range));
-      }
-    }
-
-    for (GoSelectStatement selectStatement : PsiTreeUtil.findChildrenOfType(file, GoSelectStatement.class)) {
-      TextRange range = processList(selectStatement.getLbrace(),
-                                    selectStatement.getRbrace(),
-                                    selectStatement.getCommClauseList().size(), 1);
-      if (range != null) {
-        result.add(new FoldingDescriptor(selectStatement, range));
+      PsiElement colon = commClause.getColon();
+      if (colon != null && !commClause.getStatementList().isEmpty()) {
+        fold(commClause, colon.getNextSibling(), commClause, result);
       }
     }
 
     for (GoVarDeclaration varDeclaration : PsiTreeUtil.findChildrenOfType(file, GoVarDeclaration.class)) {
-      TextRange range = processList(varDeclaration.getLparen(), varDeclaration.getRparen(), varDeclaration.getVarSpecList().size(), 2);
+      TextRange range = processList(varDeclaration.getLparen(), varDeclaration.getRparen(), varDeclaration.getVarSpecList().size());
       if (range != null) {
         result.add(new FoldingDescriptor(varDeclaration, range));
       }
     }
 
     for (GoConstDeclaration constDeclaration : PsiTreeUtil.findChildrenOfType(file, GoConstDeclaration.class)) {
-      TextRange range = processList(constDeclaration.getLparen(), constDeclaration.getRparen(), constDeclaration.getConstSpecList().size(), 2);
+      TextRange range = processList(constDeclaration.getLparen(), constDeclaration.getRparen(), constDeclaration.getConstSpecList().size());
       if (range != null) {
         result.add(new FoldingDescriptor(constDeclaration, range));
       }
     }
 
     for (GoTypeDeclaration typeDeclaration : PsiTreeUtil.findChildrenOfType(file, GoTypeDeclaration.class)) {
-      TextRange range = processList(typeDeclaration.getLparen(), typeDeclaration.getRparen(), typeDeclaration.getTypeSpecList().size(), 2);
+      TextRange range = processList(typeDeclaration.getLparen(), typeDeclaration.getRparen(), typeDeclaration.getTypeSpecList().size());
       if (range != null) {
         result.add(new FoldingDescriptor(typeDeclaration, range));
       }
@@ -191,7 +172,7 @@ public class GoFoldingBuilder extends CustomFoldingBuilder implements DumbAware 
 
     for (GoCompositeLit compositeLit : PsiTreeUtil.findChildrenOfType(file, GoCompositeLit.class)) {
       GoLiteralValue literalValue = compositeLit.getLiteralValue();
-      TextRange range = processList(literalValue.getLbrace(), literalValue.getRbrace(), literalValue.getElementList().size(), 2);
+      TextRange range = processList(literalValue.getLbrace(), literalValue.getRbrace(), literalValue.getElementList().size());
       if (range != null) {
         result.add(new FoldingDescriptor(literalValue, range));
       }
@@ -226,8 +207,7 @@ public class GoFoldingBuilder extends CustomFoldingBuilder implements DumbAware 
         psi instanceof GoSelectStatement || psi instanceof GoExprSwitchStatement) {
       return "{...}";
     }
-    if (psi instanceof GoVarDeclaration || psi instanceof GoConstDeclaration
-        || psi instanceof GoTypeDeclaration) {
+    if (psi instanceof GoVarDeclaration || psi instanceof GoConstDeclaration || psi instanceof GoTypeDeclaration) {
       return "(...)";
     }
     if (psi instanceof GoImportDeclaration || psi instanceof GoCommClause || psi instanceof GoCaseClause) return "...";
