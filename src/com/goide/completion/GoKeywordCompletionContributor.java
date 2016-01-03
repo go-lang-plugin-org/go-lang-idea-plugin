@@ -101,17 +101,23 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
   }
 
   private static ElementPattern<? extends PsiElement> insideConstSpec() {
-    return psiElement().inside(GoConstSpec.class);
+    return psiElement().inside(false, psiElement(GoConstSpec.class), psiElement(GoStatement.class));
+  }
+
+  private static PsiElementPattern.Capture<PsiElement> insideSelectorExpression() {
+    return psiElement().inside(true, psiElement(GoSelectorExpr.class), psiElement(GoStatement.class));
   }
 
   private static ElementPattern<? extends PsiElement> typeExpression() {
     return psiElement(GoTypes.IDENTIFIER).withParent(
       psiElement(GoTypeReferenceExpression.class).with(new GoNonQualifiedReference()));
   }
-  
+
   private static ElementPattern<? extends PsiElement>referenceExpression() {
     return psiElement(GoTypes.IDENTIFIER).withParent(
-      psiElement(GoReferenceExpression.class).andNot(insideConstSpec())
+      psiElement(GoReferenceExpression.class)
+        .andNot(insideConstSpec())
+        .andNot(insideSelectorExpression())
         .withParent(not(psiElement(GoSelectorExpr.class))).with(new GoNonQualifiedReference()));
   }
 
