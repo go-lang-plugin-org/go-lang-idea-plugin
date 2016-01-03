@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -100,14 +100,19 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
     return insideBlockPattern(tokenType).inside(GoForStatement.class);
   }
 
+  private static ElementPattern<? extends PsiElement> insideConstSpec() {
+    return psiElement().inside(GoConstSpec.class);
+  }
+
   private static ElementPattern<? extends PsiElement> typeExpression() {
     return psiElement(GoTypes.IDENTIFIER).withParent(
       psiElement(GoTypeReferenceExpression.class).with(new GoNonQualifiedReference()));
   }
   
-  private static ElementPattern<? extends PsiElement> referenceExpression() {
+  private static ElementPattern<? extends PsiElement>referenceExpression() {
     return psiElement(GoTypes.IDENTIFIER).withParent(
-      psiElement(GoReferenceExpression.class).withParent(not(psiElement(GoSelectorExpr.class))).with(new GoNonQualifiedReference()));
+      psiElement(GoReferenceExpression.class).andNot(insideConstSpec())
+        .withParent(not(psiElement(GoSelectorExpr.class))).with(new GoNonQualifiedReference()));
   }
 
   private static ElementPattern<? extends PsiElement> insideSwitchStatement() {
