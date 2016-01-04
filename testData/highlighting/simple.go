@@ -643,3 +643,27 @@ func _() {
         z.Run(aaa{})
     }
 }
+
+type baseType interface {
+	Method() string
+}
+
+type middleType struct {
+	baseType
+}
+
+func (c *middleType) /*def*/Method() string {
+	return "Hi!"
+}
+
+type leafType struct {
+	middleType
+}
+
+func _() {
+	var leaf = leafType{}
+	println(leaf./*ref*/Method())
+
+	var middle = middleType{}
+	println(middle./*ref*/Method())
+}
