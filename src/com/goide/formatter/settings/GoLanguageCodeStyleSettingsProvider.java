@@ -60,8 +60,6 @@ public class GoLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSettin
     indentOptions.TAB_SIZE = 8;
     indentOptions.USE_TAB_CHARACTER = true;
     
-    defaultSettings.KEEP_BLANK_LINES_IN_CODE = 1;
-    defaultSettings.KEEP_BLANK_LINES_IN_DECLARATIONS = 1;
     defaultSettings.BLOCK_COMMENT_AT_FIRST_COLUMN = false;
     defaultSettings.LINE_COMMENT_AT_FIRST_COLUMN = false;
     return defaultSettings;
