@@ -140,6 +140,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testInit()                      { doTest(); }
   public void testChan()                      { doTest(); }
   public void testIota()                      { doTest(); }
+  public void testIota2()                     { doTest(); }
 
   public void testCheckSamePackage_test()     { 
     myFixture.configureByText("a_test.go", "package check; func TestStringer(t *testing.T) {}"); 
