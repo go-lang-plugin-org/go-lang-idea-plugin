@@ -705,7 +705,8 @@ public class GoPsiImplUtil {
   }
 
   public static boolean allowed(@NotNull PsiFile file, @Nullable PsiFile contextFile) {
-    if (contextFile == null || !(contextFile instanceof GoFile) || !(file instanceof GoFile) || !GoUtil.allowed(file)) return true;
+    if (contextFile == null || !(contextFile instanceof GoFile)) return true;
+    if (!(file instanceof GoFile) || !GoUtil.allowed(file)) return false;
     // it's not a test or context file is also test from the same package
     return !GoTestFinder.isTestFile(file) || 
            GoTestFinder.isTestFile(contextFile) && Comparing.equal(file.getParent(), contextFile.getParent());
