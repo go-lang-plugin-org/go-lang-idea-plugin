@@ -61,7 +61,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       GoRedeclareImportAsFunctionInspection.class,
       GoStructTagInspection.class,
       GoUsedAsValueInCondition.class,
-      GoDeferInLoop.class,
+      GoDeferInLoopInspection.class,
       GoCommentStartInspection.class,
       GoPlaceholderCountInspection.class,
       GoEmbeddedInterfacePointerInspection.class,

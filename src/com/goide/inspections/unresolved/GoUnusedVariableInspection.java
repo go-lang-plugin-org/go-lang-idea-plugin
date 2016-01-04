@@ -17,7 +17,7 @@
 package com.goide.inspections.unresolved;
 
 import com.goide.inspections.GoInspectionBase;
-import com.goide.inspections.GoRenameToBlankQuickFix;
+import com.goide.quickfix.GoRenameToBlankQuickFix;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoVarProcessor;
 import com.goide.quickfix.GoDeleteVarDefinitionQuickFix;
