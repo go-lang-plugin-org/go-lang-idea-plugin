@@ -419,8 +419,9 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
                                              boolean localProcessing) {
     if (!processNamedElements(processor, state, file.getConstants(), new Condition<GoNamedElement>() {
         @Override
-        public boolean value(GoNamedElement o) {
+        public boolean value(@NotNull GoNamedElement o) {
           return !Comparing.equal(GoConstants.IOTA, o.getName()) ||
+                 !builtin(o) ||
                  PsiTreeUtil.getParentOfType(getContext(state), GoConstSpec.class) != null;
         }
       }, localProcessing, false)) return false;
