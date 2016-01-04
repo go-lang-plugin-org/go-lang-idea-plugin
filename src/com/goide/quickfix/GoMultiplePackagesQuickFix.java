@@ -52,7 +52,7 @@ public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionO
 
   public GoMultiplePackagesQuickFix(@NotNull PsiElement element,
                                     @NotNull String packageName,
-                                    Collection<String> packages,
+                                    @NotNull Collection<String> packages,
                                     boolean isOnTheFly) {
     super(element);
     myPackages = packages;
