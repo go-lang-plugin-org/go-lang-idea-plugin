@@ -20,17 +20,14 @@ import com.goide.GoIcons;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.ide.structureView.*;
+import com.intellij.ide.structureView.impl.common.PsiTreeElementBase;
 import com.intellij.ide.util.ActionShortcutProvider;
 import com.intellij.ide.util.FileStructureNodeProvider;
 import com.intellij.ide.util.treeView.smartTree.*;
 import com.intellij.lang.PsiStructureViewFactory;
-import com.intellij.navigation.ItemPresentation;
-import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.actionSystem.Shortcut;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.Iconable;
-import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
@@ -39,7 +36,6 @@ import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -63,7 +59,8 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
   }
 
   public static class Model extends StructureViewModelBase implements StructureViewModel.ElementInfoProvider {
-    private static final List<NodeProvider> PROVIDERS = ContainerUtil.<NodeProvider>newSmartList(new TreeElementFileStructureNodeProvider());
+    private static final List<NodeProvider> PROVIDERS =
+      ContainerUtil.<NodeProvider>newSmartList(new TreeElementFileStructureNodeProvider());
 
     Model(@NotNull PsiFile file) {
       super(file, new Element(file));
@@ -110,7 +107,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
       @NotNull
       @Override
       public Collection<TreeElement> provideNodes(@NotNull TreeElement node) {
-        PsiElement psi = node instanceof Element ? ((Element)node).myElement : null;
+        PsiElement psi = node instanceof Element ? ((Element)node).getElement() : null;
         if (psi instanceof GoFile) {
           GoFile orig = (GoFile)psi;
           List<TreeElement> result = ContainerUtil.newSmartList();
@@ -144,60 +141,22 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
     }
   }
 
-  public static class Element implements StructureViewTreeElement, ItemPresentation, NavigationItem {
-    @NotNull private final PsiElement myElement;
-
+  public static class Element extends PsiTreeElementBase<PsiElement> {
     public Element(@NotNull PsiElement e) {
-      myElement = e;
+      super(e);
     }
 
     @NotNull
     @Override
-    public PsiElement getValue() {
-      return myElement;
-    }
-
-    @Override
-    public void navigate(boolean requestFocus) {
-      if (myElement.isValid()) {
-        ((Navigatable)myElement).navigate(requestFocus);
-      }
-    }
-
-    @Override
-    public boolean canNavigate() {
-      return myElement.isValid() && ((Navigatable)myElement).canNavigate();
-    }
-
-    @Override
-    public boolean canNavigateToSource() {
-      return myElement.isValid() && ((Navigatable)myElement).canNavigateToSource();
-    }
-
-    @Nullable
-    @Override
-    public String getName() {
-      if (!myElement.isValid()) return null;
-      return myElement instanceof GoNamedElement ? ((GoNamedElement)myElement).getName() : myElement.getText();
-    }
-
-    @NotNull
-    @Override
-    public ItemPresentation getPresentation() {
-      return this;
-    }
-
-    @NotNull
-    @Override
-    public TreeElement[] getChildren() {
-      if (!myElement.isValid()) return TreeElement.EMPTY_ARRAY;
-      List<TreeElement> result = ContainerUtil.newArrayList();
-      if (myElement instanceof GoFile) {
-        for (GoTypeSpec o : ((GoFile)myElement).getTypes()) result.add(new Element(o));
-        for (GoConstDefinition o : ((GoFile)myElement).getConstants()) result.add(new Element(o));
-        for (GoVarDefinition o : ((GoFile)myElement).getVars()) result.add(new Element(o));
-        for (GoFunctionDeclaration o : ((GoFile)myElement).getFunctions()) result.add(new Element(o));
-        for (GoMethodDeclaration o : ((GoFile)myElement).getMethods()) {
+    public Collection<StructureViewTreeElement> getChildrenBase() {
+      List<StructureViewTreeElement> result = ContainerUtil.newArrayList();
+      PsiElement element = getElement();
+      if (element instanceof GoFile) {
+        for (GoTypeSpec o : ((GoFile)element).getTypes()) result.add(new Element(o));
+        for (GoConstDefinition o : ((GoFile)element).getConstants()) result.add(new Element(o));
+        for (GoVarDefinition o : ((GoFile)element).getVars()) result.add(new Element(o));
+        for (GoFunctionDeclaration o : ((GoFile)element).getFunctions()) result.add(new Element(o));
+        for (GoMethodDeclaration o : ((GoFile)element).getMethods()) {
           GoReceiver receiver = o.getReceiver();
           GoType type = receiver.getType();
           GoTypeReferenceExpression expression = type != null ? type.getTypeReferenceExpression() : null;
@@ -208,8 +167,8 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
           }
         }
       }
-      else if (myElement instanceof GoTypeSpec) {
-        GoTypeSpec typeSpec = (GoTypeSpec)myElement;
+      else if (element instanceof GoTypeSpec) {
+        GoTypeSpec typeSpec = (GoTypeSpec)element;
         GoType type = typeSpec.getSpecType().getType();
         for (GoMethodDeclaration m : GoPsiImplUtil.getMethods(typeSpec)) result.add(new Element(m));
         if (type instanceof GoStructType) {
@@ -223,7 +182,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
           for (GoMethodSpec m : ((GoInterfaceType)type).getMethodSpecList()) result.add(new Element(m));
         }
       }
-      return result.toArray(new TreeElement[result.size()]);
+      return result;
     }
 
     @Nullable
@@ -235,42 +194,34 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
 
     @Nullable
     private String getPresentationTextInner() {
-      if (!myElement.isValid()) return null;
-      String separator = ": ";
-      if (myElement instanceof GoFile) {
-        return ((GoFile)myElement).getName();
+      PsiElement element = getElement();
+      if (element == null) {
+        return null;
       }
-      else if (myElement instanceof GoNamedSignatureOwner) {
-        GoSignature signature = ((GoNamedSignatureOwner)myElement).getSignature();
+      String separator = ": ";
+      if (element instanceof GoFile) {
+        return ((GoFile)element).getName();
+      }
+      else if (element instanceof GoNamedSignatureOwner) {
+        GoSignature signature = ((GoNamedSignatureOwner)element).getSignature();
         String signatureText = signature != null ? signature.getText() : "";
-        PsiElement id = ((GoNamedSignatureOwner)myElement).getIdentifier();
+        PsiElement id = ((GoNamedSignatureOwner)element).getIdentifier();
         return (id != null ? id.getText() : "") + signatureText;
       }
-      else if (myElement instanceof GoTypeSpec) {
-        GoType type = ((GoTypeSpec)myElement).getSpecType().getType();
+      else if (element instanceof GoTypeSpec) {
+        GoType type = ((GoTypeSpec)element).getSpecType().getType();
         String appendix = type instanceof GoStructType || type instanceof GoInterfaceType ?
                           "" :
                           separator + GoPsiImplUtil.getText(type);
-        return ((GoTypeSpec)myElement).getName() + appendix;
+        return ((GoTypeSpec)element).getName() + appendix;
       }
-      else if (myElement instanceof GoNamedElement) {
-        GoType type = ((GoNamedElement)myElement).getGoType(null);
-        String typeText = type == null || myElement instanceof GoAnonymousFieldDefinition ? "" : separator + GoPsiImplUtil.getText(type);
-        return ((GoNamedElement)myElement).getName() + typeText;
+      else if (element instanceof GoNamedElement) {
+        GoType type = ((GoNamedElement)element).getGoType(null);
+        String typeText = type == null || element instanceof GoAnonymousFieldDefinition ? "" : separator + GoPsiImplUtil.getText(type);
+        return ((GoNamedElement)element).getName() + typeText;
       }
-      Logger.getInstance(GoStructureViewFactory.class).error("Cannot get presentation for " + myElement.getClass().getName());
+      Logger.getInstance(GoStructureViewFactory.class).error("Cannot get presentation for " + element.getClass().getName());
       return null;
-    }
-
-    @Nullable
-    @Override
-    public String getLocationString() {
-      return null;
-    }
-
-    @Override
-    public Icon getIcon(boolean open) {
-      return myElement.isValid() ? myElement.getIcon(Iconable.ICON_FLAG_VISIBILITY) : null;
     }
   }
 }
