@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -167,7 +167,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
   
   private static boolean allowed(@NotNull GoNamedElement element) {
     GoFile file = element.getContainingFile();
-    if (!GoUtil.allowed(file) || GoUtil.isExcludedFile(file)) return false;
+    if (GoPsiImplUtil.builtin(element) || !GoUtil.allowed(file) || GoUtil.isExcludedFile(file)) return false;
     PsiDirectory directory = file.getContainingDirectory();
     if (directory != null) {
       VirtualFile vFile = directory.getVirtualFile();
