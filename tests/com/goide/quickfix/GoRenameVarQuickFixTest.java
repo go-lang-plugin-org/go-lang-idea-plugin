@@ -16,7 +16,6 @@
 
 package com.goide.quickfix;
 
-import com.goide.inspections.GoRenameToBlankQuickFix;
 import com.goide.inspections.unresolved.GoUnusedVariableInspection;
 import org.jetbrains.annotations.NotNull;
 

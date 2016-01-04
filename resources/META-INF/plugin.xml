@@ -249,7 +249,7 @@
                      implementationClass="com.goide.inspections.GoUsedAsValueInCondition"/>
     <localInspection language="go" displayName="Defer in loop" groupPath="Go"
                      groupName="Control flow issues" enabledByDefault="true" level="WEAK WARNING"
-                     implementationClass="com.goide.inspections.GoDeferInLoop"/>
+                     implementationClass="com.goide.inspections.GoDeferInLoopInspection"/>
     <!-- /control flow issues -->
 
     <!-- general -->

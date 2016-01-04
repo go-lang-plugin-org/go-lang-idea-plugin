@@ -17,7 +17,6 @@
 package com.goide.quickfix;
 
 import com.goide.inspections.GoMultiplePackagesInspection;
-import com.goide.inspections.GoMultiplePackagesQuickFix;
 import org.jetbrains.annotations.NotNull;
 
 public class GoMultiplePackagesQuickFixTest extends GoQuickFixTestBase {

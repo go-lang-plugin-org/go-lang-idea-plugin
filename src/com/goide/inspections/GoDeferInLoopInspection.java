@@ -26,7 +26,7 @@ import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 
-public class GoDeferInLoop extends GoInspectionBase {
+public class GoDeferInLoopInspection extends GoInspectionBase {
   @NotNull
   @Override
   protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {

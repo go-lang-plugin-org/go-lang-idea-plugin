@@ -18,6 +18,7 @@ package com.goide.inspections;
 
 import com.goide.psi.GoFile;
 import com.goide.psi.GoImportSpec;
+import com.goide.quickfix.GoDeleteQuickFix;
 import com.goide.runconfig.testing.GoTestFinder;
 import com.intellij.codeInspection.ProblemsHolder;
 import org.jetbrains.annotations.NotNull;
