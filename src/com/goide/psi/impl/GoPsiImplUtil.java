@@ -47,6 +47,7 @@ import com.intellij.util.Function;
 import com.intellij.util.NotNullFunction;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -1245,5 +1246,13 @@ public class GoPsiImplUtil {
   @NotNull
   public PsiElement getType(@NotNull GoTypeSpec o) {
     return o.getSpecType();
+  }
+
+  @Nullable
+  @Contract("null, _ -> null")
+  public static <T extends PsiElement> T getNonStrictTopmostParentOfType(@Nullable PsiElement element, @NotNull Class<T> aClass) {
+    T first = PsiTreeUtil.getNonStrictParentOfType(element, aClass);
+    T topMost = PsiTreeUtil.getTopmostParentOfType(first, aClass);
+    return ObjectUtils.chooseNotNull(topMost, first);
   }
 }

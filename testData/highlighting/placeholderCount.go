@@ -13,7 +13,7 @@ func printf(placeholder string, args ...int) {
 }
 
 var s string = "%d"
-const s1 = s1
+const s1 = <error descr="Cyclic definition detected">s1</error>
 const s2 = 1
 
 func _() {
