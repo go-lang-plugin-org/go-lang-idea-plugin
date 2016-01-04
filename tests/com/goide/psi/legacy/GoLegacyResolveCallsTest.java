@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.goide.psi.legacy;
 
+import com.goide.project.GoBuildTargetSettings;
 import org.jetbrains.annotations.NotNull;
 
 public class GoLegacyResolveCallsTest extends GoLegacyResolveTestBase {
@@ -60,4 +61,9 @@ public class GoLegacyResolveCallsTest extends GoLegacyResolveTestBase {
   public void testCallToMethodWithTheSameNameAsFunctionAcrossPackages()  { doDirTest(); }
   public void testCallFromTestToMethodDefinedInTestFile()                { doDirTest(); }
   public void testCallToMethodDefinedInTestFile()                        { doDirTest(); }
+
+  public void testCallToDifferentBuildTargetFiles() {
+    GoBuildTargetSettings.getInstance(myFixture.getProject()).setCustomFlags("enabled");
+    doDirTest();
+  }
 }
