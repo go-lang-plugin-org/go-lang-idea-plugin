@@ -105,10 +105,6 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testVariadic()                  { doTest(); }
   public void testCheck()                     { doTest(); }
   public void testCheck_test()                { doTest(); }
-  public void testCheckSamePackage_test()     { 
-    myFixture.configureByText("a_test.go", "package check; func TestStringer(t *testing.T) {}"); 
-    doTest(); 
-  }
   public void testFuncCall()                  { doTest(); }
   public void testBuiltinFuncCalls()          { doTest(); }
   public void testBackticks()                 { doTest(); }
@@ -145,6 +141,11 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testInit()                      { doTest(); }
   public void testChan()                      { doTest(); }
   public void testIota()                      { doTest(); }
+
+  public void testCheckSamePackage_test()     { 
+    myFixture.configureByText("a_test.go", "package check; func TestStringer(t *testing.T) {}"); 
+    doTest(); 
+  }
 
   public void testRelativeImportIgnoringDirectories() throws IOException {
     myFixture.getTempDirFixture().findOrCreateDir("to_import/testdata");
