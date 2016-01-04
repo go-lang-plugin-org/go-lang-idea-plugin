@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import com.intellij.lang.PsiStructureViewFactory;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.actionSystem.Shortcut;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.Iconable;
 import com.intellij.pom.Navigatable;
@@ -158,24 +159,26 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
 
     @Override
     public void navigate(boolean requestFocus) {
-      ((Navigatable)myElement).navigate(requestFocus);
+      if (myElement.isValid()) {
+        ((Navigatable)myElement).navigate(requestFocus);
+      }
     }
 
     @Override
     public boolean canNavigate() {
-      return ((Navigatable)myElement).canNavigate();
+      return myElement.isValid() && ((Navigatable)myElement).canNavigate();
     }
 
     @Override
     public boolean canNavigateToSource() {
-      return ((Navigatable)myElement).canNavigateToSource();
+      return myElement.isValid() && ((Navigatable)myElement).canNavigateToSource();
     }
 
     @Nullable
     @Override
     public String getName() {
-      if (myElement instanceof GoNamedElement) return ((GoNamedElement)myElement).getName();
-      return myElement.getText();
+      if (!myElement.isValid()) return null;
+      return myElement instanceof GoNamedElement ? ((GoNamedElement)myElement).getName() : myElement.getText();
     }
 
     @NotNull
@@ -187,6 +190,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
     @NotNull
     @Override
     public TreeElement[] getChildren() {
+      if (!myElement.isValid()) return TreeElement.EMPTY_ARRAY;
       List<TreeElement> result = ContainerUtil.newArrayList();
       if (myElement instanceof GoFile) {
         for (GoTypeSpec o : ((GoFile)myElement).getTypes()) result.add(new Element(o));
@@ -222,13 +226,16 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
       return result.toArray(new TreeElement[result.size()]);
     }
 
+    @Nullable
     @Override
     public String getPresentableText() {
-      return getPresentationTextInner().replaceAll("\\(\\n", "(").replaceAll("\\n\\)", ")");
+      String textInner = getPresentationTextInner();
+      return textInner != null ? textInner.replaceAll("\\(\\n", "(").replaceAll("\\n\\)", ")") : null;
     }
 
-    @NotNull
+    @Nullable
     private String getPresentationTextInner() {
+      if (!myElement.isValid()) return null;
       String separator = ": ";
       if (myElement instanceof GoFile) {
         return ((GoFile)myElement).getName();
@@ -251,7 +258,8 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
         String typeText = type == null || myElement instanceof GoAnonymousFieldDefinition ? "" : separator + GoPsiImplUtil.getText(type);
         return ((GoNamedElement)myElement).getName() + typeText;
       }
-      throw new AssertionError(myElement.getClass().getName());
+      Logger.getInstance(GoStructureViewFactory.class).error("Cannot get presentation for " + myElement.getClass().getName());
+      return null;
     }
 
     @Nullable
@@ -262,8 +270,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
 
     @Override
     public Icon getIcon(boolean open) {
-      if (!myElement.isValid()) return null;
-      return myElement.getIcon(Iconable.ICON_FLAG_VISIBILITY);
+      return myElement.isValid() ? myElement.getIcon(Iconable.ICON_FLAG_VISIBILITY) : null;
     }
   }
 }
