@@ -3,5 +3,5 @@ package check
 import "fmt"
 
 func init() {
-  fmt.TestStringer(nil)
+  fmt.<error descr="Unresolved reference 'TestStringer'">TestStringer</error>(nil)
 }

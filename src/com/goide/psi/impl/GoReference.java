@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package com.goide.psi.impl;
 
 import com.goide.GoConstants;
 import com.goide.psi.*;
-import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.sdk.GoSdkUtil;
 import com.goide.util.GoUtil;
 import com.intellij.openapi.util.*;
@@ -286,11 +285,10 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
                                             boolean localProcessing) {
     if (dir == null) return true;
     String filePath = getPath(file);
-    boolean isTesting = GoTestFinder.isTestFile(file);
     for (PsiFile f : dir.getFiles()) {
       if (!(f instanceof GoFile) || Comparing.equal(getPath(f), filePath)) continue;
       if (packageName != null && !packageName.equals(((GoFile)f).getPackageName())) continue;
-      if (allowed(f, isTesting) && !processFileEntities((GoFile)f, processor, state, localProcessing)) return false;
+      if (allowed(f, file) && !processFileEntities((GoFile)f, processor, state, localProcessing)) return false;
     }
     return true;
   }
