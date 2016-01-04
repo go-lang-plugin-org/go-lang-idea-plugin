@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -703,13 +703,11 @@ public class GoPsiImplUtil {
     return calcMethods(o);
   }
 
-  static boolean allowed(@NotNull PsiFile file, boolean isTesting) {
-    return file instanceof GoFile && (!GoTestFinder.isTestFile(file) || isTesting) && GoUtil.allowed(file);
-  }
-
   public static boolean allowed(@NotNull PsiFile file, @Nullable PsiFile contextFile) {
-    if (contextFile == null || !(contextFile instanceof GoFile)) return true; 
-    return allowed(file, GoTestFinder.isTestFile(contextFile));
+    if (contextFile == null || !(contextFile instanceof GoFile) || !(file instanceof GoFile) || !GoUtil.allowed(file)) return true;
+    // it's not a test or context file is also test from the same package
+    return !GoTestFinder.isTestFile(file) || 
+           GoTestFinder.isTestFile(contextFile) && Comparing.equal(file.getParent(), contextFile.getParent());
   }
 
   static boolean processNamedElements(@NotNull PsiScopeProcessor processor,
