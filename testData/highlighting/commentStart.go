@@ -1,4 +1,4 @@
-<weak_warning descr="Package comment should be of the form \"Package commentstart ...\"">// demo</weak_warning>
+<weak_warning descr="Package comment should be of the form 'Package commentstart ...'">// demo</weak_warning>
 package commentstart
 
 type (

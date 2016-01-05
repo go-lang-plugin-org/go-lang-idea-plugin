@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,7 +49,7 @@ public class GoCommentStartInspection extends GoInspectionBase {
         List<PsiComment> comments = GoDocumentationProvider.getCommentsForElement(o);
         String commentText = GoDocumentationProvider.getCommentText(comments, false);
         if (!comments.isEmpty() && !commentText.isEmpty() && !commentText.startsWith("Package " + packageName)) {
-          registerProblem(comments, "Package comment should be of the form \"Package " + packageName + " ...\"", holder);
+          registerProblem(comments, "Package comment should be of the form 'Package " + packageName + " ...'", holder);
         }
       }
 
