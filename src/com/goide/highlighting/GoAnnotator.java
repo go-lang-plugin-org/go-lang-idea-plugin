@@ -67,7 +67,7 @@ public class GoAnnotator implements Annotator {
         }
       }
       if (resolvedReference instanceof GoTypeSpec && isIllegalUseOfTypeAsExpression(reference)) {
-        holder.createErrorAnnotation(element, "Type " + element.getText() + " is not an expression.");
+        holder.createErrorAnnotation(element, "Type " + element.getText() + " is not an expression");
       }
       if (resolvedReference instanceof GoConstDefinition &&
           resolvedReference.getParent() instanceof GoConstSpec &&
@@ -82,7 +82,7 @@ public class GoAnnotator implements Annotator {
     }
     else if (element instanceof GoLiteralTypeExpr) {
       if (isIllegalUseOfTypeAsExpression(element)) {
-        holder.createErrorAnnotation(element, "Type " + element.getText() + " is not an expression.");
+        holder.createErrorAnnotation(element, "Type " + element.getText() + " is not an expression");
       }
     }
     else if (element instanceof GoCompositeLit) {
@@ -101,7 +101,7 @@ public class GoAnnotator implements Annotator {
         GoType baseType = GoPsiImplUtil.findBaseTypeFromRef(type.getTypeReferenceExpression());
         if (baseType instanceof GoSpecType && !(((GoSpecType)baseType).getType() instanceof GoInterfaceType)) {
           String message =
-            String.format("Invalid type assertion: %s, (non-interface type %s on left).", element.getText(), type.getText());
+            String.format("Invalid type assertion: %s, (non-interface type %s on left)", element.getText(), type.getText());
           holder.createErrorAnnotation(((GoTypeAssertionExpr)element).getExpression(), message);
         }
       }
