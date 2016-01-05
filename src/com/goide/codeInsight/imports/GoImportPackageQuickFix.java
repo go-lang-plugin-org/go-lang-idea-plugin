@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,9 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.Set;
 
 import static com.intellij.openapi.actionSystem.IdeActions.ACTION_SHOW_INTENTION_ACTIONS;
 import static com.intellij.util.containers.ContainerUtil.*;
@@ -161,6 +163,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
     if (myPackagesToImport == null) {
       GlobalSearchScope scope = GoUtil.moduleScope(element);
       PsiFile file = element.getContainingFile();
+      final Set<String> imported = file instanceof GoFile ? ((GoFile)file).getImportedPackagesMap().keySet() : Collections.<String>emptySet();
       Project project = element.getProject();
       final PsiDirectory parentDirectory = file != null ? file.getParent() : null;
       final GoExcludedPathsSettings excludedSettings = GoExcludedPathsSettings.getInstance(project);
@@ -179,7 +182,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
             }
 
             String importPath = file.getImportPath();
-            return !excludedSettings.isExcluded(importPath) ? importPath : null;
+            return !imported.contains(importPath) && !excludedSettings.isExcluded(importPath) ? importPath : null;
           }
         }
       )), new MyImportsComparator(element));
