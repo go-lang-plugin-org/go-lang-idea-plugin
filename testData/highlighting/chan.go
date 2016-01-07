@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 type Struct struct {
 	String string
 }
@@ -17,4 +19,37 @@ func main() {
 		println(s.String)
 	}
 
+}
+
+type Neuron struct {
+	ID int
+}
+
+type Signal struct {
+	Value float64
+	ID    string
+}
+
+func (s *Signal) IsNull() bool {
+	if s.Value != 0 {
+		return false
+	}
+	return true
+}
+
+type Dendrit chan *Signal
+
+func (d Dendrit) Sinops(n *Neuron) {
+	for {
+		select {
+		case signal := 	<-d:
+			if signal.IsNull() { // not found method
+				continue
+			}
+		// Value not found also
+			fmt.Printf("NID=%d\t<- %g (IN)\n", n.ID, signal.Value)
+		default:
+			continue
+		}
+	}
 }
