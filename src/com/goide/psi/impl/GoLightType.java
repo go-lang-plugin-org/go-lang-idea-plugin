@@ -61,8 +61,8 @@ class GoLightType<E extends GoCompositeElement> extends LightElement implements 
     return null;
   }
 
-  static class MyPointerType extends GoLightType<GoType> implements GoPointerType {
-    protected MyPointerType(@NotNull GoType o) {
+  static class LightPointerType extends GoLightType<GoType> implements GoPointerType {
+    protected LightPointerType(@NotNull GoType o) {
       super(o);
     }
 
@@ -84,10 +84,10 @@ class GoLightType<E extends GoCompositeElement> extends LightElement implements 
     }
   }
 
-  static class MyGoTypeList extends GoLightType<GoCompositeElement> implements GoTypeList {
+  static class LightTypeList extends GoLightType<GoCompositeElement> implements GoTypeList {
     @NotNull private final List<GoType> myTypes;
 
-    public MyGoTypeList(@NotNull GoCompositeElement o, @NotNull List<GoType> types) {
+    public LightTypeList(@NotNull GoCompositeElement o, @NotNull List<GoType> types) {
       super(o);
       myTypes = types;
     }
@@ -104,8 +104,8 @@ class GoLightType<E extends GoCompositeElement> extends LightElement implements 
     }
   }
 
-  static class MyFunctionType extends GoLightType<GoSignatureOwner> implements GoFunctionType {
-    public MyFunctionType(@NotNull GoSignatureOwner o) {
+  static class LightFunctionType extends GoLightType<GoSignatureOwner> implements GoFunctionType {
+    public LightFunctionType(@NotNull GoSignatureOwner o) {
       super(o);
     }
 
@@ -128,8 +128,8 @@ class GoLightType<E extends GoCompositeElement> extends LightElement implements 
     }
   }
 
-  static class MyArrayType extends GoLightType<GoType> implements GoArrayOrSliceType {
-    protected MyArrayType(GoType type) {
+  static class LightArrayType extends GoLightType<GoType> implements GoArrayOrSliceType {
+    protected LightArrayType(GoType type) {
       super(type);
     }
 
