@@ -352,7 +352,7 @@ public class GoPsiImplUtil {
       return findTypeFromTypeRef(expression);
     }
     else if (o instanceof GoFunctionLit) {
-      return new MyFunctionType((GoFunctionLit)o);
+      return new LightFunctionType((GoFunctionLit)o);
     }
     else if (o instanceof GoBuiltinCallExpr) {
       String text = ((GoBuiltinCallExpr)o).getReferenceExpression().getText();
@@ -361,7 +361,7 @@ public class GoPsiImplUtil {
       if (isNew || isMake) {
         GoBuiltinArgs args = ((GoBuiltinCallExpr)o).getBuiltinArgs();
         GoType type = args != null ? args.getType() : null;
-        return isNew ? type == null ? null : new MyPointerType(type) : type;
+        return isNew ? type == null ? null : new LightPointerType(type) : type;
       }
     }
     else if (o instanceof GoCallExpr) {
@@ -474,10 +474,10 @@ public class GoPsiImplUtil {
   public static GoType typeOrParameterType(@NotNull final GoTypeOwner resolve, @Nullable ResolveState context) {
     GoType type = resolve.getGoType(context);
     if (resolve instanceof GoParamDefinition && ((GoParamDefinition)resolve).isVariadic()) {
-      return type == null ? null : new MyArrayType(type);
+      return type == null ? null : new LightArrayType(type);
     }
     if (resolve instanceof GoSignatureOwner) {
-      return new MyFunctionType((GoSignatureOwner)resolve);
+      return new LightFunctionType((GoSignatureOwner)resolve);
     }
     return type;
   }
@@ -584,7 +584,7 @@ public class GoPsiImplUtil {
             }
           }
           if (types.size() == 1) return types.get(0);
-          return new MyGoTypeList(parameters, types);
+          return new LightTypeList(parameters, types);
         }
       }
     }
@@ -833,7 +833,7 @@ public class GoPsiImplUtil {
           }
         }
         if (composite.size() == 1) return composite.get(0);
-        return new MyGoTypeList(parameters, composite);
+        return new LightTypeList(parameters, composite);
       }
     }
     return null;
