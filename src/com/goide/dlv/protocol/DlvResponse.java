@@ -20,8 +20,8 @@ import com.goide.dlv.JsonReaderEx;
 import com.google.gson.stream.JsonToken;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.jsonProtocol.JsonOptionalField;
 import org.jetbrains.jsonProtocol.JsonType;
+import org.jetbrains.jsonProtocol.Optional;
 
 import java.util.Collections;
 import java.util.List;
@@ -31,11 +31,11 @@ public interface DlvResponse {
   int id();
 
   @Nullable
-  @JsonOptionalField
+  @Optional
   JsonReaderEx result();
 
   @Nullable
-  @JsonOptionalField
+  @Optional
   ErrorInfo error();
 
   @JsonType
@@ -44,7 +44,7 @@ public interface DlvResponse {
     String message();
 
     @NotNull
-    @JsonOptionalField
+    @Optional
     List<String> data();
 
     int code();
