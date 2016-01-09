@@ -221,7 +221,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
 
   @NotNull
   @Override
-  public List<Location> getLocationsForBreakpoint(@NotNull XLineBreakpoint<?> breakpoint, boolean b) {
+  public List<Location> getLocationsForBreakpoint(@NotNull XLineBreakpoint<?> breakpoint) {
     return Collections.emptyList();
   }
 
