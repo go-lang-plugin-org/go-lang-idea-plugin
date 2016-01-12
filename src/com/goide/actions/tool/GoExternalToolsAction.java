@@ -112,10 +112,8 @@ public abstract class GoExternalToolsAction extends DumbAwareAction {
     else {
       FileDocumentManager.getInstance().saveAllDocuments();
     }
-    String filePath = virtualFile.getCanonicalPath();
-    assert filePath != null;
 
-    createExecutor(project, module, title, filePath).executeWithProgress(withProgress, new Consumer<Boolean>() {
+    createExecutor(project, module, title, virtualFile).executeWithProgress(withProgress, new Consumer<Boolean>() {
       @Override
       public void consume(Boolean result) {
         consumer.consume(result);
@@ -123,6 +121,15 @@ public abstract class GoExternalToolsAction extends DumbAwareAction {
       }
     });
     return true;
+  }
+
+  protected GoExecutor createExecutor(@NotNull Project project,
+                                               @Nullable Module module,
+                                               @NotNull String title,
+                                               @NotNull VirtualFile virtualFile) {
+      String filePath = virtualFile.getCanonicalPath();
+      assert filePath != null;
+      return createExecutor(project, module, title, filePath);
   }
 
   @NotNull

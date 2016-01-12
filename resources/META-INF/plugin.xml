@@ -215,9 +215,9 @@
                      groupName="Redeclared symbols" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoRedeclareImportAsFunctionInspection"/>
     <!-- /redeclare inspections -->
-    
+
     <!-- code style issues -->
-    <localInspection language="go" displayName="Comment of exported element starts with incorrect name" groupPath="Go" 
+    <localInspection language="go" displayName="Comment of exported element starts with incorrect name" groupPath="Go"
                      groupName="Code style issues" enabledByDefault="true" level="WEAK WARNING"
                      implementationClass="com.goide.inspections.GoCommentStartInspection"/>
     <localInspection language="go" displayName="Exported element should have its own declaration" groupPath="Go"
@@ -332,8 +332,8 @@
             description="Optimizes imports for selected file with goimports util">
       <add-to-group group-id="CodeMenu" anchor="last"/>
     </action>
-    <action id="GoTypeFileAction" class="com.goide.actions.tool.GoTypeFileAction" text="Gotype file"
-            description="Analyze types for selected file with gotype util">
+    <action id="GoTypeFileAction" class="com.goide.actions.tool.GoTypeFileAction" text="Gotype directory"
+            description="Analyze types for current directory with gotype util">
       <add-to-group group-id="CodeMenu" anchor="last"/>
     </action>
   </actions>
