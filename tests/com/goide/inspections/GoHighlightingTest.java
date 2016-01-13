@@ -285,14 +285,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testMethodOnNonLocalType() throws Throwable {
-    myFixture.configureByFile(getTestName(true)+".go");
-    VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
-      @NotNull
-      @Override
-      public VirtualFile compute() throws Throwable {
-        return myFixture.getTempDirFixture().copyFile(myFixture.getFile().getVirtualFile(), "method/nonlocaltype.go");
-      }
-    });
+    VirtualFile file = myFixture.copyFileToProject(getTestName(true) + ".go", "method/nonlocaltype.go");
     GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(file.getParent().getParent().getUrl());
     myFixture.configureFromExistingVirtualFile(file);
     myFixture.checkHighlighting();
