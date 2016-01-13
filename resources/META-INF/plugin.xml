@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+  ~ Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@
   <depends optional="true" config-file="java-deps.xml">com.intellij.modules.java</depends>
   <depends optional="true" config-file="coverage.xml">Coverage</depends>
   <depends optional="true" config-file="coverage.xml">com.intellij.modules.coverage</depends>
-  <!-- todo[IDEA 16] replace with real dependency -->
+  <!-- todo[IDEA 17] replace with real dependency -->
   <depends optional="true" config-file="app-engine.xml">com.intellij.modules.lang</depends>
 
   <module-components>
@@ -351,7 +351,7 @@
   <!-- GAE -->
 
   <!-- START plugin.xml of future GAE module -->
-  <!-- todo[IDEA 16] It's supposed that GAE-core module will be moved to IDEA source and bundled in IDEA 16 -->
+  <!-- todo[IDEA 17] It's supposed that GAE-core module will be moved to IDEA source and bundled in IDEA 16 -->
   <!--<id>com.intellij.appengine</id>-->
   <depends optional="true" config-file="google-app-engine-core-yaml.xml">org.jetbrains.plugins.yaml</depends>
 

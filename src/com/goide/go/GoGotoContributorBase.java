@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,7 +81,7 @@ public class GoGotoContributorBase<T extends GoNamedElement> implements GotoClas
   @Nullable
   @Override
   public String getQualifiedNameSeparator() {
-    // todo[IDEA 15.1]: replace with null 
+    // todo[IDEA 16]: replace with null 
     return ".";
   }
 }
