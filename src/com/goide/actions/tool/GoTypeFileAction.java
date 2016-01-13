@@ -23,8 +23,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
-
 public class GoTypeFileAction extends GoDownloadableFileAction {
   public GoTypeFileAction() {
     super("gotype", "golang.org/x/tools/cmd/gotype");
@@ -37,14 +35,8 @@ public class GoTypeFileAction extends GoDownloadableFileAction {
 
   @NotNull
   @Override
-  protected GoExecutor createExecutor(@NotNull Project project, @Nullable Module module, @NotNull String title, @NotNull VirtualFile virtualFile) {
-    VirtualFile directoryVirtualFile;
-    if(virtualFile.isDirectory()) {
-      directoryVirtualFile = virtualFile;
-    } else {
-      directoryVirtualFile = virtualFile.getParent();
-    }
-    return super.createExecutor(project, module, title, directoryVirtualFile);
+  protected GoExecutor createExecutor(@NotNull Project project, @Nullable Module module, @NotNull String title, @NotNull VirtualFile file) {
+    return super.createExecutor(project, module, title, file.isDirectory() ? file : file.getParent());
   }
 
   @NotNull
