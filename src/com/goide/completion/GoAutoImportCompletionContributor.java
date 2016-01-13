@@ -93,7 +93,11 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         Set<String> sortedKeys = sortMatching(matcher, StubIndex.getInstance().getAllKeys(ALL_PUBLIC_NAMES, project), file);
         for (String name : sortedKeys) {
           processor.setName(name);
-          StubIndex.getInstance().processElements(ALL_PUBLIC_NAMES, name, project, scope, GoNamedElement.class, processor);
+          for (GoNamedElement element : StubIndex.getElements(ALL_PUBLIC_NAMES, name, project, scope, GoNamedElement.class)) {
+            if (!processor.process(element)) {
+              break;
+            }
+          }
         }
       }
 
