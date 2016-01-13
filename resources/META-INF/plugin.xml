@@ -30,9 +30,8 @@
     ]]>
   </change-notes>
 
-  <idea-version since-build="141.1532" until-build="141.9999"/>
+  <idea-version since-build="143.379" until-build="143.379"/>
   <depends>com.intellij.modules.lang</depends>
-
   <depends optional="true" config-file="java-deps.xml">com.intellij.modules.java</depends>
   <depends optional="true" config-file="coverage.xml">Coverage</depends>
   <depends optional="true" config-file="coverage.xml">com.intellij.modules.coverage</depends>
