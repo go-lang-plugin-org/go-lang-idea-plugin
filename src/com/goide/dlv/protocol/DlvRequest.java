@@ -104,21 +104,21 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
   public final static class CreateBreakpoint extends DlvRequest<DlvApi.Breakpoint> {
     public CreateBreakpoint(String path, int line) {
       writeString("file", path);
-      writeInt("line", line);
+      writeLong("line", line);
     }
   }
 
   public final static class StacktraceGoroutine extends DlvRequest<List<DlvApi.Location>> {
     public StacktraceGoroutine() {
-      writeInt("Id", -1);
-      writeInt("Depth", 100);
+      writeLong("Id", -1);
+      writeLong("Depth", 100);
     }
   }
 
   private abstract static class Locals<T> extends DlvRequest<T> {
     Locals(int frameId) {
-      writeInt("GoroutineID", -1);
-      writeInt("Frame", frameId);
+      writeLong("GoroutineID", -1);
+      writeLong("Frame", frameId);
     }
   }
 
