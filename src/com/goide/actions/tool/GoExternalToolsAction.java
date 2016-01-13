@@ -90,11 +90,11 @@ public abstract class GoExternalToolsAction extends DumbAwareAction {
     return doSomething(virtualFile, module, project, title, false);
   }
 
-  protected boolean doSomething(@NotNull VirtualFile virtualFile,
-                                @Nullable Module module,
-                                @NotNull Project project,
-                                @NotNull String title,
-                                boolean withProgress) {
+  private boolean doSomething(@NotNull VirtualFile virtualFile,
+                              @Nullable Module module,
+                              @NotNull Project project,
+                              @NotNull String title,
+                              boolean withProgress) {
     //noinspection unchecked
     return doSomething(virtualFile, module, project, title, withProgress, Consumer.EMPTY_CONSUMER);
   }
@@ -124,12 +124,12 @@ public abstract class GoExternalToolsAction extends DumbAwareAction {
   }
 
   protected GoExecutor createExecutor(@NotNull Project project,
-                                               @Nullable Module module,
-                                               @NotNull String title,
-                                               @NotNull VirtualFile virtualFile) {
-      String filePath = virtualFile.getCanonicalPath();
-      assert filePath != null;
-      return createExecutor(project, module, title, filePath);
+                                      @Nullable Module module,
+                                      @NotNull String title,
+                                      @NotNull VirtualFile virtualFile) {
+    String filePath = virtualFile.getCanonicalPath();
+    assert filePath != null;
+    return createExecutor(project, module, title, filePath);
   }
 
   @NotNull
