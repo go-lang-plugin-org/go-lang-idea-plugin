@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,13 +52,18 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
   }
 
   @Override
-  protected final void beginArguments() throws IOException {
+  public final void beginArguments() {
     if (!argumentsObjectStarted) {
       argumentsObjectStarted = true;
       if (needObject()) {
-        writer.name(PARAMS);
-        writer.beginArray();
-        writer.beginObject();
+        try {
+          writer.name(PARAMS);
+          writer.beginArray();
+          writer.beginObject();
+        }
+        catch (IOException e) {
+          throw new RuntimeException(e);
+        }
       }
     }
   }
