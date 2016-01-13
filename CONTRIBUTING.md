@@ -98,16 +98,15 @@ compiles everything, runs the tests, and builds the plugins. The output appears 
 1. Setup the right version of [Grammar-Kit](https://dl.dropboxusercontent.com/u/4294872/GrammarKit-2015-11-22.zip)
 1. Make sure that **UI Designer** and **Gradle** plugins are turned on
 1. Checkout plugin repo and open the project
-1. Open the copy of go-lang-idea-plugin repository (`File | New | Project from Existing Sources...`) with it. Then import Gradle project. The default project module config should work with a recent IDEA 15 version
+1. Open the copy of go-lang-idea-plugin repository (`File | New | Project from Existing Sources...`) with it. Then import Gradle project. The default project module config should work with a recent IDEA 16 version
 1. Git revert changes to the .idea folder because IDEA Gradle import blows it away (https://youtrack.jetbrains.com/issue/IDEA-146295)
-1. Open `File -> Project Settings`, go to the SDKs entry, click the `+` and select JDK 1.6
+1. Open `File -> Project Settings`, go to the SDKs entry, click the `+` and select JDK 1.8
 1. Go to the Project entry and make sure that the Project SDK is set to selected SDK
 1. Wait until the source files of the SDK are indexed
 1. Run or debug the **Go** run configuration
 
 If you use Mac, you may check follow path while looking for SDK:
 ```
-/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/
 /Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/
 ```
 
@@ -125,20 +124,6 @@ sure that all the test cases pass before committing anything (or making a pull r
 
 You can also have a look at some [useful links](#useful-links) for getting started with
 plugin development on IntelliJ IDEA platform.
-
-##### IMPORTANT: MacOS X users note
-
-You might get the following error ```Unsupported major.minor version 52``` in the
-logs or the plugin might not work at all.
-
-Check the version of Java your IDE is running on. Since in 99.9% of the cases it will
-be Java 6, this means that you compiled the plugin with a different version of Java,
-for example Java 8.
-
-To fix the error, please use Java JDK 6 to compile the plugin and everything should work.
-
-To get the log files, you can go to ```Help | Show Log in File Manager``` and then the
-log will be displayed to you.
 
 ### Code Style
 

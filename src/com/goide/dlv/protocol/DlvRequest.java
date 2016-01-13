@@ -38,7 +38,7 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
 
   private DlvRequest() {
     try {
-      writer.name("method").value(getMethodName());
+      getWriter().name("method").value(getMethodName());
     }
     catch (IOException e) {
       throw new RuntimeException(e);
@@ -57,9 +57,9 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
       argumentsObjectStarted = true;
       if (needObject()) {
         try {
-          writer.name(PARAMS);
-          writer.beginArray();
-          writer.beginObject();
+          getWriter().name(PARAMS);
+          getWriter().beginArray();
+          getWriter().beginObject();
         }
         catch (IOException e) {
           throw new RuntimeException(e);
@@ -77,13 +77,13 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
     try {
       if (argumentsObjectStarted) {
         if (needObject()) {
-          writer.endObject();
-          writer.endArray();
+          getWriter().endObject();
+          getWriter().endArray();
         }
       }
-      writer.name(ID).value(id);
-      writer.endObject();
-      writer.close();
+      getWriter().name(ID).value(id);
+      getWriter().endObject();
+      getWriter().close();
     }
     catch (IOException e) {
       throw new RuntimeException(e);
@@ -143,8 +143,8 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
   public final static class EvalSymbol extends DlvRequest<DlvApi.Variable> {
     public EvalSymbol(@NotNull String symbol, int frameId) {
       try {
-        writer.name(PARAMS).beginArray();
-        writeScope(frameId, writer)
+        getWriter().name(PARAMS).beginArray();
+        writeScope(frameId, getWriter())
           .name("Symbol").value(symbol)
           .endObject().endArray();
       }
@@ -171,8 +171,8 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
   public final static class SetSymbol extends DlvRequest<Object> {
     public SetSymbol(@NotNull String symbol, @NotNull String value, int frameId) {
       try {
-        writer.name(PARAMS).beginArray();
-        writeScope(frameId, writer)
+        getWriter().name(PARAMS).beginArray();
+        writeScope(frameId, getWriter())
           .name("Symbol").value(symbol)
           .name("Value").value(value)
           .endObject().endArray();
