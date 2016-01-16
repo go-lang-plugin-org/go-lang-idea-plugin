@@ -94,8 +94,6 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
         }
         else {
           GoFunctionOrMethodDeclaration function = findTestFunctionInContext(contextElement);
-          if (shouldSkipContext(function)) return false;
-
           if (function != null) {
             configuration.setName(getFunctionConfigurationName(function, getFileConfigurationName(file.getName())));
             configuration.setPattern("^" + function.getName() + "$");
@@ -115,8 +113,6 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
 
     return false;
   }
-
-  protected abstract boolean shouldSkipContext(@Nullable GoFunctionOrMethodDeclaration context);
 
   @NotNull
   protected String getFileConfigurationName(@NotNull String fileName) {
@@ -167,7 +163,7 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
   }
 
   @Nullable
-  private static GoFunctionOrMethodDeclaration findTestFunctionInContext(@NotNull PsiElement contextElement) {
+  protected GoFunctionOrMethodDeclaration findTestFunctionInContext(@NotNull PsiElement contextElement) {
     GoFunctionOrMethodDeclaration function = PsiTreeUtil.getNonStrictParentOfType(contextElement, GoFunctionOrMethodDeclaration.class);
     return function != null && GoTestFinder.isTestOrExampleFunction(function) ? function : null;
   }

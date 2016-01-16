@@ -167,6 +167,7 @@
     <!-- test -->
     <runConfigurationProducer implementation="com.goide.runconfig.testing.frameworks.gotest.GotestRunConfigurationProducer"/>
     <runConfigurationProducer implementation="com.goide.runconfig.testing.frameworks.gocheck.GocheckRunConfigurationProducer"/>
+    <runConfigurationProducer implementation="com.goide.runconfig.testing.frameworks.gobench.GobenchRunConfigurationProducer"/>
     <configurationType implementation="com.goide.runconfig.testing.GoTestRunConfigurationType"/>
     <testFinder implementation="com.goide.runconfig.testing.GoTestFinder"/>
     <testSrcLocator implementation="com.goide.runconfig.testing.GoTestLocationProvider"/>

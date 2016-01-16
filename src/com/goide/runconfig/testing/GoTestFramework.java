@@ -16,6 +16,7 @@
 
 package com.goide.runconfig.testing;
 
+import com.goide.runconfig.testing.frameworks.gobench.GobenchFramework;
 import com.goide.runconfig.testing.frameworks.gocheck.GocheckFramework;
 import com.goide.runconfig.testing.frameworks.gotest.GotestFramework;
 import com.intellij.execution.runners.ExecutionEnvironment;
@@ -29,6 +30,9 @@ import org.jetbrains.annotations.Nullable;
 public abstract class GoTestFramework {
   @NotNull
   public static GoTestFramework fromName(@Nullable String name) {
+    if (GobenchFramework.NAME.equals(name)) {
+      return GobenchFramework.INSTANCE;
+    }
     if (GocheckFramework.NAME.equals(name)) {
       return GocheckFramework.INSTANCE;
     }

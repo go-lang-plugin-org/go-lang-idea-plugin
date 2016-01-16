@@ -20,9 +20,9 @@ import com.goide.psi.GoFunctionDeclaration;
 import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.goide.psi.GoMethodDeclaration;
 import com.goide.runconfig.testing.GoTestRunConfigurationProducerBase;
+import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 
 public class GocheckRunConfigurationProducer extends GoTestRunConfigurationProducerBase implements Cloneable {
   public GocheckRunConfigurationProducer() {
@@ -43,14 +43,19 @@ public class GocheckRunConfigurationProducer extends GoTestRunConfigurationProdu
            : super.getFunctionConfigurationName(function, fileName);
   }
 
-  @Override
-  protected boolean shouldSkipContext(@Nullable GoFunctionOrMethodDeclaration context) {
-    return context != null && context instanceof GoFunctionDeclaration;
-  }
-
   @NotNull
   @Override
   protected String getFileConfigurationName(@NotNull String fileName) {
     return "gocheck " + super.getFileConfigurationName(fileName);
+  }
+
+  @Nullable
+  @Override
+  protected GoFunctionOrMethodDeclaration findTestFunctionInContext(@NotNull PsiElement contextElement) {
+    GoFunctionOrMethodDeclaration functionOrMethodDecl = super.findTestFunctionInContext(contextElement);
+    if (functionOrMethodDecl instanceof GoFunctionDeclaration) {
+      return null;
+    }
+    return functionOrMethodDecl;
   }
 }

@@ -113,7 +113,7 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
         }
 
         executor.withParameters(importPath);
-        addFilterParameter(executor, buildFilePattern((GoFile)file));
+        addFilterParameter(executor, buildFilterPatternForFile((GoFile)file));
         break;
     }
 
@@ -125,7 +125,7 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
   }
 
   @NotNull
-  protected String buildFilePattern(GoFile file) {
+  protected String buildFilterPatternForFile(GoFile file) {
     Collection<String> testNames = ContainerUtil.newLinkedHashSet();
     for (GoFunctionDeclaration function : file.getFunctions()) {
       ContainerUtil.addIfNotNull(testNames, GoTestFinder.isTestOrExampleFunction(function) ? function.getName() : null);

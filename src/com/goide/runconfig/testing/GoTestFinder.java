@@ -51,6 +51,11 @@ public class GoTestFinder implements TestFinder {
     return type == GoTestFunctionType.EXAMPLE || type == GoTestFunctionType.TEST;
   }
 
+  public static boolean isBenchmarkFunction(@NotNull GoFunctionOrMethodDeclaration function) {
+    GoTestFunctionType type = GoTestFunctionType.fromName(function.getName());
+    return type == GoTestFunctionType.BENCHMARK;
+  }
+
   public static boolean isTestFileWithTestPackage(@Nullable PsiFile file) {
     return getTestTargetPackage(file) != null;
   }
