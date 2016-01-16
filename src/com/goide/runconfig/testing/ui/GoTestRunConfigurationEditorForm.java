@@ -17,7 +17,9 @@
 package com.goide.runconfig.testing.ui;
 
 import com.goide.runconfig.GoRunUtil;
+import com.goide.runconfig.testing.GoTestFramework;
 import com.goide.runconfig.testing.GoTestRunConfiguration;
+import com.goide.runconfig.testing.frameworks.gobench.GobenchFramework;
 import com.goide.runconfig.testing.frameworks.gocheck.GocheckFramework;
 import com.goide.runconfig.testing.frameworks.gotest.GotestFramework;
 import com.goide.runconfig.ui.GoCommonSettingsPanel;
@@ -54,6 +56,7 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   private GoCommonSettingsPanel myCommonSettingsPanel;
   private JRadioButton myGotestFrameworkRadioButton;
   private JRadioButton myGocheckFrameworkRadioButton;
+  private JRadioButton myGobenchRadioButton;
 
   public GoTestRunConfigurationEditorForm(@NotNull Project project) {
     super(null);
@@ -87,6 +90,7 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   protected void resetEditorFrom(@NotNull GoTestRunConfiguration configuration) {
     myGotestFrameworkRadioButton.setSelected(configuration.getTestFramework() == GotestFramework.INSTANCE);
     myGocheckFrameworkRadioButton.setSelected(configuration.getTestFramework() == GocheckFramework.INSTANCE);
+    myGobenchRadioButton.setSelected(configuration.getTestFramework() == GobenchFramework.INSTANCE);
     myTestKindComboBox.setSelectedItem(configuration.getKind());
     myPackageField.setText(configuration.getPackage());
 
@@ -103,7 +107,13 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
 
   @Override
   protected void applyEditorTo(@NotNull GoTestRunConfiguration configuration) throws ConfigurationException {
-    configuration.setTestFramework(myGocheckFrameworkRadioButton.isSelected() ? GocheckFramework.INSTANCE : GotestFramework.INSTANCE);
+    if (myGocheckFrameworkRadioButton.isSelected()) {
+      configuration.setTestFramework(GocheckFramework.INSTANCE);
+    } else if (myGobenchRadioButton.isSelected()) {
+      configuration.setTestFramework(GobenchFramework.INSTANCE);
+    } else {
+      configuration.setTestFramework(GotestFramework.INSTANCE);
+    }
     configuration.setKind((GoTestRunConfiguration.Kind)myTestKindComboBox.getSelectedItem());
     configuration.setPackage(myPackageField.getText());
     configuration.setDirectoryPath(myDirectoryField.getText());
@@ -136,7 +146,14 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
   }
 
   private String getSelectedFramework() {
-    return myGocheckFrameworkRadioButton.isSelected() ? GocheckFramework.NAME : GotestFramework.NAME;
+    GoTestFramework framework = GotestFramework.INSTANCE;
+    if (myGocheckFrameworkRadioButton.isSelected()) {
+      framework = GocheckFramework.INSTANCE;
+    } else if (myGobenchRadioButton.isSelected()) {
+      framework = GobenchFramework.INSTANCE;
+    }
+
+    return framework.getName();
   }
   
   @Nullable
