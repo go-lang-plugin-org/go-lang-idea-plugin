@@ -116,6 +116,7 @@
     <elementDescriptionProvider implementation="com.goide.refactor.GoDescriptionProvider"/>
     <lang.namesValidator language="go" implementationClass="com.goide.GoNamesValidator"/>
     <lang.findUsagesProvider language="go" implementationClass="com.goide.usages.GoFindUsagesProvider"/>
+    <readWriteAccessDetector implementation="com.goide.usages.GoReadWriteAccessDetector" id="go"/>
     <fileStructureGroupRuleProvider implementation="com.goide.usages.GoFileStructureGroupRuleProvider"/>
     <lang.documentationProvider language="go" implementationClass="com.goide.GoDocumentationProvider"/>
     <lang.foldingBuilder language="go" implementationClass="com.goide.editor.GoFoldingBuilder"/>
