@@ -21,38 +21,36 @@ import com.intellij.codeInsight.highlighting.ReadWriteAccessDetector;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.util.PsiTreeUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class GoReadWriteAccessDetector extends ReadWriteAccessDetector {
   @Override
-  public boolean isReadWriteAccessible(final PsiElement element) {
-    return element instanceof GoVarDefinition ||
-           element instanceof GoConstDefinition ||
-           element instanceof GoParamDefinition ||
-           element instanceof GoReceiver ||
-           element instanceof GoFunctionOrMethodDeclaration;
+  public boolean isReadWriteAccessible(@Nullable PsiElement e) {
+    return e instanceof GoVarDefinition ||
+           e instanceof GoConstDefinition ||
+           e instanceof GoParamDefinition ||
+           e instanceof GoReceiver ||
+           e instanceof GoFunctionOrMethodDeclaration;
   }
 
   @Override
-  public boolean isDeclarationWriteAccess(PsiElement element) {
-    return element instanceof GoVarDefinition ||
-           element instanceof GoConstDefinition;
+  public boolean isDeclarationWriteAccess(@Nullable PsiElement e) {
+    return e instanceof GoVarDefinition || e instanceof GoConstDefinition;
   }
 
+  @NotNull
   @Override
-  public Access getReferenceAccess(PsiElement referencedElement, PsiReference reference) {
+  public Access getReferenceAccess(@Nullable PsiElement referencedElement, @NotNull PsiReference reference) {
      return getExpressionAccess(reference.getElement());
   }
 
+  @NotNull
   @Override
-  public Access getExpressionAccess(PsiElement expression) {
+  public Access getExpressionAccess(@Nullable PsiElement e) {
     GoCompositeElement parent =
-      PsiTreeUtil.getParentOfType(expression, GoAssignmentStatement.class, GoShortVarDeclaration.class, GoArgumentList.class, GoIndexOrSliceExpr.class, GoBlock.class);
-
-    if (parent instanceof GoArgumentList ||
-        parent instanceof GoIndexOrSliceExpr ||
-        parent instanceof GoBlock) {
-      return Access.Read;
-    }
-    return PsiTreeUtil.getParentOfType(expression, GoLeftHandExprList.class) == null ? Access.Read : Access.Write;
+      PsiTreeUtil.getParentOfType(e, GoAssignmentStatement.class, GoShortVarDeclaration.class, GoArgumentList.class, GoIndexOrSliceExpr.class, GoBlock.class);
+    if (parent instanceof GoArgumentList || parent instanceof GoIndexOrSliceExpr || parent instanceof GoBlock) return Access.Read;
+    return PsiTreeUtil.getParentOfType(e, GoLeftHandExprList.class) == null ? Access.Read : Access.Write;
   }
 }
