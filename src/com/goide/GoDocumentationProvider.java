@@ -39,6 +39,7 @@ import com.intellij.psi.search.GlobalSearchScopesCore;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Function;
+import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.xml.util.XmlStringUtil;
 import org.jetbrains.annotations.NotNull;
@@ -222,7 +223,10 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
         return replaceInnerTypes(type, contextImportPath, ((GoArrayOrSliceType)type).getType());
       }
       else if (type instanceof GoPointerType) {
-        return replaceInnerTypes(type, contextImportPath, ((GoPointerType)type).getType());
+        GoType inner = ((GoPointerType)type).getType();
+        return inner instanceof GoSpecType
+               ? getTypePresentation(inner, contextImportPath)
+               : replaceInnerTypes(type, contextImportPath, inner);
       }
       else if (type instanceof GoTypeList) {
         return "(" + replaceInnerTypes(type, contextImportPath, ((GoTypeList)type).getTypeList()) + ")";
@@ -273,7 +277,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
   private static String replaceInnerTypes(@NotNull GoType type, @Nullable String contextImportPath, @NotNull List<GoType> innerTypes) {
     StringBuilder result = new StringBuilder();
     String typeText = type.getText();
-    int initialOffset = type.getTextRange().getStartOffset();
+    int initialOffset = ObjectUtils.notNull(type.getTextRange(), TextRange.EMPTY_RANGE).getStartOffset();
     int lastStartOffset = type.getTextLength();
     ContainerUtil.sort(innerTypes, ELEMENT_BY_RANGE_COMPARATOR);
     for (int i = innerTypes.size() - 1; i >= 0; i--) {

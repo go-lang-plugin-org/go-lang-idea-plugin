@@ -329,6 +329,7 @@ public class GoPsiImplUtil {
     if (o instanceof GoUnaryExpr) {
       GoExpression e = ((GoUnaryExpr)o).getExpression();
       GoType type = e == null ? null : findBaseType(e.getGoType(context));
+      if (type != null && ((GoUnaryExpr)o).getBitAnd() != null) return new LightPointerType(type);
       if (type instanceof GoChannelType && ((GoUnaryExpr)o).getSendChannel() != null) return ((GoChannelType)type).getType();
       if (type instanceof GoPointerType && ((GoUnaryExpr)o).getMul() != null) return ((GoPointerType)type).getType();
       return type;
@@ -640,6 +641,9 @@ public class GoPsiImplUtil {
   @NotNull
   public static String getText(@Nullable GoType o) {
     if (o == null) return "";
+    if (o instanceof GoPointerType && ((GoPointerType)o).getType() instanceof GoSpecType) {
+      return "*" + getText(((GoPointerType)o).getType());
+    }
     if (o instanceof GoSpecType) {
       String fqn = getFqn(getTypeSpecSafe(o));
       if (fqn != null) {
