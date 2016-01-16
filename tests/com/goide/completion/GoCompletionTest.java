@@ -17,9 +17,12 @@
 package com.goide.completion;
 
 import com.intellij.codeInsight.lookup.Lookup;
+import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.TreePrintCondition;
+import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 
 import java.io.IOException;
@@ -519,6 +522,17 @@ public class GoCompletionTest extends GoCompletionTestBase {
     myFixture.configureByText("foo_test.go", "package <caret>");
     myFixture.completeBasic();
     assertSameElements(myFixture.getLookupElementStrings(), "foo", "foo_test", "main");
+  }
+  
+  public void testPointerSpecType() {
+    myFixture.configureByText("foo.go", "package main; type a struct{};" +
+                                        "func main() {q1, q2:=&a{};q<caret>}");
+    myFixture.completeBasic();
+    LookupElement first = ArrayUtil.getFirstElement(myFixture.getLookupElements());
+    assertNotNull(first);
+    LookupElementPresentation presentation = new LookupElementPresentation();
+    first.renderElement(presentation);
+    assertEquals("*main.a", presentation.getTypeText());
   }
 
   public void testPackageNamesInEmptyDirectory() throws IOException {
