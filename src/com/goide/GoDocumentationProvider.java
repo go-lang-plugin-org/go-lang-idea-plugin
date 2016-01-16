@@ -39,13 +39,15 @@ import com.intellij.psi.search.GlobalSearchScopesCore;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Function;
-import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.xml.util.XmlStringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class GoDocumentationProvider extends AbstractDocumentationProvider {
   private static final GoCommentsConverter COMMENTS_CONVERTER = new GoCommentsConverter();
@@ -277,7 +279,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
   private static String replaceInnerTypes(@NotNull GoType type, @Nullable String contextImportPath, @NotNull List<GoType> innerTypes) {
     StringBuilder result = new StringBuilder();
     String typeText = type.getText();
-    int initialOffset = ObjectUtils.notNull(type.getTextRange(), TextRange.EMPTY_RANGE).getStartOffset();
+    int initialOffset = type.getTextRange().getStartOffset(); // todo[zolotov] a potential NPE: type.getTextRange() could be null 
     int lastStartOffset = type.getTextLength();
     ContainerUtil.sort(innerTypes, ELEMENT_BY_RANGE_COMPARATOR);
     for (int i = innerTypes.size() - 1; i >= 0; i--) {
