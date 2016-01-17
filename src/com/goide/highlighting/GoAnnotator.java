@@ -112,6 +112,34 @@ public class GoAnnotator implements Annotator {
         checkMakeCall(call, holder);
       }
     }
+    else if (element instanceof GoCallExpr) {
+      GoCallExpr call = (GoCallExpr)element;
+      if (call.getExpression() instanceof GoReferenceExpression) {
+        GoReferenceExpression reference = (GoReferenceExpression)call.getExpression();
+        if ("cap".equals(reference.getText())) {
+          if (GoPsiImplUtil.builtin(reference.getReference().resolve())) {
+            checkCapCall(call, holder);
+          }
+        }
+      }
+    }
+  }
+
+  private static void checkCapCall(@NotNull GoCallExpr capCall, @NotNull AnnotationHolder holder) {
+    if (capCall.getArgumentList().getExpressionList().size() != 1) {
+      return;
+    }
+    GoType exprType = capCall.getArgumentList().getExpressionList().get(0).getGoType(null);
+    if (exprType == null) {
+      return;
+    }
+    GoType baseType = getBaseType(exprType);
+    if (baseType instanceof GoPointerType) {
+      baseType = ((GoPointerType)baseType).getType();
+    }
+    if (!(baseType instanceof GoArrayOrSliceType || baseType instanceof GoChannelType)) {
+      holder.createErrorAnnotation(capCall.getArgumentList().getExpressionList().get(0), "Invalid argument for cap");
+    }
   }
 
   private static void checkMakeCall(@NotNull GoBuiltinCallExpr call, @NotNull AnnotationHolder holder) {
