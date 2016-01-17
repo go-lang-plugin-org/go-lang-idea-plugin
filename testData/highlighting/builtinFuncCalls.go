@@ -53,4 +53,21 @@ func main() {
 	foo(make(chan func(), <error descr="Non-integer size argument to make">true</error>))
 	foo(make(chan func(), <error descr="Non-integer size argument to make">complex(17,4)</error>))
 	foo(make(chan func(), <error descr="Non-integer size argument to make">"1"</error>))
+
+	type someChan chan int
+	type capChan someChan
+
+	var capTest1 e
+	var capTest2 a
+	var capTest3 capChan
+	var capTest4 int
+	foo(cap<error descr="not enough arguments in call to cap">()</error>)
+	foo(cap<error descr="too many arguments in call to cap">(capTest1, capTest2)</error>)
+	foo(cap(capTest1))
+	foo(cap(<error descr="Invalid argument for cap">capTest2</error>))
+	foo(cap(capTest3))
+	foo(cap(<error descr="Invalid argument for cap">capTest4</error>))
+	foo(cap(<error descr="Invalid argument for cap">map[string]struct{}{}</error>))
+	foo(cap(&[4]string{"a", "b", "c", "d"}))
+	foo(cap([]string{}))
 }
