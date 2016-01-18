@@ -668,6 +668,29 @@ func _() {
 	println(middle./*ref*/Method())
 }
 
+// The only acceptable declarations of init at the top level: as a function with no params
+// or as a method.
+var <error descr="Cannot declare init, must be a function"><warning descr="Unused variable 'init'">init</warning> = 4</error>
+
+type (
+    someNotInitType string
+    <error descr="Cannot declare init, must be a function">init int</error>
+)
+
+const (
+    <warning descr="Unused constant 'someConst'">someConst</warning> = 1
+    <error descr="Cannot declare init, must be a function"><warning descr="Unused constant 'init'">init</warning> = 4</error>
+)
+
+type someInitType struct{}
+
+func (someInitType) init() {}
+
+func <error descr="Duplicate function name">init</error><error descr="Init function must have no arguments and no return values">(int)</error> {}
+
+func init() <error descr="Init function must have no arguments and no return values">int</error> {
+    return 4
+}
 type GroupSlice []Group
 
 type Group int
