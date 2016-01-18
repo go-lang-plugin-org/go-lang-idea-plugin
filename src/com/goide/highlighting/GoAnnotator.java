@@ -16,6 +16,7 @@
 
 package com.goide.highlighting;
 
+import com.goide.GoConstants;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoCType;
 import com.goide.psi.impl.GoPsiImplUtil;
@@ -120,6 +121,53 @@ public class GoAnnotator implements Annotator {
         if (reference.textMatches("cap")) {
           if (GoPsiImplUtil.builtin(reference.getReference().resolve())) {
             checkCapCall(call, holder);
+          }
+        }
+      }
+    }
+    else if (element instanceof GoTopLevelDeclaration) {
+      if (element.getParent() instanceof GoFile) {
+        if (element instanceof GoTypeDeclaration) {
+          for (GoTypeSpec spec : ((GoTypeDeclaration)element).getTypeSpecList()) {
+            if (spec.getIdentifier().textMatches(GoConstants.INIT)) {
+              holder.createErrorAnnotation(spec, "Cannot declare init, must be a function");
+            }
+          }
+        }
+        else if (element instanceof GoVarDeclaration) {
+          for (GoVarSpec spec : ((GoVarDeclaration)element).getVarSpecList()) {
+            for (GoVarDefinition definition : spec.getVarDefinitionList()) {
+              if (definition.getIdentifier().textMatches(GoConstants.INIT)) {
+                holder.createErrorAnnotation(spec, "Cannot declare init, must be a function");
+              }
+            }
+          }
+        }
+        else if (element instanceof GoConstDeclaration) {
+          for (GoConstSpec spec : ((GoConstDeclaration)element).getConstSpecList()) {
+            for (GoConstDefinition definition : spec.getConstDefinitionList()) {
+              if (definition.getIdentifier().textMatches(GoConstants.INIT)) {
+                holder.createErrorAnnotation(spec, "Cannot declare init, must be a function");
+              }
+            }
+          }
+        }
+        else if (element instanceof GoFunctionOrMethodDeclaration) {
+          if (element instanceof GoFunctionDeclaration) {
+            GoFunctionDeclaration declaration = (GoFunctionDeclaration)element;
+            if (declaration.getIdentifier().textMatches(GoConstants.INIT)) {
+              GoSignature signature = declaration.getSignature();
+              if (signature != null) {
+                if (signature.getResult() != null) {
+                  holder.createErrorAnnotation(signature.getResult(),
+                                               "Init function must have no arguments and no return values");
+                }
+                if (!signature.getParameters().getParameterDeclarationList().isEmpty()) {
+                  holder.createErrorAnnotation(signature.getParameters(),
+                                               "Init function must have no arguments and no return values");
+                }
+              }
+            }
           }
         }
       }
