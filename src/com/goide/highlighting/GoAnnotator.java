@@ -116,7 +116,7 @@ public class GoAnnotator implements Annotator {
       GoCallExpr call = (GoCallExpr)element;
       if (call.getExpression() instanceof GoReferenceExpression) {
         GoReferenceExpression reference = (GoReferenceExpression)call.getExpression();
-        if ("cap".equals(reference.getText())) {
+        if (reference.textMatches("cap")) {
           if (GoPsiImplUtil.builtin(reference.getReference().resolve())) {
             checkCapCall(call, holder);
           }
@@ -126,20 +126,18 @@ public class GoAnnotator implements Annotator {
   }
 
   private static void checkCapCall(@NotNull GoCallExpr capCall, @NotNull AnnotationHolder holder) {
-    if (capCall.getArgumentList().getExpressionList().size() != 1) {
-      return;
-    }
-    GoType exprType = capCall.getArgumentList().getExpressionList().get(0).getGoType(null);
-    if (exprType == null) {
-      return;
-    }
+    List<GoExpression> exprs = capCall.getArgumentList().getExpressionList();
+    if (exprs.size() != 1) return;
+    GoExpression first = ContainerUtil.getFirstItem(exprs);
+    //noinspection ConstantConditions
+    GoType exprType = first.getGoType(null); // todo: context
+    if (exprType == null) return;
     GoType baseType = getBaseType(exprType);
     if (baseType instanceof GoPointerType) {
       baseType = ((GoPointerType)baseType).getType();
     }
-    if (!(baseType instanceof GoArrayOrSliceType || baseType instanceof GoChannelType)) {
-      holder.createErrorAnnotation(capCall.getArgumentList().getExpressionList().get(0), "Invalid argument for cap");
-    }
+    if (baseType instanceof GoArrayOrSliceType || baseType instanceof GoChannelType) return;
+    holder.createErrorAnnotation(first, "Invalid argument for cap");
   }
 
   private static void checkMakeCall(@NotNull GoBuiltinCallExpr call, @NotNull AnnotationHolder holder) {
