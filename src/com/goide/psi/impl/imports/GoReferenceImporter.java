@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,7 +53,7 @@ public class GoReferenceImporter implements ReferenceImporter {
           if (reference instanceof GoReference) {
             GoImportPackageQuickFix fix = new GoImportPackageQuickFix(reference);
             if (fix.isAvailable(file.getProject(), editor, file)) {
-              fix.applyFix();
+              fix.invoke(file.getProject(), editor, file);
               return true;
             }
           }
@@ -75,7 +75,7 @@ public class GoReferenceImporter implements ReferenceImporter {
       GoImportPackageQuickFix fix = new GoImportPackageQuickFix(reference);
       Project project = file.getProject();
       if (fix.isAvailable(project, editor, file)) {
-        fix.applyFix();
+        fix.invoke(file.getProject(), editor, file);
         return true;
       }
     }
