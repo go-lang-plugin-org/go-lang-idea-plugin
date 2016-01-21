@@ -40,6 +40,7 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
+import com.intellij.util.PathUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -83,11 +84,14 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
         String relativePath = FileUtil.getRelativePath(myConfiguration.getWorkingDirectory(),
                                                        myConfiguration.getDirectoryPath(),
                                                        File.separatorChar);
+        // TODO Once Go gets support for covering multiple packages the ternary condition should be reverted
+        // See https://golang.org/issues/6909
+        String pathSuffix = (myCoverageFilePath == null) ? "..." : ".";
         if (relativePath != null) {
-          executor.withParameters("./" + relativePath + "/...");
+          executor.withParameters("./" + relativePath + "/" + pathSuffix);
         }
         else {
-          executor.withParameters("./...");
+          executor.withParameters("./" + pathSuffix);
           executor.withWorkDirectory(myConfiguration.getDirectoryPath());
         }
         addFilterParameter(executor, myConfiguration.getPattern());
