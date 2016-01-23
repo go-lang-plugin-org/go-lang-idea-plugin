@@ -39,6 +39,7 @@ public class GoAnnotator implements Annotator {
     "int", "int8", "int16", "int32", "int64", "uint", "uint8", "uint16", "uint32", "uint64", "uintptr",
     "rune", "float32", "float64"
   ); // todo: unify with DlvApi.Variable.Kind
+  private static final boolean ENABLE_CAP_CHECK = false; // todo: disable for a while due to #2268
 
   @Override
   public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
@@ -112,7 +113,7 @@ public class GoAnnotator implements Annotator {
         checkMakeCall(call, holder);
       }
     }
-    else if (element instanceof GoCallExpr) {
+    else if (ENABLE_CAP_CHECK && element instanceof GoCallExpr) {
       GoCallExpr call = (GoCallExpr)element;
       if (call.getExpression() instanceof GoReferenceExpression) {
         GoReferenceExpression reference = (GoReferenceExpression)call.getExpression();
