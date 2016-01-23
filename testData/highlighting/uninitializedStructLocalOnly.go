@@ -1,5 +1,8 @@
 package demo2094
 
+import "text/template"
+import "os"
+
 type demo struct {
 	a string
 	b int32
@@ -31,4 +34,34 @@ func _() (struct {
 	_ = bemo{x: "demo"}
 	_ = b
 	return struct{x string}{<weak_warning descr="Unnamed field initialization">"demo"</weak_warning>}
+}
+
+type Item struct {
+	Name   string
+}
+
+type Menu []Item
+
+func _() {
+	_ = Menu{
+		{Name: "home"},
+	}
+
+	_ = template.Template{
+		"hello",
+	}
+
+	_ = os.LinkError{
+		"string",
+		"string",
+		"string",
+		nil,
+	}
+
+	_ = os.LinkError{
+		Op:  "string",
+		Old: "string",
+		New: "string",
+		Err: nil,
+	}
 }
