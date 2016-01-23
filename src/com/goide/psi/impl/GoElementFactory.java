@@ -260,4 +260,9 @@ public class GoElementFactory {
     GoFile file = createFileFromText(project, "package a; func " + name + "(" + text + ") " + expectedType + "{\n}");
     return ContainerUtil.getFirstItem(file.getFunctions());
   }
+
+  public static PsiElement createNamedStructField(Project project, String field, String element) {
+    GoFile file = createFileFromText(project, "package a; var _ = struct { a string } { " + field + ": " + element + " }");
+    return PsiTreeUtil.findChildOfType(file, GoElement.class);
+  }
 }
