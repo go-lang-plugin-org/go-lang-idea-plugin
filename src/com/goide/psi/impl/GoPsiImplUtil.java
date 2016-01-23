@@ -485,7 +485,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  private static GoType findTypeFromTypeRef(@Nullable GoTypeReferenceExpression expression) {
+  public static GoType findTypeFromTypeRef(@Nullable GoTypeReferenceExpression expression) {
     PsiReference reference = expression != null ? expression.getReference() : null;
     PsiElement resolve = reference != null ? reference.resolve() : null;
     if (resolve instanceof GoTypeSpec) return ((GoTypeSpec)resolve).getSpecType();
