@@ -1,6 +1,6 @@
 package main
 
-func <info descr="null"><info descr="GO_LOCAL_FUNCTION">test</info></info>() int {
+func <info descr="null"><info descr="GO_LOCAL_FUNCTION">test</info></info>() <info descr="null"><info descr="GO_BUILTIN_TYPE_REFERENCE">int</info></info> {
 <info descr="null"><info descr="GO_LABEL">foo</info></info>:
 	for {
 		continue <info descr="null"><info descr="GO_LABEL">foo</info></info>
