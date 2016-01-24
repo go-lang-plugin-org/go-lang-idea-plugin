@@ -25,7 +25,7 @@ func (self *A) chain() *A{
     return self
 }
 
-func getAnA() (result *A) {
+func getAnA() (_ *A) {
     return &A{}
 }
 
@@ -51,7 +51,7 @@ func _(fn func() (i int, e error)) {
 	print(e.Error())
 }
 
-func _(fn func() (myErr error)) {
+func _(fn func() (_ error)) {
 	err := fn()
 	err.Error()
 }
@@ -80,7 +80,7 @@ func FA() (int, string) {
 	return 0, "abc"
 }
 
-func FB(a int, s string) {
+func FB(_ int, _ string) {
 }
 
 func _() {

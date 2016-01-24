@@ -193,6 +193,9 @@
     <localInspection language="go" displayName="Unused function inspection" groupPath="Go"
                      groupName="Declaration redundancy" enabledByDefault="true" level="WARNING"
                      implementationClass="com.goide.inspections.unresolved.GoUnusedFunctionInspection"/>
+    <localInspection language="go" displayName="Unused parameter inspection" groupPath="Go"
+                     groupName="Declaration redundancy" enabledByDefault="true" level="WARNING"
+                     implementationClass="com.goide.inspections.unresolved.GoUnusedParameterInspection"/>
     <!-- /unused inspections -->
 
     <!-- redeclare inspections -->

@@ -67,7 +67,8 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       GoStructInitializationInspection.class,
       GoMethodOnNonLocalTypeInspection.class,
       GoUnderscoreUsedAsValueInspection.class,
-      GoRangeIterationOnIllegalTypeInspection.class
+      GoRangeIterationOnIllegalTypeInspection.class,
+      GoUnusedParameterInspection.class
     );
   }
 
@@ -147,6 +148,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testFileRead()                  { doTest(); }
   public void testLiteralValues()             { doTest(); }
   public void testUnderscoreUsedAsValue()     { doTest(); }
+  public void testUnusedParameter()           { doTest(); }
 
   public void testAvoidDuplicatedUnusedImportReports() {
     myFixture.addFileToProject("pack1/a.go", "package foo;");
@@ -246,7 +248,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
 
   public void testDoNotSearchMethodDuplicatesForNotTargetMatchingFiles() {
     myFixture.configureByText("b.go", "//+build appengine\n\npackage main; func (a *Foo) bar() {}");
-    myFixture.configureByText("a.go", "package main; type Foo int; func (f Foo) bar(a, b string) {}");
+    myFixture.configureByText("a.go", "package main; type Foo int; func (f Foo) bar(_, _ string) {}");
     myFixture.checkHighlighting();
   }
 
@@ -294,7 +296,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testPackageWithTestPrefix() {
     myFixture.addFileToProject("pack1/pack1_test.go", "package pack1_test; func Test() {}");
     PsiFile file = myFixture.addFileToProject("pack2/pack2_test.go",
-                                              "package pack2_test; import \"testing\"; func TestTest(t *testing.T) {<error>pack1_test</error>.Test()}");
+                                              "package pack2_test; import \"testing\"; func TestTest(*testing.T) {<error>pack1_test</error>.Test()}");
     myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
     myFixture.checkHighlighting();
   }
@@ -316,7 +318,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testPackageWithTestPrefixNotInsideTestFile() {
     myFixture.addFileToProject("pack1/pack1.go", "package pack1_test; func Test() {}");
     PsiFile file = myFixture.addFileToProject("pack2/pack2_test.go",
-                                              "package pack2_test; import `pack1`; import \"testing\"; func TestTest(t *testing.T) {pack1_test.Test()}");
+                                              "package pack2_test; import `pack1`; import \"testing\"; func TestTest(*testing.T) {pack1_test.Test()}");
     myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
     myFixture.checkHighlighting();
   }

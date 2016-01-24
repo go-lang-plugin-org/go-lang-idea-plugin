@@ -34,7 +34,7 @@ type Response struct { ResponseWriter }
 type ResponseWriter interface { Header() Header }
 type Header int
 
-func (h Header) Add(key, value string) { }
+func (h Header) Add(_, _ string) { }
 
 func (r Response) AddHeader(header string, value string) Response {
 	rr := r.Header()

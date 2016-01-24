@@ -9,7 +9,7 @@ type Ad struct {
 	Price Rat
 }
 
-func (x *Rat) Cmp(y *Rat) int {
+func (x *Rat) Cmp(*Rat) int {
 	return 1
 }
 

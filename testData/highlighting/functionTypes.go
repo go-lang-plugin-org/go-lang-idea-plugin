@@ -8,7 +8,7 @@ type t struct {
 func (t t) foo() {
 }
 
-func startConvert() (fin, fill t, e error) {
+func startConvert() (<warning descr="Unused named return parameter 'fin'">fin</warning>, <warning descr="Unused named return parameter 'fill'">fill</warning> t, <warning descr="Unused named return parameter 'e'">e</warning> error) {
 	return t{}, t{}, nil
 }
 
