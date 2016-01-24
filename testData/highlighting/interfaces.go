@@ -14,5 +14,5 @@ type Parent struct {
 type Child struct { Unimplemented }
 type Interface interface { Get(...int) }
 type impl struct { }
-func (r impl) Get(h ...int) { fmt.Println("HERE") }
+func (r impl) Get(...int) { fmt.Println("HERE") }
 type Unimplemented interface { Get(s string) }

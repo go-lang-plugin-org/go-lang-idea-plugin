@@ -9,7 +9,7 @@ const (
 	myWrongFormatConst = "%d %d %#[1]x %#x %2.f %d %2.2f %.f %.3f %[9]*.[2]*[3]f %d %f %#[1]x %#x %[2]d %v % d"
 )
 
-func printf(placeholder string, args ...int) {
+func printf(string, ...int) {
 
 }
 

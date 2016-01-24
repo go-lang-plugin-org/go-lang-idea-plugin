@@ -103,21 +103,21 @@ func NoReturn3(a int) (int, int) {
     }
 <error descr="Missing return at end of function">}</error>
 
-func NoReturn4(aa int) (int, int) {
+func NoReturn4(int) (int, int) {
     a := 3
     for a > 0 {
 
     }
 <error descr="Missing return at end of function">}</error>
 
-func NoReturn5(aa int) (int, int) {
+func NoReturn5(int) (int, int) {
     a := 3
     if a > 0 {
         return 0, 0
     }
 <error descr="Missing return at end of function">}</error>
 
-func NoReturn6(aa int) (int, int) {
+func NoReturn6(int) (int, int) {
     a := 3
     if a > 0 {
         return 0, 0
@@ -126,7 +126,7 @@ func NoReturn6(aa int) (int, int) {
     }
 <error descr="Missing return at end of function">}</error>
 
-func NoReturn65(aa int) (int, int) {
+func NoReturn65(int) (int, int) {
     a := 3
     if a > 0 {
         return 0, 0
@@ -135,7 +135,7 @@ func NoReturn65(aa int) (int, int) {
     }
 <error descr="Missing return at end of function">}</error>
 
-func NoReturn7(aa int) (int, int) {
+func NoReturn7(int) (int, int) {
     a := 3
     switch a {
         case 1:
@@ -143,7 +143,7 @@ func NoReturn7(aa int) (int, int) {
     }
 <error descr="Missing return at end of function">}</error>
 
-func NoReturn8(aa int) (int, int) {
+func NoReturn8(int) (int, int) {
     a := 3
     switch a {
         case 1:
@@ -152,7 +152,7 @@ func NoReturn8(aa int) (int, int) {
     }
 <error descr="Missing return at end of function">}</error>
 
-func NoReturn9(aa int) (int, int) {
+func NoReturn9(int) (int, int) {
     a := make(chan bool)
     select {
     case <-a:

@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-func append1(slice []Type, elems ...Type) []Type
+func append1([]Type, ...Type) []Type
 type Type int
 type int int
 type string string

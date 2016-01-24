@@ -41,11 +41,11 @@ func <warning>search</warning>() bool {
 }
 
 
-func g(a, b, c int) (int, int) {
+func g(a, b, _ int) (int, int) {
     return a, b
 }
 
-func f(a, b int) {
+func f(_, _ int) {
 }
 
 func <warning>test</warning>() {
@@ -128,7 +128,7 @@ func de(x string) *d {
     return &d{A: x}
 }
 
-func demo23(a *d, err error) string {
+func demo23(a *d, _ error) string {
     return a.A
 }
 
@@ -196,7 +196,7 @@ func _() {
 type Decoder func(p int) (size int)
 
 func (e Decoder) ConvertString(s string) string { return s }
-func NewDecoder(name string) Decoder { return nil }
+func NewDecoder(_ string) Decoder { return nil }
 
 func _() {
 	dc := NewDecoder("GB18030")
