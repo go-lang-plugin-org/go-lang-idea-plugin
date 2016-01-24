@@ -6,7 +6,7 @@ type demo struct {
     Field string
 }
 
-func getMore() (demo1, demo2, demo3 *demo) {
+func getMore() (_, _, _ *demo) {
     return &demo{"demo1"}, &demo{"demo2"}, &demo{"demo3"}
 }
 

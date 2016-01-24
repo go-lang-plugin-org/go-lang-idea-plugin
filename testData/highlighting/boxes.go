@@ -1,6 +1,6 @@
 package main
 
-func Println(o ...interface{})  {
+func Println(...interface{})  {
 
 }
 

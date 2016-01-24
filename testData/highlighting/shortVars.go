@@ -29,7 +29,7 @@ func test() int {
     return x + y + z + a + b // Just to avoid unused variable error
 }
 
-func test21313() (err int) {
+func test21313() (<warning descr="Unused named return parameter 'err'">err</warning> int) {
     {
         err := 1
         return err
@@ -67,7 +67,7 @@ func Test2() (err error) {
     return err
 }
 
-func _(i int) {
+func _(<warning descr="Unused parameter 'i'">i</warning> int) {
     for i := 1; i < 3; i++ {
         _ = i
     }

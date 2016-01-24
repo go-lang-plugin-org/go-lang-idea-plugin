@@ -19,7 +19,7 @@ func (_ ScanState) <error descr="Method defined on non-local type">Demo</error>(
 
 }
 
-func (_ *Duration) UnmarshalText(data []byte) (err error) {
+func (_ *Duration) UnmarshalText(data []byte) (error) {
 	_ = data
 	return nil
 }

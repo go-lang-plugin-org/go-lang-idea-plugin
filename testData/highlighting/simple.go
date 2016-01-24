@@ -52,8 +52,8 @@ type string string
 type T struct {
 	a int
 }
-func (tv  T) Mv(a int) int         { return 0 }  // value receiver
-func (tp *T) Mp(f float32) float32 { return 1 }  // pointer receiver
+func (tv  T) Mv(int) int         { return 0 }  // value receiver
+func (tp *T) Mp(float32) float32 { return 1 }  // pointer receiver
 
 var t T
 
@@ -103,7 +103,7 @@ func _(b *AA) {
      b.N
 }
 
-func _(o interface{}, args ...interface{}) {
+func _(interface{}, ...interface{}) {
 }
 
 func _(o interface{}) {
@@ -131,7 +131,7 @@ func _(integers []int) []int {
   return integers
 }
 
-func Println(o ...interface{})  {
+func Println(...interface{})  {
 }
 
 func _() {
@@ -196,7 +196,7 @@ func _ () {
 func composite1() (*compositeA, *compositeB) {
 	return new(compositeA), new(compositeB)
 }
-func composite2() (a *compositeA, b *compositeB) {
+func composite2() (*compositeA, *compositeB) {
 	return new(compositeA), new(compositeB)
 }
 
@@ -232,10 +232,10 @@ func GetMulti() (map[string]*Item) {
 }
 
 type WebService struct { rootPath string }
-func (w *WebService) Path(root string) *WebService { return w }
-func (w *WebService) GET(subPath string) *RouteBuilder { return new(RouteBuilder) }
+func (w *WebService) Path(string) *WebService { return w }
+func (w *WebService) GET(string) *RouteBuilder { return new(RouteBuilder) }
 type RouteBuilder struct { bool }
-func (w *WebService) Route(builder *RouteBuilder) *WebService { return w }
+func (w *WebService) Route(*RouteBuilder) *WebService { return w }
 func _() {
 	ws1 := new(WebService).Path("/")
 	ws1.GET("").bool
@@ -348,15 +348,15 @@ func _() {
     Println(response.<error descr="Unresolved reference 'Body'">Body</error>)
 }
 
-func _(a int, <error descr="Duplicate argument 'a'">a</error> int, c, d, <error descr="Duplicate argument 'c'">c</error> int) (<error descr="Duplicate argument 'a'">a</error>, <error descr="Duplicate argument 'd'">d</error>, x int) {
+func _(<warning descr="Unused parameter 'a'">a</warning> int, <error descr="Duplicate argument 'a'">a</error> int, <warning descr="Unused parameter 'c'">c</warning>, <warning descr="Unused parameter 'd'">d</warning>, <error descr="Duplicate argument 'c'">c</error> int) (<error descr="Duplicate argument 'a'">a</error>, <error descr="Duplicate argument 'd'">d</error>, <warning descr="Unused named return parameter 'x'">x</warning> int) {
   return 1,1,1
 }
 
-func _(a int,  d<error descr="Can only use ... as final argument in list">...</error> int, c string) (y,x,z int) {
+func _(int,  <error descr="Can only use ... as final argument in list">...</error> int, string) (_,_,_ int) {
     return 1,1,1
 }
 
-func _(a int, c, d<error descr="Can only use ... as final argument in list">...</error> int) (y,x,z <error descr="Cannot use ... in output argument list">...</error>int) {
+func _(_ int, _, _<error descr="Can only use ... as final argument in list">...</error> int) (_,_,_ <error descr="Cannot use ... in output argument list">...</error>int) {
     return 1,1,1
 }
 
@@ -382,7 +382,7 @@ type Name struct {
 
 type B Name
 
-func (self *Name) Foo(a int) {
+func (self *Name) Foo(int) {
 }
 
 func _(b B, c Color) {
@@ -421,7 +421,7 @@ func _() {
     go func(){}()
 }
 
-func _(bar func(baz    int)) {
+func _(<warning descr="Unused parameter 'bar'">bar</warning> func(baz    int)) {
       <error descr="Unresolved reference 'baz'">baz</error>
 }
 
@@ -437,7 +437,7 @@ type Conn interface {
 	Do(commandName string, args ...interface{}) (reply interface{}, err error)
 }
 
-func String(reply interface{}, err error) {
+func String(interface{}, error) {
 }
  
 func _(c Conn) {
@@ -446,7 +446,7 @@ func _(c Conn) {
 
 type MyType string
 
-func (t MyType) Get(key string) string { return "hello" }
+func (t MyType) Get(string) string { return "hello" }
 
 func _() {
 	st := MyType("tag")
@@ -487,7 +487,7 @@ type Server interface {
 }
 
 func _() {
-	server := ServerFunc(func(params Params) (*Image, error) {
+	server := ServerFunc(func(Params) (*Image, error) {
 		return nil, nil
 	})
 	server.Get(Params{})
@@ -719,7 +719,7 @@ func (gs *GroupSlice) Merge(groups ...*Group) error {
     return nil
 }
 
-func (gs *GroupSlice) merge(g *Group) error {
+func (gs *GroupSlice) merge(*Group) error {
     return nil
 }
 
