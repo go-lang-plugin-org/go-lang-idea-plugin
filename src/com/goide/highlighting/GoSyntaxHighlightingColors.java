@@ -41,6 +41,7 @@ public class GoSyntaxHighlightingColors {
   public static final TextAttributesKey TYPE_SPECIFICATION = createTextAttributesKey("GO_TYPE_SPECIFICATION", DefaultLanguageHighlighterColors.CLASS_NAME);
   public static final TextAttributesKey TYPE_REFERENCE = createTextAttributesKey("GO_TYPE_REFERENCE", DefaultLanguageHighlighterColors.CLASS_REFERENCE);
   public static final TextAttributesKey BUILTIN_TYPE_REFERENCE = createTextAttributesKey("GO_BUILTIN_TYPE_REFERENCE", DefaultLanguageHighlighterColors.CLASS_REFERENCE);
+  public static final TextAttributesKey BUILTIN_FUNCTION = createTextAttributesKey("GO_BUILTIN_FUNCTION", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
   public static final TextAttributesKey EXPORTED_FUNCTION = createTextAttributesKey("GO_EXPORTED_FUNCTION", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
   public static final TextAttributesKey LOCAL_FUNCTION = createTextAttributesKey("GO_LOCAL_FUNCTION", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
   public static final TextAttributesKey PACKAGE_EXPORTED_INTERFACE = createTextAttributesKey("GO_PACKAGE_EXPORTED_INTERFACE", DefaultLanguageHighlighterColors.INTERFACE_NAME);
