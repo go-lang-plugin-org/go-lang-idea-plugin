@@ -114,6 +114,13 @@ If you use Mac, you may check follow path while looking for SDK:
 Now you can use the run configurations provided by the plugin source code to
 run and play.
 
+There are multiple branches of the plugin which correspond to different versions
+of the IntelliJ Platform:
+
+- 141 -> can be used for IDEA 14.1
+- 144 -> can be used for IDEA 16
+
+The master branch will follow the current stable release of IDEA (currently IDEA 15).
 
 Going to ``` Run -> Run... ``` will provide you with the following run configurations:
 
