@@ -299,6 +299,9 @@
     <localInspection language="go" displayName="Need trailing comma before newline in composite literal" groupPath="Go"
                      groupName="General" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoAddTrailingCommaInspection"/>
+    <localInspection language="go" displayName="Underscore used as value" groupPath="Go"
+                     groupName="General" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoUnderscoreUsedAsValueInspection"/>
     <!-- /general -->
   </extensions>
   <actions>
