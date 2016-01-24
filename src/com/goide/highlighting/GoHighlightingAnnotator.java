@@ -92,6 +92,7 @@ public class GoHighlightingAnnotator implements Annotator {
   }
 
   private static TextAttributesKey getColor(GoNamedSignatureOwner o) {
+    if (GoPsiImplUtil.builtin(o)) return BUILTIN_FUNCTION;
     return o.isPublic() ? EXPORTED_FUNCTION : LOCAL_FUNCTION;
   }
 
