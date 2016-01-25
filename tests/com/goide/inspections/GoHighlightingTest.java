@@ -71,7 +71,8 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       GoUnderscoreUsedAsValueInspection.class,
       GoRangeIterationOnIllegalTypeInspection.class,
       GoUnusedParameterInspection.class,
-      GoInvalidStringOrCharInspection.class
+      GoInvalidStringOrCharInspection.class,
+      GoDirectAssignToStructFieldInMapInspection.class
     );
   }
 
@@ -154,6 +155,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testStringSliceWithThirdIndex() { doTest(); }
   public void testSliceWithThirdIndex()       { doTest(); }
   public void testStringInStructSliceWithThirdIndex() { doTest(); }
+  public void testAssignToStructFieldInMap()  { doTest(); }
 
   public void testAvoidDuplicatedUnusedImportReports() {
     myFixture.addFileToProject("pack1/a.go", "package foo;");
