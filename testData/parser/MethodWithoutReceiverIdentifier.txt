@@ -33,10 +33,11 @@ GO_FILE
     RECEIVER
       PsiElement(()('(')
       PsiElement(identifier)('ds')
-      PsiElement(*)('*')
-      TYPE
-        TYPE_REFERENCE_EXPRESSION
-          PsiElement(identifier)('dasa')
+      POINTER_TYPE
+        PsiElement(*)('*')
+        TYPE
+          TYPE_REFERENCE_EXPRESSION
+            PsiElement(identifier)('dasa')
       PsiElement(,)(',')
       PsiElement())(')')
     PsiElement(identifier)('yooolo')

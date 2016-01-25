@@ -187,12 +187,10 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   }
 
   private boolean processTypeRef(@Nullable GoType type, @NotNull GoScopeProcessor processor, @NotNull ResolveState state) {
-    return type == null || processInTypeRef(getTypeReference(type), processor, state);
+    return type == null || processInTypeRef(type.getTypeReferenceExpression(), processor, state);
   }
 
-  private boolean processExistingType(@NotNull GoType type,
-                                      @NotNull GoScopeProcessor processor,
-                                      @NotNull ResolveState state) {
+  private boolean processExistingType(@NotNull GoType type, @NotNull GoScopeProcessor processor, @NotNull ResolveState state) {
     PsiFile file = type.getContainingFile();
     if (!(file instanceof GoFile)) return true;
     PsiFile myFile = ObjectUtils.notNull(getContextFile(state), myElement.getContainingFile());

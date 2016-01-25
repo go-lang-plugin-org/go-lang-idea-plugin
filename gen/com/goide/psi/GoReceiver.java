@@ -20,9 +20,6 @@ public interface GoReceiver extends GoNamedElement, StubBasedPsiElement<GoReceiv
   PsiElement getLparen();
 
   @Nullable
-  PsiElement getMul();
-
-  @Nullable
   PsiElement getRparen();
 
   @Nullable

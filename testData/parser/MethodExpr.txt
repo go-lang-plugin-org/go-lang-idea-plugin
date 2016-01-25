@@ -56,10 +56,11 @@ GO_FILE
     RECEIVER
       PsiElement(()('(')
       PsiElement(identifier)('tp')
-      PsiElement(*)('*')
-      TYPE
-        TYPE_REFERENCE_EXPRESSION
-          PsiElement(identifier)('T')
+      POINTER_TYPE
+        PsiElement(*)('*')
+        TYPE
+          TYPE_REFERENCE_EXPRESSION
+            PsiElement(identifier)('T')
       PsiElement())(')')
     PsiElement(identifier)('Mp')
     SIGNATURE

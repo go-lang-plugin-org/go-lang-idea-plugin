@@ -895,10 +895,11 @@ GO_FILE
     PsiElement(func)('func')
     RECEIVER
       PsiElement(()('(')
-      PsiElement(*)('*')
-      TYPE
-        TYPE_REFERENCE_EXPRESSION
-          PsiElement(identifier)('ctx')
+      POINTER_TYPE
+        PsiElement(*)('*')
+        TYPE
+          TYPE_REFERENCE_EXPRESSION
+            PsiElement(identifier)('ctx')
       PsiElement())(')')
     PsiElement(identifier)('Errorf')
     SIGNATURE

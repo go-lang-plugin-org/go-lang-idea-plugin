@@ -34,7 +34,7 @@ public class GoMethodIndex extends StringStubIndexExtension<GoMethodDeclaration>
 
   @Override
   public int getVersion() {
-    return GoFileElementType.VERSION + 1;
+    return GoFileElementType.VERSION + 2;
   }
 
   @NotNull

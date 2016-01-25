@@ -405,10 +405,11 @@ GO_FILE
     RECEIVER
       PsiElement(()('(')
       PsiElement(identifier)('e')
-      PsiElement(*)('*')
-      TYPE
-        TYPE_REFERENCE_EXPRESSION
-          PsiElement(identifier)('Example')
+      POINTER_TYPE
+        PsiElement(*)('*')
+        TYPE
+          TYPE_REFERENCE_EXPRESSION
+            PsiElement(identifier)('Example')
       PsiElement())(')')
     PsiElement(identifier)('Log')
     SIGNATURE
