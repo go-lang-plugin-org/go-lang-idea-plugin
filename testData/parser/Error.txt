@@ -69,10 +69,11 @@ GO_FILE
     PsiElement(func)('func')
     RECEIVER
       PsiElement(()('(')
-      PsiElement(*)('*')
-      TYPE
-        TYPE_REFERENCE_EXPRESSION
-          PsiElement(identifier)('TypeAssertionError')
+      POINTER_TYPE
+        PsiElement(*)('*')
+        TYPE
+          TYPE_REFERENCE_EXPRESSION
+            PsiElement(identifier)('TypeAssertionError')
       PsiElement())(')')
     PsiElement(identifier)('RuntimeError')
     SIGNATURE
@@ -87,10 +88,11 @@ GO_FILE
     RECEIVER
       PsiElement(()('(')
       PsiElement(identifier)('e')
-      PsiElement(*)('*')
-      TYPE
-        TYPE_REFERENCE_EXPRESSION
-          PsiElement(identifier)('TypeAssertionError')
+      POINTER_TYPE
+        PsiElement(*)('*')
+        TYPE
+          TYPE_REFERENCE_EXPRESSION
+            PsiElement(identifier)('TypeAssertionError')
       PsiElement())(')')
     PsiElement(identifier)('Error')
     SIGNATURE

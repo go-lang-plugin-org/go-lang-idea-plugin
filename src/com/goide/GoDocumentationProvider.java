@@ -310,7 +310,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
         }
         else if (element instanceof GoMethodDeclaration) {
           GoType receiverType = ((GoMethodDeclaration)element).getReceiver().getType();
-          String receiver = receiverType != null ? receiverType.getText() : null;
+          String receiver = getReceiverTypeText(receiverType);
           String name = ((GoMethodDeclaration)element).getName();
           if (StringUtil.isNotEmpty(receiver) && StringUtil.isNotEmpty(name)) {
             String fqn = getElementFqn((GoNamedElement)element, name, includePackageName);
@@ -324,6 +324,15 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
     }
 
     return null;
+  }
+
+  private static String getReceiverTypeText(@Nullable GoType type) {
+    if (type == null) return null;
+    if (type instanceof GoPointerType) {
+      GoType inner = ((GoPointerType)type).getType();
+      if (inner != null) return inner.getText();
+    }
+    return type.getText();
   }
 
   @NotNull

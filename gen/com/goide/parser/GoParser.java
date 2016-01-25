@@ -2946,41 +2946,20 @@ public class GoParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // TypeReferenceExpression
-  public static boolean ReceiverResultType(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ReceiverResultType")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = TypeReferenceExpression(b, l + 1);
-    exit_section_(b, m, TYPE, r);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // '*'? ReceiverResultType ','?
+  // Type ','?
   static boolean ReceiverTail(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ReceiverTail")) return false;
-    if (!nextTokenIs(b, "", MUL, IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = ReceiverTail_0(b, l + 1);
-    r = r && ReceiverResultType(b, l + 1);
-    r = r && ReceiverTail_2(b, l + 1);
+    r = Type(b, l + 1);
+    r = r && ReceiverTail_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // '*'?
-  private static boolean ReceiverTail_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ReceiverTail_0")) return false;
-    consumeToken(b, MUL);
-    return true;
-  }
-
   // ','?
-  private static boolean ReceiverTail_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ReceiverTail_2")) return false;
+  private static boolean ReceiverTail_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ReceiverTail_1")) return false;
     consumeToken(b, COMMA);
     return true;
   }

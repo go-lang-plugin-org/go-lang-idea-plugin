@@ -52,12 +52,6 @@ public class GoReceiverImpl extends GoNamedElementImpl<GoReceiverStub> implement
 
   @Override
   @Nullable
-  public PsiElement getMul() {
-    return findChildByType(MUL);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getRparen() {
     return findChildByType(RPAREN);
   }

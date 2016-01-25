@@ -159,7 +159,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
         for (GoMethodDeclaration o : ((GoFile)element).getMethods()) {
           GoReceiver receiver = o.getReceiver();
           GoType type = receiver.getType();
-          GoTypeReferenceExpression expression = type != null ? type.getTypeReferenceExpression() : null;
+          GoTypeReferenceExpression expression = GoPsiImplUtil.getTypeReference(type);
           PsiReference reference = expression != null ? expression.getReference() : null;
           PsiElement resolve = reference != null ? reference.resolve() : null;
           if (resolve == null) {

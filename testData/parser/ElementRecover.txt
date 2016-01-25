@@ -18,10 +18,11 @@ GO_FILE
     RECEIVER
       PsiElement(()('(')
       PsiElement(identifier)('conn')
-      PsiElement(*)('*')
-      TYPE
-        TYPE_REFERENCE_EXPRESSION
-          PsiElement(identifier)('connection')
+      POINTER_TYPE
+        PsiElement(*)('*')
+        TYPE
+          TYPE_REFERENCE_EXPRESSION
+            PsiElement(identifier)('connection')
       PsiElement())(')')
     PsiElement(identifier)('Delete')
     SIGNATURE
@@ -179,10 +180,11 @@ GO_FILE
     RECEIVER
       PsiElement(()('(')
       PsiElement(identifier)('conn')
-      PsiElement(*)('*')
-      TYPE
-        TYPE_REFERENCE_EXPRESSION
-          PsiElement(identifier)('connection')
+      POINTER_TYPE
+        PsiElement(*)('*')
+        TYPE
+          TYPE_REFERENCE_EXPRESSION
+            PsiElement(identifier)('connection')
       PsiElement())(')')
     PsiElement(identifier)('Create')
     SIGNATURE
