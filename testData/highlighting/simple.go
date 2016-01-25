@@ -667,3 +667,20 @@ func _() {
 	var middle = middleType{}
 	println(middle./*ref*/Method())
 }
+
+type GroupSlice []Group
+
+type Group int
+
+func (gs *GroupSlice) Merge(groups ...*Group) error {
+    for _, g := range groups {
+        if err := (*gs).merge(g); err != nil {
+            return err
+        }
+    }
+    return nil
+}
+
+func (gs *GroupSlice) merge(g *Group) error {
+    return nil
+}

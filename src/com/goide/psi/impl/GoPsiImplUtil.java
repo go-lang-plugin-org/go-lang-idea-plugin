@@ -262,7 +262,7 @@ public class GoPsiImplUtil {
   @Nullable
   public static GoTypeReferenceExpression getTypeReference(@Nullable GoType o) {
     if (o == null) return null;
-    if (o instanceof GoReceiverType) {
+    if (o instanceof GoReceiverType || o instanceof GoPointerType) {
       return PsiTreeUtil.findChildOfAnyType(o, GoTypeReferenceExpression.class);
     }
     return o.getTypeReferenceExpression();
@@ -405,7 +405,7 @@ public class GoPsiImplUtil {
       GoExpression first = ContainerUtil.getFirstItem(((GoIndexOrSliceExpr)o).getExpressionList());
       GoType type = first == null ? null : first.getGoType(context);
       if (o.getNode().findChildByType(GoTypes.COLON) != null) return type; // means slice expression, todo: extract if needed
-      GoTypeReferenceExpression typeRef = getTypeReference(type);
+      GoTypeReferenceExpression typeRef = type == null ? null : type.getTypeReferenceExpression();
       if (typeRef != null) {
         type = findTypeFromTypeRef(typeRef);
       }
@@ -417,8 +417,7 @@ public class GoPsiImplUtil {
         }
       }
       else if (type instanceof GoArrayOrSliceType) {
-        GoType tt = ((GoArrayOrSliceType)type).getType();
-        return typeFromRefOrType(tt);
+        return typeFromRefOrType(((GoArrayOrSliceType)type).getType());
       }
     }
     else if (o instanceof GoTypeAssertionExpr) {
@@ -469,7 +468,7 @@ public class GoPsiImplUtil {
   @Nullable
   private static GoType typeFromRefOrType(@Nullable GoType t) {
     if (t == null) return null;
-    GoTypeReferenceExpression tr = getTypeReference(t);
+    GoTypeReferenceExpression tr = t.getTypeReferenceExpression();
     return tr != null ? findTypeFromTypeRef(tr) : t;
   }
 
