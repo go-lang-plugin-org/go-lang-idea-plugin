@@ -22,6 +22,7 @@ import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class GoMethodOnNonLocalTypeInspection extends GoInspectionBase {
   @NotNull
@@ -31,23 +32,19 @@ public class GoMethodOnNonLocalTypeInspection extends GoInspectionBase {
       @Override
       public void visitMethodDeclaration(@NotNull final GoMethodDeclaration method) {
         if (method.getIdentifier() == null || method.isBlank()) return;
-
         String containingFileImportPath = method.getContainingFile().getImportPath();
         if (containingFileImportPath == null) return;
-
-        GoType methodType = method.getReceiver().getType();
-        if (methodType == null ||
-            methodType.getTypeReferenceExpression() == null) return;
-
-        methodType = GoPsiImplUtil.findTypeFromTypeRef(methodType.getTypeReferenceExpression());
+        GoType methodType = getMethodType(method);
         if (methodType == null) return;
-
         String typeImportPath = ((GoFile)methodType.getContainingFile()).getImportPath();
-        if (typeImportPath == null) return;
-
-        if (typeImportPath.equals(containingFileImportPath)) return;
-
+        if (typeImportPath == null || typeImportPath.equals(containingFileImportPath)) return;
         holder.registerProblem(method.getIdentifier(), "Method defined on non-local type", ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+      }
+
+      @Nullable
+      private GoType getMethodType(@NotNull GoMethodDeclaration method) {
+        GoType methodType = method.getReceiver().getType();
+        return methodType == null ? null : GoPsiImplUtil.findTypeFromTypeRef(GoPsiImplUtil.getTypeReference(methodType));
       }
     };
   }
