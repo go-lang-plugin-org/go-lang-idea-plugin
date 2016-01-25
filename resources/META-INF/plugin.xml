@@ -276,6 +276,9 @@
     <localInspection language="go" displayName="Range iteration on illegal type" groupPath="Go"
                      groupName="Control flow issues" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoRangeIterationOnIllegalTypeInspection"/>
+    <localInspection language="go" displayName="Direct assignment to struct field in map" groupPath="Go"
+                     groupName="Control flow issues" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoDirectAssignToStructFieldInMapInspection"/>
     <!-- /control flow issues -->
 
     <!-- general -->
