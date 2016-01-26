@@ -193,27 +193,27 @@ public class GoUtil {
 
     PsiFile definitionFile = definition.getContainingFile();
     PsiFile referenceFile = reference.getContainingFile();
-    if (!(definitionFile instanceof GoFile) || !(referenceFile instanceof GoFile)) {
-      return false; // todo: zolotov, are you sure? cross refs, for instance?
-    }
+    // todo: zolotov, are you sure? cross refs, for instance?
+    if (!(definitionFile instanceof GoFile) || !(referenceFile instanceof GoFile)) return false; 
 
     boolean inSameFile = definitionFile.isEquivalentTo(referenceFile);
-    if (!inSameFile) {
-      String referencePackage = ((GoFile)referenceFile).getPackageName();
-      String definitionPackage = ((GoFile)definitionFile).getPackageName();
-      boolean inSamePackage = referencePackage != null && referencePackage.equals(definitionPackage);
+    if (inSameFile) return true;
+    GoFile refFile = (GoFile)referenceFile;
+    String referencePackage = refFile.getPackageName();
+    String definitionPackage = ((GoFile)definitionFile).getPackageName();
+    boolean inSamePackage = referencePackage != null && referencePackage.equals(definitionPackage);
 
-      if (!inSamePackage) {
-        if (reference instanceof GoNamedElement && !((GoNamedElement)reference).isPublic()) {
-          return false;
-        }
-        String path = ((GoFile)definitionFile).getImportPath();
-        if (!((GoFile)referenceFile).getImportedPackagesMap().containsKey(path)) {
-          return GoConstants.BUILTIN_PACKAGE_NAME.equals(path);
-        }
+    if (inSamePackage) return true;
+    if (reference instanceof GoNamedElement && !((GoNamedElement)reference).isPublic()) return false;
+    String path = ((GoFile)definitionFile).getImportPath();
+    if (GoConstants.BUILTIN_PACKAGE_NAME.equals(path)) return true;
+    if (refFile.getImportedPackagesMap().containsKey(path)) return true;
+    for (GoFile file : GoPsiImplUtil.getAllPackageFiles(refFile)) {
+      if (file != refFile && refFile.getOriginalFile() != file) {
+        if (file.getImportedPackagesMap().containsKey(path)) return true;
       }
     }
-    return true;
+    return false;
   }
   
   @NotNull
