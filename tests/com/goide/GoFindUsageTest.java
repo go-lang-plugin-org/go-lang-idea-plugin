@@ -16,6 +16,7 @@
 
 package com.goide;
 
+import com.goide.project.GoModuleLibrariesService;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.testFramework.LightProjectDescriptor;
@@ -58,6 +59,15 @@ public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
 
   public void testBuiltinHighlighting() {
     myFixture.configureByText("a.go", "package main; func bar() i<caret>nt {}");
+    assertSize(1, myFixture.findUsages(myFixture.getElementAtCaret()));
+  }
+
+  // #2301
+  public void _testCheckImportInWholePackage() {
+    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls("temp:///");
+    myFixture.addFileToProject("bar/bar1.go", "package bar; func Bar() { b := bar{}; b.f.Method() }");
+    myFixture.addFileToProject("bar/bar.go", "package bar; import \"..\"; type bar struct { f *foo.Foo }");
+    myFixture.configureByText("foo.go", "package foo; type Foo struct{}; func (*Foo) M<caret>ethod() {}");
     assertSize(1, myFixture.findUsages(myFixture.getElementAtCaret()));
   }
 
