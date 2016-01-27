@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package com.goide.stubs.types;
 import com.goide.psi.GoImportSpec;
 import com.goide.psi.impl.GoImportSpecImpl;
 import com.goide.stubs.GoImportSpecStub;
+import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
@@ -66,5 +67,10 @@ public class GoImportSpecStubElementType extends GoNamedStubElementType<GoImport
   public GoImportSpecStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException {
     return new GoImportSpecStub(parentStub, this, StringUtil.nullize(dataStream.readUTFFast()), 
                                 dataStream.readUTFFast(), dataStream.readBoolean());
+  }
+
+  @Override
+  public boolean shouldCreateStub(@NotNull ASTNode node) {
+    return true;
   }
 }
