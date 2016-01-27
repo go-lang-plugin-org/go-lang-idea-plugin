@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package com.goide;
 import com.goide.project.GoModuleLibrariesService;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.Function;
@@ -63,13 +64,22 @@ public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
   }
 
   // #2301
-  public void _testCheckImportInWholePackage() {
+  public void testCheckImportInWholePackage() {
     GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls("temp:///");
+    myFixture.addFileToProject("bar/bar1.go", "package bar; func Bar() { b := bar{}; b.f.Method() }");
+    myFixture.addFileToProject("bar/bar.go", "package bar; import \"foo\"; type bar struct { f *foo.Foo }");
+    PsiFile file = myFixture.addFileToProject("foo/foo.go", "package foo; type Foo struct{}; func (*Foo) M<caret>ethod() {}");
+    myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
+    assertSize(1, myFixture.findUsages(myFixture.getElementAtCaret()));
+  }
+  
+  public void _testCheckImportInWholePackageWithRelativeImports() {
     myFixture.addFileToProject("bar/bar1.go", "package bar; func Bar() { b := bar{}; b.f.Method() }");
     myFixture.addFileToProject("bar/bar.go", "package bar; import \"..\"; type bar struct { f *foo.Foo }");
     myFixture.configureByText("foo.go", "package foo; type Foo struct{}; func (*Foo) M<caret>ethod() {}");
     assertSize(1, myFixture.findUsages(myFixture.getElementAtCaret()));
   }
+
 
   @Override
   protected LightProjectDescriptor getProjectDescriptor() {
