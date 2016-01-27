@@ -17,15 +17,18 @@
 package com.goide;
 
 import com.goide.project.GoModuleLibrariesService;
+import com.goide.psi.GoStatement;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.List;
 
 import static com.intellij.util.containers.ContainerUtil.newArrayList;
@@ -70,7 +73,13 @@ public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
     myFixture.addFileToProject("bar/bar.go", "package bar; import \"foo\"; type bar struct { f *foo.Foo }");
     PsiFile file = myFixture.addFileToProject("foo/foo.go", "package foo; type Foo struct{}; func (*Foo) M<caret>ethod() {}");
     myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
-    assertSize(1, myFixture.findUsages(myFixture.getElementAtCaret()));
+    Collection<UsageInfo> usages = myFixture.findUsages(myFixture.getElementAtCaret());
+    assertSize(1, usages);
+    UsageInfo first = usages.iterator().next();
+    PsiElement e = first.getElement();
+    GoStatement statement = PsiTreeUtil.getParentOfType(e, GoStatement.class);
+    assertNotNull(statement);
+    assertEquals("b.f.Method()", statement.getText());
   }
   
   public void _testCheckImportInWholePackageWithRelativeImports() {
