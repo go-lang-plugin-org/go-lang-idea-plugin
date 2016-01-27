@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -171,7 +171,7 @@ public class GoFile extends PsiFileBase {
   @NotNull
   public List<GoImportSpec> getImports() {
     StubElement<GoFile> stub = getStub();
-    if (stub != null) return getChildrenByType(stub, GoTypes.IMPORT, GoImportSpecStubElementType.ARRAY_FACTORY);
+    if (stub != null) return getChildrenByType(stub, GoTypes.IMPORT_SPEC, GoImportSpecStubElementType.ARRAY_FACTORY);
     return CachedValuesManager.getCachedValue(this, new CachedValueProvider<List<GoImportSpec>>() {
       @Override
       public Result<List<GoImportSpec>> compute() {
