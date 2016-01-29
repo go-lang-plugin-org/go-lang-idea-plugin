@@ -114,7 +114,8 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
     String dlvPath = System.getProperty("dlv.path");
     if (StringUtil.isNotEmpty(dlvPath)) return new File(dlvPath);
     return new File(GoUtil.getPlugin().getPath(),
-                    "lib/dlv/" + (SystemInfo.isMac ? "mac" : "linux") + "/" + GoConstants.DELVE_EXECUTABLE_NAME);
+                    "lib/dlv/" + (SystemInfo.isMac ? "mac" : SystemInfo.isWindows ? "windows" : "linux") + "/"
+                    + GoConstants.DELVE_EXECUTABLE_NAME + (SystemInfo.isWindows ? ".exe" : ""));
   }
 
   public void setOutputFilePath(@NotNull String outputFilePath) {
