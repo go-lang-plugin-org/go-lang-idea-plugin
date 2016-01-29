@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,10 +35,13 @@ import java.util.List;
 
 public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
   private boolean defaultJavaOnTheFly;
+  private boolean defaultJavaMemberOnTheFly;
   private boolean defaultGoOnTheFly;
 
   private static void updateSettings(boolean goOnTheFlyEnabled, boolean javaOnTheFlyEnabled) {
-    CodeInsightSettings.getInstance().ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY = javaOnTheFlyEnabled;
+    CodeInsightSettings codeInsightSettings = CodeInsightSettings.getInstance();
+    codeInsightSettings.ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY = javaOnTheFlyEnabled;
+    codeInsightSettings.ADD_MEMBER_IMPORTS_ON_THE_FLY = javaOnTheFlyEnabled;
     GoCodeInsightSettings.getInstance().setAddUnambiguousImportsOnTheFly(goOnTheFlyEnabled);
   }
 
@@ -48,7 +51,9 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
     setUpProjectSdk();
     myFixture.enableInspections(GoUnresolvedReferenceInspection.class);
     ((CodeInsightTestFixtureImpl)myFixture).canChangeDocumentDuringHighlighting(true);
-    defaultJavaOnTheFly = CodeInsightSettings.getInstance().ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY;
+    CodeInsightSettings codeInsightSettings = CodeInsightSettings.getInstance();
+    defaultJavaOnTheFly = codeInsightSettings.ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY;
+    defaultJavaMemberOnTheFly = codeInsightSettings.ADD_MEMBER_IMPORTS_ON_THE_FLY;
     defaultGoOnTheFly = GoCodeInsightSettings.getInstance().isAddUnambiguousImportsOnTheFly();
   }
 
@@ -56,6 +61,7 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
   protected void tearDown() throws Exception {
     try {
       updateSettings(defaultGoOnTheFly, defaultJavaOnTheFly);
+      CodeInsightSettings.getInstance().ADD_MEMBER_IMPORTS_ON_THE_FLY = defaultJavaMemberOnTheFly;
     }
     finally {
       super.tearDown();
