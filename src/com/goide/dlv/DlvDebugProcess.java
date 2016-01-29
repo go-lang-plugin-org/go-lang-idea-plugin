@@ -34,7 +34,6 @@ import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.PlainTextLanguage;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
-import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -68,9 +67,9 @@ import static com.intellij.util.ObjectUtils.assertNotNull;
 import static com.intellij.util.ObjectUtils.tryCast;
 
 public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> implements Disposable {
-  public static final boolean IS_DLV_DISABLED = SystemInfo.isWindows || !GoConstants.AMD64.equals(GoUtil.systemArch());
+  public static final boolean IS_DLV_DISABLED = !GoConstants.AMD64.equals(GoUtil.systemArch());
 
-  final static Logger LOG = Logger.getInstance(DlvDebugProcess.class);
+  private final static Logger LOG = Logger.getInstance(DlvDebugProcess.class);
   private final AtomicBoolean breakpointsInitiated = new AtomicBoolean();
   private final AtomicBoolean connectedListenerAdded = new AtomicBoolean();
   private static final Consumer<Throwable> THROWABLE_CONSUMER = new Consumer<Throwable>() {
