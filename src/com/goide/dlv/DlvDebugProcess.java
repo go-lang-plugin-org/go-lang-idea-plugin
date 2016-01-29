@@ -39,6 +39,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.util.Consumer;
+import com.intellij.util.PathUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.io.socketConnection.ConnectionStatus;
 import com.intellij.util.io.socketConnection.SocketConnectionListener;
@@ -265,7 +266,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
       if (breakpointPosition == null) return;
       VirtualFile file = breakpointPosition.getFile();
       int line = breakpointPosition.getLine();
-      send(new DlvRequest.CreateBreakpoint(file.getPath(), line + 1))
+      send(new DlvRequest.CreateBreakpoint(PathUtil.toSystemDependentName(file.getPath()), line + 1))
         .done(new Consumer<Breakpoint>() {
           @Override
           public void consume(@NotNull Breakpoint b) {
