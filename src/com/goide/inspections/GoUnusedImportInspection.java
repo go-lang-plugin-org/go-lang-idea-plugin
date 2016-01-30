@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
+import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -109,7 +110,9 @@ public class GoUnusedImportInspection extends GoInspectionBase {
     if (!problemsHolder.isOnTheFly()) {
       resolveAllReferences(file);
     }
-    for (PsiElement importEntry : GoImportOptimizer.filterUnusedImports(file, importMap).values()) {
+    MultiMap<String, GoImportSpec> unusedImportsMap = GoImportOptimizer.filterUnusedImports(file, importMap);
+    Set<GoImportSpec> unusedImportSpecs = ContainerUtil.newHashSet(unusedImportsMap.values());
+    for (PsiElement importEntry : unusedImportSpecs) {
       GoImportSpec spec = GoImportOptimizer.getImportSpec(importEntry);
       if (spec != null) {
         if (spec.getImportString().resolve() != null) {
