@@ -142,6 +142,15 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testIota()                      { doTest(); }
   public void testIota2()                     { doTest(); }
 
+  public void testAvoidDuplicatedUnusedImportReports() {
+    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls("temp:///");
+    myFixture.addFileToProject("pack1/a.go", "package foo;");
+    myFixture.addFileToProject("pack1/b.go", "package foo_test;");
+    myFixture.addFileToProject("pack2/a.go", "package foo;");
+    myFixture.addFileToProject("pack3/a.go", "package foo; func Hi() {}");
+    doTest();
+  }
+
   public void testCheckSamePackage_test()     { 
     myFixture.configureByText("a_test.go", "package check; func TestStringer(t *testing.T) {}"); 
     doTest(); 
