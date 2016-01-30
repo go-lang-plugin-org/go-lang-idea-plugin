@@ -124,3 +124,34 @@ func _() {
 	}
 	_ = tr
 }
+
+
+type Mtx struct {
+	state int32
+	sema  uint32
+}
+
+func (m *Mtx) Lock() {
+
+}
+
+func (m *Mtx) Unlock() {
+
+}
+
+type Locker interface {
+	Lock()
+	Unlock()
+}
+
+type TMtx struct {
+	M struct {
+		  Mtx
+	  }
+}
+
+func _() {
+	t := TMtx{}
+	t.M.Lock()
+	t.M.Unlock()
+}
