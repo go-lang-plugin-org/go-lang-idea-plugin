@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,6 @@ public class GoImportOptimizerTest extends GoCodeInsightFixtureTestCase {
   public void testDuplicatedImportsWithSameString() { doTest(); } 
   public void testDuplicatedImportsWithDifferentString() { doTest(); } 
   public void testUnusedDuplicatedImports() { doTest(); }
-  public void testImportWithSameIdentifier() { doTest(); }
   public void testImportPackageWithMainFiles() { doTest(); }
   public void testImportDirectoryWithoutPackages() {
     doTest(); 
@@ -49,6 +48,13 @@ public class GoImportOptimizerTest extends GoCodeInsightFixtureTestCase {
   public void testDoNotOptimizeSideEffectImports() {
     doTest(); 
   }
+  
+  public void testImportWithSameIdentifier() {
+    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls("temp:///");
+    myFixture.addFileToProject("foo/bar/buzz.go", "package bar; func Hello() {}");
+    doTest(); 
+  }
+
   public void testImportWithMultiplePackages() throws Throwable {
     VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
       @NotNull
