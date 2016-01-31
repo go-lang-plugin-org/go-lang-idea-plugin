@@ -19,16 +19,22 @@ package com.goide.runconfig.testing.frameworks.gotest;
 import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.goide.psi.GoMethodDeclaration;
 import com.goide.runconfig.testing.GoTestRunConfigurationProducerBase;
+import com.intellij.psi.PsiElement;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 
 public class GotestRunConfigurationProducer extends GoTestRunConfigurationProducerBase implements Cloneable {
   public GotestRunConfigurationProducer() {
     super(GotestFramework.INSTANCE);
   }
-  
+
+  @Nullable
   @Override
-  protected boolean shouldSkipContext(@Nullable GoFunctionOrMethodDeclaration context) {
-    return context != null && context instanceof GoMethodDeclaration;
+  protected GoFunctionOrMethodDeclaration findTestFunctionInContext(@NotNull PsiElement contextElement) {
+    GoFunctionOrMethodDeclaration functionOrMethodDecl = super.findTestFunctionInContext(contextElement);
+    if (functionOrMethodDecl instanceof GoMethodDeclaration) {
+      return null;
+    }
+    return functionOrMethodDecl;
   }
 }
