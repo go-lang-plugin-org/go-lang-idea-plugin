@@ -46,6 +46,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Function;
 import com.intellij.util.NotNullFunction;
 import com.intellij.util.ObjectUtils;
+import com.intellij.util.PathUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -896,13 +897,14 @@ public class GoPsiImplUtil {
   }
 
   public static String getLocalPackageName(@NotNull String importPath) {
+    String fileName = PathUtil.getFileName(importPath);
     StringBuilder name = null;
-    for (int i = 0; i < importPath.length(); i++) {
-      char c = importPath.charAt(i);
+    for (int i = 0; i < fileName.length(); i++) {
+      char c = fileName.charAt(i);
       if (!(Character.isLetter(c) || c == '_' || (i != 0 && Character.isDigit(c)))) {
         if (name == null) {
-          name = new StringBuilder(importPath.length());
-          name.append(importPath, 0, i);
+          name = new StringBuilder(fileName.length());
+          name.append(fileName, 0, i);
         }
         name.append('_');
       }
@@ -910,7 +912,7 @@ public class GoPsiImplUtil {
         name.append(c);
       }
     }
-    return name == null ? importPath : name.toString();
+    return name == null ? fileName : name.toString();
   }
 
   public static String getLocalPackageName(@NotNull GoImportSpec importSpec) {
