@@ -1,5 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <problems>
+  <problem>
+    <file>consul.go</file>
+    <line>13</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libkv/store/consul/consul.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused import inspection</problem_class>
+    <description>Redundant alias</description>
+  </problem>
+  <problem>
+    <file>zookeeper.go</file>
+    <line>9</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libkv/store/zookeeper/zookeeper.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused import inspection</problem_class>
+    <description>Redundant alias</description>
+  </problem>
+  <problem>
+    <file>dbstore.go</file>
+    <line>11</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/endophage/gotuf/store/dbstore.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused import inspection</problem_class>
+    <description>Redundant alias</description>
+  </problem>
+  <problem>
+    <file>criurpc.pb.go</file>
+    <line>27</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/opencontainers/runc/libcontainer/criurpc/criurpc.pb.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused import inspection</problem_class>
+    <description>Redundant alias</description>
+  </problem>
   <problem>
     <file>criurpc.pb.go</file>
     <line>28</line>
