@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import com.goide.util.GoUtil;
 import com.intellij.codeInsight.daemon.impl.analysis.DefaultHighlightingSettingProvider;
 import com.intellij.codeInsight.daemon.impl.analysis.FileHighlightingSetting;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.FileIndexFacade;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
@@ -36,7 +35,6 @@ public class GoDefaultHighlightingSettingProvider extends DefaultHighlightingSet
     if (file.getFileType() != GoFileType.INSTANCE) return null;
     if (project.isDefault()) return null;
     if (!file.isValid()) return null;
-    if (FileIndexFacade.getInstance(project).isInContent(file)) return null;
 
     PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
     if (psiFile instanceof GoFile && GoUtil.importPathToIgnore(((GoFile)psiFile).getImportPath())) {

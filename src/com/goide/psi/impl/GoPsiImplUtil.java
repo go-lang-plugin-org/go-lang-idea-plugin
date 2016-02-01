@@ -897,7 +897,9 @@ public class GoPsiImplUtil {
   }
 
   public static String getLocalPackageName(@NotNull String importPath) {
-    String fileName = PathUtil.getFileName(importPath);
+    String fileName = !StringUtil.endsWithChar(importPath, '/') && !StringUtil.endsWithChar(importPath, '\\') 
+                      ? PathUtil.getFileName(importPath)
+                      : "";
     StringBuilder name = null;
     for (int i = 0; i < fileName.length(); i++) {
       char c = fileName.charAt(i);

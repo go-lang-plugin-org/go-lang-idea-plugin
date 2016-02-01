@@ -19,7 +19,6 @@ package com.goide.completion;
 import com.intellij.codeInsight.lookup.Lookup;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.testFramework.TreePrintCondition;
 import com.intellij.util.ArrayUtil;
@@ -49,8 +48,8 @@ public class GoCompletionTest extends GoCompletionTestBase {
   }
 
   public void testImportPackages() throws IOException {
-    myFixture.getTempDirFixture().createFile("package1/pack/test.go", "package foo");
-    myFixture.getTempDirFixture().createFile("package2/pack/test.go", "package bar");
+    myFixture.addFileToProject("package1/pack/test.go", "package foo");
+    myFixture.addFileToProject("package2/pack/test.go", "package bar");
     myFixture.configureByText("test.go", "package foo; import `pack<caret>`");
     myFixture.completeBasic();
     List<String> lookupElementStrings = myFixture.getLookupElementStrings();
@@ -59,8 +58,8 @@ public class GoCompletionTest extends GoCompletionTestBase {
   }
   
   public void testImportPackagesWithoutClosingQuote() throws IOException {
-    myFixture.getTempDirFixture().createFile("package1/pack/test.go", "package foo");
-    myFixture.getTempDirFixture().createFile("package2/pack/test.go", "package bar");
+    myFixture.addFileToProject("package1/pack/test.go", "package foo");
+    myFixture.addFileToProject("package2/pack/test.go", "package bar");
     myFixture.configureByText("test.go", "package foo; import `pack<caret>");
     myFixture.completeBasic();
     List<String> lookupElementStrings = myFixture.getLookupElementStrings();
@@ -69,8 +68,8 @@ public class GoCompletionTest extends GoCompletionTestBase {
   }
 
   public void testImportRelativePackages() throws IOException {
-    myFixture.getTempDirFixture().createFile("package1/pack/test.go", "package foo");
-    myFixture.getTempDirFixture().createFile("package2/pack/test.go", "package bar");
+    myFixture.addFileToProject("package1/pack/test.go", "package foo");
+    myFixture.addFileToProject("package2/pack/test.go", "package bar");
     myFixture.configureByText("test.go", "package foo; import `./pack<caret>`");
     myFixture.completeBasic();
     List<String> lookupElementStrings = myFixture.getLookupElementStrings();
@@ -79,8 +78,8 @@ public class GoCompletionTest extends GoCompletionTestBase {
   }
 
   public void testDoNotCompleteFullPackagesForRelativeImports() throws IOException {
-    myFixture.getTempDirFixture().createFile("package1/pack/test.go", "package foo");
-    myFixture.getTempDirFixture().createFile("package2/pack/test.go", "package bar");
+    myFixture.addFileToProject("package1/pack/test.go", "package foo");
+    myFixture.addFileToProject("package2/pack/test.go", "package bar");
     myFixture.configureByText("test.go", "package foo; import `./pack<caret>`");
     myFixture.completeBasic();
     List<String> lookupElementStrings = myFixture.getLookupElementStrings();
@@ -89,30 +88,29 @@ public class GoCompletionTest extends GoCompletionTestBase {
   }
 
   public void testDoNotCompleteOwnImportPath() throws IOException {
-    myFixture.getTempDirFixture().createFile("package/long/long/path/test.go", "package pack");
-    VirtualFile testFile = myFixture.getTempDirFixture()
-      .createFile("package/very/long/path/but/same/package/test.go", "package pack; import `package/<caret>`");
-    myFixture.configureFromExistingVirtualFile(testFile);
+    myFixture.addFileToProject("package/long/long/path/test.go", "package pack");
+    PsiFile testFile = myFixture.addFileToProject("package/very/long/path/but/same/package/test.go", 
+                                                  "package pack; import `package/<caret>`");
+    myFixture.configureFromExistingVirtualFile(testFile.getVirtualFile());
     myFixture.completeBasic();
     myFixture.checkResult("package pack; import `package/long/long/path`");
   }
 
   public void testImportsPriority() throws IOException {
-    myFixture.getTempDirFixture().createFile("package/long/but/similar/path/test.go", "package pack");
-    myFixture.getTempDirFixture().createFile("package/very/long/path/test.go", "package pack");
-    myFixture.getTempDirFixture().createFile("package/middle/path/test.go", "package pack");
-    myFixture.getTempDirFixture().createFile("package/short/test.go", "package pack");
-    VirtualFile testFile = myFixture.getTempDirFixture()
-      .createFile("package/long/but/similar/test.go", "package pack; import `package/<caret>`");
-    myFixture.configureFromExistingVirtualFile(testFile);
+    myFixture.addFileToProject("package/long/but/similar/path/test.go", "package pack");
+    myFixture.addFileToProject("package/very/long/path/test.go", "package pack");
+    myFixture.addFileToProject("package/middle/path/test.go", "package pack");
+    myFixture.addFileToProject("package/short/test.go", "package pack");
+    PsiFile testFile = myFixture.addFileToProject("package/long/but/similar/test.go", "package pack; import `package/<caret>`");
+    myFixture.configureFromExistingVirtualFile(testFile.getVirtualFile());
     myFixture.completeBasic();
     myFixture.assertPreferredCompletionItems(0, "package/long/but/similar/path", "package/short", "package/middle/path",
                                              "package/very/long/path");
   }
 
   public void testDoNotHidePopupOnSlash() throws IOException {
-    myFixture.getTempDirFixture().createFile("package1/pack/test.go", "package foo");
-    myFixture.getTempDirFixture().createFile("package2/pack/test.go", "package bar");
+    myFixture.addFileToProject("package1/pack/test.go", "package foo");
+    myFixture.addFileToProject("package2/pack/test.go", "package bar");
     myFixture.configureByText("test.go", "package foo; import `<caret>`");
     myFixture.completeBasic();
     myFixture.type("package1/\n");
@@ -536,12 +534,12 @@ public class GoCompletionTest extends GoCompletionTestBase {
   }
 
   public void testPackageNamesInEmptyDirectory() throws IOException {
-    PsiFile file = myFixture.addFileToProject("directory-name/test.go", "package d<caret>");
+    PsiFile file = myFixture.addFileToProject("my-directory-name/test.go", "package m<caret>");
     myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
     myFixture.completeBasic();
     List<String> strings = myFixture.getLookupElementStrings();
     assertNotNull(strings);
-    assertSameElements(strings, "directory_name", "main");
+    assertSameElements(strings, "my_directory_name", "main");
   }
 
   private void doTestEmptyCompletion() {
