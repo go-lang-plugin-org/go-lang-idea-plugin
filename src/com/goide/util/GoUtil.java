@@ -148,7 +148,8 @@ public class GoUtil {
 
   @NotNull
   public static GlobalSearchScope moduleScope(@NotNull PsiElement element) {
-    return moduleScope(element.getProject(), ModuleUtilCore.findModuleForPsiElement(element));
+    // it's important to ask module on file, otherwise module won't be found for elements in libraries files [zolotov]
+    return moduleScope(element.getProject(), ModuleUtilCore.findModuleForPsiElement(element.getContainingFile()));
   }
 
   @NotNull

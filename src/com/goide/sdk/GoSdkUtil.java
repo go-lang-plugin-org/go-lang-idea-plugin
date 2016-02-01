@@ -78,7 +78,8 @@ public class GoSdkUtil {
   @Nullable
   public static GoFile findBuiltinFile(@NotNull PsiElement context) {
     final Project project = context.getProject();
-    Module moduleFromContext = ModuleUtilCore.findModuleForPsiElement(context);
+    // it's important to ask module on file, otherwise module won't be found for elements in libraries files [zolotov]
+    Module moduleFromContext = ModuleUtilCore.findModuleForPsiElement(context.getContainingFile());
     if (moduleFromContext == null) {
       for (Module module : ModuleManager.getInstance(project).getModules()) {
         if (GoSdkService.getInstance(project).isGoModule(module)) {
@@ -370,7 +371,7 @@ public class GoSdkUtil {
   }
 
   @NotNull
-  public static Collection<Object> getSdkAndLibrariesCacheDependencies(@NotNull Project project, @Nullable Module module, Object... extra) {
+  private static Collection<Object> getSdkAndLibrariesCacheDependencies(@NotNull Project project, @Nullable Module module, Object... extra) {
     Collection<Object> dependencies = ContainerUtil.newArrayList((Object[])GoLibrariesService.getModificationTrackers(project, module));
     ContainerUtil.addAllNotNull(dependencies, GoSdkService.getInstance(project));
     ContainerUtil.addAllNotNull(dependencies, extra);

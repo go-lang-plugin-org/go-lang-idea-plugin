@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -382,7 +382,8 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
   @Override
   public PsiElement getDocumentationElementForLink(PsiManager psiManager, String link, PsiElement context) {
     if (context != null && !DumbService.isDumb(psiManager.getProject())) {
-      Module module = ModuleUtilCore.findModuleForPsiElement(context);
+      // it's important to ask module on file, otherwise module won't be found for elements in libraries files [zolotov]
+      Module module = ModuleUtilCore.findModuleForPsiElement(context.getContainingFile());
       int hash = link.indexOf('#');
       String importPath = hash >= 0 ? link.substring(0, hash) : link;
       Project project = psiManager.getProject();
