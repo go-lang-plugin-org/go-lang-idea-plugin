@@ -17,13 +17,9 @@
 package com.goide.codeInsight.imports;
 
 import com.goide.GoCodeInsightFixtureTestCase;
-import com.goide.project.GoModuleLibrariesService;
 import com.intellij.codeInsight.actions.OptimizeImportsAction;
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.util.ThrowableComputable;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 import org.jetbrains.annotations.NotNull;
@@ -50,23 +46,13 @@ public class GoImportOptimizerTest extends GoCodeInsightFixtureTestCase {
   }
   
   public void testImportWithSameIdentifier() {
-    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls("temp:///");
     myFixture.addFileToProject("foo/bar/buzz.go", "package bar; func Hello() {}");
     doTest(); 
   }
 
   public void testImportWithMultiplePackages() throws Throwable {
-    VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
-      @NotNull
-      @Override
-      public VirtualFile compute() throws Throwable {
-        VirtualFile pack = myFixture.getTempDirFixture().findOrCreateDir("pack");
-        myFixture.getTempDirFixture().createFile("pack/pack_test.go", "package pack_test; func Test() {}");
-        myFixture.getTempDirFixture().createFile("pack/pack.go", "package pack;");
-        return pack;
-      }
-    });
-    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(file.getParent().getUrl());
+    myFixture.addFileToProject("pack/pack_test.go", "package pack_test; func Test() {}");
+    myFixture.addFileToProject("pack/pack.go", "package pack;");
     doTest(); 
   }
 

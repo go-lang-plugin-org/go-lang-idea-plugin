@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package com.goide.quickfix;
 
 import com.goide.inspections.GoSelfImportInspection;
-import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiFile;
 
 import java.io.IOException;
 
@@ -34,9 +34,9 @@ public class GoSelfImportInspectionTest extends GoQuickFixTestBase {
   }
 
   public void testRemoveSelfImport() throws IOException {
-    VirtualFile file = myFixture.getTempDirFixture().createFile("path/a.go", "package pack;" +
-                                                                             "import <error descr=\"Self import is not allowed\"><caret>\"path\"</error>");
-    myFixture.configureFromExistingVirtualFile(file);
+    PsiFile file = myFixture.addFileToProject("path/a.go", "package pack;" +
+                                                           "import <error descr=\"Self import is not allowed\"><caret>\"path\"</error>");
+    myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
     myFixture.checkHighlighting();
     applySingleQuickFix("Remove self import");
   }
@@ -48,8 +48,8 @@ public class GoSelfImportInspectionTest extends GoQuickFixTestBase {
   }
 
   public void testDoNotConsiderImportFromTestPackageAsSelfImport() throws IOException {
-    VirtualFile file = myFixture.getTempDirFixture().createFile("path/a_test.go", "package pack_test; import <caret>\"path\"");
-    myFixture.configureFromExistingVirtualFile(file);
+    PsiFile file = myFixture.addFileToProject("path/a_test.go", "package pack_test; import <caret>\"path\"");
+    myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
     myFixture.checkHighlighting();
   }
 }
