@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -207,7 +207,8 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
   @Override
   public SearchScope getUseScope() {
     if (isPublic()) {
-      Module module = ModuleUtilCore.findModuleForPsiElement(this);
+      // it's important to ask module on file, otherwise module won't be found for elements in libraries files [zolotov]
+      Module module = ModuleUtilCore.findModuleForPsiElement(getContainingFile());
       return module != null ? GoUtil.moduleScope(getProject(), module) : super.getUseScope();
     }
     else {
