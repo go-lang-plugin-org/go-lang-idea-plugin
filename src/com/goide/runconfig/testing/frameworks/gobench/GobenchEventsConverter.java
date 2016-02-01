@@ -22,11 +22,9 @@ import com.intellij.execution.testframework.TestConsoleProperties;
 import com.intellij.execution.testframework.sm.runner.OutputToGeneralTestEventsConverter;
 import com.intellij.execution.testframework.sm.runner.events.TestFailedEvent;
 import com.intellij.execution.testframework.sm.runner.events.TestFinishedEvent;
-import com.intellij.execution.testframework.sm.runner.events.TestOutputEvent;
 import com.intellij.execution.testframework.sm.runner.events.TestStartedEvent;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.text.StringUtil;
-import jetbrains.buildServer.messages.serviceMessages.TestFailed;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
@@ -38,12 +36,13 @@ public class GobenchEventsConverter extends OutputToGeneralTestEventsConverter {
   private static final Pattern FAIL = Pattern.compile("^--- FAIL: (Benchmark[^ (\n\t\r]+)");
   private static final Pattern OK = Pattern.compile("^ok  \t");
 
+  private final Stopwatch testStopwatch = Stopwatch.createUnstarted();
+  private String currentBenchmark = "<benchmark>";
+  private boolean benchmarkFailing = false;
+  
   public GobenchEventsConverter(TestConsoleProperties properties) {
     super(GobenchFramework.NAME, properties);
   }
-  private Stopwatch testStopwatch = Stopwatch.createUnstarted();
-  private String currentBenchmark = "<benchmark>";
-  private boolean benchmarkFailing = false;
 
   @Override
   public void process(String text, Key outputType) {
