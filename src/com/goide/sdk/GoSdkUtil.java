@@ -29,6 +29,7 @@ import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.UserDataHolder;
 import com.intellij.openapi.util.io.FileUtil;
@@ -62,6 +63,7 @@ public class GoSdkUtil {
   private static final Pattern GO_VERSION_PATTERN = Pattern.compile("[tT]heVersion\\s*=\\s*`go([\\d.]+\\w+(\\d+)?)`");
   private static final Pattern GAE_VERSION_PATTERN = Pattern.compile("[tT]heVersion\\s*=\\s*`go([\\d.]+)( \\(appengine-[\\d.]+\\))?`");
   private static final Pattern GO_DEVEL_VERSION_PATTERN = Pattern.compile("[tT]heVersion\\s*=\\s*`(devel.*)`");
+  private static final Key<String> ZVERSION_DATA_KEY = Key.create("GO_ZVERSION_KEY");
 
   @Nullable
   private static VirtualFile getSdkSrcDir(@NotNull Project project, @Nullable Module module) {
@@ -311,25 +313,38 @@ public class GoSdkUtil {
   @Nullable
   public static String retrieveGoVersion(@NotNull String sdkPath) {
     try {
-      String legacyStylePath = new File(sdkPath, "src/pkg/" + GoConstants.GO_VERSION_FILE_PATH).getPath();
-      String oldStylePath = new File(sdkPath, "src/" + GoConstants.GO_VERSION_FILE_PATH).getPath();
-      String newStylePath = new File(sdkPath, "src/" + GoConstants.GO_VERSION_NEW_FILE_PATH).getPath();
-      File zVersionFile = FileUtil.findFirstThatExist(legacyStylePath, oldStylePath, newStylePath);
-      if (zVersionFile == null) {
-        GoSdkService.LOG.debug("Cannot find zVersion file at sdk path: " + sdkPath);
-        return null;
+      VirtualFile sdkRoot = VirtualFileManager.getInstance().findFileByUrl(VfsUtilCore.pathToUrl(sdkPath));
+      if (sdkRoot != null) {
+        String cachedVersion = sdkRoot.getUserData(ZVERSION_DATA_KEY);
+        if (cachedVersion != null) {
+          return !cachedVersion.isEmpty() ? cachedVersion : null;
+        }
+        
+        VirtualFile versionFile = sdkRoot.findFileByRelativePath("src/" + GoConstants.GO_VERSION_NEW_FILE_PATH);
+        if (versionFile == null) {
+          versionFile = sdkRoot.findFileByRelativePath("src/" + GoConstants.GO_VERSION_FILE_PATH);
+        }
+        if (versionFile == null) {
+          versionFile = sdkRoot.findFileByRelativePath("src/pkg/" + GoConstants.GO_VERSION_FILE_PATH);
+        }
+        if (versionFile != null) {
+          String text = VfsUtilCore.loadText(versionFile);
+          String version = parseGoVersion(text);
+          if (version == null) {
+            GoSdkService.LOG.debug("Cannot retrieve go version from zVersion file: " + text);
+          }
+          sdkRoot.putUserData(ZVERSION_DATA_KEY, StringUtil.notNullize(version));
+          return version;
+        }
+        else {
+          GoSdkService.LOG.debug("Cannot find go version file in sdk path: " + sdkPath);
+        }
       }
-      String file = FileUtil.loadFile(zVersionFile);
-      String version = parseGoVersion(file);
-      if (version == null) {
-        GoSdkService.LOG.debug("Cannot retrieve go version from zVersion file: " + file);
-      }
-      return version;
     }
     catch (IOException e) {
       GoSdkService.LOG.debug("Cannot retrieve go version from sdk path: " + sdkPath, e);
-      return null;
     }
+    return null;
   }
 
   @NotNull
