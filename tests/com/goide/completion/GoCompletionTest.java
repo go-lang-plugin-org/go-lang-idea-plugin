@@ -19,8 +19,8 @@ package com.goide.completion;
 import com.intellij.codeInsight.lookup.Lookup;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
-import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiFile;
 import com.intellij.testFramework.TreePrintCondition;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
@@ -536,10 +536,8 @@ public class GoCompletionTest extends GoCompletionTestBase {
   }
 
   public void testPackageNamesInEmptyDirectory() throws IOException {
-    VirtualFile dir = myFixture.getTempDirFixture().findOrCreateDir("directory-name");
-    VirtualFile file = dir.createChildData(this, "test.go");
-    VfsUtil.saveText(file, "package <caret>");
-    myFixture.configureFromExistingVirtualFile(file);
+    PsiFile file = myFixture.addFileToProject("directory-name/test.go", "package d<caret>");
+    myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
     myFixture.completeBasic();
     List<String> strings = myFixture.getLookupElementStrings();
     assertNotNull(strings);
