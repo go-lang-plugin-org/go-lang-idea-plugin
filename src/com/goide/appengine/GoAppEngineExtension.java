@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.goide.appengine;
 
 import com.goide.sdk.GoSdkService;
 import com.intellij.appengine.AppEngineExtension;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.Nullable;
@@ -25,7 +26,13 @@ import org.jetbrains.annotations.Nullable;
 public class GoAppEngineExtension extends AppEngineExtension {
   @Override
   public boolean isAppEngineEnabled(@Nullable PsiElement context) {
-    return context != null &&
-           GoSdkService.getInstance(context.getProject()).isAppEngineSdk(ModuleUtilCore.findModuleForPsiElement(context));
+    if (context != null) {
+      // it's important to ask module on file, otherwise module won't be found for elements in libraries files [zolotov]
+      Module module = ModuleUtilCore.findModuleForPsiElement(context.getContainingFile());
+      if (GoSdkService.getInstance(context.getProject()).isAppEngineSdk(module)) {
+        return true;
+      }
+    }
+    return false;
   }
 }
