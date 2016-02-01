@@ -20,11 +20,8 @@ import com.goide.GoCodeInsightFixtureTestCase;
 import com.goide.inspections.unresolved.*;
 import com.goide.project.GoModuleLibrariesService;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightingSettingsPerFile;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.util.ThrowableComputable;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiFile;
 import com.intellij.testFramework.LightProjectDescriptor;
 import org.jetbrains.annotations.NotNull;
 
@@ -143,7 +140,6 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testIota2()                     { doTest(); }
 
   public void testAvoidDuplicatedUnusedImportReports() {
-    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls("temp:///");
     myFixture.addFileToProject("pack1/a.go", "package foo;");
     myFixture.addFileToProject("pack1/b.go", "package foo_test;");
     myFixture.addFileToProject("pack2/a.go", "package foo;");
@@ -163,29 +159,20 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     doTest();
   }
 
-  public void testImportWithSlashAtTheEnd() throws Throwable {
-    VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
-      @NotNull
-      @Override
-      public VirtualFile compute() throws Throwable {
-        myFixture.getTempDirFixture().createFile("a/pack/pack.go", "package pack; func Foo() {}");
-        return myFixture.getTempDirFixture().createFile("pack2/pack2.go",
-                                                        "package main; import \"a/pack/<error descr=\"Cannot resolve file ''\"></error>\"; import \"../a/pack/\"; func main() { pack.Foo() }");
-      }
-    });
-    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(file.getParent().getParent().getUrl());
-    myFixture.configureFromExistingVirtualFile(file);
+  public void testImportWithSlashAtTheEnd() {
+    myFixture.addFileToProject("a/pack/pack.go", "package pack; func Foo() {}");
+    PsiFile file = myFixture.addFileToProject("pack2/pack2.go",
+                                              "package main; import \"a/pack/<error descr=\"Cannot resolve file ''\"></error>\"; import \"../a/pack/\"; func main() { pack.Foo() }");
+    myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
     myFixture.checkHighlighting();
   }
 
-  public void testDoNotReportNonLastMultiResolvedImport() throws IOException {
-    final VirtualFile root1 = myFixture.getTempDirFixture().findOrCreateDir("root1");
-    final VirtualFile root2 = myFixture.getTempDirFixture().findOrCreateDir("root2");
-
-    myFixture.getTempDirFixture().createFile("root1/src/to_import/unique/foo.go", "package unique; func Foo() {}");
-    myFixture.getTempDirFixture().findOrCreateDir("root1/src/to_import/shared");
-    myFixture.getTempDirFixture().findOrCreateDir("root2/src/to_import/shared");
-    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(root1.getUrl(), root2.getUrl());
+  public void testDoNotReportNonLastMultiResolvedImport() {
+    myFixture.addFileToProject("root1/src/to_import/unique/foo.go", "package unique; func Foo() {}");
+    myFixture.addFileToProject("root1/src/to_import/shared/a.go", "package shared");
+    myFixture.addFileToProject("root2/src/to_import/shared/a.go", "package shared");
+    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(myFixture.findFileInTempDir("root1").getUrl(), 
+                                                                                   myFixture.findFileInTempDir("root2").getUrl());
     doTest();
   }
 
@@ -278,40 +265,25 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.checkHighlighting();
   }
 
-  public void testPackageWithTestPrefix() throws Throwable {
-    VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
-      @NotNull
-      @Override
-      public VirtualFile compute() throws Throwable {
-        myFixture.getTempDirFixture().createFile("pack1/pack1_test.go", "package pack1_test; func Test() {}");
-        return myFixture.getTempDirFixture().createFile("pack2/pack2_test.go",
-                                                        "package pack2_test; import \"testing\"; func TestTest(t *testing.T) {<error>pack1_test</error>.Test()}");
-      }
-    });
-    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(file.getParent().getParent().getUrl());
-    myFixture.configureFromExistingVirtualFile(file);
+  public void testPackageWithTestPrefix() {
+    myFixture.addFileToProject("pack1/pack1_test.go", "package pack1_test; func Test() {}");
+    PsiFile file = myFixture.addFileToProject("pack2/pack2_test.go",
+                                              "package pack2_test; import \"testing\"; func TestTest(t *testing.T) {<error>pack1_test</error>.Test()}");
+    myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
     myFixture.checkHighlighting();
   }
 
-  public void testMethodOnNonLocalType() throws Throwable {
+  public void testMethodOnNonLocalType() {
     VirtualFile file = myFixture.copyFileToProject(getTestName(true) + ".go", "method/nonlocaltype.go");
-    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(file.getParent().getParent().getUrl());
     myFixture.configureFromExistingVirtualFile(file);
     myFixture.checkHighlighting();
   }
 
-  public void testPackageWithTestPrefixNotInsideTestFile() throws Throwable {
-    VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
-      @NotNull
-      @Override
-      public VirtualFile compute() throws Throwable {
-        myFixture.getTempDirFixture().createFile("pack1/pack1.go", "package pack1_test; func Test() {}");
-        return myFixture.getTempDirFixture().createFile("pack2/pack2_test.go",
-                                                        "package pack2_test; import `pack1`; import \"testing\"; func TestTest(t *testing.T) {pack1_test.Test()}");
-      }
-    });
-    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(file.getParent().getParent().getUrl());
-    myFixture.configureFromExistingVirtualFile(file);
+  public void testPackageWithTestPrefixNotInsideTestFile() {
+    myFixture.addFileToProject("pack1/pack1.go", "package pack1_test; func Test() {}");
+    PsiFile file = myFixture.addFileToProject("pack2/pack2_test.go",
+                                              "package pack2_test; import `pack1`; import \"testing\"; func TestTest(t *testing.T) {pack1_test.Test()}");
+    myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
     myFixture.checkHighlighting();
   }
 
@@ -369,123 +341,62 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.checkHighlighting();
   }
   
-  @SuppressWarnings("ConstantConditions")
-  public void testDoNotHighlightCodeFromIgnoredImportPaths() throws Throwable {
-    final VirtualFile tmp = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
-        @NotNull
-        @Override
-        public VirtualFile compute() throws Throwable {
-          return VfsUtil.findFileByIoFile(FileUtil.createTempDirectory("go", "test"), true).createChildDirectory(this, "src");
-        }
-      });
-    VirtualFile ignoredFile = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
-        @NotNull
-        @Override
-        public VirtualFile compute() throws Throwable {
-          VirtualFile file = tmp.createChildDirectory(this, "_pack1").createChildData(this, "pack1.go");
-          VfsUtil.saveText(file, "package pack1; func unusedFunction() {}");
-          return file;
-        }
-      });
-    VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
-      @NotNull
-      @Override
-      public VirtualFile compute() throws Throwable {
-        VirtualFile file = tmp.createChildDirectory(this, "pack1").createChildData(this, "pack.go");
-        VfsUtil.saveText(file, "package pack1; func <warning descr=\"Unused function 'unusedFunction'\">unusedFunction</warning>() {}");
-        return file;
-      }
-    });
-    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(tmp.getUrl());
+  public void testDoNotHighlightCodeFromIgnoredImportPaths() {
+    PsiFile ignoredFile = myFixture.addFileToProject("_pack1/pack1.go", "package pack1; func unusedFunction() {}");
+    PsiFile file = myFixture.addFileToProject("pack1/pack.go",
+                                              "package pack1; func <warning descr=\"Unused function 'unusedFunction'\">unusedFunction</warning>() {}");
     HighlightingSettingsPerFile settingsPerFile = HighlightingSettingsPerFile.getInstance(myFixture.getProject());
-    assertFalse(settingsPerFile.shouldHighlight(myFixture.getPsiManager().findFile(ignoredFile)));
-    assertTrue(settingsPerFile.shouldHighlight(myFixture.getPsiManager().findFile(file)));
+    assertFalse(settingsPerFile.shouldHighlight(ignoredFile));
+    assertTrue(settingsPerFile.shouldHighlight(file));
   }
 
-  public void testDuplicatePackageAlias() throws Throwable {
-    VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
-      @NotNull
-      @Override
-      public VirtualFile compute() throws Throwable {
-        myFixture.getTempDirFixture().createFile("pack1/pack1.go", "package pack1; func Foo() {}");
-        myFixture.getTempDirFixture().createFile("pack2/pack2.go", "package pack2");
-        return myFixture.getTempDirFixture().createFile("pack3/pack3.go",
-                                                        "package main; import p \"pack1\"; import <error>p \"pack2\"</error>; func main() { p.Foo() }");
-      }
-    });
-    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(file.getParent().getParent().getUrl());
-    myFixture.configureFromExistingVirtualFile(file);
+  public void testDuplicatePackageAlias() {
+    myFixture.addFileToProject("pack1/pack1.go", "package pack1; func Foo() {}");
+    myFixture.addFileToProject("pack2/pack2.go", "package pack2");
+    PsiFile file = myFixture.addFileToProject("pack3/pack3.go",
+                                              "package main; import p \"pack1\"; import <error>p \"pack2\"</error>; func main() { p.Foo() }");
+    myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
     myFixture.checkHighlighting();
   }
 
-  public void testDuplicatePackageImport() throws Throwable {
-    VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
-      @NotNull
-      @Override
-      public VirtualFile compute() throws Throwable {
-        myFixture.getTempDirFixture().createFile("pack/pack1.go", "package pack; func Foo() {}");
-        return myFixture.getTempDirFixture().createFile("pack3/pack3.go",
-                                                        "package main; import \"pack\"; import <error>\"pack\"</error>; func main() { pack.Foo() }");
-      }
-    });
-    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(file.getParent().getParent().getUrl());
-    myFixture.configureFromExistingVirtualFile(file);
+  public void testDuplicatePackageImport() {
+    myFixture.addFileToProject("pack/pack1.go", "package pack; func Foo() {}");
+    PsiFile file = myFixture.addFileToProject("pack3/pack3.go",
+                                              "package main; import \"pack\"; import <error>\"pack\"</error>; func main() { pack.Foo() }");
+    myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
     myFixture.checkHighlighting();
   }
 
-  public void testDuplicateFinalPackageComponent() throws Throwable {
-    VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
-      @NotNull
-      @Override
-      public VirtualFile compute() throws Throwable {
-        myFixture.getTempDirFixture().createFile("a/pack/pack1.go", "package pack; func Foo() {}");
-        myFixture.getTempDirFixture().createFile("b/pack/pack2.go", "package pack");
-        return myFixture.getTempDirFixture().createFile("pack3/pack3.go",
-                                                        "package main; import \"a/pack\"; import <error>\"b/pack\"</error>; func main() { pack.Foo() }");
-      }
-    });
-    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(file.getParent().getParent().getUrl());
-    myFixture.configureFromExistingVirtualFile(file);
+  public void testDuplicateFinalPackageComponent() {
+    myFixture.addFileToProject("a/pack/pack1.go", "package pack; func Foo() {}");
+    myFixture.addFileToProject("b/pack/pack2.go", "package pack");
+    PsiFile file = myFixture.addFileToProject("pack3/pack3.go", 
+                                              "package main; import \"a/pack\"; import <error>\"b/pack\"</error>; func main() { pack.Foo() }");
+    myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
     myFixture.checkHighlighting();
   }
 
-  public void testIgnoredBuildTag() throws Throwable {
-    VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
-      @NotNull
-      @Override
-      public VirtualFile compute() throws Throwable {
-        myFixture.getTempDirFixture().createFile("a/pack1.go", "package a; func Foo() {}");
-        myFixture.getTempDirFixture().createFile("a/pack2.go", "// +build ignored\n\npackage main");
-        myFixture.getTempDirFixture().createFile("b/pack1.go", "package b; func Bar() {}");
-        myFixture.getTempDirFixture().createFile("b/pack2.go", "// +build ignored\n\npackage main");
-        // There should be no errors: package main exists in the a/ and b/
-        // directories, but it is not imported as it has a non-matching build
-        // tag.
-        // For more details see https://github.com/go-lang-plugin-org/go-lang-idea-plugin/issues/1858#issuecomment-139794391.
-        return myFixture.getTempDirFixture().createFile("c/pack1.go",
-                                                        "package main; import \"a\"; import \"b\"; func main() { a.Foo(); b.Bar(); }");
-      }
-    });
-    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(file.getParent().getParent().getUrl());
-    myFixture.configureFromExistingVirtualFile(file);
+  public void testIgnoredBuildTag() {
+    myFixture.addFileToProject("a/pack1.go", "package a; func Foo() {}");
+    myFixture.addFileToProject("a/pack2.go", "// +build ignored\n\npackage main");
+    myFixture.addFileToProject("b/pack1.go", "package b; func Bar() {}");
+    myFixture.addFileToProject("b/pack2.go", "// +build ignored\n\npackage main");
+    // There should be no errors: package main exists in the a/ and b/
+    // directories, but it is not imported as it has a non-matching build tag. 
+    // For more details see https://github.com/go-lang-plugin-org/go-lang-idea-plugin/issues/1858#issuecomment-139794391.
+    PsiFile file = myFixture.addFileToProject("c/pack1.go", "package main; import \"a\"; import \"b\"; func main() { a.Foo(); b.Bar(); }");
+    myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
     myFixture.checkHighlighting();
   }
 
-  public void testImportUnderscore() throws Throwable {
-    VirtualFile file = WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new ThrowableComputable<VirtualFile, Throwable>() {
-      @NotNull
-      @Override
-      public VirtualFile compute() throws Throwable {
-        myFixture.getTempDirFixture().createFile("a/pack/pack1.go", "package pack; func Foo() {}");
-        myFixture.getTempDirFixture().createFile("b/pack/pack2.go", "package pack");
-        myFixture.getTempDirFixture().createFile("c/pack/pack3.go", "package whatever; func Bar() {}");
-        myFixture.getTempDirFixture().createFile("d/pack/pack4.go", "package another; func Baz() {}");
-        return myFixture.getTempDirFixture().createFile("pack3/pack3.go",
-                                                        "package main; import _ \"a/pack\"; import _ \"b/pack\"; import . \"c/pack\"; import . \"d/pack\"; func main() { Bar(); Baz() }");
-      }
-    });
-    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(file.getParent().getParent().getUrl());
-    myFixture.configureFromExistingVirtualFile(file);
+  public void testImportUnderscore() {
+    myFixture.addFileToProject("a/pack/pack1.go", "package pack; func Foo() {}");
+    myFixture.addFileToProject("b/pack/pack2.go", "package pack");
+    myFixture.addFileToProject("c/pack/pack3.go", "package whatever; func Bar() {}");
+    myFixture.addFileToProject("d/pack/pack4.go", "package another; func Baz() {}");
+    PsiFile file = myFixture.addFileToProject("pack3/pack3.go",
+                                              "package main; import _ \"a/pack\"; import _ \"b/pack\"; import . \"c/pack\"; import . \"d/pack\"; func main() { Bar(); Baz() }");
+    myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
     myFixture.checkHighlighting();
   }
 

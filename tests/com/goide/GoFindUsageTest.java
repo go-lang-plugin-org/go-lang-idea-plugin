@@ -16,7 +16,6 @@
 
 package com.goide;
 
-import com.goide.project.GoModuleLibrariesService;
 import com.goide.psi.GoStatement;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
@@ -68,7 +67,6 @@ public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
 
   // #2301
   public void testCheckImportInWholePackage() {
-    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls("temp:///");
     myFixture.addFileToProject("bar/bar1.go", "package bar; func Bar() { b := bar{}; b.f.Method() }");
     myFixture.addFileToProject("bar/bar.go", "package bar; import \"foo\"; type bar struct { f *foo.Foo }");
     PsiFile file = myFixture.addFileToProject("foo/foo.go", "package foo; type Foo struct{}; func (*Foo) M<caret>ethod() {}");

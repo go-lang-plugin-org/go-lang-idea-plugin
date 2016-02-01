@@ -18,8 +18,7 @@ package com.goide.completion;
 
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.Lookup;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.testFramework.fixtures.TempDirTestFixture;
+import com.intellij.psi.PsiFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -180,7 +179,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
   }
 
   public void testDoNotImportLocallyImportedPackage() throws IOException {
-    myFixture.getTempDirFixture().createFile("imported/imported.go", "package imported\n" +
+    myFixture.addFileToProject("imported/imported.go", "package imported\n" +
                                                                      "func LocallyImported() {}");
     doCheckResult("package main; \n" +
                   "import `./imported`\n" +
@@ -273,28 +272,28 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
   }
 
   public void testDoNotCompleteTestFunctions() throws IOException {
-    myFixture.getTempDirFixture().createFile("pack/pack_test.go", "package pack; func TestFoo() {}");
+    myFixture.addFileToProject("pack/pack_test.go", "package pack; func TestFoo() {}");
     myFixture.configureByText("my_test.go", "package a; func main() { _ = TestF<caret>");
     myFixture.completeBasic();
     myFixture.checkResult("package a; func main() { _ = TestF<caret>");
   }
 
   public void testDoNotCompleteBenchmarkFunctions() throws IOException {
-    myFixture.getTempDirFixture().createFile("pack/pack_test.go", "package pack; func BenchmarkFoo() {}");
+    myFixture.addFileToProject("pack/pack_test.go", "package pack; func BenchmarkFoo() {}");
     myFixture.configureByText("my_test.go", "package a; func main() { _ = BenchmarkF<caret>");
     myFixture.completeBasic();
     myFixture.checkResult("package a; func main() { _ = BenchmarkF<caret>");
   }
 
   public void testDoNotCompleteExampleFunctions() throws IOException {
-    myFixture.getTempDirFixture().createFile("pack/pack_test.go", "package pack; func ExampleFoo() {}");
+    myFixture.addFileToProject("pack/pack_test.go", "package pack; func ExampleFoo() {}");
     myFixture.configureByText("my_test.go", "package a; func main() { _ = ExampleF<caret>");
     myFixture.completeBasic();
     myFixture.checkResult("package a; func main() { _ = ExampleF<caret>");
   }
 
   public void testCompleteTestBenchmarkExamplesFromNonTestFiles() throws IOException {
-    myFixture.getTempDirFixture().createFile("pack/pack.go", "package pack; func TestFoo() {} func BenchmarkFoo() {} func ExampleFoo() {}");
+    myFixture.addFileToProject("pack/pack.go", "package pack; func TestFoo() {} func BenchmarkFoo() {} func ExampleFoo() {}");
     myFixture.configureByText("my_test.go", "package a; func main() { _ = Foo<caret>");
     myFixture.completeBasic();
     //noinspection ConstantConditions
@@ -302,44 +301,42 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
   }
 
   public void testDoNotAutoImportWithTheSameImportPath() throws IOException {
-    myFixture.getTempDirFixture().createFile("pack1/file2.go", "package pack1; func MyFunctionFromSamePath() {}");
-    myFixture.getTempDirFixture().createFile("pack2/file2.go", "package pack1; func MyFunctionFromOtherPath() {}");
-    VirtualFile file = myFixture.getTempDirFixture().createFile("pack1/file1.go", "package pack1; func test() { pack1.MyFunc<caret> }");
-    myFixture.configureFromExistingVirtualFile(file);
+    myFixture.addFileToProject("pack1/file2.go", "package pack1; func MyFunctionFromSamePath() {}");
+    myFixture.addFileToProject("pack2/file2.go", "package pack1; func MyFunctionFromOtherPath() {}");
+    PsiFile file = myFixture.addFileToProject("pack1/file1.go", "package pack1; func test() { pack1.MyFunc<caret> }");
+    myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
     myFixture.completeBasic();
     myFixture.checkResult("package pack1;\n\nimport \"pack2\"\n\nfunc test() { pack1.MyFunctionFromOtherPath() }");
   }
   
   public void testAutoImportOwnImportPathFromTest() throws IOException {
-    myFixture.getTempDirFixture().createFile("pack/a.go", "package myPack; func Func() {}");
-    VirtualFile testFile = myFixture.getTempDirFixture()
-      .createFile("pack/a_test.go", "package myPack_test; func TestFunc() { myPack.Fun<caret> }");
-    myFixture.configureFromExistingVirtualFile(testFile);
+    myFixture.addFileToProject("pack/a.go", "package myPack; func Func() {}");
+    PsiFile testFile = myFixture.addFileToProject("pack/a_test.go", "package myPack_test; func TestFunc() { myPack.Fun<caret> }");
+    myFixture.configureFromExistingVirtualFile(testFile.getVirtualFile());
     myFixture.completeBasic();
     myFixture.checkResult("package myPack_test;\n\nimport \"pack\"\n\nfunc TestFunc() { myPack.Func() }");
   }
 
   public void testDoNotAutoImportDifferentPackageInSamePathFromTest() throws IOException {
     String text = "package foo_test; func TestFunc() { bar.Fun<caret> }";
-    myFixture.getTempDirFixture().createFile("pack/a.go", "package bar; func Func() {}");
-    myFixture.configureFromExistingVirtualFile(myFixture.getTempDirFixture().createFile("pack/a_test.go", text));
+    myFixture.addFileToProject("pack/a.go", "package bar; func Func() {}");
+    PsiFile file = myFixture.addFileToProject("pack/a_test.go", text);
+    myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
     myFixture.completeBasic();
     myFixture.checkResult(text);
   }
   
   public void testImportOwnPathFromTestFile() throws IOException {
-    TempDirTestFixture dir = myFixture.getTempDirFixture();
-    VirtualFile testFile = dir.createFile("fuzz/fuzy_test.go", "package fuzy_test; import \"<caret>\"");
-    myFixture.configureFromExistingVirtualFile(testFile);
+    PsiFile testFile = myFixture.addFileToProject("fuzz/fuzy_test.go", "package fuzy_test; import \"<caret>\"");
+    myFixture.configureFromExistingVirtualFile(testFile.getVirtualFile());
     myFixture.completeBasic();
     //noinspection ConstantConditions
     assertContainsElements(myFixture.getLookupElementStrings(), "fuzz");
   }
 
   public void testDoNotImportOwnPathFromNonTestPackage() throws IOException {
-    TempDirTestFixture dir = myFixture.getTempDirFixture();
-    VirtualFile testFile = dir.createFile("fuzz/fuzy_test.go", "package fuzy; import \"<caret>\"");
-    myFixture.configureFromExistingVirtualFile(testFile);
+    PsiFile testFile = myFixture.addFileToProject("fuzz/fuzy_test.go", "package fuzy; import \"<caret>\"");
+    myFixture.configureFromExistingVirtualFile(testFile.getVirtualFile());
     myFixture.completeBasic();
     List<String> strings = myFixture.getLookupElementStrings();
     assertTrue(strings != null && !strings.contains("fuzz"));

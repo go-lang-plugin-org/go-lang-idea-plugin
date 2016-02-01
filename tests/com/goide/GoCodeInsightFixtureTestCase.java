@@ -40,6 +40,12 @@ import java.io.IOException;
 
 abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsightFixtureTestCase {
   @Override
+  protected void setUp() throws Exception {
+    super.setUp();
+    GoApplicationLibrariesService.getInstance().setLibraryRootUrls("temp:///");
+  }
+  
+  @Override
   protected void tearDown() throws Exception {
     try {
       GoApplicationLibrariesService.getInstance().setLibraryRootUrls();

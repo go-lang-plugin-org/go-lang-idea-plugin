@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,9 @@ import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.command.undo.UndoManager;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.psi.PsiFile;
 import com.intellij.testFramework.LightProjectDescriptor;
-import com.intellij.testFramework.fixtures.TempDirTestFixture;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 
 import java.io.IOException;
@@ -58,6 +58,7 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
       updateSettings(defaultGoOnTheFly, defaultJavaOnTheFly);
     }
     finally {
+      //noinspection ThrowFromFinallyBlock
       super.tearDown();
     }
   }
@@ -119,15 +120,14 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
     doTestAddOnTheFly(false, false);
   }
 
-  private void doTestImportOwnPath(String file, String text, String testFile, String testText, String path, boolean shouldImport)
+  private void doTestImportOwnPath(String file, String text, String testFileText, String testText, String path, boolean shouldImport)
     throws IOException {
     DaemonCodeAnalyzerSettings.getInstance().setImportHintEnabled(true);
     updateSettings(true, true);
 
-    TempDirTestFixture dir = myFixture.getTempDirFixture();
-    dir.createFile(path + "/" + file, text);
-    VirtualFile test = dir.createFile(path + "/" + testFile, testText);
-    myFixture.configureFromExistingVirtualFile(test);
+    myFixture.addFileToProject(FileUtil.join(path, file), text);
+    PsiFile testFile = myFixture.addFileToProject(FileUtil.join(path, testFileText), testText);
+    myFixture.configureFromExistingVirtualFile(testFile.getVirtualFile());
     List<IntentionAction> actions = myFixture.filterAvailableIntentions("Import " + path + "?");
     assertTrue(shouldImport != actions.isEmpty());
   }

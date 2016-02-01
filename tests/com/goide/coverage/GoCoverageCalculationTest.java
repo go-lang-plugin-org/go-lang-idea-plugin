@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package com.goide.coverage;
 
 import com.goide.GoCodeInsightFixtureTestCase;
-import com.goide.project.GoModuleLibrariesService;
 import com.goide.runconfig.testing.coverage.GoCoverageAnnotator;
 import com.goide.runconfig.testing.coverage.GoCoverageProjectData;
 import com.goide.runconfig.testing.coverage.GoCoverageRunner;
@@ -30,12 +29,6 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class GoCoverageCalculationTest extends GoCodeInsightFixtureTestCase {
-  @Override
-  public void setUp() throws Exception {
-    super.setUp();
-    GoModuleLibrariesService.getInstance(myModule).setLibraryRootUrls(getRoot().getUrl());
-  }
-
   public void testCoverage() throws IOException {
     assertEquals("75% statements", annotate().getFileCoverageInformationString(myFixture.findFileInTempDir(file())));
   }
@@ -109,6 +102,7 @@ public class GoCoverageCalculationTest extends GoCodeInsightFixtureTestCase {
       return data;
     }
     finally {
+      //noinspection ThrowFromFinallyBlock
       reader.close();
     }
   }
