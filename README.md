@@ -7,7 +7,7 @@
 
 Pre-release builds can be installed on IntelliJ platform versions 141.1532 – 141.9999 and 143.380 – 143.9999:
 
-- IntelliJ IDEA 14.1.4 or 15 (Ultimate or Community)
+- IntelliJ IDEA 14.1.4, 15 or 16 (Ultimate or Community)
 - WebStorm 10.0.4 or 11
 - PhpStorm 9.0 or 10
 - PyCharm 4.5.2+ or 5
