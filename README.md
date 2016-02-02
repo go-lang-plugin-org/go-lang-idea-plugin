@@ -50,8 +50,7 @@ When reporting a bug, please include the following:
 
 ## Bumping or +1 comments
 
-Annoying as it might be, please don't comment with
-"bump", "+1", "same for me" or other irrelevant comments as they're useless for identifying the issue and finding the solution.
+Please don't comment with "bump", "+1", "same for me" or other irrelevant comments as they're useless for identifying the issue and finding the solution.
 
 Contributions are always welcome and we'll do our best to make the most of them.
 
