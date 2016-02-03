@@ -54,6 +54,16 @@ func _() {
 		1, 2, 3, 4, 5, 6, 7, 8, 9,
 	)
 
+	fmt.Printf("eq (as-is): %.3f%% score: %v offset: %v descr: [%v]\n", 3.14, 1, 1, "descr")
+
+	fmt.Printf("a: %+v", 1)
+
+	fmt.Printf("%-4d", 999)
+
+	fmt.Printf("a: %%%+v", 1)
+
+	fmt.Printf(<warning descr="Got 0 placeholder(s) for 1 arguments(s)">"a: %%%%+v"</warning>, 1)
+
 	fmt.Printf("#%02X%02X%02X", 1, 2, 3)
 
 	fmt.Printf(<warning descr="Got 3 placeholder(s) for 4 arguments(s)">"#%02X%02X%02X"</warning>, 1, 2, 3, 4)
