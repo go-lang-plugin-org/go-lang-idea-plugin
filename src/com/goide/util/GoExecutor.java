@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,6 @@ import com.intellij.util.Consumer;
 import com.intellij.util.EnvironmentUtil;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
-import com.pty4j.unix.PtyHelpers;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -210,15 +209,19 @@ public class GoExecutor {
           super.processTerminated(event);
           final boolean success = event.getExitCode() == 0 && myProcessOutput.getStderr().isEmpty();
           boolean nothingToShow = myProcessOutput.getStdout().isEmpty() && myProcessOutput.getStderr().isEmpty();
-          final boolean cancelledByUser = (SystemInfo.isWindows || event.getExitCode() == PtyHelpers.SIGINT) && nothingToShow;
+          final boolean cancelledByUser = (event.getExitCode() == -1 || event.getExitCode() == 2) && nothingToShow;
           result.set(success);
-          if (success && myShowNotificationsOnSuccess) {
-            showNotification("Finished successfully", NotificationType.INFORMATION);
+          if (success) {
+            if (myShowNotificationsOnSuccess) {
+              showNotification("Finished successfully", NotificationType.INFORMATION);
+            }
           }
-          else if (cancelledByUser && myShowNotificationsOnError) {
-            showNotification("Interrupted", NotificationType.WARNING);
+          else if (cancelledByUser) {
+            if (myShowNotificationsOnError) {
+              showNotification("Interrupted", NotificationType.WARNING);
+            }
           }
-          if (!success && !cancelledByUser && myShowOutputOnError) {
+          else if (myShowOutputOnError) {
             ApplicationManager.getApplication().invokeLater(new Runnable() {
               @Override
               public void run() {
