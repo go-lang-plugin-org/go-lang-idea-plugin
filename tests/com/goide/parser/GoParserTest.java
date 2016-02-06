@@ -80,4 +80,5 @@ public class GoParserTest extends ParsingTestCase {
   public void testExpressionPerformance()           { doTest(false); }
   public void testElementRecover()                  { doTest(false); }
   public void testChanRecover()                     { doTest(false); }
+  public void testMapLiteralRecover()               { doTest(false); }
 }

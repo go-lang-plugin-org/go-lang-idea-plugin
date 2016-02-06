@@ -121,10 +121,9 @@ GO_FILE
         PsiElement())(')')
     BLOCK
       PsiElement({)('{')
-      PsiErrorElement:break, continue, defer, fallthrough, for, go, goto, if, return, select, switch, '{' or '}' expected, got '['
-        <empty list>
-  PsiElement([)('[')
-  PsiElement(])(']')
+      PsiErrorElement:break, continue, defer, fallthrough, for, go, goto, if, return, select, switch or '{' expected, got '['
+        PsiElement([)('[')
+      PsiElement(])(']')
   PsiElement(identifier)('string')
   PsiElement(})('}')
   FUNCTION_DECLARATION
