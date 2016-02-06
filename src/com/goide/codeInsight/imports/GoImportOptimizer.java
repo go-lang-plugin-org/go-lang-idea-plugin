@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import com.intellij.lang.ImportOptimizer;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.util.Comparing;
+import com.intellij.openapi.util.EmptyRunnable;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
@@ -48,14 +49,18 @@ public class GoImportOptimizer implements ImportOptimizer {
   @NotNull
   @Override
   public Runnable processFile(@NotNull final PsiFile file) {
-    commit(file);
-    assert file instanceof GoFile;
+    if (!(file instanceof GoFile)) {
+      return EmptyRunnable.getInstance();
+    }
     MultiMap<String, GoImportSpec> importMap = ((GoFile)file).getImportMap();
     final Set<PsiElement> importEntriesToDelete = ContainerUtil.newLinkedHashSet();
     final Set<PsiElement> importIdentifiersToDelete = findRedundantImportIdentifiers(importMap);
 
     importEntriesToDelete.addAll(findDuplicatedEntries(importMap));
     importEntriesToDelete.addAll(filterUnusedImports(file, importMap).values());
+    if (importEntriesToDelete.isEmpty() && importIdentifiersToDelete.isEmpty()) {
+      return EmptyRunnable.getInstance();
+    }
 
     return new CollectingInfoRunnable() {
       @Nullable
@@ -76,8 +81,12 @@ public class GoImportOptimizer implements ImportOptimizer {
 
       @Override
       public void run() {
-        if (!importEntriesToDelete.isEmpty() && !importIdentifiersToDelete.isEmpty()) {
-          commit(file);
+        if (!importEntriesToDelete.isEmpty() || !importIdentifiersToDelete.isEmpty()) {
+          PsiDocumentManager manager = PsiDocumentManager.getInstance(file.getProject());
+          Document document = manager.getDocument(file);
+          if (document != null) {
+            manager.commitDocument(document);
+          }
         }
 
         for (PsiElement importEntry : importEntriesToDelete) {
@@ -236,13 +245,5 @@ public class GoImportOptimizer implements ImportOptimizer {
   @Nullable
   public static GoImportSpec getImportSpec(@NotNull PsiElement importEntry) {
     return PsiTreeUtil.getNonStrictParentOfType(importEntry, GoImportSpec.class);
-  }
-
-  private static void commit(@NotNull PsiFile file) {
-    PsiDocumentManager manager = PsiDocumentManager.getInstance(file.getProject());
-    Document document = manager.getDocument(file);
-    if (document != null) {
-      manager.commitDocument(document);
-    }
   }
 }
