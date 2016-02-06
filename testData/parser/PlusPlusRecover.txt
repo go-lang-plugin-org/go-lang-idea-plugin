@@ -1,0 +1,183 @@
+GO_FILE
+  PACKAGE_CLAUSE
+    PsiElement(package)('package')
+    PsiElement(identifier)('main')
+  IMPORT_LIST
+    <empty list>
+  FUNCTION_DECLARATION
+    PsiElement(func)('func')
+    PsiElement(identifier)('main')
+    SIGNATURE
+      PARAMETERS
+        PsiElement(()('(')
+        PsiElement())(')')
+    BLOCK
+      PsiElement({)('{')
+      SIMPLE_STATEMENT
+        SHORT_VAR_DECLARATION
+          VAR_DEFINITION
+            PsiElement(identifier)('i')
+          PsiElement(:=)(':=')
+          LITERAL
+            PsiElement(int)('0')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('i')
+      PsiComment(GO_LINE_COMMENT)('//error')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          UNARY_EXPR
+            PsiElement(&)('&')
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('i')
+      PsiComment(GO_LINE_COMMENT)('//error')
+      PsiErrorElement:'/' unexpected
+        PsiElement(/)('/')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('i')
+      PsiComment(GO_LINE_COMMENT)('//error')
+      PsiErrorElement:'/=' unexpected
+        PsiElement(/=)('/=')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('i')
+      PsiComment(GO_LINE_COMMENT)('//error')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          UNARY_EXPR
+            PsiElement(^)('^')
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('i')
+      PsiComment(GO_LINE_COMMENT)('//error')
+      PsiErrorElement:'<' unexpected
+        PsiElement(<)('<')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('i')
+      PsiComment(GO_LINE_COMMENT)('//error')
+      PsiErrorElement:'<<' unexpected
+        PsiElement(<<)('<<')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('i')
+      PsiComment(GO_LINE_COMMENT)('//error')
+      PsiErrorElement:'=' unexpected
+        PsiElement(=)('=')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('i')
+      PsiComment(GO_LINE_COMMENT)('//error')
+      PsiErrorElement:'==' unexpected
+        PsiElement(==)('==')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('i')
+      PsiComment(GO_LINE_COMMENT)('//error')
+      PsiErrorElement:'>' unexpected
+        PsiElement(>)('>')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('i')
+      PsiComment(GO_LINE_COMMENT)('//error')
+      PsiErrorElement:'>>' unexpected
+        PsiElement(>>)('>>')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('i')
+      PsiComment(GO_LINE_COMMENT)('//error')
+      PsiErrorElement:'...' unexpected
+        PsiElement(...)('...')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('i')
+      PsiComment(GO_LINE_COMMENT)('//error')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          UNARY_EXPR
+            PsiElement(!)('!')
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('i')
+      PsiComment(GO_LINE_COMMENT)('//error')
+      PsiErrorElement:'!=' unexpected
+        PsiElement(!=)('!=')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('i')
+      PsiComment(GO_LINE_COMMENT)('//error')
+      PsiErrorElement:'%' unexpected
+        PsiElement(%)('%')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('i')
+      PsiComment(GO_LINE_COMMENT)('//error')
+      PsiErrorElement:'&&' unexpected
+        PsiElement(&&)('&&')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('i')
+      PsiComment(GO_LINE_COMMENT)('//error')
+      PsiErrorElement:'&=' unexpected
+        PsiElement(&=)('&=')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('i')
+      PsiComment(GO_LINE_COMMENT)('//error')
+      PsiErrorElement:'&^' unexpected
+        PsiElement(&^)('&^')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('i')
+      PsiComment(GO_LINE_COMMENT)('//error')
+      PsiErrorElement:'&^=' unexpected
+        PsiElement(&^=)('&^=')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('i')
+      PsiComment(GO_LINE_COMMENT)('//error')
+      PsiErrorElement:'+=' unexpected
+        PsiElement(+=)('+=')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('i')
+      PsiComment(GO_LINE_COMMENT)('//error')
+      PsiErrorElement:'--' unexpected
+        PsiElement(--)('--')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('i')
+      PsiComment(GO_LINE_COMMENT)('//error')
+      PsiErrorElement:'++' unexpected
+        PsiElement(++)('++')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('i')
+      PsiComment(GO_LINE_COMMENT)('//error')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          CALL_EXPR
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('Println')
+            ARGUMENT_LIST
+              PsiElement(()('(')
+              PsiElement())(')')
+      PsiElement(})('}')
