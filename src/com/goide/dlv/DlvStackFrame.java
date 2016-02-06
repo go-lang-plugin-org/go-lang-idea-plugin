@@ -23,6 +23,7 @@ import com.goide.psi.*;
 import com.goide.runconfig.application.GoApplicationConfiguration;
 import com.goide.sdk.GoSdkService;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
+import com.intellij.execution.configurations.ModuleBasedConfiguration;
 import com.intellij.execution.configurations.RunProfile;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.editor.Document;
@@ -145,8 +146,7 @@ class DlvStackFrame extends XStackFrame {
     if (file == null && SystemInfo.isWindows) {
       Project project = myProcess.getSession().getProject();
       RunProfile profile = myProcess.getSession().getRunProfile();
-      Module[] modules = profile instanceof GoApplicationConfiguration ? ((GoApplicationConfiguration)profile).getModules() : Module.EMPTY_ARRAY;
-      Module module = ArrayUtil.getFirstElement(modules);
+      Module module = profile instanceof ModuleBasedConfiguration ? ((ModuleBasedConfiguration)profile).getConfigurationModule().getModule() : null;
       String sdkHomePath = GoSdkService.getInstance(project).getSdkHomePath(module);
       if (sdkHomePath == null) return null;
       String newUrl = StringUtil.replaceIgnoreCase(url, "c:/go", sdkHomePath);
