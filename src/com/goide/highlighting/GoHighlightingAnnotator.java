@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
@@ -139,13 +140,9 @@ public class GoHighlightingAnnotator implements Annotator {
         setHighlighting(o, holder, NUMBER);
       }
     }
-    else if (o instanceof GoReferenceExpression) {
-      PsiElement resolve = ((GoReferenceExpression)o).getReference().resolve();
-      highlightRefIfNeeded((GoReferenceExpression)o, resolve, holder);
-    }
-    else if (o instanceof GoTypeReferenceExpression) {
-      PsiElement resolve = ((GoTypeReferenceExpression)o).getReference().resolve();
-      highlightRefIfNeeded((GoTypeReferenceExpression)o, resolve, holder);
+    else if (o instanceof GoReferenceExpressionBase) {
+      PsiReference reference = o.getReference();
+      highlightRefIfNeeded((GoReferenceExpressionBase)o, reference != null ? reference.resolve() : null, holder);
     }
     else if (o instanceof GoTypeSpec) {
       TextAttributesKey key = getColor((GoTypeSpec)o);
