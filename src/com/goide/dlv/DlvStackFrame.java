@@ -20,13 +20,19 @@ import com.goide.GoIcons;
 import com.goide.dlv.protocol.DlvApi;
 import com.goide.dlv.protocol.DlvRequest;
 import com.goide.psi.*;
+import com.goide.runconfig.application.GoApplicationConfiguration;
+import com.goide.sdk.GoSdkService;
 import com.intellij.debugger.impl.DebuggerUtilsEx;
+import com.intellij.execution.configurations.RunProfile;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Ref;
+import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
@@ -34,6 +40,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.ColoredTextContainer;
 import com.intellij.ui.SimpleTextAttributes;
+import com.intellij.util.ArrayUtil;
 import com.intellij.util.Consumer;
 import com.intellij.xdebugger.XDebuggerUtil;
 import com.intellij.xdebugger.XSourcePosition;
@@ -127,10 +134,25 @@ class DlvStackFrame extends XStackFrame {
   @Nullable
   @Override
   public XSourcePosition getSourcePosition() {
+    VirtualFile file = findFile();
+    return file == null ? null : XDebuggerUtil.getInstance().createPosition(file, myLocation.line - 1);
+  }
+
+  @Nullable
+  private VirtualFile findFile() {
     String url = myLocation.file;
     VirtualFile file = LocalFileSystem.getInstance().findFileByPath(url);
-    if (file == null) return null;
-    return XDebuggerUtil.getInstance().createPosition(file, myLocation.line - 1);
+    if (file == null && SystemInfo.isWindows) {
+      Project project = myProcess.getSession().getProject();
+      RunProfile profile = myProcess.getSession().getRunProfile();
+      Module[] modules = profile instanceof GoApplicationConfiguration ? ((GoApplicationConfiguration)profile).getModules() : Module.EMPTY_ARRAY;
+      Module module = ArrayUtil.getFirstElement(modules);
+      String sdkHomePath = GoSdkService.getInstance(project).getSdkHomePath(module);
+      if (sdkHomePath == null) return null;
+      String newUrl = StringUtil.replaceIgnoreCase(url, "c:/go", sdkHomePath);
+      return LocalFileSystem.getInstance().findFileByPath(newUrl);
+    }
+    return file;
   }
 
   @Override
