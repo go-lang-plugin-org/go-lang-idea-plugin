@@ -206,18 +206,16 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
   @NotNull
   @Override
   public SearchScope getUseScope() {
+    if (this instanceof GoVarDefinition || this instanceof GoConstDefinition) {
+      GoBlock block = PsiTreeUtil.getParentOfType(this, GoBlock.class);
+      if (block != null) return new LocalSearchScope(block);
+    }
     if (isPublic()) {
       // it's important to ask module on file, otherwise module won't be found for elements in libraries files [zolotov]
       Module module = ModuleUtilCore.findModuleForPsiElement(getContainingFile());
       return module != null ? GoUtil.moduleScope(getProject(), module) : super.getUseScope();
     }
-    else {
-      if (this instanceof GoVarDefinition || this instanceof GoConstDefinition) {
-        GoBlock block = PsiTreeUtil.getParentOfType(this, GoBlock.class);
-        if (block != null) return new LocalSearchScope(block);
-      }
-      return GoPsiImplUtil.packageScope(getContainingFile());
-    }
+    return GoPsiImplUtil.packageScope(getContainingFile());
   }
 
   @Override
