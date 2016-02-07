@@ -231,6 +231,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
 
   @Override
   public void stop() {
+    send(new DlvRequest.Detach(true));
     getSession().stop();
   }
 
