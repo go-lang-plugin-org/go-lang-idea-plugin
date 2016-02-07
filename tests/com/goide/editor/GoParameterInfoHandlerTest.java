@@ -87,7 +87,7 @@ public class GoParameterInfoHandlerTest extends GoCodeInsightFixtureTestCase {
   private String getPresentation(Object[] itemsToShow, int paramIdx) {
     ParameterInfoUIContextEx uiCtx =
       ParameterInfoComponent.createContext(itemsToShow, myFixture.getEditor(), myParameterInfoHandler, paramIdx);
-    return myParameterInfoHandler.updatePresentation(itemsToShow[0], uiCtx);
+    return GoParameterInfoHandler.updatePresentation(itemsToShow[0], uiCtx);
   }
 
   @NotNull
