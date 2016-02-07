@@ -895,8 +895,8 @@ GO_FILE
                   BUILTIN_CALL_EXPR
                     REFERENCE_EXPRESSION
                       PsiElement(identifier)('make')
-                    PsiElement(()('(')
-                    BUILTIN_ARGS
+                    BUILTIN_ARGUMENT_LIST
+                      PsiElement(()('(')
                       CHANNEL_TYPE
                         PsiElement(chan)('chan')
                         POINTER_TYPE
@@ -907,7 +907,7 @@ GO_FILE
                       PsiElement(,)(',')
                       LITERAL
                         PsiElement(int)('1')
-                    PsiElement())(')')
+                      PsiElement())(')')
               PsiElement(,)(',')
               PsiElement(})('}')
       PsiElement(})('}')

@@ -867,12 +867,12 @@ GO_FILE
           BUILTIN_CALL_EXPR
             REFERENCE_EXPRESSION
               PsiElement(identifier)('new')
-            PsiElement(()('(')
-            BUILTIN_ARGS
+            BUILTIN_ARGUMENT_LIST
+              PsiElement(()('(')
               TYPE
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(identifier)('test')
-            PsiElement())(')')
+              PsiElement())(')')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
           VAR_DEFINITION
@@ -1769,12 +1769,12 @@ GO_FILE
           BUILTIN_CALL_EXPR
             REFERENCE_EXPRESSION
               PsiElement(identifier)('new')
-            PsiElement(()('(')
-            BUILTIN_ARGS
+            BUILTIN_ARGUMENT_LIST
+              PsiElement(()('(')
               TYPE
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(identifier)('SensorFactory')
-            PsiElement())(')')
+              PsiElement())(')')
       ASSIGNMENT_STATEMENT
         LEFT_HAND_EXPR_LIST
           REFERENCE_EXPRESSION
@@ -1787,8 +1787,8 @@ GO_FILE
         BUILTIN_CALL_EXPR
           REFERENCE_EXPRESSION
             PsiElement(identifier)('make')
-          PsiElement(()('(')
-          BUILTIN_ARGS
+          BUILTIN_ARGUMENT_LIST
+            PsiElement(()('(')
             MAP_TYPE
               PsiElement(map)('map')
               PsiElement([)('[')
@@ -1799,7 +1799,7 @@ GO_FILE
               TYPE
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(identifier)('string')
-          PsiElement())(')')
+            PsiElement())(')')
       RETURN_STATEMENT
         PsiElement(return)('return')
         REFERENCE_EXPRESSION

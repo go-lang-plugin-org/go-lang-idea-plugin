@@ -188,7 +188,7 @@ public class GoAnnotator implements Annotator {
   }
 
   private static void checkMakeCall(@NotNull GoBuiltinCallExpr call, @NotNull AnnotationHolder holder) {
-    GoBuiltinArgs args = call.getBuiltinArgs();
+    GoBuiltinArgumentList args = call.getBuiltinArgumentList();
     if (args == null) {
       holder.createErrorAnnotation(call, "Missing argument to make");
       return;
@@ -198,6 +198,9 @@ public class GoAnnotator implements Annotator {
       GoExpression first = ContainerUtil.getFirstItem(args.getExpressionList());
       if (first != null) {
         holder.createErrorAnnotation(call, first.getText() + " is not a type");
+      }
+      else {
+        holder.createErrorAnnotation(args, "Missing argument to make");
       }
     }
     else {

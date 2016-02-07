@@ -10,14 +10,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoBuiltinArgsImpl extends GoCompositeElementImpl implements GoBuiltinArgs {
+public class GoBuiltinArgumentListImpl extends GoArgumentListImpl implements GoBuiltinArgumentList {
 
-  public GoBuiltinArgsImpl(ASTNode node) {
+  public GoBuiltinArgumentListImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull GoVisitor visitor) {
-    visitor.visitBuiltinArgs(this);
+    visitor.visitBuiltinArgumentList(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -35,6 +35,18 @@ public class GoBuiltinArgsImpl extends GoCompositeElementImpl implements GoBuilt
   @Nullable
   public GoType getType() {
     return findChildByClass(GoType.class);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getLparen() {
+    return findNotNullChildByType(LPAREN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRparen() {
+    return findChildByType(RPAREN);
   }
 
   @Override

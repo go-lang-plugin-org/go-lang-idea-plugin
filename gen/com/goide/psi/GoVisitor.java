@@ -43,8 +43,8 @@ public class GoVisitor extends PsiElementVisitor {
     visitStatement(o);
   }
 
-  public void visitBuiltinArgs(@NotNull GoBuiltinArgs o) {
-    visitCompositeElement(o);
+  public void visitBuiltinArgumentList(@NotNull GoBuiltinArgumentList o) {
+    visitArgumentList(o);
   }
 
   public void visitBuiltinCallExpr(@NotNull GoBuiltinCallExpr o) {

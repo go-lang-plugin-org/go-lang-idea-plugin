@@ -358,7 +358,7 @@ public class GoPsiImplUtil {
       boolean isNew = "new".equals(text);
       boolean isMake = "make".equals(text);
       if (isNew || isMake) {
-        GoBuiltinArgs args = ((GoBuiltinCallExpr)o).getBuiltinArgs();
+        GoBuiltinArgumentList args = ((GoBuiltinCallExpr)o).getBuiltinArgumentList();
         GoType type = args != null ? args.getType() : null;
         return isNew ? type == null ? null : new LightPointerType(type) : type;
       }
