@@ -8,18 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface GoBuiltinCallExpr extends GoExpression {
 
   @Nullable
-  GoBuiltinArgs getBuiltinArgs();
+  GoBuiltinArgumentList getBuiltinArgumentList();
 
   @NotNull
   GoReferenceExpression getReferenceExpression();
-
-  @Nullable
-  PsiElement getComma();
-
-  @NotNull
-  PsiElement getLparen();
-
-  @Nullable
-  PsiElement getRparen();
 
 }

@@ -1272,8 +1272,8 @@ GO_FILE
           BUILTIN_CALL_EXPR
             REFERENCE_EXPRESSION
               PsiElement(identifier)('make')
-            PsiElement(()('(')
-            BUILTIN_ARGS
+            BUILTIN_ARGUMENT_LIST
+              PsiElement(()('(')
               ARRAY_OR_SLICE_TYPE
                 PsiElement([)('[')
                 PsiElement(])(']')
@@ -1283,7 +1283,7 @@ GO_FILE
               PsiElement(,)(',')
               REFERENCE_EXPRESSION
                 PsiElement(identifier)('blockSize')
-            PsiElement())(')')
+              PsiElement())(')')
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
           VAR_DEFINITION
@@ -2270,12 +2270,12 @@ GO_FILE
           BUILTIN_CALL_EXPR
             REFERENCE_EXPRESSION
               PsiElement(identifier)('new')
-            PsiElement(()('(')
-            BUILTIN_ARGS
+            BUILTIN_ARGUMENT_LIST
+              PsiElement(()('(')
               TYPE
                 TYPE_REFERENCE_EXPRESSION
                   PsiElement(identifier)('Header')
-            PsiElement())(')')
+              PsiElement())(')')
       ASSIGNMENT_STATEMENT
         LEFT_HAND_EXPR_LIST
           REFERENCE_EXPRESSION

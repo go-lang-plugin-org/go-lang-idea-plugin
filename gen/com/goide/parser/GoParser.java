@@ -47,8 +47,8 @@ public class GoParser implements PsiParser, LightPsiParser {
     else if (t == BREAK_STATEMENT) {
       r = BreakStatement(b, 0);
     }
-    else if (t == BUILTIN_ARGS) {
-      r = BuiltinArgs(b, 0);
+    else if (t == BUILTIN_ARGUMENT_LIST) {
+      r = BuiltinArgumentList(b, 0);
     }
     else if (t == BUILTIN_CALL_EXPR) {
       r = Expression(b, 0, 6);
@@ -337,6 +337,7 @@ public class GoParser implements PsiParser, LightPsiParser {
   }
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
+    create_token_set_(ARGUMENT_LIST, BUILTIN_ARGUMENT_LIST),
     create_token_set_(EXPR_SWITCH_STATEMENT, SWITCH_STATEMENT, TYPE_SWITCH_STATEMENT),
     create_token_set_(RANGE_CLAUSE, RECV_STATEMENT, SHORT_VAR_DECLARATION, VAR_SPEC),
     create_token_set_(ADD_EXPR, CONDITIONAL_EXPR, CONVERSION_EXPR, MUL_EXPR,
@@ -578,69 +579,102 @@ public class GoParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Type [ ',' ExpressionList '...'? ] | ExpressionList '...'?
-  public static boolean BuiltinArgs(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "BuiltinArgs")) return false;
+  // Type [ ',' BuiltinArgsTail ] | BuiltinArgsTail
+  static boolean BuiltinArgsInner(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BuiltinArgsInner")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, BUILTIN_ARGS, "<builtin args>");
-    r = BuiltinArgs_0(b, l + 1);
-    if (!r) r = BuiltinArgs_1(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
+    Marker m = enter_section_(b);
+    r = BuiltinArgsInner_0(b, l + 1);
+    if (!r) r = BuiltinArgsTail(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 
-  // Type [ ',' ExpressionList '...'? ]
-  private static boolean BuiltinArgs_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "BuiltinArgs_0")) return false;
+  // Type [ ',' BuiltinArgsTail ]
+  private static boolean BuiltinArgsInner_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BuiltinArgsInner_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = Type(b, l + 1);
-    r = r && BuiltinArgs_0_1(b, l + 1);
+    r = r && BuiltinArgsInner_0_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // [ ',' ExpressionList '...'? ]
-  private static boolean BuiltinArgs_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "BuiltinArgs_0_1")) return false;
-    BuiltinArgs_0_1_0(b, l + 1);
+  // [ ',' BuiltinArgsTail ]
+  private static boolean BuiltinArgsInner_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BuiltinArgsInner_0_1")) return false;
+    BuiltinArgsInner_0_1_0(b, l + 1);
     return true;
   }
 
-  // ',' ExpressionList '...'?
-  private static boolean BuiltinArgs_0_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "BuiltinArgs_0_1_0")) return false;
+  // ',' BuiltinArgsTail
+  private static boolean BuiltinArgsInner_0_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BuiltinArgsInner_0_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, COMMA);
-    r = r && ExpressionList(b, l + 1);
-    r = r && BuiltinArgs_0_1_0_2(b, l + 1);
+    r = r && BuiltinArgsTail(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // ExpressionList '...'?
+  static boolean BuiltinArgsTail(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BuiltinArgsTail")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = ExpressionList(b, l + 1);
+    r = r && BuiltinArgsTail_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // '...'?
-  private static boolean BuiltinArgs_0_1_0_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "BuiltinArgs_0_1_0_2")) return false;
+  private static boolean BuiltinArgsTail_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BuiltinArgsTail_1")) return false;
     consumeToken(b, TRIPLE_DOT);
     return true;
   }
 
-  // ExpressionList '...'?
-  private static boolean BuiltinArgs_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "BuiltinArgs_1")) return false;
+  /* ********************************************************** */
+  // '(' [ BuiltinArgsInner ','? ] ')'
+  public static boolean BuiltinArgumentList(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BuiltinArgumentList")) return false;
+    if (!nextTokenIs(b, LPAREN)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, BUILTIN_ARGUMENT_LIST, null);
+    r = consumeToken(b, LPAREN);
+    p = r; // pin = 1
+    r = r && report_error_(b, BuiltinArgumentList_1(b, l + 1));
+    r = p && consumeToken(b, RPAREN) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // [ BuiltinArgsInner ','? ]
+  private static boolean BuiltinArgumentList_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BuiltinArgumentList_1")) return false;
+    BuiltinArgumentList_1_0(b, l + 1);
+    return true;
+  }
+
+  // BuiltinArgsInner ','?
+  private static boolean BuiltinArgumentList_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BuiltinArgumentList_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = ExpressionList(b, l + 1);
-    r = r && BuiltinArgs_1_1(b, l + 1);
+    r = BuiltinArgsInner(b, l + 1);
+    r = r && BuiltinArgumentList_1_0_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // '...'?
-  private static boolean BuiltinArgs_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "BuiltinArgs_1_1")) return false;
-    consumeToken(b, TRIPLE_DOT);
+  // ','?
+  private static boolean BuiltinArgumentList_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BuiltinArgumentList_1_0_1")) return false;
+    consumeToken(b, COMMA);
     return true;
   }
 
@@ -4474,42 +4508,15 @@ public class GoParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // <<isBuiltin>> '(' [ BuiltinArgs ','? ] ')'
+  // <<isBuiltin>> BuiltinArgumentList
   private static boolean BuiltinCallExpr_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "BuiltinCallExpr_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = isBuiltin(b, l + 1);
-    r = r && consumeToken(b, LPAREN);
-    r = r && BuiltinCallExpr_0_2(b, l + 1);
-    r = r && consumeToken(b, RPAREN);
+    r = r && BuiltinArgumentList(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
-  }
-
-  // [ BuiltinArgs ','? ]
-  private static boolean BuiltinCallExpr_0_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "BuiltinCallExpr_0_2")) return false;
-    BuiltinCallExpr_0_2_0(b, l + 1);
-    return true;
-  }
-
-  // BuiltinArgs ','?
-  private static boolean BuiltinCallExpr_0_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "BuiltinCallExpr_0_2_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = BuiltinArgs(b, l + 1);
-    r = r && BuiltinCallExpr_0_2_0_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // ','?
-  private static boolean BuiltinCallExpr_0_2_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "BuiltinCallExpr_0_2_0_1")) return false;
-    consumeTokenSmart(b, COMMA);
-    return true;
   }
 
   // '.' '(' &(!'type') Type ')'

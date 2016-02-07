@@ -98,8 +98,8 @@ GO_FILE
           BUILTIN_CALL_EXPR
             REFERENCE_EXPRESSION
               PsiElement(identifier)('make')
-            PsiElement(()('(')
-            BUILTIN_ARGS
+            BUILTIN_ARGUMENT_LIST
+              PsiElement(()('(')
               MAP_TYPE
                 PsiElement(map)('map')
                 PsiElement([)('[')
@@ -110,7 +110,7 @@ GO_FILE
                 TYPE
                   TYPE_REFERENCE_EXPRESSION
                     PsiElement(identifier)('int')
-            PsiElement())(')')
+              PsiElement())(')')
       ASSIGNMENT_STATEMENT
         LEFT_HAND_EXPR_LIST
           INDEX_OR_SLICE_EXPR

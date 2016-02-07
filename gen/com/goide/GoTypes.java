@@ -20,7 +20,7 @@ public interface GoTypes {
   IElementType ASSIGN_OP = new GoCompositeElementType("ASSIGN_OP");
   IElementType BLOCK = new GoCompositeElementType("BLOCK");
   IElementType BREAK_STATEMENT = new GoCompositeElementType("BREAK_STATEMENT");
-  IElementType BUILTIN_ARGS = new GoCompositeElementType("BUILTIN_ARGS");
+  IElementType BUILTIN_ARGUMENT_LIST = new GoCompositeElementType("BUILTIN_ARGUMENT_LIST");
   IElementType BUILTIN_CALL_EXPR = new GoCompositeElementType("BUILTIN_CALL_EXPR");
   IElementType CALL_EXPR = new GoCompositeElementType("CALL_EXPR");
   IElementType CHANNEL_TYPE = GoStubElementTypeFactory.factory("CHANNEL_TYPE");
@@ -227,8 +227,8 @@ public interface GoTypes {
       else if (type == BREAK_STATEMENT) {
         return new GoBreakStatementImpl(node);
       }
-      else if (type == BUILTIN_ARGS) {
-        return new GoBuiltinArgsImpl(node);
+      else if (type == BUILTIN_ARGUMENT_LIST) {
+        return new GoBuiltinArgumentListImpl(node);
       }
       else if (type == BUILTIN_CALL_EXPR) {
         return new GoBuiltinCallExprImpl(node);
