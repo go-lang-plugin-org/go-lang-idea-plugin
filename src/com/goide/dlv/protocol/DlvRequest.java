@@ -140,6 +140,23 @@ public abstract class DlvRequest<T> extends OutMessage implements Request<T> {
     }
   }
 
+  public final static class Detach extends DlvRequest<Integer> {
+    public Detach(boolean kill) {
+      try {
+        beginArguments();
+        writer.name(PARAMS).beginArray().value(kill).endArray();
+      }
+      catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    }
+
+    @Override
+    protected boolean needObject() {
+      return false;
+    }
+  }
+
   public final static class EvalSymbol extends DlvRequest<DlvApi.Variable> {
     public EvalSymbol(@NotNull String symbol, int frameId) {
       try {
