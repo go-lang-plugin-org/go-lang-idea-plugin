@@ -27,32 +27,14 @@ public class GoBuiltinCallExprImpl extends GoExpressionImpl implements GoBuiltin
 
   @Override
   @Nullable
-  public GoBuiltinArgs getBuiltinArgs() {
-    return findChildByClass(GoBuiltinArgs.class);
+  public GoBuiltinArgumentList getBuiltinArgumentList() {
+    return findChildByClass(GoBuiltinArgumentList.class);
   }
 
   @Override
   @NotNull
   public GoReferenceExpression getReferenceExpression() {
     return findNotNullChildByClass(GoReferenceExpression.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getComma() {
-    return findChildByType(COMMA);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getLparen() {
-    return findNotNullChildByType(LPAREN);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getRparen() {
-    return findChildByType(RPAREN);
   }
 
 }

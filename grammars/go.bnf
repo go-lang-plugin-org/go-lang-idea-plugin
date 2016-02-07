@@ -349,8 +349,10 @@ AddExpr ::= Expression add_op Expression
 MulExpr ::= Expression mul_op Expression
 ParenthesesExpr ::= '(' <<enterMode "PAR">> Expression <<exitModeSafe "PAR">>')' {pin=1}
 
-BuiltinCallExpr ::= ReferenceExpression <<isBuiltin>> '(' [ BuiltinArgs ','? ] ')' {pin=3}
-BuiltinArgs ::= Type [ ',' ExpressionList '...'? ] | ExpressionList '...'?
+BuiltinCallExpr ::= ReferenceExpression <<isBuiltin>> BuiltinArgumentList {pin=2}
+BuiltinArgumentList ::= '(' [ BuiltinArgsInner ','? ] ')' {pin=1 extends=ArgumentList}
+private BuiltinArgsInner ::= Type [ ',' BuiltinArgsTail ] | BuiltinArgsTail
+private BuiltinArgsTail ::= ExpressionList '...'?
 
 private MaxGroup ::=
     CompositeLit
