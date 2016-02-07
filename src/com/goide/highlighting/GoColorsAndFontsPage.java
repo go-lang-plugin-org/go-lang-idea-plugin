@@ -50,6 +50,7 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
     new AttributesDescriptor("Type specification", TYPE_SPECIFICATION),
     new AttributesDescriptor("Type reference", TYPE_REFERENCE),
     new AttributesDescriptor("Builtin type", BUILTIN_TYPE_REFERENCE),
+    new AttributesDescriptor("Builtin function", BUILTIN_FUNCTION),
     new AttributesDescriptor("Exported function", EXPORTED_FUNCTION),
     new AttributesDescriptor("Local function", LOCAL_FUNCTION),
     new AttributesDescriptor("Package exported interface", PACKAGE_EXPORTED_INTERFACE),
@@ -74,6 +75,7 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
     ATTRIBUTES_KEY_MAP.put("tr", TYPE_REFERENCE);
     ATTRIBUTES_KEY_MAP.put("ts", TYPE_SPECIFICATION);
     ATTRIBUTES_KEY_MAP.put("bt", BUILTIN_TYPE_REFERENCE);
+    ATTRIBUTES_KEY_MAP.put("bf", BUILTIN_FUNCTION);
     ATTRIBUTES_KEY_MAP.put("kw", KEYWORD);
     ATTRIBUTES_KEY_MAP.put("ef", EXPORTED_FUNCTION);
     ATTRIBUTES_KEY_MAP.put("lf", LOCAL_FUNCTION);
@@ -225,6 +227,7 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
            "    _ = <lf>variableFunc</lf>(1)\n" +
            "    _ = <fp>demo1</fp>\n" +
            "    _ = <lv>demo2</lv>\n" +
+           "    <bf>println</bf>(\"builtin function\")" +
            "\n" +
            "}\n" +
            "\n" +
