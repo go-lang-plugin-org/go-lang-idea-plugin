@@ -201,6 +201,7 @@ public class GoSdkUtil {
     if (path.isEmpty()) {
       return null;
     }
+    path = FileUtil.toSystemIndependentName(path);
     for (VirtualFile root : getSourcesPathsToLookup(project, module)) {
       VirtualFile file = root.findFileByRelativePath(path);
       if (file != null) {
