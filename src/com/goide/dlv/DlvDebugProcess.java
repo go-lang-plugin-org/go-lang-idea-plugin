@@ -201,7 +201,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
   }
 
   @Override
-  protected void continueVm(@NotNull StepAction stepAction) {
+  protected Promise<?> continueVm(@NotNull StepAction stepAction) {
     switch (stepAction) {
       case CONTINUE:
         command(CONTINUE);
@@ -216,6 +216,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
         // todo
         break;
     }
+    return null;
   }
 
   @NotNull
