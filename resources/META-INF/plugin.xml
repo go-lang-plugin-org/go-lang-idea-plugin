@@ -32,7 +32,6 @@
 
   <depends>com.intellij.modules.lang</depends>
   <depends optional="true" config-file="java-deps.xml">com.intellij.modules.java</depends>
-  <depends optional="true" config-file="coverage.xml">Coverage</depends>
   <depends optional="true" config-file="coverage.xml">com.intellij.modules.coverage</depends>
   <!-- todo[IDEA 17] replace with real dependency -->
   <depends optional="true" config-file="app-engine.xml">com.intellij.modules.lang</depends>
