@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -147,34 +147,35 @@ public class GoElementFactory {
 
   @NotNull
   public static GoConstDeclaration createConstDeclaration(@NotNull Project project, @NotNull String text) {
-    GoFile file = createFileFromText(project, "package a\n const " + text);
+    GoFile file = createFileFromText(project, "package a; const " + text);
     return PsiTreeUtil.findChildOfType(file, GoConstDeclaration.class);
   }
 
 
   @NotNull
   public static GoConstSpec createConstSpec(@NotNull Project project, @NotNull String name, @Nullable String type, @Nullable String value) {
-    type = StringUtil.trim(type);
-    value = StringUtil.trim(value);
-    type = StringUtil.isNotEmpty(type) ? " " + type : "";
-    value = StringUtil.isNotEmpty(value) ? " = " + value : "";
-    GoConstDeclaration constDeclaration = createConstDeclaration(project, name + type + value);
+    GoConstDeclaration constDeclaration = createConstDeclaration(project, prepareVarOrConstDeclarationText(name, type, value));
     return ContainerUtil.getFirstItem(constDeclaration.getConstSpecList());
   }
 
   @NotNull
   public static GoVarDeclaration createVarDeclaration(@NotNull Project project, @NotNull String text) {
-    GoFile file = createFileFromText(project, "package a\n var " + text);
+    GoFile file = createFileFromText(project, "package a; var " + text);
     return PsiTreeUtil.findChildOfType(file, GoVarDeclaration.class);
   }
 
   @NotNull
   public static GoVarSpec createVarSpec(@NotNull Project project, @NotNull String name, @Nullable String type, @Nullable String value) {
+    GoVarDeclaration varDeclaration = createVarDeclaration(project, prepareVarOrConstDeclarationText(name, type, value));
+    return ContainerUtil.getFirstItem(varDeclaration.getVarSpecList());
+  }
+
+  @NotNull
+  private static String prepareVarOrConstDeclarationText(@NotNull String name, @Nullable String type, @Nullable String value) {
     type = StringUtil.trim(type);
     value = StringUtil.trim(value);
     type = StringUtil.isNotEmpty(type) ? " " + type : "";
     value = StringUtil.isNotEmpty(value) ? " = " + value : "";
-    GoVarDeclaration varDeclaration = createVarDeclaration(project, name + type + value);
-    return ContainerUtil.getFirstItem(varDeclaration.getVarSpecList());
+    return name + type + value;
   }
 }
