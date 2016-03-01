@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.psi.LiteralTextEscaper;
 import com.intellij.psi.PsiLanguageInjectionHost;
 import com.intellij.testFramework.PlatformTestUtil;
+import com.intellij.util.ThrowableRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
@@ -176,7 +177,7 @@ public class GoStringLiteralEscaperTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testDecodeLongUnicodeCharString() {
-    PlatformTestUtil.withEncoding(CharsetToolkit.UTF8, new Runnable() {
+    PlatformTestUtil.withEncoding(CharsetToolkit.UTF8, new ThrowableRunnable() {
       public void run() {
         final GoStringLiteral expr = createStringFromText("\\U00008a9e");
         assertNotNull(expr);
@@ -187,7 +188,7 @@ public class GoStringLiteralEscaperTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testQuote() {
-    PlatformTestUtil.withEncoding(CharsetToolkit.UTF8, new Runnable() {
+    PlatformTestUtil.withEncoding(CharsetToolkit.UTF8, new ThrowableRunnable() {
       @Override
       public void run() {
         final GoStringLiteral expr = createStringFromText("import \\\"fmt\\\"");
