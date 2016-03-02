@@ -3741,14 +3741,15 @@ public class GoParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Type ( ',' Type )*
+  // Type ( ',' Type )* ','?
   public static boolean TypeList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeList")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _COLLAPSE_, TYPE_LIST, "<type list>");
     r = Type(b, l + 1);
     p = r; // pin = 1
-    r = r && TypeList_1(b, l + 1);
+    r = r && report_error_(b, TypeList_1(b, l + 1));
+    r = p && TypeList_2(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -3777,14 +3778,22 @@ public class GoParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
+  // ','?
+  private static boolean TypeList_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TypeList_2")) return false;
+    consumeToken(b, COMMA);
+    return true;
+  }
+
   /* ********************************************************** */
-  // Type ( ',' Type )*
+  // Type ( ',' Type )* ','?
   public static boolean TypeListNoPin(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeListNoPin")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _COLLAPSE_, TYPE_LIST, "<type list no pin>");
     r = Type(b, l + 1);
     r = r && TypeListNoPin_1(b, l + 1);
+    r = r && TypeListNoPin_2(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -3810,6 +3819,13 @@ public class GoParser implements PsiParser, LightPsiParser {
     r = r && Type(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  // ','?
+  private static boolean TypeListNoPin_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TypeListNoPin_2")) return false;
+    consumeToken(b, COMMA);
+    return true;
   }
 
   /* ********************************************************** */

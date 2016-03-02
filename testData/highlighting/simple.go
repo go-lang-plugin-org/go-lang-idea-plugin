@@ -707,3 +707,20 @@ func (gs *GroupSlice) Merge(groups ...*Group) error {
 func (gs *GroupSlice) merge(g *Group) error {
     return nil
 }
+
+type TestType struct{}
+
+func (t TestType) func1() {
+}
+
+func test90() (
+TestType,
+error,
+) {
+	return TestType{}, nil
+}
+
+func _() {
+	t, _ := test90()
+	t.func1()
+}
