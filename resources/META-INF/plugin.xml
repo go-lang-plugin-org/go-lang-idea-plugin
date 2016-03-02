@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<idea-plugin version="2">
+<idea-plugin version="2" xmlns:xi="http://www.w3.org/2001/XInclude">
   <id>ro.redeul.google.go</id>
   <name>Go</name>
   <version>1.0</version>
@@ -33,9 +33,9 @@
   <depends>com.intellij.modules.lang</depends>
   <depends optional="true" config-file="java-deps.xml">com.intellij.modules.java</depends>
   <depends optional="true" config-file="coverage.xml">com.intellij.modules.coverage</depends>
-  <!-- todo[IDEA 17] replace with real dependency -->
-  <depends optional="true" config-file="app-engine.xml">com.intellij.modules.lang</depends>
-
+  <xi:include href="app-engine.xml" xpointer="xpointer(/idea-plugin/*)"/>
+  <!-- plan9 assembler -->
+  <xi:include href="plan9.xml" xpointer="xpointer(/idea-plugin/*)"/>
   <module-components>
     <component>
       <implementation-class>com.goide.project.GoModuleLibrariesInitializer</implementation-class>
@@ -353,10 +353,6 @@
   <!-- todo[IDEA 17] It's supposed that GAE-core module will be moved to IDEA source and bundled in IDEA 16 -->
   <!--<id>com.intellij.appengine</id>-->
   <depends optional="true" config-file="google-app-engine-core-yaml.xml">org.jetbrains.plugins.yaml</depends>
-
-  <!-- plan9 assembler -->
-  <depends optional="true" config-file="plan9.xml">com.intellij.modules.lang</depends>
-
   <extensionPoints>
     <extensionPoint name="appengine.Extension" interface="com.intellij.appengine.AppEngineExtension"/>
   </extensionPoints>
