@@ -31,7 +31,7 @@ import java.io.IOException;
 
 public class GoFileElementType extends IStubFileElementType<GoFileStub> {
   public static final IStubFileElementType INSTANCE = new GoFileElementType();
-  public static final int VERSION = 15;
+  public static final int VERSION = 16;
 
   private GoFileElementType() {
     super("GO_FILE", GoLanguage.INSTANCE);
