@@ -697,17 +697,15 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static List<GoMethodDeclaration> getMethods(@NotNull final GoTypeSpec o) {
-    final PsiDirectory dir = o.getContainingFile().getOriginalFile().getParent();
-    if (dir != null) {
-      return CachedValuesManager.getCachedValue(o, new CachedValueProvider<List<GoMethodDeclaration>>() {
-        @Nullable
-        @Override
-        public Result<List<GoMethodDeclaration>> compute() {
-          return Result.create(calcMethods(o), dir);
-        }
-      });
-    }
-    return calcMethods(o);
+    List<GoMethodDeclaration> result = CachedValuesManager.getCachedValue(o, new CachedValueProvider<List<GoMethodDeclaration>>() {
+      @Nullable
+      @Override
+      public Result<List<GoMethodDeclaration>> compute() {
+        PsiDirectory packageDirectory = o.getContainingFile().getOriginalFile().getParent();
+        return packageDirectory != null ? Result.create(calcMethods(o), packageDirectory) : null;
+      }
+    });
+    return result != null ? result : calcMethods(o);
   }
 
   public static boolean allowed(@NotNull PsiFile file, @Nullable PsiFile contextFile) {
