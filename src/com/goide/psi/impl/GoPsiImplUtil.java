@@ -112,7 +112,7 @@ public class GoPsiImplUtil {
     List<GoFile> files = ContainerUtil.newArrayListWithCapacity(children.length);
     for (PsiElement element : children) {
       if (element instanceof GoFile && Comparing.equal(((GoFile)element).getPackageName(), name)) {
-        files.add(((GoFile)element));
+        files.add((GoFile)element);
       }
     }
     return files;
@@ -180,6 +180,7 @@ public class GoPsiImplUtil {
         return refs.length > 1 ? refs[1].resolve() : null;
       }
 
+      @Override
       public boolean isReferenceTo(PsiElement element) {
         return GoUtil.couldBeReferenceTo(element, getElement()) && getElement().getManager().areElementsEquivalent(resolve(), element);
       }
@@ -270,7 +271,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType getGoTypeInner(@NotNull final GoConstDefinition o, @Nullable final ResolveState context) {
+  public static GoType getGoTypeInner(@NotNull GoConstDefinition o, @Nullable ResolveState context) {
     GoType fromSpec = findTypeInConstSpec(o);
     if (fromSpec != null) return fromSpec;
     // todo: stubs 
@@ -309,7 +310,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType getGoType(@NotNull final GoExpression o, @Nullable final ResolveState context) {
+  public static GoType getGoType(@NotNull GoExpression o, @Nullable ResolveState context) {
     return RecursionManager.doPreventingRecursion(o, true, new Computable<GoType>() {
       @Override
       public GoType compute() {
@@ -327,7 +328,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType getGoTypeInner(@NotNull final GoExpression o, @Nullable ResolveState context) {
+  public static GoType getGoTypeInner(@NotNull GoExpression o, @Nullable ResolveState context) {
     if (o instanceof GoUnaryExpr) {
       GoExpression e = ((GoUnaryExpr)o).getExpression();
       if (e == null) return null;
@@ -338,10 +339,10 @@ public class GoPsiImplUtil {
       if (baseType instanceof GoPointerType && ((GoUnaryExpr)o).getMul() != null) return ((GoPointerType)baseType).getType();
       return baseType;
     }
-    else if (o instanceof GoAddExpr) {
+    if (o instanceof GoAddExpr) {
       return ((GoAddExpr)o).getLeft().getGoType(context);
     }
-    else if (o instanceof GoMulExpr) {
+    if (o instanceof GoMulExpr) {
       GoExpression left = ((GoMulExpr)o).getLeft();
       if (!(left instanceof GoLiteral)) return left.getGoType(context);
       GoExpression right = ((GoBinaryExpr)o).getRight();
@@ -453,7 +454,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  private static GoType getBuiltinType(@NotNull GoExpression o, @NotNull final String name) {
+  private static GoType getBuiltinType(@NotNull GoExpression o, @NotNull String name) {
     GoFile builtin = GoSdkUtil.findBuiltinFile(o);
     if (builtin != null) {
       GoTypeSpec spec = ContainerUtil.find(builtin.getTypes(), new Condition<GoTypeSpec>() {
@@ -477,7 +478,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType typeOrParameterType(@NotNull final GoTypeOwner resolve, @Nullable ResolveState context) {
+  public static GoType typeOrParameterType(@NotNull GoTypeOwner resolve, @Nullable ResolveState context) {
     GoType type = resolve.getGoType(context);
     if (resolve instanceof GoParamDefinition && ((GoParamDefinition)resolve).isVariadic()) {
       return type == null ? null : new LightArrayType(type);
@@ -693,7 +694,7 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static List<GoTypeReferenceExpression> getBaseTypesReferences(@NotNull GoInterfaceType o) {
-    final List<GoTypeReferenceExpression> refs = ContainerUtil.newArrayList();
+    List<GoTypeReferenceExpression> refs = ContainerUtil.newArrayList();
     o.accept(new GoRecursiveVisitor() {
       @Override
       public void visitMethodSpec(@NotNull GoMethodSpec o) {
@@ -704,7 +705,7 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
-  public static List<GoMethodDeclaration> getMethods(@NotNull final GoTypeSpec o) {
+  public static List<GoMethodDeclaration> getMethods(@NotNull GoTypeSpec o) {
     List<GoMethodDeclaration> result = CachedValuesManager.getCachedValue(o, new CachedValueProvider<List<GoMethodDeclaration>>() {
       @Nullable
       @Override
@@ -717,7 +718,7 @@ public class GoPsiImplUtil {
   }
 
   public static boolean allowed(@NotNull PsiFile file, @Nullable PsiFile contextFile) {
-    if (contextFile == null || !(contextFile instanceof GoFile)) return true;
+    if (!(contextFile instanceof GoFile)) return true;
     if (!(file instanceof GoFile) || !GoUtil.allowed(file)) return false;
     // it's not a test or context file is also test from the same package
     return !GoTestFinder.isTestFile(file) || 
@@ -909,7 +910,7 @@ public class GoPsiImplUtil {
     StringBuilder name = null;
     for (int i = 0; i < fileName.length(); i++) {
       char c = fileName.charAt(i);
-      if (!(Character.isLetter(c) || c == '_' || (i != 0 && Character.isDigit(c)))) {
+      if (!(Character.isLetter(c) || c == '_' || i != 0 && Character.isDigit(c))) {
         if (name == null) {
           name = new StringBuilder(fileName.length());
           name.append(fileName, 0, i);
@@ -1054,7 +1055,7 @@ public class GoPsiImplUtil {
       PsiReference reference = right instanceof GoReferenceExpression ? right.getReference() : null;
       return reference != null ? reference.resolve() : null;
     }
-    else if (e instanceof GoCallExpr) {
+    if (e instanceof GoCallExpr) {
       GoSignatureOwner resolve = resolveCall(e);
       if (resolve != null) {
         GoSignature signature = resolve.getSignature();
@@ -1063,7 +1064,7 @@ public class GoPsiImplUtil {
       }
       return null;
     }
-    GoReferenceExpression r = e instanceof GoReferenceExpression ? ((GoReferenceExpression)e) : PsiTreeUtil.getChildOfType(e, GoReferenceExpression.class);
+    GoReferenceExpression r = e instanceof GoReferenceExpression ? (GoReferenceExpression)e : PsiTreeUtil.getChildOfType(e, GoReferenceExpression.class);
     PsiReference reference = (r != null ? r : e).getReference();
     return reference != null ? reference.resolve() : null;
   }
@@ -1223,7 +1224,7 @@ public class GoPsiImplUtil {
   
   private static boolean hasNewLineBefore(@NotNull PsiElement anchor) {
     PsiElement prevSibling = anchor.getPrevSibling();
-    while (prevSibling != null && prevSibling instanceof PsiWhiteSpace) {
+    while (prevSibling instanceof PsiWhiteSpace) {
       if (prevSibling.textContains('\n')) {
         return true;
       }

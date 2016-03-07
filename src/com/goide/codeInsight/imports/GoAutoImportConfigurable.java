@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,10 @@ import com.intellij.openapi.options.SearchableConfigurable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.ui.*;
+import com.intellij.ui.AnActionButton;
+import com.intellij.ui.AnActionButtonRunnable;
+import com.intellij.ui.IdeBorderFactory;
+import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.ui.FormBuilder;
 import com.intellij.util.ui.UIUtil;
@@ -41,8 +44,8 @@ public class GoAutoImportConfigurable implements SearchableConfigurable {
   private JBList myExcludePackagesList;
   private DefaultListModel myExcludePackagesModel;
 
-  @NotNull private GoCodeInsightSettings myCodeInsightSettings;
-  @NotNull private GoExcludedPathsSettings myExcludedSettings;
+  @NotNull private final GoCodeInsightSettings myCodeInsightSettings;
+  @NotNull private final GoExcludedPathsSettings myExcludedSettings;
   private final boolean myIsDefaultProject;
   private final boolean myIsDialog;
 
@@ -168,7 +171,7 @@ public class GoAutoImportConfigurable implements SearchableConfigurable {
       int index = -Arrays.binarySearch(myExcludePackagesModel.toArray(), packageName) - 1;
       if (index >= 0) {
         myExcludePackagesModel.add(index, packageName);
-        ListScrollingUtil.ensureIndexIsVisible(myExcludePackagesList, index, 0);
+        ScrollingUtil.ensureIndexIsVisible(myExcludePackagesList, index, 0);
       }
       myExcludePackagesList.clearSelection();
       myExcludePackagesList.setSelectedValue(packageName, true);

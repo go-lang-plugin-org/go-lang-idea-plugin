@@ -178,8 +178,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
       if (vFile.getPath().endsWith("go/doc/testdata")) return false;
     }
 
-    if (StringUtil.equals(file.getPackageName(), GoConstants.MAIN)) return false;
-    return true;
+    return !StringUtil.equals(file.getPackageName(), GoConstants.MAIN);
   }
 
   @NotNull
@@ -218,7 +217,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
                            @NotNull GoNamedElement element,
                            @NotNull ExistingImportData importData,
                            @NotNull CompletionResultSet result) {
-      GoFunctionDeclaration function = ((GoFunctionDeclaration)element);
+      GoFunctionDeclaration function = (GoFunctionDeclaration)element;
       double priority = importData.exists ? GoCompletionUtil.FUNCTION_PRIORITY : GoCompletionUtil.NOT_IMPORTED_FUNCTION_PRIORITY;
       result.addElement(GoCompletionUtil.createFunctionOrMethodLookupElement(function, replacePackageWithAlias(name, importData.alias),
                                                                              GoAutoImportInsertHandler.FUNCTION_INSERT_HANDLER, priority));
@@ -243,7 +242,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
                            @NotNull GoNamedElement element,
                            @NotNull ExistingImportData importData,
                            @NotNull CompletionResultSet result) {
-      GoTypeSpec spec = ((GoTypeSpec)element);
+      GoTypeSpec spec = (GoTypeSpec)element;
       boolean forTypes = myParent instanceof GoTypeReferenceExpression;
       double priority;
       if (importData.exists) {
@@ -342,7 +341,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
     private ExistingImportData(boolean exists, boolean isDot, String packageName, String importPath) {
       this.exists = exists;
       this.isDot = isDot;
-      this.alias = packageName;
+      alias = packageName;
       this.importPath = importPath;
     }
   }

@@ -65,6 +65,8 @@ public class GoSdkUtil {
   private static final Pattern GO_DEVEL_VERSION_PATTERN = Pattern.compile("[tT]heVersion\\s*=\\s*`(devel.*)`");
   private static final Key<String> ZVERSION_DATA_KEY = Key.create("GO_ZVERSION_KEY");
 
+  private GoSdkUtil() {}
+
   @Nullable
   private static VirtualFile getSdkSrcDir(@NotNull Project project, @Nullable Module module) {
     String sdkHomePath = GoSdkService.getInstance(project).getSdkHomePath(module);
@@ -79,7 +81,7 @@ public class GoSdkUtil {
 
   @Nullable
   public static GoFile findBuiltinFile(@NotNull PsiElement context) {
-    final Project project = context.getProject();
+    Project project = context.getProject();
     // it's important to ask module on file, otherwise module won't be found for elements in libraries files [zolotov]
     Module moduleFromContext = ModuleUtilCore.findModuleForPsiElement(context.getContainingFile());
     if (moduleFromContext == null) {
@@ -91,7 +93,7 @@ public class GoSdkUtil {
       }
     }
     
-    final Module module = moduleFromContext;
+    Module module = moduleFromContext;
     UserDataHolder holder = ObjectUtils.notNull(module, project);
     VirtualFile file = CachedValuesManager.getManager(context.getProject()).getCachedValue(holder, new CachedValueProvider<VirtualFile>() {
       @Nullable
@@ -105,7 +107,7 @@ public class GoSdkUtil {
 
     if (file == null) return null;
     PsiFile psiBuiltin = context.getManager().findFile(file);
-    return (psiBuiltin instanceof GoFile) ? (GoFile)psiBuiltin : null;
+    return psiBuiltin instanceof GoFile ? (GoFile)psiBuiltin : null;
   }
 
   @Nullable
@@ -212,7 +214,7 @@ public class GoSdkUtil {
 
   @Nullable
   @Contract("null -> null")
-  public static String getImportPath(@Nullable final PsiDirectory psiDirectory) {
+  public static String getImportPath(@Nullable PsiDirectory psiDirectory) {
     if (psiDirectory == null) {
       return null;
     }
@@ -396,7 +398,7 @@ public class GoSdkUtil {
   @NotNull
   public static Collection<Module> getGoModules(@NotNull Project project) {
     if (project.isDefault()) return Collections.emptyList();
-    final GoSdkService sdkService = GoSdkService.getInstance(project);
+    GoSdkService sdkService = GoSdkService.getInstance(project);
     return ContainerUtil.filter(ModuleManager.getInstance(project).getModules(), new Condition<Module>() {
       @Override
       public boolean value(Module module) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ public class GoExportedOwnDeclarationInspection extends GoInspectionBase {
 
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
+  protected GoVisitor buildGoVisitor(@NotNull ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
       public void visitConstDeclaration(@NotNull GoConstDeclaration o) {
@@ -81,16 +81,16 @@ public class GoExportedOwnDeclarationInspection extends GoInspectionBase {
 
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-      final PsiElement element = descriptor.getPsiElement();
+      PsiElement element = descriptor.getPsiElement();
       if (!element.isValid() || !(element instanceof GoConstDefinition)) {
         return;
       }
-      final String name = ((GoConstDefinition)element).getName();
+      String name = ((GoConstDefinition)element).getName();
       if (StringUtil.isEmpty(name)) {
         return;
       }
-      final GoType type = ((GoConstDefinition)element).findSiblingType();
-      final GoExpression value = ((GoConstDefinition)element).getValue();
+      GoType type = ((GoConstDefinition)element).findSiblingType();
+      GoExpression value = ((GoConstDefinition)element).getValue();
       WriteCommandAction.runWriteCommandAction(project, new Runnable() {
         @Override
         public void run() {
@@ -102,7 +102,7 @@ public class GoExportedOwnDeclarationInspection extends GoInspectionBase {
             }
             String typeText = type != null ? type.getText() : "";
             String valueText = value != null ? value.getText() : "";
-            ((GoConstSpec)parent).deleteDefinition(((GoConstDefinition)element));
+            ((GoConstSpec)parent).deleteDefinition((GoConstDefinition)element);
             if (grandParent.isValid()) {
               ((GoConstDeclaration)grandParent).addSpec(name, typeText, valueText, (GoConstSpec)parent);
               return;
@@ -123,16 +123,16 @@ public class GoExportedOwnDeclarationInspection extends GoInspectionBase {
 
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-      final PsiElement element = descriptor.getPsiElement();
+      PsiElement element = descriptor.getPsiElement();
       if (!element.isValid() || !(element instanceof GoVarDefinition)) {
         return;
       }
-      final String name = ((GoVarDefinition)element).getName();
+      String name = ((GoVarDefinition)element).getName();
       if (StringUtil.isEmpty(name)) {
         return;
       }
-      final GoType type = ((GoVarDefinition)element).findSiblingType();
-      final GoExpression value = ((GoVarDefinition)element).getValue();
+      GoType type = ((GoVarDefinition)element).findSiblingType();
+      GoExpression value = ((GoVarDefinition)element).getValue();
       WriteCommandAction.runWriteCommandAction(project, new Runnable() {
         @Override
         public void run() {
@@ -144,7 +144,7 @@ public class GoExportedOwnDeclarationInspection extends GoInspectionBase {
             }
             String typeText = type != null ? type.getText() : "";
             String valueText = value != null ? value.getText() : "";
-            ((GoVarSpec)parent).deleteDefinition(((GoVarDefinition)element));
+            ((GoVarSpec)parent).deleteDefinition((GoVarDefinition)element);
             if (grandParent.isValid()) {
               ((GoVarDeclaration)grandParent).addSpec(name, typeText, valueText, (GoVarSpec)parent);
               return;

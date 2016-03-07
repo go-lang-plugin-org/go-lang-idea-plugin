@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -104,8 +104,7 @@ public class GoBuildMatcher {
     if ("cgo".equals(name)) {
       return myTarget.cgoEnabled == ThreeState.YES;
     }
-    if (myTarget.supportsFlag(name)) return true;
-    return false;
+    return myTarget.supportsFlag(name);
   }
 
   public boolean matchFileName(@NotNull String fileName) {

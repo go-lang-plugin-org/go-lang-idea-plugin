@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -104,9 +104,9 @@ public interface DlvResponse {
   }
 
   final class M5m implements DlvResponse.ErrorInfo {
-    private int _code = -1;
-    @NotNull private List<String> _data = Collections.emptyList();
-    @Nullable private String _message;
+    private static final int _code = -1;
+    @NotNull private final List<String> _data = Collections.emptyList();
+    @Nullable private final String _message;
 
     M5m(@NotNull JsonReaderEx reader) {
       _message = nextNullableString(reader);

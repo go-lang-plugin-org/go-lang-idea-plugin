@@ -27,7 +27,6 @@ import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.execution.configurations.coverage.CoverageEnabledConfiguration;
 import com.intellij.execution.testframework.AbstractTestProxy;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
-import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
@@ -51,7 +50,7 @@ public class GoCoverageEngine extends CoverageEngine {
     public boolean value(AbstractTreeNode node) {
       Object value = node.getValue();
       if (value instanceof PsiFile) {
-        return isProductionGoFile(((PsiFile)value));
+        return isProductionGoFile((PsiFile)value);
       }
       return !StringUtil.equals(node.getName(), Project.DIRECTORY_STORE_FOLDER);
     }
@@ -174,7 +173,7 @@ public class GoCoverageEngine extends CoverageEngine {
 
   @Override
   public boolean coverageProjectViewStatisticsApplicableTo(VirtualFile fileOrDir) {
-    return !(fileOrDir.isDirectory()) && fileOrDir.getFileType() == GoFileType.INSTANCE && !GoTestFinder.isTestFile(fileOrDir);
+    return !fileOrDir.isDirectory() && fileOrDir.getFileType() == GoFileType.INSTANCE && !GoTestFinder.isTestFile(fileOrDir);
   }
 
   @Override
@@ -187,19 +186,5 @@ public class GoCoverageEngine extends CoverageEngine {
         return ContainerUtil.filter(super.getChildrenNodes(node), NODE_TO_COVERAGE);
       }
     };
-  }
-
-  @Override
-  public boolean isReportGenerationAvailable(@NotNull Project project,
-                                             @NotNull DataContext dataContext,
-                                             @NotNull CoverageSuitesBundle currentSuite) {
-    // todo
-    return super.isReportGenerationAvailable(project, dataContext, currentSuite);
-  }
-
-  @Override
-  public void generateReport(@NotNull Project project, @NotNull DataContext dataContext, @NotNull CoverageSuitesBundle currentSuite) {
-    // todo
-    super.generateReport(project, dataContext, currentSuite);
   }
 }

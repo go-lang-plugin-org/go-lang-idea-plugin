@@ -55,6 +55,7 @@ public class GoVendoringUI implements Disposable {
       //noinspection unchecked
       myVendoringEnabledCombo.setModel(myVendoringEnabledComboModel);
       connection.subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
+        @Override
         public void rootsChanged(ModuleRootEvent event) {
           initComboValues(module);
         }

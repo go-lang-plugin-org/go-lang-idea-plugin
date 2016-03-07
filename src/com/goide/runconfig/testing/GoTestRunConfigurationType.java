@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ public class GoTestRunConfigurationType extends ConfigurationTypeBase {
   public GoTestRunConfigurationType() {
     super("GoTestRunConfiguration", "Go Test", "Go test run configuration", GoIcons.TEST_RUN);
     addFactory(new GoTestConfigurationFactoryBase(this) {
+      @Override
       @NotNull
       public RunConfiguration createTemplateConfiguration(@NotNull Project project) {
         return new GoTestRunConfiguration(project, "Go Test", getInstance());

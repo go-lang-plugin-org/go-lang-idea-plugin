@@ -43,7 +43,7 @@ import java.util.List;
 public class GoStructureViewFactory implements PsiStructureViewFactory {
   @Nullable
   @Override
-  public StructureViewBuilder getStructureViewBuilder(@NotNull final PsiFile psiFile) {
+  public StructureViewBuilder getStructureViewBuilder(@NotNull PsiFile psiFile) {
     return new TreeBasedStructureViewBuilder() {
       @NotNull
       @Override
@@ -60,7 +60,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
 
   public static class Model extends StructureViewModelBase implements StructureViewModel.ElementInfoProvider {
     private static final List<NodeProvider> PROVIDERS =
-      ContainerUtil.<NodeProvider>newSmartList(new TreeElementFileStructureNodeProvider());
+      ContainerUtil.newSmartList(new TreeElementFileStructureNodeProvider());
 
     Model(@NotNull PsiFile file) {
       super(file, new Element(file));
@@ -202,20 +202,20 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
       if (element instanceof GoFile) {
         return ((GoFile)element).getName();
       }
-      else if (element instanceof GoNamedSignatureOwner) {
+      if (element instanceof GoNamedSignatureOwner) {
         GoSignature signature = ((GoNamedSignatureOwner)element).getSignature();
         String signatureText = signature != null ? signature.getText() : "";
         PsiElement id = ((GoNamedSignatureOwner)element).getIdentifier();
         return (id != null ? id.getText() : "") + signatureText;
       }
-      else if (element instanceof GoTypeSpec) {
+      if (element instanceof GoTypeSpec) {
         GoType type = ((GoTypeSpec)element).getSpecType().getType();
         String appendix = type instanceof GoStructType || type instanceof GoInterfaceType ?
                           "" :
                           separator + GoPsiImplUtil.getText(type);
         return ((GoTypeSpec)element).getName() + appendix;
       }
-      else if (element instanceof GoNamedElement) {
+      if (element instanceof GoNamedElement) {
         GoType type = ((GoNamedElement)element).getGoType(null);
         String typeText = type == null || element instanceof GoAnonymousFieldDefinition ? "" : separator + GoPsiImplUtil.getText(type);
         return ((GoNamedElement)element).getName() + typeText;

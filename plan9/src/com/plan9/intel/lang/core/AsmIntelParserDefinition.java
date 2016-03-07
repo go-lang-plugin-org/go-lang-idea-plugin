@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan, Stuart Carnie
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,6 @@ import com.plan9.intel.lang.core.lexer.AsmIntelLexerAdapter;
 import com.plan9.intel.lang.core.lexer.AsmIntelTokenType;
 import com.plan9.intel.lang.core.parser.AsmIntelParser;
 import com.plan9.intel.lang.core.psi.AsmIntelFile;
-import com.plan9.intel.lang.core.psi.AsmIntelTypes;
 import org.jetbrains.annotations.NotNull;
 
 import static com.plan9.intel.lang.core.psi.AsmIntelTypes.*;
@@ -50,7 +49,7 @@ public class AsmIntelParserDefinition implements ParserDefinition {
   public static final TokenSet NUMBERS = TokenSet.create(HEX, INT);
   public static final TokenSet REGISTERS = TokenSet.create(PSEUDO_REG);
 
-  public static final IFileElementType FILE = new IFileElementType(Language.<AsmIntelLanguage>findInstance(AsmIntelLanguage.class));
+  public static final IFileElementType FILE = new IFileElementType(Language.findInstance(AsmIntelLanguage.class));
 
   @NotNull
   @Override
@@ -58,23 +57,27 @@ public class AsmIntelParserDefinition implements ParserDefinition {
     return new AsmIntelLexerAdapter();
   }
 
+  @Override
   @NotNull
   public TokenSet getWhitespaceTokens() {
     return WHITE_SPACES;
   }
 
+  @Override
   @NotNull
   public TokenSet getCommentTokens() {
     return COMMENTS;
   }
 
+  @Override
   @NotNull
   public TokenSet getStringLiteralElements() {
     return TokenSet.EMPTY;
   }
 
+  @Override
   @NotNull
-  public PsiParser createParser(final Project project) {
+  public PsiParser createParser(Project project) {
     return new AsmIntelParser();
   }
 
@@ -83,16 +86,19 @@ public class AsmIntelParserDefinition implements ParserDefinition {
     return FILE;
   }
 
+  @Override
   public PsiFile createFile(FileViewProvider viewProvider) {
     return new AsmIntelFile(viewProvider);
   }
 
+  @Override
   public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left, ASTNode right) {
     return SpaceRequirements.MAY;
   }
 
+  @Override
   @NotNull
   public PsiElement createElement(ASTNode node) {
-    return AsmIntelTypes.Factory.createElement(node);
+    return Factory.createElement(node);
   }
 }

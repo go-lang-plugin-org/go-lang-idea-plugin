@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +29,9 @@ public class GoRunFileConfigurationType extends ConfigurationTypeBase {
   public GoRunFileConfigurationType() {
     super("GoRunFileConfiguration", "Go Single File", "Go single run file configuration", GoIcons.APPLICATION_RUN);
     addFactory(new GoConfigurationFactoryBase(this) {
+      @Override
       @NotNull
-      public RunConfiguration createTemplateConfiguration(Project project) {
+      public RunConfiguration createTemplateConfiguration(@NotNull Project project) {
         return new GoRunFileConfiguration(project, GoConstants.GO, getInstance());
       }
     });

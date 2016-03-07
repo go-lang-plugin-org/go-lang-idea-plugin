@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ public class GoAppEngineRunConfigurationType extends ConfigurationTypeBase {
   public GoAppEngineRunConfigurationType() {
     super("GoAppEngineRunConfiguration", "Go App Engine", "Go app engine web server runner", GoAppEngineIcons.ICON);
     addFactory(new GoConfigurationFactoryBase(this) {
+      @Override
       @NotNull
       public RunConfiguration createTemplateConfiguration(@NotNull Project project) {
         return new GoAppEngineRunConfiguration(project, "Go App Engine", getInstance());

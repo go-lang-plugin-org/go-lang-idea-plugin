@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,13 +61,13 @@ public class GoReferenceCompletionProvider extends CompletionProvider<Completion
 
       PsiElement element = reference.getElement();
       if (element instanceof GoReferenceExpression && PsiTreeUtil.getParentOfType(element, GoCompositeLit.class) != null) {
-        new GoFieldNameReference(((GoReferenceExpression)element)).processResolveVariants(new MyGoScopeProcessor(result, false));
+        new GoFieldNameReference((GoReferenceExpression)element).processResolveVariants(new MyGoScopeProcessor(result, false));
       }
     }
     else if (reference instanceof GoTypeReference) {
       PsiElement element = reference.getElement();
-      final PsiElement spec = PsiTreeUtil.getParentOfType(element, GoFieldDeclaration.class, GoTypeSpec.class);
-      final boolean insideParameter = PsiTreeUtil.getParentOfType(element, GoParameterDeclaration.class) != null;
+      PsiElement spec = PsiTreeUtil.getParentOfType(element, GoFieldDeclaration.class, GoTypeSpec.class);
+      boolean insideParameter = PsiTreeUtil.getParentOfType(element, GoParameterDeclaration.class) != null;
       ((GoTypeReference)reference).processResolveVariants(new MyGoScopeProcessor(result, true) {
         @Override
         protected boolean accept(@NotNull PsiElement e) {
@@ -96,7 +96,7 @@ public class GoReferenceCompletionProvider extends CompletionProvider<Completion
   private static LookupElement createLookupElement(@NotNull PsiElement o, @NotNull ResolveState state, boolean forTypes) {
     if (o instanceof GoNamedElement && !((GoNamedElement)o).isBlank() || o instanceof GoImportSpec && !((GoImportSpec)o).isDot()) {
       if (o instanceof GoImportSpec) {
-        return GoCompletionUtil.createPackageLookupElement(((GoImportSpec)o), state.get(GoReference.ACTUAL_NAME));
+        return GoCompletionUtil.createPackageLookupElement((GoImportSpec)o, state.get(GoReference.ACTUAL_NAME));
       }
       else if (o instanceof GoNamedSignatureOwner && ((GoNamedSignatureOwner)o).getName() != null) {
         String name = ((GoNamedSignatureOwner)o).getName();
@@ -111,7 +111,7 @@ public class GoReferenceCompletionProvider extends CompletionProvider<Completion
                : GoCompletionUtil.createTypeConversionLookupElement((GoTypeSpec)o);
       }
       else if (o instanceof PsiDirectory) {
-        return GoCompletionUtil.createPackageLookupElement(((PsiDirectory)o).getName(), ((PsiDirectory)o), o, true);
+        return GoCompletionUtil.createPackageLookupElement(((PsiDirectory)o).getName(), (PsiDirectory)o, o, true);
       }
       else if (o instanceof GoLabelDefinition) {
         String name = ((GoLabelDefinition)o).getName();
