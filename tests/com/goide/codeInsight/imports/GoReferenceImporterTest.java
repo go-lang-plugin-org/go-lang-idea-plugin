@@ -29,7 +29,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 
-import java.io.IOException;
 import java.util.List;
 
 
@@ -120,8 +119,7 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
     doTestAddOnTheFly(false, false);
   }
 
-  private void doTestImportOwnPath(String file, String text, String testFileText, String testText, String path, boolean shouldImport)
-    throws IOException {
+  private void doTestImportOwnPath(String file, String text, String testFileText, String testText, String path, boolean shouldImport) {
     DaemonCodeAnalyzerSettings.getInstance().setImportHintEnabled(true);
     updateSettings(true, true);
 
@@ -132,13 +130,13 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
     assertTrue(shouldImport != actions.isEmpty());
   }
 
-  public void testOwnAddPathFromTest() throws IOException {
+  public void testOwnAddPathFromTest() {
     doTestImportOwnPath("a.go", "package myPack; func Func() {}",
                         "a_test.go", "package myPack_test; func TestFunc() { my<caret>Pack.Func() }",
                         "pack", true);
   }
 
-  public void testDoNotImportOwnPathFromDifferentPackage() throws IOException {
+  public void testDoNotImportOwnPathFromDifferentPackage() {
     doTestImportOwnPath("a.go", "package pack1; func Func() {}",
                         "a_test.go", "package pack2_test; func TestFunc() { pack<caret>1.Func() }",
                         "pack", false);
