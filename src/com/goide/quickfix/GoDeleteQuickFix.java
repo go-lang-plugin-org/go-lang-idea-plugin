@@ -34,7 +34,7 @@ public class GoDeleteQuickFix extends LocalQuickFixBase {
     if (element == null) return;
     new WriteCommandAction.Simple(project, getName(), element.getContainingFile()) {
       @Override
-      protected void run() throws Throwable {
+      protected void run() {
         element.delete();
       }
     }.execute();
