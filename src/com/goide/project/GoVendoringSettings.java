@@ -18,9 +18,11 @@ package com.goide.project;
 
 import com.intellij.util.ThreeState;
 import com.intellij.util.text.VersionComparatorUtil;
+import com.intellij.util.xmlb.annotations.Tag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@Tag("vendoring")
 public class GoVendoringSettings {
   @NotNull
   public ThreeState vendorSupportEnabled = ThreeState.UNSURE;
