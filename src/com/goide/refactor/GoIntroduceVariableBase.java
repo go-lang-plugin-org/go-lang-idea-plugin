@@ -179,6 +179,7 @@ public class GoIntroduceVariableBase {
         PsiElement statement = context.addBefore(declarationStatement, context.addBefore(newLine, anchor));
         GoVarDefinition varDefinition = PsiTreeUtil.findChildOfType(statement, GoVarDefinition.class);
         assert varDefinition != null;
+        assert varDefinition.isValid() : "invalid var `" + varDefinition.getText() + "` definition in `" + statement.getText() + "`";
         operation.setVar(varDefinition);
 
         for (PsiElement occurrence : occurrences) {
