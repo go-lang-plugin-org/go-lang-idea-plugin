@@ -26,6 +26,7 @@ public class GoLegacyResolveStructTest extends GoLegacyResolveTestBase {
   public void testDirectStructField()                       { doFileTest(); } 
   public void testAnonymousDirectStructField()              { doFileTest(); } 
   public void testPromotedStructField()                     { doFileTest(); } 
+  public void testStructFieldInMap()                        { doFileTest(); } 
   public void testFieldVsParam()                            { doFileTest(); } 
   public void testFieldVsParam2()                           { doFileTest(); }
   public void testFieldVsParam3()                           { doFileTest(); }

@@ -57,8 +57,13 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
     if (type == null && lit != null) {
       type = GoPsiImplUtil.findBaseTypeFromRef(lit.getTypeReferenceExpression());
     }
-
-    type = getType(type);
+    
+    PsiElement p = PsiTreeUtil.getParentOfType(myElement, GoLiteralValue.class);
+    while (lit != null && p != null) {
+      if (p == lit) break;
+      if (p instanceof GoLiteralValue) type = getType(type);
+      p = p.getParent();
+    }
 
     if (!processStructType(fieldProcessor, type)) return false;
     if (type instanceof GoPointerType && !processStructType(fieldProcessor, ((GoPointerType)type).getType())) return false;
