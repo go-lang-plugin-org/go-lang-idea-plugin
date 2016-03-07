@@ -34,7 +34,8 @@ public class GoModuleSettings implements PersistentStateComponent<GoModuleSettin
 
   @NotNull
   private final GoModuleSettingsState myState = new GoModuleSettingsState();
-  @NotNull private final Module myModule;
+  @NotNull
+  private final Module myModule;
 
   public GoModuleSettings(@NotNull Module module) {
     myModule = module;
@@ -84,7 +85,7 @@ public class GoModuleSettings implements PersistentStateComponent<GoModuleSettin
     @Property(surroundWithTag = false)
     @NotNull
     private GoVendoringSettings vendoringSettings = new GoVendoringSettings();
-    
+
     @Property(surroundWithTag = false)
     @NotNull
     private GoBuildTargetSettings buildTargetSettings = new GoBuildTargetSettings();
