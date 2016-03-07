@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
   }
 
   @Override
-  public boolean processResolveVariants(@NotNull final GoScopeProcessor processor) {
+  public boolean processResolveVariants(@NotNull GoScopeProcessor processor) {
     GoScopeProcessor fieldProcessor = processor instanceof GoFieldProcessor ? processor : new GoFieldProcessor(myElement) {
       @Override
       public boolean execute(@NotNull PsiElement e, @NotNull ResolveState state) {
@@ -66,9 +66,7 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
     }
 
     if (!processStructType(fieldProcessor, type)) return false;
-    if (type instanceof GoPointerType && !processStructType(fieldProcessor, ((GoPointerType)type).getType())) return false;
-
-    return true;
+    return !(type instanceof GoPointerType && !processStructType(fieldProcessor, ((GoPointerType)type).getType()));
   }
 
   private boolean processStructType(@NotNull GoScopeProcessor fieldProcessor, @Nullable GoType type) {

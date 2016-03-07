@@ -27,7 +27,7 @@ import com.intellij.util.messages.Topic;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 
-@State(name = GoConstants.GO_MODULE_SESTTINGS_SERVICE_NAME, storages = {@Storage(StoragePathMacros.MODULE_FILE)})
+@State(name = GoConstants.GO_MODULE_SESTTINGS_SERVICE_NAME, storages = @Storage(StoragePathMacros.MODULE_FILE))
 public class GoModuleSettings implements PersistentStateComponent<GoModuleSettings.GoModuleSettingsState> {
   public static final Topic<BuildTargetListener> TOPIC = new Topic<BuildTargetListener>("build target changed", BuildTargetListener.class);
 

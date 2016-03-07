@@ -53,15 +53,10 @@ public class GoImportReferenceHelper extends FileReferenceHelper {
 
     FileReferenceSet referenceSet = reference.getFileReferenceSet();
     PsiFileSystemItem context;
-    if (index > 0) {
-      context = referenceSet.getReference(index - 1).resolve();
-    }
-    else {
-      context = ContainerUtil.getFirstItem(referenceSet.getDefaultContexts());
-    }
+    context = index > 0 ? referenceSet.getReference(index - 1).resolve() : ContainerUtil.getFirstItem(referenceSet.getDefaultContexts());
 
     String fileNameToCreate = reference.getFileNameToCreate();
-    if (context == null || !(context instanceof PsiDirectory)) {
+    if (!(context instanceof PsiDirectory)) {
       return result;
     }
 
@@ -76,7 +71,7 @@ public class GoImportReferenceHelper extends FileReferenceHelper {
 
   @NotNull
   @Override
-  public Collection<PsiFileSystemItem> getContexts(final Project project, @NotNull VirtualFile file) {
+  public Collection<PsiFileSystemItem> getContexts(Project project, @NotNull VirtualFile file) {
     PsiFileSystemItem psiFile = getPsiFileSystemItem(project, file);
     if (psiFile == null) {
       return Collections.emptyList();
@@ -97,7 +92,6 @@ public class GoImportReferenceHelper extends FileReferenceHelper {
 
   @Override
   public boolean isMine(Project project, @NotNull VirtualFile file) {
-    PsiFileSystemItem psiFile = getPsiFileSystemItem(project, file);
-    return psiFile != null && psiFile instanceof GoFile;
+    return getPsiFileSystemItem(project, file) instanceof GoFile;
   }
 }

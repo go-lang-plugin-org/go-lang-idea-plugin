@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 
 public class GoStubElementTypeFactory {
-  private static Map<String, Class> TYPES = new HashMap<String, Class>() {
+  private static final Map<String, Class> TYPES = new HashMap<String, Class>() {
     {
       put("ARRAY_OR_SLICE_TYPE", GoArrayOrSliceTypeImpl.class);
       put("CHANNEL_TYPE", GoChannelTypeImpl.class);
@@ -45,49 +45,51 @@ public class GoStubElementTypeFactory {
     }
   };
 
+  private GoStubElementTypeFactory() {}
+
   @NotNull
   public static IStubElementType factory(@NotNull String name) {
-    if (name.equals("CONST_DEFINITION")) return new GoConstDefinitionStubElementType(name);
-    if (name.equals("FIELD_DEFINITION")) return new GoFieldDefinitionStubElementType(name);
-    if (name.equals("ANONYMOUS_FIELD_DEFINITION")) return new GoAnonymousFieldDefinitionStubElementType(name);
-    if (name.equals("FUNCTION_DECLARATION")) return new GoFunctionDeclarationStubElementType(name);
-    if (name.equals("METHOD_DECLARATION")) return new GoMethodDeclarationStubElementType(name);
-    if (name.equals("IMPORT_SPEC")) return new GoImportSpecStubElementType(name);
-    if (name.equals("PARAM_DEFINITION")) return new GoParamDefinitionStubElementType(name);
-    if (name.equals("RECEIVER")) return new GoReceiverStubElementType(name);
-    if (name.equals("TYPE_SPEC")) return new GoTypeSpecStubElementType(name);
-    if (name.equals("METHOD_SPEC")) return new GoMethodSpecStubElementType(name);
-    if (name.equals("CONST_SPEC")) return new GoConstSpecStubElementType(name);
-    if (name.equals("VAR_SPEC")) return new GoVarSpecStubElementType(name);
-    if (name.equals("SHORT_VAR_DECLARATION")) return new GoVarSpecStubElementType(name) {
+    if ("CONST_DEFINITION".equals(name)) return new GoConstDefinitionStubElementType(name);
+    if ("FIELD_DEFINITION".equals(name)) return new GoFieldDefinitionStubElementType(name);
+    if ("ANONYMOUS_FIELD_DEFINITION".equals(name)) return new GoAnonymousFieldDefinitionStubElementType(name);
+    if ("FUNCTION_DECLARATION".equals(name)) return new GoFunctionDeclarationStubElementType(name);
+    if ("METHOD_DECLARATION".equals(name)) return new GoMethodDeclarationStubElementType(name);
+    if ("IMPORT_SPEC".equals(name)) return new GoImportSpecStubElementType(name);
+    if ("PARAM_DEFINITION".equals(name)) return new GoParamDefinitionStubElementType(name);
+    if ("RECEIVER".equals(name)) return new GoReceiverStubElementType(name);
+    if ("TYPE_SPEC".equals(name)) return new GoTypeSpecStubElementType(name);
+    if ("METHOD_SPEC".equals(name)) return new GoMethodSpecStubElementType(name);
+    if ("CONST_SPEC".equals(name)) return new GoConstSpecStubElementType(name);
+    if ("VAR_SPEC".equals(name)) return new GoVarSpecStubElementType(name);
+    if ("SHORT_VAR_DECLARATION".equals(name)) return new GoVarSpecStubElementType(name) {
       @NotNull
       @Override
       public GoVarSpec createPsi(@NotNull GoVarSpecStub stub) {
         return new GoShortVarDeclarationImpl(stub, this);
       }
     };
-    if (name.equals("RECV_STATEMENT")) return new GoVarSpecStubElementType(name) {
+    if ("RECV_STATEMENT".equals(name)) return new GoVarSpecStubElementType(name) {
       @NotNull
       @Override
       public GoVarSpec createPsi(@NotNull GoVarSpecStub stub) {
         return new GoRecvStatementImpl(stub, this);
       }
     };
-    if (name.equals("RANGE_CLAUSE")) return new GoVarSpecStubElementType(name) {
+    if ("RANGE_CLAUSE".equals(name)) return new GoVarSpecStubElementType(name) {
       @NotNull
       @Override
       public GoVarSpec createPsi(@NotNull GoVarSpecStub stub) {
         return new GoRangeClauseImpl(stub, this);
       }
     };
-    if (name.equals("VAR_DEFINITION")) return new GoVarDefinitionStubElementType(name);
-    if (name.equals("LABEL_DEFINITION")) return new GoLabelDefinitionStubElementType(name);
-    if (name.equals("PARAMETERS")) return new GoParametersStubElementType(name);
-    if (name.equals("SIGNATURE")) return new GoSignatureStubElementType(name);
-    if (name.equals("PARAMETER_DECLARATION")) return new GoParameterDeclarationStubElementType(name);
-    if (name.equals("RESULT")) return new GoResultStubElementType(name);
+    if ("VAR_DEFINITION".equals(name)) return new GoVarDefinitionStubElementType(name);
+    if ("LABEL_DEFINITION".equals(name)) return new GoLabelDefinitionStubElementType(name);
+    if ("PARAMETERS".equals(name)) return new GoParametersStubElementType(name);
+    if ("SIGNATURE".equals(name)) return new GoSignatureStubElementType(name);
+    if ("PARAMETER_DECLARATION".equals(name)) return new GoParameterDeclarationStubElementType(name);
+    if ("RESULT".equals(name)) return new GoResultStubElementType(name);
 
-    final Class c = TYPES.get(name);
+    Class c = TYPES.get(name);
     if (c != null) {
       return new GoTypeStubElementType(name) {
         @NotNull

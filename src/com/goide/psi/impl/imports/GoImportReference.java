@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,8 +69,7 @@ public class GoImportReference extends FileReference {
       List<ResolveResult> filtered = ContainerUtil.filter(super.innerResolve(caseSensitive, file), new Condition<ResolveResult>() {
         @Override
         public boolean value(@NotNull ResolveResult resolveResult) {
-          PsiElement element = resolveResult.getElement();
-          return element != null && element instanceof PsiDirectory;
+          return resolveResult.getElement() instanceof PsiDirectory;
         }
       });
       return filtered.toArray(new ResolveResult[filtered.size()]);
@@ -102,7 +101,7 @@ public class GoImportReference extends FileReference {
         Collection<PsiFileSystemItem> contexts = getFileReferenceSet().getDefaultContexts();
         for (ResolveResult resolveResult : firstReference.multiResolve(false)) {
           PsiElement resolveResultElement = resolveResult.getElement();
-          if (resolveResultElement != null && resolveResultElement instanceof PsiFileSystemItem) {
+          if (resolveResultElement instanceof PsiFileSystemItem) {
             PsiFileSystemItem parentDirectory = ((PsiFileSystemItem)resolveResultElement).getParent();
             if (parentDirectory != null && contexts.contains(parentDirectory)) {
               return getElement();

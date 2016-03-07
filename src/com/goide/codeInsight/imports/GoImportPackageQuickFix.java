@@ -67,7 +67,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
   @NotNull private final TextRange myRangeInElement;
   @NotNull private final PsiReference myReference;
   @Nullable private Collection<String> myPackagesToImport;
-  private boolean isPerformed = false;
+  private boolean isPerformed;
 
   public GoImportPackageQuickFix(@NotNull PsiReference reference) {
     super(reference.getElement());
@@ -77,18 +77,18 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
   }
 
   @Override
-  public boolean showHint(@NotNull final Editor editor) {
+  public boolean showHint(@NotNull Editor editor) {
     if (isPerformed) return false;
     if (!GoCodeInsightSettings.getInstance().isShowImportPopup()) return false;
     if (HintManager.getInstance().hasShownHintsThatWillHideByOtherHint(true)) return false;
     if (ApplicationManager.getApplication().isUnitTestMode()) return false;
 
-    final PsiElement element = getStartElement();
+    PsiElement element = getStartElement();
     if (element == null || !element.isValid()) return false;
 
     if (myReference.resolve() != null) return false;
 
-    final Collection<String> packagesToImport = getPackagesToImport(element);
+    Collection<String> packagesToImport = getPackagesToImport(element);
     if (packagesToImport.isEmpty()) {
       return false;
     }
@@ -163,11 +163,11 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
     if (myPackagesToImport == null) {
       GlobalSearchScope scope = GoUtil.moduleScope(element);
       PsiFile file = element.getContainingFile();
-      final Set<String> imported = file instanceof GoFile ? ((GoFile)file).getImportedPackagesMap().keySet() : Collections.<String>emptySet();
+      Set<String> imported = file instanceof GoFile ? ((GoFile)file).getImportedPackagesMap().keySet() : Collections.emptySet();
       Project project = element.getProject();
-      final PsiDirectory parentDirectory = file != null ? file.getParent() : null;
-      final GoExcludedPathsSettings excludedSettings = GoExcludedPathsSettings.getInstance(project);
-      final String testTargetPackage = GoTestFinder.getTestTargetPackage(file);
+      PsiDirectory parentDirectory = file != null ? file.getParent() : null;
+      GoExcludedPathsSettings excludedSettings = GoExcludedPathsSettings.getInstance(project);
+      String testTargetPackage = GoTestFinder.getTestTargetPackage(file);
       Collection<GoFile> es = StubIndex.getElements(GoPackagesIndex.KEY, myPackageName, project, scope, GoFile.class);
       myPackagesToImport = sorted(skipNulls(map2Set(
         es,
@@ -190,9 +190,9 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
     return myPackagesToImport;
   }
 
-  private void applyFix(@NotNull final Collection<String> packagesToImport, @NotNull final PsiFile file, @Nullable Editor editor) {
+  private void applyFix(@NotNull Collection<String> packagesToImport, @NotNull PsiFile file, @Nullable Editor editor) {
     if (packagesToImport.size() > 1 && editor != null) {
-      final JBList list = new JBList(packagesToImport);
+      JBList list = new JBList(packagesToImport);
       list.installCellRenderer(new NotNullFunction<Object, JComponent>() {
         @NotNull
         @Override
@@ -218,7 +218,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
     }
   }
 
-  private void perform(@NotNull final PsiFile file, @Nullable final String pathToImport) {
+  private void perform(@NotNull PsiFile file, @Nullable String pathToImport) {
     if (file instanceof GoFile && pathToImport != null) {
       CommandProcessor.getInstance().runUndoTransparentAction(new Runnable() {
         @Override

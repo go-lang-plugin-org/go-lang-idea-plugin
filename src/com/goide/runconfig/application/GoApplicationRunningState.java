@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,9 +66,9 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
   @NotNull
   @Override
   protected ProcessHandler startProcess() throws ExecutionException {
-    final ProcessHandler processHandler = super.startProcess();
+    ProcessHandler processHandler = super.startProcess();
     processHandler.addProcessListener(new ProcessAdapter() {
-      private AtomicBoolean firstOutput = new AtomicBoolean(true);
+      private final AtomicBoolean firstOutput = new AtomicBoolean(true);
 
       @Override
       public void onTextAvailable(ProcessEvent event, Key outputType) {

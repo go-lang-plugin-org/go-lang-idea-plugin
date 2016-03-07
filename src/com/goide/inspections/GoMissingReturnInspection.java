@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,8 +63,7 @@ public class GoMissingReturnInspection extends GoInspectionBase {
     else if (s instanceof GoIfStatement) {
       GoBlock block = ((GoIfStatement)s).getBlock();
       GoStatement st = ((GoIfStatement)s).getElseStatement();
-      if (block != null && isTerminating(block) && st != null && isTerminating(st)) return true;
-      return false;
+      return block != null && isTerminating(block) && st != null && isTerminating(st);
     }
     else if (s instanceof GoElseStatement) {
       GoIfStatement ifStatement = ((GoElseStatement)s).getIfStatement();
@@ -108,7 +107,7 @@ public class GoMissingReturnInspection extends GoInspectionBase {
       GoSelectStatement selectStatement = (GoSelectStatement)s;
       for (GoCommClause clause : selectStatement.getCommClauseList()) {
         List<GoStatement> statements = clause.getStatementList();
-        if (statements.size() == 0) {
+        if (statements.isEmpty()) {
           return false;
         }
         if (!isTerminating(statements.get(statements.size() - 1))) {
@@ -129,7 +128,7 @@ public class GoMissingReturnInspection extends GoInspectionBase {
 
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder,
+  protected GoVisitor buildGoVisitor(@NotNull ProblemsHolder holder,
                                      @SuppressWarnings({"UnusedParameters", "For future"}) @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
@@ -178,7 +177,7 @@ public class GoMissingReturnInspection extends GoInspectionBase {
       editor.getCaretModel().moveToOffset(start);
       editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
       template.setToReformat(true);
-      TemplateManager.getInstance(project).startTemplate(editor, template, true, Collections.<String, String>emptyMap(), null);
+      TemplateManager.getInstance(project).startTemplate(editor, template, true, Collections.emptyMap(), null);
     }
   }
 }

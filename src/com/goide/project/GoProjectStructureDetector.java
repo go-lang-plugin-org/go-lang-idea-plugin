@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import com.intellij.ide.util.importProject.ProjectDescriptor;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ide.util.projectWizard.ProjectJdkForModuleStep;
 import com.intellij.ide.util.projectWizard.importSources.DetectedProjectRoot;
-import com.intellij.ide.util.projectWizard.importSources.DetectedSourceRoot;
 import com.intellij.ide.util.projectWizard.importSources.ProjectFromSourcesBuilder;
 import com.intellij.ide.util.projectWizard.importSources.ProjectStructureDetector;
 import com.intellij.openapi.util.io.FileUtil;
@@ -69,7 +68,7 @@ public class GoProjectStructureDetector extends ProjectStructureDetector {
       if (modules.isEmpty()) {
         modules = new ArrayList<ModuleDescriptor>();
         for (DetectedProjectRoot root : roots) {
-          modules.add(new ModuleDescriptor(root.getDirectory(), GoModuleType.getInstance(), ContainerUtil.<DetectedSourceRoot>emptyList()));
+          modules.add(new ModuleDescriptor(root.getDirectory(), GoModuleType.getInstance(), ContainerUtil.emptyList()));
         }
         projectDescriptor.setModules(modules);
       }
@@ -80,6 +79,6 @@ public class GoProjectStructureDetector extends ProjectStructureDetector {
   @Override
   public List<ModuleWizardStep> createWizardSteps(@NotNull ProjectFromSourcesBuilder builder, ProjectDescriptor projectDescriptor, Icon stepIcon) {
     ProjectJdkForModuleStep projectJdkForModuleStep = new ProjectJdkForModuleStep(builder.getContext(), GoSdkType.getInstance());
-    return Collections.<ModuleWizardStep>singletonList(projectJdkForModuleStep);
+    return Collections.singletonList(projectJdkForModuleStep);
   }
 }

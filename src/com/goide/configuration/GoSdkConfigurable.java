@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -188,7 +188,7 @@ public class GoSdkConfigurable implements SearchableConfigurable, Configurable.N
     }
   }
 
-  private void asyncUpdateSdkVersion(@NotNull final String sdkPath) {
+  private void asyncUpdateSdkVersion(@NotNull String sdkPath) {
     ApplicationManager.getApplication().assertIsDispatchThread();
     ((CardLayout)myVersionPanel.getLayout()).show(myVersionPanel, VERSION_GETTING);
 
@@ -197,7 +197,7 @@ public class GoSdkConfigurable implements SearchableConfigurable, Configurable.N
       myAlarm.addRequest(new Runnable() {
         @Override
         public void run() {
-          final String version = GoSdkUtil.retrieveGoVersion(GoSdkUtil.adjustSdkPath(sdkPath));
+          String version = GoSdkUtil.retrieveGoVersion(GoSdkUtil.adjustSdkPath(sdkPath));
           ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -251,7 +251,7 @@ public class GoSdkConfigurable implements SearchableConfigurable, Configurable.N
 
   private class MyBrowseFolderListener extends ComponentWithBrowseButton.BrowseFolderActionListener<JTextField> {
     public MyBrowseFolderListener(@NotNull FileChooserDescriptor descriptor) {
-      super("Select Go SDK path", "", mySdkPathField, myProject, descriptor, TextComponentAccessor.TEXT_FIELD_WHOLE_TEXT);
+      super("Select Go SDK Path", "", mySdkPathField, myProject, descriptor, TextComponentAccessor.TEXT_FIELD_WHOLE_TEXT);
     }
 
     @Nullable
@@ -262,8 +262,8 @@ public class GoSdkConfigurable implements SearchableConfigurable, Configurable.N
   }
 
   private void listenForPathUpdate() {
-    final JTextField textField = mySdkPathField.getTextField();
-    final Ref<String> prevPathRef = Ref.create(StringUtil.notNullize(textField.getText()));
+    JTextField textField = mySdkPathField.getTextField();
+    Ref<String> prevPathRef = Ref.create(StringUtil.notNullize(textField.getText()));
     textField.getDocument().addDocumentListener(new DocumentAdapter() {
       @Override
       protected void textChanged(DocumentEvent e) {

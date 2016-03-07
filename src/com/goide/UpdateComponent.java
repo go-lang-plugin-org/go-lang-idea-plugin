@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ import java.util.concurrent.TimeUnit;
 import static com.goide.util.GoUtil.getPlugin;
 
 public class UpdateComponent implements ApplicationComponent, Disposable {
-  private static Logger LOG = Logger.getInstance(UpdateComponent.class);
+  private static final Logger LOG = Logger.getInstance(UpdateComponent.class);
   private static final String KEY = "go.last.update.timestamp";
   private final EditorFactoryAdapter myListener = new EditorFactoryAdapter() {
     @Override
@@ -78,7 +78,7 @@ public class UpdateComponent implements ApplicationComponent, Disposable {
             String pluginId = plugin.getPluginId().getIdString();
             String os = URLEncoder.encode(SystemInfo.OS_NAME + " " + SystemInfo.OS_VERSION, CharsetToolkit.UTF8);
             String uid = UpdateChecker.getInstallationUID(PropertiesComponent.getInstance());
-            final String url =
+            String url =
               "https://plugins.jetbrains.com/plugins/list" +
               "?pluginId=" + pluginId +
               "&build=" + buildNumber +

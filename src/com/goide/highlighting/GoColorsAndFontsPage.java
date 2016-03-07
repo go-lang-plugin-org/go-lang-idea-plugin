@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -97,30 +97,36 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
     ATTRIBUTES_KEY_MAP.put("ll", LABEL);
   }
 
+  @Override
   @NotNull
   public String getDisplayName() {
     return GoFileType.INSTANCE.getName();
   }
 
+  @Override
   public Icon getIcon() {
     return GoFileType.INSTANCE.getIcon();
   }
 
+  @Override
   @NotNull
   public AttributesDescriptor[] getAttributeDescriptors() {
     return DESCRIPTORS;
   }
 
+  @Override
   @NotNull
   public ColorDescriptor[] getColorDescriptors() {
     return ColorDescriptor.EMPTY_ARRAY;
   }
 
+  @Override
   @NotNull
   public SyntaxHighlighter getHighlighter() {
     return new GoSyntaxHighlighter();
   }
 
+  @Override
   @NotNull
   public String getDemoText() {
     return "/*\n" +
@@ -240,6 +246,7 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
            "}\n";
   }
 
+  @Override
   @NotNull
   public Map<String, TextAttributesKey> getAdditionalHighlightingTagToDescriptorMap() {
     return ATTRIBUTES_KEY_MAP;

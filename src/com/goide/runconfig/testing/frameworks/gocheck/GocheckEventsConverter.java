@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -191,8 +191,8 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter i
         TestResult testResult = detectTestResult(text, true);
         if (testResult != null) {
           myScope = Scope.SUITE;
-          if ((StringUtil.notNullize(testResult.myAttributes.get("details")).contains("Fixture has panicked"))
-              || ((testResult.getStatus() == Status.MISSED || testResult.getStatus() == Status.SKIPPED)&& myFixtureFailure != null)) {
+          if (StringUtil.notNullize(testResult.myAttributes.get("details")).contains("Fixture has panicked")
+              || (testResult.getStatus() == Status.MISSED || testResult.getStatus() == Status.SKIPPED) && myFixtureFailure != null) {
             testResult = myFixtureFailure;
           }
           myFixtureFailure = null;
@@ -213,7 +213,7 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter i
         break;
 
       case TEST_TEARDOWN:
-        boolean isSetUpFailed = (myFixtureFailure != null);
+        boolean isSetUpFailed = myFixtureFailure != null;
         TestResult testTearDownResult = detectTestResult(text, !isSetUpFailed);
         if (testTearDownResult != null) {
           myScope = Scope.TEST;
@@ -297,7 +297,7 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter i
         break;
 
       default:
-        throw new RuntimeException("Unexpected test result: " + testResult.toString());
+        throw new RuntimeException("Unexpected test result: " + testResult);
     }
     long duration = System.currentTimeMillis() - myCurrentTestStart;
     String testFinishedMsg = ServiceMessageBuilder.testFinished(myTestName).addAttribute("duration", Long.toString(duration)).toString();

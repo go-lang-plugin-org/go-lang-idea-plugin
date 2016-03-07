@@ -69,12 +69,14 @@ public class GoUtil {
   private static final Key<CachedValue<Collection<String>>> PACKAGES_CACHE = Key.create("packages_cache");
   private static final Key<CachedValue<Collection<String>>> PACKAGES_TEST_TRIMMED_CACHE = Key.create("packages_test_trimmed_cache");
 
+  private GoUtil() {}
+
   public static boolean allowed(@NotNull PsiFile file) {
     Module module = ModuleUtilCore.findModuleForPsiElement(file);
     return module == null || new GoBuildMatcher(GoBuildTargetUtil.getTargetSystemDescriptor(module)).matchFile(file);
   }
 
-  public static boolean isExcludedFile(@NotNull final GoFile file) {
+  public static boolean isExcludedFile(@NotNull GoFile file) {
     return CachedValuesManager.getCachedValue(file, new CachedValueProvider<Boolean>() {
       @Nullable
       @Override
@@ -92,16 +94,16 @@ public class GoUtil {
     if (SystemInfo.isMac) {
       return "darwin";
     }
-    else if (SystemInfo.isFreeBSD) {
+    if (SystemInfo.isFreeBSD) {
       return "freebsd";
     }
-    else if (SystemInfo.isLinux) {
+    if (SystemInfo.isLinux) {
       return "linux";
     }
-    else if (SystemInfo.isSolaris) {
+    if (SystemInfo.isSolaris) {
       return "solaris";
     }
-    else if (SystemInfo.isWindows) {
+    if (SystemInfo.isWindows) {
       return "windows";
     }
     return "unknown";
@@ -112,12 +114,12 @@ public class GoUtil {
     if (SystemInfo.is64Bit) {
       return GoConstants.AMD64;
     }
-    else if (SystemInfo.isWindows) {
+    if (SystemInfo.isWindows) {
       String arch = System.getenv("PROCESSOR_ARCHITECTURE");
       String wow64Arch = System.getenv("PROCESSOR_ARCHITEW6432");
       return arch.endsWith("64") || wow64Arch != null && wow64Arch.endsWith("64") ? GoConstants.AMD64 : "386";
     }
-    else if (SystemInfo.is32Bit) {
+    if (SystemInfo.is32Bit) {
       return "386";
     }
     return "unknown";
@@ -229,7 +231,7 @@ public class GoUtil {
   }
 
   @NotNull
-  public static Collection<String> getAllPackagesInDirectory(@Nullable final PsiDirectory dir, final boolean trimTestSuffices) {
+  public static Collection<String> getAllPackagesInDirectory(@Nullable PsiDirectory dir, boolean trimTestSuffices) {
     if (dir == null) return Collections.emptyList();
     Key<CachedValue<Collection<String>>> key = trimTestSuffices ? PACKAGES_TEST_TRIMMED_CACHE : PACKAGES_CACHE;
     return CachedValuesManager.getManager(dir.getProject()).getCachedValue(dir, key, new CachedValueProvider<Collection<String>>() {

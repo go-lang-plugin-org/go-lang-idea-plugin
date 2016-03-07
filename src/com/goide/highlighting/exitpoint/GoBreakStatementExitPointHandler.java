@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ import java.util.List;
 public class GoBreakStatementExitPointHandler extends HighlightUsagesHandlerBase<PsiElement> {
   @NotNull private final PsiElement myTarget;
   @Nullable private final GoBreakStatement myBreakStatement;
-  @Nullable private PsiElement myOwner;
+  @Nullable private final PsiElement myOwner;
 
   private GoBreakStatementExitPointHandler(@NotNull Editor editor,
                                            @NotNull PsiFile file,
@@ -59,7 +59,7 @@ public class GoBreakStatementExitPointHandler extends HighlightUsagesHandlerBase
 
   @Override
   public void computeUsages(List<PsiElement> targets) {
-    final PsiElement breakStmtOwner = findBreakStatementOwner();
+    PsiElement breakStmtOwner = findBreakStatementOwner();
     GoRecursiveVisitor visitor = new GoRecursiveVisitor() {
       @Override
       public void visitLabelDefinition(@NotNull GoLabelDefinition o) {
@@ -107,7 +107,7 @@ public class GoBreakStatementExitPointHandler extends HighlightUsagesHandlerBase
     if (breakStmtOwner != null) {
       PsiElement parent = breakStmtOwner.getParent();
       if (parent instanceof GoCompositeElement) {
-        visitor.visitCompositeElement(((GoCompositeElement)parent));
+        visitor.visitCompositeElement((GoCompositeElement)parent);
       }
     }
   }

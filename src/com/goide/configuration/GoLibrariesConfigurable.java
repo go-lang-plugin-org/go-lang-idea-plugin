@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,7 +60,7 @@ public class GoLibrariesConfigurable implements SearchableConfigurable, Configur
     myLibrariesService = librariesService;
     myReadOnlyPaths = readOnlyPaths;
 
-    final JBList filesList = new JBList(myListModel);
+    JBList filesList = new JBList(myListModel);
     filesList.setCellRenderer(new ColoredListCellRenderer() {
       @Override
       protected void customizeCellRenderer(JList list, Object value, int index, boolean selected, boolean hasFocus) {
@@ -129,7 +129,7 @@ public class GoLibrariesConfigurable implements SearchableConfigurable, Configur
         @Override
         public void run(AnActionButton button) {
           for (Object selectedValue : filesList.getSelectedValues()) {
-            myListModel.remove(((ListItem)selectedValue));
+            myListModel.remove((ListItem)selectedValue);
           }
         }
       })
@@ -167,9 +167,9 @@ public class GoLibrariesConfigurable implements SearchableConfigurable, Configur
   @Override
   public boolean isModified() {
     return !getUserDefinedUrls().equals(ContainerUtil.newHashSet(myLibrariesService.getLibraryRootUrls())) ||
-           ((myLibrariesService instanceof GoApplicationLibrariesService) &&
-            (((GoApplicationLibrariesService)myLibrariesService).isUseGoPathFromSystemEnvironment() !=
-             myUseEnvGoPathCheckBox.isSelected()));
+           myLibrariesService instanceof GoApplicationLibrariesService &&
+           ((GoApplicationLibrariesService)myLibrariesService).isUseGoPathFromSystemEnvironment() !=
+           myUseEnvGoPathCheckBox.isSelected();
   }
 
   @Override

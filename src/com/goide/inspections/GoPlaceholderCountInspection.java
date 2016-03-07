@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -111,7 +111,7 @@ public class GoPlaceholderCountInspection extends GoInspectionBase {
     if (resolved instanceof GoVarDefinition) {
       return getValue(((GoVarDefinition)resolved).getValue());
     }
-    else if (resolved instanceof GoConstDefinition) {
+    if (resolved instanceof GoConstDefinition) {
       return getValue(((GoConstDefinition)resolved).getValue());
     }
 
@@ -124,7 +124,7 @@ public class GoPlaceholderCountInspection extends GoInspectionBase {
     if (expression instanceof GoStringLiteral) {
       return expression.getText();
     }
-    else if (expression instanceof GoAddExpr) {
+    if (expression instanceof GoAddExpr) {
       String sum = getValue((GoAddExpr)expression);
       return sum.isEmpty() ? null : sum;
     }
@@ -136,29 +136,29 @@ public class GoPlaceholderCountInspection extends GoInspectionBase {
   @NotNull
   private static String getValue(@Nullable GoAddExpr expression) {
     if (expression == null) return "";
-    String result = "";
+    StringBuilder result = new StringBuilder();
     for (GoExpression expr : expression.getExpressionList()) {
       if (expr instanceof GoStringLiteral) {
-        result += expr.getText();
+        result.append(expr.getText());
       }
       else if (expr instanceof GoAddExpr) {
-        result += getValue(expr);
+        result.append(getValue(expr));
       }
     }
 
-    return result;
+    return result.toString();
   }
 
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
+  protected GoVisitor buildGoVisitor(@NotNull ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
       public void visitCallExpr(@NotNull GoCallExpr o) {
         PsiReference psiReference = o.getExpression().getReference();
         PsiElement resolved = psiReference != null ? psiReference.resolve() : null;
         if (!(resolved instanceof GoFunctionOrMethodDeclaration)) return;
-        int placeholderPosition = getPlaceholderPosition(((GoFunctionOrMethodDeclaration)resolved));
+        int placeholderPosition = getPlaceholderPosition((GoFunctionOrMethodDeclaration)resolved);
         List<GoExpression> arguments = o.getArgumentList().getExpressionList();
         if (placeholderPosition < 0 || arguments.size() <= placeholderPosition) return;
         

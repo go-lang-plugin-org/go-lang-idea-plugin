@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ public class GoCoverageRunner extends CoverageRunner {
 
   @Override
   public ProjectData loadCoverageData(@NotNull File sessionDataFile, @Nullable CoverageSuite baseCoverageSuite) {
-    if (baseCoverageSuite == null || !(baseCoverageSuite instanceof BaseCoverageSuite)) {
+    if (!(baseCoverageSuite instanceof BaseCoverageSuite)) {
       return null;
     }
     Project project = baseCoverageSuite.getProject();
@@ -90,7 +90,7 @@ public class GoCoverageRunner extends CoverageRunner {
   public static GoCoverageProjectData parseCoverage(@NotNull BufferedReader dataReader,
                                                     @NotNull Project project,
                                                     @Nullable Module module) throws IOException {
-    final GoCoverageProjectData result = new GoCoverageProjectData();
+    GoCoverageProjectData result = new GoCoverageProjectData();
     String line;
 
     while ((line = dataReader.readLine()) != null) {
@@ -144,7 +144,7 @@ public class GoCoverageRunner extends CoverageRunner {
           max = Math.max(max, rangeData.endLine);
         }
 
-        final LineData[] linesArray = new LineData[max + 1];
+        LineData[] linesArray = new LineData[max + 1];
         linesMap.forEachValue(new TObjectProcedure<LineData>() {
           @Override
           public boolean execute(LineData data) {

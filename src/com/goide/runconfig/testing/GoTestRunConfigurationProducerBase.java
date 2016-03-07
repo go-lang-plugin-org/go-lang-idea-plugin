@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,16 +50,16 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
   }
 
   @Override
-  protected boolean setupConfigurationFromContext(@NotNull final GoTestRunConfiguration configuration,
+  protected boolean setupConfigurationFromContext(@NotNull GoTestRunConfiguration configuration,
                                                   ConfigurationContext context,
                                                   Ref sourceElement) {
-    final PsiElement contextElement = GoRunUtil.getContextElement(context);
+    PsiElement contextElement = GoRunUtil.getContextElement(context);
     if (contextElement == null) {
       return false;
     }
 
     Module module = ModuleUtilCore.findModuleForPsiElement(contextElement);
-    final Project project = contextElement.getProject();
+    Project project = contextElement.getProject();
     if (module == null || !GoSdkService.getInstance(project).isGoModule(module)) return false;
     if (!myFramework.isAvailable(module)) return false;
 
@@ -83,32 +83,31 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
         }
       });
     }
-    else {
-      PsiFile file = contextElement.getContainingFile();
-      if (myFramework.isAvailableOnFile(file)) {
-        if (GoRunUtil.isPackageContext(contextElement)) {
-          String packageName = StringUtil.notNullize(((GoFile)file).getImportPath());
+
+    PsiFile file = contextElement.getContainingFile();
+    if (myFramework.isAvailableOnFile(file)) {
+      if (GoRunUtil.isPackageContext(contextElement)) {
+        String packageName = StringUtil.notNullize(((GoFile)file).getImportPath());
+        configuration.setKind(GoTestRunConfiguration.Kind.PACKAGE);
+        configuration.setPackage(packageName);
+        configuration.setName(getPackageConfigurationName(packageName));
+      }
+      else {
+        GoFunctionOrMethodDeclaration function = findTestFunctionInContext(contextElement);
+        if (function != null) {
+          configuration.setName(getFunctionConfigurationName(function, getFileConfigurationName(file.getName())));
+          configuration.setPattern("^" + function.getName() + "$");
+
           configuration.setKind(GoTestRunConfiguration.Kind.PACKAGE);
-          configuration.setPackage(packageName);
-          configuration.setName(getPackageConfigurationName(packageName));
+          configuration.setPackage(StringUtil.notNullize(((GoFile)file).getImportPath()));
         }
         else {
-          GoFunctionOrMethodDeclaration function = findTestFunctionInContext(contextElement);
-          if (function != null) {
-            configuration.setName(getFunctionConfigurationName(function, getFileConfigurationName(file.getName())));
-            configuration.setPattern("^" + function.getName() + "$");
-
-            configuration.setKind(GoTestRunConfiguration.Kind.PACKAGE);
-            configuration.setPackage(StringUtil.notNullize(((GoFile)file).getImportPath()));
-          }
-          else {
-            configuration.setName(getFileConfigurationName(file.getName()));
-            configuration.setKind(GoTestRunConfiguration.Kind.FILE);
-            configuration.setFilePath(file.getVirtualFile().getPath());
-          }
+          configuration.setName(getFileConfigurationName(file.getName()));
+          configuration.setKind(GoTestRunConfiguration.Kind.FILE);
+          configuration.setFilePath(file.getVirtualFile().getPath());
         }
-        return true;
       }
+      return true;
     }
 
     return false;

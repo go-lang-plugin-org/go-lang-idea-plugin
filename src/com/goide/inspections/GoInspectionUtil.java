@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,18 +28,20 @@ import java.util.List;
 public class GoInspectionUtil {
   public static final int UNKNOWN_COUNT = -1;
 
+  private GoInspectionUtil() {}
+
   public static int getExpressionResultCount(GoExpression call) {
     if (call instanceof GoLiteral || call instanceof GoStringLiteral || call instanceof GoBinaryExpr || call instanceof GoParenthesesExpr ||
-        (call instanceof GoUnaryExpr && ((GoUnaryExpr)call).getSendChannel() == null) || call instanceof GoBuiltinCallExpr) {
+        call instanceof GoUnaryExpr && ((GoUnaryExpr)call).getSendChannel() == null || call instanceof GoBuiltinCallExpr) {
       return 1;
     }
-    else if (call instanceof GoTypeAssertionExpr) {
+    if (call instanceof GoTypeAssertionExpr) {
       return getTypeAssertionResultCount((GoTypeAssertionExpr)call);
     }
-    else if (call instanceof GoCallExpr) {
+    if (call instanceof GoCallExpr) {
       return getFunctionResultCount((GoCallExpr)call);
     }
-    else if (call instanceof GoReferenceExpression) {
+    if (call instanceof GoReferenceExpression) {
       if (((GoReferenceExpression)call).getReference().resolve() instanceof GoVarDefinition) return 1;
     }
     return UNKNOWN_COUNT;
@@ -83,7 +85,7 @@ public class GoInspectionUtil {
       }
       return count;
     }
-    else if (result != null) {
+    if (result != null) {
       GoType type = result.getType();
       if (type instanceof GoTypeList) return ((GoTypeList)type).getTypeList().size();
       if (type != null) return 1;

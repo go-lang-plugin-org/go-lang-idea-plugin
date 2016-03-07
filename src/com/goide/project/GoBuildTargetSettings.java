@@ -45,9 +45,7 @@ public class GoBuildTargetSettings {
     if (cgo != settings.cgo) return false;
     if (!compiler.equals(settings.compiler)) return false;
     if (!goVersion.equals(settings.goVersion)) return false;
-    if (!Arrays.equals(customFlags, settings.customFlags)) return false;
-
-    return true;
+    return Arrays.equals(customFlags, settings.customFlags);
   }
 
   @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,7 +76,7 @@ public class GoTestSignaturesInspection extends GoInspectionBase {
   }
 
   private static class GoTestSignaturesQuickFix extends LocalQuickFixBase {
-    private GoTestFunctionType myType;
+    private final GoTestFunctionType myType;
 
     public GoTestSignaturesQuickFix(GoTestFunctionType type) {
       super("Fix signature");
@@ -97,7 +97,7 @@ public class GoTestSignaturesInspection extends GoInspectionBase {
         signature.replace(GoElementFactory.createFunctionSignatureFromText(project, ""));
         return;
       }
-      GoImportSpec testingImportSpec = (file.getImportedPackagesMap().get(GoConstants.TESTING_PATH));
+      GoImportSpec testingImportSpec = file.getImportedPackagesMap().get(GoConstants.TESTING_PATH);
       if (testingImportSpec == null) {
         file.addImport(GoConstants.TESTING_PATH, null);
       }

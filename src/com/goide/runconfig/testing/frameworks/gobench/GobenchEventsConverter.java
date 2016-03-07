@@ -38,7 +38,7 @@ public class GobenchEventsConverter extends OutputToGeneralTestEventsConverter {
 
   private final Stopwatch testStopwatch = Stopwatch.createUnstarted();
   private String currentBenchmark = "<benchmark>";
-  private boolean benchmarkFailing = false;
+  private boolean benchmarkFailing;
   
   public GobenchEventsConverter(TestConsoleProperties properties) {
     super(GobenchFramework.NAME, properties);
