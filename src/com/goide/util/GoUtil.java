@@ -17,7 +17,7 @@
 package com.goide.util;
 
 import com.goide.GoConstants;
-import com.goide.project.GoBuildTargetSettings;
+import com.goide.project.GoBuildTargetUtil;
 import com.goide.project.GoExcludedPathsSettings;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
@@ -70,8 +70,8 @@ public class GoUtil {
   private static final Key<CachedValue<Collection<String>>> PACKAGES_TEST_TRIMMED_CACHE = Key.create("packages_test_trimmed_cache");
 
   public static boolean allowed(@NotNull PsiFile file) {
-    GoBuildTargetSettings targetSettings = GoBuildTargetSettings.getInstance(file.getProject());
-    return new GoBuildMatcher(targetSettings.getTargetSystemDescriptor(ModuleUtilCore.findModuleForPsiElement(file))).matchFile(file);
+    Module module = ModuleUtilCore.findModuleForPsiElement(file);
+    return module == null || new GoBuildMatcher(GoBuildTargetUtil.getTargetSystemDescriptor(module)).matchFile(file);
   }
 
   public static boolean isExcludedFile(@NotNull final GoFile file) {

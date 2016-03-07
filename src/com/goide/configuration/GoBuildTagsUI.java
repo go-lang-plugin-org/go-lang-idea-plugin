@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,12 @@ import com.goide.GoConstants;
 import com.goide.project.GoBuildTargetSettings;
 import com.goide.sdk.GoSdkService;
 import com.goide.util.GoUtil;
-import com.intellij.openapi.options.Configurable;
+import com.intellij.ProjectTopics;
+import com.intellij.openapi.Disposable;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.options.SearchableConfigurable;
-import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ModuleRootAdapter;
+import com.intellij.openapi.roots.ModuleRootEvent;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.MutableCollectionComboBoxModel;
@@ -31,24 +33,20 @@ import com.intellij.ui.components.JBTextField;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ThreeState;
 import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.messages.MessageBusConnection;
 import com.intellij.util.ui.UIUtil;
-import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class GoBuildTargetConfigurable implements SearchableConfigurable, Configurable.NoScroll {
+public class GoBuildTagsUI implements Disposable {
   private static final String ENABLED = "Enabled";
   private static final String DISABLED = "Disabled";
-
-  @NotNull private final GoBuildTargetSettings myBuildTargetSettings;
 
   private JPanel myPanel;
   private ComboBox myOSCombo;
@@ -57,24 +55,19 @@ public class GoBuildTargetConfigurable implements SearchableConfigurable, Config
   private ComboBox myCompilerCombo;
   private ComboBox myCgoCombo;
   private JBTextField myCustomFlagsField;
+  private JTextPane myDescriptionPane;
 
   @NotNull private final MutableCollectionComboBoxModel<String> myCgoComboModel;
 
   @NotNull private final String myDefaultOSValue;
   @NotNull private final String myDefaultArchValue;
   @NotNull private String myDefaultCgo;
-  @NotNull private final String myDefaultGoVersion;
+  @NotNull private String myDefaultGoVersion = "";
 
-  public GoBuildTargetConfigurable(@NotNull Project project, boolean dialogMode) {
-    if (dialogMode) {
-      myPanel.setPreferredSize(new Dimension(400, -1));
-    }
-    
-    myBuildTargetSettings = GoBuildTargetSettings.getInstance(project);
-
+  @SuppressWarnings("unchecked")
+  public GoBuildTagsUI() {
     myDefaultOSValue = "Default (" + GoUtil.systemOS() + ")";
     myDefaultArchValue = "Default (" + GoUtil.systemArch() + ")";
-    myDefaultGoVersion = "Project SDK (" + StringUtil.notNullize(GoSdkService.getInstance(project).getSdkVersion(null), "any") + ")";
     myDefaultCgo = "Default (" + cgo(GoUtil.systemCgo(myDefaultOSValue, myDefaultArchValue)) + ")";
 
     myOSCombo.setModel(createModel(GoConstants.KNOWN_OS, myDefaultOSValue));
@@ -82,7 +75,6 @@ public class GoBuildTargetConfigurable implements SearchableConfigurable, Config
     myCgoComboModel = createModel(ContainerUtil.newArrayList(ENABLED, DISABLED), myDefaultCgo);
     myCgoCombo.setModel(myCgoComboModel);
     myCompilerCombo.setModel(createModel(GoConstants.KNOWN_COMPILERS, GoBuildTargetSettings.ANY_COMPILER));
-    myGoVersionCombo.setModel(createModel(GoConstants.KNOWN_VERSIONS, myDefaultGoVersion));
 
     ActionListener updateCgoListener = new ActionListener() {
       @Override
@@ -99,6 +91,27 @@ public class GoBuildTargetConfigurable implements SearchableConfigurable, Config
     };
     myOSCombo.addActionListener(updateCgoListener);
     myArchCombo.addActionListener(updateCgoListener);
+  }
+
+  public void initPanel(@NotNull Module module) {
+    if (!module.isDisposed()) {
+      MessageBusConnection connection = module.getMessageBus().connect(this);
+      connection.subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
+        public void rootsChanged(ModuleRootEvent event) {
+          initComboValues(module);
+        }
+      });
+      initComboValues(module);
+    }
+  }
+
+  private void initComboValues(@NotNull Module module) {
+    if (!module.isDisposed()) {
+      String sdkVersion = GoSdkService.getInstance(module.getProject()).getSdkVersion(module);
+      myDefaultGoVersion = "Project SDK (" + StringUtil.notNullize(sdkVersion, "any") + ")";
+      //noinspection unchecked
+      myGoVersionCombo.setModel(createModel(GoConstants.KNOWN_VERSIONS, myDefaultGoVersion));
+    }
   }
 
   @NotNull
@@ -145,44 +158,39 @@ public class GoBuildTargetConfigurable implements SearchableConfigurable, Config
     return new MutableCollectionComboBoxModel<String>(items, defaultValue);
   }
 
-  @Override
-  public boolean isModified() {
-    return !myBuildTargetSettings.getOS().equals(selected(myOSCombo, myDefaultOSValue)) ||
-           !myBuildTargetSettings.getArch().equals(selected(myArchCombo, myDefaultArchValue)) ||
-           !myBuildTargetSettings.getGoVersion().equals(selected(myGoVersionCombo, myDefaultGoVersion)) ||
-           !myBuildTargetSettings.getCgo().equals(selectedCgo()) ||
-           !myBuildTargetSettings.getCompiler().equals(selectedCompiler()) ||
-           !Arrays.equals(myBuildTargetSettings.getCustomFlags(), selectedCustomFlags());
+  public boolean isModified(@NotNull GoBuildTargetSettings buildTargetSettings) {
+    return !buildTargetSettings.os.equals(selected(myOSCombo, myDefaultOSValue)) ||
+           !buildTargetSettings.arch.equals(selected(myArchCombo, myDefaultArchValue)) ||
+           !buildTargetSettings.goVersion.equals(selected(myGoVersionCombo, myDefaultGoVersion)) ||
+           !buildTargetSettings.cgo.equals(selectedCgo()) ||
+           !buildTargetSettings.compiler.equals(selectedCompiler()) ||
+           !Arrays.equals(buildTargetSettings.customFlags, selectedCustomFlags());
   }
 
-  @Override
-  public void apply() throws ConfigurationException {
-    myBuildTargetSettings.setOS(selected(myOSCombo, myDefaultOSValue));
-    myBuildTargetSettings.setArch(selected(myArchCombo, myDefaultArchValue));
-    myBuildTargetSettings.setGoVersion(selected(myGoVersionCombo, myDefaultGoVersion));
-    myBuildTargetSettings.setCompiler(selectedCompiler());
-    myBuildTargetSettings.setCgo(selectedCgo());
-    myBuildTargetSettings.setCustomFlags(selectedCustomFlags());
+  public void apply(@NotNull GoBuildTargetSettings buildTargetSettings) throws ConfigurationException {
+    buildTargetSettings.os = selected(myOSCombo, myDefaultOSValue);
+    buildTargetSettings.arch = selected(myArchCombo, myDefaultArchValue);
+    buildTargetSettings.goVersion = selected(myGoVersionCombo, myDefaultGoVersion);
+    buildTargetSettings.compiler = selectedCompiler();
+    buildTargetSettings.cgo = selectedCgo();
+    buildTargetSettings.customFlags = selectedCustomFlags();
   }
 
-  @Override
-  public void reset() {
-    myOSCombo.setSelectedItem(expandDefault(myBuildTargetSettings.getOS(), myDefaultOSValue));
-    myArchCombo.setSelectedItem(expandDefault(myBuildTargetSettings.getArch(), myDefaultArchValue));
-    myGoVersionCombo.setSelectedItem(expandDefault(myBuildTargetSettings.getGoVersion(), myDefaultGoVersion));
-    myCgoCombo.setSelectedItem(expandDefault(cgo(myBuildTargetSettings.getCgo()), myDefaultCgo));
-    myCompilerCombo.setSelectedItem(myBuildTargetSettings.getCompiler());
-    myCustomFlagsField.setText(StringUtil.join(myBuildTargetSettings.getCustomFlags(), " "));
+  public void reset(@NotNull GoBuildTargetSettings buildTargetSettings) {
+    myOSCombo.setSelectedItem(expandDefault(buildTargetSettings.os, myDefaultOSValue));
+    myArchCombo.setSelectedItem(expandDefault(buildTargetSettings.arch, myDefaultArchValue));
+    myGoVersionCombo.setSelectedItem(expandDefault(buildTargetSettings.goVersion, myDefaultGoVersion));
+    myCgoCombo.setSelectedItem(expandDefault(cgo(buildTargetSettings.cgo), myDefaultCgo));
+    myCompilerCombo.setSelectedItem(buildTargetSettings.compiler);
+    myCustomFlagsField.setText(StringUtil.join(buildTargetSettings.customFlags, " "));
   }
 
-  @Nullable
-  @Override
-  public JComponent createComponent() {
+  @NotNull
+  public JPanel getPanel() {
     return myPanel;
   }
 
-  @Override
-  public void disposeUIResources() {
+  public void dispose() {
     UIUtil.dispose(myPanel);
     UIUtil.dispose(myOSCombo);
     UIUtil.dispose(myArchCombo);
@@ -190,12 +198,6 @@ public class GoBuildTargetConfigurable implements SearchableConfigurable, Config
     UIUtil.dispose(myCompilerCombo);
     UIUtil.dispose(myCgoCombo);
     UIUtil.dispose(myCustomFlagsField);
-  }
-
-  @Nls
-  @Override
-  public String getDisplayName() {
-    return "Build Tags";
   }
 
   @NotNull
@@ -209,21 +211,7 @@ public class GoBuildTargetConfigurable implements SearchableConfigurable, Config
     return GoBuildTargetSettings.DEFAULT;
   }
 
-  @NotNull
-  @Override
-  public String getId() {
-    return "go.build.flags";
-  }
-
-  @Nullable
-  @Override
-  public Runnable enableSearch(String s) {
-    return null;
-  }
-
-  @Nullable
-  @Override
-  public String getHelpTopic() {
-    return null;
+  private void createUIComponents() {
+    myDescriptionPane = GoUIUtil.createDescriptionPane();
   }
 }
