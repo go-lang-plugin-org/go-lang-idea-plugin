@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,11 @@ package com.goide.configuration;
 import com.goide.GoConstants;
 import com.goide.codeInsight.imports.GoAutoImportConfigurable;
 import com.goide.sdk.GoSdkService;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurableProvider;
 import com.intellij.openapi.options.SearchableConfigurable;
+import com.intellij.openapi.options.UnnamedConfigurable;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -37,15 +39,21 @@ public class GoConfigurableProvider extends ConfigurableProvider {
   @Nullable
   @Override
   public Configurable createConfigurable() {
+    Configurable projectSettingsConfigurable = new GoModuleAwareConfigurable(myProject, "Project settings", null) {
+      @NotNull
+      @Override
+      protected UnnamedConfigurable createModuleConfigurable(Module module) {
+        return new GoModuleSettingsConfigurable(module, false);
+      }
+    };
     Configurable librariesConfigurable = new GoLibrariesConfigurableProvider(myProject).createConfigurable();
     Configurable sdkConfigurable = GoSdkService.getInstance(myProject).createSdkConfigurable();
-    Configurable buildFlagsConfigurable = new GoBuildTargetConfigurable(myProject, false);
     Configurable autoImportConfigurable = new GoAutoImportConfigurable(myProject, false);
     if (sdkConfigurable != null) {
-      return new GoCompositeConfigurable(sdkConfigurable, buildFlagsConfigurable, librariesConfigurable, autoImportConfigurable);
+      return new GoCompositeConfigurable(sdkConfigurable, projectSettingsConfigurable, librariesConfigurable, autoImportConfigurable);
     }
     else {
-      return new GoCompositeConfigurable(buildFlagsConfigurable, librariesConfigurable, autoImportConfigurable);
+      return new GoCompositeConfigurable(projectSettingsConfigurable, librariesConfigurable, autoImportConfigurable);
     }
   }
 

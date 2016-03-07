@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,148 +16,48 @@
 
 package com.goide.project;
 
-import com.goide.GoConstants;
-import com.goide.sdk.GoSdkService;
-import com.goide.util.GoTargetSystem;
-import com.goide.util.GoUtil;
-import com.intellij.openapi.components.*;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ThreeState;
-import com.intellij.util.messages.Topic;
-import com.intellij.util.xmlb.XmlSerializerUtil;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-@State(
-  name = GoConstants.GO_BUILD_FLAGS_SERVICE_NAME,
-  storages = {
-    @Storage(id = "default", file = StoragePathMacros.PROJECT_FILE),
-    @Storage(id = "dir", file = StoragePathMacros.PROJECT_CONFIG_DIR + "/" +
-                                GoConstants.GO_BUILD_FLAGS_CONFIG_FILE, scheme = StorageScheme.DIRECTORY_BASED)
-  })
-public class GoBuildTargetSettings implements PersistentStateComponent<GoBuildTargetSettings.GoBuildTargetSettingsState> {
-  public static final Topic<BuildTargetListener> TOPIC = new Topic<BuildTargetListener>("build target changed", BuildTargetListener.class);
-  
-  public static final String DEFAULT = "default";
+import java.util.Arrays;
+
+public class GoBuildTargetSettings {
   public static final String ANY_COMPILER = "Any";
-  private static final String GAE_BUILD_FLAG = "appengine";
+  public static final String DEFAULT = "default";
 
-  @NotNull private final Project myProject;
-  @NotNull private final GoBuildTargetSettingsState myState = new GoBuildTargetSettingsState();
+  @NotNull public String os = DEFAULT;
+  @NotNull public String arch = DEFAULT;
+  @NotNull public ThreeState cgo = ThreeState.UNSURE;
+  @NotNull public String compiler = ANY_COMPILER;
+  @NotNull public String goVersion = DEFAULT;
+  @NotNull public String[] customFlags = ArrayUtil.EMPTY_STRING_ARRAY;
 
-  public GoBuildTargetSettings(@NotNull Project project) {
-    myProject = project;
-  }
-
-  public static GoBuildTargetSettings getInstance(@NotNull Project project) {
-    return ServiceManager.getService(project, GoBuildTargetSettings.class);
-  }
-
-  @NotNull
-  public String getOS() {
-    return myState.os;
-  }
-
-  public void setOS(@NotNull String OS) {
-    myState.os = OS;
-    notifyChange();
-  }
-
-  @NotNull
-  public String getArch() {
-    return myState.arch;
-  }
-
-  public void setArch(@NotNull String arch) {
-    myState.arch = arch;
-    notifyChange();
-  }
-
-  @NotNull
-  public ThreeState getCgo() {
-    return myState.cgo;
-  }
-
-  public void setCgo(@NotNull ThreeState cgo) {
-    myState.cgo = cgo;
-    notifyChange();
-  }
-
-  @NotNull
-  public String getCompiler() {
-    return myState.compiler;
-  }
-
-  public void setCompiler(@NotNull String compiler) {
-    myState.compiler = compiler;
-    notifyChange();
-  }
-
-  @NotNull
-  public String[] getCustomFlags() {
-    return myState.customFlags;
-  }
-
-  public void setCustomFlags(@NotNull String... customFlags) {
-    myState.customFlags = customFlags;
-    notifyChange();
-  }
-
-  @NotNull
-  public String getGoVersion() {
-    return myState.goVersion;
-  }
-
-  public void setGoVersion(@NotNull String goVersion) {
-    myState.goVersion = goVersion;
-    notifyChange();
-  }
-
-  public GoTargetSystem getTargetSystemDescriptor(@Nullable Module module) {
-    String os = realValue(myState.os, GoUtil.systemOS());
-    String arch = realValue(myState.arch, GoUtil.systemArch());
-    ThreeState cgo = myState.cgo == ThreeState.UNSURE ? GoUtil.systemCgo(os, arch) : myState.cgo;
-    String moduleSdkVersion = GoSdkService.getInstance(myProject).getSdkVersion(module);
-    String[] customFlags = GoSdkService.getInstance(myProject).isAppEngineSdk(module)
-                           ? ArrayUtil.prepend(GAE_BUILD_FLAG, myState.customFlags)
-                           : myState.customFlags;
-    String compiler = ANY_COMPILER.equals(myState.compiler) ? null : myState.compiler;
-    return new GoTargetSystem(os, arch, realValue(myState.goVersion, moduleSdkVersion), compiler, cgo, customFlags);
-  }
-
-  @Contract("_,null->!null")
-  private static String realValue(@NotNull String value, @Nullable String defaultValue) {
-    return DEFAULT.equals(value) ? defaultValue : value;
-  }
-
-  @NotNull
   @Override
-  public GoBuildTargetSettingsState getState() {
-    return myState;
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof GoBuildTargetSettings)) return false;
+
+    GoBuildTargetSettings settings = (GoBuildTargetSettings)o;
+
+    if (!os.equals(settings.os)) return false;
+    if (!arch.equals(settings.arch)) return false;
+    if (cgo != settings.cgo) return false;
+    if (!compiler.equals(settings.compiler)) return false;
+    if (!goVersion.equals(settings.goVersion)) return false;
+    if (!Arrays.equals(customFlags, settings.customFlags)) return false;
+
+    return true;
   }
 
   @Override
-  public void loadState(GoBuildTargetSettingsState state) {
-    XmlSerializerUtil.copyBean(state, myState);
-  }
-
-  static class GoBuildTargetSettingsState {
-    @NotNull public String os = DEFAULT;
-    @NotNull public String arch = DEFAULT;
-    @NotNull public ThreeState cgo = ThreeState.UNSURE;
-    @NotNull public String compiler = ANY_COMPILER;
-    @NotNull public String goVersion = DEFAULT;
-    @NotNull public String[] customFlags = ArrayUtil.EMPTY_STRING_ARRAY;
-  }
-  
-  private void notifyChange() {
-    myProject.getMessageBus().syncPublisher(TOPIC).changed();
-  }
-
-  public interface BuildTargetListener {
-    void changed();
+  public int hashCode() {
+    int result = os.hashCode();
+    result = 31 * result + arch.hashCode();
+    result = 31 * result + cgo.hashCode();
+    result = 31 * result + compiler.hashCode();
+    result = 31 * result + goVersion.hashCode();
+    result = 31 * result + Arrays.hashCode(customFlags);
+    return result;
   }
 }

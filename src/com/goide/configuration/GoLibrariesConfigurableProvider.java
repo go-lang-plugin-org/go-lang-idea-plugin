@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,7 @@ package com.goide.configuration;
 import com.goide.project.GoApplicationLibrariesService;
 import com.goide.project.GoModuleLibrariesService;
 import com.goide.project.GoProjectLibrariesService;
-import com.goide.sdk.GoSdkService;
 import com.goide.sdk.GoSdkUtil;
-import com.intellij.application.options.ModuleAwareProjectConfigurable;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.CompositeConfigurable;
@@ -119,12 +117,7 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
         result.add(new GoLibrariesConfigurable("Global libraries", GoApplicationLibrariesService.getInstance(), urlsFromEnv));
         if (!myProject.isDefault()) {
           result.add(new GoLibrariesConfigurable("Project libraries", GoProjectLibrariesService.getInstance(myProject)));
-          result.add(new ModuleAwareProjectConfigurable(myProject, "Module libraries", "Module libraries") {
-            @Override
-            protected boolean isSuitableForModule(@NotNull Module module) {
-              return !myProject.isDisposed() && GoSdkService.getInstance(myProject).isGoModule(module);
-            }
-
+          result.add(new GoModuleAwareConfigurable(myProject, "Module libraries", null) {
             @NotNull
             @Override
             protected UnnamedConfigurable createModuleConfigurable(@NotNull Module module) {
