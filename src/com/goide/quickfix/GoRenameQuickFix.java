@@ -45,13 +45,14 @@ public class GoRenameQuickFix extends LocalQuickFixOnPsiElement {
 
 
   @Override
-  public void invoke(@NotNull final Project project,
+  public void invoke(@NotNull Project project,
                      @NotNull PsiFile file,
-                     @NotNull final PsiElement startElement,
+                     @NotNull PsiElement startElement,
                      @NotNull PsiElement endElement) {
     if (!FileModificationService.getInstance().preparePsiElementsForWrite(startElement)) return;
 
     Runnable runnable = new Runnable() {
+      @Override
       public void run() {
         AsyncResult<DataContext> dataContextContainer = DataManager.getInstance().getDataContextFromFocus();
         dataContextContainer.doWhenDone(new Consumer<DataContext>() {
@@ -77,6 +78,7 @@ public class GoRenameQuickFix extends LocalQuickFixOnPsiElement {
     }
   }
 
+  @Override
   @NotNull
   public String getFamilyName() {
     return getName();

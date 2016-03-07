@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,7 +85,7 @@ public class GoRunUtil {
     return psiElement;
   }
 
-  public static void installGoWithMainFileChooser(final Project project, @NotNull TextFieldWithBrowseButton fileField) {
+  public static void installGoWithMainFileChooser(Project project, @NotNull TextFieldWithBrowseButton fileField) {
     installFileChooser(project, fileField, false, false, new Condition<VirtualFile>() {
       @Override
       public boolean value(VirtualFile file) {
@@ -99,7 +99,7 @@ public class GoRunUtil {
   }
 
   public static boolean isMainGoFile(@Nullable PsiFile psiFile) {
-    if (psiFile != null && psiFile instanceof GoFile) {
+    if (psiFile instanceof GoFile) {
       return GoConstants.MAIN.equals(((GoFile)psiFile).getPackageName()) && ((GoFile)psiFile).hasMainFunction();
     }
     return false;

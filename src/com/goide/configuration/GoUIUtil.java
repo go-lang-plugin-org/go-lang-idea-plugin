@@ -26,6 +26,8 @@ import javax.swing.text.html.HTMLEditorKit;
 import java.awt.*;
 
 public class GoUIUtil {
+  private GoUIUtil() {}
+
   @NotNull
   public static JTextPane createDescriptionPane() {
     JTextPane result = new JTextPane();

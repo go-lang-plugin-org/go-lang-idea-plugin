@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
 
   @Override
   public String getDescription(GoCommandBeforeRunTask task) {
-    return "Run `" + task.toString() + "`";
+    return "Run `" + task + "`";
   }
 
   @Nullable
@@ -119,16 +119,17 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
   public boolean executeTask(DataContext context,
                              RunConfiguration configuration,
                              ExecutionEnvironment env,
-                             final GoCommandBeforeRunTask task) {
-    final Semaphore done = new Semaphore();
-    final Ref<Boolean> result = new Ref<Boolean>(false);
+                             GoCommandBeforeRunTask task) {
+    Semaphore done = new Semaphore();
+    Ref<Boolean> result = new Ref<Boolean>(false);
 
     GoRunConfigurationBase goRunConfiguration = (GoRunConfigurationBase)configuration;
-    final Module module = goRunConfiguration.getConfigurationModule().getModule();
-    final Project project = configuration.getProject();
-    final String workingDirectory = goRunConfiguration.getWorkingDirectory();
+    Module module = goRunConfiguration.getConfigurationModule().getModule();
+    Project project = configuration.getProject();
+    String workingDirectory = goRunConfiguration.getWorkingDirectory();
 
     UIUtil.invokeAndWaitIfNeeded(new Runnable() {
+      @Override
       public void run() {
         if (StringUtil.isEmpty(task.getCommand())) return;
         if (project == null || project.isDisposed()) return;
@@ -140,7 +141,7 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
           .withWorkDirectory(workingDirectory)
           .showOutputOnError()
           .showNotifications(false)
-          .withPresentableName("Executing `" + task.toString() + "`")
+          .withPresentableName("Executing `" + task + "`")
           .withProcessListener(new ProcessAdapter() {
             @Override
             public void processTerminated(ProcessEvent event) {

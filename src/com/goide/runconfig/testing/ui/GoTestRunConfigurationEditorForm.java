@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package com.goide.runconfig.testing.ui;
 
 import com.goide.runconfig.GoRunUtil;
-import com.goide.runconfig.testing.GoTestFramework;
 import com.goide.runconfig.testing.GoTestRunConfiguration;
 import com.goide.runconfig.testing.frameworks.gobench.GobenchFramework;
 import com.goide.runconfig.testing.frameworks.gocheck.GocheckFramework;
@@ -39,6 +38,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Locale;
 
 public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunConfiguration> {
   @NotNull private final Project myProject;
@@ -145,24 +145,13 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
     }).createEditor(myProject);
   }
 
-  private String getSelectedFramework() {
-    GoTestFramework framework = GotestFramework.INSTANCE;
-    if (myGocheckFrameworkRadioButton.isSelected()) {
-      framework = GocheckFramework.INSTANCE;
-    } else if (myGobenchRadioButton.isSelected()) {
-      framework = GobenchFramework.INSTANCE;
-    }
-
-    return framework.getName();
-  }
-  
   @Nullable
   private static ListCellRendererWrapper<GoTestRunConfiguration.Kind> getTestKindListCellRendererWrapper() {
     return new ListCellRendererWrapper<GoTestRunConfiguration.Kind>() {
       @Override
       public void customize(JList list, @Nullable GoTestRunConfiguration.Kind kind, int index, boolean selected, boolean hasFocus) {
         if (kind != null) {
-          String kindName = StringUtil.capitalize(kind.toString().toLowerCase());
+          String kindName = StringUtil.capitalize(kind.toString().toLowerCase(Locale.US));
           setText(kindName);
         }
       }

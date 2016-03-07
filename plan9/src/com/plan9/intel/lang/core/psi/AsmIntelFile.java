@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan, Stuart Carnie
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,12 @@
 
 package com.plan9.intel.lang.core.psi;
 
-import com.plan9.intel.AsmIntelFileType;
-import com.plan9.intel.lang.AsmIntelLanguage;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
+import com.plan9.intel.AsmIntelFileType;
+import com.plan9.intel.lang.AsmIntelLanguage;
 import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
 
 public class AsmIntelFile extends PsiFileBase {
   public AsmIntelFile(@NotNull FileViewProvider viewProvider) {
@@ -39,10 +37,5 @@ public class AsmIntelFile extends PsiFileBase {
   @Override
   public String toString() {
     return "x86 File";
-  }
-
-  @Override
-  public Icon getIcon(int flags) {
-    return super.getIcon(flags);
   }
 }

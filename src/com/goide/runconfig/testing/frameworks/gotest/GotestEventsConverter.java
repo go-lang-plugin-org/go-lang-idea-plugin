@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,9 +39,9 @@ public class GotestEventsConverter extends OutputToGeneralTestEventsConverter im
   private static final Pattern FAILED = Pattern.compile("--- FAIL:\\s+([^( \n\t\r]+)");
   private static final Pattern FINISHED = Pattern.compile("^(PASS)|(FAIL)$");
 
-  private boolean myFailed = false;
-  private boolean mySkipped = false;
-  private boolean myOutputAppeared = false;
+  private boolean myFailed;
+  private boolean mySkipped;
+  private boolean myOutputAppeared;
   @NotNull private StringBuilder myStdOut = new StringBuilder();
   @NotNull private String myCurrentTest = "<test>";
   private long myCurrentTestStart;
@@ -130,7 +130,9 @@ public class GotestEventsConverter extends OutputToGeneralTestEventsConverter im
 
   private boolean handleFinishTest(String text, Matcher matcher, String testName, Key outputType, ServiceMessageVisitor visitor)
     throws ParseException {
-    addNewLineIfNeeded(testName, outputType, visitor);
+    if (!addNewLineIfNeeded(testName, outputType, visitor)) {
+      return false;
+    }
     if (matcher.start() > 0) {
       myOutputAppeared = true;
       String out = text.substring(0, matcher.start()) + (!myFailed && !mySkipped ? "\n" : "");

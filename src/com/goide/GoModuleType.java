@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,9 +71,10 @@ public class GoModuleType extends ModuleType<GoModuleBuilder> {
   @NotNull
   @Override
   public ModuleWizardStep[] createWizardSteps(@NotNull WizardContext wizardContext,
-                                              @NotNull final GoModuleBuilder moduleBuilder,
+                                              @NotNull GoModuleBuilder moduleBuilder,
                                               @NotNull ModulesProvider modulesProvider) {
     return new ModuleWizardStep[]{new ProjectJdkForModuleStep(wizardContext, GoSdkType.getInstance()) {
+      @Override
       public void updateDataModel() {
         super.updateDataModel();
         moduleBuilder.setModuleJdk(getJdk());

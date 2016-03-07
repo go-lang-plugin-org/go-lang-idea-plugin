@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,16 +32,19 @@ import java.util.List;
 
 public class GoRefactoringUtil {
 
+  private GoRefactoringUtil() {}
+
   @NotNull
   public static List<PsiElement> getLocalOccurrences(@NotNull PsiElement element) {
     return getOccurrences(element, PsiTreeUtil.getTopmostParentOfType(element, GoBlock.class));
   }
 
   @NotNull
-  public static List<PsiElement> getOccurrences(@NotNull final PsiElement pattern, @Nullable PsiElement context) {
+  public static List<PsiElement> getOccurrences(@NotNull PsiElement pattern, @Nullable PsiElement context) {
     if (context == null) return Collections.emptyList();
-    final List<PsiElement> occurrences = ContainerUtil.newArrayList();
+    List<PsiElement> occurrences = ContainerUtil.newArrayList();
     PsiRecursiveElementVisitor visitor = new PsiRecursiveElementVisitor() {
+      @Override
       public void visitElement(@NotNull PsiElement element) {
         if (PsiEquivalenceUtil.areElementsEquivalent(element, pattern)) {
           occurrences.add(element);

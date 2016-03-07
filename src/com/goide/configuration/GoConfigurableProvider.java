@@ -49,12 +49,9 @@ public class GoConfigurableProvider extends ConfigurableProvider {
     Configurable librariesConfigurable = new GoLibrariesConfigurableProvider(myProject).createConfigurable();
     Configurable sdkConfigurable = GoSdkService.getInstance(myProject).createSdkConfigurable();
     Configurable autoImportConfigurable = new GoAutoImportConfigurable(myProject, false);
-    if (sdkConfigurable != null) {
-      return new GoCompositeConfigurable(sdkConfigurable, projectSettingsConfigurable, librariesConfigurable, autoImportConfigurable);
-    }
-    else {
-      return new GoCompositeConfigurable(projectSettingsConfigurable, librariesConfigurable, autoImportConfigurable);
-    }
+    return sdkConfigurable != null
+           ? new GoCompositeConfigurable(sdkConfigurable, projectSettingsConfigurable, librariesConfigurable, autoImportConfigurable)
+           : new GoCompositeConfigurable(projectSettingsConfigurable, librariesConfigurable, autoImportConfigurable);
   }
 
   private static class GoCompositeConfigurable extends SearchableConfigurable.Parent.Abstract {

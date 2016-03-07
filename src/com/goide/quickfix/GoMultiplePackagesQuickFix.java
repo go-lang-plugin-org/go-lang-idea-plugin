@@ -46,9 +46,9 @@ import java.util.Collection;
 
 public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   private static String myTestingPackageName;
-  private Collection<String> myPackages;
-  private String myPackageName;
-  private boolean myIsOneTheFly;
+  private final Collection<String> myPackages;
+  private final String myPackageName;
+  private final boolean myIsOneTheFly;
 
   public GoMultiplePackagesQuickFix(@NotNull PsiElement element,
                                     @NotNull String packageName,
@@ -60,9 +60,9 @@ public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionO
     myIsOneTheFly = isOnTheFly;
   }
 
-  private static void renamePackagesInDirectory(@NotNull final Project project,
-                                                @NotNull final PsiDirectory dir,
-                                                @NotNull final String newName) {
+  private static void renamePackagesInDirectory(@NotNull Project project,
+                                                @NotNull PsiDirectory dir,
+                                                @NotNull String newName) {
     WriteCommandAction.runWriteCommandAction(project, new Runnable() {
       @Override
       public void run() {
@@ -95,8 +95,8 @@ public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionO
   }
 
   @Override
-  public void invoke(@NotNull final Project project,
-                     @NotNull final PsiFile file,
+  public void invoke(@NotNull Project project,
+                     @NotNull PsiFile file,
                      @Nullable("is null when called from inspection") Editor editor,
                      @NotNull PsiElement startElement,
                      @NotNull PsiElement endElement) {
@@ -105,7 +105,7 @@ public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionO
                                 myTestingPackageName != null ? myTestingPackageName : myPackageName);
       return;
     }
-    final JBList list = new JBList(myPackages);
+    JBList list = new JBList(myPackages);
     list.installCellRenderer(new NotNullFunction<Object, JComponent>() {
       @NotNull
       @Override

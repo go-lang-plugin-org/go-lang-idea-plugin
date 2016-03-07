@@ -23,7 +23,6 @@ import com.goide.util.GoUtil;
 import com.intellij.ProjectTopics;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.roots.ModuleRootAdapter;
 import com.intellij.openapi.roots.ModuleRootEvent;
 import com.intellij.openapi.ui.ComboBox;
@@ -97,6 +96,7 @@ public class GoBuildTagsUI implements Disposable {
     if (!module.isDisposed()) {
       MessageBusConnection connection = module.getMessageBus().connect(this);
       connection.subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
+        @Override
         public void rootsChanged(ModuleRootEvent event) {
           initComboValues(module);
         }
@@ -117,7 +117,7 @@ public class GoBuildTagsUI implements Disposable {
   @NotNull
   private String selectedCompiler() {
     Object item = myCompilerCombo.getSelectedItem();
-    return item != null && item instanceof String ? (String)item : GoBuildTargetSettings.ANY_COMPILER;
+    return item instanceof String ? (String)item : GoBuildTargetSettings.ANY_COMPILER;
   }
 
   @NotNull
@@ -140,7 +140,7 @@ public class GoBuildTagsUI implements Disposable {
   @NotNull
   private static String selected(@NotNull ComboBox comboBox, @NotNull String defaultValue) {
     Object item = comboBox.getSelectedItem();
-    if (item != null && item instanceof String) {
+    if (item instanceof String) {
       return defaultValue.equals(item) ? GoBuildTargetSettings.DEFAULT : (String)item;
     }
     return GoBuildTargetSettings.DEFAULT;
@@ -162,12 +162,12 @@ public class GoBuildTagsUI implements Disposable {
     return !buildTargetSettings.os.equals(selected(myOSCombo, myDefaultOSValue)) ||
            !buildTargetSettings.arch.equals(selected(myArchCombo, myDefaultArchValue)) ||
            !buildTargetSettings.goVersion.equals(selected(myGoVersionCombo, myDefaultGoVersion)) ||
-           !buildTargetSettings.cgo.equals(selectedCgo()) ||
+           buildTargetSettings.cgo != selectedCgo() ||
            !buildTargetSettings.compiler.equals(selectedCompiler()) ||
            !Arrays.equals(buildTargetSettings.customFlags, selectedCustomFlags());
   }
 
-  public void apply(@NotNull GoBuildTargetSettings buildTargetSettings) throws ConfigurationException {
+  public void apply(@NotNull GoBuildTargetSettings buildTargetSettings) {
     buildTargetSettings.os = selected(myOSCombo, myDefaultOSValue);
     buildTargetSettings.arch = selected(myArchCombo, myDefaultArchValue);
     buildTargetSettings.goVersion = selected(myGoVersionCombo, myDefaultGoVersion);
@@ -190,6 +190,7 @@ public class GoBuildTagsUI implements Disposable {
     return myPanel;
   }
 
+  @Override
   public void dispose() {
     UIUtil.dispose(myPanel);
     UIUtil.dispose(myOSCombo);

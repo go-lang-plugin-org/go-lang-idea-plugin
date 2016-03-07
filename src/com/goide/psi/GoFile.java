@@ -85,7 +85,7 @@ public class GoFile extends PsiFileBase {
     return CachedValuesManager.getCachedValue(this, new CachedValueProvider<GoPackageClause>() {
       @Override
       public Result<GoPackageClause> compute() {
-        GoPackageClause packageClauses = calcFirst(Conditions.<PsiElement>instanceOf(GoPackageClause.class));
+        GoPackageClause packageClauses = calcFirst(Conditions.instanceOf(GoPackageClause.class));
         return Result.create(packageClauses, GoFile.this);
       }
     });
@@ -294,7 +294,7 @@ public class GoFile extends PsiFileBase {
 
   @NotNull
   private List<GoTypeSpec> calcTypes() {
-    final List<GoTypeSpec> result = ContainerUtil.newArrayList();
+    List<GoTypeSpec> result = ContainerUtil.newArrayList();
     processChildrenDummyAware(this, new Processor<PsiElement>() {
       @Override
       public boolean process(PsiElement e) {
@@ -324,7 +324,7 @@ public class GoFile extends PsiFileBase {
 
   @NotNull
   private List<GoVarDefinition> calcVars() {
-    final List<GoVarDefinition> result = ContainerUtil.newArrayList();
+    List<GoVarDefinition> result = ContainerUtil.newArrayList();
     processChildrenDummyAware(this, new Processor<PsiElement>() {
       @Override
       public boolean process(PsiElement e) {
@@ -343,7 +343,7 @@ public class GoFile extends PsiFileBase {
 
   @NotNull
   private List<GoConstDefinition> calcConsts() {
-    final List<GoConstDefinition> result = ContainerUtil.newArrayList();
+    List<GoConstDefinition> result = ContainerUtil.newArrayList();
     processChildrenDummyAware(this, new Processor<PsiElement>() {
       @Override
       public boolean process(PsiElement e) {
@@ -361,8 +361,8 @@ public class GoFile extends PsiFileBase {
   }
   
   @Nullable
-  private <T extends PsiElement> T calcFirst(@NotNull final Condition<PsiElement> condition) {
-    final Ref<T> result = Ref.create(null);
+  private <T extends PsiElement> T calcFirst(@NotNull Condition<PsiElement> condition) {
+    Ref<T> result = Ref.create(null);
     processChildrenDummyAware(this, new Processor<PsiElement>() {
       @Override
       public boolean process(PsiElement e) {
@@ -378,8 +378,8 @@ public class GoFile extends PsiFileBase {
   }
 
   @NotNull
-  private <T extends PsiElement> List<T> calc(@NotNull final Condition<PsiElement> condition) {
-    final List<T> result = ContainerUtil.newArrayList();
+  private <T extends PsiElement> List<T> calc(@NotNull Condition<PsiElement> condition) {
+    List<T> result = ContainerUtil.newArrayList();
     processChildrenDummyAware(this, new Processor<PsiElement>() {
       @Override
       public boolean process(PsiElement e) {
@@ -440,7 +440,7 @@ public class GoFile extends PsiFileBase {
     elementToDelete.delete();
   }
 
-  private static boolean processChildrenDummyAware(@NotNull GoFile file, @NotNull final Processor<PsiElement> processor) {
+  private static boolean processChildrenDummyAware(@NotNull GoFile file, @NotNull Processor<PsiElement> processor) {
     StubTree stubTree = file.getStubTree();
     if (stubTree != null) {
       List<StubElement<?>> plainList = stubTree.getPlainList();
@@ -490,7 +490,7 @@ public class GoFile extends PsiFileBase {
       }
       child = child.getNextSibling();
     }
-    final int finalLastEmptyLineOffset = lastEmptyLineOffset;
+    int finalLastEmptyLineOffset = lastEmptyLineOffset;
     return ContainerUtil.filter(commentsToConsider, new Condition<PsiComment>() {
       @Override
       public boolean value(PsiComment comment) {

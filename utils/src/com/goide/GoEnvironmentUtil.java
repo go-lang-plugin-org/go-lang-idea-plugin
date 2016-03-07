@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoEnvironmentUtil {
+  private GoEnvironmentUtil() {}
+
   @NotNull
   public static String getBinaryFileNameForPath(@NotNull String path) {
     String resultBinaryName = FileUtil.getNameWithoutExtension(PathUtil.getFileName(path));

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ public class GoCoverageProjectData extends ProjectData {
     }
   }
 
-  public void addData(final String filePath, int startLine, int startColumn, int endLine, int endColumn, int statements, int hits) {
+  public void addData(String filePath, int startLine, int startColumn, int endLine, int endColumn, int statements, int hits) {
     FileData fileData = ContainerUtil.getOrCreate(myFilesData, filePath, new Factory<FileData>() {
       @Override
       public FileData create() {
@@ -93,10 +93,7 @@ public class GoCoverageProjectData extends ProjectData {
     if (!(o instanceof GoCoverageProjectData)) return false;
 
     GoCoverageProjectData data = (GoCoverageProjectData)o;
-
-    if (!myFilesData.equals(data.myFilesData)) return false;
-
-    return true;
+    return myFilesData.equals(data.myFilesData);
   }
 
   @Override
@@ -127,9 +124,7 @@ public class GoCoverageProjectData extends ProjectData {
       FileData fileData = (FileData)o;
 
       if (!myFilePath.equals(fileData.myFilePath)) return false;
-      if (!myRangesData.equals(fileData.myRangesData)) return false;
-
-      return true;
+      return myRangesData.equals(fileData.myRangesData);
     }
 
     @Override
@@ -169,9 +164,7 @@ public class GoCoverageProjectData extends ProjectData {
       if (endLine != data.endLine) return false;
       if (endColumn != data.endColumn) return false;
       if (hits != data.hits) return false;
-      if (statements != data.statements) return false;
-
-      return true;
+      return statements == data.statements;
     }
 
     @Override

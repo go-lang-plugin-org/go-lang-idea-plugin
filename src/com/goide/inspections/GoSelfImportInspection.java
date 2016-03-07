@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ public class GoSelfImportInspection extends GoInspectionBase {
     String fileImportPath = file.getImportPath();
     for (GoImportSpec importSpec : file.getImports()) {
       String path = importSpec.getPath();
-      if (path.equals(fileImportPath) || path.equals(".")) {
+      if (path.equals(fileImportPath) || ".".equals(path)) {
         problemsHolder.registerProblem(importSpec, "Self import is not allowed", new GoSelfImportQuickFix());
       }
     }
@@ -47,8 +47,8 @@ public class GoSelfImportInspection extends GoInspectionBase {
     }
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-      final PsiElement element = descriptor.getPsiElement();
-      final PsiFile file = element != null ? element.getContainingFile() : null;
+      PsiElement element = descriptor.getPsiElement();
+      PsiFile file = element != null ? element.getContainingFile() : null;
       if (!(element instanceof GoImportSpec && file instanceof GoFile)) return;
   
       WriteCommandAction.runWriteCommandAction(project, new Runnable() {

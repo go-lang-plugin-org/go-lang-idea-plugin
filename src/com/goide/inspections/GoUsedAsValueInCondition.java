@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ public class GoUsedAsValueInCondition extends GoInspectionBase {
 
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
+  protected GoVisitor buildGoVisitor(@NotNull ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
       public void visitAssignmentStatement(@NotNull GoAssignmentStatement o) {
@@ -54,7 +54,7 @@ public class GoUsedAsValueInCondition extends GoInspectionBase {
         PsiElement parent = o.getParent();
         if (parent != null) {
           PsiElement gradParent = parent.getParent();
-          if (gradParent != null && gradParent instanceof GoIfStatement && ((GoIfStatement)gradParent).getExpression() == null) {
+          if (gradParent instanceof GoIfStatement && ((GoIfStatement)gradParent).getExpression() == null) {
             String left = GoPsiImplUtil.joinPsiElementText(o.getVarDefinitionList());
             String right = GoPsiImplUtil.joinPsiElementText(o.getExpressionList());
             holder.registerProblem(o, left + " := " + right + " used as value", GENERIC_ERROR_OR_WARNING,
@@ -72,7 +72,7 @@ public class GoUsedAsValueInCondition extends GoInspectionBase {
 
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-      final PsiElement element = descriptor.getPsiElement();
+      PsiElement element = descriptor.getPsiElement();
       if (element instanceof GoAssignmentStatement) {
         String left = GoPsiImplUtil.joinPsiElementText(((GoAssignmentStatement)element).getLeftHandExprList().getExpressionList());
         String right = GoPsiImplUtil.joinPsiElementText(((GoAssignmentStatement)element).getExpressionList());

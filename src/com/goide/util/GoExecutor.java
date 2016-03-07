@@ -60,22 +60,22 @@ public class GoExecutor {
   private static final Logger LOGGER = Logger.getInstance(GoExecutor.class);
   @NotNull private final Map<String, String> myExtraEnvironment = ContainerUtil.newHashMap();
   @NotNull private final ParametersList myParameterList = new ParametersList();
-  @NotNull private ProcessOutput myProcessOutput = new ProcessOutput();
+  @NotNull private final ProcessOutput myProcessOutput = new ProcessOutput();
   @NotNull private final Project myProject;
   @Nullable private final Module myModule;
   @Nullable private String myGoRoot;
   @Nullable private String myGoPath;
   @Nullable private String myEnvPath;
   @Nullable private String myWorkDirectory;
-  private boolean myShowOutputOnError = false;
-  private boolean myShowNotificationsOnError = false;
-  private boolean myShowNotificationsOnSuccess = false;
+  private boolean myShowOutputOnError;
+  private boolean myShowNotificationsOnError;
+  private boolean myShowNotificationsOnSuccess;
   private boolean myPassParentEnvironment = true;
-  private boolean myPtyDisabled = false;
-  @Nullable private String myExePath = null;
+  private boolean myPtyDisabled;
+  @Nullable private String myExePath;
   @Nullable private String myPresentableName;
   private OSProcessHandler myProcessHandler;
-  private Collection<ProcessListener> myProcessListeners = ContainerUtil.newArrayList();
+  private final Collection<ProcessListener> myProcessListeners = ContainerUtil.newArrayList();
 
   private GoExecutor(@NotNull Project project, @Nullable Module module) {
     myProject = project;
@@ -191,13 +191,13 @@ public class GoExecutor {
     Logger.getInstance(getClass()).assertTrue(!ApplicationManager.getApplication().isDispatchThread(),
                                               "It's bad idea to run external tool on EDT");
     Logger.getInstance(getClass()).assertTrue(myProcessHandler == null, "Process has already run with this executor instance");
-    final Ref<Boolean> result = Ref.create(false);
+    Ref<Boolean> result = Ref.create(false);
     GeneralCommandLine commandLine = null;
     try {
       commandLine = createCommandLine();
 
       myProcessHandler = new KillableColoredProcessHandler(commandLine);
-      final GoHistoryProcessListener historyProcessListener = new GoHistoryProcessListener();
+      GoHistoryProcessListener historyProcessListener = new GoHistoryProcessListener();
       myProcessHandler.addProcessListener(historyProcessListener);
       for (ProcessListener listener : myProcessListeners) {
         myProcessHandler.addProcessListener(listener);
@@ -207,9 +207,9 @@ public class GoExecutor {
         @Override
         public void processTerminated(@NotNull ProcessEvent event) {
           super.processTerminated(event);
-          final boolean success = event.getExitCode() == 0 && myProcessOutput.getStderr().isEmpty();
+          boolean success = event.getExitCode() == 0 && myProcessOutput.getStderr().isEmpty();
           boolean nothingToShow = myProcessOutput.getStdout().isEmpty() && myProcessOutput.getStderr().isEmpty();
-          final boolean cancelledByUser = (event.getExitCode() == -1 || event.getExitCode() == 2) && nothingToShow;
+          boolean cancelledByUser = (event.getExitCode() == -1 || event.getExitCode() == 2) && nothingToShow;
           result.set(success);
           if (success) {
             if (myShowNotificationsOnSuccess) {
@@ -253,14 +253,14 @@ public class GoExecutor {
     }
   }
 
-  public void executeWithProgress(final boolean modal) {
+  public void executeWithProgress(boolean modal) {
     //noinspection unchecked
     executeWithProgress(modal, Consumer.EMPTY_CONSUMER);
   }
 
-  public void executeWithProgress(final boolean modal, @NotNull final Consumer<Boolean> consumer) {
+  public void executeWithProgress(boolean modal, @NotNull Consumer<Boolean> consumer) {
     ProgressManager.getInstance().run(new Task.Backgroundable(myProject, getPresentableName(), true) {
-      private boolean doNotStart = false;
+      private boolean doNotStart;
 
       @Override
       public void onCancel() {
@@ -281,6 +281,7 @@ public class GoExecutor {
         return modal;
       }
 
+      @Override
       public void run(@NotNull ProgressIndicator indicator) {
         if (doNotStart || myProject == null || myProject.isDisposed()) {
           return;
@@ -296,7 +297,7 @@ public class GoExecutor {
     return myProcessHandler;
   }
 
-  private void showNotification(@NotNull final String message, final NotificationType type) {
+  private void showNotification(@NotNull String message, NotificationType type) {
     ApplicationManager.getApplication().invokeLater(new Runnable() {
       @Override
       public void run() {

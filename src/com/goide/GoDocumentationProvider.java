@@ -110,10 +110,10 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
   private static GoFile findDocFileForDirectory(@NotNull PsiDirectory directory) {
     PsiFile file = directory.findFile("doc.go");
     if (file instanceof GoFile) {
-      return ((GoFile)file);
+      return (GoFile)file;
     }
     PsiFile directoryFile = directory.findFile(GoUtil.suggestPackageForDirectory(directory) + ".go");
-    return directoryFile instanceof GoFile ? ((GoFile)directoryFile) : null;
+    return directoryFile instanceof GoFile ? (GoFile)directoryFile : null;
   }
 
   @Nullable
@@ -191,7 +191,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
 
   @NotNull
   private static String getParametersAsString(@NotNull GoParameters parameters) {
-    final String contextImportPath = getImportPathForElement(parameters);
+    String contextImportPath = getImportPathForElement(parameters);
     return StringUtil.join(GoParameterInfoHandler.getParameterPresentations(parameters, new Function<PsiElement, String>() {
       @Override
       public String fun(PsiElement element) {
@@ -209,31 +209,31 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
   @NotNull
   private static String getTypePresentation(@Nullable PsiElement element, @Nullable String contextImportPath) {
     if (element instanceof GoType) {
-      GoType type = ((GoType)element);
+      GoType type = (GoType)element;
       if (type instanceof GoMapType) {
         GoType keyType = ((GoMapType)type).getKeyType();
         GoType valueType = ((GoMapType)type).getValueType();
         return replaceInnerTypes(type, contextImportPath, keyType, valueType);
       }
-      else if (type instanceof GoChannelType) {
+      if (type instanceof GoChannelType) {
         return replaceInnerTypes(type, contextImportPath, ((GoChannelType)type).getType());
       }
-      else if (type instanceof GoParType) {
+      if (type instanceof GoParType) {
         return replaceInnerTypes(type, contextImportPath, ((GoParType)type).getActualType());
       }
-      else if (type instanceof GoArrayOrSliceType) {
+      if (type instanceof GoArrayOrSliceType) {
         return replaceInnerTypes(type, contextImportPath, ((GoArrayOrSliceType)type).getType());
       }
-      else if (type instanceof GoPointerType) {
+      if (type instanceof GoPointerType) {
         GoType inner = ((GoPointerType)type).getType();
         return inner instanceof GoSpecType
                ? getTypePresentation(inner, contextImportPath)
                : replaceInnerTypes(type, contextImportPath, inner);
       }
-      else if (type instanceof GoTypeList) {
+      if (type instanceof GoTypeList) {
         return "(" + replaceInnerTypes(type, contextImportPath, ((GoTypeList)type).getTypeList()) + ")";
       }
-      else if (type instanceof GoSpecType) {
+      if (type instanceof GoSpecType) {
         return getTypePresentation(GoPsiImplUtil.getTypeSpecSafe(type), contextImportPath);
       }
       GoTypeReferenceExpression typeRef = GoPsiImplUtil.getTypeReference(type);
@@ -320,7 +320,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       }
     }
     else if (element instanceof PsiDirectory && findDocFileForDirectory((PsiDirectory)element) != null) {
-      return GoSdkUtil.getImportPath(((PsiDirectory)element));
+      return GoSdkUtil.getImportPath((PsiDirectory)element);
     }
 
     return null;
@@ -354,8 +354,8 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       signature = StringUtil.isNotEmpty(signature) ? "<b>" + signature + "</b>\n" : signature;
       return StringUtil.nullize(signature + getCommentText(getCommentsForElement(element), true));
     }
-    else if (element instanceof PsiDirectory) {
-      return getPackageComment(findDocFileForDirectory(((PsiDirectory)element)));
+    if (element instanceof PsiDirectory) {
+      return getPackageComment(findDocFileForDirectory((PsiDirectory)element));
     }
     return null;
   }

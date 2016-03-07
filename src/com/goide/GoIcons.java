@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,8 +43,10 @@ public interface GoIcons {
   Icon DIRECTORY = PlatformIcons.DIRECTORY_CLOSED_ICON;
 
   class Helper {
+    private Helper() {}
+
     @NotNull
-    public static LayeredIcon createIconWithShift(@NotNull final Icon base, Icon mark) {
+    public static LayeredIcon createIconWithShift(@NotNull Icon base, Icon mark) {
       LayeredIcon icon = new LayeredIcon(2) {
         @Override
         public int getIconHeight() {

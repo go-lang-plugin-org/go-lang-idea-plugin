@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,13 +48,15 @@ import java.util.List;
 public class GoFmtCheckinFactory extends CheckinHandlerFactory {
   private static final String GO_FMT = "GO_FMT";
 
+  @Override
   @NotNull
-  public CheckinHandler createHandler(@NotNull final CheckinProjectPanel panel, @NotNull CommitContext commitContext) {
+  public CheckinHandler createHandler(@NotNull CheckinProjectPanel panel, @NotNull CommitContext commitContext) {
     return new CheckinHandler() {
       @Override
       public RefreshableOnComponent getBeforeCheckinConfigurationPanel() {
-        final JCheckBox checkBox = new JCheckBox("Go fmt");
+        JCheckBox checkBox = new JCheckBox("Go fmt");
         return new RefreshableOnComponent() {
+          @Override
           @NotNull
           public JComponent getComponent() {
             JPanel panel = new JPanel(new BorderLayout());
@@ -62,13 +64,16 @@ public class GoFmtCheckinFactory extends CheckinHandlerFactory {
             return panel;
           }
 
+          @Override
           public void refresh() {
           }
 
+          @Override
           public void saveState() {
             PropertiesComponent.getInstance(panel.getProject()).setValue(GO_FMT, Boolean.toString(checkBox.isSelected()));
           }
 
+          @Override
           public void restoreState() {
             checkBox.setSelected(enabled(panel));
           }
@@ -78,7 +83,7 @@ public class GoFmtCheckinFactory extends CheckinHandlerFactory {
       @Override
       public ReturnResult beforeCheckin(@Nullable CommitExecutor executor, PairConsumer<Object, Object> additionalDataConsumer) {
         if (enabled(panel)) {
-          final Ref<Boolean> success = new Ref<Boolean>(true);
+          Ref<Boolean> success = new Ref<Boolean>(true);
           FileDocumentManager.getInstance().saveAllDocuments();
           for (PsiFile file : getPsiFiles()) {
             VirtualFile virtualFile = file.getVirtualFile();
@@ -100,10 +105,10 @@ public class GoFmtCheckinFactory extends CheckinHandlerFactory {
       @NotNull
       private ReturnResult showErrorMessage(@Nullable CommitExecutor executor) {
         String[] buttons = new String[]{"&Details...", commitButtonMessage(executor, panel), CommonBundle.getCancelButtonText()};
-        final int answer = Messages.showDialog(panel.getProject(),
-                                               "<html><body>GoFmt returned non-zero code on some of the files.<br/>" +
-                                               "Would you like to commit anyway?</body></html>\n",
-                                               "Go Fmt", null, buttons, 0, 1, UIUtil.getWarningIcon());
+        int answer = Messages.showDialog(panel.getProject(),
+                                         "<html><body>GoFmt returned non-zero code on some of the files.<br/>" +
+                                         "Would you like to commit anyway?</body></html>\n",
+                                         "Go Fmt", null, buttons, 0, 1, UIUtil.getWarningIcon());
         if (answer == Messages.OK) {
           return ReturnResult.CLOSE_WINDOW;
         }

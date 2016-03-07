@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan, Stuart Carnie
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,4 +47,6 @@ public class AsmIntelLexerTokens {
   public static final TokenSet KEYWORDS = TokenSet.create(DIRECTIVE);
   public static final TokenSet NUMBERS = TokenSet.create(HEX, INT);
   public static final TokenSet REGISTERS = TokenSet.create(PSEUDO_REG, REGISTER);
+
+  private AsmIntelLexerTokens() {}
 }

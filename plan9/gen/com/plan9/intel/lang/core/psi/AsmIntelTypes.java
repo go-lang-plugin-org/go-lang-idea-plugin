@@ -1,9 +1,25 @@
+/*
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 // This is a generated file. Not intended for manual editing.
 package com.plan9.intel.lang.core.psi;
 
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.PsiElement;
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.tree.IElementType;
 import com.plan9.intel.lang.core.lexer.AsmIntelTokenType;
 import com.plan9.intel.lang.core.psi.impl.*;
 
@@ -37,36 +53,38 @@ public interface AsmIntelTypes {
   IElementType TEXT = new AsmIntelTokenType("TEXT");
 
   class Factory {
+    private Factory() {}
+
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
        if (type == FRAME_SIZE) {
         return new AsmIntelFrameSizeImpl(node);
       }
-      else if (type == FUNCTION) {
+      if (type == FUNCTION) {
         return new AsmIntelFunctionImpl(node);
       }
-      else if (type == FUNCTION_BODY) {
+      if (type == FUNCTION_BODY) {
         return new AsmIntelFunctionBodyImpl(node);
       }
-      else if (type == FUNCTION_FLAGS) {
+      if (type == FUNCTION_FLAGS) {
         return new AsmIntelFunctionFlagsImpl(node);
       }
-      else if (type == FUNCTION_HEADER) {
+      if (type == FUNCTION_HEADER) {
         return new AsmIntelFunctionHeaderImpl(node);
       }
-      else if (type == INSTRUCTION_STMT) {
+      if (type == INSTRUCTION_STMT) {
         return new AsmIntelInstructionStmtImpl(node);
       }
-      else if (type == LITERAL) {
+      if (type == LITERAL) {
         return new AsmIntelLiteralImpl(node);
       }
-      else if (type == OPERANDS) {
+      if (type == OPERANDS) {
         return new AsmIntelOperandsImpl(node);
       }
-      else if (type == PREPROCESSOR_DIRECTIVE) {
+      if (type == PREPROCESSOR_DIRECTIVE) {
         return new AsmIntelPreprocessorDirectiveImpl(node);
       }
-      else if (type == STATEMENT) {
+      if (type == STATEMENT) {
         return new AsmIntelStatementImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);

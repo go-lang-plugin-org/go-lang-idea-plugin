@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,6 +61,6 @@ public abstract class GoRunConfigurationProducerBase<T extends GoRunConfiguratio
   private static GoFile getFileFromContext(@Nullable ConfigurationContext context) {
     PsiElement contextElement = GoRunUtil.getContextElement(context);
     PsiFile psiFile = contextElement != null ? contextElement.getContainingFile() : null;
-    return psiFile != null && psiFile instanceof GoFile ? ((GoFile)psiFile) : null;
+    return psiFile instanceof GoFile ? (GoFile)psiFile : null;
   }
 }

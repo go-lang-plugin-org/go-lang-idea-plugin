@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,20 +20,19 @@ import com.goide.psi.*;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class GoEmbeddedInterfacePointerInspection extends GoInspectionBase {
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
+  protected GoVisitor buildGoVisitor(@NotNull ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
       public void visitAnonymousFieldDefinition(@NotNull GoAnonymousFieldDefinition o) {
         if (o.getMul() == null) return;
 
         GoType goType = o.getGoType(null);
-        if (goType == null || !(goType instanceof GoSpecType)) return;
+        if (!(goType instanceof GoSpecType)) return;
 
         if (!(((GoSpecType)goType).getType() instanceof GoInterfaceType)) return;
 
