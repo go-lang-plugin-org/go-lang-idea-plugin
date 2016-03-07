@@ -45,6 +45,13 @@ type File struct {
 	*file
 }
 
+func (file *File) Close() error {
+	if file == nil {
+		return ErrInvalid
+	}
+	return file.file.close()
+}
+
 // file is the real representation of *File.
 // The extra level of indirection ensures that no clients of os
 // can overwrite this data, which could cause the finalizer
