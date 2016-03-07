@@ -85,6 +85,11 @@ public class GoElementFactory {
   }
 
   @NotNull
+  public static PsiElement createComma(@NotNull Project project) {
+    return createFileFromText(project, "package foo; var a,b = 1,2").getVars().get(0).getNextSibling();
+  }
+
+  @NotNull
   public static GoPackageClause createPackageClause(@NotNull Project project, @NotNull String name) {
     return createFileFromText(project, "package " + name).getPackage();
   }
