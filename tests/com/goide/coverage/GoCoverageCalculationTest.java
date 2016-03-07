@@ -112,6 +112,7 @@ public class GoCoverageCalculationTest extends GoCodeInsightFixtureTestCase {
     return getTestName(true) + ".go";
   }
 
+  @Override
   @NotNull
   protected String getBasePath() {
     return "coverage";
@@ -119,6 +120,8 @@ public class GoCoverageCalculationTest extends GoCodeInsightFixtureTestCase {
 
   @NotNull
   private VirtualFile getRoot() {
-    return myFixture.getTempDirFixture().getFile("");
+    VirtualFile root = myFixture.getTempDirFixture().getFile("");
+    assertNotNull(root);
+    return root;
   }
 }
