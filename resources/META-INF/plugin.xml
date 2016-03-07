@@ -61,6 +61,7 @@
 
     <!-- project -->
     <project.converterProvider implementation="com.goide.project.migration.GoProjectModelConverterProvider"/>
+    <project.converterProvider implementation="com.goide.project.migration.GoBuildTagsSettingsConverterProvider"/>
 
     <applicationService serviceImplementation="com.goide.project.GoApplicationLibrariesService"/>
     <projectService serviceImplementation="com.goide.project.GoProjectLibrariesService"/>
