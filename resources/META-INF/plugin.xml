@@ -69,7 +69,7 @@
     <projectConfigurable groupId="language" provider="com.goide.configuration.GoConfigurableProvider" dynamic="true"
                          bundle="do.not.touch.this.attribute"/>
 
-    <projectService serviceImplementation="com.goide.project.GoBuildTargetSettings"/>
+    <moduleService serviceImplementation="com.goide.project.GoModuleSettings"/>
     <projectService serviceImplementation="com.goide.project.GoExcludedPathsSettings"/>
     <applicationService serviceImplementation="com.goide.codeInsight.imports.GoCodeInsightSettings"/>
 

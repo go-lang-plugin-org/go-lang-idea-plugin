@@ -31,8 +31,7 @@ public class GoConstants {
   public static final String GO_ROOT = "GOROOT";
   public static final String GO_LIBRARIES_SERVICE_NAME = "GoLibraries";
   public static final String GO_LIBRARIES_CONFIG_FILE = "goLibraries.xml";
-  public static final String GO_BUILD_FLAGS_SERVICE_NAME = "GoBuildFlags";
-  public static final String GO_BUILD_FLAGS_CONFIG_FILE = "goBuildFlags.xml";
+  public static final String GO_MODULE_SESTTINGS_SERVICE_NAME = "Go";
 
   public static final String TESTDATA_NAME = "testdata";
   public static final String TEST_SUFFIX = "_test";

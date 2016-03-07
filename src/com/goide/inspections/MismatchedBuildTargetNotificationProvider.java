@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,13 @@
 package com.goide.inspections;
 
 import com.goide.GoFileType;
-import com.goide.configuration.GoBuildTargetConfigurable;
-import com.goide.project.GoBuildTargetSettings;
+import com.goide.configuration.GoModuleSettingsConfigurable;
+import com.goide.project.GoModuleSettings;
 import com.goide.util.GoUtil;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
@@ -51,7 +53,7 @@ public class MismatchedBuildTargetNotificationProvider extends EditorNotificatio
                                                    @NotNull final FileEditorManager fileEditorManager) {
     myProject = project;
     MessageBusConnection connection = myProject.getMessageBus().connect(myProject);
-    connection.subscribe(GoBuildTargetSettings.TOPIC, new GoBuildTargetSettings.BuildTargetListener() {
+    connection.subscribe(GoModuleSettings.TOPIC, new GoModuleSettings.BuildTargetListener() {
       @Override
       public void changed() {
         notifications.updateAllNotifications();
@@ -84,20 +86,23 @@ public class MismatchedBuildTargetNotificationProvider extends EditorNotificatio
     if (file.getFileType() == GoFileType.INSTANCE) {
       PsiFile psiFile = PsiManager.getInstance(myProject).findFile(file);
       if (psiFile != null && !GoUtil.allowed(psiFile)) {
-        return createPanel(myProject, file);
+        Module module = ModuleUtilCore.findModuleForPsiElement(psiFile);
+        if (module != null) {
+          return createPanel(module, file);
+        }
       }
     }
     return null;
   }
 
   @NotNull
-  private static EditorNotificationPanel createPanel(@NotNull final Project project, @NotNull VirtualFile file) {
+  private static EditorNotificationPanel createPanel(@NotNull final Module module, @NotNull VirtualFile file) {
     EditorNotificationPanel panel = new EditorNotificationPanel();
     panel.setText("'" + file.getName() + "' doesn't match to target system");
-    panel.createActionLabel("Open target system settings", new Runnable() {
+    panel.createActionLabel("Open Go project settings", new Runnable() {
       @Override
       public void run() {
-        ShowSettingsUtil.getInstance().editConfigurable(project, new GoBuildTargetConfigurable(project, true));
+        ShowSettingsUtil.getInstance().editConfigurable(module.getProject(), new GoModuleSettingsConfigurable(module, true));
       }
     });
     return panel;

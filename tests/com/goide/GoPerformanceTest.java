@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import com.goide.inspections.unresolved.GoUnusedFunctionInspection;
 import com.goide.inspections.unresolved.GoUnusedGlobalVariableInspection;
 import com.goide.inspections.unresolved.GoUnusedVariableInspection;
 import com.goide.project.GoBuildTargetSettings;
+import com.goide.project.GoModuleSettings;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInspection.InspectionManager;
@@ -60,23 +61,10 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
   @Override
   public void setUp() throws Exception {
     super.setUp();
-    GoBuildTargetSettings settings = GoBuildTargetSettings.getInstance(myFixture.getProject());
-    settings.setOS("darwin");
-    settings.setArch("amd64");
-    settings.setGoVersion("1.5.1");
-  }
-
-  @Override
-  protected void tearDown() throws Exception {
-    try {
-      GoBuildTargetSettings settings = GoBuildTargetSettings.getInstance(myFixture.getProject());
-      settings.setOS(GoBuildTargetSettings.DEFAULT);
-      settings.setArch(GoBuildTargetSettings.DEFAULT);
-      settings.setGoVersion(GoBuildTargetSettings.DEFAULT);
-    }
-    finally {
-      super.tearDown();
-    }
+    GoBuildTargetSettings settings = GoModuleSettings.getInstance(myFixture.getModule()).getBuildTargetSettings();
+    settings.os = "darwin";
+    settings.arch = "amd64";
+    settings.goVersion = "1.5.1";
   }
 
   public void _testUnusedVariable() {

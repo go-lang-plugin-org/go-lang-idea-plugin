@@ -18,6 +18,7 @@ package com.goide;
 
 import com.goide.project.GoApplicationLibrariesService;
 import com.goide.project.GoBuildTargetSettings;
+import com.goide.project.GoModuleSettings;
 import com.goide.sdk.GoSdkType;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.openapi.application.ApplicationManager;
@@ -49,7 +50,7 @@ abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsi
   protected void tearDown() throws Exception {
     try {
       GoApplicationLibrariesService.getInstance().setLibraryRootUrls();
-      GoBuildTargetSettings.getInstance(myFixture.getProject()).setCustomFlags();
+      GoModuleSettings.getInstance(myFixture.getModule()).setBuildTargetSettings(new GoBuildTargetSettings());
     }
     finally {
       //noinspection ThrowFromFinallyBlock
