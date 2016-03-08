@@ -45,6 +45,13 @@ public class GoCompletionTest extends GoCompletionTestBase {
     myFixture.completeBasic();
     myFixture.checkResultByFile(getTestName(true) + "_after.go");
   }
+  
+  public void testImportVendoringPackages() {
+    myFixture.addFileToProject("vendor/pack1/pack2/test.go", "package foo");
+    myFixture.configureByText("test.go", "package foo; import `pa<caret>`");
+    myFixture.completeBasic();
+    myFixture.checkResult("package foo; import `pack1/pack2<caret>`");
+  }
 
   public void testImportPackages() {
     myFixture.addFileToProject("package1/pack/test.go", "package foo");

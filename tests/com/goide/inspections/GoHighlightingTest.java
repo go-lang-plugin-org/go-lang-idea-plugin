@@ -368,6 +368,12 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     assertFalse(settingsPerFile.shouldHighlight(ignoredFile));
     assertTrue(settingsPerFile.shouldHighlight(file));
   }
+  
+  public void testVendoringImportPaths() {
+    myFixture.addFileToProject("vendor/vendoringPackage/v.go", "package vendoringPackage; func Hello() {}");
+    myFixture.addFileToProject("subPackage/vendor/subVendoringPackage/v.go", "package subVendoringPackage; func Hello() {}");
+    doTest();
+  }
 
   public void testDuplicatePackageAlias() {
     myFixture.addFileToProject("pack1/pack1.go", "package pack1; func Foo() {}");
