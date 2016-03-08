@@ -29,6 +29,7 @@ public class GoConstants {
   public static final String PATH = "PATH";
   public static final String GO_PATH = "GOPATH";
   public static final String GO_ROOT = "GOROOT";
+  public static final String GO_VENDORING_EXPERIMENT = "GO15VENDOREXPERIMENT";
   public static final String GO_LIBRARIES_SERVICE_NAME = "GoLibraries";
   public static final String GO_LIBRARIES_CONFIG_FILE = "goLibraries.xml";
   public static final String GO_MODULE_SESTTINGS_SERVICE_NAME = "Go";

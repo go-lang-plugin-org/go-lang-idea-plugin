@@ -17,6 +17,7 @@
 package com.goide.util;
 
 import com.goide.GoConstants;
+import com.goide.project.GoModuleSettings;
 import com.goide.runconfig.GoConsoleFilter;
 import com.goide.sdk.GoSdkService;
 import com.goide.sdk.GoSdkUtil;
@@ -47,6 +48,7 @@ import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.util.Consumer;
 import com.intellij.util.EnvironmentUtil;
 import com.intellij.util.ObjectUtils;
+import com.intellij.util.ThreeState;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -62,6 +64,7 @@ public class GoExecutor {
   @NotNull private final ParametersList myParameterList = new ParametersList();
   @NotNull private final ProcessOutput myProcessOutput = new ProcessOutput();
   @NotNull private final Project myProject;
+  @Nullable private Boolean myVendoringEnabled;
   @Nullable private final Module myModule;
   @Nullable private String myGoRoot;
   @Nullable private String myGoPath;
@@ -87,7 +90,7 @@ public class GoExecutor {
   }
 
   @NotNull
-  public static GoExecutor in(@NotNull Project project) {
+  private static GoExecutor in(@NotNull Project project) {
     return new GoExecutor(project, null)
       .withGoRoot(GoSdkService.getInstance(project).getSdkHomePath(null))
       .withGoPath(GoSdkUtil.retrieveGoPath(project, null))
@@ -97,10 +100,12 @@ public class GoExecutor {
   @NotNull
   public static GoExecutor in(@NotNull Module module) {
     Project project = module.getProject();
+    ThreeState vendoringEnabled = GoModuleSettings.getInstance(module).getVendoringSettings().vendorSupportEnabled;
     return new GoExecutor(project, module)
       .withGoRoot(GoSdkService.getInstance(project).getSdkHomePath(module))
       .withGoPath(GoSdkUtil.retrieveGoPath(project, module))
-      .withEnvPath(GoSdkUtil.retrieveEnvironmentPathForGo(project, module));
+      .withEnvPath(GoSdkUtil.retrieveEnvironmentPathForGo(project, module))
+      .withVendoring(vendoringEnabled != ThreeState.UNSURE ? vendoringEnabled.toBoolean() : null);
   }
 
   @NotNull
@@ -136,6 +141,12 @@ public class GoExecutor {
   @NotNull
   public GoExecutor withEnvPath(@Nullable String envPath) {
     myEnvPath = envPath;
+    return this;
+  }
+
+  @NotNull
+  public GoExecutor withVendoring(@Nullable Boolean enabled) {
+    myVendoringEnabled = enabled;
     return this;
   }
 
@@ -336,6 +347,9 @@ public class GoExecutor {
     commandLine.getEnvironment().putAll(myExtraEnvironment);
     commandLine.getEnvironment().put(GoConstants.GO_ROOT, StringUtil.notNullize(myGoRoot));
     commandLine.getEnvironment().put(GoConstants.GO_PATH, StringUtil.notNullize(myGoPath));
+    if (myVendoringEnabled != null) {
+      commandLine.getEnvironment().put(GoConstants.GO_VENDORING_EXPERIMENT, myVendoringEnabled ? "1" : "0");
+    }
 
     Collection<String> paths = ContainerUtil.newArrayList();
     ContainerUtil.addIfNotNull(paths, StringUtil.nullize(commandLine.getEnvironment().get(GoConstants.PATH), true));
