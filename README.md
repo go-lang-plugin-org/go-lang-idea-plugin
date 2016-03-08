@@ -61,3 +61,9 @@ functionality that you'd like to see. In order to get started, see the
 [contribution](CONTRIBUTING.md) guide.
 
 ## [People who helped](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/graphs/contributors)
+
+## License
+
+The Gopher icons are based on the Go mascot designed by [Renée French](http://reneefrench.blogspot.com/) and copyrighted under the [Creative Commons Attribution 3.0 license](http://creativecommons.org/licenses/by/3.0/us/).
+
+The plugin is distributed under Apache License, version 2.0. For full license terms, see [LICENCE](https://github.com/go-lang-plugin-org/go-lang-idea-plugin/blob/master/LICENCE).
