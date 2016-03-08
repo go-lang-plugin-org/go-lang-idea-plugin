@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,8 @@ package com.goide.inspections;
 
 import com.goide.GoFileType;
 import com.goide.GoLanguage;
+import com.goide.configuration.GoLibrariesConfigurableProvider;
 import com.goide.project.GoLibrariesService;
-import com.goide.project.GoModuleLibrariesInitializer;
 import com.goide.sdk.GoSdkService;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.ProjectTopics;
@@ -49,7 +49,7 @@ public class WrongSdkConfigurationNotificationProvider extends EditorNotificatio
 
   private final Project myProject;
 
-  public WrongSdkConfigurationNotificationProvider(@NotNull Project project, @NotNull final EditorNotifications notifications) {
+  public WrongSdkConfigurationNotificationProvider(@NotNull Project project, @NotNull EditorNotifications notifications) {
     myProject = project;
     MessageBusConnection connection = myProject.getMessageBus().connect(project);
     connection.subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
@@ -98,7 +98,7 @@ public class WrongSdkConfigurationNotificationProvider extends EditorNotificatio
   }
 
   @NotNull
-  private static EditorNotificationPanel createMissingSdkPanel(@NotNull final Project project, @Nullable final Module module) {
+  private static EditorNotificationPanel createMissingSdkPanel(@NotNull Project project, @Nullable Module module) {
     EditorNotificationPanel panel = new EditorNotificationPanel();
     panel.setText(ProjectBundle.message("project.sdk.not.defined"));
     panel.createActionLabel(ProjectBundle.message("project.sdk.setup"), new Runnable() {
@@ -111,13 +111,13 @@ public class WrongSdkConfigurationNotificationProvider extends EditorNotificatio
   }
 
   @NotNull
-  private static EditorNotificationPanel createEmptyGoPathPanel(@NotNull final Project project) {
+  private static EditorNotificationPanel createEmptyGoPathPanel(@NotNull Project project) {
     EditorNotificationPanel panel = new EditorNotificationPanel();
     panel.setText("GOPATH is empty");
     panel.createActionLabel("Configure Go Libraries", new Runnable() {
       @Override
       public void run() {
-        GoModuleLibrariesInitializer.showModulesConfigurable(project);
+        GoLibrariesConfigurableProvider.showModulesConfigurable(project);
       }
     });
     return panel;
