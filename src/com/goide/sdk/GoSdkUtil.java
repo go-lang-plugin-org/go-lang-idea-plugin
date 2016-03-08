@@ -190,7 +190,10 @@ public class GoSdkUtil {
     if (version.startsWith("devel")) {
       return "src";
     }
-    return compareVersions(version, "1.4") < 0 ? "src/pkg" : "src";
+    if (version.length() > 2 && StringUtil.parseDouble(version.substring(0, 3), 1.4) < 1.4) {
+      return "src/pkg";
+    }
+    return "src";
   }
 
   public static int compareVersions(@NotNull String lhs, @NotNull String rhs) {
@@ -403,8 +406,8 @@ public class GoSdkUtil {
 
   @NotNull
   public static Collection<VirtualFile> getSdkDirectoriesToAttach(@NotNull String sdkPath, @NotNull String versionString) {
-    String srcPath = getSrcLocation(versionString);
     // scr is enough at the moment, possible process binaries from pkg
+    String srcPath = getSrcLocation(versionString);
     VirtualFile src = VirtualFileManager.getInstance().findFileByUrl(VfsUtilCore.pathToUrl(FileUtil.join(sdkPath, srcPath)));
     if (src != null && src.isDirectory()) {
       return Collections.singletonList(src);
