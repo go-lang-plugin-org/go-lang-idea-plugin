@@ -98,7 +98,7 @@ public class GoUtil {
       return "freebsd";
     }
     if (SystemInfo.isLinux) {
-      return "linux";
+      return GoConstants.LINUX_OS;
     }
     if (SystemInfo.isSolaris) {
       return "solaris";
