@@ -17,8 +17,11 @@
 package com.goide.psi.impl.imports;
 
 import com.goide.GoConstants;
+import com.goide.codeInsight.imports.GoGetPackageFix;
 import com.goide.completion.GoCompletionUtil;
 import com.intellij.codeInsight.completion.CompletionUtil;
+import com.intellij.codeInsight.daemon.quickFix.CreateFileFix;
+import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
@@ -111,6 +114,32 @@ public class GoImportReference extends FileReference {
       }
     }
     return super.bindToElement(element, absolute);
+  }
+
+  @Override
+  public LocalQuickFix[] getQuickFixes() {
+    LocalQuickFix goGetFix = new GoGetPackageFix(getFileReferenceSet().getPathString());
+    List<LocalQuickFix> result = ContainerUtil.newArrayList(goGetFix);
+
+    String fileNameToCreate = getFileNameToCreate();
+    for (PsiFileSystemItem context : getContexts()) {
+      if (context instanceof PsiDirectory) {
+        try {
+          ((PsiDirectory)context).checkCreateSubdirectory(fileNameToCreate);
+          String targetPath = context.getVirtualFile().getPath();
+          result.add(new CreateFileFix(true, fileNameToCreate, (PsiDirectory)context) {
+            @NotNull
+            @Override
+            public String getText() {
+              return "Create Directory " + fileNameToCreate + " at " + targetPath; 
+            }
+          });
+        }
+        catch (IncorrectOperationException ignore) {
+        }
+      }
+    }
+    return result.toArray(new LocalQuickFix[result.size()]);
   }
 
   private boolean isFirst() {

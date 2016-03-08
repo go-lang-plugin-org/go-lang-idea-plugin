@@ -89,8 +89,6 @@
 
     <lang.importOptimizer language="go" implementationClass="com.goide.codeInsight.imports.GoImportOptimizer"/>
     <referenceImporter implementation="com.goide.psi.impl.imports.GoReferenceImporter"/>
-    <psi.fileReferenceHelper implementation="com.goide.psi.impl.imports.GoImportReferenceHelper"/>
-    <fileContextProvider implementation="com.goide.psi.impl.imports.GoFileContextProvider"/>
 
     <lang.parserDefinition language="go" implementationClass="com.goide.GoParserDefinition"/>
     <fileTypeFactory implementation="com.goide.GoFileTypeFactory"/>
