@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.goide.completion;
 
 import com.goide.GoFileType;
 import com.goide.project.GoExcludedPathsSettings;
+import com.goide.project.GoVendoringSettings;
 import com.goide.psi.GoImportString;
 import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.sdk.GoSdkUtil;
@@ -68,10 +69,11 @@ public class GoImportPathsCompletionProvider extends CompletionProvider<Completi
       GlobalSearchScope scope = withLibraries ? GoUtil.moduleScope(module) : GoUtil.moduleScopeWithoutLibraries(module);
       PsiFile contextFile = context != null ? context.getContainingFile() : null;
       boolean testFileWithTestPackage = GoTestFinder.isTestFileWithTestPackage(contextFile);
+      boolean vendoringEnabled = GoVendoringSettings.isVendoringEnabled(module);
       for (VirtualFile file : FileTypeIndex.getFiles(GoFileType.INSTANCE, scope)) {
         VirtualFile parent = file.getParent();
         if (parent == null) continue;
-        String importPath = GoSdkUtil.getPathRelativeToSdkAndLibraries(parent, project, module);
+        String importPath = GoSdkUtil.getPathRelativeToSdkAndLibrariesAndVendor(parent, project, module, vendoringEnabled ? context : null);
         if (!StringUtil.isEmpty(importPath) && !excludedSettings.isExcluded(importPath) &&
             (testFileWithTestPackage || !importPath.equals(contextImportPath))) {
           PsiDirectory directory = PsiManager.getInstance(project).findDirectory(parent);

@@ -16,9 +16,12 @@
 
 package com.goide.project;
 
+import com.goide.sdk.GoSdkService;
+import com.intellij.openapi.module.Module;
 import com.intellij.util.ThreeState;
 import com.intellij.util.text.VersionComparatorUtil;
 import com.intellij.util.xmlb.annotations.Tag;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,5 +42,19 @@ public class GoVendoringSettings {
       return false;
     }
     return VersionComparatorUtil.compare(sdkVersion.substring(0, 3), "1.4") > 0;
+  }
+
+  @Contract("null -> false")
+  public static boolean isVendoringEnabled(@Nullable Module module) {
+    if (module == null) {
+      return false;
+    }
+    
+    ThreeState vendorSupportEnabled = GoModuleSettings.getInstance(module).getVendoringSettings().vendorSupportEnabled;
+    if (vendorSupportEnabled == ThreeState.UNSURE) {
+      String version = GoSdkService.getInstance(module.getProject()).getSdkVersion(module);
+      return supportsVendoring(version) && supportsVendoringByDefault(version);
+    }
+    return vendorSupportEnabled.toBoolean();
   }
 }

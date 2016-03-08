@@ -16,6 +16,7 @@
 
 package com.goide.psi.impl.imports;
 
+import com.goide.project.GoVendoringSettings;
 import com.goide.psi.GoImportString;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.openapi.module.Module;
@@ -30,6 +31,7 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
 import com.intellij.util.Function;
+import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -52,14 +54,27 @@ public class GoImportReferenceSet extends FileReferenceSet {
 
     PsiManager psiManager = file.getManager();
     Module module = ModuleUtilCore.findModuleForPsiElement(file);
-    return ContainerUtil.mapNotNull(GoSdkUtil.getSourcesPathsToLookup(file.getProject(), module),
-                                    new Function<VirtualFile, PsiFileSystemItem>() {
-                                      @Nullable
-                                      @Override
-                                      public PsiFileSystemItem fun(VirtualFile file) {
-                                        return psiManager.findDirectory(file);
-                                      }
-                                    });
+    Collection<VirtualFile> sourcesPaths = GoSdkUtil.getSourcesPathsToLookup(file.getProject(), module);
+    Collection<PsiFileSystemItem> result = ContainerUtil.newArrayList();
+    if (GoVendoringSettings.isVendoringEnabled(module)) {
+      GoSdkUtil.processVendorDirectories(file, sourcesPaths, new Processor<VirtualFile>() {
+        @Override
+        public boolean process(VirtualFile file) {
+          ContainerUtil.addIfNotNull(result, psiManager.findDirectory(file));
+          return true;
+        }
+      });
+    }
+
+    result.addAll(ContainerUtil.mapNotNull(sourcesPaths,
+                                           new Function<VirtualFile, PsiFileSystemItem>() {
+                                             @Nullable
+                                             @Override
+                                             public PsiFileSystemItem fun(VirtualFile file) {
+                                               return psiManager.findDirectory(file);
+                                             }
+                                           }));
+    return result;
   }
 
   @Override

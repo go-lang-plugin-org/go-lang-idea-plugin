@@ -34,6 +34,7 @@ import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.fixtures.DefaultLightProjectDescriptor;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
+import com.intellij.util.ThreeState;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -44,6 +45,7 @@ abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsi
   protected void setUp() throws Exception {
     super.setUp();
     GoApplicationLibrariesService.getInstance().setLibraryRootUrls("temp:///");
+    GoModuleSettings.getInstance(myFixture.getModule()).getVendoringSettings().vendorSupportEnabled = ThreeState.YES;
   }
   
   @Override
@@ -51,6 +53,7 @@ abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsi
     try {
       GoApplicationLibrariesService.getInstance().setLibraryRootUrls();
       GoModuleSettings.getInstance(myFixture.getModule()).setBuildTargetSettings(new GoBuildTargetSettings());
+      GoModuleSettings.getInstance(myFixture.getModule()).getVendoringSettings().vendorSupportEnabled = ThreeState.UNSURE;
     }
     finally {
       //noinspection ThrowFromFinallyBlock

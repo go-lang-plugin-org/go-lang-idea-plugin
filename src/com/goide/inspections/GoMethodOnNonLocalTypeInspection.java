@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,10 @@
 
 package com.goide.inspections;
 
-import com.goide.psi.*;
+import com.goide.psi.GoFile;
+import com.goide.psi.GoMethodDeclaration;
+import com.goide.psi.GoType;
+import com.goide.psi.GoVisitor;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
@@ -27,10 +30,10 @@ import org.jetbrains.annotations.Nullable;
 public class GoMethodOnNonLocalTypeInspection extends GoInspectionBase {
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
+  protected GoVisitor buildGoVisitor(@NotNull ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
-      public void visitMethodDeclaration(@NotNull final GoMethodDeclaration method) {
+      public void visitMethodDeclaration(@NotNull GoMethodDeclaration method) {
         if (method.getIdentifier() == null || method.isBlank()) return;
         String containingFileImportPath = method.getContainingFile().getImportPath();
         if (containingFileImportPath == null) return;

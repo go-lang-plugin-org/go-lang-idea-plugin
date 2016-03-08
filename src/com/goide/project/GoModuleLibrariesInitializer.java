@@ -79,7 +79,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     @Override
     public void fileCreated(@NotNull VirtualFileEvent event) {
       handleEvent(event);
-      if ("vendor".equals(event.getFileName()) && event.getFile().isDirectory()) {
+      if (GoConstants.VENDOR.equals(event.getFileName()) && event.getFile().isDirectory()) {
         showVendoringNotification();
       }
     }
@@ -151,7 +151,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
         @Override
         public void run() {
           if (!project.isDisposed() && !myModule.isDisposed()) {
-            for (PsiFileSystemItem vendor : FilenameIndex.getFilesByName(project, "vendor", GoUtil.moduleScope(myModule), true)) {
+            for (PsiFileSystemItem vendor : FilenameIndex.getFilesByName(project, GoConstants.VENDOR, GoUtil.moduleScope(myModule), true)) {
               if (vendor.isDirectory()) {
                 showVendoringNotification();
                 break;
