@@ -70,12 +70,14 @@ public class GoSdkUtil {
   private static VirtualFile getSdkSrcDir(@NotNull Project project, @Nullable Module module) {
     String sdkHomePath = GoSdkService.getInstance(project).getSdkHomePath(module);
     String sdkVersionString = GoSdkService.getInstance(project).getSdkVersion(module);
-    VirtualFile sdkSrcDir = null;
-    if (sdkHomePath != null && sdkVersionString != null) {
-      File sdkSrcDirFile = new File(sdkHomePath, getSrcLocation(sdkVersionString));
-      sdkSrcDir = LocalFileSystem.getInstance().findFileByIoFile(sdkSrcDirFile);
-    }
-    return sdkSrcDir;
+    return sdkHomePath != null && sdkVersionString != null ? getSdkSrcDir(sdkHomePath, sdkVersionString) : null;
+  }
+
+  @Nullable
+  private static VirtualFile getSdkSrcDir(@NotNull String sdkPath, @NotNull String sdkVersion) {
+    String srcPath = getSrcLocation(sdkVersion);
+    VirtualFile file = VirtualFileManager.getInstance().findFileByUrl(VfsUtilCore.pathToUrl(FileUtil.join(sdkPath, srcPath)));
+    return file != null && file.isDirectory() ? file : null;
   }
 
   @Nullable
@@ -407,12 +409,7 @@ public class GoSdkUtil {
   @NotNull
   public static Collection<VirtualFile> getSdkDirectoriesToAttach(@NotNull String sdkPath, @NotNull String versionString) {
     // scr is enough at the moment, possible process binaries from pkg
-    String srcPath = getSrcLocation(versionString);
-    VirtualFile src = VirtualFileManager.getInstance().findFileByUrl(VfsUtilCore.pathToUrl(FileUtil.join(sdkPath, srcPath)));
-    if (src != null && src.isDirectory()) {
-      return Collections.singletonList(src);
-    }
-    return Collections.emptyList();
+    return ContainerUtil.createMaybeSingletonList(getSdkSrcDir(sdkPath, versionString));
   }
 
   @NotNull
