@@ -43,7 +43,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collection;
-import java.util.Set;
 
 import static com.intellij.openapi.fileChooser.FileChooserDescriptorFactory.createMultipleFoldersDescriptor;
 
@@ -132,8 +131,7 @@ public class GoLibrariesConfigurable implements SearchableConfigurable, Configur
             myListModel.remove((ListItem)selectedValue);
           }
         }
-      })
-      .disableUpDownActions();
+      });
     myPanel.add(decorator.createPanel(), BorderLayout.CENTER);
     if (librariesService instanceof GoApplicationLibrariesService) {
       myUseEnvGoPathCheckBox.addActionListener(new ActionListener() {
@@ -166,7 +164,7 @@ public class GoLibrariesConfigurable implements SearchableConfigurable, Configur
 
   @Override
   public boolean isModified() {
-    return !getUserDefinedUrls().equals(ContainerUtil.newHashSet(myLibrariesService.getLibraryRootUrls())) ||
+    return !getUserDefinedUrls().equals(myLibrariesService.getLibraryRootUrls()) ||
            myLibrariesService instanceof GoApplicationLibrariesService &&
            ((GoApplicationLibrariesService)myLibrariesService).isUseGoPathFromSystemEnvironment() !=
            myUseEnvGoPathCheckBox.isSelected();
@@ -238,8 +236,8 @@ public class GoLibrariesConfigurable implements SearchableConfigurable, Configur
   }
 
   @NotNull
-  private Set<String> getUserDefinedUrls() {
-    Set<String> libraryUrls = ContainerUtil.newHashSet();
+  private Collection<String> getUserDefinedUrls() {
+    Collection<String> libraryUrls = ContainerUtil.newArrayList();
     for (ListItem item : myListModel.getItems()) {
       if (!item.readOnly) {
         libraryUrls.add(item.url);
