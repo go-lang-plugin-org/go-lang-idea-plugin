@@ -860,6 +860,9 @@ public class GoPsiImplUtil {
     for (int i = existingImports.size() - 1; i >= 0; i--) {
       GoImportDeclaration existingImport = existingImports.get(i);
       List<GoImportSpec> importSpecList = existingImport.getImportSpecList();
+      if (importSpecList.isEmpty()) {
+        continue;
+      }
       if (existingImport.getRparen() == null && importSpecList.size() == 1) {
         GoImportSpec firstItem = ContainerUtil.getFirstItem(importSpecList);
         assert firstItem != null;
