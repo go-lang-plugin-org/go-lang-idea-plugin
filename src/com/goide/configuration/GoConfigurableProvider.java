@@ -39,13 +39,7 @@ public class GoConfigurableProvider extends ConfigurableProvider {
   @Nullable
   @Override
   public Configurable createConfigurable() {
-    Configurable projectSettingsConfigurable = new GoModuleAwareConfigurable(myProject, "Project settings", null) {
-      @NotNull
-      @Override
-      protected UnnamedConfigurable createModuleConfigurable(Module module) {
-        return new GoModuleSettingsConfigurable(module, false);
-      }
-    };
+    Configurable projectSettingsConfigurable = new GoProjectSettingsConfigurable(myProject);
     Configurable librariesConfigurable = new GoLibrariesConfigurableProvider(myProject).createConfigurable();
     Configurable sdkConfigurable = GoSdkService.getInstance(myProject).createSdkConfigurable();
     Configurable autoImportConfigurable = new GoAutoImportConfigurable(myProject, false);
@@ -88,6 +82,18 @@ public class GoConfigurableProvider extends ConfigurableProvider {
     public void disposeUIResources() {
       super.disposeUIResources();
       myConfigurables = null;
+    }
+  }
+
+  public static class GoProjectSettingsConfigurable extends GoModuleAwareConfigurable {
+    public GoProjectSettingsConfigurable(@NotNull Project project) {
+      super(project, "Project settings", null);
+    }
+
+    @NotNull
+    @Override
+    protected UnnamedConfigurable createModuleConfigurable(Module module) {
+      return new GoModuleSettingsConfigurable(module, false);
     }
   }
 }

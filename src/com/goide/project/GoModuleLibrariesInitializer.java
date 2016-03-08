@@ -32,8 +32,6 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleComponent;
-import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.*;
@@ -42,9 +40,13 @@ import com.intellij.openapi.roots.impl.libraries.LibraryEx;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.roots.libraries.LibraryTable;
 import com.intellij.openapi.roots.libraries.LibraryTablesRegistrar;
+import com.intellij.openapi.startup.StartupManager;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.vfs.*;
+import com.intellij.psi.PsiFileSystemItem;
+import com.intellij.psi.search.FilenameIndex;
 import com.intellij.util.Alarm;
+import com.intellij.util.ThreeState;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.messages.MessageBusConnection;
 import org.jetbrains.annotations.NotNull;
@@ -60,6 +62,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   private static final String GO_LIB_NAME = "GOPATH";
   private static final Logger LOG = Logger.getInstance(GoModuleLibrariesInitializer.class);
   private static final String GO_LIBRARIES_NOTIFICATION_HAD_BEEN_SHOWN = "go.libraries.notification.had.been.shown";
+  private static final String GO_VENDORING_NOTIFICATION_HAD_BEEN_SHOWN = "go.vendoring.notification.had.been.shown";
   private static final int UPDATE_DELAY = 300;
   private static boolean isTestingMode;
 
@@ -76,6 +79,9 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     @Override
     public void fileCreated(@NotNull VirtualFileEvent event) {
       handleEvent(event);
+      if ("vendor".equals(event.getFileName()) && event.getFile().isDirectory()) {
+        showVendoringNotification();
+      }
     }
 
     @Override
@@ -137,6 +143,21 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
         @Override
         public void librariesChanged(@NotNull Collection<String> newRootUrls) {
           scheduleUpdate();
+        }
+      });
+
+      Project project = myModule.getProject();
+      StartupManager.getInstance(project).runWhenProjectIsInitialized(new Runnable() {
+        @Override
+        public void run() {
+          if (!project.isDisposed() && !myModule.isDisposed()) {
+            for (PsiFileSystemItem vendor : FilenameIndex.getFilesByName(project, "vendor", GoUtil.moduleScope(myModule), true)) {
+              if (vendor.isDirectory()) {
+                showVendoringNotification();
+                break;
+              }
+            }
+          }
         }
       });
 
@@ -298,22 +319,53 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
         @Override
         protected void hyperlinkActivated(@NotNull Notification notification, @NotNull HyperlinkEvent event) {
           if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED && "configure".equals(event.getDescription())) {
-            showModulesConfigurable(project);
+            GoLibrariesConfigurableProvider.showModulesConfigurable(project);
           }
         }
       });
       Notifications.Bus.notify(notification, project);
     }
   }
-
-  public static void showModulesConfigurable(@NotNull Project project) {
-    ApplicationManager.getApplication().assertIsDispatchThread();
-    if (!project.isDisposed()) {
-      Configurable configurable = new GoLibrariesConfigurableProvider(project).createConfigurable(true);
-      if (configurable != null) {
-        ShowSettingsUtil.getInstance().editConfigurable(project, configurable);
+  
+  private void showVendoringNotification() {
+    if (!myModuleInitialized || myModule.isDisposed()) {
+      return;
+    }
+    Project project = myModule.getProject();
+    String version = GoSdkService.getInstance(project).getSdkVersion(myModule);
+    if (!GoVendoringSettings.supportsVendoring(version) || GoVendoringSettings.supportsVendoringByDefault(version)) {
+      return;
+    }
+    if (GoModuleSettings.getInstance(myModule).getVendoringSettings().vendorSupportEnabled != ThreeState.UNSURE) {
+      return;
+    }
+    
+    PropertiesComponent propertiesComponent = PropertiesComponent.getInstance(project);
+    boolean shownAlready;
+    //noinspection SynchronizationOnLocalVariableOrMethodParameter
+    synchronized (propertiesComponent) {
+      shownAlready = propertiesComponent.getBoolean(GO_VENDORING_NOTIFICATION_HAD_BEEN_SHOWN, false);
+      if (!shownAlready) {
+        propertiesComponent.setValue(GO_VENDORING_NOTIFICATION_HAD_BEEN_SHOWN, String.valueOf(true));
       }
     }
+
+    if (!shownAlready) {
+      Notification notification = GoConstants.GO_NOTIFICATION_GROUP.createNotification("Vendoring usage is detected",
+                                                         "<p><strong>vendor</strong> directory usually means that project uses Go Vendor Experiment.</p>\n" +
+                                                         "<p>Selected Go SDK version support vendoring but it's disabled by default.</p>\n" +
+                                                         "<p>You may want to explicitly enabled Go Vendor Experiment in the <a href='configure'>project settings</a>.</p>",
+                                                         NotificationType.INFORMATION, new NotificationListener.Adapter() {
+        @Override
+        protected void hyperlinkActivated(@NotNull Notification notification, @NotNull HyperlinkEvent event) {
+          if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED && "configure".equals(event.getDescription())) {
+            GoModuleSettings.showModulesConfigurable(project);
+          }
+        }
+      });
+      Notifications.Bus.notify(notification, project);
+    }
+      
   }
 
   @Override
