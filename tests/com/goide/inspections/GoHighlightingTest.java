@@ -21,7 +21,10 @@ import com.goide.inspections.unresolved.*;
 import com.goide.project.GoModuleLibrariesService;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightingSettingsPerFile;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiReference;
 import com.intellij.testFramework.LightProjectDescriptor;
 import org.jetbrains.annotations.NotNull;
 
@@ -170,6 +173,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.checkHighlighting();
   }
 
+  @SuppressWarnings("ConstantConditions")
   public void testDoNotReportNonLastMultiResolvedImport() {
     myFixture.addFileToProject("root1/src/to_import/unique/foo.go", "package unique; func Foo() {}");
     myFixture.addFileToProject("root1/src/to_import/shared/a.go", "package shared");
@@ -177,6 +181,18 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(myFixture.findFileInTempDir("root1").getUrl(), 
                                                                                    myFixture.findFileInTempDir("root2").getUrl());
     doTest();
+    
+    PsiReference reference = myFixture.getFile().findReferenceAt(myFixture.getCaretOffset());
+    PsiElement resolve = reference.resolve();
+    assertInstanceOf(resolve, PsiDirectory.class);
+    assertTrue(((PsiDirectory)resolve).getVirtualFile().getPath().endsWith("root1/src/to_import/shared"));
+    
+    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(myFixture.findFileInTempDir("root2").getUrl(), 
+                                                                                   myFixture.findFileInTempDir("root1").getUrl());
+    reference = myFixture.getFile().findReferenceAt(myFixture.getCaretOffset());
+    resolve = reference.resolve();
+    assertInstanceOf(resolve, PsiDirectory.class);
+    assertTrue(((PsiDirectory)resolve).getVirtualFile().getPath().endsWith("root2/src/to_import/shared"));
   }
 
   public void testLocalScope() {
