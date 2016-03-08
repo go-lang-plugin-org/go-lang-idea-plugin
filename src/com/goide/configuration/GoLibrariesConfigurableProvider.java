@@ -21,11 +21,9 @@ import com.goide.project.GoModuleLibrariesService;
 import com.goide.project.GoProjectLibrariesService;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.ide.util.PropertiesComponent;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.options.CompositeConfigurable;
-import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ConfigurableProvider;
-import com.intellij.openapi.options.UnnamedConfigurable;
+import com.intellij.openapi.options.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -59,7 +57,7 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
   }
 
   @Nullable
-  public Configurable createConfigurable(final boolean dialogMode) {
+  private Configurable createConfigurable(boolean dialogMode) {
     return new CompositeConfigurable<UnnamedConfigurable>() {
 
       @Nullable
@@ -88,10 +86,10 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
             ListenableHideableDecorator decorator = new ListenableHideableDecorator(hideablePanel, displayName, configurableComponent);
             decorator.addListener(new MyHideableDecoratorListener(layoutManager, hideablePanel,
                                                                   spacer, hideableDecorators,
-                                                                  configurableExpandedPropertyKey(((Configurable)configurable))
+                                                                  configurableExpandedPropertyKey((Configurable)configurable)
             ));
             hideableDecorators.add(decorator);
-            decorator.setOn(isConfigurableExpanded(i, ((Configurable)configurable)));
+            decorator.setOn(isConfigurableExpanded(i, (Configurable)configurable));
           }
         }
         if (dialogMode) {
@@ -220,5 +218,15 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
         }
       }
     };
+  }
+
+  public static void showModulesConfigurable(@NotNull Project project) {
+    ApplicationManager.getApplication().assertIsDispatchThread();
+    if (!project.isDisposed()) {
+      Configurable configurable = new GoLibrariesConfigurableProvider(project).createConfigurable(true);
+      if (configurable != null) {
+        ShowSettingsUtil.getInstance().editConfigurable(project, configurable);
+      }
+    }
   }
 }
