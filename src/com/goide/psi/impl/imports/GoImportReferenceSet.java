@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +17,49 @@
 package com.goide.psi.impl.imports;
 
 import com.goide.psi.GoImportString;
+import com.goide.sdk.GoSdkUtil;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Conditions;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileSystemItem;
+import com.intellij.psi.PsiManager;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
+import com.intellij.util.Function;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
+import java.util.Collections;
 
 public class GoImportReferenceSet extends FileReferenceSet {
   public GoImportReferenceSet(@NotNull GoImportString importString) {
     super(importString.getPath(), importString, importString.getPathTextRange().getStartOffset(), null, true);
+  }
+
+  @NotNull
+  @Override
+  public Collection<PsiFileSystemItem> computeDefaultContexts() {
+    PsiFile file = getContainingFile();
+    if (file == null || !file.isValid()) {
+      return Collections.emptyList();
+    }
+
+    PsiManager psiManager = file.getManager();
+    Module module = ModuleUtilCore.findModuleForPsiElement(file);
+    return ContainerUtil.mapNotNull(GoSdkUtil.getSourcesPathsToLookup(file.getProject(), module),
+                                    new Function<VirtualFile, PsiFileSystemItem>() {
+                                      @Nullable
+                                      @Override
+                                      public PsiFileSystemItem fun(VirtualFile file) {
+                                        return psiManager.findDirectory(file);
+                                      }
+                                    });
   }
 
   @Override
