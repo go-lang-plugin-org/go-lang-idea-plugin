@@ -168,9 +168,9 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
       PsiDirectory parentDirectory = file != null ? file.getParent() : null;
       GoExcludedPathsSettings excludedSettings = GoExcludedPathsSettings.getInstance(project);
       String testTargetPackage = GoTestFinder.getTestTargetPackage(file);
-      Collection<GoFile> es = StubIndex.getElements(GoPackagesIndex.KEY, myPackageName, project, scope, GoFile.class);
+      Collection<GoFile> packages = StubIndex.getElements(GoPackagesIndex.KEY, myPackageName, project, scope, GoFile.class);
       myPackagesToImport = sorted(skipNulls(map2Set(
-        es,
+        packages,
         new Function<GoFile, String>() {
           @Nullable
           @Override
