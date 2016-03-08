@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,10 +40,10 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
     myPackage = packageName;
   }
 
-  public static void applyFix(@NotNull final Project project,
-                              @Nullable final Module module,
-                              @NotNull final String packageName,
-                              final boolean startInBackground) {
+  public static void applyFix(@NotNull Project project,
+                              @Nullable Module module,
+                              @NotNull String packageName,
+                              boolean startInBackground) {
     String sdkPath = GoSdkService.getInstance(project).getSdkHomePath(module);
     if (StringUtil.isEmpty(sdkPath)) return;
     CommandProcessor.getInstance().runUndoTransparentAction(new Runnable() {
@@ -65,6 +65,8 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
   @Override
   public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
     PsiElement element = descriptor.getPsiElement();
-    applyFix(project, ModuleUtilCore.findModuleForPsiElement(element), myPackage, true);
+    if (element != null) {
+      applyFix(project, ModuleUtilCore.findModuleForPsiElement(element.getContainingFile()), myPackage, true);
+    }
   }
 }
