@@ -22,7 +22,6 @@ import com.goide.completion.GoCompletionUtil;
 import com.intellij.codeInsight.completion.CompletionUtil;
 import com.intellij.codeInsight.daemon.quickFix.CreateFileFix;
 import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
@@ -35,6 +34,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public class GoImportReference extends FileReference {
   public GoImportReference(@NotNull FileReferenceSet fileReferenceSet, TextRange range, int index, String text) {
@@ -68,16 +68,22 @@ public class GoImportReference extends FileReference {
       }
     }
 
-    if (isLast()) {
-      List<ResolveResult> filtered = ContainerUtil.filter(super.innerResolve(caseSensitive, file), new Condition<ResolveResult>() {
-        @Override
-        public boolean value(@NotNull ResolveResult resolveResult) {
-          return resolveResult.getElement() instanceof PsiDirectory;
+    String referenceText = getText();
+    Set<ResolveResult> result = ContainerUtil.newLinkedHashSet();
+    Set<ResolveResult> innerResult = ContainerUtil.newLinkedHashSet();
+    for (PsiFileSystemItem context : getContexts()) {
+      innerResolveInContext(referenceText, context, innerResult, caseSensitive);
+      for (ResolveResult resolveResult : innerResult) {
+        if (resolveResult.getElement() instanceof PsiDirectory) {
+          if (isLast()) {
+            return new ResolveResult[]{resolveResult};
+          }
+          result.add(resolveResult);
         }
-      });
-      return filtered.toArray(new ResolveResult[filtered.size()]);
+      }
+      innerResult.clear();
     }
-    return super.innerResolve(caseSensitive, file);
+    return result.isEmpty() ? ResolveResult.EMPTY_ARRAY : result.toArray(new ResolveResult[result.size()]);
   }
 
   @Override

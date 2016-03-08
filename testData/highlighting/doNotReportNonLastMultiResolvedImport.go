@@ -1,7 +1,7 @@
 package main
 
 import "to_import/unique"
-import "to_import/<error descr="Resolved to several targets">shared</error>"
+import _ "to_import/sha<caret>red"
 
 func main() {
 	unique.Foo()
