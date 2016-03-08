@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package com.goide.project;
 
 import com.goide.GoLibrariesState;
-import com.goide.sdk.GoSdkUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.module.Module;
@@ -105,13 +104,12 @@ public abstract class GoLibrariesService<T extends GoLibrariesState> extends Sim
 
   @NotNull
   private static Collection<? extends VirtualFile> goRootsFromUrls(@NotNull Collection<String> urls) {
-    return ContainerUtil.skipNulls(ContainerUtil.map(urls, new Function<String, VirtualFile>() {
+    return ContainerUtil.mapNotNull(urls, new Function<String, VirtualFile>() {
       @Override
       public VirtualFile fun(String url) {
-        VirtualFile file = VirtualFileManager.getInstance().findFileByUrl(url);
-        return file != null && GoSdkUtil.retrieveGoVersion(file.getPath()) == null ? file : null;
+        return VirtualFileManager.getInstance().findFileByUrl(url);
       }
-    }));
+    });
   }
 
   public interface LibrariesListener {
