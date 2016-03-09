@@ -25,7 +25,6 @@ import com.intellij.codeInsight.daemon.LineMarkerProvider;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.markup.GutterIconRenderer;
-import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
@@ -38,10 +37,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-public class GoRecursiveCallMarkerProvider implements LineMarkerProvider, DumbAware {
+public class GoRecursiveCallMarkerProvider implements LineMarkerProvider {
   @Override
   public LineMarkerInfo getLineMarkerInfo(@NotNull PsiElement element) {
-    return null; //do nothing
+    return null;
   }
 
   @Override
