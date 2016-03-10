@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,10 @@
 
 package com.goide.completion;
 
-import com.goide.psi.*;
+import com.goide.codeInsight.imports.GoImportPackageQuickFix;
+import com.goide.psi.GoFunctionDeclaration;
+import com.goide.psi.GoNamedElement;
+import com.goide.psi.GoTypeSpec;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -24,6 +27,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiReference;
 import com.intellij.util.Function;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -45,10 +49,10 @@ public class GoAutoImportInsertHandler<T extends GoNamedElement> implements Inse
   @Nullable private final Class<T> myClass;
 
   public GoAutoImportInsertHandler() {
-    this(((Function<T, InsertHandler<LookupElement>>)null), null);
+    this((Function<T, InsertHandler<LookupElement>>)null, null);
   }
 
-  public GoAutoImportInsertHandler(@Nullable final InsertHandler<LookupElement> delegate, @Nullable Class<T> clazz) {
+  public GoAutoImportInsertHandler(@Nullable InsertHandler<LookupElement> delegate, @Nullable Class<T> clazz) {
     this(new Function<T, InsertHandler<LookupElement>>() {
       @Nullable
       @Override
@@ -78,16 +82,16 @@ public class GoAutoImportInsertHandler<T extends GoNamedElement> implements Inse
   }
 
   private static void autoImport(@NotNull InsertionContext context, @NotNull GoNamedElement element) {
-    PsiFile file = context.getFile();
-    if (!(file instanceof GoFile)) return;
-
-    String fullPackageName = element.getContainingFile().getImportPath();
-    if (StringUtil.isEmpty(fullPackageName)) return;
-
-    GoImportSpec existingImport = ((GoFile)file).getImportedPackagesMap().get(fullPackageName);
-    if (existingImport != null) return;
+    String importPath = element.getContainingFile().getImportPath();
+    if (StringUtil.isEmpty(importPath)) return;
 
     PsiDocumentManager.getInstance(context.getProject()).commitDocument(context.getEditor().getDocument());
-    ((GoFile)file).addImport(fullPackageName, null);
+    PsiFile file = context.getFile();
+    PsiReference reference = file.findReferenceAt(context.getStartOffset());
+    if (reference != null) {
+      PsiElement referenceElement = reference.getElement();
+      GoImportPackageQuickFix fix = new GoImportPackageQuickFix(referenceElement, importPath);
+      fix.invoke(context.getProject(), file, context.getEditor(), referenceElement, referenceElement);
+    }
   }
 }
