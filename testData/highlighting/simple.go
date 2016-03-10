@@ -484,7 +484,7 @@ func _() {
 			message chan string
 		}
 		clientList struct {
-			m (map[string]*client)
+			m (((map[string]*client)))
 		}
 	)
 	cl := clientList{m: make(map[string]*client)}
