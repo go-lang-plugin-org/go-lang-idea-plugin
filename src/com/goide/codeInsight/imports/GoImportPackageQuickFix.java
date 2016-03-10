@@ -22,25 +22,31 @@ import com.goide.project.GoExcludedPathsSettings;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoReferenceExpression;
 import com.goide.psi.GoTypeReferenceExpression;
+import com.goide.psi.impl.GoReference;
+import com.goide.psi.impl.GoTypeReference;
 import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.stubs.index.GoPackagesIndex;
 import com.goide.util.GoUtil;
+import com.intellij.codeInsight.FileModificationService;
+import com.intellij.codeInsight.daemon.QuickFixBundle;
+import com.intellij.codeInsight.daemon.impl.DaemonListeners;
+import com.intellij.codeInsight.daemon.impl.ShowAutoImportPass;
 import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.codeInsight.hint.QuestionAction;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInspection.HintAction;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
-import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.impl.LaterInvocator;
 import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.keymap.KeymapUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.PopupChooserBuilder;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -51,68 +57,45 @@ import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.Function;
+import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.NotNullFunction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Set;
+import java.util.*;
 
-import static com.intellij.openapi.actionSystem.IdeActions.ACTION_SHOW_INTENTION_ACTIONS;
 import static com.intellij.util.containers.ContainerUtil.*;
 
 public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPsiElement implements HintAction, HighPriorityAction {
   @NotNull private final String myPackageName;
-  @NotNull private final TextRange myRangeInElement;
-  @NotNull private final PsiReference myReference;
-  @Nullable private Collection<String> myPackagesToImport;
+  @Nullable private List<String> myPackagesToImport;
   private boolean isPerformed;
 
   public GoImportPackageQuickFix(@NotNull PsiReference reference) {
     super(reference.getElement());
-    myReference = reference;
     myPackageName = reference.getCanonicalText();
-    myRangeInElement = reference.getRangeInElement();
+  }
+
+  @Nullable
+  public PsiReference getReference(PsiElement element) {
+    if (element != null && element.isValid()) {
+      for (PsiReference reference : element.getReferences()) {
+        if (isSupportedReference(reference)) {
+          return reference;
+        }
+      }
+    }
+    return null;
+  }
+
+  private static boolean isSupportedReference(@Nullable PsiReference reference) {
+    return reference instanceof GoReference || reference instanceof GoTypeReference;
   }
 
   @Override
   public boolean showHint(@NotNull Editor editor) {
-    if (isPerformed) return false;
-    if (!GoCodeInsightSettings.getInstance().isShowImportPopup()) return false;
-    if (HintManager.getInstance().hasShownHintsThatWillHideByOtherHint(true)) return false;
-    if (ApplicationManager.getApplication().isUnitTestMode()) return false;
-
-    PsiElement element = getStartElement();
-    if (element == null || !element.isValid()) return false;
-
-    if (myReference.resolve() != null) return false;
-
-    Collection<String> packagesToImport = getPackagesToImport(element);
-    if (packagesToImport.isEmpty()) {
-      return false;
-    }
-
-    String shortcutText = KeymapUtil.getFirstKeyboardShortcutText(ActionManager.getInstance().getAction(ACTION_SHOW_INTENTION_ACTIONS));
-    String message = getText(packagesToImport) + shortcutText;
-
-    TextRange referenceRange = myRangeInElement.shiftRight(element.getTextRange().getStartOffset());
-    HintManager.getInstance().showQuestionHint(
-      editor,
-      message,
-      referenceRange.getStartOffset(),
-      referenceRange.getEndOffset(),
-      new QuestionAction() {
-        @Override
-        public boolean execute() {
-          applyFix(packagesToImport, element.getContainingFile(), editor);
-          return true;
-        }
-      }
-    );
-    return true;
+    return doAutoImportOrShowHint(editor, true);
   }
 
   @NotNull
@@ -139,9 +122,8 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
   @Override
   public void invoke(@NotNull Project project, @NotNull PsiFile file, @Nullable("is null when called from inspection") Editor editor,
                      @NotNull PsiElement startElement, @NotNull PsiElement endElement) {
-    Collection<String> packagesToImport = getPackagesToImport(startElement);
-    assert !packagesToImport.isEmpty();
-    applyFix(packagesToImport, file, editor);
+    if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
+    perform(getPackagesToImport(startElement), file, editor);
   }
 
   @Override
@@ -149,8 +131,9 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
                              @NotNull PsiFile file,
                              @NotNull PsiElement startElement,
                              @NotNull PsiElement endElement) {
+    PsiReference reference = getReference(startElement);
     return !isPerformed && file instanceof GoFile && file.getManager().isInProject(file)
-           && myReference.getElement().isValid() && myReference.resolve() == null
+           && reference != null && reference.resolve() == null
            && !getPackagesToImport(startElement).isEmpty() && notQualified(startElement);
   }
 
@@ -161,7 +144,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
   }
 
   @NotNull
-  private Collection<String> getPackagesToImport(@NotNull PsiElement element) {
+  private List<String> getPackagesToImport(@NotNull PsiElement element) {
     if (myPackagesToImport == null) {
       GlobalSearchScope scope = GoUtil.moduleScope(element);
       PsiFile file = element.getContainingFile();
@@ -192,7 +175,65 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
     return myPackagesToImport;
   }
 
-  private void applyFix(@NotNull Collection<String> packagesToImport, @NotNull PsiFile file, @Nullable Editor editor) {
+  public boolean doAutoImportOrShowHint(@NotNull Editor editor, boolean showHint) {
+    if (isPerformed) return false;
+
+    PsiElement element = getStartElement();
+    if (element == null || !element.isValid()) return false;
+
+    PsiReference reference = getReference(element);
+    if (reference == null || reference.resolve() != null) return false;
+
+    List<String> packagesToImport = getPackagesToImport(element);
+    if (packagesToImport.isEmpty()) {
+      return false;
+    }
+
+    PsiFile file = element.getContainingFile();
+    String firstPackageToImport = getFirstItem(packagesToImport);
+
+    // autoimport on trying to fix
+    if (packagesToImport.size() == 1) {
+      if (GoCodeInsightSettings.getInstance().isAddUnambiguousImportsOnTheFly() && !LaterInvocator.isInModalContext() &&
+          (ApplicationManager.getApplication().isUnitTestMode() || DaemonListeners.canChangeFileSilently(file))) {
+        CommandProcessor.getInstance().runUndoTransparentAction(new Runnable() {
+          @Override
+          public void run() {
+            perform(file, firstPackageToImport);
+          }
+        });
+        return true;
+      }
+    }
+
+    // show hint on failed autoimport
+    if (showHint) {
+      if (ApplicationManager.getApplication().isUnitTestMode()) return false;
+      if (HintManager.getInstance().hasShownHintsThatWillHideByOtherHint(true)) return false;
+      if (!GoCodeInsightSettings.getInstance().isShowImportPopup()) return false;
+      TextRange referenceRange = reference.getRangeInElement().shiftRight(element.getTextRange().getStartOffset());
+      HintManager.getInstance().showQuestionHint(
+        editor,
+        ShowAutoImportPass.getMessage(packagesToImport.size() > 1, getFirstItem(packagesToImport)),
+        referenceRange.getStartOffset(),
+        referenceRange.getEndOffset(),
+        new QuestionAction() {
+          @Override
+          public boolean execute() {
+            if (file.isValid() && !editor.isDisposed()) {
+              perform(packagesToImport, file, editor);
+            }
+            return true;
+          }
+        }
+      );
+      return true;
+    }
+    return false;
+  }
+
+  private void perform(@NotNull List<String> packagesToImport, @NotNull PsiFile file, @Nullable Editor editor) {
+    LOG.assertTrue(editor != null || packagesToImport.size() == 1, "Cannot invoke fix with ambiguous imports on null editor");
     if (packagesToImport.size() > 1 && editor != null) {
       JBList list = new JBList(packagesToImport);
       list.installCellRenderer(new NotNullFunction<Object, JComponent>() {
@@ -212,7 +253,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
             public void run() {
               int i = list.getSelectedIndex();
               if (i < 0) return;
-              perform(file, newArrayList(packagesToImport).get(i));
+              perform(file, packagesToImport.get(i));
             }
           })
         .setFilteringEnabled(new Function<Object, String>() {
@@ -226,14 +267,19 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
       builder.getScrollPane().setViewportBorder(null);
       popup.showInBestPositionFor(editor);
     }
-    else {
+    else if (packagesToImport.size() == 1) {
       perform(file, getFirstItem(packagesToImport));
+    }
+    else {
+      String packages = StringUtil.join(packagesToImport, ",");
+      throw new IncorrectOperationException("Cannot invoke fix with ambiguous imports on editor ()" + editor + ". Packages: " + packages);
     }
   }
 
   private void perform(@NotNull PsiFile file, @Nullable String pathToImport) {
     if (file instanceof GoFile && pathToImport != null) {
-      CommandProcessor.getInstance().runUndoTransparentAction(new Runnable() {
+      Project project = file.getProject();
+      CommandProcessor.getInstance().executeCommand(project, new Runnable() {
         @Override
         public void run() {
           ApplicationManager.getApplication().runWriteAction(new Runnable() {
@@ -245,7 +291,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
             }
           });
         }
-      });
+      }, QuickFixBundle.message("add.import"), null);
     }
   }
 
