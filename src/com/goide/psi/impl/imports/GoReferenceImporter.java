@@ -17,15 +17,13 @@
 package com.goide.psi.impl.imports;
 
 import com.goide.GoLanguage;
-import com.goide.codeInsight.imports.GoCodeInsightSettings;
 import com.goide.codeInsight.imports.GoImportPackageQuickFix;
 import com.goide.psi.GoCompositeElement;
-import com.goide.psi.impl.GoReference;
 import com.intellij.codeInsight.daemon.ReferenceImporter;
 import com.intellij.codeInsight.daemon.impl.CollectHighlightsUtil;
+import com.intellij.codeInsight.daemon.impl.DaemonListeners;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
@@ -36,7 +34,8 @@ import java.util.List;
 public class GoReferenceImporter implements ReferenceImporter {
   @Override
   public boolean autoImportReferenceAtCursor(@NotNull Editor editor, @NotNull PsiFile file) {
-    if (!file.getViewProvider().getLanguages().contains(GoLanguage.INSTANCE)) {
+    if (!file.getViewProvider().getLanguages().contains(GoLanguage.INSTANCE) ||
+        !DaemonListeners.canChangeFileSilently(file)) {
       return false;
     }
 
@@ -50,12 +49,9 @@ public class GoReferenceImporter implements ReferenceImporter {
     for (PsiElement element : elements) {
       if (element instanceof GoCompositeElement) {
         for (PsiReference reference : element.getReferences()) {
-          if (reference instanceof GoReference) {
-            GoImportPackageQuickFix fix = new GoImportPackageQuickFix(reference);
-            if (fix.isAvailable(file.getProject(), editor, file)) {
-              fix.invoke(file.getProject(), editor, file);
-              return true;
-            }
+          GoImportPackageQuickFix fix = new GoImportPackageQuickFix(reference);
+          if (fix.doAutoImportOrShowHint(editor, false)) {
+            return true;
           }
         }
       }
@@ -65,19 +61,12 @@ public class GoReferenceImporter implements ReferenceImporter {
 
   @Override
   public boolean autoImportReferenceAt(@NotNull Editor editor, @NotNull PsiFile file, int offset) {
-    if (!file.getViewProvider().getLanguages().contains(GoLanguage.INSTANCE) ||
-        !GoCodeInsightSettings.getInstance().isAddUnambiguousImportsOnTheFly()) {
+    if (!file.getViewProvider().getLanguages().contains(GoLanguage.INSTANCE)) {
       return false;
     }
-
     PsiReference reference = file.findReferenceAt(offset);
-    if (reference instanceof GoReference) {
-      GoImportPackageQuickFix fix = new GoImportPackageQuickFix(reference);
-      Project project = file.getProject();
-      if (fix.isAvailable(project, editor, file)) {
-        fix.invoke(file.getProject(), editor, file);
-        return true;
-      }
+    if (reference != null) {
+      return new GoImportPackageQuickFix(reference).doAutoImportOrShowHint(editor, false);
     }
     return false;
   }

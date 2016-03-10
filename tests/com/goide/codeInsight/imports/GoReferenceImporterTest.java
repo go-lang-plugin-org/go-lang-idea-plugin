@@ -80,7 +80,7 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureByText("a.go", initial);
     myFixture.doHighlighting();
     myFixture.doHighlighting();
-    String after = "package a;\nimport \"fmt\" func a() {\n fmt.Println()  \n}";
+    String after = "package a;\n\nimport \"fmt\"\n\nfunc a() {\n fmt.Println()  \n}";
     String result = goOnTheFlyEnabled && javaOnTheFlyEnabled ? after : initial;
     myFixture.checkResult(result);
   }
@@ -92,18 +92,14 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
     myFixture.type("fmt.");
     myFixture.doHighlighting();
     myFixture.doHighlighting();
-    myFixture.checkResult("package main\nimport \"fmt\"\n\nfunc main() { fmt. }");
+    myFixture.checkResult("package main\n\nimport \"fmt\"\n\nfunc main() { fmt. }");
     FileEditor editor = FileEditorManager.getInstance(myFixture.getProject()).getSelectedEditor(myFixture.getFile().getVirtualFile());
-    UndoManager.getInstance(myFixture.getProject()).undo(editor);
-    myFixture.checkResult("package main\n" +
-                          "import \"fmt\"\n" +
-                          "\n" +
-                          "func main() { fmt. }");
     UndoManager.getInstance(myFixture.getProject()).undo(editor);
     myFixture.checkResult("package main\n\nfunc main() { <caret> }");
   }
 
   public void testOnTheFlyEnabled() {
+    
     doTestAddOnTheFly(true, true);
   }
 
@@ -120,8 +116,7 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
   }
 
   private void doTestImportOwnPath(String file, String text, String testFileText, String testText, String path, boolean shouldImport) {
-    DaemonCodeAnalyzerSettings.getInstance().setImportHintEnabled(true);
-    updateSettings(true, true);
+    updateSettings(false, false);
 
     myFixture.addFileToProject(FileUtil.join(path, file), text);
     PsiFile testFile = myFixture.addFileToProject(FileUtil.join(path, testFileText), testText);
