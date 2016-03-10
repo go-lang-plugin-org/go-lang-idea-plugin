@@ -24,6 +24,7 @@ import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
@@ -32,11 +33,13 @@ public class GoSelfImportInspection extends GoInspectionBase {
   @Override
   protected void checkFile(@NotNull GoFile file, @NotNull ProblemsHolder problemsHolder) {
     if (GoTestFinder.isTestFileWithTestPackage(file)) return;
-    String fileImportPath = file.getImportPath();
-    for (GoImportSpec importSpec : file.getImports()) {
-      String path = importSpec.getPath();
-      if (path.equals(fileImportPath) || ".".equals(path)) {
-        problemsHolder.registerProblem(importSpec, "Self import is not allowed", new GoSelfImportQuickFix());
+    PsiDirectory directory = file.getContainingDirectory();
+    if (directory != null) {
+      for (GoImportSpec importSpec : file.getImports()) {
+        PsiDirectory resolve = importSpec.getImportString().resolve();
+        if (directory.equals(resolve)) {
+          problemsHolder.registerProblem(importSpec, "Self import is not allowed", new GoSelfImportQuickFix());
+        }
       }
     }
   }
@@ -45,12 +48,13 @@ public class GoSelfImportInspection extends GoInspectionBase {
     protected GoSelfImportQuickFix() {
       super("Remove self import");
     }
+
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
       PsiElement element = descriptor.getPsiElement();
       PsiFile file = element != null ? element.getContainingFile() : null;
       if (!(element instanceof GoImportSpec && file instanceof GoFile)) return;
-  
+
       WriteCommandAction.runWriteCommandAction(project, new Runnable() {
         @Override
         public void run() {

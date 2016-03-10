@@ -19,8 +19,6 @@ package com.goide.quickfix;
 import com.goide.inspections.GoSelfImportInspection;
 import com.intellij.psi.PsiFile;
 
-import java.io.IOException;
-
 public class GoSelfImportInspectionTest extends GoQuickFixTestBase {
   @Override
   public void setUp() throws Exception {
@@ -33,7 +31,7 @@ public class GoSelfImportInspectionTest extends GoQuickFixTestBase {
     return false;
   }
 
-  public void testRemoveSelfImport() throws IOException {
+  public void testRemoveSelfImport() {
     PsiFile file = myFixture.addFileToProject("path/a.go", "package pack;" +
                                                            "import <error descr=\"Self import is not allowed\"><caret>\"path\"</error>");
     myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
@@ -47,8 +45,15 @@ public class GoSelfImportInspectionTest extends GoQuickFixTestBase {
     applySingleQuickFix("Remove self import");
   }
 
-  public void testDoNotConsiderImportFromTestPackageAsSelfImport() throws IOException {
+  public void testDoNotConsiderImportFromTestPackageAsSelfImport() {
     PsiFile file = myFixture.addFileToProject("path/a_test.go", "package pack_test; import <caret>\"path\"");
+    myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
+    myFixture.checkHighlighting();
+  }
+
+  public void testVendoringSelfImport() {
+    PsiFile file = myFixture.addFileToProject("vendor/vendorPackage/a.go", "package vendorPackage;" +
+                                                                           "import <error descr=\"Self import is not allowed\"><caret>\"vendorPackage\"</error>");
     myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
     myFixture.checkHighlighting();
   }
