@@ -70,7 +70,12 @@ import static com.intellij.util.containers.ContainerUtil.*;
 public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPsiElement implements HintAction, HighPriorityAction {
   @NotNull private final String myPackageName;
   @Nullable private List<String> myPackagesToImport;
-  private boolean isPerformed;
+
+  public GoImportPackageQuickFix(@NotNull PsiElement element, @NotNull String importPath) {
+    super(element);
+    myPackageName = "";
+    myPackagesToImport = Collections.singletonList(importPath);
+  }
 
   public GoImportPackageQuickFix(@NotNull PsiReference reference) {
     super(reference.getElement());
@@ -103,7 +108,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
   public String getText() {
     PsiElement element = getStartElement();
     if (element != null) {
-      return "Import " + getText(getPackagesToImport(element));
+      return "Import " + getText(getImportPathVariantsToImport(element));
     }
     return "Import package";
   }
@@ -123,7 +128,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
   public void invoke(@NotNull Project project, @NotNull PsiFile file, @Nullable("is null when called from inspection") Editor editor,
                      @NotNull PsiElement startElement, @NotNull PsiElement endElement) {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
-    perform(getPackagesToImport(startElement), file, editor);
+    perform(getImportPathVariantsToImport(startElement), file, editor);
   }
 
   @Override
@@ -132,59 +137,61 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
                              @NotNull PsiElement startElement,
                              @NotNull PsiElement endElement) {
     PsiReference reference = getReference(startElement);
-    return !isPerformed && file instanceof GoFile && file.getManager().isInProject(file)
+    return file instanceof GoFile && file.getManager().isInProject(file)
            && reference != null && reference.resolve() == null
-           && !getPackagesToImport(startElement).isEmpty() && notQualified(startElement);
+           && !getImportPathVariantsToImport(startElement).isEmpty() && notQualified(startElement);
   }
 
   private static boolean notQualified(@Nullable PsiElement startElement) {
-    return
-      startElement instanceof GoReferenceExpression && ((GoReferenceExpression)startElement).getQualifier() == null ||
+    return startElement instanceof GoReferenceExpression && ((GoReferenceExpression)startElement).getQualifier() == null ||
       startElement instanceof GoTypeReferenceExpression && ((GoTypeReferenceExpression)startElement).getQualifier() == null;
   }
 
   @NotNull
-  private List<String> getPackagesToImport(@NotNull PsiElement element) {
+  private List<String> getImportPathVariantsToImport(@NotNull PsiElement element) {
     if (myPackagesToImport == null) {
-      GlobalSearchScope scope = GoUtil.moduleScope(element);
-      PsiFile file = element.getContainingFile();
-      Set<String> imported = file instanceof GoFile ? ((GoFile)file).getImportedPackagesMap().keySet() : Collections.emptySet();
-      Project project = element.getProject();
-      PsiDirectory parentDirectory = file != null ? file.getParent() : null;
-      GoExcludedPathsSettings excludedSettings = GoExcludedPathsSettings.getInstance(project);
-      String testTargetPackage = GoTestFinder.getTestTargetPackage(file);
-      Collection<GoFile> packages = StubIndex.getElements(GoPackagesIndex.KEY, myPackageName, project, scope, GoFile.class);
-      myPackagesToImport = sorted(skipNulls(map2Set(
-        packages,
-        new Function<GoFile, String>() {
-          @Nullable
-          @Override
-          public String fun(@NotNull GoFile file) {
-            if (parentDirectory != null && parentDirectory.isEquivalentTo(file.getParent())) {
-              if (testTargetPackage == null || !testTargetPackage.equals(file.getPackageName())) {
-                return null;
-              }
-            }
-
-            String importPath = file.getImportPath();
-            return !imported.contains(importPath) && !excludedSettings.isExcluded(importPath) ? importPath : null;
-          }
-        }
-      )), new MyImportsComparator(element));
+      myPackagesToImport = getImportPathVariantsToImport(myPackageName, element);
     }
     return myPackagesToImport;
   }
 
-  public boolean doAutoImportOrShowHint(@NotNull Editor editor, boolean showHint) {
-    if (isPerformed) return false;
+  @NotNull
+  public static List<String> getImportPathVariantsToImport(@NotNull String packageName, @NotNull PsiElement context) {
+    GlobalSearchScope scope = GoUtil.moduleScope(context);
+    PsiFile file = context.getContainingFile();
+    Set<String> imported = file instanceof GoFile ? ((GoFile)file).getImportedPackagesMap().keySet() : Collections.emptySet();
+    Project project = context.getProject();
+    PsiDirectory parentDirectory = file != null ? file.getParent() : null;
+    GoExcludedPathsSettings excludedSettings = GoExcludedPathsSettings.getInstance(project);
+    String testTargetPackage = GoTestFinder.getTestTargetPackage(file);
+    Collection<GoFile> packages = StubIndex.getElements(GoPackagesIndex.KEY, packageName, project, scope, GoFile.class);
+    return sorted(skipNulls(map2Set(
+      packages,
+      new Function<GoFile, String>() {
+        @Nullable
+        @Override
+        public String fun(@NotNull GoFile file) {
+          if (parentDirectory != null && parentDirectory.isEquivalentTo(file.getParent())) {
+            if (testTargetPackage == null || !testTargetPackage.equals(file.getPackageName())) {
+              return null;
+            }
+          }
 
+          String importPath = file.getImportPath();
+          return !imported.contains(importPath) && !excludedSettings.isExcluded(importPath) ? importPath : null;
+        }
+      }
+    )), new MyImportsComparator(context));
+  }
+
+  public boolean doAutoImportOrShowHint(@NotNull Editor editor, boolean showHint) {
     PsiElement element = getStartElement();
     if (element == null || !element.isValid()) return false;
 
     PsiReference reference = getReference(element);
     if (reference == null || reference.resolve() != null) return false;
 
-    List<String> packagesToImport = getPackagesToImport(element);
+    List<String> packagesToImport = getImportPathVariantsToImport(element);
     if (packagesToImport.isEmpty()) {
       return false;
     }
@@ -286,7 +293,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
             @Override
             public void run() {
               if (!isAvailable()) return;
-              isPerformed = true;
+              if (((GoFile)file).getImportedPackagesMap().containsKey(pathToImport)) return;
               ((GoFile)file).addImport(pathToImport, null);
             }
           });
