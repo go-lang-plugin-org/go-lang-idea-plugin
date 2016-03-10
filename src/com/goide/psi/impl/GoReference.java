@@ -166,7 +166,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     Boolean result = RecursionManager.doPreventingRecursion(type, true, new Computable<Boolean>() {
       @Override
       public Boolean compute() {
-        if (type instanceof GoParType) return processGoType(((GoParType)type).getType(), processor, state);
+        if (type instanceof GoParType) return processGoType(((GoParType)type).getActualType(), processor, state);
         if (!processExistingType(type, processor, state)) return false;
         if (type instanceof GoPointerType) {
           if (!processPointer((GoPointerType)type, processor, state.put(POINTER, true))) return false;
