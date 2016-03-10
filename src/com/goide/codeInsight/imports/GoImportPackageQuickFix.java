@@ -36,7 +36,9 @@ import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.keymap.KeymapUtil;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
+import com.intellij.openapi.ui.popup.PopupChooserBuilder;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiDirectory;
@@ -202,16 +204,27 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
           return label;
         }
       });
-      JBPopupFactory.getInstance().createListPopupBuilder(list).setRequestFocus(true).setTitle("Package to import").setItemChoosenCallback(
-        new Runnable() {
+      PopupChooserBuilder builder = JBPopupFactory.getInstance().createListPopupBuilder(list).setRequestFocus(true)
+        .setTitle("Package to import")
+        .setItemChoosenCallback(
+          new Runnable() {
+            @Override
+            public void run() {
+              int i = list.getSelectedIndex();
+              if (i < 0) return;
+              perform(file, newArrayList(packagesToImport).get(i));
+            }
+          })
+        .setFilteringEnabled(new Function<Object, String>() {
           @Override
-          public void run() {
-            int i = list.getSelectedIndex();
-            if (i < 0) return;
-            perform(file, newArrayList(packagesToImport).get(i));
+          public String fun(Object o) {
+            return o instanceof String ? (String)o : o.toString();
           }
-        }
-      ).createPopup().showInBestPositionFor(editor);
+        });
+      JBPopup popup = builder.createPopup();
+      builder.getScrollPane().setBorder(null);
+      builder.getScrollPane().setViewportBorder(null);
+      popup.showInBestPositionFor(editor);
     }
     else {
       perform(file, getFirstItem(packagesToImport));
