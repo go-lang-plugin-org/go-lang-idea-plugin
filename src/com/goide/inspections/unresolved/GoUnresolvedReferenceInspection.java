@@ -32,8 +32,12 @@ import com.intellij.psi.ResolveResult;
 import com.intellij.psi.formatter.FormatterUtil;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
+import java.util.List;
 
 import static com.intellij.codeInspection.ProblemHighlightType.GENERIC_ERROR_OR_WARNING;
 import static com.intellij.codeInspection.ProblemHighlightType.LIKE_UNKNOWN_SYMBOL;
@@ -71,7 +75,7 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
         else if (reference.resolve() == null) {
           LocalQuickFix[] fixes = LocalQuickFix.EMPTY_ARRAY;
           if (isProhibited(o, qualifier)) {
-            fixes = createImportPackageFixes(o, reference);
+            fixes = createImportPackageFixes(o, reference, holder.isOnTheFly());
           }
           else if (holder.isOnTheFly()) {
             fixes = new LocalQuickFix[]{
@@ -124,7 +128,7 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
           boolean isProhibited = isProhibited(o, qualifier);
           LocalQuickFix[] fixes = LocalQuickFix.EMPTY_ARRAY;
           if (isProhibited) {
-            fixes = createImportPackageFixes(o, reference);
+            fixes = createImportPackageFixes(o, reference, holder.isOnTheFly());
           }
           else if (holder.isOnTheFly()) {
             fixes = new LocalQuickFix[]{new GoIntroduceTypeFix(id, name)};
@@ -136,11 +140,27 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
   }
 
   @NotNull
-  private static LocalQuickFix[] createImportPackageFixes(@NotNull PsiElement target, @NotNull PsiReference reference) {
-    GoImportPackageQuickFix importFix = new GoImportPackageQuickFix(reference);
-    return importFix.isAvailable(target.getProject(), target.getContainingFile(), target, target)
-           ? new LocalQuickFix[]{importFix}
-           : LocalQuickFix.EMPTY_ARRAY;
+  private static LocalQuickFix[] createImportPackageFixes(@NotNull PsiElement target, @NotNull PsiReference reference, boolean onTheFly) {
+    if (onTheFly) {
+      GoImportPackageQuickFix importFix = new GoImportPackageQuickFix(reference);
+      if (importFix.isAvailable(target.getProject(), target.getContainingFile(), target, target)) {
+        return new LocalQuickFix[]{importFix};
+      }
+    }
+    else {
+      List<String> packagesToImport = GoImportPackageQuickFix.getImportPathVariantsToImport(reference.getCanonicalText(), target);
+      if (!packagesToImport.isEmpty()) {
+        Collection<LocalQuickFix> result = ContainerUtil.newArrayList();
+        for (String importPath : packagesToImport) {
+          GoImportPackageQuickFix importFix = new GoImportPackageQuickFix(target, importPath);
+          if (importFix.isAvailable(target.getProject(), target.getContainingFile(), target, target)) {
+            result.add(importFix);
+          }
+        }
+        return result.toArray(new LocalQuickFix[result.size()]);
+      }
+    }
+    return LocalQuickFix.EMPTY_ARRAY;
   }
 
   private static boolean isProhibited(@NotNull GoCompositeElement o, @Nullable GoCompositeElement qualifier) {
