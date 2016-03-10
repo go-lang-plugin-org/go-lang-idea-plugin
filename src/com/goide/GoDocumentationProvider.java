@@ -219,7 +219,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
         return replaceInnerTypes(type, contextImportPath, ((GoChannelType)type).getType());
       }
       else if (type instanceof GoParType) {
-        return replaceInnerTypes(type, contextImportPath, ((GoParType)type).getType());
+        return replaceInnerTypes(type, contextImportPath, ((GoParType)type).getActualType());
       }
       else if (type instanceof GoArrayOrSliceType) {
         return replaceInnerTypes(type, contextImportPath, ((GoArrayOrSliceType)type).getType());
