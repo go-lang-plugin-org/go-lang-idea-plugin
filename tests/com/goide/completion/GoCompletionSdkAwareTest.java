@@ -350,4 +350,23 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
     myFixture.addFileToProject("vendor/builtin/builtin.go", "package builtin; func Hello() {}");
     doCheckResult("package a; import \"built<caret>\"", "package a; import \"builtin<caret>\"");
   }
+
+  public void testAutoImportVendorPackage() {
+    myFixture.addFileToProject("vendor/vendorPackage/foo.go", "package vendorPackage; func Bar() {}");
+    doCheckResult("package src; func _() { ven.Ba<caret> }", "package src;\n" +
+                                                             "\n" +
+                                                             "import \"vendorPackage\"\n" +
+                                                             "\n" +
+                                                             "func _() { vendorPackage.Bar() }");
+  }
+
+  public void testAutoImportVendorPackageWithDisabledVendoring() {
+    disableVendoring();
+    myFixture.addFileToProject("vendor/vendorPackage/foo.go", "package vendorPackage; func Bar() {}");
+    doCheckResult("package src; func _() { ven.Ba<caret> }", "package src;\n" +
+                                                             "\n" +
+                                                             "import \"vendor/vendorPackage\"\n" +
+                                                             "\n" +
+                                                             "func _() { vendorPackage.Bar() }");
+  }
 }

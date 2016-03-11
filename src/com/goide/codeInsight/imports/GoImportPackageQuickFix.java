@@ -158,12 +158,12 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
   @NotNull
   public static List<String> getImportPathVariantsToImport(@NotNull String packageName, @NotNull PsiElement context) {
     GlobalSearchScope scope = GoUtil.moduleScope(context);
-    PsiFile file = context.getContainingFile();
-    Set<String> imported = file instanceof GoFile ? ((GoFile)file).getImportedPackagesMap().keySet() : Collections.emptySet();
+    PsiFile contextFile = context.getContainingFile();
+    Set<String> imported = contextFile instanceof GoFile ? ((GoFile)contextFile).getImportedPackagesMap().keySet() : Collections.emptySet();
     Project project = context.getProject();
-    PsiDirectory parentDirectory = file != null ? file.getParent() : null;
+    PsiDirectory parentDirectory = contextFile != null ? contextFile.getParent() : null;
     GoExcludedPathsSettings excludedSettings = GoExcludedPathsSettings.getInstance(project);
-    String testTargetPackage = GoTestFinder.getTestTargetPackage(file);
+    String testTargetPackage = GoTestFinder.getTestTargetPackage(contextFile);
     Collection<GoFile> packages = StubIndex.getElements(GoPackagesIndex.KEY, packageName, project, scope, GoFile.class);
     return sorted(skipNulls(map2Set(
       packages,
@@ -177,7 +177,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
             }
           }
 
-          String importPath = file.getImportPath();
+          String importPath = file.getVendoringAwareImportPath(contextFile);
           return !imported.contains(importPath) && !excludedSettings.isExcluded(importPath) ? importPath : null;
         }
       }
