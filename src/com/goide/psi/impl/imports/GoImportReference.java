@@ -37,6 +37,9 @@ import java.util.List;
 import java.util.Set;
 
 public class GoImportReference extends FileReference {
+  @Nullable
+  private String myUnresolvedMessage;
+  
   public GoImportReference(@NotNull FileReferenceSet fileReferenceSet, TextRange range, int index, String text) {
     super(fileReferenceSet, range, index, text);
   }
@@ -73,6 +76,7 @@ public class GoImportReference extends FileReference {
         PsiElement element = resolveResult.getElement();
         if (element instanceof PsiDirectory) {
           if (GoPsiImplUtil.isBuiltinDirectory((PsiDirectory)element)) {
+            myUnresolvedMessage = "Cannot import `builtin` package";
             continue;
           }
           if (isLast()) {
@@ -146,6 +150,15 @@ public class GoImportReference extends FileReference {
       }
     }
     return result.toArray(new LocalQuickFix[result.size()]);
+  }
+
+  @NotNull
+  @Override
+  public String getUnresolvedMessagePattern() {
+    if (myUnresolvedMessage != null) {
+      return myUnresolvedMessage;
+    }
+    return super.getUnresolvedMessagePattern();
   }
 
   private boolean isFirst() {
