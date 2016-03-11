@@ -31,7 +31,6 @@ import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 
 import java.util.List;
 
-
 public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
   private boolean defaultJavaOnTheFly;
   private boolean defaultGoOnTheFly;
@@ -154,5 +153,17 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureByText("a.go", "package a; func a() { b<caret>.Println() }");
     myFixture.launchAction(myFixture.findSingleIntention("Import vendor/a/b?"));
     myFixture.checkResult("package a;\n\nimport \"vendor/a/b\"\n\nfunc a() { b<caret>.Println() }");
+  }
+  
+  public void testImportBuiltinPackage() {
+    myFixture.configureByText("a.go", "package a; func a() { built<caret>in.Println() }");
+    assertEmpty(myFixture.filterAvailableIntentions("Import builtin?"));
+  } 
+  
+  public void testImportVendoredBuiltinPackage() {
+    myFixture.addFileToProject("vendor/builtin/builtin.go", "package builtin");
+    myFixture.configureByText("a.go", "package a; func a() { built<caret>in.Println() }");
+    myFixture.launchAction(myFixture.findSingleIntention("Import builtin?"));
+    myFixture.checkResult("package a;\n\nimport \"builtin\"\n\nfunc a() { builtin.Println() }");
   }
 }
