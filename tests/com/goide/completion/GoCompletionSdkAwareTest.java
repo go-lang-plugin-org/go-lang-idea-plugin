@@ -27,7 +27,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
   public void testFormatter() {
     doTestInclude("package main; import . \"fmt\"; type alias <caret>", "Formatter");
   }
-  
+
   public void testDoNotCompleteBuiltinFunctions() {
     doCheckResult("package main; var a = fals<caret>", "package main; var a = false<caret>");
   }
@@ -180,7 +180,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
 
   public void testDoNotImportLocallyImportedPackage() throws IOException {
     myFixture.addFileToProject("imported/imported.go", "package imported\n" +
-                                                                     "func LocallyImported() {}");
+                                                       "func LocallyImported() {}");
     doCheckResult("package main; \n" +
                   "import `./imported`\n" +
                   "func test(){LocallyImport<caret>}", "package main; \n" +
@@ -308,7 +308,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
     myFixture.completeBasic();
     myFixture.checkResult("package pack1;\n\nimport \"pack2\"\n\nfunc test() { pack1.MyFunctionFromOtherPath() }");
   }
-  
+
   public void testAutoImportOwnImportPathFromTest() throws IOException {
     myFixture.addFileToProject("pack/a.go", "package myPack; func Func() {}");
     PsiFile testFile = myFixture.addFileToProject("pack/a_test.go", "package myPack_test; func TestFunc() { myPack.Fun<caret> }");
@@ -325,7 +325,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
     myFixture.completeBasic();
     myFixture.checkResult(text);
   }
-  
+
   public void testImportOwnPathFromTestFile() throws IOException {
     PsiFile testFile = myFixture.addFileToProject("fuzz/fuzy_test.go", "package fuzy_test; import \"<caret>\"");
     myFixture.configureFromExistingVirtualFile(testFile.getVirtualFile());
@@ -342,4 +342,12 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
     assertTrue(strings != null && !strings.contains("fuzz"));
   }
 
+  public void testDoNotCompleteBuiltinImport() {
+    doCheckResult("package a; import \"built<caret>\"", "package a; import \"built<caret>\"");
+  }
+  
+  public void testCompleteVendoredBuiltinImport() {
+    myFixture.addFileToProject("vendor/builtin/builtin.go", "package builtin; func Hello() {}");
+    doCheckResult("package a; import \"built<caret>\"", "package a; import \"builtin<caret>\"");
+  }
 }

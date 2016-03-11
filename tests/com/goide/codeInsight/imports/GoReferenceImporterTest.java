@@ -99,7 +99,6 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testOnTheFlyEnabled() {
-    
     doTestAddOnTheFly(true, true);
   }
 
