@@ -68,6 +68,11 @@ public class GoFile extends PsiFileBase {
     return GoSdkUtil.getImportPath(getParent());
   }
 
+  @Nullable
+  public String getVendoringAwareImportPath(@Nullable PsiElement context) {
+    return GoSdkUtil.getVendoringAwareImportPath(getParent(), context);
+  }
+
   @NotNull
   @Override
   public SearchScope getUseScope() {
@@ -203,7 +208,7 @@ public class GoFile extends PsiFileBase {
           if (!spec.isForSideEffects()) {
             PsiDirectory resolve = spec.getImportString().resolve();
             extraDeps.add(resolve);
-            String path = GoSdkUtil.getImportPath(resolve);
+            String path = GoSdkUtil.getVendoringAwareImportPath(resolve, GoFile.this);
             if (StringUtil.isNotEmpty(path)) {
               map.put(path, spec);
             }

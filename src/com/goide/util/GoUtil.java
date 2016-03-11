@@ -209,7 +209,7 @@ public class GoUtil {
     if (inSamePackage) return true;
     if (reference instanceof GoNamedElement && !((GoNamedElement)reference).isPublic()) return false;
     if (GoPsiImplUtil.builtin(definitionFile)) return true;
-    String path = ((GoFile)definitionFile).getImportPath();
+    String path = ((GoFile)definitionFile).getVendoringAwareImportPath(reference);
     if (refFile.getImportedPackagesMap().containsKey(path)) return true;
     for (GoFile file : GoPsiImplUtil.getAllPackageFiles(refFile)) {
       if (file != refFile && refFile.getOriginalFile() != file) {

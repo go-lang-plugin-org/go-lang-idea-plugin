@@ -118,4 +118,8 @@ abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsi
       throw new RuntimeException(e);
     }
   }
+
+  protected void disableVendoring() {
+    GoModuleSettings.getInstance(myFixture.getModule()).getVendoringSettings().vendorSupportEnabled = ThreeState.NO;
+  }
 }

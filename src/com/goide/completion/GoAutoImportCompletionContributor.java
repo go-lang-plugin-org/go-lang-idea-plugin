@@ -83,7 +83,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         }
         if (processors.isEmpty()) return;
 
-        NamedElementProcessor processor = new NamedElementProcessor(processors, file.getImportedPackagesMap(), result);
+        NamedElementProcessor processor = new NamedElementProcessor(processors, file, result);
         Project project = position.getProject();
         GlobalSearchScope scope = GoUtil.moduleScopeWithoutTests(file);
         VirtualFile containingDirectory = file.getVirtualFile().getParent();
@@ -277,15 +277,17 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
 
   private static class NamedElementProcessor implements Processor<GoNamedElement> {
     @NotNull private final Collection<ElementProcessor> myProcessors;
+    @NotNull private final GoFile myContextFile;
     @NotNull private final CompletionResultSet myResult;
     @NotNull private String myName = "";
     @NotNull private final Map<String, GoImportSpec> myImportedPackages;
 
     public NamedElementProcessor(@NotNull Collection<ElementProcessor> processors,
-                                 @NotNull Map<String, GoImportSpec> packages,
+                                 @NotNull GoFile contextFile,
                                  @NotNull CompletionResultSet result) {
       myProcessors = processors;
-      myImportedPackages = packages;
+      myContextFile = contextFile;
+      myImportedPackages = contextFile.getImportedPackagesMap();
       myResult = result;
     }
 
@@ -322,7 +324,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
       if (existingValue != null) return existingValue;
 
       GoFile declarationFile = element.getContainingFile();
-      String importPath = declarationFile.getImportPath();
+      String importPath = declarationFile.getVendoringAwareImportPath(myContextFile);
       GoImportSpec existingImport = myImportedPackages.get(importPath);
 
       boolean exists = existingImport != null;

@@ -140,4 +140,19 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureByText("a.go", "package foo; func a() { fmt.Print<caret> }");
     assertNotEmpty(myFixture.getLookupElementStrings());
   }
+  
+  public void testImportVendoringPackage() {
+    myFixture.addFileToProject("vendor/a/b/c.go", "package b");
+    myFixture.configureByText("a.go", "package a; func a() { b<caret>.Println() }");
+    myFixture.launchAction(myFixture.findSingleIntention("Import a/b?"));
+    myFixture.checkResult("package a;\n\nimport \"a/b\"\n\nfunc a() { b<caret>.Println() }");
+  } 
+  
+  public void testImportVendoringPackageWithDisabledVendoring() {
+    disableVendoring();
+    myFixture.addFileToProject("vendor/a/b/c.go", "package b");
+    myFixture.configureByText("a.go", "package a; func a() { b<caret>.Println() }");
+    myFixture.launchAction(myFixture.findSingleIntention("Import vendor/a/b?"));
+    myFixture.checkResult("package a;\n\nimport \"vendor/a/b\"\n\nfunc a() { b<caret>.Println() }");
+  }
 }
