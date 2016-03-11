@@ -376,7 +376,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testBuiltinImport() {
-    myFixture.configureByText("a.go", "package a; import _ `<error descr=\"Cannot resolve file 'builtin'\">builtin</error>`");
+    myFixture.configureByText("a.go", "package a; import _ `<error descr=\"Cannot import `builtin` package\">builtin</error>`");
     myFixture.checkHighlighting();
   }
   
