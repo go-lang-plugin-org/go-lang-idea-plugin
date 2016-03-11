@@ -48,11 +48,11 @@ public class GoAutoImportInsertHandler<T extends GoNamedElement> implements Inse
   @Nullable private final Function<T, InsertHandler<LookupElement>> myDelegateGetter;
   @Nullable private final Class<T> myClass;
 
-  public GoAutoImportInsertHandler() {
+  private GoAutoImportInsertHandler() {
     this((Function<T, InsertHandler<LookupElement>>)null, null);
   }
 
-  public GoAutoImportInsertHandler(@Nullable InsertHandler<LookupElement> delegate, @Nullable Class<T> clazz) {
+  private GoAutoImportInsertHandler(@Nullable InsertHandler<LookupElement> delegate, @Nullable Class<T> clazz) {
     this(new Function<T, InsertHandler<LookupElement>>() {
       @Nullable
       @Override
@@ -62,7 +62,7 @@ public class GoAutoImportInsertHandler<T extends GoNamedElement> implements Inse
     }, clazz);
   }
 
-  public GoAutoImportInsertHandler(@Nullable Function<T, InsertHandler<LookupElement>> delegateGetter, @Nullable Class<T> clazz) {
+  private GoAutoImportInsertHandler(@Nullable Function<T, InsertHandler<LookupElement>> delegateGetter, @Nullable Class<T> clazz) {
     myDelegateGetter = delegateGetter;
     myClass = clazz;
   }
@@ -82,11 +82,11 @@ public class GoAutoImportInsertHandler<T extends GoNamedElement> implements Inse
   }
 
   private static void autoImport(@NotNull InsertionContext context, @NotNull GoNamedElement element) {
-    String importPath = element.getContainingFile().getImportPath();
+    PsiFile file = context.getFile();
+    String importPath = element.getContainingFile().getVendoringAwareImportPath(file);
     if (StringUtil.isEmpty(importPath)) return;
 
     PsiDocumentManager.getInstance(context.getProject()).commitDocument(context.getEditor().getDocument());
-    PsiFile file = context.getFile();
     PsiReference reference = file.findReferenceAt(context.getStartOffset());
     if (reference != null) {
       PsiElement referenceElement = reference.getElement();

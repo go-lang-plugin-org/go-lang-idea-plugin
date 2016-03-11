@@ -225,7 +225,7 @@ public class GoSdkUtil {
 
   @Nullable
   @Contract("null, _ -> null")
-  private static String getVendoringAwareImportPath(@Nullable PsiDirectory psiDirectory, @Nullable PsiElement context) {
+  public static String getVendoringAwareImportPath(@Nullable PsiDirectory psiDirectory, @Nullable PsiElement context) {
     if (psiDirectory == null) {
       return null;
     }
