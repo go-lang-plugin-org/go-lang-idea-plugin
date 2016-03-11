@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -98,9 +98,9 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
     ResolveState state = ResolveState.initial();
     GoTypeReferenceExpression qualifier = myElement.getQualifier();
     if (qualifier != null) {
-      return processQualifierExpression(((GoFile)file), qualifier, processor, state);
+      return processQualifierExpression((GoFile)file, qualifier, processor, state);
     }
-    return processUnqualifiedResolve(((GoFile)file), processor, state, true);
+    return processUnqualifiedResolve((GoFile)file, processor, state, true);
   }
 
   private boolean processQualifierExpression(@NotNull GoFile file,
@@ -110,7 +110,7 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
     PsiElement target = qualifier.getReference().resolve();
     if (target == null || target == qualifier) return false;
     if (target instanceof GoImportSpec) {
-      if (GoConstants.C_PATH.equals(((GoImportSpec)target).getPath())) return processor.execute(myElement, state);
+      if (((GoImportSpec)target).isCImport()) return processor.execute(myElement, state);
       target = ((GoImportSpec)target).getImportString().resolve();
     }
     if (target instanceof PsiDirectory) {
@@ -177,7 +177,7 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
   }
 
   public boolean allowed(@NotNull GoTypeSpec definition) {
-    return !myInsideInterfaceType || (definition.getSpecType().getType() instanceof GoInterfaceType);
+    return !myInsideInterfaceType || definition.getSpecType().getType() instanceof GoInterfaceType;
   }
 
   @Override
