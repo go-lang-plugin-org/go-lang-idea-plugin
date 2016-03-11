@@ -137,7 +137,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     if (target == null) return false;
     if (target == qualifier) return processor.execute(myElement, state);
     if (target instanceof GoImportSpec) {
-      if (GoConstants.C_PATH.equals(((GoImportSpec)target).getPath())) return processor.execute(myElement, state);
+      if (((GoImportSpec)target).isCImport()) return processor.execute(myElement, state);
       target = ((GoImportSpec)target).getImportString().resolve();
     }
     if (target instanceof PsiDirectory && !processDirectory((PsiDirectory)target, file, null, processor, state, false)) return false;
