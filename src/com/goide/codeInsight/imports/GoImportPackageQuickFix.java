@@ -22,6 +22,7 @@ import com.goide.project.GoExcludedPathsSettings;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoReferenceExpression;
 import com.goide.psi.GoTypeReferenceExpression;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.psi.impl.GoReference;
 import com.goide.psi.impl.GoTypeReference;
 import com.goide.runconfig.testing.GoTestFinder;
@@ -176,7 +177,9 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
               return null;
             }
           }
-
+          if (GoPsiImplUtil.builtin(file)) {
+            return null;
+          }
           String importPath = file.getVendoringAwareImportPath(contextFile);
           return !imported.contains(importPath) && !excludedSettings.isExcluded(importPath) ? importPath : null;
         }
