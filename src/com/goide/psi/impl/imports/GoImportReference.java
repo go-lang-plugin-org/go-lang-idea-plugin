@@ -16,9 +16,9 @@
 
 package com.goide.psi.impl.imports;
 
-import com.goide.GoConstants;
 import com.goide.codeInsight.imports.GoGetPackageFix;
 import com.goide.completion.GoCompletionUtil;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInsight.completion.CompletionUtil;
 import com.intellij.codeInsight.daemon.quickFix.CreateFileFix;
 import com.intellij.codeInspection.LocalQuickFix;
@@ -52,10 +52,6 @@ public class GoImportReference extends FileReference {
   @NotNull
   @Override
   protected ResolveResult[] innerResolve(boolean caseSensitive, @NotNull PsiFile file) {
-    if (isFirst() && isLast() && GoConstants.BUILTIN_PACKAGE_NAME.equals(getFileReferenceSet().getPathString())) {
-      // import "builtin" can't be resolved
-      return ResolveResult.EMPTY_ARRAY;
-    }
     if (isFirst()) {
       if (".".equals(getCanonicalText())) {
         PsiDirectory directory = getDirectory();
@@ -74,7 +70,11 @@ public class GoImportReference extends FileReference {
     for (PsiFileSystemItem context : getContexts()) {
       innerResolveInContext(referenceText, context, innerResult, caseSensitive);
       for (ResolveResult resolveResult : innerResult) {
-        if (resolveResult.getElement() instanceof PsiDirectory) {
+        PsiElement element = resolveResult.getElement();
+        if (element instanceof PsiDirectory) {
+          if (GoPsiImplUtil.isBuiltinDirectory((PsiDirectory)element)) {
+            continue;
+          }
           if (isLast()) {
             return new ResolveResult[]{resolveResult};
           }

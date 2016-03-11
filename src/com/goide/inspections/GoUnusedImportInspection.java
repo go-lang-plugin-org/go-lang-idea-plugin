@@ -62,7 +62,7 @@ public class GoUnusedImportInspection extends GoInspectionBase {
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
       PsiElement element = descriptor.getPsiElement();
-      if (element == null || !(element instanceof GoImportSpec)) {
+      if (!(element instanceof GoImportSpec)) {
         return;
       }
       element.replace(GoElementFactory.createImportSpec(project, ((GoImportSpec)element).getPath(), "_"));
