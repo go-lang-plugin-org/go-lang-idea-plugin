@@ -375,6 +375,17 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     doTest();
   }
 
+  public void testBuiltinImport() {
+    myFixture.configureByText("a.go", "package a; import _ `<error descr=\"Cannot resolve file 'builtin'\">builtin</error>`");
+    myFixture.checkHighlighting();
+  }
+  
+  public void testVendoredBuiltinImport() {
+    myFixture.addFileToProject("vendor/builtin/builtin.go", "package builtin; func Hello() {}");
+    myFixture.configureByText("a.go", "package a; import _ `builtin`");
+    myFixture.checkHighlighting();
+  }
+
   public void testDuplicatePackageAlias() {
     myFixture.addFileToProject("pack1/pack1.go", "package pack1; func Foo() {}");
     myFixture.addFileToProject("pack2/pack2.go", "package pack2");

@@ -69,10 +69,7 @@ public class GoPsiImplUtil {
   };
 
   public static boolean builtin(@Nullable PsiElement resolve) {
-    if (resolve == null) return false;
-    PsiFile file = resolve.getContainingFile();
-    if (!(file instanceof GoFile)) return false;
-    return isBuiltinFile(file);
+    return resolve != null && isBuiltinFile(resolve.getContainingFile());
   }
 
   public static boolean isPanic(@NotNull GoCallExpr o) {
@@ -88,8 +85,17 @@ public class GoPsiImplUtil {
   }
 
   private static boolean isBuiltinFile(@NotNull PsiFile file) {
-    return StringUtil.equals(((GoFile)file).getPackageName(), GoConstants.BUILTIN_PACKAGE_NAME)
-           && StringUtil.equals(file.getName(), GoConstants.BUILTIN_FILE_NAME);
+    return file instanceof GoFile
+           && GoConstants.BUILTIN_PACKAGE_NAME.equals(((GoFile)file).getPackageName())
+           && GoConstants.BUILTIN_PACKAGE_NAME.equals(((GoFile)file).getImportPath())
+           && GoConstants.BUILTIN_FILE_NAME.equals(file.getName());
+  }
+
+  @Contract("null -> false")
+  public static boolean isBuiltinDirectory(@Nullable PsiDirectory directory) {
+    return directory != null 
+           && GoConstants.BUILTIN_PACKAGE_NAME.equals(directory.getName())
+           && GoConstants.BUILTIN_PACKAGE_NAME.equals(GoSdkUtil.getImportPath(directory));
   }
 
   @NotNull
