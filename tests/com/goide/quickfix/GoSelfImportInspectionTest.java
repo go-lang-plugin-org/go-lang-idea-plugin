@@ -36,13 +36,15 @@ public class GoSelfImportInspectionTest extends GoQuickFixTestBase {
                                                            "import <error descr=\"Self import is not allowed\"><caret>\"path\"</error>");
     myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
     myFixture.checkHighlighting();
-    applySingleQuickFix("Remove self import");
+    applySingleQuickFix(GoDeleteImportQuickFix.QUICK_FIX_NAME);
+    myFixture.checkResult("package pack;");
   }
 
   public void testRemoveRelativeSelfImport() {
     myFixture.configureByText("a.go", "package pack; import <error descr=\"Self import is not allowed\"><caret>\".\"</error>");
     myFixture.checkHighlighting();
-    applySingleQuickFix("Remove self import");
+    applySingleQuickFix(GoDeleteImportQuickFix.QUICK_FIX_NAME);
+    myFixture.checkResult("package pack;");
   }
 
   public void testDoNotConsiderImportFromTestPackageAsSelfImport() {
