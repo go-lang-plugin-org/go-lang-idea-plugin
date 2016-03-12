@@ -28,8 +28,11 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleServiceManager;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.impl.source.resolve.ResolveCache;
+import com.intellij.util.ThreeState;
 import com.intellij.util.messages.Topic;
 import com.intellij.util.xmlb.XmlSerializerUtil;
+import com.intellij.util.xmlb.annotations.OptionTag;
 import com.intellij.util.xmlb.annotations.Property;
 import org.jetbrains.annotations.NotNull;
 
@@ -51,12 +54,15 @@ public class GoModuleSettings implements PersistentStateComponent<GoModuleSettin
   }
 
   @NotNull
-  public GoVendoringSettings getVendoringSettings() {
-    return myState.vendoringSettings;
+  public ThreeState getVendoringEnabled() {
+    return myState.vendoring;
   }
 
-  public void setVendoringSettings(@NotNull GoVendoringSettings vendorSupportEnabled) {
-    myState.vendoringSettings = vendorSupportEnabled;
+  public void setVendoringEnabled(@NotNull ThreeState vendoringEnabled) {
+    if (vendoringEnabled != myState.vendoring) {
+      ResolveCache.getInstance(myModule.getProject()).clearCache(true);
+    }
+    myState.vendoring = vendoringEnabled;
   }
 
   @NotNull
@@ -67,6 +73,7 @@ public class GoModuleSettings implements PersistentStateComponent<GoModuleSettin
   public void setBuildTargetSettings(@NotNull GoBuildTargetSettings buildTargetSettings) {
     if (!buildTargetSettings.equals(myState.buildTargetSettings)) {
       myModule.getMessageBus().syncPublisher(TOPIC).changed();
+      ResolveCache.getInstance(myModule.getProject()).clearCache(true);
     }
     myState.buildTargetSettings = buildTargetSettings;
   }
@@ -87,15 +94,15 @@ public class GoModuleSettings implements PersistentStateComponent<GoModuleSettin
   }
 
   static class GoModuleSettingsState {
-    @Property(surroundWithTag = false)
+    @OptionTag
     @NotNull
-    private GoVendoringSettings vendoringSettings = new GoVendoringSettings();
+    private ThreeState vendoring = ThreeState.UNSURE;
 
     @Property(surroundWithTag = false)
     @NotNull
     private GoBuildTargetSettings buildTargetSettings = new GoBuildTargetSettings();
   }
-  
+
   public static void showModulesConfigurable(@NotNull Project project) {
     ApplicationManager.getApplication().assertIsDispatchThread();
     if (!project.isDisposed()) {

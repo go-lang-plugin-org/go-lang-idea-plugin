@@ -100,7 +100,7 @@ public class GoExecutor {
   @NotNull
   public static GoExecutor in(@NotNull Module module) {
     Project project = module.getProject();
-    ThreeState vendoringEnabled = GoModuleSettings.getInstance(module).getVendoringSettings().vendorSupportEnabled;
+    ThreeState vendoringEnabled = GoModuleSettings.getInstance(module).getVendoringEnabled();
     return new GoExecutor(project, module)
       .withGoRoot(GoSdkService.getInstance(project).getSdkHomePath(module))
       .withGoPath(GoSdkUtil.retrieveGoPath(project, module))

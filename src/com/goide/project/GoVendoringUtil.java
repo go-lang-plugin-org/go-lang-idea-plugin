@@ -18,30 +18,31 @@ package com.goide.project;
 
 import com.goide.sdk.GoSdkService;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.ThreeState;
-import com.intellij.util.text.VersionComparatorUtil;
-import com.intellij.util.xmlb.annotations.Tag;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Tag("vendoring")
-public class GoVendoringSettings {
-  @NotNull
-  public ThreeState vendorSupportEnabled = ThreeState.UNSURE;
-
+public class GoVendoringUtil {
   public static boolean supportsVendoringByDefault(@Nullable String sdkVersion) {
     if (sdkVersion == null || sdkVersion.length() < 3) {
       return false;
     }
-    return VersionComparatorUtil.compare(sdkVersion.substring(0, 3), "1.6") > 0;
+    return StringUtil.parseDouble(sdkVersion.substring(0, 3), 0) >= 1.6;
+  }
+
+  public static boolean vendoringCanBeDisabled(@Nullable String sdkVersion) {
+    if (sdkVersion == null || sdkVersion.length() < 3) {
+      return true;
+    }
+    return StringUtil.parseDouble(sdkVersion.substring(0, 3), 0) < 1.7;
   }
 
   public static boolean supportsVendoring(@Nullable String sdkVersion) {
     if (sdkVersion == null || sdkVersion.length() < 3) {
       return false;
     }
-    return VersionComparatorUtil.compare(sdkVersion.substring(0, 3), "1.4") > 0;
+    return StringUtil.parseDouble(sdkVersion.substring(0, 3), 0) >= 1.4;
   }
 
   @Contract("null -> false")
@@ -49,10 +50,13 @@ public class GoVendoringSettings {
     if (module == null) {
       return false;
     }
-    
-    ThreeState vendorSupportEnabled = GoModuleSettings.getInstance(module).getVendoringSettings().vendorSupportEnabled;
+
+    String version = GoSdkService.getInstance(module.getProject()).getSdkVersion(module);
+    if (!vendoringCanBeDisabled(version)) {
+      return true;
+    }
+    ThreeState vendorSupportEnabled = GoModuleSettings.getInstance(module).getVendoringEnabled();
     if (vendorSupportEnabled == ThreeState.UNSURE) {
-      String version = GoSdkService.getInstance(module.getProject()).getSdkVersion(module);
       return supportsVendoring(version) && supportsVendoringByDefault(version);
     }
     return vendorSupportEnabled.toBoolean();

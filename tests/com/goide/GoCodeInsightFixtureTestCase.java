@@ -45,7 +45,7 @@ abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsi
   protected void setUp() throws Exception {
     super.setUp();
     GoApplicationLibrariesService.getInstance().setLibraryRootUrls("temp:///");
-    GoModuleSettings.getInstance(myFixture.getModule()).getVendoringSettings().vendorSupportEnabled = ThreeState.YES;
+    GoModuleSettings.getInstance(myFixture.getModule()).setVendoringEnabled(ThreeState.YES);
   }
   
   @Override
@@ -53,7 +53,7 @@ abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsi
     try {
       GoApplicationLibrariesService.getInstance().setLibraryRootUrls();
       GoModuleSettings.getInstance(myFixture.getModule()).setBuildTargetSettings(new GoBuildTargetSettings());
-      GoModuleSettings.getInstance(myFixture.getModule()).getVendoringSettings().vendorSupportEnabled = ThreeState.UNSURE;
+      GoModuleSettings.getInstance(myFixture.getModule()).setVendoringEnabled(ThreeState.UNSURE);
     }
     finally {
       //noinspection ThrowFromFinallyBlock
@@ -120,6 +120,6 @@ abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsi
   }
 
   protected void disableVendoring() {
-    GoModuleSettings.getInstance(myFixture.getModule()).getVendoringSettings().vendorSupportEnabled = ThreeState.NO;
+    GoModuleSettings.getInstance(myFixture.getModule()).setVendoringEnabled(ThreeState.NO);
   }
 }

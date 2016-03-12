@@ -333,10 +333,10 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     }
     Project project = myModule.getProject();
     String version = GoSdkService.getInstance(project).getSdkVersion(myModule);
-    if (!GoVendoringSettings.supportsVendoring(version) || GoVendoringSettings.supportsVendoringByDefault(version)) {
+    if (!GoVendoringUtil.supportsVendoring(version) || GoVendoringUtil.supportsVendoringByDefault(version)) {
       return;
     }
-    if (GoModuleSettings.getInstance(myModule).getVendoringSettings().vendorSupportEnabled != ThreeState.UNSURE) {
+    if (GoModuleSettings.getInstance(myModule).getVendoringEnabled() != ThreeState.UNSURE) {
       return;
     }
     

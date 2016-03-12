@@ -18,7 +18,6 @@ package com.goide.configuration;
 
 import com.goide.project.GoBuildTargetSettings;
 import com.goide.project.GoModuleSettings;
-import com.goide.project.GoVendoringSettings;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.ConfigurableUi;
@@ -49,19 +48,17 @@ public class GoModuleSettingsUI implements ConfigurableUi<GoModuleSettings>, Dis
   @Override
   public void reset(@NotNull GoModuleSettings settings) {
     myBuildTagsUI.reset(settings.getBuildTargetSettings());
-    myVendoringUI.reset(settings.getVendoringSettings());
+    myVendoringUI.reset(settings);
   }
 
   @Override
   public boolean isModified(@NotNull GoModuleSettings settings) {
-    return myVendoringUI.isModified(settings.getVendoringSettings()) || myBuildTagsUI.isModified(settings.getBuildTargetSettings());
+    return myVendoringUI.isModified(settings) || myBuildTagsUI.isModified(settings.getBuildTargetSettings());
   }
 
   @Override
   public void apply(@NotNull GoModuleSettings settings) throws ConfigurationException {
-    GoVendoringSettings newVendoringSettings = new GoVendoringSettings();
-    myVendoringUI.apply(newVendoringSettings);
-    settings.setVendoringSettings(newVendoringSettings);
+    myVendoringUI.apply(settings);
 
     GoBuildTargetSettings newBuildTargetSettings = new GoBuildTargetSettings();
     myBuildTagsUI.apply(newBuildTargetSettings);

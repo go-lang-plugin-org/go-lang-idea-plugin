@@ -16,7 +16,7 @@
 
 package com.goide.psi.impl.imports;
 
-import com.goide.project.GoVendoringSettings;
+import com.goide.project.GoVendoringUtil;
 import com.goide.psi.GoImportString;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.openapi.module.Module;
@@ -56,7 +56,7 @@ public class GoImportReferenceSet extends FileReferenceSet {
     Module module = ModuleUtilCore.findModuleForPsiElement(file);
     Collection<VirtualFile> sourcesPaths = GoSdkUtil.getSourcesPathsToLookup(file.getProject(), module);
     Collection<PsiFileSystemItem> result = ContainerUtil.newArrayList();
-    if (GoVendoringSettings.isVendoringEnabled(module)) {
+    if (GoVendoringUtil.isVendoringEnabled(module)) {
       GoSdkUtil.processVendorDirectories(file, sourcesPaths, new Processor<VirtualFile>() {
         @Override
         public boolean process(VirtualFile file) {

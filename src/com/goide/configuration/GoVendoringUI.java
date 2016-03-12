@@ -16,7 +16,8 @@
 
 package com.goide.configuration;
 
-import com.goide.project.GoVendoringSettings;
+import com.goide.project.GoModuleSettings;
+import com.goide.project.GoVendoringUtil;
 import com.goide.sdk.GoSdkService;
 import com.intellij.ProjectTopics;
 import com.intellij.icons.AllIcons;
@@ -35,6 +36,8 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
+import static com.intellij.util.ThreeState.UNSURE;
+
 public class GoVendoringUI implements Disposable {
   private static final String ENABLED = "Enabled";
   private static final String DISABLED = "Disabled";
@@ -47,6 +50,7 @@ public class GoVendoringUI implements Disposable {
   private JPanel myPanel;
   private JBLabel myErrorMessageLabel;
   private ComboBox myVendoringEnabledCombo;
+  @SuppressWarnings("unused") 
   private JTextPane myDescriptionPane;
 
   public void initPanel(@NotNull Module module) {
@@ -68,22 +72,30 @@ public class GoVendoringUI implements Disposable {
   private void initComboValues(@NotNull Module module) {
     if (!module.isDisposed()) {
       String sdkVersion = GoSdkService.getInstance(module.getProject()).getSdkVersion(module);
-      if (!GoVendoringSettings.supportsVendoring(sdkVersion) && sdkVersion != null) {
+      if (!GoVendoringUtil.vendoringCanBeDisabled(sdkVersion)) {
+        myErrorMessageLabel.setIcon(AllIcons.General.BalloonWarning);
+        myErrorMessageLabel.setText("Go " + sdkVersion + " doesn't support disabling vendor experiment");
+        myErrorMessageLabel.setVisible(true);
+        myVendoringEnabledCombo.setEnabled(false);
+      }
+      else if (!GoVendoringUtil.supportsVendoring(sdkVersion) && sdkVersion != null) {
         myErrorMessageLabel.setIcon(AllIcons.General.BalloonWarning);
         myErrorMessageLabel.setText("Go " + sdkVersion + " doesn't support vendor experiment");
         myErrorMessageLabel.setVisible(true);
+        myVendoringEnabledCombo.setEnabled(true);
       }
       else {
         myErrorMessageLabel.setVisible(false);
+        myVendoringEnabledCombo.setEnabled(true);
       }
-      myDefaultComboText = "Default for SDK (" + (GoVendoringSettings.supportsVendoringByDefault(sdkVersion) ? ENABLED : DISABLED) + ")";
+      myDefaultComboText = "Default for SDK (" + (GoVendoringUtil.supportsVendoringByDefault(sdkVersion) ? ENABLED : DISABLED) + ")";
       //noinspection unchecked
       myVendoringEnabledComboModel.update(ContainerUtil.newArrayList(myDefaultComboText, ENABLED, DISABLED));
     }
   }
 
-  public void reset(@NotNull GoVendoringSettings settings) {
-    switch (settings.vendorSupportEnabled) {
+  public void reset(@NotNull GoModuleSettings settings) {
+    switch (settings.getVendoringEnabled()) {
       case YES:
         myVendoringEnabledComboModel.setSelectedItem(ENABLED);
         break;
@@ -96,9 +108,9 @@ public class GoVendoringUI implements Disposable {
     }
   }
 
-  public boolean isModified(@NotNull GoVendoringSettings settings) {
+  public boolean isModified(@NotNull GoModuleSettings settings) {
     Object item = myVendoringEnabledComboModel.getSelectedItem();
-    switch (settings.vendorSupportEnabled) {
+    switch (settings.getVendoringEnabled()) {
       case YES:
         return !ENABLED.equals(item);
       case NO:
@@ -110,16 +122,16 @@ public class GoVendoringUI implements Disposable {
   }
 
 
-  public void apply(@NotNull GoVendoringSettings settings) {
+  public void apply(@NotNull GoModuleSettings settings) {
     Object item = myVendoringEnabledComboModel.getSelectedItem();
     if (ENABLED.equals(item)) {
-      settings.vendorSupportEnabled = ThreeState.YES;
+      settings.setVendoringEnabled(ThreeState.YES);
     }
     else if (DISABLED.equals(item)) {
-      settings.vendorSupportEnabled = ThreeState.NO;
+      settings.setVendoringEnabled(ThreeState.NO);
     }
     else {
-      settings.vendorSupportEnabled = ThreeState.UNSURE;
+      settings.setVendoringEnabled(UNSURE);
     }
   }
 
