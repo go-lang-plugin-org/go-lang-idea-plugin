@@ -39,7 +39,7 @@ import java.util.Set;
 public class GoImportReference extends FileReference {
   @Nullable
   private String myUnresolvedMessage;
-  
+
   public GoImportReference(@NotNull FileReferenceSet fileReferenceSet, TextRange range, int index, String text) {
     super(fileReferenceSet, range, index, text);
   }
@@ -128,8 +128,11 @@ public class GoImportReference extends FileReference {
 
   @Override
   public LocalQuickFix[] getQuickFixes() {
-    LocalQuickFix goGetFix = new GoGetPackageFix(getFileReferenceSet().getPathString());
-    List<LocalQuickFix> result = ContainerUtil.newArrayList(goGetFix);
+    List<LocalQuickFix> result = ContainerUtil.newArrayList();
+    FileReferenceSet fileReferenceSet = getFileReferenceSet();
+    if (fileReferenceSet instanceof GoImportReferenceSet && !((GoImportReferenceSet)fileReferenceSet).isRelativeImport()) {
+      result.add(new GoGetPackageFix(fileReferenceSet.getPathString()));
+    }
 
     String fileNameToCreate = getFileNameToCreate();
     for (PsiFileSystemItem context : getContexts()) {
