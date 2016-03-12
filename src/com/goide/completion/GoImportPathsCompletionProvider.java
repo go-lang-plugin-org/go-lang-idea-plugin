@@ -18,7 +18,7 @@ package com.goide.completion;
 
 import com.goide.GoFileType;
 import com.goide.project.GoExcludedPathsSettings;
-import com.goide.project.GoVendoringSettings;
+import com.goide.project.GoVendoringUtil;
 import com.goide.psi.GoImportString;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.runconfig.testing.GoTestFinder;
@@ -70,7 +70,7 @@ public class GoImportPathsCompletionProvider extends CompletionProvider<Completi
       GlobalSearchScope scope = withLibraries ? GoUtil.moduleScope(module) : GoUtil.moduleScopeWithoutLibraries(module);
       PsiFile contextFile = context != null ? context.getContainingFile() : null;
       boolean testFileWithTestPackage = GoTestFinder.isTestFileWithTestPackage(contextFile);
-      boolean vendoringEnabled = GoVendoringSettings.isVendoringEnabled(module);
+      boolean vendoringEnabled = GoVendoringUtil.isVendoringEnabled(module);
       for (VirtualFile file : FileTypeIndex.getFiles(GoFileType.INSTANCE, scope)) {
         VirtualFile parent = file.getParent();
         if (parent == null) continue;
