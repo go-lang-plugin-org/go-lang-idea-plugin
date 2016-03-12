@@ -107,7 +107,7 @@ public class GoImportReferenceSet extends FileReferenceSet {
     return new GoImportReference(this, range, index, text);
   }
 
-  private boolean isRelativeImport() {
+  public boolean isRelativeImport() {
     return getPathString().startsWith("./") || getPathString().startsWith("../");
   }
 }
