@@ -92,10 +92,10 @@ public class GoPsiImplUtil {
   }
 
   @Contract("null -> false")
-  public static boolean isBuiltinDirectory(@Nullable PsiDirectory directory) {
-    return directory != null 
+  public static boolean isBuiltinDirectory(@Nullable PsiFileSystemItem directory) {
+    return directory instanceof PsiDirectory 
            && GoConstants.BUILTIN_PACKAGE_NAME.equals(directory.getName())
-           && GoConstants.BUILTIN_PACKAGE_NAME.equals(GoSdkUtil.getImportPath(directory));
+           && GoConstants.BUILTIN_PACKAGE_NAME.equals(GoSdkUtil.getImportPath((PsiDirectory)directory));
   }
 
   @NotNull
