@@ -53,7 +53,7 @@ public class MismatchedBuildTargetNotificationProvider extends EditorNotificatio
     MessageBusConnection connection = myProject.getMessageBus().connect(myProject);
     connection.subscribe(GoModuleSettings.TOPIC, new GoModuleSettings.BuildTargetListener() {
       @Override
-      public void changed() {
+      public void changed(@NotNull Module module) {
         notifications.updateAllNotifications();
       }
     });
