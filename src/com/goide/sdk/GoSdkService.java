@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,13 @@ package com.goide.sdk;
 import com.goide.GoConstants;
 import com.goide.GoEnvironmentUtil;
 import com.intellij.execution.configurations.PathEnvironmentVariableUtil;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.SimpleModificationTracker;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
@@ -35,6 +37,7 @@ import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.TestOnly;
 
 import java.io.File;
 import java.util.Set;
@@ -42,6 +45,7 @@ import java.util.Set;
 public abstract class GoSdkService extends SimpleModificationTracker {
   public static final Logger LOG = Logger.getInstance(GoSdkService.class);
   private static final Set<String> FEDORA_SUBDIRECTORIES = ContainerUtil.newHashSet("linux_amd64", "linux_386", "linux_arm");
+  private static String ourTestSdkVersion;
 
   @NotNull
   protected final Project myProject;
@@ -63,7 +67,9 @@ public abstract class GoSdkService extends SimpleModificationTracker {
   }
 
   @Nullable
-  public abstract String getSdkVersion(@Nullable Module module);
+  public String getSdkVersion(@Nullable Module module) {
+    return ourTestSdkVersion;
+  }
 
   public boolean isAppEngineSdk(@Nullable Module module) {
     return isAppEngineSdkPath(getSdkHomePath(module));
@@ -73,7 +79,7 @@ public abstract class GoSdkService extends SimpleModificationTracker {
     return isLooksLikeAppEngineSdkPath(path) && getGaeExecutablePath(path) != null;
   }
 
-  public static boolean isLooksLikeAppEngineSdkPath(@Nullable String path) {
+  private static boolean isLooksLikeAppEngineSdkPath(@Nullable String path) {
     return path != null && path.endsWith(GoConstants.APP_ENGINE_GO_ROOT_DIRECTORY_PATH);
   }
 
@@ -148,5 +154,17 @@ public abstract class GoSdkService extends SimpleModificationTracker {
     }
     String executablePath = FileUtil.join(goExecutablePath, GoEnvironmentUtil.getGaeExecutableFileName(gcloudInstallation));
     return new File(executablePath).exists() ? executablePath : null;
+  }
+
+  @TestOnly
+  public static void setTestingSdkVersion(@Nullable String version, @NotNull Disposable disposable) {
+    ourTestSdkVersion = version;
+    Disposer.register(disposable, new Disposable() {
+      @Override
+      public void dispose() {
+        //noinspection AssignmentToStaticFieldFromInstanceMethod
+        ourTestSdkVersion = null;
+      }
+    });
   }
 }
