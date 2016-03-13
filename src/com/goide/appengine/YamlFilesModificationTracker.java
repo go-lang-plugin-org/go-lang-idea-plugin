@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ import com.intellij.openapi.util.SimpleModificationTracker;
 import com.intellij.openapi.util.UserDataHolder;
 import com.intellij.openapi.vfs.*;
 import com.intellij.psi.search.FilenameIndex;
-import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.util.ObjectUtils;
@@ -81,8 +80,7 @@ public class YamlFilesModificationTracker extends SimpleModificationTracker {
         Collection<VirtualFile> yamlFiles = ApplicationManager.getApplication().runReadAction(new Computable<Collection<VirtualFile>>() {
           @Override
           public Collection<VirtualFile> compute() {
-            GlobalSearchScope scope = module != null ? GoUtil.moduleScopeWithoutLibraries(module) : GlobalSearchScope.projectScope(project);
-            return FilenameIndex.getAllFilesByExt(project, "yaml", scope);
+            return FilenameIndex.getAllFilesByExt(project, "yaml", GoUtil.moduleScopeWithoutLibraries(project, module));
           }
         });
         return Result.create(yamlFiles, getInstance(project));

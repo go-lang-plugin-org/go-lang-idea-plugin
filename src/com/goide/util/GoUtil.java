@@ -22,6 +22,7 @@ import com.goide.project.GoExcludedPathsSettings;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.runconfig.testing.GoTestFinder;
+import com.goide.sdk.GoSdkUtil;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.extensions.PluginId;
@@ -38,6 +39,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.DelegatingGlobalSearchScope;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.search.GlobalSearchScopesCore;
 import com.intellij.psi.util.CachedValue;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
@@ -148,15 +150,21 @@ public class GoUtil {
     return StringUtil.startsWithChar(name, '_') || StringUtil.startsWithChar(name, '.');
   }
 
-  @NotNull
-  public static GlobalSearchScope moduleScope(@NotNull PsiElement element) {
+  public static GlobalSearchScope goPathScope(@NotNull PsiElement context) {
     // it's important to ask module on file, otherwise module won't be found for elements in libraries files [zolotov]
-    return moduleScope(element.getProject(), ModuleUtilCore.findModuleForPsiElement(element.getContainingFile()));
+    return goPathScope(context.getProject(), ModuleUtilCore.findModuleForPsiElement(context.getContainingFile()));
   }
 
-  @NotNull
-  public static GlobalSearchScope moduleScope(@NotNull Project project, @Nullable Module module) {
-    return module != null ? moduleScope(module) : GlobalSearchScope.projectScope(project);
+  public static GlobalSearchScope goPathScope(@NotNull Module module) {
+    return goPathScope(module.getProject(), module);
+  }
+  
+  public static GlobalSearchScope goPathScope(@NotNull Project project, @Nullable Module module) {
+    GlobalSearchScope moduleScope = moduleScopeWithoutLibraries(project, module);
+    Collection<VirtualFile> directories = GoSdkUtil.getSourcesPathsToLookup(project, module);
+    return directories.isEmpty()
+           ? moduleScopeWithoutLibraries(project, module)
+           : moduleScope.uniteWith(GlobalSearchScopesCore.directoriesScope(project, true, ContainerUtil.toArray(directories, VirtualFile.EMPTY_ARRAY)));
   }
 
   @NotNull
@@ -165,8 +173,9 @@ public class GoUtil {
   }
 
   @NotNull
-  public static GlobalSearchScope moduleScopeWithoutLibraries(@NotNull Module module) {
-    return GlobalSearchScope.moduleWithDependenciesScope(module).uniteWith(module.getModuleContentWithDependenciesScope());
+  public static GlobalSearchScope moduleScopeWithoutLibraries(@NotNull Project project, @Nullable Module module) {
+    return module != null ? GlobalSearchScope.moduleWithDependenciesScope(module).uniteWith(module.getModuleContentWithDependenciesScope())
+                          : GlobalSearchScope.projectScope(project);
   }
 
   @NotNull
@@ -254,7 +263,7 @@ public class GoUtil {
 
   @NotNull
   public static GlobalSearchScope moduleScopeWithoutTests(@NotNull PsiElement context) {
-    return new ExceptTestsScope(moduleScope(context));
+    return new ExceptTestsScope(goPathScope(context));
   }
 
   private static class ExceptTestsScope extends DelegatingGlobalSearchScope {

@@ -24,8 +24,6 @@ import com.goide.stubs.GoTypeStub;
 import com.goide.util.GoUtil;
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.util.Iconable;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
@@ -60,6 +58,7 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
     super(node);
   }
 
+  @Override
   public boolean isPublic() {
     if (GoPsiImplUtil.builtin(this)) return true;
     T stub = getStub();
@@ -211,9 +210,7 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
       if (block != null) return new LocalSearchScope(block);
     }
     if (isPublic()) {
-      // it's important to ask module on file, otherwise module won't be found for elements in libraries files [zolotov]
-      Module module = ModuleUtilCore.findModuleForPsiElement(getContainingFile());
-      return module != null ? GoUtil.moduleScope(getProject(), module) : super.getUseScope();
+      return GoUtil.goPathScope(this);
     }
     return GoPsiImplUtil.packageScope(getContainingFile());
   }
