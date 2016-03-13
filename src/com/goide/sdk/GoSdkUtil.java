@@ -21,7 +21,7 @@ import com.goide.GoEnvironmentUtil;
 import com.goide.appengine.YamlFilesModificationTracker;
 import com.goide.project.GoApplicationLibrariesService;
 import com.goide.project.GoLibrariesService;
-import com.goide.project.GoVendoringSettings;
+import com.goide.project.GoVendoringUtil;
 import com.goide.psi.GoFile;
 import com.goide.util.GoUtil;
 import com.intellij.execution.configurations.PathEnvironmentVariableUtil;
@@ -230,7 +230,7 @@ public class GoSdkUtil {
     }
     if (context != null) {
       Module module = ModuleUtilCore.findModuleForPsiElement(psiDirectory);
-      if (GoVendoringSettings.isVendoringEnabled(module)) {
+      if (GoVendoringUtil.isVendoringEnabled(module)) {
         return getPathRelativeToSdkAndLibrariesAndVendor(psiDirectory.getVirtualFile(), psiDirectory.getProject(), module, context);
       }
     }

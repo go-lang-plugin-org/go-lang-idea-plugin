@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package com.goide.quickfix;
+package com.goide.inspections;
 
-import com.goide.inspections.GoImportPackageWithoutBuildableSourceFilesInspection;
+import com.goide.quickfix.GoDeleteImportQuickFix;
+import com.goide.quickfix.GoQuickFixTestBase;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.psi.PsiFile;
 
