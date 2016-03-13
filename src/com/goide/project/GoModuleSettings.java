@@ -19,6 +19,7 @@ package com.goide.project;
 import com.goide.GoConstants;
 import com.goide.configuration.GoConfigurableProvider;
 import com.goide.configuration.GoModuleSettingsConfigurable;
+import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
@@ -60,7 +61,7 @@ public class GoModuleSettings implements PersistentStateComponent<GoModuleSettin
 
   public void setVendoringEnabled(@NotNull ThreeState vendoringEnabled) {
     if (vendoringEnabled != myState.vendoring) {
-      ResolveCache.getInstance(myModule.getProject()).clearCache(true);
+      cleanResolveCaches();
     }
     myState.vendoring = vendoringEnabled;
   }
@@ -72,10 +73,20 @@ public class GoModuleSettings implements PersistentStateComponent<GoModuleSettin
 
   public void setBuildTargetSettings(@NotNull GoBuildTargetSettings buildTargetSettings) {
     if (!buildTargetSettings.equals(myState.buildTargetSettings)) {
-      myModule.getMessageBus().syncPublisher(TOPIC).changed();
-      ResolveCache.getInstance(myModule.getProject()).clearCache(true);
+      if (!myModule.isDisposed()) {
+        myModule.getProject().getMessageBus().syncPublisher(TOPIC).changed(myModule);
+      }
+      cleanResolveCaches();
     }
     myState.buildTargetSettings = buildTargetSettings;
+  }
+
+  private void cleanResolveCaches() {
+    Project project = myModule.getProject();
+    if (!project.isDisposed()) {
+      ResolveCache.getInstance(project).clearCache(true);
+      DaemonCodeAnalyzer.getInstance(project).restart();
+    }
   }
 
   @NotNull
@@ -90,7 +101,7 @@ public class GoModuleSettings implements PersistentStateComponent<GoModuleSettin
   }
 
   public interface BuildTargetListener {
-    void changed();
+    void changed(@NotNull Module module);
   }
 
   static class GoModuleSettingsState {
