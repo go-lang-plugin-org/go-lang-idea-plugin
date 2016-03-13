@@ -30,8 +30,6 @@ import com.goide.util.GoUtil;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
 import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Conditions;
 import com.intellij.openapi.util.Ref;
@@ -76,8 +74,7 @@ public class GoFile extends PsiFileBase {
   @NotNull
   @Override
   public SearchScope getUseScope() {
-    Module module = ModuleUtilCore.findModuleForPsiElement(this);
-    return module != null ? GoUtil.moduleScope(getProject(), module) : super.getUseScope();
+    return GoUtil.goPathScope(this);
   }
 
   @Nullable

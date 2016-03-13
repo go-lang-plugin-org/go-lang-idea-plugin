@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,7 +63,7 @@ public class GocheckFramework extends GoTestFramework {
   @Override
   public boolean isAvailable(@Nullable Module module) {
     if (module == null) return false;
-    for (GoFile file : StubIndex.getElements(GoPackagesIndex.KEY, "check", module.getProject(), GoUtil.moduleScope(module), GoFile.class)) {
+    for (GoFile file : StubIndex.getElements(GoPackagesIndex.KEY, "check", module.getProject(), GoUtil.goPathScope(module), GoFile.class)) {
       String importPath = file.getImportPath();
       if (isGoCheckImportPath(importPath)) {
         return true;

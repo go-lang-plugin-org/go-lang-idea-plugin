@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,20 +25,22 @@ import com.intellij.execution.filters.OpenFileHyperlinkInfo;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.vfs.ex.temp.TempFileSystem;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.FilenameIndex;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.PathUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -158,14 +160,20 @@ public class GoConsoleFilter implements Filter {
   @Nullable
   private VirtualFile findSingleFile(@NotNull String fileName) {
     if (PathUtil.isValidFileName(fileName)) {
-      PsiFile[] files = FilenameIndex.getFilesByName(myProject, fileName, GoUtil.moduleScope(myProject, myModule));
-      if (files.length == 1) {
-        return files[0].getVirtualFile();
+      Collection<VirtualFile> files = FilenameIndex.getVirtualFilesByName(myProject, fileName, GoUtil.goPathScope(myProject, myModule));
+      if (files.size() == 1) {
+        return ContainerUtil.getFirstItem(files);
       }
-      else if (files.length > 0 && myModule != null) {
-        files = FilenameIndex.getFilesByName(myProject, fileName, GoUtil.moduleScopeWithoutLibraries(myModule));
-        if (files.length == 1) {
-          return files[0].getVirtualFile();
+      else if (!files.isEmpty()) {
+        final GlobalSearchScope smallerScope = GoUtil.moduleScopeWithoutLibraries(myProject, myModule);
+        files = ContainerUtil.filter(files, new Condition<VirtualFile>() {
+          @Override
+          public boolean value(VirtualFile file) {
+            return smallerScope.accept(file);
+          }
+        });
+        if (files.size() == 1) {
+          return ContainerUtil.getFirstItem(files);
         }
       }
     }
