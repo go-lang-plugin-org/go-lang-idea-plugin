@@ -5,9 +5,9 @@
 
 **Supported IDEs**
 
-Pre-release builds can be installed on IntelliJ platform versions 141.1532 – 141.9999 and 143.380 – 143.9999:
+The plugin can be installed on IntelliJ platform versions 141.1532 – 141.9999 and 143.1180 – 143.9999 and 2016.1:
 
-- IntelliJ IDEA 14.1.4, 15 or 16 (Ultimate or Community)
+- IntelliJ IDEA 14.1.4, 15.0.2+ or 16 (Ultimate or Community)
 - WebStorm 10.0.4 or 11
 - PhpStorm 9.0 or 10
 - PyCharm 4.5.2+ or 5
@@ -24,7 +24,21 @@ To use them do the following:
  - alpha: https://plugins.jetbrains.com/plugins/alpha/5047
  - nightly: https://plugins.jetbrains.com/plugins/nightly/5047
 
-As this is a preview release, something might go wrong.
+As this is not yet a stable, 1.x release, some things might not work as expected.
+
+### Release versions schema
+
+Bellow you can see the versions of the plugin which correspond to the versions of the 
+IntelliJ Platfom (IntelliJ IDEA, WebStorm, PyCharm etc.):
+
+| Plugin version number | Platform number |
+| ---- | --- |
+| 0.11.x | IntelliJ 2016.1 (IntelliJ IDEA 2016.1) | 
+| 0.10.x | IntelliJ 143.1180 - 143.9999 (IntelliJ IDEA 15.0.2+) | 
+| 0.9.x | IntelliJ 141.1532 - 141.9999 (IntelliJ IDEA 14.1) |
+ 
+ If you are not using IntelliJ IDEA, then please check the build number of your IDE
+ as that will correspond to the IntelliJ Platform version.
 
 **NOTE**
 The above links are not meant to be used in browsers, so don't report issues
