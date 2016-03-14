@@ -19,6 +19,7 @@ package com.goide.util;
 import com.goide.GoConstants;
 import com.goide.project.GoBuildTargetUtil;
 import com.goide.project.GoExcludedPathsSettings;
+import com.goide.project.GoVendoringUtil;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.runconfig.testing.GoTestFinder;
@@ -43,6 +44,7 @@ import com.intellij.psi.search.GlobalSearchScopesCore;
 import com.intellij.psi.util.CachedValue;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
+import com.intellij.util.CommonProcessors;
 import com.intellij.util.Function;
 import com.intellij.util.ThreeState;
 import com.intellij.util.containers.ContainerUtil;
@@ -145,26 +147,35 @@ public class GoUtil {
   public static boolean libraryDirectoryToIgnore(@NotNull String name) {
     return directoryToIgnore(name) || GoConstants.TESTDATA_NAME.equals(name);
   }
-  
+
   public static boolean directoryToIgnore(@NotNull String name) {
     return StringUtil.startsWithChar(name, '_') || StringUtil.startsWithChar(name, '.');
   }
 
   public static GlobalSearchScope goPathScope(@NotNull PsiElement context) {
     // it's important to ask module on file, otherwise module won't be found for elements in libraries files [zolotov]
-    return goPathScope(context.getProject(), ModuleUtilCore.findModuleForPsiElement(context.getContainingFile()));
+    PsiFile contextFile = context.getContainingFile();
+    Module module = ModuleUtilCore.findModuleForPsiElement(contextFile);
+    if (GoVendoringUtil.isVendoringEnabled(module)) {
+      Collection<VirtualFile> directories = GoSdkUtil.getSourcesPathsToLookup(context.getProject(), module);
+      if (!directories.isEmpty()) {
+        return new VendoringAwareScope(contextFile, directories);
+      }
+    }
+    return goPathScope(context.getProject(), module);
   }
 
   public static GlobalSearchScope goPathScope(@NotNull Module module) {
     return goPathScope(module.getProject(), module);
   }
-  
+
   public static GlobalSearchScope goPathScope(@NotNull Project project, @Nullable Module module) {
     GlobalSearchScope moduleScope = moduleScopeWithoutLibraries(project, module);
     Collection<VirtualFile> directories = GoSdkUtil.getSourcesPathsToLookup(project, module);
     return directories.isEmpty()
            ? moduleScopeWithoutLibraries(project, module)
-           : moduleScope.uniteWith(GlobalSearchScopesCore.directoriesScope(project, true, ContainerUtil.toArray(directories, VirtualFile.EMPTY_ARRAY)));
+           : moduleScope.uniteWith(
+             GlobalSearchScopesCore.directoriesScope(project, true, ContainerUtil.toArray(directories, VirtualFile.EMPTY_ARRAY)));
   }
 
   @NotNull
@@ -206,7 +217,7 @@ public class GoUtil {
     PsiFile definitionFile = definition.getContainingFile();
     PsiFile referenceFile = reference.getContainingFile();
     // todo: zolotov, are you sure? cross refs, for instance?
-    if (!(definitionFile instanceof GoFile) || !(referenceFile instanceof GoFile)) return false; 
+    if (!(definitionFile instanceof GoFile) || !(referenceFile instanceof GoFile)) return false;
 
     boolean inSameFile = definitionFile.isEquivalentTo(referenceFile);
     if (inSameFile) return true;
@@ -227,7 +238,7 @@ public class GoUtil {
     }
     return false;
   }
-  
+
   @NotNull
   public static String suggestPackageForDirectory(@Nullable PsiDirectory directory) {
     String packageName = GoPsiImplUtil.getLocalPackageName(directory != null ? directory.getName() : "");
@@ -276,13 +287,13 @@ public class GoUtil {
       return !GoTestFinder.isTestFile(file) && super.contains(file);
     }
   }
-  
+
   public static class ExceptChildOfDirectory extends DelegatingGlobalSearchScope {
     @NotNull private final VirtualFile myParent;
     @Nullable private final String myAllowedPackageInExcludedDirectory;
 
-    public ExceptChildOfDirectory(@NotNull VirtualFile parent, 
-                                  @NotNull GlobalSearchScope baseScope, 
+    public ExceptChildOfDirectory(@NotNull VirtualFile parent,
+                                  @NotNull GlobalSearchScope baseScope,
                                   @Nullable String allowedPackageInExcludedDirectory) {
       super(baseScope);
       myParent = parent;
@@ -308,4 +319,51 @@ public class GoUtil {
     }
   }
 
+  private static class VendoringAwareScope extends DelegatingGlobalSearchScope {
+    private final Collection<VirtualFile> myDirectories;
+    private final VirtualFile myContextDirectory;
+    @Nullable
+    private Collection<VirtualFile> myVendorDirectories;
+
+    public VendoringAwareScope(@NotNull PsiFile context, @NotNull Collection<VirtualFile> directories) {
+      super(GlobalSearchScopesCore.directoriesScope(context.getProject(), true, ContainerUtil.toArray(directories,
+                                                                                                      VirtualFile.EMPTY_ARRAY)));
+      myDirectories = directories;
+      PsiDirectory containingDirectory = context.getContainingDirectory();
+      myContextDirectory = containingDirectory != null ? containingDirectory.getVirtualFile() : null;
+    }
+    
+    @NotNull
+    private Collection<VirtualFile> getVendorDirectories() {
+      if (myVendorDirectories == null) {
+        if (myContextDirectory != null) {
+          CommonProcessors.CollectProcessor<VirtualFile> processor = new CommonProcessors.CollectProcessor<>();
+          GoSdkUtil.processVendorDirectories(myContextDirectory, myDirectories, processor);
+          myVendorDirectories = processor.getResults();
+        }
+        else {
+          myVendorDirectories = Collections.emptyList();
+        }
+      }
+      return myVendorDirectories;
+    }
+    
+
+    @Override
+    public boolean contains(@NotNull VirtualFile file) {
+      if (super.contains(file)) {
+        if (myContextDirectory == null) {
+          return true;
+        }
+        VirtualFile packageDirectory = file.isDirectory() ? file : file.getParent();
+        if (packageDirectory == null) {
+          return true;
+        }
+        
+        return !GoSdkUtil.isUnreachableVendoredPackage(packageDirectory, myContextDirectory, myDirectories) &&
+               !GoSdkUtil.isPackageShadowedByVendoring(packageDirectory, myContextDirectory, myDirectories, getVendorDirectories());
+      }
+      return false;
+    }
+  }
 }

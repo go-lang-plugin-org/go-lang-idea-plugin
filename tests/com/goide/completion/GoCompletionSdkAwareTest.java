@@ -369,4 +369,32 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
                                                              "\n" +
                                                              "func _() { vendorPackage.Bar() }");
   }
+  
+  public void testDoNotCompleteSymbolsFromUnreachableVendoredPackages() {
+    myFixture.addFileToProject("vendor/foo/foo.go", "package foo; func VendoredFunction() {}");
+    myFixture.addFileToProject("vendor/foo/vendor/bar/bar.go", "package bar; func VendoredFunction() {}");
+    myFixture.configureByText("a.go", "package src; func _() { VendorF<caret> }");
+    myFixture.completeBasic();
+    //noinspection ConstantConditions
+    assertSameElements(myFixture.getLookupElementStrings(), "foo.VendoredFunction");
+  }
+
+  public void testDoNotCompleteSymbolsFromShadowedPackages() {
+    myFixture.addFileToProject("foo/foo.go", "package foo; func ShadowedFunction() {}");
+    myFixture.addFileToProject("vendor/foo/foo.go", "package bar; func ShadowedFunction() {}");
+    myFixture.configureByText("a.go", "package src; func _() { ShadowF<caret> }");
+    myFixture.completeBasic();
+    //noinspection ConstantConditions
+    assertSameElements(myFixture.getLookupElementStrings(), "bar.ShadowedFunction");
+  }
+
+  public void testDoNotCompleteSymbolsFromShadowedVendoredPackages() {
+    myFixture.addFileToProject("vendor/foo/foo.go", "package bar; func ShadowedFunction() {}");
+    myFixture.addFileToProject("vendor/foo/vendor/foo/foo.go", "package bar; func ShadowedFunction() {}");
+    PsiFile file = myFixture.addFileToProject("vendor/foo/main.go", "package foo; func _() { ShadowF<caret> }");
+    myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
+    myFixture.completeBasic();
+    //noinspection ConstantConditions
+    assertSameElements(myFixture.getLookupElementStrings(), "bar.ShadowedFunction");
+  }
 }

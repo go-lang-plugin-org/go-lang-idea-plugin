@@ -76,11 +76,12 @@ public class GoImportPathsCompletionProvider extends CompletionProvider<Completi
       for (VirtualFile file : FileTypeIndex.getFiles(GoFileType.INSTANCE, scope)) {
         VirtualFile parent = file.getParent();
         if (parent == null) continue;
-        String importPath = GoSdkUtil.getPathRelativeToSdkAndLibrariesAndVendor(parent, project, module, vendoringEnabled ? context : null);
-        if (!StringUtil.isEmpty(importPath) && !excludedSettings.isExcluded(importPath) &&
-            (testFileWithTestPackage || !importPath.equals(contextImportPath))) {
-          PsiDirectory directory = PsiManager.getInstance(project).findDirectory(parent);
-          if (!GoPsiImplUtil.isBuiltinDirectory(directory)) {
+
+        PsiDirectory directory = PsiManager.getInstance(project).findDirectory(parent);
+        if (directory != null && !GoPsiImplUtil.isBuiltinDirectory(directory)) {
+          String importPath = GoSdkUtil.getVendoringAwareImportPath(directory, vendoringEnabled ? context : null);
+          if (StringUtil.isNotEmpty(importPath) && !excludedSettings.isExcluded(importPath) &&
+              (testFileWithTestPackage || !importPath.equals(contextImportPath))) {
             result.addElement(GoCompletionUtil.createPackageLookupElement(importPath, contextImportPath, directory, false));
           }
         }

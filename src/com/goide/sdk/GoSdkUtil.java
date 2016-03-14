@@ -93,7 +93,7 @@ public class GoSdkUtil {
         }
       }
     }
-    
+
     Module module = moduleFromContext;
     UserDataHolder holder = ObjectUtils.notNull(module, project);
     VirtualFile file = CachedValuesManager.getManager(context.getProject()).getCachedValue(holder, new CachedValueProvider<VirtualFile>() {
@@ -223,39 +223,42 @@ public class GoSdkUtil {
     return getVendoringAwareImportPath(psiDirectory, null);
   }
 
+  /**
+   * NOTE: vendored results are not cached. Please avoid invoking this method with context != null until you're totally sure what're you doing
+   */
   @Nullable
   @Contract("null, _ -> null")
   public static String getVendoringAwareImportPath(@Nullable PsiDirectory psiDirectory, @Nullable PsiElement context) {
     if (psiDirectory == null) {
       return null;
     }
-    if (context != null) {
-      Module module = ModuleUtilCore.findModuleForPsiElement(psiDirectory);
+    VirtualFile contextVirtualFile = context != null ? context.getContainingFile().getVirtualFile() : null;
+    if (contextVirtualFile != null) {
+      Module module = ModuleUtilCore.findModuleForPsiElement(context);
       if (GoVendoringUtil.isVendoringEnabled(module)) {
-        return getPathRelativeToSdkAndLibrariesAndVendor(psiDirectory.getVirtualFile(), psiDirectory.getProject(), module, context);
+        Collection<VirtualFile> sourceRoots = getSourcesPathsToLookup(psiDirectory.getProject(), module);
+        return getPathRelativeToSdkAndLibrariesAndVendor(psiDirectory.getVirtualFile(), sourceRoots, contextVirtualFile);
       }
     }
     return CachedValuesManager.getCachedValue(psiDirectory, new CachedValueProvider<String>() {
       @Nullable
       @Override
       public Result<String> compute() {
-        Project project = psiDirectory.getProject();
         Module module = ModuleUtilCore.findModuleForPsiElement(psiDirectory);
-        String path = getPathRelativeToSdkAndLibrariesAndVendor(psiDirectory.getVirtualFile(), project, module, null);
+        Collection<VirtualFile> sourceRoots = getSourcesPathsToLookup(psiDirectory.getProject(), module);
+        String path = getPathRelativeToSdkAndLibrariesAndVendor(psiDirectory.getVirtualFile(), sourceRoots, null);
         return Result.create(path, getSdkAndLibrariesCacheDependencies(psiDirectory));
       }
     });
   }
 
   @Nullable
-  public static String getPathRelativeToSdkAndLibrariesAndVendor(@NotNull VirtualFile file,
-                                                                 @NotNull Project project,
-                                                                 @Nullable Module module,
-                                                                 @Nullable PsiElement context) {
-    Collection<VirtualFile> sourcesPaths = getSourcesPathsToLookup(project, module);
-    if (context != null) {
-      Ref<String> vendoringPath = Ref.create();
-      processVendorDirectories(context, sourcesPaths, new Processor<VirtualFile>() {
+  private static String getPathRelativeToSdkAndLibrariesAndVendor(@NotNull VirtualFile file,
+                                                                  @NotNull Collection<VirtualFile> sourceRoots,
+                                                                  @Nullable VirtualFile contextVirtualFile) {
+    if (contextVirtualFile != null) {
+      final Ref<String> vendoringPath = Ref.create();
+      processVendorDirectories(contextVirtualFile, sourceRoots, new Processor<VirtualFile>() {
         @Override
         public boolean process(VirtualFile vendorDirectory) {
           String relativePath = VfsUtilCore.getRelativePath(file, vendorDirectory, '/');
@@ -272,7 +275,7 @@ public class GoSdkUtil {
     }
 
     String result = null;
-    for (VirtualFile root : sourcesPaths) {
+    for (VirtualFile root : sourceRoots) {
       String relativePath = VfsUtilCore.getRelativePath(file, root, '/');
       if (StringUtil.isNotEmpty(relativePath) && (result == null || result.length() > relativePath.length())) {
         result = relativePath;
@@ -358,7 +361,7 @@ public class GoSdkUtil {
         if (cachedVersion != null) {
           return !cachedVersion.isEmpty() ? cachedVersion : null;
         }
-        
+
         VirtualFile versionFile = sdkRoot.findFileByRelativePath("src/" + GoConstants.GO_VERSION_NEW_FILE_PATH);
         if (versionFile == null) {
           versionFile = sdkRoot.findFileByRelativePath("src/" + GoConstants.GO_VERSION_FILE_PATH);
@@ -420,7 +423,9 @@ public class GoSdkUtil {
   }
 
   @NotNull
-  private static Collection<Object> getSdkAndLibrariesCacheDependencies(@NotNull Project project, @Nullable Module module, Object... extra) {
+  private static Collection<Object> getSdkAndLibrariesCacheDependencies(@NotNull Project project,
+                                                                        @Nullable Module module,
+                                                                        Object... extra) {
     Collection<Object> dependencies = ContainerUtil.newArrayList((Object[])GoLibrariesService.getModificationTrackers(project, module));
     ContainerUtil.addAllNotNull(dependencies, GoSdkService.getInstance(project));
     ContainerUtil.addAllNotNull(dependencies, extra);
@@ -439,12 +444,20 @@ public class GoSdkUtil {
     });
   }
 
-  public static void processVendorDirectories(@NotNull PsiElement context,
-                                              @NotNull Collection<VirtualFile> sourcesPaths,
+  public static void processVendorDirectories(@NotNull PsiFile contextFile,
+                                              @NotNull Collection<VirtualFile> sourceRoots,
                                               @NotNull Processor<VirtualFile> processor) {
-    PsiFile containingFile = context.getContainingFile();
-    PsiDirectory containingDirectory = containingFile != null ? containingFile.getContainingDirectory() : null;
-    VirtualFile directory = containingDirectory != null ? containingDirectory.getVirtualFile() : null;
+    PsiDirectory containingDirectory = contextFile.getContainingDirectory();
+    VirtualFile contextDirectory = containingDirectory != null ? containingDirectory.getVirtualFile() : null;
+    if (contextDirectory != null) {
+      processVendorDirectories(contextDirectory, sourceRoots, processor);
+    }
+  }
+
+  public static void processVendorDirectories(@NotNull VirtualFile contextDirectory,
+                                              @NotNull Collection<VirtualFile> sourceRoots,
+                                              @NotNull Processor<VirtualFile> processor) {
+    VirtualFile directory = contextDirectory;
     while (directory != null) {
       VirtualFile vendorDirectory = directory.findChild(GoConstants.VENDOR);
       if (vendorDirectory != null) {
@@ -452,11 +465,44 @@ public class GoSdkUtil {
           break;
         }
       }
-      if (sourcesPaths.contains(directory)) {
+      if (sourceRoots.contains(directory)) {
         break;
       }
       directory = directory.getParent();
     }
+  }
+
+  public static boolean isPackageShadowedByVendoring(@NotNull VirtualFile packageDirectory,
+                                                     @NotNull VirtualFile contextFile,
+                                                     @NotNull Collection<VirtualFile> sourceRoots,
+                                                     @NotNull Collection<VirtualFile> vendorDirectories) {
+    if (vendorDirectories.isEmpty()) {
+      return false;
+    }
+    String importPath = getPathRelativeToSdkAndLibrariesAndVendor(packageDirectory, sourceRoots, contextFile);
+    if (importPath != null) {
+      for (VirtualFile vendorDirectory : vendorDirectories) {
+        VirtualFile shadowPackage = vendorDirectory.findFileByRelativePath(importPath);
+        if (shadowPackage != null) {
+          return !shadowPackage.equals(packageDirectory);
+        }
+      }
+    }
+    return false;
+  }
+
+  public static boolean isUnreachableVendoredPackage(@NotNull VirtualFile packageDirectory,
+                                                     @NotNull VirtualFile contextFile,
+                                                     @NotNull Collection<VirtualFile> sourceRoots) {
+    VirtualFile currentFile = packageDirectory;
+    while (currentFile != null && !sourceRoots.contains(currentFile)) {
+      if (GoConstants.VENDOR.equals(currentFile.getName())) {
+        VirtualFile parent = currentFile.getParent();
+        return parent == null || !VfsUtilCore.isAncestor(parent, contextFile, false);
+      }
+      currentFile = currentFile.getParent();
+    }
+    return false;
   }
 
   public static class RetrieveSubDirectoryOrSelfFunction implements Function<VirtualFile, VirtualFile> {

@@ -80,6 +80,16 @@ public class GoIllegalVendoredPackageImportInspectionTest extends GoQuickFixTest
     myFixture.checkHighlighting();
   }
 
+  public void testVendorInsideVendorShouldBeUnreachable() {
+    myFixture.addFileToProject("vendor/foo/a.go", "package foo");
+    myFixture.addFileToProject("vendor/foo/vendor/bar/a.go", "package bar");
+    myFixture.configureByText("a.go", "package bar\n" +
+                                      "import _ `foor`\n" +
+                                      "import <error descr=\"Use of vendored package is not allowed\">_ `foo/vendor/bar`</error>");
+    myFixture.checkHighlighting();
+
+  }
+
   private Collection<String> getIntentionNames() {
     return ContainerUtil.map(myFixture.getAvailableIntentions(), new Function<IntentionAction, String>() {
       @Override
