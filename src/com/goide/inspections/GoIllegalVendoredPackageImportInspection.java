@@ -31,8 +31,11 @@ import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
 
 public class GoIllegalVendoredPackageImportInspection extends GoInspectionBase {
   @Override
@@ -42,28 +45,26 @@ public class GoIllegalVendoredPackageImportInspection extends GoInspectionBase {
       return;
     }
 
-    PsiDirectory directory = file.getContainingDirectory();
-    if (directory != null) {
-      for (GoImportSpec importSpec : file.getImports()) {
-        PsiDirectory resolve = importSpec.getImportString().resolve();
-        if (resolve != null) {
-          for (PsiReference reference : importSpec.getImportString().getReferences()) {
-            if (reference instanceof GoImportReference && GoConstants.VENDOR.equals(reference.getCanonicalText())) {
-              String importPath = GoSdkUtil.getImportPath(resolve);
-              if (importPath != null) {
-                String vendoredImportPath = GoSdkUtil.getVendoringAwareImportPath(resolve, file);
-                if (importPath.equals(vendoredImportPath)) {
-                  problemsHolder.registerProblem(importSpec, "Use of vendored package is not allowed",
-                                                 new GoDeleteImportQuickFix(), GoDisableVendoringInModuleQuickFix.create(module));
-                }
-                else if (vendoredImportPath != null) {
-                  problemsHolder.registerProblem(importSpec, "Must be imported as '" + vendoredImportPath + "'",
-                                                 new GoReplaceImportPath(vendoredImportPath), 
-                                                 new GoDeleteImportQuickFix(), GoDisableVendoringInModuleQuickFix.create(module));
-                }
-              }
-              break;
+    Collection<VirtualFile> sourceRoots = GoSdkUtil.getSourcesPathsToLookup(file.getProject(), module);
+    for (GoImportSpec importSpec : file.getImports()) {
+      PsiDirectory resolve = importSpec.getImportString().resolve();
+      if (resolve != null) {
+        for (PsiReference reference : importSpec.getImportString().getReferences()) {
+          if (reference instanceof GoImportReference && GoConstants.VENDOR.equals(reference.getCanonicalText())) {
+            VirtualFile resolvedVirtualFile = resolve.getVirtualFile();
+            if (GoSdkUtil.isUnreachableVendoredPackage(resolvedVirtualFile, file.getVirtualFile(), sourceRoots)) {
+              problemsHolder.registerProblem(importSpec, "Use of vendored package is not allowed",
+                                             new GoDeleteImportQuickFix(), GoDisableVendoringInModuleQuickFix.create(module));
             }
+            else {
+              String vendoredImportPath = GoSdkUtil.getVendoringAwareImportPath(resolve, file);
+              if (vendoredImportPath != null) {
+                problemsHolder.registerProblem(importSpec, "Must be imported as '" + vendoredImportPath + "'",
+                                               new GoReplaceImportPath(vendoredImportPath),
+                                               new GoDeleteImportQuickFix(), GoDisableVendoringInModuleQuickFix.create(module));
+              }
+            }
+            break;
           }
         }
       }

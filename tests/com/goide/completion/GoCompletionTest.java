@@ -48,18 +48,13 @@ public class GoCompletionTest extends GoCompletionTestBase {
   
   public void testImportVendoringPackages() {
     myFixture.addFileToProject("vendor/pack1/pack2/test.go", "package foo");
-    myFixture.configureByText("test.go", "package foo; import `pa<caret>`");
-    myFixture.completeBasic();
-    myFixture.checkResult("package foo; import `pack1/pack2<caret>`");
+    doCheckResult("package foo; import `pa<caret>`", "package foo; import `pack1/pack2<caret>`");
   }
 
   public void testImportVendoringPackagesWithDisabledVendoring() {
     disableVendoring();
     myFixture.addFileToProject("vendor/pack1/pack2/test.go", "package foo");
-    myFixture.configureByText("test.go", "package foo; import `pa<caret>`");
-    myFixture.completeBasic();
-    myFixture.finishLookup(Lookup.NORMAL_SELECT_CHAR);
-    myFixture.checkResult("package foo; import `vendor/pack1/pack2<caret>`");
+    doCheckResult("package foo; import `pa<caret>`", "package foo; import `vendor/pack1/pack2<caret>`", Lookup.NORMAL_SELECT_CHAR);
   }
 
   public void testImportPackages() {
