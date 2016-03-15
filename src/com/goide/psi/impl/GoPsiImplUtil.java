@@ -297,8 +297,7 @@ public class GoPsiImplUtil {
           @Nullable
           @Override
           public Result<GoType> compute() {
-            GoType inner = getGoTypeInner(o, null);
-            return Result.create(inner instanceof GoParType ? ((GoParType)inner).getActualType() : inner, PsiModificationTracker.MODIFICATION_COUNT);
+            return Result.create(getGoTypeInner(o, null), PsiModificationTracker.MODIFICATION_COUNT);
           }
         });
       }
