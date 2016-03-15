@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package com.goide.inspections;
 
 import com.goide.psi.*;
-import com.goide.psi.impl.GoPsiImplUtil;
+import com.goide.sdk.GoPackageUtil;
 import com.goide.stubs.index.GoFunctionIndex;
 import com.goide.stubs.index.GoMethodIndex;
 import com.goide.stubs.types.GoMethodDeclarationStubElementType;
@@ -49,7 +49,7 @@ public class GoDuplicateFunctionOrMethodInspection extends GoInspectionBase {
         if (typeText == null) return;
 
         GoFile file = method.getContainingFile();
-        GlobalSearchScope scope = GoPsiImplUtil.packageScope(file);
+        GlobalSearchScope scope = GoPackageUtil.packageScope(file);
         GoMethodIndex.process(file.getPackageName() + "." + typeText, file.getProject(), scope, new Processor<GoMethodDeclaration>() {
           @Override
           public boolean process(GoMethodDeclaration declaration) {
@@ -75,7 +75,7 @@ public class GoDuplicateFunctionOrMethodInspection extends GoInspectionBase {
 
         final GoFile file = func.getContainingFile();
         final boolean isMainFunction = MAIN.equals(funcName) && MAIN.equals(file.getPackageName()) && zeroArity(func);
-        final GlobalSearchScope scope = GoPsiImplUtil.packageScope(file);
+        final GlobalSearchScope scope = GoPackageUtil.packageScope(file);
         GoFunctionIndex.process(funcName, file.getProject(), scope, new Processor<GoFunctionDeclaration>() {
           @Override
           public boolean process(GoFunctionDeclaration declaration) {

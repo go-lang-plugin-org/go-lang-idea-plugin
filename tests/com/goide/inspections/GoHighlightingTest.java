@@ -153,9 +153,9 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     doTest();
   }
 
-  public void testCheckSamePackage_test()     { 
-    myFixture.configureByText("a_test.go", "package check; func TestStringer(t *testing.T) {}"); 
-    doTest(); 
+  public void testCheckSamePackage_test() {
+    myFixture.configureByText("a_test.go", "package check; func TestStringer(t *testing.T) {}");
+    doTest();
   }
 
   public void testRelativeImportIgnoringDirectories() throws IOException {
@@ -178,16 +178,16 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.addFileToProject("root1/src/to_import/unique/foo.go", "package unique; func Foo() {}");
     myFixture.addFileToProject("root1/src/to_import/shared/a.go", "package shared");
     myFixture.addFileToProject("root2/src/to_import/shared/a.go", "package shared");
-    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(myFixture.findFileInTempDir("root1").getUrl(), 
+    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(myFixture.findFileInTempDir("root1").getUrl(),
                                                                                    myFixture.findFileInTempDir("root2").getUrl());
     doTest();
-    
+
     PsiReference reference = myFixture.getFile().findReferenceAt(myFixture.getCaretOffset());
     PsiElement resolve = reference.resolve();
     assertInstanceOf(resolve, PsiDirectory.class);
     assertTrue(((PsiDirectory)resolve).getVirtualFile().getPath().endsWith("root1/src/to_import/shared"));
-    
-    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(myFixture.findFileInTempDir("root2").getUrl(), 
+
+    GoModuleLibrariesService.getInstance(myFixture.getModule()).setLibraryRootUrls(myFixture.findFileInTempDir("root2").getUrl(),
                                                                                    myFixture.findFileInTempDir("root1").getUrl());
     reference = myFixture.getFile().findReferenceAt(myFixture.getCaretOffset());
     resolve = reference.resolve();
@@ -209,14 +209,16 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
 
   public void testNoLocalResolveForTest() {
     myFixture.configureByText("a.go", "package i; type P struct { v1 int }");
-    myFixture.configureByText("b_test.go", "package i_test; import ( \".\" ); func <warning>f</warning>() { print(i.P{}.<error>v1</error>) }");
+    myFixture
+      .configureByText("b_test.go", "package i_test; import ( \".\" ); func <warning>f</warning>() { print(i.P{}.<error>v1</error>) }");
     myFixture.checkHighlighting();
   }
 
   public void testDuplicateFunctionsInOnePackage() {
     myFixture.configureByText("a.go", "package foo; func init() {bar()}; func bar() {};");
     myFixture.configureByText("b.go", "//+build appengine\n\npackage foo; func init() {buzz()}; func buzz() {}");
-    myFixture.configureByText("c.go", "package foo; func init() {bar(); buzz();}; func <error descr=\"Duplicate function name\">bar</error>() {}; func <error descr=\"Duplicate function name\">buzz</error>() {}");
+    myFixture.configureByText("c.go",
+                              "package foo; func init() {bar(); buzz();}; func <error descr=\"Duplicate function name\">bar</error>() {}; func <error descr=\"Duplicate function name\">buzz</error>() {}");
     myFixture.checkHighlighting();
   }
 
@@ -270,12 +272,14 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testDuplicateBuiltinFunction() {
-    myFixture.configureByText("a.go", "package main; func main() {new()}; func <warning descr=\"Function 'new' collides with builtin function\">new</warning>() {}");
+    myFixture.configureByText("a.go",
+                              "package main; func main() {new()}; func <warning descr=\"Function 'new' collides with builtin function\">new</warning>() {}");
     myFixture.checkHighlighting();
   }
 
   public void testDuplicateBuiltinType() {
-    myFixture.configureByText("a.go", "package main; func main() {<warning descr=\"Variable 'string' collides with builtin type\">string</warning> := 3; _ = string}");
+    myFixture.configureByText("a.go",
+                              "package main; func main() {<warning descr=\"Variable 'string' collides with builtin type\">string</warning> := 3; _ = string}");
     myFixture.checkHighlighting();
   }
 
@@ -359,7 +363,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureByText("a.go", "package a; import \"C\"");
     myFixture.checkHighlighting();
   }
-  
+
   public void testDoNotHighlightCodeFromIgnoredImportPaths() {
     PsiFile ignoredFile = myFixture.addFileToProject("_pack1/pack1.go", "package pack1; func unusedFunction() {}");
     PsiFile file = myFixture.addFileToProject("pack1/pack.go",
@@ -368,18 +372,13 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     assertFalse(settingsPerFile.shouldHighlight(ignoredFile));
     assertTrue(settingsPerFile.shouldHighlight(file));
   }
-  
+
   public void testVendoringImportPaths() {
     myFixture.addFileToProject("vendor/vendoringPackage/v.go", "package vendoringPackage; func Hello() {}");
     myFixture.addFileToProject("subPackage/vendor/subVendoringPackage/v.go", "package subVendoringPackage; func Hello() {}");
     doTest();
   }
 
-  public void testBuiltinImport() {
-    myFixture.configureByText("a.go", "package a; import _ `<error descr=\"Cannot import `builtin` package\">builtin</error>`");
-    myFixture.checkHighlighting();
-  }
-  
   public void testVendoredBuiltinImport() {
     myFixture.addFileToProject("vendor/builtin/builtin.go", "package builtin; func Hello() {}");
     myFixture.configureByText("a.go", "package a; import _ `builtin`");
@@ -406,8 +405,9 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testDuplicateFinalPackageComponent() {
     myFixture.addFileToProject("a/pack/pack1.go", "package pack; func Foo() {}");
     myFixture.addFileToProject("b/pack/pack2.go", "package pack");
-    PsiFile file = myFixture.addFileToProject("pack3/pack3.go", 
-                                              "package main; import \"a/pack\"; import <error>\"b/pack\"</error>; func main() { pack.Foo() }");
+    PsiFile file = myFixture.addFileToProject("pack3/pack3.go", "package main; import \"a/pack\"\n" +
+                                                                "import <error>\"b/pack\"</error>\n" +
+                                                                "func main() { pack.Foo() }");
     myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
     myFixture.checkHighlighting();
   }

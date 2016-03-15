@@ -19,6 +19,7 @@ package com.goide.tree;
 import com.goide.GoIcons;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
+import com.goide.sdk.GoPackageUtil;
 import com.intellij.ide.structureView.*;
 import com.intellij.ide.structureView.impl.common.PsiTreeElementBase;
 import com.intellij.ide.util.ActionShortcutProvider;
@@ -111,7 +112,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
         if (psi instanceof GoFile) {
           GoFile orig = (GoFile)psi;
           List<TreeElement> result = ContainerUtil.newSmartList();
-          for (GoFile f : GoPsiImplUtil.getAllPackageFiles(orig)) {
+          for (GoFile f : GoPackageUtil.getAllPackageFiles(orig)) {
             if (f != orig) {
               ContainerUtil.addAll(result, new Element(f).getChildren());
             }

@@ -21,6 +21,7 @@ import com.goide.GoFileType;
 import com.goide.GoLanguage;
 import com.goide.GoTypes;
 import com.goide.psi.impl.GoElementFactory;
+import com.goide.sdk.GoPackageUtil;
 import com.goide.sdk.GoSdkUtil;
 import com.goide.stubs.GoConstSpecStub;
 import com.goide.stubs.GoFileStub;
@@ -97,7 +98,7 @@ public class GoFile extends PsiFileBase {
   public GoImportList getImportList() {
     return findChildByClass(GoImportList.class);
   }
-  
+
   @Nullable
   public String getBuildFlags() {
     GoFileStub stub = getStub();
@@ -110,7 +111,7 @@ public class GoFile extends PsiFileBase {
     int buildFlagLength = GoConstants.BUILD_FLAG.length();
     for (PsiComment comment : getCommentsToConsider(this)) {
       String commentText = StringUtil.trimStart(comment.getText(), "//").trim();
-      if (commentText.startsWith(GoConstants.BUILD_FLAG) && commentText.length() > buildFlagLength 
+      if (commentText.startsWith(GoConstants.BUILD_FLAG) && commentText.length() > buildFlagLength
           && StringUtil.isWhiteSpace(commentText.charAt(buildFlagLength))) {
         ContainerUtil.addIfNotNull(buildFlags, StringUtil.nullize(commentText.substring(buildFlagLength).trim(), true));
       }
@@ -181,7 +182,7 @@ public class GoFile extends PsiFileBase {
       }
     });
   }
-  
+
   public GoImportSpec addImport(String path, String alias) {
     GoImportList importList = getImportList();
     if (importList != null) {
@@ -234,7 +235,7 @@ public class GoFile extends PsiFileBase {
       }
       GoImportString string = spec.getImportString();
       PsiDirectory dir = string.resolve();
-      Collection<String> packagesInDirectory = GoUtil.getAllPackagesInDirectory(dir, true);
+      Collection<String> packagesInDirectory = GoPackageUtil.getAllPackagesInDirectory(dir, true);
       if (!packagesInDirectory.isEmpty()) {
         for (String packageNames : packagesInDirectory) {
           if (!StringUtil.isEmpty(packageNames)) {
@@ -361,7 +362,7 @@ public class GoFile extends PsiFileBase {
     });
     return result;
   }
-  
+
   @Nullable
   private <T extends PsiElement> T calcFirst(@NotNull Condition<PsiElement> condition) {
     Ref<T> result = Ref.create(null);
@@ -472,7 +473,7 @@ public class GoFile extends PsiFileBase {
                                                                   ArrayFactory<E> f) {
     return Arrays.asList(stub.getChildrenByType(elementType, f));
   }
-  
+
   @NotNull
   private static Collection<PsiComment> getCommentsToConsider(@NotNull GoFile file) {
     Collection<PsiComment> commentsToConsider = ContainerUtil.newArrayList();

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import com.goide.GoConstants;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoPackageClause;
 import com.goide.quickfix.GoMultiplePackagesQuickFix;
-import com.goide.util.GoUtil;
+import com.goide.sdk.GoPackageUtil;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.ide.scratch.ScratchFileType;
@@ -39,7 +39,7 @@ public class GoMultiplePackagesInspection extends GoInspectionBase {
       String packageName = file.getPackageName();
       if (packageName == null || packageName.equals(GoConstants.DOCUMENTATION)) return;
       PsiDirectory dir = file.getContainingDirectory();
-      Collection<String> packages = GoUtil.getAllPackagesInDirectory(dir, true);
+      Collection<String> packages = GoPackageUtil.getAllPackagesInDirectory(dir, true);
       packages.remove(GoConstants.DOCUMENTATION);
       if (packages.size() > 1) {
         Collection<LocalQuickFix> fixes = ContainerUtil.newArrayList();

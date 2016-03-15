@@ -26,7 +26,7 @@ import com.goide.psi.GoReferenceExpressionBase;
 import com.goide.psi.impl.GoCachedReference;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.runconfig.testing.GoTestFinder;
-import com.goide.util.GoUtil;
+import com.goide.sdk.GoPackageUtil;
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
@@ -68,7 +68,7 @@ public class GoCompletionContributor extends CompletionContributor {
       boolean isTestFile = GoTestFinder.isTestFile(file);
       PsiDirectory directory = file.getParent();
       String currentPackageName = ((GoFile)file).getPackageName();
-      Collection<String> packagesInDirectory = GoUtil.getAllPackagesInDirectory(directory, true);
+      Collection<String> packagesInDirectory = GoPackageUtil.getAllPackagesInDirectory(directory, true);
       for (String packageName : packagesInDirectory) {
         if (!packageName.equals(currentPackageName)) {
           result.addElement(packageLookup(packageName, GoCompletionUtil.PACKAGE_PRIORITY - 1));
@@ -90,7 +90,7 @@ public class GoCompletionContributor extends CompletionContributor {
   }
 
   @NotNull
-  private static LookupElement packageLookup(@NotNull  String packageName, int priority) {
+  private static LookupElement packageLookup(@NotNull String packageName, int priority) {
     LookupElement element = withPriority(LookupElementBuilder.create(packageName), priority);
     return AutoCompletionPolicy.NEVER_AUTOCOMPLETE.applyPolicy(element);
   }

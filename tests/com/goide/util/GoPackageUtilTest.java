@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,9 @@
 package com.goide.util;
 
 import com.goide.GoCodeInsightFixtureTestCase;
+import com.goide.sdk.GoPackageUtil;
 
-public class GoUtilTest extends GoCodeInsightFixtureTestCase {
+public class GoPackageUtilTest extends GoCodeInsightFixtureTestCase {
   public void testPackageNameOfTestPackageInNonTestFile() {
     myFixture.configureByText("foo.go", "package foo");
     myFixture.configureByText("foo_test.go", "package foo_test");
@@ -27,12 +28,11 @@ public class GoUtilTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureByText("bar_test.go", "package tricky_package_name");
     myFixture.configureByText("non_test_file.go", "package non_test");
     myFixture.configureByText("ignored.go", "// +build ignored\n\npackage ignored");
-    
-    assertSameElements(GoUtil.getAllPackagesInDirectory(myFixture.getFile().getContainingDirectory(), true), 
+
+    assertSameElements(GoPackageUtil.getAllPackagesInDirectory(myFixture.getFile().getContainingDirectory(), true),
                        "foo", "main", "non_test", "documentation", "tricky_package_name");
-    
-    assertSameElements(GoUtil.getAllPackagesInDirectory(myFixture.getFile().getContainingDirectory(), false), 
+
+    assertSameElements(GoPackageUtil.getAllPackagesInDirectory(myFixture.getFile().getContainingDirectory(), false),
                        "foo", "foo_test", "main", "non_test", "documentation", "tricky_package_name");
   }
-
 }

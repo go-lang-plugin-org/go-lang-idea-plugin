@@ -20,8 +20,8 @@ import com.goide.GoFileType;
 import com.goide.project.GoExcludedPathsSettings;
 import com.goide.project.GoVendoringUtil;
 import com.goide.psi.GoImportString;
-import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.runconfig.testing.GoTestFinder;
+import com.goide.sdk.GoPackageUtil;
 import com.goide.sdk.GoSdkUtil;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.completion.CompletionParameters;
@@ -78,7 +78,7 @@ public class GoImportPathsCompletionProvider extends CompletionProvider<Completi
         if (parent == null) continue;
 
         PsiDirectory directory = PsiManager.getInstance(project).findDirectory(parent);
-        if (directory != null && !GoPsiImplUtil.isBuiltinDirectory(directory)) {
+        if (directory != null && !GoPackageUtil.isBuiltinPackage(directory)) {
           String importPath = GoSdkUtil.getVendoringAwareImportPath(directory, vendoringEnabled ? context : null);
           if (StringUtil.isNotEmpty(importPath) && !excludedSettings.isExcluded(importPath) &&
               (testFileWithTestPackage || !importPath.equals(contextImportPath))) {
