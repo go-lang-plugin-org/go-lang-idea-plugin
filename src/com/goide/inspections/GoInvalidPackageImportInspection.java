@@ -38,13 +38,14 @@ import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.Set;
 
 public class GoInvalidPackageImportInspection extends GoInspectionBase {
   @Override
   protected void checkFile(@NotNull GoFile file, @NotNull ProblemsHolder problemsHolder) {
     Module module = ModuleUtilCore.findModuleForPsiElement(file);
     boolean vendoringEnabled = GoVendoringUtil.isVendoringEnabled(module);
-    Collection<VirtualFile> sourceRoots = GoSdkUtil.getSourcesPathsToLookup(file.getProject(), module);
+    Set<VirtualFile> sourceRoots = GoSdkUtil.getSourcesPathsToLookup(file.getProject(), module, vendoringEnabled ? file : null);
     for (GoImportSpec importSpec : file.getImports()) {
       PsiDirectory resolve = importSpec.getImportString().resolve();
       if (resolve != null) {

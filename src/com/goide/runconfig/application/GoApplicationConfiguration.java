@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import com.goide.runconfig.GoModuleBasedConfiguration;
 import com.goide.runconfig.GoRunConfigurationWithMain;
 import com.goide.runconfig.GoRunUtil;
 import com.goide.runconfig.ui.GoApplicationConfigurationEditorForm;
-import com.goide.sdk.GoSdkUtil;
+import com.goide.sdk.GoPackageUtil;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
@@ -97,7 +97,7 @@ public class GoApplicationConfiguration extends GoRunConfigurationWithMain<GoApp
         if (StringUtil.isEmptyOrSpaces(myPackage)) {
           throw new RuntimeConfigurationError("Package is not specified");
         }
-        VirtualFile packageDirectory = GoSdkUtil.findFileByRelativeToLibrariesPath(myPackage, module.getProject(), module);
+        VirtualFile packageDirectory = GoPackageUtil.findByImportPath(myPackage, module.getProject(), module);
         if (packageDirectory == null || !packageDirectory.isDirectory()) {
           throw new RuntimeConfigurationError("Cannot find package '" + myPackage + "'");
         }

@@ -19,6 +19,7 @@ package com.goide;
 import com.goide.editor.GoParameterInfoHandler;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
+import com.goide.sdk.GoPackageUtil;
 import com.goide.sdk.GoSdkUtil;
 import com.goide.stubs.index.GoAllPrivateNamesIndex;
 import com.goide.stubs.index.GoAllPublicNamesIndex;
@@ -387,7 +388,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       int hash = link.indexOf('#');
       String importPath = hash >= 0 ? link.substring(0, hash) : link;
       Project project = psiManager.getProject();
-      VirtualFile directory = GoSdkUtil.findFileByRelativeToLibrariesPath(importPath, project, module);
+      VirtualFile directory = GoPackageUtil.findByImportPath(importPath, project, module);
       PsiDirectory psiDirectory = directory != null ? psiManager.findDirectory(directory) : null;
       String anchor = hash >= 0 ? link.substring(Math.min(hash + 1, link.length())) : null;
       if (StringUtil.isNotEmpty(anchor)) {

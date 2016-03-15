@@ -345,7 +345,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
   public void testDoNotCompleteBuiltinImport() {
     doCheckResult("package a; import \"built<caret>\"", "package a; import \"built<caret>\"");
   }
-  
+
   public void testCompleteVendoredBuiltinImport() {
     myFixture.addFileToProject("vendor/builtin/builtin.go", "package builtin; func Hello() {}");
     doCheckResult("package a; import \"built<caret>\"", "package a; import \"builtin<caret>\"");
@@ -369,7 +369,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
                                                              "\n" +
                                                              "func _() { vendorPackage.Bar() }");
   }
-  
+
   public void testDoNotCompleteSymbolsFromUnreachableVendoredPackages() {
     myFixture.addFileToProject("vendor/foo/foo.go", "package foo; func VendoredFunction() {}");
     myFixture.addFileToProject("vendor/foo/vendor/bar/bar.go", "package bar; func VendoredFunction() {}");
@@ -396,5 +396,25 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
     myFixture.completeBasic();
     //noinspection ConstantConditions
     assertSameElements(myFixture.getLookupElementStrings(), "bar.ShadowedFunction");
+  }
+
+  public void testDoNotCompletePackagesShadowedBySdkDirectories() {
+    myFixture.addFileToProject("fmt/subdir/fmt.go", "package subdir; func Println() {}");
+    myFixture.addFileToProject("fmt/fmt.go", "package shadowed; func Println() {}");
+    myFixture.configureByText("a.go", "package src; import `fmt<caret>`");
+    myFixture.completeBasic();
+    //noinspection ConstantConditions
+    assertSameElements(myFixture.getLookupElementStrings(), "fmt", "fmt/subdir");
+  }
+
+  public void testDoNotCompleteFunctionsFromPackagesShadowedBySdkDirectories() {
+    myFixture.addFileToProject("fmt/subdir/fmt.go", "package subdir; func Println() {}");
+    myFixture.addFileToProject("fmt/fmt.go", "package shadowed; func Println() {}");
+    myFixture.configureByText("a.go", "package src; func _() { Printl<caret> }");
+    myFixture.completeBasic();
+    List<String> elementStrings = myFixture.getLookupElementStrings();
+    assertNotNull(elementStrings);
+    assertContainsElements(elementStrings, "subdir.Println");
+    assertDoesntContain(elementStrings, "shadowed.Println");
   }
 }

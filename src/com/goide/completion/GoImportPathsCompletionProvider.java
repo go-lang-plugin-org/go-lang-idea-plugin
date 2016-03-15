@@ -67,9 +67,7 @@ public class GoImportPathsCompletionProvider extends CompletionProvider<Completi
       Project project = module.getProject();
       String contextImportPath = GoCompletionUtil.getContextImportPath(context);
       GoExcludedPathsSettings excludedSettings = GoExcludedPathsSettings.getInstance(project);
-      GlobalSearchScope scope = withLibraries
-                                ? context != null ? GoUtil.goPathScope(context) : GoUtil.goPathScope(module)
-                                : GoUtil.moduleScopeWithoutLibraries(project, module);
+      GlobalSearchScope scope = withLibraries ? GoUtil.goPathScope(module, context) : GoUtil.moduleScopeWithoutLibraries(project, module);
       PsiFile contextFile = context != null ? context.getContainingFile() : null;
       boolean testFileWithTestPackage = GoTestFinder.isTestFileWithTestPackage(contextFile);
       boolean vendoringEnabled = GoVendoringUtil.isVendoringEnabled(module);

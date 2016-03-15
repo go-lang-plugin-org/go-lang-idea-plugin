@@ -19,12 +19,10 @@ package com.goide.util;
 import com.goide.GoConstants;
 import com.goide.project.GoBuildTargetUtil;
 import com.goide.project.GoExcludedPathsSettings;
-import com.goide.project.GoVendoringUtil;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.sdk.GoPackageUtil;
-import com.goide.sdk.GoSdkUtil;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.extensions.PluginId;
@@ -40,19 +38,13 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.DelegatingGlobalSearchScope;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.GlobalSearchScopesCore;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.util.CommonProcessors;
 import com.intellij.util.Function;
 import com.intellij.util.ThreeState;
-import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
-import java.util.Collections;
 
 public class GoUtil {
   public static final Function<VirtualFile, String> RETRIEVE_FILE_PATH_FUNCTION = new Function<VirtualFile, String>() {
@@ -151,27 +143,12 @@ public class GoUtil {
 
   public static GlobalSearchScope goPathScope(@NotNull PsiElement context) {
     // it's important to ask module on file, otherwise module won't be found for elements in libraries files [zolotov]
-    PsiFile contextFile = context.getContainingFile();
-    Module module = ModuleUtilCore.findModuleForPsiElement(contextFile);
-    if (GoVendoringUtil.isVendoringEnabled(module)) {
-      Collection<VirtualFile> directories = GoSdkUtil.getSourcesPathsToLookup(context.getProject(), module);
-      if (!directories.isEmpty()) {
-        return new VendoringAwareScope(contextFile, directories);
-      }
-    }
-    return goPathScope(context.getProject(), module);
+    Module module = ModuleUtilCore.findModuleForPsiElement(context.getContainingFile());
+    return GoPathSearchScope.create(context.getProject(), module, context);
   }
 
-  public static GlobalSearchScope goPathScope(@NotNull Module module) {
-    return goPathScope(module.getProject(), module);
-  }
-
-  public static GlobalSearchScope goPathScope(@NotNull Project project, @Nullable Module module) {
-    GlobalSearchScope moduleScope = moduleScopeWithoutLibraries(project, module);
-    Collection<VirtualFile> directories = GoSdkUtil.getSourcesPathsToLookup(project, module);
-    return directories.isEmpty()
-           ? moduleScopeWithoutLibraries(project, module)
-           : moduleScope.uniteWith(GlobalSearchScopesCore.directoriesScope(project, true, ContainerUtil.toArray(directories, VirtualFile.EMPTY_ARRAY)));
+  public static GlobalSearchScope goPathScope(@NotNull Module module, @Nullable PsiElement context) {
+    return GoPathSearchScope.create(module.getProject(), module, context);
   }
 
   @NotNull
@@ -290,54 +267,6 @@ public class GoUtil {
         }
       }
       return super.contains(file);
-    }
-  }
-
-  private static class VendoringAwareScope extends DelegatingGlobalSearchScope {
-    private final Collection<VirtualFile> myDirectories;
-    private final VirtualFile myContextDirectory;
-    @Nullable
-    private Collection<VirtualFile> myVendorDirectories;
-
-    public VendoringAwareScope(@NotNull PsiFile context, @NotNull Collection<VirtualFile> directories) {
-      super(GlobalSearchScopesCore.directoriesScope(context.getProject(), true, ContainerUtil.toArray(directories,
-                                                                                                      VirtualFile.EMPTY_ARRAY)));
-      myDirectories = directories;
-      PsiDirectory containingDirectory = context.getContainingDirectory();
-      myContextDirectory = containingDirectory != null ? containingDirectory.getVirtualFile() : null;
-    }
-    
-    @NotNull
-    private Collection<VirtualFile> getVendorDirectories() {
-      if (myVendorDirectories == null) {
-        if (myContextDirectory != null) {
-          CommonProcessors.CollectProcessor<VirtualFile> processor = new CommonProcessors.CollectProcessor<>();
-          GoPackageUtil.processVendorDirectories(myContextDirectory, myDirectories, processor);
-          myVendorDirectories = processor.getResults();
-        }
-        else {
-          myVendorDirectories = Collections.emptyList();
-        }
-      }
-      return myVendorDirectories;
-    }
-    
-
-    @Override
-    public boolean contains(@NotNull VirtualFile file) {
-      if (super.contains(file)) {
-        if (myContextDirectory == null) {
-          return true;
-        }
-        VirtualFile packageDirectory = file.isDirectory() ? file : file.getParent();
-        if (packageDirectory == null) {
-          return true;
-        }
-        
-        return !GoSdkUtil.isUnreachableVendoredPackage(packageDirectory, myContextDirectory, myDirectories) &&
-               !GoPackageUtil.isPackageShadowedByVendoring(packageDirectory, myContextDirectory, myDirectories, getVendorDirectories());
-      }
-      return false;
     }
   }
 }
