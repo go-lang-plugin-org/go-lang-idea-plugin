@@ -16,24 +16,46 @@
 
 package com.goide.inspections;
 
+import com.goide.quickfix.GoDeleteImportQuickFix;
 import com.goide.quickfix.GoQuickFixTestBase;
 import com.goide.sdk.GoSdkService;
 import com.intellij.codeInsight.intention.IntentionAction;
+import com.intellij.openapi.command.WriteCommandAction;
+import com.intellij.psi.PsiFile;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 
 import java.util.Collection;
 
-public class GoIllegalVendoredPackageImportInspectionTest extends GoQuickFixTestBase {
+public class GoInvalidPackageImportInspectionTest extends GoQuickFixTestBase {
   @Override
   public void setUp() throws Exception {
     super.setUp();
-    myFixture.enableInspections(GoIllegalVendoredPackageImportInspection.class);
+    myFixture.enableInspections(GoInvalidPackageImportInspection.class);
   }
 
   @Override
   protected boolean isWriteActionRequired() {
     return false;
+  }
+
+  public void testImportBuiltinPackage() {
+    myFixture.addFileToProject("builtin/hello.go", "package builtin");
+    myFixture.configureByText("a.go", "package pack; import <error descr=\"Cannot import 'builtin' package\">`builtin`</error>");
+    myFixture.checkHighlighting();
+  }
+
+  public void testImportBuiltinSubPackage() {
+    myFixture.addFileToProject("builtin/hello.go", "package builtin");
+    myFixture.addFileToProject("builtin/sub/hello.go", "package builtin");
+    myFixture.configureByText("a.go", "package pack; import `builtin/sub`");
+    myFixture.checkHighlighting();
+  }
+
+  public void testImportVendoredBuiltin() {
+    myFixture.addFileToProject("vendor/builtin/hello.go", "package builtin");
+    myFixture.configureByText("a.go", "package pack; import `builtin`");
+    myFixture.checkHighlighting();
   }
 
   public void testImportUnreachableVendoredPackage() {
@@ -87,7 +109,49 @@ public class GoIllegalVendoredPackageImportInspectionTest extends GoQuickFixTest
                                       "import _ `foor`\n" +
                                       "import <error descr=\"Use of vendored package is not allowed\">_ `foo/vendor/bar`</error>");
     myFixture.checkHighlighting();
+  }
 
+  public void testImportMainPackage() {
+    myFixture.addFileToProject("foo/main/main.go", "package main");
+    myFixture.addFileToProject("bar/main/main_test.go", "package main_test");
+    myFixture.addFileToProject("buzz/main/other_main_test.go", "package main");
+    myFixture.addFileToProject("not_program/main/other_main.go", "package main_test");
+    myFixture.addFileToProject("foo/not_main/main.go", "package main");
+    myFixture.addFileToProject("bar/not_main/main_test.go", "package main_test");
+    myFixture.addFileToProject("buzz/not_main/other_main_test.go", "package main");
+    myFixture.addFileToProject("not_program/not_main/other_main.go", "package main_test");
+    myFixture.configureByText("a.go", "package a\n" +
+                                      "import <error descr=\"'foo/main' is a program, not an importable package\">`foo/main`</error>\n" +
+                                      "import <error descr=\"'bar/main' is a program, not an importable package\">`bar/main`</error>\n" +
+                                      "import <error descr=\"'buzz/main' is a program, not an importable package\">`buzz/main`</error>\n" +
+                                      "import `not_program/main`\n" +
+                                      "import <error descr=\"'foo/not_main' is a program, not an importable package\">`foo/not_main`</error>\n" +
+                                      "import <error descr=\"'bar/not_main' is a program, not an importable package\">`bar/not_main`</error>\n" +
+                                      "import <error descr=\"'buzz/not_main' is a program, not an importable package\">`buzz/not_main`</error>\n" +
+                                      "import `not_program/not_main`");
+    myFixture.checkHighlighting();
+  }
+
+  public void testImportPackageWithoutBuildableSource() {
+    PsiFile file = myFixture.addFileToProject("withSources/a.go", "package withSources");
+    WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new Runnable() {
+      @Override
+      public void run() {
+        //noinspection ConstantConditions
+        file.getParent().getParent().createSubdirectory("withoutSources");
+      }
+    });
+    myFixture.configureByText("a.go", "package pack\n" +
+                                      "import `withSources`\n" +
+                                      "import <error descr=\"'/src/withoutSources' has no buildable Go source files\">`withoutSources`</error>\n" +
+                                      "import <error descr=\"'/src/withoutSources' has no buildable Go source files\">_ `without<caret>Sources`</error>\n" +
+                                      "import `unresolved`\n");
+    myFixture.checkHighlighting();
+    applySingleQuickFix(GoDeleteImportQuickFix.QUICK_FIX_NAME);
+    myFixture.checkResult("package pack\n" +
+                          "import `withSources`\n" +
+                          "import `withoutSources`\n" +
+                          "import `unresolved`\n");
   }
 
   private Collection<String> getIntentionNames() {

@@ -18,6 +18,7 @@ package com.goide.psi.impl;
 
 import com.goide.GoIcons;
 import com.goide.psi.*;
+import com.goide.sdk.GoPackageUtil;
 import com.goide.sdk.GoSdkUtil;
 import com.goide.stubs.GoNamedStub;
 import com.goide.stubs.GoTypeStub;
@@ -212,7 +213,7 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
     if (isPublic()) {
       return GoUtil.goPathScope(this);
     }
-    return GoPsiImplUtil.packageScope(getContainingFile());
+    return GoPackageUtil.packageScope(getContainingFile());
   }
 
   @Override
