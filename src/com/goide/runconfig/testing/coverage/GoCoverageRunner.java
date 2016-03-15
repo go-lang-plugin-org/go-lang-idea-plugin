@@ -17,7 +17,7 @@
 package com.goide.runconfig.testing.coverage;
 
 import com.goide.GoConstants;
-import com.goide.sdk.GoSdkUtil;
+import com.goide.sdk.GoPackageUtil;
 import com.intellij.coverage.BaseCoverageSuite;
 import com.intellij.coverage.CoverageEngine;
 import com.intellij.coverage.CoverageRunner;
@@ -96,7 +96,7 @@ public class GoCoverageRunner extends CoverageRunner {
     while ((line = dataReader.readLine()) != null) {
       if (line.isEmpty()) continue;
       List<String> fileNameTail = StringUtil.split(line, ":");
-      VirtualFile file = GoSdkUtil.findFileByRelativeToLibrariesPath(fileNameTail.get(0), project, module);
+      VirtualFile file = GoPackageUtil.findByImportPath(fileNameTail.get(0), project, module);
       if (file == null) continue;
       String filePath = file.getPath();
 

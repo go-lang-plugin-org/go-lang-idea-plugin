@@ -20,8 +20,11 @@ import com.goide.GoConstants;
 import com.goide.psi.GoFile;
 import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.util.GoUtil;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Key;
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
@@ -33,7 +36,6 @@ import com.intellij.psi.util.CachedValue;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.util.Function;
-import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -104,50 +106,18 @@ public class GoPackageUtil {
     }, false);
   }
 
-  public static void processVendorDirectories(@NotNull PsiFile contextFile,
-                                              @NotNull Collection<VirtualFile> sourceRoots,
-                                              @NotNull Processor<VirtualFile> processor) {
-    PsiDirectory containingDirectory = contextFile.getContainingDirectory();
-    VirtualFile contextDirectory = containingDirectory != null ? containingDirectory.getVirtualFile() : null;
-    if (contextDirectory != null) {
-      processVendorDirectories(contextDirectory, sourceRoots, processor);
+  @Nullable
+  public static VirtualFile findByImportPath(@NotNull String importPath, @NotNull Project project, @Nullable Module module) {
+    if (importPath.isEmpty()) {
+      return null;
     }
-  }
-
-  public static void processVendorDirectories(@NotNull VirtualFile contextDirectory,
-                                              @NotNull Collection<VirtualFile> sourceRoots,
-                                              @NotNull Processor<VirtualFile> processor) {
-    VirtualFile directory = contextDirectory;
-    while (directory != null) {
-      VirtualFile vendorDirectory = directory.findChild(GoConstants.VENDOR);
-      if (vendorDirectory != null) {
-        if (!processor.process(vendorDirectory)) {
-          break;
-        }
-      }
-      if (sourceRoots.contains(directory)) {
-        break;
-      }
-      directory = directory.getParent();
-    }
-  }
-
-  public static boolean isPackageShadowedByVendoring(@NotNull VirtualFile packageDirectory,
-                                                     @NotNull VirtualFile contextFile,
-                                                     @NotNull Collection<VirtualFile> sourceRoots,
-                                                     @NotNull Collection<VirtualFile> vendorDirectories) {
-    if (vendorDirectories.isEmpty()) {
-      return false;
-    }
-    String importPath = GoSdkUtil.getPathRelativeToSdkAndLibrariesAndVendor(packageDirectory, sourceRoots, contextFile);
-    if (importPath != null) {
-      for (VirtualFile vendorDirectory : vendorDirectories) {
-        VirtualFile shadowPackage = vendorDirectory.findFileByRelativePath(importPath);
-        if (shadowPackage != null) {
-          return !shadowPackage.equals(packageDirectory);
-        }
+    importPath = FileUtil.toSystemIndependentName(importPath);
+    for (VirtualFile root : GoSdkUtil.getSourcesPathsToLookup(project, module, null)) {
+      VirtualFile file = root.findFileByRelativePath(importPath);
+      if (file != null) {
+        return file;
       }
     }
-    return false;
+    return null;
   }
 }
