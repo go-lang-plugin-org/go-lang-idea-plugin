@@ -23,10 +23,7 @@ import com.intellij.openapi.options.SearchableConfigurable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.ui.AnActionButton;
-import com.intellij.ui.AnActionButtonRunnable;
-import com.intellij.ui.IdeBorderFactory;
-import com.intellij.ui.ToolbarDecorator;
+import com.intellij.ui.*;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.ui.FormBuilder;
 import com.intellij.util.ui.UIUtil;
@@ -171,7 +168,7 @@ public class GoAutoImportConfigurable implements SearchableConfigurable {
       int index = -Arrays.binarySearch(myExcludePackagesModel.toArray(), packageName) - 1;
       if (index >= 0) {
         myExcludePackagesModel.add(index, packageName);
-        ScrollingUtil.ensureIndexIsVisible(myExcludePackagesList, index, 0);
+        ListScrollingUtil.ensureIndexIsVisible(myExcludePackagesList, index, 0);
       }
       myExcludePackagesList.clearSelection();
       myExcludePackagesList.setSelectedValue(packageName, true);

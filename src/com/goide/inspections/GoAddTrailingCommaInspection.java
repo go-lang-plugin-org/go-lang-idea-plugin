@@ -35,14 +35,13 @@ public class GoAddTrailingCommaInspection extends GoInspectionBase {
 
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
+  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
       public void visitErrorElement(PsiErrorElement o) {
         GoElement element = PsiTreeUtil.getPrevSiblingOfType(o, GoElement.class);
-        if (element != null) {
+        if (element != null)
           holder.registerProblem(element, "Need trailing comma before newline in composite literal", new MyAddCommaFix());
-        }
       }
     };
   }
@@ -51,10 +50,10 @@ public class GoAddTrailingCommaInspection extends GoInspectionBase {
     private MyAddCommaFix() {super(QUICK_FIX_NAME, QUICK_FIX_NAME);}
 
     @Override
-    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+    public void applyFix(@NotNull final Project project, @NotNull ProblemDescriptor descriptor) {
       PsiElement e = descriptor.getPsiElement();
       if (!(e instanceof GoElement)) return;
-      PsiErrorElement error = PsiTreeUtil.getNextSiblingOfType(e, PsiErrorElement.class);
+      final PsiErrorElement error = PsiTreeUtil.getNextSiblingOfType(e, PsiErrorElement.class);
       if (error == null) return;
       new WriteCommandAction.Simple(project, getName(), e.getContainingFile()) {
         @Override

@@ -19,6 +19,7 @@ package com.goide;
 import com.goide.editor.GoParameterInfoHandler;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
+import com.goide.sdk.GoPackageUtil;
 import com.goide.sdk.GoSdkUtil;
 import com.goide.stubs.index.GoAllPrivateNamesIndex;
 import com.goide.stubs.index.GoAllPublicNamesIndex;
@@ -110,10 +111,10 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
   private static GoFile findDocFileForDirectory(@NotNull PsiDirectory directory) {
     PsiFile file = directory.findFile("doc.go");
     if (file instanceof GoFile) {
-      return ((GoFile)file);
+      return (GoFile)file;
     }
     PsiFile directoryFile = directory.findFile(GoUtil.suggestPackageForDirectory(directory) + ".go");
-    return directoryFile instanceof GoFile ? ((GoFile)directoryFile) : null;
+    return directoryFile instanceof GoFile ? (GoFile)directoryFile : null;
   }
 
   @Nullable
@@ -209,7 +210,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
   @NotNull
   private static String getTypePresentation(@Nullable PsiElement element, @Nullable String contextImportPath) {
     if (element instanceof GoType) {
-      GoType type = ((GoType)element);
+      GoType type = (GoType)element;
       if (type instanceof GoMapType) {
         GoType keyType = ((GoMapType)type).getKeyType();
         GoType valueType = ((GoMapType)type).getValueType();
@@ -320,7 +321,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       }
     }
     else if (element instanceof PsiDirectory && findDocFileForDirectory((PsiDirectory)element) != null) {
-      return GoSdkUtil.getImportPath(((PsiDirectory)element));
+      return GoSdkUtil.getImportPath((PsiDirectory)element);
     }
 
     return null;
@@ -355,7 +356,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       return StringUtil.nullize(signature + getCommentText(getCommentsForElement(element), true));
     }
     else if (element instanceof PsiDirectory) {
-      return getPackageComment(findDocFileForDirectory(((PsiDirectory)element)));
+      return getPackageComment(findDocFileForDirectory((PsiDirectory)element));
     }
     return null;
   }
@@ -387,7 +388,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       int hash = link.indexOf('#');
       String importPath = hash >= 0 ? link.substring(0, hash) : link;
       Project project = psiManager.getProject();
-      VirtualFile directory = GoSdkUtil.findFileByRelativeToLibrariesPath(importPath, project, module);
+      VirtualFile directory = GoPackageUtil.findByImportPath(importPath, project, module);
       PsiDirectory psiDirectory = directory != null ? psiManager.findDirectory(directory) : null;
       String anchor = hash >= 0 ? link.substring(Math.min(hash + 1, link.length())) : null;
       if (StringUtil.isNotEmpty(anchor)) {

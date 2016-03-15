@@ -35,6 +35,7 @@ import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import java.util.ArrayList;
 
 import static com.intellij.util.ThreeState.UNSURE;
 
@@ -43,7 +44,7 @@ public class GoVendoringUI implements Disposable {
   private static final String DISABLED = "Disabled";
 
   @NotNull
-  private final MutableCollectionComboBoxModel myVendoringEnabledComboModel = new MutableCollectionComboBoxModel<String>();
+  private final MutableCollectionComboBoxModel myVendoringEnabledComboModel = new MutableCollectionComboBoxModel<String>(new ArrayList<String>());
   @NotNull
   private String myDefaultComboText = "";
 

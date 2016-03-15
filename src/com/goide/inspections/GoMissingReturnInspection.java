@@ -177,7 +177,7 @@ public class GoMissingReturnInspection extends GoInspectionBase {
       editor.getCaretModel().moveToOffset(start);
       editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
       template.setToReformat(true);
-      TemplateManager.getInstance(project).startTemplate(editor, template, true, Collections.emptyMap(), null);
+      TemplateManager.getInstance(project).startTemplate(editor, template, true, Collections.<String, String>emptyMap(), null);
     }
   }
 }

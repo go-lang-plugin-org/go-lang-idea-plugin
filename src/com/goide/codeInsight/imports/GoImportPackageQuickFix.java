@@ -160,7 +160,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
   public static List<String> getImportPathVariantsToImport(@NotNull String packageName, @NotNull PsiElement context) {
     final PsiFile contextFile = context.getContainingFile();
     final Set<String> imported = contextFile instanceof GoFile 
-                           ? ((GoFile)contextFile).getImportedPackagesMap().keySet() : Collections.emptySet();
+                           ? ((GoFile)contextFile).getImportedPackagesMap().keySet() : Collections.<String>emptySet();
     Project project = context.getProject();
     final PsiDirectory parentDirectory = contextFile != null ? contextFile.getParent() : null;
     final GoExcludedPathsSettings excludedSettings = GoExcludedPathsSettings.getInstance(project);

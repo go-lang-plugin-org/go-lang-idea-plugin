@@ -61,7 +61,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
 
   public static class Model extends StructureViewModelBase implements StructureViewModel.ElementInfoProvider {
     private static final List<NodeProvider> PROVIDERS =
-      ContainerUtil.newSmartList(new TreeElementFileStructureNodeProvider());
+      ContainerUtil.<NodeProvider>newSmartList(new TreeElementFileStructureNodeProvider());
 
     Model(@NotNull PsiFile file) {
       super(file, new Element(file));

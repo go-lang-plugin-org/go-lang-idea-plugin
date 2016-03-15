@@ -21,7 +21,6 @@ import com.goide.project.GoModuleSettings;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.ConfigurableUi;
-import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.NotNull;
@@ -57,7 +56,7 @@ public class GoModuleSettingsUI implements ConfigurableUi<GoModuleSettings>, Dis
   }
 
   @Override
-  public void apply(@NotNull GoModuleSettings settings) throws ConfigurationException {
+  public void apply(@NotNull GoModuleSettings settings) {
     myVendoringUI.apply(settings);
 
     GoBuildTargetSettings newBuildTargetSettings = new GoBuildTargetSettings();
