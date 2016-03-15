@@ -71,7 +71,7 @@ public class GoModuleType extends ModuleType<GoModuleBuilder> {
   @NotNull
   @Override
   public ModuleWizardStep[] createWizardSteps(@NotNull WizardContext wizardContext,
-                                              @NotNull GoModuleBuilder moduleBuilder,
+                                              @NotNull final GoModuleBuilder moduleBuilder,
                                               @NotNull ModulesProvider modulesProvider) {
     return new ModuleWizardStep[]{new ProjectJdkForModuleStep(wizardContext, GoSdkType.getInstance()) {
       @Override

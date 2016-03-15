@@ -90,7 +90,7 @@ public class GoCoverageRunner extends CoverageRunner {
   public static GoCoverageProjectData parseCoverage(@NotNull BufferedReader dataReader,
                                                     @NotNull Project project,
                                                     @Nullable Module module) throws IOException {
-    GoCoverageProjectData result = new GoCoverageProjectData();
+    final GoCoverageProjectData result = new GoCoverageProjectData();
     String line;
 
     while ((line = dataReader.readLine()) != null) {
@@ -144,7 +144,7 @@ public class GoCoverageRunner extends CoverageRunner {
           max = Math.max(max, rangeData.endLine);
         }
 
-        LineData[] linesArray = new LineData[max + 1];
+        final LineData[] linesArray = new LineData[max + 1];
         linesMap.forEachValue(new TObjectProcedure<LineData>() {
           @Override
           public boolean execute(LineData data) {

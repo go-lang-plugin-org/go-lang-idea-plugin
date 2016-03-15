@@ -133,7 +133,7 @@ public class GoHighlightingAnnotator implements Annotator {
     if (!o.isValid()) return;
     if (o instanceof GoImportSpec) {
       if (((GoImportSpec)o).isDot()) {
-        o.putUserData(GoReference.IMPORT_USERS, ContainerUtil.newArrayListWithCapacity(0));
+        o.putUserData(GoReference.IMPORT_USERS, ContainerUtil.newArrayList());
       }
     }
     else if (o instanceof GoLiteral) {

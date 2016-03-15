@@ -92,7 +92,7 @@ public class GoBuildTagsUI implements Disposable {
     myArchCombo.addActionListener(updateCgoListener);
   }
 
-  public void initPanel(@NotNull Module module) {
+  public void initPanel(@NotNull final Module module) {
     if (!module.isDisposed()) {
       MessageBusConnection connection = module.getMessageBus().connect(this);
       connection.subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {

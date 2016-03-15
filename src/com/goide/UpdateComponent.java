@@ -78,7 +78,7 @@ public class UpdateComponent implements ApplicationComponent, Disposable {
             String pluginId = plugin.getPluginId().getIdString();
             String os = URLEncoder.encode(SystemInfo.OS_NAME + " " + SystemInfo.OS_VERSION, CharsetToolkit.UTF8);
             String uid = UpdateChecker.getInstallationUID(PropertiesComponent.getInstance());
-            String url =
+            final String url =
               "https://plugins.jetbrains.com/plugins/list" +
               "?pluginId=" + pluginId +
               "&build=" + buildNumber +

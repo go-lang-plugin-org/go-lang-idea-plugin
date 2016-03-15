@@ -146,7 +146,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
         }
       });
 
-      Project project = myModule.getProject();
+      final Project project = myModule.getProject();
       StartupManager.getInstance(project).runWhenProjectIsInitialized(new Runnable() {
         @Override
         public void run() {
@@ -182,7 +182,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     }
   }
 
-  private void attachLibraries(@NotNull Collection<VirtualFile> libraryRoots, Set<VirtualFile> exclusions) {
+  private void attachLibraries(@NotNull final Collection<VirtualFile> libraryRoots, final Set<VirtualFile> exclusions) {
     ApplicationManager.getApplication().assertIsDispatchThread();
 
     if (!libraryRoots.isEmpty()) {
@@ -236,9 +236,9 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   private void removeLibraryIfNeeded() {
     ApplicationManager.getApplication().assertIsDispatchThread();
 
-    ModifiableModelsProvider modelsProvider = ModifiableModelsProvider.SERVICE.getInstance();
-    ModifiableRootModel model = modelsProvider.getModuleModifiableModel(myModule);
-    LibraryOrderEntry goLibraryEntry = OrderEntryUtil.findLibraryOrderEntry(model, getLibraryName());
+    final ModifiableModelsProvider modelsProvider = ModifiableModelsProvider.SERVICE.getInstance();
+    final ModifiableRootModel model = modelsProvider.getModuleModifiableModel(myModule);
+    final LibraryOrderEntry goLibraryEntry = OrderEntryUtil.findLibraryOrderEntry(model, getLibraryName());
     if (goLibraryEntry != null) {
       ApplicationManager.getApplication().runWriteAction(new Runnable() {
         @Override
@@ -270,7 +270,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
 
   @NotNull
   private static Set<VirtualFile> gatherExclusions(@NotNull Collection<VirtualFile> roots, @NotNull VirtualFile... exclusions) {
-    Set<VirtualFile> result = ContainerUtil.newHashSet(exclusions);
+    final Set<VirtualFile> result = ContainerUtil.newHashSet(exclusions);
 
     Iterator<VirtualFile> iterator = roots.iterator();
     while (iterator.hasNext()) {
@@ -300,7 +300,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     return result;
   }
 
-  private static void showNotification(@NotNull Project project) {
+  private static void showNotification(@NotNull final Project project) {
     PropertiesComponent propertiesComponent = PropertiesComponent.getInstance(project);
     boolean shownAlready;
     //noinspection SynchronizationOnLocalVariableOrMethodParameter
@@ -331,7 +331,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     if (!myModuleInitialized || myModule.isDisposed()) {
       return;
     }
-    Project project = myModule.getProject();
+    final Project project = myModule.getProject();
     String version = GoSdkService.getInstance(project).getSdkVersion(myModule);
     if (!GoVendoringUtil.supportsVendoring(version) || GoVendoringUtil.supportsVendoringByDefault(version)) {
       return;
@@ -402,14 +402,14 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   private class UpdateRequest implements Runnable {
     @Override
     public void run() {
-      Project project = myModule.getProject();
+      final Project project = myModule.getProject();
       if (GoSdkService.getInstance(project).isGoModule(myModule)) {
         synchronized (myLastHandledRoots) {
-          Collection<VirtualFile> libraryRoots = ContainerUtil.newHashSet();
+          final Collection<VirtualFile> libraryRoots = ContainerUtil.newHashSet();
           for (VirtualFile packages : GoSdkUtil.getGoPathSources(project, myModule)) {
             Collections.addAll(libraryRoots, packages.getChildren());
           }
-          Set<VirtualFile> excludedRoots = gatherExclusions(libraryRoots,
+          final Set<VirtualFile> excludedRoots = gatherExclusions(libraryRoots,
                                                                   ProjectRootManager.getInstance(project).getContentRoots());
 
           ProgressIndicatorProvider.checkCanceled();

@@ -89,7 +89,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   }
 
   @NotNull
-  static GoScopeProcessor createResolveProcessor(@NotNull Collection<ResolveResult> result, @NotNull GoReferenceExpressionBase o) {
+  static GoScopeProcessor createResolveProcessor(@NotNull final Collection<ResolveResult> result, @NotNull final GoReferenceExpressionBase o) {
     return new GoScopeProcessor() {
       @Override
       public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state) {
@@ -162,7 +162,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     return type.getTypeReferenceExpression();
   }
 
-  private boolean processGoType(@NotNull GoType type, @NotNull GoScopeProcessor processor, @NotNull ResolveState state) {
+  private boolean processGoType(@NotNull final GoType type, @NotNull final GoScopeProcessor processor, @NotNull final ResolveState state) {
     Boolean result = RecursionManager.doPreventingRecursion(type, true, new Computable<Boolean>() {
       @Override
       public Boolean compute() {
@@ -412,7 +412,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
   private static boolean processFileEntities(@NotNull GoFile file,
                                              @NotNull GoScopeProcessor processor,
-                                             @NotNull ResolveState state,
+                                             @NotNull final ResolveState state,
                                              boolean localProcessing) {
     if (!processNamedElements(processor, state, file.getConstants(), new Condition<GoNamedElement>() {
         @Override

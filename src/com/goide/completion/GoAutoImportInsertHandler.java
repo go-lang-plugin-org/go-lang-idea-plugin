@@ -52,7 +52,7 @@ public class GoAutoImportInsertHandler<T extends GoNamedElement> implements Inse
     this((Function<T, InsertHandler<LookupElement>>)null, null);
   }
 
-  private GoAutoImportInsertHandler(@Nullable InsertHandler<LookupElement> delegate, @Nullable Class<T> clazz) {
+  private GoAutoImportInsertHandler(@Nullable final InsertHandler<LookupElement> delegate, @Nullable Class<T> clazz) {
     this(new Function<T, InsertHandler<LookupElement>>() {
       @Nullable
       @Override

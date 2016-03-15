@@ -57,7 +57,7 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
   }
 
   @Nullable
-  private Configurable createConfigurable(boolean dialogMode) {
+  private Configurable createConfigurable(final boolean dialogMode) {
     return new CompositeConfigurable<UnnamedConfigurable>() {
 
       @Nullable
@@ -224,9 +224,7 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
     ApplicationManager.getApplication().assertIsDispatchThread();
     if (!project.isDisposed()) {
       Configurable configurable = new GoLibrariesConfigurableProvider(project).createConfigurable(true);
-      if (configurable != null) {
-        ShowSettingsUtil.getInstance().editConfigurable(project, configurable);
-      }
+      ShowSettingsUtil.getInstance().editConfigurable(project, configurable);
     }
   }
 }

@@ -52,7 +52,7 @@ public class GoImportReferenceSet extends FileReferenceSet {
       return Collections.emptyList();
     }
 
-    PsiManager psiManager = file.getManager();
+    final PsiManager psiManager = file.getManager();
     Module module = ModuleUtilCore.findModuleForPsiElement(file);
     PsiElement contextForSourcePaths = GoVendoringUtil.isVendoringEnabled(module) ? file : null;
     return ContainerUtil.mapNotNull(GoSdkUtil.getSourcesPathsToLookup(file.getProject(), module, contextForSourcePaths),

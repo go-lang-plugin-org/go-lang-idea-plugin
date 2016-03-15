@@ -69,7 +69,7 @@ public class GoUtil {
     return module == null || new GoBuildMatcher(GoBuildTargetUtil.getTargetSystemDescriptor(module)).matchFile(file);
   }
 
-  public static boolean isExcludedFile(@NotNull GoFile file) {
+  public static boolean isExcludedFile(@NotNull final GoFile file) {
     return CachedValuesManager.getCachedValue(file, new CachedValueProvider<Boolean>() {
       @Nullable
       @Override

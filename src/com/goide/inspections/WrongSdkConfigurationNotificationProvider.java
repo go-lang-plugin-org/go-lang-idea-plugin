@@ -49,7 +49,7 @@ public class WrongSdkConfigurationNotificationProvider extends EditorNotificatio
 
   private final Project myProject;
 
-  public WrongSdkConfigurationNotificationProvider(@NotNull Project project, @NotNull EditorNotifications notifications) {
+  public WrongSdkConfigurationNotificationProvider(@NotNull Project project, @NotNull final EditorNotifications notifications) {
     myProject = project;
     MessageBusConnection connection = myProject.getMessageBus().connect(project);
     connection.subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
@@ -98,7 +98,7 @@ public class WrongSdkConfigurationNotificationProvider extends EditorNotificatio
   }
 
   @NotNull
-  private static EditorNotificationPanel createMissingSdkPanel(@NotNull Project project, @Nullable Module module) {
+  private static EditorNotificationPanel createMissingSdkPanel(@NotNull final Project project, @Nullable final Module module) {
     EditorNotificationPanel panel = new EditorNotificationPanel();
     panel.setText(ProjectBundle.message("project.sdk.not.defined"));
     panel.createActionLabel(ProjectBundle.message("project.sdk.setup"), new Runnable() {
@@ -111,7 +111,7 @@ public class WrongSdkConfigurationNotificationProvider extends EditorNotificatio
   }
 
   @NotNull
-  private static EditorNotificationPanel createEmptyGoPathPanel(@NotNull Project project) {
+  private static EditorNotificationPanel createEmptyGoPathPanel(@NotNull final Project project) {
     EditorNotificationPanel panel = new EditorNotificationPanel();
     panel.setText("GOPATH is empty");
     panel.createActionLabel("Configure Go Libraries", new Runnable() {

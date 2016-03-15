@@ -131,8 +131,8 @@ public class GoCoverageAnnotator extends BaseCoverageAnnotator {
 
   @Nullable
   @Override
-  protected Runnable createRenewRequest(@NotNull CoverageSuitesBundle bundle, @NotNull CoverageDataManager manager) {
-    GoCoverageProjectData data = new GoCoverageProjectData();
+  protected Runnable createRenewRequest(@NotNull CoverageSuitesBundle bundle, @NotNull final CoverageDataManager manager) {
+    final GoCoverageProjectData data = new GoCoverageProjectData();
     for (CoverageSuite suite : bundle.getSuites()) {
       ProjectData toMerge = suite.getCoverageData(manager);
       if (toMerge != null) {
@@ -193,7 +193,7 @@ public class GoCoverageAnnotator extends BaseCoverageAnnotator {
     return total != 0 ? (double)covered / total : 0;
   }
 
-  public void annotateAllFiles(@NotNull GoCoverageProjectData data,
+  public void annotateAllFiles(@NotNull final GoCoverageProjectData data,
                                @Nullable VirtualFile... contentRoots) {
     if (contentRoots != null) {
       for (VirtualFile root : contentRoots) {
@@ -208,7 +208,7 @@ public class GoCoverageAnnotator extends BaseCoverageAnnotator {
             }
             if (!file.isDirectory() && GoCoverageEngine.INSTANCE.coverageProjectViewStatisticsApplicableTo(file)) {
               DirCoverageInfo dirCoverageInfo = getOrCreateDirectoryInfo(file.getParent());
-              FileCoverageInfo fileCoverageInfo = getOrCreateFileInfo(file);
+              final FileCoverageInfo fileCoverageInfo = getOrCreateFileInfo(file);
               data.processFile(file.getPath(), new Processor<GoCoverageProjectData.RangeData>() {
                 @Override
                 public boolean process(GoCoverageProjectData.RangeData rangeData) {

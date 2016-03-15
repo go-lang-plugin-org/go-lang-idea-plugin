@@ -192,7 +192,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
 
   @NotNull
   private static String getParametersAsString(@NotNull GoParameters parameters) {
-    String contextImportPath = getImportPathForElement(parameters);
+    final String contextImportPath = getImportPathForElement(parameters);
     return StringUtil.join(GoParameterInfoHandler.getParameterPresentations(parameters, new Function<PsiElement, String>() {
       @Override
       public String fun(PsiElement element) {

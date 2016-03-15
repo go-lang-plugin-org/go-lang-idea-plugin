@@ -36,7 +36,7 @@ public class GoExportedOwnDeclarationInspection extends GoInspectionBase {
 
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
+  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
       public void visitConstDeclaration(@NotNull GoConstDeclaration o) {
@@ -81,16 +81,16 @@ public class GoExportedOwnDeclarationInspection extends GoInspectionBase {
 
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-      PsiElement element = descriptor.getPsiElement();
+      final PsiElement element = descriptor.getPsiElement();
       if (!element.isValid() || !(element instanceof GoConstDefinition)) {
         return;
       }
-      String name = ((GoConstDefinition)element).getName();
+      final String name = ((GoConstDefinition)element).getName();
       if (StringUtil.isEmpty(name)) {
         return;
       }
-      GoType type = ((GoConstDefinition)element).findSiblingType();
-      GoExpression value = ((GoConstDefinition)element).getValue();
+      final GoType type = ((GoConstDefinition)element).findSiblingType();
+      final GoExpression value = ((GoConstDefinition)element).getValue();
       WriteCommandAction.runWriteCommandAction(project, new Runnable() {
         @Override
         public void run() {
@@ -123,16 +123,16 @@ public class GoExportedOwnDeclarationInspection extends GoInspectionBase {
 
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-      PsiElement element = descriptor.getPsiElement();
+      final PsiElement element = descriptor.getPsiElement();
       if (!element.isValid() || !(element instanceof GoVarDefinition)) {
         return;
       }
-      String name = ((GoVarDefinition)element).getName();
+      final String name = ((GoVarDefinition)element).getName();
       if (StringUtil.isEmpty(name)) {
         return;
       }
-      GoType type = ((GoVarDefinition)element).findSiblingType();
-      GoExpression value = ((GoVarDefinition)element).getValue();
+      final GoType type = ((GoVarDefinition)element).findSiblingType();
+      final GoExpression value = ((GoVarDefinition)element).getValue();
       WriteCommandAction.runWriteCommandAction(project, new Runnable() {
         @Override
         public void run() {
