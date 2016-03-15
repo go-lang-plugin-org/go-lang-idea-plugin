@@ -59,7 +59,7 @@ public class GoBreakStatementExitPointHandler extends HighlightUsagesHandlerBase
 
   @Override
   public void computeUsages(List<PsiElement> targets) {
-    PsiElement breakStmtOwner = findBreakStatementOwner();
+    final PsiElement breakStmtOwner = findBreakStatementOwner();
     GoRecursiveVisitor visitor = new GoRecursiveVisitor() {
       @Override
       public void visitLabelDefinition(@NotNull GoLabelDefinition o) {

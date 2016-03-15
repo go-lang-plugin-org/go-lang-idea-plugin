@@ -119,14 +119,14 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
   public boolean executeTask(DataContext context,
                              RunConfiguration configuration,
                              ExecutionEnvironment env,
-                             GoCommandBeforeRunTask task) {
-    Semaphore done = new Semaphore();
-    Ref<Boolean> result = new Ref<Boolean>(false);
+                             final GoCommandBeforeRunTask task) {
+    final Semaphore done = new Semaphore();
+    final Ref<Boolean> result = new Ref<Boolean>(false);
 
     GoRunConfigurationBase goRunConfiguration = (GoRunConfigurationBase)configuration;
-    Module module = goRunConfiguration.getConfigurationModule().getModule();
-    Project project = configuration.getProject();
-    String workingDirectory = goRunConfiguration.getWorkingDirectory();
+    final Module module = goRunConfiguration.getConfigurationModule().getModule();
+    final Project project = configuration.getProject();
+    final String workingDirectory = goRunConfiguration.getWorkingDirectory();
 
     UIUtil.invokeAndWaitIfNeeded(new Runnable() {
       @Override

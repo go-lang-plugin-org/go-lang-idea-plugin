@@ -66,8 +66,8 @@ public class GoReferenceCompletionProvider extends CompletionProvider<Completion
     }
     else if (reference instanceof GoTypeReference) {
       PsiElement element = reference.getElement();
-      PsiElement spec = PsiTreeUtil.getParentOfType(element, GoFieldDeclaration.class, GoTypeSpec.class);
-      boolean insideParameter = PsiTreeUtil.getParentOfType(element, GoParameterDeclaration.class) != null;
+      final PsiElement spec = PsiTreeUtil.getParentOfType(element, GoFieldDeclaration.class, GoTypeSpec.class);
+      final boolean insideParameter = PsiTreeUtil.getParentOfType(element, GoParameterDeclaration.class) != null;
       ((GoTypeReference)reference).processResolveVariants(new MyGoScopeProcessor(result, true) {
         @Override
         protected boolean accept(@NotNull PsiElement e) {

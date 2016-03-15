@@ -66,7 +66,7 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
   @NotNull
   @Override
   protected ProcessHandler startProcess() throws ExecutionException {
-    ProcessHandler processHandler = super.startProcess();
+    final ProcessHandler processHandler = super.startProcess();
     processHandler.addProcessListener(new ProcessAdapter() {
       private final AtomicBoolean firstOutput = new AtomicBoolean(true);
 

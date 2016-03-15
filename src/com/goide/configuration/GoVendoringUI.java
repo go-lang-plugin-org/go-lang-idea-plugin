@@ -53,7 +53,7 @@ public class GoVendoringUI implements Disposable {
   @SuppressWarnings("unused") 
   private JTextPane myDescriptionPane;
 
-  public void initPanel(@NotNull Module module) {
+  public void initPanel(@NotNull final Module module) {
     if (!module.isDisposed()) {
       MessageBusConnection connection = module.getMessageBus().connect(this);
       //noinspection unchecked

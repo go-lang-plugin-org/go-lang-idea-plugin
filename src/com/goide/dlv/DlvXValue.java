@@ -107,7 +107,7 @@ class DlvXValue extends XNamedValue {
   public XValueModifier getModifier() {
     return new XValueModifier() {
       @Override
-      public void setValue(@NotNull String newValue, @NotNull XModificationCallback callback) {
+      public void setValue(@NotNull String newValue, @NotNull final XModificationCallback callback) {
         myProcessor.send(new DlvRequest.SetSymbol(myVariable.name, newValue, myFrameId))
           .processed(new Consumer<Object>() {
             @Override
@@ -129,7 +129,7 @@ class DlvXValue extends XNamedValue {
 
   @NotNull
   private XValuePresentation getPresentation() {
-    String value = myVariable.value;
+    final String value = myVariable.value;
     if (myVariable.isNumber()) return new XNumericValuePresentation(value);
     if (myVariable.isString()) return new XStringValuePresentation(value);
     if (myVariable.isBool()) {
@@ -156,7 +156,7 @@ class DlvXValue extends XNamedValue {
   private static PsiElement findTargetElement(@NotNull Project project,
                                               @NotNull XSourcePosition position,
                                               @NotNull Editor editor,
-                                              @NotNull String name) {
+                                              @NotNull final String name) {
     PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument());
     if (file == null || !file.getVirtualFile().equals(position.getFile())) return null;
     ASTNode leafElement = file.getNode().findLeafElementAt(position.getOffset());
@@ -174,7 +174,7 @@ class DlvXValue extends XNamedValue {
   }
 
   @Override
-  public void computeSourcePosition(@NotNull XNavigatable navigatable) {
+  public void computeSourcePosition(@NotNull final XNavigatable navigatable) {
     readActionInPooledThread(new Runnable() {
       @Override
       public void run() {
@@ -200,7 +200,7 @@ class DlvXValue extends XNamedValue {
     });
   }
 
-  private static void readActionInPooledThread(@NotNull Runnable runnable) {
+  private static void readActionInPooledThread(@NotNull final Runnable runnable) {
     ApplicationManager.getApplication().executeOnPooledThread(new Runnable() {
       @Override
       public void run() {
@@ -222,7 +222,7 @@ class DlvXValue extends XNamedValue {
 
   @NotNull
   @Override
-  public ThreeState computeInlineDebuggerData(@NotNull XInlineDebuggerDataCallback callback) {
+  public ThreeState computeInlineDebuggerData(@NotNull final XInlineDebuggerDataCallback callback) {
     computeSourcePosition(new XNavigatable() {
       @Override
       public void setSourcePosition(@Nullable XSourcePosition sourcePosition) {
@@ -243,7 +243,7 @@ class DlvXValue extends XNamedValue {
   }
 
   @Override
-  public void computeTypeSourcePosition(@NotNull XNavigatable navigatable) {
+  public void computeTypeSourcePosition(@NotNull final XNavigatable navigatable) {
     readActionInPooledThread(new Runnable() {
       @Override
       public void run() {

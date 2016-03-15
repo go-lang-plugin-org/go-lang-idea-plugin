@@ -48,7 +48,7 @@ public class GoVarReference extends GoCachedReference<GoVarDefinition> {
   }
 
   @Override
-  public boolean processResolveVariants(@NotNull GoScopeProcessor processor) {
+  public boolean processResolveVariants(@NotNull final GoScopeProcessor processor) {
     GoVarProcessor p = processor instanceof GoVarProcessor
                        ? (GoVarProcessor)processor
                        : new GoVarProcessor(myElement, processor.isCompletion()) {

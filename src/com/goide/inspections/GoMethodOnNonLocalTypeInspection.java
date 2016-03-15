@@ -30,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 public class GoMethodOnNonLocalTypeInspection extends GoInspectionBase {
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
+  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
       public void visitMethodDeclaration(@NotNull GoMethodDeclaration method) {

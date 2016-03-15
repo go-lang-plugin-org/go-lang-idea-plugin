@@ -166,7 +166,7 @@ public class GoConsoleFilter implements Filter {
         return ContainerUtil.getFirstItem(files);
       }
       if (!files.isEmpty()) {
-        GlobalSearchScope goPathScope = GoPathSearchScope.create(myProject, myModule, null);
+        final GlobalSearchScope goPathScope = GoPathSearchScope.create(myProject, myModule, null);
         files = ContainerUtil.filter(files, new Condition<VirtualFile>() {
           @Override
           public boolean value(VirtualFile file) {
