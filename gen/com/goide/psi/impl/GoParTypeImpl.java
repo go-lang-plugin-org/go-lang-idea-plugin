@@ -48,9 +48,4 @@ public class GoParTypeImpl extends GoTypeImpl implements GoParType {
     return findNotNullChildByType(RPAREN);
   }
 
-  @NotNull
-  public GoType getActualType() {
-    return GoPsiImplUtil.getActualType(this);
-  }
-
 }

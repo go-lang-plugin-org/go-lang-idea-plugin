@@ -595,7 +595,7 @@ public class GoPsiImplUtil {
         type = ((GoPointerType)type).getType();
       }
       else if (type instanceof GoParType) {
-        type = ((GoParType)type).getActualType();
+        type = ((GoParType)type).getType();
       }
       else if (type instanceof GoSpecType) {
         type = ((GoSpecType)type).getType();
@@ -620,11 +620,6 @@ public class GoPsiImplUtil {
     return null;
   }
 
-  @NotNull
-  public static GoType getActualType(@NotNull GoParType o) {
-    return ObjectUtils.notNull(SyntaxTraverser.psiTraverser(o).filter(Conditions.notInstanceOf(GoParType.class)).filter(GoType.class).first(), o.getType());
-  }
-  
   @NotNull
   public static String getText(@Nullable GoType o) {
     if (o == null) return "";

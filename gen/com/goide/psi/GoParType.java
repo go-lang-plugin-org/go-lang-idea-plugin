@@ -16,7 +16,4 @@ public interface GoParType extends GoType {
   @NotNull
   PsiElement getRparen();
 
-  @NotNull
-  GoType getActualType();
-
 }
