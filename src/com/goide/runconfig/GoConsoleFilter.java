@@ -17,7 +17,8 @@
 package com.goide.runconfig;
 
 import com.goide.codeInsight.imports.GoGetPackageFix;
-import com.goide.sdk.GoSdkUtil;
+import com.goide.sdk.GoPackageUtil;
+import com.goide.util.GoPathSearchScope;
 import com.goide.util.GoUtil;
 import com.intellij.execution.filters.Filter;
 import com.intellij.execution.filters.HyperlinkInfo;
@@ -160,11 +161,23 @@ public class GoConsoleFilter implements Filter {
   @Nullable
   private VirtualFile findSingleFile(@NotNull String fileName) {
     if (PathUtil.isValidFileName(fileName)) {
-      Collection<VirtualFile> files = FilenameIndex.getVirtualFilesByName(myProject, fileName, GoUtil.goPathScope(myProject, myModule));
+      Collection<VirtualFile> files = FilenameIndex.getVirtualFilesByName(myProject, fileName, GlobalSearchScope.allScope(myProject));
       if (files.size() == 1) {
         return ContainerUtil.getFirstItem(files);
       }
-      else if (!files.isEmpty()) {
+      if (!files.isEmpty()) {
+        GlobalSearchScope goPathScope = GoPathSearchScope.create(myProject, myModule, null);
+        files = ContainerUtil.filter(files, new Condition<VirtualFile>() {
+          @Override
+          public boolean value(VirtualFile file) {
+            return goPathScope.accept(file);
+          }
+        });
+        if (files.size() == 1) {
+          return ContainerUtil.getFirstItem(files);
+        }
+      }
+      if (!files.isEmpty()) {
         final GlobalSearchScope smallerScope = GoUtil.moduleScopeWithoutLibraries(myProject, myModule);
         files = ContainerUtil.filter(files, new Condition<VirtualFile>() {
           @Override
@@ -182,7 +195,7 @@ public class GoConsoleFilter implements Filter {
 
   @Nullable
   private VirtualFile findInGoPath(@NotNull String fileName) {
-    return GoSdkUtil.findFileByRelativeToLibrariesPath(fileName, myProject, myModule);
+    return GoPackageUtil.findByImportPath(fileName, myProject, myModule);
   }
 
   public static class GoGetHyperlinkInfo implements HyperlinkInfo {
