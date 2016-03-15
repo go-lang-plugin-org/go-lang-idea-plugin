@@ -132,12 +132,12 @@ public class GoImportReference extends FileReference {
       result.add(new GoGetPackageFix(fileReferenceSet.getPathString()));
     }
 
-    String fileNameToCreate = getFileNameToCreate();
+    final String fileNameToCreate = getFileNameToCreate();
     for (PsiFileSystemItem context : getContexts()) {
       if (context instanceof PsiDirectory) {
         try {
           ((PsiDirectory)context).checkCreateSubdirectory(fileNameToCreate);
-          String targetPath = context.getVirtualFile().getPath();
+          final String targetPath = context.getVirtualFile().getPath();
           result.add(new CreateFileFix(true, fileNameToCreate, (PsiDirectory)context) {
             @NotNull
             @Override

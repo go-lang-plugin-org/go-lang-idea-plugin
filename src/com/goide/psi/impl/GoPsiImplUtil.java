@@ -249,7 +249,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType getGoTypeInner(@NotNull GoConstDefinition o, @Nullable ResolveState context) {
+  public static GoType getGoTypeInner(@NotNull final GoConstDefinition o, @Nullable final ResolveState context) {
     GoType fromSpec = findTypeInConstSpec(o);
     if (fromSpec != null) return fromSpec;
     // todo: stubs 
@@ -288,7 +288,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType getGoType(@NotNull GoExpression o, @Nullable ResolveState context) {
+  public static GoType getGoType(@NotNull final GoExpression o, @Nullable final ResolveState context) {
     return RecursionManager.doPreventingRecursion(o, true, new Computable<GoType>() {
       @Override
       public GoType compute() {
@@ -432,7 +432,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  private static GoType getBuiltinType(@NotNull GoExpression o, @NotNull String name) {
+  private static GoType getBuiltinType(@NotNull GoExpression o, @NotNull final String name) {
     GoFile builtin = GoSdkUtil.findBuiltinFile(o);
     if (builtin != null) {
       GoTypeSpec spec = ContainerUtil.find(builtin.getTypes(), new Condition<GoTypeSpec>() {
@@ -672,7 +672,7 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static List<GoTypeReferenceExpression> getBaseTypesReferences(@NotNull GoInterfaceType o) {
-    List<GoTypeReferenceExpression> refs = ContainerUtil.newArrayList();
+    final List<GoTypeReferenceExpression> refs = ContainerUtil.newArrayList();
     o.accept(new GoRecursiveVisitor() {
       @Override
       public void visitMethodSpec(@NotNull GoMethodSpec o) {
@@ -683,7 +683,7 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
-  public static List<GoMethodDeclaration> getMethods(@NotNull GoTypeSpec o) {
+  public static List<GoMethodDeclaration> getMethods(@NotNull final GoTypeSpec o) {
     List<GoMethodDeclaration> result = CachedValuesManager.getCachedValue(o, new CachedValueProvider<List<GoMethodDeclaration>>() {
       @Nullable
       @Override

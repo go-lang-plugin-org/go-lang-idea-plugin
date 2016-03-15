@@ -89,7 +89,7 @@ public class GoStubElementTypeFactory {
     if ("PARAMETER_DECLARATION".equals(name)) return new GoParameterDeclarationStubElementType(name);
     if ("RESULT".equals(name)) return new GoResultStubElementType(name);
 
-    Class c = TYPES.get(name);
+    final Class c = TYPES.get(name);
     if (c != null) {
       return new GoTypeStubElementType(name) {
         @NotNull

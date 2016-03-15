@@ -188,7 +188,7 @@ public class GoSdkConfigurable implements SearchableConfigurable, Configurable.N
     }
   }
 
-  private void asyncUpdateSdkVersion(@NotNull String sdkPath) {
+  private void asyncUpdateSdkVersion(@NotNull final String sdkPath) {
     ApplicationManager.getApplication().assertIsDispatchThread();
     ((CardLayout)myVersionPanel.getLayout()).show(myVersionPanel, VERSION_GETTING);
 
@@ -197,7 +197,7 @@ public class GoSdkConfigurable implements SearchableConfigurable, Configurable.N
       myAlarm.addRequest(new Runnable() {
         @Override
         public void run() {
-          String version = GoSdkUtil.retrieveGoVersion(GoSdkUtil.adjustSdkPath(sdkPath));
+          final String version = GoSdkUtil.retrieveGoVersion(GoSdkUtil.adjustSdkPath(sdkPath));
           ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -262,8 +262,8 @@ public class GoSdkConfigurable implements SearchableConfigurable, Configurable.N
   }
 
   private void listenForPathUpdate() {
-    JTextField textField = mySdkPathField.getTextField();
-    Ref<String> prevPathRef = Ref.create(StringUtil.notNullize(textField.getText()));
+    final JTextField textField = mySdkPathField.getTextField();
+    final Ref<String> prevPathRef = Ref.create(StringUtil.notNullize(textField.getText()));
     textField.getDocument().addDocumentListener(new DocumentAdapter() {
       @Override
       protected void textChanged(DocumentEvent e) {

@@ -47,8 +47,8 @@ public class MismatchedBuildTargetNotificationProvider extends EditorNotificatio
   private final Project myProject;
 
   public MismatchedBuildTargetNotificationProvider(@NotNull Project project, 
-                                                   @NotNull EditorNotifications notifications,
-                                                   @NotNull FileEditorManager fileEditorManager) {
+                                                   @NotNull final EditorNotifications notifications,
+                                                   @NotNull final FileEditorManager fileEditorManager) {
     myProject = project;
     MessageBusConnection connection = myProject.getMessageBus().connect(myProject);
     connection.subscribe(GoModuleSettings.TOPIC, new GoModuleSettings.BuildTargetListener() {
@@ -94,7 +94,7 @@ public class MismatchedBuildTargetNotificationProvider extends EditorNotificatio
   }
 
   @NotNull
-  private static EditorNotificationPanel createPanel(@NotNull Module module, @NotNull VirtualFile file) {
+  private static EditorNotificationPanel createPanel(@NotNull final Module module, @NotNull VirtualFile file) {
     EditorNotificationPanel panel = new EditorNotificationPanel();
     panel.setText("'" + file.getName() + "' doesn't match to target system");
     panel.createActionLabel("Open Go project settings", new Runnable() {

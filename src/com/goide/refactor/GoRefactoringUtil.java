@@ -40,9 +40,9 @@ public class GoRefactoringUtil {
   }
 
   @NotNull
-  public static List<PsiElement> getOccurrences(@NotNull PsiElement pattern, @Nullable PsiElement context) {
+  public static List<PsiElement> getOccurrences(@NotNull final PsiElement pattern, @Nullable PsiElement context) {
     if (context == null) return Collections.emptyList();
-    List<PsiElement> occurrences = ContainerUtil.newArrayList();
+    final List<PsiElement> occurrences = ContainerUtil.newArrayList();
     PsiRecursiveElementVisitor visitor = new PsiRecursiveElementVisitor() {
       @Override
       public void visitElement(@NotNull PsiElement element) {

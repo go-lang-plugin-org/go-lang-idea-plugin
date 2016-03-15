@@ -85,7 +85,7 @@ public class GoRunUtil {
     return psiElement;
   }
 
-  public static void installGoWithMainFileChooser(Project project, @NotNull TextFieldWithBrowseButton fileField) {
+  public static void installGoWithMainFileChooser(final Project project, @NotNull TextFieldWithBrowseButton fileField) {
     installFileChooser(project, fileField, false, false, new Condition<VirtualFile>() {
       @Override
       public boolean value(VirtualFile file) {

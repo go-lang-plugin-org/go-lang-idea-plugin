@@ -133,7 +133,7 @@ public class GoInvalidPackageImportInspectionTest extends GoQuickFixTestBase {
   }
 
   public void testImportPackageWithoutBuildableSource() {
-    PsiFile file = myFixture.addFileToProject("withSources/a.go", "package withSources");
+    final PsiFile file = myFixture.addFileToProject("withSources/a.go", "package withSources");
     WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new Runnable() {
       @Override
       public void run() {

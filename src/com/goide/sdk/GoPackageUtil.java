@@ -85,7 +85,7 @@ public class GoPackageUtil {
   }
 
   @NotNull
-  public static Collection<String> getAllPackagesInDirectory(@Nullable PsiDirectory dir, boolean trimTestSuffices) {
+  public static Collection<String> getAllPackagesInDirectory(@Nullable final PsiDirectory dir, final boolean trimTestSuffices) {
     if (dir == null) return Collections.emptyList();
     Key<CachedValue<Collection<String>>> key = trimTestSuffices ? PACKAGES_TEST_TRIMMED_CACHE : PACKAGES_CACHE;
     return CachedValuesManager.getManager(dir.getProject()).getCachedValue(dir, key, new CachedValueProvider<Collection<String>>() {

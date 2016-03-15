@@ -85,7 +85,7 @@ public class GoSdkUtil {
 
   @Nullable
   public static GoFile findBuiltinFile(@NotNull PsiElement context) {
-    Project project = context.getProject();
+    final Project project = context.getProject();
     // it's important to ask module on file, otherwise module won't be found for elements in libraries files [zolotov]
     Module moduleFromContext = ModuleUtilCore.findModuleForPsiElement(context.getContainingFile());
     if (moduleFromContext == null) {
@@ -97,7 +97,7 @@ public class GoSdkUtil {
       }
     }
 
-    Module module = moduleFromContext;
+    final Module module = moduleFromContext;
     UserDataHolder holder = ObjectUtils.notNull(module, project);
     VirtualFile file = CachedValuesManager.getManager(context.getProject()).getCachedValue(holder, new CachedValueProvider<VirtualFile>() {
       @Nullable
@@ -252,7 +252,7 @@ public class GoSdkUtil {
    */
   @Nullable
   @Contract("null, _ -> null")
-  public static String getVendoringAwareImportPath(@Nullable PsiDirectory psiDirectory, @Nullable PsiElement context) {
+  public static String getVendoringAwareImportPath(@Nullable final PsiDirectory psiDirectory, @Nullable PsiElement context) {
     if (psiDirectory == null) {
       return null;
     }
@@ -445,7 +445,7 @@ public class GoSdkUtil {
   @NotNull
   public static Collection<Module> getGoModules(@NotNull Project project) {
     if (project.isDefault()) return Collections.emptyList();
-    GoSdkService sdkService = GoSdkService.getInstance(project);
+    final GoSdkService sdkService = GoSdkService.getInstance(project);
     return ContainerUtil.filter(ModuleManager.getInstance(project).getModules(), new Condition<Module>() {
       @Override
       public boolean value(Module module) {

@@ -50,11 +50,11 @@ public class GoFmtCheckinFactory extends CheckinHandlerFactory {
 
   @Override
   @NotNull
-  public CheckinHandler createHandler(@NotNull CheckinProjectPanel panel, @NotNull CommitContext commitContext) {
+  public CheckinHandler createHandler(@NotNull final CheckinProjectPanel panel, @NotNull CommitContext commitContext) {
     return new CheckinHandler() {
       @Override
       public RefreshableOnComponent getBeforeCheckinConfigurationPanel() {
-        JCheckBox checkBox = new JCheckBox("Go fmt");
+        final JCheckBox checkBox = new JCheckBox("Go fmt");
         return new RefreshableOnComponent() {
           @Override
           @NotNull
@@ -83,7 +83,7 @@ public class GoFmtCheckinFactory extends CheckinHandlerFactory {
       @Override
       public ReturnResult beforeCheckin(@Nullable CommitExecutor executor, PairConsumer<Object, Object> additionalDataConsumer) {
         if (enabled(panel)) {
-          Ref<Boolean> success = new Ref<Boolean>(true);
+          final Ref<Boolean> success = new Ref<Boolean>(true);
           FileDocumentManager.getInstance().saveAllDocuments();
           for (PsiFile file : getPsiFiles()) {
             VirtualFile virtualFile = file.getVirtualFile();

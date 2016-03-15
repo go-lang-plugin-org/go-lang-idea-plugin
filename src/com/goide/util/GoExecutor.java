@@ -202,13 +202,13 @@ public class GoExecutor {
     Logger.getInstance(getClass()).assertTrue(!ApplicationManager.getApplication().isDispatchThread(),
                                               "It's bad idea to run external tool on EDT");
     Logger.getInstance(getClass()).assertTrue(myProcessHandler == null, "Process has already run with this executor instance");
-    Ref<Boolean> result = Ref.create(false);
+    final Ref<Boolean> result = Ref.create(false);
     GeneralCommandLine commandLine = null;
     try {
       commandLine = createCommandLine();
 
       myProcessHandler = new KillableColoredProcessHandler(commandLine);
-      GoHistoryProcessListener historyProcessListener = new GoHistoryProcessListener();
+      final GoHistoryProcessListener historyProcessListener = new GoHistoryProcessListener();
       myProcessHandler.addProcessListener(historyProcessListener);
       for (ProcessListener listener : myProcessListeners) {
         myProcessHandler.addProcessListener(listener);
@@ -269,7 +269,7 @@ public class GoExecutor {
     executeWithProgress(modal, Consumer.EMPTY_CONSUMER);
   }
 
-  public void executeWithProgress(boolean modal, @NotNull Consumer<Boolean> consumer) {
+  public void executeWithProgress(final boolean modal, @NotNull final Consumer<Boolean> consumer) {
     ProgressManager.getInstance().run(new Task.Backgroundable(myProject, getPresentableName(), true) {
       private boolean doNotStart;
 
@@ -308,7 +308,7 @@ public class GoExecutor {
     return myProcessHandler;
   }
 
-  private void showNotification(@NotNull String message, NotificationType type) {
+  private void showNotification(@NotNull final String message, final NotificationType type) {
     ApplicationManager.getApplication().invokeLater(new Runnable() {
       @Override
       public void run() {

@@ -59,7 +59,7 @@ public class GoLibrariesConfigurable implements SearchableConfigurable, Configur
     myLibrariesService = librariesService;
     myReadOnlyPaths = readOnlyPaths;
 
-    JBList filesList = new JBList(myListModel);
+    final JBList filesList = new JBList(myListModel);
     filesList.setCellRenderer(new ColoredListCellRenderer() {
       @Override
       protected void customizeCellRenderer(JList list, Object value, int index, boolean selected, boolean hasFocus) {

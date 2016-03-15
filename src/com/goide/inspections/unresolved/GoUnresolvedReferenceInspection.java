@@ -45,7 +45,7 @@ import static com.intellij.codeInspection.ProblemHighlightType.LIKE_UNKNOWN_SYMB
 public class GoUnresolvedReferenceInspection extends GoInspectionBase {
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull ProblemsHolder holder,
+  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder,
                                      @SuppressWarnings({"UnusedParameters", "For future"}) @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override

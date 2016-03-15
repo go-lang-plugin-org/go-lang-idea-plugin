@@ -46,7 +46,7 @@ public interface GoIcons {
     private Helper() {}
 
     @NotNull
-    public static LayeredIcon createIconWithShift(@NotNull Icon base, Icon mark) {
+    public static LayeredIcon createIconWithShift(@NotNull final Icon base, Icon mark) {
       LayeredIcon icon = new LayeredIcon(2) {
         @Override
         public int getIconHeight() {

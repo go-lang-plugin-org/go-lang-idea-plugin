@@ -45,9 +45,9 @@ public class GoRenameQuickFix extends LocalQuickFixOnPsiElement {
 
 
   @Override
-  public void invoke(@NotNull Project project,
+  public void invoke(@NotNull final Project project,
                      @NotNull PsiFile file,
-                     @NotNull PsiElement startElement,
+                     @NotNull final PsiElement startElement,
                      @NotNull PsiElement endElement) {
     if (!FileModificationService.getInstance().preparePsiElementsForWrite(startElement)) return;
 

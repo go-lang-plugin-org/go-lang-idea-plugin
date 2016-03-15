@@ -45,7 +45,7 @@ public class GoFunctionDeclarationStubElementType extends GoNamedStubElementType
   };
   
   private static final ArrayList<StubIndexKey<String, ? extends GoNamedElement>> EXTRA_KEYS =
-    ContainerUtil.newArrayList(GoFunctionIndex.KEY);
+    ContainerUtil.<StubIndexKey<String, ? extends GoNamedElement>>newArrayList(GoFunctionIndex.KEY);
 
   public GoFunctionDeclarationStubElementType(@NotNull String name) {
     super(name);

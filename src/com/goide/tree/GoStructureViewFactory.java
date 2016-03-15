@@ -44,7 +44,7 @@ import java.util.List;
 public class GoStructureViewFactory implements PsiStructureViewFactory {
   @Nullable
   @Override
-  public StructureViewBuilder getStructureViewBuilder(@NotNull PsiFile psiFile) {
+  public StructureViewBuilder getStructureViewBuilder(@NotNull final PsiFile psiFile) {
     return new TreeBasedStructureViewBuilder() {
       @NotNull
       @Override
@@ -61,7 +61,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
 
   public static class Model extends StructureViewModelBase implements StructureViewModel.ElementInfoProvider {
     private static final List<NodeProvider> PROVIDERS =
-      ContainerUtil.newSmartList(new TreeElementFileStructureNodeProvider());
+      ContainerUtil.<NodeProvider>newSmartList(new TreeElementFileStructureNodeProvider());
 
     Model(@NotNull PsiFile file) {
       super(file, new Element(file));
