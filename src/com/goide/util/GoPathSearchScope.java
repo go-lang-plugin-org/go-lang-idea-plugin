@@ -18,6 +18,7 @@ package com.goide.util;
 
 import com.goide.project.GoVendoringUtil;
 import com.goide.sdk.GoSdkUtil;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -65,7 +66,7 @@ public class GoPathSearchScope extends GlobalSearchScope {
       return false;
     }
 
-    if (myRoots.contains(packageDirectory)) {
+    if (ApplicationManager.getApplication().isUnitTestMode() && myRoots.contains(packageDirectory)) {
       return true;
     }
 
