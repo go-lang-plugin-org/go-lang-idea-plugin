@@ -18,8 +18,8 @@ package com.goide.psi.impl.imports;
 
 import com.goide.codeInsight.imports.GoGetPackageFix;
 import com.goide.completion.GoCompletionUtil;
-import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.quickfix.GoDeleteImportQuickFix;
+import com.goide.sdk.GoPackageUtil;
 import com.intellij.codeInsight.completion.CompletionUtil;
 import com.intellij.codeInsight.daemon.quickFix.CreateFileFix;
 import com.intellij.codeInspection.LocalQuickFix;
@@ -38,9 +38,6 @@ import java.util.List;
 import java.util.Set;
 
 public class GoImportReference extends FileReference {
-  @Nullable
-  private String myUnresolvedMessage;
-
   public GoImportReference(@NotNull FileReferenceSet fileReferenceSet, TextRange range, int index, String text) {
     super(fileReferenceSet, range, index, text);
   }
@@ -76,10 +73,6 @@ public class GoImportReference extends FileReference {
       for (ResolveResult resolveResult : innerResult) {
         PsiElement element = resolveResult.getElement();
         if (element instanceof PsiDirectory) {
-          if (GoPsiImplUtil.isBuiltinDirectory((PsiDirectory)element)) {
-            myUnresolvedMessage = "Cannot import `builtin` package";
-            continue;
-          }
           if (isLast()) {
             return new ResolveResult[]{resolveResult};
           }
@@ -129,10 +122,10 @@ public class GoImportReference extends FileReference {
 
   @Override
   public LocalQuickFix[] getQuickFixes() {
-    if (GoPsiImplUtil.isBuiltinDirectory(resolve())) {
+    if (GoPackageUtil.isBuiltinPackage(resolve())) {
       return new LocalQuickFix[]{new GoDeleteImportQuickFix()};
     }
-    
+
     List<LocalQuickFix> result = ContainerUtil.newArrayList();
     FileReferenceSet fileReferenceSet = getFileReferenceSet();
     if (fileReferenceSet instanceof GoImportReferenceSet && !((GoImportReferenceSet)fileReferenceSet).isRelativeImport()) {
@@ -149,7 +142,7 @@ public class GoImportReference extends FileReference {
             @NotNull
             @Override
             public String getText() {
-              return "Create Directory " + fileNameToCreate + " at " + targetPath; 
+              return "Create Directory " + fileNameToCreate + " at " + targetPath;
             }
           });
         }
@@ -158,15 +151,6 @@ public class GoImportReference extends FileReference {
       }
     }
     return result.toArray(new LocalQuickFix[result.size()]);
-  }
-
-  @NotNull
-  @Override
-  public String getUnresolvedMessagePattern() {
-    if (myUnresolvedMessage != null) {
-      return myUnresolvedMessage;
-    }
-    return super.getUnresolvedMessagePattern();
   }
 
   private boolean isFirst() {

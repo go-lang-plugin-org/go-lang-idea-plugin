@@ -253,12 +253,12 @@ public class GoSdkUtil {
   }
 
   @Nullable
-  private static String getPathRelativeToSdkAndLibrariesAndVendor(@NotNull VirtualFile file,
-                                                                  @NotNull Collection<VirtualFile> sourceRoots,
-                                                                  @Nullable VirtualFile contextVirtualFile) {
+  public static String getPathRelativeToSdkAndLibrariesAndVendor(@NotNull VirtualFile file,
+                                                                 @NotNull Collection<VirtualFile> sourceRoots,
+                                                                 @Nullable VirtualFile contextVirtualFile) {
     if (contextVirtualFile != null) {
       final Ref<String> vendoringPath = Ref.create();
-      processVendorDirectories(contextVirtualFile, sourceRoots, new Processor<VirtualFile>() {
+      GoPackageUtil.processVendorDirectories(contextVirtualFile, sourceRoots, new Processor<VirtualFile>() {
         @Override
         public boolean process(VirtualFile vendorDirectory) {
           String relativePath = VfsUtilCore.getRelativePath(file, vendorDirectory, '/');
@@ -442,53 +442,6 @@ public class GoSdkUtil {
         return sdkService.isGoModule(module);
       }
     });
-  }
-
-  public static void processVendorDirectories(@NotNull PsiFile contextFile,
-                                              @NotNull Collection<VirtualFile> sourceRoots,
-                                              @NotNull Processor<VirtualFile> processor) {
-    PsiDirectory containingDirectory = contextFile.getContainingDirectory();
-    VirtualFile contextDirectory = containingDirectory != null ? containingDirectory.getVirtualFile() : null;
-    if (contextDirectory != null) {
-      processVendorDirectories(contextDirectory, sourceRoots, processor);
-    }
-  }
-
-  public static void processVendorDirectories(@NotNull VirtualFile contextDirectory,
-                                              @NotNull Collection<VirtualFile> sourceRoots,
-                                              @NotNull Processor<VirtualFile> processor) {
-    VirtualFile directory = contextDirectory;
-    while (directory != null) {
-      VirtualFile vendorDirectory = directory.findChild(GoConstants.VENDOR);
-      if (vendorDirectory != null) {
-        if (!processor.process(vendorDirectory)) {
-          break;
-        }
-      }
-      if (sourceRoots.contains(directory)) {
-        break;
-      }
-      directory = directory.getParent();
-    }
-  }
-
-  public static boolean isPackageShadowedByVendoring(@NotNull VirtualFile packageDirectory,
-                                                     @NotNull VirtualFile contextFile,
-                                                     @NotNull Collection<VirtualFile> sourceRoots,
-                                                     @NotNull Collection<VirtualFile> vendorDirectories) {
-    if (vendorDirectories.isEmpty()) {
-      return false;
-    }
-    String importPath = getPathRelativeToSdkAndLibrariesAndVendor(packageDirectory, sourceRoots, contextFile);
-    if (importPath != null) {
-      for (VirtualFile vendorDirectory : vendorDirectories) {
-        VirtualFile shadowPackage = vendorDirectory.findFileByRelativePath(importPath);
-        if (shadowPackage != null) {
-          return !shadowPackage.equals(packageDirectory);
-        }
-      }
-    }
-    return false;
   }
 
   public static boolean isUnreachableVendoredPackage(@NotNull VirtualFile packageDirectory,

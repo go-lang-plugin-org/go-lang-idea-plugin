@@ -288,12 +288,9 @@
     <localInspection language="go" displayName="Self import" groupPath="Go"
                      groupName="General" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoSelfImportInspection"/>
-    <localInspection language="go" displayName="Import package without buildable source files" groupPath="Go"
-                     groupName="General" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.GoImportPackageWithoutBuildableSourceFilesInspection"/>
     <localInspection language="go" displayName="Illegal vendor package import" groupPath="Go"
                      groupName="General" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.GoIllegalVendoredPackageImportInspection"/>
+                     implementationClass="com.goide.inspections.GoInvalidPackageImportInspection"/>
     <localInspection language="go" displayName="Embedded interface pointer" groupPath="Go"
                      groupName="General" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoEmbeddedInterfacePointerInspection"/>

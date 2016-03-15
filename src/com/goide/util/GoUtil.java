@@ -23,6 +23,7 @@ import com.goide.project.GoVendoringUtil;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.runconfig.testing.GoTestFinder;
+import com.goide.sdk.GoPackageUtil;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManager;
@@ -30,7 +31,6 @@ import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -41,7 +41,6 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.DelegatingGlobalSearchScope;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.GlobalSearchScopesCore;
-import com.intellij.psi.util.CachedValue;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.util.CommonProcessors;
@@ -70,8 +69,6 @@ public class GoUtil {
   };
   private static final String PLUGIN_ID = "ro.redeul.google.go";
   public static final String PLUGIN_VERSION = getPlugin().getVersion();
-  private static final Key<CachedValue<Collection<String>>> PACKAGES_CACHE = Key.create("packages_cache");
-  private static final Key<CachedValue<Collection<String>>> PACKAGES_TEST_TRIMMED_CACHE = Key.create("packages_test_trimmed_cache");
 
   private GoUtil() {}
 
@@ -174,8 +171,7 @@ public class GoUtil {
     Collection<VirtualFile> directories = GoSdkUtil.getSourcesPathsToLookup(project, module);
     return directories.isEmpty()
            ? moduleScopeWithoutLibraries(project, module)
-           : moduleScope.uniteWith(
-             GlobalSearchScopesCore.directoriesScope(project, true, ContainerUtil.toArray(directories, VirtualFile.EMPTY_ARRAY)));
+           : moduleScope.uniteWith(GlobalSearchScopesCore.directoriesScope(project, true, ContainerUtil.toArray(directories, VirtualFile.EMPTY_ARRAY)));
   }
 
   @NotNull
@@ -231,7 +227,7 @@ public class GoUtil {
     if (GoPsiImplUtil.builtin(definitionFile)) return true;
     String path = ((GoFile)definitionFile).getVendoringAwareImportPath(reference);
     if (refFile.getImportedPackagesMap().containsKey(path)) return true;
-    for (GoFile file : GoPsiImplUtil.getAllPackageFiles(refFile)) {
+    for (GoFile file : GoPackageUtil.getAllPackageFiles(refFile)) {
       if (file != refFile && refFile.getOriginalFile() != file) {
         if (file.getImportedPackagesMap().containsKey(path)) return true;
       }
@@ -242,34 +238,12 @@ public class GoUtil {
   @NotNull
   public static String suggestPackageForDirectory(@Nullable PsiDirectory directory) {
     String packageName = GoPsiImplUtil.getLocalPackageName(directory != null ? directory.getName() : "");
-    for (String p : getAllPackagesInDirectory(directory, true)) {
+    for (String p : GoPackageUtil.getAllPackagesInDirectory(directory, true)) {
       if (!GoConstants.MAIN.equals(p)) {
         return p;
       }
     }
     return packageName;
-  }
-
-  @NotNull
-  public static Collection<String> getAllPackagesInDirectory(@Nullable PsiDirectory dir, boolean trimTestSuffices) {
-    if (dir == null) return Collections.emptyList();
-    Key<CachedValue<Collection<String>>> key = trimTestSuffices ? PACKAGES_TEST_TRIMMED_CACHE : PACKAGES_CACHE;
-    return CachedValuesManager.getManager(dir.getProject()).getCachedValue(dir, key, new CachedValueProvider<Collection<String>>() {
-      @Nullable
-      @Override
-      public Result<Collection<String>> compute() {
-        Collection<String> set = ContainerUtil.newLinkedHashSet();
-        for (PsiFile file : dir.getFiles()) {
-          if (file instanceof GoFile && !directoryToIgnore(file.getName()) && allowed(file)) {
-            String name = ((GoFile)file).getPackageName();
-            if (StringUtil.isNotEmpty(name)) {
-              set.add(trimTestSuffices && GoTestFinder.isTestFile(file) ? StringUtil.trimEnd(name, GoConstants.TEST_SUFFIX) : name);
-            }
-          }
-        }
-        return Result.create(set, dir);
-      }
-    }, false);
   }
 
   @NotNull
@@ -338,7 +312,7 @@ public class GoUtil {
       if (myVendorDirectories == null) {
         if (myContextDirectory != null) {
           CommonProcessors.CollectProcessor<VirtualFile> processor = new CommonProcessors.CollectProcessor<>();
-          GoSdkUtil.processVendorDirectories(myContextDirectory, myDirectories, processor);
+          GoPackageUtil.processVendorDirectories(myContextDirectory, myDirectories, processor);
           myVendorDirectories = processor.getResults();
         }
         else {
@@ -361,7 +335,7 @@ public class GoUtil {
         }
         
         return !GoSdkUtil.isUnreachableVendoredPackage(packageDirectory, myContextDirectory, myDirectories) &&
-               !GoSdkUtil.isPackageShadowedByVendoring(packageDirectory, myContextDirectory, myDirectories, getVendorDirectories());
+               !GoPackageUtil.isPackageShadowedByVendoring(packageDirectory, myContextDirectory, myDirectories, getVendorDirectories());
       }
       return false;
     }
