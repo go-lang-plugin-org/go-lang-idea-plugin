@@ -28,7 +28,7 @@ import com.intellij.openapi.roots.ModuleRootEvent;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.MutableCollectionComboBoxModel;
-import com.intellij.ui.components.JBTextField;
+import com.intellij.ui.RawCommandLineEditor;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ThreeState;
 import com.intellij.util.containers.ContainerUtil;
@@ -53,7 +53,7 @@ public class GoBuildTagsUI implements Disposable {
   private ComboBox myGoVersionCombo;
   private ComboBox myCompilerCombo;
   private ComboBox myCgoCombo;
-  private JBTextField myCustomFlagsField;
+  private RawCommandLineEditor myCustomTagsField;
   private JTextPane myDescriptionPane;
 
   @NotNull private final MutableCollectionComboBoxModel<String> myCgoComboModel;
@@ -68,6 +68,7 @@ public class GoBuildTagsUI implements Disposable {
     myDefaultOSValue = "Default (" + GoUtil.systemOS() + ")";
     myDefaultArchValue = "Default (" + GoUtil.systemArch() + ")";
     myDefaultCgo = "Default (" + cgo(GoUtil.systemCgo(myDefaultOSValue, myDefaultArchValue)) + ")";
+    myCustomTagsField.setDialogCaption("Custom Build Tags");
 
     myOSCombo.setModel(createModel(GoConstants.KNOWN_OS, myDefaultOSValue));
     myArchCombo.setModel(createModel(GoConstants.KNOWN_ARCH, myDefaultArchValue));
@@ -121,8 +122,8 @@ public class GoBuildTagsUI implements Disposable {
   }
 
   @NotNull
-  private String[] selectedCustomFlags() {
-    return ArrayUtil.toStringArray(StringUtil.split(myCustomFlagsField.getText(), " "));
+  private String[] selectedCustomTags() {
+    return ArrayUtil.toStringArray(StringUtil.split(myCustomTagsField.getText(), " "));
   }
 
   @NotNull
@@ -164,7 +165,7 @@ public class GoBuildTagsUI implements Disposable {
            !buildTargetSettings.goVersion.equals(selected(myGoVersionCombo, myDefaultGoVersion)) ||
            buildTargetSettings.cgo != selectedCgo() ||
            !buildTargetSettings.compiler.equals(selectedCompiler()) ||
-           !Arrays.equals(buildTargetSettings.customFlags, selectedCustomFlags());
+           !Arrays.equals(buildTargetSettings.customFlags, selectedCustomTags());
   }
 
   public void apply(@NotNull GoBuildTargetSettings buildTargetSettings) {
@@ -173,7 +174,7 @@ public class GoBuildTagsUI implements Disposable {
     buildTargetSettings.goVersion = selected(myGoVersionCombo, myDefaultGoVersion);
     buildTargetSettings.compiler = selectedCompiler();
     buildTargetSettings.cgo = selectedCgo();
-    buildTargetSettings.customFlags = selectedCustomFlags();
+    buildTargetSettings.customFlags = selectedCustomTags();
   }
 
   public void reset(@NotNull GoBuildTargetSettings buildTargetSettings) {
@@ -182,7 +183,7 @@ public class GoBuildTagsUI implements Disposable {
     myGoVersionCombo.setSelectedItem(expandDefault(buildTargetSettings.goVersion, myDefaultGoVersion));
     myCgoCombo.setSelectedItem(expandDefault(cgo(buildTargetSettings.cgo), myDefaultCgo));
     myCompilerCombo.setSelectedItem(buildTargetSettings.compiler);
-    myCustomFlagsField.setText(StringUtil.join(buildTargetSettings.customFlags, " "));
+    myCustomTagsField.setText(StringUtil.join(buildTargetSettings.customFlags, " "));
   }
 
   @NotNull
@@ -198,7 +199,7 @@ public class GoBuildTagsUI implements Disposable {
     UIUtil.dispose(myGoVersionCombo);
     UIUtil.dispose(myCompilerCombo);
     UIUtil.dispose(myCgoCombo);
-    UIUtil.dispose(myCustomFlagsField);
+    UIUtil.dispose(myCustomTagsField);
   }
 
   @NotNull
