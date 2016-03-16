@@ -87,7 +87,7 @@ public class GoConfigurableProvider extends ConfigurableProvider {
 
   public static class GoProjectSettingsConfigurable extends GoModuleAwareConfigurable {
     public GoProjectSettingsConfigurable(@NotNull Project project) {
-      super(project, "Project settings", null);
+      super(project, "Project Settings", null);
     }
 
     @NotNull
