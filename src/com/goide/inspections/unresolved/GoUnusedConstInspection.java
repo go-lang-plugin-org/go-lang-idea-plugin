@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,11 +23,7 @@ import com.goide.quickfix.GoDeleteConstDefinitionQuickFix;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.util.Query;
 import org.jetbrains.annotations.NotNull;
 
 public class GoUnusedConstInspection extends GoInspectionBase {
@@ -38,17 +34,11 @@ public class GoUnusedConstInspection extends GoInspectionBase {
       @Override
       public void visitConstDefinition(@NotNull GoConstDefinition o) {
         if (o.isBlank()) return;
-        Query<PsiReference> query = ReferencesSearch.search(o, o.getUseScope());
-        for (PsiReference ref : query) {
-          ProgressManager.checkCanceled();
-          PsiElement element = ref.getElement();
-          if (element != null) {
-            return;
-          }
+        if (ReferencesSearch.search(o, o.getUseScope()).findFirst() == null) {
+          String constName = o.getName();
+          holder.registerProblem(o, "Unused constant " + "'" + constName + "'", ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+                                 new GoDeleteConstDefinitionQuickFix(constName));
         }
-        String constName = o.getName();
-        holder.registerProblem(o, "Unused constant " + "'" + constName + "'", ProblemHighlightType.LIKE_UNUSED_SYMBOL,
-                               new GoDeleteConstDefinitionQuickFix(constName));
       }
     };
   }

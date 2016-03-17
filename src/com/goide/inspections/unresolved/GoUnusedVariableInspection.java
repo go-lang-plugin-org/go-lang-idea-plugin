@@ -29,7 +29,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.Query;
+import com.intellij.util.Processor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,26 +47,36 @@ public class GoUnusedVariableInspection extends GoInspectionBase {
           PsiReference reference = o.getReference();
           PsiElement resolve = reference != null ? reference.resolve() : null;
           if (resolve != null) return;
-          Query<PsiReference> query = ReferencesSearch.search(o, o.getUseScope());
-          for (PsiReference ref : query) {
-            ProgressManager.checkCanceled();
-            PsiElement element = ref.getElement();
-            if (element == null) continue;
-            PsiElement parent = element.getParent();
-            if (parent instanceof GoLeftHandExprList) {
-              PsiElement grandParent = parent.getParent();
-              if (grandParent instanceof GoAssignmentStatement && ((GoAssignmentStatement)grandParent).getAssignOp().getAssign() != null) {
-                GoFunctionLit fn = PsiTreeUtil.getParentOfType(element, GoFunctionLit.class);
-                if (fn == null || !PsiTreeUtil.isAncestor(GoVarProcessor.getScope(o), fn, true)) continue;
+          boolean foundReference = !ReferencesSearch.search(o, o.getUseScope()).forEach(new Processor<PsiReference>() {
+            @Override
+            public boolean process(PsiReference reference) {
+              ProgressManager.checkCanceled();
+              PsiElement element = reference.getElement();
+              if (element == null) return true;
+              PsiElement parent = element.getParent();
+              if (parent instanceof GoLeftHandExprList) {
+                PsiElement grandParent = parent.getParent();
+                if (grandParent instanceof GoAssignmentStatement &&
+                    ((GoAssignmentStatement)grandParent).getAssignOp().getAssign() != null) {
+                  GoFunctionLit fn = PsiTreeUtil.getParentOfType(element, GoFunctionLit.class);
+                  if (fn == null || !PsiTreeUtil.isAncestor(GoVarProcessor.getScope(o), fn, true)) {
+                    return true;
+                  }
+                }
               }
+              if (parent instanceof GoShortVarDeclaration) {
+                int op = ((GoShortVarDeclaration)parent).getVarAssign().getStartOffsetInParent();
+                if (element.getStartOffsetInParent() < op) {
+                  return true;
+                }
+              }
+              return false;
             }
-            if (parent instanceof GoShortVarDeclaration) {
-              int op = ((GoShortVarDeclaration)parent).getVarAssign().getStartOffsetInParent();
-              if (element.getStartOffsetInParent() < op) continue;
-            }
-            return;
+          });
+
+          if (!foundReference) {
+            reportError(o, holder);
           }
-          reportError(o, holder);
         }
       }
     };
