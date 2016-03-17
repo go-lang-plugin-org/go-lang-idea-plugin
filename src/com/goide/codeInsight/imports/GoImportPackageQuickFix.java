@@ -28,7 +28,6 @@ import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.stubs.index.GoPackagesIndex;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.QuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.DaemonListeners;
 import com.intellij.codeInsight.daemon.impl.ShowAutoImportPass;
 import com.intellij.codeInsight.hint.HintManager;
@@ -300,7 +299,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
             }
           });
         }
-      }, QuickFixBundle.message("add.import"), null);
+      }, "Add import", null);
     }
   }
 
