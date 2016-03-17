@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,12 @@
 package com.goide.inspections.unresolved;
 
 import com.goide.GoConstants;
-import com.goide.quickfix.GoDeleteQuickFix;
 import com.goide.inspections.GoInspectionBase;
-import com.goide.quickfix.GoRenameToBlankQuickFix;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoFunctionDeclaration;
 import com.goide.psi.GoVisitor;
+import com.goide.quickfix.GoDeleteQuickFix;
+import com.goide.quickfix.GoRenameToBlankQuickFix;
 import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.runconfig.testing.GoTestFunctionType;
 import com.intellij.codeInspection.LocalInspectionToolSession;
@@ -30,9 +30,7 @@ import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.util.Query;
 import org.jetbrains.annotations.NotNull;
 
 public class GoUnusedFunctionInspection extends GoInspectionBase {
@@ -49,8 +47,7 @@ public class GoUnusedFunctionInspection extends GoInspectionBase {
         if (GoConstants.MAIN.equals(file.getPackageName()) && GoConstants.MAIN.equals(name)) return;
         if (GoConstants.INIT.equals(name)) return;
         if (GoTestFinder.isTestFile(file) && GoTestFunctionType.fromName(name) != null) return;
-        Query<PsiReference> search = ReferencesSearch.search(o, o.getUseScope());
-        if (search.findFirst() == null) {
+        if (ReferencesSearch.search(o, o.getUseScope()).findFirst() == null) {
           PsiElement id = o.getIdentifier();
           TextRange range = TextRange.from(id.getStartOffsetInParent(), id.getTextLength());
           holder.registerProblem(o, "Unused function " + "'" + name + "'", ProblemHighlightType.LIKE_UNUSED_SYMBOL, range,
