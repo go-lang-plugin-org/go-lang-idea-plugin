@@ -24,6 +24,7 @@ import com.goide.psi.impl.imports.GoImportReference;
 import com.goide.quickfix.GoDeleteImportQuickFix;
 import com.goide.quickfix.GoDisableVendoringInModuleQuickFix;
 import com.goide.sdk.GoPackageUtil;
+import com.goide.sdk.GoSdkService;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInspection.LocalQuickFixBase;
@@ -33,6 +34,7 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
@@ -43,9 +45,6 @@ import java.util.Set;
 public class GoInvalidPackageImportInspection extends GoInspectionBase {
   @Override
   protected void checkFile(@NotNull GoFile file, @NotNull ProblemsHolder problemsHolder) {
-    Module module = ModuleUtilCore.findModuleForPsiElement(file);
-    boolean vendoringEnabled = GoVendoringUtil.isVendoringEnabled(module);
-    Set<VirtualFile> sourceRoots = GoSdkUtil.getSourcesPathsToLookup(file.getProject(), module, vendoringEnabled ? file : null);
     for (GoImportSpec importSpec : file.getImports()) {
       PsiDirectory resolve = importSpec.getImportString().resolve();
       if (resolve != null) {
@@ -69,23 +68,44 @@ public class GoInvalidPackageImportInspection extends GoInspectionBase {
           continue;
         }
 
-        for (PsiReference reference : importSpec.getImportString().getReferences()) {
-          if (reference instanceof GoImportReference) {
-            if (vendoringEnabled && GoConstants.VENDOR.equals(reference.getCanonicalText())) {
-              VirtualFile resolvedVirtualFile = resolve.getVirtualFile();
-              if (GoSdkUtil.isUnreachableVendoredPackage(resolvedVirtualFile, file.getVirtualFile(), sourceRoots)) {
-                problemsHolder.registerProblem(importSpec, "Use of vendored package is not allowed",
-                                               new GoDeleteImportQuickFix(), GoDisableVendoringInModuleQuickFix.create(module));
-              }
-              else {
-                String vendoredImportPath = GoSdkUtil.getVendoringAwareImportPath(resolve, file);
-                if (vendoredImportPath != null) {
-                  problemsHolder.registerProblem(importSpec, "Must be imported as '" + vendoredImportPath + "'",
-                                                 new GoReplaceImportPath(vendoredImportPath),
-                                                 new GoDeleteImportQuickFix(), GoDisableVendoringInModuleQuickFix.create(module));
+        Module module = ModuleUtilCore.findModuleForPsiElement(file);
+        VirtualFile sdkHome = GoSdkUtil.getSdkSrcDir(file.getProject(), module);
+
+        VirtualFile contextFile = file.getVirtualFile();
+        VirtualFile resolvedFile = resolve.getVirtualFile();
+
+        String sdkVersion = GoSdkService.getInstance(file.getProject()).getSdkVersion(module);
+        boolean supportsInternalPackages = GoVendoringUtil.supportsInternalPackages(sdkVersion) ||
+                                           sdkHome != null && GoVendoringUtil.supportsSdkInternalPackages(sdkVersion) &&
+                                           VfsUtilCore.isAncestor(sdkHome, resolvedFile, false);
+        boolean supportsVendoring = GoVendoringUtil.isVendoringEnabled(module);
+
+        if (supportsVendoring || supportsInternalPackages) {
+          Set<VirtualFile> sourceRoots = GoSdkUtil.getSourcesPathsToLookup(file.getProject(), module, file);
+          for (PsiReference reference : importSpec.getImportString().getReferences()) {
+            if (reference instanceof GoImportReference) {
+              if (supportsInternalPackages && GoConstants.INTERNAL.equals(reference.getCanonicalText())) {
+                if (GoSdkUtil.isUnreachableInternalPackage(resolvedFile, contextFile, sourceRoots)) {
+                  problemsHolder.registerProblem(importSpec, "Use of internal package is not allowed", new GoDeleteImportQuickFix());
+                  break;
                 }
               }
-              break;
+              else if (supportsVendoring && GoConstants.VENDOR.equals(reference.getCanonicalText())) {
+                if (GoSdkUtil.isUnreachableVendoredPackage(resolvedFile, contextFile, sourceRoots)) {
+                  problemsHolder.registerProblem(importSpec, "Use of vendored package is not allowed",
+                                                 new GoDeleteImportQuickFix(), GoDisableVendoringInModuleQuickFix.create(module));
+                  break;
+                }
+                else {
+                  String vendoredImportPath = GoSdkUtil.getVendoringAwareImportPath(resolve, file);
+                  if (vendoredImportPath != null) {
+                    problemsHolder.registerProblem(importSpec, "Must be imported as '" + vendoredImportPath + "'",
+                                                   new GoReplaceImportPath(vendoredImportPath),
+                                                   new GoDeleteImportQuickFix(), GoDisableVendoringInModuleQuickFix.create(module));
+                    break;
+                  }
+                }
+              }
             }
           }
         }

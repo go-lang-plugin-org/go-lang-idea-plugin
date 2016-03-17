@@ -17,10 +17,12 @@
 package com.goide.util;
 
 import com.goide.project.GoVendoringUtil;
+import com.goide.sdk.GoSdkService;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
@@ -31,8 +33,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Set;
 
 public class GoPathSearchScope extends GlobalSearchScope {
-  private final Set<VirtualFile> myRoots;
-  private final VirtualFile myContextDirectory;
+  @NotNull private final Set<VirtualFile> myRoots;
+  @Nullable private final VirtualFile myContextDirectory;
+  @Nullable private final VirtualFile mySdkHome;
+  private final boolean mySupportsInternalPackages;
+  private final boolean mySupportsSdkInternalPackages;
 
   public static GoPathSearchScope create(@NotNull Project project, @Nullable Module module, @Nullable PsiElement context) {
     VirtualFile contextDirectory = null;
@@ -47,16 +52,25 @@ public class GoPathSearchScope extends GlobalSearchScope {
         context = null;
       }
     }
-    return new GoPathSearchScope(project, GoSdkUtil.getSourcesPathsToLookup(project, module, context), contextDirectory);
+    VirtualFile sdk = GoSdkUtil.getSdkSrcDir(project, module);
+    String sdkVersion = GoSdkService.getInstance(project).getSdkVersion(module);
+    return new GoPathSearchScope(project, GoSdkUtil.getSourcesPathsToLookup(project, module, context), contextDirectory, sdk, sdkVersion);
   }
 
-  private GoPathSearchScope(@NotNull Project project, @NotNull Set<VirtualFile> roots, @Nullable VirtualFile contextDirectory) {
+  private GoPathSearchScope(@NotNull Project project,
+                            @NotNull Set<VirtualFile> roots,
+                            @Nullable VirtualFile contextDirectory, 
+                            @Nullable VirtualFile sdkHome,
+                            @Nullable String sdkVersion) {
     super(project);
     if (contextDirectory != null && !contextDirectory.isDirectory()) {
       throw new IllegalArgumentException("Context should be a directory, given " + contextDirectory);
     }
     myRoots = roots;
     myContextDirectory = contextDirectory;
+    mySdkHome = sdkHome;
+    mySupportsInternalPackages = GoVendoringUtil.supportsInternalPackages(sdkVersion);
+    mySupportsSdkInternalPackages = GoVendoringUtil.supportsSdkInternalPackages(sdkVersion);
   }
 
   @Override
@@ -78,8 +92,16 @@ public class GoPathSearchScope extends GlobalSearchScope {
       return true;
     }
 
-    if (myContextDirectory != null && GoSdkUtil.isUnreachableVendoredPackage(packageDirectory, myContextDirectory, myRoots)) {
-      return false;
+    if (myContextDirectory != null) {
+      if (GoSdkUtil.isUnreachableVendoredPackage(packageDirectory, myContextDirectory, myRoots)) {
+        return false;
+      }
+      if (mySupportsInternalPackages || mySupportsSdkInternalPackages && mySdkHome != null &&
+                                        VfsUtilCore.isAncestor(mySdkHome, packageDirectory, false)) {
+        if (GoSdkUtil.isUnreachableInternalPackage(packageDirectory, myContextDirectory, myRoots)) {
+          return false;
+        }
+      }
     }
 
     for (VirtualFile root : myRoots) {

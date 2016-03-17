@@ -38,6 +38,20 @@ public class GoVendoringUtil {
     return StringUtil.parseDouble(sdkVersion.substring(0, 3), 0) < 1.7;
   }
 
+  public static boolean supportsInternalPackages(@Nullable String sdkVersion) {
+    if (sdkVersion == null || sdkVersion.length() < 3) {
+      return false;
+    }
+    return StringUtil.parseDouble(sdkVersion.substring(0, 3), 0) >= 1.5;
+  }
+
+  public static boolean supportsSdkInternalPackages(@Nullable String sdkVersion) {
+    if (sdkVersion == null || sdkVersion.length() < 3) {
+      return false;
+    }
+    return StringUtil.parseDouble(sdkVersion.substring(0, 3), 0) >= 1.4;
+  }
+
   public static boolean supportsVendoring(@Nullable String sdkVersion) {
     if (sdkVersion == null || sdkVersion.length() < 3) {
       return false;
