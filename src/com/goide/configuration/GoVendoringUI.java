@@ -26,6 +26,7 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.roots.ModuleRootAdapter;
 import com.intellij.openapi.roots.ModuleRootEvent;
 import com.intellij.openapi.ui.ComboBox;
+import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.MutableCollectionComboBoxModel;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.util.ThreeState;
@@ -52,6 +53,10 @@ public class GoVendoringUI implements Disposable {
   private ComboBox myVendoringEnabledCombo;
   @SuppressWarnings("unused") 
   private JTextPane myDescriptionPane;
+
+  public GoVendoringUI() {
+    myPanel.setBorder(IdeBorderFactory.createTitledBorder("Vendor experiment"));
+  }
 
   public void initPanel(@NotNull final Module module) {
     if (!module.isDisposed()) {
