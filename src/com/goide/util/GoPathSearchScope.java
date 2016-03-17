@@ -42,14 +42,9 @@ public class GoPathSearchScope extends GlobalSearchScope {
   public static GoPathSearchScope create(@NotNull Project project, @Nullable Module module, @Nullable PsiElement context) {
     VirtualFile contextDirectory = null;
     if (context != null) {
-      if (GoVendoringUtil.isVendoringEnabled(module)) {
-        PsiDirectory psiDirectory = context.getContainingFile().getContainingDirectory();
-        if (psiDirectory != null) {
-          contextDirectory = psiDirectory.getVirtualFile();
-        }
-      }
-      else {
-        context = null;
+      PsiDirectory psiDirectory = context.getContainingFile().getContainingDirectory();
+      if (psiDirectory != null) {
+        contextDirectory = psiDirectory.getVirtualFile();
       }
     }
     VirtualFile sdk = GoSdkUtil.getSdkSrcDir(project, module);
