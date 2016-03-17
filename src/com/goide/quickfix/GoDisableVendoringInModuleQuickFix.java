@@ -24,6 +24,7 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.ThreeState;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static com.goide.project.GoVendoringUtil.isVendoringEnabled;
 import static com.goide.project.GoVendoringUtil.vendoringCanBeDisabled;
@@ -43,8 +44,11 @@ public class GoDisableVendoringInModuleQuickFix extends LocalQuickFixBase {
     }
   }
 
-  public static GoDisableVendoringInModuleQuickFix create(@NotNull Module module) {
+  public static GoDisableVendoringInModuleQuickFix create(@Nullable Module module) {
+    if (!isVendoringEnabled(module)) {
+      return null;
+    }
     String version = GoSdkService.getInstance(module.getProject()).getSdkVersion(module);
-    return isVendoringEnabled(module) && vendoringCanBeDisabled(version) ? new GoDisableVendoringInModuleQuickFix(module) : null;
+    return vendoringCanBeDisabled(version) ? new GoDisableVendoringInModuleQuickFix(module) : null;
   }
 }

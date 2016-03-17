@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 
 public class GoSdkUtilTest {
   @Test
-  public void testCompareVersions() throws Exception {
+  public void testCompareVersions() {
     assertEquals(-1, GoSdkUtil.compareVersions("1.1.2", "1.1.3"));
     assertEquals(-1, GoSdkUtil.compareVersions("1.1.2", "1.2.1"));
     assertEquals(-1, GoSdkUtil.compareVersions("1.1.2", "2.1.1"));
@@ -39,17 +39,6 @@ public class GoSdkUtilTest {
     assertEquals(1, GoSdkUtil.compareVersions("1.2.1", "1.2"));
     assertEquals(1, GoSdkUtil.compareVersions("1.4rc2", "1.3"));
     assertEquals(1, GoSdkUtil.compareVersions("1.5beta1", "1.4rc2"));
-  }
-
-  @Test
-  public void testGetSrcLocation() {
-    assertEquals("src/pkg", GoSdkUtil.getSrcLocation("1.1.2"));
-    assertEquals("src/pkg", GoSdkUtil.getSrcLocation("1.2.1"));
-    assertEquals("src/pkg", GoSdkUtil.getSrcLocation("1.3"));
-    assertEquals("src/pkg", GoSdkUtil.getSrcLocation("1.3.1"));
-    assertEquals("src", GoSdkUtil.getSrcLocation("1.4"));
-    assertEquals("src", GoSdkUtil.getSrcLocation("1.4.1"));
-    assertEquals("src", GoSdkUtil.getSrcLocation("1.5"));
   }
 
   @Test
