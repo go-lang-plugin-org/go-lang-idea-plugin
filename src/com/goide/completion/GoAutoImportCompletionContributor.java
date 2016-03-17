@@ -16,7 +16,6 @@
 
 package com.goide.completion;
 
-import com.goide.GoConstants;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.psi.impl.GoTypeReference;
@@ -26,11 +25,9 @@ import com.intellij.codeInsight.completion.*;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.patterns.StandardPatterns;
-import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
@@ -168,18 +165,6 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
     if (i == -1) return "";
     return s.substring(i + 1);
   }
-  
-  private static boolean allowed(@NotNull GoNamedElement element) {
-    GoFile file = element.getContainingFile();
-    if (GoPsiImplUtil.builtin(element) || !GoUtil.allowed(file) || GoUtil.isExcludedFile(file)) return false;
-    PsiDirectory directory = file.getContainingDirectory();
-    if (directory != null) {
-      VirtualFile vFile = directory.getVirtualFile();
-      if (vFile.getPath().endsWith("go/doc/testdata")) return false;
-    }
-
-    return !StringUtil.equals(file.getPackageName(), GoConstants.MAIN);
-  }
 
   @NotNull
   private static String replacePackageWithAlias(@NotNull String qualifiedName, @Nullable String alias) {
@@ -316,7 +301,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
     @NotNull
     private static Boolean cachedAllowed(@NotNull GoNamedElement element, @Nullable Boolean existingValue) {
       if (existingValue != null) return existingValue;
-      return allowed(element);
+      return GoPsiImplUtil.canBeAutoImported(element.getContainingFile());
     }
 
     @NotNull

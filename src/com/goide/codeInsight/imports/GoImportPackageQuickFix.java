@@ -18,7 +18,6 @@ package com.goide.codeInsight.imports;
 
 import com.goide.GoIcons;
 import com.goide.completion.GoCompletionUtil;
-import com.goide.project.GoExcludedPathsSettings;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoReferenceExpression;
 import com.goide.psi.GoTypeReferenceExpression;
@@ -163,7 +162,6 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
                            ? ((GoFile)contextFile).getImportedPackagesMap().keySet() : Collections.emptySet();
     Project project = context.getProject();
     final PsiDirectory parentDirectory = contextFile != null ? contextFile.getParent() : null;
-    final GoExcludedPathsSettings excludedSettings = GoExcludedPathsSettings.getInstance(project);
     final String testTargetPackage = GoTestFinder.getTestTargetPackage(contextFile);
     GlobalSearchScope scope = GoUtil.goPathScope(context);
     Collection<GoFile> packages = StubIndex.getElements(GoPackagesIndex.KEY, packageName, project, scope, GoFile.class);
@@ -178,11 +176,11 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
               return null;
             }
           }
-          if (GoPsiImplUtil.builtin(file)) {
+          if (!GoPsiImplUtil.canBeAutoImported(file)) {
             return null;
           }
           String importPath = file.getVendoringAwareImportPath(contextFile);
-          return !imported.contains(importPath) && !excludedSettings.isExcluded(importPath) ? importPath : null;
+          return !imported.contains(importPath) ? importPath : null;
         }
       }
     )), new MyImportsComparator(context));
