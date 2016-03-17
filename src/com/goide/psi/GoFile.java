@@ -205,11 +205,9 @@ public class GoFile extends PsiFileBase {
         Map<String, GoImportSpec> map = ContainerUtil.newHashMap();
         for (GoImportSpec spec : getImports()) {
           if (!spec.isForSideEffects()) {
-            PsiDirectory resolve = spec.getImportString().resolve();
-            extraDeps.add(resolve);
-            String path = GoSdkUtil.getVendoringAwareImportPath(resolve, GoFile.this);
-            if (StringUtil.isNotEmpty(path)) {
-              map.put(path, spec);
+            String importPath = spec.getPath();
+            if (StringUtil.isNotEmpty(importPath)) {
+              map.put(importPath, spec);
             }
           }
         }
