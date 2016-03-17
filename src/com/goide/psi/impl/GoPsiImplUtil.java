@@ -693,7 +693,7 @@ public class GoPsiImplUtil {
     if (!(file instanceof GoFile) || !GoUtil.allowed(file)) return false;
     // it's not a test or context file is also test from the same package
     return !GoTestFinder.isTestFile(file) ||
-           GoTestFinder.isTestFile(contextFile) && Comparing.equal(file.getParent(), contextFile.getParent());
+           GoTestFinder.isTestFile(contextFile) && Comparing.equal(file.getParent(), contextFile.getOriginalFile().getParent());
   }
 
   static boolean processNamedElements(@NotNull PsiScopeProcessor processor,

@@ -552,6 +552,13 @@ public class GoCompletionTest extends GoCompletionTestBase {
     assertNotNull(strings);
     assertSameElements(strings, "my_directory_name", "main");
   }
+  
+  public void testCompleteFromTestsDefinedInCurrentPackage() {
+    myFixture.addFileToProject("my_test.go", "package mytest; func MyFunction() {}");
+    myFixture.configureByText("current_test.go", "package mytest; func TestSomething() { MyFunc<caret> }");
+    myFixture.completeBasic();
+    myFixture.checkResult("package mytest; func TestSomething() { MyFunction() }");
+  }
 
   private void doTestEmptyCompletion() {
     myFixture.testCompletionVariants(getTestName(true) + ".go");
