@@ -250,8 +250,9 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       String name = ((GoTypeSpec)element).getName();
       if (StringUtil.isNotEmpty(name)) {
         String importPath = getImportPathForElement(element);
-        String packageName = ((GoTypeSpec)element).getContainingFile().getPackageName();
-        if (StringUtil.isNotEmpty(packageName) && !GoPsiImplUtil.builtin(element) && !Comparing.equal(importPath, contextImportPath)) {
+        GoFile file = ((GoTypeSpec)element).getContainingFile();
+        String packageName = file.getPackageName();
+        if (StringUtil.isNotEmpty(packageName) && !GoPsiImplUtil.isBuiltinFile(file) && !Comparing.equal(importPath, contextImportPath)) {
           return String.format("<a href=\"%s%s\">%s</a>.<a href=\"%s%s\">%s</a>",
                                DocumentationManagerProtocol.PSI_ELEMENT_PROTOCOL, StringUtil.notNullize(importPath), packageName,
                                DocumentationManagerProtocol.PSI_ELEMENT_PROTOCOL, localUrl, name);

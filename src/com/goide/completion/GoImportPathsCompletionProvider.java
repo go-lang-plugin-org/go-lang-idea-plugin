@@ -19,10 +19,10 @@ package com.goide.completion;
 import com.goide.GoFileType;
 import com.goide.project.GoExcludedPathsSettings;
 import com.goide.project.GoVendoringUtil;
+import com.goide.psi.GoFile;
 import com.goide.psi.GoImportString;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.runconfig.testing.GoTestFinder;
-import com.goide.sdk.GoPackageUtil;
-import com.goide.sdk.GoSdkUtil;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
@@ -72,16 +72,19 @@ public class GoImportPathsCompletionProvider extends CompletionProvider<Completi
       boolean testFileWithTestPackage = GoTestFinder.isTestFileWithTestPackage(contextFile);
       boolean vendoringEnabled = GoVendoringUtil.isVendoringEnabled(module);
       for (VirtualFile file : FileTypeIndex.getFiles(GoFileType.INSTANCE, scope)) {
-        VirtualFile parent = file.getParent();
-        if (parent == null) continue;
-
-        PsiDirectory directory = PsiManager.getInstance(project).findDirectory(parent);
-        if (directory != null && !GoPackageUtil.isBuiltinPackage(directory)) {
-          String importPath = GoSdkUtil.getVendoringAwareImportPath(directory, vendoringEnabled ? context : null);
-          if (StringUtil.isNotEmpty(importPath) && !excludedSettings.isExcluded(importPath) &&
-              (testFileWithTestPackage || !importPath.equals(contextImportPath))) {
-            result.addElement(GoCompletionUtil.createPackageLookupElement(importPath, contextImportPath, directory, false));
-          }
+        PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
+        if (!(psiFile instanceof GoFile)) continue;
+        
+        GoFile goFile = (GoFile)psiFile;
+        if (!GoPsiImplUtil.canBeAutoImported(goFile)) continue;
+        
+        PsiDirectory directory = psiFile.getContainingDirectory();
+        if (directory == null) continue;
+        
+        String importPath = vendoringEnabled ? goFile.getVendoringAwareImportPath(context) : goFile.getImportPath();
+        if (StringUtil.isNotEmpty(importPath) && !excludedSettings.isExcluded(importPath) 
+            && (testFileWithTestPackage || !importPath.equals(contextImportPath))) {
+          result.addElement(GoCompletionUtil.createPackageLookupElement(importPath, contextImportPath, directory, false));
         }
       }
     }
