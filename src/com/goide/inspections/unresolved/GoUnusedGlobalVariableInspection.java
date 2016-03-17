@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,24 @@
 
 package com.goide.inspections.unresolved;
 
+import com.goide.psi.GoVarDeclaration;
+import com.goide.psi.GoVarDefinition;
+import com.goide.quickfix.GoDeleteVarDefinitionQuickFix;
+import com.intellij.codeInspection.ProblemHighlightType;
+import com.intellij.codeInspection.ProblemsHolder;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class GoUnusedGlobalVariableInspection extends GoUnusedVariableInspection {
   @Override
-  protected boolean checkGlobal() {
-    return true;
+  protected void reportError(@NotNull GoVarDefinition varDefinition, @NotNull ProblemsHolder holder) {
+    String name = varDefinition.getName();
+    holder.registerProblem(varDefinition, "Unused variable " + "'" + name + "'", ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+                           new GoDeleteVarDefinitionQuickFix(name));
+  }
+
+  @Override
+  protected boolean shouldValidate(@Nullable GoVarDeclaration varDeclaration) {
+    return !super.shouldValidate(varDeclaration);
   }
 }
