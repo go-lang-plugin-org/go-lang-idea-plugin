@@ -72,9 +72,9 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
 
     GoTestConsoleProperties consoleProperties = new GoTestConsoleProperties(myConfiguration, executor);
     // todo: replace with simple create console
-    ConsoleView consoleView = SMTestRunnerConnectionUtil.createConsoleWithCustomLocator(myConfiguration.getTestFramework().getName(),
-                                                                                        consoleProperties, getEnvironment(),
-                                                                                        new GoTestLocationProvider());
+    final ConsoleView consoleView = SMTestRunnerConnectionUtil.createConsoleWithCustomLocator(myConfiguration.getTestFramework().getName(),
+                                                                                              consoleProperties, getEnvironment(),
+                                                                                              new GoTestLocationProvider());
     consoleView.attachToProcess(processHandler);
     consoleView.addMessageFilter(new GoConsoleFilter(myConfiguration.getProject(), myModule, myConfiguration.getWorkingDirectoryUrl()));
 
