@@ -16,6 +16,7 @@
 
 package com.goide.completion;
 
+import com.goide.sdk.GoSdkService;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.Lookup;
 import com.intellij.psi.PsiFile;
@@ -416,5 +417,34 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
     assertNotNull(elementStrings);
     assertContainsElements(elementStrings, "subdir.Println");
     assertDoesntContain(elementStrings, "shadowed.Println");
+  }
+  
+  public void testCompleteInternalPackageOn1_2_SDK() {
+    myFixture.addFileToProject("internal/internal.go", "package internalPackage; func InternalFunction() {}");
+    myFixture.addFileToProject("sub/internal/internal.go", "package subInternalPackage; func InternalFunction() {}");
+    myFixture.configureByText("a.go", "package a; import `inte<caret>`");
+    myFixture.completeBasic();
+    List<String> elementStrings = myFixture.getLookupElementStrings();
+    assertNotNull(elementStrings);
+    assertContainsElements(elementStrings, "internal", "sub/internal", "net/internal");
+  }
+
+  public void testCompleteInternalPackageOn1_4_SDK() {
+    GoSdkService.setTestingSdkVersion("1.4", getTestRootDisposable());
+    myFixture.addFileToProject("internal/internal.go", "package internalPackage; func InternalFunction() {}");
+    myFixture.addFileToProject("sub/internal/internal.go", "package subInternalPackage; func InternalFunction() {}");
+    myFixture.configureByText("a.go", "package a; import `inte<caret>`");
+    myFixture.completeBasic();
+    List<String> elementStrings = myFixture.getLookupElementStrings();
+    assertNotNull(elementStrings);
+    assertContainsElements(elementStrings, "internal", "sub/internal");
+    assertDoesntContain(elementStrings, "net/internal");
+  }
+
+  public void testCompleteInternalPackageOn1_5_SDK() {
+    GoSdkService.setTestingSdkVersion("1.5", getTestRootDisposable());
+    myFixture.addFileToProject("internal/internal.go", "package internalPackage; func InternalFunction() {}");
+    myFixture.addFileToProject("sub/internal/internal.go", "package subInternalPackage; func InternalFunction() {}");
+    doCheckResult("package a; import `inte<caret>`", "package a; import `internal`");
   }
 }

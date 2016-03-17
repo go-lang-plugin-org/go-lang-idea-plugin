@@ -22,6 +22,7 @@ import com.goide.sdk.GoSdkService;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.psi.PsiFile;
+import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 
@@ -31,6 +32,7 @@ public class GoInvalidPackageImportInspectionTest extends GoQuickFixTestBase {
   @Override
   public void setUp() throws Exception {
     super.setUp();
+    setUpProjectSdk();
     myFixture.enableInspections(GoInvalidPackageImportInspection.class);
   }
 
@@ -106,7 +108,7 @@ public class GoInvalidPackageImportInspectionTest extends GoQuickFixTestBase {
     myFixture.addFileToProject("vendor/foo/a.go", "package foo");
     myFixture.addFileToProject("vendor/foo/vendor/bar/a.go", "package bar");
     myFixture.configureByText("a.go", "package bar\n" +
-                                      "import _ `foor`\n" +
+                                      "import _ `foo`\n" +
                                       "import <error descr=\"Use of vendored package is not allowed\">_ `foo/vendor/bar`</error>");
     myFixture.checkHighlighting();
   }
@@ -129,6 +131,44 @@ public class GoInvalidPackageImportInspectionTest extends GoQuickFixTestBase {
                                       "import <error descr=\"'bar/not_main' is a program, not an importable package\">`bar/not_main`</error>\n" +
                                       "import <error descr=\"'buzz/not_main' is a program, not an importable package\">`buzz/not_main`</error>\n" +
                                       "import `not_program/not_main`");
+    myFixture.checkHighlighting();
+  }
+
+  public void testInternalPackageOn1_2_SDK() {
+    myFixture.addFileToProject("internal/internal.go", "package internalPackage; func InternalFunction() {}");
+    myFixture.addFileToProject("sub/internal/internal.go", "package subInternalPackage; func InternalFunction() {}");
+    myFixture.configureByText("a.go", "package src\n" +
+                                      "import (\n" +
+                                      "  `internal`\n" +
+                                      "  `sub/internal`\n" +
+                                      "  `net/internal`\n" +
+                                      ")");
+    myFixture.checkHighlighting();
+  }
+
+  public void testInternalPackageOn1_4_SDK() {
+    GoSdkService.setTestingSdkVersion("1.4", getTestRootDisposable());
+    myFixture.addFileToProject("internal/internal.go", "package internalPackage; func InternalFunction() {}");
+    myFixture.addFileToProject("sub/internal/internal.go", "package subInternalPackage; func InternalFunction() {}");
+    myFixture.configureByText("a.go", "package src\n" +
+                                      "import (\n" +
+                                      "  `internal`\n" +
+                                      "  `sub/internal`\n" +
+                                      "  <error descr=\"Use of internal package is not allowed\">`net/internal`</error>\n" +
+                                      ")");
+    myFixture.checkHighlighting();
+  }
+
+  public void testInternalPackageOn1_5_SDK() {
+    GoSdkService.setTestingSdkVersion("1.5", getTestRootDisposable());
+    myFixture.addFileToProject("internal/internal.go", "package internalPackage; func InternalFunction() {}");
+    myFixture.addFileToProject("sub/internal/internal.go", "package subInternalPackage; func InternalFunction() {}");
+    myFixture.configureByText("a.go", "package src\n" +
+                                      "import (\n" +
+                                      "  `internal`\n" +
+                                      "  <error descr=\"Use of internal package is not allowed\">`sub/internal`</error>\n" +
+                                      "  <error descr=\"Use of internal package is not allowed\">`net/internal`</error>\n" +
+                                      ")");
     myFixture.checkHighlighting();
   }
 
@@ -161,5 +201,10 @@ public class GoInvalidPackageImportInspectionTest extends GoQuickFixTestBase {
         return action.getText();
       }
     });
+  }
+
+  @Override
+  protected LightProjectDescriptor getProjectDescriptor() {
+    return createMockProjectDescriptor();
   }
 }

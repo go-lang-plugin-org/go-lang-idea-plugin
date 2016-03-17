@@ -25,6 +25,7 @@ import com.goide.project.GoVendoringUtil;
 import com.goide.psi.GoFile;
 import com.goide.util.GoUtil;
 import com.intellij.execution.configurations.PathEnvironmentVariableUtil;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -70,7 +71,7 @@ public class GoSdkUtil {
   private GoSdkUtil() {}
 
   @Nullable
-  private static VirtualFile getSdkSrcDir(@NotNull Project project, @Nullable Module module) {
+  public static VirtualFile getSdkSrcDir(@NotNull Project project, @Nullable Module module) {
     String sdkHomePath = GoSdkService.getInstance(project).getSdkHomePath(module);
     String sdkVersionString = GoSdkService.getInstance(project).getSdkVersion(module);
     return sdkHomePath != null && sdkVersionString != null ? getSdkSrcDir(sdkHomePath, sdkVersionString) : null;
@@ -227,7 +228,10 @@ public class GoSdkUtil {
   }
 
   @NotNull
-  static String getSrcLocation(@NotNull String version) {
+  private static String getSrcLocation(@NotNull String version) {
+    if (ApplicationManager.getApplication().isUnitTestMode()) {
+      return "src/pkg";
+    }
     if (version.startsWith("devel")) {
       return "src";
     }
@@ -454,12 +458,25 @@ public class GoSdkUtil {
     });
   }
 
+  public static boolean isUnreachableInternalPackage(@NotNull VirtualFile packageDirectory,
+                                                     @NotNull VirtualFile contextFile,
+                                                     @NotNull Set<VirtualFile> sourceRoots) {
+    return isUnreachablePackage(GoConstants.INTERNAL, packageDirectory, contextFile, sourceRoots);
+  }
+
   public static boolean isUnreachableVendoredPackage(@NotNull VirtualFile packageDirectory,
                                                      @NotNull VirtualFile contextFile,
                                                      @NotNull Set<VirtualFile> sourceRoots) {
+    return isUnreachablePackage(GoConstants.VENDOR, packageDirectory, contextFile, sourceRoots);
+  }
+
+  private static boolean isUnreachablePackage(@NotNull String unreachableDirectoryName, 
+                                              @NotNull VirtualFile packageDirectory,
+                                              @NotNull VirtualFile contextFile,
+                                              @NotNull Set<VirtualFile> sourceRoots) {
     VirtualFile currentFile = packageDirectory;
     while (currentFile != null && !sourceRoots.contains(currentFile)) {
-      if (GoConstants.VENDOR.equals(currentFile.getName())) {
+      if (unreachableDirectoryName.equals(currentFile.getName())) {
         VirtualFile parent = currentFile.getParent();
         return parent == null || !VfsUtilCore.isAncestor(parent, contextFile, false);
       }
