@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -306,12 +306,19 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       if (parentType == ARGUMENT_LIST && type != LPAREN && type != RPAREN) return Indent.getNormalIndent();
       if ((parentType == EXPR_CASE_CLAUSE || parentType == TYPE_CASE_CLAUSE) && (type == CASE || type == DEFAULT)) return Indent.getNoneIndent();
       if (BLOCKS_TOKEN_SET.contains(parentType)) return indentIfNotBrace(child);
-      if (parentType == IMPORT_DECLARATION && type == IMPORT_SPEC) return Indent.getNormalIndent();
-      if (parentType == CONST_DECLARATION && type == CONST_SPEC) return Indent.getNormalIndent();
-      if (parentType == VAR_DECLARATION && type == VAR_SPEC) return Indent.getNormalIndent();
-      if (parentType == TYPE_DECLARATION && type == TYPE_SPEC) return Indent.getNormalIndent();
+      if (parentType == IMPORT_DECLARATION) return indentOfMultipleDeclartionChild(type, IMPORT_SPEC);
+      if (parentType == CONST_DECLARATION) return indentOfMultipleDeclartionChild(type, CONST_SPEC);
+      if (parentType == VAR_DECLARATION) return indentOfMultipleDeclartionChild(type, VAR_SPEC);
+      if (parentType == TYPE_DECLARATION) return indentOfMultipleDeclartionChild(type, TYPE_SPEC);
       if (parentType == COMM_CLAUSE && child.getPsi() instanceof GoStatement) return Indent.getNormalIndent();
       return Indent.getNoneIndent();
+    }
+
+    private Indent indentOfMultipleDeclartionChild(@NotNull IElementType childType, @NotNull IElementType specType) {
+      if (childType == specType) {
+        return Indent.getNormalIndent();
+      }
+      return COMMENTS.contains(childType) && myNode.findChildByType(specType) != null ? Indent.getNormalIndent() : Indent.getNoneIndent();
     }
 
     @Override
