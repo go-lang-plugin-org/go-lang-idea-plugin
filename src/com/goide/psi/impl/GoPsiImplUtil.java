@@ -76,13 +76,12 @@ public class GoPsiImplUtil {
       PsiReference reference = e.getReference();
       PsiElement resolve = reference != null ? reference.resolve() : null;
       if (!(resolve instanceof GoFunctionDeclaration)) return false;
-      GoFile file = ((GoFunctionDeclaration)resolve).getContainingFile();
-      return isBuiltinFile(file);
+      return isBuiltinFile(resolve.getContainingFile());
     }
     return false;
   }
 
-  private static boolean isBuiltinFile(@NotNull PsiFile file) {
+  public static boolean isBuiltinFile(@NotNull PsiFile file) {
     return file instanceof GoFile
            && GoConstants.BUILTIN_PACKAGE_NAME.equals(((GoFile)file).getPackageName())
            && GoConstants.BUILTIN_PACKAGE_NAME.equals(((GoFile)file).getImportPath())
@@ -1243,6 +1242,20 @@ public class GoPsiImplUtil {
     GoTypeStub stub = type.getStub();
     PsiElement parent = stub == null ? type.getParent() : stub.getParentStub().getPsi();
     return ObjectUtils.tryCast(parent, GoTypeSpec.class);
+  }
+
+  public static boolean canBeAutoImported(@NotNull GoFile file) {
+    if (isBuiltinFile(file) || StringUtil.equals(file.getCanonicalPackageName(), GoConstants.MAIN)) {
+      return false;
+    }
+    if (!GoUtil.allowed(file) || GoUtil.isExcludedFile(file)) {
+      return false;
+    }
+    PsiDirectory directory = file.getContainingDirectory();
+    if (directory == null) {
+      return false;
+    }
+    return !directory.getVirtualFile().getPath().endsWith("go/doc/testdata");
   }
 
   @NotNull

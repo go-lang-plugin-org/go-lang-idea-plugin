@@ -18,7 +18,6 @@ package com.goide.sdk;
 
 import com.goide.GoConstants;
 import com.goide.psi.GoFile;
-import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.util.GoUtil;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
@@ -95,9 +94,9 @@ public class GoPackageUtil {
         Collection<String> set = ContainerUtil.newLinkedHashSet();
         for (PsiFile file : dir.getFiles()) {
           if (file instanceof GoFile && !GoUtil.directoryToIgnore(file.getName()) && GoUtil.allowed(file)) {
-            String name = ((GoFile)file).getPackageName();
+            String name = trimTestSuffices ? ((GoFile)file).getCanonicalPackageName() : ((GoFile)file).getPackageName();
             if (StringUtil.isNotEmpty(name)) {
-              set.add(trimTestSuffices && GoTestFinder.isTestFile(file) ? StringUtil.trimEnd(name, GoConstants.TEST_SUFFIX) : name);
+              set.add(name);
             }
           }
         }
