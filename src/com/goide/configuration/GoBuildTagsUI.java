@@ -27,6 +27,7 @@ import com.intellij.openapi.roots.ModuleRootAdapter;
 import com.intellij.openapi.roots.ModuleRootEvent;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.MutableCollectionComboBoxModel;
 import com.intellij.ui.RawCommandLineEditor;
 import com.intellij.util.ArrayUtil;
@@ -54,6 +55,7 @@ public class GoBuildTagsUI implements Disposable {
   private ComboBox myCompilerCombo;
   private ComboBox myCgoCombo;
   private RawCommandLineEditor myCustomTagsField;
+  @SuppressWarnings("unused") 
   private JTextPane myDescriptionPane;
 
   @NotNull private final MutableCollectionComboBoxModel<String> myCgoComboModel;
@@ -65,6 +67,8 @@ public class GoBuildTagsUI implements Disposable {
 
   @SuppressWarnings("unchecked")
   public GoBuildTagsUI() {
+    myPanel.setBorder(IdeBorderFactory.createTitledBorder("Build tags"));
+    
     myDefaultOSValue = "Default (" + GoUtil.systemOS() + ")";
     myDefaultArchValue = "Default (" + GoUtil.systemArch() + ")";
     myDefaultCgo = "Default (" + cgo(GoUtil.systemCgo(myDefaultOSValue, myDefaultArchValue)) + ")";
