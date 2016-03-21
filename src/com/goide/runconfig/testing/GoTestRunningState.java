@@ -78,15 +78,20 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
     consoleView.attachToProcess(processHandler);
     consoleView.addMessageFilter(new GoConsoleFilter(myConfiguration.getProject(), myModule, myConfiguration.getWorkingDirectoryUrl()));
 
-    AbstractRerunFailedTestsAction rerunFailedTestsAction = consoleProperties.createRerunFailedTestsAction(consoleView);
-    rerunFailedTestsAction.setModelProvider(new Getter<TestFrameworkRunningModel>() {
-      @Override
-      public TestFrameworkRunningModel get() {
-        return ((SMTRunnerConsoleView)consoleView).getResultsViewer();
-      }
-    });
     DefaultExecutionResult executionResult = new DefaultExecutionResult(consoleView, processHandler);
-    executionResult.setRestartActions(rerunFailedTestsAction, new ToggleAutoTestAction());
+    AbstractRerunFailedTestsAction rerunFailedTestsAction = consoleProperties.createRerunFailedTestsAction(consoleView);
+    if (rerunFailedTestsAction != null) {
+      rerunFailedTestsAction.setModelProvider(new Getter<TestFrameworkRunningModel>() {
+        @Override
+        public TestFrameworkRunningModel get() {
+          return ((SMTRunnerConsoleView)consoleView).getResultsViewer();
+        }
+      });
+      executionResult.setRestartActions(rerunFailedTestsAction, new ToggleAutoTestAction());
+    }
+    else {
+      executionResult.setRestartActions(new ToggleAutoTestAction());
+    }
     return executionResult;
   }
 

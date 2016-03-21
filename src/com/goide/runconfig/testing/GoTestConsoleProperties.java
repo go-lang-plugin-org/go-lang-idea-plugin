@@ -33,6 +33,8 @@ import com.intellij.execution.testframework.sm.SMCustomMessagesParsing;
 import com.intellij.execution.testframework.sm.runner.OutputToGeneralTestEventsConverter;
 import com.intellij.execution.testframework.sm.runner.SMTRunnerConsoleProperties;
 import com.intellij.execution.ui.ConsoleView;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -58,7 +60,8 @@ public class GoTestConsoleProperties extends SMTRunnerConsoleProperties implemen
   @Nullable
   @Override
   public AbstractRerunFailedTestsAction createRerunFailedTestsAction(ConsoleView consoleView) {
-    return new GoRerunFailedTestsAction(this, consoleView);
+    AnAction rerunFailedTestsAction = ActionManager.getInstance().getAction("RerunFailedTests");
+    return rerunFailedTestsAction != null ? new GoRerunFailedTestsAction(this, consoleView) : null;
   }
 
   private static class GoRerunFailedTestsAction extends AbstractRerunFailedTestsAction {
