@@ -84,7 +84,7 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testUnusedImport() {
-    doInspectionTest(new GoUnusedImportInspection(), TimeUnit.MINUTES.toMillis(1));
+    doInspectionTest(new GoUnusedImportInspection(), TimeUnit.SECONDS.toMillis(20));
   }
 
   public void testPerformanceA() {
@@ -92,15 +92,15 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testPerformanceA2() {
-    doHighlightingTest(TimeUnit.SECONDS.toMillis(15));
+    doHighlightingTest(TimeUnit.SECONDS.toMillis(10));
   }
 
   public void testCompletionPerformance() {
-    doCompletionTest("package main; func main() { <caret> }", 2, TimeUnit.SECONDS.toMillis(30));
+    doCompletionTest("package main; func main() { <caret> }", 2, TimeUnit.SECONDS.toMillis(15));
   }
 
   public void testCompletionWithPrefixPerformance() {
-    doCompletionTest("package main; func main() { slee<caret> }", 1, TimeUnit.SECONDS.toMillis(10));
+    doCompletionTest("package main; func main() { slee<caret> }", 1, TimeUnit.SECONDS.toMillis(5));
   }
 
   private void doCompletionTest(@NotNull String source, final int invocationCount, long expectation) {
