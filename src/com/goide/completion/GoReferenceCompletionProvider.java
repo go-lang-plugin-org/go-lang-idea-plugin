@@ -16,16 +16,15 @@
 
 package com.goide.completion;
 
+import com.goide.project.GoVendoringUtil;
 import com.goide.psi.*;
 import com.goide.psi.impl.*;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.ResolveState;
+import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.PsiMultiReference;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
@@ -40,63 +39,72 @@ public class GoReferenceCompletionProvider extends CompletionProvider<Completion
   @Override
   protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet set) {
     GoReferenceExpressionBase expression = PsiTreeUtil.getParentOfType(parameters.getPosition(), GoReferenceExpressionBase.class);
+    PsiFile originalFile = parameters.getOriginalFile();
     if (expression != null) {
-      fillVariantsByReference(expression.getReference(), set.withPrefixMatcher(createPrefixMatcher(set.getPrefixMatcher())));
+      fillVariantsByReference(expression.getReference(), originalFile, set.withPrefixMatcher(createPrefixMatcher(set.getPrefixMatcher())));
     }
     PsiElement parent = parameters.getPosition().getParent();
     if (parent != null) {
-      fillVariantsByReference(parent.getReference(), set.withPrefixMatcher(createPrefixMatcher(set.getPrefixMatcher())));
+      fillVariantsByReference(parent.getReference(), originalFile, set.withPrefixMatcher(createPrefixMatcher(set.getPrefixMatcher())));
     }
   }
 
-  private static void fillVariantsByReference(@Nullable PsiReference reference, @NotNull CompletionResultSet result) {
+  private static void fillVariantsByReference(@Nullable PsiReference reference,
+                                              @NotNull PsiFile file,
+                                              @NotNull CompletionResultSet result) {
     if (reference == null) return;
     if (reference instanceof PsiMultiReference) {
       PsiReference[] references = ((PsiMultiReference)reference).getReferences();
       ContainerUtil.sort(references, PsiMultiReference.COMPARATOR);
-      fillVariantsByReference(ArrayUtil.getFirstElement(references), result);
+      fillVariantsByReference(ArrayUtil.getFirstElement(references), file, result);
     }
     else if (reference instanceof GoReference) {
-      ((GoReference)reference).processResolveVariants(new MyGoScopeProcessor(result, false));
+      ((GoReference)reference).processResolveVariants(new MyGoScopeProcessor(result, file, false));
 
       PsiElement element = reference.getElement();
       if (element instanceof GoReferenceExpression && PsiTreeUtil.getParentOfType(element, GoCompositeLit.class) != null) {
-        new GoFieldNameReference((GoReferenceExpression)element).processResolveVariants(new MyGoScopeProcessor(result, false));
+        new GoFieldNameReference((GoReferenceExpression)element).processResolveVariants(new MyGoScopeProcessor(result, file, false));
       }
     }
     else if (reference instanceof GoTypeReference) {
       PsiElement element = reference.getElement();
       final PsiElement spec = PsiTreeUtil.getParentOfType(element, GoFieldDeclaration.class, GoTypeSpec.class);
       final boolean insideParameter = PsiTreeUtil.getParentOfType(element, GoParameterDeclaration.class) != null;
-      ((GoTypeReference)reference).processResolveVariants(new MyGoScopeProcessor(result, true) {
+      ((GoTypeReference)reference).processResolveVariants(new MyGoScopeProcessor(result, file, true) {
         @Override
         protected boolean accept(@NotNull PsiElement e) {
-          return e != spec &&
-                 !(insideParameter &&
-                   (e instanceof GoNamedSignatureOwner || e instanceof GoVarDefinition || e instanceof GoConstDefinition));
+          return e != spec && !(insideParameter &&
+                                (e instanceof GoNamedSignatureOwner || e instanceof GoVarDefinition || e instanceof GoConstDefinition));
         }
       });
       if (element instanceof GoReferenceExpressionBase && element.getParent() instanceof GoReceiverType) {
-        fillVariantsByReference(new GoReference((GoReferenceExpressionBase)element), result);
+        fillVariantsByReference(new GoReference((GoReferenceExpressionBase)element), file, result);
       }
     }
     else if (reference instanceof GoCachedReference) {
-      ((GoCachedReference)reference).processResolveVariants(new MyGoScopeProcessor(result, false));
+      ((GoCachedReference)reference).processResolveVariants(new MyGoScopeProcessor(result, file, false));
     }
   }
 
-  private static void addElement(@NotNull PsiElement o, @NotNull ResolveState state, boolean forTypes, @NotNull CompletionResultSet set) {
-    LookupElement lookup = createLookupElement(o, state, forTypes);
+  private static void addElement(@NotNull PsiElement o,
+                                 @NotNull ResolveState state,
+                                 boolean forTypes,
+                                 boolean vendoringEnabled,
+                                 @NotNull CompletionResultSet set) {
+    LookupElement lookup = createLookupElement(o, state, forTypes, vendoringEnabled);
     if (lookup != null) {
       set.addElement(lookup);
     }
   }
 
   @Nullable
-  private static LookupElement createLookupElement(@NotNull PsiElement o, @NotNull ResolveState state, boolean forTypes) {
+  private static LookupElement createLookupElement(@NotNull PsiElement o,
+                                                   @NotNull ResolveState state,
+                                                   boolean forTypes,
+                                                   boolean vendoringEnabled) {
     if (o instanceof GoNamedElement && !((GoNamedElement)o).isBlank() || o instanceof GoImportSpec && !((GoImportSpec)o).isDot()) {
       if (o instanceof GoImportSpec) {
-        return GoCompletionUtil.createPackageLookupElement((GoImportSpec)o, state.get(GoReference.ACTUAL_NAME));
+        return GoCompletionUtil.createPackageLookupElement((GoImportSpec)o, state.get(GoReference.ACTUAL_NAME), vendoringEnabled);
       }
       else if (o instanceof GoNamedSignatureOwner && ((GoNamedSignatureOwner)o).getName() != null) {
         String name = ((GoNamedSignatureOwner)o).getName();
@@ -111,7 +119,7 @@ public class GoReferenceCompletionProvider extends CompletionProvider<Completion
                : GoCompletionUtil.createTypeConversionLookupElement((GoTypeSpec)o);
       }
       else if (o instanceof PsiDirectory) {
-        return GoCompletionUtil.createPackageLookupElement(((PsiDirectory)o).getName(), (PsiDirectory)o, o, true);
+        return GoCompletionUtil.createPackageLookupElement(((PsiDirectory)o).getName(), (PsiDirectory)o, o, vendoringEnabled, true);
       }
       else if (o instanceof GoLabelDefinition) {
         String name = ((GoLabelDefinition)o).getName();
@@ -127,16 +135,18 @@ public class GoReferenceCompletionProvider extends CompletionProvider<Completion
   private static class MyGoScopeProcessor extends GoScopeProcessor {
     @NotNull private final CompletionResultSet myResult;
     private final boolean myForTypes;
+    private final boolean myVendoringEnabled;
 
-    public MyGoScopeProcessor(@NotNull CompletionResultSet result, boolean forTypes) {
+    public MyGoScopeProcessor(@NotNull CompletionResultSet result, @NotNull PsiFile originalFile, boolean forTypes) {
       myResult = result;
       myForTypes = forTypes;
+      myVendoringEnabled = GoVendoringUtil.isVendoringEnabled(ModuleUtilCore.findModuleForPsiElement(originalFile));
     }
 
     @Override
     public boolean execute(@NotNull PsiElement o, @NotNull ResolveState state) {
       if (accept(o)) {
-        addElement(o, state, myForTypes, myResult);
+        addElement(o, state, myForTypes, myVendoringEnabled, myResult);
       }
       return true;
     }

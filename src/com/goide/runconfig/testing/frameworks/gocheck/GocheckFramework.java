@@ -63,9 +63,8 @@ public class GocheckFramework extends GoTestFramework {
   @Override
   public boolean isAvailable(@Nullable Module module) {
     if (module == null) return false;
-    for (GoFile file : StubIndex.getElements(GoPackagesIndex.KEY, "check", module.getProject(), GoUtil.goPathScope(module, null), GoFile.class)) {
-      String importPath = file.getImportPath();
-      if (isGoCheckImportPath(importPath)) {
+    for (GoFile file : StubIndex.getElements(GoPackagesIndex.KEY, "check", module.getProject(), GoUtil.goPathResolveScope(module, null), GoFile.class)) {
+      if (isGoCheckImportPath(file.getImportPath(true))) {
         return true;
       }
     }

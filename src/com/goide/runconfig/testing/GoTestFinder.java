@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,8 +42,8 @@ public class GoTestFinder implements TestFinder {
     return file instanceof GoFile && file.getName().endsWith(GoConstants.TEST_SUFFIX_WITH_EXTENSION);
   }
 
-  public static boolean isTestFile(@Nullable VirtualFile file) {
-    return file != null && file.getFileType() == GoFileType.INSTANCE && file.getNameWithoutExtension().endsWith(GoConstants.TEST_SUFFIX);
+  public static boolean isTestFile(@NotNull VirtualFile file) {
+    return file.getNameWithoutExtension().endsWith(GoConstants.TEST_SUFFIX_WITH_EXTENSION);
   }
 
   public static boolean isTestOrExampleFunction(@NotNull GoFunctionOrMethodDeclaration function) {

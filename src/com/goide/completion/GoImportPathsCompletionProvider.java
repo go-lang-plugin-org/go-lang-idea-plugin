@@ -56,36 +56,36 @@ public class GoImportPathsCompletionProvider extends CompletionProvider<Completi
     String newPrefix = parameters.getEditor().getDocument().getText(TextRange.create(pathRange.getStartOffset(), parameters.getOffset()));
     result = result.withPrefixMatcher(result.getPrefixMatcher().cloneWithPrefix(newPrefix));
 
-    addCompletions(result, ModuleUtilCore.findModuleForPsiElement(parameters.getPosition()), parameters.getOriginalFile(), true);
+    Module module = ModuleUtilCore.findModuleForPsiElement(parameters.getOriginalFile());
+    if (module != null) {
+      addCompletions(result, module, parameters.getOriginalFile(), GoUtil.goPathResolveScope(module, parameters.getOriginalFile()));
+    }
   }
 
   public static void addCompletions(@NotNull CompletionResultSet result,
-                                    @Nullable Module module,
+                                    @NotNull Module module,
                                     @Nullable PsiElement context,
-                                    boolean withLibraries) {
-    if (module != null) {
-      Project project = module.getProject();
-      String contextImportPath = GoCompletionUtil.getContextImportPath(context);
-      GoExcludedPathsSettings excludedSettings = GoExcludedPathsSettings.getInstance(project);
-      GlobalSearchScope scope = withLibraries ? GoUtil.goPathScope(module, context) : GoUtil.moduleScopeWithoutLibraries(project, module);
-      PsiFile contextFile = context != null ? context.getContainingFile() : null;
-      boolean testFileWithTestPackage = GoTestFinder.isTestFileWithTestPackage(contextFile);
-      boolean vendoringEnabled = GoVendoringUtil.isVendoringEnabled(module);
-      for (VirtualFile file : FileTypeIndex.getFiles(GoFileType.INSTANCE, scope)) {
-        PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
-        if (!(psiFile instanceof GoFile)) continue;
-        
-        GoFile goFile = (GoFile)psiFile;
-        if (!GoPsiImplUtil.canBeAutoImported(goFile)) continue;
-        
-        PsiDirectory directory = psiFile.getContainingDirectory();
-        if (directory == null) continue;
-        
-        String importPath = vendoringEnabled ? goFile.getVendoringAwareImportPath(context) : goFile.getImportPath();
-        if (StringUtil.isNotEmpty(importPath) && !excludedSettings.isExcluded(importPath) 
-            && (testFileWithTestPackage || !importPath.equals(contextImportPath))) {
-          result.addElement(GoCompletionUtil.createPackageLookupElement(importPath, contextImportPath, directory, false));
-        }
+                                    @NotNull GlobalSearchScope scope) {
+    Project project = module.getProject();
+    boolean vendoringEnabled = GoVendoringUtil.isVendoringEnabled(module);
+    String contextImportPath = GoCompletionUtil.getContextImportPath(context, vendoringEnabled);
+    GoExcludedPathsSettings excludedSettings = GoExcludedPathsSettings.getInstance(project);
+    PsiFile contextFile = context != null ? context.getContainingFile() : null;
+    boolean testFileWithTestPackage = GoTestFinder.isTestFileWithTestPackage(contextFile);
+    for (VirtualFile file : FileTypeIndex.getFiles(GoFileType.INSTANCE, scope)) {
+      PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
+      if (!(psiFile instanceof GoFile)) continue;
+      
+      PsiDirectory directory = psiFile.getContainingDirectory();
+      if (directory == null) continue;
+
+      GoFile goFile = (GoFile)psiFile;
+      if (!GoPsiImplUtil.canBeAutoImported(goFile)) continue;
+      
+      String importPath = goFile.getImportPath(vendoringEnabled);
+      if (StringUtil.isNotEmpty(importPath) && !excludedSettings.isExcluded(importPath) 
+          && (testFileWithTestPackage || !importPath.equals(contextImportPath))) {
+        result.addElement(GoCompletionUtil.createPackageLookupElement(importPath, contextImportPath, directory, false));
       }
     }
   }

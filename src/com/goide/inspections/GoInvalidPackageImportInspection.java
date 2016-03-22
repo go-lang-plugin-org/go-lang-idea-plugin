@@ -81,7 +81,7 @@ public class GoInvalidPackageImportInspection extends GoInspectionBase {
         boolean supportsVendoring = GoVendoringUtil.isVendoringEnabled(module);
 
         if (supportsVendoring || supportsInternalPackages) {
-          Set<VirtualFile> sourceRoots = GoSdkUtil.getSourcesPathsToLookup(file.getProject(), module, file);
+          Set<VirtualFile> sourceRoots = GoSdkUtil.getSourcesPathsToLookup(file.getProject(), module);
           for (PsiReference reference : importSpec.getImportString().getReferences()) {
             if (reference instanceof GoImportReference) {
               if (supportsInternalPackages && GoConstants.INTERNAL.equals(reference.getCanonicalText())) {
@@ -97,7 +97,7 @@ public class GoInvalidPackageImportInspection extends GoInspectionBase {
                   break;
                 }
                 else {
-                  String vendoredImportPath = GoSdkUtil.getVendoringAwareImportPath(resolve, file);
+                  String vendoredImportPath = GoSdkUtil.getImportPath(resolve, true);
                   if (vendoredImportPath != null) {
                     problemsHolder.registerProblem(importSpec, "Must be imported as '" + vendoredImportPath + "'",
                                                    new GoReplaceImportPath(vendoredImportPath),

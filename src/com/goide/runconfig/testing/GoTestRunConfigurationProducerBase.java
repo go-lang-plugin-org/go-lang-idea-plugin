@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,40 +83,35 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
         }
       });
     }
-    else {
-      PsiFile file = contextElement.getContainingFile();
-      if (myFramework.isAvailableOnFile(file)) {
-        if (GoRunUtil.isPackageContext(contextElement)) {
-          String packageName = StringUtil.notNullize(((GoFile)file).getImportPath());
+
+    PsiFile file = contextElement.getContainingFile();
+    if (myFramework.isAvailableOnFile(file)) {
+      if (GoRunUtil.isPackageContext(contextElement)) {
+        String packageName = StringUtil.notNullize(((GoFile)file).getImportPath(false));
+        configuration.setKind(GoTestRunConfiguration.Kind.PACKAGE);
+        configuration.setPackage(packageName);
+        configuration.setName(getPackageConfigurationName(packageName));
+      }
+      else {
+        GoFunctionOrMethodDeclaration function = findTestFunctionInContext(contextElement);
+        if (function != null) {
+          configuration.setName(getFunctionConfigurationName(function, getFileConfigurationName(file.getName())));
+          configuration.setPattern("^" + function.getName() + "$");
+
           configuration.setKind(GoTestRunConfiguration.Kind.PACKAGE);
-          configuration.setPackage(packageName);
-          configuration.setName(getPackageConfigurationName(packageName));
+          configuration.setPackage(StringUtil.notNullize(((GoFile)file).getImportPath(false)));
         }
         else {
-          GoFunctionOrMethodDeclaration function = findTestFunctionInContext(contextElement);
-          if (shouldSkipContext(function)) return false;
-
-          if (function != null) {
-            configuration.setName(getFunctionConfigurationName(function, getFileConfigurationName(file.getName())));
-            configuration.setPattern("^" + function.getName() + "$");
-
-            configuration.setKind(GoTestRunConfiguration.Kind.PACKAGE);
-            configuration.setPackage(StringUtil.notNullize(((GoFile)file).getImportPath()));
-          }
-          else {
-            configuration.setName(getFileConfigurationName(file.getName()));
-            configuration.setKind(GoTestRunConfiguration.Kind.FILE);
-            configuration.setFilePath(file.getVirtualFile().getPath());
-          }
+          configuration.setName(getFileConfigurationName(file.getName()));
+          configuration.setKind(GoTestRunConfiguration.Kind.FILE);
+          configuration.setFilePath(file.getVirtualFile().getPath());
         }
-        return true;
       }
+      return true;
     }
 
     return false;
   }
-
-  protected abstract boolean shouldSkipContext(@Nullable GoFunctionOrMethodDeclaration context);
 
   @NotNull
   protected String getFileConfigurationName(@NotNull String fileName) {
@@ -152,7 +147,7 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
         }
       case PACKAGE:
         if (!GoTestFinder.isTestFile(file)) return false;
-        if (!Comparing.equal(((GoFile)file).getImportPath(), configuration.getPackage())) return false;
+        if (!Comparing.equal(((GoFile)file).getImportPath(false), configuration.getPackage())) return false;
         if (GoRunUtil.isPackageContext(contextElement) && configuration.getPattern().isEmpty()) return true;
 
         GoFunctionOrMethodDeclaration contextFunction = findTestFunctionInContext(contextElement);
@@ -167,7 +162,7 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
   }
 
   @Nullable
-  private static GoFunctionOrMethodDeclaration findTestFunctionInContext(@NotNull PsiElement contextElement) {
+  protected GoFunctionOrMethodDeclaration findTestFunctionInContext(@NotNull PsiElement contextElement) {
     GoFunctionOrMethodDeclaration function = PsiTreeUtil.getNonStrictParentOfType(contextElement, GoFunctionOrMethodDeclaration.class);
     return function != null && GoTestFinder.isTestOrExampleFunction(function) ? function : null;
   }

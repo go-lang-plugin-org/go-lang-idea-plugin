@@ -16,12 +16,14 @@
 
 package com.goide.completion;
 
+import com.goide.project.GoVendoringUtil;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.psi.impl.GoTypeReference;
 import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.completion.*;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
@@ -80,9 +82,10 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         }
         if (processors.isEmpty()) return;
 
-        NamedElementProcessor processor = new NamedElementProcessor(processors, file, result);
+        boolean vendoringEnabled = GoVendoringUtil.isVendoringEnabled(ModuleUtilCore.findModuleForPsiElement(psiFile));
+        NamedElementProcessor processor = new NamedElementProcessor(processors, file, result, vendoringEnabled);
         Project project = position.getProject();
-        GlobalSearchScope scope = GoUtil.moduleScopeWithoutTests(file);
+        GlobalSearchScope scope = new GoUtil.ExceptTestsScope(GoUtil.goPathResolveScope(file));
         VirtualFile containingDirectory = file.getVirtualFile().getParent();
         if (containingDirectory != null) {
           scope = new GoUtil.ExceptChildOfDirectory(containingDirectory, scope, GoTestFinder.getTestTargetPackage(file));
@@ -266,12 +269,15 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
     @NotNull private final CompletionResultSet myResult;
     @NotNull private String myName = "";
     @NotNull private final Map<String, GoImportSpec> myImportedPackages;
+    private final boolean myVendoringEnabled;
 
     public NamedElementProcessor(@NotNull Collection<ElementProcessor> processors,
                                  @NotNull GoFile contextFile,
-                                 @NotNull CompletionResultSet result) {
+                                 @NotNull CompletionResultSet result, 
+                                 boolean vendoringEnabled) {
       myProcessors = processors;
       myContextFile = contextFile;
+      myVendoringEnabled = vendoringEnabled;
       myImportedPackages = contextFile.getImportedPackagesMap();
       myResult = result;
     }
@@ -309,7 +315,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
       if (existingValue != null) return existingValue;
 
       GoFile declarationFile = element.getContainingFile();
-      String importPath = declarationFile.getVendoringAwareImportPath(myContextFile);
+      String importPath = declarationFile.getImportPath(myVendoringEnabled);
       GoImportSpec existingImport = myImportedPackages.get(importPath);
 
       boolean exists = existingImport != null;

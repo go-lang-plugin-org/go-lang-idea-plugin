@@ -35,11 +35,11 @@ public class GoMethodOnNonLocalTypeInspection extends GoInspectionBase {
       @Override
       public void visitMethodDeclaration(@NotNull GoMethodDeclaration method) {
         if (method.getIdentifier() == null || method.isBlank()) return;
-        String containingFileImportPath = method.getContainingFile().getImportPath();
+        String containingFileImportPath = method.getContainingFile().getImportPath(false);
         if (containingFileImportPath == null) return;
         GoType methodType = getMethodType(method);
         if (methodType == null) return;
-        String typeImportPath = ((GoFile)methodType.getContainingFile()).getImportPath();
+        String typeImportPath = ((GoFile)methodType.getContainingFile()).getImportPath(false);
         if (typeImportPath == null || typeImportPath.equals(containingFileImportPath)) return;
         holder.registerProblem(method.getIdentifier(), "Method defined on non-local type", ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
       }

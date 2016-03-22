@@ -54,7 +54,7 @@ public class GoPackageUtil {
   public static boolean isBuiltinPackage(@Nullable PsiFileSystemItem directory) {
     return directory instanceof PsiDirectory
            && GoConstants.BUILTIN_PACKAGE_NAME.equals(directory.getName())
-           && GoConstants.BUILTIN_PACKAGE_NAME.equals(GoSdkUtil.getImportPath((PsiDirectory)directory));
+           && GoConstants.BUILTIN_PACKAGE_NAME.equals(GoSdkUtil.getImportPath((PsiDirectory)directory, false));
   }
 
   @NotNull
@@ -111,7 +111,7 @@ public class GoPackageUtil {
       return null;
     }
     importPath = FileUtil.toSystemIndependentName(importPath);
-    for (VirtualFile root : GoSdkUtil.getSourcesPathsToLookup(project, module, null)) {
+    for (VirtualFile root : GoSdkUtil.getSourcesPathsToLookup(project, module)) {
       VirtualFile file = root.findFileByRelativePath(importPath);
       if (file != null) {
         return file;
