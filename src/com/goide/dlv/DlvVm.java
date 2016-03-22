@@ -89,7 +89,7 @@ public class DlvVm extends VmBase {
 
   /**
    * Changed API between minor versions, runtime is compatible
-   * Todo: uncomment since 16, when only the last build of 15.0 will be supported
+   * Todo: uncomment since 2016.2, when only the last build of 15.0 will be supported
    */
   @SuppressWarnings("unchecked")
   @NotNull
