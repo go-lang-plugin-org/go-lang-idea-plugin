@@ -18,6 +18,7 @@ package com.goide.codeInsight.imports;
 
 import com.goide.GoIcons;
 import com.goide.completion.GoCompletionUtil;
+import com.goide.project.GoVendoringUtil;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoReferenceExpression;
 import com.goide.psi.GoTypeReferenceExpression;
@@ -39,6 +40,8 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.impl.LaterInvocator;
 import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
@@ -162,7 +165,9 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
     Project project = context.getProject();
     final PsiDirectory parentDirectory = contextFile != null ? contextFile.getParent() : null;
     final String testTargetPackage = GoTestFinder.getTestTargetPackage(contextFile);
-    GlobalSearchScope scope = GoUtil.goPathScope(context);
+    Module module = contextFile != null ? ModuleUtilCore.findModuleForPsiElement(contextFile) : null;
+    final boolean vendoringEnabled = GoVendoringUtil.isVendoringEnabled(module);
+    GlobalSearchScope scope = GoUtil.goPathResolveScope(context);
     Collection<GoFile> packages = StubIndex.getElements(GoPackagesIndex.KEY, packageName, project, scope, GoFile.class);
     return sorted(skipNulls(map2Set(
       packages,
@@ -178,11 +183,11 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
           if (!GoPsiImplUtil.canBeAutoImported(file)) {
             return null;
           }
-          String importPath = file.getVendoringAwareImportPath(contextFile);
+          String importPath = file.getImportPath(vendoringEnabled);
           return !imported.contains(importPath) ? importPath : null;
         }
       }
-    )), new MyImportsComparator(context));
+    )), new MyImportsComparator(context, vendoringEnabled));
   }
 
   public boolean doAutoImportOrShowHint(@NotNull final Editor editor, boolean showHint) {
@@ -307,8 +312,8 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
     @Nullable
     private final String myContextImportPath;
 
-    public MyImportsComparator(@Nullable PsiElement context) {
-      myContextImportPath = GoCompletionUtil.getContextImportPath(context);
+    public MyImportsComparator(@Nullable PsiElement context, boolean vendoringEnabled) {
+      myContextImportPath = GoCompletionUtil.getContextImportPath(context, vendoringEnabled);
     }
 
     @Override

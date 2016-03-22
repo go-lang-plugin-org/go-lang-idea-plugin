@@ -17,12 +17,14 @@
 package com.goide.completion;
 
 import com.goide.codeInsight.imports.GoImportPackageQuickFix;
+import com.goide.project.GoVendoringUtil;
 import com.goide.psi.GoFunctionDeclaration;
 import com.goide.psi.GoNamedElement;
 import com.goide.psi.GoTypeSpec;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
@@ -83,7 +85,8 @@ public class GoAutoImportInsertHandler<T extends GoNamedElement> implements Inse
 
   private static void autoImport(@NotNull InsertionContext context, @NotNull GoNamedElement element) {
     PsiFile file = context.getFile();
-    String importPath = element.getContainingFile().getVendoringAwareImportPath(file);
+    boolean vendoringEnabled = GoVendoringUtil.isVendoringEnabled(ModuleUtilCore.findModuleForPsiElement(file));
+    String importPath = element.getContainingFile().getImportPath(vendoringEnabled);
     if (StringUtil.isEmpty(importPath)) return;
 
     PsiDocumentManager.getInstance(context.getProject()).commitDocument(context.getEditor().getDocument());

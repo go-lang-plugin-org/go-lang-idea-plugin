@@ -37,6 +37,7 @@ import com.intellij.openapi.util.Conditions;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubTree;
@@ -45,7 +46,6 @@ import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayFactory;
-import com.intellij.util.ArrayUtil;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
@@ -64,19 +64,20 @@ public class GoFile extends PsiFileBase {
   }
 
   @Nullable
-  public String getImportPath() {
-    return GoSdkUtil.getImportPath(getParent());
+  public String getImportPath(boolean withVendoring) {
+    return GoSdkUtil.getImportPath(getParent(), withVendoring);
   }
 
-  @Nullable
-  public String getVendoringAwareImportPath(@Nullable PsiElement context) {
-    return GoSdkUtil.getVendoringAwareImportPath(getParent(), context);
+  @NotNull
+  @Override
+  public GlobalSearchScope getResolveScope() {
+    return GoUtil.goPathResolveScope(this);
   }
 
   @NotNull
   @Override
   public SearchScope getUseScope() {
-    return GoUtil.goPathScope(this);
+    return GoUtil.goPathUseScope(this);
   }
 
   @Nullable
@@ -201,7 +202,6 @@ public class GoFile extends PsiFileBase {
       @Nullable
       @Override
       public Result<Map<String, GoImportSpec>> compute() {
-        Collection<PsiDirectory> extraDeps = ContainerUtil.newHashSet();
         Map<String, GoImportSpec> map = ContainerUtil.newHashMap();
         for (GoImportSpec spec : getImports()) {
           if (!spec.isForSideEffects()) {
@@ -211,7 +211,7 @@ public class GoFile extends PsiFileBase {
             }
           }
         }
-        return Result.create(map, GoSdkUtil.getSdkAndLibrariesCacheDependencies(GoFile.this, ArrayUtil.toObjectArray(extraDeps)));
+        return Result.create(map, GoFile.this);
       }
     });
   }

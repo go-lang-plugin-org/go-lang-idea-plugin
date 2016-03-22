@@ -62,11 +62,11 @@ public class GoApplicationRunConfigurationProducer extends GoRunConfigurationPro
     if (GoRunUtil.isPackageContext(contextElement)) {
       PsiFile file = contextElement.getContainingFile();
       if (file instanceof GoFile) {
-        return ((GoFile)file).getImportPath();
+        return ((GoFile)file).getImportPath(false);
       }
     }
     else if (contextElement instanceof PsiDirectory) {
-      return GoSdkUtil.getImportPath((PsiDirectory)contextElement);
+      return GoSdkUtil.getImportPath((PsiDirectory)contextElement, false);
     }
     return null;
   }

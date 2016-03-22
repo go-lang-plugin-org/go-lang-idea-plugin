@@ -17,10 +17,12 @@
 package com.goide.highlighting;
 
 import com.goide.GoFileType;
+import com.goide.project.GoVendoringUtil;
 import com.goide.psi.GoFile;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.daemon.impl.analysis.DefaultHighlightingSettingProvider;
 import com.intellij.codeInsight.daemon.impl.analysis.FileHighlightingSetting;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
@@ -37,8 +39,11 @@ public class GoDefaultHighlightingSettingProvider extends DefaultHighlightingSet
     if (!file.isValid()) return null;
 
     PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
-    if (psiFile instanceof GoFile && GoUtil.importPathToIgnore(((GoFile)psiFile).getImportPath())) {
-      return FileHighlightingSetting.SKIP_HIGHLIGHTING;
+    if (psiFile instanceof GoFile) {
+      boolean vendoringEnabled = GoVendoringUtil.isVendoringEnabled(ModuleUtilCore.findModuleForPsiElement(psiFile));
+      if (GoUtil.importPathToIgnore(((GoFile)psiFile).getImportPath(vendoringEnabled))) {
+        return FileHighlightingSetting.SKIP_HIGHLIGHTING;
+      }
     }
     return null;
   }

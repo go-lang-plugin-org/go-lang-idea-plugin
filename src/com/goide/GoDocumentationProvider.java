@@ -17,6 +17,7 @@
 package com.goide;
 
 import com.goide.editor.GoParameterInfoHandler;
+import com.goide.project.GoVendoringUtil;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.sdk.GoPackageUtil;
@@ -120,10 +121,11 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
   @Nullable
   private static String getPackageComment(@Nullable GoFile file) {
     if (file != null) {
+      boolean vendoringEnabled = GoVendoringUtil.isVendoringEnabled(ModuleUtilCore.findModuleForPsiElement(file));
       // todo: remove after correct stubbing (comments needed in stubs)
       GoPackageClause pack = PsiTreeUtil.findChildOfType(file, GoPackageClause.class);
       String title = "<b>Package " + GoUtil.suggestPackageForDirectory(file.getParent()) + "</b>\n";
-      String importPath = "<p><code>import \"" + StringUtil.notNullize(file.getImportPath()) + "\"</code></p>\n";
+      String importPath = "<p><code>import \"" + StringUtil.notNullize(file.getImportPath(vendoringEnabled)) + "\"</code></p>\n";
       return title + importPath + getCommentText(getCommentsForElement(pack), true);
     }
     return null;
@@ -204,7 +206,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
   @Nullable
   private static String getImportPathForElement(@Nullable PsiElement element) {
     PsiFile file = element != null ? element.getContainingFile() : null;
-    return file instanceof GoFile ? ((GoFile)file).getImportPath() : null;
+    return file instanceof GoFile ? ((GoFile)file).getImportPath(false) : null;
   }
 
   @NotNull
@@ -302,7 +304,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
     if (element instanceof GoNamedElement) {
       PsiFile file = element.getContainingFile();
       if (file instanceof GoFile) {
-        String importPath = ((GoFile)file).getImportPath();
+        String importPath = ((GoFile)file).getImportPath(false);
         if (element instanceof GoFunctionDeclaration || element instanceof GoTypeSpec) {
           String name = ((GoNamedElement)element).getName();
           if (StringUtil.isNotEmpty(name)) {
@@ -322,7 +324,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       }
     }
     else if (element instanceof PsiDirectory && findDocFileForDirectory((PsiDirectory)element) != null) {
-      return GoSdkUtil.getImportPath((PsiDirectory)element);
+      return GoSdkUtil.getImportPath((PsiDirectory)element, false);
     }
 
     return null;

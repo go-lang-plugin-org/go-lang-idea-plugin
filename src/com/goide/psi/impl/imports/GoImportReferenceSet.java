@@ -21,11 +21,11 @@ import com.goide.psi.GoImportString;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Conditions;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileSystemItem;
 import com.intellij.psi.PsiManager;
@@ -38,6 +38,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 
 public class GoImportReferenceSet extends FileReferenceSet {
   public GoImportReferenceSet(@NotNull GoImportString importString) {
@@ -54,15 +55,17 @@ public class GoImportReferenceSet extends FileReferenceSet {
 
     final PsiManager psiManager = file.getManager();
     Module module = ModuleUtilCore.findModuleForPsiElement(file);
-    PsiElement contextForSourcePaths = GoVendoringUtil.isVendoringEnabled(module) ? file : null;
-    return ContainerUtil.mapNotNull(GoSdkUtil.getSourcesPathsToLookup(file.getProject(), module, contextForSourcePaths),
-                                    new Function<VirtualFile, PsiFileSystemItem>() {
-                                      @Nullable
-                                      @Override
-                                      public PsiFileSystemItem fun(VirtualFile file) {
-                                        return psiManager.findDirectory(file);
-                                      }
-                                    });
+    Project project = file.getProject();
+    LinkedHashSet<VirtualFile> sourceRoots = GoVendoringUtil.isVendoringEnabled(module)
+                                             ? GoSdkUtil.getVendoringAwareSourcesPathsToLookup(project, module, file.getVirtualFile())
+                                             : GoSdkUtil.getSourcesPathsToLookup(project, module);
+    return ContainerUtil.mapNotNull(sourceRoots, new Function<VirtualFile, PsiFileSystemItem>() {
+      @Nullable
+      @Override
+      public PsiFileSystemItem fun(VirtualFile file) {
+        return psiManager.findDirectory(file);
+      }
+    });
   }
 
   @Override

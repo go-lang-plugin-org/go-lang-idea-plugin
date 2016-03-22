@@ -131,7 +131,7 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
           throw new ExecutionException("File '" + filePath + "' is not test file");
         }
 
-        String importPath = ((GoFile)file).getImportPath();
+        String importPath = ((GoFile)file).getImportPath(false);
         if (StringUtil.isEmpty(importPath)) {
           throw new ExecutionException("Cannot find import path for " + filePath);
         }

@@ -54,7 +54,7 @@ public class GoPlaceholderCountInspection extends GoInspectionBase {
   private static int getPlaceholderPosition(@NotNull GoFunctionOrMethodDeclaration function) {
     Integer position = FORMATTING_FUNCTIONS.get(StringUtil.toLowerCase(function.getName()));
     if (position != null) {
-      String importPath = function.getContainingFile().getImportPath();
+      String importPath = function.getContainingFile().getImportPath(false);
       if ("fmt".equals(importPath) || "log".equals(importPath)) {
         return position;
       }
