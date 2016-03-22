@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -261,17 +261,18 @@ public class GoCompletionUtil {
   }
 
   @Nullable
-  public static LookupElement createPackageLookupElement(@NotNull GoImportSpec spec, @Nullable String name) {
+  public static LookupElement createPackageLookupElement(@NotNull GoImportSpec spec, @Nullable String name, boolean vendoringEnabled) {
     name = name != null ? name : ObjectUtils.notNull(spec.getAlias(), spec.getLocalPackageName());
-    return createPackageLookupElement(name, spec.getImportString().resolve(), spec, true);
+    return createPackageLookupElement(name, spec.getImportString().resolve(), spec, vendoringEnabled, true);
   }
 
   @NotNull
   public static LookupElement createPackageLookupElement(@NotNull String importPath,
                                                          @Nullable PsiDirectory directory,
                                                          @Nullable PsiElement context,
+                                                         boolean vendoringEnabled, 
                                                          boolean forType) {
-    return createPackageLookupElement(importPath, getContextImportPath(context), directory, forType);
+    return createPackageLookupElement(importPath, getContextImportPath(context, vendoringEnabled), directory, forType);
   }
 
   @NotNull
@@ -303,16 +304,16 @@ public class GoCompletionUtil {
   }
 
   @Nullable
-  public static String getContextImportPath(@Nullable PsiElement context) {
+  public static String getContextImportPath(@Nullable PsiElement context, boolean vendoringEnabled) {
     if (context == null) return null;
     String currentPath = null;
     if (context instanceof PsiDirectory) {
-      currentPath = GoSdkUtil.getImportPath((PsiDirectory)context);
+      currentPath = GoSdkUtil.getImportPath((PsiDirectory)context, vendoringEnabled);
     }
     else {
       PsiFile file = context.getContainingFile();
       if (file instanceof GoFile) {
-        currentPath = ((GoFile)file).getImportPath();
+        currentPath = ((GoFile)file).getImportPath(vendoringEnabled);
       }
     }
     return currentPath;

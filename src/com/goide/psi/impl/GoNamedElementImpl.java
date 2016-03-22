@@ -17,20 +17,22 @@
 package com.goide.psi.impl;
 
 import com.goide.GoIcons;
+import com.goide.project.GoVendoringUtil;
 import com.goide.psi.*;
 import com.goide.sdk.GoPackageUtil;
-import com.goide.sdk.GoSdkUtil;
 import com.goide.stubs.GoNamedStub;
 import com.goide.stubs.GoTypeStub;
 import com.goide.util.GoUtil;
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.util.Iconable;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.impl.ElementBase;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.stubs.IStubElementType;
@@ -152,6 +154,7 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
   public ItemPresentation getPresentation() {
     String text = UsageViewUtil.createNodeText(this);
     if (text != null) {
+      final boolean vendoringEnabled = GoVendoringUtil.isVendoringEnabled(ModuleUtilCore.findModuleForPsiElement(getContainingFile()));
       return new ItemPresentation() {
         @Nullable
         @Override
@@ -164,7 +167,7 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
         public String getLocationString() {
           GoFile file = getContainingFile();
           String fileName = file.getName();
-          String importPath = ObjectUtils.chooseNotNull(GoSdkUtil.getImportPath(file.getContainingDirectory()), file.getPackageName());
+          String importPath = ObjectUtils.chooseNotNull(file.getImportPath(vendoringEnabled), file.getPackageName());
           return "in " + (importPath != null ? importPath  + "/" + fileName : fileName);
         }
 
@@ -205,15 +208,18 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
 
   @NotNull
   @Override
+  public GlobalSearchScope getResolveScope() {
+    return isPublic() ? GoUtil.goPathResolveScope(this) : GoPackageUtil.packageScope(getContainingFile());
+  }
+
+  @NotNull
+  @Override
   public SearchScope getUseScope() {
     if (this instanceof GoVarDefinition || this instanceof GoConstDefinition) {
       GoBlock block = PsiTreeUtil.getParentOfType(this, GoBlock.class);
       if (block != null) return new LocalSearchScope(block);
     }
-    if (isPublic()) {
-      return GoUtil.goPathScope(this);
-    }
-    return GoPackageUtil.packageScope(getContainingFile());
+    return isPublic() ? GoUtil.goPathUseScope(this) : GoPackageUtil.packageScope(getContainingFile());
   }
 
   @Override

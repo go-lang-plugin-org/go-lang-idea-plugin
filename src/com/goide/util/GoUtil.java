@@ -74,7 +74,7 @@ public class GoUtil {
       @Nullable
       @Override
       public Result<Boolean> compute() {
-        String importPath = file.getImportPath();
+        String importPath = file.getImportPath(false);
         GoExcludedPathsSettings excludedSettings = GoExcludedPathsSettings.getInstance(file.getProject());
         return Result.create(importPath != null && excludedSettings.isExcluded(importPath), file, excludedSettings);
       }
@@ -140,15 +140,19 @@ public class GoUtil {
   public static boolean directoryToIgnore(@NotNull String name) {
     return StringUtil.startsWithChar(name, '_') || StringUtil.startsWithChar(name, '.');
   }
-
-  public static GlobalSearchScope goPathScope(@NotNull PsiElement context) {
-    // it's important to ask module on file, otherwise module won't be found for elements in libraries files [zolotov]
-    Module module = ModuleUtilCore.findModuleForPsiElement(context.getContainingFile());
-    return GoPathSearchScope.create(context.getProject(), module, context);
+  
+  public static GlobalSearchScope goPathUseScope(@NotNull PsiElement context) {
+    return GoPathUseScope.create(context);
   }
 
-  public static GlobalSearchScope goPathScope(@NotNull Module module, @Nullable PsiElement context) {
-    return GoPathSearchScope.create(module.getProject(), module, context);
+  public static GlobalSearchScope goPathResolveScope(@NotNull PsiElement context) {
+    // it's important to ask module on file, otherwise module won't be found for elements in libraries files [zolotov]
+    Module module = ModuleUtilCore.findModuleForPsiElement(context.getContainingFile());
+    return GoPathResolveScope.create(context.getProject(), module, context);
+  }
+
+  public static GlobalSearchScope goPathResolveScope(@NotNull Module module, @Nullable PsiElement context) {
+    return GoPathResolveScope.create(module.getProject(), module, context);
   }
 
   @NotNull
@@ -175,7 +179,6 @@ public class GoUtil {
    * – GoLabelRef can't be resolved to anything but GoLabelDefinition<br/>
    * – GoTypeReferenceExpression (not from receiver type) can't be resolved to anything but GoTypeSpec or GoImportSpec<br/>
    * – Definition is private and reference in different package<br/>
-   * – Definition is public, reference in different package and reference containing file doesn't have an import of definition package
    */
   public static boolean couldBeReferenceTo(@NotNull PsiElement definition, @NotNull PsiElement reference) {
     if (definition instanceof GoNamedElement && ((GoNamedElement)definition).isBlank()) return false;
@@ -200,16 +203,7 @@ public class GoUtil {
     boolean inSamePackage = referencePackage != null && referencePackage.equals(definitionPackage);
 
     if (inSamePackage) return true;
-    if (reference instanceof GoNamedElement && !((GoNamedElement)reference).isPublic()) return false;
-    if (GoPsiImplUtil.isBuiltinFile(definitionFile)) return true;
-    String path = ((GoFile)definitionFile).getVendoringAwareImportPath(reference);
-    if (refFile.getImportedPackagesMap().containsKey(path)) return true;
-    for (GoFile file : GoPackageUtil.getAllPackageFiles(refFile)) {
-      if (file != refFile && refFile.getOriginalFile() != file) {
-        if (file.getImportedPackagesMap().containsKey(path)) return true;
-      }
-    }
-    return false;
+    return !(reference instanceof GoNamedElement && !((GoNamedElement)reference).isPublic());
   }
 
   @NotNull
@@ -223,12 +217,7 @@ public class GoUtil {
     return packageName;
   }
 
-  @NotNull
-  public static GlobalSearchScope moduleScopeWithoutTests(@NotNull PsiElement context) {
-    return new ExceptTestsScope(goPathScope(context));
-  }
-
-  private static class ExceptTestsScope extends DelegatingGlobalSearchScope {
+  public static class ExceptTestsScope extends DelegatingGlobalSearchScope {
     public ExceptTestsScope(@NotNull GlobalSearchScope baseScope) {
       super(baseScope);
     }

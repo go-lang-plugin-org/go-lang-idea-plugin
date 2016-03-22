@@ -87,7 +87,7 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
     PsiFile file = contextElement.getContainingFile();
     if (myFramework.isAvailableOnFile(file)) {
       if (GoRunUtil.isPackageContext(contextElement)) {
-        String packageName = StringUtil.notNullize(((GoFile)file).getImportPath());
+        String packageName = StringUtil.notNullize(((GoFile)file).getImportPath(false));
         configuration.setKind(GoTestRunConfiguration.Kind.PACKAGE);
         configuration.setPackage(packageName);
         configuration.setName(getPackageConfigurationName(packageName));
@@ -99,7 +99,7 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
           configuration.setPattern("^" + function.getName() + "$");
 
           configuration.setKind(GoTestRunConfiguration.Kind.PACKAGE);
-          configuration.setPackage(StringUtil.notNullize(((GoFile)file).getImportPath()));
+          configuration.setPackage(StringUtil.notNullize(((GoFile)file).getImportPath(false)));
         }
         else {
           configuration.setName(getFileConfigurationName(file.getName()));
@@ -147,7 +147,7 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
         }
       case PACKAGE:
         if (!GoTestFinder.isTestFile(file)) return false;
-        if (!Comparing.equal(((GoFile)file).getImportPath(), configuration.getPackage())) return false;
+        if (!Comparing.equal(((GoFile)file).getImportPath(false), configuration.getPackage())) return false;
         if (GoRunUtil.isPackageContext(contextElement) && configuration.getPattern().isEmpty()) return true;
 
         GoFunctionOrMethodDeclaration contextFunction = findTestFunctionInContext(contextElement);

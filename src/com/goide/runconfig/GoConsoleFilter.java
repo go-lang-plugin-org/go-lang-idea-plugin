@@ -18,7 +18,7 @@ package com.goide.runconfig;
 
 import com.goide.codeInsight.imports.GoGetPackageFix;
 import com.goide.sdk.GoPackageUtil;
-import com.goide.util.GoPathSearchScope;
+import com.goide.util.GoPathResolveScope;
 import com.goide.util.GoUtil;
 import com.intellij.execution.filters.Filter;
 import com.intellij.execution.filters.HyperlinkInfo;
@@ -166,7 +166,7 @@ public class GoConsoleFilter implements Filter {
         return ContainerUtil.getFirstItem(files);
       }
       if (!files.isEmpty()) {
-        final GlobalSearchScope goPathScope = GoPathSearchScope.create(myProject, myModule, null);
+        final GlobalSearchScope goPathScope = GoPathResolveScope.create(myProject, myModule, null);
         files = ContainerUtil.filter(files, new Condition<VirtualFile>() {
           @Override
           public boolean value(VirtualFile file) {

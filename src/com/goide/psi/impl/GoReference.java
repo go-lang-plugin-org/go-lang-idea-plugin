@@ -42,7 +42,7 @@ import static com.goide.psi.impl.GoPsiImplUtil.*;
 public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressionBase> {
   public static final Key<List<? extends PsiElement>> IMPORT_USERS = Key.create("IMPORT_USERS");
   public static final Key<String> ACTUAL_NAME = Key.create("ACTUAL_NAME");
-  public static final Key<Object> POINTER = Key.create("POINTER");
+  private static final Key<Object> POINTER = Key.create("POINTER");
   private static final Key<Object> DONT_PROCESS_METHODS = Key.create("DONT_PROCESS_METHODS");
 
   private static final ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase> MY_RESOLVER =
@@ -239,7 +239,8 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     if (!(originFile instanceof GoFile) || !(externalFile instanceof GoFile)) return false;
     GoFile o1 = (GoFile)originFile.getOriginalFile();
     GoFile o2 = (GoFile)externalFile.getOriginalFile();
-    return Comparing.equal(o1.getImportPath(), o2.getImportPath()) && Comparing.equal(o1.getPackageName(), o2.getPackageName());
+    return Comparing.equal(o1.getImportPath(false), o2.getImportPath(false)) 
+           && Comparing.equal(o1.getPackageName(), o2.getPackageName());
   }
 
   private boolean processCollectedRefs(@NotNull List<GoTypeReferenceExpression> refs,
