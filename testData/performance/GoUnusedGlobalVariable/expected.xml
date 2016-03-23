@@ -1,5 +1,2571 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<problems>
-  
-</problems>
+<!--
+  ~ Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 
+<problems>
+  <problem>
+    <file>flag.go</file>
+    <line>594</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/mflag/flag.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ShortUsage'</description>
+  </problem>
+  <problem>
+    <file>random.go</file>
+    <line>18</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/random/random.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'Reader'</description>
+  </problem>
+  <problem>
+    <file>copy.go</file>
+    <line>21</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/archive/copy.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrInvalidCopySource'</description>
+  </problem>
+  <problem>
+    <file>archive.go</file>
+    <line>76</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/archive/archive.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrNotImplemented'</description>
+  </problem>
+  <problem>
+    <file>stdcopy.go</file>
+    <line>24</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/stdcopy/stdcopy.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'Stdin'</description>
+  </problem>
+  <problem>
+    <file>discovery.go</file>
+    <line>14</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/discovery/discovery.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrNotImplemented'</description>
+  </problem>
+  <problem>
+    <file>mimetype.go</file>
+    <line>9</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/httputils/mimetype.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'MimeTypes'</description>
+  </problem>
+  <problem>
+    <file>checker.go</file>
+    <line>14</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/integration/checker/checker.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'DeepEquals'</description>
+  </problem>
+  <problem>
+    <file>checker.go</file>
+    <line>15</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/integration/checker/checker.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'Equals'</description>
+  </problem>
+  <problem>
+    <file>checker.go</file>
+    <line>16</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/integration/checker/checker.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorMatches'</description>
+  </problem>
+  <problem>
+    <file>checker.go</file>
+    <line>17</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/integration/checker/checker.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'FitsTypeOf'</description>
+  </problem>
+  <problem>
+    <file>checker.go</file>
+    <line>18</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/integration/checker/checker.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'HasLen'</description>
+  </problem>
+  <problem>
+    <file>checker.go</file>
+    <line>19</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/integration/checker/checker.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'Implements'</description>
+  </problem>
+  <problem>
+    <file>checker.go</file>
+    <line>20</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/integration/checker/checker.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'IsNil'</description>
+  </problem>
+  <problem>
+    <file>checker.go</file>
+    <line>21</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/integration/checker/checker.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'Matches'</description>
+  </problem>
+  <problem>
+    <file>checker.go</file>
+    <line>22</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/integration/checker/checker.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'Not'</description>
+  </problem>
+  <problem>
+    <file>checker.go</file>
+    <line>23</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/integration/checker/checker.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'NotNil'</description>
+  </problem>
+  <problem>
+    <file>checker.go</file>
+    <line>24</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/integration/checker/checker.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'PanicMatches'</description>
+  </problem>
+  <problem>
+    <file>checker.go</file>
+    <line>25</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/pkg/integration/checker/checker.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'Panics'</description>
+  </problem>
+  <problem>
+    <file>hosts_unix.go</file>
+    <line>8</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/opts/hosts_unix.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'DefaultHost'</description>
+  </problem>
+  <problem>
+    <file>names.go</file>
+    <line>9</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/utils/names.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'RestrictedNamePattern'</description>
+  </problem>
+  <problem>
+    <file>logger.go</file>
+    <line>18</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/daemon/logger/logger.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrReadLogsNotSupported'</description>
+  </problem>
+  <problem>
+    <file>driver.go</file>
+    <line>22</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/daemon/execdriver/driver.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrNotRunning'</description>
+  </problem>
+  <problem>
+    <file>driver.go</file>
+    <line>23</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/daemon/execdriver/driver.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrWaitTimeoutReached'</description>
+  </problem>
+  <problem>
+    <file>driver.go</file>
+    <line>24</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/daemon/execdriver/driver.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrDriverAlreadyRegistered'</description>
+  </problem>
+  <problem>
+    <file>driver.go</file>
+    <line>25</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/daemon/execdriver/driver.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrDriverNotFound'</description>
+  </problem>
+  <problem>
+    <file>image.go</file>
+    <line>14</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/image.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeInvalidImageID'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>15</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeNoSuchContainer'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>24</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeUnregisteredContainer'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>33</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeContainerBeingRemoved'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>42</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeUnpauseContainer'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>51</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeAlreadyPaused'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>60</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeNotPaused'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>69</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeImageUnregContainer'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>77</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeEmptyID'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>86</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeLoggingFactory'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>95</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeInitLogger'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>104</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeNotRunning'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>113</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeLinkNotRunning'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>123</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeDeviceInfo'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>132</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeEmptyEndpoint'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>141</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeEmptyNetwork'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>150</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeParsingPort'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>159</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeNoSandbox'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>168</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeNetworkUpdate'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>177</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeNetworkRefresh'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>186</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeHostPort'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>195</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeNetworkConflict'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>204</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeJoinInfo'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>213</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeIPCRunning'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>222</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeNotADir'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>231</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeParseContainer'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>239</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeJoinSelf'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>247</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeJoinRunning'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>256</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeModeNotContainer'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>265</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeRemovingVolume'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>274</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeInvalidNetworkMode'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>283</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeGetGraph'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>292</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeGetLayer'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>301</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodePutLayer'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>310</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeGetLayerMetadata'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>319</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeEmptyConfig'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>328</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeNoSuchImageHash'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>337</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeNoSuchImageTag'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>346</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeMountOverFile'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>355</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeMountSetup'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>364</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeVolumeInvalidMode'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>373</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeVolumeInvalid'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>381</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeVolumeAbs'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>389</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeVolumeName'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>397</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeVolumeFromBlank'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>406</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeVolumeMode'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>415</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeVolumeDup'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>424</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeCantUnpause'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>432</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodePSError'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>441</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeNoPID'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>449</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeBadPID'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>458</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeNoTop'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>467</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeStopped'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>476</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeCantStop'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>485</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeBadCPUFields'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>493</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeBadCPUInt'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>502</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeBadStatFormat'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>510</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeTimedOut'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>519</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeAlreadyRemoving'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>527</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeStartPaused'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>536</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeAlreadyStarted'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>545</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeHostConfigStart'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>554</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeCantStart'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>563</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeCantRestart'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>572</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeEmptyRename'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>581</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeRenameTaken'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>590</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeRenameDelete'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>599</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodePauseError'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>608</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeNeedStream'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>617</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeDanglingOne'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>626</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeImgDelUsed'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>635</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeImgNoParent'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>643</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeExportFailed'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>652</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeExecResize'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>661</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeContainerNotRunning'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>670</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeNoExecID'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>679</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeExecPaused'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>688</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeExecRunning'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>697</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeExecCantRun'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>706</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeExecAttach'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>715</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeExecContainerStopped'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>724</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeDefaultName'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>733</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeNoParent'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>742</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeCantDestroy'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>751</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeRmRunning'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>760</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeRmFailed'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>769</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeRmNotFound'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>778</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeRmState'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>787</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeRmDriverFS'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>796</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeRmInit'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>805</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeRmFS'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>814</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeRmExecDriver'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>823</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeRmVolumeInUse'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>832</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeRmVolume'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>841</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeInvalidCpusetCpus'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>850</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeInvalidCpusetMems'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>859</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeNotAvailableCpusetCpus'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>868</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeNotAvailableCpusetMems'</description>
+  </problem>
+  <problem>
+    <file>daemon.go</file>
+    <line>877</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/daemon.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorVolumeNameTaken'</description>
+  </problem>
+  <problem>
+    <file>server.go</file>
+    <line>12</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/server.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeNewerClientVersion'</description>
+  </problem>
+  <problem>
+    <file>server.go</file>
+    <line>21</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/server.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeOldClientVersion'</description>
+  </problem>
+  <problem>
+    <file>server.go</file>
+    <line>30</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/server.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorNetworkControllerNotEnabled'</description>
+  </problem>
+  <problem>
+    <file>builder.go</file>
+    <line>15</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/builder.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeAtLeastOneArg'</description>
+  </problem>
+  <problem>
+    <file>builder.go</file>
+    <line>24</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/builder.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeExactlyOneArg'</description>
+  </problem>
+  <problem>
+    <file>builder.go</file>
+    <line>33</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/builder.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeAtLeastTwoArgs'</description>
+  </problem>
+  <problem>
+    <file>builder.go</file>
+    <line>42</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/builder.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeTooManyArgs'</description>
+  </problem>
+  <problem>
+    <file>builder.go</file>
+    <line>51</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/builder.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeChainOnBuild'</description>
+  </problem>
+  <problem>
+    <file>builder.go</file>
+    <line>60</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/builder.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeBadOnBuildCmd'</description>
+  </problem>
+  <problem>
+    <file>builder.go</file>
+    <line>69</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/builder.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeMissingFrom'</description>
+  </problem>
+  <problem>
+    <file>builder.go</file>
+    <line>78</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/builder.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeNotOnWindows'</description>
+  </problem>
+  <problem>
+    <file>builder.go</file>
+    <line>87</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/errors/builder.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeVolumeEmpty'</description>
+  </problem>
+  <problem>
+    <file>const.go</file>
+    <line>19</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/agl/ed25519/edwards25519/const.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'A'</description>
+  </problem>
+  <problem>
+    <file>config.go</file>
+    <line>34</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/aws/aws-sdk-go/aws/config.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'DefaultConfig'</description>
+  </problem>
+  <problem>
+    <file>credentials.go</file>
+    <line>67</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/aws/aws-sdk-go/aws/credentials/credentials.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'AnonymousCredentials'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>25</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrError'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>26</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrInternal'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>27</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrPerm'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>31</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrNomem'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>33</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrInterrupt'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>36</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrNotFound'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>37</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrFull'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>39</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrProtocol'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>40</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrEmpty'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>41</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrSchema'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>42</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrTooBig'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>44</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrMismatch'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>45</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrMisuse'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>46</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrNoLFS'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>47</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrAuth'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>48</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrFormat'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>49</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrRange'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>50</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrNotADB'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>76</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIoErrRead'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>77</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIoErrShortRead'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>78</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIoErrWrite'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>79</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIoErrFsync'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>80</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIoErrDirFsync'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>81</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIoErrTruncate'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>82</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIoErrFstat'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>83</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIoErrUnlock'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>84</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIoErrRDlock'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>85</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIoErrDelete'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>86</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIoErrBlocked'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>87</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIoErrNoMem'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>88</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIoErrAccess'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>89</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIoErrCheckReservedLock'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>90</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIoErrLock'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>91</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIoErrClose'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>92</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIoErrDirClose'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>93</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIoErrSHMOpen'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>94</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIoErrSHMSize'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>95</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIoErrSHMLock'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>96</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIoErrSHMMap'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>97</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIoErrSeek'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>98</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIoErrDeleteNoent'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>99</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIoErrMMap'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>100</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIoErrGetTempPath'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>101</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIoErrConvPath'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>102</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrLockedSharedCache'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>103</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrBusyRecovery'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>104</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrBusySnapshot'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>105</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrCantOpenNoTempDir'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>106</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrCantOpenIsDir'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>107</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrCantOpenFullPath'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>108</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrCantOpenConvPath'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>109</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrCorruptVTab'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>110</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrReadonlyRecovery'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>111</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrReadonlyCantLock'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>112</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrReadonlyRollback'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>113</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrReadonlyDbMoved'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>114</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrAbortRollback'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>115</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrConstraintCheck'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>116</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrConstraintCommitHook'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>117</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrConstraintForeignKey'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>118</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrConstraintFunction'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>119</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrConstraintNotNull'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>120</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrConstraintPrimaryKey'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>121</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrConstraintTrigger'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>122</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrConstraintUnique'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>123</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrConstraintVTab'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>124</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrConstraintRowId'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>125</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrNoticeRecoverWAL'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>126</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrNoticeRecoverRollback'</description>
+  </problem>
+  <problem>
+    <file>error.go</file>
+    <line>127</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/mattn/go-sqlite3/error.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrWarningAutoIndex'</description>
+  </problem>
+  <problem>
+    <file>errors.go</file>
+    <line>13</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/boltdb/bolt/errors.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrDatabaseOpen'</description>
+  </problem>
+  <problem>
+    <file>client.go</file>
+    <line>40</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/coreos/etcd/client/client.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'DefaultRequestTimeout'</description>
+  </problem>
+  <problem>
+    <file>keys.generated.go</file>
+    <line>25</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/coreos/etcd/client/keys.generated.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'codecSelferBitsize5311'</description>
+  </problem>
+  <problem>
+    <file>store.go</file>
+    <line>25</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libkv/store/store.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrBackendNotSupported'</description>
+  </problem>
+  <problem>
+    <file>store.go</file>
+    <line>27</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libkv/store/store.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrCallNotSupported'</description>
+  </problem>
+  <problem>
+    <file>store.go</file>
+    <line>29</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libkv/store/store.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrNotReachable'</description>
+  </problem>
+  <problem>
+    <file>store.go</file>
+    <line>31</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libkv/store/store.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrCannotLock'</description>
+  </problem>
+  <problem>
+    <file>store.go</file>
+    <line>33</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libkv/store/store.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrKeyModified'</description>
+  </problem>
+  <problem>
+    <file>store.go</file>
+    <line>35</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libkv/store/store.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrKeyNotFound'</description>
+  </problem>
+  <problem>
+    <file>store.go</file>
+    <line>37</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libkv/store/store.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrPreviousNotSpecified'</description>
+  </problem>
+  <problem>
+    <file>client.go</file>
+    <line>61</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/notary/client/client.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrRepositoryNotExist'</description>
+  </problem>
+  <problem>
+    <file>jsonsign.go</file>
+    <line>18</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libtrust/jsonsign.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrInvalidSignContent'</description>
+  </problem>
+  <problem>
+    <file>contract.go</file>
+    <line>32</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libnetwork/ipamapi/contract.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrInvalidIpamService'</description>
+  </problem>
+  <problem>
+    <file>contract.go</file>
+    <line>33</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libnetwork/ipamapi/contract.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrInvalidIpamConfigService'</description>
+  </problem>
+  <problem>
+    <file>contract.go</file>
+    <line>34</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libnetwork/ipamapi/contract.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIpamNotAvailable'</description>
+  </problem>
+  <problem>
+    <file>contract.go</file>
+    <line>35</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libnetwork/ipamapi/contract.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIpamInternalError'</description>
+  </problem>
+  <problem>
+    <file>contract.go</file>
+    <line>36</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libnetwork/ipamapi/contract.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrInvalidAddressSpace'</description>
+  </problem>
+  <problem>
+    <file>contract.go</file>
+    <line>37</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libnetwork/ipamapi/contract.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrInvalidPool'</description>
+  </problem>
+  <problem>
+    <file>contract.go</file>
+    <line>38</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libnetwork/ipamapi/contract.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrInvalidSubPool'</description>
+  </problem>
+  <problem>
+    <file>contract.go</file>
+    <line>39</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libnetwork/ipamapi/contract.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrInvalidRequest'</description>
+  </problem>
+  <problem>
+    <file>contract.go</file>
+    <line>40</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libnetwork/ipamapi/contract.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrPoolNotFound'</description>
+  </problem>
+  <problem>
+    <file>contract.go</file>
+    <line>41</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libnetwork/ipamapi/contract.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrOverlapPool'</description>
+  </problem>
+  <problem>
+    <file>contract.go</file>
+    <line>42</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libnetwork/ipamapi/contract.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrNoAvailablePool'</description>
+  </problem>
+  <problem>
+    <file>contract.go</file>
+    <line>43</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libnetwork/ipamapi/contract.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrNoAvailableIPs'</description>
+  </problem>
+  <problem>
+    <file>contract.go</file>
+    <line>44</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libnetwork/ipamapi/contract.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIPAlreadyAllocated'</description>
+  </problem>
+  <problem>
+    <file>contract.go</file>
+    <line>45</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libnetwork/ipamapi/contract.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrIPOutOfRange'</description>
+  </problem>
+  <problem>
+    <file>contract.go</file>
+    <line>46</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libnetwork/ipamapi/contract.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrPoolOverlap'</description>
+  </problem>
+  <problem>
+    <file>contract.go</file>
+    <line>47</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libnetwork/ipamapi/contract.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrBadPool'</description>
+  </problem>
+  <problem>
+    <file>labels.go</file>
+    <line>48</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libnetwork/netlabel/labels.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'GlobalKVProvider'</description>
+  </problem>
+  <problem>
+    <file>labels.go</file>
+    <line>51</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libnetwork/netlabel/labels.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'GlobalKVProviderURL'</description>
+  </problem>
+  <problem>
+    <file>labels.go</file>
+    <line>54</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libnetwork/netlabel/labels.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'GlobalKVProviderConfig'</description>
+  </problem>
+  <problem>
+    <file>labels.go</file>
+    <line>57</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libnetwork/netlabel/labels.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'LocalKVProvider'</description>
+  </problem>
+  <problem>
+    <file>labels.go</file>
+    <line>60</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libnetwork/netlabel/labels.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'LocalKVProviderURL'</description>
+  </problem>
+  <problem>
+    <file>labels.go</file>
+    <line>63</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libnetwork/netlabel/labels.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'LocalKVProviderConfig'</description>
+  </problem>
+  <problem>
+    <file>utils.go</file>
+    <line>24</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libnetwork/netutils/utils.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrNoDefaultRoute'</description>
+  </problem>
+  <problem>
+    <file>datastore.go</file>
+    <line>55</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libnetwork/datastore/datastore.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrKeyModified'</description>
+  </problem>
+  <problem>
+    <file>utils.go</file>
+    <line>12</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/libnetwork/ipamutils/utils.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'PredefinedGranularNetworks'</description>
+  </problem>
+  <problem>
+    <file>tarsum.go</file>
+    <line>10</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/distribution/digest/tarsum.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'TarsumRegexp'</description>
+  </problem>
+  <problem>
+    <file>blobs.go</file>
+    <line>16</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/distribution/blobs.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrBlobExists'</description>
+  </problem>
+  <problem>
+    <file>blobs.go</file>
+    <line>19</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/distribution/blobs.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrBlobDigestUnsupported'</description>
+  </problem>
+  <problem>
+    <file>blobs.go</file>
+    <line>22</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/distribution/blobs.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrBlobUnknown'</description>
+  </problem>
+  <problem>
+    <file>blobs.go</file>
+    <line>25</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/distribution/blobs.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrBlobUploadUnknown'</description>
+  </problem>
+  <problem>
+    <file>blobs.go</file>
+    <line>29</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/distribution/blobs.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrBlobInvalidLength'</description>
+  </problem>
+  <problem>
+    <file>blobs.go</file>
+    <line>32</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/distribution/blobs.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrUnsupported'</description>
+  </problem>
+  <problem>
+    <file>names.go</file>
+    <line>49</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/distribution/registry/api/v2/names.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'TagNameAnchoredRegexp'</description>
+  </problem>
+  <problem>
+    <file>errors.go</file>
+    <line>13</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/distribution/registry/api/v2/errors.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeUnsupported'</description>
+  </problem>
+  <problem>
+    <file>errors.go</file>
+    <line>44</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/distribution/registry/api/v2/errors.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeSizeInvalid'</description>
+  </problem>
+  <problem>
+    <file>errors.go</file>
+    <line>116</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/distribution/registry/api/v2/errors.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorCodeManifestBlobUnknown'</description>
+  </problem>
+  <problem>
+    <file>routes.go</file>
+    <line>17</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/distribution/registry/api/v2/routes.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'allEndpoints'</description>
+  </problem>
+  <problem>
+    <file>descriptors.go</file>
+    <line>196</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/distribution/registry/api/v2/descriptors.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'APIDescriptor'</description>
+  </problem>
+  <problem>
+    <file>registry.go</file>
+    <line>23</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/docker/distribution/registry.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'GlobalScope'</description>
+  </problem>
+  <problem>
+    <file>call.go</file>
+    <line>26</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/godbus/dbus/call.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'errSignature'</description>
+  </problem>
+  <problem>
+    <file>dbus.go</file>
+    <line>12</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/godbus/dbus/dbus.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'uint8Type'</description>
+  </problem>
+  <problem>
+    <file>rpc.go</file>
+    <line>170</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/ugorji/go/codec/rpc.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'GoRpc'</description>
+  </problem>
+  <problem>
+    <file>helper.go</file>
+    <line>233</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/ugorji/go/codec/helper.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'bsAll0x00'</description>
+  </problem>
+  <problem>
+    <file>msgpack.go</file>
+    <line>832</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/ugorji/go/codec/msgpack.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'MsgpackSpecRpc'</description>
+  </problem>
+  <problem>
+    <file>write.go</file>
+    <line>33</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/tinylib/msgp/msgp/write.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'Nowhere'</description>
+  </problem>
+  <problem>
+    <file>checkers.go</file>
+    <line>109</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/go-check/check/checkers.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'IsNil'</description>
+  </problem>
+  <problem>
+    <file>checkers.go</file>
+    <line>145</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/go-check/check/checkers.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'NotNil'</description>
+  </problem>
+  <problem>
+    <file>checkers.go</file>
+    <line>167</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/go-check/check/checkers.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'Equals'</description>
+  </problem>
+  <problem>
+    <file>checkers.go</file>
+    <line>198</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/go-check/check/checkers.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'DeepEquals'</description>
+  </problem>
+  <problem>
+    <file>checkers.go</file>
+    <line>223</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/go-check/check/checkers.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'HasLen'</description>
+  </problem>
+  <problem>
+    <file>checkers.go</file>
+    <line>255</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/go-check/check/checkers.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrorMatches'</description>
+  </problem>
+  <problem>
+    <file>checkers.go</file>
+    <line>287</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/go-check/check/checkers.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'Matches'</description>
+  </problem>
+  <problem>
+    <file>checkers.go</file>
+    <line>331</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/go-check/check/checkers.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'Panics'</description>
+  </problem>
+  <problem>
+    <file>checkers.go</file>
+    <line>366</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/go-check/check/checkers.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'PanicMatches'</description>
+  </problem>
+  <problem>
+    <file>checkers.go</file>
+    <line>412</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/go-check/check/checkers.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'FitsTypeOf'</description>
+  </problem>
+  <problem>
+    <file>checkers.go</file>
+    <line>444</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/go-check/check/checkers.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'Implements'</description>
+  </problem>
+  <problem>
+    <file>db.go</file>
+    <line>10</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/endophage/gotuf/keys/db.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrWrongType'</description>
+  </problem>
+  <problem>
+    <file>db.go</file>
+    <line>11</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/endophage/gotuf/keys/db.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrExists'</description>
+  </problem>
+  <problem>
+    <file>db.go</file>
+    <line>12</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/endophage/gotuf/keys/db.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrWrongID'</description>
+  </problem>
+  <problem>
+    <file>db.go</file>
+    <line>13</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/endophage/gotuf/keys/db.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrInvalidKey'</description>
+  </problem>
+  <problem>
+    <file>errors.go</file>
+    <line>9</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/endophage/gotuf/client/errors.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrNoRootKeys'</description>
+  </problem>
+  <problem>
+    <file>errors.go</file>
+    <line>10</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/endophage/gotuf/client/errors.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrInsufficientKeys'</description>
+  </problem>
+  <problem>
+    <file>errors.go</file>
+    <line>9</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/endophage/gotuf/errors/errors.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrInitNotAllowed'</description>
+  </problem>
+  <problem>
+    <file>verify.go</file>
+    <line>15</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/endophage/gotuf/signed/verify.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrMissingKey'</description>
+  </problem>
+  <problem>
+    <file>verify.go</file>
+    <line>18</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/endophage/gotuf/signed/verify.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrWrongMethod'</description>
+  </problem>
+  <problem>
+    <file>rpc.go</file>
+    <line>142</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/hashicorp/go-msgpack/codec/rpc.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'GoRpc'</description>
+  </problem>
+  <problem>
+    <file>helper.go</file>
+    <line>131</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/hashicorp/go-msgpack/codec/helper.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'boolSliceTypId'</description>
+  </problem>
+  <problem>
+    <file>helper.go</file>
+    <line>132</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/hashicorp/go-msgpack/codec/helper.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'uintSliceTypId'</description>
+  </problem>
+  <problem>
+    <file>helper.go</file>
+    <line>134</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/hashicorp/go-msgpack/codec/helper.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'uint16SliceTypId'</description>
+  </problem>
+  <problem>
+    <file>helper.go</file>
+    <line>135</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/hashicorp/go-msgpack/codec/helper.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'uint32SliceTypId'</description>
+  </problem>
+  <problem>
+    <file>helper.go</file>
+    <line>137</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/hashicorp/go-msgpack/codec/helper.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'intSliceTypId'</description>
+  </problem>
+  <problem>
+    <file>helper.go</file>
+    <line>138</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/hashicorp/go-msgpack/codec/helper.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'int8SliceTypId'</description>
+  </problem>
+  <problem>
+    <file>helper.go</file>
+    <line>139</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/hashicorp/go-msgpack/codec/helper.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'int16SliceTypId'</description>
+  </problem>
+  <problem>
+    <file>helper.go</file>
+    <line>140</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/hashicorp/go-msgpack/codec/helper.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'int32SliceTypId'</description>
+  </problem>
+  <problem>
+    <file>helper.go</file>
+    <line>142</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/hashicorp/go-msgpack/codec/helper.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'float32SliceTypId'</description>
+  </problem>
+  <problem>
+    <file>helper.go</file>
+    <line>143</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/hashicorp/go-msgpack/codec/helper.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'float64SliceTypId'</description>
+  </problem>
+  <problem>
+    <file>helper.go</file>
+    <line>148</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/hashicorp/go-msgpack/codec/helper.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'mapIntIntfTypId'</description>
+  </problem>
+  <problem>
+    <file>helper.go</file>
+    <line>150</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/hashicorp/go-msgpack/codec/helper.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'mapUintIntfTypId'</description>
+  </problem>
+  <problem>
+    <file>helper.go</file>
+    <line>155</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/hashicorp/go-msgpack/codec/helper.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'binaryMarshalerTypId'</description>
+  </problem>
+  <problem>
+    <file>helper.go</file>
+    <line>156</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/hashicorp/go-msgpack/codec/helper.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'binaryUnmarshalerTypId'</description>
+  </problem>
+  <problem>
+    <file>helper.go</file>
+    <line>161</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/hashicorp/go-msgpack/codec/helper.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'bsAll0x00'</description>
+  </problem>
+  <problem>
+    <file>msgpack.go</file>
+    <line>805</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/hashicorp/go-msgpack/codec/msgpack.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'MsgpackSpecRpc'</description>
+  </problem>
+  <problem>
+    <file>hcsshim.go</file>
+    <line>89</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/microsoft/hcsshim/hcsshim.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'temp'</description>
+  </problem>
+  <problem>
+    <file>encode.go</file>
+    <line>30</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/github.com/BurntSushi/toml/encode.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'errAnything'</description>
+  </problem>
+  <problem>
+    <file>hybi.go</file>
+    <line>45</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/golang.org/x/net/websocket/hybi.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrBadPongMessage'</description>
+  </problem>
+  <problem>
+    <file>hybi.go</file>
+    <line>46</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/golang.org/x/net/websocket/hybi.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrBadClosingStatus'</description>
+  </problem>
+  <problem>
+    <file>websocket.go</file>
+    <line>54</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/golang.org/x/net/websocket/websocket.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrBadFrame'</description>
+  </problem>
+  <problem>
+    <file>websocket.go</file>
+    <line>55</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/golang.org/x/net/websocket/websocket.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrBadFrameBoundary'</description>
+  </problem>
+  <problem>
+    <file>websocket.go</file>
+    <line>382</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/golang.org/x/net/websocket/websocket.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'Message'</description>
+  </problem>
+  <problem>
+    <file>websocket.go</file>
+    <line>412</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/vendor/src/golang.org/x/net/websocket/websocket.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'JSON'</description>
+  </problem>
+  <problem>
+    <file>command.go</file>
+    <line>25</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/builder/dockerfile/command/command.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'Commands'</description>
+  </problem>
+  <problem>
+    <file>parse.go</file>
+    <line>23</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/runconfig/parse.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrConflictSharedNetwork'</description>
+  </problem>
+  <problem>
+    <file>parse.go</file>
+    <line>25</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/runconfig/parse.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrConflictHostNetwork'</description>
+  </problem>
+  <problem>
+    <file>parse.go</file>
+    <line>27</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/runconfig/parse.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'ErrConflictNoNetwork'</description>
+  </problem>
+  <problem>
+    <file>requirements.go</file>
+    <line>120</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/integration-cli/requirements.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'NotOverlay'</description>
+  </problem>
+  <problem>
+    <file>docker_test_vars.go</file>
+    <line>17</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/integration-cli/docker_test_vars.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'registryImageName'</description>
+  </problem>
+  <problem>
+    <file>docker_test_vars.go</file>
+    <line>39</line>
+    <module>light_idea_test_case</module>
+    <entry_point TYPE="file" FQNAME="temp:///src/docker/integration-cli/docker_test_vars.go"/>
+    <problem_class severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused global variable inspection</problem_class>
+    <description>Unused variable 'daemonDefaultImage'</description>
+  </problem>
+</problems>
