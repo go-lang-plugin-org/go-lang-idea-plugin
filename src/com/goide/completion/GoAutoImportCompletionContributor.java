@@ -265,7 +265,6 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
 
   private static class NamedElementProcessor implements Processor<GoNamedElement> {
     @NotNull private final Collection<ElementProcessor> myProcessors;
-    @NotNull private final GoFile myContextFile;
     @NotNull private final CompletionResultSet myResult;
     @NotNull private String myName = "";
     @NotNull private final Map<String, GoImportSpec> myImportedPackages;
@@ -276,7 +275,6 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
                                  @NotNull CompletionResultSet result, 
                                  boolean vendoringEnabled) {
       myProcessors = processors;
-      myContextFile = contextFile;
       myVendoringEnabled = vendoringEnabled;
       myImportedPackages = contextFile.getImportedPackagesMap();
       myResult = result;
