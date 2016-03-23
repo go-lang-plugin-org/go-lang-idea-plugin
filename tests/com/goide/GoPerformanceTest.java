@@ -80,7 +80,7 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testUnusedFunction() {
-    doInspectionTest(new GoUnusedFunctionInspection(), TimeUnit.MINUTES.toMillis(3));
+    doInspectionTest(new GoUnusedFunctionInspection(), TimeUnit.SECONDS.toMillis(30));
   }
 
   public void testUnusedImport() {
