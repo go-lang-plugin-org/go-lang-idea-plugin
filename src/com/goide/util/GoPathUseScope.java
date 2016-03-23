@@ -79,27 +79,30 @@ public class GoPathUseScope extends GlobalSearchScope {
     if (!scopeHelper.couldBeReferenced(myDeclarationDirectory, referenceDirectory)) {
       return false;
     }
+    
+    if (file.getFileType() != GoFileType.INSTANCE) {
+      // it's some injection or cross-reference, so we cannot check its imports
+      return true;
+    }
 
-    if (file.getFileType() == GoFileType.INSTANCE) {
-      PsiFile referencePsiFile = psiManager.findFile(file);
-      if (referencePsiFile instanceof GoFile) {
-        PsiDirectory declarationDirectory = psiManager.findDirectory(myDeclarationDirectory);
-        if (declarationDirectory != null) {
-          String importPath = GoSdkUtil.getImportPath(referencePsiDirectory, scopeHelper.isVendoringEnabled());
-          if (((GoFile)referencePsiFile).getImportedPackagesMap().containsKey(importPath)) {
-            return true;
-          }
-          for (GoFile packageFile : GoPackageUtil.getAllPackageFiles((GoFile)referencePsiFile)) {
-            if (packageFile != referencePsiFile && referencePsiFile.getOriginalFile() != packageFile) {
-              if (packageFile.getImportedPackagesMap().containsKey(importPath)) {
-                return true;
-              }
+    PsiFile referencePsiFile = psiManager.findFile(file);
+    if (referencePsiFile instanceof GoFile) {
+      PsiDirectory declarationDirectory = psiManager.findDirectory(myDeclarationDirectory);
+      if (declarationDirectory != null) {
+        String importPath = GoSdkUtil.getImportPath(declarationDirectory, scopeHelper.isVendoringEnabled());
+        if (((GoFile)referencePsiFile).getImportedPackagesMap().containsKey(importPath)) {
+          return true;
+        }
+        for (GoFile packageFile : GoPackageUtil.getAllPackageFiles((GoFile)referencePsiFile)) {
+          if (packageFile != referencePsiFile && referencePsiFile.getOriginalFile() != packageFile) {
+            if (packageFile.getImportedPackagesMap().containsKey(importPath)) {
+              return true;
             }
           }
         }
       }
     }
-    return true;
+    return false;
   }
 
   @Override
