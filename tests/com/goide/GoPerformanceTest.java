@@ -67,12 +67,12 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
     settings.goVersion = "1.5.1";
   }
 
-  public void _testUnusedVariable() {
-    doInspectionTest(new GoUnusedVariableInspection(), TimeUnit.MINUTES.toMillis(4));
+  public void testUnusedVariable() {
+    doInspectionTest(new GoUnusedVariableInspection(), TimeUnit.SECONDS.toMillis(30));
   }
 
-  public void _testUnusedGlobalVariable() {
-    doInspectionTest(new GoUnusedGlobalVariableInspection(), TimeUnit.MINUTES.toMillis(4));
+  public void testUnusedGlobalVariable() {
+    doInspectionTest(new GoUnusedGlobalVariableInspection(), TimeUnit.SECONDS.toMillis(30));
   }
 
   public void _testUnresolvedReference() {
