@@ -181,7 +181,6 @@ public class GoUtil {
    * – Definition is private and reference in different package<br/>
    */
   public static boolean couldBeReferenceTo(@NotNull PsiElement definition, @NotNull PsiElement reference) {
-    if (definition instanceof GoNamedElement && ((GoNamedElement)definition).isBlank()) return false;
     if (definition instanceof PsiDirectory && reference instanceof GoReferenceExpressionBase) return true;
     if (reference instanceof GoLabelRef && !(definition instanceof GoLabelDefinition)) return false;
     if (reference instanceof GoTypeReferenceExpression &&

@@ -18,6 +18,7 @@ package com.goide.util;
 
 import com.goide.GoFileType;
 import com.goide.psi.GoFile;
+import com.goide.psi.GoNamedElement;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.sdk.GoPackageUtil;
 import com.goide.sdk.GoSdkService;
@@ -36,6 +37,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class GoPathUseScope extends GlobalSearchScope {
   public static GlobalSearchScope create(@NotNull PsiElement declarationContext) {
+    if (declarationContext instanceof GoNamedElement && ((GoNamedElement)declarationContext).isBlank()) {
+      return GlobalSearchScope.EMPTY_SCOPE;
+    }
     PsiFile declarationPsiFile = declarationContext.getContainingFile();
     if (!(declarationPsiFile instanceof GoFile)) {
       return GlobalSearchScope.fileScope(declarationPsiFile);
