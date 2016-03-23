@@ -91,6 +91,7 @@ public class GoPathUseScope extends GlobalSearchScope {
 
     PsiFile referencePsiFile = psiManager.findFile(file);
     if (referencePsiFile instanceof GoFile) {
+      // todo: add PsiImplUtil#allowed
       PsiDirectory declarationDirectory = psiManager.findDirectory(myDeclarationDirectory);
       if (declarationDirectory != null) {
         String importPath = GoSdkUtil.getImportPath(declarationDirectory, scopeHelper.isVendoringEnabled());
