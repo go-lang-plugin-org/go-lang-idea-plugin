@@ -17,11 +17,15 @@
 package com.goide;
 
 import com.goide.psi.GoStatement;
+import com.goide.sdk.GoSdkService;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VirtualFileFilter;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.impl.PsiManagerImpl;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.LightProjectDescriptor;
+import com.intellij.testFramework.exceptionCases.AssertionErrorCase;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
@@ -143,6 +147,48 @@ public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
            "        y := /*usage*/key\n" +
            "    }\n" +
            "}");
+  }
+
+  public void testDoNoLoadUnreachableVendorDirectory() {
+    myFixture.addFileToProject("a.go", "package a; import `foo/vendor/foo`; func _() { println(CONST_NAME) }");
+    PsiFile declarationFile = myFixture.addFileToProject("foo/vendor/foo/foo.go", "package foo; const CON<caret>ST_NAME = 1;");
+    myFixture.configureFromExistingVirtualFile(declarationFile.getVirtualFile());
+    failOnFileLoading();
+    myFixture.findUsages(myFixture.getElementAtCaret());
+  }
+
+  public void testDoNoLoadUnreachableInternalDirectory() {
+    GoSdkService.setTestingSdkVersion("1.5", getTestRootDisposable());
+    myFixture.addFileToProject("a.go", "package a; import `foo/internal/foo`; func _() { println(CONST_NAME) }");
+    PsiFile declarationFile = myFixture.addFileToProject("foo/internal/foo/foo.go", "package foo; const CON<caret>ST_NAME = 1;");
+    myFixture.configureFromExistingVirtualFile(declarationFile.getVirtualFile());
+    failOnFileLoading();
+    myFixture.findUsages(myFixture.getElementAtCaret());
+  }
+
+  public void testDoNoLoadNotImportedDirectory() {
+    myFixture.addFileToProject("bar/bar.go", "package bar; func _() { println(CONST_NAME) }");
+    PsiFile declarationFile = myFixture.addFileToProject("foo/foo.go", "package foo; const CON<caret>ST_NAME = 1;");
+    myFixture.configureFromExistingVirtualFile(declarationFile.getVirtualFile());
+    failOnFileLoading();
+    myFixture.findUsages(myFixture.getElementAtCaret());
+  }
+
+  public void testLoadImportedDirectory() throws Throwable {
+    myFixture.addFileToProject("bar/bar.go", "package bar; import `foo`; func _() { println(CONST_NAME) }");
+    PsiFile declarationFile = myFixture.addFileToProject("foo/foo.go", "package foo; const CON<caret>ST_NAME = 1;");
+    myFixture.configureFromExistingVirtualFile(declarationFile.getVirtualFile());
+    failOnFileLoading();
+    assertException(new AssertionErrorCase() {
+      @Override
+      public void tryClosure() {
+        myFixture.findUsages(myFixture.getElementAtCaret());
+      }
+    }, "Access to tree elements not allowed in tests. path='/src/bar/bar.go'");
+  }
+
+  private void failOnFileLoading() {
+    ((PsiManagerImpl)myFixture.getPsiManager()).setAssertOnFileLoadingFilter(VirtualFileFilter.ALL, getTestRootDisposable());
   }
 
   private void doTestDoNotFind(@NotNull String text) {
