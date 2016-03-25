@@ -12,8 +12,6 @@ import static com.plan9.intel.ide.highlighting.AsmIntelLexerTokens.*;
 %unicode
 %function advance
 %type IElementType
-%eof{  return;
-%eof}
 
 WSNL          = [ \r\n\t]+
 WS            = [ \t\f]
