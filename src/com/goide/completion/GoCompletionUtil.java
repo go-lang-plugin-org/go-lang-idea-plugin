@@ -59,92 +59,93 @@ public class GoCompletionUtil {
   public static final int VAR_PRIORITY = NOT_IMPORTED_VAR_PRIORITY + 10;
   private static final int LABEL_PRIORITY = 15;
   public static final int PACKAGE_PRIORITY = 5;
-  public static final InsertHandler<LookupElement> FUNCTION_INSERT_HANDLER = new InsertHandler<LookupElement>() {
-    @Override
-    public void handleInsert(InsertionContext context, @NotNull LookupElement item) {
-      PsiElement e = item.getPsiElement();
-      if (e instanceof GoSignatureOwner) {
-        doInsert(context, item, ((GoSignatureOwner)e).getSignature());
-      }
-      else if (e instanceof GoNamedElement) {
-        GoType type = ((GoNamedElement)e).getGoType(null);
-        if (type instanceof GoFunctionType) {
-          doInsert(context, item, ((GoFunctionType)type).getSignature());   
-        }
-      }
-    }
 
-    private void doInsert(InsertionContext context, @NotNull LookupElement item, GoSignature signature) {
-      int paramsCount = signature != null ? signature.getParameters().getParameterDeclarationList().size() : 0;
-      InsertHandler<LookupElement> handler = paramsCount == 0 ? ParenthesesInsertHandler.NO_PARAMETERS : ParenthesesInsertHandler.WITH_PARAMETERS;
-      handler.handleInsert(context, item);
-    }
-  };
-  private static final LookupElementRenderer<LookupElement> FUNCTION_RENDERER = new LookupElementRenderer<LookupElement>() {
-    @Override
-    public void renderElement(@NotNull LookupElement element, @NotNull LookupElementPresentation p) {
-      PsiElement o = element.getPsiElement();
-      if (!(o instanceof GoNamedSignatureOwner)) return;
-      GoNamedSignatureOwner f = (GoNamedSignatureOwner)o;
-      Icon icon = f instanceof GoMethodDeclaration || f instanceof GoMethodSpec ? GoIcons.METHOD : GoIcons.FUNCTION;
-      String typeText = "";
-      GoSignature signature = f.getSignature();
-      String paramText = "";
-      if (signature != null) {
-        GoResult result = signature.getResult();
-        paramText = signature.getParameters().getText();
-        if (result != null) typeText = result.getText();
-      }
-
-      p.setIcon(icon);
-      p.setTypeText(typeText);
-      p.setTypeGrayed(true);
-      p.setTailText(calcTailText(f), true);
-      p.setItemText(element.getLookupString() + paramText);
-    }
-  };
-  private static final LookupElementRenderer<LookupElement> VARIABLE_RENDERER = new LookupElementRenderer<LookupElement>() {
-    @Override
-    public void renderElement(@NotNull LookupElement element, @NotNull LookupElementPresentation p) {
-      PsiElement o = element.getPsiElement();
-      if (!(o instanceof GoNamedElement)) return;
-      GoNamedElement v = (GoNamedElement)o;
-      GoType type = typesDisabled ? null : v.getGoType(null);
-      String text = GoPsiImplUtil.getText(type);
-      Icon icon = v instanceof GoVarDefinition ? GoIcons.VARIABLE :
-                  v instanceof GoParamDefinition ? GoIcons.PARAMETER :
-                  v instanceof GoFieldDefinition ? GoIcons.FIELD :
-                  v instanceof GoReceiver ? GoIcons.RECEIVER :
-                  v instanceof GoConstDefinition ? GoIcons.CONSTANT :
-                  v instanceof GoAnonymousFieldDefinition ? GoIcons.FIELD :
-                  null;
-
-      p.setIcon(icon);
-      p.setTailText(calcTailTextForFields(v), true);
-      p.setTypeText(text);
-      p.setTypeGrayed(true);
-      p.setItemText(element.getLookupString());
-    }
-  };
-  public static final InsertHandler<LookupElement> TYPE_CONVERSION_INSERT_HANDLER = new InsertHandler<LookupElement>() {
-    @Override
-    public void handleInsert(InsertionContext context, LookupElement item) {
-      PsiElement element = item.getPsiElement();
-      if (element instanceof GoTypeSpec) {
-        GoType type = ((GoTypeSpec)element).getSpecType().getType();
-        if (type instanceof GoStructType || type instanceof GoArrayOrSliceType || type instanceof GoMapType) {
-          BracesInsertHandler.ONE_LINER.handleInsert(context, item);
-        }
-        else {
-          ParenthesesInsertHandler.WITH_PARAMETERS.handleInsert(context, item);
-        }
-      }
-    }
-  };
-
-  private static class Lazy {
+  public static class Lazy {
     private static final SingleCharInsertHandler DIR_INSERT_HANDLER = new SingleCharInsertHandler('/');
     private static final SingleCharInsertHandler PACKAGE_INSERT_HANDLER = new SingleCharInsertHandler('.');
+    
+    public static final InsertHandler<LookupElement> FUNCTION_INSERT_HANDLER = new InsertHandler<LookupElement>() {
+      @Override
+      public void handleInsert(InsertionContext context, @NotNull LookupElement item) {
+        PsiElement e = item.getPsiElement();
+        if (e instanceof GoSignatureOwner) {
+          doInsert(context, item, ((GoSignatureOwner)e).getSignature());
+        }
+        else if (e instanceof GoNamedElement) {
+          GoType type = ((GoNamedElement)e).getGoType(null);
+          if (type instanceof GoFunctionType) {
+            doInsert(context, item, ((GoFunctionType)type).getSignature());   
+          }
+        }
+      }
+  
+      private void doInsert(InsertionContext context, @NotNull LookupElement item, GoSignature signature) {
+        int paramsCount = signature != null ? signature.getParameters().getParameterDeclarationList().size() : 0;
+        InsertHandler<LookupElement> handler = paramsCount == 0 ? ParenthesesInsertHandler.NO_PARAMETERS : ParenthesesInsertHandler.WITH_PARAMETERS;
+        handler.handleInsert(context, item);
+      }
+    };
+    public static final InsertHandler<LookupElement> TYPE_CONVERSION_INSERT_HANDLER = new InsertHandler<LookupElement>() {
+      @Override
+      public void handleInsert(InsertionContext context, LookupElement item) {
+        PsiElement element = item.getPsiElement();
+        if (element instanceof GoTypeSpec) {
+          GoType type = ((GoTypeSpec)element).getSpecType().getType();
+          if (type instanceof GoStructType || type instanceof GoArrayOrSliceType || type instanceof GoMapType) {
+            BracesInsertHandler.ONE_LINER.handleInsert(context, item);
+          }
+          else {
+            ParenthesesInsertHandler.WITH_PARAMETERS.handleInsert(context, item);
+          }
+        }
+      }
+    };
+    private static final LookupElementRenderer<LookupElement> FUNCTION_RENDERER = new LookupElementRenderer<LookupElement>() {
+      @Override
+      public void renderElement(@NotNull LookupElement element, @NotNull LookupElementPresentation p) {
+        PsiElement o = element.getPsiElement();
+        if (!(o instanceof GoNamedSignatureOwner)) return;
+        GoNamedSignatureOwner f = (GoNamedSignatureOwner)o;
+        Icon icon = f instanceof GoMethodDeclaration || f instanceof GoMethodSpec ? GoIcons.METHOD : GoIcons.FUNCTION;
+        String typeText = "";
+        GoSignature signature = f.getSignature();
+        String paramText = "";
+        if (signature != null) {
+          GoResult result = signature.getResult();
+          paramText = signature.getParameters().getText();
+          if (result != null) typeText = result.getText();
+        }
+  
+        p.setIcon(icon);
+        p.setTypeText(typeText);
+        p.setTypeGrayed(true);
+        p.setTailText(calcTailText(f), true);
+        p.setItemText(element.getLookupString() + paramText);
+      }
+    };
+    private static final LookupElementRenderer<LookupElement> VARIABLE_RENDERER = new LookupElementRenderer<LookupElement>() {
+      @Override
+      public void renderElement(@NotNull LookupElement element, @NotNull LookupElementPresentation p) {
+        PsiElement o = element.getPsiElement();
+        if (!(o instanceof GoNamedElement)) return;
+        GoNamedElement v = (GoNamedElement)o;
+        GoType type = typesDisabled ? null : v.getGoType(null);
+        String text = GoPsiImplUtil.getText(type);
+        Icon icon = v instanceof GoVarDefinition ? GoIcons.VARIABLE :
+                    v instanceof GoParamDefinition ? GoIcons.PARAMETER :
+                    v instanceof GoFieldDefinition ? GoIcons.FIELD :
+                    v instanceof GoReceiver ? GoIcons.RECEIVER :
+                    v instanceof GoConstDefinition ? GoIcons.CONSTANT :
+                    v instanceof GoAnonymousFieldDefinition ? GoIcons.FIELD :
+                    null;
+  
+        p.setIcon(icon);
+        p.setTailText(calcTailTextForFields(v), true);
+        p.setTypeText(text);
+        p.setTypeGrayed(true);
+        p.setItemText(element.getLookupString());
+      }
+    };
   }
   
   private static boolean typesDisabled;
@@ -181,8 +182,8 @@ public class GoCompletionUtil {
                                                                   double priority) {
     return PrioritizedLookupElement.withPriority(LookupElementBuilder
                                                    .createWithSmartPointer(lookupString, f)
-                                                   .withRenderer(FUNCTION_RENDERER)
-                                                   .withInsertHandler(h != null ? h : FUNCTION_INSERT_HANDLER), priority);
+                                                   .withRenderer(Lazy.FUNCTION_RENDERER)
+                                                   .withInsertHandler(h != null ? h : Lazy.FUNCTION_INSERT_HANDLER), priority);
   }
 
   @Nullable
@@ -238,7 +239,7 @@ public class GoCompletionUtil {
                                                                 @Nullable String importPath,
                                                                 double priority) {
     // todo: check context and place caret in or outside {}
-    InsertHandler<LookupElement> handler = ObjectUtils.notNull(insertHandler, TYPE_CONVERSION_INSERT_HANDLER);
+    InsertHandler<LookupElement> handler = ObjectUtils.notNull(insertHandler, Lazy.TYPE_CONVERSION_INSERT_HANDLER);
     return createTypeLookupElement(t, lookupString, handler, importPath, priority);
   }
 
@@ -263,7 +264,7 @@ public class GoCompletionUtil {
         if (value == null || PsiTreeUtil.getPrevSiblingOfType(value, GoKey.class) != null) return;
         super.handleInsert(context, item);
       }
-    } : v.getGoType(null) instanceof GoFunctionType ? FUNCTION_INSERT_HANDLER : null, VAR_PRIORITY);
+    } : v.getGoType(null) instanceof GoFunctionType ? Lazy.FUNCTION_INSERT_HANDLER : null, VAR_PRIORITY);
   }
 
   @NotNull
@@ -271,7 +272,7 @@ public class GoCompletionUtil {
                                                               @Nullable InsertHandler<LookupElement> insertHandler,
                                                               double priority) {
     return PrioritizedLookupElement.withPriority(LookupElementBuilder.createWithSmartPointer(lookupString, v)
-                                                   .withRenderer(VARIABLE_RENDERER)
+                                                   .withRenderer(Lazy.VARIABLE_RENDERER)
                                                    .withInsertHandler(insertHandler), priority);
   }
 
