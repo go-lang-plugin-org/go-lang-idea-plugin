@@ -63,8 +63,7 @@ public class GoUtil {
 
   private GoUtil() {}
 
-  public static boolean allowed(@NotNull PsiFile file) {
-    Module module = ModuleUtilCore.findModuleForPsiElement(file);
+  public static boolean matchedForModuleBuildTarget(@NotNull PsiFile file, @Nullable Module module) {
     return module == null || new GoBuildMatcher(GoTargetSystem.forModule(module)).matchFile(file);
   }
 

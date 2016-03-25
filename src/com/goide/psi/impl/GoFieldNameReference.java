@@ -17,6 +17,8 @@
 package com.goide.psi.impl;
 
 import com.goide.psi.*;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
@@ -122,8 +124,11 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
   }
 
   private static class GoFieldProcessor extends GoScopeProcessorBase {
+    private final Module myModule;
+
     public GoFieldProcessor(@NotNull PsiElement element) {
       super(element);
+      myModule = ModuleUtilCore.findModuleForPsiElement(myOrigin);
     }
 
     @Override
@@ -132,7 +137,7 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
       GoNamedElement named = (GoNamedElement)e;
       PsiFile myFile = myOrigin.getContainingFile();
       PsiFile file = e.getContainingFile();
-      if (!(myFile instanceof GoFile) || !GoPsiImplUtil.allowed(file, myFile)) return true;
+      if (!(myFile instanceof GoFile) || !GoPsiImplUtil.allowed(file, myFile, myModule)) return true;
       boolean localResolve = GoReference.isLocalResolve(myFile, file);
       return !e.isValid() || !(named.isPublic() || localResolve);
     }

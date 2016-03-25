@@ -80,7 +80,7 @@ public class GoImportPathsCompletionProvider extends CompletionProvider<Completi
       if (directory == null) continue;
 
       GoFile goFile = (GoFile)psiFile;
-      if (!GoPsiImplUtil.canBeAutoImported(goFile)) continue;
+      if (!GoPsiImplUtil.canBeAutoImported(goFile, module)) continue;
       
       String importPath = goFile.getImportPath(vendoringEnabled);
       if (StringUtil.isNotEmpty(importPath) && !excludedSettings.isExcluded(importPath) 
