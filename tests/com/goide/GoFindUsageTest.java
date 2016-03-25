@@ -182,9 +182,15 @@ public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
     assertException(new AssertionErrorCase() {
       @Override
       public void tryClosure() {
-        myFixture.findUsages(myFixture.getElementAtCaret());
+        try {
+          myFixture.findUsages(myFixture.getElementAtCaret());
+        }
+        catch (AssertionError e) {
+          assertTrue(e.getMessage().contains("Access to tree elements not allowed in tests"));
+          throw e;
+        }
       }
-    }, "Access to tree elements not allowed in tests. path='/src/bar/bar.go'");
+    });
   }
 
   private void failOnFileLoading() {
