@@ -62,10 +62,11 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
   @Override
   public void setUp() throws Exception {
     super.setUp();
-    GoBuildTargetSettings settings = GoModuleSettings.getInstance(myFixture.getModule()).getBuildTargetSettings();
-    settings.os = "darwin";
-    settings.arch = "amd64";
-    settings.goVersion = "1.5.1";
+    GoBuildTargetSettings buildTargetSettings = new GoBuildTargetSettings();
+    buildTargetSettings.os = "darwin";
+    buildTargetSettings.arch = "amd64";
+    buildTargetSettings.goVersion = "1.5.1";
+    GoModuleSettings.getInstance(myFixture.getModule()).setBuildTargetSettings(buildTargetSettings);
   }
 
   public void testUnusedVariable() {
