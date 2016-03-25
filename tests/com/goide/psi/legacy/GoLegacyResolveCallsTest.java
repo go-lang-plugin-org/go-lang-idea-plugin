@@ -16,6 +16,7 @@
 
 package com.goide.psi.legacy;
 
+import com.goide.project.GoBuildTargetSettings;
 import com.goide.project.GoModuleSettings;
 import org.jetbrains.annotations.NotNull;
 
@@ -63,7 +64,9 @@ public class GoLegacyResolveCallsTest extends GoLegacyResolveTestBase {
   public void testCallToMethodDefinedInTestFile()                        { doDirTest(); }
 
   public void testCallToDifferentBuildTargetFiles() {
-    GoModuleSettings.getInstance(myFixture.getModule()).getBuildTargetSettings().customFlags = new String[] {"enabled"};
+    GoBuildTargetSettings buildTargetSettings = new GoBuildTargetSettings();
+    buildTargetSettings.customFlags = new String[]{"enabled"};
+    GoModuleSettings.getInstance(myFixture.getModule()).setBuildTargetSettings(buildTargetSettings);
     doDirTest();
   }
 }
