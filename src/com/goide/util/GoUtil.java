@@ -17,7 +17,6 @@
 package com.goide.util;
 
 import com.goide.GoConstants;
-import com.goide.project.GoBuildTargetUtil;
 import com.goide.project.GoExcludedPathsSettings;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
@@ -66,7 +65,7 @@ public class GoUtil {
 
   public static boolean allowed(@NotNull PsiFile file) {
     Module module = ModuleUtilCore.findModuleForPsiElement(file);
-    return module == null || new GoBuildMatcher(GoBuildTargetUtil.getTargetSystemDescriptor(module)).matchFile(file);
+    return module == null || new GoBuildMatcher(GoTargetSystem.forModule(module)).matchFile(file);
   }
 
   public static boolean isExcludedFile(@NotNull final GoFile file) {
