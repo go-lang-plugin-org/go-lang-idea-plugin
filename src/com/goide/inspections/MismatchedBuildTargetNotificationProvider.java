@@ -83,11 +83,9 @@ public class MismatchedBuildTargetNotificationProvider extends EditorNotificatio
   public EditorNotificationPanel createNotificationPanel(@NotNull VirtualFile file, @NotNull FileEditor fileEditor) {
     if (file.getFileType() == GoFileType.INSTANCE) {
       PsiFile psiFile = PsiManager.getInstance(myProject).findFile(file);
-      if (psiFile != null && !GoUtil.allowed(psiFile)) {
-        Module module = ModuleUtilCore.findModuleForPsiElement(psiFile);
-        if (module != null) {
-          return createPanel(module, file);
-        }
+      Module module = psiFile != null ? ModuleUtilCore.findModuleForPsiElement(psiFile) : null;
+      if (module != null && !GoUtil.matchedForModuleBuildTarget(psiFile, module)) {
+        return createPanel(module, file);
       }
     }
     return null;

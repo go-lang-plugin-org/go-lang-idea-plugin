@@ -27,6 +27,8 @@ import com.goide.stubs.index.GoMethodIndex;
 import com.goide.util.GoStringLiteralEscaper;
 import com.goide.util.GoUtil;
 import com.intellij.lang.ASTNode;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.*;
 import com.intellij.openapi.util.text.StringUtil;
@@ -689,11 +691,16 @@ public class GoPsiImplUtil {
     return result != null ? result : calcMethods(o);
   }
 
-  public static boolean allowed(@NotNull PsiFile file, @Nullable PsiFile contextFile) {
-    if (!(contextFile instanceof GoFile)) return true;
-    if (!(file instanceof GoFile) || !GoUtil.allowed(file)) return false;
-    // it's not a test or context file is also test from the same package
-    return allowed(file.getVirtualFile(), contextFile.getVirtualFile());
+  public static boolean allowed(@NotNull PsiFile declarationFile, @Nullable PsiFile referenceFile) {
+    return allowed(declarationFile, referenceFile, referenceFile != null ? ModuleUtilCore.findModuleForPsiElement(referenceFile) : null);
+  }
+
+  public static boolean allowed(@NotNull PsiFile declarationFile,
+                                @Nullable PsiFile referenceFile,
+                                @Nullable Module contextModule) {
+    if (!(referenceFile instanceof GoFile)) return true;
+    if (!(declarationFile instanceof GoFile) || !GoUtil.matchedForModuleBuildTarget(declarationFile, contextModule)) return false;
+    return allowed(declarationFile.getVirtualFile(), referenceFile.getOriginalFile().getVirtualFile());
   }
 
   public static boolean allowed(@Nullable VirtualFile declarationFile, @Nullable VirtualFile referenceFile) {
@@ -729,9 +736,10 @@ public class GoPsiImplUtil {
                                       boolean localResolve,
                                       boolean checkContainingFile) {
     PsiFile contextFile = checkContainingFile ? GoReference.getContextFile(state) : null;
+    Module module = contextFile != null ? ModuleUtilCore.findModuleForPsiElement(contextFile) : null;
     for (GoNamedElement definition : elements) {
       if (!condition.value(definition)) continue;
-      if (!definition.isValid() || checkContainingFile && !allowed(definition.getContainingFile(), contextFile)) continue;
+      if (!definition.isValid() || checkContainingFile && !allowed(definition.getContainingFile(), contextFile, module)) continue;
       if ((localResolve || definition.isPublic()) && !processor.execute(definition, state)) return false;
     }
     return true;
@@ -1247,11 +1255,11 @@ public class GoPsiImplUtil {
     return ObjectUtils.tryCast(parent, GoTypeSpec.class);
   }
 
-  public static boolean canBeAutoImported(@NotNull GoFile file) {
+  public static boolean canBeAutoImported(@NotNull GoFile file, @Nullable Module module) {
     if (isBuiltinFile(file) || StringUtil.equals(file.getCanonicalPackageName(), GoConstants.MAIN)) {
       return false;
     }
-    if (!GoUtil.allowed(file) || GoUtil.isExcludedFile(file)) {
+    if (!GoUtil.matchedForModuleBuildTarget(file, module) || GoUtil.isExcludedFile(file)) {
       return false;
     }
     PsiDirectory directory = file.getContainingDirectory();

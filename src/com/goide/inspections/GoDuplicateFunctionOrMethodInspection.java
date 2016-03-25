@@ -24,6 +24,8 @@ import com.goide.stubs.types.GoMethodDeclarationStubElementType;
 import com.goide.util.GoUtil;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -50,11 +52,13 @@ public class GoDuplicateFunctionOrMethodInspection extends GoInspectionBase {
 
         GoFile file = method.getContainingFile();
         GlobalSearchScope scope = GoPackageUtil.packageScope(file);
+        Module module = ModuleUtilCore.findModuleForPsiElement(file);
         GoMethodIndex.process(file.getPackageName() + "." + typeText, file.getProject(), scope, new Processor<GoMethodDeclaration>() {
           @Override
           public boolean process(GoMethodDeclaration declaration) {
             if (!method.isEquivalentTo(declaration)) {
-              if (Comparing.equal(declaration.getName(), methodName) && GoUtil.allowed(declaration.getContainingFile())) {
+              if (Comparing.equal(declaration.getName(), methodName) 
+                  && GoUtil.matchedForModuleBuildTarget(declaration.getContainingFile(), module)) {
                 PsiElement identifier = method.getNameIdentifier();
                 holder.registerProblem(identifier == null ? method : identifier, "Duplicate method name");
                 return false;

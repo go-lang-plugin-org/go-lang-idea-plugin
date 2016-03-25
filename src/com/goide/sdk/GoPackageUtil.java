@@ -20,6 +20,7 @@ import com.goide.GoConstants;
 import com.goide.psi.GoFile;
 import com.goide.util.GoUtil;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Key;
@@ -92,8 +93,9 @@ public class GoPackageUtil {
       @Override
       public Result<Collection<String>> compute() {
         Collection<String> set = ContainerUtil.newLinkedHashSet();
+        Module module = ModuleUtilCore.findModuleForPsiElement(dir);
         for (PsiFile file : dir.getFiles()) {
-          if (file instanceof GoFile && !GoUtil.directoryToIgnore(file.getName()) && GoUtil.allowed(file)) {
+          if (file instanceof GoFile && !GoUtil.directoryToIgnore(file.getName()) && GoUtil.matchedForModuleBuildTarget(file, module)) {
             String name = trimTestSuffices ? ((GoFile)file).getCanonicalPackageName() : ((GoFile)file).getPackageName();
             if (StringUtil.isNotEmpty(name)) {
               set.add(name);
