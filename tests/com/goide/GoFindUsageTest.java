@@ -83,7 +83,7 @@ public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
     assertNotNull(statement);
     assertEquals("b.f.Method()", statement.getText());
   }
-  
+
   public void _testCheckImportInWholePackageWithRelativeImports() {
     myFixture.addFileToProject("bar/bar1.go", "package bar; func Bar() { b := bar{}; b.f.Method() }");
     myFixture.addFileToProject("bar/bar.go", "package bar; import \"..\"; type bar struct { f *foo.Foo }");
@@ -137,7 +137,7 @@ public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
            "    a := 1\n" +
            "}\n");
   }
-  
+
   public void testDeclaredInForRange() {
     doTest("package main\n" +
            "const key = iota\n" +
@@ -172,6 +172,41 @@ public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureFromExistingVirtualFile(declarationFile.getVirtualFile());
     failOnFileLoading();
     myFixture.findUsages(myFixture.getElementAtCaret());
+  }
+
+  public void testDoNoLoadTestDirectoryFromTestFileWithDifferentPackage() {
+    myFixture.addFileToProject("bar/bar_test.go", "package bar; import `foo`; func _() { println(CONST_NAME) }");
+    PsiFile declarationFile = myFixture.addFileToProject("foo/foo_test.go", "package foo; const CON<caret>ST_NAME = 1;");
+    myFixture.configureFromExistingVirtualFile(declarationFile.getVirtualFile());
+    failOnFileLoading();
+    myFixture.findUsages(myFixture.getElementAtCaret());
+  }
+
+  public void testDoNoLoadTestDirectoryFromProductionFile() {
+    myFixture.addFileToProject("bar/bar.go", "package bar; import `foo`; func _() { println(CONST_NAME) }");
+    PsiFile declarationFile = myFixture.addFileToProject("foo/foo_test.go", "package foo; const CON<caret>ST_NAME = 1;");
+    myFixture.configureFromExistingVirtualFile(declarationFile.getVirtualFile());
+    failOnFileLoading();
+    myFixture.findUsages(myFixture.getElementAtCaret());
+  }
+
+  public void testLoadTestDirectoryFromTestFile() throws Throwable {
+    myFixture.addFileToProject("foo/bar_test.go", "package foo_test; import `foo`; func _() { println(CONST_NAME) }");
+    PsiFile declarationFile = myFixture.addFileToProject("foo/foo_test.go", "package foo; const CON<caret>ST_NAME = 1;");
+    myFixture.configureFromExistingVirtualFile(declarationFile.getVirtualFile());
+    failOnFileLoading();
+    assertException(new AssertionErrorCase() {
+      @Override
+      public void tryClosure() {
+        try {
+          myFixture.findUsages(myFixture.getElementAtCaret());
+        }
+        catch (AssertionError e) {
+          assertTrue(e.getMessage().contains("Access to tree elements not allowed in tests"));
+          throw e;
+        }
+      }
+    });
   }
 
   public void testLoadImportedDirectory() throws Throwable {
@@ -209,7 +244,9 @@ public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
     }
   }
 
-  public void testDot()              { doTestDoNotFind("package main; import <caret>. \"fmt\""); }
-  public void testUnderscore()       { doTestDoNotFind("package main; import <caret>_ \"fmt\""); }
-  public void testNearImportString() { doTestDoNotFind("package main; import <caret>\"fmt\"");   }
+  public void testDot() { doTestDoNotFind("package main; import <caret>. \"fmt\""); }
+
+  public void testUnderscore() { doTestDoNotFind("package main; import <caret>_ \"fmt\""); }
+
+  public void testNearImportString() { doTestDoNotFind("package main; import <caret>\"fmt\""); }
 }

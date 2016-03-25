@@ -17,6 +17,7 @@
 package com.goide.util;
 
 import com.goide.project.GoVendoringUtil;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.sdk.GoSdkService;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.openapi.application.ApplicationManager;
@@ -39,15 +40,15 @@ public class GoPathScopeHelper {
   private final boolean mySupportsSdkInternalPackages;
   private final boolean myVendoringEnabled;
 
-  public static GoPathScopeHelper fromReferenceDirectory(@NotNull Project project,
-                                                         @Nullable Module module,
-                                                         @Nullable VirtualFile referenceDirectory) {
+  public static GoPathScopeHelper fromReferenceFile(@NotNull Project project,
+                                                    @Nullable Module module,
+                                                    @Nullable VirtualFile referenceFile) {
     VirtualFile sdkHome = GoSdkUtil.getSdkSrcDir(project, module);
     String sdkVersion = GoSdkService.getInstance(project).getSdkVersion(module);
     boolean supportsInternalPackages = GoVendoringUtil.supportsInternalPackages(sdkVersion);
     boolean supportsSdkInternalPackages = GoVendoringUtil.supportsSdkInternalPackages(sdkVersion);
     boolean vendoringEnabled = GoVendoringUtil.isVendoringEnabled(module);
-    Set<VirtualFile> sourceRoots = vendoringEnabled ? GoSdkUtil.getVendoringAwareSourcesPathsToLookup(project, module, referenceDirectory)
+    Set<VirtualFile> sourceRoots = vendoringEnabled ? GoSdkUtil.getVendoringAwareSourcesPathsToLookup(project, module, referenceFile)
                                                     : GoSdkUtil.getSourcesPathsToLookup(project, module);
     return new GoPathScopeHelper(sourceRoots, sdkHome, supportsInternalPackages, supportsSdkInternalPackages, vendoringEnabled);
   }
@@ -64,7 +65,12 @@ public class GoPathScopeHelper {
     myVendoringEnabled = vendoringEnabled;
   }
 
-  public boolean couldBeReferenced(@NotNull VirtualFile declarationDirectory, @Nullable VirtualFile referenceDirectory) {
+  public boolean couldBeReferenced(@NotNull VirtualFile declarationFile, @Nullable VirtualFile referenceFile) {
+    VirtualFile declarationDirectory = declarationFile.getParent();
+    if (declarationDirectory == null) {
+      return true;
+    }
+
     if (ApplicationManager.getApplication().isUnitTestMode() && myRoots.contains(declarationDirectory)) {
       return true;
     }
@@ -76,10 +82,8 @@ public class GoPathScopeHelper {
     if (importPath.isEmpty()) {
       return true;
     }
-    if (isShadowedImportPath(declarationDirectory, importPath, myRoots)) {
-      return false;
-    }
 
+    VirtualFile referenceDirectory = referenceFile != null ? referenceFile.getParent() : null;
     if (referenceDirectory != null) {
       if (myVendoringEnabled && GoSdkUtil.isUnreachableVendoredPackage(declarationDirectory, referenceDirectory, myRoots)) {
         return false;
@@ -91,7 +95,7 @@ public class GoPathScopeHelper {
         }
       }
     }
-    return true;
+    return GoPsiImplUtil.allowed(declarationFile, referenceFile) && !isShadowedImportPath(declarationDirectory, importPath, myRoots);
   }
 
   private static boolean isShadowedImportPath(@NotNull VirtualFile targetDirectory,

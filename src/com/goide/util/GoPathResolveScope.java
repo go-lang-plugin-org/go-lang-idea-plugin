@@ -20,7 +20,6 @@ import com.goide.sdk.GoSdkService;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.ObjectUtils;
@@ -28,42 +27,32 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoPathResolveScope extends GlobalSearchScope {
-  @Nullable private final VirtualFile myReferenceDirectory;
+  @Nullable private final VirtualFile myReferenceFile;
   @NotNull private final GoPathScopeHelper myScopeHelper;
 
   public static GlobalSearchScope create(@NotNull Project project, @Nullable Module module, @Nullable PsiElement context) {
-    VirtualFile referenceDirectory = null;
-    if (context != null) {
-      PsiDirectory psiDirectory = context.getContainingFile().getContainingDirectory();
-      if (psiDirectory != null) {
-        referenceDirectory = psiDirectory.getVirtualFile();
-      }
-    }
-    return new GoPathResolveScope(project, referenceDirectory,
-                                  GoPathScopeHelper.fromReferenceDirectory(project, module, referenceDirectory));
+    VirtualFile referenceFile = context != null ? context.getContainingFile().getVirtualFile() : null;
+    return new GoPathResolveScope(project, referenceFile, GoPathScopeHelper.fromReferenceFile(project, module, referenceFile));
   }
 
   private GoPathResolveScope(@NotNull Project project,
-                             @Nullable VirtualFile referenceDirectory,
+                             @Nullable VirtualFile referenceFile,
                              @NotNull GoPathScopeHelper scopeHelper) {
     super(project);
-    if (referenceDirectory != null && !referenceDirectory.isDirectory()) {
-      throw new IllegalArgumentException("Context should be a directory, given " + referenceDirectory);
-    }
     myScopeHelper = scopeHelper;
-    myReferenceDirectory = referenceDirectory;
+    myReferenceFile = referenceFile;
   }
 
   @Override
-  public boolean contains(@NotNull VirtualFile file) {
-    VirtualFile declarationDirectory = file.isDirectory() ? file : file.getParent();
+  public boolean contains(@NotNull VirtualFile declarationFile) {
+    VirtualFile declarationDirectory = declarationFile.isDirectory() ? declarationFile : declarationFile.getParent();
     if (declarationDirectory == null) {
       return false;
     }
-    if (declarationDirectory.equals(myReferenceDirectory)) {
+    if (myReferenceFile != null && declarationDirectory.equals(myReferenceFile.getParent())) {
       return true;
     }
-    return myScopeHelper.couldBeReferenced(declarationDirectory, myReferenceDirectory);
+    return myScopeHelper.couldBeReferenced(declarationFile, myReferenceFile);
   }
 
 
