@@ -77,6 +77,7 @@ public class GoModuleSettings implements PersistentStateComponent<GoModuleSettin
         myModule.getProject().getMessageBus().syncPublisher(TOPIC).changed(myModule);
       }
       cleanResolveCaches();
+      myState.buildTargetSettings.incModificationCount();
     }
     myState.buildTargetSettings = buildTargetSettings;
   }
