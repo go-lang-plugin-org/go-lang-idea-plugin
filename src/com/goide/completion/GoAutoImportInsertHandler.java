@@ -30,42 +30,25 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
-import com.intellij.util.Function;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoAutoImportInsertHandler<T extends GoNamedElement> implements InsertHandler<LookupElement> {
   public static final InsertHandler<LookupElement> SIMPLE_INSERT_HANDLER = new GoAutoImportInsertHandler<GoNamedElement>();
   public static final InsertHandler<LookupElement> TYPE_CONVERSION_INSERT_HANDLER = new GoAutoImportInsertHandler<GoTypeSpec>(
-    new Function<GoTypeSpec, InsertHandler<LookupElement>>() {
-      @NotNull
-      @Override
-      public InsertHandler<LookupElement> fun(@NotNull GoTypeSpec spec) {
-        return GoCompletionUtil.getTypeConversionInsertHandler(spec);
-      }
-    }, GoTypeSpec.class);
+    GoCompletionUtil.TYPE_CONVERSION_INSERT_HANDLER, GoTypeSpec.class);
   public static final InsertHandler<LookupElement> FUNCTION_INSERT_HANDLER = new GoAutoImportInsertHandler<GoFunctionDeclaration>(
     GoCompletionUtil.FUNCTION_INSERT_HANDLER, GoFunctionDeclaration.class);
 
-  @Nullable private final Function<T, InsertHandler<LookupElement>> myDelegateGetter;
+  @Nullable private final InsertHandler<LookupElement> myDelegate;
   @Nullable private final Class<T> myClass;
 
   private GoAutoImportInsertHandler() {
-    this((Function<T, InsertHandler<LookupElement>>)null, null);
+    this(null, null);
   }
 
   private GoAutoImportInsertHandler(@Nullable final InsertHandler<LookupElement> delegate, @Nullable Class<T> clazz) {
-    this(new Function<T, InsertHandler<LookupElement>>() {
-      @Nullable
-      @Override
-      public InsertHandler<LookupElement> fun(T o) {
-        return delegate;
-      }
-    }, clazz);
-  }
-
-  private GoAutoImportInsertHandler(@Nullable Function<T, InsertHandler<LookupElement>> delegateGetter, @Nullable Class<T> clazz) {
-    myDelegateGetter = delegateGetter;
+    myDelegate = delegate;
     myClass = clazz;
   }
 
@@ -73,11 +56,8 @@ public class GoAutoImportInsertHandler<T extends GoNamedElement> implements Inse
   public void handleInsert(@NotNull InsertionContext context, @NotNull LookupElement item) {
     PsiElement element = item.getPsiElement();
     if (element instanceof GoNamedElement) {
-      if (myClass != null && myDelegateGetter != null && myClass.isInstance(element)) {
-        InsertHandler<LookupElement> handler = myDelegateGetter.fun(myClass.cast(element));
-        if (handler != null) {
-          handler.handleInsert(context, item);
-        }
+      if (myClass != null && myDelegate != null && myClass.isInstance(element)) {
+        myDelegate.handleInsert(context, item);
       }
       autoImport(context, (GoNamedElement)element);
     }

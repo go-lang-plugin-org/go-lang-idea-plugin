@@ -126,6 +126,21 @@ public class GoCompletionUtil {
       p.setItemText(element.getLookupString());
     }
   };
+  public static final InsertHandler<LookupElement> TYPE_CONVERSION_INSERT_HANDLER = new InsertHandler<LookupElement>() {
+    @Override
+    public void handleInsert(InsertionContext context, LookupElement item) {
+      PsiElement element = item.getPsiElement();
+      if (element instanceof GoTypeSpec) {
+        GoType type = ((GoTypeSpec)element).getSpecType().getType();
+        if (type instanceof GoStructType || type instanceof GoArrayOrSliceType || type instanceof GoMapType) {
+          BracesInsertHandler.ONE_LINER.handleInsert(context, item);
+        }
+        else {
+          ParenthesesInsertHandler.WITH_PARAMETERS.handleInsert(context, item);
+        }
+      }
+    }
+  };
 
   private static class Lazy {
     private static final SingleCharInsertHandler DIR_INSERT_HANDLER = new SingleCharInsertHandler('/');
@@ -223,18 +238,10 @@ public class GoCompletionUtil {
                                                                 @Nullable String importPath,
                                                                 double priority) {
     // todo: check context and place caret in or outside {}
-    InsertHandler<LookupElement> handler = ObjectUtils.notNull(insertHandler, getTypeConversionInsertHandler(t));
+    InsertHandler<LookupElement> handler = ObjectUtils.notNull(insertHandler, TYPE_CONVERSION_INSERT_HANDLER);
     return createTypeLookupElement(t, lookupString, handler, importPath, priority);
   }
 
-  @NotNull
-  public static InsertHandler<LookupElement> getTypeConversionInsertHandler(@NotNull GoTypeSpec t) {
-    GoType type = t.getSpecType().getType();
-    return type instanceof GoStructType || type instanceof GoArrayOrSliceType || type instanceof GoMapType
-           ? BracesInsertHandler.ONE_LINER
-           : ParenthesesInsertHandler.WITH_PARAMETERS;
-  }
-  
   @Nullable
   public static LookupElement createVariableLikeLookupElement(@NotNull GoNamedElement v) {
     String name = v.getName();
@@ -340,8 +347,7 @@ public class GoCompletionUtil {
 
   @NotNull
   public static LookupElementBuilder createDirectoryLookupElement(@NotNull PsiDirectory dir) {
-    int files = dir.getFiles().length;
     return LookupElementBuilder.createWithSmartPointer(dir.getName(), dir).withIcon(GoIcons.DIRECTORY)
-      .withInsertHandler(files == 0 ? Lazy.DIR_INSERT_HANDLER : null);
+      .withInsertHandler(dir.getFiles().length == 0 ? Lazy.DIR_INSERT_HANDLER : null);
   }
 }
