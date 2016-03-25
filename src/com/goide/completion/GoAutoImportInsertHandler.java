@@ -36,9 +36,9 @@ import org.jetbrains.annotations.Nullable;
 public class GoAutoImportInsertHandler<T extends GoNamedElement> implements InsertHandler<LookupElement> {
   public static final InsertHandler<LookupElement> SIMPLE_INSERT_HANDLER = new GoAutoImportInsertHandler<GoNamedElement>();
   public static final InsertHandler<LookupElement> TYPE_CONVERSION_INSERT_HANDLER = new GoAutoImportInsertHandler<GoTypeSpec>(
-    GoCompletionUtil.TYPE_CONVERSION_INSERT_HANDLER, GoTypeSpec.class);
+    GoCompletionUtil.Lazy.TYPE_CONVERSION_INSERT_HANDLER, GoTypeSpec.class);
   public static final InsertHandler<LookupElement> FUNCTION_INSERT_HANDLER = new GoAutoImportInsertHandler<GoFunctionDeclaration>(
-    GoCompletionUtil.FUNCTION_INSERT_HANDLER, GoFunctionDeclaration.class);
+    GoCompletionUtil.Lazy.FUNCTION_INSERT_HANDLER, GoFunctionDeclaration.class);
 
   @Nullable private final InsertHandler<LookupElement> myDelegate;
   @Nullable private final Class<T> myClass;
