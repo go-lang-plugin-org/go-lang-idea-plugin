@@ -17,6 +17,7 @@
 package com.goide;
 
 import com.goide.categories.Performance;
+import com.goide.completion.GoCompletionUtil;
 import com.goide.inspections.GoUnusedImportInspection;
 import com.goide.inspections.unresolved.GoUnresolvedReferenceInspection;
 import com.goide.inspections.unresolved.GoUnusedFunctionInspection;
@@ -100,6 +101,16 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testCompletionWithPrefixPerformance() {
+    doCompletionTest("package main; func main() { slee<caret> }", 1, TimeUnit.SECONDS.toMillis(5));
+  }
+  
+  public void testCompletionPerformanceWithoutTypes() {
+    GoCompletionUtil.disableTypeInfoInLookup(getTestRootDisposable());
+    doCompletionTest("package main; func main() { <caret> }", 2, TimeUnit.SECONDS.toMillis(15));
+  }
+
+  public void testCompletionWithPrefixPerformanceWithoutTypes() {
+    GoCompletionUtil.disableTypeInfoInLookup(getTestRootDisposable());
     doCompletionTest("package main; func main() { slee<caret> }", 1, TimeUnit.SECONDS.toMillis(5));
   }
 
