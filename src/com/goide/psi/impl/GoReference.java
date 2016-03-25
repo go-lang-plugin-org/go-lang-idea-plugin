@@ -20,6 +20,8 @@ import com.goide.GoConstants;
 import com.goide.psi.*;
 import com.goide.sdk.GoSdkUtil;
 import com.goide.util.GoUtil;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.util.*;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
@@ -284,10 +286,11 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
                                             boolean localProcessing) {
     if (dir == null) return true;
     String filePath = getPath(file);
+    Module module = file != null ? ModuleUtilCore.findModuleForPsiElement(file) : null;
     for (PsiFile f : dir.getFiles()) {
       if (!(f instanceof GoFile) || Comparing.equal(getPath(f), filePath)) continue;
       if (packageName != null && !packageName.equals(((GoFile)f).getPackageName())) continue;
-      if (allowed(f, file) && !processFileEntities((GoFile)f, processor, state, localProcessing)) return false;
+      if (allowed(f, file, module) && !processFileEntities((GoFile)f, processor, state, localProcessing)) return false;
     }
     return true;
   }
