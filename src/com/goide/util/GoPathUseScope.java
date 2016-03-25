@@ -16,18 +16,15 @@
 
 package com.goide.util;
 
-import com.goide.GoFileType;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoNamedElement;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.sdk.GoPackageUtil;
 import com.goide.sdk.GoSdkService;
-import com.goide.sdk.GoSdkUtil;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
@@ -48,61 +45,55 @@ public class GoPathUseScope extends GlobalSearchScope {
       return GlobalSearchScope.allScope(declarationContext.getProject());
     }
 
-    PsiDirectory declarationPsiDirectory = declarationPsiFile.getContainingDirectory();
-    VirtualFile declarationDirectory = declarationPsiDirectory != null ? declarationPsiDirectory.getVirtualFile() : null;
-    if (declarationDirectory == null) {
+    VirtualFile declarationFile = declarationPsiFile.getVirtualFile();
+    if (declarationFile == null || declarationFile.getParent() == null) {
       return GlobalSearchScope.fileScope(declarationPsiFile);
     }
 
-    return new GoPathUseScope(declarationPsiFile.getProject(), declarationDirectory);
+    return new GoPathUseScope(declarationPsiFile.getProject(), declarationFile);
   }
 
-  @NotNull private final VirtualFile myDeclarationDirectory;
+  @NotNull private final VirtualFile myDeclarationFile;
 
-  private GoPathUseScope(@NotNull Project project, @NotNull VirtualFile declarationDirectory) {
+  private GoPathUseScope(@NotNull Project project, @NotNull VirtualFile declarationFile) {
     super(project);
-    myDeclarationDirectory = declarationDirectory;
+    myDeclarationFile = declarationFile;
   }
 
   @Override
-  public boolean contains(@NotNull VirtualFile file) {
-    VirtualFile referenceDirectory = file.isDirectory() ? file : file.getParent();
+  public boolean contains(@NotNull VirtualFile referenceFile) {
+    VirtualFile referenceDirectory = referenceFile.isDirectory() ? referenceFile : referenceFile.getParent();
     if (referenceDirectory == null) {
       return false;
     }
-    if (referenceDirectory.equals(myDeclarationDirectory)) {
+    if (referenceDirectory.equals(myDeclarationFile.getParent())) {
       return true;
     }
 
     Project project = ObjectUtils.assertNotNull(getProject());
     PsiManager psiManager = PsiManager.getInstance(project);
-    PsiDirectory referencePsiDirectory = psiManager.findDirectory(referenceDirectory);
-    Module module = referencePsiDirectory != null ? ModuleUtilCore.findModuleForPsiElement(referencePsiDirectory) : null;
+    PsiFile referencePsiFile = psiManager.findFile(referenceFile);
+    Module module = referencePsiFile != null ? ModuleUtilCore.findModuleForPsiElement(referencePsiFile) : null;
 
-    GoPathScopeHelper scopeHelper = GoPathScopeHelper.fromReferenceDirectory(project, module, referenceDirectory);
-    if (!scopeHelper.couldBeReferenced(myDeclarationDirectory, referenceDirectory)) {
+    GoPathScopeHelper scopeHelper = GoPathScopeHelper.fromReferenceFile(project, module, referenceFile);
+    if (!scopeHelper.couldBeReferenced(myDeclarationFile, referenceFile)) {
       return false;
     }
-    
-    if (file.getFileType() != GoFileType.INSTANCE) {
+
+    if (!(referencePsiFile instanceof GoFile)) {
       // it's some injection or cross-reference, so we cannot check its imports
       return true;
     }
-
-    PsiFile referencePsiFile = psiManager.findFile(file);
-    if (referencePsiFile instanceof GoFile) {
-      // todo: add PsiImplUtil#allowed
-      PsiDirectory declarationDirectory = psiManager.findDirectory(myDeclarationDirectory);
-      if (declarationDirectory != null) {
-        String importPath = GoSdkUtil.getImportPath(declarationDirectory, scopeHelper.isVendoringEnabled());
-        if (((GoFile)referencePsiFile).getImportedPackagesMap().containsKey(importPath)) {
-          return true;
-        }
-        for (GoFile packageFile : GoPackageUtil.getAllPackageFiles((GoFile)referencePsiFile)) {
-          if (packageFile != referencePsiFile && referencePsiFile.getOriginalFile() != packageFile) {
-            if (packageFile.getImportedPackagesMap().containsKey(importPath)) {
-              return true;
-            }
+    PsiFile declarationPsiFile = psiManager.findFile(myDeclarationFile);
+    if (declarationPsiFile instanceof GoFile) {
+      String importPath = ((GoFile)declarationPsiFile).getImportPath(scopeHelper.isVendoringEnabled());
+      if (((GoFile)referencePsiFile).getImportedPackagesMap().containsKey(importPath)) {
+        return true;
+      }
+      for (GoFile packageFile : GoPackageUtil.getAllPackageFiles((GoFile)referencePsiFile)) {
+        if (packageFile != referencePsiFile && referencePsiFile.getOriginalFile() != packageFile) {
+          if (packageFile.getImportedPackagesMap().containsKey(importPath)) {
+            return true;
           }
         }
       }
