@@ -30,6 +30,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.*;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.PsiMultiReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
@@ -692,8 +693,16 @@ public class GoPsiImplUtil {
     if (!(contextFile instanceof GoFile)) return true;
     if (!(file instanceof GoFile) || !GoUtil.allowed(file)) return false;
     // it's not a test or context file is also test from the same package
-    return !GoTestFinder.isTestFile(file) ||
-           GoTestFinder.isTestFile(contextFile) && Comparing.equal(file.getParent(), contextFile.getOriginalFile().getParent());
+    return allowed(file.getVirtualFile(), contextFile.getVirtualFile());
+  }
+
+  public static boolean allowed(@Nullable VirtualFile declarationFile, @Nullable VirtualFile referenceFile) {
+    if (declarationFile == null || referenceFile == null) {
+      return true;
+    }
+    // it's not a test or context file is also test from the same package
+    return !GoTestFinder.isTestFile(declarationFile) 
+           || GoTestFinder.isTestFile(referenceFile) && Comparing.equal(referenceFile.getParent(), declarationFile.getParent()); 
   }
 
   static boolean processNamedElements(@NotNull PsiScopeProcessor processor,
