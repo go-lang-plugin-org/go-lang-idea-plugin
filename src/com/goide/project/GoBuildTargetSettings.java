@@ -16,6 +16,7 @@
 
 package com.goide.project;
 
+import com.intellij.openapi.util.SimpleModificationTracker;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ThreeState;
 import com.intellij.util.xmlb.annotations.Tag;
@@ -24,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 
 @Tag("buildTags")
-public class GoBuildTargetSettings {
+public class GoBuildTargetSettings extends SimpleModificationTracker {
   public static final String ANY_COMPILER = "Any";
   public static final String DEFAULT = "default";
 
