@@ -226,10 +226,12 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
                   "package main;\n" +
                   "func test(){println(&io.reALC\n" +
                   "\t<caret>)}", Lookup.NORMAL_SELECT_CHAR);
+    assertNull(myFixture.getLookup());
   }
 
   public void testDoNotRunAutoImportCompletionAfterDotAndSpace() {
     doTestCompletion();
+    assertNull(myFixture.getLookup());
   }
 
   public void testImports() {
@@ -276,6 +278,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
     myFixture.addFileToProject("pack/pack_test.go", "package pack; func TestFoo() {}");
     myFixture.configureByText("my_test.go", "package a; func main() { _ = TestF<caret>");
     myFixture.completeBasic();
+    assertNull(myFixture.getLookup());
     myFixture.checkResult("package a; func main() { _ = TestF<caret>");
   }
 
@@ -283,14 +286,15 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
     myFixture.addFileToProject("pack/pack_test.go", "package pack; func BenchmarkFoo() {}");
     myFixture.configureByText("my_test.go", "package a; func main() { _ = BenchmarkF<caret>");
     myFixture.completeBasic();
+    assertNull(myFixture.getLookup());
     myFixture.checkResult("package a; func main() { _ = BenchmarkF<caret>");
   }
 
   public void testDoNotCompleteExampleFunctions() throws IOException {
     myFixture.addFileToProject("pack/pack_test.go", "package pack; func ExampleFoo() {}");
     myFixture.configureByText("my_test.go", "package a; func main() { _ = ExampleF<caret>");
+    assertNull(myFixture.getLookup());
     myFixture.completeBasic();
-    myFixture.checkResult("package a; func main() { _ = ExampleF<caret>");
   }
 
   public void testCompleteTestBenchmarkExamplesFromNonTestFiles() throws IOException {
@@ -324,6 +328,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
     PsiFile file = myFixture.addFileToProject("pack/a_test.go", text);
     myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
     myFixture.completeBasic();
+    assertNull(myFixture.getLookup());
     myFixture.checkResult(text);
   }
 
@@ -345,6 +350,7 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
 
   public void testDoNotCompleteBuiltinImport() {
     doCheckResult("package a; import \"built<caret>\"", "package a; import \"built<caret>\"");
+    assertNull(myFixture.getLookup());
   }
 
   public void testCompleteVendoredBuiltinImport() {
