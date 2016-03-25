@@ -73,13 +73,13 @@ public class GoModuleSettings implements PersistentStateComponent<GoModuleSettin
 
   public void setBuildTargetSettings(@NotNull GoBuildTargetSettings buildTargetSettings) {
     if (!buildTargetSettings.equals(myState.buildTargetSettings)) {
+      XmlSerializerUtil.copyBean(buildTargetSettings, myState.buildTargetSettings);
       if (!myModule.isDisposed()) {
         myModule.getProject().getMessageBus().syncPublisher(TOPIC).changed(myModule);
       }
       cleanResolveCaches();
       myState.buildTargetSettings.incModificationCount();
     }
-    myState.buildTargetSettings = buildTargetSettings;
   }
 
   private void cleanResolveCaches() {
