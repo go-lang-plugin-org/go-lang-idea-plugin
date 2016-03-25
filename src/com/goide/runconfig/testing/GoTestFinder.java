@@ -43,7 +43,7 @@ public class GoTestFinder implements TestFinder {
   }
 
   public static boolean isTestFile(@NotNull VirtualFile file) {
-    return file.getNameWithoutExtension().endsWith(GoConstants.TEST_SUFFIX_WITH_EXTENSION);
+    return file.getName().endsWith(GoConstants.TEST_SUFFIX_WITH_EXTENSION);
   }
 
   public static boolean isTestOrExampleFunction(@NotNull GoFunctionOrMethodDeclaration function) {
