@@ -31,6 +31,8 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.codeInsight.lookup.LookupElementRenderer;
+import com.intellij.openapi.Disposable;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
@@ -40,6 +42,7 @@ import com.intellij.util.ObjectUtils;
 import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.TestOnly;
 
 import javax.swing.*;
 
@@ -106,7 +109,7 @@ public class GoCompletionUtil {
       PsiElement o = element.getPsiElement();
       if (!(o instanceof GoNamedElement)) return;
       GoNamedElement v = (GoNamedElement)o;
-      GoType type = v.getGoType(null);
+      GoType type = typesDisabled ? null : v.getGoType(null);
       String text = GoPsiImplUtil.getText(type);
       Icon icon = v instanceof GoVarDefinition ? GoIcons.VARIABLE :
                   v instanceof GoParamDefinition ? GoIcons.PARAMETER :
@@ -127,6 +130,19 @@ public class GoCompletionUtil {
   private static class Lazy {
     private static final SingleCharInsertHandler DIR_INSERT_HANDLER = new SingleCharInsertHandler('/');
     private static final SingleCharInsertHandler PACKAGE_INSERT_HANDLER = new SingleCharInsertHandler('.');
+  }
+  
+  private static boolean typesDisabled;
+  @TestOnly
+  public static void disableTypeInfoInLookup(@NotNull Disposable disposable) {
+    typesDisabled = true;
+    Disposer.register(disposable, new Disposable() {
+      @Override
+      public void dispose() {
+        //noinspection AssignmentToStaticFieldFromInstanceMethod
+        typesDisabled = false;
+      }
+    });
   }
 
   private GoCompletionUtil() {
@@ -156,6 +172,9 @@ public class GoCompletionUtil {
 
   @Nullable
   private static String calcTailText(GoSignatureOwner m) {
+    if (typesDisabled) {
+      return null;
+    }
     String text = "";
     if (m instanceof GoMethodDeclaration) {
       text = GoPsiImplUtil.getText(((GoMethodDeclaration)m).getReceiver().getType());
