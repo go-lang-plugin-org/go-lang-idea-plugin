@@ -79,11 +79,12 @@ public class GoDuplicateFunctionOrMethodInspection extends GoInspectionBase {
 
         final GoFile file = func.getContainingFile();
         final boolean isMainFunction = MAIN.equals(funcName) && MAIN.equals(file.getPackageName()) && zeroArity(func);
+        Module module = ModuleUtilCore.findModuleForPsiElement(file);
         final GlobalSearchScope scope = GoPackageUtil.packageScope(file);
         GoFunctionIndex.process(funcName, file.getProject(), scope, new Processor<GoFunctionDeclaration>() {
           @Override
           public boolean process(GoFunctionDeclaration declaration) {
-            if (!func.isEquivalentTo(declaration)) {
+            if (!func.isEquivalentTo(declaration) && GoUtil.matchedForModuleBuildTarget(declaration.getContainingFile(), module)) {
               if (!isMainFunction || Comparing.equal(declaration.getContainingFile(), file)) {
                 PsiElement identifier = func.getNameIdentifier();
                 holder.registerProblem(identifier == null ? func : identifier, "Duplicate function name");
