@@ -802,6 +802,41 @@ public class GoPsiImplUtil {
     return findBaseTypeFromRef(o.getTypeReferenceExpression());
   }
 
+  @NotNull
+  public static GoType getUnderlyingType(@NotNull GoType o) {
+    GoType type = RecursionManager.doPreventingRecursion(o, true, new Computable<GoType>() {
+      @Override
+      public GoType compute() {return getTypeInner(o);}
+    });
+    return ObjectUtils.notNull(type, o);
+  }
+
+  @NotNull
+  private static GoType getTypeInner(@NotNull GoType o) {
+    if (o instanceof GoArrayOrSliceType
+        | o instanceof GoStructType
+        | o instanceof GoPointerType
+        | o instanceof GoFunctionType
+        | o instanceof GoInterfaceType
+        | o instanceof GoMapType
+        | o instanceof GoChannelType) return o;
+
+
+    if (o instanceof GoSpecType) {
+      return getUnderlyingType(((GoSpecType)o).getType());
+    }
+    
+    if (builtin(o)) return o;
+
+    GoTypeReferenceExpression expression = o.getTypeReferenceExpression();
+    GoType byRef = findTypeFromTypeRef(expression);
+    if (byRef != null) {
+      return getUnderlyingType(byRef);
+    }
+
+    return o;
+  }
+
   @Nullable
   public static GoType findBaseSpecType(@Nullable GoType type) {
     while (type instanceof GoSpecType && ((GoSpecType)type).getType().getTypeReferenceExpression() != null) {
