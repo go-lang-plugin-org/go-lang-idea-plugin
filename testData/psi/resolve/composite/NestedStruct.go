@@ -9,6 +9,6 @@ type T2 struct {
     c T
 }
 
-var x = T2{ c:{/*ref*/a:1, b:2} }
+var x = T2{ c:T{/*ref*/a:1, b:2} }
 
 
