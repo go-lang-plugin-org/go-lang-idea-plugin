@@ -1,4 +1,4 @@
-package com.plan9.intel.ide.highlighting;
+package com.plan9.intel.lang.core.lexer;
 
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
@@ -7,11 +7,18 @@ import static com.plan9.intel.ide.highlighting.AsmIntelLexerTokens.*;
 
 %%
 
-%class AsmIntelHighlightingLexer
+%public 
+%class _AsmIntelHighlightingLexer
 %implements FlexLexer
 %unicode
 %function advance
 %type IElementType
+
+%{
+  public _AsmIntelHighlightingLexer() {
+    this((java.io.Reader)null);
+  }
+%}
 
 WSNL          = [ \r\n\t]+
 WS            = [ \t\f]
