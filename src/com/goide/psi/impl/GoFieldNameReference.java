@@ -102,13 +102,13 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
     }
 
     if (type != null && type.getTypeReferenceExpression() != null) {
-      type = GoPsiImplUtil.findBaseTypeFromRef(type.getTypeReferenceExpression());
+      type = type.getUnderlyingType();
     }
 
     if (type instanceof GoPointerType) {
       GoType inner = ((GoPointerType)type).getType();
       if (inner != null && inner.getTypeReferenceExpression() != null) {
-        type = GoPsiImplUtil.findBaseTypeFromRef(inner.getTypeReferenceExpression());
+        type = inner.getUnderlyingType();
       }
     }
 
