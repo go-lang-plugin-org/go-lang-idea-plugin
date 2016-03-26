@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package com.plan9.intel.lang.core.lexer;
 
-import com.intellij.lexer.FlexAdapter;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
@@ -24,7 +23,6 @@ import com.intellij.testFramework.LexerTestCase;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Reader;
 
 public class AsmIntelLexerTest extends LexerTestCase {
   private static final String PATH = "testData/intel/lexer";
@@ -45,7 +43,7 @@ public class AsmIntelLexerTest extends LexerTestCase {
 
   @Override
   protected Lexer createLexer() {
-    return new FlexAdapter(new AsmIntelLexer((Reader)null));
+    return new AsmIntelLexer();
   }
 
   @Override
