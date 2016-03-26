@@ -61,6 +61,12 @@ class GoLightType<E extends GoCompositeElement> extends LightElement implements 
     return null;
   }
 
+  @NotNull
+  @Override
+  public GoType getUnderlyingType() {
+    return GoPsiImplUtil.getUnderlyingType(this);
+  }
+
   static class LightPointerType extends GoLightType<GoType> implements GoPointerType {
     protected LightPointerType(@NotNull GoType o) {
       super(o);

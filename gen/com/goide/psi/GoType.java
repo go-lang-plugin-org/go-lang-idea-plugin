@@ -12,4 +12,7 @@ public interface GoType extends GoCompositeElement, StubBasedPsiElement<GoTypeSt
   @Nullable
   GoTypeReferenceExpression getTypeReferenceExpression();
 
+  @NotNull
+  GoType getUnderlyingType();
+
 }

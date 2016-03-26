@@ -37,4 +37,9 @@ public class GoTypeImpl extends GoStubbedElementImpl<GoTypeStub> implements GoTy
     return findChildByClass(GoTypeReferenceExpression.class);
   }
 
+  @NotNull
+  public GoType getUnderlyingType() {
+    return GoPsiImplUtil.getUnderlyingType(this);
+  }
+
 }

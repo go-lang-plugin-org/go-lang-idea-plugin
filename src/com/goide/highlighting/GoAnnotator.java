@@ -265,7 +265,7 @@ public class GoAnnotator implements Annotator {
       type = GoPsiImplUtil.findBaseTypeFromRef(type.getTypeReferenceExpression());
     }
     if (type instanceof GoSpecType) {
-      type = GoPsiImplUtil.findBaseSpecType(type);
+      type = type.getUnderlyingType();
     }
     return type instanceof GoSpecType ? ((GoSpecType)type).getType() : type;
   }
