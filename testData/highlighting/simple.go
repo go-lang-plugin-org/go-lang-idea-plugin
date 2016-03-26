@@ -252,6 +252,15 @@ func _() {
     }
 }
 
+func _(err interface{}) {
+	switch err.(type) {
+	case ServiceError:
+		ser := err.(ServiceError)
+		Println(ser.Code)
+		Println([]byte(ser.Message))
+	}
+}
+
 type Request struct {
     Request *http.Request
 }
