@@ -332,7 +332,7 @@ public class GoPsiImplUtil {
       GoType type = ((GoCompositeLit)o).getType();
       if (type != null) return type;
       GoTypeReferenceExpression expression = ((GoCompositeLit)o).getTypeReferenceExpression();
-      return findTypeFromTypeRef(expression);
+      return expression != null ? expression.resolveType() : null;
     }
     else if (o instanceof GoFunctionLit) {
       return new LightFunctionType((GoFunctionLit)o);
@@ -392,7 +392,7 @@ public class GoPsiImplUtil {
       if (o.getNode().findChildByType(GoTypes.COLON) != null) return type; // means slice expression, todo: extract if needed
       GoTypeReferenceExpression typeRef = type == null ? null : type.getTypeReferenceExpression();
       if (typeRef != null) {
-        type = findTypeFromTypeRef(typeRef);
+        type = typeRef.resolveType();
       }
       if (type instanceof GoSpecType) type = ((GoSpecType)type).getType();
       if (type instanceof GoMapType) {
@@ -454,7 +454,7 @@ public class GoPsiImplUtil {
   private static GoType typeFromRefOrType(@Nullable GoType t) {
     if (t == null) return null;
     GoTypeReferenceExpression tr = t.getTypeReferenceExpression();
-    return tr != null ? findTypeFromTypeRef(tr) : t;
+    return tr != null ? tr.resolveType() : t;
   }
 
   @Nullable
@@ -470,16 +470,13 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType findTypeFromTypeRef(@Nullable GoTypeReferenceExpression expression) {
-    PsiReference reference = expression != null ? expression.getReference() : null;
-    PsiElement resolve = reference != null ? reference.resolve() : null;
+  public static GoType resolveType(@NotNull GoTypeReferenceExpression expression) {
+    PsiElement resolve = expression.getReference().resolve();
     if (resolve instanceof GoTypeSpec) return ((GoTypeSpec)resolve).getSpecType();
-    if (resolve == expression && expression != null) {  // hacky C resolve
-      return new GoCType(expression);
-    }
-    return null;
+    // hacky C resolve
+    return resolve == expression ? new GoCType(expression) : null;
   }
-
+  
   public static boolean isVariadic(@NotNull GoParamDefinition o) {
     PsiElement parent = o.getParent();
     return parent instanceof GoParameterDeclaration && ((GoParameterDeclaration)parent).isVariadic();
@@ -798,7 +795,7 @@ public class GoPsiImplUtil {
 
   @Nullable
   public static GoType getGoTypeInner(@NotNull GoAnonymousFieldDefinition o, @SuppressWarnings("UnusedParameters") @Nullable ResolveState context) {
-    return findTypeFromTypeRef(o.getTypeReferenceExpression());
+    return o.getTypeReferenceExpression().resolveType();
   }
 
   @NotNull
@@ -827,8 +824,8 @@ public class GoPsiImplUtil {
     
     if (builtin(o)) return o;
 
-    GoTypeReferenceExpression expression = o.getTypeReferenceExpression();
-    GoType byRef = findTypeFromTypeRef(expression);
+    GoTypeReferenceExpression e = o.getTypeReferenceExpression();
+    GoType byRef = e == null ? null : e.resolveType();
     if (byRef != null) {
       return getUnderlyingType(byRef);
     }
@@ -839,7 +836,8 @@ public class GoPsiImplUtil {
   @Nullable
   public static GoType findBaseSpecType(@Nullable GoType type) {
     while (type instanceof GoSpecType && ((GoSpecType)type).getType().getTypeReferenceExpression() != null) {
-      GoType inner = findTypeFromTypeRef(((GoSpecType)type).getType().getTypeReferenceExpression());
+      GoTypeReferenceExpression e = ((GoSpecType)type).getType().getTypeReferenceExpression();
+      GoType inner = e != null ? e.resolveType() : null;
       if (inner == null || type.isEquivalentTo(inner) || builtin(inner)) return type;
       type = inner;
     }
@@ -850,8 +848,8 @@ public class GoPsiImplUtil {
    * Finds the "base" type of {@code expression}, resolving type references iteratively until a type spec is found.
    */
   @Nullable
-  public static GoType findBaseTypeFromRef(@Nullable GoTypeReferenceExpression expression) {
-    return findBaseSpecType(findTypeFromTypeRef(expression));
+  public static GoType findBaseTypeFromRef(@Nullable GoTypeReferenceExpression e) {
+    return e == null ? null : findBaseSpecType(e.resolveType());
   }
 
   @Nullable

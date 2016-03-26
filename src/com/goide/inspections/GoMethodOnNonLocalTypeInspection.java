@@ -16,10 +16,7 @@
 
 package com.goide.inspections;
 
-import com.goide.psi.GoFile;
-import com.goide.psi.GoMethodDeclaration;
-import com.goide.psi.GoType;
-import com.goide.psi.GoVisitor;
+import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
@@ -47,7 +44,8 @@ public class GoMethodOnNonLocalTypeInspection extends GoInspectionBase {
       @Nullable
       private GoType getMethodType(@NotNull GoMethodDeclaration method) {
         GoType methodType = method.getReceiver().getType();
-        return methodType == null ? null : GoPsiImplUtil.findTypeFromTypeRef(GoPsiImplUtil.getTypeReference(methodType));
+        GoTypeReferenceExpression ref = methodType == null ? null : GoPsiImplUtil.getTypeReference(methodType);
+        return ref == null ? null : ref.resolveType();
       }
     };
   }
