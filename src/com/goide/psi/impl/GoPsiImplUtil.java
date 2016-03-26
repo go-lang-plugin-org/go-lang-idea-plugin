@@ -797,9 +797,8 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType getGoTypeInner(@NotNull GoAnonymousFieldDefinition o,
-                                      @SuppressWarnings("UnusedParameters") @Nullable ResolveState context) {
-    return findBaseTypeFromRef(o.getTypeReferenceExpression());
+  public static GoType getGoTypeInner(@NotNull GoAnonymousFieldDefinition o, @SuppressWarnings("UnusedParameters") @Nullable ResolveState context) {
+    return findTypeFromTypeRef(o.getTypeReferenceExpression());
   }
 
   @NotNull
