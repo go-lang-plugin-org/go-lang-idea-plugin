@@ -30,7 +30,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.plan9.intel.lang.AsmIntelLanguage;
-import com.plan9.intel.lang.core.lexer.AsmIntelLexerAdapter;
+import com.plan9.intel.lang.core.lexer.AsmIntelLexer;
 import com.plan9.intel.lang.core.lexer.AsmIntelTokenType;
 import com.plan9.intel.lang.core.parser.AsmIntelParser;
 import com.plan9.intel.lang.core.psi.AsmIntelFile;
@@ -42,9 +42,9 @@ public class AsmIntelParserDefinition implements ParserDefinition {
 
   public static final IElementType LINE_COMMENT = new AsmIntelTokenType("LINE_COMMENT");
 
-  public static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
+  private static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
 
-  public static final TokenSet COMMENTS = TokenSet.create(LINE_COMMENT);
+  private static final TokenSet COMMENTS = TokenSet.create(LINE_COMMENT);
   public static final TokenSet KEYWORDS = TokenSet.create(TEXT);
   public static final TokenSet NUMBERS = TokenSet.create(HEX, INT);
   public static final TokenSet REGISTERS = TokenSet.create(PSEUDO_REG);
@@ -54,7 +54,7 @@ public class AsmIntelParserDefinition implements ParserDefinition {
   @NotNull
   @Override
   public Lexer createLexer(Project project) {
-    return new AsmIntelLexerAdapter();
+    return new AsmIntelLexer();
   }
 
   @Override
