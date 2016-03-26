@@ -42,7 +42,7 @@ public class GoInspectionUtil {
       return getFunctionResultCount((GoCallExpr)call);
     }
     if (call instanceof GoReferenceExpression) {
-      if (((GoReferenceExpression)call).getReference().resolve() instanceof GoVarDefinition) return 1;
+      if (((GoReferenceExpression)call).resolve() instanceof GoVarDefinition) return 1;
     }
     return UNKNOWN_COUNT;
   }

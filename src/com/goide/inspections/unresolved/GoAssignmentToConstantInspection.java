@@ -41,7 +41,7 @@ public class GoAssignmentToConstantInspection extends GoInspectionBase {
 
       private void checkExpression(GoExpression expression) {
         if (expression instanceof GoReferenceExpression) {
-          PsiElement resolve = ((GoReferenceExpression)expression).getReference().resolve();
+          PsiElement resolve = ((GoReferenceExpression)expression).resolve();
           if (resolve instanceof GoConstDefinition) {
             String name = ((GoReferenceExpression)expression).getIdentifier().getText();
             holder.registerProblem(expression, "Cannot assign to constant '" + name + "'", GENERIC_ERROR_OR_WARNING);

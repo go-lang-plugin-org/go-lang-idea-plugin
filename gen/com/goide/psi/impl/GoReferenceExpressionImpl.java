@@ -41,4 +41,9 @@ public class GoReferenceExpressionImpl extends GoExpressionImpl implements GoRef
     return GoPsiImplUtil.getQualifier(this);
   }
 
+  @Nullable
+  public PsiElement resolve() {
+    return GoPsiImplUtil.resolve(this);
+  }
+
 }

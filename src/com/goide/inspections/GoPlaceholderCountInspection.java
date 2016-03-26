@@ -105,9 +105,9 @@ public class GoPlaceholderCountInspection extends GoInspectionBase {
   private static String resolve(@NotNull GoExpression argument) {
     if (argument instanceof GoStringLiteral) return argument.getText();
 
-    if (argument.getReference() == null) return null;
+    PsiReference reference = argument.getReference();
+    PsiElement resolved = reference != null ? reference.resolve() : null;
 
-    PsiElement resolved = argument.getReference().resolve();
     if (resolved instanceof GoVarDefinition) {
       return getValue(((GoVarDefinition)resolved).getValue());
     }

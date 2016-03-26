@@ -51,7 +51,7 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
       @Override
       public void visitFieldName(@NotNull GoFieldName o) {
         super.visitFieldName(o);
-        PsiElement resolve = o.getReference().resolve();
+        PsiElement resolve = o.resolve();
         if (resolve == null) {
           PsiElement id = o.getIdentifier();
           holder.registerProblem(id, "unknown field '" + id.getText() + "' in struct literal", LIKE_UNKNOWN_SYMBOL);
