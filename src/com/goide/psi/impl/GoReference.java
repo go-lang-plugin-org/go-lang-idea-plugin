@@ -149,7 +149,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
       if (type != null) {
         if (!processGoType(type, processor, state)) return false;
         GoTypeReferenceExpression ref = getTypeRefExpression(type);
-        if (ref != null && ref.getReference().resolve() == ref) return processor.execute(myElement, state); // a bit hacky resolve for: var a C.foo; a.b
+        if (ref != null && ref.resolve() == ref) return processor.execute(myElement, state); // a bit hacky resolve for: var a C.foo; a.b
       }
     }
     return true;

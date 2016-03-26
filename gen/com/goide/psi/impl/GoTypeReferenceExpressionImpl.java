@@ -43,6 +43,10 @@ public class GoTypeReferenceExpressionImpl extends GoCompositeElementImpl implem
   }
 
   @Nullable
+  public PsiElement resolve() {
+    return GoPsiImplUtil.resolve(this);
+  }
+
   public GoType resolveType() {
     return GoPsiImplUtil.resolveType(this);
   }

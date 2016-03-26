@@ -107,7 +107,7 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
                                              @NotNull GoTypeReferenceExpression qualifier,
                                              @NotNull GoScopeProcessor processor,
                                              @NotNull ResolveState state) {
-    PsiElement target = qualifier.getReference().resolve();
+    PsiElement target = qualifier.resolve();
     if (target == null || target == qualifier) return false;
     if (target instanceof GoImportSpec) {
       if (((GoImportSpec)target).isCImport()) return processor.execute(myElement, state);

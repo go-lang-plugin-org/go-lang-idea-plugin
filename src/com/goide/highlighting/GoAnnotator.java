@@ -60,7 +60,7 @@ public class GoAnnotator implements Annotator {
     }
     else if (element instanceof GoReferenceExpression) {
       GoReferenceExpression reference = (GoReferenceExpression)element;
-      PsiElement resolvedReference = reference.getReference().resolve();
+      PsiElement resolvedReference = reference.resolve();
       if (resolvedReference instanceof PsiDirectory || resolvedReference instanceof GoImportSpec) {
         // It's a package reference. It should either be inside a package clause or part of a larger reference expression.
         if (!(element.getParent() instanceof GoReferenceExpression) &&
@@ -119,7 +119,7 @@ public class GoAnnotator implements Annotator {
       if (call.getExpression() instanceof GoReferenceExpression) {
         GoReferenceExpression reference = (GoReferenceExpression)call.getExpression();
         if (reference.textMatches("cap")) {
-          if (GoPsiImplUtil.builtin(reference.getReference().resolve())) {
+          if (GoPsiImplUtil.builtin(reference.resolve())) {
             checkCapCall(call, holder);
           }
         }
@@ -280,7 +280,7 @@ public class GoAnnotator implements Annotator {
     if (type == null) return false;
     GoTypeReferenceExpression ref = type.getTypeReferenceExpression();
     if (ref == null) return false;
-    return INT_TYPE_NAMES.contains(ref.getText()) && GoPsiImplUtil.builtin(ref.getReference().resolve());
+    return INT_TYPE_NAMES.contains(ref.getText()) && GoPsiImplUtil.builtin(ref.resolve());
   }
 
   private static void checkSelfReference(@NotNull GoReferenceExpression o, PsiElement definition, AnnotationHolder holder) {

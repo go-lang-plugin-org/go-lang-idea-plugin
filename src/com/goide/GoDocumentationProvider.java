@@ -241,7 +241,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       }
       GoTypeReferenceExpression typeRef = GoPsiImplUtil.getTypeReference(type);
       if (typeRef != null) {
-        PsiElement resolve = typeRef.getReference().resolve();
+        PsiElement resolve = typeRef.resolve();
         if (resolve != null) {
           return getTypePresentation(resolve, contextImportPath);
         }

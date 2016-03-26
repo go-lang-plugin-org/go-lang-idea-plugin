@@ -469,8 +469,22 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
+  public static PsiElement resolve(@NotNull GoReferenceExpression o) { // todo: replace with default method in GoReferenceExpressionBase
+    return o.getReference().resolve();
+  }
+
+  @Nullable
+  public static PsiElement resolve(@NotNull GoTypeReferenceExpression o) { // todo: replace with default method in GoReferenceExpressionBase
+    return o.getReference().resolve();
+  }
+  
+  @Nullable
+  public static PsiElement resolve(@NotNull GoFieldName o) { // todo: replace with default method in GoReferenceExpressionBase
+    return o.getReference().resolve();
+  }
+
   public static GoType resolveType(@NotNull GoTypeReferenceExpression expression) {
-    PsiElement resolve = expression.getReference().resolve();
+    PsiElement resolve = expression.resolve();
     if (resolve instanceof GoTypeSpec) return ((GoTypeSpec)resolve).getSpecType();
     // hacky C resolve
     return resolve == expression ? new GoCType(expression) : null;
@@ -600,7 +614,7 @@ public class GoPsiImplUtil {
       }
       GoTypeReferenceExpression typeRef = type != null ? type.getTypeReferenceExpression() : null;
       if (typeRef != null) {
-        PsiElement resolve = typeRef.getReference().resolve();
+        PsiElement resolve = typeRef.resolve();
         if (resolve instanceof GoTypeSpec) {
           type = ((GoTypeSpec)resolve).getSpecType().getType();
           if (type instanceof GoChannelType) {

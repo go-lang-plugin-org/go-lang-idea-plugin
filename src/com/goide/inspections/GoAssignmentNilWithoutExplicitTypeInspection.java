@@ -67,7 +67,7 @@ public class GoAssignmentNilWithoutExplicitTypeInspection extends GoInspectionBa
         for (GoExpression expr : expressions) {
           if (expr instanceof GoReferenceExpressionImpl) {
             GoReferenceExpressionImpl ref = (GoReferenceExpressionImpl)expr;
-            PsiElement resolve = ref.getReference().resolve();
+            PsiElement resolve = ref.resolve();
             if (ref.getIdentifier().textMatches(GoConstants.NIL) && resolve != null && GoPsiImplUtil.builtin(resolve)) {
               holder.registerProblem(expr, "Cannot assign nil without explicit type", GENERIC_ERROR_OR_WARNING);
             }
