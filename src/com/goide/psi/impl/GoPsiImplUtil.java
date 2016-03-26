@@ -834,7 +834,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType findBaseSpecType(@Nullable GoType type) {
+  private static GoType findBaseSpecType(@Nullable GoType type) {
     while (type instanceof GoSpecType && ((GoSpecType)type).getType().getTypeReferenceExpression() != null) {
       GoTypeReferenceExpression e = ((GoSpecType)type).getType().getTypeReferenceExpression();
       GoType inner = e != null ? e.resolveType() : null;
