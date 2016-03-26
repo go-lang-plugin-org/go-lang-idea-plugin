@@ -112,7 +112,7 @@ ImportString ::= string | raw_string {methods=[getReferences resolve getPath get
 Type ::= TypeName | TypeLit | ParType {stubClass="com.goide.stubs.GoTypeStub" methods=[getUnderlyingType]}
 ParType ::= '(' Type ')'
 private TypeName ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
-TypeReferenceExpression ::= identifier { methods=[getReference getQualifier] }
+TypeReferenceExpression ::= identifier { methods=[getReference getQualifier resolveType] }
 left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
 
 private TypeLit ::=

@@ -17,4 +17,7 @@ public interface GoTypeReferenceExpression extends GoReferenceExpressionBase {
   @Nullable
   GoTypeReferenceExpression getQualifier();
 
+  @Nullable
+  GoType resolveType();
+
 }
