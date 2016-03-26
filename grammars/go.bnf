@@ -112,7 +112,7 @@ ImportString ::= string | raw_string {methods=[getReferences resolve getPath get
 Type ::= TypeName | TypeLit | ParType {stubClass="com.goide.stubs.GoTypeStub" methods=[getUnderlyingType]}
 ParType ::= '(' Type ')' {methods=[getActualType]}
 private TypeName ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
-TypeReferenceExpression ::= identifier { methods=[getReference getQualifier resolveType] }
+TypeReferenceExpression ::= identifier { methods=[getReference getQualifier resolve resolveType] }
 left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
 
 private TypeLit ::=
@@ -301,7 +301,7 @@ StringLiteral ::= string | raw_string {
 OperandName ::= ReferenceExpression QualifiedReferenceExpression? {elementType=ReferenceExpression}
 
 left QualifiedReferenceExpression ::= '.' identifier {elementType=ReferenceExpression}
-ReferenceExpression ::= identifier { methods=[getReference getQualifier] extends=Expression}
+ReferenceExpression ::= identifier { methods=[getReference getQualifier resolve] extends=Expression}
 
 CompositeLit ::= (LiteralTypeExprInner LiteralValue) // the brackets are valuable
 private LiteralTypeExprInner ::=
@@ -319,9 +319,7 @@ private E_recover ::= !('}'|',')
 Element ::= First [':' Value]  {pin(".*")=1}
 private First ::= Key | <<keyOrValueExpression>>
 Key ::= (FieldName &':') | !() Expression // nullability hack for key without reference inside
-FieldName ::= identifier {
-  methods=[getReference getQualifier]
-}
+FieldName ::= identifier { methods=[getReference getQualifier resolve] }
 Value ::= Expression | LiteralValue
 
 FunctionLit ::= func Signature Block {pin=1 methods=[processDeclarations]}

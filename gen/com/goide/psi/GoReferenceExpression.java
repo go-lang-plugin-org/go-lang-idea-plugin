@@ -17,4 +17,7 @@ public interface GoReferenceExpression extends GoExpression, GoReferenceExpressi
   @Nullable
   GoReferenceExpression getQualifier();
 
+  @Nullable
+  PsiElement resolve();
+
 }

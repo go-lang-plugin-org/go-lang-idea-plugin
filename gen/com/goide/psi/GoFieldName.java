@@ -17,4 +17,7 @@ public interface GoFieldName extends GoReferenceExpressionBase {
   @Nullable
   GoReferenceExpression getQualifier();
 
+  @Nullable
+  PsiElement resolve();
+
 }

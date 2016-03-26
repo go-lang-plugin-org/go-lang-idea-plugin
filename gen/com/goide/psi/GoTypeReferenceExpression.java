@@ -18,6 +18,8 @@ public interface GoTypeReferenceExpression extends GoReferenceExpressionBase {
   GoTypeReferenceExpression getQualifier();
 
   @Nullable
+  PsiElement resolve();
+
   GoType resolveType();
 
 }

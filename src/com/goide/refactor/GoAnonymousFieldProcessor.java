@@ -49,7 +49,7 @@ public class GoAnonymousFieldProcessor extends RenamePsiElementProcessor {
       }
     }
     else if (element instanceof GoAnonymousFieldDefinition) {
-      PsiElement type = ((GoAnonymousFieldDefinition)element).getTypeReferenceExpression().getReference().resolve();
+      PsiElement type = ((GoAnonymousFieldDefinition)element).getTypeReferenceExpression().resolve();
       if (type instanceof GoTypeSpec) {
         allRenames.put(type, newName);
       }

@@ -42,4 +42,9 @@ public class GoFieldNameImpl extends GoCompositeElementImpl implements GoFieldNa
     return GoPsiImplUtil.getQualifier(this);
   }
 
+  @Nullable
+  public PsiElement resolve() {
+    return GoPsiImplUtil.resolve(this);
+  }
+
 }
