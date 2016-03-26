@@ -8,13 +8,18 @@ import static com.plan9.intel.lang.core.AsmIntelParserDefinition.*;
 
 %%
 
-%class AsmIntelLexer
+%public
+%class _AsmIntelLexer
 %implements FlexLexer, AsmIntelTypes
 %unicode
 %function advance
 %type IElementType
-%eof{  return;
-%eof}
+
+%{
+  public _AsmIntelLexer() {
+    this((java.io.Reader)null);
+  }
+%}
 
 WSNL          = [ \r\n\t]+
 WS            = [ \t\f]
