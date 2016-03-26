@@ -25,10 +25,7 @@ import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.EmptyRunnable;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiWhiteSpace;
+import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
@@ -153,7 +150,7 @@ public class GoImportOptimizer implements ImportOptimizer {
           while ((previousQualifier = lastQualifier.getQualifier()) != null) {
             lastQualifier = previousQualifier;
           }
-          markAsUsed(lastQualifier.getIdentifier());
+          markAsUsed(lastQualifier.getIdentifier(), lastQualifier.getReference());
         }
       }
 
@@ -165,13 +162,22 @@ public class GoImportOptimizer implements ImportOptimizer {
           while ((previousQualifier = lastQualifier.getQualifier()) != null) {
             lastQualifier = previousQualifier;
           }
-          markAsUsed(lastQualifier.getIdentifier());
+          markAsUsed(lastQualifier.getIdentifier(), lastQualifier.getReference());
         }
       }
 
-      private void markAsUsed(@NotNull PsiElement qualifier) {
+      private void markAsUsed(@NotNull PsiElement qualifier, @NotNull PsiReference reference) {
+        String qualifierText = qualifier.getText();
+        if (!result.containsKey(qualifierText)) {
+          // already marked
+          return;
+        }
+        PsiElement resolve = reference.resolve();
+        if (!(resolve instanceof PsiDirectory || resolve instanceof GoImportSpec || resolve instanceof PsiDirectoryContainer)) {
+          return;
+        }
         Collection<String> qualifiersToDelete = ContainerUtil.newHashSet();
-        for (GoImportSpec spec : result.get(qualifier.getText())) {
+        for (GoImportSpec spec : result.get(qualifierText)) {
           for (Map.Entry<String, Collection<GoImportSpec>> entry : result.entrySet()) {
             for (GoImportSpec importSpec : entry.getValue()) {
               if (importSpec == spec) {
