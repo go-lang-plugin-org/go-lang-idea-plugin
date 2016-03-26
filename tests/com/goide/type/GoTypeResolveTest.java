@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.goide.inspections;
+package com.goide.type;
 
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.goide.psi.GoExpression;
