@@ -84,7 +84,7 @@ public class GoPsiImplUtil {
     return false;
   }
 
-  public static boolean isBuiltinFile(@NotNull PsiFile file) {
+  public static boolean isBuiltinFile(@Nullable PsiFile file) {
     return file instanceof GoFile
            && GoConstants.BUILTIN_PACKAGE_NAME.equals(((GoFile)file).getPackageName())
            && GoConstants.BUILTIN_PACKAGE_NAME.equals(((GoFile)file).getImportPath(false))
