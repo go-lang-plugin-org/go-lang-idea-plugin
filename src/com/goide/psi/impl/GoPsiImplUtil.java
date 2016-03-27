@@ -314,7 +314,7 @@ public class GoPsiImplUtil {
       if (e == null) return null;
       GoType type = e.getGoType(context);
       if (type != null && ((GoUnaryExpr)o).getBitAnd() != null) return new LightPointerType(type);
-      GoType baseType = findBaseType(type);
+      GoType baseType = type == null || type.getTypeReferenceExpression() == null ? type : type.getUnderlyingType();
       if (baseType instanceof GoChannelType && ((GoUnaryExpr)o).getSendChannel() != null) return ((GoChannelType)baseType).getType();
       if (baseType instanceof GoPointerType && ((GoUnaryExpr)o).getMul() != null) return ((GoPointerType)baseType).getType();
       return baseType;
@@ -429,8 +429,7 @@ public class GoPsiImplUtil {
   }
 
   private static GoType findBaseType(@Nullable GoType type) {
-    GoType baseType = type == null ? null : findBaseTypeFromRef(type.getTypeReferenceExpression());
-    return baseType instanceof GoSpecType ? ((GoSpecType)baseType).getType() : type;
+    return type == null || type.getTypeReferenceExpression() == null ? type : type.getUnderlyingType();
   }
 
   @Nullable
