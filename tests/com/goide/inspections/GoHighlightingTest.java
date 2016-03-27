@@ -342,17 +342,15 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.checkHighlighting();
   }
 
-  public void testDeferInLoop() {
-    myFixture.testHighlighting(true, false, true, getTestName(true) + ".go");
-  }
+  public void testDeferInLoop() { doWeakTest(); }
 
-  public void testCommentStart() {
-    myFixture.testHighlighting(true, false, true, getTestName(true) + ".go");
-  }
+  public void testCommentStart() { doWeakTest(); }
 
   public void testUnitializedStructInitialization() {
-    myFixture.testHighlighting(true, false, true, getTestName(true) + ".go");
+    doWeakTest();
   }
+
+  private long doWeakTest() {return myFixture.testHighlighting(true, false, true, getTestName(true) + ".go");}
 
   public void testDoNotHighlightCommentOfMainPackage() {
     myFixture.configureByText("a.go", "// Some comment\npackage main; func main() {}");
