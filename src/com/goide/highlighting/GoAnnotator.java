@@ -181,7 +181,7 @@ public class GoAnnotator implements Annotator {
     //noinspection ConstantConditions
     GoType exprType = first.getGoType(null); // todo: context
     if (exprType == null) return;
-    GoType baseType = getBaseType(exprType);
+    GoType baseType = exprType.getUnderlyingType();
     if (baseType instanceof GoPointerType) {
       baseType = ((GoPointerType)baseType).getType();
     }
@@ -207,7 +207,7 @@ public class GoAnnotator implements Annotator {
     }
     else {
       // We have a type, is it valid?
-      GoType baseType = getBaseType(type);
+      GoType baseType = type.getUnderlyingType();
       if (canMakeType(baseType)) {
         // We have a type and we can make the type, are the parameters to make valid?
         checkMakeArgs(call, baseType, args.getExpressionList(), holder);
@@ -252,24 +252,13 @@ public class GoAnnotator implements Annotator {
       GoExpression expression = list.get(i);
       GoType type = expression.getGoType(null); // todo: context
       if (type != null) {
-        GoType expressionBaseType = getBaseType(type);
+        GoType expressionBaseType = type.getUnderlyingType();
         if (!(isIntegerConvertibleType(expressionBaseType) || isCType(type))) {
           String argName = i == 0 ? "size" : "capacity";
           holder.createErrorAnnotation(expression, "Non-integer " + argName + " argument to make");
         }
       }
     }
-  }
-
-  @Nullable
-  private static GoType getBaseType(@NotNull GoType type) {
-    if (type.getTypeReferenceExpression() != null) {
-      type = GoPsiImplUtil.findBaseTypeFromRef(type.getTypeReferenceExpression());
-    }
-    if (type instanceof GoSpecType) {
-      type = type.getUnderlyingType();
-    }
-    return type instanceof GoSpecType ? ((GoSpecType)type).getType() : type;
   }
 
   private static boolean isCType(@Nullable GoType type) {
