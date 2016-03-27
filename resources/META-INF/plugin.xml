@@ -313,12 +313,7 @@
       <add-to-group group-id="EditorPopupMenu" anchor="last"/>
     </action>
 
-    <group id="GoTestGenerateGroup">
-      <action id="GoGenerateTest" class="com.goide.generate.GenerateTestAction" text="Test"
-              description="Creates Go test function"/>
-      <action id="GoGenerateBenchmark" class="com.goide.generate.GenerateBenchmarkAction" text="Benchmark"
-              description="Creates Go benchmark function"/>
-      <separator/>
+    <group id="GoTestGenerateGroup" class="com.goide.generate.GoGenerateTestMethodActionGroup">
       <add-to-group group-id="GenerateGroup" anchor="first"/>
     </group>
 

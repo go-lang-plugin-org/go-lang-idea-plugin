@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,8 @@ import com.intellij.openapi.util.text.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
+
 public enum GoTestFunctionType {
   TEST(GoConstants.TEST_PREFIX, "T"),
   TEST_MAIN(GoConstants.TEST_PREFIX, "M"),
@@ -35,9 +37,30 @@ public enum GoTestFunctionType {
     myParamType = paramType;
   }
 
-  @NotNull
+  @Nullable
   public String getParamType() {
     return myParamType;
+  }
+
+  @NotNull
+  public String getPrefix() {
+    return myPrefix;
+  }
+
+  @NotNull
+  public String getQualifiedParamType(@Nullable String testingQualifier) {
+    if (myParamType == null) {
+      return "";
+    }
+    return "*" + (StringUtil.isNotEmpty(testingQualifier) ? testingQualifier + "." : "") + myParamType; 
+  }
+  
+  @NotNull
+  public String getSignature(@Nullable String testingQualifier) {
+    if (myParamType == null) {
+      return "";
+    }
+    return myParamType.toLowerCase(Locale.US) + " " + getQualifiedParamType(testingQualifier);
   }
 
   @Nullable
