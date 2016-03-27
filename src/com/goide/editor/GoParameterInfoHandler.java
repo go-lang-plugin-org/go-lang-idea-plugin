@@ -106,22 +106,17 @@ public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabAction
   public void showParameterInfo(@NotNull GoArgumentList argList, @NotNull CreateParameterInfoContext context) {
     PsiElement parent = argList.getParent();
     if (!(parent instanceof GoCallExpr)) return;
-
-    GoCallExpr call = (GoCallExpr)parent;
-    GoExpression expression = call.getExpression();
-    GoType type = expression.getGoType(null); // todo: context
-    GoFunctionType functionType = findFunctionType(type);
-    if (functionType != null) {
-      context.setItemsToShow(new Object[]{functionType});
+    GoFunctionType type = findFunctionType(((GoCallExpr)parent).getExpression().getGoType(null));
+    if (type != null) {
+      context.setItemsToShow(new Object[]{type});
       context.showHint(argList, argList.getTextRange().getStartOffset(), this);
     }
   }
 
   @Nullable
-  private static GoFunctionType findFunctionType(GoType type) {
-    if (type instanceof GoFunctionType) return (GoFunctionType)type;
-    GoType base = GoPsiImplUtil.findBaseTypeFromRef(GoPsiImplUtil.getTypeReference(type));
-    base = base instanceof GoSpecType ? ((GoSpecType)base).getType() : base;
+  private static GoFunctionType findFunctionType(@Nullable GoType type) {
+    if (type instanceof GoFunctionType || type == null) return (GoFunctionType)type;
+    GoType base = type.getUnderlyingType();
     return base instanceof GoFunctionType ? (GoFunctionType)base : null;
   }
 
