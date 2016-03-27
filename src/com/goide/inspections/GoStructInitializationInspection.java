@@ -17,7 +17,6 @@
 package com.goide.inspections;
 
 import com.goide.psi.*;
-import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
@@ -35,15 +34,12 @@ public class GoStructInitializationInspection extends GoInspectionBase {
 
         if (PsiTreeUtil.getParentOfType(o, GoReturnStatement.class, GoShortVarDeclaration.class, GoAssignmentStatement.class) == null) return;
 
-        GoType type = o.getType();
-        if (!(type instanceof GoStructType) &&
-            !(GoPsiImplUtil.findBaseTypeFromRef(o.getTypeReferenceExpression()) instanceof GoSpecType)) {
-          return;
-        }
-
-        for (GoElement element : o.getLiteralValue().getElementList()) {
-          if (element.getKey() == null) {
-            holder.registerProblem(element, "Unnamed field initialization", ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+        GoTypeReferenceExpression ref = o.getTypeReferenceExpression();
+        if (o.getType() instanceof GoStructType || ref != null && ref.resolveType() instanceof GoSpecType) {
+          for (GoElement element : o.getLiteralValue().getElementList()) {
+            if (element.getKey() == null) {
+              holder.registerProblem(element, "Unnamed field initialization", ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+            }
           }
         }
       }
