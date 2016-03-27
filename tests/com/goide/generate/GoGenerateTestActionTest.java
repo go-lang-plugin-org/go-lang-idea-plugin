@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,29 +17,98 @@
 package com.goide.generate;
 
 import com.goide.GoCodeInsightFixtureTestCase;
-import com.intellij.testFramework.PlatformTestUtil;
+import com.goide.runconfig.testing.GoTestFunctionType;
+import com.goide.runconfig.testing.frameworks.gotest.GotestGenerateAction;
 import org.jetbrains.annotations.NotNull;
 
 public class GoGenerateTestActionTest extends GoCodeInsightFixtureTestCase {
   public void testTest() {
-    doTest("GoGenerateTest", "package test\n\n" +
-                             "func TestName(t *testing.T) {\n" +
-                             "\t\n" +
-                             "}");
+    doTest(GoTestFunctionType.TEST, "package test\n<caret>", "package test\n" +
+                                                             "\n" +
+                                                             "import \"testing\"\n" +
+                                                             "func Test<caret>(t *testing.T) {\n" +
+                                                             "\t\n" +
+                                                             "}");
   }
 
   public void testBenchmark() {
-    doTest("GoGenerateBenchmark", "package test\n\n" +
-                                  "func BenchmarkName(b *testing.B) {\n" +
-                                  "\tfor i := 0; i < b.N; i++ {\n" +
-                                  "\t\t\n" +
-                                  "\t}\n" +
-                                  "}");
+    doTest(GoTestFunctionType.BENCHMARK, "package test\n<caret>", "package test\n" +
+                                                                  "\n" +
+                                                                  "import \"testing\"\n" +
+                                                                  "func Benchmark<caret>(b *testing.B) {\n" +
+                                                                  "\t\n" +
+                                                                  "}");
   }
 
-  private void doTest(@NotNull String actionName, @NotNull String afterText) {
-    myFixture.configureByText("test_test.go", "package test\n<caret>");
-    PlatformTestUtil.invokeNamedAction(actionName);
+  public void testExample() {
+    doTest(GoTestFunctionType.EXAMPLE, "package test\n<caret>", "package test\n" +
+                                                                "func Example<caret>() {\n" +
+                                                                "\t\n" +
+                                                                "}");
+  }
+
+  public void testImportedTestingPackage() {
+    doTest(GoTestFunctionType.TEST, "package test\n" +
+                                    "import `testing`\n" +
+                                    "<caret>", "package test\n" +
+                                               "import `testing`\n" +
+                                               "func Test<caret>(t *testing.T) {\n" +
+                                               "\t\n" +
+                                               "}");
+  }
+
+  public void testImportedTestingPackageWithDifferentAlias() {
+    doTest(GoTestFunctionType.TEST, "package test\n" +
+                                    "import my_alias `testing`\n" +
+                                    "<caret>", "package test\n" +
+                                               "import my_alias `testing`\n" +
+                                               "func Test<caret>(t *my_alias.T) {\n" +
+                                               "\t\n" +
+                                               "}");
+  }
+
+  public void testImportedTestingPackageWithDot() {
+    doTest(GoTestFunctionType.TEST, "package test\n" +
+                                    "import . `testing`\n" +
+                                    "<caret>", "package test\n" +
+                                               "import . `testing`\n" +
+                                               "func Test<caret>(t *T) {\n" +
+                                               "\t\n" +
+                                               "}");
+  }
+
+  public void testImportedTestingPackageWithForSideEffects() {
+    doTest(GoTestFunctionType.TEST, "package test\n" +
+                                    "import _ `testing`\n" +
+                                    "<caret>", "package test\n" +
+                                               "\n" +
+                                               "import (\n" +
+                                               "\t_ \"testing\"\n" +
+                                               "\t\"testing\"\n" +
+                                               ")\n" +
+                                               "func Test<caret>(t *testing.T) {\n" +
+                                               "\t\n" +
+                                               "}");
+  }
+
+  public void testImportedPackageWithTestingAlias() {
+    doTest(GoTestFunctionType.TEST, "package test\n" +
+                                    "import testing `some_other_package`\n" +
+                                    "<caret>", "package test\n" +
+                                               "\n" +
+                                               "import (\n" +
+                                               "\ttesting \"some_other_package\"\n" +
+                                               "\ttesting2 \"testing\"\n" +
+                                               ")\n" +
+                                               "func Test<caret>(t *testing2.T) {\n" +
+                                               "\t\n" +
+                                               "}");
+  }
+
+
+  private void doTest(@NotNull GoTestFunctionType type, @NotNull String beforeText, @NotNull String afterText) {
+    myFixture.configureByText("test_test.go", beforeText);
+    myFixture.testAction(new GotestGenerateAction(type));
     myFixture.checkResult(afterText);
   }
 }

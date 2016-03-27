@@ -19,39 +19,25 @@ package com.goide.inspections;
 import com.goide.GoConstants;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoElementFactory;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.runconfig.testing.GoTestFunctionType;
+import com.goide.runconfig.testing.frameworks.gotest.GotestGenerateAction;
 import com.intellij.codeInspection.LocalQuickFixBase;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Locale;
 
 public class GoTestSignaturesInspection extends GoInspectionBase {
-  private static String getTestingAlias(@Nullable GoImportSpec testingImportSpec) {
-    if (testingImportSpec != null) {
-      return !testingImportSpec.isDot() ? StringUtil.notNullize(testingImportSpec.getAlias(), GoConstants.TESTING_PATH) : "";
-    }
-    return GoConstants.TESTING_PATH;
-  }
-
-  private static String getProperParamType(@NotNull String testingAlias, GoTestFunctionType type) {
-    return "*" + (testingAlias.isEmpty() ? "" : testingAlias + ".") + type.getParamType();
-  }
-
   @Override
   protected void checkFile(@NotNull GoFile file, @NotNull ProblemsHolder problemsHolder) {
     if (!GoTestFinder.isTestFile(file)) return;
-    GoImportSpec testingImportSpec = file.getImportedPackagesMap().get(GoConstants.TESTING_PATH);
-    String testingAlias = getTestingAlias(testingImportSpec);
     for (GoFunctionDeclaration function : file.getFunctions()) {
       GoTestFunctionType type = GoTestFunctionType.fromName(function.getName());
       if (type == null) continue;
@@ -65,10 +51,12 @@ public class GoTestSignaturesInspection extends GoInspectionBase {
       }
       else {
         GoParameterDeclaration param = ContainerUtil.getFirstItem(params);
+        GoImportSpec testingImportSpec = file.getImportedPackagesMap().get(GoConstants.TESTING_PATH);
+        String testingAlias = ObjectUtils.notNull(GoPsiImplUtil.getImportQualifierToUseInFile(testingImportSpec), GoConstants.TESTING_PATH);
         if (params.size() != 1 ||
             param == null ||
             testingImportSpec == null ||
-            !param.getType().textMatches(getProperParamType(testingAlias, type))) {
+            !param.getType().textMatches(type.getQualifiedParamType(testingAlias))) {
           problemsHolder.registerProblem(function.getIdentifier(), "Wrong test signature", new GoTestSignaturesQuickFix(type));
         }
       }
@@ -92,18 +80,9 @@ public class GoTestSignaturesInspection extends GoInspectionBase {
       if (signature == null) return;
       GoFile file = ObjectUtils.tryCast(signature.getContainingFile(), GoFile.class);
       if (file == null) return;
-      
-      if (myType == GoTestFunctionType.EXAMPLE) {
-        signature.replace(GoElementFactory.createFunctionSignatureFromText(project, ""));
-        return;
-      }
-      GoImportSpec testingImportSpec = file.getImportedPackagesMap().get(GoConstants.TESTING_PATH);
-      if (testingImportSpec == null) {
-        file.addImport(GoConstants.TESTING_PATH, null);
-      }
-      String paramType = getProperParamType(getTestingAlias(testingImportSpec), myType);
-      String newSignature = myType.getParamType().toLowerCase(Locale.US) + " " + paramType;
-      signature.replace(GoElementFactory.createFunctionSignatureFromText(project, newSignature));
+
+      String testingQualifier = GotestGenerateAction.importPackageIfNeeded(file, GoConstants.TESTING_PATH, GoConstants.TESTING_PATH);
+      signature.replace(GoElementFactory.createFunctionSignatureFromText(project, myType.getSignature(testingQualifier)));
     }
   }
 }
