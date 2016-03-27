@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilCore;
+import com.intellij.util.ObjectUtils;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -38,9 +39,10 @@ abstract public class GoLiveTemplateContextType extends TemplateContextType {
     super(id, presentableName, baseContextType);
   }
 
+  @Override
   public boolean isInContext(@NotNull PsiFile file, int offset) {
     if (PsiUtilCore.getLanguageAtOffset(file, offset).isKindOf(GoLanguage.INSTANCE)) {
-      PsiElement element = getFirstCompositeElement(file.findElementAt(offset));
+      PsiElement element = getFirstCompositeElement(ObjectUtils.notNull(file.findElementAt(offset), file));
       return element != null && isInContext(element);
     }
 
@@ -59,6 +61,7 @@ abstract public class GoLiveTemplateContextType extends TemplateContextType {
 
   protected abstract boolean isInContext(@NotNull PsiElement element);
 
+  @Override
   public SyntaxHighlighter createHighlighter() {
     return new GoSyntaxHighlighter();
   }
@@ -70,7 +73,7 @@ abstract public class GoLiveTemplateContextType extends TemplateContextType {
   
     @Override
     protected boolean isInContext(@NotNull PsiElement element) {
-      return element.getParent() instanceof GoFile && !(element instanceof GoTopLevelDeclaration);
+      return element instanceof GoFile || element.getParent() instanceof GoFile && !(element instanceof GoTopLevelDeclaration);
     }
   }
   

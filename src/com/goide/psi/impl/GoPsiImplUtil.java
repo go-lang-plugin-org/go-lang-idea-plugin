@@ -975,6 +975,18 @@ public class GoPsiImplUtil {
     return importSpec.isDot() ? "." : null;
   }
 
+  @Nullable
+  public static String getImportQualifierToUseInFile(@Nullable GoImportSpec importSpec) {
+    if (importSpec == null || importSpec.isForSideEffects()) {
+      return null;
+    }
+    if (importSpec.isDot()) {
+      return "";
+    }
+    String alias = importSpec.getAlias();
+    return alias != null ? alias : importSpec.getLocalPackageName(); 
+  }
+
   public static boolean shouldGoDeeper(@SuppressWarnings("UnusedParameters") GoImportSpec o) {
     return false;
   }

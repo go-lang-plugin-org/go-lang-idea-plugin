@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,23 +16,34 @@
 
 package com.goide.runconfig.testing.frameworks.gotest;
 
-import com.goide.runconfig.testing.GoTestFinder;
-import com.goide.runconfig.testing.GoTestFramework;
-import com.goide.runconfig.testing.GoTestRunConfiguration;
-import com.goide.runconfig.testing.GoTestRunningState;
+import com.goide.runconfig.testing.*;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.testframework.TestConsoleProperties;
 import com.intellij.execution.testframework.sm.runner.OutputToGeneralTestEventsConverter;
+import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.module.Module;
 import com.intellij.psi.PsiFile;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class GotestFramework extends GoTestFramework {
   public static final String NAME = "gotest";
   public static final GotestFramework INSTANCE = new GotestFramework();
+  private static final ArrayList<GotestGenerateAction> GENERATE_ACTIONS = ContainerUtil.newArrayList(
+    new GotestGenerateAction(GoTestFunctionType.TEST),
+    new GotestGenerateAction(GoTestFunctionType.BENCHMARK),
+    new GotestGenerateAction(GoTestFunctionType.EXAMPLE));
 
   private GotestFramework() {
+  }
+
+  @Override
+  public Collection<? extends AnAction> getGenerateMethodActions() {
+    return GENERATE_ACTIONS;
   }
 
   @NotNull

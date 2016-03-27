@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!--
-  ~ Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+  ~ Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -148,22 +148,6 @@
   <template description='Add return' id='go_lang_add_return' name='add_return' toReformat='true' toShortenFQNames='true'
             value='return $VALUE$$END$&#10;'>
     <variable alwaysStopAt='true' defaultValue='' expression='' name='VALUE'/>
-    <context>
-      <option name='GO' value='true'/>
-    </context>
-  </template>
-
-  <!-- TEST GENERATOR -->
-  <template description='Test' id='go_lang_test' name='go_lang_test' toReformat='true' toShortenFQNames='true'
-            value='func Test$NAME$(t *testing.T) {&#10;	$END$&#10;}'>
-    <variable alwaysStopAt='true' defaultValue='&quot;Name&quot;' expression='' name='NAME'/>
-    <context>
-      <option name='GO' value='true'/>
-    </context>
-  </template>
-  <template description='Benchmark' id='go_lang_benchmark' name='go_lang_benchmark' toReformat='true' toShortenFQNames='true'
-            value='func Benchmark$NAME$(b *testing.B) {&#10;	for i := 0; i &lt; b.N; i++ {&#10;	$END$ &#10;	}&#10;}'>
-    <variable alwaysStopAt='true' defaultValue='&quot;Name&quot;' expression='' name='NAME'/>
     <context>
       <option name='GO' value='true'/>
     </context>
