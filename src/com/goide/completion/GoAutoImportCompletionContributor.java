@@ -69,7 +69,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
           result.restartCompletionOnPrefixChange(StandardPatterns.string().longerThan(0));
           return;
         }
-        
+
         GoReferenceExpressionBase qualifier = ((GoReferenceExpressionBase)parent).getQualifier();
         if (qualifier != null && qualifier.getReference() != null && qualifier.getReference().resolve() != null) return;
 
@@ -129,7 +129,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
       }
     }
 
-  List<String> sorted = ContainerUtil.newArrayList();
+    List<String> sorted = ContainerUtil.newArrayList();
     for (String name : names) {
       if (matcher.prefixMatches(name) || packagesWithAliases.contains(substringBefore(name, '.'))) {
         sorted.add(name);
@@ -163,7 +163,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
     if (i == -1) return s;
     return s.substring(0, i);
   }
-  
+
   private static String substringAfter(@NotNull String s, char c) {
     int i = s.indexOf(c);
     if (i == -1) return "";
@@ -174,7 +174,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
   private static String replacePackageWithAlias(@NotNull String qualifiedName, @Nullable String alias) {
     return alias != null ? alias + "." + substringAfter(qualifiedName, '.') : qualifiedName;
   }
-  
+
   private interface ElementProcessor {
     boolean process(@NotNull String name,
                     @NotNull GoNamedElement element,
@@ -182,7 +182,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
                     @NotNull CompletionResultSet result);
     boolean isMine(@NotNull String name, @NotNull GoNamedElement element);
   }
-  
+
   private static class VariablesAndConstantsProcessor implements ElementProcessor {
     @Override
     public boolean process(@NotNull String name,
@@ -194,6 +194,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
                                                                          GoAutoImportInsertHandler.SIMPLE_INSERT_HANDLER, priority));
       return true;
     }
+
     @Override
     public boolean isMine(@NotNull String name, @NotNull GoNamedElement element) {
       return element instanceof GoVarDefinition || element instanceof GoConstDefinition;
