@@ -803,7 +803,7 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
-  public static GoType getUnderlyingType(@NotNull GoType o) {
+  public static GoType getUnderlyingType(@NotNull final GoType o) {
     GoType type = RecursionManager.doPreventingRecursion(o, true, new Computable<GoType>() {
       @Override
       public GoType compute() {return getTypeInner(o);}

@@ -72,9 +72,9 @@ public class GoIdFilter extends IdFilter {
     });
   }
 
-  private static IdFilter createIdFilter(@NotNull Project project,
+  private static IdFilter createIdFilter(@NotNull final Project project,
                                          @NotNull Key<CachedValue<IdFilter>> cacheKey,
-                                         @NotNull Condition<VirtualFile> filterCondition) {
+                                         @NotNull final Condition<VirtualFile> filterCondition) {
     return CachedValuesManager.getManager(project).getCachedValue(project, cacheKey, new CachedValueProvider<IdFilter>() {
       @Nullable
       @Override
