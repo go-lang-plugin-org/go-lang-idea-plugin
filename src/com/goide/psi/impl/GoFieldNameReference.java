@@ -56,8 +56,12 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
     GoCompositeLit lit = PsiTreeUtil.getParentOfType(myElement, GoCompositeLit.class);
 
     GoType type = lit != null ? lit.getType() : null;
-    if (type == null && lit != null) {
-      type = GoPsiImplUtil.findBaseTypeFromRef(lit.getTypeReferenceExpression());
+    if (type == null) {
+      GoTypeReferenceExpression ref = lit != null ? lit.getTypeReferenceExpression() : null;
+      if (ref != null) {
+        GoType resolve = ref.resolveType();
+        type = resolve != null ? resolve.getUnderlyingType() : null;
+      }
     }
     
     PsiElement p = PsiTreeUtil.getParentOfType(myElement, GoLiteralValue.class);
