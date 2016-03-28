@@ -21,7 +21,6 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
@@ -97,8 +96,7 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
       else if (inner instanceof GoStructType) {
         GoKey key = PsiTreeUtil.getPrevSiblingOfType(myValue, GoKey.class);
         GoFieldName field = key != null ? key.getFieldName() : null;
-        PsiReference reference = field != null ? field.getReference() : null;
-        PsiElement resolve = reference != null ? reference.resolve() : null;
+        PsiElement resolve = field != null ? field.resolve() : null;
         if (resolve instanceof GoFieldDefinition) {
           type = PsiTreeUtil.getNextSiblingOfType(resolve, GoType.class);
         }
