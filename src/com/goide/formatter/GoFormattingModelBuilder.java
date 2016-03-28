@@ -87,6 +87,7 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       .after(FOR).spaces(1)
       .after(IF).spaces(1)
       .after(ELSE).spaces(1)
+      .before(ELSE_STATEMENT).spaces(1)
       .after(CASE).spaces(1)
       .after(RANGE).spaces(1)
       .after(SWITCH).spaces(1)
