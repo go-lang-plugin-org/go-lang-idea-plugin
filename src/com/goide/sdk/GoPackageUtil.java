@@ -60,13 +60,18 @@ public class GoPackageUtil {
 
   @NotNull
   public static List<GoFile> getAllPackageFiles(@NotNull GoFile file) {
-    String name = file.getPackageName();
+    String packageName = file.getPackageName();
     PsiDirectory parent = file.getParent();
-    if (parent == null || StringUtil.isEmpty(name)) return ContainerUtil.list(file);
-    PsiElement[] children = parent.getChildren();
+    if (parent == null || StringUtil.isEmpty(packageName)) return ContainerUtil.list(file);
+    return getAllPackageFiles(parent, packageName);
+  }
+  
+  @NotNull
+  private static List<GoFile> getAllPackageFiles(@NotNull PsiDirectory directory, @Nullable String packageName) {
+    PsiElement[] children = directory.getChildren();
     List<GoFile> files = ContainerUtil.newArrayListWithCapacity(children.length);
     for (PsiElement element : children) {
-      if (element instanceof GoFile && Comparing.equal(((GoFile)element).getPackageName(), name)) {
+      if (element instanceof GoFile && (packageName == null || Comparing.equal(((GoFile)element).getPackageName(), packageName))) {
         files.add((GoFile)element);
       }
     }
@@ -76,7 +81,18 @@ public class GoPackageUtil {
   @NotNull
   public static GlobalSearchScope packageScope(@NotNull GoFile file) {
     List<GoFile> files = getAllPackageFiles(file);
-    return GlobalSearchScope.filesScope(file.getProject(), ContainerUtil.map(files, new Function<GoFile, VirtualFile>() {
+    return GlobalSearchScope.filesWithLibrariesScope(file.getProject(), ContainerUtil.map(files, new Function<GoFile, VirtualFile>() {
+      @Override
+      public VirtualFile fun(GoFile file) {
+        return file.getVirtualFile();
+      }
+    }));
+  }
+  
+  @NotNull
+  public static GlobalSearchScope packageScope(@NotNull PsiDirectory psiDirectory) {
+    List<GoFile> files = getAllPackageFiles(psiDirectory, null);
+    return GlobalSearchScope.filesWithLibrariesScope(psiDirectory.getProject(), ContainerUtil.map(files, new Function<GoFile, VirtualFile>() {
       @Override
       public VirtualFile fun(GoFile file) {
         return file.getVirtualFile();

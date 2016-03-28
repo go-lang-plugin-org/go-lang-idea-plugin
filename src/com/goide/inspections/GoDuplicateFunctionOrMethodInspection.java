@@ -19,6 +19,7 @@ package com.goide.inspections;
 import com.goide.psi.*;
 import com.goide.sdk.GoPackageUtil;
 import com.goide.stubs.index.GoFunctionIndex;
+import com.goide.stubs.index.GoIdFilter;
 import com.goide.stubs.index.GoMethodIndex;
 import com.goide.stubs.types.GoMethodDeclarationStubElementType;
 import com.goide.util.GoUtil;
@@ -30,6 +31,7 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.Processor;
+import com.intellij.util.indexing.IdFilter;
 import org.jetbrains.annotations.NotNull;
 
 import static com.goide.GoConstants.INIT;
@@ -52,8 +54,10 @@ public class GoDuplicateFunctionOrMethodInspection extends GoInspectionBase {
 
         GoFile file = method.getContainingFile();
         GlobalSearchScope scope = GoPackageUtil.packageScope(file);
+        IdFilter idFilter = GoIdFilter.getFilesFilter(scope);
         Module module = ModuleUtilCore.findModuleForPsiElement(file);
-        GoMethodIndex.process(file.getPackageName() + "." + typeText, file.getProject(), scope, new Processor<GoMethodDeclaration>() {
+        String key = file.getPackageName() + "." + typeText;
+        GoMethodIndex.process(key, file.getProject(), scope, idFilter, new Processor<GoMethodDeclaration>() {
           @Override
           public boolean process(GoMethodDeclaration declaration) {
             if (!method.isEquivalentTo(declaration)) {
@@ -81,7 +85,8 @@ public class GoDuplicateFunctionOrMethodInspection extends GoInspectionBase {
         final boolean isMainFunction = MAIN.equals(funcName) && MAIN.equals(file.getPackageName()) && zeroArity(func);
         Module module = ModuleUtilCore.findModuleForPsiElement(file);
         final GlobalSearchScope scope = GoPackageUtil.packageScope(file);
-        GoFunctionIndex.process(funcName, file.getProject(), scope, new Processor<GoFunctionDeclaration>() {
+        final IdFilter idFilter = GoIdFilter.getFilesFilter(scope);
+        GoFunctionIndex.process(funcName, file.getProject(), scope, idFilter, new Processor<GoFunctionDeclaration>() {
           @Override
           public boolean process(GoFunctionDeclaration declaration) {
             if (!func.isEquivalentTo(declaration) && GoUtil.matchedForModuleBuildTarget(declaration.getContainingFile(), module)) {

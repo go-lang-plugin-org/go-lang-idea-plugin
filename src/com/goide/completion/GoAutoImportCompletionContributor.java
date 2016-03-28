@@ -21,6 +21,7 @@ import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.psi.impl.GoTypeReference;
 import com.goide.runconfig.testing.GoTestFinder;
+import com.goide.stubs.index.GoIdFilter;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.openapi.module.Module;
@@ -36,9 +37,11 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
+import com.intellij.util.CommonProcessors;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.indexing.IdFilter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -91,10 +94,11 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         if (containingDirectory != null) {
           scope = new GoUtil.ExceptChildOfDirectory(containingDirectory, scope, GoTestFinder.getTestTargetPackage(file));
         }
-        Set<String> sortedKeys = sortMatching(matcher, StubIndex.getInstance().getAllKeys(ALL_PUBLIC_NAMES, project), file);
+        IdFilter idFilter = GoIdFilter.getProductionFilter(project);
+        Set<String> sortedKeys = sortMatching(matcher, collectAllPublicProductionNames(scope, idFilter), file);
         for (String name : sortedKeys) {
           processor.setName(name);
-          for (GoNamedElement element : StubIndex.getElements(ALL_PUBLIC_NAMES, name, project, scope, GoNamedElement.class)) {
+          for (GoNamedElement element : StubIndex.getElements(ALL_PUBLIC_NAMES, name, project, scope, idFilter, GoNamedElement.class)) {
             if (!processor.process(element)) {
               break;
             }
@@ -110,6 +114,13 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
         return result.withPrefixMatcher(createPrefixMatcher(newPrefix));
       }
     });
+  }
+
+  @NotNull
+  private static Collection<String> collectAllPublicProductionNames(@NotNull GlobalSearchScope scope, IdFilter idFilter) {
+    Collection<String> result = ContainerUtil.newHashSet();
+    StubIndex.getInstance().processAllKeys(ALL_PUBLIC_NAMES, new CommonProcessors.CollectProcessor<String>(result), scope, idFilter);
+    return result;
   }
 
   @NotNull
