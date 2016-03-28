@@ -224,6 +224,17 @@ public class GoUtil {
       return !GoTestFinder.isTestFile(file) && super.contains(file);
     }
   }
+  
+  public static class TestsScope extends DelegatingGlobalSearchScope {
+    public TestsScope(@NotNull GlobalSearchScope baseScope) {
+      super(baseScope);
+    }
+
+    @Override
+    public boolean contains(@NotNull VirtualFile file) {
+      return GoTestFinder.isTestFile(file) && super.contains(file);
+    }
+  }
 
   public static class ExceptChildOfDirectory extends DelegatingGlobalSearchScope {
     @NotNull private final VirtualFile myParent;
