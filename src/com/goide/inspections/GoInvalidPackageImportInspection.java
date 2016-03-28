@@ -45,6 +45,13 @@ import java.util.Set;
 public class GoInvalidPackageImportInspection extends GoInspectionBase {
   @Override
   protected void checkFile(@NotNull GoFile file, @NotNull ProblemsHolder problemsHolder) {
+    Module module = ModuleUtilCore.findModuleForPsiElement(file);
+    VirtualFile sdkHome = GoSdkUtil.getSdkSrcDir(file.getProject(), module);
+    boolean supportsVendoring = GoVendoringUtil.isVendoringEnabled(module);
+    String sdkVersion = GoSdkService.getInstance(file.getProject()).getSdkVersion(module);
+    boolean supportsInternalPackages = GoVendoringUtil.supportsInternalPackages(sdkVersion);
+    boolean supportsInternalPackagesInSdk = sdkHome != null && GoVendoringUtil.supportsSdkInternalPackages(sdkVersion);
+    
     for (GoImportSpec importSpec : file.getImports()) {
       PsiDirectory resolve = importSpec.getImportString().resolve();
       if (resolve != null) {
@@ -68,23 +75,16 @@ public class GoInvalidPackageImportInspection extends GoInspectionBase {
           continue;
         }
 
-        Module module = ModuleUtilCore.findModuleForPsiElement(file);
-        VirtualFile sdkHome = GoSdkUtil.getSdkSrcDir(file.getProject(), module);
-
         VirtualFile contextFile = file.getVirtualFile();
         VirtualFile resolvedFile = resolve.getVirtualFile();
 
-        String sdkVersion = GoSdkService.getInstance(file.getProject()).getSdkVersion(module);
-        boolean supportsInternalPackages = GoVendoringUtil.supportsInternalPackages(sdkVersion) ||
-                                           sdkHome != null && GoVendoringUtil.supportsSdkInternalPackages(sdkVersion) &&
-                                           VfsUtilCore.isAncestor(sdkHome, resolvedFile, false);
-        boolean supportsVendoring = GoVendoringUtil.isVendoringEnabled(module);
-
-        if (supportsVendoring || supportsInternalPackages) {
+        boolean validateInternal = supportsInternalPackages || supportsInternalPackagesInSdk 
+                                                               && VfsUtilCore.isAncestor(sdkHome, resolvedFile, false);
+        if (supportsVendoring || validateInternal) {
           Set<VirtualFile> sourceRoots = GoSdkUtil.getSourcesPathsToLookup(file.getProject(), module);
           for (PsiReference reference : importSpec.getImportString().getReferences()) {
             if (reference instanceof GoImportReference) {
-              if (supportsInternalPackages && GoConstants.INTERNAL.equals(reference.getCanonicalText())) {
+              if (validateInternal && GoConstants.INTERNAL.equals(reference.getCanonicalText())) {
                 if (GoSdkUtil.isUnreachableInternalPackage(resolvedFile, contextFile, sourceRoots)) {
                   problemsHolder.registerProblem(importSpec, "Use of internal package is not allowed", new GoDeleteImportQuickFix());
                   break;
