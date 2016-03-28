@@ -32,6 +32,7 @@ import com.intellij.execution.testframework.actions.AbstractRerunFailedTestsActi
 import com.intellij.execution.testframework.sm.SMCustomMessagesParsing;
 import com.intellij.execution.testframework.sm.runner.OutputToGeneralTestEventsConverter;
 import com.intellij.execution.testframework.sm.runner.SMTRunnerConsoleProperties;
+import com.intellij.execution.testframework.sm.runner.SMTestLocator;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -46,6 +47,12 @@ import java.util.List;
 public class GoTestConsoleProperties extends SMTRunnerConsoleProperties implements SMCustomMessagesParsing {
   public GoTestConsoleProperties(@NotNull GoTestRunConfiguration configuration, @NotNull Executor executor) {
     super(configuration, configuration.getTestFramework().getName(), executor);
+  }
+
+  @Nullable
+  @Override
+  public SMTestLocator getTestLocator() {
+    return GoTestLocator.INSTANCE; 
   }
 
   @NotNull

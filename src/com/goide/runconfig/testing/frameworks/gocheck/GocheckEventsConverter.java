@@ -17,7 +17,7 @@
 package com.goide.runconfig.testing.frameworks.gocheck;
 
 import com.goide.runconfig.testing.GoTestEventsConverterBase;
-import com.goide.runconfig.testing.GoTestLocationProvider;
+import com.goide.runconfig.testing.GoTestLocator;
 import com.intellij.execution.testframework.TestConsoleProperties;
 import com.intellij.execution.testframework.sm.ServiceMessageBuilder;
 import com.intellij.execution.testframework.sm.runner.OutputToGeneralTestEventsConverter;
@@ -502,11 +502,11 @@ public class GocheckEventsConverter extends OutputToGeneralTestEventsConverter i
 
   @NotNull
   private static String suiteUrl(@NotNull String suiteName) {
-    return GoTestLocationProvider.SUITE_PROTOCOL + "://" + suiteName;
+    return GoTestLocator.SUITE_PROTOCOL + "://" + suiteName;
   }
   
   @NotNull
   private static String testUrl(@NotNull String testName) {
-    return GoTestLocationProvider.PROTOCOL + "://" + testName;
+    return GoTestLocator.PROTOCOL + "://" + testName;
   }
 }
