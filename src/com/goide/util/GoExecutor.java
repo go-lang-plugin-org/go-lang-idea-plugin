@@ -25,7 +25,6 @@ import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionHelper;
 import com.intellij.execution.ExecutionModes;
 import com.intellij.execution.RunContentExecutor;
-import com.intellij.execution.configurations.EncodingEnvironmentUtil;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.ParametersList;
 import com.intellij.execution.configurations.PtyCommandLine;
@@ -73,7 +72,7 @@ public class GoExecutor {
   private boolean myShowOutputOnError;
   private boolean myShowNotificationsOnError;
   private boolean myShowNotificationsOnSuccess;
-  private boolean myPassParentEnvironment = true;
+  private GeneralCommandLine.ParentEnvironmentType myParentEnvironmentType = GeneralCommandLine.ParentEnvironmentType.CONSOLE;
   private boolean myPtyDisabled;
   @Nullable private String myExePath;
   @Nullable private String myPresentableName;
@@ -163,7 +162,8 @@ public class GoExecutor {
 
   @NotNull
   public GoExecutor withPassParentEnvironment(boolean passParentEnvironment) {
-    myPassParentEnvironment = passParentEnvironment;
+    myParentEnvironmentType = passParentEnvironment ? GeneralCommandLine.ParentEnvironmentType.CONSOLE 
+                                                    : GeneralCommandLine.ParentEnvironmentType.NONE;
     return this;
   }
 
@@ -359,9 +359,8 @@ public class GoExecutor {
 
     commandLine.withWorkDirectory(myWorkDirectory);
     commandLine.addParameters(myParameterList.getList());
-    commandLine.setPassParentEnvironment(myPassParentEnvironment);
+    commandLine.withParentEnvironmentType(myParentEnvironmentType);
     commandLine.withCharset(CharsetToolkit.UTF8_CHARSET);
-    EncodingEnvironmentUtil.setLocaleEnvironmentIfMac(commandLine);
     return commandLine;
   }
 
