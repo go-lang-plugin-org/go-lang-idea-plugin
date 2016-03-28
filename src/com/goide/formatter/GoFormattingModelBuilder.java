@@ -46,6 +46,7 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
     return new SpacingBuilder(settings, GoLanguage.INSTANCE)
       .before(COMMA).spaceIf(false)
       .after(COMMA).spaceIf(true)
+      .betweenInside(SEMICOLON, SEMICOLON, FOR_CLAUSE).spaces(1)
       .before(SEMICOLON).spaceIf(false)
       .after(SEMICOLON).spaceIf(true)
       .beforeInside(DOT, IMPORT_SPEC).none()
