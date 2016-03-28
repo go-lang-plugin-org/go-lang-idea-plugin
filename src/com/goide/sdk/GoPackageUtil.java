@@ -81,7 +81,7 @@ public class GoPackageUtil {
   @NotNull
   public static GlobalSearchScope packageScope(@NotNull GoFile file) {
     List<GoFile> files = getAllPackageFiles(file);
-    return GlobalSearchScope.filesWithLibrariesScope(file.getProject(), ContainerUtil.map(files, new Function<GoFile, VirtualFile>() {
+    return GlobalSearchScope.filesScope(file.getProject(), ContainerUtil.map(files, new Function<GoFile, VirtualFile>() {
       @Override
       public VirtualFile fun(GoFile file) {
         return file.getVirtualFile();
@@ -92,7 +92,7 @@ public class GoPackageUtil {
   @NotNull
   public static GlobalSearchScope packageScope(@NotNull PsiDirectory psiDirectory) {
     List<GoFile> files = getAllPackageFiles(psiDirectory, null);
-    return GlobalSearchScope.filesWithLibrariesScope(psiDirectory.getProject(), ContainerUtil.map(files, new Function<GoFile, VirtualFile>() {
+    return GlobalSearchScope.filesScope(psiDirectory.getProject(), ContainerUtil.map(files, new Function<GoFile, VirtualFile>() {
       @Override
       public VirtualFile fun(GoFile file) {
         return file.getVirtualFile();
