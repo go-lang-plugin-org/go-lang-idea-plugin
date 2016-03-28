@@ -119,8 +119,7 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
         super.visitTypeReferenceExpression(o);
         PsiReference reference = o.getReference();
         GoTypeReferenceExpression qualifier = o.getQualifier();
-        PsiReference qualifierRef = qualifier != null ? qualifier.getReference() : null;
-        PsiElement qualifierResolve = qualifierRef != null ? qualifierRef.resolve() : null;
+        PsiElement qualifierResolve = qualifier != null ? qualifier.resolve() : null;
         if (qualifier != null && qualifierResolve == null) return;
         if (reference.resolve() == null) {
           PsiElement id = o.getIdentifier();

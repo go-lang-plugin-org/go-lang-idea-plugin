@@ -253,9 +253,8 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     return true;
   }
 
-  private boolean processInTypeRef(@Nullable GoTypeReferenceExpression refExpr, @NotNull GoScopeProcessor processor, @NotNull ResolveState state) {
-    PsiReference reference = refExpr != null ? refExpr.getReference() : null;
-    PsiElement resolve = reference != null ? reference.resolve() : null;
+  private boolean processInTypeRef(@Nullable GoTypeReferenceExpression e, @NotNull GoScopeProcessor processor, @NotNull ResolveState state) {
+    PsiElement resolve = e != null ? e.resolve() : null;
     if (resolve instanceof GoTypeOwner) {
       GoType type = ((GoTypeOwner)resolve).getGoType(state);
       if (type == null) return true;
