@@ -16,7 +16,7 @@
 
 package com.goide.runconfig.testing.frameworks.gobench;
 
-import com.goide.runconfig.testing.GoTestLocationProvider;
+import com.goide.runconfig.testing.GoTestLocator;
 import com.google.common.base.Stopwatch;
 import com.intellij.execution.testframework.TestConsoleProperties;
 import com.intellij.execution.testframework.sm.runner.OutputToGeneralTestEventsConverter;
@@ -81,6 +81,6 @@ public class GobenchEventsConverter extends OutputToGeneralTestEventsConverter {
 
   @NotNull
   private static String testUrl(@NotNull String testName) {
-    return GoTestLocationProvider.PROTOCOL + "://" + testName;
+    return GoTestLocator.PROTOCOL + "://" + testName;
   }
 }

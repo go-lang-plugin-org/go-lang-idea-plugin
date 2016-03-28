@@ -168,7 +168,6 @@
     <runConfigurationProducer implementation="com.goide.runconfig.testing.frameworks.gobench.GobenchRunConfigurationProducer"/>
     <configurationType implementation="com.goide.runconfig.testing.GoTestRunConfigurationType"/>
     <testFinder implementation="com.goide.runconfig.testing.GoTestFinder"/>
-    <testSrcLocator implementation="com.goide.runconfig.testing.GoTestLocationProvider"/>
 
     <!-- debugger -->
     <xdebugger.breakpointType implementation="com.goide.dlv.breakpoint.DlvBreakpointType"/>
