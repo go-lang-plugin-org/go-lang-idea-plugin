@@ -40,6 +40,7 @@ public class GoFormatterTest extends GoCodeInsightFixtureTestCase {
   public void testVarDeclaration()                  { doTest(); }
   public void testBreakLines()                      { doTest(); }
   public void testCommentIndentation()              { doTest(); }
+  public void testElseStatement()                   { doTest(); }
 
   private void doTest() { doTest(null); }
 
