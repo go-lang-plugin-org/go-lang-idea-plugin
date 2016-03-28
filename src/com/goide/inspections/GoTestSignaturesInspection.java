@@ -81,7 +81,7 @@ public class GoTestSignaturesInspection extends GoInspectionBase {
       GoFile file = ObjectUtils.tryCast(signature.getContainingFile(), GoFile.class);
       if (file == null) return;
 
-      String testingQualifier = GotestGenerateAction.importPackageIfNeeded(file, GoConstants.TESTING_PATH, GoConstants.TESTING_PATH);
+      String testingQualifier = GotestGenerateAction.importTestingPackageIfNeeded(file);
       signature.replace(GoElementFactory.createFunctionSignatureFromText(project, myType.getSignature(testingQualifier)));
     }
   }
