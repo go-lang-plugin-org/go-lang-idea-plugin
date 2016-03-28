@@ -21,8 +21,10 @@ import com.goide.GoTypes;
 import com.goide.psi.*;
 import com.goide.psi.impl.imports.GoImportReferenceSet;
 import com.goide.runconfig.testing.GoTestFinder;
+import com.goide.sdk.GoPackageUtil;
 import com.goide.sdk.GoSdkUtil;
 import com.goide.stubs.*;
+import com.goide.stubs.index.GoIdFilter;
 import com.goide.stubs.index.GoMethodIndex;
 import com.goide.util.GoStringLiteralEscaper;
 import com.goide.util.GoUtil;
@@ -40,7 +42,6 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileRefe
 import com.intellij.psi.impl.source.tree.LeafElement;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.GlobalSearchScopesCore;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiModificationTracker;
@@ -789,8 +790,8 @@ public class GoPsiImplUtil {
       String key = packageName + "." + typeName;
       Project project = ((GoFile)file).getProject();
       PsiDirectory parent = file.getParent();
-      GlobalSearchScope scope = parent == null ? GlobalSearchScope.allScope(project) : GlobalSearchScopesCore.directoryScope(parent, false);
-      Collection<GoMethodDeclaration> declarations = GoMethodIndex.find(key, project, scope);
+      GlobalSearchScope scope = parent == null ? GlobalSearchScope.allScope(project) : GoPackageUtil.packageScope(parent);
+      Collection<GoMethodDeclaration> declarations = GoMethodIndex.find(key, project, scope, GoIdFilter.getFilesFilter(scope));
       return ContainerUtil.newArrayList(declarations);
     }
     return Collections.emptyList();

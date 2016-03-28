@@ -23,6 +23,7 @@ import com.goide.runconfig.testing.GoTestFunctionType;
 import com.goide.runconfig.testing.frameworks.gotest.GotestGenerateAction;
 import com.goide.sdk.GoPackageUtil;
 import com.goide.stubs.index.GoFunctionIndex;
+import com.goide.stubs.index.GoIdFilter;
 import com.goide.stubs.index.GoMethodIndex;
 import com.goide.stubs.types.GoMethodDeclarationStubElementType;
 import com.goide.util.GoUtil;
@@ -44,8 +45,10 @@ import com.intellij.util.CommonProcessors;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.indexing.IdFilter;
 import com.intellij.util.text.UniqueNameGenerator;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Set;
@@ -58,26 +61,26 @@ public class GoTestFunctionCompletionProvider extends CompletionProvider<Complet
     if (file instanceof GoFile) {
       final CompletionResultSet resultSet = result.withPrefixMatcher(new CamelHumpMatcher(result.getPrefixMatcher().getPrefix(), false));
       GlobalSearchScope packageScope = GoPackageUtil.packageScope((GoFile)file);
-      Collection<String> allFunctionNames = collectAllFunctionNames(packageScope);
-      Set<String> allTestFunctionNames = collectAllTestNames(allFunctionNames, project, packageScope);
+      IdFilter idFilter = GoIdFilter.getFilesFilter(packageScope);
+      Collection<String> allFunctionNames = collectAllFunctionNames(packageScope, idFilter);
+      Set<String> allTestFunctionNames = collectAllTestNames(allFunctionNames, project, packageScope, idFilter);
       String fileNameWithoutTestPrefix = StringUtil.trimEnd(file.getName(), GoConstants.TEST_SUFFIX_WITH_EXTENSION) + ".go";
       GlobalSearchScope scope = new GoUtil.ExceptTestsScope(packageScope);
       for (String functionName : allFunctionNames) {
-        StubIndex.getInstance().processElements(GoFunctionIndex.KEY, functionName, project, scope, GoFunctionDeclaration.class,
-                                                new Processor<GoFunctionDeclaration>() {
-                                                  @Override
-                                                  public boolean process(GoFunctionDeclaration declaration) {
-                                                    addVariants(declaration, functionName, fileNameWithoutTestPrefix,
-                                                                allTestFunctionNames, resultSet);
-                                                    return false;
-                                                  }
-                                                });
+        GoFunctionIndex.process(functionName, project, scope, idFilter, new Processor<GoFunctionDeclaration>() {
+          @Override
+          public boolean process(GoFunctionDeclaration declaration) {
+            addVariants(declaration, functionName, fileNameWithoutTestPrefix,
+                        allTestFunctionNames, resultSet);
+            return false;
+          }
+        });
       }
 
       Collection<String> methodKeys = ContainerUtil.newHashSet();
-      StubIndex.getInstance().processAllKeys(GoMethodIndex.KEY, project, new CommonProcessors.CollectProcessor<String>(methodKeys));
+      StubIndex.getInstance().processAllKeys(GoMethodIndex.KEY, new CommonProcessors.CollectProcessor<String>(methodKeys), scope, idFilter);
       for (String key : methodKeys) {
-        Processor<GoMethodDeclaration> methodsProcessor = new Processor<GoMethodDeclaration>() {
+        Processor<GoMethodDeclaration> processor = new Processor<GoMethodDeclaration>() {
           @Override
           public boolean process(GoMethodDeclaration declaration) {
             GoMethodDeclarationStubElementType.calcTypeText(declaration);
@@ -93,7 +96,7 @@ public class GoTestFunctionCompletionProvider extends CompletionProvider<Complet
             return false;
           }
         };
-        StubIndex.getInstance().processElements(GoMethodIndex.KEY, key, project, scope, GoMethodDeclaration.class, methodsProcessor);
+        GoMethodIndex.process(key, project, scope, idFilter, processor);
       }
     }
   }
@@ -123,33 +126,33 @@ public class GoTestFunctionCompletionProvider extends CompletionProvider<Complet
   }
 
   @NotNull
-  private static Set<String> collectAllFunctionNames(@NotNull GlobalSearchScope packageScope) {
+  private static Set<String> collectAllFunctionNames(@NotNull GlobalSearchScope packageScope, @Nullable IdFilter idFilter) {
     Set<String> result = ContainerUtil.newHashSet();
     StubIndex.getInstance().processAllKeys(GoFunctionIndex.KEY, new CommonProcessors.CollectProcessor<String>(result) {
       @Override
       protected boolean accept(String s) {
         return !"_".equals(s) && StringUtil.isCapitalized(s);
       }
-    }, packageScope, null);
+    }, packageScope, idFilter);
     return result;
   }
 
   @NotNull
   private static Set<String> collectAllTestNames(@NotNull Collection<String> names,
                                                  @NotNull Project project,
-                                                 @NotNull GlobalSearchScope packageScope) {
+                                                 @NotNull GlobalSearchScope packageScope,
+                                                 @Nullable IdFilter idFilter) {
     Set<String> result = ContainerUtil.newHashSet();
     GoUtil.TestsScope scope = new GoUtil.TestsScope(packageScope);
     for (final String name : names) {
       if (GoTestFunctionType.fromName(name) != null) {
-        StubIndex.getInstance().processElements(GoFunctionIndex.KEY, name, project, scope, GoFunctionDeclaration.class,
-                                                new Processor<GoFunctionDeclaration>() {
-                                                  @Override
-                                                  public boolean process(GoFunctionDeclaration declaration) {
-                                                    result.add(name);
-                                                    return false;
-                                                  }
-                                                });
+        GoFunctionIndex.process(name, project, scope, idFilter, new Processor<GoFunctionDeclaration>() {
+          @Override
+          public boolean process(GoFunctionDeclaration declaration) {
+            result.add(name);
+            return false;
+          }
+        });
       }
     }
     return result;

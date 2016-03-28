@@ -24,6 +24,7 @@ import com.goide.sdk.GoPackageUtil;
 import com.goide.sdk.GoSdkUtil;
 import com.goide.stubs.index.GoAllPrivateNamesIndex;
 import com.goide.stubs.index.GoAllPublicNamesIndex;
+import com.goide.stubs.index.GoIdFilter;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.documentation.DocumentationManagerProtocol;
 import com.intellij.lang.documentation.AbstractDocumentationProvider;
@@ -37,11 +38,11 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.GlobalSearchScopesCore;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.indexing.IdFilter;
 import com.intellij.xml.util.XmlStringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -395,15 +396,14 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       PsiDirectory psiDirectory = directory != null ? psiManager.findDirectory(directory) : null;
       String anchor = hash >= 0 ? link.substring(Math.min(hash + 1, link.length())) : null;
       if (StringUtil.isNotEmpty(anchor)) {
-        GlobalSearchScope scope = psiDirectory != null 
-                                  ? GlobalSearchScopesCore.directoryScope(psiDirectory, false) 
-                                  : GlobalSearchScope.projectScope(project);
+        GlobalSearchScope scope = psiDirectory != null ? GoPackageUtil.packageScope(psiDirectory) : GlobalSearchScope.projectScope(project);
+        IdFilter idFilter = GoIdFilter.getFilesFilter(scope);
         GoNamedElement element = ContainerUtil.getFirstItem(StubIndex.getElements(GoAllPublicNamesIndex.ALL_PUBLIC_NAMES, anchor, project, 
-                                                                                  scope, GoNamedElement.class));
+                                                                                  scope, idFilter, GoNamedElement.class));
         if (element != null) {
           return element;
         }
-        return ContainerUtil.getFirstItem(StubIndex.getElements(GoAllPrivateNamesIndex.ALL_PRIVATE_NAMES, anchor, project, scope,
+        return ContainerUtil.getFirstItem(StubIndex.getElements(GoAllPrivateNamesIndex.ALL_PRIVATE_NAMES, anchor, project, scope, idFilter,
                                                                 GoNamedElement.class));
       }
       else {
