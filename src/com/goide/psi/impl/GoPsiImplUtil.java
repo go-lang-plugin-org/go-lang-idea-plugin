@@ -427,10 +427,6 @@ public class GoPsiImplUtil {
     return null;
   }
 
-  private static GoType findBaseType(@Nullable GoType type) {
-    return type == null || type.getTypeReferenceExpression() == null ? type : type.getUnderlyingType();
-  }
-
   @Nullable
   private static GoType getBuiltinType(@NotNull GoExpression o, @NotNull final String name) {
     GoFile builtin = GoSdkUtil.findBuiltinFile(o);
@@ -1293,11 +1289,6 @@ public class GoPsiImplUtil {
       return false;
     }
     return !directory.getVirtualFile().getPath().endsWith("go/doc/testdata");
-  }
-
-  @NotNull
-  public PsiElement getType(@NotNull GoTypeSpec o) {
-    return o.getSpecType();
   }
 
   @Nullable
