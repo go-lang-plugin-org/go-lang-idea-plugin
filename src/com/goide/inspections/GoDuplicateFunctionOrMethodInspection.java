@@ -55,7 +55,7 @@ public class GoDuplicateFunctionOrMethodInspection extends GoInspectionBase {
         GoFile file = method.getContainingFile();
         GlobalSearchScope scope = GoPackageUtil.packageScope(file);
         IdFilter idFilter = GoIdFilter.getFilesFilter(scope);
-        Module module = ModuleUtilCore.findModuleForPsiElement(file);
+        final Module module = ModuleUtilCore.findModuleForPsiElement(file);
         String key = file.getPackageName() + "." + typeText;
         GoMethodIndex.process(key, file.getProject(), scope, idFilter, new Processor<GoMethodDeclaration>() {
           @Override
@@ -83,7 +83,7 @@ public class GoDuplicateFunctionOrMethodInspection extends GoInspectionBase {
 
         final GoFile file = func.getContainingFile();
         final boolean isMainFunction = MAIN.equals(funcName) && MAIN.equals(file.getPackageName()) && zeroArity(func);
-        Module module = ModuleUtilCore.findModuleForPsiElement(file);
+        final Module module = ModuleUtilCore.findModuleForPsiElement(file);
         final GlobalSearchScope scope = GoPackageUtil.packageScope(file);
         final IdFilter idFilter = GoIdFilter.getFilesFilter(scope);
         GoFunctionIndex.process(funcName, file.getProject(), scope, idFilter, new Processor<GoFunctionDeclaration>() {

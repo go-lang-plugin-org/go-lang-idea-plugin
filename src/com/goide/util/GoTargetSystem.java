@@ -58,7 +58,7 @@ public class GoTargetSystem {
   }
 
   @NotNull
-  public static GoTargetSystem forModule(@NotNull Module module) {
+  public static GoTargetSystem forModule(@NotNull final Module module) {
     return CachedValuesManager.getManager(module.getProject()).getCachedValue(module, new CachedValueProvider<GoTargetSystem>() {
       @Nullable
       @Override

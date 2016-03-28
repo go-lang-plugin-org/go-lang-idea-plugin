@@ -63,10 +63,10 @@ public class GoTestFunctionCompletionProvider extends CompletionProvider<Complet
       GlobalSearchScope packageScope = GoPackageUtil.packageScope((GoFile)file);
       IdFilter idFilter = GoIdFilter.getFilesFilter(packageScope);
       Collection<String> allFunctionNames = collectAllFunctionNames(packageScope, idFilter);
-      Set<String> allTestFunctionNames = collectAllTestNames(allFunctionNames, project, packageScope, idFilter);
-      String fileNameWithoutTestPrefix = StringUtil.trimEnd(file.getName(), GoConstants.TEST_SUFFIX_WITH_EXTENSION) + ".go";
+      final Set<String> allTestFunctionNames = collectAllTestNames(allFunctionNames, project, packageScope, idFilter);
+      final String fileNameWithoutTestPrefix = StringUtil.trimEnd(file.getName(), GoConstants.TEST_SUFFIX_WITH_EXTENSION) + ".go";
       GlobalSearchScope scope = new GoUtil.ExceptTestsScope(packageScope);
-      for (String functionName : allFunctionNames) {
+      for (final String functionName : allFunctionNames) {
         GoFunctionIndex.process(functionName, project, scope, idFilter, new Processor<GoFunctionDeclaration>() {
           @Override
           public boolean process(GoFunctionDeclaration declaration) {
@@ -79,7 +79,7 @@ public class GoTestFunctionCompletionProvider extends CompletionProvider<Complet
 
       Collection<String> methodKeys = ContainerUtil.newHashSet();
       StubIndex.getInstance().processAllKeys(GoMethodIndex.KEY, new CommonProcessors.CollectProcessor<String>(methodKeys), scope, idFilter);
-      for (String key : methodKeys) {
+      for (final String key : methodKeys) {
         Processor<GoMethodDeclaration> processor = new Processor<GoMethodDeclaration>() {
           @Override
           public boolean process(GoMethodDeclaration declaration) {
@@ -142,7 +142,7 @@ public class GoTestFunctionCompletionProvider extends CompletionProvider<Complet
                                                  @NotNull Project project,
                                                  @NotNull GlobalSearchScope packageScope,
                                                  @Nullable IdFilter idFilter) {
-    Set<String> result = ContainerUtil.newHashSet();
+    final Set<String> result = ContainerUtil.newHashSet();
     GoUtil.TestsScope scope = new GoUtil.TestsScope(packageScope);
     for (final String name : names) {
       if (GoTestFunctionType.fromName(name) != null) {

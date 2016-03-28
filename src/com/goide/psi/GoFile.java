@@ -123,9 +123,11 @@ public class GoFile extends PsiFileBase {
       @Override
       public Result<List<GoFunctionDeclaration>> compute() {
         GoFileStub stub = getStub();
-        List<GoFunctionDeclaration> functions = stub != null ? getChildrenByType(stub, GoTypes.FUNCTION_DECLARATION,
+        List<GoFunctionDeclaration> functions = stub != null 
+                                                ? getChildrenByType(stub, GoTypes.FUNCTION_DECLARATION,
                                                                                  GoFunctionDeclarationStubElementType.ARRAY_FACTORY)
-                                                             : calc(Conditions.instanceOf(GoFunctionDeclaration.class));
+                                                : GoFile.this.<GoFunctionDeclaration>calc(
+                                                               Conditions.<PsiElement>instanceOf(GoFunctionDeclaration.class));
         return Result.create(functions, GoFile.this);
       }
     });
@@ -139,7 +141,7 @@ public class GoFile extends PsiFileBase {
         StubElement<GoFile> stub = getStub();
         List<GoMethodDeclaration> calc = stub != null
                                          ? getChildrenByType(stub, GoTypes.METHOD_DECLARATION, GoMethodDeclarationStubElementType.ARRAY_FACTORY)
-                                         : calc(Conditions.instanceOf(GoMethodDeclaration.class));
+                                         : GoFile.this.<GoMethodDeclaration>calc(Conditions.<PsiElement>instanceOf(GoMethodDeclaration.class));
         return Result.create(calc, GoFile.this);
       }
     });
@@ -212,7 +214,7 @@ public class GoFile extends PsiFileBase {
       @Override
       public Result<MultiMap<String, GoImportSpec>> compute() {
         MultiMap<String, GoImportSpec> map = MultiMap.createLinked();
-        List<Object> dependencies = ContainerUtil.newArrayList(GoFile.this);
+        List<Object> dependencies = ContainerUtil.<Object>newArrayList(GoFile.this);
         for (GoImportSpec spec : getImports()) {
           String alias = spec.getAlias();
           if (alias != null) {
