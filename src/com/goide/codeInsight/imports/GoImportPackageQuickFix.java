@@ -165,7 +165,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
     Project project = context.getProject();
     final PsiDirectory parentDirectory = contextFile != null ? contextFile.getParent() : null;
     final String testTargetPackage = GoTestFinder.getTestTargetPackage(contextFile);
-    Module module = contextFile != null ? ModuleUtilCore.findModuleForPsiElement(contextFile) : null;
+    final Module module = contextFile != null ? ModuleUtilCore.findModuleForPsiElement(contextFile) : null;
     final boolean vendoringEnabled = GoVendoringUtil.isVendoringEnabled(module);
     GlobalSearchScope scope = GoUtil.goPathResolveScope(context);
     Collection<GoFile> packages = StubIndex.getElements(GoPackagesIndex.KEY, packageName, project, scope, GoFile.class);

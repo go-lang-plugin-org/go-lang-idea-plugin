@@ -123,9 +123,11 @@ public class GoFile extends PsiFileBase {
       @Override
       public Result<List<GoFunctionDeclaration>> compute() {
         GoFileStub stub = getStub();
-        List<GoFunctionDeclaration> functions = stub != null ? getChildrenByType(stub, GoTypes.FUNCTION_DECLARATION,
+        List<GoFunctionDeclaration> functions = stub != null 
+                                                ? getChildrenByType(stub, GoTypes.FUNCTION_DECLARATION,
                                                                                  GoFunctionDeclarationStubElementType.ARRAY_FACTORY)
-                                                             : calc(Conditions.instanceOf(GoFunctionDeclaration.class));
+                                                : GoFile.this.calc(
+                                                               Conditions.instanceOf(GoFunctionDeclaration.class));
         return Result.create(functions, GoFile.this);
       }
     });
@@ -139,7 +141,7 @@ public class GoFile extends PsiFileBase {
         StubElement<GoFile> stub = getStub();
         List<GoMethodDeclaration> calc = stub != null
                                          ? getChildrenByType(stub, GoTypes.METHOD_DECLARATION, GoMethodDeclarationStubElementType.ARRAY_FACTORY)
-                                         : calc(Conditions.instanceOf(GoMethodDeclaration.class));
+                                         : GoFile.this.calc(Conditions.instanceOf(GoMethodDeclaration.class));
         return Result.create(calc, GoFile.this);
       }
     });
