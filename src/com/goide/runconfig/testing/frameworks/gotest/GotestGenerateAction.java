@@ -55,17 +55,15 @@ public class GotestGenerateAction extends GoGenerateTestActionBase {
   }
 
   @NotNull
-  public static String importPackageIfNeeded(@NotNull GoFile file,
-                                             @NotNull String importPath,
-                                             @NotNull String defaultIdentifier) {
-    GoImportSpec alreadyImportedPackage = file.getImportedPackagesMap().get(importPath);
+  public static String importTestingPackageIfNeeded(@NotNull GoFile file) {
+    GoImportSpec alreadyImportedPackage = file.getImportedPackagesMap().get(GoConstants.TESTING_PATH);
     String qualifier = GoPsiImplUtil.getImportQualifierToUseInFile(alreadyImportedPackage);
     if (qualifier != null) {
       return qualifier;
     }
 
-    String localName = UniqueNameGenerator.generateUniqueName(defaultIdentifier, file.getImportMap().keySet());
-    file.addImport(importPath, !defaultIdentifier.equals(localName) ? localName : null);
+    String localName = UniqueNameGenerator.generateUniqueName(GoConstants.TESTING_PATH, file.getImportMap().keySet());
+    file.addImport(GoConstants.TESTING_PATH, !GoConstants.TESTING_PATH.equals(localName) ? localName : null);
     return localName;
   }
 
@@ -84,7 +82,7 @@ public class GotestGenerateAction extends GoGenerateTestActionBase {
       }
       String testingQualifier = null;
       if (myType.getParamType() != null) {
-        testingQualifier = importPackageIfNeeded((GoFile)file, GoConstants.TESTING_PATH, GoConstants.TESTING_PATH);
+        testingQualifier = importTestingPackageIfNeeded((GoFile)file);
         PsiDocumentManager.getInstance(file.getProject()).doPostponedOperationsAndUnblockDocument(editor.getDocument());
       }
       String functionText = "func " + myType.getPrefix();
