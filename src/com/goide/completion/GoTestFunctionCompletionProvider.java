@@ -93,7 +93,7 @@ public class GoTestFunctionCompletionProvider extends CompletionProvider<Complet
               String lookupString = !typeText.isEmpty() ? StringUtil.capitalize(typeText) + "_" + methodName : methodName;
               addVariants(declaration, lookupString, fileNameWithoutTestPrefix, allTestFunctionNames, resultSet);
             }
-            return false;
+            return true;
           }
         };
         GoMethodIndex.process(key, project, scope, idFilter, processor);
