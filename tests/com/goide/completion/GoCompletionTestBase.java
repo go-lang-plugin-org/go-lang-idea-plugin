@@ -40,7 +40,7 @@ public abstract class GoCompletionTestBase extends GoCodeInsightFixtureTestCase 
     myFixture.testCompletion(getTestName(true) + ".go", getTestName(true) + "_after.go");
   }
 
-  protected enum CheckType {EQUALS, INCLUDES, EXCLUDES}
+  protected enum CheckType {EQUALS, INCLUDES, EXCLUDES, ORDERED_EQUALS}
 
   private void doTestVariantsInner(@NotNull CompletionType type, int count, CheckType checkType, String... variants) {
     myFixture.complete(type, count);
@@ -52,7 +52,10 @@ public abstract class GoCompletionTestBase extends GoCodeInsightFixtureTestCase 
       myFixture.getFile().getText(),
       stringList);
     Collection<String> varList = new ArrayList<String>(Arrays.asList(variants));
-    if (checkType == CheckType.EQUALS) {
+    if (checkType == CheckType.ORDERED_EQUALS) {
+      UsefulTestCase.assertOrderedEquals(stringList, variants);
+    }
+    else if (checkType == CheckType.EQUALS) {
       UsefulTestCase.assertSameElements(stringList, variants);
     }
     else if (checkType == CheckType.INCLUDES) {
@@ -66,7 +69,7 @@ public abstract class GoCompletionTestBase extends GoCodeInsightFixtureTestCase 
   }
 
   protected void doTestVariants(@NotNull String txt, @NotNull CompletionType type, int count, CheckType checkType, String... variants) {
-    myFixture.configureByText("a.go", txt);
+    myFixture.configureByText(getDefaultFileName(), txt);
     failOnFileLoading();
     doTestVariantsInner(type, count, checkType, variants);
   }
@@ -88,7 +91,7 @@ public abstract class GoCompletionTestBase extends GoCodeInsightFixtureTestCase 
   }
 
   protected void doCheckResult(@NotNull String before, @NotNull String after, @Nullable Character c) {
-    myFixture.configureByText("a.go", before);
+    myFixture.configureByText(getDefaultFileName(), before);
     failOnFileLoading();
     myFixture.completeBasic();
     if (c != null) myFixture.type(c);
@@ -96,7 +99,7 @@ public abstract class GoCompletionTestBase extends GoCodeInsightFixtureTestCase 
   }
   
   protected void doCheckResult(@NotNull String before, @NotNull String after, @NotNull String selectItem) {
-    myFixture.configureByText("a.go", before);
+    myFixture.configureByText(getDefaultFileName(), before);
     failOnFileLoading();
     myFixture.completeBasic();
     selectLookupItem(selectItem);
@@ -120,5 +123,9 @@ public abstract class GoCompletionTestBase extends GoCodeInsightFixtureTestCase 
 
   protected void failOnFileLoading() {
     //((PsiManagerImpl)myFixture.getPsiManager()).setAssertOnFileLoadingFilter(VirtualFileFilter.ALL, getTestRootDisposable());
+  }
+  
+  protected String getDefaultFileName() {
+    return "a.go";
   }
 }

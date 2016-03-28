@@ -19,10 +19,7 @@ package com.goide.completion;
 import com.goide.GoConstants;
 import com.goide.GoParserDefinition;
 import com.goide.GoTypes;
-import com.goide.psi.GoFile;
-import com.goide.psi.GoImportString;
-import com.goide.psi.GoPackageClause;
-import com.goide.psi.GoReferenceExpressionBase;
+import com.goide.psi.*;
 import com.goide.psi.impl.GoCachedReference;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.runconfig.testing.GoTestFinder;
@@ -36,27 +33,35 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.Conditions;
-import com.intellij.patterns.PlatformPatterns;
+import com.intellij.patterns.PatternCondition;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
 import static com.intellij.codeInsight.completion.PrioritizedLookupElement.withPriority;
+import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public class GoCompletionContributor extends CompletionContributor {
   public GoCompletionContributor() {
     extend(CompletionType.BASIC, importString(), new GoImportPathsCompletionProvider());
     extend(CompletionType.BASIC, referenceExpression(), new GoReferenceCompletionProvider());
     extend(CompletionType.BASIC, goReference(), new GoReferenceCompletionProvider());
+    extend(CompletionType.BASIC, testFunctionSignature(), new GoTestFunctionCompletionProvider());
+  }
+
+  private static PsiElementPattern.Capture<PsiElement> testFunctionSignature() {
+    return psiElement(GoTypes.IDENTIFIER).with(new GoTestFilePattern()).withParent(GoFunctionDeclaration.class)
+      .afterLeaf(psiElement().withElementType(GoTypes.FUNC));
   }
 
   private static PsiElementPattern.Capture<PsiElement> goReference() {
-    return PlatformPatterns.psiElement().withParent(PlatformPatterns.psiElement().withReference(GoCachedReference.class));
+    return psiElement().withParent(psiElement().withReference(GoCachedReference.class));
   }
 
   @Override
@@ -96,10 +101,21 @@ public class GoCompletionContributor extends CompletionContributor {
   }
 
   private static PsiElementPattern.Capture<PsiElement> importString() {
-    return PlatformPatterns.psiElement().withElementType(GoParserDefinition.STRING_LITERALS).withParent(GoImportString.class);
+    return psiElement().withElementType(GoParserDefinition.STRING_LITERALS).withParent(GoImportString.class);
   }
 
   private static PsiElementPattern.Capture<PsiElement> referenceExpression() {
-    return PlatformPatterns.psiElement().withParent(GoReferenceExpressionBase.class);
+    return psiElement().withParent(GoReferenceExpressionBase.class);
+  }
+
+  private static class GoTestFilePattern extends PatternCondition<PsiElement> {
+    public GoTestFilePattern() {
+      super("in go test file");
+    }
+
+    @Override
+    public boolean accepts(@NotNull PsiElement element, ProcessingContext context) {
+      return GoTestFinder.isTestFile(element.getContainingFile());
+    }
   }
 }
