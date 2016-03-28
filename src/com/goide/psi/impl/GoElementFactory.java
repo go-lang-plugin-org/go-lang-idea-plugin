@@ -51,12 +51,6 @@ public class GoElementFactory {
   }
 
   @NotNull
-  public static PsiElement createVarDefinitionFromText(@NotNull Project project, String text) {
-    GoFile file = createFileFromText(project, "package p; var " + text + " = 1");
-    return ContainerUtil.getFirstItem(file.getVars());
-  }
-
-  @NotNull
   public static GoImportDeclaration createImportDeclaration(@NotNull Project project, @NotNull String importString,
                                                             @Nullable String alias, boolean withParens) {
     importString = GoPsiImplUtil.isQuotedImportString(importString) ? importString : StringUtil.wrapWithDoubleQuote(importString);
@@ -136,12 +130,6 @@ public class GoElementFactory {
   public static GoReferenceExpression createReferenceExpression(@NotNull Project project, @NotNull String name) {
     GoFile file = createFileFromText(project, "package a; var a = " + name);
     return PsiTreeUtil.findChildOfType(file, GoReferenceExpression.class);
-  }
-
-  @NotNull
-  public static GoTypeReferenceExpression createTypeReferenceExpression(@NotNull Project project, @NotNull String name) {
-    GoFile file = createFileFromText(project, "package a; type " + name + " struct {}; func f() { " + name + "{} }");
-    return PsiTreeUtil.findChildOfType(file, GoTypeReferenceExpression.class);
   }
 
   @NotNull
