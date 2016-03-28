@@ -226,7 +226,7 @@ public class GoSdkUtil {
       @Nullable
       @Override
       public Result<Collection<VirtualFile>> compute() {
-        return Result.create(getInnerGoPathSources(project, null),
+        return Result.<Collection<VirtualFile>>create(getInnerGoPathSources(project, null),
                              getSdkAndLibrariesCacheDependencies(project, null, YamlFilesModificationTracker.getInstance(project)));
       }
     });

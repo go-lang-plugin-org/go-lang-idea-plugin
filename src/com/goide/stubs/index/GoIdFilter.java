@@ -91,8 +91,8 @@ public class GoIdFilter extends IdFilter {
           }
         };
         FileBasedIndex.getInstance().iterateIndexableFiles(iterator, project, null);
-        return Result.create(new GoIdFilter(bitSet), ProjectRootManager.getInstance(project),
-                             VirtualFileManager.VFS_STRUCTURE_MODIFICATIONS);
+        return Result.<IdFilter>create(new GoIdFilter(bitSet), ProjectRootManager.getInstance(project),
+                             VirtualFileManager.getInstance());
       }
     }, false);
   }

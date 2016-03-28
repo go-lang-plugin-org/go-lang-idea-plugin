@@ -16,7 +16,6 @@
 
 package com.goide.runconfig.testing;
 
-import com.goide.runconfig.testing.frameworks.gobench.GobenchFramework;
 import com.goide.runconfig.testing.frameworks.gocheck.GocheckFramework;
 import com.goide.runconfig.testing.frameworks.gotest.GotestFramework;
 import com.intellij.execution.runners.ExecutionEnvironment;
@@ -38,7 +37,7 @@ public abstract class GoTestFramework {
   private static class Lazy {
 
     private static final ArrayList<GoTestFramework> ALL_FRAMEWORKS = ContainerUtil.newArrayList(
-      GotestFramework.INSTANCE, GocheckFramework.INSTANCE, GobenchFramework.INSTANCE
+      GotestFramework.INSTANCE, GocheckFramework.INSTANCE
     );
   }
   public static List<GoTestFramework> all() {

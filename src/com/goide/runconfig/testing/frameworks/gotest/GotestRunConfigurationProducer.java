@@ -26,9 +26,4 @@ public class GotestRunConfigurationProducer extends GoTestRunConfigurationProduc
   public GotestRunConfigurationProducer() {
     super(GotestFramework.INSTANCE);
   }
-  
-  @Override
-  protected boolean shouldSkipContext(@Nullable GoFunctionOrMethodDeclaration context) {
-    return context != null && context instanceof GoMethodDeclaration;
-  }
 }

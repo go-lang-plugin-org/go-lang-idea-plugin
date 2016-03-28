@@ -43,11 +43,6 @@ public class GocheckRunConfigurationProducer extends GoTestRunConfigurationProdu
            : super.getFunctionConfigurationName(function, fileName);
   }
 
-  @Override
-  protected boolean shouldSkipContext(@Nullable GoFunctionOrMethodDeclaration context) {
-    return context != null && context instanceof GoFunctionDeclaration;
-  }
-
   @NotNull
   @Override
   protected String getFileConfigurationName(@NotNull String fileName) {
