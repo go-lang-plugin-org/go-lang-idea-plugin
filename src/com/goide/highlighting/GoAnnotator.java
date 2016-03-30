@@ -20,6 +20,7 @@ import com.goide.GoConstants;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoCType;
 import com.goide.psi.impl.GoPsiImplUtil;
+import com.goide.quickfix.GoEmptySignatureQuickFix;
 import com.goide.quickfix.GoReplaceWithReturnStatementQuickFix;
 import com.google.common.collect.Sets;
 import com.intellij.lang.annotation.Annotation;
@@ -159,12 +160,15 @@ public class GoAnnotator implements Annotator {
             GoSignature signature = declaration.getSignature();
             if (signature != null) {
               if (signature.getResult() != null) {
-                holder.createErrorAnnotation(signature.getResult(), declaration.getName() +
-                                                                    " function must have no arguments and no return values");
+                Annotation annotation = holder.createErrorAnnotation(signature.getResult(), declaration.getName() +
+                                                                                            " function must have no arguments and no return values");
+                annotation.registerFix(new GoEmptySignatureQuickFix(declaration));
               }
-              if (!signature.getParameters().getParameterDeclarationList().isEmpty()) {
-                holder.createErrorAnnotation(signature.getParameters(), declaration.getName() +
-                                                                        " function must have no arguments and no return values");
+              GoParameters parameters = signature.getParameters();
+              if (!parameters.getParameterDeclarationList().isEmpty()) {
+                Annotation annotation = holder.createErrorAnnotation(parameters, declaration.getName() +
+                                                                                 " function must have no arguments and no return values");
+                annotation.registerFix(new GoEmptySignatureQuickFix(declaration));
               }
             }
           }
