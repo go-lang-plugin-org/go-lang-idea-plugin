@@ -16,11 +16,19 @@
 
 package com.goide.inspections.unresolved;
 
+import com.goide.refactor.GoRefactoringUtil;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class GoIntroduceGlobalConstantFix extends GoUnresolvedFixBase {
-  public GoIntroduceGlobalConstantFix(@NotNull PsiElement element, @NotNull String name) {
-    super(element, name, "global constant", "go_lang_const_qf");
+public class GoIntroduceLocalConstantFix extends GoUnresolvedFixBase {
+  public GoIntroduceLocalConstantFix(@NotNull PsiElement element, @NotNull String name) {
+    super(element, name, "local constant", "go_lang_const_qf");
+  }
+
+  @Nullable
+  @Override
+  protected PsiElement findAnchor(@NotNull PsiElement reference) {
+    return GoRefactoringUtil.findLocalAnchor(GoRefactoringUtil.getLocalOccurrences(reference));
   }
 }
