@@ -596,16 +596,6 @@ public class GoPsiImplUtil {
       List<GoVarDefinition> varList = parent.getVarDefinitionList();
       GoType type = unwrapIfNeeded(last.getGoType(context));
       if (type instanceof GoChannelType) return ((GoChannelType)type).getType();
-      GoTypeReferenceExpression typeRef = type != null ? type.getTypeReferenceExpression() : null;
-      if (typeRef != null) {
-        PsiElement resolve = typeRef.resolve();
-        if (resolve instanceof GoTypeSpec) {
-          type = ((GoTypeSpec)resolve).getSpecType().getType();
-          if (type instanceof GoChannelType) {
-            return ((GoChannelType)type).getType();
-          }
-        }
-      }
       int i = varList.indexOf(o);
       i = i == -1 ? 0 : i;
       if (type instanceof GoArrayOrSliceType && i == 1) return ((GoArrayOrSliceType)type).getType();
@@ -620,7 +610,7 @@ public class GoPsiImplUtil {
 
   @Nullable
   private static GoType unwrapIfNeeded(@Nullable GoType type) {
-    if (type instanceof GoPointerType) return ((GoPointerType)type).getType();
+    if (type instanceof GoPointerType) type = ((GoPointerType)type).getType();
     return type != null ? type.getUnderlyingType() : null;
   }
 
