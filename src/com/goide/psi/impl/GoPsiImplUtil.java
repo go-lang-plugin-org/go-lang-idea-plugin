@@ -621,9 +621,7 @@ public class GoPsiImplUtil {
   @Nullable
   private static GoType unwrapIfNeeded(@Nullable GoType type) {
     if (type instanceof GoPointerType) return ((GoPointerType)type).getType();
-    if (type instanceof GoParType) return ((GoParType)type).getActualType();
-    if (type instanceof GoSpecType) return ((GoSpecType)type).getType();
-    return type;
+    return type != null ? type.getUnderlyingType() : null;
   }
 
   @NotNull
@@ -824,6 +822,7 @@ public class GoPsiImplUtil {
         | o instanceof GoMapType
         | o instanceof GoChannelType) return o;
 
+    if (o instanceof GoParType) return ((GoParType)o).getActualType();
 
     if (o instanceof GoSpecType) {
       return getUnderlyingType(((GoSpecType)o).getType());
