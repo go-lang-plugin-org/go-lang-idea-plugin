@@ -82,7 +82,8 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
                                                                        new GoIntroduceGlobalVariableFix(id, name)
             );
             PsiElement parent = o.getParent();
-            if (!(parent instanceof GoLeftHandExprList)) {
+            if (!(parent instanceof GoLeftHandExprList) || parent.getNextSibling() == null) {
+              fixesList.add(new GoIntroduceLocalConstantFix(id, name));
               fixesList.add(new GoIntroduceGlobalConstantFix(id, name));
             }
             fixes = fixesList.toArray(new LocalQuickFix[fixesList.size()]);
