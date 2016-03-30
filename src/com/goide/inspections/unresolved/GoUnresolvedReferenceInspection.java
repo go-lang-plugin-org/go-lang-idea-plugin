@@ -78,11 +78,14 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
             fixes = createImportPackageFixes(o, reference, holder.isOnTheFly());
           }
           else if (holder.isOnTheFly()) {
-            fixes = new LocalQuickFix[]{
-              new GoIntroduceLocalVariableFix(id, name),
-              new GoIntroduceGlobalVariableFix(id, name),
-              new GoIntroduceGlobalConstantFix(id, name),
-            };
+            List<LocalQuickFix> fixesList = ContainerUtil.newArrayList(new GoIntroduceLocalVariableFix(id, name),
+                                                                       new GoIntroduceGlobalVariableFix(id, name)
+            );
+            PsiElement parent = o.getParent();
+            if (!(parent instanceof GoLeftHandExprList)) {
+              fixesList.add(new GoIntroduceGlobalConstantFix(id, name));
+            }
+            fixes = fixesList.toArray(new LocalQuickFix[fixesList.size()]);
           }
           holder.registerProblem(id, "Unresolved reference " + "'" + name + "'", LIKE_UNKNOWN_SYMBOL, fixes);
         }
