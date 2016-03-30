@@ -45,7 +45,7 @@ public class GoTestSignaturesInspection extends GoInspectionBase {
       if (signature == null) continue;
       List<GoParameterDeclaration> params = signature.getParameters().getParameterDeclarationList();
       if (type == GoTestFunctionType.EXAMPLE) {
-        if (!params.isEmpty()) {
+        if (!params.isEmpty() || signature.getResult() != null) {
           problemsHolder.registerProblem(function.getIdentifier(), "Wrong example signature", new GoTestSignaturesQuickFix(type));
         }
       }
@@ -53,7 +53,8 @@ public class GoTestSignaturesInspection extends GoInspectionBase {
         GoParameterDeclaration param = ContainerUtil.getFirstItem(params);
         GoImportSpec testingImportSpec = file.getImportedPackagesMap().get(GoConstants.TESTING_PATH);
         String testingAlias = ObjectUtils.notNull(GoPsiImplUtil.getImportQualifierToUseInFile(testingImportSpec), GoConstants.TESTING_PATH);
-        if (params.size() != 1 ||
+        if (signature.getResult() != null || 
+            params.size() != 1 ||
             param == null ||
             testingImportSpec == null ||
             !param.getType().textMatches(type.getQualifiedParamType(testingAlias))) {
