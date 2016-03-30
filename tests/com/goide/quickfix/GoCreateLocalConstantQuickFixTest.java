@@ -44,4 +44,5 @@ public class GoCreateLocalConstantQuickFixTest extends GoQuickFixTestBase {
   public void testResolved()        { doTestCreateA(); }
   public void testOnAssignment()    { doTestNoFix(CREATE_LOCAL_CONSTANT_A); }
   public void testOnChanRead()      { doTestNoFix(CREATE_LOCAL_CONSTANT_A); }
+  public void testOnTopLevel()      { doTestNoFix(CREATE_LOCAL_CONSTANT_A); }
 }

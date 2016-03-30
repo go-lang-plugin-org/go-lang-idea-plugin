@@ -78,13 +78,17 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
             fixes = createImportPackageFixes(o, reference, holder.isOnTheFly());
           }
           else if (holder.isOnTheFly()) {
-            List<LocalQuickFix> fixesList = ContainerUtil.newArrayList(new GoIntroduceLocalVariableFix(id, name),
-                                                                       new GoIntroduceGlobalVariableFix(id, name)
-            );
+            boolean canBeLocal = PsiTreeUtil.getParentOfType(o, GoBlock.class) != null;
+            List<LocalQuickFix> fixesList = ContainerUtil.newArrayList(new GoIntroduceGlobalVariableFix(id, name));
+            if (canBeLocal) {
+              fixesList.add(new GoIntroduceLocalVariableFix(id, name));
+            }
             PsiElement parent = o.getParent();
             if (!(parent instanceof GoLeftHandExprList) || parent.getNextSibling() == null) {
-              fixesList.add(new GoIntroduceLocalConstantFix(id, name));
               fixesList.add(new GoIntroduceGlobalConstantFix(id, name));
+              if (canBeLocal) {
+                fixesList.add(new GoIntroduceLocalConstantFix(id, name));
+              }
             }
             fixes = fixesList.toArray(new LocalQuickFix[fixesList.size()]);
           }
