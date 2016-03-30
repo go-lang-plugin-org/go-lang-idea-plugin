@@ -695,9 +695,9 @@ type someInitType struct{}
 
 func (someInitType) init() {}
 
-func <error descr="Duplicate function name">init</error><error descr="Init function must have no arguments and no return values">(int)</error> {}
+func <error descr="Duplicate function name">init</error><error descr="init function must have no arguments and no return values">(int)</error> {}
 
-func init() <error descr="Init function must have no arguments and no return values">int</error> {
+func init() <error descr="init function must have no arguments and no return values">int</error> {
     return 4
 }
 type GroupSlice []Group
