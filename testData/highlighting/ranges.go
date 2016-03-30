@@ -84,19 +84,22 @@ type sampleType struct {
     a int
 }
 
+type a_ b_
+type b_ sampleChan
 type sampleChan chan sampleType
 
-func sample() sampleChan {
-    return make(chan sampleType, 3)
+func sample() a_ {
+	return make(chan sampleType, 3)
 }
 
 func _() {
-    c := sample()
-    c <- sampleType{1}
-    c <- sampleType{2}
-    c <- sampleType{3}
-    close(c)
-    for t := range c {
-        println(t.a)
-    }
+	c := sample()
+	c <- sampleType{1}
+	c <- sampleType{2}
+	c <- sampleType{3}
+	close(c)
+
+	for t := range (((c))) {
+		println(t.a)
+	}
 }
