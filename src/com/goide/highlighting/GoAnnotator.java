@@ -154,16 +154,17 @@ public class GoAnnotator implements Annotator {
         }
         else if (element instanceof GoFunctionDeclaration) {
           GoFunctionDeclaration declaration = (GoFunctionDeclaration)element;
-          if (declaration.getIdentifier().textMatches(GoConstants.INIT)) {
+          if (declaration.getIdentifier().textMatches(GoConstants.INIT) ||  declaration.getIdentifier().textMatches(GoConstants.MAIN) && 
+              GoConstants.MAIN.equals(declaration.getContainingFile().getPackageName())) {
             GoSignature signature = declaration.getSignature();
             if (signature != null) {
               if (signature.getResult() != null) {
-                holder.createErrorAnnotation(signature.getResult(),
-                                             "Init function must have no arguments and no return values");
+                holder.createErrorAnnotation(signature.getResult(), declaration.getName() +
+                                                                    " function must have no arguments and no return values");
               }
               if (!signature.getParameters().getParameterDeclarationList().isEmpty()) {
-                holder.createErrorAnnotation(signature.getParameters(),
-                                             "Init function must have no arguments and no return values");
+                holder.createErrorAnnotation(signature.getParameters(), declaration.getName() +
+                                                                        " function must have no arguments and no return values");
               }
             }
           }
