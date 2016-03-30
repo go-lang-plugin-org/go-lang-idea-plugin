@@ -78,3 +78,25 @@ func <warning>main2</warning>() {
     go chanFn(ch)
     ch <- myStruct{true}
 }
+
+
+type sampleType struct {
+    a int
+}
+
+type sampleChan chan sampleType
+
+func sample() sampleChan {
+    return make(chan sampleType, 3)
+}
+
+func _() {
+    c := sample()
+    c <- sampleType{1}
+    c <- sampleType{2}
+    c <- sampleType{3}
+    close(c)
+    for t := range c {
+        println(t.a)
+    }
+}
