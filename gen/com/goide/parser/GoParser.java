@@ -2999,7 +2999,7 @@ public class GoParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // TypeName | '(' '*' TypeName ')' | '(' ReceiverType ')'
+  // TypeName | '(' ('*' TypeName | ReceiverType) ')'
   public static boolean ReceiverType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ReceiverType")) return false;
     if (!nextTokenIs(b, "<receiver type>", LPAREN, IDENTIFIER)) return false;
@@ -3007,32 +3007,40 @@ public class GoParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, RECEIVER_TYPE, "<receiver type>");
     r = TypeName(b, l + 1);
     if (!r) r = ReceiverType_1(b, l + 1);
-    if (!r) r = ReceiverType_2(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // '(' '*' TypeName ')'
+  // '(' ('*' TypeName | ReceiverType) ')'
   private static boolean ReceiverType_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ReceiverType_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, LPAREN);
-    r = r && consumeToken(b, MUL);
-    r = r && TypeName(b, l + 1);
+    r = r && ReceiverType_1_1(b, l + 1);
     r = r && consumeToken(b, RPAREN);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // '(' ReceiverType ')'
-  private static boolean ReceiverType_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ReceiverType_2")) return false;
+  // '*' TypeName | ReceiverType
+  private static boolean ReceiverType_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ReceiverType_1_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, LPAREN);
-    r = r && ReceiverType(b, l + 1);
-    r = r && consumeToken(b, RPAREN);
+    r = ReceiverType_1_1_0(b, l + 1);
+    if (!r) r = ReceiverType(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // '*' TypeName
+  private static boolean ReceiverType_1_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ReceiverType_1_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, MUL);
+    r = r && TypeName(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }

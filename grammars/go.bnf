@@ -368,7 +368,7 @@ private add_op ::= '+' | '-' | '|' | '^'
 private mul_op ::= '*' | '/' | '%' | '<<' | '>>' | '&' | '&^'
 private unary_op ::= '+' | '-' | '!' | '^' | '*' | '&' | '<-'
 
-ReceiverType ::= TypeName | '(' '*' TypeName ')' | '(' ReceiverType ')'
+ReceiverType ::= TypeName | '(' ('*' TypeName | ReceiverType) ')'
 SelectorExpr ::= Expression '.' !('(' 'type') Expression
 IndexOrSliceExpr ::= Expression '[' <<enterMode "PAR">> (SliceExprBody | IndexExprBody) <<exitModeSafe "PAR">> ']' {pin=2}
 private IndexExprBody ::= Expression SliceExprBodyInner?
