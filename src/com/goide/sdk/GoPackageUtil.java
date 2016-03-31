@@ -17,6 +17,7 @@
 package com.goide.sdk;
 
 import com.goide.GoConstants;
+import com.goide.project.GoModuleSettings;
 import com.goide.psi.GoFile;
 import com.goide.util.GoUtil;
 import com.intellij.openapi.module.Module;
@@ -35,12 +36,14 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.CachedValue;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
+import com.intellij.util.ArrayUtil;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -121,7 +124,11 @@ public class GoPackageUtil {
             }
           }
         }
-        return Result.create(set, dir);
+        ArrayList<Object> dependencies = ContainerUtil.newArrayList(dir);
+        if (module != null) {
+          dependencies.add(GoModuleSettings.getInstance(module).getBuildTargetSettings());
+        }
+        return Result.create(set, ArrayUtil.toObjectArray(dependencies));
       }
     }, false);
   }
