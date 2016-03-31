@@ -52,7 +52,7 @@ public class GoTestLocator implements SMTestLocator {
       List<String> locationDataItems = StringUtil.split(path, ".");
       // Location is a function name, e.g. `TestCheckItOut`
       if (locationDataItems.size() == 1) {
-        return ContainerUtil.mapNotNull(GoFunctionIndex.find(path, project, scope),
+        return ContainerUtil.mapNotNull(GoFunctionIndex.find(path, project, GlobalSearchScope.projectScope(project)),
                                         new Function<GoFunctionDeclaration, Location>() {
                                           @Override
                                           public Location fun(GoFunctionDeclaration function) {
@@ -64,7 +64,7 @@ public class GoTestLocator implements SMTestLocator {
       // Location is a method name, e.g. `FooSuite.TestCheckItOut`
       if (locationDataItems.size() == 2) {
         List<Location> locations = ContainerUtil.newArrayList();
-        for (GoTypeSpec typeSpec : GoTypesIndex.find(locationDataItems.get(0), project, scope)) {
+        for (GoTypeSpec typeSpec : GoTypesIndex.find(locationDataItems.get(0), project, GlobalSearchScope.projectScope(project))) {
           for (GoMethodDeclaration method : typeSpec.getMethods()) {
             if (locationDataItems.get(1).equals(method.getName())) {
               ContainerUtil.addIfNotNull(locations, PsiLocation.fromPsiElement(method));
@@ -75,7 +75,7 @@ public class GoTestLocator implements SMTestLocator {
       }
     }
     else if (SUITE_PROTOCOL.equals(protocolId)) {
-      return ContainerUtil.mapNotNull(GoTypesIndex.find(path, project, scope),
+      return ContainerUtil.mapNotNull(GoTypesIndex.find(path, project, GlobalSearchScope.projectScope(project)),
                                       new Function<GoTypeSpec, Location>() {
                                         @Override
                                         public Location fun(GoTypeSpec spec) {
