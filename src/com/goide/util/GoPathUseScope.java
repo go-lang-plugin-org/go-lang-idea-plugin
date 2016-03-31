@@ -33,7 +33,7 @@ import com.intellij.util.ObjectUtils;
 import org.jetbrains.annotations.NotNull;
 
 public class GoPathUseScope extends GlobalSearchScope {
-  public static GlobalSearchScope create(@NotNull PsiElement declarationContext) {
+  public static GlobalSearchScope create(@NotNull PsiElement declarationContext, boolean filterByImportList) {
     if (declarationContext instanceof GoNamedElement && ((GoNamedElement)declarationContext).isBlank()) {
       return GlobalSearchScope.EMPTY_SCOPE;
     }
@@ -50,14 +50,16 @@ public class GoPathUseScope extends GlobalSearchScope {
       return GlobalSearchScope.fileScope(declarationPsiFile);
     }
 
-    return new GoPathUseScope(declarationPsiFile.getProject(), declarationFile);
+    return new GoPathUseScope(declarationPsiFile.getProject(), declarationFile, filterByImportList);
   }
 
   @NotNull private final VirtualFile myDeclarationFile;
+  private final boolean myFilterByImportList;
 
-  private GoPathUseScope(@NotNull Project project, @NotNull VirtualFile declarationFile) {
+  private GoPathUseScope(@NotNull Project project, @NotNull VirtualFile declarationFile, boolean filterByImportList) {
     super(project);
     myDeclarationFile = declarationFile;
+    myFilterByImportList = filterByImportList;
   }
 
   @Override
@@ -79,6 +81,9 @@ public class GoPathUseScope extends GlobalSearchScope {
     if (!scopeHelper.couldBeReferenced(myDeclarationFile, referenceFile)) {
       return false;
     }
+    if (!myFilterByImportList) {
+      return true;
+    }
 
     if (!(referencePsiFile instanceof GoFile)) {
       // it's some injection or cross-reference, so we cannot check its imports
@@ -90,7 +95,7 @@ public class GoPathUseScope extends GlobalSearchScope {
       if (((GoFile)referencePsiFile).getImportedPackagesMap().containsKey(importPath)) {
         return true;
       }
-      for (GoFile packageFile : GoPackageUtil.getAllPackageFiles((GoFile)referencePsiFile)) {
+      for (GoFile packageFile : GoPackageUtil.getAllPackageFiles(referencePsiFile.getContainingDirectory(), null)) {
         if (packageFile != referencePsiFile && referencePsiFile.getOriginalFile() != packageFile) {
           if (packageFile.getImportedPackagesMap().containsKey(importPath)) {
             return true;

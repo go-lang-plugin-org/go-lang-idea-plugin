@@ -139,8 +139,8 @@ public class GoUtil {
     return StringUtil.startsWithChar(name, '_') || StringUtil.startsWithChar(name, '.');
   }
   
-  public static GlobalSearchScope goPathUseScope(@NotNull PsiElement context) {
-    return GoPathUseScope.create(context);
+  public static GlobalSearchScope goPathUseScope(@NotNull PsiElement context, boolean filterByImportList) {
+    return GoPathUseScope.create(context, filterByImportList);
   }
 
   public static GlobalSearchScope goPathResolveScope(@NotNull PsiElement context) {

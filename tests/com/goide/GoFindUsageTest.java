@@ -148,6 +148,17 @@ public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
            "    }\n" +
            "}");
   }
+  
+  public void testMethodWithTransitiveImport() {
+    myFixture.addFileToProject("a.go", "package main; import `middle`; func main() { fmt.Println(middle.A.Method()) }");
+    myFixture.addFileToProject("middle/middle.go", "package middle; import `declaration`; var A *declaration.D = nil");
+    PsiFile file = myFixture.addFileToProject("declaration/declaration.go", "package declaration; type D struct {}; func (D) Met<caret>hod() {}");
+    myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
+    Collection<UsageInfo> usages = myFixture.findUsages(myFixture.getElementAtCaret());
+    assertEquals(1, usages.size());
+    //noinspection ConstantConditions
+    assertEquals("a.go", usages.iterator().next().getFile().getName());
+  }
 
   public void testDoNoLoadUnreachableVendorDirectory() {
     myFixture.addFileToProject("a.go", "package a; import `foo/vendor/foo`; func _() { println(CONST_NAME) }");

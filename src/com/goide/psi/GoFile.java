@@ -77,7 +77,7 @@ public class GoFile extends PsiFileBase {
   @NotNull
   @Override
   public SearchScope getUseScope() {
-    return GoUtil.goPathUseScope(this);
+    return GoUtil.goPathUseScope(this, true);
   }
 
   @Nullable
@@ -85,7 +85,7 @@ public class GoFile extends PsiFileBase {
     return CachedValuesManager.getCachedValue(this, new CachedValueProvider<GoPackageClause>() {
       @Override
       public Result<GoPackageClause> compute() {
-        GoPackageClause packageClauses = calcFirst(Conditions.<PsiElement>instanceOf(GoPackageClause.class));
+        GoPackageClause packageClauses = calcFirst(Conditions.instanceOf(GoPackageClause.class));
         return Result.create(packageClauses, GoFile.this);
       }
     });
@@ -126,8 +126,8 @@ public class GoFile extends PsiFileBase {
         List<GoFunctionDeclaration> functions = stub != null 
                                                 ? getChildrenByType(stub, GoTypes.FUNCTION_DECLARATION,
                                                                                  GoFunctionDeclarationStubElementType.ARRAY_FACTORY)
-                                                : GoFile.this.<GoFunctionDeclaration>calc(
-                                                               Conditions.<PsiElement>instanceOf(GoFunctionDeclaration.class));
+                                                : calc(
+                                                               Conditions.instanceOf(GoFunctionDeclaration.class));
         return Result.create(functions, GoFile.this);
       }
     });
@@ -141,7 +141,7 @@ public class GoFile extends PsiFileBase {
         StubElement<GoFile> stub = getStub();
         List<GoMethodDeclaration> calc = stub != null
                                          ? getChildrenByType(stub, GoTypes.METHOD_DECLARATION, GoMethodDeclarationStubElementType.ARRAY_FACTORY)
-                                         : GoFile.this.<GoMethodDeclaration>calc(Conditions.<PsiElement>instanceOf(GoMethodDeclaration.class));
+                                         : calc(Conditions.instanceOf(GoMethodDeclaration.class));
         return Result.create(calc, GoFile.this);
       }
     });
@@ -214,7 +214,7 @@ public class GoFile extends PsiFileBase {
       @Override
       public Result<MultiMap<String, GoImportSpec>> compute() {
         MultiMap<String, GoImportSpec> map = MultiMap.createLinked();
-        List<Object> dependencies = ContainerUtil.<Object>newArrayList(GoFile.this);
+        List<Object> dependencies = ContainerUtil.newArrayList(GoFile.this);
         for (GoImportSpec spec : getImports()) {
           String alias = spec.getAlias();
           if (alias != null) {
