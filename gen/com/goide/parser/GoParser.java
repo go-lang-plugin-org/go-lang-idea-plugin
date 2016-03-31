@@ -1,3 +1,19 @@
+/*
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 // This is a generated file. Not intended for manual editing.
 package com.goide.parser;
 
@@ -151,6 +167,9 @@ public class GoParser implements PsiParser, LightPsiParser {
     }
     else if (t == IMPORT_STRING) {
       r = ImportString(b, 0);
+    }
+    else if (t == INC_DEC_STATEMENT) {
+      r = IncDecStatement(b, 0);
     }
     else if (t == INDEX_OR_SLICE_EXPR) {
       r = Expression(b, 0, 6);
@@ -347,9 +366,9 @@ public class GoParser implements PsiParser, LightPsiParser {
       STRUCT_TYPE, TYPE, TYPE_LIST),
     create_token_set_(ASSIGNMENT_STATEMENT, BREAK_STATEMENT, CONTINUE_STATEMENT, DEFER_STATEMENT,
       ELSE_STATEMENT, EXPR_SWITCH_STATEMENT, FALLTHROUGH_STATEMENT, FOR_STATEMENT,
-      GOTO_STATEMENT, GO_STATEMENT, IF_STATEMENT, LABELED_STATEMENT,
-      RETURN_STATEMENT, SELECT_STATEMENT, SEND_STATEMENT, SIMPLE_STATEMENT,
-      STATEMENT, SWITCH_STATEMENT, TYPE_SWITCH_STATEMENT),
+      GOTO_STATEMENT, GO_STATEMENT, IF_STATEMENT, INC_DEC_STATEMENT,
+      LABELED_STATEMENT, RETURN_STATEMENT, SELECT_STATEMENT, SEND_STATEMENT,
+      SIMPLE_STATEMENT, STATEMENT, SWITCH_STATEMENT, TYPE_SWITCH_STATEMENT),
     create_token_set_(ADD_EXPR, AND_EXPR, BUILTIN_CALL_EXPR, CALL_EXPR,
       COMPOSITE_LIT, CONDITIONAL_EXPR, CONVERSION_EXPR, EXPRESSION,
       FUNCTION_LIT, INDEX_OR_SLICE_EXPR, LITERAL, LITERAL_TYPE_EXPR,
@@ -2247,6 +2266,29 @@ public class GoParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // Expression ('++' | '--')
+  public static boolean IncDecStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IncDecStatement")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, INC_DEC_STATEMENT, "<inc dec statement>");
+    r = Expression(b, l + 1, -1);
+    r = r && IncDecStatement_1(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // '++' | '--'
+  private static boolean IncDecStatement_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IncDecStatement_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, PLUS_PLUS);
+    if (!r) r = consumeToken(b, MINUS_MINUS);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // Expression SliceExprBodyInner?
   static boolean IndexExprBody(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IndexExprBody")) return false;
@@ -3202,55 +3244,45 @@ public class GoParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // ShortVarDeclaration
-  //   | (LeftHandExprList (AssignmentStatement | SendStatement | ['++' | '--']))
+  //   | IncDecStatement
+  //   | (LeftHandExprList [AssignmentStatement | SendStatement])
   public static boolean SimpleStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SimpleStatement")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _COLLAPSE_, SIMPLE_STATEMENT, "<simple statement>");
     r = ShortVarDeclaration(b, l + 1);
-    if (!r) r = SimpleStatement_1(b, l + 1);
+    if (!r) r = IncDecStatement(b, l + 1);
+    if (!r) r = SimpleStatement_2(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // LeftHandExprList (AssignmentStatement | SendStatement | ['++' | '--'])
-  private static boolean SimpleStatement_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SimpleStatement_1")) return false;
+  // LeftHandExprList [AssignmentStatement | SendStatement]
+  private static boolean SimpleStatement_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SimpleStatement_2")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
     r = LeftHandExprList(b, l + 1);
     p = r; // pin = LeftHandExprList
-    r = r && SimpleStatement_1_1(b, l + 1);
+    r = r && SimpleStatement_2_1(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
-  // AssignmentStatement | SendStatement | ['++' | '--']
-  private static boolean SimpleStatement_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SimpleStatement_1_1")) return false;
+  // [AssignmentStatement | SendStatement]
+  private static boolean SimpleStatement_2_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SimpleStatement_2_1")) return false;
+    SimpleStatement_2_1_0(b, l + 1);
+    return true;
+  }
+
+  // AssignmentStatement | SendStatement
+  private static boolean SimpleStatement_2_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SimpleStatement_2_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = AssignmentStatement(b, l + 1);
     if (!r) r = SendStatement(b, l + 1);
-    if (!r) r = SimpleStatement_1_1_2(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // ['++' | '--']
-  private static boolean SimpleStatement_1_1_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SimpleStatement_1_1_2")) return false;
-    SimpleStatement_1_1_2_0(b, l + 1);
-    return true;
-  }
-
-  // '++' | '--'
-  private static boolean SimpleStatement_1_1_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SimpleStatement_1_1_2_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, PLUS_PLUS);
-    if (!r) r = consumeToken(b, MINUS_MINUS);
     exit_section_(b, m, null, r);
     return r;
   }

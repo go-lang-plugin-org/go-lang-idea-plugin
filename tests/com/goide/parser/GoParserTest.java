@@ -84,4 +84,5 @@ public class GoParserTest extends ParsingTestCase {
   public void testMapLiteralRecover()               { doTest(false); }
   public void testPlusPlusRecover()                 { doTest(false); }
   public void testTypeComma()                       { doTest(false); }
+  public void testIncDec()                          { doTest(false); }
 }

@@ -91,7 +91,7 @@ GO_FILE
         LEFT_HAND_EXPR_LIST
           PARENTHESES_EXPR
             PsiElement(()('(')
-            PsiErrorElement:'*', <-, <expression>, '[', chan, func, interface, map or struct expected, got 'type'
+            PsiErrorElement:'!=', '%', '&', '&^', '(', ')', '*', '+', '++', '-', '--', '/', <, <-, <<, <=, <expression>, '==', '>', '>=', '>>', '[', '^', chan, func, interface, map, struct or '|' expected, got 'type'
               <empty list>
       STATEMENT
         TYPE_DECLARATION

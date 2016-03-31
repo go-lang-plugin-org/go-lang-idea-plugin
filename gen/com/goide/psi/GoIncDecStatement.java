@@ -21,15 +21,15 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoSimpleStatement extends GoStatement {
+public interface GoIncDecStatement extends GoStatement {
+
+  @NotNull
+  GoExpression getExpression();
 
   @Nullable
-  GoLeftHandExprList getLeftHandExprList();
+  PsiElement getMinusMinus();
 
   @Nullable
-  GoShortVarDeclaration getShortVarDeclaration();
-
-  @Nullable
-  GoStatement getStatement();
+  PsiElement getPlusPlus();
 
 }

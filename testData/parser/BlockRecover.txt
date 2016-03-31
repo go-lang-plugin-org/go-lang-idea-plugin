@@ -28,7 +28,7 @@ GO_FILE
         LEFT_HAND_EXPR_LIST
           REFERENCE_EXPRESSION
             PsiElement(identifier)('asd')
-      PsiErrorElement:'++', ',', '--', ';', <-, <NL>, <assign op> or '}' expected, got ')'
+      PsiErrorElement:',', ';', <-, <NL>, <assign op> or '}' expected, got ')'
         PsiElement())(')')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
@@ -42,7 +42,7 @@ GO_FILE
         LEFT_HAND_EXPR_LIST
           REFERENCE_EXPRESSION
             PsiElement(identifier)('asd')
-      PsiErrorElement:'++', ',', '--', ';', <-, <NL>, <assign op> or '}' expected, got ')'
+      PsiErrorElement:',', ';', <-, <NL>, <assign op> or '}' expected, got ')'
         PsiElement())(')')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST

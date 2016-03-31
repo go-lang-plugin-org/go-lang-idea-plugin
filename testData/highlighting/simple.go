@@ -17,7 +17,7 @@ func  main() {
     <error descr="Type string is not an expression">string</error>
 	test := <error descr="Unresolved reference 'test'">test</error>
 	Println(test)
-	test.<EOLError descr="'(', <expression> or identifier expected, got '}'"></EOLError>
+	test.<EOLError descr="'!=', '%', '&', '&^', '(', '*', '+', '++', '-', '--', '/', <, <<, <=, <expression>, '==', '>', '>=', '>>', '^', identifier or '|' expected, got '}'"></EOLError>
 }
 
 type aaa aaa
