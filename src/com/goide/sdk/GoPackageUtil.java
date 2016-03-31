@@ -67,7 +67,10 @@ public class GoPackageUtil {
   }
   
   @NotNull
-  private static List<GoFile> getAllPackageFiles(@NotNull PsiDirectory directory, @Nullable String packageName) {
+  public static List<GoFile> getAllPackageFiles(@Nullable PsiDirectory directory, @Nullable String packageName) {
+    if (directory == null) {
+      return Collections.emptyList();
+    }
     PsiElement[] children = directory.getChildren();
     List<GoFile> files = ContainerUtil.newArrayListWithCapacity(children.length);
     for (PsiElement element : children) {
