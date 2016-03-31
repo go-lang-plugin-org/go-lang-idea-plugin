@@ -833,10 +833,9 @@ GO_FILE
               LITERAL
                 PsiElement(int)('0')
           PsiElement(;)(';')
-          SIMPLE_STATEMENT
-            LEFT_HAND_EXPR_LIST
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('i')
+          INC_DEC_STATEMENT
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('i')
             PsiElement(--)('--')
         BLOCK
           PsiElement({)('{')
@@ -2111,10 +2110,9 @@ GO_FILE
                     PsiElement(char)(''/'')
             BLOCK
               PsiElement({)('{')
-              SIMPLE_STATEMENT
-                LEFT_HAND_EXPR_LIST
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('length')
+              INC_DEC_STATEMENT
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('length')
                 PsiElement(--)('--')
               PsiElement(})('}')
       SIMPLE_STATEMENT
@@ -3131,10 +3129,9 @@ GO_FILE
             LITERAL
               PsiElement(int)('2')
           PsiElement(;)(';')
-          SIMPLE_STATEMENT
-            LEFT_HAND_EXPR_LIST
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('i')
+          INC_DEC_STATEMENT
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('i')
             PsiElement(++)('++')
         BLOCK
           PsiElement({)('{')

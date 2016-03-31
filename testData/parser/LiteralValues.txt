@@ -2522,10 +2522,9 @@ GO_FILE
             LITERAL
               PsiElement(int)('4')
           PsiElement(;)(';')
-          SIMPLE_STATEMENT
-            LEFT_HAND_EXPR_LIST
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('i')
+          INC_DEC_STATEMENT
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('i')
             PsiElement(++)('++')
         BLOCK
           PsiElement({)('{')

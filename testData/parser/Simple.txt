@@ -1347,10 +1347,9 @@ GO_FILE
             LITERAL
               PsiElement(int)('10')
           PsiElement(;)(';')
-          SIMPLE_STATEMENT
-            LEFT_HAND_EXPR_LIST
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('a')
+          INC_DEC_STATEMENT
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('a')
             PsiElement(++)('++')
         BLOCK
           PsiElement({)('{')
@@ -1479,10 +1478,9 @@ GO_FILE
             LITERAL
               PsiElement(int)('10')
       PsiElement(;)(';')
-      SIMPLE_STATEMENT
-        LEFT_HAND_EXPR_LIST
-          REFERENCE_EXPRESSION
-            PsiElement(identifier)('i')
+      INC_DEC_STATEMENT
+        REFERENCE_EXPRESSION
+          PsiElement(identifier)('i')
         PsiElement(++)('++')
       PsiErrorElement:';', <NL> or '}' expected, got '{'
         <empty list>
@@ -1535,10 +1533,9 @@ GO_FILE
             LITERAL
               PsiElement(int)('10')
           PsiElement(;)(';')
-          SIMPLE_STATEMENT
-            LEFT_HAND_EXPR_LIST
-              REFERENCE_EXPRESSION
-                PsiElement(identifier)('i')
+          INC_DEC_STATEMENT
+            REFERENCE_EXPRESSION
+              PsiElement(identifier)('i')
             PsiElement(++)('++')
         BLOCK
           PsiElement({)('{')

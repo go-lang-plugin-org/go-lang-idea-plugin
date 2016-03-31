@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoSimpleStatementImpl extends GoStatementImpl implements GoSimpleStatement {
+public class GoIncDecStatementImpl extends GoStatementImpl implements GoIncDecStatement {
 
-  public GoSimpleStatementImpl(ASTNode node) {
+  public GoIncDecStatementImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull GoVisitor visitor) {
-    visitor.visitSimpleStatement(this);
+    visitor.visitIncDecStatement(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -42,21 +42,21 @@ public class GoSimpleStatementImpl extends GoStatementImpl implements GoSimpleSt
   }
 
   @Override
-  @Nullable
-  public GoLeftHandExprList getLeftHandExprList() {
-    return findChildByClass(GoLeftHandExprList.class);
+  @NotNull
+  public GoExpression getExpression() {
+    return findNotNullChildByClass(GoExpression.class);
   }
 
   @Override
   @Nullable
-  public GoShortVarDeclaration getShortVarDeclaration() {
-    return findChildByClass(GoShortVarDeclaration.class);
+  public PsiElement getMinusMinus() {
+    return findChildByType(MINUS_MINUS);
   }
 
   @Override
   @Nullable
-  public GoStatement getStatement() {
-    return findChildByClass(GoStatement.class);
+  public PsiElement getPlusPlus() {
+    return findChildByType(PLUS_PLUS);
   }
 
 }

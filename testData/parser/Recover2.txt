@@ -48,7 +48,7 @@ GO_FILE
               PsiElement(identifier)('foo')
             ARGUMENT_LIST
               PsiElement(()('(')
-              PsiErrorElement:')', <expression> or <literal type expr> expected, got 'if'
+              PsiErrorElement:'!=', '%', '&', '&^', '(', ')', '*', '+', '++', '-', '--', '/', <, <<, <=, <expression>, <literal type expr>, '==', '>', '>=', '>>', '^' or '|' expected, got 'if'
                 <empty list>
       IF_STATEMENT
         PsiElement(if)('if')
@@ -76,7 +76,7 @@ GO_FILE
               PsiElement(identifier)('bar')
             ARGUMENT_LIST
               PsiElement(()('(')
-              PsiErrorElement:')', <expression> or <literal type expr> expected, got ','
+              PsiErrorElement:'!=', '%', '&', '&^', '(', ')', '*', '+', '++', '-', '--', '/', <, <<, <=, <expression>, <literal type expr>, '==', '>', '>=', '>>', '^' or '|' expected, got ','
                 <empty list>
           PsiElement(,)(',')
       PsiElement())(')')
@@ -219,7 +219,7 @@ GO_FILE
             LEFT_HAND_EXPR_LIST
               STRING_LITERAL
                 PsiElement(string)('"DELETE"')
-          PsiErrorElement:'++', ',', '--', ';', <-, <NL>, <assign op> or '}' expected, got ':'
+          PsiErrorElement:',', ';', <-, <NL>, <assign op> or '}' expected, got ':'
             PsiElement(:)(':')
           RETURN_STATEMENT
             PsiElement(return)('return')
@@ -335,7 +335,7 @@ GO_FILE
             LEFT_HAND_EXPR_LIST
               STRING_LITERAL
                 PsiElement(string)('"PUT"')
-          PsiErrorElement:'++', ',', '--', ';', <-, <NL>, <assign op> or '}' expected, got ':'
+          PsiErrorElement:',', ';', <-, <NL>, <assign op> or '}' expected, got ':'
             PsiElement(:)(':')
           RETURN_STATEMENT
             PsiElement(return)('return')
@@ -359,7 +359,7 @@ GO_FILE
             LEFT_HAND_EXPR_LIST
               STRING_LITERAL
                 PsiElement(string)('"DELETE"')
-          PsiErrorElement:'++', ',', '--', ';', <-, <NL>, <assign op> or '}' expected, got ':'
+          PsiErrorElement:',', ';', <-, <NL>, <assign op> or '}' expected, got ':'
             PsiElement(:)(':')
           RETURN_STATEMENT
             PsiElement(return)('return')

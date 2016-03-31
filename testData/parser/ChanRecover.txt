@@ -696,7 +696,7 @@ GO_FILE
         LEFT_HAND_EXPR_LIST
           UNARY_EXPR
             PsiElement(<-)('<-')
-          PsiErrorElement:'!', '!=', '%', '&', '&^', '(', '*', '+', '-', '/', <, <-, <<, <=, <channel type>, <expression>, <string literal>, '==', '>', '>=', '>>', '[', '^', chan, func, identifier, interface, map, struct or '|' expected, got 'chan'
+          PsiErrorElement:'!', '!=', '%', '&', '&^', '(', '*', '+', '++', '-', '--', '/', <, <-, <<, <=, <channel type>, <expression>, <string literal>, '==', '>', '>=', '>>', '[', '^', chan, func, identifier, interface, map, struct or '|' expected, got 'chan'
             <empty list>
       PsiElement(chan)('chan')
       SIMPLE_STATEMENT
@@ -710,7 +710,7 @@ GO_FILE
             PsiElement(<-)('<-')
             UNARY_EXPR
               PsiElement(<-)('<-')
-          PsiErrorElement:'!', '!=', '%', '&', '&^', '(', '*', '+', '-', '/', <, <-, <<, <=, <channel type>, <expression>, <string literal>, '==', '>', '>=', '>>', '[', '^', chan, func, identifier, interface, map, struct or '|' expected, got 'chan'
+          PsiErrorElement:'!', '!=', '%', '&', '&^', '(', '*', '+', '++', '-', '--', '/', <, <-, <<, <=, <channel type>, <expression>, <string literal>, '==', '>', '>=', '>>', '[', '^', chan, func, identifier, interface, map, struct or '|' expected, got 'chan'
             <empty list>
       PsiElement(chan)('chan')
       SIMPLE_STATEMENT
@@ -739,7 +739,7 @@ GO_FILE
         LEFT_HAND_EXPR_LIST
           UNARY_EXPR
             PsiElement(<-)('<-')
-          PsiErrorElement:'!', '!=', '%', '&', '&^', '(', '*', '+', '-', '/', <, <-, <<, <=, <channel type>, <expression>, <string literal>, '==', '>', '>=', '>>', '[', '^', chan, func, identifier, interface, map, struct or '|' expected, got 'chan'
+          PsiErrorElement:'!', '!=', '%', '&', '&^', '(', '*', '+', '++', '-', '--', '/', <, <-, <<, <=, <channel type>, <expression>, <string literal>, '==', '>', '>=', '>>', '[', '^', chan, func, identifier, interface, map, struct or '|' expected, got 'chan'
             <empty list>
       PsiElement(chan)('chan')
       SIMPLE_STATEMENT

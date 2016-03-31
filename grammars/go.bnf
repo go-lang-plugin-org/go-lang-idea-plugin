@@ -212,7 +212,8 @@ private StatementRecover ::= !('!' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | 
 
 SimpleStatement ::=
     ShortVarDeclaration
-  | (LeftHandExprList (AssignmentStatement | SendStatement | ['++' | '--'])) {pin(".*")=LeftHandExprList}
+  | IncDecStatement
+  | (LeftHandExprList [AssignmentStatement | SendStatement]) {pin(".*")=LeftHandExprList}
 
 private TopLevelDeclaration ::= OneOfDeclarations semi {pin=1 recoverWhile=TopLevelDeclarationRecover}
 private OneOfDeclarations ::=
@@ -388,6 +389,7 @@ LabelDefinition ::= identifier {
 }
 left SendStatement ::= '<-' Expression {pin=1}
 left AssignmentStatement ::= assign_op ExpressionList {pin=1}
+IncDecStatement ::= Expression ('++' | '--') {pin=2}
 assign_op ::= '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=' | '&=' | '&^='
 IfStatement ::= if Condition Block ElseStatement?
 ElseStatement ::= else (IfStatement | Block)

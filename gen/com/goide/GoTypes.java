@@ -1,3 +1,19 @@
+/*
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 // This is a generated file. Not intended for manual editing.
 package com.goide;
 
@@ -55,6 +71,7 @@ public interface GoTypes {
   IElementType IMPORT_LIST = new GoCompositeElementType("IMPORT_LIST");
   IElementType IMPORT_SPEC = GoStubElementTypeFactory.factory("IMPORT_SPEC");
   IElementType IMPORT_STRING = new GoCompositeElementType("IMPORT_STRING");
+  IElementType INC_DEC_STATEMENT = new GoCompositeElementType("INC_DEC_STATEMENT");
   IElementType INDEX_OR_SLICE_EXPR = new GoCompositeElementType("INDEX_OR_SLICE_EXPR");
   IElementType INTERFACE_TYPE = GoStubElementTypeFactory.factory("INTERFACE_TYPE");
   IElementType KEY = new GoCompositeElementType("KEY");
@@ -331,6 +348,9 @@ public interface GoTypes {
       }
       else if (type == IMPORT_STRING) {
         return new GoImportStringImpl(node);
+      }
+      else if (type == INC_DEC_STATEMENT) {
+        return new GoIncDecStatementImpl(node);
       }
       else if (type == INDEX_OR_SLICE_EXPR) {
         return new GoIndexOrSliceExprImpl(node);

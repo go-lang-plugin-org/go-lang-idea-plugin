@@ -131,10 +131,9 @@ GO_FILE
                       REFERENCE_EXPRESSION
                         PsiElement(identifier)('msg')
                       PsiElement())(')')
-              SIMPLE_STATEMENT
-                LEFT_HAND_EXPR_LIST
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('count')
+              INC_DEC_STATEMENT
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('count')
                 PsiElement(++)('++')
               PsiElement(})('}')
       SIMPLE_STATEMENT
@@ -235,10 +234,9 @@ GO_FILE
                 REFERENCE_EXPRESSION
                   PsiElement(identifier)('loops')
               PsiElement(;)(';')
-              SIMPLE_STATEMENT
-                LEFT_HAND_EXPR_LIST
-                  REFERENCE_EXPRESSION
-                    PsiElement(identifier)('i')
+              INC_DEC_STATEMENT
+                REFERENCE_EXPRESSION
+                  PsiElement(identifier)('i')
                 PsiElement(++)('++')
             BLOCK
               PsiElement({)('{')
@@ -418,13 +416,12 @@ GO_FILE
         PsiElement())(')')
     BLOCK
       PsiElement({)('{')
-      SIMPLE_STATEMENT
-        LEFT_HAND_EXPR_LIST
+      INC_DEC_STATEMENT
+        REFERENCE_EXPRESSION
           REFERENCE_EXPRESSION
-            REFERENCE_EXPRESSION
-              PsiElement(identifier)('e')
-            PsiElement(.)('.')
-            PsiElement(identifier)('count')
+            PsiElement(identifier)('e')
+          PsiElement(.)('.')
+          PsiElement(identifier)('count')
         PsiElement(++)('++')
       SIMPLE_STATEMENT
         LEFT_HAND_EXPR_LIST
