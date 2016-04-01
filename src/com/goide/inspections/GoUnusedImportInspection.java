@@ -21,7 +21,9 @@ import com.goide.psi.GoFile;
 import com.goide.psi.GoImportSpec;
 import com.goide.psi.GoRecursiveVisitor;
 import com.goide.psi.impl.GoElementFactory;
+import com.goide.quickfix.GoRenameQuickFix;
 import com.intellij.codeInspection.*;
+import com.intellij.find.FindManager;
 import com.intellij.lang.ImportOptimizer;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.project.Project;
@@ -102,7 +104,10 @@ public class GoUnusedImportInspection extends GoInspectionBase {
       while (imports.hasNext()) {
         GoImportSpec redeclaredImport = imports.next();
         if (!duplicatedEntries.contains(redeclaredImport)) {
-          problemsHolder.registerProblem(redeclaredImport, "Redeclared import", ProblemHighlightType.GENERIC_ERROR);
+          LocalQuickFix[] quickFixes = FindManager.getInstance(redeclaredImport.getProject()).canFindUsages(redeclaredImport)
+                                       ? new LocalQuickFix[]{new GoRenameQuickFix(redeclaredImport)}
+                                       : LocalQuickFix.EMPTY_ARRAY;
+          problemsHolder.registerProblem(redeclaredImport, "Redeclared import", ProblemHighlightType.GENERIC_ERROR, quickFixes);
         }
       }
     }
@@ -116,7 +121,7 @@ public class GoUnusedImportInspection extends GoInspectionBase {
       GoImportSpec spec = GoImportOptimizer.getImportSpec(importEntry);
       if (spec != null) {
         if (spec.getImportString().resolve() != null) {
-          problemsHolder.registerProblem(spec, "Unused import", ProblemHighlightType.GENERIC_ERROR, OPTIMIZE_QUICK_FIX, 
+          problemsHolder.registerProblem(spec, "Unused import", ProblemHighlightType.GENERIC_ERROR, OPTIMIZE_QUICK_FIX,
                                          IMPORT_FOR_SIDE_EFFECTS_QUICK_FIX);
         }
       }
