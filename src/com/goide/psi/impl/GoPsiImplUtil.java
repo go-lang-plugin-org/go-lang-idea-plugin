@@ -60,6 +60,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.goide.psi.impl.GoLightType.*;
+import static com.intellij.codeInsight.highlighting.ReadWriteAccessDetector.Access.*;
 
 public class GoPsiImplUtil {
   public static final Key<SmartPsiElementPointer<GoReferenceExpressionBase>> CONTEXT = Key.create("CONTEXT");
@@ -1378,36 +1379,32 @@ public class GoPsiImplUtil {
         parent = expression.getParent();
       }
       else {
-        return ReadWriteAccessDetector.Access.Read;
+        return Read;
       }
     }
     if (parent instanceof GoIncDecStatement) {
-      return ReadWriteAccessDetector.Access.Write;
+      return Write;
     }
     if (parent instanceof GoLeftHandExprList) {
       PsiElement grandParent = parent.getParent();
       if (grandParent instanceof GoAssignmentStatement) {
-        return ((GoAssignmentStatement)grandParent).getAssignOp().getAssign() == null ? ReadWriteAccessDetector.Access.ReadWrite
-                                                                                      : ReadWriteAccessDetector.Access.Write;
+        return ((GoAssignmentStatement)grandParent).getAssignOp().getAssign() == null ? ReadWrite : Write;
       }
       if (grandParent instanceof GoSendStatement) {
-        return ReadWriteAccessDetector.Access.Write;
+        return Write;
       }
-      return ReadWriteAccessDetector.Access.Read;
+      return Read;
     }
     if (parent instanceof GoSendStatement && parent.getParent() instanceof GoCommCase) {
-      return expression.equals(((GoSendStatement)parent).getSendExpression()) ? ReadWriteAccessDetector.Access.Read
-                                                                              : ReadWriteAccessDetector.Access.ReadWrite;
+      return expression.equals(((GoSendStatement)parent).getSendExpression()) ? Read : ReadWrite;
     }
     if (parent instanceof GoRangeClause) {
-      return expression.equals(((GoRangeClause)parent).getRangeExpression()) ? ReadWriteAccessDetector.Access.Read
-                                                                             : ReadWriteAccessDetector.Access.Write;
+      return expression.equals(((GoRangeClause)parent).getRangeExpression()) ? Read : Write;
     }
     if (parent instanceof GoRecvStatement) {
-      return expression.equals(((GoRecvStatement)parent).getRecvExpression()) ? ReadWriteAccessDetector.Access.Read
-                                                                              : ReadWriteAccessDetector.Access.ReadWrite;
+      return expression.equals(((GoRecvStatement)parent).getRecvExpression()) ? Read : ReadWrite;
     }
-    return ReadWriteAccessDetector.Access.Read;
+    return Read;
   }
 
   @NotNull
