@@ -17,6 +17,8 @@
 package com.goide.util;
 
 import com.goide.GoCodeInsightFixtureTestCase;
+import com.goide.project.GoBuildTargetSettings;
+import com.goide.project.GoModuleSettings;
 import com.goide.sdk.GoPackageUtil;
 
 public class GoPackageUtilTest extends GoCodeInsightFixtureTestCase {
@@ -34,5 +36,18 @@ public class GoPackageUtilTest extends GoCodeInsightFixtureTestCase {
 
     assertSameElements(GoPackageUtil.getAllPackagesInDirectory(myFixture.getFile().getContainingDirectory(), false),
                        "foo", "foo_test", "main", "non_test", "documentation", "tricky_package_name");
+  }
+
+  public void testInvalidateCacheOnChangingBuildTags() {
+    myFixture.configureByText("foo.go", "// +build ignored\n\npackage ignored");
+    myFixture.configureByText("bar.go", "package not_ignored");
+    assertSameElements(GoPackageUtil.getAllPackagesInDirectory(myFixture.getFile().getContainingDirectory(), true),
+                       "not_ignored");
+
+    GoBuildTargetSettings newSettings = new GoBuildTargetSettings();
+    newSettings.customFlags = new String[]{"ignored"};
+    GoModuleSettings.getInstance(myFixture.getModule()).setBuildTargetSettings(newSettings);
+    assertSameElements(GoPackageUtil.getAllPackagesInDirectory(myFixture.getFile().getContainingDirectory(), true),
+                       "not_ignored", "ignored");
   }
 }
