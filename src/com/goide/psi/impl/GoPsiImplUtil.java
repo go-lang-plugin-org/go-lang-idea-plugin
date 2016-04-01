@@ -1344,6 +1344,11 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
+  public static GoExpression getSendExpression(@NotNull GoSendStatement sendStatement) {
+    return getLastExpressionAfter(sendStatement.getExpressionList(), sendStatement.getSendChannel());
+  }
+
+  @Nullable
   private static GoExpression getLastExpressionAfter(@NotNull List<GoExpression> list, @Nullable PsiElement anchor) {
     if (anchor == null) return null;
     GoExpression last = ContainerUtil.getLastItem(list);
@@ -1364,11 +1369,13 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
-  public static ReadWriteAccessDetector.Access getReadWriteAccess(@NotNull GoReferenceExpression expression) {
-    PsiElement parent = getExpressionParentSkipping(expression);
+  public static ReadWriteAccessDetector.Access getReadWriteAccess(@NotNull GoReferenceExpression referenceExpression) {
+    GoExpression expression = getConsiderableExpression(referenceExpression);
+    PsiElement parent = expression.getParent();
     if (parent instanceof GoSelectorExpr) {
       if (expression.equals(((GoSelectorExpr)parent).getRight())) {
-        parent = PsiTreeUtil.skipParentsOfType(parent, GoParenthesesExpr.class);
+        expression = getConsiderableExpression((GoSelectorExpr)parent);
+        parent = expression.getParent();
       }
       else {
         return ReadWriteAccessDetector.Access.Read;
@@ -1388,6 +1395,10 @@ public class GoPsiImplUtil {
       }
       return ReadWriteAccessDetector.Access.Read;
     }
+    if (parent instanceof GoSendStatement && parent.getParent() instanceof GoCommCase) {
+      return expression.equals(((GoSendStatement)parent).getSendExpression()) ? ReadWriteAccessDetector.Access.Read
+                                                                              : ReadWriteAccessDetector.Access.ReadWrite;
+    }
     if (parent instanceof GoRangeClause) {
       return expression.equals(((GoRangeClause)parent).getRangeExpression()) ? ReadWriteAccessDetector.Access.Read
                                                                              : ReadWriteAccessDetector.Access.Write;
@@ -1400,25 +1411,25 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
-  private static PsiElement getExpressionParentSkipping(@NotNull GoReferenceExpression expression) {
-    PsiElement parent = expression.getParent();
+  private static GoExpression getConsiderableExpression(@NotNull GoExpression element) {
+    GoExpression result = element;
     while (true) {
-      PsiElement nextParent = parent.getParent();
-      if (nextParent == null) {
-        return parent;
+      PsiElement parent = result.getParent();
+      if (parent == null) {
+        return result;
       }
       if (parent instanceof GoParenthesesExpr) {
-        parent = nextParent;
+        result = (GoParenthesesExpr)parent;
         continue;
       }
       if (parent instanceof GoUnaryExpr) {
         GoUnaryExpr unaryExpr = (GoUnaryExpr)parent;
         if (unaryExpr.getMul() != null || unaryExpr.getBitAnd() != null || unaryExpr.getSendChannel() != null) {
-          parent = nextParent;
+          result = (GoUnaryExpr)parent;
           continue;
         }
       }
-      return parent;
+      return result;
     }
   }
 }

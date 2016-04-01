@@ -22,9 +22,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 
-import static com.intellij.codeInsight.highlighting.ReadWriteAccessDetector.Access.Read;
-import static com.intellij.codeInsight.highlighting.ReadWriteAccessDetector.Access.ReadWrite;
-import static com.intellij.codeInsight.highlighting.ReadWriteAccessDetector.Access.Write;
+import static com.intellij.codeInsight.highlighting.ReadWriteAccessDetector.Access.*;
 
 public class GoReadWriteAccessTest extends GoCodeInsightFixtureTestCase {
   public void testAssignment() {
@@ -67,12 +65,20 @@ public class GoReadWriteAccessTest extends GoCodeInsightFixtureTestCase {
     doTest("for fo<caret>o = range bar {\n}", Write);
   }
 
+  public void testRangeLeftExpression_1() {
+    doTest("for (*fo<caret>o) = range bar {\n}", Write);
+  }
+
   public void testRangeRightExpression() {
     doTest("for foo = range ba<caret>r {\n}", Read);
   }
 
   public void testRangeRightExpression_1() {
     doTest("for foo := range ba<caret>r {\n}", Read);
+  }
+
+  public void testRangeRightExpression_2() {
+    doTest("for foo = range (*ba<caret>r) {\n}", Read);
   }
 
   public void testSendRead() {
@@ -93,6 +99,14 @@ public class GoReadWriteAccessTest extends GoCodeInsightFixtureTestCase {
 
   public void testRecvStatementRead() {
     doTest("select {\n\tcase foo = b<caret>ar:\n}", Read);
+  }
+
+  public void testSendStatementInCaseWrite() {
+    doTest("select {\n\tcase (*fo<caret>o) <- bar:\n}", ReadWrite);
+  }
+
+  public void testSendStatementInCaseRead() {
+    doTest("select {\n\tcase foo <- (*b<caret>ar):\n}", Read);
   }
 
   private void doTest(@NotNull String expressionText, @NotNull ReadWriteAccessDetector.Access expectedAccess) {
