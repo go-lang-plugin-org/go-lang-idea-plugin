@@ -22,73 +22,77 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 
+import static com.intellij.codeInsight.highlighting.ReadWriteAccessDetector.Access.Read;
+import static com.intellij.codeInsight.highlighting.ReadWriteAccessDetector.Access.ReadWrite;
+import static com.intellij.codeInsight.highlighting.ReadWriteAccessDetector.Access.Write;
+
 public class GoReadWriteAccessTest extends GoCodeInsightFixtureTestCase {
   public void testAssignment() {
-    doTest("fo<caret>o = 1", ReadWriteAccessDetector.Access.Write);
+    doTest("fo<caret>o = 1", Write);
   }
 
   public void testSimpleStatement() {
-    doTest("fo<caret>o", ReadWriteAccessDetector.Access.Read);
+    doTest("fo<caret>o", Read);
   }
 
   public void testIncDec() {
-    doTest("fo<caret>o++", ReadWriteAccessDetector.Access.Write);
+    doTest("fo<caret>o++", Write);
   }
 
   public void testPlusAssign() {
-    doTest("fo<caret>o += 1", ReadWriteAccessDetector.Access.ReadWrite);
+    doTest("fo<caret>o += 1", ReadWrite);
   }
 
   public void testParenthesisExpression() {
-    doTest("(fo<caret>o) = 2", ReadWriteAccessDetector.Access.Write);
+    doTest("(fo<caret>o) = 2", Write);
   }
 
   public void testPointer() {
-    doTest("(*fo<caret>o) = 2", ReadWriteAccessDetector.Access.Write);
+    doTest("(*fo<caret>o) = 2", Write);
   }
 
   public void testLeftPartOfSelectorExpressionInAssignment() {
-    doTest("foo.b<caret>ar.baz = 1", ReadWriteAccessDetector.Access.Read);
+    doTest("foo.b<caret>ar.baz = 1", Read);
   }
 
   public void testLeftPartOfSelectorExpressionInAssignment_1() {
-    doTest("f<caret>oo.bar.baz = 1", ReadWriteAccessDetector.Access.Read);
+    doTest("f<caret>oo.bar.baz = 1", Read);
   }
 
   public void testRightPartOfSelectorExpressionInAssignment() {
-    doTest("foo.bar.ba<caret>z = 1", ReadWriteAccessDetector.Access.Write);
+    doTest("foo.bar.ba<caret>z = 1", Write);
   }
 
   public void testRangeLeftExpression() {
-    doTest("for fo<caret>o = range bar {\n}", ReadWriteAccessDetector.Access.Write);
+    doTest("for fo<caret>o = range bar {\n}", Write);
   }
 
   public void testRangeRightExpression() {
-    doTest("for foo = range ba<caret>r {\n}", ReadWriteAccessDetector.Access.Read);
+    doTest("for foo = range ba<caret>r {\n}", Read);
   }
 
   public void testRangeRightExpression_1() {
-    doTest("for foo := range ba<caret>r {\n}", ReadWriteAccessDetector.Access.Read);
+    doTest("for foo := range ba<caret>r {\n}", Read);
   }
 
   public void testSendRead() {
-    doTest("a := <- cha<caret>nnel", ReadWriteAccessDetector.Access.Read);
+    doTest("a := <- cha<caret>nnel", Read);
   }
 
   public void testSendWrite() {
-    doTest("chan<caret>nel <- a", ReadWriteAccessDetector.Access.Write);
+    doTest("chan<caret>nel <- a", Write);
   }
 
   public void testCallExpression() {
-    doTest("fmt.Print<caret>ln(a)", ReadWriteAccessDetector.Access.Read);
+    doTest("fmt.Print<caret>ln(a)", Read);
   }
 
   public void testRecvStatementWrite() {
-    doTest("select {\n\tcase fo<caret>o = bar:\n}", ReadWriteAccessDetector.Access.ReadWrite);
+    doTest("select {\n\tcase fo<caret>o = bar:\n}", ReadWrite);
   }
 
   public void testRecvStatementRead() {
-    doTest("select {\n\tcase foo = b<caret>ar:\n}", ReadWriteAccessDetector.Access.Read);
+    doTest("select {\n\tcase foo = b<caret>ar:\n}", Read);
   }
 
   private void doTest(@NotNull String expressionText, @NotNull ReadWriteAccessDetector.Access expectedAccess) {
