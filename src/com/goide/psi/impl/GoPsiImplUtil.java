@@ -28,6 +28,7 @@ import com.goide.stubs.index.GoIdFilter;
 import com.goide.stubs.index.GoMethodIndex;
 import com.goide.util.GoStringLiteralEscaper;
 import com.goide.util.GoUtil;
+import com.intellij.codeInsight.highlighting.ReadWriteAccessDetector;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -1355,5 +1356,64 @@ public class GoPsiImplUtil {
         return expression.getTextRange().getEndOffset() <= anchor.getTextRange().getStartOffset();
       }
     });
+  }
+
+  @NotNull
+  public static ReadWriteAccessDetector.Access getReadWriteAccess(@NotNull GoReferenceExpression expression) {
+    PsiElement parent = getExpressionParentSkipping(expression);
+    if (parent instanceof GoSelectorExpr) {
+      if (expression.equals(((GoSelectorExpr)parent).getRight())) {
+        parent = PsiTreeUtil.skipParentsOfType(parent, GoParenthesesExpr.class);
+      }
+      else {
+        return ReadWriteAccessDetector.Access.Read;
+      }
+    }
+    if (parent instanceof GoIncDecStatement) {
+      return ReadWriteAccessDetector.Access.Write;
+    }
+    if (parent instanceof GoLeftHandExprList) {
+      PsiElement grandParent = parent.getParent();
+      if (grandParent instanceof GoAssignmentStatement) {
+        return ((GoAssignmentStatement)grandParent).getAssignOp().getAssign() == null ? ReadWriteAccessDetector.Access.ReadWrite
+                                                                                      : ReadWriteAccessDetector.Access.Write;
+      }
+      if (grandParent instanceof GoSendStatement) {
+        return ReadWriteAccessDetector.Access.Write;
+      }
+      return ReadWriteAccessDetector.Access.Read;
+    }
+    if (parent instanceof GoRangeClause) {
+      return expression.equals(((GoRangeClause)parent).getRangeExpression()) ? ReadWriteAccessDetector.Access.Read
+                                                                             : ReadWriteAccessDetector.Access.Write;
+    }
+    if (parent instanceof GoRecvStatement) {
+      return expression.equals(((GoRecvStatement)parent).getRecvExpression()) ? ReadWriteAccessDetector.Access.Read
+                                                                              : ReadWriteAccessDetector.Access.Write;
+    }
+    return ReadWriteAccessDetector.Access.Read;
+  }
+
+  @NotNull
+  private static PsiElement getExpressionParentSkipping(@NotNull GoReferenceExpression expression) {
+    PsiElement parent = expression.getParent();
+    while (true) {
+      PsiElement nextParent = parent.getParent();
+      if (nextParent == null) {
+        return parent;
+      }
+      if (parent instanceof GoParenthesesExpr) {
+        parent = nextParent;
+        continue;
+      }
+      if (parent instanceof GoUnaryExpr) {
+        GoUnaryExpr unaryExpr = (GoUnaryExpr)parent;
+        if (unaryExpr.getMul() != null || unaryExpr.getBitAnd() != null || unaryExpr.getSendChannel() != null) {
+          parent = nextParent;
+          continue;
+        }
+      }
+      return parent;
+    }
   }
 }

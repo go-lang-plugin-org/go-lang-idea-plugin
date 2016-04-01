@@ -302,7 +302,7 @@ StringLiteral ::= string | raw_string {
 OperandName ::= ReferenceExpression QualifiedReferenceExpression? {elementType=ReferenceExpression}
 
 left QualifiedReferenceExpression ::= '.' identifier {elementType=ReferenceExpression}
-ReferenceExpression ::= identifier { methods=[getReference getQualifier resolve] extends=Expression}
+ReferenceExpression ::= identifier { methods=[getReference getQualifier resolve getReadWriteAccess] extends=Expression}
 
 CompositeLit ::= (LiteralTypeExprInner LiteralValue) // the brackets are valuable
 private LiteralTypeExprInner ::=
