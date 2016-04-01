@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,29 +41,51 @@ public class GoInspectionSuppressor implements InspectionSuppressor {
       return true;
     }
     GoImportDeclaration importDeclaration = PsiTreeUtil.getNonStrictParentOfType(element, GoImportDeclaration.class);
-    if (importDeclaration != null && importDeclaration.getPrevSibling() == null 
+    if (importDeclaration != null && importDeclaration.getPrevSibling() == null
         && isSuppressedInStatement(element, toolId, GoImportList.class)) {
       return true;
     }
-    return isSuppressedInStatement(element, toolId, GoPackageClause.class) ||
-           isSuppressedInStatement(element, toolId, GoStatement.class) ||
-           isSuppressedInStatement(element, toolId, GoTopLevelDeclaration.class) ||
-           isSuppressedInStatement(element, toolId, GoImportDeclaration.class);
+    return isSuppressedInStatement(element, toolId, GoPackageClause.class, GoStatement.class, GoCommClause.class, GoCaseClause.class,
+                                   GoTopLevelDeclaration.class, GoImportDeclaration.class);
   }
 
   @NotNull
   @Override
   public SuppressQuickFix[] getSuppressActions(PsiElement element, @NotNull String toolId) {
     return new SuppressQuickFix[]{
+      new GoSuppressInspectionFix("comm case", GoCommClause.class, false),
+      new GoSuppressInspectionFix(toolId, "comm case", GoCommClause.class, false),
+      new GoSuppressInspectionFix("case", GoCaseClause.class, false),
+      new GoSuppressInspectionFix(toolId, "case", GoCaseClause.class, false),
       new GoSuppressInspectionFix("declaration", GoTopLevelDeclaration.class, true),
       new GoSuppressInspectionFix(toolId, "declaration", GoTopLevelDeclaration.class, true),
-      new GoSuppressInspectionFix("statement", GoStatement.class, false),
-      new GoSuppressInspectionFix(toolId, "statement", GoStatement.class, false),
+      new GoSuppressForStatementFix(),
+      new GoSuppressForStatementFix(toolId),
       new GoSuppressInspectionFix("import", GoImportDeclaration.class, false),
       new GoSuppressInspectionFix(toolId, "import", GoImportDeclaration.class, false),
       new GoSuppressInspectionFix("package statement", GoPackageClause.class, false),
       new GoSuppressInspectionFix(toolId, "package statement", GoPackageClause.class, false),
     };
+  }
+
+  private static class GoSuppressForStatementFix extends GoSuppressInspectionFix {
+    public GoSuppressForStatementFix() {
+      super("statement", GoStatement.class, false);
+    }
+
+    public GoSuppressForStatementFix(@NotNull String ID) {
+      super(ID, "statement", GoStatement.class, false);
+    }
+
+    @Nullable
+    @Override
+    public PsiElement getContainer(PsiElement context) {
+      GoStatement statement = PsiTreeUtil.getNonStrictParentOfType(context, GoStatement.class);
+      if (statement != null && statement.getParent() instanceof GoCommCase) {
+        return PsiTreeUtil.getParentOfType(statement, GoStatement.class);
+      }
+      return statement;
+    }
   }
 
   public static class GoSuppressInspectionFix extends AbstractBatchSuppressByNoInspectionCommentFix {
@@ -116,9 +138,16 @@ public class GoInspectionSuppressor implements InspectionSuppressor {
   }
 
   private static boolean isSuppressedInStatement(@NotNull PsiElement place,
-                                                @NotNull String toolId,
-                                                @NotNull Class<? extends PsiElement> statementClass) {
-    return isSuppressedInStatement(toolId, PsiTreeUtil.getNonStrictParentOfType(place, statementClass));
+                                                 @NotNull String toolId,
+                                                 @NotNull Class<? extends PsiElement>... statementClasses) {
+    PsiElement statement = PsiTreeUtil.getNonStrictParentOfType(place, statementClasses);
+    while (statement != null) {
+      if (isSuppressedInStatement(toolId, statement)) {
+        return true;
+      }
+      statement = PsiTreeUtil.getParentOfType(statement, statementClasses);
+    }
+    return false;
   }
 
   private static boolean isSuppressedInStatement(@NotNull String toolId, @Nullable PsiElement statement) {
