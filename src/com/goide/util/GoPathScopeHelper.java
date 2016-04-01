@@ -88,9 +88,15 @@ public class GoPathScopeHelper {
       if (myVendoringEnabled && GoSdkUtil.isUnreachableVendoredPackage(declarationDirectory, referenceDirectory, myRoots)) {
         return false;
       }
-      if (mySupportsInternalPackages || mySupportsSdkInternalPackages && mySdkHome != null &&
-                                        VfsUtilCore.isAncestor(mySdkHome, declarationDirectory, false)) {
+      boolean declarationIsInSdk = mySdkHome != null && VfsUtilCore.isAncestor(mySdkHome, declarationDirectory, false);
+      if (mySupportsInternalPackages || mySupportsSdkInternalPackages && declarationIsInSdk) {
         if (GoSdkUtil.isUnreachableInternalPackage(declarationDirectory, referenceDirectory, myRoots)) {
+          return false;
+        }
+      }
+      if (!declarationIsInSdk) {
+        boolean referenceIsInSdk = mySdkHome != null && VfsUtilCore.isAncestor(mySdkHome, referenceDirectory, false);
+        if (referenceIsInSdk) {
           return false;
         }
       }
