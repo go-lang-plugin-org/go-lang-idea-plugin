@@ -115,6 +115,26 @@ public class GoElementFactory {
     return PsiTreeUtil.findChildOfType(file, GoSimpleStatement.class);
   }
 
+  @NotNull
+  public static GoStatement createShortVarDeclarationStatement(@NotNull Project project,
+                                                               @NotNull String leftSide,
+                                                               @NotNull String rightSide) {
+    GoFile file = createFileFromText(project, "package a; func a() {\n " + leftSide + " := " + rightSide + "}");
+    return PsiTreeUtil.findChildOfType(file, GoSimpleStatement.class);
+  }
+
+  @NotNull
+  public static GoRangeClause createRangeClause(@NotNull Project project, @NotNull String leftSide, @NotNull String rightSide) {
+    GoFile file = createFileFromText(project, "package a; func a() {\n for " + leftSide + " := range " + rightSide + "{\n}\n}");
+    return PsiTreeUtil.findChildOfType(file, GoRangeClause.class);
+  }
+
+  @NotNull
+  public static GoRecvStatement createRecvStatement(@NotNull Project project, @NotNull String leftSide, @NotNull String rightSide) {
+    GoFile file = createFileFromText(project, "package a; func a() {\n select { case " + leftSide + " := " + rightSide + ":\n}\n}");
+    return PsiTreeUtil.findChildOfType(file, GoRecvStatement.class);
+  }
+
   public static GoAssignmentStatement createAssignmentStatement(@NotNull Project project, @NotNull String left, @NotNull String right) {
     GoFile file = createFileFromText(project, "package a; func a() {\n " + left + " = " + right + "}");
     return PsiTreeUtil.findChildOfType(file, GoAssignmentStatement.class);

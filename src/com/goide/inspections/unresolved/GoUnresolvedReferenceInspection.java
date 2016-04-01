@@ -21,6 +21,7 @@ import com.goide.codeInsight.imports.GoImportPackageQuickFix;
 import com.goide.inspections.GoInspectionBase;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoReference;
+import com.intellij.codeInsight.highlighting.ReadWriteAccessDetector;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemHighlightType;
@@ -84,10 +85,19 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
               fixesList.add(new GoIntroduceLocalVariableFix(id, name));
             }
             PsiElement parent = o.getParent();
-            if (!(parent instanceof GoLeftHandExprList) || parent.getNextSibling() == null) {
+            if (o.getReadWriteAccess() == ReadWriteAccessDetector.Access.Read) {
               fixesList.add(new GoIntroduceGlobalConstantFix(id, name));
               if (canBeLocal) {
                 fixesList.add(new GoIntroduceLocalConstantFix(id, name));
+              }
+            }
+            else if (canBeLocal) {
+              PsiElement grandParent = parent.getParent();
+              if (grandParent instanceof GoAssignmentStatement) {
+                fixesList.add(new GoReplaceAssignmentWithDeclaration(grandParent));
+              }
+              else if (parent instanceof GoRangeClause || parent instanceof GoRecvStatement) {
+                fixesList.add(new GoReplaceAssignmentWithDeclaration(parent));
               }
             }
             fixes = fixesList.toArray(new LocalQuickFix[fixesList.size()]);
