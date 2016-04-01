@@ -58,29 +58,37 @@ public class GoReadWriteAccessTest extends GoCodeInsightFixtureTestCase {
   public void testRightPartOfSelectorExpressionInAssignment() {
     doTest("foo.bar.ba<caret>z = 1", ReadWriteAccessDetector.Access.Write);
   }
-  
+
   public void testRangeLeftExpression() {
     doTest("for fo<caret>o = range bar {\n}", ReadWriteAccessDetector.Access.Write);
   }
-  
+
   public void testRangeRightExpression() {
     doTest("for foo = range ba<caret>r {\n}", ReadWriteAccessDetector.Access.Read);
   }
-  
+
   public void testRangeRightExpression_1() {
     doTest("for foo := range ba<caret>r {\n}", ReadWriteAccessDetector.Access.Read);
   }
-  
+
   public void testSendRead() {
     doTest("a := <- cha<caret>nnel", ReadWriteAccessDetector.Access.Read);
   }
-  
+
   public void testSendWrite() {
     doTest("chan<caret>nel <- a", ReadWriteAccessDetector.Access.Write);
   }
-  
+
   public void testCallExpression() {
     doTest("fmt.Print<caret>ln(a)", ReadWriteAccessDetector.Access.Read);
+  }
+
+  public void testRecvStatementWrite() {
+    doTest("select {\n\tcase fo<caret>o = bar:\n}", ReadWriteAccessDetector.Access.ReadWrite);
+  }
+
+  public void testRecvStatementRead() {
+    doTest("select {\n\tcase foo = b<caret>ar:\n}", ReadWriteAccessDetector.Access.Read);
   }
 
   private void doTest(@NotNull String expressionText, @NotNull ReadWriteAccessDetector.Access expectedAccess) {
