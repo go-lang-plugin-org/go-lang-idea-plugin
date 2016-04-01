@@ -1394,7 +1394,7 @@ public class GoPsiImplUtil {
     }
     if (parent instanceof GoRecvStatement) {
       return expression.equals(((GoRecvStatement)parent).getRecvExpression()) ? ReadWriteAccessDetector.Access.Read
-                                                                              : ReadWriteAccessDetector.Access.Write;
+                                                                              : ReadWriteAccessDetector.Access.ReadWrite;
     }
     return ReadWriteAccessDetector.Access.Read;
   }
