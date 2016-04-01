@@ -43,7 +43,6 @@ public class GoRenameQuickFix extends LocalQuickFixOnPsiElement {
     myText = "Rename " + ElementDescriptionUtil.getElementDescription(element, UsageViewTypeLocation.INSTANCE);
   }
 
-
   @Override
   public void invoke(@NotNull final Project project,
                      @NotNull PsiFile file,
