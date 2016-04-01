@@ -60,4 +60,19 @@ public class GoRangeClauseImpl extends GoVarSpecImpl implements GoRangeClause {
     return findNotNullChildByType(RANGE);
   }
 
+  @Nullable
+  public GoExpression getRangeExpression() {
+    return GoPsiImplUtil.getRangeExpression(this);
+  }
+
+  @NotNull
+  public List<GoExpression> getLeftExpressionsList() {
+    return GoPsiImplUtil.getLeftExpressionsList(this);
+  }
+
+  @NotNull
+  public List<GoExpression> getRightExpressionsList() {
+    return GoPsiImplUtil.getRightExpressionsList(this);
+  }
+
 }

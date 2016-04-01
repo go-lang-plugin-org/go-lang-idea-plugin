@@ -59,7 +59,7 @@ public class GoInspectionUtil {
     }
 
     List<GoVarDefinition> identifiers = ((GoVarSpec)parent).getVarDefinitionList();
-    List<GoExpression> expressions = ((GoVarSpec)parent).getExpressionList();
+    List<GoExpression> expressions = ((GoVarSpec)parent).getRightExpressionsList();
     // if the type assertion is the only expression, and there are two variables.
     // The result of the type assertion is a pair of values with types (T, bool)
     if (identifiers.size() == 2 && expressions.size() == 1) {

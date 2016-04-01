@@ -259,7 +259,7 @@ SpecType ::= identifier Type {stubClass="com.goide.stubs.GoTypeStub" extends="co
 VarDeclaration ::= var ( VarSpec | '(' VarSpecs? ')' ) {pin=1 methods=[addSpec deleteSpec]}
 private VarSpecs ::= VarSpec (semi VarSpec)* semi? {pin=1}
 VarSpec ::= VarDefinitionList ( Type [ '=' ExpressionList ] | '=' ExpressionList ) {
-  methods=[processDeclarations deleteDefinition]
+  methods=[processDeclarations deleteDefinition getRightExpressionsList]
   stubClass="com.goide.stubs.GoVarSpecStub"
 }
 private VarDefinitionList ::= VarDefinition ( ',' VarDefinition )*
@@ -412,17 +412,15 @@ TypeListNoPin ::= Type ( ',' Type )* ','? {elementType=TypeList}
 ForStatement ::= for <<enterMode "BLOCK?">> (ForOrRangeClause Block | Block | Expression Block) <<exitModeSafe "BLOCK?">> {pin(".*")="for|ForOrRangeClause"}
 private ForOrRangeClause ::= (ForClause | RangeClause)
 ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement? {methods=[processDeclarations]}
-RangeClause ::= ExpressionsOrVariables? range Expression {pin=2 extends=VarSpec}
+RangeClause ::= ExpressionsOrVariables? range Expression {pin=2 extends=VarSpec methods=[getRangeExpression getLeftExpressionsList getRightExpressionsList]}
 private ExpressionsOrVariables ::= ExpressionList '=' | VarDefinitionList ':='
 GoStatement ::= go Expression
 SelectStatement ::= select '{' CommClause* '}'
 CommClause ::= CommCase ':' Statements? {pin=1}
 CommCase ::= case ( Expression SendStatement | RecvStatement ) | default {pin(".*")="case"}
-RecvStatement ::= ExpressionsOrVariables? Expression {pin=0 extends=VarSpec}
+RecvStatement ::= ExpressionsOrVariables? Expression {pin=0 extends=VarSpec methods=[getRecvExpression getLeftExpressionsList getRightExpressionsList]}
 ReturnStatement ::= return ExpressionList?
-LabelRef ::= identifier {
-  methods=[getReference]
-}
+LabelRef ::= identifier { methods=[getReference] }
 BreakStatement ::= break LabelRef?
 ContinueStatement ::= continue LabelRef?
 GotoStatement ::= goto LabelRef

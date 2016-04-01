@@ -19,4 +19,13 @@ public interface GoRecvStatement extends GoVarSpec {
   @Nullable
   PsiElement getVarAssign();
 
+  @Nullable
+  GoExpression getRecvExpression();
+
+  @NotNull
+  List<GoExpression> getLeftExpressionsList();
+
+  @NotNull
+  List<GoExpression> getRightExpressionsList();
+
 }
