@@ -9,6 +9,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
+import com.intellij.codeInsight.highlighting.ReadWriteAccessDetector.Access;
 
 public class GoReferenceExpressionImpl extends GoExpressionImpl implements GoReferenceExpression {
 
@@ -44,6 +45,11 @@ public class GoReferenceExpressionImpl extends GoExpressionImpl implements GoRef
   @Nullable
   public PsiElement resolve() {
     return GoPsiImplUtil.resolve(this);
+  }
+
+  @NotNull
+  public Access getReadWriteAccess() {
+    return GoPsiImplUtil.getReadWriteAccess(this);
   }
 
 }

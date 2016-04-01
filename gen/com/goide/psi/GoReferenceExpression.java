@@ -5,6 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.goide.psi.impl.GoReference;
+import com.intellij.codeInsight.highlighting.ReadWriteAccessDetector.Access;
 
 public interface GoReferenceExpression extends GoExpression, GoReferenceExpressionBase {
 
@@ -19,5 +20,8 @@ public interface GoReferenceExpression extends GoExpression, GoReferenceExpressi
 
   @Nullable
   PsiElement resolve();
+
+  @NotNull
+  Access getReadWriteAccess();
 
 }
