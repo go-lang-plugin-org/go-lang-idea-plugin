@@ -122,10 +122,9 @@ public class GoPackageUtil {
             }
           }
         }
-        if (module != null) {
-          return Result.create(set, dir, GoModuleSettings.getInstance(module).getBuildTargetSettings());
-        }
-        return Result.create(set, dir);
+        return module != null
+               ? Result.create(set, dir, GoModuleSettings.getInstance(module).getBuildTargetSettings())
+               : Result.create(set, dir);
       }
     }, false);
   }
