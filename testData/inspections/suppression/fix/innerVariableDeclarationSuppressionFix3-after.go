@@ -2,5 +2,5 @@ package newmath
 
 //noinspection GoUnusedVariable
 func TestFunction() {
-  var var<caret>1 = 1;
+	var var<caret>1 = 1;
 }
