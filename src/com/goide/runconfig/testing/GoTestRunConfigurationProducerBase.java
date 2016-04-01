@@ -29,14 +29,10 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VfsUtilCore;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.Processor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -66,22 +62,12 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
     configuration.setModule(module);
     configuration.setTestFramework(myFramework);
     if (contextElement instanceof PsiDirectory) {
-      VirtualFile virtualFile = ((PsiDirectory)contextElement).getVirtualFile();
-      return !VfsUtilCore.processFilesRecursively(virtualFile, new Processor<VirtualFile>() {
-        @Override
-        public boolean process(VirtualFile file) {
-          PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
-          if (myFramework.isAvailableOnFile(psiFile)) {
-            configuration.setName(getPackageConfigurationName(((PsiDirectory)contextElement).getName()));
-            configuration.setKind(GoTestRunConfiguration.Kind.DIRECTORY);
-            String directoryPath = ((PsiDirectory)contextElement).getVirtualFile().getPath();
-            configuration.setDirectoryPath(directoryPath);
-            configuration.setWorkingDirectory(directoryPath);
-            return false;
-          }
-          return true;
-        }
-      });
+      configuration.setName(getPackageConfigurationName(((PsiDirectory)contextElement).getName()));
+      configuration.setKind(GoTestRunConfiguration.Kind.DIRECTORY);
+      String directoryPath = ((PsiDirectory)contextElement).getVirtualFile().getPath();
+      configuration.setDirectoryPath(directoryPath);
+      configuration.setWorkingDirectory(directoryPath);
+      return true;
     }
 
     PsiFile file = contextElement.getContainingFile();
