@@ -91,7 +91,6 @@ public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
     assertSize(1, myFixture.findUsages(myFixture.getElementAtCaret()));
   }
 
-
   @Override
   protected LightProjectDescriptor getProjectDescriptor() {
     return createMockProjectDescriptor();
@@ -148,11 +147,12 @@ public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
            "    }\n" +
            "}");
   }
-  
+
   public void testMethodWithTransitiveImport() {
     myFixture.addFileToProject("a.go", "package main; import `middle`; func main() { fmt.Println(middle.A.Method()) }");
     myFixture.addFileToProject("middle/middle.go", "package middle; import `declaration`; var A *declaration.D = nil");
-    PsiFile file = myFixture.addFileToProject("declaration/declaration.go", "package declaration; type D struct {}; func (D) Met<caret>hod() {}");
+    PsiFile file =
+      myFixture.addFileToProject("declaration/declaration.go", "package declaration; type D struct {}; func (D) Met<caret>hod() {}");
     myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
     Collection<UsageInfo> usages = myFixture.findUsages(myFixture.getElementAtCaret());
     assertEquals(1, usages.size());
@@ -213,11 +213,39 @@ public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
           myFixture.findUsages(myFixture.getElementAtCaret());
         }
         catch (AssertionError e) {
-          assertTrue(e.getMessage().contains("Access to tree elements not allowed in tests"));
+          String message = e.getMessage();
+          assertTrue(message.contains("Access to tree elements not allowed in tests"));
+          assertTrue(message.contains("bar_test.go"));
           throw e;
         }
       }
     });
+  }
+
+  public void testLoadSdkUsagesForSdkDeclarations() throws Throwable {
+    myFixture.configureByText("bar.go", "package foo; import `fmt`; func _() { fmt.Pri<caret>ntln() }");
+    failOnFileLoading();
+    assertException(new AssertionErrorCase() {
+      @Override
+      public void tryClosure() {
+        try {
+          myFixture.findUsages(myFixture.getElementAtCaret());
+        }
+        catch (AssertionError e) {
+          String message = e.getMessage();
+          assertTrue(message.contains("Access to tree elements not allowed in tests"));
+          assertTrue(message.contains("print.go"));
+          throw e;
+        }
+      }
+    });
+  }
+
+  public void testDoNotLoadSdkUsagesForProjectDeclarations() {
+    myFixture.configureByText("foo.go", "package foo; func _() { Println() }");
+    myFixture.configureByText("bar.go", "package foo; func Pri<caret>ntln() {}");
+    failOnFileLoading();
+    myFixture.findUsages(myFixture.getElementAtCaret());
   }
 
   public void testLoadImportedDirectory() throws Throwable {
@@ -232,7 +260,9 @@ public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
           myFixture.findUsages(myFixture.getElementAtCaret());
         }
         catch (AssertionError e) {
-          assertTrue(e.getMessage().contains("Access to tree elements not allowed in tests"));
+          String message = e.getMessage();
+          assertTrue(message.contains("Access to tree elements not allowed in tests"));
+          assertTrue(message.contains("bar.go"));
           throw e;
         }
       }
@@ -255,9 +285,9 @@ public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
     }
   }
 
-  public void testDot() { doTestDoNotFind("package main; import <caret>. \"fmt\""); }
+  public void testDot()              { doTestDoNotFind("package main; import <caret>. \"fmt\""); }
 
-  public void testUnderscore() { doTestDoNotFind("package main; import <caret>_ \"fmt\""); }
+  public void testUnderscore()       { doTestDoNotFind("package main; import <caret>_ \"fmt\""); }
 
   public void testNearImportString() { doTestDoNotFind("package main; import <caret>\"fmt\""); }
 }
