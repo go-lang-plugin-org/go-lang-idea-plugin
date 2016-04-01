@@ -31,7 +31,7 @@ public class GoReadWriteAccessDetector extends ReadWriteAccessDetector {
            e instanceof GoConstDefinition ||
            e instanceof GoParamDefinition ||
            e instanceof GoReceiver ||
-           e instanceof GoFunctionOrMethodDeclaration;
+           e instanceof GoFieldDefinition;
   }
 
   @Override
@@ -42,15 +42,13 @@ public class GoReadWriteAccessDetector extends ReadWriteAccessDetector {
   @NotNull
   @Override
   public Access getReferenceAccess(@Nullable PsiElement referencedElement, @NotNull PsiReference reference) {
-     return getExpressionAccess(reference.getElement());
+    return getExpressionAccess(reference.getElement());
   }
 
   @NotNull
   @Override
   public Access getExpressionAccess(@Nullable PsiElement e) {
-    GoCompositeElement parent =
-      PsiTreeUtil.getParentOfType(e, GoAssignmentStatement.class, GoShortVarDeclaration.class, GoArgumentList.class, GoIndexOrSliceExpr.class, GoBlock.class);
-    if (parent instanceof GoArgumentList || parent instanceof GoIndexOrSliceExpr || parent instanceof GoBlock) return Access.Read;
-    return PsiTreeUtil.getParentOfType(e, GoLeftHandExprList.class) == null ? Access.Read : Access.Write;
+    GoReferenceExpression referenceExpression = PsiTreeUtil.getNonStrictParentOfType(e, GoReferenceExpression.class);
+    return referenceExpression != null ? referenceExpression.getReadWriteAccess() : Access.Read;
   }
 }
