@@ -43,4 +43,9 @@ public class GoSendStatementImpl extends GoStatementImpl implements GoSendStatem
     return findNotNullChildByType(SEND_CHANNEL);
   }
 
+  @Nullable
+  public GoExpression getSendExpression() {
+    return GoPsiImplUtil.getSendExpression(this);
+  }
+
 }

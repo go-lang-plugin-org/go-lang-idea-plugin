@@ -16,4 +16,7 @@ public interface GoSendStatement extends GoStatement {
   @NotNull
   PsiElement getSendChannel();
 
+  @Nullable
+  GoExpression getSendExpression();
+
 }
