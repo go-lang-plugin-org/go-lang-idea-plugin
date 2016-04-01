@@ -75,7 +75,7 @@ public class GoNoNewVariablesInspection extends GoInspectionBase {
         PsiElement parent = element.getParent();
         if (parent instanceof GoSimpleStatement) {
           String left = GoPsiImplUtil.joinPsiElementText(((GoShortVarDeclaration)element).getVarDefinitionList());
-          String right = GoPsiImplUtil.joinPsiElementText(((GoShortVarDeclaration)element).getExpressionList());
+          String right = GoPsiImplUtil.joinPsiElementText(((GoShortVarDeclaration)element).getRightExpressionsList());
           parent.replace(GoElementFactory.createAssignmentStatement(project, left, right));
         }
       }

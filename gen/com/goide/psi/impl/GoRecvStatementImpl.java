@@ -54,4 +54,19 @@ public class GoRecvStatementImpl extends GoVarSpecImpl implements GoRecvStatemen
     return findChildByType(VAR_ASSIGN);
   }
 
+  @Nullable
+  public GoExpression getRecvExpression() {
+    return GoPsiImplUtil.getRecvExpression(this);
+  }
+
+  @NotNull
+  public List<GoExpression> getLeftExpressionsList() {
+    return GoPsiImplUtil.getLeftExpressionsList(this);
+  }
+
+  @NotNull
+  public List<GoExpression> getRightExpressionsList() {
+    return GoPsiImplUtil.getRightExpressionsList(this);
+  }
+
 }

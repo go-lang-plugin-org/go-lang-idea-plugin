@@ -539,7 +539,7 @@ public class GoPsiImplUtil {
     List<GoVarDefinition> varList = parent.getVarDefinitionList();
     int i = varList.indexOf(o);
     i = i == -1 ? 0 : i;
-    List<GoExpression> exprs = parent.getExpressionList();
+    List<GoExpression> exprs = parent.getRightExpressionsList();
     if (exprs.size() == 1 && exprs.get(0) instanceof GoCallExpr) {
       GoExpression call = exprs.get(0);
       GoType fromCall = call.getGoType(context);
@@ -587,14 +587,10 @@ public class GoPsiImplUtil {
 
   @Nullable
   private static GoType processRangeClause(@NotNull GoVarDefinition o, @NotNull GoRangeClause parent, @Nullable ResolveState context) {
-    List<GoExpression> exprs = parent.getExpressionList();
-    GoExpression last = ContainerUtil.getLastItem(exprs);
-    int rangeOffset = parent.getRange().getTextOffset();
-    last = last != null && last.getTextOffset() > rangeOffset ? last : null;
-
-    if (last != null) {
+    GoExpression rangeExpression = parent.getRangeExpression();
+    if (rangeExpression != null) {
       List<GoVarDefinition> varList = parent.getVarDefinitionList();
-      GoType type = unwrapIfNeeded(last.getGoType(context));
+      GoType type = unwrapIfNeeded(rangeExpression.getGoType(context));
       if (type instanceof GoChannelType) return ((GoChannelType)type).getType();
       int i = varList.indexOf(o);
       i = i == -1 ? 0 : i;
@@ -1194,7 +1190,7 @@ public class GoPsiImplUtil {
     }
 
     GoExpression value = definitionToDelete.getValue();
-    if (value != null && spec.getExpressionList().size() <= 1) {
+    if (value != null && spec.getRightExpressionsList().size() <= 1) {
       PsiElement assign = spec.getAssign();
       if (assign != null) {
         assign.delete();
@@ -1260,7 +1256,7 @@ public class GoPsiImplUtil {
     PsiElement parent = definition.getParent();
     assert parent instanceof GoVarSpec;
     int index = ((GoVarSpec)parent).getVarDefinitionList().indexOf(definition);
-    return getByIndex(((GoVarSpec)parent).getExpressionList(), index);
+    return getByIndex(((GoVarSpec)parent).getRightExpressionsList(), index);
   }
 
   @Nullable
@@ -1302,5 +1298,62 @@ public class GoPsiImplUtil {
     T first = PsiTreeUtil.getNonStrictParentOfType(element, aClass);
     T topMost = PsiTreeUtil.getTopmostParentOfType(first, aClass);
     return ObjectUtils.chooseNotNull(topMost, first);
+  }
+
+  @NotNull
+  public static List<GoExpression> getLeftExpressionsList(@NotNull GoRangeClause rangeClause) {
+    return getExpressionsBefore(rangeClause.getExpressionList(), rangeClause.getRange());
+  }
+
+  @NotNull
+  public static List<GoExpression> getLeftExpressionsList(@NotNull GoRecvStatement recvStatement) {
+    return getExpressionsBefore(recvStatement.getExpressionList(), 
+                                ObjectUtils.chooseNotNull(recvStatement.getAssign(), recvStatement.getVarAssign()));
+  }
+
+  @NotNull
+  public static List<GoExpression> getRightExpressionsList(@NotNull GoVarSpec varSpec) {
+    return varSpec.getExpressionList();
+  }
+
+  @NotNull
+  public static List<GoExpression> getRightExpressionsList(@NotNull GoRangeClause rangeClause) {
+    return ContainerUtil.createMaybeSingletonList(rangeClause.getRangeExpression());
+  }
+
+  @NotNull
+  public static List<GoExpression> getRightExpressionsList(@NotNull GoRecvStatement recvStatement) {
+    return ContainerUtil.createMaybeSingletonList(recvStatement.getRecvExpression());
+  }
+
+  @Nullable
+  public static GoExpression getRangeExpression(@NotNull GoRangeClause rangeClause) {
+    return getLastExpressionAfter(rangeClause.getExpressionList(), rangeClause.getRange());
+  }
+
+  @Nullable
+  public static GoExpression getRecvExpression(@NotNull GoRecvStatement recvStatement) {
+    return getLastExpressionAfter(recvStatement.getExpressionList(), 
+                                  ObjectUtils.chooseNotNull(recvStatement.getAssign(), recvStatement.getVarAssign()));
+  }
+
+  @Nullable
+  private static GoExpression getLastExpressionAfter(@NotNull List<GoExpression> list, @Nullable PsiElement anchor) {
+    if (anchor == null) return null;
+    GoExpression last = ContainerUtil.getLastItem(list);
+    return last != null && last.getTextRange().getStartOffset() >= anchor.getTextRange().getEndOffset() ? last : null;
+  }
+
+  @NotNull
+  private static List<GoExpression> getExpressionsBefore(@NotNull List<GoExpression> list, @Nullable PsiElement anchor) {
+    if (anchor == null) {
+      return list;
+    }
+    return ContainerUtil.filter(list, new Condition<GoExpression>() {
+      @Override
+      public boolean value(GoExpression expression) {
+        return expression.getTextRange().getEndOffset() <= anchor.getTextRange().getStartOffset();
+      }
+    });
   }
 }

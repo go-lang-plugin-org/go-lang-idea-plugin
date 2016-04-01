@@ -65,4 +65,9 @@ public class GoVarSpecImpl extends GoStubbedElementImpl<GoVarSpecStub> implement
     GoPsiImplUtil.deleteDefinition(this, definitionToDelete);
   }
 
+  @NotNull
+  public List<GoExpression> getRightExpressionsList() {
+    return GoPsiImplUtil.getRightExpressionsList(this);
+  }
+
 }

@@ -22,4 +22,13 @@ public interface GoRangeClause extends GoVarSpec {
   @NotNull
   PsiElement getRange();
 
+  @Nullable
+  GoExpression getRangeExpression();
+
+  @NotNull
+  List<GoExpression> getLeftExpressionsList();
+
+  @NotNull
+  List<GoExpression> getRightExpressionsList();
+
 }

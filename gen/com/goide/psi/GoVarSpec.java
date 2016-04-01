@@ -27,4 +27,7 @@ public interface GoVarSpec extends GoCompositeElement, StubBasedPsiElement<GoVar
 
   void deleteDefinition(GoVarDefinition definitionToDelete);
 
+  @NotNull
+  List<GoExpression> getRightExpressionsList();
+
 }

@@ -32,12 +32,10 @@ import static com.goide.inspections.GoInspectionUtil.*;
 public class GoVarDeclarationInspection extends GoInspectionBase {
   @NotNull
   private static Pair<List<? extends GoCompositeElement>, List<GoExpression>> getPair(@NotNull GoVarSpec varDeclaration) {
-    PsiElement assign = varDeclaration instanceof GoShortVarDeclaration
-                        ? ((GoShortVarDeclaration)varDeclaration).getVarAssign()
-                        : varDeclaration.getAssign();
+    PsiElement assign = varDeclaration instanceof GoShortVarDeclaration ? ((GoShortVarDeclaration)varDeclaration).getVarAssign()
+                                                                        : varDeclaration.getAssign();
     if (assign == null) {
-      return Pair.<List<? extends GoCompositeElement>, List<GoExpression>>create(ContainerUtil.<GoCompositeElement>emptyList(),
-                                                                                 ContainerUtil.<GoExpression>emptyList());
+      return Pair.create(ContainerUtil.emptyList(), ContainerUtil.emptyList());
     }
     if (varDeclaration instanceof GoRecvStatement || varDeclaration instanceof GoRangeClause) {
       List<GoCompositeElement> v = ContainerUtil.newArrayList();
@@ -45,16 +43,15 @@ public class GoVarDeclarationInspection extends GoInspectionBase {
       for (PsiElement c : varDeclaration.getChildren()) {
         if (!(c instanceof GoCompositeElement)) continue;
         if (c.getTextOffset() < assign.getTextOffset()) {
-          v.add(((GoCompositeElement)c));
+          v.add((GoCompositeElement)c);
         }
         else if (c instanceof GoExpression) {
-          e.add(((GoExpression)c));
+          e.add((GoExpression)c);
         }
       }
-      return Pair.<List<? extends GoCompositeElement>, List<GoExpression>>create(v, e);
+      return Pair.create(v, e);
     }
-    return Pair.<List<? extends GoCompositeElement>, List<GoExpression>>create(varDeclaration.getVarDefinitionList(),
-                                                                               varDeclaration.getExpressionList());
+    return Pair.create(varDeclaration.getVarDefinitionList(), varDeclaration.getRightExpressionsList());
   }
 
   @NotNull

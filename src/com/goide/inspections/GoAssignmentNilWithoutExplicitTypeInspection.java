@@ -55,7 +55,7 @@ public class GoAssignmentNilWithoutExplicitTypeInspection extends GoInspectionBa
 
       private void checkVar(@NotNull GoVarSpec spec) {
         if (spec.getType() != null) return;
-        checkExpressions(spec.getExpressionList());
+        checkExpressions(spec.getRightExpressionsList());
       }
 
       private void checkConst(@NotNull GoConstSpec spec) {

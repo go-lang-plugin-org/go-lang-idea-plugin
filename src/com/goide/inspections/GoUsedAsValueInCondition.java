@@ -56,7 +56,7 @@ public class GoUsedAsValueInCondition extends GoInspectionBase {
           PsiElement gradParent = parent.getParent();
           if (gradParent instanceof GoIfStatement && ((GoIfStatement)gradParent).getExpression() == null) {
             String left = GoPsiImplUtil.joinPsiElementText(o.getVarDefinitionList());
-            String right = GoPsiImplUtil.joinPsiElementText(o.getExpressionList());
+            String right = GoPsiImplUtil.joinPsiElementText(o.getRightExpressionsList());
             holder.registerProblem(o, left + " := " + right + " used as value", GENERIC_ERROR_OR_WARNING,
                                    new GoAssignmentToComparisonQuickFix());
           }
@@ -80,7 +80,7 @@ public class GoUsedAsValueInCondition extends GoInspectionBase {
       }
       else if (element instanceof GoShortVarDeclaration) {
         String left = GoPsiImplUtil.joinPsiElementText(((GoShortVarDeclaration)element).getVarDefinitionList());
-        String right = GoPsiImplUtil.joinPsiElementText(((GoShortVarDeclaration)element).getExpressionList());
+        String right = GoPsiImplUtil.joinPsiElementText(((GoShortVarDeclaration)element).getRightExpressionsList());
         element.replace(GoElementFactory.createComparison(project, left + " == " + right));
       }
     }
