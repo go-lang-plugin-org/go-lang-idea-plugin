@@ -17,34 +17,29 @@
 package com.goide.inspections.unresolved;
 
 import com.goide.inspections.GoInspectionBase;
-import com.goide.psi.*;
+import com.goide.psi.GoConstDefinition;
+import com.goide.psi.GoReferenceExpression;
+import com.goide.psi.GoVisitor;
+import com.intellij.codeInsight.highlighting.ReadWriteAccessDetector;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 import static com.intellij.codeInspection.ProblemHighlightType.GENERIC_ERROR_OR_WARNING;
 
 public class GoAssignmentToConstantInspection extends GoInspectionBase {
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder,
-                                     @SuppressWarnings({"UnusedParameters", "For future"}) @NotNull LocalInspectionToolSession session) {
+  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
-      public void visitAssignmentStatement(@NotNull GoAssignmentStatement o) {
-        List<GoExpression> list = o.getLeftHandExprList().getExpressionList();
-        for (GoExpression expression : list) checkExpression(expression);
-      }
-
-      private void checkExpression(GoExpression expression) {
-        if (expression instanceof GoReferenceExpression) {
-          PsiElement resolve = ((GoReferenceExpression)expression).resolve();
+      public void visitReferenceExpression(@NotNull GoReferenceExpression o) {
+        super.visitReferenceExpression(o);
+        if (o.getReadWriteAccess() != ReadWriteAccessDetector.Access.Read) {
+          PsiElement resolve = o.resolve();
           if (resolve instanceof GoConstDefinition) {
-            String name = ((GoReferenceExpression)expression).getIdentifier().getText();
-            holder.registerProblem(expression, "Cannot assign to constant '" + name + "'", GENERIC_ERROR_OR_WARNING);
+            holder.registerProblem(o, "Cannot assign to constant", GENERIC_ERROR_OR_WARNING);
           }
         }
       }

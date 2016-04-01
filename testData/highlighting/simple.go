@@ -166,7 +166,13 @@ type Iface interface {
 const name1 int = 10
 
 func _(st interface {Foo()}, st1 Iface) {
-    <error descr="Cannot assign to constant 'name1'">name1</error>, <error descr="Cannot assign to constant 'name1'">name1</error> = 1, 2
+    <error descr="Cannot assign to constant">name1</error>, <error descr="Cannot assign to constant">name1</error> = 1, 2
+    for <error descr="Cannot assign to constant">name1</error> = range st {
+        
+    }
+    for <error descr="Cannot assign to constant">name1</error> = range st {
+        
+    }
     Println(st.Foo() + st1.Boo())
     if <error descr="_ := 1 used as value"><error descr="No new variables on left side of :=">_</error> := 1</error> {
       return
