@@ -739,3 +739,15 @@ func _() {
 	t, _ := test90()
 	t.func1()
 }
+
+func _(key1, key2 int) (string, error) {
+	type MyStruct struct {
+		Name  string
+		Label string
+	}
+
+	var cache map[int]((map[int]MyStruct)) = make((map[int]((map[int]MyStruct))))
+	tmp1, _ := cache[key1]
+	tmp2, _ := tmp1[key2]
+	return tmp2.Name, nil
+}
