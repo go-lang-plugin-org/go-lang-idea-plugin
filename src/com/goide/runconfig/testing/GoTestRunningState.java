@@ -28,6 +28,7 @@ import com.intellij.execution.Executor;
 import com.intellij.execution.filters.TextConsoleBuilder;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.process.ProcessHandler;
+import com.intellij.execution.process.ProcessTerminatedListener;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.testframework.AbstractTestProxy;
@@ -74,6 +75,7 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
     String frameworkName = myConfiguration.getTestFramework().getName();
     ConsoleView consoleView = SMTestRunnerConnectionUtil.createAndAttachConsole(frameworkName, processHandler, consoleProperties);
     consoleView.addMessageFilter(new GoConsoleFilter(myConfiguration.getProject(), myModule, myConfiguration.getWorkingDirectoryUrl()));
+    ProcessTerminatedListener.attach(processHandler);
 
     DefaultExecutionResult executionResult = new DefaultExecutionResult(consoleView, processHandler);
     AbstractRerunFailedTestsAction rerunFailedTestsAction = consoleProperties.createRerunFailedTestsAction(consoleView);
