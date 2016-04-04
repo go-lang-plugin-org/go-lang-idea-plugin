@@ -106,7 +106,7 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
         // TODO Once Go gets support for covering multiple packages the ternary condition should be reverted
         // See https://golang.org/issues/6909
         String pathSuffix = myCoverageFilePath == null ? "..." : ".";
-        if (relativePath != null) {
+        if (relativePath != null && !".".equals(relativePath)) {
           executor.withParameters("./" + relativePath + "/" + pathSuffix);
         }
         else {
