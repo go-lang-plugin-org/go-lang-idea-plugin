@@ -40,7 +40,6 @@ import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.openapi.vfs.VfsUtilCore;
@@ -162,7 +161,7 @@ public class GoExecutor {
 
   @NotNull
   public GoExecutor withPassParentEnvironment(boolean passParentEnvironment) {
-    myParentEnvironmentType = passParentEnvironment ? GeneralCommandLine.ParentEnvironmentType.CONSOLE 
+    myParentEnvironmentType = passParentEnvironment ? GeneralCommandLine.ParentEnvironmentType.CONSOLE
                                                     : GeneralCommandLine.ParentEnvironmentType.NONE;
     return this;
   }
@@ -340,9 +339,7 @@ public class GoExecutor {
       throw new ExecutionException("Sdk is not set or Sdk home path is empty for module");
     }
 
-    GeneralCommandLine commandLine = !myPtyDisabled && (!SystemInfo.isWindows || PtyCommandLine.isEnabled()) 
-                                     ? new PtyCommandLine() 
-                                     : new GeneralCommandLine();
+    GeneralCommandLine commandLine = !myPtyDisabled && PtyCommandLine.isEnabled() ? new PtyCommandLine() : new GeneralCommandLine();
     commandLine.setExePath(ObjectUtils.notNull(myExePath, GoSdkService.getGoExecutablePath(myGoRoot)));
     commandLine.getEnvironment().putAll(myExtraEnvironment);
     commandLine.getEnvironment().put(GoConstants.GO_ROOT, StringUtil.notNullize(myGoRoot));
