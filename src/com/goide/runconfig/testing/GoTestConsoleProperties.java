@@ -17,6 +17,8 @@
 package com.goide.runconfig.testing;
 
 import com.goide.psi.GoFunctionOrMethodDeclaration;
+import com.goide.runconfig.GoRunConfigurationBase;
+import com.goide.util.GoUtil;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
 import com.intellij.execution.Location;
@@ -48,6 +50,20 @@ public class GoTestConsoleProperties extends SMTRunnerConsoleProperties implemen
   public GoTestConsoleProperties(@NotNull GoTestRunConfiguration configuration, @NotNull Executor executor) {
     super(configuration, configuration.getTestFramework().getName(), executor);
     setPrintTestingStartedTime(false);
+  }
+
+  @NotNull
+  @Override
+  protected GlobalSearchScope initScope() {
+    RunProfile configuration = getConfiguration();
+    if (configuration instanceof GoRunConfigurationBase) {
+      GlobalSearchScope scope = GlobalSearchScope.EMPTY_SCOPE;
+      for (Module module : ((GoRunConfigurationBase)configuration).getModules()) {
+        scope = new GoUtil.TestsScope(GoUtil.goPathResolveScope(module, null));
+      }
+      return scope;   
+    }
+    return super.initScope(); 
   }
 
   @Nullable

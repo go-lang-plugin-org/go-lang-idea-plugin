@@ -45,8 +45,11 @@ public class GoFunctionIndex extends StringStubIndexExtension<GoFunctionDeclarat
   }
 
   @NotNull
-  public static Collection<GoFunctionDeclaration> find(@NotNull String name, @NotNull Project project, @Nullable GlobalSearchScope scope) {
-    return StubIndex.getElements(KEY, name, project, scope, GoFunctionDeclaration.class);
+  public static Collection<GoFunctionDeclaration> find(@NotNull String name,
+                                                       @NotNull Project project,
+                                                       @Nullable GlobalSearchScope scope,
+                                                       @Nullable IdFilter idFilter) {
+    return StubIndex.getElements(KEY, name, project, scope, idFilter, GoFunctionDeclaration.class);
   }
 
   public static boolean process(@NotNull String name,

@@ -20,6 +20,7 @@ import com.goide.psi.GoFunctionDeclaration;
 import com.goide.psi.GoMethodDeclaration;
 import com.goide.psi.GoTypeSpec;
 import com.goide.stubs.index.GoFunctionIndex;
+import com.goide.stubs.index.GoIdFilter;
 import com.goide.stubs.index.GoTypesIndex;
 import com.intellij.execution.Location;
 import com.intellij.execution.PsiLocation;
@@ -29,6 +30,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.indexing.IdFilter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -49,10 +51,11 @@ public class GoTestLocator implements SMTestLocator {
                                     @NotNull Project project,
                                     @NotNull GlobalSearchScope scope) {
     if (PROTOCOL.equals(protocolId)) {
+      IdFilter idFilter = GoIdFilter.getTestsFilter(project);
       List<String> locationDataItems = StringUtil.split(path, ".");
       // Location is a function name, e.g. `TestCheckItOut`
       if (locationDataItems.size() == 1) {
-        return ContainerUtil.mapNotNull(GoFunctionIndex.find(path, project, GlobalSearchScope.projectScope(project)),
+        return ContainerUtil.mapNotNull(GoFunctionIndex.find(path, project, scope, idFilter),
                                         new Function<GoFunctionDeclaration, Location>() {
                                           @Override
                                           public Location fun(GoFunctionDeclaration function) {
@@ -64,7 +67,7 @@ public class GoTestLocator implements SMTestLocator {
       // Location is a method name, e.g. `FooSuite.TestCheckItOut`
       if (locationDataItems.size() == 2) {
         List<Location> locations = ContainerUtil.newArrayList();
-        for (GoTypeSpec typeSpec : GoTypesIndex.find(locationDataItems.get(0), project, GlobalSearchScope.projectScope(project))) {
+        for (GoTypeSpec typeSpec : GoTypesIndex.find(locationDataItems.get(0), project, scope, idFilter)) {
           for (GoMethodDeclaration method : typeSpec.getMethods()) {
             if (locationDataItems.get(1).equals(method.getName())) {
               ContainerUtil.addIfNotNull(locations, PsiLocation.fromPsiElement(method));
@@ -75,7 +78,8 @@ public class GoTestLocator implements SMTestLocator {
       }
     }
     else if (SUITE_PROTOCOL.equals(protocolId)) {
-      return ContainerUtil.mapNotNull(GoTypesIndex.find(path, project, GlobalSearchScope.projectScope(project)),
+      IdFilter idFilter = GoIdFilter.getTestsFilter(project);
+      return ContainerUtil.mapNotNull(GoTypesIndex.find(path, project, scope, idFilter),
                                       new Function<GoTypeSpec, Location>() {
                                         @Override
                                         public Location fun(GoTypeSpec spec) {
