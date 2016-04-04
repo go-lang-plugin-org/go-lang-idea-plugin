@@ -259,7 +259,7 @@ class DlvXValue extends XNamedValue {
         if (split.size() == 2 || noFqn) {
           String name = ContainerUtil.getLastItem(split);
           assert name != null;
-          Collection<GoTypeSpec> types = GoTypesIndex.find(name, project, GlobalSearchScope.allScope(project));
+          Collection<GoTypeSpec> types = GoTypesIndex.find(name, project, GlobalSearchScope.allScope(project), null);
           for (GoTypeSpec type : types) {
             if (noFqn || Comparing.equal(fqn, type.getQualifiedName())) {
               navigatable.setSourcePosition(XDebuggerUtil.getInstance().createPositionByOffset(
