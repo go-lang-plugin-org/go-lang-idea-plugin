@@ -47,6 +47,7 @@ import java.util.List;
 public class GoTestConsoleProperties extends SMTRunnerConsoleProperties implements SMCustomMessagesParsing {
   public GoTestConsoleProperties(@NotNull GoTestRunConfiguration configuration, @NotNull Executor executor) {
     super(configuration, configuration.getTestFramework().getName(), executor);
+    setPrintTestingStartedTime(false);
   }
 
   @Nullable
