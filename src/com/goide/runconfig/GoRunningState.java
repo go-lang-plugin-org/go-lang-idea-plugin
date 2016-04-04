@@ -55,11 +55,9 @@ public abstract class GoRunningState<T extends GoRunConfigurationBase<?>> extend
     return new KillableColoredProcessHandler(commandLine) {
       @Override
       public void startNotify() {
-        if (isShowGoPathAndGoRootValuesOnStart()) {
-          Map<String, String> environment = commandLine.getEnvironment();
-          notifyTextAvailable("GOROOT=" + environment.getOrDefault(GoConstants.GO_ROOT, "") + '\n', ProcessOutputTypes.SYSTEM);
-          notifyTextAvailable("GOPATH=" + environment.getOrDefault(GoConstants.GO_PATH, "") + '\n', ProcessOutputTypes.SYSTEM);
-        }
+        Map<String, String> environment = commandLine.getEnvironment();
+        notifyTextAvailable("GOROOT=" + environment.getOrDefault(GoConstants.GO_ROOT, "") + '\n', ProcessOutputTypes.SYSTEM);
+        notifyTextAvailable("GOPATH=" + environment.getOrDefault(GoConstants.GO_PATH, "") + '\n', ProcessOutputTypes.SYSTEM);
         super.startNotify();
       }
     };
@@ -74,9 +72,5 @@ public abstract class GoRunningState<T extends GoRunConfigurationBase<?>> extend
 
   protected GoExecutor patchExecutor(@NotNull GoExecutor executor) throws ExecutionException {
     return executor;
-  }
-  
-  protected boolean isShowGoPathAndGoRootValuesOnStart() {
-    return true;
   }
 }
