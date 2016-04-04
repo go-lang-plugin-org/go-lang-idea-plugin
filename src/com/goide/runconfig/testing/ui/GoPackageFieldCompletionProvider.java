@@ -20,6 +20,7 @@ import com.goide.completion.GoImportPathsCompletionProvider;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.openapi.module.Module;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.Producer;
 import com.intellij.util.TextFieldCompletionProvider;
 import org.jetbrains.annotations.NotNull;
@@ -38,7 +39,8 @@ public class GoPackageFieldCompletionProvider extends TextFieldCompletionProvide
                                        @NotNull CompletionResultSet result) {
     Module module = myModuleProducer.produce();
     if (module != null) {
-      GoImportPathsCompletionProvider.addCompletions(result, module, null, GoUtil.moduleScopeWithoutLibraries(module.getProject(), module));
+      GlobalSearchScope scope = GoUtil.moduleScopeWithoutLibraries(module.getProject(), module);
+      GoImportPathsCompletionProvider.addCompletions(result, module, null, scope, true);
     }
   }
 }
