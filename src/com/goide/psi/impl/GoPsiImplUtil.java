@@ -1361,7 +1361,7 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
-  private static List<GoExpression> getExpressionsBefore(@NotNull List<GoExpression> list, @Nullable PsiElement anchor) {
+  private static List<GoExpression> getExpressionsBefore(@NotNull List<GoExpression> list, @Nullable final PsiElement anchor) {
     if (anchor == null) {
       return list;
     }

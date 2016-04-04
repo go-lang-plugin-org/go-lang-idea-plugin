@@ -48,7 +48,7 @@ public class GoTestLocator implements SMTestLocator {
   @Override
   public List<Location> getLocation(@NotNull String protocolId,
                                     @NotNull String path,
-                                    @NotNull Project project,
+                                    @NotNull final Project project,
                                     @NotNull GlobalSearchScope scope) {
     if (PROTOCOL.equals(protocolId)) {
       IdFilter idFilter = GoIdFilter.getTestsFilter(project);

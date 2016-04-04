@@ -26,6 +26,7 @@ import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.process.ProcessOutputTypes;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.util.text.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -51,13 +52,13 @@ public abstract class GoRunningState<T extends GoRunConfigurationBase<?>> extend
   @Override
   protected ProcessHandler startProcess() throws ExecutionException {
     GoExecutor executor = patchExecutor(createCommonExecutor());
-    GeneralCommandLine commandLine = executor.withParameterString(myConfiguration.getParams()).createCommandLine();
+    final GeneralCommandLine commandLine = executor.withParameterString(myConfiguration.getParams()).createCommandLine();
     return new KillableColoredProcessHandler(commandLine) {
       @Override
       public void startNotify() {
         Map<String, String> environment = commandLine.getEnvironment();
-        notifyTextAvailable("GOROOT=" + environment.getOrDefault(GoConstants.GO_ROOT, "") + '\n', ProcessOutputTypes.SYSTEM);
-        notifyTextAvailable("GOPATH=" + environment.getOrDefault(GoConstants.GO_PATH, "") + '\n', ProcessOutputTypes.SYSTEM);
+        notifyTextAvailable("GOROOT=" + StringUtil.nullize(environment.get(GoConstants.GO_ROOT)) + '\n', ProcessOutputTypes.SYSTEM);
+        notifyTextAvailable("GOPATH=" + StringUtil.nullize(environment.get(GoConstants.GO_PATH)) + '\n', ProcessOutputTypes.SYSTEM);
         super.startNotify();
       }
     };
