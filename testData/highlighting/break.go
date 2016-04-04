@@ -29,14 +29,14 @@ func _() {
 
 		break
 	}
-	switch _ {
-	default: _()
-	case 0, 1, 2, 3: _(); break;
-	case 4, 5, 6, 7: _()
+	switch <error descr="Cannot use '_' as value">_</error> {
+	default: <error descr="Cannot use '_' as value">_</error>()
+	case 0, 1, 2, 3: <error descr="Cannot use '_' as value">_</error>(); break;
+	case 4, 5, 6, 7: <error descr="Cannot use '_' as value">_</error>()
 	}
 	
 	select {
-	case _ <- 0:  break;
-	case _ <- 1:
+	case <error descr="Cannot use '_' as value">_</error> <- 0:  break;
+	case <error descr="Cannot use '_' as value">_</error> <- 1:
 	}
 }
