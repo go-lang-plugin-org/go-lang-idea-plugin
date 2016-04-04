@@ -180,7 +180,7 @@ public class GoImportPackageQuickFix extends LocalQuickFixAndIntentionActionOnPs
               return null;
             }
           }
-          if (!GoPsiImplUtil.canBeAutoImported(file, module)) {
+          if (!GoPsiImplUtil.canBeAutoImported(file, false, module)) {
             return null;
           }
           String importPath = file.getImportPath(vendoringEnabled);

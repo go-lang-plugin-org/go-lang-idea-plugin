@@ -58,14 +58,15 @@ public class GoImportPathsCompletionProvider extends CompletionProvider<Completi
 
     Module module = ModuleUtilCore.findModuleForPsiElement(parameters.getOriginalFile());
     if (module != null) {
-      addCompletions(result, module, parameters.getOriginalFile(), GoUtil.goPathResolveScope(module, parameters.getOriginalFile()));
+      addCompletions(result, module, parameters.getOriginalFile(), GoUtil.goPathResolveScope(module, parameters.getOriginalFile()), false);
     }
   }
 
   public static void addCompletions(@NotNull CompletionResultSet result,
                                     @NotNull Module module,
                                     @Nullable PsiElement context,
-                                    @NotNull GlobalSearchScope scope) {
+                                    @NotNull GlobalSearchScope scope,
+                                    boolean allowMain) {
     Project project = module.getProject();
     boolean vendoringEnabled = GoVendoringUtil.isVendoringEnabled(module);
     String contextImportPath = GoCompletionUtil.getContextImportPath(context, vendoringEnabled);
@@ -80,7 +81,7 @@ public class GoImportPathsCompletionProvider extends CompletionProvider<Completi
       if (directory == null) continue;
 
       GoFile goFile = (GoFile)psiFile;
-      if (!GoPsiImplUtil.canBeAutoImported(goFile, module)) continue;
+      if (!GoPsiImplUtil.canBeAutoImported(goFile, allowMain, module)) continue;
       
       String importPath = goFile.getImportPath(vendoringEnabled);
       if (StringUtil.isNotEmpty(importPath) && !excludedSettings.isExcluded(importPath) 

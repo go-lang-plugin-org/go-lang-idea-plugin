@@ -320,7 +320,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
     @NotNull
     private Boolean cachedAllowed(@NotNull GoNamedElement element, @Nullable Boolean existingValue) {
       if (existingValue != null) return existingValue;
-      return GoPsiImplUtil.canBeAutoImported(element.getContainingFile(), myModule);
+      return GoPsiImplUtil.canBeAutoImported(element.getContainingFile(), false, myModule);
     }
 
     @NotNull

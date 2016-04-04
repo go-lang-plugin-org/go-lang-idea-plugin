@@ -1289,8 +1289,8 @@ public class GoPsiImplUtil {
     return ObjectUtils.tryCast(parent, GoTypeSpec.class);
   }
 
-  public static boolean canBeAutoImported(@NotNull GoFile file, @Nullable Module module) {
-    if (isBuiltinFile(file) || StringUtil.equals(file.getCanonicalPackageName(), GoConstants.MAIN)) {
+  public static boolean canBeAutoImported(@NotNull GoFile file, boolean allowMain, @Nullable Module module) {
+    if (isBuiltinFile(file) || !allowMain && StringUtil.equals(file.getCanonicalPackageName(), GoConstants.MAIN)) {
       return false;
     }
     if (!GoUtil.matchedForModuleBuildTarget(file, module) || GoUtil.isExcludedFile(file)) {
