@@ -118,6 +118,7 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
       psiElement(GoReferenceExpression.class)
         .andNot(insideConstSpec())
         .andNot(insideSelectorExpression())
+        .without(new FieldNameInStructLiteral())
         .withParent(not(psiElement(GoSelectorExpr.class))).with(new GoNonQualifiedReference()));
   }
 
@@ -192,6 +193,18 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
     @Override
     public boolean accepts(@NotNull GoReferenceExpressionBase element, ProcessingContext context) {
       return element.getQualifier() == null;
+    }
+  }
+
+  private static class FieldNameInStructLiteral extends PatternCondition<GoReferenceExpression> {
+    public FieldNameInStructLiteral() {
+      super("field name in struct literal");
+    }
+
+    @Override
+    public boolean accepts(@NotNull GoReferenceExpression expression, ProcessingContext context) {
+      GoStructLiteralCompletion.Variants variants = GoStructLiteralCompletion.allowedVariants(expression);
+      return variants == GoStructLiteralCompletion.Variants.FIELD_NAME_ONLY;
     }
   }
 }

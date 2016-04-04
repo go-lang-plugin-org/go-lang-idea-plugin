@@ -560,6 +560,42 @@ public class GoCompletionTest extends GoCompletionTestBase {
     myFixture.checkResult("package mytest; func TestSomething() { MyFunction() }");
   }
 
+  public void testFieldNamesInEmptyStructLiteral() {
+    String source = "package test; " +
+                    "type A struct { field_in_a string }; " +
+                    "type B struct { A; field_in_b string }; " +
+                    "func Test() B { a := A{}; s := \"\"; return B{<caret>}; }";
+    doTestInclude(source, "a", "A", "field_in_b");
+  }
+
+  public void testFieldNamesInStructLiteralWithNameValueInitializers() {
+    String source = "package test; " +
+                    "type A struct { field_in_a string }; " +
+                    "type B struct { A; field_in_b string }; " +
+                    "func Test() B { a := A{}; s := \"\"; return B{ A: A{}, <caret>}; }";
+    doTestEquals(source, "field_in_b");
+  }
+
+  public void testNoFieldNamesInStructLiteralWithValueInitializers() {
+    String source = "package test; " +
+                    "type A struct { field_in_a string }; " +
+                    "type B struct { A; field_in_b string }; " +
+                    "func Test() B { a := A{}; s := \"\"; return B{ A{}, <caret>}; }";
+    myFixture.configureByText("test.go", source);
+    myFixture.completeBasic();
+    List<String> variants = myFixture.getLookupElementStrings();
+    assertNotNull(variants);
+    assertContainsElements(variants, "s");
+    assertDoesntContain(variants, "field_in_b");
+  }
+
+  public void testStructFieldValueCompletion() {
+    String source = "package test; " +
+                    "type A struct { field1 string; field2 string }; " +
+                    "func Test() A { s := \"\"; return A{field1: \"\", field2: <caret>}; }";
+    doTestInclude(source, "s");
+  }
+
   private void doTestEmptyCompletion() {
     myFixture.testCompletionVariants(getTestName(true) + ".go");
   }
