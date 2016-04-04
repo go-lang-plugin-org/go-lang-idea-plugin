@@ -28,19 +28,18 @@ import com.intellij.execution.process.ProcessEvent;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.text.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GoApplicationRunningState extends GoRunningState<GoApplicationConfiguration> {
   private String myOutputFilePath;
   @Nullable private GoHistoryProcessListener myHistoryProcessHandler;
   private int myDebugPort = 59090;
+  private boolean myCompilationFailed;
 
   public GoApplicationRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module,
                                    @NotNull GoApplicationConfiguration configuration) {
@@ -66,18 +65,13 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
   @NotNull
   @Override
   protected ProcessHandler startProcess() throws ExecutionException {
-    final ProcessHandler processHandler = super.startProcess();
+    final ProcessHandler processHandler = myCompilationFailed ? new GoNopProcessHandler() : super.startProcess();
     processHandler.addProcessListener(new ProcessAdapter() {
-      private final AtomicBoolean firstOutput = new AtomicBoolean(true);
-
       @Override
-      public void onTextAvailable(ProcessEvent event, Key outputType) {
-        if (firstOutput.getAndSet(false)) {
-          if (myHistoryProcessHandler != null) {
-            myHistoryProcessHandler.apply(processHandler);
-          }
+      public void startNotified(ProcessEvent event) {
+        if (myHistoryProcessHandler != null) {
+          myHistoryProcessHandler.apply(processHandler);
         }
-        super.onTextAvailable(event, outputType);
       }
 
       @Override
@@ -128,5 +122,9 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
 
   public void setDebugPort(int debugPort) {
     myDebugPort = debugPort;
+  }
+
+  public void setCompilationFailed(boolean compilationFailed) {
+    myCompilationFailed = compilationFailed;
   }
 }
