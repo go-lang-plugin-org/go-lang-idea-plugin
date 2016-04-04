@@ -16,31 +16,25 @@
 
 package com.goide.inspections;
 
-import com.goide.psi.*;
+import com.goide.psi.GoReferenceExpression;
+import com.goide.psi.GoVisitor;
+import com.intellij.codeInsight.highlighting.ReadWriteAccessDetector;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class GoUnderscoreUsedAsValueInspection extends GoInspectionBase {
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder,
-                                     @SuppressWarnings({"UnusedParameters", "For future"}) @NotNull LocalInspectionToolSession session) {
+  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
       public void visitReferenceExpression(@NotNull GoReferenceExpression o) {
         super.visitReferenceExpression(o);
-        if (!o.getIdentifier().textMatches("_")) return;
-        PsiElement parent = o.getParent();
-        if (parent instanceof GoSendStatement) return;
-        if (parent instanceof GoRangeClause) {
-          if (!((GoRangeClause)parent).getExpressionList().contains(o)) return;
+        if (o.getIdentifier().textMatches("_") && o.getReadWriteAccess() != ReadWriteAccessDetector.Access.Write) {
+          holder.registerProblem(o, "Cannot use '_' as value", ProblemHighlightType.ERROR);
         }
-        if (PsiTreeUtil.getParentOfType(o, GoLeftHandExprList.class, GoArgumentList.class) instanceof GoLeftHandExprList) return;
-        holder.registerProblem(o, "Cannot use '_' as value", ProblemHighlightType.ERROR);
       }
     };
   }
