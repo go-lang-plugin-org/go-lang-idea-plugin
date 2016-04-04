@@ -80,7 +80,7 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
           }
           else if (holder.isOnTheFly()) {
             boolean canBeLocal = PsiTreeUtil.getParentOfType(o, GoBlock.class) != null;
-            List<LocalQuickFix> fixesList = ContainerUtil.newArrayList(new GoIntroduceGlobalVariableFix(id, name));
+            List<LocalQuickFix> fixesList = ContainerUtil.<LocalQuickFix>newArrayList(new GoIntroduceGlobalVariableFix(id, name));
             if (canBeLocal) {
               fixesList.add(new GoIntroduceLocalVariableFix(id, name));
             }
