@@ -32,7 +32,34 @@ import java.util.List;
 import java.util.Set;
 
 class GoStructLiteralCompletion {
-  enum Variants {FIELD_NAME_ONLY, VALUE_ONLY, BOTH, NONE}
+  /**
+   * Describes struct literal completion variants that should be suggested.
+   */
+  enum Variants {
+    /**
+     * Only struct field names should be suggested.
+     * Indicates that field:value initializers are used in this struct literal.
+     * For example, {@code Struct{field1: "", caret}}.
+     */
+    FIELD_NAME_ONLY,
+    /**
+     * Only values should be suggested.
+     * Indicates that value initializers are used in this struct literal.
+     * For example, {@code Struct{"", caret}}.
+     */
+    VALUE_ONLY,
+    /**
+     * Both struct field names and values should be suggested.
+     * Indicates that there's no reliable way to determine whether field:value or value initializers are used.
+     * Example 1: {@code Struct{caret}}.
+     * Example 2: {@code Struct{field1:"", "", caret}}
+     */
+    BOTH,
+    /**
+     * Indicates that struct literal completion should not be available.
+     */
+    NONE
+  }
 
   @NotNull
   static Variants allowedVariants(@Nullable GoReferenceExpression structFieldReference) {
