@@ -24,10 +24,12 @@ import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.openapi.util.Condition;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.PsiMultiReference;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
+import com.intellij.util.ObjectUtils;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
@@ -59,11 +61,30 @@ public class GoReferenceCompletionProvider extends CompletionProvider<Completion
       fillVariantsByReference(ArrayUtil.getFirstElement(references), file, result);
     }
     else if (reference instanceof GoReference) {
-      ((GoReference)reference).processResolveVariants(new MyGoScopeProcessor(result, file, false));
+      GoReferenceExpression refExpression = ObjectUtils.tryCast(reference.getElement(), GoReferenceExpression.class);
+      GoStructLiteralCompletion.Variants variants = GoStructLiteralCompletion.allowedVariants(refExpression);
 
-      PsiElement element = reference.getElement();
-      if (element instanceof GoReferenceExpression && PsiTreeUtil.getParentOfType(element, GoCompositeLit.class) != null) {
-        new GoFieldNameReference((GoReferenceExpression)element).processResolveVariants(new MyGoScopeProcessor(result, file, false));
+      if (refExpression != null &&
+          (variants == GoStructLiteralCompletion.Variants.FIELD_NAME_ONLY ||
+           variants == GoStructLiteralCompletion.Variants.BOTH)) {
+        final GoLiteralValue literal = PsiTreeUtil.getParentOfType(refExpression, GoLiteralValue.class);
+        new GoFieldNameReference(refExpression).processResolveVariants(new MyGoScopeProcessor(result, file, false) {
+          final Condition<String> myIsFieldAssigned = GoStructLiteralCompletion.newIsFieldAssignedPredicate(literal);
+
+          @Override
+          public boolean execute(@NotNull PsiElement o, @NotNull ResolveState state) {
+            String structFieldName = o instanceof GoFieldDefinition ? ((GoFieldDefinition)o).getName() :
+                                     o instanceof GoAnonymousFieldDefinition ? ((GoAnonymousFieldDefinition)o).getName() : null;
+            if (structFieldName != null && myIsFieldAssigned.value(structFieldName)) {
+              return true;
+            }
+            return super.execute(o, state);
+          }
+        });
+      }
+
+      if (variants != GoStructLiteralCompletion.Variants.FIELD_NAME_ONLY) {
+        ((GoReference)reference).processResolveVariants(new MyGoScopeProcessor(result, file, false));
       }
     }
     else if (reference instanceof GoTypeReference) {
