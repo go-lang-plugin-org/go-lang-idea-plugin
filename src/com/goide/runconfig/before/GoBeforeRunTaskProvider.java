@@ -140,7 +140,7 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
         GoExecutor.in(module).withParameterString(task.getCommand())
           .withWorkDirectory(workingDirectory)
           .showOutputOnError()
-          .showNotifications(false)
+          .showNotifications(false, true)
           .withPresentableName("Executing `" + task + "`")
           .withProcessListener(new ProcessAdapter() {
             @Override

@@ -56,7 +56,7 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
           }
         };
         GoExecutor.in(project, module).withPresentableName("go get -t " + packageName + "/...")
-          .withParameters("get", "-t", packageName+"/...").showNotifications(false).showOutputOnError()
+          .withParameters("get", "-t", packageName+"/...").showNotifications(false, true).showOutputOnError()
           .executeWithProgress(!startInBackground, consumer);
       }
     });
