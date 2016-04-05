@@ -54,10 +54,10 @@ public class GoLibrariesConfigurable implements SearchableConfigurable, Configur
   private final JPanel myPanel = new JPanel(new BorderLayout());
   private final CollectionListModel<ListItem> myListModel = new CollectionListModel<ListItem>();
 
-  public GoLibrariesConfigurable(@NotNull String displayName, @NotNull GoLibrariesService librariesService, String... readOnlyPaths) {
+  public GoLibrariesConfigurable(@NotNull String displayName, @NotNull GoLibrariesService librariesService, String... urls) {
     myDisplayName = displayName;
     myLibrariesService = librariesService;
-    myReadOnlyPaths = readOnlyPaths;
+    myReadOnlyPaths = urls;
 
     final JBList filesList = new JBList(myListModel);
     filesList.setCellRenderer(new ColoredListCellRenderer() {
