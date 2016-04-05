@@ -24,6 +24,7 @@ import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.KillableColoredProcessHandler;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.process.ProcessOutputTypes;
+import com.intellij.execution.process.ProcessTerminatedListener;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.util.text.StringUtil;
@@ -53,7 +54,7 @@ public abstract class GoRunningState<T extends GoRunConfigurationBase<?>> extend
   protected ProcessHandler startProcess() throws ExecutionException {
     GoExecutor executor = patchExecutor(createCommonExecutor());
     final GeneralCommandLine commandLine = executor.withParameterString(myConfiguration.getParams()).createCommandLine();
-    return new KillableColoredProcessHandler(commandLine) {
+    KillableColoredProcessHandler handler = new KillableColoredProcessHandler(commandLine) {
       @Override
       public void startNotify() {
         Map<String, String> environment = commandLine.getEnvironment();
@@ -62,6 +63,8 @@ public abstract class GoRunningState<T extends GoRunConfigurationBase<?>> extend
         super.startNotify();
       }
     };
+    ProcessTerminatedListener.attach(handler);
+    return handler;
   }
 
   @NotNull
