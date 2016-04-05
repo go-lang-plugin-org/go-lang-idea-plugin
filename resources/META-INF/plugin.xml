@@ -338,6 +338,11 @@
             description="Analyze types for current directory with gotype util">
       <add-to-group group-id="CodeMenu" anchor="last"/>
     </action>
+    <action id="GoVetFileAction" class="com.goide.actions.tool.GoVetFileAction" text="Go vet file"
+            description="Format selected file with go vet util">
+      <add-to-group group-id="CodeMenu" anchor="last"/>
+    </action>
+
   </actions>
 
   <application-components>
