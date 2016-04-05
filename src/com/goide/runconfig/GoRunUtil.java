@@ -21,6 +21,9 @@ import com.goide.GoFileType;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoPackageClause;
 import com.intellij.execution.actions.ConfigurationContext;
+import com.intellij.execution.configurations.GeneralCommandLine;
+import com.intellij.execution.process.ProcessHandler;
+import com.intellij.execution.process.ProcessOutputTypes;
 import com.intellij.ide.scratch.ScratchFileType;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
@@ -31,6 +34,7 @@ import com.intellij.openapi.ui.TextBrowseFolderListener;
 import com.intellij.openapi.ui.TextComponentAccessor;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.util.Condition;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -40,6 +44,8 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Map;
 
 public class GoRunUtil {
   private GoRunUtil() {
@@ -136,5 +142,11 @@ public class GoRunUtil {
                                                                                                       chooseDirectoryDescriptor,
                                                                                                       TextComponentAccessor.TEXT_FIELD_WITH_HISTORY_WHOLE_TEXT));
     }
+  }
+
+  public static void printGoEnvVariables(@NotNull GeneralCommandLine commandLine, @NotNull ProcessHandler handler) {
+    Map<String, String> environment = commandLine.getEnvironment();
+    handler.notifyTextAvailable("GOROOT=" + StringUtil.nullize(environment.get(GoConstants.GO_ROOT)) + '\n', ProcessOutputTypes.SYSTEM);
+    handler.notifyTextAvailable("GOPATH=" + StringUtil.nullize(environment.get(GoConstants.GO_PATH)) + '\n', ProcessOutputTypes.SYSTEM);
   }
 }
