@@ -198,9 +198,9 @@ public class GoExecutor {
   }
 
   @NotNull
-  public GoExecutor showNotifications(boolean onErrorOnly) {
-    myShowNotificationsOnError = true;
-    myShowNotificationsOnSuccess = !onErrorOnly;
+  public GoExecutor showNotifications(boolean onError, boolean onSuccess) {
+    myShowNotificationsOnError = onError;
+    myShowNotificationsOnSuccess = onSuccess;
     return this;
   }
 
