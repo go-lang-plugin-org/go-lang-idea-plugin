@@ -318,30 +318,28 @@
     <group id="GoTestGenerateGroup" class="com.goide.generate.GoGenerateTestMethodActionGroup">
       <add-to-group group-id="GenerateGroup" anchor="first"/>
     </group>
-
-    <action id="GoFmtFileAction" class="com.goide.actions.tool.GoFmtFileAction" text="Go fmt file"
-            description="Format selected file with go fmt util">
+    <group id="GoTools" text="Go Tools" description="Go External Tools" icon="/icons/go.png" popup="true">
+      <action id="GoFmtFileAction" class="com.goide.actions.tool.GoFmtFileAction" text="Go fmt file"
+              description="Format selected file with go fmt util">
+        <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt F"/>
+      </action>
+      <action id="GoFmtProjectAction" class="com.goide.actions.tool.GoFmtProjectAction" text="Go fmt project"
+              description="Format project with go fmt util">
+        <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt P"/>
+      </action>
+      <action id="GoImportsFileAction" class="com.goide.actions.tool.GoImportsFileAction" text="Goimports file"
+              description="Optimizes imports for selected file with goimports util">
+      </action>
+      <action id="GoTypeFileAction" class="com.goide.actions.tool.GoTypeFileAction" text="Gotype directory"
+              description="Analyze types for current directory with gotype util">
+      </action>
+      <action id="GoVetFileAction" class="com.goide.actions.tool.GoVetFileAction" text="Go vet file"
+              description="Lint selected file or directory with go vet tool">
+      </action>
       <add-to-group group-id="CodeMenu" anchor="last"/>
-      <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt F"/>
-    </action>
-    <action id="GoFmtProjectAction" class="com.goide.actions.tool.GoFmtProjectAction" text="Go fmt project"
-            description="Format project with go fmt util">
-      <add-to-group group-id="CodeMenu" anchor="last"/>
-      <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt P"/>
-    </action>
-    <action id="GoImportsFileAction" class="com.goide.actions.tool.GoImportsFileAction" text="Goimports file"
-            description="Optimizes imports for selected file with goimports util">
-      <add-to-group group-id="CodeMenu" anchor="last"/>
-    </action>
-    <action id="GoTypeFileAction" class="com.goide.actions.tool.GoTypeFileAction" text="Gotype directory"
-            description="Analyze types for current directory with gotype util">
-      <add-to-group group-id="CodeMenu" anchor="last"/>
-    </action>
-    <action id="GoVetFileAction" class="com.goide.actions.tool.GoVetFileAction" text="Go vet file"
-            description="Format selected file with go vet util">
-      <add-to-group group-id="CodeMenu" anchor="last"/>
-    </action>
-
+      <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+      <add-to-group group-id="EditorLangPopupMenu" anchor="last"/>
+    </group>
   </actions>
 
   <application-components>
