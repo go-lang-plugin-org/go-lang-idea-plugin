@@ -104,10 +104,9 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
       protected List<UnnamedConfigurable> createConfigurables() {
         List<UnnamedConfigurable> result = ContainerUtil.newArrayList();
 
-        String[] urlsFromEnv = ContainerUtil.map2Array(ContainerUtil.mapNotNull(GoSdkUtil.getGoPathsRootsFromEnvironment(),
-                                                                                new GoSdkUtil.RetrieveSubDirectoryOrSelfFunction("src")),
-                                                       String.class, new Function<VirtualFile, String>() {
-            @Override
+        String[] urlsFromEnv = ContainerUtil.map2Array(GoSdkUtil.getGoPathsRootsFromEnvironment(), String.class, 
+                                                       new Function<VirtualFile, String>() {
+          @Override
             public String fun(VirtualFile file) {
               return file.getUrl();
             }
