@@ -19,6 +19,7 @@ package com.goide.util;
 import com.goide.GoConstants;
 import com.goide.project.GoModuleSettings;
 import com.goide.runconfig.GoConsoleFilter;
+import com.goide.runconfig.GoRunUtil;
 import com.goide.sdk.GoSdkService;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.execution.ExecutionException;
@@ -71,6 +72,7 @@ public class GoExecutor {
   private boolean myShowOutputOnError;
   private boolean myShowNotificationsOnError;
   private boolean myShowNotificationsOnSuccess;
+  private boolean myShowGoEnvVariables = true;
   private GeneralCommandLine.ParentEnvironmentType myParentEnvironmentType = GeneralCommandLine.ParentEnvironmentType.CONSOLE;
   private boolean myPtyDisabled;
   @Nullable private String myExePath;
@@ -178,6 +180,11 @@ public class GoExecutor {
     return this;
   }
 
+  public GoExecutor showGoEnvVariables(boolean show) {
+    myShowGoEnvVariables = show;
+    return this;
+  } 
+
   @NotNull
   public GoExecutor showOutputOnError() {
     myShowOutputOnError = true;
@@ -205,8 +212,16 @@ public class GoExecutor {
     GeneralCommandLine commandLine = null;
     try {
       commandLine = createCommandLine();
-
-      myProcessHandler = new KillableColoredProcessHandler(commandLine);
+      GeneralCommandLine finalCommandLine = commandLine;
+      myProcessHandler = new KillableColoredProcessHandler(finalCommandLine) {
+        @Override
+        public void startNotify() {
+          if (myShowGoEnvVariables) {
+            GoRunUtil.printGoEnvVariables(finalCommandLine, this);
+          }
+          super.startNotify();
+        }
+      };
       final GoHistoryProcessListener historyProcessListener = new GoHistoryProcessListener();
       myProcessHandler.addProcessListener(historyProcessListener);
       for (ProcessListener listener : myProcessListeners) {

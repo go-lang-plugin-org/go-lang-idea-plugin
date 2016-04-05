@@ -16,21 +16,16 @@
 
 package com.goide.runconfig;
 
-import com.goide.GoConstants;
 import com.goide.util.GoExecutor;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.CommandLineState;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.KillableColoredProcessHandler;
 import com.intellij.execution.process.ProcessHandler;
-import com.intellij.execution.process.ProcessOutputTypes;
 import com.intellij.execution.process.ProcessTerminatedListener;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.util.text.StringUtil;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Map;
 
 public abstract class GoRunningState<T extends GoRunConfigurationBase<?>> extends CommandLineState {
   @NotNull protected final Module myModule;
@@ -54,15 +49,7 @@ public abstract class GoRunningState<T extends GoRunConfigurationBase<?>> extend
   protected ProcessHandler startProcess() throws ExecutionException {
     GoExecutor executor = patchExecutor(createCommonExecutor());
     final GeneralCommandLine commandLine = executor.withParameterString(myConfiguration.getParams()).createCommandLine();
-    KillableColoredProcessHandler handler = new KillableColoredProcessHandler(commandLine) {
-      @Override
-      public void startNotify() {
-        Map<String, String> environment = commandLine.getEnvironment();
-        notifyTextAvailable("GOROOT=" + StringUtil.nullize(environment.get(GoConstants.GO_ROOT)) + '\n', ProcessOutputTypes.SYSTEM);
-        notifyTextAvailable("GOPATH=" + StringUtil.nullize(environment.get(GoConstants.GO_PATH)) + '\n', ProcessOutputTypes.SYSTEM);
-        super.startNotify();
-      }
-    };
+    KillableColoredProcessHandler handler = new KillableColoredProcessHandler(commandLine);
     ProcessTerminatedListener.attach(handler);
     return handler;
   }
