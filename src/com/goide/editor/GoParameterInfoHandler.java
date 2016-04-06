@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.Set;
 
 public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabActionSupport<GoArgumentList, Object, GoExpression> {
-
   @NotNull
   @Override
   public GoExpression[] getActualParameters(@NotNull GoArgumentList o) {
@@ -62,7 +61,7 @@ public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabAction
 
   @NotNull
   @Override
-  public Set<? extends Class> getArgListStopSearchClasses() {
+  public Set<Class> getArgListStopSearchClasses() {
     return ContainerUtil.newHashSet();
   }
 
