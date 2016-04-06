@@ -52,7 +52,7 @@ public class GoMissingReturnInspection extends GoInspectionBase {
     if (s instanceof GoReturnStatement || s instanceof GoGoStatement) {
       return true;
     }
-    else if (s instanceof GoSimpleStatement) {
+    if (s instanceof GoSimpleStatement) {
       GoLeftHandExprList list = ((GoSimpleStatement)s).getLeftHandExprList();
       GoExpression expression = ContainerUtil.getFirstItem(list != null ? list.getExpressionList() : null);
       if (expression instanceof GoCallExpr && GoPsiImplUtil.isPanic((GoCallExpr)expression)) return true;
