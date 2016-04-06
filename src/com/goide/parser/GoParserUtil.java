@@ -147,7 +147,7 @@ public class GoParserUtil extends GeneratedParserUtilBase {
     return true;
   }
 
-  public static boolean exitMode(@NotNull PsiBuilder builder_, @SuppressWarnings("UnusedParameters") int level, String mode, boolean safe) {
+  private static boolean exitMode(@NotNull PsiBuilder builder_, @SuppressWarnings("UnusedParameters") int level, String mode, boolean safe) {
     TObjectIntHashMap<String> flags = getParsingModes(builder_);
     int count = flags.get(mode);
     if (count == 1) flags.remove(mode);
@@ -177,8 +177,8 @@ public class GoParserUtil extends GeneratedParserUtilBase {
       for (Field field : builder_.getClass().getDeclaredFields()) {
         if ("MyList".equals(field.getType().getSimpleName())) {
           field.setAccessible(true);
-          List production = (List)field.get(builder_);
-          return (PsiBuilder.Marker)ContainerUtil.getLastItem(production);
+          //noinspection unchecked
+          return ContainerUtil.getLastItem((List<PsiBuilder.Marker>)field.get(builder_));
         }
       }
     }
