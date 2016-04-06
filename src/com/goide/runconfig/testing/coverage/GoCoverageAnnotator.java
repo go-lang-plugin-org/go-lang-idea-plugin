@@ -143,7 +143,7 @@ public class GoCoverageAnnotator extends BaseCoverageAnnotator {
     return new Runnable() {
       @Override
       public void run() {
-        annotateAllFiles(data, (VirtualFile[])manager.doInReadActionIfProjectOpen(new Computable() {
+        annotateAllFiles(data, manager.doInReadActionIfProjectOpen(new Computable<VirtualFile[]>() {
           @Override
           public VirtualFile[] compute() {
             return ProjectRootManager.getInstance(getProject()).getContentRoots();
