@@ -32,7 +32,6 @@ import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@SuppressWarnings("QuickFixGetFamilyNameViolation")
 public abstract class GoUnresolvedFixBase extends LocalQuickFixAndIntentionActionOnPsiElement {
   @NotNull private final String myName;
   @NotNull private final String myWhat;
