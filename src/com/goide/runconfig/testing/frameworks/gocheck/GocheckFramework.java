@@ -47,7 +47,7 @@ public class GocheckFramework extends GoTestFramework {
   public static String getGocheckTestName(@NotNull GoMethodDeclaration method) {
     String methodName = GoTestFunctionType.fromName(method.getName()) == GoTestFunctionType.TEST ? method.getName() : null;
     if (methodName != null) {
-      String suiteName = GoPsiImplUtil.getText(method.getReceiver().getType());
+      String suiteName = GoPsiImplUtil.getText(method.getReceiverType());
       if (!suiteName.isEmpty()) {
         return suiteName + "." + methodName;
       }

@@ -43,7 +43,7 @@ public class GoMethodOnNonLocalTypeInspection extends GoInspectionBase {
 
       @Nullable
       private GoType getMethodType(@NotNull GoMethodDeclaration method) {
-        GoType methodType = method.getReceiver().getType();
+        GoType methodType = method.getReceiverType();
         GoTypeReferenceExpression ref = methodType == null ? null : GoPsiImplUtil.getTypeReference(methodType);
         return ref == null ? null : ref.resolveType();
       }

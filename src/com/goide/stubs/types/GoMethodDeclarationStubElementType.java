@@ -91,7 +91,7 @@ public class GoMethodDeclarationStubElementType extends GoNamedStubElementType<G
 
   @Nullable
   public static String calcTypeText(@NotNull GoMethodDeclaration psi) {
-    GoTypeReferenceExpression reference = GoPsiImplUtil.getTypeReference(psi.getReceiver().getType());
+    GoTypeReferenceExpression reference = GoPsiImplUtil.getTypeReference(psi.getReceiverType());
     return reference != null ? reference.getIdentifier().getText() : null;
   }
 }

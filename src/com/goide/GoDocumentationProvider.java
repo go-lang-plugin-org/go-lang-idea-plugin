@@ -314,7 +314,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
           }
         }
         else if (element instanceof GoMethodDeclaration) {
-          GoType receiverType = ((GoMethodDeclaration)element).getReceiver().getType();
+          GoType receiverType = ((GoMethodDeclaration)element).getReceiverType();
           String receiver = getReceiverTypeText(receiverType);
           String name = ((GoMethodDeclaration)element).getName();
           if (StringUtil.isNotEmpty(receiver) && StringUtil.isNotEmpty(name)) {

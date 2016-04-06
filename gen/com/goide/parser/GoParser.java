@@ -2518,9 +2518,9 @@ public class GoParser implements PsiParser, LightPsiParser {
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, METHOD_DECLARATION, null);
     r = consumeToken(b, FUNC);
-    r = r && Receiver(b, l + 1);
-    p = r; // pin = 2
-    r = r && report_error_(b, consumeToken(b, IDENTIFIER));
+    p = r; // pin = 1
+    r = r && report_error_(b, Receiver(b, l + 1));
+    r = p && report_error_(b, consumeToken(b, IDENTIFIER)) && r;
     r = p && report_error_(b, Signature(b, l + 1)) && r;
     r = p && MethodDeclaration_4(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);

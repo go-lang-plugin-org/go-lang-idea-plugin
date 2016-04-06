@@ -245,6 +245,12 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
+  public static GoType getReceiverType(@NotNull GoMethodDeclaration o) {
+    GoReceiver receiver = o.getReceiver();
+    return receiver == null ? null : receiver.getType();
+  }
+
+  @Nullable
   public static GoTypeReferenceExpression getTypeReference(@Nullable GoType o) {
     if (o == null) return null;
     if (o instanceof GoReceiverType || o instanceof GoPointerType) {

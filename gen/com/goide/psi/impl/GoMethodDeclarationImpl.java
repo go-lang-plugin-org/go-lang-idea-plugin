@@ -38,9 +38,9 @@ public class GoMethodDeclarationImpl extends GoFunctionOrMethodDeclarationImpl<G
   }
 
   @Override
-  @NotNull
+  @Nullable
   public GoReceiver getReceiver() {
-    return findNotNullChildByClass(GoReceiver.class, com.goide.stubs.GoReceiverStub.class);
+    return findChildByClass(GoReceiver.class, com.goide.stubs.GoReceiverStub.class);
   }
 
   @Override
@@ -59,6 +59,11 @@ public class GoMethodDeclarationImpl extends GoFunctionOrMethodDeclarationImpl<G
   @Nullable
   public PsiElement getIdentifier() {
     return findChildByType(IDENTIFIER);
+  }
+
+  @Nullable
+  public GoType getReceiverType() {
+    return GoPsiImplUtil.getReceiverType(this);
   }
 
 }
