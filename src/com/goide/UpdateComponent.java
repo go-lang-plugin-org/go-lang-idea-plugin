@@ -39,6 +39,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.util.concurrent.TimeUnit;
 
 import static com.goide.util.GoUtil.getPlugin;
@@ -101,6 +102,8 @@ public class UpdateComponent implements ApplicationComponent, Disposable {
                 }
               }
             );
+          }
+          catch (UnknownHostException ignored) {
           }
           catch (IOException e) {
             LOG.warn(e);
