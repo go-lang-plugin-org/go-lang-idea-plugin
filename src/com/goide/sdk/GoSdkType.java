@@ -30,16 +30,13 @@ import javax.swing.*;
 import java.io.File;
 
 public class GoSdkType extends SdkType {
-
   public GoSdkType() {
     super(GoConstants.SDK_TYPE_ID);
   }
 
   @NotNull
   public static GoSdkType getInstance() {
-    GoSdkType instance = SdkType.findInstance(GoSdkType.class);
-    assert instance != null;
-    return instance;
+    return SdkType.findInstance(GoSdkType.class);
   }
 
   @NotNull
@@ -80,8 +77,9 @@ public class GoSdkType extends SdkType {
     return false;
   }
 
+  @NotNull
   @Override
-  public String adjustSelectedSdkHome(String homePath) {
+  public String adjustSelectedSdkHome(@NotNull String homePath) {
     return GoSdkUtil.adjustSdkPath(homePath);
   }
 
