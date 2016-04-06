@@ -12,7 +12,7 @@ public interface GoMethodDeclaration extends GoFunctionOrMethodDeclaration, Stub
   @Nullable
   GoBlock getBlock();
 
-  @NotNull
+  @Nullable
   GoReceiver getReceiver();
 
   @Nullable
@@ -23,5 +23,8 @@ public interface GoMethodDeclaration extends GoFunctionOrMethodDeclaration, Stub
 
   @Nullable
   PsiElement getIdentifier();
+
+  @Nullable
+  GoType getReceiverType();
 
 }

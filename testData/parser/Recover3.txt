@@ -1,0 +1,20 @@
+GO_FILE
+  PACKAGE_CLAUSE
+    PsiElement(package)('package')
+    PsiElement(identifier)('main')
+  IMPORT_LIST
+    <empty list>
+  METHOD_DECLARATION
+    PsiElement(func)('func')
+    PsiErrorElement:'(' or identifier expected, got 'func'
+      <empty list>
+  FUNCTION_DECLARATION
+    PsiElement(func)('func')
+    PsiElement(identifier)('example')
+    SIGNATURE
+      PARAMETERS
+        PsiElement(()('(')
+        PsiElement())(')')
+    BLOCK
+      PsiElement({)('{')
+      PsiElement(})('}')

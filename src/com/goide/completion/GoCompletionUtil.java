@@ -193,7 +193,7 @@ public class GoCompletionUtil {
     }
     String text = "";
     if (m instanceof GoMethodDeclaration) {
-      text = GoPsiImplUtil.getText(((GoMethodDeclaration)m).getReceiver().getType());
+      text = GoPsiImplUtil.getText(((GoMethodDeclaration)m).getReceiverType());
     }
     else if (m instanceof GoMethodSpec) {
       PsiElement parent = m.getParent();

@@ -74,6 +74,7 @@ public class GoParserTest extends ParsingTestCase {
   public void testSimple()                          { doTest(false); }
   public void testRecover()                         { doTest(false); }
   public void testRecover2()                        { doTest(false); }
+  public void testRecover3()                        { doTest(false); }
   public void testMethodExpr()                      { doTest(false); }
   public void testLabels()                          { doTest(false); }
   public void testBlockRecover()                    { doTest(false); }
