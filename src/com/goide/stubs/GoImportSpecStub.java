@@ -18,7 +18,6 @@ package com.goide.stubs;
 
 import com.goide.psi.GoImportSpec;
 import com.intellij.psi.stubs.IStubElementType;
-import com.intellij.psi.stubs.StubBase;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.io.StringRef;
 import org.jetbrains.annotations.NotNull;
