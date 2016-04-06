@@ -209,6 +209,8 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
       case IN:
         command(STEP);
         break;
+      case IN_ASYNC:
+        break;
       case OVER:
         command(NEXT);
         break;
