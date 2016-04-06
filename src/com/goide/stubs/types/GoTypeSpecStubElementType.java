@@ -74,6 +74,6 @@ public class GoTypeSpecStubElementType extends GoNamedStubElementType<GoTypeSpec
   @NotNull
   @Override
   protected Collection<StubIndexKey<String, ? extends GoNamedElement>> getExtraIndexKeys() {
-    return ContainerUtil.list(GoTypesIndex.KEY);
+    return ContainerUtil.<StubIndexKey<String, ? extends GoNamedElement>>list(GoTypesIndex.KEY);
   }
 }
