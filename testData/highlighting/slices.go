@@ -64,3 +64,32 @@ func <warning>sourceReader</warning>(files <-chan *File) {
         file.Contents
     }
 }
+
+type FooSl struct {
+	a int
+}
+
+type Baz [5]FooSl
+type ZOO Baz
+
+func _(){
+	b := &ZOO{}
+	b[0].a = 1
+}
+
+type typ1 struct {
+}
+
+type typ2 struct {
+	t1 typ1
+}
+
+func (t typ1) F() {
+	print("t1.F()")
+}
+
+func _() {
+	t2 := typ2{t1:typ1{}}
+	t1 := &t2.t1
+	t1.F()
+}
