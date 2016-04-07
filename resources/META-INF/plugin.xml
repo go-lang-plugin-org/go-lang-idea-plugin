@@ -119,6 +119,7 @@
     <lang.documentationProvider language="go" implementationClass="com.goide.GoDocumentationProvider"/>
     <lang.foldingBuilder language="go" implementationClass="com.goide.editor.GoFoldingBuilder"/>
     <typeDeclarationProvider implementation="com.goide.editor.GoTypeDeclarationProvider"/>
+    <codeInsight.typeInfo language="go" implementationClass="com.goide.codeInsight.GoExpressionTypeProvider"/>
     <codeInsight.parameterInfo language="go" implementationClass="com.goide.editor.GoParameterInfoHandler"/>
     <lang.smartEnterProcessor language="go" implementationClass="com.goide.editor.smart.GoSmartEnterProcessor"/>
     <highlightUsagesHandlerFactory implementation="com.goide.highlighting.exitpoint.GoHighlightExitPointsHandlerFactory"/>
@@ -309,13 +310,6 @@
             text="Go File" description="Create new Go file">
       <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
     </action>
-
-    <action id="GoShowTypeInternalAction"
-            class="com.goide.actions.internal.GoShowTypeInternalAction"
-            text="Show Go type info">
-      <add-to-group group-id="EditorLangPopupMenu" anchor="last"/>
-    </action>
-
     <group id="GoTestGenerateGroup" class="com.goide.generate.GoGenerateTestMethodActionGroup">
       <add-to-group group-id="GenerateGroup" anchor="first"/>
     </group>
