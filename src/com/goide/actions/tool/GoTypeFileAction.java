@@ -45,6 +45,7 @@ public class GoTypeFileAction extends GoDownloadableFileAction {
     VirtualFile executable = getExecutable(project, module);
     assert executable != null;
 
-    return GoExecutor.in(project, module).withExePath(executable.getPath()).withParameters("-e", "-a", "-v", filePath ).showOutputOnError();
+    return GoExecutor.in(project, module).withExePath(executable.getPath()).withParameters("-e", "-a", "-v", filePath )
+      .showNotifications(false, true).showOutputOnError();
   }
 }
