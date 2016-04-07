@@ -402,13 +402,9 @@ public class GoPsiImplUtil {
     }
     else if (o instanceof GoIndexOrSliceExpr) {
       GoExpression first = ContainerUtil.getFirstItem(((GoIndexOrSliceExpr)o).getExpressionList());
-      GoType type = first == null ? null : first.getGoType(context);
+      GoType firstType = unwrapOnlySpecPointers(first == null ? null : first.getGoType(context));
+      GoType type = firstType != null ? firstType.getUnderlyingType() : null;
       if (o.getNode().findChildByType(GoTypes.COLON) != null) return type; // means slice expression, todo: extract if needed
-      GoTypeReferenceExpression typeRef = type == null ? null : type.getTypeReferenceExpression();
-      if (typeRef != null) {
-        type = typeRef.resolveType();
-      }
-      if (type instanceof GoSpecType) type = ((GoSpecType)type).getType();
       if (type instanceof GoMapType) {
         List<GoType> list = ((GoMapType)type).getTypeList();
         if (list.size() == 2) {
@@ -440,6 +436,15 @@ public class GoPsiImplUtil {
       return getBuiltinType(o, "bool");
     }
     return null;
+  }
+
+  @Nullable
+  private static GoType unwrapOnlySpecPointers(@Nullable GoType type) {
+    if (type instanceof GoPointerType) {
+      GoType inner = ((GoPointerType)type).getType();
+      if (inner instanceof GoSpecType) return inner;
+    }
+    return type;
   }
 
   @Nullable
