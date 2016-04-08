@@ -41,7 +41,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.util.ArrayUtil;
 import com.intellij.util.Function;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
@@ -455,12 +454,6 @@ public class GoSdkUtil {
   }
 
   @NotNull
-  private static Collection<Object> getSdkAndLibrariesCacheDependencies(@NotNull PsiElement context, Object... extra) {
-    return getSdkAndLibrariesCacheDependencies(context.getProject(), ModuleUtilCore.findModuleForPsiElement(context),
-                                               ArrayUtil.append(extra, context));
-  }
-
-  @NotNull
   private static Collection<Object> getSdkAndLibrariesCacheDependencies(@NotNull Project project,
                                                                         @Nullable Module module,
                                                                         Object... extra) {
@@ -518,7 +511,7 @@ public class GoSdkUtil {
     return directory != null && !VfsUtilCore.isAncestor(parent, referenceContextFile, false);
   }
 
-  public static class RetrieveSubDirectoryOrSelfFunction implements Function<VirtualFile, VirtualFile> {
+  private static class RetrieveSubDirectoryOrSelfFunction implements Function<VirtualFile, VirtualFile> {
     @NotNull private final String mySubdirName;
 
     public RetrieveSubDirectoryOrSelfFunction(@NotNull String subdirName) {
@@ -544,7 +537,8 @@ public class GoSdkUtil {
     @Override
     public Result<String> compute() {
       String path = getPathRelativeToSdkAndLibrariesAndVendor(myPsiDirectory, myWithVendoring);
-      return Result.create(path, getSdkAndLibrariesCacheDependencies(myPsiDirectory));
+      Module module = ModuleUtilCore.findModuleForPsiElement(myPsiDirectory);
+      return Result.create(path, getSdkAndLibrariesCacheDependencies(myPsiDirectory.getProject(), module, myPsiDirectory));
     }
   }
 
