@@ -120,8 +120,8 @@ public class GoUtil {
     return GoConstants.KNOWN_CGO.contains(os + "/" + arch) ? ThreeState.YES : ThreeState.NO;
   }
 
-  public static boolean fileToIgnore(@NotNull String name) {
-    return StringUtil.startsWithChar(name, '_') || StringUtil.startsWithChar(name, '.');
+  public static boolean fileToIgnore(@NotNull String fileName) {
+    return StringUtil.startsWithChar(fileName, '_') || StringUtil.startsWithChar(fileName, '.');
   }
   
   public static GlobalSearchScope goPathUseScope(@NotNull PsiElement context, boolean filterByImportList) {
