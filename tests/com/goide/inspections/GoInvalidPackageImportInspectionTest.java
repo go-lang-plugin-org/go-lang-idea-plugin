@@ -194,6 +194,14 @@ public class GoInvalidPackageImportInspectionTest extends GoQuickFixTestBase {
                           "import `unresolved`\n");
   }
 
+  public void testImportAbsolutePath() {
+    myFixture.configureByText("a.go", "package a; import <error descr=\"Cannot import absolute path\">`/f<caret>mt`</error>");
+    myFixture.checkHighlighting();
+    assertEmpty(myFixture.filterAvailableIntentions("go get"));
+    applySingleQuickFix(GoDeleteImportQuickFix.QUICK_FIX_NAME);
+    myFixture.checkResult("package a; ");
+  }
+
   private Collection<String> getIntentionNames() {
     return ContainerUtil.map(myFixture.getAvailableIntentions(), new Function<IntentionAction, String>() {
       @Override

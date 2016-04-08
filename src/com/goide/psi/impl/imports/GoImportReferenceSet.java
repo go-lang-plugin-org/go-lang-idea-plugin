@@ -49,7 +49,7 @@ public class GoImportReferenceSet extends FileReferenceSet {
   @Override
   public Collection<PsiFileSystemItem> computeDefaultContexts() {
     PsiFile file = getContainingFile();
-    if (file == null || !file.isValid()) {
+    if (file == null || !file.isValid() || isAbsolutePathReference()) {
       return Collections.emptyList();
     }
 
