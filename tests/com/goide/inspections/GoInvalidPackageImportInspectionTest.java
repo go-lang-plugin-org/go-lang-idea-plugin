@@ -174,6 +174,9 @@ public class GoInvalidPackageImportInspectionTest extends GoQuickFixTestBase {
 
   public void testImportPackageWithoutBuildableSource() {
     final PsiFile file = myFixture.addFileToProject("withSources/a.go", "package withSources");
+    myFixture.addFileToProject("withIgnoredFiles/a.go", "package documentation");
+    myFixture.addFileToProject("withIgnoredFiles/.b.go", "package withIgnoredFiles");
+    myFixture.addFileToProject("withIgnoredFiles/_b.go", "package withIgnoredFiles");
     WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new Runnable() {
       @Override
       public void run() {
@@ -183,6 +186,7 @@ public class GoInvalidPackageImportInspectionTest extends GoQuickFixTestBase {
     });
     myFixture.configureByText("a.go", "package pack\n" +
                                       "import `withSources`\n" +
+                                      "import <error descr=\"'/src/withIgnoredFiles' has no buildable Go source files\">`withIgnoredFiles`</error>\n" +
                                       "import <error descr=\"'/src/withoutSources' has no buildable Go source files\">`withoutSources`</error>\n" +
                                       "import <error descr=\"'/src/withoutSources' has no buildable Go source files\">_ `without<caret>Sources`</error>\n" +
                                       "import `unresolved`\n");
@@ -190,6 +194,7 @@ public class GoInvalidPackageImportInspectionTest extends GoQuickFixTestBase {
     applySingleQuickFix(GoDeleteImportQuickFix.QUICK_FIX_NAME);
     myFixture.checkResult("package pack\n" +
                           "import `withSources`\n" +
+                          "import `withIgnoredFiles`\n" +
                           "import `withoutSources`\n" +
                           "import `unresolved`\n");
   }
