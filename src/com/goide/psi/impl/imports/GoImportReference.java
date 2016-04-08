@@ -128,7 +128,8 @@ public class GoImportReference extends FileReference {
 
     List<LocalQuickFix> result = ContainerUtil.newArrayList();
     FileReferenceSet fileReferenceSet = getFileReferenceSet();
-    if (fileReferenceSet instanceof GoImportReferenceSet && !((GoImportReferenceSet)fileReferenceSet).isRelativeImport()) {
+    if (fileReferenceSet instanceof GoImportReferenceSet && !((GoImportReferenceSet)fileReferenceSet).isRelativeImport()
+        && !fileReferenceSet.isAbsolutePathReference()) {
       result.add(new GoGetPackageFix(fileReferenceSet.getPathString()));
     }
 

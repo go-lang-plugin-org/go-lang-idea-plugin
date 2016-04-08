@@ -110,6 +110,16 @@ public class GoInvalidPackageImportInspection extends GoInspectionBase {
           }
         }
       }
+      else {
+        for (PsiReference reference : importSpec.getImportString().getReferences()) {
+          if (reference instanceof GoImportReference) {
+            if (((GoImportReference)reference).getFileReferenceSet().isAbsolutePathReference()) {
+              problemsHolder.registerProblem(importSpec, "Cannot import absolute path", new GoDeleteImportQuickFix());
+              break;
+            }
+          }
+        }
+      }
     }
   }
 
