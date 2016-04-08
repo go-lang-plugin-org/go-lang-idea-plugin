@@ -130,7 +130,8 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
 
     public GoFieldProcessor(@NotNull PsiElement element) {
       super(element);
-      myModule = ModuleUtilCore.findModuleForPsiElement(myOrigin);
+      PsiFile containingFile = myOrigin.getContainingFile();
+      myModule = containingFile != null ? ModuleUtilCore.findModuleForPsiElement(containingFile.getOriginalFile()) : null;
     }
 
     @Override
