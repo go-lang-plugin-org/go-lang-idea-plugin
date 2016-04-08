@@ -40,8 +40,11 @@ public class GoHighlightingAnnotator implements Annotator {
 
     if (resolve instanceof GoTypeSpec) {
       TextAttributesKey key = GoPsiImplUtil.builtin(resolve) ? BUILTIN_TYPE_REFERENCE : getColor((GoTypeSpec)resolve);
-      if (o.getParent() instanceof GoType && o.getParent().getParent() instanceof GoReceiver) {
-        key = TYPE_REFERENCE;
+      if (o.getParent() instanceof GoType) {
+        GoType topmostType = PsiTreeUtil.getTopmostParentOfType(o, GoType.class);
+        if (topmostType != null && topmostType.getParent() instanceof GoReceiver) {
+          key = TYPE_REFERENCE;
+        }
       }
       setHighlighting(o.getIdentifier(), holder, key);
     }

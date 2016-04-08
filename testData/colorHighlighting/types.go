@@ -22,5 +22,9 @@ type (
 		<info descr="null"><info descr="GO_STRUCT_LOCAL_MEMBER">privateField</info></info> <info descr="null"><info descr="GO_BUILTIN_TYPE_REFERENCE">int</info></info>
 	}
 
-	<info descr="null"><info descr="GO_TYPE_SPECIFICATION">demoInt</info></info> <info descr="null"><info descr="GO_BUILTIN_TYPE_REFERENCE">int</info></info>
-)
+	<info descr="null"><info descr="GO_TYPE_SPECIFICATION">demoInt</info></info> <info descr="null"><info descr="GO_BUILTIN_TYPE_REFERENCE">int</info></info><EOLError descr="')' or identifier expected, got 'type'"></EOLError>
+	
+	type <info descr="null"><info descr="GO_TYPE_SPECIFICATION">Bla</info></info> <info descr="null"><info descr="GO_BUILTIN_TYPE_REFERENCE">int32</info></info>
+
+	func (<info descr="null"><info descr="GO_METHOD_RECEIVER">b</info></info> *<info descr="null"><info descr="GO_TYPE_REFERENCE">Bla</info></info>) <info descr="null"><info descr="GO_EXPORTED_FUNCTION">Method1</info></info>() {}
+<error descr="')' unexpected">)</error>
