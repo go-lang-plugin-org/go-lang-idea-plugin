@@ -53,6 +53,7 @@ import org.jetbrains.annotations.TestOnly;
 
 import javax.swing.event.HyperlinkEvent;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 public class GoModuleLibrariesInitializer implements ModuleComponent {
@@ -68,6 +69,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
 
   @NotNull private final Set<VirtualFile> myLastHandledGoPathSourcesRoots = ContainerUtil.newHashSet();
   @NotNull private final Set<VirtualFile> myLastHandledExclusions = ContainerUtil.newHashSet();
+  @NotNull private final Set<LocalFileSystem.WatchRequest> myWatchedRequests = ContainerUtil.newHashSet();
 
   @NotNull private final Module myModule;
   @NotNull private final VirtualFileAdapter myFilesListener = new VirtualFileAdapter() {
@@ -316,6 +318,8 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     VirtualFileManager.getInstance().removeVirtualFileListener(myFilesListener);
     myLastHandledGoPathSourcesRoots.clear();
     myLastHandledExclusions.clear();
+    LocalFileSystem.getInstance().removeWatchedRoots(myWatchedRequests);
+    myWatchedRequests.clear();
   }
 
   @Override
@@ -359,11 +363,16 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
 
             myLastHandledExclusions.clear();
             myLastHandledExclusions.addAll(excludeRoots);
+
+            List<String> paths = ContainerUtil.map(goPathSourcesRoots, GoUtil.RETRIEVE_FILE_PATH_FUNCTION);
+            myWatchedRequests.clear();
+            myWatchedRequests.addAll(LocalFileSystem.getInstance().addRootsToWatch(paths, true));
           }
         }
       }
       else {
         synchronized (myLastHandledGoPathSourcesRoots) {
+          LocalFileSystem.getInstance().removeWatchedRoots(myWatchedRequests);
           myLastHandledGoPathSourcesRoots.clear();
           myLastHandledExclusions.clear();
           ApplicationManager.getApplication().invokeLater(new Runnable() {
