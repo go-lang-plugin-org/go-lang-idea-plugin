@@ -321,8 +321,16 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
 
   public void testMultiplePackagesWithIgnoredFile() {
     myFixture.addFileToProject("a.go", "// +build ignored\n\npackage a");
+    myFixture.addFileToProject(".c.go", "// package a");
+    myFixture.addFileToProject("_c.go", "// package a");
     // Should be OK to have package b because package a has a non-matching
     // build tag.
+    myFixture.configureByText("b.go", "package b");
+    myFixture.checkHighlighting();
+  }
+
+  public void testMultiplePackagesWithDocumentationPackage() {
+    myFixture.addFileToProject("a.go", "package documentation");
     myFixture.configureByText("b.go", "package b");
     myFixture.checkHighlighting();
   }

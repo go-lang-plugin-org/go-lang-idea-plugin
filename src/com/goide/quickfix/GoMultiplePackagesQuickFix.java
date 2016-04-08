@@ -20,12 +20,14 @@ import com.goide.GoConstants;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoPackageClause;
 import com.goide.psi.impl.GoElementFactory;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.runconfig.testing.GoTestFinder;
-import com.goide.util.GoUtil;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.util.Disposer;
@@ -66,11 +68,12 @@ public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionO
     WriteCommandAction.runWriteCommandAction(project, new Runnable() {
       @Override
       public void run() {
+        Module module = ModuleUtilCore.findModuleForPsiElement(dir);
         for (PsiFile file : dir.getFiles()) {
-          if (file instanceof GoFile && !GoUtil.directoryToIgnore(file.getName())) {
+          if (file instanceof GoFile && GoPsiImplUtil.allowed(file, null, module)) {
             GoPackageClause packageClause = ((GoFile)file).getPackage();
             String oldName = ((GoFile)file).getPackageName();
-            if (packageClause != null && oldName != null && !oldName.equals(GoConstants.DOCUMENTATION)) {
+            if (packageClause != null && oldName != null) {
               String fullName = GoTestFinder.isTestFile(file) && StringUtil.endsWith(oldName, GoConstants.TEST_SUFFIX)
                                 ? newName + GoConstants.TEST_SUFFIX
                                 : newName;

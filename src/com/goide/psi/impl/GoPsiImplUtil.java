@@ -704,24 +704,30 @@ public class GoPsiImplUtil {
     return result != null ? result : calcMethods(o);
   }
 
-  public static boolean allowed(@NotNull PsiFile declarationFile, @Nullable PsiFile referenceFile) {
-    return allowed(declarationFile, referenceFile, referenceFile != null ? ModuleUtilCore.findModuleForPsiElement(referenceFile) : null);
-  }
-
-  public static boolean allowed(@NotNull PsiFile declarationFile,
-                                @Nullable PsiFile referenceFile,
-                                @Nullable Module contextModule) {
-    if (!(referenceFile instanceof GoFile)) return true;
-    if (!(declarationFile instanceof GoFile) || !GoUtil.matchedForModuleBuildTarget(declarationFile, contextModule)) return false;
-    return allowed(declarationFile.getVirtualFile(), referenceFile.getOriginalFile().getVirtualFile());
+  public static boolean allowed(@NotNull PsiFile declarationFile, @Nullable PsiFile referenceFile, @Nullable Module contextModule) {
+    if (!(declarationFile instanceof GoFile)) {
+      return false;
+    }
+    VirtualFile referenceVirtualFile = referenceFile != null ? referenceFile.getOriginalFile().getVirtualFile() : null;
+    if (!allowed(declarationFile.getVirtualFile(), referenceVirtualFile)) {
+      return false;
+    }
+    if (GoConstants.DOCUMENTATION.equals(((GoFile)declarationFile).getPackageName())) {
+      return false;
+    }
+    return GoUtil.matchedForModuleBuildTarget(declarationFile, contextModule);
   }
 
   public static boolean allowed(@Nullable VirtualFile declarationFile, @Nullable VirtualFile referenceFile) {
-    if (declarationFile == null || referenceFile == null) {
+    if (declarationFile == null) {
       return true;
     }
+    if (GoUtil.fileToIgnore(declarationFile.getName())) {
+      return false;
+    }
     // it's not a test or context file is also test from the same package
-    return !GoTestFinder.isTestFile(declarationFile)
+    return referenceFile == null 
+           || !GoTestFinder.isTestFile(declarationFile)
            || GoTestFinder.isTestFile(referenceFile) && Comparing.equal(referenceFile.getParent(), declarationFile.getParent());
   }
 
@@ -1301,17 +1307,10 @@ public class GoPsiImplUtil {
   }
 
   public static boolean canBeAutoImported(@NotNull GoFile file, boolean allowMain, @Nullable Module module) {
-    if (isBuiltinFile(file) || !allowMain && StringUtil.equals(file.getCanonicalPackageName(), GoConstants.MAIN)) {
+    if (isBuiltinFile(file) || !allowMain && StringUtil.equals(file.getPackageName(), GoConstants.MAIN)) {
       return false;
     }
-    if (!GoUtil.matchedForModuleBuildTarget(file, module) || GoUtil.isExcludedFile(file)) {
-      return false;
-    }
-    PsiDirectory directory = file.getContainingDirectory();
-    if (directory == null) {
-      return false;
-    }
-    return !directory.getVirtualFile().getPath().endsWith("go/doc/testdata");
+    return allowed(file, null, module) && !GoUtil.isExcludedFile(file);
   }
 
   @Nullable

@@ -196,7 +196,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     PsiFile file = type.getContainingFile();
     if (!(file instanceof GoFile)) return true;
     PsiFile myFile = ObjectUtils.notNull(getContextFile(state), myElement.getContainingFile());
-    if (!(myFile instanceof GoFile) || !allowed(file, myFile)) return true;
+    if (!(myFile instanceof GoFile) || !allowed(file, myFile, ModuleUtilCore.findModuleForPsiElement(myFile))) return true;
 
     boolean localResolve = isLocalResolve(myFile, file);
 

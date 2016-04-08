@@ -18,7 +18,7 @@ package com.goide.inspections;
 
 import com.goide.psi.GoFile;
 import com.goide.psi.GoVisitor;
-import com.goide.util.GoUtil;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInspection.*;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.psi.PsiElementVisitor;
@@ -34,8 +34,9 @@ abstract public class GoInspectionBase extends LocalInspectionTool {
   @Override
   public final PsiElementVisitor buildVisitor(@NotNull ProblemsHolder holder, boolean isOnTheFly, @NotNull LocalInspectionToolSession session) {
     GoFile file = ObjectUtils.tryCast(session.getFile(), GoFile.class);
-    return file != null && GoUtil.matchedForModuleBuildTarget(file, ModuleUtilCore.findModuleForPsiElement(file)) ? buildGoVisitor(holder, session)
-                                                                                                                  : DUMMY_VISITOR;
+    return file != null && GoPsiImplUtil.allowed(file, null, ModuleUtilCore.findModuleForPsiElement(file))
+           ? buildGoVisitor(holder, session)
+           : DUMMY_VISITOR;
   }
 
   @NotNull

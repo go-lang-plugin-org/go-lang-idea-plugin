@@ -41,7 +41,6 @@ import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.util.Function;
 import com.intellij.util.ThreeState;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -121,21 +120,7 @@ public class GoUtil {
     return GoConstants.KNOWN_CGO.contains(os + "/" + arch) ? ThreeState.YES : ThreeState.NO;
   }
 
-  @Contract("null -> false")
-  public static boolean importPathToIgnore(@Nullable String importPath) {
-    if (importPath != null) {
-      for (String part : StringUtil.split(importPath, "/")) {
-        if (directoryToIgnore(part)) return true;
-      }
-    }
-    return false;
-  }
-
-  public static boolean libraryDirectoryToIgnore(@NotNull String name) {
-    return directoryToIgnore(name) || GoConstants.TESTDATA_NAME.equals(name);
-  }
-
-  public static boolean directoryToIgnore(@NotNull String name) {
+  public static boolean fileToIgnore(@NotNull String name) {
     return StringUtil.startsWithChar(name, '_') || StringUtil.startsWithChar(name, '.');
   }
   
