@@ -488,7 +488,7 @@ public class GoSdkUtil {
   }
 
   @Nullable
-  private static VirtualFile findParentDirectory(@Nullable VirtualFile file, @NotNull Set<VirtualFile> sourceRoots, @NotNull String name) {
+  public static VirtualFile findParentDirectory(@Nullable VirtualFile file, @NotNull Set<VirtualFile> sourceRoots, @NotNull String name) {
     if (file == null) {
       return null;
     }

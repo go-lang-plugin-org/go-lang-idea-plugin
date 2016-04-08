@@ -160,6 +160,11 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
     assertEmpty(myFixture.filterAvailableIntentions("Import builtin?"));
   } 
   
+  public void testImportSdkTestData() {
+    myFixture.configureByText("a.go", "package a; func _() { println(p<caret>kg.ExportedConstant) } ");
+    assertEmpty(myFixture.filterAvailableIntentions("Import doc/testdata?"));
+  }
+  
   public void testImportVendoredBuiltinPackage() {
     myFixture.addFileToProject("vendor/builtin/builtin.go", "package builtin");
     myFixture.configureByText("a.go", "package a; func a() { built<caret>in.Println() }");

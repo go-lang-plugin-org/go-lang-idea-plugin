@@ -16,6 +16,7 @@
 
 package com.goide.util;
 
+import com.goide.GoConstants;
 import com.goide.project.GoVendoringUtil;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.sdk.GoSdkService;
@@ -94,7 +95,10 @@ public class GoPathScopeHelper {
           return false;
         }
       }
-      if (!declarationIsInSdk) {
+      if (declarationIsInSdk && GoSdkUtil.findParentDirectory(declarationDirectory, myRoots, GoConstants.TESTDATA_NAME) != null) {
+        return false;
+      }
+      else {
         boolean referenceIsInSdk = mySdkHome != null && VfsUtilCore.isAncestor(mySdkHome, referenceDirectory, false);
         if (referenceIsInSdk) {
           return false;

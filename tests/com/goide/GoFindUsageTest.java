@@ -22,6 +22,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFileFilter;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.PsiManagerImpl;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.LightProjectDescriptor;
@@ -267,6 +268,15 @@ public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
         }
       }
     });
+  }
+
+  public void testSdkTestDataDirectory() {
+    myFixture.configureByText("a.go", "package a; import `doc/testdata`; func _() { println(pkg.ExportedConst<caret>ant) } ");
+    PsiReference reference = myFixture.getFile().findReferenceAt(myFixture.getCaretOffset());
+    PsiElement resolve = reference != null ? reference.resolve() : null;
+    assertNotNull(resolve);
+    assertEquals("pkg.go", resolve.getContainingFile().getName());
+    assertEmpty(myFixture.findUsages(resolve));
   }
 
   private void failOnFileLoading() {
