@@ -29,7 +29,6 @@ import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleComponent;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
@@ -54,56 +53,28 @@ import org.jetbrains.annotations.TestOnly;
 
 import javax.swing.event.HyperlinkEvent;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.Set;
 
 public class GoModuleLibrariesInitializer implements ModuleComponent {
   private static final String GO_LIB_NAME = "GOPATH";
-  private static final Logger LOG = Logger.getInstance(GoModuleLibrariesInitializer.class);
   private static final String GO_LIBRARIES_NOTIFICATION_HAD_BEEN_SHOWN = "go.libraries.notification.had.been.shown";
   private static final String GO_VENDORING_NOTIFICATION_HAD_BEEN_SHOWN = "go.vendoring.notification.had.been.shown";
   private static final int UPDATE_DELAY = 300;
   private static boolean isTestingMode;
 
-  private final Set<VirtualFile> myFilesToWatch = ContainerUtil.newConcurrentSet();
   private final Alarm myAlarm;
   private final MessageBusConnection myConnection;
   private boolean myModuleInitialized;
 
-  @NotNull private final Set<VirtualFile> myLastHandledRoots = ContainerUtil.newHashSet();
+  @NotNull private final Set<VirtualFile> myLastHandledGoPathSourcesRoots = ContainerUtil.newHashSet();
   @NotNull private final Set<VirtualFile> myLastHandledExclusions = ContainerUtil.newHashSet();
 
   @NotNull private final Module myModule;
   @NotNull private final VirtualFileAdapter myFilesListener = new VirtualFileAdapter() {
     @Override
     public void fileCreated(@NotNull VirtualFileEvent event) {
-      handleEvent(event);
       if (GoConstants.VENDOR.equals(event.getFileName()) && event.getFile().isDirectory()) {
         showVendoringNotification();
-      }
-    }
-
-    @Override
-    public void fileDeleted(@NotNull VirtualFileEvent event) {
-      handleEvent(event);
-    }
-
-    @Override
-    public void fileMoved(@NotNull VirtualFileMoveEvent event) {
-      handleEvent(event);
-    }
-
-    private void handleEvent(VirtualFileEvent event) {
-      if (myFilesToWatch.contains(event.getFile())) {
-        scheduleUpdate();
-      }
-      else {
-        for (VirtualFile file : myFilesToWatch) {
-          if (VfsUtilCore.isAncestor(file, event.getFile(), true)) {
-            scheduleUpdate();
-          }
-        }
       }
     }
   };
@@ -124,10 +95,6 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     myModule = module;
     myAlarm = ApplicationManager.getApplication().isUnitTestMode() ? new Alarm() : new Alarm(Alarm.ThreadToUse.POOLED_THREAD, myModule);
     myConnection = myModule.getMessageBus().connect();
-  }
-
-  private static boolean directoryShouldBeExcluded(@NotNull VirtualFile file) {
-    return file.isDirectory() && GoUtil.libraryDirectoryToIgnore(file.getName());
   }
 
   @Override
@@ -268,38 +235,6 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     }
   }
 
-  @NotNull
-  private static Set<VirtualFile> gatherExclusions(@NotNull Collection<VirtualFile> roots, @NotNull VirtualFile... exclusions) {
-    final Set<VirtualFile> result = ContainerUtil.newHashSet(exclusions);
-
-    Iterator<VirtualFile> iterator = roots.iterator();
-    while (iterator.hasNext()) {
-      VirtualFile file = iterator.next();
-      for (VirtualFile exclusion : exclusions) {
-        if (VfsUtilCore.isAncestor(exclusion, file, false)) {
-          iterator.remove();
-          break;
-        }
-      }
-    }
-
-    for (VirtualFile file : roots) {
-      VfsUtilCore.visitChildrenRecursively(file, new VirtualFileVisitor() {
-        @NotNull
-        @Override
-        public Result visitFileEx(@NotNull VirtualFile file) {
-          if (directoryShouldBeExcluded(file)) {
-            result.add(file);
-            LOG.debug("Excluding part of GOPATH: " + file.getPath());
-            return SKIP_CHILDREN;
-          }
-          return CONTINUE;
-        }
-      });
-    }
-    return result;
-  }
-
   private static void showNotification(@NotNull final Project project) {
     PropertiesComponent propertiesComponent = PropertiesComponent.getInstance(project);
     boolean shownAlready;
@@ -312,21 +247,22 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     }
 
     if (!shownAlready) {
-      Notification notification = GoConstants.GO_NOTIFICATION_GROUP.createNotification("GOPATH was detected",
-                                                         "We've detected some libraries from your GOPATH.\n" +
-                                                         "You may want to add extra libraries in <a href='configure'>Go Libraries configuration</a>.",
-                                                         NotificationType.INFORMATION, new NotificationListener.Adapter() {
+      NotificationListener.Adapter notificationListener = new NotificationListener.Adapter() {
         @Override
         protected void hyperlinkActivated(@NotNull Notification notification, @NotNull HyperlinkEvent event) {
           if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED && "configure".equals(event.getDescription())) {
             GoLibrariesConfigurableProvider.showModulesConfigurable(project);
           }
         }
-      });
+      };
+      Notification notification = GoConstants.GO_NOTIFICATION_GROUP.createNotification("GOPATH was detected",
+                                                                                       "We've detected some libraries from your GOPATH.\n" +
+                                                                                       "You may want to add extra libraries in <a href='configure'>Go Libraries configuration</a>.",
+                                                                                       NotificationType.INFORMATION, notificationListener);
       Notifications.Bus.notify(notification, project);
     }
   }
-  
+
   private void showVendoringNotification() {
     if (!myModuleInitialized || myModule.isDisposed()) {
       return;
@@ -339,7 +275,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     if (GoModuleSettings.getInstance(myModule).getVendoringEnabled() != ThreeState.UNSURE) {
       return;
     }
-    
+
     PropertiesComponent propertiesComponent = PropertiesComponent.getInstance(project);
     boolean shownAlready;
     //noinspection SynchronizationOnLocalVariableOrMethodParameter
@@ -351,21 +287,21 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     }
 
     if (!shownAlready) {
-      Notification notification = GoConstants.GO_NOTIFICATION_GROUP.createNotification("Vendoring usage is detected",
-                                                         "<p><strong>vendor</strong> directory usually means that project uses Go Vendor Experiment.</p>\n" +
-                                                         "<p>Selected Go SDK version support vendoring but it's disabled by default.</p>\n" +
-                                                         "<p>You may want to explicitly enabled Go Vendor Experiment in the <a href='configure'>project settings</a>.</p>",
-                                                         NotificationType.INFORMATION, new NotificationListener.Adapter() {
+      NotificationListener.Adapter notificationListener = new NotificationListener.Adapter() {
         @Override
         protected void hyperlinkActivated(@NotNull Notification notification, @NotNull HyperlinkEvent event) {
           if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED && "configure".equals(event.getDescription())) {
             GoModuleSettings.showModulesConfigurable(project);
           }
         }
-      });
+      };
+      Notification notification = GoConstants.GO_NOTIFICATION_GROUP.createNotification("Vendoring usage is detected",
+                                                                                       "<p><strong>vendor</strong> directory usually means that project uses Go Vendor Experiment.</p>\n" +
+                                                                                       "<p>Selected Go SDK version support vendoring but it's disabled by default.</p>\n" +
+                                                                                       "<p>You may want to explicitly enabled Go Vendor Experiment in the <a href='configure'>project settings</a>.</p>",
+                                                                                       NotificationType.INFORMATION, notificationListener);
       Notifications.Bus.notify(notification, project);
     }
-      
   }
 
   @Override
@@ -378,9 +314,8 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     Disposer.dispose(myConnection);
     Disposer.dispose(myAlarm);
     VirtualFileManager.getInstance().removeVirtualFileListener(myFilesListener);
-    myLastHandledRoots.clear();
+    myLastHandledGoPathSourcesRoots.clear();
     myLastHandledExclusions.clear();
-    myFilesToWatch.clear();
   }
 
   @Override
@@ -404,39 +339,32 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     public void run() {
       final Project project = myModule.getProject();
       if (GoSdkService.getInstance(project).isGoModule(myModule)) {
-        synchronized (myLastHandledRoots) {
-          final Collection<VirtualFile> libraryRoots = ContainerUtil.newHashSet();
-          for (VirtualFile packages : GoSdkUtil.getGoPathSources(project, myModule)) {
-            Collections.addAll(libraryRoots, packages.getChildren());
-          }
-          final Set<VirtualFile> excludedRoots = gatherExclusions(libraryRoots,
-                                                                  ProjectRootManager.getInstance(project).getContentRoots());
-
+        synchronized (myLastHandledGoPathSourcesRoots) {
+          final Collection<VirtualFile> goPathSourcesRoots = GoSdkUtil.getGoPathSources(project, myModule);
+          final Set<VirtualFile> excludeRoots = ContainerUtil.newHashSet(ProjectRootManager.getInstance(project).getContentRoots());
           ProgressIndicatorProvider.checkCanceled();
-          if (!myLastHandledRoots.equals(libraryRoots) || !myLastHandledExclusions.equals(excludedRoots)) {
-            myFilesToWatch.clear();
-            myFilesToWatch.addAll(libraryRoots);
-
+          if (!myLastHandledGoPathSourcesRoots.equals(goPathSourcesRoots) || !myLastHandledExclusions.equals(excludeRoots)) {
+            final Collection<VirtualFile> includeRoots = gatherIncludeRoots(goPathSourcesRoots, excludeRoots);
             ApplicationManager.getApplication().invokeLater(new Runnable() {
               @Override
               public void run() {
                 if (!myModule.isDisposed() && GoSdkService.getInstance(project).isGoModule(myModule)) {
-                  attachLibraries(libraryRoots, excludedRoots);
+                  attachLibraries(includeRoots, excludeRoots);
                 }
               }
             });
 
-            myLastHandledRoots.clear();
-            myLastHandledRoots.addAll(libraryRoots);
+            myLastHandledGoPathSourcesRoots.clear();
+            myLastHandledGoPathSourcesRoots.addAll(goPathSourcesRoots);
 
             myLastHandledExclusions.clear();
-            myLastHandledExclusions.addAll(excludedRoots);
+            myLastHandledExclusions.addAll(excludeRoots);
           }
         }
       }
       else {
-        synchronized (myLastHandledRoots) {
-          myLastHandledRoots.clear();
+        synchronized (myLastHandledGoPathSourcesRoots) {
+          myLastHandledGoPathSourcesRoots.clear();
           myLastHandledExclusions.clear();
           ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
@@ -449,5 +377,31 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
         }
       }
     }
+  }
+
+  @NotNull
+  private static Collection<VirtualFile> gatherIncludeRoots(Collection<VirtualFile> goPathSourcesRoots, Set<VirtualFile> excludeRoots) {
+    final Collection<VirtualFile> includeRoots = ContainerUtil.newHashSet();
+    for (VirtualFile goPathSourcesDirectory : goPathSourcesRoots) {
+      ProgressIndicatorProvider.checkCanceled();
+      boolean excludedRootIsAncestor = false;
+      for (VirtualFile excludeRoot : excludeRoots) {
+        ProgressIndicatorProvider.checkCanceled();
+        if (VfsUtilCore.isAncestor(excludeRoot, goPathSourcesDirectory, false)) {
+          excludedRootIsAncestor = true;
+          break;
+        }
+      }
+      if (excludedRootIsAncestor) {
+        continue;
+      }
+      for (VirtualFile file : goPathSourcesDirectory.getChildren()) {
+        ProgressIndicatorProvider.checkCanceled();
+        if (file.isDirectory() && !excludeRoots.contains(file)) {
+          includeRoots.add(file);
+        }
+      }
+    }
+    return includeRoots;
   }
 }

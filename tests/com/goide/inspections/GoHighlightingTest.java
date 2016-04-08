@@ -19,7 +19,6 @@ package com.goide.inspections;
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.goide.inspections.unresolved.*;
 import com.goide.project.GoModuleLibrariesService;
-import com.intellij.codeInsight.daemon.impl.analysis.HighlightingSettingsPerFile;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
@@ -363,15 +362,6 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testCGOImportInNonTestFile() {
     myFixture.configureByText("a.go", "package a; import \"C\"");
     myFixture.checkHighlighting();
-  }
-
-  public void testDoNotHighlightCodeFromIgnoredImportPaths() {
-    PsiFile ignoredFile = myFixture.addFileToProject("_pack1/pack1.go", "package pack1; func unusedFunction() {}");
-    PsiFile file = myFixture.addFileToProject("pack1/pack.go",
-                                              "package pack1; func <warning descr=\"Unused function 'unusedFunction'\">unusedFunction</warning>() {}");
-    HighlightingSettingsPerFile settingsPerFile = HighlightingSettingsPerFile.getInstance(myFixture.getProject());
-    assertFalse(settingsPerFile.shouldHighlight(ignoredFile));
-    assertTrue(settingsPerFile.shouldHighlight(file));
   }
 
   public void testVendoringImportPaths() {
