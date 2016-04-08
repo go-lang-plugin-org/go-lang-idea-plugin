@@ -19,7 +19,7 @@ package com.goide.sdk;
 import com.goide.GoConstants;
 import com.goide.project.GoModuleSettings;
 import com.goide.psi.GoFile;
-import com.goide.util.GoUtil;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
@@ -115,7 +115,7 @@ public class GoPackageUtil {
         Collection<String> set = ContainerUtil.newLinkedHashSet();
         Module module = ModuleUtilCore.findModuleForPsiElement(dir);
         for (PsiFile file : dir.getFiles()) {
-          if (file instanceof GoFile && !GoUtil.directoryToIgnore(file.getName()) && GoUtil.matchedForModuleBuildTarget(file, module)) {
+          if (file instanceof GoFile && GoPsiImplUtil.allowed(file, null, module)) {
             String name = trimTestSuffices ? ((GoFile)file).getCanonicalPackageName() : ((GoFile)file).getPackageName();
             if (StringUtil.isNotEmpty(name)) {
               set.add(name);

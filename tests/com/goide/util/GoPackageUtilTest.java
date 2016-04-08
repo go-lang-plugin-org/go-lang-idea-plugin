@@ -32,10 +32,10 @@ public class GoPackageUtilTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureByText("ignored.go", "// +build ignored\n\npackage ignored");
 
     assertSameElements(GoPackageUtil.getAllPackagesInDirectory(myFixture.getFile().getContainingDirectory(), true),
-                       "foo", "main", "non_test", "documentation", "tricky_package_name");
+                       "foo", "main", "non_test", "tricky_package_name");
 
     assertSameElements(GoPackageUtil.getAllPackagesInDirectory(myFixture.getFile().getContainingDirectory(), false),
-                       "foo", "foo_test", "main", "non_test", "documentation", "tricky_package_name");
+                       "foo", "foo_test", "main", "non_test", "tricky_package_name");
   }
 
   public void testInvalidateCacheOnChangingBuildTags() {

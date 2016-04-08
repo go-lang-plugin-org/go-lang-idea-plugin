@@ -48,7 +48,7 @@ public class GoBuildMatcher {
   /**
    * @param checkBuildFlags should be false for directly used files: go run gen.go
    */
-  public boolean matchFile(@NotNull PsiFile file, boolean checkBuildFlags) {
+  private boolean matchFile(@NotNull PsiFile file, boolean checkBuildFlags) {
     if (!(file instanceof GoFile)) {
       // TODO support .c, .cpp and other
       return false;
@@ -58,14 +58,13 @@ public class GoBuildMatcher {
     return match(file.getName(), ((GoFile)file).getBuildFlags(), checkBuildFlags);
   }
 
-  public boolean match(@NotNull String fileName, @Nullable String buildFlags, boolean checkBuildFlags) {
-    if (GoUtil.directoryToIgnore(fileName) || !matchFileName(fileName)) return false;
+  private boolean match(@NotNull String fileName, @Nullable String buildFlags, boolean checkBuildFlags) {
+    if (!matchFileName(fileName)) return false;
 
     if (!checkBuildFlags || buildFlags == null) return true;
     for (String line : StringUtil.split(buildFlags, "|")) {
       if (!matchBuildFlagsLine(line)) return false;
     }
-
     return true;
   }
 
