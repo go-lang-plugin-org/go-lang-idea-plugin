@@ -78,19 +78,24 @@ public class GoInvalidPackageImportInspection extends GoInspectionBase {
         VirtualFile contextFile = file.getVirtualFile();
         VirtualFile resolvedFile = resolve.getVirtualFile();
 
-        boolean validateInternal = supportsInternalPackages || supportsInternalPackagesInSdk 
-                                                               && VfsUtilCore.isAncestor(sdkHome, resolvedFile, false);
-        if (supportsVendoring || validateInternal) {
+        boolean resolvedToSdk = sdkHome != null && VfsUtilCore.isAncestor(sdkHome, resolvedFile, false);
+        boolean validateInternal = supportsInternalPackages || supportsInternalPackagesInSdk && resolvedToSdk;
+        if (supportsVendoring || validateInternal || resolvedToSdk) {
           Set<VirtualFile> sourceRoots = GoSdkUtil.getSourcesPathsToLookup(file.getProject(), module);
           for (PsiReference reference : importSpec.getImportString().getReferences()) {
             if (reference instanceof GoImportReference) {
-              if (validateInternal && GoConstants.INTERNAL.equals(reference.getCanonicalText())) {
+              String canonicalText = reference.getCanonicalText();
+              if (resolvedToSdk && GoConstants.TESTDATA_NAME.equals(canonicalText)) {
+                problemsHolder.registerProblem(importSpec, "Use of testdata package from SDK is not allowed", new GoDeleteImportQuickFix());
+                break;
+              }
+              else if (validateInternal && GoConstants.INTERNAL.equals(canonicalText)) {
                 if (GoSdkUtil.isUnreachableInternalPackage(resolvedFile, contextFile, sourceRoots)) {
                   problemsHolder.registerProblem(importSpec, "Use of internal package is not allowed", new GoDeleteImportQuickFix());
                   break;
                 }
               }
-              else if (supportsVendoring && GoConstants.VENDOR.equals(reference.getCanonicalText())) {
+              else if (supportsVendoring && GoConstants.VENDOR.equals(canonicalText)) {
                 if (GoSdkUtil.isUnreachableVendoredPackage(resolvedFile, contextFile, sourceRoots)) {
                   problemsHolder.registerProblem(importSpec, "Use of vendored package is not allowed",
                                                  new GoDeleteImportQuickFix(), GoDisableVendoringInModuleQuickFix.create(module));

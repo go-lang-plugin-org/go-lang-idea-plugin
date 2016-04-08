@@ -206,6 +206,16 @@ public class GoInvalidPackageImportInspectionTest extends GoQuickFixTestBase {
     applySingleQuickFix(GoDeleteImportQuickFix.QUICK_FIX_NAME);
     myFixture.checkResult("package a; ");
   }
+  
+  public void testImportTestDataDirectory() {
+    myFixture.addFileToProject("pack/testdata/pack/foo.go", "package test");
+    myFixture.configureByText("a.go", "package a\n" +
+                                      "import `pack/testdata/pack`\n" +
+                                      "import <error descr=\"Use of testdata package from SDK is not allowed\">`doc/te<caret>stdata`</error>");
+    myFixture.checkHighlighting();
+    applySingleQuickFix(GoDeleteImportQuickFix.QUICK_FIX_NAME);
+    myFixture.checkResult("package a\nimport `pack/testdata/pack`\n");
+  }
 
   private Collection<String> getIntentionNames() {
     return ContainerUtil.map(myFixture.getAvailableIntentions(), new Function<IntentionAction, String>() {
