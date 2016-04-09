@@ -17,12 +17,19 @@
 package com.goide.editor;
 
 import com.goide.GoTypes;
+import com.intellij.codeInsight.editorActions.JavaLikeQuoteHandler;
 import com.intellij.codeInsight.editorActions.SimpleTokenSetQuoteHandler;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.highlighter.HighlighterIterator;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.TokenType;
+import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.tree.TokenSet;
+import org.jetbrains.annotations.NotNull;
 
-public class GoQuoteHandler extends SimpleTokenSetQuoteHandler {
+public class GoQuoteHandler extends SimpleTokenSetQuoteHandler implements JavaLikeQuoteHandler {
+  private static final TokenSet SINGLE_LINE_LITERALS = TokenSet.create(GoTypes.STRING);
+
   public GoQuoteHandler() {
     super(GoTypes.STRING, GoTypes.RAW_STRING, GoTypes.CHAR, TokenType.BAD_CHARACTER);
   }
@@ -30,5 +37,30 @@ public class GoQuoteHandler extends SimpleTokenSetQuoteHandler {
   @Override
   public boolean hasNonClosedLiteral(Editor editor, HighlighterIterator iterator, int offset) {
     return true;
+  }
+
+  @Override
+  public TokenSet getConcatenatableStringTokenTypes() {
+    return SINGLE_LINE_LITERALS;
+  }
+
+  @Override
+  public String getStringConcatenationOperatorRepresentation() {
+    return "+";
+  }
+
+  @Override
+  public TokenSet getStringTokenTypes() {
+    return SINGLE_LINE_LITERALS;
+  }
+
+  @Override
+  public boolean isAppropriateElementTypeForLiteral(@NotNull IElementType tokenType) {
+    return true;
+  }
+
+  @Override
+  public boolean needParenthesesAroundConcatenation(PsiElement element) {
+    return false;
   }
 }
