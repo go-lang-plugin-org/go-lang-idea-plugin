@@ -52,16 +52,8 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
     GoValue value = PsiTreeUtil.getParentOfType(myElement, GoValue.class);
     if (key == null && (value == null || PsiTreeUtil.getPrevSiblingOfType(value, GoKey.class) != null)) return true;
 
-    GoCompositeLit lit = PsiTreeUtil.getParentOfType(myElement, GoCompositeLit.class);
-
-    GoType type = lit != null ? lit.getType() : null;
-    if (type == null) {
-      GoTypeReferenceExpression ref = lit != null ? lit.getTypeReferenceExpression() : null;
-      if (ref != null) {
-        GoType resolve = ref.resolveType();
-        type = resolve != null ? resolve.getUnderlyingType() : null;
-      }
-    }
+    GoCompositeLit lit = getLiteral();
+    GoType type = getLiteralType(lit);
     
     PsiElement p = PsiTreeUtil.getParentOfType(myElement, GoLiteralValue.class);
     while (lit != null && p != null) {
@@ -73,6 +65,18 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
     if (!processStructType(fieldProcessor, type)) return false;
     return !(type instanceof GoPointerType && !processStructType(fieldProcessor, ((GoPointerType)type).getType()));
   }
+
+  @Nullable
+  private static GoType getLiteralType(@Nullable GoCompositeLit lit) {
+    GoType type = lit != null ? lit.getType() : null;
+    if (type != null) return type;
+    GoTypeReferenceExpression ref = lit != null ? lit.getTypeReferenceExpression() : null;
+    GoType resolve = ref == null ? null : ref.resolveType();
+    return resolve != null ? resolve.getUnderlyingType() : null;
+  }
+
+  @Nullable
+  private GoCompositeLit getLiteral() {return PsiTreeUtil.getParentOfType(myElement, GoCompositeLit.class);}
 
   private boolean processStructType(@NotNull GoScopeProcessor fieldProcessor, @Nullable GoType type) {
     return !(type instanceof GoStructType && !type.processDeclarations(fieldProcessor, ResolveState.initial(), null, myElement));
@@ -115,6 +119,10 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
     }
 
     return type instanceof GoSpecType ? ((GoSpecType)type).getType() : type;
+  }
+
+  public boolean inStructTypeKey() {
+    return myValue == null && getLiteralType(getLiteral()) instanceof GoStructType;
   }
 
   @Nullable
