@@ -73,6 +73,9 @@ abstract public class GoLiveTemplateContextType extends TemplateContextType {
   
     @Override
     protected boolean isInContext(@NotNull PsiElement element) {
+      if (element instanceof PsiComment) {
+        return false;
+      }
       return element instanceof GoFile || element.getParent() instanceof GoFile && !(element instanceof GoTopLevelDeclaration);
     }
   }
