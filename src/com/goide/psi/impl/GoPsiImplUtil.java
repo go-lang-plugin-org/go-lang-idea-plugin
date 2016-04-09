@@ -148,13 +148,13 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static PsiReference getReference(@NotNull GoFieldName o) {
-    return new PsiMultiReference(new PsiReference[]{new GoFieldNameReference(o), new GoReference(o)}, o) {
+    GoFieldNameReference field = new GoFieldNameReference(o);
+    GoReference ordinal = new GoReference(o);
+    return new PsiMultiReference(new PsiReference[]{field, ordinal}, o) {
       @Override
       public PsiElement resolve() {
-        PsiReference[] refs = getReferences();
-        PsiElement resolve = refs.length > 0 ? refs[0].resolve() : null;
-        if (resolve != null) return resolve;
-        return refs.length > 1 ? refs[1].resolve() : null;
+        PsiElement resolve = field.resolve();
+        return resolve != null ? resolve : field.inStructTypeKey() ? null : ordinal.resolve();
       }
 
       @Override

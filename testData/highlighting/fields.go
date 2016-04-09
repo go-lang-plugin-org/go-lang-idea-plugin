@@ -15,6 +15,15 @@ func main() {
     _ = map[interface{}]string{foo1: "hola", }
 }
 
+func _() {
+	type test struct {
+		field1 string
+	}
+	field2 := ""
+	_ = field2
+	_ = test{<error>field2</error>: ""}
+}
+
 func foo1() {
 
 }
