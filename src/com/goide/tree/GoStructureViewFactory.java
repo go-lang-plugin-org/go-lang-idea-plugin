@@ -48,7 +48,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
       @NotNull
       @Override
       public StructureViewModel createStructureViewModel(@Nullable Editor editor) {
-        return new Model(psiFile);
+        return new Model(psiFile, editor);
       }
 
       @Override
@@ -62,9 +62,10 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
     private static final List<NodeProvider> PROVIDERS =
       ContainerUtil.newSmartList(new TreeElementFileStructureNodeProvider());
 
-    Model(@NotNull PsiFile file) {
-      super(file, new Element(file));
-      withSuitableClasses(GoFile.class).withSorters(ExportabilitySorter.INSTANCE, Sorter.ALPHA_SORTER);
+    Model(@NotNull PsiFile file, @Nullable Editor editor) {
+      super(file, editor, new Element(file));
+      withSuitableClasses(GoFile.class, GoNamedElement.class)
+        .withSorters(ExportabilitySorter.INSTANCE, Sorter.ALPHA_SORTER);
     }
 
     @NotNull
