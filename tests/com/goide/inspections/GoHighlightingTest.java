@@ -303,6 +303,14 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureFromExistingVirtualFile(file);
     myFixture.checkHighlighting();
   }
+  
+  public void testMethodOnNonLocalTypeInTheSameDirectory() {
+    myFixture.addFileToProject("method/foo.go", "package a; type H struct {}");
+    PsiFile psiFile = myFixture.addFileToProject("method/foo_test.go", "package a_test;\n" +
+                                                                       "func (<error descr=\"Unresolved type 'H'\">H</error>) Hello() {}");
+    myFixture.configureFromExistingVirtualFile(psiFile.getVirtualFile());
+    myFixture.checkHighlighting();
+  }
 
   public void testPackageWithTestPrefixNotInsideTestFile() {
     myFixture.addFileToProject("pack1/pack1.go", "package pack1_test; func Test() {}");

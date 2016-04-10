@@ -21,6 +21,7 @@ import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.openapi.util.text.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,13 +33,21 @@ public class GoMethodOnNonLocalTypeInspection extends GoInspectionBase {
       @Override
       public void visitMethodDeclaration(@NotNull GoMethodDeclaration method) {
         if (method.getIdentifier() == null || method.isBlank()) return;
-        String containingFileImportPath = method.getContainingFile().getImportPath(false);
-        if (containingFileImportPath == null) return;
+        GoFile methodContainingFile = method.getContainingFile();
+        String methodImportPath = methodContainingFile.getImportPath(false);
+        if (methodImportPath == null) return;
+        
         GoType methodType = getMethodType(method);
         if (methodType == null) return;
-        String typeImportPath = ((GoFile)methodType.getContainingFile()).getImportPath(false);
-        if (typeImportPath == null || typeImportPath.equals(containingFileImportPath)) return;
-        holder.registerProblem(method.getIdentifier(), "Method defined on non-local type", ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+        GoFile typeContainingFile = (GoFile)methodType.getContainingFile();
+        String typeImportPath = typeContainingFile.getImportPath(false);
+        if (typeImportPath == null) return;
+
+        String methodPackageName = methodContainingFile.getPackageName();
+        String typePackageName = typeContainingFile.getPackageName();
+        if (!StringUtil.equals(methodPackageName, typePackageName)  || !typeImportPath.equals(methodImportPath)) {
+          holder.registerProblem(method.getIdentifier(), "Method defined on non-local type", ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+        }
       }
 
       @Nullable
