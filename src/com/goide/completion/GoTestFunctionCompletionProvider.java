@@ -34,6 +34,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -58,9 +59,10 @@ public class GoTestFunctionCompletionProvider extends CompletionProvider<Complet
   protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
     Project project = parameters.getPosition().getProject();
     PsiFile file = parameters.getOriginalFile();
-    if (file instanceof GoFile) {
+    PsiDirectory containingDirectory = file.getContainingDirectory();
+    if (file instanceof GoFile && containingDirectory != null) {
       final CompletionResultSet resultSet = result.withPrefixMatcher(new CamelHumpMatcher(result.getPrefixMatcher().getPrefix(), false));
-      GlobalSearchScope packageScope = GoPackageUtil.packageScope((GoFile)file);
+      GlobalSearchScope packageScope = GoPackageUtil.packageScope(containingDirectory, ((GoFile)file).getCanonicalPackageName());
       IdFilter idFilter = GoIdFilter.getFilesFilter(packageScope);
       Collection<String> allFunctionNames = collectAllFunctionNames(packageScope, idFilter);
       final Set<String> allTestFunctionNames = collectAllTestNames(allFunctionNames, project, packageScope, idFilter);

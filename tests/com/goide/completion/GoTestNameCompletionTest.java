@@ -141,6 +141,16 @@ public class GoTestNameCompletionTest extends GoCompletionTestBase {
                   "func TestPublic(t *testing.T) { <caret>println(); println(); }");
   }
 
+  public void testCrossTestPackage() {
+    myFixture.addFileToProject("foo.go", "package foo; func Public() {}; func private() {}; func _() {}");
+    doCheckResult("package foo_test; func TestP<caret>() { println(); println(); }",
+                  "package foo_test;\n" +
+                  "\n" +
+                  "import \"testing\"\n" +
+                  "\n" +
+                  "func TestPublic(t *testing.T) { println(); println(); }");
+  }
+  
   @Override
   protected String getDefaultFileName() {
     return "a_test.go";
