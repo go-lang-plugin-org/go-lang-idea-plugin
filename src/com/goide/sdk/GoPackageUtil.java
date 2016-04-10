@@ -94,8 +94,8 @@ public class GoPackageUtil {
   }
   
   @NotNull
-  public static GlobalSearchScope packageScope(@NotNull PsiDirectory psiDirectory) {
-    List<GoFile> files = getAllPackageFiles(psiDirectory, null);
+  public static GlobalSearchScope packageScope(@NotNull PsiDirectory psiDirectory, @Nullable String packageName) {
+    List<GoFile> files = getAllPackageFiles(psiDirectory, packageName);
     return GlobalSearchScope.filesScope(psiDirectory.getProject(), ContainerUtil.map(files, new Function<GoFile, VirtualFile>() {
       @Override
       public VirtualFile fun(GoFile file) {

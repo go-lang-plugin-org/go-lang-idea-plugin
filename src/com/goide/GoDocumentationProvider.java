@@ -396,7 +396,8 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       PsiDirectory psiDirectory = directory != null ? psiManager.findDirectory(directory) : null;
       String anchor = hash >= 0 ? link.substring(Math.min(hash + 1, link.length())) : null;
       if (StringUtil.isNotEmpty(anchor)) {
-        GlobalSearchScope scope = psiDirectory != null ? GoPackageUtil.packageScope(psiDirectory) : GlobalSearchScope.projectScope(project);
+        GlobalSearchScope scope = psiDirectory != null ? GoPackageUtil.packageScope(psiDirectory, null) 
+                                                       : GlobalSearchScope.projectScope(project);
         IdFilter idFilter = GoIdFilter.getFilesFilter(scope);
         GoNamedElement element = ContainerUtil.getFirstItem(StubIndex.getElements(GoAllPublicNamesIndex.ALL_PUBLIC_NAMES, anchor, project, 
                                                                                   scope, idFilter, GoNamedElement.class));
