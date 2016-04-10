@@ -801,8 +801,7 @@ public class GoPsiImplUtil {
       if (StringUtil.isEmpty(packageName) || StringUtil.isEmpty(typeName)) return Collections.emptyList();
       String key = packageName + "." + typeName;
       Project project = ((GoFile)file).getProject();
-      PsiDirectory parent = file.getParent();
-      GlobalSearchScope scope = parent == null ? GlobalSearchScope.allScope(project) : GoPackageUtil.packageScope(parent);
+      GlobalSearchScope scope = GoPackageUtil.packageScope((GoFile)file);
       Collection<GoMethodDeclaration> declarations = GoMethodIndex.find(key, project, scope, GoIdFilter.getFilesFilter(scope));
       return ContainerUtil.newArrayList(declarations);
     }
