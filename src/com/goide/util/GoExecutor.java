@@ -212,7 +212,7 @@ public class GoExecutor {
     GeneralCommandLine commandLine = null;
     try {
       commandLine = createCommandLine();
-      GeneralCommandLine finalCommandLine = commandLine;
+      final GeneralCommandLine finalCommandLine = commandLine;
       myProcessHandler = new KillableColoredProcessHandler(finalCommandLine) {
         @Override
         public void startNotify() {

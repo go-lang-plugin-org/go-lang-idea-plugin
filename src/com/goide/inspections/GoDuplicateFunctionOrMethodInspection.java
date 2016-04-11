@@ -52,7 +52,7 @@ public class GoDuplicateFunctionOrMethodInspection extends GoInspectionBase {
         String typeText = GoMethodDeclarationStubElementType.calcTypeText(method);
         if (typeText == null) return;
 
-        GoFile file = method.getContainingFile();
+        final GoFile file = method.getContainingFile();
         GlobalSearchScope scope = GoPackageUtil.packageScope(file);
         IdFilter idFilter = GoIdFilter.getFilesFilter(scope);
         final Module module = ModuleUtilCore.findModuleForPsiElement(file);

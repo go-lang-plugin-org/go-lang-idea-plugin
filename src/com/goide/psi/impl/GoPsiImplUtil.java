@@ -148,8 +148,8 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static PsiReference getReference(@NotNull GoFieldName o) {
-    GoFieldNameReference field = new GoFieldNameReference(o);
-    GoReference ordinal = new GoReference(o);
+    final GoFieldNameReference field = new GoFieldNameReference(o);
+    final GoReference ordinal = new GoReference(o);
     return new PsiMultiReference(new PsiReference[]{field, ordinal}, o) {
       @Override
       public PsiElement resolve() {
