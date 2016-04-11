@@ -43,6 +43,7 @@ allprojects {
     plugins 'coverage'
     downloadSources Boolean.valueOf(sources)
     sameSinceUntilBuild Boolean.valueOf(isEAP)
+    alternativeIdePath localIdePath
     publish {
       username publishUsername
       password publishPassword
