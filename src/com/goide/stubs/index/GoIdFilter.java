@@ -84,7 +84,7 @@ public class GoIdFilter extends IdFilter {
           @Override
           public boolean processFile(VirtualFile fileOrDir) {
             if (filterCondition.value(fileOrDir)) {
-              addToBitSet(bitSet, (VirtualFileWithId)fileOrDir);
+              addToBitSet(bitSet, fileOrDir);
             }
             ProgressManager.checkCanceled();
             return true;
@@ -102,16 +102,18 @@ public class GoIdFilter extends IdFilter {
     if (scope instanceof GlobalSearchScope.FilesScope) {
       BitSet bitSet = new BitSet();
       for (VirtualFile file : (GlobalSearchScope.FilesScope)scope) {
-        addToBitSet(bitSet, (VirtualFileWithId)file);
+        addToBitSet(bitSet, file);
       }
       return new GoIdFilter(bitSet);
     }
     return null;
   }
 
-  private static void addToBitSet(@NotNull BitSet set, @NotNull VirtualFileWithId file) {
-    int id = file.getId();
-    if (id < 0) id = -id; // workaround for encountering invalid files, see EA-49915, EA-50599
-    set.set(id);
+  private static void addToBitSet(@NotNull BitSet set, @NotNull VirtualFile file) {
+    if (file instanceof VirtualFileWithId) {
+      int id = ((VirtualFileWithId)file).getId();
+      if (id < 0) id = -id; // workaround for encountering invalid files, see EA-49915, EA-50599
+      set.set(id);
+    }
   }
 }
