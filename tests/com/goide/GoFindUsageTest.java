@@ -85,7 +85,7 @@ public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
     assertEquals("b.f.Method()", statement.getText());
   }
 
-  public void _testCheckImportInWholePackageWithRelativeImports() {
+  public void testCheckImportInWholePackageWithRelativeImports() {
     myFixture.addFileToProject("bar/bar1.go", "package bar; func Bar() { b := bar{}; b.f.Method() }");
     myFixture.addFileToProject("bar/bar.go", "package bar; import \"..\"; type bar struct { f *foo.Foo }");
     myFixture.configureByText("foo.go", "package foo; type Foo struct{}; func (*Foo) M<caret>ethod() {}");

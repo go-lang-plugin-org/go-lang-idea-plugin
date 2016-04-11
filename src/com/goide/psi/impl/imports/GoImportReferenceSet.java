@@ -99,7 +99,11 @@ public class GoImportReferenceSet extends FileReferenceSet {
   }
 
   public boolean isRelativeImport() {
-    return getPathString().startsWith("./") || getPathString().startsWith("../");
+    return isRelativeImport(getPathString());
+  }
+
+  public static boolean isRelativeImport(@NotNull String pathString) {
+    return pathString.startsWith("./") || pathString.startsWith("../");
   }
 
   @Override
