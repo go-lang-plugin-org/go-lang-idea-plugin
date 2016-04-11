@@ -20,10 +20,10 @@ import com.goide.psi.GoStatement;
 import com.goide.psi.GoType;
 import com.goide.psi.GoTypeOwner;
 import com.intellij.lang.ExpressionTypeProvider;
+import com.intellij.openapi.util.Conditions;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.containers.ContainerUtil;
+import com.intellij.psi.SyntaxTraverser;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -45,16 +45,6 @@ public class GoExpressionTypeProvider extends ExpressionTypeProvider<GoTypeOwner
   @NotNull
   @Override
   public List<GoTypeOwner> getExpressionsAt(@NotNull PsiElement elementAt) {
-    if (PsiTreeUtil.getParentOfType(elementAt, GoStatement.class) == null) {
-      return ContainerUtil.emptyList();
-    }
-    List<GoTypeOwner> expressions = ContainerUtil.newArrayList();
-    while (elementAt != null && !(elementAt instanceof GoStatement)) {
-      if (elementAt instanceof GoTypeOwner) {
-        expressions.add((GoTypeOwner)elementAt);
-      }
-      elementAt = elementAt.getParent();
-    }
-    return expressions;
+    return SyntaxTraverser.psiApi().parents(elementAt).takeWhile(Conditions.notInstanceOf(GoStatement.class)).filter(GoTypeOwner.class).toList();
   }
 }
