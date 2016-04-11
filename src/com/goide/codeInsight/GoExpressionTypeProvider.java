@@ -16,9 +16,9 @@
 
 package com.goide.codeInsight;
 
-import com.goide.psi.GoExpression;
 import com.goide.psi.GoStatement;
 import com.goide.psi.GoType;
+import com.goide.psi.GoTypeOwner;
 import com.intellij.lang.ExpressionTypeProvider;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
@@ -28,10 +28,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class GoExpressionTypeProvider extends ExpressionTypeProvider<GoExpression> {
+public class GoExpressionTypeProvider extends ExpressionTypeProvider<GoTypeOwner> {
   @NotNull
   @Override
-  public String getInformationHint(@NotNull GoExpression element) {
+  public String getInformationHint(@NotNull GoTypeOwner element) {
     GoType type = element.getGoType(null);
     return StringUtil.escapeXml(StringUtil.notNullize(type != null ? type.getText() : null, "<unknown>"));
   }
@@ -44,14 +44,14 @@ public class GoExpressionTypeProvider extends ExpressionTypeProvider<GoExpressio
 
   @NotNull
   @Override
-  public List<GoExpression> getExpressionsAt(@NotNull PsiElement elementAt) {
+  public List<GoTypeOwner> getExpressionsAt(@NotNull PsiElement elementAt) {
     if (PsiTreeUtil.getParentOfType(elementAt, GoStatement.class) == null) {
       return ContainerUtil.emptyList();
     }
-    List<GoExpression> expressions = ContainerUtil.newArrayList();
+    List<GoTypeOwner> expressions = ContainerUtil.newArrayList();
     while (elementAt != null && !(elementAt instanceof GoStatement)) {
-      if (elementAt instanceof GoExpression) {
-        expressions.add((GoExpression)elementAt);
+      if (elementAt instanceof GoTypeOwner) {
+        expressions.add((GoTypeOwner)elementAt);
       }
       elementAt = elementAt.getParent();
     }
