@@ -100,7 +100,7 @@ public class GoFileIgnoredByBuildToolNotificationProvider extends EditorNotifica
     return null;
   }
 
-  private static EditorNotificationPanel createIgnoredByBuildToolPanel(@NotNull Project project, @NotNull VirtualFile file) {
+  private static EditorNotificationPanel createIgnoredByBuildToolPanel(@NotNull final Project project, @NotNull VirtualFile file) {
     EditorNotificationPanel panel = new EditorNotificationPanel();
     String fileName = file.getName();
     panel.setText("'" + fileName + "' will be ignored by build tool since its name starts with '" + fileName.charAt(0) + "'");
