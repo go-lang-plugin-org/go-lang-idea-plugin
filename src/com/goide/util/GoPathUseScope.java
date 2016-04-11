@@ -17,8 +17,10 @@
 package com.goide.util;
 
 import com.goide.psi.GoFile;
+import com.goide.psi.GoImportSpec;
 import com.goide.psi.GoNamedElement;
 import com.goide.psi.impl.GoPsiImplUtil;
+import com.goide.psi.impl.imports.GoImportReferenceSet;
 import com.goide.sdk.GoPackageUtil;
 import com.goide.sdk.GoSdkService;
 import com.intellij.openapi.module.Module;
@@ -31,6 +33,9 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.ObjectUtils;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Map;
+import java.util.Set;
 
 public class GoPathUseScope extends GlobalSearchScope {
   public static GlobalSearchScope create(@NotNull PsiElement declarationContext, boolean filterByImportList) {
@@ -68,7 +73,8 @@ public class GoPathUseScope extends GlobalSearchScope {
     if (referenceDirectory == null) {
       return false;
     }
-    if (referenceDirectory.equals(myDeclarationFile.getParent())) {
+    VirtualFile declarationDirectory = myDeclarationFile.getParent();
+    if (referenceDirectory.equals(declarationDirectory)) {
       return true;
     }
 
@@ -92,14 +98,37 @@ public class GoPathUseScope extends GlobalSearchScope {
     PsiFile declarationPsiFile = psiManager.findFile(myDeclarationFile);
     if (declarationPsiFile instanceof GoFile) {
       String importPath = ((GoFile)declarationPsiFile).getImportPath(scopeHelper.isVendoringEnabled());
-      if (((GoFile)referencePsiFile).getImportedPackagesMap().containsKey(importPath)) {
+      Map<String, GoImportSpec> importedPackagesMap = ((GoFile)referencePsiFile).getImportedPackagesMap();
+      if (importedPackagesMap.containsKey(importPath)) {
         return true;
       }
+      if (hasRelativeImportOfTargetPackage(importedPackagesMap.keySet(), referenceDirectory, declarationDirectory)) {
+        return true;
+      }
+
       for (GoFile packageFile : GoPackageUtil.getAllPackageFiles(referencePsiFile.getContainingDirectory(), null)) {
         if (packageFile != referencePsiFile && referencePsiFile.getOriginalFile() != packageFile) {
-          if (packageFile.getImportedPackagesMap().containsKey(importPath)) {
+          Map<String, GoImportSpec> packagesMap = packageFile.getImportedPackagesMap();
+          if (packagesMap.containsKey(importPath)) {
             return true;
           }
+          if (hasRelativeImportOfTargetPackage(packagesMap.keySet(), referenceDirectory, declarationDirectory)) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  private static boolean hasRelativeImportOfTargetPackage(@NotNull Set<String> paths,
+                                                          @NotNull VirtualFile referenceDirectory,
+                                                          @NotNull VirtualFile declarationDirectory) {
+    for (String pathString : paths) {
+      if (GoImportReferenceSet.isRelativeImport(pathString)) {
+        VirtualFile file = referenceDirectory.findFileByRelativePath(pathString);
+        if (declarationDirectory.equals(file)) {
+          return true;
         }
       }
     }
