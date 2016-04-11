@@ -53,7 +53,7 @@ public class GoTestNameCompletionTest extends GoCompletionTestBase {
                                                      "\t<caret>\n" +
                                                      "}");
   }
-  
+
   public void testWithoutSignatureWithBlock() {
     myFixture.addFileToProject("foo.go", "package main; func Public() {}; func private() {}; func _() {}");
     doCheckResult("package main; func TestP<caret>{}", "package main;\n" +
@@ -75,7 +75,7 @@ public class GoTestNameCompletionTest extends GoCompletionTestBase {
                                                          "\t<caret>\n" +
                                                          "}");
   }
-  
+
   public void testWithInvalidSignature() {
     myFixture.addFileToProject("foo.go", "package main; func Public() {}; func private() {}; func _() {}");
     doCheckResult("package main; func TestP<caret>(foo Bar){}", "package main;\n" +
@@ -108,7 +108,7 @@ public class GoTestNameCompletionTest extends GoCompletionTestBase {
                                                          "\t<caret>\n" +
                                                          "}");
   }
-  
+
   public void testWithEmptyBody() {
     myFixture.addFileToProject("foo.go", "package main; func Public() {}; func private() {}; func _() {}");
     doCheckResult("package main; func TestP<caret>(){}", "package main;\n" +
@@ -133,7 +133,7 @@ public class GoTestNameCompletionTest extends GoCompletionTestBase {
 
   public void testWithStatements() {
     myFixture.addFileToProject("foo.go", "package main; func Public() {}; func private() {}; func _() {}");
-    doCheckResult("package main; func TestP<caret>() { println(); println(); }", 
+    doCheckResult("package main; func TestP<caret>() { println(); println(); }",
                   "package main;\n" +
                   "\n" +
                   "import \"testing\"\n" +
@@ -143,14 +143,33 @@ public class GoTestNameCompletionTest extends GoCompletionTestBase {
 
   public void testCrossTestPackage() {
     myFixture.addFileToProject("foo.go", "package foo; func Public() {}; func private() {}; func _() {}");
-    doCheckResult("package foo_test; func TestP<caret>() { println(); println(); }",
-                  "package foo_test;\n" +
-                  "\n" +
-                  "import \"testing\"\n" +
-                  "\n" +
-                  "func TestPublic(t *testing.T) { println(); println(); }");
+    doCheckResult("package foo_test; func TestP<caret>() { }", "package foo_test;\n\n" +
+                                                               "import \"testing\"\n\n" +
+                                                               "func TestPublic(t *testing.T) {\n" +
+                                                               "\t\n" +
+                                                               "}");
   }
-  
+
+  public void testDoNotSuggestDuplicatedFunction() {
+    myFixture.addFileToProject("foo.go", "package foo\n\nfunc Public() {} func private() {}; func _() {}");
+    doCheckResult("package foo; func TestPublic() {}\n\nfunc TestP<caret>() { }", "package foo;\n\n" +
+                                                                                  "import \"testing\"\n\n" +
+                                                                                  "func TestPublic() {}\n\n" +
+                                                                                  "func TestPublic2(t *testing.T) {\n" +
+                                                                                  "\t\n" +
+                                                                                  "}");
+  }
+
+  public void testDoNotSuggestDuplicatedFunctionForTestPackages() {
+    myFixture.addFileToProject("foo.go", "package foo\n\nfunc Public() {} func private() {}; func _() {}");
+    doCheckResult("package foo_test; func TestPublic() {}\n\nfunc TestP<caret>() { }", "package foo_test;\n\n" +
+                                                                                       "import \"testing\"\n\n" +
+                                                                                       "func TestPublic() {}\n\n" +
+                                                                                       "func TestPublic2(t *testing.T) {\n" +
+                                                                                       "\t\n" +
+                                                                                       "}");
+  }
+
   @Override
   protected String getDefaultFileName() {
     return "a_test.go";

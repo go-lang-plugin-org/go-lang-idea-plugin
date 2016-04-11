@@ -49,7 +49,6 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.indexing.IdFilter;
 import com.intellij.util.text.UniqueNameGenerator;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Set;
@@ -62,18 +61,19 @@ public class GoTestFunctionCompletionProvider extends CompletionProvider<Complet
     PsiDirectory containingDirectory = file.getContainingDirectory();
     if (file instanceof GoFile && containingDirectory != null) {
       final CompletionResultSet resultSet = result.withPrefixMatcher(new CamelHumpMatcher(result.getPrefixMatcher().getPrefix(), false));
-      GlobalSearchScope packageScope = GoPackageUtil.packageScope(containingDirectory, ((GoFile)file).getCanonicalPackageName());
-      IdFilter idFilter = GoIdFilter.getFilesFilter(packageScope);
-      Collection<String> allFunctionNames = collectAllFunctionNames(packageScope, idFilter);
-      final Set<String> allTestFunctionNames = collectAllTestNames(allFunctionNames, project, packageScope, idFilter);
+
+      Collection<String> allPackageFunctionNames = collectAllFunctionNames(containingDirectory);      
+      final Set<String> allTestFunctionNames = collectAllTestNames(allPackageFunctionNames, project, (GoFile)file);
+      
       final String fileNameWithoutTestPrefix = StringUtil.trimEnd(file.getName(), GoConstants.TEST_SUFFIX_WITH_EXTENSION) + ".go";
+      GlobalSearchScope packageScope = GoPackageUtil.packageScope(containingDirectory, ((GoFile)file).getCanonicalPackageName());
       GlobalSearchScope scope = new GoUtil.ExceptTestsScope(packageScope);
-      for (final String functionName : allFunctionNames) {
+      IdFilter idFilter = GoIdFilter.getFilesFilter(scope);
+      for (final String functionName : allPackageFunctionNames) {
         GoFunctionIndex.process(functionName, project, scope, idFilter, new Processor<GoFunctionDeclaration>() {
           @Override
           public boolean process(GoFunctionDeclaration declaration) {
-            addVariants(declaration, functionName, fileNameWithoutTestPrefix,
-                        allTestFunctionNames, resultSet);
+            addVariants(declaration, functionName, fileNameWithoutTestPrefix, allTestFunctionNames, resultSet);
             return false;
           }
         });
@@ -128,24 +128,26 @@ public class GoTestFunctionCompletionProvider extends CompletionProvider<Complet
   }
 
   @NotNull
-  private static Set<String> collectAllFunctionNames(@NotNull GlobalSearchScope packageScope, @Nullable IdFilter idFilter) {
+  private static Set<String> collectAllFunctionNames(@NotNull PsiDirectory directory) {
+    GlobalSearchScope packageScope = GoPackageUtil.packageScope(directory, null);
+    IdFilter packageIdFilter = GoIdFilter.getFilesFilter(packageScope);
+    
     Set<String> result = ContainerUtil.newHashSet();
     StubIndex.getInstance().processAllKeys(GoFunctionIndex.KEY, new CommonProcessors.CollectProcessor<String>(result) {
       @Override
       protected boolean accept(String s) {
         return !"_".equals(s) && StringUtil.isCapitalized(s);
       }
-    }, packageScope, idFilter);
+    }, packageScope, packageIdFilter);
     return result;
   }
 
   @NotNull
-  private static Set<String> collectAllTestNames(@NotNull Collection<String> names,
-                                                 @NotNull Project project,
-                                                 @NotNull GlobalSearchScope packageScope,
-                                                 @Nullable IdFilter idFilter) {
+  private static Set<String> collectAllTestNames(@NotNull Collection<String> names, @NotNull Project project, @NotNull GoFile file) {
     final Set<String> result = ContainerUtil.newHashSet();
-    GoUtil.TestsScope scope = new GoUtil.TestsScope(packageScope);
+    GlobalSearchScope packageScope = GoPackageUtil.packageScope(file);
+    GlobalSearchScope scope = new GoUtil.TestsScope(packageScope);
+    IdFilter idFilter = GoIdFilter.getFilesFilter(packageScope);
     for (final String name : names) {
       if (GoTestFunctionType.fromName(name) != null) {
         GoFunctionIndex.process(name, project, scope, idFilter, new Processor<GoFunctionDeclaration>() {
