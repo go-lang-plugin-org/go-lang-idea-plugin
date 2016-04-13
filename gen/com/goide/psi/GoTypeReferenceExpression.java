@@ -36,6 +36,7 @@ public interface GoTypeReferenceExpression extends GoReferenceExpressionBase {
   @Nullable
   PsiElement resolve();
 
+  @Nullable
   GoType resolveType();
 
 }
