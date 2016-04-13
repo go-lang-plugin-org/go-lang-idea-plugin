@@ -308,15 +308,15 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       if (parentType == ARGUMENT_LIST && type != LPAREN && type != RPAREN) return Indent.getNormalIndent();
       if ((parentType == EXPR_CASE_CLAUSE || parentType == TYPE_CASE_CLAUSE) && (type == CASE || type == DEFAULT)) return Indent.getNoneIndent();
       if (BLOCKS_TOKEN_SET.contains(parentType)) return indentIfNotBrace(child);
-      if (parentType == IMPORT_DECLARATION) return indentOfMultipleDeclartionChild(type, IMPORT_SPEC);
-      if (parentType == CONST_DECLARATION) return indentOfMultipleDeclartionChild(type, CONST_SPEC);
-      if (parentType == VAR_DECLARATION) return indentOfMultipleDeclartionChild(type, VAR_SPEC);
-      if (parentType == TYPE_DECLARATION) return indentOfMultipleDeclartionChild(type, TYPE_SPEC);
+      if (parentType == IMPORT_DECLARATION) return indentOfMultipleDeclarationChild(type, IMPORT_SPEC);
+      if (parentType == CONST_DECLARATION) return indentOfMultipleDeclarationChild(type, CONST_SPEC);
+      if (parentType == VAR_DECLARATION) return indentOfMultipleDeclarationChild(type, VAR_SPEC);
+      if (parentType == TYPE_DECLARATION) return indentOfMultipleDeclarationChild(type, TYPE_SPEC);
       if (parentType == COMM_CLAUSE && child.getPsi() instanceof GoStatement) return Indent.getNormalIndent();
       return Indent.getNoneIndent();
     }
 
-    private Indent indentOfMultipleDeclartionChild(@NotNull IElementType childType, @NotNull IElementType specType) {
+    private Indent indentOfMultipleDeclarationChild(@NotNull IElementType childType, @NotNull IElementType specType) {
       if (childType == specType) {
         return Indent.getNormalIndent();
       }
