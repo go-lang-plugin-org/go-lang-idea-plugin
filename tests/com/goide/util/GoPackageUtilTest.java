@@ -31,23 +31,23 @@ public class GoPackageUtilTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureByText("non_test_file.go", "package non_test");
     myFixture.configureByText("ignored.go", "// +build ignored\n\npackage ignored");
 
-    assertSameElements(GoPackageUtil.getAllPackagesInDirectory(myFixture.getFile().getContainingDirectory(), true),
+    assertSameElements(GoPackageUtil.getAllPackagesInDirectory(myFixture.getFile().getContainingDirectory(), null, true),
                        "foo", "main", "non_test", "tricky_package_name");
 
-    assertSameElements(GoPackageUtil.getAllPackagesInDirectory(myFixture.getFile().getContainingDirectory(), false),
+    assertSameElements(GoPackageUtil.getAllPackagesInDirectory(myFixture.getFile().getContainingDirectory(), null, false),
                        "foo", "foo_test", "main", "non_test", "tricky_package_name");
   }
 
   public void testInvalidateCacheOnChangingBuildTags() {
     myFixture.configureByText("foo.go", "// +build ignored\n\npackage ignored");
     myFixture.configureByText("bar.go", "package not_ignored");
-    assertSameElements(GoPackageUtil.getAllPackagesInDirectory(myFixture.getFile().getContainingDirectory(), true),
+    assertSameElements(GoPackageUtil.getAllPackagesInDirectory(myFixture.getFile().getContainingDirectory(), null, true),
                        "not_ignored");
 
     GoBuildTargetSettings newSettings = new GoBuildTargetSettings();
     newSettings.customFlags = new String[]{"ignored"};
     GoModuleSettings.getInstance(myFixture.getModule()).setBuildTargetSettings(newSettings);
-    assertSameElements(GoPackageUtil.getAllPackagesInDirectory(myFixture.getFile().getContainingDirectory(), true),
+    assertSameElements(GoPackageUtil.getAllPackagesInDirectory(myFixture.getFile().getContainingDirectory(), null, true),
                        "not_ignored", "ignored");
   }
 }

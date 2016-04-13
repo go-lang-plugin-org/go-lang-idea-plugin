@@ -17,6 +17,7 @@
 package com.goide.sdk;
 
 import com.goide.GoConstants;
+import com.goide.project.GoBuildTargetSettings;
 import com.goide.project.GoModuleSettings;
 import com.goide.psi.GoFile;
 import com.goide.psi.impl.GoPsiImplUtil;
@@ -105,28 +106,41 @@ public class GoPackageUtil {
   }
 
   @NotNull
-  public static Collection<String> getAllPackagesInDirectory(@Nullable final PsiDirectory dir, final boolean trimTestSuffices) {
+  public static Collection<String> getAllPackagesInDirectory(@Nullable final PsiDirectory dir,
+                                                             @Nullable Module contextModule,
+                                                             final boolean trimTestSuffices) {
     if (dir == null) return Collections.emptyList();
+    if (contextModule != null) {
+      return getAllPackagesInDirectoryInner(dir, contextModule, trimTestSuffices);
+    }
     Key<CachedValue<Collection<String>>> key = trimTestSuffices ? PACKAGES_TEST_TRIMMED_CACHE : PACKAGES_CACHE;
     return CachedValuesManager.getManager(dir.getProject()).getCachedValue(dir, key, new CachedValueProvider<Collection<String>>() {
       @Nullable
       @Override
       public Result<Collection<String>> compute() {
-        Collection<String> set = ContainerUtil.newLinkedHashSet();
         Module module = ModuleUtilCore.findModuleForPsiElement(dir);
-        for (PsiFile file : dir.getFiles()) {
-          if (file instanceof GoFile && GoPsiImplUtil.allowed(file, null, module)) {
-            String name = trimTestSuffices ? ((GoFile)file).getCanonicalPackageName() : ((GoFile)file).getPackageName();
-            if (StringUtil.isNotEmpty(name)) {
-              set.add(name);
-            }
-          }
-        }
-        return module != null
-               ? Result.create(set, dir, GoModuleSettings.getInstance(module).getBuildTargetSettings())
-               : Result.create(set, dir);
+        GoBuildTargetSettings buildTargetSettings = module != null ? GoModuleSettings.getInstance(module).getBuildTargetSettings() : null;
+        return buildTargetSettings != null
+               ? Result.create(getAllPackagesInDirectoryInner(dir, module, trimTestSuffices), dir, buildTargetSettings)
+               : Result.create(getAllPackagesInDirectoryInner(dir, null, trimTestSuffices), dir); 
       }
     }, false);
+  }
+
+  @NotNull
+  private static Collection<String> getAllPackagesInDirectoryInner(@NotNull PsiDirectory dir,
+                                                                   @Nullable Module contextModule,
+                                                                   boolean trimTestSuffices) {
+    Collection<String> set = ContainerUtil.newLinkedHashSet();
+    for (PsiFile file : dir.getFiles()) {
+      if (file instanceof GoFile && GoPsiImplUtil.allowed(file, null, contextModule)) {
+        String name = trimTestSuffices ? ((GoFile)file).getCanonicalPackageName() : ((GoFile)file).getPackageName();
+        if (StringUtil.isNotEmpty(name)) {
+          set.add(name);
+        }
+      }
+    }
+    return set;
   }
 
   @Nullable

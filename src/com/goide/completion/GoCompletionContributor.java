@@ -73,7 +73,7 @@ public class GoCompletionContributor extends CompletionContributor {
       boolean isTestFile = GoTestFinder.isTestFile(file);
       PsiDirectory directory = file.getParent();
       String currentPackageName = ((GoFile)file).getPackageName();
-      Collection<String> packagesInDirectory = GoPackageUtil.getAllPackagesInDirectory(directory, true);
+      Collection<String> packagesInDirectory = GoPackageUtil.getAllPackagesInDirectory(directory, null, true);
       for (String packageName : packagesInDirectory) {
         if (!packageName.equals(currentPackageName)) {
           result.addElement(packageLookup(packageName, GoCompletionUtil.PACKAGE_PRIORITY - 1));
