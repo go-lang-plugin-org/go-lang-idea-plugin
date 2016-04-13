@@ -313,6 +313,7 @@ public class GoFormattingModelBuilder implements FormattingModelBuilder {
       if (parentType == VAR_DECLARATION) return indentOfMultipleDeclarationChild(type, VAR_SPEC);
       if (parentType == TYPE_DECLARATION) return indentOfMultipleDeclarationChild(type, TYPE_SPEC);
       if (parentType == COMM_CLAUSE && child.getPsi() instanceof GoStatement) return Indent.getNormalIndent();
+      if (child.getPsi() instanceof GoExpression) return Indent.getContinuationWithoutFirstIndent(); 
       return Indent.getNoneIndent();
     }
 
