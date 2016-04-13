@@ -38,7 +38,7 @@ public class GoAutoImportInsertHandler<T extends GoNamedElement> implements Inse
   public static final InsertHandler<LookupElement> TYPE_CONVERSION_INSERT_HANDLER = new GoAutoImportInsertHandler<GoTypeSpec>(
     GoCompletionUtil.Lazy.TYPE_CONVERSION_INSERT_HANDLER, GoTypeSpec.class);
   public static final InsertHandler<LookupElement> FUNCTION_INSERT_HANDLER = new GoAutoImportInsertHandler<GoFunctionDeclaration>(
-    GoCompletionUtil.Lazy.FUNCTION_INSERT_HANDLER, GoFunctionDeclaration.class);
+    GoCompletionUtil.Lazy.VARIABLE_OR_FUNCTION_INSERT_HANDLER, GoFunctionDeclaration.class);
 
   @Nullable private final InsertHandler<LookupElement> myDelegate;
   @Nullable private final Class<T> myClass;
