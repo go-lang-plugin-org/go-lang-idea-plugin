@@ -191,7 +191,7 @@ public class GoUtil {
   @NotNull
   public static String suggestPackageForDirectory(@Nullable PsiDirectory directory) {
     String packageName = GoPsiImplUtil.getLocalPackageName(directory != null ? directory.getName() : "");
-    for (String p : GoPackageUtil.getAllPackagesInDirectory(directory, true)) {
+    for (String p : GoPackageUtil.getAllPackagesInDirectory(directory, null, true)) {
       if (!GoConstants.MAIN.equals(p)) {
         return p;
       }

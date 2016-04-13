@@ -31,6 +31,8 @@ import com.goide.util.GoUtil;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
 import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Conditions;
 import com.intellij.openapi.util.Ref;
@@ -126,7 +128,7 @@ public class GoFile extends PsiFileBase {
         List<GoFunctionDeclaration> functions = stub != null 
                                                 ? getChildrenByType(stub, GoTypes.FUNCTION_DECLARATION,
                                                                                  GoFunctionDeclarationStubElementType.ARRAY_FACTORY)
-                                                : GoFile.this.calc(
+                                                : calc(
                                                                Conditions.instanceOf(GoFunctionDeclaration.class));
         return Result.create(functions, GoFile.this);
       }
@@ -141,7 +143,7 @@ public class GoFile extends PsiFileBase {
         StubElement<GoFile> stub = getStub();
         List<GoMethodDeclaration> calc = stub != null
                                          ? getChildrenByType(stub, GoTypes.METHOD_DECLARATION, GoMethodDeclarationStubElementType.ARRAY_FACTORY)
-                                         : GoFile.this.calc(Conditions.instanceOf(GoMethodDeclaration.class));
+                                         : calc(Conditions.instanceOf(GoMethodDeclaration.class));
         return Result.create(calc, GoFile.this);
       }
     });
@@ -215,6 +217,7 @@ public class GoFile extends PsiFileBase {
       public Result<MultiMap<String, GoImportSpec>> compute() {
         MultiMap<String, GoImportSpec> map = MultiMap.createLinked();
         List<Object> dependencies = ContainerUtil.newArrayList(GoFile.this);
+        Module module = ModuleUtilCore.findModuleForPsiElement(GoFile.this);
         for (GoImportSpec spec : getImports()) {
           String alias = spec.getAlias();
           if (alias != null) {
@@ -228,7 +231,7 @@ public class GoFile extends PsiFileBase {
           GoImportString string = spec.getImportString();
           PsiDirectory dir = string.resolve();
           ContainerUtil.addIfNotNull(dependencies, dir);
-          Collection<String> packagesInDirectory = GoPackageUtil.getAllPackagesInDirectory(dir, true);
+          Collection<String> packagesInDirectory = GoPackageUtil.getAllPackagesInDirectory(dir, module, true);
           if (!packagesInDirectory.isEmpty()) {
             for (String packageNames : packagesInDirectory) {
               if (!StringUtil.isEmpty(packageNames)) {

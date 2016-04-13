@@ -58,7 +58,7 @@ public class GoInvalidPackageImportInspection extends GoInspectionBase {
         if (GoPackageUtil.isBuiltinPackage(resolve)) {
           problemsHolder.registerProblem(importSpec, "Cannot import 'builtin' package", new GoDeleteImportQuickFix());
         }
-        Collection<String> packagesInDirectory = GoPackageUtil.getAllPackagesInDirectory(resolve, true);
+        Collection<String> packagesInDirectory = GoPackageUtil.getAllPackagesInDirectory(resolve, module, true);
         if (packagesInDirectory.isEmpty()) {
           problemsHolder.registerProblem(importSpec, "'" + resolve.getVirtualFile().getPath() + "' has no buildable Go source files",
                                          new GoDeleteImportQuickFix());
