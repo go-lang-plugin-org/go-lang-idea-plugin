@@ -1,5 +1,5 @@
 <p>Escape comment text for HTML. If nice is set,
-also turn &ldquo; into &amp;ldquo; and &rdquo into &amp;rdquo;.
+also turn &ldquo; into &amp;ldquo; and &rdquo; into &amp;rdquo;.
 </p>
 <pre>   Escape comment text for HTML. If nice is set,
    also turn `` into &amp;ldquo; and '' into &amp;rdquo;.</pre>
