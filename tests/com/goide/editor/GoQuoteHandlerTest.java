@@ -22,7 +22,7 @@ public class GoQuoteHandlerTest extends GoCodeInsightFixtureTestCase {
   public void testNewlineInStringLiteral() {
     myFixture.configureByText("t.go", "package t; const c = \"const<caret>value\"");
     myFixture.type('\n');
-    myFixture.checkResult("package t; const c = \"const\" +\n\"<caret>value\"");
+    myFixture.checkResult("package t; const c = \"const\" +\n\t\"<caret>value\"");
   }
 
   public void testTypeSingleQuote() { doTypeQuoteTest('\''); }
