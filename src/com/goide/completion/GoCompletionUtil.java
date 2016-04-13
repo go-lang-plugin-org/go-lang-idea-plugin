@@ -63,8 +63,8 @@ public class GoCompletionUtil {
   public static class Lazy {
     private static final SingleCharInsertHandler DIR_INSERT_HANDLER = new SingleCharInsertHandler('/');
     private static final SingleCharInsertHandler PACKAGE_INSERT_HANDLER = new SingleCharInsertHandler('.');
-    
-    public static final InsertHandler<LookupElement> FUNCTION_INSERT_HANDLER = new InsertHandler<LookupElement>() {
+
+    public static final InsertHandler<LookupElement> VARIABLE_OR_FUNCTION_INSERT_HANDLER = new InsertHandler<LookupElement>() {
       @Override
       public void handleInsert(InsertionContext context, @NotNull LookupElement item) {
         PsiElement e = item.getPsiElement();
@@ -74,11 +74,11 @@ public class GoCompletionUtil {
         else if (e instanceof GoNamedElement) {
           GoType type = ((GoNamedElement)e).getGoType(null);
           if (type instanceof GoFunctionType) {
-            doInsert(context, item, ((GoFunctionType)type).getSignature());   
+            doInsert(context, item, ((GoFunctionType)type).getSignature());
           }
         }
       }
-  
+
       private void doInsert(InsertionContext context, @NotNull LookupElement item, GoSignature signature) {
         int paramsCount = signature != null ? signature.getParameters().getParameterDeclarationList().size() : 0;
         InsertHandler<LookupElement> handler = paramsCount == 0 ? ParenthesesInsertHandler.NO_PARAMETERS : ParenthesesInsertHandler.WITH_PARAMETERS;
@@ -100,6 +100,23 @@ public class GoCompletionUtil {
         }
       }
     };
+    private static final SingleCharInsertHandler FIELD_DEFINITION_INSERT_HANDLER = new SingleCharInsertHandler(':') {
+      @Override
+      public void handleInsert(@NotNull InsertionContext context, LookupElement item) {
+        PsiFile file = context.getFile();
+        if (!(file instanceof GoFile)) return;
+        context.commitDocument();
+        int offset = context.getStartOffset();
+        PsiElement at = file.findElementAt(offset);
+        GoCompositeElement ref = PsiTreeUtil.getParentOfType(at, GoValue.class, GoReferenceExpression.class);
+        if (ref instanceof GoReferenceExpression && (((GoReferenceExpression)ref).getQualifier() != null || GoPsiImplUtil.prevDot(ref))) {
+          return;
+        }
+        GoValue value = PsiTreeUtil.getParentOfType(at, GoValue.class);
+        if (value == null || PsiTreeUtil.getPrevSiblingOfType(value, GoKey.class) != null) return;
+        super.handleInsert(context, item);
+      }
+    };
     private static final LookupElementRenderer<LookupElement> FUNCTION_RENDERER = new LookupElementRenderer<LookupElement>() {
       @Override
       public void renderElement(@NotNull LookupElement element, @NotNull LookupElementPresentation p) {
@@ -115,7 +132,7 @@ public class GoCompletionUtil {
           paramText = signature.getParameters().getText();
           if (result != null) typeText = result.getText();
         }
-  
+
         p.setIcon(icon);
         p.setTypeText(typeText);
         p.setTypeGrayed(true);
@@ -138,7 +155,7 @@ public class GoCompletionUtil {
                     v instanceof GoConstDefinition ? GoIcons.CONSTANT :
                     v instanceof GoAnonymousFieldDefinition ? GoIcons.FIELD :
                     null;
-  
+
         p.setIcon(icon);
         p.setTailText(calcTailTextForFields(v), true);
         p.setTypeText(text);
@@ -147,8 +164,9 @@ public class GoCompletionUtil {
       }
     };
   }
-  
+
   private static boolean typesDisabled;
+
   @TestOnly
   public static void disableTypeInfoInLookup(@NotNull Disposable disposable) {
     typesDisabled = true;
@@ -183,7 +201,7 @@ public class GoCompletionUtil {
     return PrioritizedLookupElement.withPriority(LookupElementBuilder
                                                    .createWithSmartPointer(lookupString, f)
                                                    .withRenderer(Lazy.FUNCTION_RENDERER)
-                                                   .withInsertHandler(h != null ? h : Lazy.FUNCTION_INSERT_HANDLER), priority);
+                                                   .withInsertHandler(h != null ? h : Lazy.VARIABLE_OR_FUNCTION_INSERT_HANDLER), priority);
   }
 
   @Nullable
@@ -223,7 +241,7 @@ public class GoCompletionUtil {
 
   @NotNull
   public static LookupElement createLabelLookupElement(@NotNull GoLabelDefinition l, @NotNull String lookupString) {
-    return PrioritizedLookupElement.withPriority(LookupElementBuilder.createWithSmartPointer(lookupString, l).withIcon(GoIcons.LABEL), 
+    return PrioritizedLookupElement.withPriority(LookupElementBuilder.createWithSmartPointer(lookupString, l).withIcon(GoIcons.LABEL),
                                                  LABEL_PRIORITY);
   }
 
@@ -247,24 +265,9 @@ public class GoCompletionUtil {
   public static LookupElement createVariableLikeLookupElement(@NotNull GoNamedElement v) {
     String name = v.getName();
     if (StringUtil.isEmpty(name)) return null;
-    return createVariableLikeLookupElement(v, name, v instanceof GoFieldDefinition
-                                                    ? new SingleCharInsertHandler(':') {
-      @Override
-      public void handleInsert(@NotNull InsertionContext context, LookupElement item) {
-        PsiFile file = context.getFile();
-        if (!(file instanceof GoFile)) return;
-        context.commitDocument();
-        int offset = context.getStartOffset();
-        PsiElement at = file.findElementAt(offset);
-        GoCompositeElement ref = PsiTreeUtil.getParentOfType(at, GoValue.class, GoReferenceExpression.class);
-        if (ref instanceof GoReferenceExpression && (((GoReferenceExpression)ref).getQualifier() != null || GoPsiImplUtil.prevDot(ref))) {
-          return;
-        }
-        GoValue value = PsiTreeUtil.getParentOfType(at, GoValue.class);
-        if (value == null || PsiTreeUtil.getPrevSiblingOfType(value, GoKey.class) != null) return;
-        super.handleInsert(context, item);
-      }
-    } : v.getGoType(null) instanceof GoFunctionType ? Lazy.FUNCTION_INSERT_HANDLER : null, VAR_PRIORITY);
+    InsertHandler<LookupElement> insertHandler = v instanceof GoFieldDefinition ? Lazy.FIELD_DEFINITION_INSERT_HANDLER
+                                                                                : Lazy.VARIABLE_OR_FUNCTION_INSERT_HANDLER;
+    return createVariableLikeLookupElement(v, name, insertHandler, VAR_PRIORITY);
   }
 
   @NotNull
@@ -297,20 +300,21 @@ public class GoCompletionUtil {
   public static LookupElement createPackageLookupElement(@NotNull String importPath,
                                                          @Nullable PsiDirectory directory,
                                                          @Nullable PsiElement context,
-                                                         boolean vendoringEnabled, 
+                                                         boolean vendoringEnabled,
                                                          boolean forType) {
     return createPackageLookupElement(importPath, getContextImportPath(context, vendoringEnabled), directory, forType);
   }
 
   @NotNull
-  public static LookupElement createPackageLookupElement(@NotNull String importPath, @Nullable String contextImportPath, 
+  public static LookupElement createPackageLookupElement(@NotNull String importPath, @Nullable String contextImportPath,
                                                          @Nullable PsiDirectory directory, boolean forType) {
-    LookupElementBuilder builder = directory != null 
-                                   ? LookupElementBuilder.create(directory, importPath) 
+    LookupElementBuilder builder = directory != null
+                                   ? LookupElementBuilder.create(directory, importPath)
                                    : LookupElementBuilder.create(importPath);
     return PrioritizedLookupElement.withPriority(builder.withLookupString(importPath.substring(Math.max(0, importPath.lastIndexOf('/'))))
-        .withIcon(GoIcons.PACKAGE).withInsertHandler(forType ? Lazy.PACKAGE_INSERT_HANDLER : null),
-      calculatePackagePriority(importPath, contextImportPath));
+                                                   .withIcon(GoIcons.PACKAGE)
+                                                   .withInsertHandler(forType ? Lazy.PACKAGE_INSERT_HANDLER : null),
+                                                 calculatePackagePriority(importPath, contextImportPath));
   }
 
   public static int calculatePackagePriority(@NotNull String importPath, @Nullable String currentPath) {
