@@ -22,10 +22,8 @@ import com.intellij.notification.NotificationListener;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.components.ApplicationComponent;
-import com.intellij.util.text.VersionComparatorUtil;
 import org.jetbrains.annotations.NotNull;
 
-import static com.goide.util.GoUtil.PLUGIN_VERSION;
 
 public class ProjectTutorialNotification implements ApplicationComponent {
 
@@ -34,17 +32,14 @@ public class ProjectTutorialNotification implements ApplicationComponent {
   @Override
   public void initComponent() {
     PropertiesComponent propertiesComponent = PropertiesComponent.getInstance();
-    boolean shownAlready;
+    boolean wasDisplayed;
     //noinspection SynchronizationOnLocalVariableOrMethodParameter
     synchronized (propertiesComponent) {
-      String storedVersion = propertiesComponent.getValue(GO_PROJECT_TUTORIAL_NOTIFICATION_SHOWN, "0.0");
-      shownAlready = VersionComparatorUtil.compare(storedVersion, PLUGIN_VERSION) == 0;
-      propertiesComponent.setValue(GO_PROJECT_TUTORIAL_NOTIFICATION_SHOWN, PLUGIN_VERSION);
+      wasDisplayed = propertiesComponent.getBoolean(GO_PROJECT_TUTORIAL_NOTIFICATION_SHOWN, false);
+      propertiesComponent.setValue(GO_PROJECT_TUTORIAL_NOTIFICATION_SHOWN, true);
     }
 
-    if (shownAlready) {
-      return;
-    }
+    if (wasDisplayed) return;
 
     Notifications.Bus.notify(GoConstants.GO_NOTIFICATION_GROUP.createNotification("Learn how to setup a new Go project",
       "Please visit our " +
