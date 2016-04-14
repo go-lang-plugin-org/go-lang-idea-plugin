@@ -498,6 +498,15 @@ public class GoPsiImplUtil {
     return o.getReference().resolve();
   }
 
+  @Nullable
+  public static GoType getLiteralType(@Nullable GoCompositeLit lit) {
+    GoType type = lit != null ? lit.getType() : null;
+    if (type != null) return type;
+    GoTypeReferenceExpression ref = lit != null ? lit.getTypeReferenceExpression() : null;
+    GoType resolve = ref == null ? null : ref.resolveType();
+    return resolve != null ? resolve.getUnderlyingType() : null;
+  }
+
   public static GoType resolveType(@NotNull GoTypeReferenceExpression expression) {
     PsiElement resolve = expression.resolve();
     if (resolve instanceof GoTypeSpec) return ((GoTypeSpec)resolve).getSpecType();

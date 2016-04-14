@@ -53,7 +53,7 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
     if (key == null && (value == null || PsiTreeUtil.getPrevSiblingOfType(value, GoKey.class) != null)) return true;
 
     GoCompositeLit lit = getLiteral();
-    GoType type = getLiteralType(lit);
+    GoType type = GoPsiImplUtil.getLiteralType(lit);
     
     PsiElement p = PsiTreeUtil.getParentOfType(myElement, GoLiteralValue.class);
     while (lit != null && p != null) {
@@ -64,15 +64,6 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
 
     if (!processStructType(fieldProcessor, type)) return false;
     return !(type instanceof GoPointerType && !processStructType(fieldProcessor, ((GoPointerType)type).getType()));
-  }
-
-  @Nullable
-  private static GoType getLiteralType(@Nullable GoCompositeLit lit) {
-    GoType type = lit != null ? lit.getType() : null;
-    if (type != null) return type;
-    GoTypeReferenceExpression ref = lit != null ? lit.getTypeReferenceExpression() : null;
-    GoType resolve = ref == null ? null : ref.resolveType();
-    return resolve != null ? resolve.getUnderlyingType() : null;
   }
 
   @Nullable
@@ -122,7 +113,7 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
   }
 
   public boolean inStructTypeKey() {
-    return myValue == null && getLiteralType(getLiteral()) instanceof GoStructType;
+    return myValue == null && GoPsiImplUtil.getLiteralType(getLiteral()) instanceof GoStructType;
   }
 
   @Nullable
