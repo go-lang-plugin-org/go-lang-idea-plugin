@@ -58,7 +58,6 @@ public class GoUtil {
     }
   };
   private static final String PLUGIN_ID = "ro.redeul.google.go";
-  public static final String PLUGIN_VERSION = getPlugin().getVersion();
 
   private GoUtil() {}
 
