@@ -33,6 +33,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.goide.GoConstants.TESTING_PATH;
+
 public class GoPlaceholderCountInspection extends GoInspectionBase {
   private static final Pattern PLACEHOLDER_PATTERN =
     Pattern.compile("((?<!(?:[^%]%|%%%))%(?:#|\\+|-)?((\\[\\d+\\]|\\*?)?\\.?)*(\\d*\\.?\\d*)*\\s?(v|T|t|b|c|d|o|q|x|X|U|b|e|E|f|F|g|G|s|q|x|X|p))");
@@ -49,13 +51,15 @@ public class GoPlaceholderCountInspection extends GoInspectionBase {
     Pair.pair("scanf", 0),
     Pair.pair("sscanf", 1),
     Pair.pair("fatalf", 0),
-    Pair.pair("panicf", 0));
+    Pair.pair("panicf", 0),
+    Pair.pair("logf", 0),
+    Pair.pair("skipf", 0));
 
   private static int getPlaceholderPosition(@NotNull GoFunctionOrMethodDeclaration function) {
     Integer position = FORMATTING_FUNCTIONS.get(StringUtil.toLowerCase(function.getName()));
     if (position != null) {
       String importPath = function.getContainingFile().getImportPath(false);
-      if ("fmt".equals(importPath) || "log".equals(importPath)) {
+      if ("fmt".equals(importPath) || "log".equals(importPath) || TESTING_PATH.equals(importPath)) {
         return position;
       }
     }
