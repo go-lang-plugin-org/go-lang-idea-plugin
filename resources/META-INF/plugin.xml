@@ -233,7 +233,7 @@
                      groupName="Probable bugs" enabledByDefault="true" level="WARNING"
                      implementationClass="com.goide.inspections.GoStructTagInspection"/>
     <localInspection language="go" displayName="Printf/Logf placeholder handler" groupPath="Go"
-                     groupName="Probable bug" enabledByDefault="true" level="WARNING"
+                     groupName="Probable bugs" enabledByDefault="true" level="WARNING"
                      implementationClass="com.goide.inspections.GoPlaceholderCountInspection"/>
     <!-- /probable bugs -->
 
