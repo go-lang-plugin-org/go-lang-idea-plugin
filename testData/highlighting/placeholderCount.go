@@ -2,6 +2,7 @@ package placeholderCount
 
 import "fmt"
 import "log"
+import "testing"
 
 const (
 	myFormatConst      = "%d %d %#[1]x %#x %2.f %d %2.2f %.f %.3f %[9]*.[2]*[3]f %d %f %#[1]x %#x %[2]d %v % d"
@@ -16,7 +17,7 @@ var s string = "%d"
 const s1 = <error descr="Cyclic definition detected">s1</error>
 const s2 = 1
 
-func _() {
+func _(t *testing.T) {
 	fmt.Printf(<warning descr="Got 1 placeholder(s) for 2 arguments(s)">s</warning>, 1, 2)
 
 	fmt.Printf(<warning descr="Value used for formatting text does not appear to be a string">s1</warning>, 1, 2)
@@ -75,8 +76,16 @@ func _() {
 	log.Printf(<warning descr="Got 9 placeholder(s) for 8 arguments(s)">myWrongFormatVar</warning>, 1, 2, 3, 4, 5, 6, 7, 8)
 
 	log.Printf(myFormatConst, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+	t.Errorf(myFormatConst, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+	t.Fatalf(myFormatConst, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+	t.Logf(myFormatConst, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+	t.Skipf(myFormatConst, 1, 2, 3, 4, 5, 6, 7, 8, 9)
 
 	log.Printf(<warning descr="Got 9 placeholder(s) for 8 arguments(s)">myWrongFormatConst</warning>, 1, 2, 3, 4, 5, 6, 7, 8)
+	t.Errorf(<warning descr="Got 9 placeholder(s) for 8 arguments(s)">myWrongFormatConst</warning>, 1, 2, 3, 4, 5, 6, 7, 8)
+	t.Fatalf(<warning descr="Got 9 placeholder(s) for 8 arguments(s)">myWrongFormatConst</warning>, 1, 2, 3, 4, 5, 6, 7, 8)
+	t.Logf(<warning descr="Got 9 placeholder(s) for 8 arguments(s)">myWrongFormatConst</warning>, 1, 2, 3, 4, 5, 6, 7, 8)
+	t.Skipf(<warning descr="Got 9 placeholder(s) for 8 arguments(s)">myWrongFormatConst</warning>, 1, 2, 3, 4, 5, 6, 7, 8)
 
 	printf("%d", 1)
 	printf("%[2]d %[1]d", 1, 2)
