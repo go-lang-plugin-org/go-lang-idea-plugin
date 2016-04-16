@@ -29,7 +29,9 @@ import com.goide.stubs.index.GoMethodIndex;
 import com.goide.util.GoStringLiteralEscaper;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.highlighting.ReadWriteAccessDetector;
+import com.intellij.diagnostic.AttachmentFactory;
 import com.intellij.lang.ASTNode;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
@@ -63,6 +65,7 @@ import static com.goide.psi.impl.GoLightType.*;
 import static com.intellij.codeInsight.highlighting.ReadWriteAccessDetector.Access.*;
 
 public class GoPsiImplUtil {
+  private static final Logger LOG = Logger.getInstance(GoPsiImplUtil.class);
   public static final Key<SmartPsiElementPointer<GoReferenceExpressionBase>> CONTEXT = Key.create("CONTEXT");
   public static final NotNullFunction<PsiElement, String> GET_TEXT_FUNCTION = new NotNullFunction<PsiElement, String>() {
     @NotNull
@@ -1290,9 +1293,16 @@ public class GoPsiImplUtil {
   @Nullable
   public static GoExpression getValue(@NotNull GoVarDefinition definition) {
     PsiElement parent = definition.getParent();
-    assert parent instanceof GoVarSpec;
-    int index = ((GoVarSpec)parent).getVarDefinitionList().indexOf(definition);
-    return getByIndex(((GoVarSpec)parent).getRightExpressionsList(), index);
+    if (parent instanceof GoVarSpec) {
+      int index = ((GoVarSpec)parent).getVarDefinitionList().indexOf(definition);
+      return getByIndex(((GoVarSpec)parent).getRightExpressionsList(), index);
+    }
+    if (parent instanceof GoTypeSwitchStatement) {
+      return ((GoTypeSwitchStatement)parent).getTypeSwitchGuard().getExpression();
+    }
+    LOG.error("Cannot find value for variable definition: " + definition.getText(), 
+              AttachmentFactory.createAttachment(definition.getContainingFile().getVirtualFile()));
+    return null;
   }
 
   @Nullable
