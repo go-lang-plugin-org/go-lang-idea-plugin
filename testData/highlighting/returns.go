@@ -50,7 +50,7 @@ func Ok3() int {
 
 func Ok4() bool {
     for {
-
+        println("to infinity and beyond!")
     }
 }
 

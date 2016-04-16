@@ -45,6 +45,12 @@ public class GoElementFactory {
   }
 
   @NotNull
+  public static PsiElement createSelectStatement(@NotNull Project project) {
+    GoFile file = createFileFromText(project, "package main\nfunc _() { select {\n} }");
+    return PsiTreeUtil.findChildOfType(file, GoSelectStatement.class);
+  }
+
+  @NotNull
   public static PsiElement createIdentifierFromText(@NotNull Project project, String text) {
     GoFile file = createFileFromText(project, "package " + text);
     return file.getPackage().getIdentifier();
