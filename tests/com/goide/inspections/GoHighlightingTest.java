@@ -320,6 +320,10 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     myFixture.checkHighlighting();
   }
 
+  public void testBlankPackage() {
+    myFixture.configureByText("a.go", "package <error descr=\"Invalid package name\">_</error>");
+    myFixture.checkHighlighting();
+  }
 
   public void testMultiplePackages() {
     myFixture.addFileToProject("a.go", "package a");
