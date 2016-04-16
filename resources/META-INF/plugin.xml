@@ -274,6 +274,9 @@
     <localInspection language="go" displayName="Used as value in condition" groupPath="Go"
                      groupName="Control flow issues" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoUsedAsValueInCondition"/>
+    <localInspection language="go" displayName="Infinite for loop" groupPath="Go"
+                     groupName="Control flow issues" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoInfiniteForInspection"/>
     <localInspection language="go" displayName="Defer in loop" groupPath="Go"
                      groupName="Control flow issues" enabledByDefault="true" level="WEAK WARNING"
                      implementationClass="com.goide.inspections.GoDeferInLoopInspection"/>
