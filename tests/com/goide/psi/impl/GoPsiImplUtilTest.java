@@ -183,6 +183,15 @@ public class GoPsiImplUtilTest extends GoCodeInsightFixtureTestCase {
     assertEquals("int", type.getText());
   }
   
+  public void testGetValueOfVarDefinitionInSelect() {
+    myFixture.configureByText("a.go", "package main\n\n func _() { bar := nil; select fo<caret>o := bar.(type){}}");
+    GoVarDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarDefinition.class);
+    assertNotNull(definition);
+    GoExpression value = definition.getValue();
+    assertNotNull(value);
+    assertEquals("bar", value.getText());
+  }
+  
   public void testGetValueOfSingleVarDefinition() {
     myFixture.configureByText("a.go", "package main\n\n var fo<caret>o int = 1");
     GoVarDefinition definition = PsiTreeUtil.getNonStrictParentOfType(myFixture.getElementAtCaret(), GoVarDefinition.class);
