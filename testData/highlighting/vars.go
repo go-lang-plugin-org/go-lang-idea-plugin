@@ -21,18 +21,18 @@ func simple(a int) int {
 }
 
 func Foo() {
-    <error>err</error> := 1
+    <error descr="Unused variable 'err'">err</error> := 1
     err = 2
 }
 
 func Foo2() {
-    <error>err</error> := 1
+    <error descr="Unused variable 'err'">err</error> := 1
     err,x := 2,1
     fmt.Println(x)
 }
 
 func _(p interface{}) error {
-	switch <error>p</error> := p.(type) {
+	switch <error descr="Unused variable 'p'">p</error> := p.(type) {
 		case error:
 		return nil
 	}
@@ -43,11 +43,21 @@ type Image interface {
 	At(x, y int)
 }
 
+type Image2 interface {
+}
+
+
 func _() {
 	var p Image
 	switch q := p.(type) {
 	case Image:
 		fmt.Println("draw.Image")
+		switch p.(type) {
+		case Image2:
+			q.At(0,0)
+		}
+	case Image2:
+		q.<error descr="Unresolved reference 'At'">At</error>(0,0)
 	default:
 		fmt.Println("default")
 		q.At(0, 0)

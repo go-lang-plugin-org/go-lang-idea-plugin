@@ -550,14 +550,24 @@ public class GoPsiImplUtil {
     if (siblingType != null) return siblingType;
 
     if (parent instanceof GoTypeSwitchGuard) {
-      SmartPsiElementPointer<GoReferenceExpressionBase> pointer = context == null ? null : context.get(CONTEXT);
-      GoTypeCaseClause typeCase = PsiTreeUtil.getParentOfType(pointer != null ? pointer.getElement() : null, GoTypeCaseClause.class);
-      if (typeCase != null && typeCase.getDefault() != null) {
-        return ((GoTypeSwitchGuard)parent).getExpression().getGoType(context);
+      GoTypeSwitchStatement switchStatement = ObjectUtils.tryCast(parent.getParent(), GoTypeSwitchStatement.class);
+      if (switchStatement != null) {
+        SmartPsiElementPointer<GoReferenceExpressionBase> pointer = context == null ? null : context.get(CONTEXT);
+        GoTypeCaseClause typeCase = getTypeCaseClause(pointer != null ? pointer.getElement() : null, switchStatement);
+        if (typeCase != null) {
+          return typeCase.getDefault() != null
+                 ? ((GoTypeSwitchGuard)parent).getExpression().getGoType(context)
+                 : typeCase.getType();
+        }
       }
-      return typeCase != null ? typeCase.getType() : null;
     }
     return null;
+  }
+
+  @Nullable
+  private static GoTypeCaseClause getTypeCaseClause(@Nullable PsiElement context, @NotNull GoTypeSwitchStatement switchStatement) {
+    return SyntaxTraverser.psiApi().parents(context).takeWhile(Conditions.notEqualTo(switchStatement))
+      .filter(GoTypeCaseClause.class).last();
   }
 
   @Nullable
@@ -1300,7 +1310,7 @@ public class GoPsiImplUtil {
     if (parent instanceof GoTypeSwitchStatement) {
       return ((GoTypeSwitchStatement)parent).getTypeSwitchGuard().getExpression();
     }
-    LOG.error("Cannot find value for variable definition: " + definition.getText(), 
+    LOG.error("Cannot find value for variable definition: " + definition.getText(),
               AttachmentFactory.createAttachment(definition.getContainingFile().getVirtualFile()));
     return null;
   }
