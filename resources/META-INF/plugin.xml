@@ -303,6 +303,10 @@
                      groupName="General" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoUnderscoreUsedAsValueInspection"/>
     <!-- /general -->
+
+    <!-- color schemes -->
+    <bundledColorScheme path="colorscheme/Darcula - dlsniper"/>
+    <!-- /color schemes -->
   </extensions>
   <actions>
     <action id="Go.NewGoFile" class="com.goide.actions.file.GoCreateFileAction"
