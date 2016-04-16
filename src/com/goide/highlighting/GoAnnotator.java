@@ -46,6 +46,14 @@ public class GoAnnotator implements Annotator {
   public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
     if (!(element instanceof GoCompositeElement) || !element.isValid()) return;
 
+    if (element instanceof GoPackageClause) {
+      PsiElement identifier = ((GoPackageClause)element).getIdentifier();
+      if (identifier != null && identifier.textMatches("_")) {
+        holder.createErrorAnnotation(identifier, "Invalid package name");
+        return;
+      }
+    }
+
     if (element instanceof GoContinueStatement) {
       if (!(PsiTreeUtil.getParentOfType(element, GoForStatement.class, GoFunctionLit.class) instanceof GoForStatement)) {
         Annotation annotation = holder.createErrorAnnotation(element, "Continue statement not inside a for loop");
