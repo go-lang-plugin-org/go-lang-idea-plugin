@@ -32,8 +32,7 @@ import java.util.List;
 public class GoUnusedParameterInspection extends GoInspectionBase {
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder,
-                                     @SuppressWarnings({"UnusedParameters", "For future"}) @NotNull LocalInspectionToolSession session) {
+  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
       public void visitMethodDeclaration(@NotNull GoMethodDeclaration o) {
@@ -52,16 +51,15 @@ public class GoUnusedParameterInspection extends GoInspectionBase {
         if (signature == null) return;
         GoParameters parameters = signature.getParameters();
         visitParameterList(parameters.getParameterDeclarationList(), "parameter");
+
         GoResult result = signature.getResult();
-        if (result == null) return;
-        parameters = result.getParameters();
-        if (parameters == null) return;
-        visitParameterList(parameters.getParameterDeclarationList(), "named return parameter");
+        GoParameters returnParameters = result != null ? result.getParameters() : null;
+        if (returnParameters != null) {
+          visitParameterList(returnParameters.getParameterDeclarationList(), "named return parameter");
+        }
       }
 
       private void visitParameterList(List<GoParameterDeclaration> parameters, String what) {
-        if (parameters.isEmpty()) return;
-
         for (GoParameterDeclaration parameterDeclaration : parameters) {
           for (GoParamDefinition parameter : parameterDeclaration.getParamDefinitionList()) {
             ProgressManager.checkCanceled();
@@ -69,7 +67,7 @@ public class GoUnusedParameterInspection extends GoInspectionBase {
 
             Query<PsiReference> search = ReferencesSearch.search(parameter, parameter.getUseScope());
             if (search.findFirst() != null) continue;
-            
+
             String paramName = parameter.getIdentifier().getText();
             holder.registerProblem(parameter, "Unused " + what + " '" + paramName + "'", ProblemHighlightType.LIKE_UNUSED_SYMBOL);
           }
