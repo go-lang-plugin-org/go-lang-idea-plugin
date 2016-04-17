@@ -62,14 +62,8 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
   @Nullable
   static PsiFile getContextFile(@NotNull ResolveState state) {
-    PsiElement element = getContext(state);
+    PsiElement element = getContextElement(state);
     return element != null ? element.getContainingFile() : null;
-  }
-  
-  @Nullable
-  private static PsiElement getContext(@NotNull ResolveState state) {
-    SmartPsiElementPointer<GoReferenceExpressionBase> context = state.get(CONTEXT);
-    return context != null ? context.getElement() : null;
   }
 
   @NotNull
@@ -123,7 +117,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   public boolean processResolveVariants(@NotNull GoScopeProcessor processor) {
     PsiFile file = myElement.getContainingFile();
     if (!(file instanceof GoFile)) return false;
-    ResolveState state = createContext();
+    ResolveState state = createContextOnElement(myElement);
     GoReferenceExpressionBase qualifier = myElement.getQualifier();
     return qualifier != null
            ? processQualifierExpression((GoFile)file, qualifier, processor, state)
@@ -144,7 +138,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     }
     if (target instanceof PsiDirectory && !processDirectory((PsiDirectory)target, file, null, processor, state, false)) return false;
     if (target instanceof GoTypeOwner) {
-      GoType type = typeOrParameterType((GoTypeOwner)target, createContext());
+      GoType type = typeOrParameterType((GoTypeOwner)target, createContextOnElement(myElement));
       if (type instanceof GoCType) return processor.execute(myElement, state);
       if (type != null) {
         if (!processGoType(type, processor, state)) return false;
@@ -389,16 +383,10 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
       PsiReference ref = o.getReference();
       PsiElement resolve = ref != null ? ref.resolve() : null;
       if (resolve == o) return processor.execute(myElement, state); // var c = C.call(); c.a.b.d;
-      GoType type = e.getGoType(createContext());
+      GoType type = e.getGoType(createContextOnElement(myElement));
       if (type != null && !processGoType(type, processor, state)) return false;
     }
     return true;
-  }
-
-  @NotNull
-  private ResolveState createContext() {
-    return ResolveState.initial().put(CONTEXT,
-                                      SmartPointerManager.getInstance(myElement.getProject()).createSmartPsiElementPointer(myElement));
   }
 
   @NotNull
@@ -421,7 +409,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
         public boolean value(@NotNull GoNamedElement o) {
           return !Comparing.equal(GoConstants.IOTA, o.getName()) ||
                  !builtin(o) ||
-                 PsiTreeUtil.getParentOfType(getContext(state), GoConstSpec.class) != null;
+                 PsiTreeUtil.getParentOfType(getContextElement(state), GoConstSpec.class) != null;
         }
       }, localProcessing, false)) return false;
     if (!processNamedElements(processor, state, file.getVars(), localProcessing)) return false;

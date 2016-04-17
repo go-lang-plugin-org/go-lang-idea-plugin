@@ -66,7 +66,7 @@ import static com.intellij.codeInsight.highlighting.ReadWriteAccessDetector.Acce
 
 public class GoPsiImplUtil {
   private static final Logger LOG = Logger.getInstance(GoPsiImplUtil.class);
-  public static final Key<SmartPsiElementPointer<GoReferenceExpressionBase>> CONTEXT = Key.create("CONTEXT");
+  private static final Key<SmartPsiElementPointer<PsiElement>> CONTEXT = Key.create("CONTEXT");
   public static final NotNullFunction<PsiElement, String> GET_TEXT_FUNCTION = new NotNullFunction<PsiElement, String>() {
     @NotNull
     @Override
@@ -106,6 +106,17 @@ public class GoPsiImplUtil {
 
   public static int getArity(@Nullable GoSignature s) {
     return s == null ? -1 : s.getParameters().getParameterDeclarationList().size();
+  }
+
+  @Nullable
+  public static PsiElement getContextElement(@Nullable ResolveState state) {
+    SmartPsiElementPointer<PsiElement> context = state != null ? state.get(CONTEXT) : null;
+    return context != null ? context.getElement() : null;
+  }
+
+  @NotNull
+  public static ResolveState createContextOnElement(@NotNull PsiElement element) {
+    return ResolveState.initial().put(CONTEXT, SmartPointerManager.getInstance(element.getProject()).createSmartPsiElementPointer(element));
   }
 
   @Nullable
@@ -317,7 +328,7 @@ public class GoPsiImplUtil {
           @Nullable
           @Override
           public Result<GoType> compute() {
-            return Result.create(unwrapParType(o, null), PsiModificationTracker.MODIFICATION_COUNT);
+            return Result.create(unwrapParType(o, createContextOnElement(o)), PsiModificationTracker.MODIFICATION_COUNT);
           }
         });
       }
@@ -552,12 +563,9 @@ public class GoPsiImplUtil {
     if (parent instanceof GoTypeSwitchGuard) {
       GoTypeSwitchStatement switchStatement = ObjectUtils.tryCast(parent.getParent(), GoTypeSwitchStatement.class);
       if (switchStatement != null) {
-        SmartPsiElementPointer<GoReferenceExpressionBase> pointer = context == null ? null : context.get(CONTEXT);
-        GoTypeCaseClause typeCase = getTypeCaseClause(pointer != null ? pointer.getElement() : null, switchStatement);
+        GoTypeCaseClause typeCase = getTypeCaseClause(getContextElement(context), switchStatement);
         if (typeCase != null) {
-          return typeCase.getDefault() != null
-                 ? ((GoTypeSwitchGuard)parent).getExpression().getGoType(context)
-                 : typeCase.getType();
+          return typeCase.getDefault() != null ? ((GoTypeSwitchGuard)parent).getExpression().getGoType(context) : typeCase.getType();
         }
       }
     }
