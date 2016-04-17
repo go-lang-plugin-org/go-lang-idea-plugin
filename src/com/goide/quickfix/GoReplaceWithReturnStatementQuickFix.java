@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.goide.quickfix;
 
+import com.goide.psi.GoStatement;
 import com.goide.psi.impl.GoElementFactory;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.openapi.command.WriteCommandAction;
@@ -53,11 +54,13 @@ public class GoReplaceWithReturnStatementQuickFix extends LocalQuickFixAndIntent
                      @Nullable("is null when called from inspection") Editor editor,
                      @NotNull final PsiElement startElement,
                      @NotNull PsiElement endElement) {
-    new WriteCommandAction.Simple(project, getName(), file) {
+    WriteCommandAction.runWriteCommandAction(project, new Runnable() {
       @Override
-      protected void run() throws Throwable {
-        startElement.replace(GoElementFactory.createReturnStatement(project));
+      public void run() {
+        if (startElement instanceof GoStatement) {
+          startElement.replace(GoElementFactory.createReturnStatement(project));
+        }
       }
-    }.execute();
+    });
   }
 }
