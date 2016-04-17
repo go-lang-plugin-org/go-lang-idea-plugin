@@ -51,7 +51,8 @@ public class GoUnusedFunctionInspection extends GoInspectionBase {
           PsiElement id = o.getIdentifier();
           TextRange range = TextRange.from(id.getStartOffsetInParent(), id.getTextLength());
           holder.registerProblem(o, "Unused function " + "'" + name + "'", ProblemHighlightType.LIKE_UNUSED_SYMBOL, range,
-                                 new GoDeleteQuickFix("Delete function '" + name + "'"), new GoRenameToBlankQuickFix(o));
+                                 new GoDeleteQuickFix("Delete function '" + name + "'", GoFunctionDeclaration.class), 
+                                 new GoRenameToBlankQuickFix(o));
         }
       }
     };
