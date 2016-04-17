@@ -167,10 +167,10 @@ const name1 int = 10
 
 func _(st interface {Foo()}, st1 Iface) {
     <error descr="Cannot assign to constant">name1</error>, <error descr="Cannot assign to constant">name1</error> = 1, 2
-    for <error descr="Cannot assign to constant">name1</error> = range st {
+    for <error descr="Cannot assign to constant">name1</error> = range <error descr="Cannot range over data (type interface {...})">st</error> {
         
     }
-    for <error descr="Cannot assign to constant">name1</error> = range st {
+    for <error descr="Cannot assign to constant">name1</error> = range <error descr="Cannot range over data (type interface {...})">st</error> {
         
     }
     Println(st.Foo() + st1.Boo())
@@ -465,7 +465,7 @@ func NewDataSlice() *DataSlice {
 
 func _() {
 	data := NewDataSlice()
-	for _, element := range data {
+	for _, element := range <error descr="Cannot range over data (type *DataSlice)">data</error> {
 		if  element.SomeId > 20 {
 			println("some text")
 		}

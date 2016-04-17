@@ -860,7 +860,7 @@ public class GoPsiImplUtil {
     if (o instanceof GoParType) return ((GoParType)o).getActualType();
 
     if (o instanceof GoSpecType) {
-      return getUnderlyingType(((GoSpecType)o).getType());
+      return ((GoSpecType)o).getType().getUnderlyingType();
     }
 
     if (builtin(o)) return o;
@@ -868,7 +868,7 @@ public class GoPsiImplUtil {
     GoTypeReferenceExpression e = o.getTypeReferenceExpression();
     GoType byRef = e == null ? null : e.resolveType();
     if (byRef != null) {
-      return getUnderlyingType(byRef);
+      return byRef.getUnderlyingType();
     }
 
     return o;
