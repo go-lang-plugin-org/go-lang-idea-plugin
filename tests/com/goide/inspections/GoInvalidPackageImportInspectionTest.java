@@ -206,7 +206,7 @@ public class GoInvalidPackageImportInspectionTest extends GoQuickFixTestBase {
     applySingleQuickFix(GoDeleteImportQuickFix.QUICK_FIX_NAME);
     myFixture.checkResult("package a; ");
   }
-  
+
   public void testImportTestDataDirectory() {
     myFixture.addFileToProject("pack/testdata/pack/foo.go", "package test");
     myFixture.configureByText("a.go", "package a\n" +
@@ -216,6 +216,22 @@ public class GoInvalidPackageImportInspectionTest extends GoQuickFixTestBase {
     applySingleQuickFix(GoDeleteImportQuickFix.QUICK_FIX_NAME);
     myFixture.checkResult("package a\nimport `pack/testdata/pack`\n");
   }
+
+  public void testImportCWithAlias() {
+    myFixture.configureByText("a.go", 
+                              "package t; import `C`; import <error descr=\"Cannot import 'builtin' package\">alias `<caret>C`</error>;");
+    myFixture.checkHighlighting();
+    applySingleQuickFix(GoInvalidPackageImportInspection.DELETE_ALIAS_QUICK_FIX_NAME);
+    myFixture.checkResult("package t; import `C`; import `C`;");
+  }
+
+  public void testImportCWithDot() {
+    myFixture.configureByText("a.go", "package t; import `C`; import <error descr=\"Cannot rename import `C`\">. `<caret>C`</error>;");
+    myFixture.checkHighlighting();
+    applySingleQuickFix(GoInvalidPackageImportInspection.DELETE_ALIAS_QUICK_FIX_NAME);
+    myFixture.checkResult("package t; import `C`; import `C`;");
+  }
+
 
   private Collection<String> getIntentionNames() {
     return ContainerUtil.map(myFixture.getAvailableIntentions(), new Function<IntentionAction, String>() {

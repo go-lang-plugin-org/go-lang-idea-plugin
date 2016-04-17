@@ -30,19 +30,26 @@ import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInspection.LocalQuickFixBase;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.ElementManipulators;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
+import com.intellij.util.ObjectUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Set;
 
 public class GoInvalidPackageImportInspection extends GoInspectionBase {
+  public static final String DELETE_ALIAS_QUICK_FIX_NAME = "Delete alias";
+
   @Override
   protected void checkFile(@NotNull GoFile file, @NotNull ProblemsHolder problemsHolder) {
     Module module = ModuleUtilCore.findModuleForPsiElement(file);
@@ -51,8 +58,22 @@ public class GoInvalidPackageImportInspection extends GoInspectionBase {
     String sdkVersion = GoSdkService.getInstance(file.getProject()).getSdkVersion(module);
     boolean supportsInternalPackages = GoVendoringUtil.supportsInternalPackages(sdkVersion);
     boolean supportsInternalPackagesInSdk = sdkHome != null && GoVendoringUtil.supportsSdkInternalPackages(sdkVersion);
-    
+
     for (GoImportSpec importSpec : file.getImports()) {
+      if (importSpec.isCImport()) {
+        PsiElement dot = importSpec.getDot();
+        if (dot != null) {
+          problemsHolder.registerProblem(importSpec, "Cannot rename import `C`", new GoDeleteImportSpecAlias(),
+                                         new GoDeleteImportQuickFix());
+        }
+        PsiElement identifier = importSpec.getIdentifier();
+        if (identifier != null) {
+          problemsHolder.registerProblem(importSpec, "Cannot import 'builtin' package", new GoDeleteImportSpecAlias(),
+                                         new GoDeleteImportQuickFix());
+        }
+        continue;
+      }
+
       PsiDirectory resolve = importSpec.getImportString().resolve();
       if (resolve != null) {
         if (GoPackageUtil.isBuiltinPackage(resolve)) {
@@ -128,6 +149,34 @@ public class GoInvalidPackageImportInspection extends GoInspectionBase {
     }
   }
 
+  private static class GoDeleteImportSpecAlias extends LocalQuickFixBase {
+    protected GoDeleteImportSpecAlias() {
+      super(DELETE_ALIAS_QUICK_FIX_NAME);
+    }
+
+    @Override
+    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+      GoImportSpec element = ObjectUtils.tryCast(descriptor.getPsiElement(), GoImportSpec.class);
+      if (element != null) {
+        WriteCommandAction.runWriteCommandAction(project, new Runnable() {
+          @Override
+          public void run() {
+            PsiElement dot = element.getDot();
+            if (dot != null) {
+              dot.delete();
+              return;
+            }
+
+            PsiElement identifier = element.getIdentifier();
+            if (identifier != null) {
+              identifier.delete();
+            }
+          }
+        });
+      }
+    }
+  }
+
   private static class GoReplaceImportPath extends LocalQuickFixBase implements HighPriorityAction {
     @NotNull private final String myNewImportPath;
 
@@ -138,10 +187,10 @@ public class GoInvalidPackageImportInspection extends GoInspectionBase {
 
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-      PsiElement element = descriptor.getPsiElement();
-      PsiFile file = element != null ? element.getContainingFile() : null;
-      if (!(element instanceof GoImportSpec) || !(file instanceof GoFile)) return;
-      ElementManipulators.handleContentChange(((GoImportSpec)element).getImportString(), myNewImportPath);
+      GoImportSpec element = ObjectUtils.tryCast(descriptor.getPsiElement(), GoImportSpec.class);
+      if (element != null) {
+        ElementManipulators.handleContentChange(element.getImportString(), myNewImportPath);
+      }
     }
   }
 }
