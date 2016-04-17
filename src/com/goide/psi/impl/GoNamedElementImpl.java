@@ -118,7 +118,8 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
       @Nullable
       @Override
       public Result<GoType> compute() {
-        return Result.create(getGoTypeInner(null), PsiModificationTracker.MODIFICATION_COUNT);
+        return Result.create(getGoTypeInner(GoPsiImplUtil.createContextOnElement(GoNamedElementImpl.this)), 
+                             PsiModificationTracker.MODIFICATION_COUNT);
       }
     });
   }
