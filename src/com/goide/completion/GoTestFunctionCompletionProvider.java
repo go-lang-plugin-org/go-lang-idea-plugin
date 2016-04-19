@@ -42,7 +42,6 @@ import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.CommonProcessors;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
@@ -79,8 +78,8 @@ public class GoTestFunctionCompletionProvider extends CompletionProvider<Complet
         });
       }
 
-      Collection<String> methodKeys = ContainerUtil.newHashSet();
-      StubIndex.getInstance().processAllKeys(GoMethodIndex.KEY, new CommonProcessors.CollectProcessor<String>(methodKeys), scope, idFilter);
+      Collection<String> methodKeys = ContainerUtil.newTroveSet();
+      StubIndex.getInstance().processAllKeys(GoMethodIndex.KEY, new CancellableCollectProcessor<String>(methodKeys), scope, idFilter);
       for (final String key : methodKeys) {
         Processor<GoMethodDeclaration> processor = new Processor<GoMethodDeclaration>() {
           @Override
@@ -133,7 +132,7 @@ public class GoTestFunctionCompletionProvider extends CompletionProvider<Complet
     IdFilter packageIdFilter = GoIdFilter.getFilesFilter(packageScope);
     
     Set<String> result = ContainerUtil.newHashSet();
-    StubIndex.getInstance().processAllKeys(GoFunctionIndex.KEY, new CommonProcessors.CollectProcessor<String>(result) {
+    StubIndex.getInstance().processAllKeys(GoFunctionIndex.KEY, new CancellableCollectProcessor<String>(result) {
       @Override
       protected boolean accept(String s) {
         return !"_".equals(s) && StringUtil.isCapitalized(s);

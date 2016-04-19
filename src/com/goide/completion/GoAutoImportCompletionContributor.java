@@ -137,14 +137,10 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
     }
 
     Set<String> allNames = ContainerUtil.newTroveSet();
-    StubIndex.getInstance().processAllKeys(ALL_PUBLIC_NAMES, new Processor<String>() {
+    StubIndex.getInstance().processAllKeys(ALL_PUBLIC_NAMES, new CancellableCollectProcessor<String>(allNames) {
       @Override
-      public boolean process(String s) {
-        ProgressManager.checkCanceled();
-        if (emptyPrefix || matcher.prefixMatches(s) || packagesWithAliases.contains(substringBefore(s, '.'))) {
-          allNames.add(s);
-        }
-        return true;
+      protected boolean accept(String s) {
+        return emptyPrefix || matcher.prefixMatches(s) || packagesWithAliases.contains(substringBefore(s, '.'));
       }
     }, scope, idFilter);
 

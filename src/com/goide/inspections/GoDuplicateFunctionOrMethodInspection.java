@@ -27,6 +27,7 @@ import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -60,6 +61,7 @@ public class GoDuplicateFunctionOrMethodInspection extends GoInspectionBase {
         GoMethodIndex.process(key, file.getProject(), scope, idFilter, new Processor<GoMethodDeclaration>() {
           @Override
           public boolean process(GoMethodDeclaration declaration) {
+            ProgressManager.checkCanceled();
             if (!method.isEquivalentTo(declaration)) {
               if (Comparing.equal(declaration.getName(), methodName)
                   && GoPsiImplUtil.allowed(declaration.getContainingFile(), file, module)) {
@@ -89,6 +91,7 @@ public class GoDuplicateFunctionOrMethodInspection extends GoInspectionBase {
         GoFunctionIndex.process(funcName, file.getProject(), scope, idFilter, new Processor<GoFunctionDeclaration>() {
           @Override
           public boolean process(GoFunctionDeclaration declaration) {
+            ProgressManager.checkCanceled();
             if (!func.isEquivalentTo(declaration) && GoPsiImplUtil.allowed(declaration.getContainingFile(), file, module)) {
               if (!isMainFunction || Comparing.equal(declaration.getContainingFile(), file)) {
                 PsiElement identifier = func.getNameIdentifier();
