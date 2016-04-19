@@ -751,3 +751,9 @@ func _(key1, key2 int) (string, error) {
 	tmp2, _ := tmp1[key2]
 	return tmp2.Name, nil
 }
+
+// do not resolve inside type
+func _() {
+        var _ func(variableInFunctionType float64)
+	println(<error descr="Unresolved reference 'variableInFunctionType'">variableInFunctionType</error>)
+}

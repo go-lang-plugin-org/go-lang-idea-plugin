@@ -109,7 +109,7 @@ ImportSpec ::= [ '.' | identifier ] ImportString {
 }
 ImportString ::= string | raw_string {methods=[getReferences resolve getPath getPathTextRange]}
 
-Type ::= TypeName | TypeLit | ParType {stubClass="com.goide.stubs.GoTypeStub" methods=[getUnderlyingType]}
+Type ::= TypeName | TypeLit | ParType {stubClass="com.goide.stubs.GoTypeStub" methods=[getUnderlyingType shouldGoDeeper]}
 ParType ::= '(' Type ')' {methods=[getActualType]}
 private TypeName ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
 TypeReferenceExpression ::= identifier { methods=[getReference getQualifier resolve resolveType] }
@@ -126,7 +126,7 @@ private TypeLit ::=
 
 ArrayOrSliceType ::= '[' ('...'|Expression?) ']' Type {pin=1}
 
-StructType ::= struct '{' Fields? '}' {pin=1}
+StructType ::= struct '{' Fields? '}' {pin=1 methods=[shouldGoDeeper]}
 private Fields ::= FieldDeclaration (semi FieldDeclaration)* semi? {pin=1}
 FieldDeclaration ::= (FieldDefinitionList Type | AnonymousFieldDefinition) Tag?
 private FieldDefinitionList ::= FieldDefinition (',' FieldDefinition)*
@@ -167,7 +167,7 @@ ParamDefinition ::= identifier {
 
 InterfaceType ::= interface '{' MethodSpecs? '}' {
   pin(".*")=1
-  methods=[getMethods getBaseTypesReferences]
+  methods=[getMethods getBaseTypesReferences shouldGoDeeper]
 }
 private MethodSpecs ::= MethodSpec (semi MethodSpec)* semi? {pin=1}
 MethodSpec ::= TypeName &(!'(') | identifier Signature {

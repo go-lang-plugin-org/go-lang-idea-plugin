@@ -1041,6 +1041,18 @@ public class GoPsiImplUtil {
     return false;
   }
 
+  public static boolean shouldGoDeeper(@SuppressWarnings("UnusedParameters") GoType o) {
+    return false;
+  }
+
+  public static boolean shouldGoDeeper(@SuppressWarnings("UnusedParameters") GoStructType o) {
+    return true;
+  }
+
+  public static boolean shouldGoDeeper(@SuppressWarnings("UnusedParameters") GoInterfaceType o) {
+    return true;
+  }
+
   public static boolean isForSideEffects(@NotNull GoImportSpec o) {
     return "_".equals(o.getAlias());
   }

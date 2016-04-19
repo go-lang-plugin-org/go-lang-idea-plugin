@@ -15,4 +15,6 @@ public interface GoType extends GoCompositeElement, StubBasedPsiElement<GoTypeSt
   @NotNull
   GoType getUnderlyingType();
 
+  boolean shouldGoDeeper();
+
 }
