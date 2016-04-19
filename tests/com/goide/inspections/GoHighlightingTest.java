@@ -149,6 +149,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testLiteralValues()             { doTest(); }
   public void testUnderscoreUsedAsValue()     { doTest(); }
   public void testUnusedParameter()           { doTest(); }
+  public void testUnusedParameter_test()      { doTest(); }
 
   public void testAvoidDuplicatedUnusedImportReports() {
     myFixture.addFileToProject("pack1/a.go", "package foo;");
