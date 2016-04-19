@@ -133,6 +133,12 @@ public class GoInvalidPackageImportInspectionTest extends GoQuickFixTestBase {
                                       "import `not_program/not_main`");
     myFixture.checkHighlighting();
   }
+  
+  public void testImportMainPackageInTest() {
+    myFixture.addFileToProject("foo/main/main.go", "package main");
+    myFixture.configureByText("a_test.go", "package a\nimport `foo/main`");
+    myFixture.checkHighlighting();
+  }
 
   public void testInternalPackageOn1_2_SDK() {
     myFixture.addFileToProject("internal/internal.go", "package internalPackage; func InternalFunction() {}");
@@ -231,7 +237,6 @@ public class GoInvalidPackageImportInspectionTest extends GoQuickFixTestBase {
     applySingleQuickFix(GoInvalidPackageImportInspection.DELETE_ALIAS_QUICK_FIX_NAME);
     myFixture.checkResult("package t; import `C`; import `C`;");
   }
-
 
   private Collection<String> getIntentionNames() {
     return ContainerUtil.map(myFixture.getAvailableIntentions(), new Function<IntentionAction, String>() {

@@ -23,6 +23,7 @@ import com.goide.psi.GoImportSpec;
 import com.goide.psi.impl.imports.GoImportReference;
 import com.goide.quickfix.GoDeleteImportQuickFix;
 import com.goide.quickfix.GoDisableVendoringInModuleQuickFix;
+import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.sdk.GoPackageUtil;
 import com.goide.sdk.GoSdkService;
 import com.goide.sdk.GoSdkUtil;
@@ -85,7 +86,7 @@ public class GoInvalidPackageImportInspection extends GoInspectionBase {
                                          new GoDeleteImportQuickFix());
           continue;
         }
-        if (packagesInDirectory.size() == 1 && packagesInDirectory.contains(GoConstants.MAIN)) {
+        if (!GoTestFinder.isTestFile(file) && packagesInDirectory.size() == 1 && packagesInDirectory.contains(GoConstants.MAIN)) {
           problemsHolder.registerProblem(importSpec, "'" + importSpec.getPath() + "' is a program, not an importable package",
                                          new GoDeleteImportQuickFix());
           continue;
