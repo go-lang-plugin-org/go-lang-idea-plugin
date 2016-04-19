@@ -37,7 +37,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
-import com.intellij.util.CommonProcessors;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
@@ -95,7 +94,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
           scope = new GoUtil.ExceptChildOfDirectory(containingDirectory, scope, GoTestFinder.getTestTargetPackage(file));
         }
         IdFilter idFilter = GoIdFilter.getProductionFilter(project);
-        Set<String> sortedKeys = sortMatching(matcher, collectAllPublicProductionNames(scope, idFilter), file);
+        Set<String> sortedKeys = collectAndSortAllPublicProductionNames(matcher, scope, idFilter, file);
         for (String name : sortedKeys) {
           processor.setName(name);
           for (GoNamedElement element : StubIndex.getElements(ALL_PUBLIC_NAMES, name, project, scope, idFilter, GoNamedElement.class)) {
@@ -117,49 +116,52 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
   }
 
   @NotNull
-  private static Collection<String> collectAllPublicProductionNames(@NotNull GlobalSearchScope scope, IdFilter idFilter) {
-    Collection<String> result = ContainerUtil.newHashSet();
-    StubIndex.getInstance().processAllKeys(ALL_PUBLIC_NAMES, new CommonProcessors.CollectProcessor<String>(result), scope, idFilter);
-    return result;
-  }
-
-  @NotNull
-  private static Set<String> sortMatching(@NotNull PrefixMatcher matcher, @NotNull Collection<String> names, @NotNull GoFile file) {
-    ProgressManager.checkCanceled();
+  private static Set<String> collectAndSortAllPublicProductionNames(@NotNull PrefixMatcher matcher,
+                                                                    @NotNull GlobalSearchScope scope, 
+                                                                    @Nullable IdFilter idFilter,
+                                                                    @NotNull GoFile file) {
     String prefix = matcher.getPrefix();
-    if (prefix.isEmpty()) return ContainerUtil.newLinkedHashSet(names);
+    final boolean emptyPrefix = prefix.isEmpty();
 
     Set<String> packagesWithAliases = ContainerUtil.newHashSet();
-    for (Map.Entry<String, Collection<GoImportSpec>> entry : file.getImportMap().entrySet()) {
-      for (GoImportSpec spec : entry.getValue()) {
-        String alias = spec.getAlias();
-        if (spec.isDot() || alias != null) {
-          packagesWithAliases.add(entry.getKey());
-          break;
+    if (!emptyPrefix) {
+      for (Map.Entry<String, Collection<GoImportSpec>> entry : file.getImportMap().entrySet()) {
+        for (GoImportSpec spec : entry.getValue()) {
+          String alias = spec.getAlias();
+          if (spec.isDot() || alias != null) {
+            packagesWithAliases.add(entry.getKey());
+            break;
+          }
         }
       }
     }
 
-    List<String> sorted = ContainerUtil.newArrayList();
-    for (String name : names) {
-      if (matcher.prefixMatches(name) || packagesWithAliases.contains(substringBefore(name, '.'))) {
-        sorted.add(name);
+    Set<String> allNames = ContainerUtil.newTroveSet();
+    StubIndex.getInstance().processAllKeys(ALL_PUBLIC_NAMES, new Processor<String>() {
+      @Override
+      public boolean process(String s) {
+        ProgressManager.checkCanceled();
+        if (emptyPrefix || matcher.prefixMatches(s) || packagesWithAliases.contains(substringBefore(s, '.'))) {
+          allNames.add(s);
+        }
+        return true;
       }
+    }, scope, idFilter);
+
+    if (emptyPrefix) {
+      return allNames;
     }
 
-    ProgressManager.checkCanceled();
-    Collections.sort(sorted, String.CASE_INSENSITIVE_ORDER);
+    List<String> sorted = ContainerUtil.sorted(allNames, String.CASE_INSENSITIVE_ORDER);
     ProgressManager.checkCanceled();
 
-    LinkedHashSet<String> result = new LinkedHashSet<String>();
+    LinkedHashSet<String> result = ContainerUtil.newLinkedHashSet();
     for (String name : sorted) {
+      ProgressManager.checkCanceled();
       if (matcher.isStartMatch(name)) {
         result.add(name);
       }
     }
-
-    ProgressManager.checkCanceled();
-
     result.addAll(sorted);
     return result;
   }
