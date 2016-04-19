@@ -29,6 +29,7 @@ import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
@@ -74,6 +75,7 @@ public class GoImportPathsCompletionProvider extends CompletionProvider<Completi
     PsiFile contextFile = context != null ? context.getContainingFile() : null;
     boolean testFileWithTestPackage = GoTestFinder.isTestFileWithTestPackage(contextFile);
     for (VirtualFile file : FileTypeIndex.getFiles(GoFileType.INSTANCE, scope)) {
+      ProgressManager.checkCanceled();
       PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
       if (!(psiFile instanceof GoFile)) continue;
       
