@@ -18,6 +18,8 @@ package com.goide.inspections.unresolved;
 
 import com.goide.inspections.GoInspectionBase;
 import com.goide.psi.*;
+import com.goide.runconfig.testing.GoTestFinder;
+import com.goide.runconfig.testing.GoTestFunctionType;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
@@ -43,6 +45,9 @@ public class GoUnusedParameterInspection extends GoInspectionBase {
       @Override
       public void visitFunctionDeclaration(@NotNull GoFunctionDeclaration o) {
         super.visitFunctionDeclaration(o);
+        if (GoTestFinder.isTestFile(o.getContainingFile()) && GoTestFunctionType.fromName(o.getName()) != null) {
+          return;
+        }
         visitDeclaration(o);
       }
 
