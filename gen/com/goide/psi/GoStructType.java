@@ -19,4 +19,6 @@ public interface GoStructType extends GoType {
   @NotNull
   PsiElement getStruct();
 
+  boolean shouldGoDeeper();
+
 }

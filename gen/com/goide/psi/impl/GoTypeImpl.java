@@ -42,4 +42,8 @@ public class GoTypeImpl extends GoStubbedElementImpl<GoTypeStub> implements GoTy
     return GoPsiImplUtil.getUnderlyingType(this);
   }
 
+  public boolean shouldGoDeeper() {
+    return GoPsiImplUtil.shouldGoDeeper(this);
+  }
+
 }
