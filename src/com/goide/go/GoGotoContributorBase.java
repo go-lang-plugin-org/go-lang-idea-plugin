@@ -20,6 +20,7 @@ import com.goide.psi.GoNamedElement;
 import com.intellij.navigation.ChooseByNameContributorEx;
 import com.intellij.navigation.GotoClassContributor;
 import com.intellij.navigation.NavigationItem;
+import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
@@ -32,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoGotoContributorBase<T extends GoNamedElement> implements GotoClassContributor, ChooseByNameContributorEx {
-  protected final StubIndexKey<String, T>[] myIndexKeys;
+  private final StubIndexKey<String, T>[] myIndexKeys;
   @NotNull private final Class<T> myClazz;
 
   public GoGotoContributorBase(@NotNull Class<T> clazz, @NotNull StubIndexKey<String, T>... key) {
@@ -64,6 +65,7 @@ public class GoGotoContributorBase<T extends GoNamedElement> implements GotoClas
                                       @NotNull Processor<NavigationItem> processor,
                                       @NotNull FindSymbolParameters parameters) {
     for (StubIndexKey<String, T> key : myIndexKeys) {
+      ProgressManager.checkCanceled();
       StubIndex.getInstance().processElements(key, s, parameters.getProject(), parameters.getSearchScope(), parameters.getIdFilter(), 
                                               myClazz, processor);
     }
