@@ -24,9 +24,9 @@ type Foo2 struct {
 
 func main2() {
     var a *[]Foo2
-    (*a)[0].Test
+    (*a)[0].Test // todo: should be an error
     var b *[]Foo2
-    b[0].<error>Test</error>
+    b[0].Test // todo: should be an error
 
     test(a)
 }

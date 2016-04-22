@@ -416,7 +416,9 @@ public class GoPsiImplUtil {
     }
     else if (o instanceof GoIndexOrSliceExpr) {
       GoExpression first = ContainerUtil.getFirstItem(((GoIndexOrSliceExpr)o).getExpressionList());
-      GoType firstType = unwrapOnlySpecPointers(first == null ? null : first.getGoType(context));
+      // todo: calculate type for indexed expressions only
+      // https://golang.org/ref/spec#Index_expressions – a[x] is shorthand for (*a)[x]
+      GoType firstType = unwrapPointerIfNeeded(first == null ? null : first.getGoType(context));
       if (o.getNode().findChildByType(GoTypes.COLON) != null) return firstType; // means slice expression, todo: extract if needed
       GoType type = firstType != null ? firstType.getUnderlyingType() : null;
       if (type instanceof GoMapType) {
@@ -456,12 +458,8 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  private static GoType unwrapOnlySpecPointers(@Nullable GoType type) {
-    if (type instanceof GoPointerType) {
-      GoType inner = ((GoPointerType)type).getType();
-      if (inner instanceof GoSpecType) return inner;
-    }
-    return type;
+  private static GoType unwrapPointerIfNeeded(@Nullable GoType type) {
+    return type instanceof GoPointerType ? ((GoPointerType)type).getType() : type;
   }
 
   @Nullable
