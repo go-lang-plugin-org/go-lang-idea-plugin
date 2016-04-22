@@ -436,18 +436,18 @@ public class GoPsiImplUtil {
       return ((GoConversionExpr)o).getType();
     }
     else if (o instanceof GoStringLiteral) {
-      return getBuiltinType(o, "string");
+      return getBuiltinType("string", o);
     }
     else if (o instanceof GoLiteral) {
       GoLiteral l = (GoLiteral)o;
-      if (l.getChar() != null) return getBuiltinType(o, "rune");
-      if (l.getInt() != null || l.getHex() != null || ((GoLiteral)o).getOct() != null) return getBuiltinType(o, "int");
-      if (l.getFloat() != null) return getBuiltinType(o, "float64");
-      if (l.getFloati() != null) return getBuiltinType(o, "complex64");
-      if (l.getDecimali() != null) return getBuiltinType(o, "complex128");
+      if (l.getChar() != null) return getBuiltinType("rune", o);
+      if (l.getInt() != null || l.getHex() != null || ((GoLiteral)o).getOct() != null) return getBuiltinType("int", o);
+      if (l.getFloat() != null) return getBuiltinType("float64", o);
+      if (l.getFloati() != null) return getBuiltinType("complex64", o);
+      if (l.getDecimali() != null) return getBuiltinType("complex128", o);
     }
     else if (o instanceof GoConditionalExpr) {
-      return getBuiltinType(o, "bool");
+      return getBuiltinType("bool", o);
     }
     return null;
   }
@@ -462,8 +462,8 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  private static GoType getBuiltinType(@NotNull GoExpression o, @NotNull final String name) {
-    GoFile builtin = GoSdkUtil.findBuiltinFile(o);
+  private static GoType getBuiltinType(@NotNull final String name, @NotNull PsiElement context) {
+    GoFile builtin = GoSdkUtil.findBuiltinFile(context);
     if (builtin != null) {
       GoTypeSpec spec = ContainerUtil.find(builtin.getTypes(), new Condition<GoTypeSpec>() {
         @Override
@@ -648,6 +648,9 @@ public class GoPsiImplUtil {
         List<GoType> list = ((GoMapType)type).getTypeList();
         if (i == 0) return ContainerUtil.getFirstItem(list);
         if (i == 1) return ContainerUtil.getLastItem(list);
+      }
+      if (GoTypeUtil.isString(type)) {
+        return getBuiltinType("int", o);
       }
     }
     return null;
