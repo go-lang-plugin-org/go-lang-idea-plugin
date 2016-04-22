@@ -417,8 +417,8 @@ public class GoPsiImplUtil {
     else if (o instanceof GoIndexOrSliceExpr) {
       GoExpression first = ContainerUtil.getFirstItem(((GoIndexOrSliceExpr)o).getExpressionList());
       GoType firstType = unwrapOnlySpecPointers(first == null ? null : first.getGoType(context));
+      if (o.getNode().findChildByType(GoTypes.COLON) != null) return firstType; // means slice expression, todo: extract if needed
       GoType type = firstType != null ? firstType.getUnderlyingType() : null;
-      if (o.getNode().findChildByType(GoTypes.COLON) != null) return type; // means slice expression, todo: extract if needed
       if (type instanceof GoMapType) {
         List<GoType> list = ((GoMapType)type).getTypeList();
         if (list.size() == 2) {

@@ -38,6 +38,14 @@ public class GoTypeResolveTest extends GoCodeInsightFixtureTestCase {
     doStatementTest("switch foo := \"hello\".(type) { case bool:\n println(fo<caret>o)\n}", "bool");
   }
 
+  public void testWrappedSlice() {
+    doTopLevelTest("type Foo int[]\nfunc _() { var foo Foo\nb<caret>ar := foo[2:9]", "Foo");
+  }
+
+  public void testSlice() {
+    doStatementTest("var foo []int\nb<caret>ar := foo[2:9]", "[]int");
+  }
+
   public void testNestedTypeSwitchUsageInContext() {
     doStatementTest("var p interface{}\n" +
                     "switch foo := p.(type) {\n" +
