@@ -41,7 +41,8 @@ public class GoVarProcessor extends GoScopeProcessorBase {
 
   @Override
   protected boolean add(@NotNull GoNamedElement o) {
-    if (PsiTreeUtil.findCommonParent(o, myOrigin) instanceof GoRangeClause) return true;
+    PsiElement commonParent = PsiTreeUtil.findCommonParent(o, myOrigin);
+    if (commonParent instanceof GoRangeClause || commonParent instanceof GoTypeSwitchGuard) return true;
     PsiElement p = o.getParent();
     boolean inVarOrRange = PsiTreeUtil.getParentOfType(o, GoVarDeclaration.class) != null || p instanceof GoRangeClause;
     boolean differentBlocks = differentBlocks(o);
@@ -77,6 +78,7 @@ public class GoVarProcessor extends GoScopeProcessorBase {
     return PsiTreeUtil.getParentOfType(o, GoBlock.class);
   }
 
+  @Override
   protected boolean crossOff(@NotNull PsiElement e) {
     return !(e instanceof GoVarDefinition) &&
            !(e instanceof GoParamDefinition) &&
