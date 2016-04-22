@@ -428,6 +428,9 @@ public class GoPsiImplUtil {
       else if (type instanceof GoArrayOrSliceType) {
         return typeFromRefOrType(((GoArrayOrSliceType)type).getType());
       }
+      else if (GoTypeUtil.isString(type)) {
+        return getBuiltinType("uint8", o);
+      }
     }
     else if (o instanceof GoTypeAssertionExpr) {
       return ((GoTypeAssertionExpr)o).getType();
