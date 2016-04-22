@@ -50,6 +50,14 @@ public class GoTypeResolveTest extends GoCodeInsightFixtureTestCase {
     doStatementTest("for fo<caret>o := range \"hello\" {}", "int");
   }
 
+  public void testIndexExpressionOfString() {
+    doStatementTest("foo := \"hello\"\na := <selection>foo[0]</selection>", "uint8");
+  }
+
+  public void testIndexExpressionOfStringLiteral() {
+    doExpressionTest("<selection>\"hello\"[0]</selection>", "uint8");
+  }
+
   public void testNestedTypeSwitchUsageInContext() {
     doStatementTest("var p interface{}\n" +
                     "switch foo := p.(type) {\n" +
@@ -67,7 +75,7 @@ public class GoTypeResolveTest extends GoCodeInsightFixtureTestCase {
     SelectionModel selectionModel = myFixture.getEditor().getSelectionModel();
     if (selectionModel.hasSelection()) {
       PsiElement left = myFixture.getFile().findElementAt(selectionModel.getSelectionStart());
-      PsiElement right = myFixture.getFile().findElementAt(selectionModel.getSelectionEnd());
+      PsiElement right = myFixture.getFile().findElementAt(selectionModel.getSelectionEnd() - 1);
       assertNotNull(left);
       assertNotNull(right);
       elementAt = PsiTreeUtil.findCommonParent(left, right);
@@ -87,7 +95,11 @@ public class GoTypeResolveTest extends GoCodeInsightFixtureTestCase {
   private void doStatementTest(@NotNull String text, @NotNull String expectedTypeText) {
     doTopLevelTest("func _() {\n" + text + "\n}", expectedTypeText);
   }
-  
+
+  private void doExpressionTest(@NotNull String text, @NotNull String expectedTypeText) {
+    doStatementTest("a := " + text, expectedTypeText);
+  }
+
   @Override
   protected LightProjectDescriptor getProjectDescriptor() {
     return createMockProjectDescriptor();
