@@ -266,6 +266,14 @@ type ServiceError struct {
 	Message string
 }
 
+type ForSwitch struct {
+	Value interface{}
+}
+
+func _(x ForSwitch) {
+	switch x := x.Value.(type) {
+	}
+}
 
 func _() {
   err := nil
