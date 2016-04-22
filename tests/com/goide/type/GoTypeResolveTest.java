@@ -45,7 +45,7 @@ public class GoTypeResolveTest extends GoCodeInsightFixtureTestCase {
   public void testSlice() {
     doStatementTest("var foo []int\nb<caret>ar := foo[2:9]", "[]int");
   }
-  
+
   public void testRangeOverString() {
     doStatementTest("for fo<caret>o := range \"hello\" {}", "int");
   }
@@ -56,6 +56,10 @@ public class GoTypeResolveTest extends GoCodeInsightFixtureTestCase {
 
   public void testIndexExpressionOfStringLiteral() {
     doExpressionTest("<selection>\"hello\"[0]</selection>", "uint8");
+  }
+
+  public void testIndexExpressionOfPointer() {
+    doStatementTest("var buckhash *[20]*int\nfo<caret>o := buckhash[0]", "*int");
   }
 
   public void testNestedTypeSwitchUsageInContext() {
