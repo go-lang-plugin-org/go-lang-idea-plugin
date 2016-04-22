@@ -19,8 +19,9 @@ func main() {
 	println(c)
 
 	select {
-	case <error descr="Cannot use '_' as value">_</error> <- 0:  break;
-	case <error descr="Cannot use '_' as value">_</error> <- 1:
+	case <error descr="Cannot use '_' as value">_</error> <- 0: break;
+	case <error descr="Cannot use '_' as value">_</error> <- 1: break;
+	case _ = <- 1: break;
 	}
 
 	for _, _ = range <error descr="Cannot use '_' as value">_</error>  {

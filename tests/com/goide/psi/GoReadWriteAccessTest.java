@@ -94,7 +94,7 @@ public class GoReadWriteAccessTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testRecvStatementWrite() {
-    doTest("select {\n\tcase fo<caret>o = bar:\n}", ReadWrite);
+    doTest("select {\n\tcase fo<caret>o = bar:\n}", Write);
   }
 
   public void testRecvStatementRead() {
