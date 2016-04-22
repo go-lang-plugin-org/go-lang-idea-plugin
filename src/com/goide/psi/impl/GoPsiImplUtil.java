@@ -637,6 +637,9 @@ public class GoPsiImplUtil {
     return type;
   }
 
+  /**
+   * https://golang.org/ref/spec#RangeClause
+   */
   @Nullable
   private static GoType processRangeClause(@NotNull GoVarDefinition o, @NotNull GoRangeClause parent, @Nullable ResolveState context) {
     GoExpression rangeExpression = parent.getRangeExpression();
