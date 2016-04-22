@@ -23,7 +23,9 @@ import com.intellij.lang.ExpressionTypeProvider;
 import com.intellij.openapi.util.Conditions;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.SyntaxTraverser;
+import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -44,7 +46,10 @@ public class GoExpressionTypeProvider extends ExpressionTypeProvider<GoTypeOwner
 
   @NotNull
   @Override
-  public List<GoTypeOwner> getExpressionsAt(@NotNull PsiElement elementAt) {
-    return SyntaxTraverser.psiApi().parents(elementAt).takeWhile(Conditions.notInstanceOf(GoStatement.class)).filter(GoTypeOwner.class).toList();
+  public List<GoTypeOwner> getExpressionsAt(@NotNull PsiElement at) {
+    if (at instanceof PsiWhiteSpace && at.textMatches("\n")) {
+      at = PsiTreeUtil.prevLeaf(at);
+    }
+    return SyntaxTraverser.psiApi().parents(at).takeWhile(Conditions.notInstanceOf(GoStatement.class)).filter(GoTypeOwner.class).toList();
   }
 }
