@@ -52,11 +52,14 @@ public class GoTestSignaturesInspection extends GoInspectionBase {
       else {
         GoParameterDeclaration param = ContainerUtil.getFirstItem(params);
         GoImportSpec testingImportSpec = file.getImportedPackagesMap().get(GoConstants.TESTING_PATH);
-        String testingAlias = ObjectUtils.notNull(GoPsiImplUtil.getImportQualifierToUseInFile(testingImportSpec), GoConstants.TESTING_PATH);
-        if (signature.getResult() != null || 
+        String testingAlias = GoPsiImplUtil.getImportQualifierToUseInFile(testingImportSpec);
+        if (GoConstants.TESTING_PATH.equals(file.getImportPath(false))) {
+          testingAlias = "";
+        }
+        if (signature.getResult() != null ||
+            testingAlias == null ||
             params.size() != 1 ||
             param == null ||
-            testingImportSpec == null ||
             !param.getType().textMatches(type.getQualifiedParamType(testingAlias))) {
           problemsHolder.registerProblem(function.getIdentifier(), "Wrong test signature", new GoTestSignaturesQuickFix(type));
         }
