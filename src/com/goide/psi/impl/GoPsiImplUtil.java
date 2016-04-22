@@ -567,6 +567,7 @@ public class GoPsiImplUtil {
         if (typeCase != null) {
           return typeCase.getDefault() != null ? ((GoTypeSwitchGuard)parent).getExpression().getGoType(context) : typeCase.getType();
         }
+        return ((GoTypeSwitchGuard)parent).getExpression().getGoType(null);
       }
     }
     return null;
