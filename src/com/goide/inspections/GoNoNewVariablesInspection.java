@@ -16,10 +16,7 @@
 
 package com.goide.inspections;
 
-import com.goide.psi.GoShortVarDeclaration;
-import com.goide.psi.GoSimpleStatement;
-import com.goide.psi.GoVarDefinition;
-import com.goide.psi.GoVisitor;
+import com.goide.psi.*;
 import com.goide.psi.impl.GoElementFactory;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInspection.LocalInspectionToolSession;
@@ -44,9 +41,21 @@ public class GoNoNewVariablesInspection extends GoInspectionBase {
     return new GoVisitor() {
       @Override
       public void visitShortVarDeclaration(@NotNull GoShortVarDeclaration o) {
-        List<GoVarDefinition> list = o.getVarDefinitionList();
-        if (list.isEmpty()) return;
+        visitVarDefinitionList(o, o.getVarDefinitionList());
+      }
 
+      @Override
+      public void visitRecvStatement(@NotNull GoRecvStatement o) {
+        visitVarDefinitionList(o, o.getVarDefinitionList());
+      }
+
+      @Override
+      public void visitRangeClause(@NotNull GoRangeClause o) {
+        visitVarDefinitionList(o, o.getVarDefinitionList());
+      }
+
+      private void visitVarDefinitionList(@NotNull PsiElement o, @NotNull List<GoVarDefinition> list) {
+        if (list.isEmpty()) return;
         GoVarDefinition first = ContainerUtil.getFirstItem(list);
         GoVarDefinition last = ContainerUtil.getLastItem(list);
         if (first == null || last == null) return;
@@ -71,12 +80,26 @@ public class GoNoNewVariablesInspection extends GoInspectionBase {
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
       PsiElement element = descriptor.getStartElement();
-      if (element.isValid() && element instanceof GoShortVarDeclaration) {
-        PsiElement parent = element.getParent();
-        if (parent instanceof GoSimpleStatement) {
-          String left = GoPsiImplUtil.joinPsiElementText(((GoShortVarDeclaration)element).getVarDefinitionList());
-          String right = GoPsiImplUtil.joinPsiElementText(((GoShortVarDeclaration)element).getRightExpressionsList());
-          parent.replace(GoElementFactory.createAssignmentStatement(project, left, right));
+      if (element.isValid()) {
+        if (element instanceof GoShortVarDeclaration) {
+          PsiElement parent = element.getParent();
+          if (parent instanceof GoSimpleStatement) {
+            String left = GoPsiImplUtil.joinPsiElementText(((GoShortVarDeclaration)element).getVarDefinitionList());
+            String right = GoPsiImplUtil.joinPsiElementText(((GoShortVarDeclaration)element).getRightExpressionsList());
+            parent.replace(GoElementFactory.createAssignmentStatement(project, left, right));
+          }
+        }
+        else if (element instanceof GoRangeClause) {
+          String left = GoPsiImplUtil.joinPsiElementText(((GoRangeClause)element).getVarDefinitionList());
+          GoExpression rangeExpression = ((GoRangeClause)element).getRangeExpression();
+          String right = rangeExpression != null ? rangeExpression.getText() : "";
+          element.replace(GoElementFactory.createRangeClauseAssignment(project, left, right));
+        }
+        else if (element instanceof GoRecvStatement) {
+          String left = GoPsiImplUtil.joinPsiElementText(((GoRecvStatement)element).getVarDefinitionList());
+          GoExpression recvExpression = ((GoRecvStatement)element).getRecvExpression();
+          String right = recvExpression != null ? recvExpression.getText() : "";
+          element.replace(GoElementFactory.createRecvStatementAssignment(project, left, right));
         }
       }
     }

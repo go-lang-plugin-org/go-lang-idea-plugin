@@ -174,9 +174,28 @@ func _(st interface {Foo()}, st1 Iface) {
         
     }
     Println(st.Foo() + st1.Boo())
-    if <error descr="_ := 1 used as value"><error descr="No new variables on left side of :=">_</error> := 1</error> {
-      return
-    }
+}
+
+// No new variables on left side
+func _() {
+	c := make(chan int)
+	
+	select {
+	case <error descr="No new variables on left side of :=">_</error> := <-c:
+		println("Ololo")
+	default:
+	}
+	for <error descr="No new variables on left side of :=">_</error> := range "asd"  {
+	}
+	if <error descr="_ := 1 used as value"><error descr="No new variables on left side of :=">_</error> := 1</error> {
+		return
+	}
+	
+	buzz := 0
+	println(buzz)
+
+	<error descr="No new variables on left side of :=">buzz</error> := <-c
+	buzz = <-c
 }
 
 func _() { goto Label1; Label1: 1; goto <error descr="Unresolved label 'Label2'">Label2</error>}
