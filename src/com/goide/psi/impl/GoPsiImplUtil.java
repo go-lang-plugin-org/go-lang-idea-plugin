@@ -1464,7 +1464,7 @@ public class GoPsiImplUtil {
       return expression.equals(((GoRangeClause)parent).getRangeExpression()) ? Read : Write;
     }
     if (parent instanceof GoRecvStatement) {
-      return expression.equals(((GoRecvStatement)parent).getRecvExpression()) ? Read : ReadWrite;
+      return expression.equals(((GoRecvStatement)parent).getRecvExpression()) ? Read : Write;
     }
     return Read;
   }
