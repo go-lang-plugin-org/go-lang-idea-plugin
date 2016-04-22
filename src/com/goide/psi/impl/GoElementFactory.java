@@ -128,10 +128,22 @@ public class GoElementFactory {
     GoFile file = createFileFromText(project, "package a; func a() {\n for " + leftSide + " := range " + rightSide + "{\n}\n}");
     return PsiTreeUtil.findChildOfType(file, GoRangeClause.class);
   }
+  
+  @NotNull
+  public static GoRangeClause createRangeClauseAssignment(@NotNull Project project, @NotNull String leftSide, @NotNull String rightSide) {
+    GoFile file = createFileFromText(project, "package a; func a() {\n for " + leftSide + " = range " + rightSide + "{\n}\n}");
+    return PsiTreeUtil.findChildOfType(file, GoRangeClause.class);
+  }
 
   @NotNull
   public static GoRecvStatement createRecvStatement(@NotNull Project project, @NotNull String leftSide, @NotNull String rightSide) {
     GoFile file = createFileFromText(project, "package a; func a() {\n select { case " + leftSide + " := " + rightSide + ":\n}\n}");
+    return PsiTreeUtil.findChildOfType(file, GoRecvStatement.class);
+  }
+  
+  @NotNull
+  public static GoRecvStatement createRecvStatementAssignment(@NotNull Project project, @NotNull String left, @NotNull String right) {
+    GoFile file = createFileFromText(project, "package a; func a() {\n select { case " + left + " = " + right + ":\n}\n}");
     return PsiTreeUtil.findChildOfType(file, GoRecvStatement.class);
   }
 

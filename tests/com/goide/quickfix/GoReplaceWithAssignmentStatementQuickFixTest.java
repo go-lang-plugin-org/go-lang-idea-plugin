@@ -39,4 +39,16 @@ public class GoReplaceWithAssignmentStatementQuickFixTest extends GoQuickFixTest
   public void testSeveralAssignments() {
     doTest(GoNoNewVariablesInspection.QUICK_FIX_NAME);
   }
+  
+  public void testRecvStatement() {
+    doTest(GoNoNewVariablesInspection.QUICK_FIX_NAME);
+  }
+  
+  public void testRecvStatementInSelect() {
+    doTest(GoNoNewVariablesInspection.QUICK_FIX_NAME);
+  }
+  
+  public void testRangeClause() {
+    doTest(GoNoNewVariablesInspection.QUICK_FIX_NAME);
+  }
 }

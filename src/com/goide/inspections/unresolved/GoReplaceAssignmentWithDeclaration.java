@@ -60,8 +60,8 @@ public class GoReplaceAssignmentWithDeclaration extends LocalQuickFixOnPsiElemen
     else if (startElement instanceof GoRecvStatement) {
       GoRecvStatement recvStatement = (GoRecvStatement)startElement;
       String leftSide = GoPsiImplUtil.joinPsiElementText(recvStatement.getLeftExpressionsList());
-      GoExpression rangeExpression = recvStatement.getRecvExpression();
-      String rightSide = rangeExpression != null ? rangeExpression.getText() : "";
+      GoExpression recvExpression = recvStatement.getRecvExpression();
+      String rightSide = recvExpression != null ? recvExpression.getText() : "";
       recvStatement.replace(GoElementFactory.createRecvStatement(project, leftSide, rightSide));
     }
   }
