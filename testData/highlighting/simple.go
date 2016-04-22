@@ -271,7 +271,7 @@ type ForSwitch struct {
 }
 
 func _(x ForSwitch) {
-	switch x := x.Value.(type) {
+	switch <error descr="Unused variable 'x'">x</error> := x.Value.(type) {
 	}
 }
 
