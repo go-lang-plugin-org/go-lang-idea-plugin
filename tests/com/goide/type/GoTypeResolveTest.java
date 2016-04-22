@@ -45,6 +45,10 @@ public class GoTypeResolveTest extends GoCodeInsightFixtureTestCase {
   public void testSlice() {
     doStatementTest("var foo []int\nb<caret>ar := foo[2:9]", "[]int");
   }
+  
+  public void testRangeOverString() {
+    doStatementTest("for fo<caret>o := range \"hello\" {}", "int");
+  }
 
   public void testNestedTypeSwitchUsageInContext() {
     doStatementTest("var p interface{}\n" +

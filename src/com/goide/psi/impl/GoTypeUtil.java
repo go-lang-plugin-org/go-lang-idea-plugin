@@ -21,6 +21,7 @@ import com.goide.psi.GoChannelType;
 import com.goide.psi.GoMapType;
 import com.goide.psi.GoType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class GoTypeUtil {
   public static boolean isIterable(@NotNull GoType type) {
@@ -30,7 +31,7 @@ public class GoTypeUtil {
            isString(type);
   }
 
-  private static boolean isString(@NotNull GoType type) {
-    return type.textMatches("string") && GoPsiImplUtil.builtin(type);
+  public static boolean isString(@Nullable GoType type) {
+    return type != null && type.textMatches("string") && GoPsiImplUtil.builtin(type);
   }
 }
