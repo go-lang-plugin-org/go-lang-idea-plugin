@@ -654,7 +654,7 @@ public class GoPsiImplUtil {
         if (i == 1) return ContainerUtil.getLastItem(list);
       }
       if (GoTypeUtil.isString(type)) {
-        return getBuiltinType("int", o);
+        return getBuiltinType("int32", o);
       }
     }
     return null;
