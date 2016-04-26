@@ -169,7 +169,7 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
       else if (element instanceof GoTypeSpec) {
         GoTypeSpec typeSpec = (GoTypeSpec)element;
         GoType type = typeSpec.getSpecType().getType();
-        for (GoMethodDeclaration m : GoPsiImplUtil.getMethods(typeSpec)) result.add(new Element(m));
+        for (GoMethodDeclaration m : typeSpec.getMethods()) result.add(new Element(m));
         if (type instanceof GoStructType) {
           for (GoFieldDeclaration field : ((GoStructType)type).getFieldDeclarationList()) {
             for (GoFieldDefinition definition : field.getFieldDefinitionList()) result.add(new Element(definition));
