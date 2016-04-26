@@ -21,6 +21,7 @@ import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.sdk.GoSdkUtil;
 import com.goide.stubs.GoFieldDefinitionStub;
+import com.intellij.codeInsight.AutoPopupController;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.completion.PrefixMatcher;
@@ -79,10 +80,13 @@ public class GoCompletionUtil {
         }
       }
 
-      private void doInsert(InsertionContext context, @NotNull LookupElement item, GoSignature signature) {
+      private void doInsert(InsertionContext context, @NotNull LookupElement item, @Nullable GoSignature signature) {
         int paramsCount = signature != null ? signature.getParameters().getParameterDeclarationList().size() : 0;
         InsertHandler<LookupElement> handler = paramsCount == 0 ? ParenthesesInsertHandler.NO_PARAMETERS : ParenthesesInsertHandler.WITH_PARAMETERS;
         handler.handleInsert(context, item);
+        if (signature != null) {
+          AutoPopupController.getInstance(context.getProject()).autoPopupParameterInfo(context.getEditor(), null);
+        }
       }
     };
     public static final InsertHandler<LookupElement> TYPE_CONVERSION_INSERT_HANDLER = new InsertHandler<LookupElement>() {
