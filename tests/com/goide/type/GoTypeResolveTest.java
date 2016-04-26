@@ -47,7 +47,7 @@ public class GoTypeResolveTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testRangeOverString() {
-    doStatementTest("for fo<caret>o := range \"hello\" {}", "int");
+    doStatementTest("for _, fo<caret>o := range \"hello\" {}", "int32");
   }
 
   public void testIndexExpressionOfString() {
