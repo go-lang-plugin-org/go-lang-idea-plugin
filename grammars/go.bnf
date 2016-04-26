@@ -1,5 +1,6 @@
 {
   parserClass='com.goide.parser.GoParser'
+  classHeader='copyrightHeader.java'
 
   implements='com.goide.psi.GoCompositeElement'
   extends='com.goide.psi.impl.GoCompositeElementImpl'
