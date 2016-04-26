@@ -51,11 +51,11 @@ public class GoTypeResolveTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testIndexExpressionOfString() {
-    doStatementTest("foo := \"hello\"\na := <selection>foo[0]</selection>", "uint8");
+    doStatementTest("foo := \"hello\"\na := <selection>foo[0]</selection>", "byte");
   }
 
   public void testIndexExpressionOfStringLiteral() {
-    doExpressionTest("<selection>\"hello\"[0]</selection>", "uint8");
+    doExpressionTest("<selection>\"hello\"[0]</selection>", "byte");
   }
 
   public void testIndexExpressionOfPointer() {
