@@ -1,0 +1,13 @@
+PASS
+BenchmarkBulk_Read2-4   2000000000               0.00 ns/op
+BenchmarkBulk_Read-4    --- FAIL: BenchmarkBulk_Read-4
+        bulk_test.go:162: bulk.Read
+        bulk_test.go:163: asdf
+BenchmarkBulk_Read3-4   Hellooooo
+Hellooooo
+Hellooooo
+Hellooooo
+Hellooooo
+Hellooooo
+2000000000               0.00 ns/op
+ok      github.com/cydev/stok/storage   0.021s
