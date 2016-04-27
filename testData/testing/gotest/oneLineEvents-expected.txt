@@ -3,7 +3,7 @@ TestStarted
     - name=Test_Sd
   TestStdOut
       - name=Test_Sd
-      - out=\n
+      - out=Test_Sd\n
 TestFinished
     - duration=42
     - name=Test_Sd
@@ -12,12 +12,15 @@ TestStarted
     - name=Test_Sp
   TestStdOut
       - name=Test_Sp
-      - out=\n
+      - out= text1\n
   TestStdOut
       - name=Test_Sp
       - out=Test_Sp............end
+  TestStdOut
+      - name=Test_Sp
+      - out=	sputils_test.go:23: sad\n
   TestIgnored
-      - message=sputils_test.go:23: sad\n
+      - message=
       - name=Test_Sp
 TestFinished
     - duration=42
@@ -27,10 +30,10 @@ TestStarted
     - name=Test_Sp2
   TestStdOut
       - name=Test_Sp2
-      - out=\n
+      - out= text2\n
   TestStdOut
       - name=Test_Sp2
-      - out=Test_Sp............end\n
+      - out=Test_Sp............end
 TestFinished
     - duration=42
     - name=Test_Sp2
@@ -39,12 +42,15 @@ TestStarted
     - name=Test_Sp3
   TestStdOut
       - name=Test_Sp3
-      - out=\n
+      - out= text3\n
   TestStdOut
       - name=Test_Sp3
       - out=Test_Sp............end
+  TestStdOut
+      - name=Test_Sp3
+      - out=	sputils_test.go:43: sad\n
   TestFailed
-      - message=sputils_test.go:43: sad\n
+      - message=
       - name=Test_Sp3
 TestFinished
     - duration=42

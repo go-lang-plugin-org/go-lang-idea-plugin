@@ -17,133 +17,59 @@
 package com.goide.runconfig.testing.frameworks.gobench;
 
 import com.goide.GoConstants;
-import com.goide.runconfig.testing.GoTestEventsConverterBase;
-import com.goide.runconfig.testing.GoTestLocator;
-import com.google.common.base.Stopwatch;
-import com.intellij.execution.process.ProcessOutputTypes;
+import com.goide.runconfig.testing.frameworks.gotest.GoTestEventsConverterBaseImpl;
 import com.intellij.execution.testframework.TestConsoleProperties;
-import com.intellij.execution.testframework.sm.ServiceMessageBuilder;
-import com.intellij.execution.testframework.sm.runner.OutputToGeneralTestEventsConverter;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.text.StringUtil;
-import jetbrains.buildServer.messages.serviceMessages.ServiceMessageTypes;
 import jetbrains.buildServer.messages.serviceMessages.ServiceMessageVisitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.text.ParseException;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class GobenchEventsConverter extends OutputToGeneralTestEventsConverter implements GoTestEventsConverterBase {
+public class GobenchEventsConverter extends GoTestEventsConverterBaseImpl {
   private static final Pattern RUN = Pattern.compile("^(Benchmark" + GoConstants.IDENTIFIER_REGEX + ")");
   private static final Pattern FAIL = Pattern.compile("^--- FAIL: (Benchmark" + GoConstants.IDENTIFIER_REGEX + ").*");
-  private static final Pattern TAIL = Pattern.compile("\\S*[ \t]+(.+)");
-  private static final String TOP_LEVEL_BENCHMARK_NAME = "<benchmark>";
 
-  private final Stopwatch testStopwatch = Stopwatch.createUnstarted();
-  private String currentBenchmark = TOP_LEVEL_BENCHMARK_NAME;
-  private boolean benchmarkFailing;
-  private ServiceMessageVisitor myVisitor;
-
-  public GobenchEventsConverter(TestConsoleProperties properties) {
+  public GobenchEventsConverter(@NotNull TestConsoleProperties properties) {
     super(GobenchFramework.NAME, properties);
   }
 
   @Override
-  public boolean processServiceMessages(@NotNull String text, Key outputType, ServiceMessageVisitor visitor) throws ParseException {
-    if (myVisitor == null && visitor != null) {
-      myVisitor = visitor;
-    }
-    if (text.isEmpty()) {
-      return true;
-    }
-    
+  protected int processLine(@NotNull String line, int start, Key outputType, ServiceMessageVisitor visitor) throws ParseException {
     Matcher matcher;
-    if ((matcher = RUN.matcher(text)).find()) {
-      if (testStopwatch.isRunning()) {
-        finishCurrentTest(outputType, visitor);
-      }
-      testStopwatch.start();
-      currentBenchmark = StringUtil.notNullize(matcher.group(1), TOP_LEVEL_BENCHMARK_NAME);
-
-      String testStartedMessage = ServiceMessageBuilder.testStarted(currentBenchmark)
-        .addAttribute("locationHint", testUrl(currentBenchmark)).toString();
-      super.processServiceMessages(testStartedMessage, outputType, visitor);
-      processTailText(text, outputType, visitor, matcher.end(1));
-      return true;
+    if ((matcher = RUN.matcher(line)).find(start)) {
+      startTest(matcher.group(1), visitor);
+      int newStartOffset = findFirstNonWSIndex(line, matcher.end(1));
+      return newStartOffset != -1 ? newStartOffset : line.length();
     }
-
-    if ((matcher = FAIL.matcher(text)).find()) {
-      String failedBenchmark = StringUtil.notNullize(matcher.group(1), TOP_LEVEL_BENCHMARK_NAME);
-      if (!failedBenchmark.equals(currentBenchmark)) {
-        finishCurrentTest(outputType, visitor);
-      }
-      currentBenchmark = failedBenchmark;
-      benchmarkFailing = true;
-      processTailText(text, outputType, visitor, matcher.end(1));
-      return true;
+    if ((matcher = FAIL.matcher(line.substring(start))).find()) {
+      finishTest(matcher.group(1), TestResult.FAILED, visitor);
+      int newStartOffset = findFirstNonWSIndex(line, start + matcher.end(1));
+      return newStartOffset != -1 ? newStartOffset : line.length();
     }
-
-    boolean isErrorMessage = ProcessOutputTypes.STDERR == outputType;
-    if (isTestStarted()) {
-      ServiceMessageBuilder builder = isErrorMessage ? ServiceMessageBuilder.testStdErr(currentBenchmark)
-                                                     : ServiceMessageBuilder.testStdOut(currentBenchmark);
-      super.processServiceMessages(builder.addAttribute("out", text).toString(), outputType, visitor);
-      return true;
-    }
-
-    ServiceMessageBuilder messageBuilder = new ServiceMessageBuilder(ServiceMessageTypes.MESSAGE);
-    if (isErrorMessage) {
-      messageBuilder.addAttribute("text", StringUtil.trimEnd(text, "\n")).addAttribute("status", "ERROR");
-    }
-    else {
-      messageBuilder.addAttribute("text", text).addAttribute("status", "NORMAL");
-    }
-    super.processServiceMessages(messageBuilder.toString(), outputType, visitor);
-    return true;
+    return start;
   }
 
   @Override
-  public void flushBufferBeforeTerminating() {
-    try {
-      finishCurrentTest(null, myVisitor);
+  protected void startTest(@NotNull String testName, @Nullable ServiceMessageVisitor visitor) throws ParseException {
+    String currentTestName = getCurrentTestName();
+    if (currentTestName != null && !currentTestName.equals(testName)) {
+      // previous test didn't fail, finish it as passed
+      finishTest(currentTestName, TestResult.PASSED, visitor);
     }
-    catch (ParseException ignore) {}
-    myVisitor = null;
-    super.flushBufferBeforeTerminating();
+    super.startTest(testName, visitor);
   }
 
-  private boolean isTestStarted() {return !TOP_LEVEL_BENCHMARK_NAME.equals(currentBenchmark);}
-
-  private void processTailText(@NotNull String text, Key outputType, ServiceMessageVisitor visitor, int tailOffset)
-    throws ParseException {
-    String tailText = text.substring(tailOffset);
-    Matcher tailMatcher = TAIL.matcher(tailText);
-    if (!tailText.isEmpty() && tailMatcher.find())  {
-      processServiceMessages(tailText.substring(tailMatcher.start(1)), outputType, visitor);
+  private static int findFirstNonWSIndex(@NotNull String text, int startOffset) {
+    int whitespaceIndex = StringUtil.indexOfAny(text, " \t", startOffset, text.length());
+    if (whitespaceIndex != -1) {
+      int newStartOffset = whitespaceIndex;
+      while (newStartOffset < text.length() && Character.isWhitespace(text.charAt(newStartOffset))) newStartOffset++;
+      return newStartOffset;
     }
-  }
-
-  private void finishCurrentTest(@Nullable Key outputType, @Nullable ServiceMessageVisitor visitor) throws ParseException {
-    if (isTestStarted()) {
-      testStopwatch.stop();
-      if (benchmarkFailing) {
-        benchmarkFailing = false;
-        String failedMessage = ServiceMessageBuilder.testFailed(currentBenchmark).addAttribute("message", "").toString();
-        super.processServiceMessages(failedMessage, outputType, visitor);
-      }
-
-      String finishedMessage = ServiceMessageBuilder.testFinished(currentBenchmark)
-        .addAttribute("duration", Long.toString(testStopwatch.elapsed(TimeUnit.MILLISECONDS))).toString();
-      testStopwatch.reset();
-      super.processServiceMessages(finishedMessage, outputType, visitor);
-    }
-  }
-
-  @NotNull
-  private static String testUrl(@NotNull String testName) {
-    return GoTestLocator.PROTOCOL + "://" + testName;
+    return -1;
   }
 }

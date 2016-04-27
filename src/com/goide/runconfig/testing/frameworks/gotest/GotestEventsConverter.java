@@ -17,13 +17,8 @@
 package com.goide.runconfig.testing.frameworks.gotest;
 
 import com.goide.GoConstants;
-import com.goide.runconfig.testing.GoTestEventsConverterBase;
-import com.goide.runconfig.testing.GoTestLocator;
 import com.intellij.execution.testframework.TestConsoleProperties;
-import com.intellij.execution.testframework.sm.ServiceMessageBuilder;
-import com.intellij.execution.testframework.sm.runner.OutputToGeneralTestEventsConverter;
 import com.intellij.openapi.util.Key;
-import com.intellij.openapi.util.text.StringUtil;
 import jetbrains.buildServer.messages.serviceMessages.ServiceMessageVisitor;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,121 +26,43 @@ import java.text.ParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class GotestEventsConverter extends OutputToGeneralTestEventsConverter implements GoTestEventsConverterBase {
-  private static final String FRAMEWORK_NAME = "gotest";
-
+public class GotestEventsConverter extends GoTestEventsConverterBaseImpl {
   private static final Pattern RUN = Pattern.compile("^=== RUN\\s+(" + GoConstants.IDENTIFIER_REGEX + ")");
   private static final Pattern PASSED = Pattern.compile("--- PASS:\\s+(" + GoConstants.IDENTIFIER_REGEX + ")");
   private static final Pattern SKIP = Pattern.compile("--- SKIP:\\s+(" + GoConstants.IDENTIFIER_REGEX + ")");
   private static final Pattern FAILED = Pattern.compile("--- FAIL:\\s+(" + GoConstants.IDENTIFIER_REGEX + ")");
   private static final Pattern FINISHED = Pattern.compile("^(PASS)|(FAIL)$");
 
-  private boolean myFailed;
-  private boolean mySkipped;
-  private boolean myOutputAppeared;
-  @NotNull private StringBuilder myStdOut = new StringBuilder();
-  @NotNull private String myCurrentTest = "<test>";
-  private long myCurrentTestStart;
-
   public GotestEventsConverter(@NotNull TestConsoleProperties consoleProperties) {
-    super(FRAMEWORK_NAME, consoleProperties);
+    super(GotestFramework.NAME, consoleProperties);
   }
 
   @Override
-  public boolean processServiceMessages(@NotNull String text, Key outputType, ServiceMessageVisitor visitor) throws ParseException {
+  protected int processLine(@NotNull String line, int start, Key outputType, ServiceMessageVisitor visitor) throws ParseException {
     Matcher matcher;
-
-    if ((matcher = RUN.matcher(text)).find()) {
-      myOutputAppeared = false;
-      String testName = StringUtil.notNullize(matcher.group(1), "<test>");
-      ServiceMessageBuilder testStarted = ServiceMessageBuilder.testStarted(testName).addAttribute("locationHint", testUrl(testName));
-      boolean result = processNotFinishedMessage(testStarted.toString(), outputType, visitor);
-      myCurrentTestStart = System.currentTimeMillis();
-      return result;
+    if ((matcher = RUN.matcher(line)).find(start)) {
+      startTest(matcher.group(1), visitor);
+      return line.length();
     }
-
-    if ((matcher = PASSED.matcher(text)).find()) {
-      String testName = StringUtil.notNullize(matcher.group(1), "<test>");
-      return handleFinishTest(text, matcher, testName, outputType, visitor)
-             && processNotFinishedMessage(testFinishedMessage(testName), outputType, visitor);
+    if ((matcher = SKIP.matcher(line)).find(start)) {
+      processOutput(line.substring(start, matcher.start()), outputType, visitor);
+      finishTest(matcher.group(1), TestResult.SKIPPED, visitor);
+      return line.length();
     }
-
-    if ((matcher = SKIP.matcher(text)).find()) {
-      mySkipped = true;
-      myCurrentTest = StringUtil.notNullize(matcher.group(1), "<test>");
-      handleFinishTest(text, matcher, myCurrentTest, outputType, visitor);
-      return true;
+    if ((matcher = FAILED.matcher(line)).find(start)) {
+      processOutput(line.substring(start, matcher.start()), outputType, visitor);
+      finishTest(matcher.group(1), TestResult.FAILED, visitor);
+      return line.length();
     }
-
-    if ((matcher = FAILED.matcher(text)).find()) {
-      myFailed = true;
-      myCurrentTest = StringUtil.notNullize(matcher.group(1), "<test>");
-      handleFinishTest(text, matcher, myCurrentTest, outputType, visitor);
-      return true;
+    if ((matcher = PASSED.matcher(line)).find(start)) {
+      processOutput(line.substring(start, matcher.start()), outputType, visitor);
+      finishTest(matcher.group(1), TestResult.PASSED, visitor);
+      return line.length();
     }
-
-    if (myFailed || mySkipped) {
-      if (!StringUtil.isEmptyOrSpaces(text) && !FINISHED.matcher(text).find()) {
-        myStdOut.append(text);
-        return true;
-      }
-      else {
-        return processFailedMessage(outputType, visitor);
-      }
+    if (FINISHED.matcher(line).find(start)) {
+      finishDelayedTest(visitor);
+      return line.length();
     }
-
-    myOutputAppeared = true;
-    return super.processServiceMessages(text, outputType, visitor);
-  }
-
-  @NotNull
-  private String testFinishedMessage(String testName) {
-    long duration = System.currentTimeMillis() - myCurrentTestStart;
-    return ServiceMessageBuilder.testFinished(testName).addAttribute("duration", Long.toString(duration)).toString();
-  }
-
-  @NotNull
-  private static String testUrl(@NotNull String testName) {
-    return GoTestLocator.PROTOCOL + "://" + testName;
-  }
-
-  private boolean processNotFinishedMessage(String message, Key outputType, ServiceMessageVisitor visitor) throws ParseException {
-    if (myFailed || mySkipped) {
-      processFailedMessage(outputType, visitor);
-    }
-    return super.processServiceMessages(message, outputType, visitor);
-  }
-
-  private boolean processFailedMessage(Key outputType, ServiceMessageVisitor visitor) throws ParseException {
-    ServiceMessageBuilder builder = myFailed
-                                    ? ServiceMessageBuilder.testFailed(myCurrentTest)
-                                    : ServiceMessageBuilder.testIgnored(myCurrentTest);
-    String message = builder.addAttribute("message", myStdOut.toString().trim() + "\n").toString();
-
-    myFailed = false;
-    mySkipped = false;
-    myStdOut = new StringBuilder();
-    return super.processServiceMessages(message, outputType, visitor)
-           && super.processServiceMessages(testFinishedMessage(myCurrentTest), outputType, visitor);
-  }
-
-  private boolean handleFinishTest(String text, Matcher matcher, String testName, Key outputType, ServiceMessageVisitor visitor)
-    throws ParseException {
-    if (!addNewLineIfNeeded(testName, outputType, visitor)) {
-      return false;
-    }
-    if (matcher.start() > 0) {
-      myOutputAppeared = true;
-      String out = text.substring(0, matcher.start()) + (!myFailed && !mySkipped ? "\n" : "");
-      ServiceMessageBuilder message = ServiceMessageBuilder.testStdOut(testName).addAttribute("out", out);
-      super.processServiceMessages(message.toString(), outputType, visitor);
-    }
-    return true;
-  }
-
-  private boolean addNewLineIfNeeded(@NotNull String testName, @NotNull Key outputType, @NotNull ServiceMessageVisitor visitor)
-    throws ParseException {
-    ServiceMessageBuilder message = ServiceMessageBuilder.testStdOut(testName).addAttribute("out", "\n");
-    return !myOutputAppeared || super.processServiceMessages(message.toString(), outputType, visitor);
+    return start;
   }
 }
