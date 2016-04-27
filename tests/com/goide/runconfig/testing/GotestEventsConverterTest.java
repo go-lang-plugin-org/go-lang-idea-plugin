@@ -52,6 +52,10 @@ public class GotestEventsConverterTest extends GoEventsConverterTestCase {
     doTest();
   }
 
+  public void testUnicodeTestName() {
+    doTest();
+  }
+
   @NotNull
   @Override
   protected String getBasePath() {
