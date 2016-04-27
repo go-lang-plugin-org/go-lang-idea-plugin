@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,35 +20,35 @@ import com.goide.runconfig.testing.frameworks.gotest.GotestFramework;
 import org.jetbrains.annotations.NotNull;
 
 public class GotestEventsConverterTest extends GoEventsConverterTestCase {
-  public void testSingleTestFailed() throws Exception {
+  public void testSingleTestFailed() {
     doTest();
   }
 
-  public void testSingleTestOk() throws Exception {
+  public void testSingleTestOk() {
     doTest();
   }
 
-  public void testMultipleTestsFailed() throws Exception {
+  public void testMultipleTestsFailed() {
     doTest();
   }
 
-  public void testMultipleTestsOk() throws Exception {
+  public void testMultipleTestsOk() {
     doTest();
   }
 
-  public void testSingleTestLeadingSpaceOk() throws Exception {
+  public void testSingleTestLeadingSpaceOk() {
     doTest();
   }
   
-  public void testSkipTest() throws Exception {
+  public void testSkipTest() {
     doTest();
   }
   
-  public void testStdOut() throws Exception {
+  public void testStdOut() {
     doTest();
   }
   
-  public void testOneLineEvents() throws Exception {
+  public void testOneLineEvents() {
     doTest();
   }
 

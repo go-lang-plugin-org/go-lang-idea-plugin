@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,20 +20,20 @@ import com.goide.runconfig.testing.frameworks.gocheck.GocheckFramework;
 import org.jetbrains.annotations.NotNull;
 
 public class GocheckEventsConverterTest extends GoEventsConverterTestCase {
-  public void testPass()                      throws Exception { doTest(); }
-  public void testAssertions()                throws Exception { doTest(); }
-  public void testAssertionsInvalidFormat()   throws Exception { doTest(); }
-  public void testPanic()                     throws Exception { doTest(); }
-  public void testPanicInvalidFormat()        throws Exception { doTest(); }
-  public void testFixtureStdOut()             throws Exception { doTest(); }
-  public void testSuiteSetUpError()           throws Exception { doTest(); }
-  public void testSuiteTearDownError()        throws Exception { doTest(); }
-  public void testTestSetUpError()            throws Exception { doTest(); }
-  public void testTestTearDownError()         throws Exception { doTest(); }
-  public void testTestErrorWithFixtures()     throws Exception { doTest(); }
-  public void testTestAndTestTearDownError()  throws Exception { doTest(); }
-  public void testTestBothFixturesError()     throws Exception { doTest(); }
-  public void testSkippingTests()             throws Exception { doTest(); }
+  public void testPass()                      { doTest(); }
+  public void testAssertions()                { doTest(); }
+  public void testAssertionsInvalidFormat()   { doTest(); }
+  public void testPanic()                     { doTest(); }
+  public void testPanicInvalidFormat()        { doTest(); }
+  public void testFixtureStdOut()             { doTest(); }
+  public void testSuiteSetUpError()           { doTest(); }
+  public void testSuiteTearDownError()        { doTest(); }
+  public void testTestSetUpError()            { doTest(); }
+  public void testTestTearDownError()         { doTest(); }
+  public void testTestErrorWithFixtures()     { doTest(); }
+  public void testTestAndTestTearDownError()  { doTest(); }
+  public void testTestBothFixturesError()     { doTest(); }
+  public void testSkippingTests()             { doTest(); }
 
   @NotNull
   @Override
