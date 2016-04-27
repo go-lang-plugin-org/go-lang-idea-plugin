@@ -1,0 +1,6 @@
+TestStarted
+    - locationHint=gotest://TestМойТест
+    - name=TestМойТест
+TestFinished
+    - duration=42
+    - name=TestМойТест

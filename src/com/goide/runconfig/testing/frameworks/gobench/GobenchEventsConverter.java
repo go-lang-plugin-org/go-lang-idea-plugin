@@ -16,6 +16,7 @@
 
 package com.goide.runconfig.testing.frameworks.gobench;
 
+import com.goide.GoConstants;
 import com.goide.runconfig.testing.GoTestLocator;
 import com.google.common.base.Stopwatch;
 import com.intellij.execution.testframework.TestConsoleProperties;
@@ -32,14 +33,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GobenchEventsConverter extends OutputToGeneralTestEventsConverter {
-  private static final Pattern RUN = Pattern.compile("^(Benchmark[^ (\n\t\r]+)");
-  private static final Pattern FAIL = Pattern.compile("^--- FAIL: (Benchmark[^ (\n\t\r]+)");
+  private static final Pattern RUN = Pattern.compile("^(Benchmark" + GoConstants.IDENTIFIER_REGEX + ")");
+  private static final Pattern FAIL = Pattern.compile("^--- FAIL: (Benchmark" + GoConstants.IDENTIFIER_REGEX + ")");
   private static final Pattern OK = Pattern.compile("^ok  \t");
 
   private final Stopwatch testStopwatch = Stopwatch.createUnstarted();
   private String currentBenchmark = "<benchmark>";
   private boolean benchmarkFailing;
-  
+
   public GobenchEventsConverter(TestConsoleProperties properties) {
     super(GobenchFramework.NAME, properties);
   }
@@ -50,13 +51,15 @@ public class GobenchEventsConverter extends OutputToGeneralTestEventsConverter {
 
     if (OK.matcher(text).find()) {
       maybeFinishCurrentTest();
-    } else if ((matcher = RUN.matcher(text)).find()) {
+    }
+    else if ((matcher = RUN.matcher(text)).find()) {
       maybeFinishCurrentTest();
       testStopwatch.start();
       currentBenchmark = StringUtil.notNullize(matcher.group(1), "<benchmark>");
       TestStartedEvent event = new TestStartedEvent(currentBenchmark, testUrl(currentBenchmark));
       getProcessor().onTestStarted(event);
-    } else if ((matcher = FAIL.matcher(text)).find()) {
+    }
+    else if ((matcher = FAIL.matcher(text)).find()) {
       currentBenchmark = StringUtil.notNullize(matcher.group(1), "<benchmark>");
       benchmarkFailing = true;
     }
