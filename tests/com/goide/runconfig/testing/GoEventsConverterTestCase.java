@@ -20,6 +20,8 @@ import com.goide.GoCodeInsightFixtureTestCase;
 import com.intellij.execution.Executor;
 import com.intellij.execution.executors.DefaultRunExecutor;
 import com.intellij.execution.process.ProcessOutputTypes;
+import com.intellij.execution.testframework.sm.runner.OutputToGeneralTestEventsConverter;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.CharsetToolkit;
 import org.jetbrains.annotations.NotNull;
@@ -49,6 +51,8 @@ public abstract class GoEventsConverterTestCase extends GoCodeInsightFixtureTest
     catch (ParseException e) {
       throw new RuntimeException(e);
     }
+    ((OutputToGeneralTestEventsConverter)converter).flushBufferBeforeTerminating();
+    Disposer.dispose((OutputToGeneralTestEventsConverter)converter);
     assertSameLinesWithFile(getTestDataPath() + "/" + getTestName(true) + "-expected.txt", serviceMessageVisitor.getLog());
   }
 

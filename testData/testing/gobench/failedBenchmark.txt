@@ -1,0 +1,4 @@
+PASS
+BenchmarkBulk_Read-4    --- FAIL: BenchmarkBulk_Read-4
+        bulk_test.go:157: bulk.Read
+ok      github.com/cydev/stok/storage   0.020s

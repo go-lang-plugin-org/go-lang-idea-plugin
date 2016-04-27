@@ -1,0 +1,15 @@
+TestStarted
+    - locationHint=gotest://BenchmarkBulk_Read
+    - name=BenchmarkBulk_Read
+  TestStdOut
+      - name=BenchmarkBulk_Read
+      - out=        bulk_test.go:157: bulk.Read\n
+  TestStdOut
+      - name=BenchmarkBulk_Read
+      - out=ok      github.com/cydev/stok/storage   0.020s\n
+  TestFailed
+      - message=
+      - name=BenchmarkBulk_Read
+TestFinished
+    - duration=42
+    - name=BenchmarkBulk_Read

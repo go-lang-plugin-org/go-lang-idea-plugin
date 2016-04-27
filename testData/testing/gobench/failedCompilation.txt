@@ -1,0 +1,4 @@
+/usr/local/Cellar/go/1.6/libexec/bin/go test -v github.com/cydev/stok/storage -bench '^BenchmarkBulk_Read2|BenchmarkBulk_Read|BenchmarkBulk_Read3$' -run ^$
+# github.com/cydev/stok/storage
+storage/bulk_test.go:167: no new variables on left side of :=
+FAIL    github.com/cydev/stok/storage [build failed]

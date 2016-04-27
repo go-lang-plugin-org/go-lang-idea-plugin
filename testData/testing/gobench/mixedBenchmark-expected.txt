@@ -1,0 +1,54 @@
+TestStarted
+    - locationHint=gotest://BenchmarkBulk_Read2
+    - name=BenchmarkBulk_Read2
+  TestStdOut
+      - name=BenchmarkBulk_Read2
+      - out=2000000000               0.00 ns/op\n
+TestFinished
+    - duration=42
+    - name=BenchmarkBulk_Read2
+TestStarted
+    - locationHint=gotest://BenchmarkBulk_Read
+    - name=BenchmarkBulk_Read
+  TestStdOut
+      - name=BenchmarkBulk_Read
+      - out=        bulk_test.go:162: bulk.Read\n
+  TestStdOut
+      - name=BenchmarkBulk_Read
+      - out=        bulk_test.go:163: asdf\n
+  TestFailed
+      - message=
+      - name=BenchmarkBulk_Read
+TestFinished
+    - duration=42
+    - name=BenchmarkBulk_Read
+TestStarted
+    - locationHint=gotest://BenchmarkBulk_Read3
+    - name=BenchmarkBulk_Read3
+  TestStdOut
+      - name=BenchmarkBulk_Read3
+      - out=Hellooooo\n
+  TestStdOut
+      - name=BenchmarkBulk_Read3
+      - out=Hellooooo\n
+  TestStdOut
+      - name=BenchmarkBulk_Read3
+      - out=Hellooooo\n
+  TestStdOut
+      - name=BenchmarkBulk_Read3
+      - out=Hellooooo\n
+  TestStdOut
+      - name=BenchmarkBulk_Read3
+      - out=Hellooooo\n
+  TestStdOut
+      - name=BenchmarkBulk_Read3
+      - out=Hellooooo\n
+  TestStdOut
+      - name=BenchmarkBulk_Read3
+      - out=2000000000               0.00 ns/op\n
+  TestStdOut
+      - name=BenchmarkBulk_Read3
+      - out=ok      github.com/cydev/stok/storage   0.021s\n
+TestFinished
+    - duration=42
+    - name=BenchmarkBulk_Read3
