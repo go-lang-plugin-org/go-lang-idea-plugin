@@ -39,7 +39,7 @@ public class GoUnusedParameterInspection extends GoInspectionBase {
       @Override
       public void visitMethodDeclaration(@NotNull GoMethodDeclaration o) {
         super.visitMethodDeclaration(o);
-        visitDeclaration(o);
+        visitDeclaration(o, false);
       }
 
       @Override
@@ -48,14 +48,16 @@ public class GoUnusedParameterInspection extends GoInspectionBase {
         if (GoTestFinder.isTestFile(o.getContainingFile()) && GoTestFunctionType.fromName(o.getName()) != null) {
           return;
         }
-        visitDeclaration(o);
+        visitDeclaration(o, true);
       }
 
-      private void visitDeclaration(@NotNull GoFunctionOrMethodDeclaration o) {
+      private void visitDeclaration(@NotNull GoFunctionOrMethodDeclaration o, boolean checkParameters) {
         GoSignature signature = o.getSignature();
         if (signature == null) return;
-        GoParameters parameters = signature.getParameters();
-        visitParameterList(parameters.getParameterDeclarationList(), "parameter");
+        if (checkParameters) {
+          GoParameters parameters = signature.getParameters();
+          visitParameterList(parameters.getParameterDeclarationList(), "parameter");
+        }
 
         GoResult result = signature.getResult();
         GoParameters returnParameters = result != null ? result.getParameters() : null;

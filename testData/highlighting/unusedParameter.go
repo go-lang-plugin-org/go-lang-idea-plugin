@@ -10,7 +10,7 @@ type (
 	dem string
 )
 
-func (d dem) demo(<warning descr="Unused parameter 'hello'">hello</warning> string) (<warning descr="Unused named return parameter 'err'">err</warning> int) {
+func (d dem) demo(hello string) (<warning descr="Unused named return parameter 'err'">err</warning> int) {
 	println("hello")
 	return nil
 }
