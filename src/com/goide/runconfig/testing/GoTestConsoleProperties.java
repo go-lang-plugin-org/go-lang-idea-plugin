@@ -18,6 +18,7 @@ package com.goide.runconfig.testing;
 
 import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.goide.runconfig.GoRunConfigurationBase;
+import com.goide.sdk.GoPackageUtil;
 import com.goide.util.GoUtil;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
@@ -40,7 +41,13 @@ import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VfsUtilCore;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.search.GlobalSearchScopesCore;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,20 +63,47 @@ public class GoTestConsoleProperties extends SMTRunnerConsoleProperties implemen
   @Override
   protected GlobalSearchScope initScope() {
     RunProfile configuration = getConfiguration();
+    if (configuration instanceof GoTestRunConfiguration) {
+      Project project = ((GoTestRunConfiguration)configuration).getProject();
+      Module module = ((GoTestRunConfiguration)configuration).getConfigurationModule().getModule();
+      switch (((GoTestRunConfiguration)configuration).getKind()) {
+        case DIRECTORY:
+          String directoryUrl = VfsUtilCore.pathToUrl(((GoTestRunConfiguration)configuration).getDirectoryPath());
+          VirtualFile directory = VirtualFileManager.getInstance().findFileByUrl(directoryUrl);
+          if (directory != null) {
+            return GlobalSearchScopesCore.directoryScope(project, directory, true);
+          }
+          break;
+        case PACKAGE:
+          VirtualFile packageDir = GoPackageUtil.findByImportPath(((GoTestRunConfiguration)configuration).getPackage(), project, module);
+          PsiDirectory psiDirectory = packageDir != null ? PsiManager.getInstance(project).findDirectory(packageDir) : null;
+          if (psiDirectory != null) {
+            return GoPackageUtil.packageScope(psiDirectory, null);
+          }
+          break;
+        case FILE:
+          String fileUrl = VfsUtilCore.pathToUrl(((GoTestRunConfiguration)configuration).getFilePath());
+          VirtualFile file = VirtualFileManager.getInstance().findFileByUrl(fileUrl);
+          if (file != null) {
+            return GlobalSearchScope.fileScope(project, file);
+          }
+          break;
+      }
+    }
     if (configuration instanceof GoRunConfigurationBase) {
       GlobalSearchScope scope = GlobalSearchScope.EMPTY_SCOPE;
       for (Module module : ((GoRunConfigurationBase)configuration).getModules()) {
         scope = new GoUtil.TestsScope(GoUtil.goPathResolveScope(module, null));
       }
-      return scope;   
+      return scope;
     }
-    return super.initScope(); 
+    return super.initScope();
   }
 
   @Nullable
   @Override
   public SMTestLocator getTestLocator() {
-    return GoTestLocator.INSTANCE; 
+    return GoTestLocator.INSTANCE;
   }
 
   @NotNull
@@ -125,7 +159,7 @@ public class GoTestConsoleProperties extends SMTRunnerConsoleProperties implemen
             if (failedTests.isEmpty()) {
               return null;
             }
-            
+
             GoTestRunConfiguration goTestRunConfiguration = (GoTestRunConfiguration)configurationBase;
             Module module = goTestRunConfiguration.getConfigurationModule().getModule();
             GoTestRunningState runningState = goTestRunConfiguration.newRunningState(environment, module);
