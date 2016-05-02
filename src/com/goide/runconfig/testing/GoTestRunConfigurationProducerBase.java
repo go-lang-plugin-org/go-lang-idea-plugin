@@ -81,6 +81,9 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
       else {
         GoFunctionOrMethodDeclaration function = findTestFunctionInContext(contextElement);
         if (function != null) {
+          if (!isAppropriateFunctionToRun(function)) {
+            return false;
+          }
           configuration.setName(getFunctionConfigurationName(function, getFileConfigurationName(file.getName())));
           configuration.setPattern("^" + function.getName() + "$");
 
@@ -137,19 +140,24 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
         if (GoRunUtil.isPackageContext(contextElement) && configuration.getPattern().isEmpty()) return true;
 
         GoFunctionOrMethodDeclaration contextFunction = findTestFunctionInContext(contextElement);
-        return contextFunction != null
+        return contextFunction != null && isAppropriateFunctionToRun(contextFunction)
                ? configuration.getPattern().equals("^" + contextFunction.getName() + "$")
                : configuration.getPattern().isEmpty();
       case FILE:
+        GoFunctionOrMethodDeclaration contextTestFunction = findTestFunctionInContext(contextElement);
         return GoTestFinder.isTestFile(file) && FileUtil.pathsEqual(configuration.getFilePath(), file.getVirtualFile().getPath()) &&
-               findTestFunctionInContext(contextElement) == null;
+               (contextTestFunction == null || !isAppropriateFunctionToRun(contextTestFunction));
     }
     return false;
   }
 
   @Nullable
-  protected GoFunctionOrMethodDeclaration findTestFunctionInContext(@NotNull PsiElement contextElement) {
+  private static GoFunctionOrMethodDeclaration findTestFunctionInContext(@NotNull PsiElement contextElement) {
     GoFunctionOrMethodDeclaration function = PsiTreeUtil.getNonStrictParentOfType(contextElement, GoFunctionOrMethodDeclaration.class);
-    return function != null && GoTestFinder.isTestOrExampleFunction(function) ? function : null;
+    return function != null && GoTestFunctionType.fromName(function.getName()) != null ? function : null;
+  }
+
+  protected boolean isAppropriateFunctionToRun(@NotNull GoFunctionOrMethodDeclaration functionOrMethodDeclaration) {
+    return GoTestFinder.isTestOrExampleFunction(functionOrMethodDeclaration);
   }
 }
