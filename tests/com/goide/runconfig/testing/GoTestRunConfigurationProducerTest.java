@@ -25,6 +25,7 @@ import com.intellij.execution.actions.ConfigurationFromContext;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.openapi.util.JDOMUtil;
 import com.intellij.openapi.util.WriteExternalException;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -228,7 +229,8 @@ public class GoTestRunConfigurationProducerTest extends GoCodeInsightFixtureTest
   }
 
   private void doTestProducedConfigurations() {
-    myFixture.configureByFile(getTestName(true) + ".go");
+    VirtualFile file = myFixture.copyFileToProject(getTestName(true) + ".go", "import/path/" + getTestName(true) + ".go");
+    myFixture.configureFromExistingVirtualFile(file);
     doTestProducedConfigurations(myFixture.getFile().findElementAt(myFixture.getCaretOffset()));
   }
 

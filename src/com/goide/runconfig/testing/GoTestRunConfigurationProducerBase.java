@@ -73,11 +73,11 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
 
     PsiFile file = contextElement.getContainingFile();
     if (myFramework.isAvailableOnFile(file)) {
-      if (GoRunUtil.isPackageContext(contextElement)) {
-        String packageName = StringUtil.notNullize(((GoFile)file).getImportPath(false));
+      String importPath = ((GoFile)file).getImportPath(false);
+      if (GoRunUtil.isPackageContext(contextElement) && StringUtil.isNotEmpty(importPath)) {
         configuration.setKind(GoTestRunConfiguration.Kind.PACKAGE);
-        configuration.setPackage(packageName);
-        configuration.setName(getPackageConfigurationName(packageName));
+        configuration.setPackage(importPath);
+        configuration.setName(getPackageConfigurationName(importPath));
         return true;
       }
       else {
@@ -92,7 +92,7 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
             return true;
           }
         }
-        else if (file instanceof GoFile && hasSupportedFunctions((GoFile)file)) {
+        else if (hasSupportedFunctions((GoFile)file)) {
           configuration.setName(getFileConfigurationName(file.getName()));
           configuration.setKind(GoTestRunConfiguration.Kind.FILE);
           configuration.setFilePath(file.getVirtualFile().getPath());

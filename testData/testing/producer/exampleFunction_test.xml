@@ -3,6 +3,7 @@
     <module name="light_idea_test_case" />
     <framework value="gotest" />
     <kind value="PACKAGE" />
+    <package value="import/path" />
     <pattern value="^ExampleName$" />
   </configurations>
 </configurations>
