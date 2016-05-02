@@ -127,7 +127,7 @@ private TypeLit ::=
 
 ArrayOrSliceType ::= '[' ('...'|Expression?) ']' Type {pin=1}
 
-StructType ::= struct '{' Fields? '}' {pin=1 methods=[shouldGoDeeper]}
+StructType ::= struct '{' Fields? '}' {pin=1}
 private Fields ::= FieldDeclaration (semi FieldDeclaration)* semi? {pin=1}
 FieldDeclaration ::= (FieldDefinitionList Type | AnonymousFieldDefinition) Tag?
 private FieldDefinitionList ::= FieldDefinition (',' FieldDefinition)*
@@ -168,7 +168,7 @@ ParamDefinition ::= identifier {
 
 InterfaceType ::= interface '{' MethodSpecs? '}' {
   pin(".*")=1
-  methods=[getMethods getBaseTypesReferences shouldGoDeeper]
+  methods=[getMethods getBaseTypesReferences]
 }
 private MethodSpecs ::= MethodSpec (semi MethodSpec)* semi? {pin=1}
 MethodSpec ::= TypeName &(!'(') | identifier Signature {

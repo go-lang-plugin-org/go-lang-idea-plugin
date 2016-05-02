@@ -70,8 +70,4 @@ public class GoStructTypeImpl extends GoTypeImpl implements GoStructType {
     return findNotNullChildByType(STRUCT);
   }
 
-  public boolean shouldGoDeeper() {
-    return GoPsiImplUtil.shouldGoDeeper(this);
-  }
-
 }
