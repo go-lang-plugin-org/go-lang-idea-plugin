@@ -16,6 +16,8 @@
 
 package com.goide.runconfig.testing.frameworks.gotest;
 
+import com.goide.psi.GoFunctionDeclaration;
+import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.goide.runconfig.testing.*;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.testframework.TestConsoleProperties;
@@ -60,6 +62,12 @@ public class GotestFramework extends GoTestFramework {
   @Override
   public boolean isAvailableOnFile(@Nullable PsiFile file) {
     return GoTestFinder.isTestFile(file);
+  }
+
+  @Override
+  public boolean isAvailableOnFunction(@Nullable GoFunctionOrMethodDeclaration functionOrMethodDeclaration) {
+    return functionOrMethodDeclaration instanceof GoFunctionDeclaration &&
+           GoTestFinder.isTestOrExampleFunction(functionOrMethodDeclaration);
   }
 
   @NotNull

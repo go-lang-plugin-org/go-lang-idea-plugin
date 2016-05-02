@@ -16,9 +16,7 @@
 
 package com.goide.runconfig.testing.frameworks.gobench;
 
-import com.goide.psi.GoFunctionDeclaration;
 import com.goide.psi.GoFunctionOrMethodDeclaration;
-import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.runconfig.testing.GoTestRunConfigurationProducerBase;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,10 +41,5 @@ public class GobenchRunConfigurationProducer extends GoTestRunConfigurationProdu
   @Override
   protected String getFunctionConfigurationName(@NotNull GoFunctionOrMethodDeclaration function, @NotNull String fileName) {
     return "gobench " + super.getFunctionConfigurationName(function, fileName);
-  }
-
-  @Override
-  protected boolean isAppropriateFunctionToRun(@NotNull GoFunctionOrMethodDeclaration functionOrMethodDeclaration) {
-    return functionOrMethodDeclaration instanceof GoFunctionDeclaration && GoTestFinder.isBenchmarkFunction(functionOrMethodDeclaration);
   }
 }

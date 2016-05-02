@@ -39,7 +39,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class GoTestRunConfigurationProducerBase extends RunConfigurationProducer<GoTestRunConfiguration> {
-
   @NotNull private final GoTestFramework myFramework;
 
   protected GoTestRunConfigurationProducerBase(@NotNull GoTestFramework framework) {
@@ -84,7 +83,7 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
       else {
         GoFunctionOrMethodDeclaration function = findTestFunctionInContext(contextElement);
         if (function != null) {
-          if (isAppropriateFunctionToRun(function)) {
+          if (myFramework.isAvailableOnFunction(function)) {
             configuration.setName(getFunctionConfigurationName(function, getFileConfigurationName(file.getName())));
             configuration.setPattern("^" + function.getName() + "$");
 
@@ -106,12 +105,12 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
 
   private boolean hasSupportedFunctions(@NotNull GoFile file) {
     for (GoFunctionDeclaration declaration : file.getFunctions()) {
-      if (isAppropriateFunctionToRun(declaration)) {
+      if (myFramework.isAvailableOnFunction(declaration)) {
         return true;
       }
     }
     for (GoMethodDeclaration declaration : file.getMethods()) {
-      if (isAppropriateFunctionToRun(declaration)) {
+      if (myFramework.isAvailableOnFunction(declaration)) {
         return true;
       }
     }
@@ -156,13 +155,13 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
         if (GoRunUtil.isPackageContext(contextElement) && configuration.getPattern().isEmpty()) return true;
 
         GoFunctionOrMethodDeclaration contextFunction = findTestFunctionInContext(contextElement);
-        return contextFunction != null && isAppropriateFunctionToRun(contextFunction)
+        return contextFunction != null && myFramework.isAvailableOnFunction(contextFunction)
                ? configuration.getPattern().equals("^" + contextFunction.getName() + "$")
                : configuration.getPattern().isEmpty();
       case FILE:
         GoFunctionOrMethodDeclaration contextTestFunction = findTestFunctionInContext(contextElement);
         return GoTestFinder.isTestFile(file) && FileUtil.pathsEqual(configuration.getFilePath(), file.getVirtualFile().getPath()) &&
-               (contextTestFunction == null || !isAppropriateFunctionToRun(contextTestFunction));
+               (contextTestFunction == null || !myFramework.isAvailableOnFunction(contextTestFunction));
     }
     return false;
   }
@@ -171,9 +170,5 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
   private static GoFunctionOrMethodDeclaration findTestFunctionInContext(@NotNull PsiElement contextElement) {
     GoFunctionOrMethodDeclaration function = PsiTreeUtil.getNonStrictParentOfType(contextElement, GoFunctionOrMethodDeclaration.class);
     return function != null && GoTestFunctionType.fromName(function.getName()) != null ? function : null;
-  }
-
-  protected boolean isAppropriateFunctionToRun(@NotNull GoFunctionOrMethodDeclaration functionOrMethodDeclaration) {
-    return GoTestFinder.isTestOrExampleFunction(functionOrMethodDeclaration);
   }
 }
