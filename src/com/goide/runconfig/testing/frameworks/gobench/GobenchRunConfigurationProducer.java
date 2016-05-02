@@ -20,10 +20,7 @@ import com.goide.psi.GoFunctionDeclaration;
 import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.runconfig.testing.GoTestRunConfigurationProducerBase;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class GobenchRunConfigurationProducer extends GoTestRunConfigurationProducerBase implements Cloneable {
   public GobenchRunConfigurationProducer() {
@@ -48,10 +45,8 @@ public class GobenchRunConfigurationProducer extends GoTestRunConfigurationProdu
     return "gobench " + super.getFunctionConfigurationName(function, fileName);
   }
 
-  @Nullable
   @Override
-  protected GoFunctionDeclaration findTestFunctionInContext(@NotNull PsiElement contextElement) {
-    GoFunctionDeclaration function = PsiTreeUtil.getNonStrictParentOfType(contextElement, GoFunctionDeclaration.class);
-    return function != null && GoTestFinder.isBenchmarkFunction(function) ? function : null;
+  protected boolean isAppropriateFunctionToRun(@NotNull GoFunctionOrMethodDeclaration functionOrMethodDeclaration) {
+    return functionOrMethodDeclaration instanceof GoFunctionDeclaration && GoTestFinder.isBenchmarkFunction(functionOrMethodDeclaration);
   }
 }

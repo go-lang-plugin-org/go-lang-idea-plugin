@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,10 @@
 
 package com.goide.runconfig.testing.frameworks.gocheck;
 
-import com.goide.psi.GoFunctionDeclaration;
 import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.goide.psi.GoMethodDeclaration;
 import com.goide.runconfig.testing.GoTestRunConfigurationProducerBase;
-import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class GocheckRunConfigurationProducer extends GoTestRunConfigurationProducerBase implements Cloneable {
   public GocheckRunConfigurationProducer() {
@@ -49,13 +46,8 @@ public class GocheckRunConfigurationProducer extends GoTestRunConfigurationProdu
     return "gocheck " + super.getFileConfigurationName(fileName);
   }
 
-  @Nullable
   @Override
-  protected GoFunctionOrMethodDeclaration findTestFunctionInContext(@NotNull PsiElement contextElement) {
-    GoFunctionOrMethodDeclaration functionOrMethodDecl = super.findTestFunctionInContext(contextElement);
-    if (functionOrMethodDecl instanceof GoFunctionDeclaration) {
-      return null;
-    }
-    return functionOrMethodDecl;
+  protected boolean isAppropriateFunctionToRun(@NotNull GoFunctionOrMethodDeclaration functionOrMethodDeclaration) {
+    return functionOrMethodDeclaration instanceof GoMethodDeclaration && super.isAppropriateFunctionToRun(functionOrMethodDeclaration);
   }
 }
