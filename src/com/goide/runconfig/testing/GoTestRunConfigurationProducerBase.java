@@ -160,8 +160,8 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
                : configuration.getPattern().isEmpty();
       case FILE:
         GoFunctionOrMethodDeclaration contextTestFunction = findTestFunctionInContext(contextElement);
-        return GoTestFinder.isTestFile(file) && FileUtil.pathsEqual(configuration.getFilePath(), file.getVirtualFile().getPath()) &&
-               (contextTestFunction == null || !myFramework.isAvailableOnFunction(contextTestFunction));
+        return contextTestFunction == null && GoTestFinder.isTestFile(file) && 
+               FileUtil.pathsEqual(configuration.getFilePath(), file.getVirtualFile().getPath());
     }
     return false;
   }
