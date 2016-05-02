@@ -75,6 +75,10 @@ public class GoTestRunConfigurationProducerTest extends GoCodeInsightFixtureTest
   public void testSimpleFunction_test() {
     doTestProducedConfigurations();
   }
+  
+  public void testSimpleFunctionInFileWithTests_test() {
+    doTestProducedConfigurations();
+  }
 
   public void testBenchmarkFunction_test() {
     doTestProducedConfigurations();
