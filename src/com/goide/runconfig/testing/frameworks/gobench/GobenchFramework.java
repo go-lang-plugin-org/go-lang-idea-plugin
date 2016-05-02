@@ -16,6 +16,8 @@
 
 package com.goide.runconfig.testing.frameworks.gobench;
 
+import com.goide.psi.GoFunctionDeclaration;
+import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.runconfig.testing.GoTestFramework;
 import com.goide.runconfig.testing.GoTestRunConfiguration;
@@ -46,6 +48,11 @@ public class GobenchFramework extends GoTestFramework {
   @Override
   public boolean isAvailableOnFile(@Nullable PsiFile file) {
     return GoTestFinder.isTestFile(file);
+  }
+
+  @Override
+  public boolean isAvailableOnFunction(@Nullable GoFunctionOrMethodDeclaration functionOrMethodDeclaration) {
+    return functionOrMethodDeclaration instanceof GoFunctionDeclaration && GoTestFinder.isBenchmarkFunction(functionOrMethodDeclaration);
   }
 
   @NotNull

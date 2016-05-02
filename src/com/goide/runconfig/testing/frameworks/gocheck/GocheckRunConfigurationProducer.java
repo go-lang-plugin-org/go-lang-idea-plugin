@@ -45,9 +45,4 @@ public class GocheckRunConfigurationProducer extends GoTestRunConfigurationProdu
   protected String getFileConfigurationName(@NotNull String fileName) {
     return "gocheck " + super.getFileConfigurationName(fileName);
   }
-
-  @Override
-  protected boolean isAppropriateFunctionToRun(@NotNull GoFunctionOrMethodDeclaration functionOrMethodDeclaration) {
-    return functionOrMethodDeclaration instanceof GoMethodDeclaration && super.isAppropriateFunctionToRun(functionOrMethodDeclaration);
-  }
 }

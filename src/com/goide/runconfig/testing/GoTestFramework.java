@@ -16,6 +16,7 @@
 
 package com.goide.runconfig.testing;
 
+import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.goide.runconfig.testing.frameworks.gobench.GobenchFramework;
 import com.goide.runconfig.testing.frameworks.gocheck.GocheckFramework;
 import com.goide.runconfig.testing.frameworks.gotest.GotestFramework;
@@ -65,6 +66,8 @@ public abstract class GoTestFramework {
   public abstract boolean isAvailable(@Nullable Module module);
 
   public abstract boolean isAvailableOnFile(@Nullable PsiFile file);
+
+  public abstract boolean isAvailableOnFunction(@Nullable GoFunctionOrMethodDeclaration functionOrMethodDeclaration);
 
   @NotNull
   protected abstract GoTestRunningState newRunningState(@NotNull ExecutionEnvironment env,

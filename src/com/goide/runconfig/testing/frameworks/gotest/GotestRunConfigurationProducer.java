@@ -16,18 +16,10 @@
 
 package com.goide.runconfig.testing.frameworks.gotest;
 
-import com.goide.psi.GoFunctionDeclaration;
-import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.goide.runconfig.testing.GoTestRunConfigurationProducerBase;
-import org.jetbrains.annotations.NotNull;
 
 public class GotestRunConfigurationProducer extends GoTestRunConfigurationProducerBase implements Cloneable {
   public GotestRunConfigurationProducer() {
     super(GotestFramework.INSTANCE);
-  }
-
-  @Override
-  protected boolean isAppropriateFunctionToRun(@NotNull GoFunctionOrMethodDeclaration functionOrMethodDeclaration) {
-    return functionOrMethodDeclaration instanceof GoFunctionDeclaration && super.isAppropriateFunctionToRun(functionOrMethodDeclaration);
   }
 }
