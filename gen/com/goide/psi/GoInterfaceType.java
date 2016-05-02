@@ -41,6 +41,4 @@ public interface GoInterfaceType extends GoType {
   @NotNull
   List<GoTypeReferenceExpression> getBaseTypesReferences();
 
-  boolean shouldGoDeeper();
-
 }

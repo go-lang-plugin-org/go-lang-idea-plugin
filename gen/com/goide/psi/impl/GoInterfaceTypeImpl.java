@@ -80,8 +80,4 @@ public class GoInterfaceTypeImpl extends GoTypeImpl implements GoInterfaceType {
     return GoPsiImplUtil.getBaseTypesReferences(this);
   }
 
-  public boolean shouldGoDeeper() {
-    return GoPsiImplUtil.shouldGoDeeper(this);
-  }
-
 }

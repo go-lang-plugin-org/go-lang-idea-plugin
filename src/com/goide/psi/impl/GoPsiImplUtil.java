@@ -522,6 +522,7 @@ public class GoPsiImplUtil {
     return resolve != null ? resolve.getUnderlyingType() : null;
   }
 
+  @Nullable
   public static GoType resolveType(@NotNull GoTypeReferenceExpression expression) {
     PsiElement resolve = expression.resolve();
     if (resolve instanceof GoTypeSpec) return ((GoTypeSpec)resolve).getSpecType();
@@ -1050,15 +1051,7 @@ public class GoPsiImplUtil {
   }
 
   public static boolean shouldGoDeeper(@SuppressWarnings("UnusedParameters") GoType o) {
-    return false;
-  }
-
-  public static boolean shouldGoDeeper(@SuppressWarnings("UnusedParameters") GoStructType o) {
-    return true;
-  }
-
-  public static boolean shouldGoDeeper(@SuppressWarnings("UnusedParameters") GoInterfaceType o) {
-    return true;
+    return o instanceof GoInterfaceType || o instanceof GoStructType;
   }
 
   public static boolean isForSideEffects(@NotNull GoImportSpec o) {
