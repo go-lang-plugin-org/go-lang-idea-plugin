@@ -16,7 +16,6 @@
 
 package com.goide.runconfig.testing.frameworks.gobench;
 
-import com.goide.psi.GoFunctionOrMethodDeclaration;
 import com.goide.runconfig.testing.GoTestRunConfigurationProducerBase;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,11 +34,5 @@ public class GobenchRunConfigurationProducer extends GoTestRunConfigurationProdu
   @Override
   protected String getFileConfigurationName(@NotNull String fileName) {
     return "gobench " + super.getFileConfigurationName(fileName);
-  }
-
-  @NotNull
-  @Override
-  protected String getFunctionConfigurationName(@NotNull GoFunctionOrMethodDeclaration function, @NotNull String fileName) {
-    return "gobench " + super.getFunctionConfigurationName(function, fileName);
   }
 }

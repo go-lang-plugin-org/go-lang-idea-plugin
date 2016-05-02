@@ -36,7 +36,7 @@ public class GocheckRunConfigurationProducer extends GoTestRunConfigurationProdu
   @Override
   protected String getFunctionConfigurationName(@NotNull GoFunctionOrMethodDeclaration function, @NotNull String fileName) {
     return function instanceof GoMethodDeclaration
-           ? "gocheck " + GocheckFramework.getGocheckTestName((GoMethodDeclaration)function)
+           ? GocheckFramework.getGocheckTestName((GoMethodDeclaration)function) + " in " + fileName
            : super.getFunctionConfigurationName(function, fileName);
   }
 
