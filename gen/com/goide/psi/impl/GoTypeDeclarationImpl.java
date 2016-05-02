@@ -61,7 +61,7 @@ public class GoTypeDeclarationImpl extends GoCompositeElementImpl implements GoT
 
   @Override
   @NotNull
-  public PsiElement getType() {
+  public PsiElement getType_() {
     return findNotNullChildByType(TYPE_);
   }
 

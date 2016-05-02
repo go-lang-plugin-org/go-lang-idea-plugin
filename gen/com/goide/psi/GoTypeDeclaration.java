@@ -33,6 +33,6 @@ public interface GoTypeDeclaration extends GoTopLevelDeclaration {
   PsiElement getRparen();
 
   @NotNull
-  PsiElement getType();
+  PsiElement getType_();
 
 }

@@ -30,6 +30,6 @@ public interface GoTypeGuard extends GoCompositeElement {
   PsiElement getRparen();
 
   @NotNull
-  PsiElement getType();
+  PsiElement getType_();
 
 }

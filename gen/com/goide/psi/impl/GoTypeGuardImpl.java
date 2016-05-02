@@ -55,7 +55,7 @@ public class GoTypeGuardImpl extends GoCompositeElementImpl implements GoTypeGua
 
   @Override
   @NotNull
-  public PsiElement getType() {
+  public PsiElement getType_() {
     return findNotNullChildByType(TYPE_);
   }
 
