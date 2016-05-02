@@ -3,6 +3,6 @@
     <module name="light_idea_test_case" />
     <framework value="gotest" />
     <kind value="FILE" />
-    <filePath value="/src/fileWithTestsOnly_test.go" />
+    <filePath value="/src/import/path/fileWithTestsOnly_test.go" />
   </configurations>
 </configurations>

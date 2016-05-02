@@ -3,12 +3,12 @@
     <module name="light_idea_test_case" />
     <framework value="gotest" />
     <kind value="FILE" />
-    <filePath value="/src/fileWithTestsAndBenchmarks_test.go" />
+    <filePath value="/src/import/path/fileWithTestsAndBenchmarks_test.go" />
   </configurations>
   <configurations name="gobench fileWithTestsAndBenchmarks_test.go" class="GoTestRunConfiguration">
     <module name="light_idea_test_case" />
     <framework value="gobench" />
     <kind value="FILE" />
-    <filePath value="/src/fileWithTestsAndBenchmarks_test.go" />
+    <filePath value="/src/import/path/fileWithTestsAndBenchmarks_test.go" />
   </configurations>
 </configurations>

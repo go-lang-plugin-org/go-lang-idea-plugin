@@ -3,6 +3,6 @@
     <module name="light_idea_test_case" />
     <framework value="gobench" />
     <kind value="FILE" />
-    <filePath value="/src/fileWithBenchmarksOnly_test.go" />
+    <filePath value="/src/import/path/fileWithBenchmarksOnly_test.go" />
   </configurations>
 </configurations>
