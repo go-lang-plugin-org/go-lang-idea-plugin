@@ -16,29 +16,19 @@
 
 package com.goide.runconfig.testing;
 
-import com.goide.GoCodeInsightFixtureTestCase;
+import com.goide.runconfig.GoRunConfigurationTestCase;
 import com.goide.runconfig.testing.frameworks.gobench.GobenchFramework;
 import com.goide.runconfig.testing.frameworks.gobench.GobenchRunConfigurationProducer;
 import com.goide.runconfig.testing.frameworks.gotest.GotestFramework;
 import com.goide.runconfig.testing.frameworks.gotest.GotestRunConfigurationProducer;
 import com.intellij.execution.actions.ConfigurationContext;
-import com.intellij.execution.actions.ConfigurationFromContext;
 import com.intellij.execution.actions.RunConfigurationProducer;
-import com.intellij.execution.configurations.RunConfiguration;
-import com.intellij.openapi.util.JDOMUtil;
-import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.testFramework.LightProjectDescriptor;
-import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
-public class GoTestRunConfigurationProducerTest extends GoCodeInsightFixtureTestCase {
+public class GoTestRunConfigurationProducerTest extends GoRunConfigurationTestCase {
   public void testDirectory() {
     PsiFile file = myFixture.configureByText("a.go", "package main");
     doTestProducedConfigurations(file.getParent());
@@ -77,7 +67,7 @@ public class GoTestRunConfigurationProducerTest extends GoCodeInsightFixtureTest
   public void testSimpleFunction_test() {
     doTestProducedConfigurations();
   }
-  
+
   public void testSimpleFunctionInFileWithTests_test() {
     doTestProducedConfigurations();
   }
@@ -155,7 +145,7 @@ public class GoTestRunConfigurationProducerTest extends GoCodeInsightFixtureTest
 
     runConfiguration = createPackageConfiguration(GobenchFramework.INSTANCE, "", "import/path");
     assertFalse(producer.isConfigurationFromContext(runConfiguration, configurationContext));
-    
+
     runConfiguration = createPackageConfiguration(GotestFramework.INSTANCE, "", "import/path/other");
     assertFalse(producer.isConfigurationFromContext(runConfiguration, configurationContext));
   }
@@ -182,7 +172,7 @@ public class GoTestRunConfigurationProducerTest extends GoCodeInsightFixtureTest
     ConfigurationContext configurationContext = new ConfigurationContext(directory);
     GotestRunConfigurationProducer producer = new GotestRunConfigurationProducer();
 
-    GoTestRunConfiguration runConfiguration = createDirectoryConfiguration(GotestFramework.INSTANCE, directory.getVirtualFile().getPath(), 
+    GoTestRunConfiguration runConfiguration = createDirectoryConfiguration(GotestFramework.INSTANCE, directory.getVirtualFile().getPath(),
                                                                            directory.getVirtualFile().getPath());
     assertTrue(producer.isConfigurationFromContext(runConfiguration, configurationContext));
 
@@ -190,11 +180,11 @@ public class GoTestRunConfigurationProducerTest extends GoCodeInsightFixtureTest
                                                     directory.getVirtualFile().getPath());
     assertFalse(producer.isConfigurationFromContext(runConfiguration, configurationContext));
 
-    runConfiguration = createDirectoryConfiguration(GobenchFramework.INSTANCE, directory.getVirtualFile().getPath(), 
+    runConfiguration = createDirectoryConfiguration(GobenchFramework.INSTANCE, directory.getVirtualFile().getPath(),
                                                     directory.getVirtualFile().getPath());
     assertFalse(producer.isConfigurationFromContext(runConfiguration, configurationContext));
-    
-    runConfiguration = createDirectoryConfiguration(GotestFramework.INSTANCE, directory.getVirtualFile().getPath(), 
+
+    runConfiguration = createDirectoryConfiguration(GotestFramework.INSTANCE, directory.getVirtualFile().getPath(),
                                                     directory.getVirtualFile().getPath() + "_vl");
     assertFalse(producer.isConfigurationFromContext(runConfiguration, configurationContext));
   }
@@ -238,48 +228,8 @@ public class GoTestRunConfigurationProducerTest extends GoCodeInsightFixtureTest
     return runConfiguration;
   }
 
-  private void doTestProducedConfigurations() {
-    VirtualFile file = myFixture.copyFileToProject(getTestName(true) + ".go", "import/path/" + getTestName(true) + ".go");
-    myFixture.configureFromExistingVirtualFile(file);
-    doTestProducedConfigurations(myFixture.getFile().findElementAt(myFixture.getCaretOffset()));
-  }
-
-  private void doTestProducedConfigurations(@Nullable PsiElement context) {
-    assertNotNull(context);
-    ConfigurationContext configurationContext = new ConfigurationContext(context);
-    List<ConfigurationFromContext> configurationAndSettings = configurationContext.getConfigurationsFromContext();
-    Element configurationsElement = new Element("configurations");
-    if (configurationAndSettings != null) {
-      for (ConfigurationFromContext setting : configurationAndSettings) {
-        try {
-          RunConfiguration configuration = setting.getConfiguration();
-          Element configurationElement = new Element("configurations");
-          configurationElement.setAttribute("name", configuration.getName());
-          configurationElement.setAttribute("class", configuration.getClass().getSimpleName());
-          configuration.writeExternal(configurationElement);
-          configurationsElement.addContent(configurationElement);
-        }
-        catch (WriteExternalException e) {
-          throw new RuntimeException(e);
-        }
-      }
-    }
-    assertSameLinesWithFile(getTestDataPath() + "/" + getTestName(true) + ".xml", JDOMUtil.writeElement(configurationsElement));
-  }
-
   @Override
   protected String getBasePath() {
     return "testing/producer";
-  }
-
-  @Override
-  public void setUp() throws Exception {
-    super.setUp();
-    setUpProjectSdk();
-  }
-
-  @Override
-  protected LightProjectDescriptor getProjectDescriptor() {
-    return createMockProjectDescriptor();
   }
 }
