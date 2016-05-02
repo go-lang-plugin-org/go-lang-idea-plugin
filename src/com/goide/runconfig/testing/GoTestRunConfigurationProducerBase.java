@@ -17,7 +17,9 @@
 package com.goide.runconfig.testing;
 
 import com.goide.psi.GoFile;
+import com.goide.psi.GoFunctionDeclaration;
 import com.goide.psi.GoFunctionOrMethodDeclaration;
+import com.goide.psi.GoMethodDeclaration;
 import com.goide.runconfig.GoRunUtil;
 import com.goide.sdk.GoSdkService;
 import com.intellij.execution.actions.ConfigurationContext;
@@ -77,28 +79,42 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
         configuration.setKind(GoTestRunConfiguration.Kind.PACKAGE);
         configuration.setPackage(packageName);
         configuration.setName(getPackageConfigurationName(packageName));
+        return true;
       }
       else {
         GoFunctionOrMethodDeclaration function = findTestFunctionInContext(contextElement);
         if (function != null) {
-          if (!isAppropriateFunctionToRun(function)) {
-            return false;
-          }
-          configuration.setName(getFunctionConfigurationName(function, getFileConfigurationName(file.getName())));
-          configuration.setPattern("^" + function.getName() + "$");
+          if (isAppropriateFunctionToRun(function)) {
+            configuration.setName(getFunctionConfigurationName(function, getFileConfigurationName(file.getName())));
+            configuration.setPattern("^" + function.getName() + "$");
 
-          configuration.setKind(GoTestRunConfiguration.Kind.PACKAGE);
-          configuration.setPackage(StringUtil.notNullize(((GoFile)file).getImportPath(false)));
+            configuration.setKind(GoTestRunConfiguration.Kind.PACKAGE);
+            configuration.setPackage(StringUtil.notNullize(((GoFile)file).getImportPath(false)));
+            return true;
+          }
         }
-        else {
+        else if (file instanceof GoFile && hasSupportedFunctions((GoFile)file)) {
           configuration.setName(getFileConfigurationName(file.getName()));
           configuration.setKind(GoTestRunConfiguration.Kind.FILE);
           configuration.setFilePath(file.getVirtualFile().getPath());
+          return true;
         }
       }
-      return true;
     }
+    return false;
+  }
 
+  private boolean hasSupportedFunctions(@NotNull GoFile file) {
+    for (GoFunctionDeclaration declaration : file.getFunctions()) {
+      if (isAppropriateFunctionToRun(declaration)) {
+        return true;
+      }
+    }
+    for (GoMethodDeclaration declaration : file.getMethods()) {
+      if (isAppropriateFunctionToRun(declaration)) {
+        return true;
+      }
+    }
     return false;
   }
 
