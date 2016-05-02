@@ -84,7 +84,7 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
         GoFunctionOrMethodDeclaration function = findTestFunctionInContext(contextElement);
         if (function != null) {
           if (myFramework.isAvailableOnFunction(function)) {
-            configuration.setName(getFunctionConfigurationName(function, getFileConfigurationName(file.getName())));
+            configuration.setName(getFunctionConfigurationName(function, file.getName()));
             configuration.setPattern("^" + function.getName() + "$");
 
             configuration.setKind(GoTestRunConfiguration.Kind.PACKAGE);

@@ -1,5 +1,5 @@
 <configurations>
-  <configurations name="gocheck *MySuite.TestHelloWorld" class="GoTestRunConfiguration">
+  <configurations name="*MySuite.TestHelloWorld in gocheckMethod_test.go" class="GoTestRunConfiguration">
     <module name="light_idea_test_case" />
     <framework value="gocheck" />
     <kind value="PACKAGE" />

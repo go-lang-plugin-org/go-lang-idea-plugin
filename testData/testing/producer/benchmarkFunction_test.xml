@@ -1,5 +1,5 @@
 <configurations>
-  <configurations name="gobench BenchmarkName in gobench benchmarkFunction_test.go" class="GoTestRunConfiguration">
+  <configurations name="BenchmarkName in benchmarkFunction_test.go" class="GoTestRunConfiguration">
     <module name="light_idea_test_case" />
     <framework value="gobench" />
     <kind value="PACKAGE" />
