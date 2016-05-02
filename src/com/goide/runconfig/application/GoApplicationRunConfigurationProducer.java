@@ -19,6 +19,7 @@ package com.goide.runconfig.application;
 import com.goide.psi.GoFile;
 import com.goide.runconfig.GoRunConfigurationProducerBase;
 import com.goide.runconfig.GoRunUtil;
+import com.goide.runconfig.testing.GoTestFinder;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.execution.actions.ConfigurationContext;
 import com.intellij.openapi.module.Module;
@@ -41,7 +42,11 @@ public class GoApplicationRunConfigurationProducer extends GoRunConfigurationPro
   protected boolean setupConfigurationFromContext(@NotNull GoApplicationConfiguration configuration,
                                                   @NotNull ConfigurationContext context,
                                                   Ref<PsiElement> sourceElement) {
-    String importPath = getImportPathFromContext(context);
+    PsiElement contextElement = GoRunUtil.getContextElement(context);
+    if (contextElement != null && GoTestFinder.isTestFile(contextElement.getContainingFile())) {
+      return false;
+    }
+    String importPath = getImportPathFromContext(contextElement);
     if (StringUtil.isNotEmpty(importPath)) {
       configuration.setModule(context.getModule());
       configuration.setKind(GoApplicationConfiguration.Kind.PACKAGE);
@@ -57,8 +62,7 @@ public class GoApplicationRunConfigurationProducer extends GoRunConfigurationPro
   }
 
   @Nullable
-  private static String getImportPathFromContext(@NotNull ConfigurationContext configurationContext) {
-    PsiElement contextElement = GoRunUtil.getContextElement(configurationContext);
+  private static String getImportPathFromContext(@Nullable PsiElement contextElement) {
     if (GoRunUtil.isPackageContext(contextElement)) {
       PsiFile file = contextElement.getContainingFile();
       if (file instanceof GoFile) {
@@ -80,7 +84,7 @@ public class GoApplicationRunConfigurationProducer extends GoRunConfigurationPro
     if (!Comparing.equal(module, configuration.getConfigurationModule().getModule())) return false;
 
     if (configuration.getKind() == GoApplicationConfiguration.Kind.PACKAGE) {
-      return Comparing.equal(getImportPathFromContext(context), configuration.getPackage());
+      return Comparing.equal(getImportPathFromContext(contextElement), configuration.getPackage());
     }
 
     return super.isConfigurationFromContext(configuration, context);
