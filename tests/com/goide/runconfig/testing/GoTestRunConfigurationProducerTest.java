@@ -18,10 +18,12 @@ package com.goide.runconfig.testing;
 
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.goide.runconfig.testing.frameworks.gobench.GobenchFramework;
+import com.goide.runconfig.testing.frameworks.gobench.GobenchRunConfigurationProducer;
 import com.goide.runconfig.testing.frameworks.gotest.GotestFramework;
 import com.goide.runconfig.testing.frameworks.gotest.GotestRunConfigurationProducer;
 import com.intellij.execution.actions.ConfigurationContext;
 import com.intellij.execution.actions.ConfigurationFromContext;
+import com.intellij.execution.actions.RunConfigurationProducer;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.openapi.util.JDOMUtil;
 import com.intellij.openapi.util.WriteExternalException;
@@ -104,7 +106,7 @@ public class GoTestRunConfigurationProducerTest extends GoCodeInsightFixtureTest
     PsiFile file = myFixture.addFileToProject("import/path/a_test.go", "package main; func TestName() {<caret>}");
     myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
     ConfigurationContext configurationContext = createConfigurationContext();
-    GotestRunConfigurationProducer producer = new GotestRunConfigurationProducer();
+    RunConfigurationProducer<GoTestRunConfiguration> producer = new GotestRunConfigurationProducer();
 
     GoTestRunConfiguration runConfiguration = createPackageConfiguration(GotestFramework.INSTANCE, "^TestName$", "import/path");
     assertTrue(producer.isConfigurationFromContext(runConfiguration, configurationContext));
@@ -116,6 +118,10 @@ public class GoTestRunConfigurationProducerTest extends GoCodeInsightFixtureTest
     assertFalse(producer.isConfigurationFromContext(runConfiguration, configurationContext));
 
     runConfiguration = createPackageConfiguration(GotestFramework.INSTANCE, "^TestName$", "import/path/other");
+    assertFalse(producer.isConfigurationFromContext(runConfiguration, configurationContext));
+
+    producer = new GobenchRunConfigurationProducer();
+    runConfiguration = createFileConfiguration(GobenchFramework.INSTANCE, file.getVirtualFile().getPath());
     assertFalse(producer.isConfigurationFromContext(runConfiguration, configurationContext));
   }
 
