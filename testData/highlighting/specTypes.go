@@ -17,3 +17,19 @@ func main()  {
 	out := d(e)
 	println(out.Err)
 }
+
+type a int
+func (a) foo() {}
+type b int
+func (b) bar() {}
+
+type c struct {
+	a
+	b
+}
+
+func _() {
+	c := new(c)
+	println(c.foo())
+	println(c.bar())
+}
