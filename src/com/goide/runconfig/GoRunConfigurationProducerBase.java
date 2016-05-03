@@ -17,7 +17,6 @@
 package com.goide.runconfig;
 
 import com.goide.psi.GoFile;
-import com.goide.runconfig.testing.GoTestFinder;
 import com.intellij.execution.actions.ConfigurationContext;
 import com.intellij.execution.actions.RunConfigurationProducer;
 import com.intellij.execution.configurations.ConfigurationType;
@@ -37,7 +36,7 @@ public abstract class GoRunConfigurationProducerBase<T extends GoRunConfiguratio
   @Override
   protected boolean setupConfigurationFromContext(@NotNull T configuration, @NotNull ConfigurationContext context, Ref<PsiElement> sourceElement) {
     PsiFile file = getFileFromContext(context);
-    if (GoRunUtil.isMainGoFile(file) && !GoTestFinder.isTestFile(file)) {
+    if (GoRunUtil.isMainGoFile(file)) {
       configuration.setName(getConfigurationName(file));
       configuration.setFilePath(file.getVirtualFile().getPath());
       Module module = context.getModule();

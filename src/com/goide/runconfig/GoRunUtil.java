@@ -20,6 +20,7 @@ import com.goide.GoConstants;
 import com.goide.GoFileType;
 import com.goide.psi.GoFile;
 import com.goide.psi.GoPackageClause;
+import com.goide.runconfig.testing.GoTestFinder;
 import com.intellij.execution.actions.ConfigurationContext;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.ProcessHandler;
@@ -98,14 +99,14 @@ public class GoRunUtil {
         if (file.getFileType() != GoFileType.INSTANCE) {
           return false;
         }
-        PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
-        return isMainGoFile(psiFile);
+        return isMainGoFile(PsiManager.getInstance(project).findFile(file));
       }
     });
   }
 
+  @Contract("null -> false")
   public static boolean isMainGoFile(@Nullable PsiFile psiFile) {
-    if (psiFile instanceof GoFile) {
+    if (!GoTestFinder.isTestFile(psiFile) && psiFile instanceof GoFile) {
       return GoConstants.MAIN.equals(((GoFile)psiFile).getPackageName()) && ((GoFile)psiFile).hasMainFunction();
     }
     return false;
