@@ -93,10 +93,10 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
             else if (canBeLocal) {
               PsiElement grandParent = parent.getParent();
               if (grandParent instanceof GoAssignmentStatement) {
-                fixesList.add(new GoReplaceAssignmentWithDeclaration(grandParent));
+                fixesList.add(new GoReplaceAssignmentWithDeclarationQuickFix(grandParent));
               }
               else if (parent instanceof GoRangeClause || parent instanceof GoRecvStatement) {
-                fixesList.add(new GoReplaceAssignmentWithDeclaration(parent));
+                fixesList.add(new GoReplaceAssignmentWithDeclarationQuickFix(parent));
               }
             }
             fixes = fixesList.toArray(new LocalQuickFix[fixesList.size()]);
