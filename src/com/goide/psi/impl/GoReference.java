@@ -174,7 +174,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
         return processTypeRef(type, processor, state);
       }
     });
-    return result != null && result;
+    return Boolean.TRUE.equals(result);
   }
 
   private boolean processPointer(@NotNull GoPointerType type, @NotNull GoScopeProcessor processor, @NotNull ResolveState state) {
@@ -183,7 +183,19 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   }
 
   private boolean processTypeRef(@Nullable GoType type, @NotNull GoScopeProcessor processor, @NotNull ResolveState state) {
-    return type == null || processInTypeRef(type.getTypeReferenceExpression(), processor, state);
+    if (type == null) {
+      return true;
+    }
+    if (builtin(type)) {
+      GoTypeReferenceExpression expression = type.getTypeReferenceExpression();
+      PsiElement resolve = expression != null ? expression.resolve() : null;
+      GoType resolveType = resolve instanceof GoTypeOwner ? ((GoTypeOwner)resolve).getGoType(state) : null;
+      if (resolveType != null && type.equals(resolveType.getUnderlyingType())) {
+        // do not process builtin types like 'int int' or 'string string'
+        return true;
+      }
+    }
+    return processInTypeRef(type.getTypeReferenceExpression(), processor, state);
   }
 
   private boolean processExistingType(@NotNull GoType type, @NotNull GoScopeProcessor processor, @NotNull ResolveState state) {
