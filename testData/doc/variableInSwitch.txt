@@ -1,0 +1,8 @@
+<b>var err <a href="psi_element://#main.Foo">Foo</a> = err</b>
+
+=====
+var err <a href="psi_element://#main.Foo">Foo</a> = err
+=====
+No urls
+=====
+No local urls
