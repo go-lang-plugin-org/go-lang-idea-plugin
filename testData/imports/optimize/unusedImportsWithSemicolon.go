@@ -2,8 +2,8 @@ package main
 
 import "asdf";
 import (
-  "math"
-  "math"
+  <error descr="Unused import">"math"</error>
+  <error descr="Redeclared import"><error descr="Unused import">"math"</error></error>
 );
 import "fmt";
 

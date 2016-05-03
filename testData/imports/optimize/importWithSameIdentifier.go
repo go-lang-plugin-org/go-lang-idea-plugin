@@ -1,8 +1,8 @@
 package main
 
-import fmt "fmt"
-import fmt "math"
-import bar "foo/bar"
+import <error descr="Redundant alias">fmt</error> "fmt"
+import <error descr="Redeclared import">fmt "math"</error>
+import <error descr="Redundant alias">bar</error> "foo/bar"
 
 func main() {
   fmt.Printf("a2",a2)

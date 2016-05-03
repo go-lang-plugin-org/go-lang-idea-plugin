@@ -1,7 +1,7 @@
 package main
 
 import (
-  "emptyDirectory"
+  <error descr="Unused import">"emptyDirectory"</error>
   "fmt"
 )
 

@@ -1,7 +1,7 @@
 package main
 
 import . "fmt"
-import . "math"
+import <error descr="Unused import">. "math"</error>
 
 func main() {
     Printf("asd")
