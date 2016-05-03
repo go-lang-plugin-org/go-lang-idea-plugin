@@ -21,24 +21,23 @@ import com.intellij.testFramework.fixtures.CodeInsightTestUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class GoSelectWordTest extends GoCodeInsightFixtureTestCase {
-  public void testImportString() {
-    doTest();
-  }
-
-  public void testMultipleImportString() {
-    doTest();
-  }
-  
-  public void testStringLiteral() {
-    doTest();
-  }
-
-  public void testBlock() {
-    doTest();
-  }
+  public void testImportString()            { doTest(); }
+  public void testMultipleImportString()    { doTest(); }
+  public void testStringLiteral()           { doTest(); }
+  public void testBlock()                   { doTest(); }
+  public void testArguments()               { doTest(); }
+  public void testParameters()              { doTest(); }
+  public void testResultParameters()        { doTest(); }
+  public void testFunctionName()            { doTest(); }
 
   private void doTest() {
     CodeInsightTestUtil.doWordSelectionTestOnDirectory(myFixture, getTestName(true), "go");
+  }
+
+  @Override
+  protected void setUp() throws Exception {
+    super.setUp();
+    OVERWRITE_TESTDATA = true;
   }
 
   @NotNull
