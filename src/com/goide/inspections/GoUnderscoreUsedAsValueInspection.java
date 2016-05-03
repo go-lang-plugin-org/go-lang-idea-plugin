@@ -33,7 +33,7 @@ public class GoUnderscoreUsedAsValueInspection extends GoInspectionBase {
       public void visitReferenceExpression(@NotNull GoReferenceExpression o) {
         super.visitReferenceExpression(o);
         if (o.getIdentifier().textMatches("_") && o.getReadWriteAccess() != ReadWriteAccessDetector.Access.Write) {
-          holder.registerProblem(o, "Cannot use '_' as value", ProblemHighlightType.ERROR);
+          holder.registerProblem(o, "Cannot use <code>#ref</code> as value #loc", ProblemHighlightType.ERROR);
         }
       }
     };

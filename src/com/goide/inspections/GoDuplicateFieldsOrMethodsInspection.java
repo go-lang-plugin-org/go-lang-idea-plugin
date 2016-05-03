@@ -80,7 +80,8 @@ public class GoDuplicateFieldsOrMethodsInspection extends GoInspectionBase {
         String name = ((GoNamedElement)field).getName();
         if (names.contains(name)) {
           PsiElement id = ((GoNamedElement)field).getIdentifier();
-          problemsHolder.registerProblem(id != null ? id : field, "Duplicate " + what + " " + "'" + name + "'", GENERIC_ERROR_OR_WARNING);
+          problemsHolder.registerProblem(id != null ? id : field, "Duplicate " + what + " <code>#ref</code> #loc",
+                                         GENERIC_ERROR_OR_WARNING);
         }
         else {
           ContainerUtil.addIfNotNull(names, name);

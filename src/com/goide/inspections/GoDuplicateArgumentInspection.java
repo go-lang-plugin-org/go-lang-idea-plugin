@@ -41,8 +41,9 @@ public class GoDuplicateArgumentInspection extends GoInspectionBase {
   }
 
   protected void check(@Nullable GoSignature o, @NotNull ProblemsHolder holder) {
-    if (o == null) return;
-    checkParameters(holder, o.getParameters(), new LinkedHashSet<String>());
+    if (o != null) {
+      checkParameters(holder, o.getParameters(), new LinkedHashSet<String>());
+    }
   }
 
   protected static void checkParameters(@NotNull ProblemsHolder holder,
@@ -53,16 +54,12 @@ public class GoDuplicateArgumentInspection extends GoInspectionBase {
         if (parameter.isBlank()) continue;
         String name = parameter.getName();
         if (name != null && parameterNames.contains(name)) {
-          holder.registerProblem(parameter, errorText(name), ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+          holder.registerProblem(parameter, "Duplicate argument <code>#ref</code> #loc", ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
         }
         else {
           parameterNames.add(name);
         }
       }
     }
-  }
-
-  private static String errorText(@NotNull String name) {
-    return "Duplicate argument " + "'" + name + "'";
   }
 }

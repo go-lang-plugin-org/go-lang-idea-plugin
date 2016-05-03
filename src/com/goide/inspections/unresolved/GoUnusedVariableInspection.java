@@ -84,7 +84,7 @@ public class GoUnusedVariableInspection extends GoInspectionBase {
 
   protected void reportError(@NotNull GoVarDefinition varDefinition, @NotNull ProblemsHolder holder) {
     String name = varDefinition.getName();
-    holder.registerProblem(varDefinition, "Unused variable " + "'" + name + "'", ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
+    holder.registerProblem(varDefinition, "Unused variable <code>#ref</code> #loc", ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
                            new GoRenameToBlankQuickFix(varDefinition), new GoDeleteVarDefinitionQuickFix(name));
   }
 

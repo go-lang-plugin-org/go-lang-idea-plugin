@@ -36,8 +36,7 @@ import org.jetbrains.annotations.NotNull;
 public class GoUnusedFunctionInspection extends GoInspectionBase {
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder,
-                                     @SuppressWarnings({"UnusedParameters", "For future"}) @NotNull LocalInspectionToolSession session) {
+  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
       public void visitFunctionDeclaration(@NotNull GoFunctionDeclaration o) {
@@ -50,7 +49,7 @@ public class GoUnusedFunctionInspection extends GoInspectionBase {
         if (ReferencesSearch.search(o, o.getUseScope()).findFirst() == null) {
           PsiElement id = o.getIdentifier();
           TextRange range = TextRange.from(id.getStartOffsetInParent(), id.getTextLength());
-          holder.registerProblem(o, "Unused function " + "'" + name + "'", ProblemHighlightType.LIKE_UNUSED_SYMBOL, range,
+          holder.registerProblem(o, "Unused function <code>#ref</code> #loc", ProblemHighlightType.LIKE_UNUSED_SYMBOL, range,
                                  new GoDeleteQuickFix("Delete function '" + name + "'", GoFunctionDeclaration.class), 
                                  new GoRenameToBlankQuickFix(o));
         }

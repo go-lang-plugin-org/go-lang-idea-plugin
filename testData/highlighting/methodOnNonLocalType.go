@@ -7,15 +7,15 @@ import (
 
 type Duration time.Duration
 
-func (_ *string) <error descr="Method defined on non-local type">Demo</error>() {
+func (_ *string) <error descr="Method 'Demo' defined on non-local type">Demo</error>() {
 
 }
 
-func (_ int) <error descr="Method defined on non-local type">Demo</error>() {
+func (_ int) <error descr="Method 'Demo' defined on non-local type">Demo</error>() {
 
 }
 
-func (_ ScanState) <error descr="Method defined on non-local type">Demo</error>() {
+func (_ ScanState) <error descr="Method 'Demo' defined on non-local type">Demo</error>() {
 
 }
 

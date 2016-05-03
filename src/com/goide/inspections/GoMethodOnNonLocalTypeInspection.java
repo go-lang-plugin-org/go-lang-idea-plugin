@@ -46,7 +46,7 @@ public class GoMethodOnNonLocalTypeInspection extends GoInspectionBase {
         String methodPackageName = methodContainingFile.getPackageName();
         String typePackageName = typeContainingFile.getPackageName();
         if (!StringUtil.equals(methodPackageName, typePackageName)  || !typeImportPath.equals(methodImportPath)) {
-          holder.registerProblem(method.getIdentifier(), "Method defined on non-local type", ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+          holder.registerProblem(method.getIdentifier(), "Method <code>#ref</code> defined on non-local type #loc", ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
         }
       }
 

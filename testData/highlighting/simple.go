@@ -379,11 +379,11 @@ func _(<warning descr="Unused parameter 'a'">a</warning> int, <error descr="Dupl
   return 1,1,1
 }
 
-func _(int,  <error descr="Can only use ... as final argument in list">...</error> int, string) (_,_,_ int) {
+func _(int,  <error descr="Can only use '...' as final argument in list">...</error> int, string) (_,_,_ int) {
     return 1,1,1
 }
 
-func _(_ int, _, _<error descr="Can only use ... as final argument in list">...</error> int) (_,_,_ <error descr="Cannot use ... in output argument list">...</error>int) {
+func _(_ int, _, _<error descr="Can only use '...' as final argument in list">...</error> int) (_,_,_ <error descr="Cannot use '...' in output argument list">...</error>int) {
     return 1,1,1
 }
 

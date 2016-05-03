@@ -79,7 +79,7 @@ public class GoStructTagInspection extends GoInspectionBase {
              tagText.charAt(i) != 0x7f) {
         i++;
       }
-      if (i == 0 || (i + 1) > tagText.length() || tagText.charAt(i) != ':') return false;
+      if (i == 0 || i + 1 > tagText.length() || tagText.charAt(i) != ':') return false;
       tagText.delete(0, i + 1);
 
       // Scan quoted string to find value.

@@ -46,8 +46,7 @@ import static com.intellij.codeInspection.ProblemHighlightType.LIKE_UNKNOWN_SYMB
 public class GoUnresolvedReferenceInspection extends GoInspectionBase {
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder,
-                                     @SuppressWarnings({"UnusedParameters", "For future"}) @NotNull LocalInspectionToolSession session) {
+  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
       public void visitFieldName(@NotNull GoFieldName o) {
@@ -55,7 +54,7 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
         PsiElement resolve = o.resolve();
         if (resolve == null) {
           PsiElement id = o.getIdentifier();
-          holder.registerProblem(id, "unknown field '" + id.getText() + "' in struct literal", LIKE_UNKNOWN_SYMBOL);
+          holder.registerProblem(id, "Unknown field <code>#ref</code> in struct literal #loc", LIKE_UNKNOWN_SYMBOL);
         }
       }
 

@@ -36,7 +36,7 @@ public class GoUnusedConstInspection extends GoInspectionBase {
         if (o.isBlank()) return;
         if (ReferencesSearch.search(o, o.getUseScope()).findFirst() == null) {
           String constName = o.getName();
-          holder.registerProblem(o, "Unused constant " + "'" + constName + "'", ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+          holder.registerProblem(o, "Unused constant <code>#ref</code> #loc", ProblemHighlightType.LIKE_UNUSED_SYMBOL,
                                  new GoDeleteConstDefinitionQuickFix(constName));
         }
       }

@@ -38,8 +38,8 @@ public class GoRangeIterationOnIllegalTypeInspection extends GoInspectionBase {
         GoExpression expression = o.getRangeExpression();
         GoType type = expression != null ? expression.getGoType(null) : null;
         if (type != null && !GoTypeUtil.isIterable(type)) {
-          holder.registerProblem(expression, "Cannot range over data (type " + GoPsiImplUtil.getText(type) + ")", 
-            ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+          holder.registerProblem(expression, "Cannot range over data (type " + GoPsiImplUtil.getText(type) + ")",
+                                 ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
         }
       }
     };
