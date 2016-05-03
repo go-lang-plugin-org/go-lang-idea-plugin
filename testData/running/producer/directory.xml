@@ -1,0 +1,28 @@
+<configurations>
+  <configurations name="Build import/path and run" class="GoApplicationConfiguration">
+    <module name="light_idea_test_case" />
+    <kind value="PACKAGE" />
+    <package value="import/path" />
+  </configurations>
+  <configurations name="All in 'path'" class="GoTestRunConfiguration">
+    <module name="light_idea_test_case" />
+    <working_directory value="/src/import/path" />
+    <framework value="gotest" />
+    <kind value="DIRECTORY" />
+    <directory value="/src/import/path" />
+  </configurations>
+  <configurations name="gocheck package 'path'" class="GoTestRunConfiguration">
+    <module name="light_idea_test_case" />
+    <working_directory value="/src/import/path" />
+    <framework value="gocheck" />
+    <kind value="DIRECTORY" />
+    <directory value="/src/import/path" />
+  </configurations>
+  <configurations name="gobench package 'path'" class="GoTestRunConfiguration">
+    <module name="light_idea_test_case" />
+    <working_directory value="/src/import/path" />
+    <framework value="gobench" />
+    <kind value="DIRECTORY" />
+    <directory value="/src/import/path" />
+  </configurations>
+</configurations>
