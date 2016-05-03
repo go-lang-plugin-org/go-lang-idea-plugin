@@ -16,7 +16,8 @@
 
 package com.goide.codeInsight.imports;
 
-import com.goide.GoCodeInsightFixtureTestCase;
+import com.goide.inspections.GoUnusedImportInspection;
+import com.goide.quickfix.GoQuickFixTestBase;
 import com.intellij.codeInsight.actions.OptimizeImportsAction;
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.application.ApplicationManager;
@@ -24,25 +25,27 @@ import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 import org.jetbrains.annotations.NotNull;
 
-public class GoImportOptimizerTest extends GoCodeInsightFixtureTestCase {
-  public void testUnusedImports() { doTest(); }
-  public void testUnusedImportsWithSemicolon() { doTest(); }
-  public void testUnusedImplicitImports() { doTest(); }
-  public void testUsedImplicitImports() { doTest(); }
-  public void testUsedDuplicatedImports() { doTest(); } 
-  public void testDuplicatedImportsWithSameStringAndDifferentQuotes() { doTest(); } 
-  public void testDuplicatedImportsWithSameString() { doTest(); } 
-  public void testDuplicatedImportsWithDifferentString() { doTest(); } 
-  public void testUnusedDuplicatedImports() { doTest(); }
-  public void testImportPackageWithMainFiles() { doTest(); }
-  public void testImportDirectoryWithoutPackages() {
-    doTest(); 
-  }
-  public void testUnusedImportsWithBacktick() {
-    doTest(); 
-  }
-  public void testDoNotOptimizeSideEffectImports() {
-    doTest(); 
+public class GoImportOptimizerTest extends GoQuickFixTestBase {
+  public void testUnusedImports()                                        { doTest(); }
+  public void testUnusedImportsWithSemicolon()                           { doTest(); }
+  public void testUnusedImplicitImports()                                { doTest(); }
+  public void testUsedImplicitImports()                                  { doTest(); }
+  public void testUsedDuplicatedImports()                                { doTest(); }
+  public void testDuplicatedImportsWithSameStringAndDifferentQuotes()    { doTest(); }
+  public void testDuplicatedImportsWithSameString()                      { doTest(); }
+  public void testDuplicatedImportsWithDifferentString()                 { doTest(); }
+  public void testUnusedDuplicatedImports()                              { doTest(); }
+  public void testImportPackageWithMainFiles()                           { doTest(); }
+  public void testImportDirectoryWithoutPackages()                       { doTest(); } 
+  public void testUnusedImportsWithBacktick()                            { doTest(); } 
+  public void testDoNotOptimizeSideEffectImports()                       { doTest(); } 
+  public void testRedundantImportQualifier()                             { doTest(); } 
+
+  public void testUnusedImportsQuickFix() { 
+    myFixture.configureByFile(getTestName(true) + ".go");
+    myFixture.checkHighlighting();
+    applySingleQuickFix("Optimize imports");
+    myFixture.checkResultByFile(getTestName(true) + "_after.go");
   }
   
   public void testImportWithSameIdentifier() {
@@ -63,7 +66,7 @@ public class GoImportOptimizerTest extends GoCodeInsightFixtureTestCase {
 
   private void doTest() {
     myFixture.configureByFile(getTestName(true) + ".go");
-    myFixture.doHighlighting();
+    myFixture.checkHighlighting();
     ApplicationManager.getApplication().runWriteAction(new Runnable() {
       @Override
       public void run() {
@@ -77,6 +80,7 @@ public class GoImportOptimizerTest extends GoCodeInsightFixtureTestCase {
   public void setUp() throws Exception {
     super.setUp();
     ((CodeInsightTestFixtureImpl)myFixture).canChangeDocumentDuringHighlighting(true);
+    myFixture.enableInspections(GoUnusedImportInspection.class);
     setUpProjectSdk();
   }
 

@@ -3,7 +3,7 @@ package main
 import "asdf"
 import "encoding/json"
 import (
-  <error descr="Unused import">"math"</error>
+  <error descr="Unused import">"m<caret>ath"</error>
   <error descr="Redeclared import"><error descr="Unused import">"math"</error></error>
 )
 import "fmt"
