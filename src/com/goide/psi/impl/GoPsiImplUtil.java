@@ -1336,8 +1336,8 @@ public class GoPsiImplUtil {
       int index = ((GoVarSpec)parent).getVarDefinitionList().indexOf(definition);
       return getByIndex(((GoVarSpec)parent).getRightExpressionsList(), index);
     }
-    if (parent instanceof GoTypeSwitchStatement) {
-      return ((GoTypeSwitchStatement)parent).getTypeSwitchGuard().getExpression();
+    if (parent instanceof GoTypeSwitchGuard) {
+      return ((GoTypeSwitchGuard)parent).getExpression();
     }
     LOG.error("Cannot find value for variable definition: " + definition.getText(),
               AttachmentFactory.createAttachment(definition.getContainingFile().getVirtualFile()));
