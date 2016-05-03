@@ -16,7 +16,7 @@
 
 package com.goide.quickfix;
 
-import com.goide.inspections.unresolved.GoReplaceAssignmentWithDeclaration;
+import com.goide.inspections.unresolved.GoReplaceAssignmentWithDeclarationQuickFix;
 import com.goide.inspections.unresolved.GoUnresolvedReferenceInspection;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,22 +34,22 @@ public class GoReplaceWithDeclarationQuickFixTest extends GoQuickFixTestBase {
   }
 
   public void testOnRecv() {
-    doTest(GoReplaceAssignmentWithDeclaration.QUICK_FIX_NAME);
+    doTest(GoReplaceAssignmentWithDeclarationQuickFix.QUICK_FIX_NAME);
   }
 
   public void testOnRange() {
-    doTest(GoReplaceAssignmentWithDeclaration.QUICK_FIX_NAME);
+    doTest(GoReplaceAssignmentWithDeclarationQuickFix.QUICK_FIX_NAME);
   }
 
   public void testOnAssignment() {
-    doTest(GoReplaceAssignmentWithDeclaration.QUICK_FIX_NAME);
+    doTest(GoReplaceAssignmentWithDeclarationQuickFix.QUICK_FIX_NAME);
   }
 
   public void testOnChanRead() {
-    doTestNoFix(GoReplaceAssignmentWithDeclaration.QUICK_FIX_NAME);
+    doTestNoFix(GoReplaceAssignmentWithDeclarationQuickFix.QUICK_FIX_NAME);
   }
 
   public void testOnTopLevel() {
-    doTestNoFix(GoReplaceAssignmentWithDeclaration.QUICK_FIX_NAME);
+    doTestNoFix(GoReplaceAssignmentWithDeclarationQuickFix.QUICK_FIX_NAME);
   }
 }

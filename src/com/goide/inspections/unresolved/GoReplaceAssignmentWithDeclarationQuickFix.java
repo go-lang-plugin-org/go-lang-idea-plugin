@@ -29,10 +29,10 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
-public class GoReplaceAssignmentWithDeclaration extends LocalQuickFixOnPsiElement {
+public class GoReplaceAssignmentWithDeclarationQuickFix extends LocalQuickFixOnPsiElement {
   public static final String QUICK_FIX_NAME = "Replace with ':='";
 
-  public GoReplaceAssignmentWithDeclaration(@NotNull PsiElement element) {
+  public GoReplaceAssignmentWithDeclarationQuickFix(@NotNull PsiElement element) {
     super(element);
   }
 
