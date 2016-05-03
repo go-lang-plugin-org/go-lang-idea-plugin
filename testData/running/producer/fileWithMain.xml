@@ -1,0 +1,11 @@
+<configurations>
+  <configurations name="go run fileWithMain.go" class="GoRunFileConfiguration">
+    <module name="light_idea_test_case" />
+    <filePath value="/src/import/path/fileWithMain.go" />
+  </configurations>
+  <configurations name="Build fileWithMain.go and run" class="GoApplicationConfiguration">
+    <module name="light_idea_test_case" />
+    <filePath value="/src/import/path/fileWithMain.go" />
+    <kind value="FILE" />
+  </configurations>
+</configurations>
