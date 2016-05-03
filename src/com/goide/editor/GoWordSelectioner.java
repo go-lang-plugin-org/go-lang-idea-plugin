@@ -46,8 +46,21 @@ public class GoWordSelectioner extends AbstractWordSelectioner {
     else if (e instanceof GoSimpleStatement) {
       result.addAll(expandToWholeLine(editorText, e.getTextRange()));
     }
+    else if (e instanceof GoArgumentList || e instanceof GoParameters) {
+      if (e.getTextLength() > 2) {
+        result.add(TextRange.create(e.getTextRange().getStartOffset() + 1, e.getTextRange().getEndOffset() - 1));
+      }
+    }
     else if (e instanceof GoBlock) {
       result.addAll(extend(editorText, ((GoBlock)e).getStatementList(), true));
+    }
+    else if (parent instanceof GoNamedSignatureOwner) {
+      GoSignature signature = ((GoNamedSignatureOwner)parent).getSignature();
+      if (signature != null) {
+        int nameStartOffset = parent.getTextOffset();
+        result.add(TextRange.create(nameStartOffset, signature.getParameters().getTextRange().getEndOffset()));
+        result.add(TextRange.create(nameStartOffset, signature.getTextRange().getEndOffset()));
+      }
     }
     return result;
   }
