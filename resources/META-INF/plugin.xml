@@ -170,6 +170,8 @@
     <runConfigurationProducer implementation="com.goide.runconfig.testing.frameworks.gobench.GobenchRunConfigurationProducer"/>
     <configurationType implementation="com.goide.runconfig.testing.GoTestRunConfigurationType"/>
     <testFinder implementation="com.goide.runconfig.testing.GoTestFinder"/>
+    <runLineMarkerContributor language="go" implementationClass="com.goide.runconfig.testing.GoTestRunLineMarkerProvider"/>
+    <runLineMarkerContributor language="go" implementationClass="com.goide.runconfig.GoRunLineMarkerProvider"/>
 
     <!-- debugger -->
     <xdebugger.breakpointType implementation="com.goide.dlv.breakpoint.DlvBreakpointType"/>
