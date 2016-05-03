@@ -435,7 +435,7 @@ public class GoPsiImplUtil {
         }
       }
       else if (type instanceof GoArrayOrSliceType) {
-        return typeFromRefOrType(((GoArrayOrSliceType)type).getType());
+        return ((GoArrayOrSliceType)type).getType();
       }
       else if (GoTypeUtil.isString(type)) {
         return getBuiltinType("byte", o);
@@ -864,7 +864,9 @@ public class GoPsiImplUtil {
   public static GoType getUnderlyingType(@NotNull final GoType o) {
     GoType type = RecursionManager.doPreventingRecursion(o, true, new Computable<GoType>() {
       @Override
-      public GoType compute() {return getTypeInner(o);}
+      public GoType compute() {
+        return getTypeInner(o);
+      }
     });
     return ObjectUtils.notNull(type, o);
   }
