@@ -3,7 +3,6 @@ package com.goide.runconfig;
 import com.goide.GoConstants;
 import com.goide.GoTypes;
 import com.goide.psi.GoFunctionDeclaration;
-import com.goide.runconfig.testing.GoTestFinder;
 import com.intellij.execution.lineMarker.ExecutorAction;
 import com.intellij.execution.lineMarker.RunLineMarkerContributor;
 import com.intellij.icons.AllIcons;
@@ -26,10 +25,7 @@ public class GoRunLineMarkerProvider extends RunLineMarkerContributor {
     if (e != null && e.getNode().getElementType() == GoTypes.IDENTIFIER) {
       PsiElement parent = e.getParent();
       PsiFile file = e.getContainingFile();
-      if (GoTestFinder.isTestFile(file) || !GoRunUtil.isMainGoFile(file)) {
-        return null;
-      }
-      if (parent instanceof GoFunctionDeclaration) {
+      if (GoRunUtil.isMainGoFile(file) && parent instanceof GoFunctionDeclaration) {
         if (GoConstants.MAIN.equals(((GoFunctionDeclaration)parent).getName())) {
           return new Info(AllIcons.RunConfigurations.TestState.Run, TOOLTIP_PROVIDER, ExecutorAction.getActions(0));
         }
