@@ -38,6 +38,7 @@ public class GoDocumentationProviderTest extends GoCodeInsightFixtureTestCase {
   public void testFprintln()                          { doTest(); }
   public void testMethod()                            { doTest(); }
   public void testVariable()                          { doTest(); }
+  public void testVariableInSwitch()                  { doTest(); }
   public void testEscape()                            { doTest(); }
   public void testEscapeReturnValues()                { doTest(); }
   public void testPackageWithDoc()                    { doTest(); }

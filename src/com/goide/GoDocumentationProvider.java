@@ -138,7 +138,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
   }
 
   @NotNull
-  private static String getSignature(PsiElement element) {
+  private static String getSignature(PsiElement element, PsiElement context) {
     if (element instanceof GoTypeSpec) {
       String name = ((GoTypeSpec)element).getName();
       return StringUtil.isNotEmpty(name) ? "type " + name : "";
@@ -154,7 +154,8 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
     if (element instanceof GoVarDefinition) {
       String name = ((GoVarDefinition)element).getName();
       if (StringUtil.isNotEmpty(name)) {
-        String type = getTypePresentation(((GoVarDefinition)element).getGoType(null), getImportPathForElement(element));
+        String type = getTypePresentation(((GoVarDefinition)element).getGoType(GoPsiImplUtil.createContextOnElement(context)), 
+                                          getImportPathForElement(element));
         GoExpression value = ((GoVarDefinition)element).getValue();
         return "var " + name + (!type.isEmpty() ? " " + type : "") + (value != null ? " = " + value.getText() : "");
       }
@@ -355,7 +356,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
   public String generateDoc(PsiElement element, PsiElement originalElement) {
     element = adjustDocElement(element);
     if (element instanceof GoNamedElement) {
-      String signature = getSignature(element);
+      String signature = getSignature(element, originalElement);
       signature = StringUtil.isNotEmpty(signature) ? "<b>" + signature + "</b>\n" : signature;
       return StringUtil.nullize(signature + getCommentText(getCommentsForElement(element), true));
     }
@@ -378,7 +379,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
   @Override
   public String getQuickNavigateInfo(PsiElement element, PsiElement originalElement) {
     if (element instanceof GoNamedElement) {
-      String result = getSignature(element);
+      String result = getSignature(element, originalElement);
       if (StringUtil.isNotEmpty(result)) return result;
     }
     return super.getQuickNavigateInfo(element, originalElement);
