@@ -145,6 +145,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testIota()                      { doTest(); }
   public void testIota2()                     { doTest(); }
   public void testUnaryPointer()              { doTest(); }
+  public void testUnaryMinus()                { doTest(); }
   public void testFileRead()                  { doTest(); }
   public void testLiteralValues()             { doTest(); }
   public void testUnderscoreUsedAsValue()     { doTest(); }
