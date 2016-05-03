@@ -73,6 +73,11 @@ public class GoTypeResolveTest extends GoCodeInsightFixtureTestCase {
                     "}", "int");
   }
 
+  public void testIndexExpression() {
+    doTopLevelTest("type foo string; var bar []foo; func _() { println(<selection>bar[0]</selection>) }", "foo");
+    doTopLevelTest("var bar []string; func _() { println(<selection>bar[0]</selection>) }", "string");
+  }
+
   private void doTopLevelTest(@NotNull String text, @NotNull String expectedTypeText) {
     myFixture.configureByText("a.go", "package a;" + text);
     PsiElement elementAt;
