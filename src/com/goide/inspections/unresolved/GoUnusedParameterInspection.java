@@ -75,8 +75,7 @@ public class GoUnusedParameterInspection extends GoInspectionBase {
             Query<PsiReference> search = ReferencesSearch.search(parameter, parameter.getUseScope());
             if (search.findFirst() != null) continue;
 
-            String paramName = parameter.getIdentifier().getText();
-            holder.registerProblem(parameter, "Unused " + what + " '" + paramName + "'", ProblemHighlightType.LIKE_UNUSED_SYMBOL);
+            holder.registerProblem(parameter, "Unused " + what + " <code>#ref</code> #loc", ProblemHighlightType.LIKE_UNUSED_SYMBOL);
           }
         }
       }

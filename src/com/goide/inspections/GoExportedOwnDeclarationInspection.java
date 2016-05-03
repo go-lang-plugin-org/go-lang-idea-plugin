@@ -45,7 +45,7 @@ public class GoExportedOwnDeclarationInspection extends GoInspectionBase {
             boolean first = true;
             for (GoConstDefinition constDefinition : spec.getConstDefinitionList()) {
               if (!first && constDefinition.isPublic()) {
-                String errorText = "Exported const '" + constDefinition.getName() + "' should have its own declaration";
+                String errorText = "Exported const <code>#ref</code> should have its own declaration #loc";
                 holder.registerProblem(constDefinition, errorText, ProblemHighlightType.WEAK_WARNING, new ExtractConstantDefinitionFix());
               }
               first = false;
@@ -61,7 +61,7 @@ public class GoExportedOwnDeclarationInspection extends GoInspectionBase {
             boolean first = true;
             for (GoVarDefinition varDefinition : spec.getVarDefinitionList()) {
               if (!first && varDefinition.isPublic()) {
-                String errorText = "Exported variable '" + varDefinition.getName() + "' should have its own declaration";
+                String errorText = "Exported variable <code>#ref</code> should have its own declaration #loc";
                 holder.registerProblem(varDefinition, errorText, ProblemHighlightType.WEAK_WARNING, new ExtractVarDefinitionFix());
               }
               first = false;

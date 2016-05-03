@@ -83,7 +83,7 @@ public class GoReservedWordUsedAsNameInspection extends GoInspectionBase {
     if (identifier != null) {
       String elementDescription = ElementDescriptionUtil.getElementDescription(element, UsageViewTypeLocation.INSTANCE);
       String builtinElementDescription = ElementDescriptionUtil.getElementDescription(builtinElement, UsageViewTypeLocation.INSTANCE);
-      String message = StringUtil.capitalize(elementDescription) + " '" + name + "' collides with builtin " + builtinElementDescription;
+      String message = StringUtil.capitalize(elementDescription) + " <code>#ref</code> collides with builtin " + builtinElementDescription;
       holder.registerProblem(identifier, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new GoRenameQuickFix(element));
     }
   }

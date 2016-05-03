@@ -56,7 +56,7 @@ public class GoFunctionVariadicParameterInspection extends GoInspectionBase {
     for (GoParameterDeclaration declaration : parameters.getParameterDeclarationList()) {
       PsiElement dot = declaration.getTripleDot();
       if (dot != null) {
-        holder.registerProblem(dot, "Cannot use ... in output argument list", ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
+        holder.registerProblem(dot, "Cannot use <code>...</code> in output argument list", ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
                                DELETE_QUICK_FIX);
       }
     }
@@ -71,7 +71,7 @@ public class GoFunctionVariadicParameterInspection extends GoInspectionBase {
       PsiElement dot = declaration.getTripleDot();
       if (dot != null) {
         if (declaration.getParamDefinitionList().size() > 1 || i != size - 1) {
-          holder.registerProblem(dot, "Can only use ... as final argument in list", ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
+          holder.registerProblem(dot, "Can only use <code>...</code> as final argument in list", ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
                                  DELETE_QUICK_FIX);
         }
       }

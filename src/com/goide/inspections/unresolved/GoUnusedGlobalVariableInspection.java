@@ -28,7 +28,7 @@ public class GoUnusedGlobalVariableInspection extends GoUnusedVariableInspection
   @Override
   protected void reportError(@NotNull GoVarDefinition varDefinition, @NotNull ProblemsHolder holder) {
     String name = varDefinition.getName();
-    holder.registerProblem(varDefinition, "Unused variable " + "'" + name + "'", ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+    holder.registerProblem(varDefinition, "Unused variable <code>#ref</code> #loc", ProblemHighlightType.LIKE_UNUSED_SYMBOL,
                            new GoDeleteVarDefinitionQuickFix(name));
   }
 
