@@ -16,19 +16,27 @@
 
 package com.goide.psi.impl;
 
-import com.goide.psi.GoArrayOrSliceType;
-import com.goide.psi.GoChannelType;
-import com.goide.psi.GoMapType;
-import com.goide.psi.GoType;
-import org.jetbrains.annotations.NotNull;
+import com.goide.psi.*;
 import org.jetbrains.annotations.Nullable;
 
 public class GoTypeUtil {
-  public static boolean isIterable(@NotNull GoType type) {
+  /**
+   * https://golang.org/ref/spec#For_statements
+   * The expression on the right in the "range" clause is called the range expression, 
+   * which may be an array, pointer to an array, slice, string, map, or channel permitting receive operations.
+   */
+  public static boolean isIterable(@Nullable GoType type) {
+    type = type != null ? type.getUnderlyingType() : null;
     return type instanceof GoArrayOrSliceType ||
+           type instanceof GoPointerType && isArray(((GoPointerType)type).getType()) ||
            type instanceof GoMapType ||
            type instanceof GoChannelType ||
            isString(type);
+  }
+
+  private static boolean isArray(@Nullable GoType type) {
+    type = type != null ? type.getUnderlyingType() : null;
+    return type instanceof GoArrayOrSliceType && ((GoArrayOrSliceType)type).getExpression() != null;
   }
 
   public static boolean isString(@Nullable GoType type) {
