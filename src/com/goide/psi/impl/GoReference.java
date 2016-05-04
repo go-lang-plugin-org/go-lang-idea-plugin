@@ -187,13 +187,8 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
       return true;
     }
     if (builtin(type)) {
-      GoTypeReferenceExpression expression = type.getTypeReferenceExpression();
-      PsiElement resolve = expression != null ? expression.resolve() : null;
-      GoType resolveType = resolve instanceof GoTypeOwner ? ((GoTypeOwner)resolve).getGoType(state) : null;
-      if (resolveType != null && type.equals(resolveType.getUnderlyingType())) {
-        // do not process builtin types like 'int int' or 'string string'
-        return true;
-      }
+      // do not process builtin types like 'int int' or 'string string'
+      return true;
     }
     return processInTypeRef(type.getTypeReferenceExpression(), processor, state);
   }
