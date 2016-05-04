@@ -34,12 +34,6 @@ public class GoSelectWordTest extends GoCodeInsightFixtureTestCase {
     CodeInsightTestUtil.doWordSelectionTestOnDirectory(myFixture, getTestName(true), "go");
   }
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    OVERWRITE_TESTDATA = true;
-  }
-
   @NotNull
   @Override
   protected String getBasePath() {
