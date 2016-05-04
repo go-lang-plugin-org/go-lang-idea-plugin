@@ -344,12 +344,11 @@ public class GoPsiImplUtil {
       if (((GoUnaryExpr)o).getBitAnd() != null) {
         return type != null ? new LightPointerType(type) : null;
       }
+      GoType baseType = type == null || type.getTypeReferenceExpression() == null ? type : type.getUnderlyingType();
       if (((GoUnaryExpr)o).getSendChannel() != null) {
-        GoType baseType = type == null || type.getTypeReferenceExpression() == null ? type : type.getUnderlyingType();
         return baseType instanceof GoChannelType ? ((GoChannelType)baseType).getType() : type;
       }
       if (((GoUnaryExpr)o).getMul() != null) {
-        GoType baseType = type == null || type.getTypeReferenceExpression() == null ? type : type.getUnderlyingType();
         return baseType instanceof GoPointerType ? ((GoPointerType)baseType).getType() : type;
       }
       return type;
