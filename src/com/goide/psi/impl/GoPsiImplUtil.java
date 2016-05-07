@@ -338,19 +338,14 @@ public class GoPsiImplUtil {
   @Nullable
   public static GoType getGoTypeInner(@NotNull GoExpression o, @Nullable ResolveState context) {
     if (o instanceof GoUnaryExpr) {
-      GoExpression e = ((GoUnaryExpr)o).getExpression();
+      GoUnaryExpr u = (GoUnaryExpr)o;
+      GoExpression e = u.getExpression();
       if (e == null) return null;
       GoType type = e.getGoType(context);
-      if (((GoUnaryExpr)o).getBitAnd() != null) {
-        return type != null ? new LightPointerType(type) : null;
-      }
-      GoType baseType = type == null || type.getTypeReferenceExpression() == null ? type : type.getUnderlyingType();
-      if (((GoUnaryExpr)o).getSendChannel() != null) {
-        return baseType instanceof GoChannelType ? ((GoChannelType)baseType).getType() : type;
-      }
-      if (((GoUnaryExpr)o).getMul() != null) {
-        return baseType instanceof GoPointerType ? ((GoPointerType)baseType).getType() : type;
-      }
+      GoType base = type == null || type.getTypeReferenceExpression() == null ? type : type.getUnderlyingType();
+      if (u.getBitAnd() != null) return type != null ? new LightPointerType(type) : null;
+      if (u.getSendChannel() != null) return base instanceof GoChannelType ? ((GoChannelType)base).getType() : type;
+      if (u.getMul() != null) return base instanceof GoPointerType ? ((GoPointerType)base).getType() : type;
       return type;
     }
     if (o instanceof GoAddExpr) {
