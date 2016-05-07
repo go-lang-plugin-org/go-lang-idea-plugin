@@ -35,6 +35,7 @@ import com.intellij.util.containers.OrderedSet;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.Set;
 
 public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReferenceExpression> {
   private final boolean myInsideInterfaceType;
@@ -127,7 +128,7 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
     ResolveUtil.treeWalkUp(myElement, delegate);
     Collection<? extends GoNamedElement> result = delegate.getVariants();
     if (!processNamedElements(processor, state, result, localResolve)) return false;
-    if (!processFileEntities(file, processor, state, localResolve)) return false;
+    if (!processNamedElements(processor, state, file.getTypes(), localResolve)) return false;
     PsiDirectory dir = file.getOriginalFile().getParent();
     if (!GoReference.processDirectory(dir, file, file.getPackageName(), processor, state, true)) return false;
     if (!GoReference.processImports(file, processor, state, myElement)) return false;
@@ -148,22 +149,24 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
     return true;
   }
 
+  private final static Set<String> DOC_ONLY_TYPES = ContainerUtil.set("Type", "Type1", "IntegerType", "FloatType", "ComplexType");
+  
   // todo: unify references, extract base class
   private boolean processBuiltin(@NotNull GoScopeProcessor processor, @NotNull ResolveState state, @NotNull GoCompositeElement element) {
     GoFile builtinFile = GoSdkUtil.findBuiltinFile(element);
-    return builtinFile == null || processFileEntities(builtinFile, processor, state, true);
+    return builtinFile == null || processNamedElements(processor, state, ContainerUtil.filter(builtinFile.getTypes(),
+                                                                                              new Condition<GoTypeSpec>() {
+                                                                                                @Override
+                                                                                                public boolean value(GoTypeSpec spec) {
+                                                                                                  String name = spec.getName();
+                                                                                                  return name != null && !DOC_ONLY_TYPES.contains(name);
+                                                                                                }
+                                                                                              }), true);
   }
 
   @NotNull
   private GoTypeProcessor createDelegate(@NotNull GoScopeProcessor processor) {
     return new GoTypeProcessor(myElement, processor.isCompletion());
-  }
-
-  private boolean processFileEntities(@NotNull GoFile file,
-                                      @NotNull GoScopeProcessor processor,
-                                      @NotNull ResolveState state,
-                                      boolean localProcessing) {
-    return processNamedElements(processor, state, file.getTypes(), localProcessing);
   }
 
   private boolean processNamedElements(@NotNull PsiScopeProcessor processor,
