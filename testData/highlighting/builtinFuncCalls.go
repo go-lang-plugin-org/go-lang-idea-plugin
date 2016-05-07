@@ -74,3 +74,8 @@ func main() {
 	foo(cap(&[4]string{"a", "b", "c", "d"}))
 	foo(cap([]string{}))
 }
+
+func _() {
+	var x <error>IntegerType</error> = 3
+	println(x)
+}
