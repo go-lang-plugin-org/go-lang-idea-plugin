@@ -150,18 +150,18 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
   }
 
   private final static Set<String> DOC_ONLY_TYPES = ContainerUtil.set("Type", "Type1", "IntegerType", "FloatType", "ComplexType");
-  
+  private static final Condition<GoTypeSpec> BUILTIN_TYPE = new Condition<GoTypeSpec>() {
+    @Override
+    public boolean value(GoTypeSpec spec) {
+      String name = spec.getName();
+      return name != null && !DOC_ONLY_TYPES.contains(name);
+    }
+  };
+
   // todo: unify references, extract base class
   private boolean processBuiltin(@NotNull GoScopeProcessor processor, @NotNull ResolveState state, @NotNull GoCompositeElement element) {
     GoFile builtinFile = GoSdkUtil.findBuiltinFile(element);
-    return builtinFile == null || processNamedElements(processor, state, ContainerUtil.filter(builtinFile.getTypes(),
-                                                                                              new Condition<GoTypeSpec>() {
-                                                                                                @Override
-                                                                                                public boolean value(GoTypeSpec spec) {
-                                                                                                  String name = spec.getName();
-                                                                                                  return name != null && !DOC_ONLY_TYPES.contains(name);
-                                                                                                }
-                                                                                              }), true);
+    return builtinFile == null || processNamedElements(processor, state, ContainerUtil.filter(builtinFile.getTypes(), BUILTIN_TYPE), true);
   }
 
   @NotNull
