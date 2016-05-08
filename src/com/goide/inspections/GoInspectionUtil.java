@@ -29,9 +29,16 @@ public class GoInspectionUtil {
   private GoInspectionUtil() {}
 
   public static int getExpressionResultCount(GoExpression call) {
-    if (call instanceof GoLiteral || call instanceof GoStringLiteral || call instanceof GoBinaryExpr || call instanceof GoParenthesesExpr ||
+    if (call instanceof GoLiteral || call instanceof GoStringLiteral || call instanceof GoBinaryExpr ||
         call instanceof GoUnaryExpr && ((GoUnaryExpr)call).getSendChannel() == null || call instanceof GoBuiltinCallExpr ||
         call instanceof GoCompositeLit || call instanceof GoIndexOrSliceExpr) {
+      return 1;
+    }
+    if (call instanceof GoParenthesesExpr) {
+      GoExpression expr = ((GoParenthesesExpr)call).getExpression();
+      if (expr instanceof GoCallExpr) {
+        return getFunctionResultCount((GoCallExpr)expr);
+      }
       return 1;
     }
     if (call instanceof GoTypeAssertionExpr) {

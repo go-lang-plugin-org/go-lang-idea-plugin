@@ -25,6 +25,20 @@ func foo() (int, int) {
 	return 4, 5
 }
 
+func returnTwo() (int, int) {
+	return 1, 2
+}
+
+func _() {
+	a, b := (returnTwo())
+	_, _ = a, b
+}
+
+func _() {
+	a, b := <error descr="Multiple-value (returnTwo())() in single-value context">(returnTwo())</error>, 1
+	_, _ = a, b
+}
+
 func _() {
 	<error descr="Assignment count mismatch: 1 = 2"><error descr="Unused variable 'x'">x</error> := foo(), foo()</error>
 	<error descr="Assignment count mismatch: 1 = 2"><error descr="Unresolved reference 'y'">y</error> = foo(), foo()</error>
