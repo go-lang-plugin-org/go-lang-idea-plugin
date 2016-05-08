@@ -73,7 +73,8 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       GoUnusedParameterInspection.class,
       GoInvalidStringOrCharInspection.class,
       GoDirectAssignToStructFieldInMapInspection.class,
-      GoInfiniteForInspection.class
+      GoInfiniteForInspection.class,
+      GoAssignmentToReceiverInspection.class
     );
   }
 
@@ -157,6 +158,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testSliceWithThirdIndex()       { doTest(); }
   public void testAssignToStructFieldInMap()  { doTest(); }
   public void testInfiniteFor()               { doTest(); }
+  public void testAssignmentToReceiver()      { doTest(); }
   public void testStringInStructSliceWithThirdIndex() { doTest(); }
 
   public void testAvoidDuplicatedUnusedImportReports() {
