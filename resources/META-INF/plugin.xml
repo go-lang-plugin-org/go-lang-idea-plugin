@@ -344,9 +344,11 @@
                      groupName="General" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoUnderscoreUsedAsValueInspection"/>
     <localInspection language="go" displayName="Invalid strings and runes" groupPath="Go"
-                     groupName="General" enabledByDefault="true" level="ERROR" 
+                     groupName="General" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoInvalidStringOrCharInspection"/>
-
+    <localInspection language="go" displayName="Mixed named and unnamed parameters" groupPath="Go"
+                     groupName="General" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoMixedNamedUnnamedParametersInspection"/>
     <!-- /general -->
 
     <!-- color schemes -->

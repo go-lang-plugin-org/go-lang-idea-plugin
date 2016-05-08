@@ -71,10 +71,11 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       GoUnderscoreUsedAsValueInspection.class,
       GoRangeIterationOnIllegalTypeInspection.class,
       GoUnusedParameterInspection.class,
-      GoInvalidStringOrCharInspection.class,
       GoDirectAssignToStructFieldInMapInspection.class,
       GoInfiniteForInspection.class,
-      GoAssignmentToReceiverInspection.class
+      GoAssignmentToReceiverInspection.class,
+      GoInvalidStringOrCharInspection.class,
+      GoMixedNamedUnnamedParametersInspection.class
     );
   }
 
@@ -86,6 +87,11 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   @Override
   protected String getBasePath() {
     return "highlighting";
+  }
+
+  @Override
+  protected boolean isWriteActionRequired() {
+    return false;
   }
 
   public void testSimple()                    { doTest(); }
@@ -159,6 +165,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testAssignToStructFieldInMap()  { doTest(); }
   public void testInfiniteFor()               { doTest(); }
   public void testAssignmentToReceiver()      { doTest(); }
+  public void testMixedNamedUnnamedParameters() { doTest(); }
   public void testStringInStructSliceWithThirdIndex() { doTest(); }
 
   public void testAvoidDuplicatedUnusedImportReports() {
