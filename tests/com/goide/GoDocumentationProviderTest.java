@@ -60,6 +60,7 @@ public class GoDocumentationProviderTest extends GoCodeInsightFixtureTestCase {
   public void testConstants()                         { doTest(); }
   public void testVarShortDefinition()                { doTest(); }
   public void testSpecType()                          { doTest(); }
+  public void testPointer()                           { doTest(); }
 
   public void testMultiBlockDoc()                     { doConverterTest(); }
   public void testIndentedBlock()                     { doConverterTest(); }
