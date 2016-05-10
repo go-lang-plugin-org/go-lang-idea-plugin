@@ -440,14 +440,6 @@ func _() int {
     }
 }
 
-func _() {
-    defer <error descr="Argument to defer must be function call">(func(){}())</error>
-    defer <error descr="Argument to defer must be function call">1</error>
-    go <error descr="Argument to go must be function call">func(){}</error>
-    defer func(){}()
-    go func(){}()
-}
-
 func _(<warning descr="Unused parameter 'bar'">bar</warning> func(baz    int)) {
       <error descr="Unresolved reference 'baz'">baz</error>
 }

@@ -17,17 +17,19 @@
 package com.goide.inspections;
 
 import com.goide.psi.*;
-import com.intellij.codeInspection.LocalInspectionToolSession;
-import com.intellij.codeInspection.ProblemHighlightType;
-import com.intellij.codeInspection.ProblemsHolder;
+import com.goide.psi.impl.GoElementFactory;
+import com.intellij.codeInspection.*;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoDeferGoInspection extends GoInspectionBase {
+  public static final String QUICK_FIX_NAME = "Add function call";
+
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder,
-                                     @SuppressWarnings({"UnusedParameters", "For future"}) @NotNull LocalInspectionToolSession session) {
+  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
       public void visitDeferStatement(@NotNull GoDeferStatement o) {
@@ -44,8 +46,27 @@ public class GoDeferGoInspection extends GoInspectionBase {
       private void checkExpression(@Nullable GoExpression o, String who) {
         if (o == null) return;
         if (o instanceof GoCallExpr || o instanceof GoBuiltinCallExpr) return;
-        holder.registerProblem(o, "Argument to " + who + " must be function call", ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+        LocalQuickFix[] fixes = o.getGoType(null) instanceof GoFunctionType
+                                ? new LocalQuickFix[]{new GoAddParensQuickFix()}
+                                : LocalQuickFix.EMPTY_ARRAY;
+        holder.registerProblem(o, "Expression in " + who + " must be function call", ProblemHighlightType.GENERIC_ERROR_OR_WARNING, fixes);
       }
     };
+  }
+
+  private static class GoAddParensQuickFix extends LocalQuickFixBase {
+    protected GoAddParensQuickFix() {
+      super(QUICK_FIX_NAME);
+    }
+
+    @Override
+    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+      PsiElement element = descriptor.getStartElement();
+      if (element instanceof GoExpression && !(element instanceof GoCallExpr || element instanceof GoBuiltinCallExpr)) {
+        if (((GoExpression)element).getGoType(null) instanceof GoFunctionType) {
+          element.replace(GoElementFactory.createExpression(project, element.getText() + "()"));
+        }
+      }
+    }
   }
 }
