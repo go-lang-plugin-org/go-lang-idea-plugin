@@ -19,6 +19,7 @@ package com.goide;
 import com.goide.editor.GoParameterInfoHandler;
 import com.goide.project.GoVendoringUtil;
 import com.goide.psi.*;
+import com.goide.psi.impl.GoLightType;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.sdk.GoPackageUtil;
 import com.goide.sdk.GoSdkUtil;
@@ -27,7 +28,9 @@ import com.goide.stubs.index.GoAllPublicNamesIndex;
 import com.goide.stubs.index.GoIdFilter;
 import com.goide.util.GoUtil;
 import com.intellij.codeInsight.documentation.DocumentationManagerProtocol;
+import com.intellij.lang.ASTNode;
 import com.intellij.lang.documentation.AbstractDocumentationProvider;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.DumbService;
@@ -47,12 +50,12 @@ import com.intellij.xml.util.XmlStringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 public class GoDocumentationProvider extends AbstractDocumentationProvider {
+  private static final Logger LOG = Logger.getInstance(GoDocumentationProvider.class);
   private static final GoCommentsConverter COMMENTS_CONVERTER = new GoCommentsConverter();
   private static final Comparator<PsiElement> ELEMENT_BY_RANGE_COMPARATOR = new Comparator<PsiElement>() {
     @Override
@@ -218,28 +221,51 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       if (type instanceof GoMapType) {
         GoType keyType = ((GoMapType)type).getKeyType();
         GoType valueType = ((GoMapType)type).getValueType();
-        return replaceInnerTypes(type, contextImportPath, keyType, valueType);
+        return "map[" + getTypePresentation(keyType, contextImportPath) + "]" + getTypePresentation(valueType, contextImportPath);
       }
       if (type instanceof GoChannelType) {
-        return replaceInnerTypes(type, contextImportPath, ((GoChannelType)type).getType());
+        ASTNode typeNode = type.getNode();
+        GoType innerType = ((GoChannelType)type).getType();
+        ASTNode innerTypeNode = innerType != null ? innerType.getNode() : null;
+        if (typeNode != null && innerTypeNode != null) {
+          StringBuilder result = new StringBuilder();
+          for (ASTNode node : typeNode.getChildren(null)) {
+            if (node.equals(innerTypeNode)) {
+              break;
+            }
+            if (node.getElementType() != TokenType.WHITE_SPACE) {
+              result.append(XmlStringUtil.escapeString(node.getText()));
+            }
+          }
+          result.append(" ").append(getTypePresentation(innerType, contextImportPath));
+          return result.toString();
+        }
       }
       if (type instanceof GoParType) {
-        return replaceInnerTypes(type, contextImportPath, ((GoParType)type).getActualType());
+        return "(" + getTypePresentation(((GoParType)type).getActualType(), contextImportPath) + ")";
       }
       if (type instanceof GoArrayOrSliceType) {
-        return replaceInnerTypes(type, contextImportPath, ((GoArrayOrSliceType)type).getType());
+        return "[]" + getTypePresentation(((GoArrayOrSliceType)type).getType(), contextImportPath);
       }
       if (type instanceof GoPointerType) {
         GoType inner = ((GoPointerType)type).getType();
-        return inner instanceof GoSpecType
-               ? getTypePresentation(inner, contextImportPath)
-               : replaceInnerTypes(type, contextImportPath, inner);
+        return inner instanceof GoSpecType ? getTypePresentation(inner, contextImportPath)
+                                           : "*" + getTypePresentation(inner, contextImportPath);
       }
       if (type instanceof GoTypeList) {
-        return "(" + replaceInnerTypes(type, contextImportPath, ((GoTypeList)type).getTypeList()) + ")";
+        return "(" + StringUtil.join(((GoTypeList)type).getTypeList(), new Function<GoType, String>() {
+          @Override
+          public String fun(GoType element) {
+            return getTypePresentation(element, contextImportPath);
+          }
+        }, ", ") + ")";
       }
       if (type instanceof GoSpecType) {
         return getTypePresentation(GoPsiImplUtil.getTypeSpecSafe(type), contextImportPath);
+      }
+      if (type instanceof GoLightType) {
+        LOG.error("Cannot build presentable text for type: " + type.getClass().getSimpleName() + " - " + type.getText());
+        return "";
       }
       GoTypeReferenceExpression typeRef = GoPsiImplUtil.getTypeReference(type);
       if (typeRef != null) {
@@ -274,31 +300,6 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       return getReferenceText(element, true);
     }
     return null;
-  }
-
-  @NotNull
-  private static String replaceInnerTypes(@NotNull GoType type, @Nullable String contextImportPath, GoType... innerTypes) {
-    return replaceInnerTypes(type, contextImportPath, Arrays.asList(innerTypes));
-  }
-
-  @NotNull
-  private static String replaceInnerTypes(@NotNull GoType type, @Nullable String contextImportPath, @NotNull List<GoType> innerTypes) {
-    StringBuilder result = new StringBuilder();
-    String typeText = type.getText();
-    int initialOffset = type.getTextRange().getStartOffset(); // todo[zolotov] a potential NPE: type.getTextRange() could be null 
-    int lastStartOffset = type.getTextLength();
-    ContainerUtil.sort(innerTypes, ELEMENT_BY_RANGE_COMPARATOR);
-    for (int i = innerTypes.size() - 1; i >= 0; i--) {
-      GoType innerType = innerTypes.get(i);
-      if (innerType != null) {
-        TextRange range = innerType.getTextRange().shiftRight(-initialOffset);
-        result.insert(0, XmlStringUtil.escapeString(typeText.substring(range.getEndOffset(), lastStartOffset)));
-        result.insert(0, getTypePresentation(innerType, contextImportPath));
-        lastStartOffset = range.getStartOffset();
-      }
-    }
-    result.insert(0, XmlStringUtil.escapeString(typeText.substring(0, lastStartOffset)));
-    return result.length() > 0 ? result.toString() : typeText;
   }
 
   @Nullable

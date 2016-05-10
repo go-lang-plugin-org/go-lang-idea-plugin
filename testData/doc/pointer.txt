@@ -1,0 +1,8 @@
+<b>var foo *<a href="psi_element://#main.S">S</a> = new(S)</b>
+
+=====
+var foo *<a href="psi_element://#main.S">S</a> = new(S)
+=====
+No urls
+=====
+No local urls
