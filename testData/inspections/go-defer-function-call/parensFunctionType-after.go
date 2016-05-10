@@ -1,5 +1,5 @@
 package main
 
 func _() {
-    defer func() {}()
+    defer (func() {})()
 }
