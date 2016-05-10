@@ -77,6 +77,18 @@ public class GoTypeResolveTest extends GoCodeInsightFixtureTestCase {
     doTopLevelTest("type foo string; var bar []foo; func _() { println(<selection>bar[0]</selection>) }", "foo");
     doTopLevelTest("var bar []string; func _() { println(<selection>bar[0]</selection>) }", "string");
   }
+  
+  public void testFuncLiteral() {
+    doTopLevelTest("func voidFunction(a int) {} func _() { <selection>voidFunction</selection>() }", "func (a int)");
+  }
+  
+  public void testCallExpression() {
+    doTopLevelTest("func voidFunction() int {} func _() { <selection>voidFunction()</selection> }", "int");
+  }
+  
+  public void testCallExpressionOnVoidFunction() {
+    doTopLevelTest("func voidFunction() {} func _() { <selection>voidFunction()</selection> }", "<unknown>");
+  }
 
   private void doTopLevelTest(@NotNull String text, @NotNull String expectedTypeText) {
     myFixture.configureByText("a.go", "package a;" + text);

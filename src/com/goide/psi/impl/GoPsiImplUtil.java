@@ -616,22 +616,23 @@ public class GoPsiImplUtil {
     if (type instanceof GoFunctionType) {
       GoSignature signature = ((GoFunctionType)type).getSignature();
       GoResult result = signature != null ? signature.getResult() : null;
-      if (result != null) {
-        GoType rt = result.getType();
-        if (rt != null) return rt;
-        GoParameters parameters = result.getParameters();
-        if (parameters != null) {
-          List<GoParameterDeclaration> list = parameters.getParameterDeclarationList();
-          List<GoType> types = ContainerUtil.newArrayListWithCapacity(list.size());
-          for (GoParameterDeclaration declaration : list) {
-            GoType declarationType = declaration.getType();
-            for (GoParamDefinition ignored : declaration.getParamDefinitionList()) {
-              types.add(declarationType);
-            }
+      if (result == null) {
+        return null;
+      }
+      GoType rt = result.getType();
+      if (rt != null) return rt;
+      GoParameters parameters = result.getParameters();
+      if (parameters != null) {
+        List<GoParameterDeclaration> list = parameters.getParameterDeclarationList();
+        List<GoType> types = ContainerUtil.newArrayListWithCapacity(list.size());
+        for (GoParameterDeclaration declaration : list) {
+          GoType declarationType = declaration.getType();
+          for (GoParamDefinition ignored : declaration.getParamDefinitionList()) {
+            types.add(declarationType);
           }
-          if (types.size() == 1) return types.get(0);
-          return new LightTypeList(parameters, types);
         }
+        if (types.size() == 1) return types.get(0);
+        return new LightTypeList(parameters, types);
       }
     }
     return type;
