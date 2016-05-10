@@ -25,7 +25,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoDeferGoInspection extends GoInspectionBase {
-  public static final String QUICK_FIX_NAME = "Add function call";
+  public static final String ADD_CALL_QUICK_FIX_NAME = "Add function call";
+  public static final String UNWRAP_PARENTHESES_QUICK_FIX_NAME = "Unwrap parentheses";
 
   @NotNull
   @Override
@@ -44,11 +45,13 @@ public class GoDeferGoInspection extends GoInspectionBase {
       }
 
       private void checkExpression(@Nullable GoExpression o, String who) {
-        if (o == null) return;
-        if (o instanceof GoCallExpr || o instanceof GoBuiltinCallExpr) return;
-        LocalQuickFix[] fixes = o.getGoType(null) instanceof GoFunctionType
-                                ? new LocalQuickFix[]{new GoAddParensQuickFix()}
-                                : LocalQuickFix.EMPTY_ARRAY;
+        if (o == null || o instanceof GoCallExpr || o instanceof GoBuiltinCallExpr) return;
+        if (o instanceof GoParenthesesExpr) {
+          holder.registerProblem(o, "Expression in " + who + " must not be parenthesized", ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
+                                 new GoUnwrapParensExpression());
+        }
+        LocalQuickFix[] fixes = o.getGoType(null) instanceof GoFunctionType ? new LocalQuickFix[]{new GoAddParensQuickFix()}
+                                                                            : LocalQuickFix.EMPTY_ARRAY;
         holder.registerProblem(o, "Expression in " + who + " must be function call", ProblemHighlightType.GENERIC_ERROR_OR_WARNING, fixes);
       }
     };
@@ -56,7 +59,7 @@ public class GoDeferGoInspection extends GoInspectionBase {
 
   private static class GoAddParensQuickFix extends LocalQuickFixBase {
     protected GoAddParensQuickFix() {
-      super(QUICK_FIX_NAME);
+      super(ADD_CALL_QUICK_FIX_NAME);
     }
 
     @Override
@@ -65,6 +68,26 @@ public class GoDeferGoInspection extends GoInspectionBase {
       if (element instanceof GoExpression && !(element instanceof GoCallExpr || element instanceof GoBuiltinCallExpr)) {
         if (((GoExpression)element).getGoType(null) instanceof GoFunctionType) {
           element.replace(GoElementFactory.createExpression(project, element.getText() + "()"));
+        }
+      }
+    }
+  }
+
+  private static class GoUnwrapParensExpression extends LocalQuickFixBase {
+    protected GoUnwrapParensExpression() {
+      super(UNWRAP_PARENTHESES_QUICK_FIX_NAME);
+    }
+
+    @Override
+    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+      PsiElement element = descriptor.getStartElement();
+      if (element instanceof GoParenthesesExpr) {
+        GoExpression innerExpression = ((GoParenthesesExpr)element).getExpression();
+        while (innerExpression instanceof GoParenthesesExpr) {
+          innerExpression = ((GoParenthesesExpr)innerExpression).getExpression();
+        }
+        if (innerExpression != null) {
+          element.replace(GoElementFactory.createExpression(project, innerExpression.getText()));
         }
       }
     }

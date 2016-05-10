@@ -16,21 +16,29 @@ public class GoDeferGoInspectionTest extends GoQuickFixTestBase {
   }
 
   public void testParens() {
-    doTest(GoDeferGoInspection.QUICK_FIX_NAME, true);
+    doTest(GoDeferGoInspection.UNWRAP_PARENTHESES_QUICK_FIX_NAME, true);
+  }
+
+  public void testTwiceParens() {
+    doTest(GoDeferGoInspection.UNWRAP_PARENTHESES_QUICK_FIX_NAME, true);
+  }
+
+  public void testParensFunctionType() {
+    doTest(GoDeferGoInspection.ADD_CALL_QUICK_FIX_NAME, true);
   }
 
   public void testLiteral() {
-    doTestNoFix(GoDeferGoInspection.QUICK_FIX_NAME, true);
+    doTestNoFix(GoDeferGoInspection.ADD_CALL_QUICK_FIX_NAME, true);
   }
 
   public void testFuncLiteral() {
-    doTest(GoDeferGoInspection.QUICK_FIX_NAME, true);
+    doTest(GoDeferGoInspection.ADD_CALL_QUICK_FIX_NAME, true);
   }
 
   public void testValid() {
     myFixture.testHighlighting(getTestName(true) + ".go");
   }
-  
+
   @NotNull
   @Override
   protected String getBasePath() {
