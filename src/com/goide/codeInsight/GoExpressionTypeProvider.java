@@ -16,7 +16,7 @@
 
 package com.goide.codeInsight;
 
-import com.goide.psi.GoStatement;
+import com.goide.psi.GoTopLevelDeclaration;
 import com.goide.psi.GoType;
 import com.goide.psi.GoTypeOwner;
 import com.intellij.lang.ExpressionTypeProvider;
@@ -50,6 +50,7 @@ public class GoExpressionTypeProvider extends ExpressionTypeProvider<GoTypeOwner
     if (at instanceof PsiWhiteSpace && at.textMatches("\n")) {
       at = PsiTreeUtil.prevLeaf(at);
     }
-    return SyntaxTraverser.psiApi().parents(at).takeWhile(Conditions.notInstanceOf(GoStatement.class)).filter(GoTypeOwner.class).toList();
+    return SyntaxTraverser.psiApi().parents(at).takeWhile(Conditions.notInstanceOf(GoTopLevelDeclaration.class))
+      .filter(GoTypeOwner.class).toList();
   }
 }
