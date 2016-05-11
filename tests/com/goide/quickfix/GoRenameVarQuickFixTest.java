@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,9 @@ public class GoRenameVarQuickFixTest extends GoQuickFixTestBase {
     return "quickfixes/rename-var";
   }
 
-  public void testSimple()      { doTest(GoRenameToBlankQuickFix.NAME);      }
-  public void testProhibited()  { doTestNoFix(GoRenameToBlankQuickFix.NAME); }
+  public void testSimple()                                    { doTest(GoRenameToBlankQuickFix.NAME);      }
+  public void testProhibited()                                { doTestNoFix(GoRenameToBlankQuickFix.NAME); }
+  public void testRenameAndReplaceWithAssignment_1()          { doTest(GoRenameToBlankQuickFix.NAME);      }
+  public void testRenameAndReplaceWithAssignment_2()          { doTest(GoRenameToBlankQuickFix.NAME);      }
+  public void testRenameAndReplaceWithAssignment_3()          { doTest(GoRenameToBlankQuickFix.NAME);      }
 }

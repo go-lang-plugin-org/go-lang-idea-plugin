@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,21 +55,48 @@ public class GoNoNewVariablesInspection extends GoInspectionBase {
       }
 
       private void visitVarDefinitionList(@NotNull PsiElement o, @NotNull List<GoVarDefinition> list) {
-        if (list.isEmpty()) return;
         GoVarDefinition first = ContainerUtil.getFirstItem(list);
         GoVarDefinition last = ContainerUtil.getLastItem(list);
         if (first == null || last == null) return;
-
-        for (GoVarDefinition def : list) {
-          if (def.isBlank()) continue;
-          PsiReference reference = def.getReference();
-          if (reference == null || reference.resolve() == null) return;
+        if (hasNonNewVariables(list)) {
+          TextRange textRange = TextRange.create(first.getStartOffsetInParent(), last.getStartOffsetInParent() + last.getTextLength());
+          holder.registerProblem(o, textRange, "No new variables on left side of :=", new MyLocalQuickFixBase());
         }
-
-        TextRange textRange = TextRange.create(first.getStartOffsetInParent(), last.getStartOffsetInParent() + last.getTextLength());
-        holder.registerProblem(o, textRange, "No new variables on left side of :=", new MyLocalQuickFixBase());
       }
     };
+  }
+
+  public static boolean hasNonNewVariables(@NotNull List<GoVarDefinition> list) {
+    if (list.isEmpty()) return false;
+    for (GoVarDefinition def : list) {
+      if (def.isBlank()) continue;
+      PsiReference reference = def.getReference();
+      if (reference == null || reference.resolve() == null) return false;
+    }
+    return true;
+  }
+
+  public static void replaceWithAssignment(@NotNull Project project, @NotNull PsiElement element) {
+    if (element instanceof GoShortVarDeclaration) {
+      PsiElement parent = element.getParent();
+      if (parent instanceof GoSimpleStatement) {
+        String left = GoPsiImplUtil.joinPsiElementText(((GoShortVarDeclaration)element).getVarDefinitionList());
+        String right = GoPsiImplUtil.joinPsiElementText(((GoShortVarDeclaration)element).getRightExpressionsList());
+        parent.replace(GoElementFactory.createAssignmentStatement(project, left, right));
+      }
+    }
+    else if (element instanceof GoRangeClause) {
+      String left = GoPsiImplUtil.joinPsiElementText(((GoRangeClause)element).getVarDefinitionList());
+      GoExpression rangeExpression = ((GoRangeClause)element).getRangeExpression();
+      String right = rangeExpression != null ? rangeExpression.getText() : "";
+      element.replace(GoElementFactory.createRangeClauseAssignment(project, left, right));
+    }
+    else if (element instanceof GoRecvStatement) {
+      String left = GoPsiImplUtil.joinPsiElementText(((GoRecvStatement)element).getVarDefinitionList());
+      GoExpression recvExpression = ((GoRecvStatement)element).getRecvExpression();
+      String right = recvExpression != null ? recvExpression.getText() : "";
+      element.replace(GoElementFactory.createRecvStatementAssignment(project, left, right));
+    }
   }
 
   private static class MyLocalQuickFixBase extends LocalQuickFixBase {
@@ -81,26 +108,7 @@ public class GoNoNewVariablesInspection extends GoInspectionBase {
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
       PsiElement element = descriptor.getStartElement();
       if (element.isValid()) {
-        if (element instanceof GoShortVarDeclaration) {
-          PsiElement parent = element.getParent();
-          if (parent instanceof GoSimpleStatement) {
-            String left = GoPsiImplUtil.joinPsiElementText(((GoShortVarDeclaration)element).getVarDefinitionList());
-            String right = GoPsiImplUtil.joinPsiElementText(((GoShortVarDeclaration)element).getRightExpressionsList());
-            parent.replace(GoElementFactory.createAssignmentStatement(project, left, right));
-          }
-        }
-        else if (element instanceof GoRangeClause) {
-          String left = GoPsiImplUtil.joinPsiElementText(((GoRangeClause)element).getVarDefinitionList());
-          GoExpression rangeExpression = ((GoRangeClause)element).getRangeExpression();
-          String right = rangeExpression != null ? rangeExpression.getText() : "";
-          element.replace(GoElementFactory.createRangeClauseAssignment(project, left, right));
-        }
-        else if (element instanceof GoRecvStatement) {
-          String left = GoPsiImplUtil.joinPsiElementText(((GoRecvStatement)element).getVarDefinitionList());
-          GoExpression recvExpression = ((GoRecvStatement)element).getRecvExpression();
-          String right = recvExpression != null ? recvExpression.getText() : "";
-          element.replace(GoElementFactory.createRecvStatementAssignment(project, left, right));
-        }
+        replaceWithAssignment(project, element);
       }
     }
   }

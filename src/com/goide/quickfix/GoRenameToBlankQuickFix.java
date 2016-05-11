@@ -16,7 +16,10 @@
 
 package com.goide.quickfix;
 
+import com.goide.inspections.GoNoNewVariablesInspection;
 import com.goide.psi.GoNamedElement;
+import com.goide.psi.GoShortVarDeclaration;
+import com.goide.psi.GoVarDefinition;
 import com.intellij.codeInspection.LocalQuickFixOnPsiElement;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -25,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class GoRenameToBlankQuickFix extends LocalQuickFixOnPsiElement {
   public static final String NAME = "Rename to _";
-  
+
   public GoRenameToBlankQuickFix(GoNamedElement o) {
     super(o);
   }
@@ -38,8 +41,17 @@ public class GoRenameToBlankQuickFix extends LocalQuickFixOnPsiElement {
 
   @Override
   public void invoke(@NotNull Project project, @NotNull PsiFile file, @NotNull PsiElement startElement, @NotNull PsiElement endElement) {
-    if (startElement instanceof GoNamedElement) {
+    if (startElement.isValid() && startElement instanceof GoNamedElement) {
       ((GoNamedElement)startElement).setName("_");
+
+      if (startElement instanceof GoVarDefinition) {
+        PsiElement parent = startElement.getParent();
+        if (parent instanceof GoShortVarDeclaration) {
+          if (GoNoNewVariablesInspection.hasNonNewVariables(((GoShortVarDeclaration)parent).getVarDefinitionList())) {
+            GoNoNewVariablesInspection.replaceWithAssignment(project, parent);
+          }
+        }
+      }
     }
   }
 
