@@ -41,7 +41,7 @@ public class GoMissingReturnInspection extends GoInspectionBase {
   private static void check(@Nullable GoSignature signature, @Nullable GoBlock block, @NotNull ProblemsHolder holder) {
     if (block == null) return;
     GoResult result = signature != null ? signature.getResult() : null;
-    if (result == null || isTerminating(block)) return;
+    if (result == null || result.isVoid() || isTerminating(block)) return;
 
     PsiElement brace = block.getRbrace();
     holder.registerProblem(brace == null ? block : brace, "Missing return at end of function",

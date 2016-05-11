@@ -404,6 +404,15 @@ func _(col Color) string {
     Println(testdata.a)
 <error descr="Missing return at end of function">}</error>
 
+func _(col Color) () {
+    Println(col.B)  
+    
+    var testdata *struct {
+        a *[7]int
+    }
+    Println(testdata.a)
+}
+
 type Name struct {
 }
 

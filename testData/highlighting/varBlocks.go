@@ -37,7 +37,7 @@ func test3() {
 	} else {
 		fmt.Println("not x")
 	}
-	fmt.Println(<error>x</error>)
+	fmt.Println(<error descr="Unresolved reference 'x'">x</error>)
 }
 
 
@@ -53,7 +53,7 @@ func test4() {
 
 
 func test5() {
-    <error>xy</error> := 5
+    <error descr="Unused variable 'xy'">xy</error> := 5
     if xy := 10; xy < 9 {
         fmt.Println(xy, "exists here")
     } else {
