@@ -153,12 +153,18 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       }
     }
 
-    if (!(element instanceof GoSignatureOwner)) return "";
+    return element instanceof GoSignatureOwner 
+           ? getSignatureOwnerTypePresentation((GoSignatureOwner)element, getImportPathForElement(element)) 
+           : "";
+  }
+
+  @NotNull
+  private static String getSignatureOwnerTypePresentation(@NotNull GoSignatureOwner signatureOwner, @Nullable String contextImportPath) {
     PsiElement identifier = null;
-    if (element instanceof GoNamedSignatureOwner) {
-      identifier = ((GoNamedSignatureOwner)element).getIdentifier();
+    if (signatureOwner instanceof GoNamedSignatureOwner) {
+      identifier = ((GoNamedSignatureOwner)signatureOwner).getIdentifier();
     }
-    GoSignature signature = ((GoSignatureOwner)element).getSignature();
+    GoSignature signature = signatureOwner.getSignature();
 
     if (identifier == null && signature == null) {
       return "";
@@ -181,7 +187,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       }
     }
     else if (type != null) {
-      builder.append(' ').append(getTypePresentation(type, getImportPathForElement(element)));
+      builder.append(' ').append(getTypePresentation(type, contextImportPath));
     }
     return builder.toString();
   }
@@ -248,6 +254,9 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
             return getTypePresentation(element, contextImportPath);
           }
         }, ", ") + ")";
+      }
+      if (type instanceof GoFunctionType) {
+        return getSignatureOwnerTypePresentation((GoFunctionType)type, contextImportPath); 
       }
       if (type instanceof GoSpecType) {
         return getTypePresentation(GoPsiImplUtil.getTypeSpecSafe(type), contextImportPath);

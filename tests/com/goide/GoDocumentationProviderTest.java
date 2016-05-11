@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,6 +61,7 @@ public class GoDocumentationProviderTest extends GoCodeInsightFixtureTestCase {
   public void testVarShortDefinition()                { doTest(); }
   public void testSpecType()                          { doTest(); }
   public void testPointer()                           { doTest(); }
+  public void testFunctionType()                      { doTest(); }
 
   public void testMultiBlockDoc()                     { doConverterTest(); }
   public void testIndentedBlock()                     { doConverterTest(); }
