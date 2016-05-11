@@ -17,6 +17,7 @@
 package com.goide.highlighting;
 
 import com.goide.GoConstants;
+import com.goide.inspections.GoInspectionUtil;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoCType;
 import com.goide.psi.impl.GoPsiImplUtil;
@@ -124,8 +125,17 @@ public class GoAnnotator implements Annotator {
     }
     else if (element instanceof GoCallExpr) {
       GoCallExpr call = (GoCallExpr)element;
-      if (call.getExpression() instanceof GoReferenceExpression) {
-        GoReferenceExpression reference = (GoReferenceExpression)call.getExpression();
+      GoExpression callExpression = call.getExpression();
+      if (GoInspectionUtil.getFunctionResultCount(call) == 0) {
+        PsiElement parent = call.getParent();
+        boolean simpleStatement = parent instanceof GoLeftHandExprList && parent.getParent() instanceof GoSimpleStatement;
+        boolean inDeferOrGo = parent instanceof GoDeferStatement || parent instanceof GoGoStatement;
+        if (!simpleStatement && !inDeferOrGo) {
+          holder.createErrorAnnotation(call, call.getText() + " used as value");
+        }
+      }
+      if (callExpression instanceof GoReferenceExpression) {
+        GoReferenceExpression reference = (GoReferenceExpression)callExpression;
         if (reference.textMatches("cap")) {
           if (GoPsiImplUtil.builtin(reference.resolve())) {
             checkCapCall(call, holder);

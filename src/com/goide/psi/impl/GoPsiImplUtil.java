@@ -1162,6 +1162,9 @@ public class GoPsiImplUtil {
       }
       return null;
     }
+    if (e instanceof GoFunctionLit) {
+      return e;
+    }
     GoReferenceExpression r = e instanceof GoReferenceExpression
                               ? (GoReferenceExpression)e
                               : PsiTreeUtil.getChildOfType(e, GoReferenceExpression.class);

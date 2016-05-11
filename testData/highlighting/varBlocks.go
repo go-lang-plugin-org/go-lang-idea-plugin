@@ -5,9 +5,9 @@ import "fmt"
 func main() {
     fmt.Println(test())
     fmt.Println(test2())
-    fmt.Println(test3())
-    fmt.Println(test4())
-    fmt.Println(test5())
+    test3()
+    test4()
+    test5()
 }
 
 func foo() int {

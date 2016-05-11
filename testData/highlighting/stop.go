@@ -16,8 +16,8 @@ func (t T2) F2() T2 {
 
 func main() {
     var x T
-    x.Method1().Method2().<error>Method2</error>()
+    <error descr="x.Method1().Method2() used as value">x.Method1().Method2()</error>.<error descr="Unresolved reference 'Method2'">Method2</error>()
     var x1 T2
-    x1.F2().F1().<error>F1</error>()
+    <error descr="x1.F2().F1() used as value">x1.F2().F1()</error>.<error descr="Unresolved reference 'F1'">F1</error>()
 }
 
