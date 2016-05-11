@@ -57,6 +57,7 @@ public class GoIntroduceVariableTest extends LightPlatformCodeInsightFixtureTest
   public void testNameSuggestOnDefaultName()        { doTest(); }
   public void testNameSuggestOnParamName()          { doTest(); }
   public void testCompositeLiteral()                { doTest(); }
+  public void testIndexedExpression()               { doTest(); }
 
   public void testMultipleValueResult() { doFailureTest("Expression fmt.Println() returns multiple values."); }
   public void testWrongSelection()      { doFailureTest(RefactoringBundle.message("selected.block.should.represent.an.expression")); }
