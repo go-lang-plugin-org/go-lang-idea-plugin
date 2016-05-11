@@ -166,9 +166,10 @@ public class GoAnnotator implements Annotator {
               GoConstants.MAIN.equals(declaration.getContainingFile().getPackageName())) {
             GoSignature signature = declaration.getSignature();
             if (signature != null) {
-              if (signature.getResult() != null) {
-                Annotation annotation = holder.createErrorAnnotation(signature.getResult(), declaration.getName() +
-                                                                                            " function must have no arguments and no return values");
+              GoResult result = signature.getResult();
+              if (result != null && !result.isVoid()) {
+                Annotation annotation = holder.createErrorAnnotation(result, declaration.getName() +
+                                                                             " function must have no arguments and no return values");
                 annotation.registerFix(new GoEmptySignatureQuickFix(declaration));
               }
               GoParameters parameters = signature.getParameters();
