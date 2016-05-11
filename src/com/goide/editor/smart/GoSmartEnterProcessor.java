@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.goide.editor.smart;
 
+import com.goide.inspections.GoDeferGoInspection;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoElementFactory;
 import com.intellij.lang.SmartEnterProcessorWithFixers;
@@ -31,7 +32,7 @@ import java.util.List;
 
 public class GoSmartEnterProcessor extends SmartEnterProcessorWithFixers {
   public GoSmartEnterProcessor() {
-    addFixers(new IfFixer(), new ForFixer());
+    addFixers(new IfFixer(), new ForFixer(), new FuncFixer(), new GoDeferExpressionFixer());
     addEnterProcessors(new PlainEnterProcessor());
   }
 
@@ -46,12 +47,47 @@ public class GoSmartEnterProcessor extends SmartEnterProcessorWithFixers {
 
   @Override
   protected void collectAdditionalElements(@NotNull PsiElement element, @NotNull List<PsiElement> result) {
-    GoStatement statement = PsiTreeUtil.getParentOfType(element, GoStatement.class);
-    if (statement != null) {
-      result.add(statement);
-      PsiElement parent = statement.getParent();
+    element = PsiTreeUtil.getParentOfType(element, GoStatement.class, GoFunctionOrMethodDeclaration.class, GoFunctionLit.class);
+    if (element != null) {
+      result.add(element);
+      PsiElement parent = element.getParent();
       if (parent instanceof GoStatement) {
         result.add(parent);
+      }
+    }
+  }
+
+  @Override
+  protected void reformat(PsiElement atCaret) throws IncorrectOperationException {
+    if (!atCaret.isValid()) {
+      // todo: reimplement this with this#restoreElementAtCaret in 2017.1
+      return;
+    }
+    super.reformat(atCaret);
+  }
+
+  private static class GoDeferExpressionFixer extends Fixer<SmartEnterProcessorWithFixers> {
+    @Override
+    public void apply(@NotNull Editor editor, @NotNull SmartEnterProcessorWithFixers processor, @NotNull PsiElement element)
+      throws IncorrectOperationException {
+      if (element instanceof GoGoStatement) {
+        GoDeferGoInspection.GoAddParensQuickFix.addParensIfNeeded(element.getProject(), ((GoGoStatement)element).getExpression());
+      }
+      else if (element instanceof GoDeferStatement) {
+        GoDeferGoInspection.GoAddParensQuickFix.addParensIfNeeded(element.getProject(), ((GoDeferStatement)element).getExpression());
+      }
+    }
+  }
+
+  private static class FuncFixer extends Fixer<SmartEnterProcessorWithFixers> {
+    @Override
+    public void apply(@NotNull Editor editor, @NotNull SmartEnterProcessorWithFixers processor, @NotNull PsiElement element)
+      throws IncorrectOperationException {
+      if (element instanceof GoFunctionOrMethodDeclaration && ((GoFunctionOrMethodDeclaration)element).getBlock() == null) {
+        element.add(GoElementFactory.createBlock(element.getProject()));
+      }
+      if (element instanceof GoFunctionLit && ((GoFunctionLit)element).getBlock() == null) {
+        element.add(GoElementFactory.createBlock(element.getProject()));
       }
     }
   }
@@ -75,13 +111,16 @@ public class GoSmartEnterProcessor extends SmartEnterProcessorWithFixers {
   private static class PlainEnterProcessor extends FixEnterProcessor {
     @Nullable
     private static GoBlock findBlock(@Nullable PsiElement element) {
-      GoStatement statement = PsiTreeUtil.getParentOfType(element, GoStatement.class);
-      if (statement instanceof GoSimpleStatement && statement.getParent() instanceof GoStatement) {
-        statement = (GoStatement)statement.getParent();
+      element = PsiTreeUtil.getParentOfType(element, GoStatement.class, GoBlock.class, GoFunctionOrMethodDeclaration.class,
+                                            GoFunctionLit.class);
+      if (element instanceof GoSimpleStatement && element.getParent() instanceof GoStatement) {
+        element = element.getParent();
       }
-      if (statement instanceof GoIfStatement) return statement.getBlock();
-      if (statement instanceof GoForStatement) return statement.getBlock();
-      if (statement instanceof GoBlock) return (GoBlock)statement;
+      if (element instanceof GoIfStatement) return ((GoIfStatement)element).getBlock();
+      if (element instanceof GoForStatement) return ((GoForStatement)element).getBlock();
+      if (element instanceof GoBlock) return (GoBlock)element;
+      if (element instanceof GoFunctionOrMethodDeclaration) return ((GoFunctionOrMethodDeclaration)element).getBlock();
+      if (element instanceof GoFunctionLit) return ((GoFunctionLit)element).getBlock();
       return null;
     }
 
