@@ -1,0 +1,8 @@
+<b>func foo(i <a href="psi_element://builtin#builtin.int">int</a>, f func (s <a href="psi_element://builtin#builtin.string">string</a>, u <a href="psi_element://builtin#builtin.uint32">uint32</a>)) (f func (s <a href="psi_element://builtin#builtin.string">string</a>, u <a href="psi_element://builtin#builtin.uint32">uint32</a>))</b>
+
+=====
+func foo(i <a href="psi_element://builtin#builtin.int">int</a>, f func (s <a href="psi_element://builtin#builtin.string">string</a>, u <a href="psi_element://builtin#builtin.uint32">uint32</a>)) (f func (s <a href="psi_element://builtin#builtin.string">string</a>, u <a href="psi_element://builtin#builtin.uint32">uint32</a>))
+=====
+https://godoc.org/#foo
+=====
+No local urls
