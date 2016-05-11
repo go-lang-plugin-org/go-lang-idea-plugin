@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,14 +57,17 @@ public class GoDeferGoInspection extends GoInspectionBase {
     };
   }
 
-  private static class GoAddParensQuickFix extends LocalQuickFixBase {
+  public static class GoAddParensQuickFix extends LocalQuickFixBase {
     protected GoAddParensQuickFix() {
       super(ADD_CALL_QUICK_FIX_NAME);
     }
 
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-      PsiElement element = descriptor.getStartElement();
+      addParensIfNeeded(project, descriptor.getStartElement());
+    }
+
+    public static void addParensIfNeeded(@NotNull Project project, @Nullable PsiElement element) {
       if (element instanceof GoExpression && !(element instanceof GoCallExpr || element instanceof GoBuiltinCallExpr)) {
         if (((GoExpression)element).getGoType(null) instanceof GoFunctionType) {
           element.replace(GoElementFactory.createExpression(project, element.getText() + "()"));
