@@ -71,4 +71,8 @@ public class GoResultImpl extends GoStubbedElementImpl<GoResultStub> implements 
     return findChildByType(RPAREN);
   }
 
+  public boolean isVoid() {
+    return GoPsiImplUtil.isVoid(this);
+  }
+
 }

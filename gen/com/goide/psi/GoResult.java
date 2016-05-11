@@ -37,4 +37,6 @@ public interface GoResult extends GoCompositeElement, StubBasedPsiElement<GoResu
   @Nullable
   PsiElement getRparen();
 
+  boolean isVoid();
+
 }

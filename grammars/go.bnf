@@ -150,6 +150,7 @@ Signature ::= Parameters Result? {
 }
 Result ::= '(' TypeListNoPin ')' | Type | Parameters { // todo: reorder and pin (
   stubClass="com.goide.stubs.GoResultStub"
+  methods=[isVoid]
 }
 Parameters ::= '(' [ (ParameterList ','?| TypeListNoPin) ] ')' {
   pin=1

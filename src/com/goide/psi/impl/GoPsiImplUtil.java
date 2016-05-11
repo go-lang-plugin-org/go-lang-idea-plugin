@@ -576,6 +576,13 @@ public class GoPsiImplUtil {
     return null;
   }
 
+  public static boolean isVoid(@NotNull GoResult result) {
+    GoType type = result.getType();
+    if (type != null) return false;
+    GoParameters parameters = result.getParameters();
+    return parameters == null || parameters.getParameterDeclarationList().isEmpty();
+  }
+
   @Nullable
   private static GoTypeCaseClause getTypeCaseClause(@Nullable PsiElement context, @NotNull GoTypeSwitchStatement switchStatement) {
     return SyntaxTraverser.psiApi().parents(context).takeWhile(Conditions.notEqualTo(switchStatement))
