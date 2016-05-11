@@ -20,11 +20,14 @@ func main() {
     NoReturn8(1) +
     NoReturn9(1) 
     
+    Ok9()
+    SwitchType(nil)
+    
     rsaPKCS1v15SignatureAlgorithmForHashID(42)
     rsaPKCS1v15SignatureAlgorithmForHashID2(42)
     
     func() int {
-    <error>}</error>
+    <error descr="Missing return at end of function">}</error>
 }
 
 func Ok1() int {
@@ -85,6 +88,12 @@ func Ok7() bool {
 }
 
 func Ok8() bool {
+    for a := 0;; a++ {
+
+    }
+}
+
+func Ok9() (){
     for a := 0;; a++ {
 
     }
@@ -158,6 +167,12 @@ func NoReturn9(int) (int, int) {
     case <-a:
         return 0, 0
     default:
+    }
+<error descr="Missing return at end of function">}</error>
+
+func SwitchType(err error) int {
+    switch err.(type) {
+        case nil: return 1
     }
 <error descr="Missing return at end of function">}</error>
 

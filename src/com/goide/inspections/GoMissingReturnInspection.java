@@ -38,6 +38,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class GoMissingReturnInspection extends GoInspectionBase {
+  public static final String ADD_RETURN_STATEMENT_QUICK_FIX_NAME = "Add return statement";
+
   private static void check(@Nullable GoSignature signature, @Nullable GoBlock block, @NotNull ProblemsHolder holder) {
     if (block == null) return;
     GoResult result = signature != null ? signature.getResult() : null;
@@ -150,7 +152,7 @@ public class GoMissingReturnInspection extends GoInspectionBase {
     @NotNull
     @Override
     public String getText() {
-      return "Add return statement";
+      return ADD_RETURN_STATEMENT_QUICK_FIX_NAME;
     }
 
     @NotNull

@@ -19,9 +19,9 @@ func main()  {
 }
 
 type a int
-func (a) foo() int {}
+func (a) foo() int { return 1 }
 type b int
-func (b) bar() int {}
+func (b) bar() int { return 2 }
 
 type c struct {
 	a
