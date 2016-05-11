@@ -90,6 +90,10 @@ public class GoTypeResolveTest extends GoCodeInsightFixtureTestCase {
     doTopLevelTest("func voidFunction() {} func _() { <selection>voidFunction()</selection> }", "<unknown>");
   }
 
+  public void testCallExpressionOnVoidFunction2() {
+    doTopLevelTest("func voidFunction() () {} func _() { <selection>voidFunction()</selection> }", "<unknown>");
+  }
+
   private void doTopLevelTest(@NotNull String text, @NotNull String expectedTypeText) {
     myFixture.configureByText("a.go", "package a;" + text);
     PsiElement elementAt;
