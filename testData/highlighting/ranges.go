@@ -73,7 +73,7 @@ func chanFn(c myChanType) {
     }
 }
 
-func <warning>main2</warning>() {
+func _() {
     ch := make(myChanType)
     go chanFn(ch)
     ch <- myStruct{true}

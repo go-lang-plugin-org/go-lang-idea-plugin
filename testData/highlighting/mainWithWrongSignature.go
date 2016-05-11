@@ -16,4 +16,4 @@ func <error descr="Duplicate function name">main</error><error descr="main funct
 
 <error descr="Missing return at end of function">}</error>
 
-func <error descr="Duplicate function name">main</error>() () {<error descr="Missing return at end of function">}</error>
+func <error descr="Duplicate function name">main</error>() () {}
