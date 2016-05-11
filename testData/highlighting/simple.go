@@ -173,7 +173,7 @@ func _(st interface {Foo()}, st1 Iface) {
     for <error descr="Cannot assign to constant">name1</error> = range <error descr="Cannot range over data (type interface {...})">st</error> {
         
     }
-    Println(st.Foo() + st1.Boo())
+    Println(<error descr="st.Foo() used as value">st.Foo()</error> + st1.Boo())
 }
 
 // No new variables on left side

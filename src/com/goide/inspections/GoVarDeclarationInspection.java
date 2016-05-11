@@ -27,7 +27,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static com.goide.inspections.GoInspectionUtil.*;
+import static com.goide.inspections.GoInspectionUtil.UNKNOWN_COUNT;
+import static com.goide.inspections.GoInspectionUtil.getExpressionResultCount;
 
 public class GoVarDeclarationInspection extends GoInspectionBase {
   @NotNull
@@ -72,7 +73,7 @@ public class GoVarDeclarationInspection extends GoInspectionBase {
           checkExpressionShouldReturnOneResult(list, holder);
           return;
         }
-        
+
         int exprCount = expressionsSize;
         if (o instanceof GoRangeClause && idCount == 2) {
           // range clause can be assigned to two variables
@@ -87,5 +88,20 @@ public class GoVarDeclarationInspection extends GoInspectionBase {
         holder.registerProblem(o, msg, ProblemHighlightType.GENERIC_ERROR);
       }
     };
+  }
+
+  private static void checkExpressionShouldReturnOneResult(@NotNull List<GoExpression> expressions, @NotNull ProblemsHolder result) {
+    for (GoExpression expr : expressions) {
+      int count = getExpressionResultCount(expr);
+      if (count != UNKNOWN_COUNT && count != 1) {
+        String text = expr.getText();
+        if (expr instanceof GoCallExpr) {
+          text = ((GoCallExpr)expr).getExpression().getText();
+        }
+
+        String msg = count == 0 ? text + "() doesn't return a value" : "Multiple-value " + text + "() in single-value context";
+        result.registerProblem(expr, msg, ProblemHighlightType.GENERIC_ERROR);
+      }
+    }
   }
 }
