@@ -36,7 +36,6 @@ import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
@@ -51,21 +50,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class GoDocumentationProvider extends AbstractDocumentationProvider {
   private static final Logger LOG = Logger.getInstance(GoDocumentationProvider.class);
   private static final GoCommentsConverter COMMENTS_CONVERTER = new GoCommentsConverter();
-  private static final Comparator<PsiElement> ELEMENT_BY_RANGE_COMPARATOR = new Comparator<PsiElement>() {
-    @Override
-    public int compare(PsiElement t1, PsiElement t2) {
-      TextRange range1 = t1.getTextRange();
-      TextRange range2 = t2.getTextRange();
-      int startOffsetDiff = Comparing.compare(range1.getStartOffset(), range2.getStartOffset());
-      return startOffsetDiff != 0 ? startOffsetDiff : Comparing.compare(range1.getEndOffset(), range2.getEndOffset());
-    }
-  };
 
   @NotNull
   public static String getCommentText(@NotNull List<PsiComment> comments, boolean withHtml) {
