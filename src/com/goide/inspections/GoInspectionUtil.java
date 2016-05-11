@@ -30,7 +30,8 @@ public class GoInspectionUtil {
 
   public static int getExpressionResultCount(GoExpression call) {
     if (call instanceof GoLiteral || call instanceof GoStringLiteral || call instanceof GoBinaryExpr || call instanceof GoParenthesesExpr ||
-        call instanceof GoUnaryExpr && ((GoUnaryExpr)call).getSendChannel() == null || call instanceof GoBuiltinCallExpr) {
+        call instanceof GoUnaryExpr && ((GoUnaryExpr)call).getSendChannel() == null || call instanceof GoBuiltinCallExpr ||
+        call instanceof GoCompositeLit) {
       return 1;
     }
     if (call instanceof GoTypeAssertionExpr) {
