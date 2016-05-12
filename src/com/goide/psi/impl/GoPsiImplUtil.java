@@ -416,12 +416,9 @@ public class GoPsiImplUtil {
       return item != null ? item.getGoType(context) : null;
     }
     else if (o instanceof GoIndexOrSliceExpr) {
-      GoExpression first = ContainerUtil.getFirstItem(((GoIndexOrSliceExpr)o).getExpressionList());
-      // todo: calculate type for indexed expressions only
-      // https://golang.org/ref/spec#Index_expressions – a[x] is shorthand for (*a)[x]
-      GoType firstType = unwrapPointerIfNeeded(first == null ? null : first.getGoType(context));
-      if (o.getNode().findChildByType(GoTypes.COLON) != null) return firstType; // means slice expression, todo: extract if needed
-      GoType type = firstType != null ? firstType.getUnderlyingType() : null;
+      GoType referenceType = getIndexedExpressionReferenceType((GoIndexOrSliceExpr)o, context);
+      if (o.getNode().findChildByType(GoTypes.COLON) != null) return referenceType; // means slice expression, todo: extract if needed
+      GoType type = referenceType != null ? referenceType.getUnderlyingType() : null;
       if (type instanceof GoMapType) {
         List<GoType> list = ((GoMapType)type).getTypeList();
         if (list.size() == 2) {
@@ -456,6 +453,15 @@ public class GoPsiImplUtil {
       return getBuiltinType("bool", o);
     }
     return null;
+  }
+
+  @Nullable
+  public static GoType getIndexedExpressionReferenceType(@NotNull GoIndexOrSliceExpr o, @Nullable ResolveState context) {
+    GoExpression first = ContainerUtil.getFirstItem(o.getExpressionList());
+    GoType firstType = first != null ? first.getGoType(context) : null;
+    // todo: calculate type for indexed expressions only
+    // https://golang.org/ref/spec#Index_expressions – a[x] is shorthand for (*a)[x]
+    return firstType instanceof GoPointerType ? ((GoPointerType)firstType).getType() : firstType;
   }
 
   @Nullable

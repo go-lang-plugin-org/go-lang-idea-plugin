@@ -17,6 +17,7 @@
 package com.goide.inspections;
 
 import com.goide.psi.*;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
@@ -75,9 +76,21 @@ public class GoVarDeclarationInspection extends GoInspectionBase {
         }
 
         int exprCount = expressionsSize;
-        if (o instanceof GoRangeClause && idCount == 2) {
-          // range clause can be assigned to two variables
-          return;
+        if (idCount == 2) {
+          if (o instanceof GoRangeClause) {
+            // range clause can be assigned to two variables
+            return;
+          }
+          if (expressionsSize == 1) {
+            GoExpression expression = list.get(0);
+            if (expression instanceof GoIndexOrSliceExpr) {
+              GoType referenceType = GoPsiImplUtil.getIndexedExpressionReferenceType((GoIndexOrSliceExpr)expression, null);
+              if (referenceType != null && referenceType.getUnderlyingType() instanceof GoMapType) {
+                // index expressions on maps can be assigned to two variables
+                return;
+              }
+            }
+          }
         }
         if (expressionsSize == 1) {
           exprCount = getExpressionResultCount(list.get(0));
