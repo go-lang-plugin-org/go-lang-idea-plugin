@@ -18,6 +18,7 @@ package com.goide.inspections;
 
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
+import com.goide.psi.impl.GoTypeUtil;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
@@ -37,24 +38,15 @@ public class GoVarDeclarationInspection extends GoInspectionBase {
     PsiElement assign = varDeclaration instanceof GoShortVarDeclaration ? ((GoShortVarDeclaration)varDeclaration).getVarAssign()
                                                                         : varDeclaration.getAssign();
     if (assign == null) {
-      return Pair.<List<? extends GoCompositeElement>, List<GoExpression>>create(ContainerUtil.<GoCompositeElement>emptyList(), 
-                                                                                 ContainerUtil.<GoExpression>emptyList());
+      return Pair.create(ContainerUtil.emptyList(), ContainerUtil.emptyList());
     }
-    if (varDeclaration instanceof GoRecvStatement || varDeclaration instanceof GoRangeClause) {
-      List<GoCompositeElement> v = ContainerUtil.newArrayList();
-      List<GoExpression> e = ContainerUtil.newArrayList();
-      for (PsiElement c : varDeclaration.getChildren()) {
-        if (!(c instanceof GoCompositeElement)) continue;
-        if (c.getTextOffset() < assign.getTextOffset()) {
-          v.add((GoCompositeElement)c);
-        }
-        else if (c instanceof GoExpression) {
-          e.add((GoExpression)c);
-        }
-      }
-      return Pair.<List<? extends GoCompositeElement>, List<GoExpression>>create(v, e);
+    if (varDeclaration instanceof GoRecvStatement) {
+      return Pair.create(((GoRecvStatement)varDeclaration).getLeftExpressionsList(), varDeclaration.getRightExpressionsList());
     }
-    return Pair.<List<? extends GoCompositeElement>, List<GoExpression>>create(varDeclaration.getVarDefinitionList(), varDeclaration.getRightExpressionsList());
+    if (varDeclaration instanceof GoRangeClause) {
+      return Pair.create(((GoRangeClause)varDeclaration).getLeftExpressionsList(), varDeclaration.getRightExpressionsList());
+    }
+    return Pair.create(varDeclaration.getVarDefinitionList(), varDeclaration.getRightExpressionsList());
   }
 
   @NotNull
@@ -62,10 +54,29 @@ public class GoVarDeclarationInspection extends GoInspectionBase {
   protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
+      public void visitAssignmentStatement(@NotNull GoAssignmentStatement o) {
+        validatePair(o, Pair.create(o.getLeftHandExprList().getExpressionList(), o.getExpressionList()));
+      }
+
+      @Override
       public void visitVarSpec(@NotNull GoVarSpec o) {
-        Pair<? extends List<? extends GoCompositeElement>, List<GoExpression>> p = getPair(o);
+        validatePair(o, getPair(o));
+      }
+
+      private void validatePair(@NotNull GoCompositeElement o, Pair<? extends List<? extends GoCompositeElement>, List<GoExpression>> p) {
         List<GoExpression> list = p.second;
         int idCount = p.first.size();
+        for (GoCompositeElement idElement : p.first) {
+          if (idElement instanceof GoIndexOrSliceExpr) {
+            GoType referenceType = GoPsiImplUtil.getIndexedExpressionReferenceType((GoIndexOrSliceExpr)idElement, null);
+            if (referenceType != null && GoTypeUtil.isString(referenceType.getUnderlyingType())) {
+              // https://golang.org/ref/spec#Index_expressions
+              // For a of string type: a[x] may not be assigned to
+              holder.registerProblem(idElement, "Cannot assign to <code>#ref</code> #loc");
+            }
+          }
+        }
+
         int expressionsSize = list.size();
         if (expressionsSize == 0) {
           return;
