@@ -27,4 +27,5 @@ func foo() (int, int) {
 
 func _() {
 	<error descr="Assignment count mismatch: 1 = 2"><error descr="Unused variable 'x'">x</error> := foo(), foo()</error>
+	<error descr="Assignment count mismatch: 1 = 2"><error descr="Unresolved reference 'y'">y</error> = foo(), foo()</error>
 }
