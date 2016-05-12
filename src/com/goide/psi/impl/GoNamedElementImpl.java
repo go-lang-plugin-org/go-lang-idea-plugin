@@ -223,10 +223,14 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
     if (!isPublic()) {
       return GoPackageUtil.packageScope(getContainingFile());
     }
-    GoType parentType = PsiTreeUtil.getParentOfType(this, GoStructType.class, GoInterfaceType.class);
-    return parentType instanceof GoNamedElement && !((GoNamedElement)parentType).isPublic()
-           ? GoPackageUtil.packageScope(getContainingFile())
-           : GoUtil.goPathUseScope(this, !(this instanceof GoMethodDeclaration));
+    GoSpecType parentType = PsiTreeUtil.getParentOfType(this, GoSpecType.class);
+    if (parentType != null) {
+      GoTypeSpec typeSpec = GoPsiImplUtil.getTypeSpecSafe(parentType);
+      if (typeSpec != null && !StringUtil.isCapitalized(typeSpec.getName())) {
+        return GoPackageUtil.packageScope(getContainingFile());
+      }
+    }
+    return GoUtil.goPathUseScope(this, !(this instanceof GoMethodDeclaration));
   }
 
   @Override
