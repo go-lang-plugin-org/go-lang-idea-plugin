@@ -18,8 +18,8 @@ package com.goide.quickfix;
 
 import com.goide.inspections.GoNoNewVariablesInspection;
 import com.goide.psi.GoNamedElement;
-import com.goide.psi.GoShortVarDeclaration;
 import com.goide.psi.GoVarDefinition;
+import com.goide.psi.GoVarSpec;
 import com.intellij.codeInspection.LocalQuickFixOnPsiElement;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -46,8 +46,8 @@ public class GoRenameToBlankQuickFix extends LocalQuickFixOnPsiElement {
 
       if (startElement instanceof GoVarDefinition) {
         PsiElement parent = startElement.getParent();
-        if (parent instanceof GoShortVarDeclaration) {
-          if (GoNoNewVariablesInspection.hasNonNewVariables(((GoShortVarDeclaration)parent).getVarDefinitionList())) {
+        if (parent instanceof GoVarSpec) {
+          if (GoNoNewVariablesInspection.hasNonNewVariables(((GoVarSpec)parent).getVarDefinitionList())) {
             GoNoNewVariablesInspection.replaceWithAssignment(project, parent);
           }
         }
