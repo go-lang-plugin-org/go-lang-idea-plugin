@@ -1,8 +1,8 @@
 package a
 
 func a() {
-	offset := getMyOffset()
-	a := offset
+	int := getMyOffset()
+	a := int
 }
 
 func getMyOffset() int {

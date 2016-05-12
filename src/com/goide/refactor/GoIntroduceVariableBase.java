@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package com.goide.refactor;
 import com.goide.inspections.GoInspectionUtil;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoElementFactory;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
@@ -215,6 +216,14 @@ public class GoIntroduceVariableBase {
     // todo rewrite with names resolve; check occurrences contexts
     LinkedHashSet<String> usedNames = getNamesInContext(PsiTreeUtil.getParentOfType(expression, GoBlock.class));
     LinkedHashSet<String> names = ContainerUtil.newLinkedHashSet();
+
+    String typeText = GoPsiImplUtil.getText(expression.getGoType(null));
+    if (StringUtil.isNotEmpty(typeText)) {
+      for (String candidate : NameUtil.getSuggestionsByName(typeText, "", "", false, false, false)) {
+        if (!usedNames.contains(candidate)) names.add(candidate);
+      }
+    }
+
     if (expression instanceof GoCallExpr) {
       GoReferenceExpression callReference = PsiTreeUtil.getChildOfType(expression, GoReferenceExpression.class);
       if (callReference != null) {
