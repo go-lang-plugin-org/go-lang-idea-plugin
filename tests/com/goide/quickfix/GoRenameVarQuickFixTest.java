@@ -37,4 +37,5 @@ public class GoRenameVarQuickFixTest extends GoQuickFixTestBase {
   public void testRenameAndReplaceWithAssignment_1()          { doTest(GoRenameToBlankQuickFix.NAME);      }
   public void testRenameAndReplaceWithAssignment_2()          { doTest(GoRenameToBlankQuickFix.NAME);      }
   public void testRenameAndReplaceWithAssignment_3()          { doTest(GoRenameToBlankQuickFix.NAME);      }
+  public void testRenameAndReplaceWithAssignmentOnRange()     { doTest(GoRenameToBlankQuickFix.NAME);      }
 }
