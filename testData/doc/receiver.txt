@@ -1,0 +1,8 @@
+<b>var foo <a href="psi_element://builtin#builtin.int">int</a></b>
+
+=====
+var foo <a href="psi_element://builtin#builtin.int">int</a>
+=====
+No urls
+=====
+No local urls

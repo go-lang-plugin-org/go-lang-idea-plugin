@@ -146,12 +146,29 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
     if (element instanceof GoVarDefinition) {
       String name = ((GoVarDefinition)element).getName();
       if (StringUtil.isNotEmpty(name)) {
-        String type = getTypePresentation(((GoVarDefinition)element).getGoType(GoPsiImplUtil.createContextOnElement(context)), 
+        String type = getTypePresentation(((GoVarDefinition)element).getGoType(GoPsiImplUtil.createContextOnElement(context)),
                                           getImportPathForElement(element));
         GoExpression value = ((GoVarDefinition)element).getValue();
         return "var " + name + (!type.isEmpty() ? " " + type : "") + (value != null ? " = " + value.getText() : "");
       }
     }
+    if (element instanceof GoParamDefinition) {
+      String name = ((GoParamDefinition)element).getName();
+      if (StringUtil.isNotEmpty(name)) {
+        String type = getTypePresentation(((GoParamDefinition)element).getGoType(GoPsiImplUtil.createContextOnElement(context)),
+                                          getImportPathForElement(element));
+        return "var " + name + (!type.isEmpty() ? " " + type : "");
+      }
+    }
+    if (element instanceof GoReceiver) {
+      String name = ((GoReceiver)element).getName();
+      if (StringUtil.isNotEmpty(name)) {
+        String type = getTypePresentation(((GoReceiver)element).getGoType(GoPsiImplUtil.createContextOnElement(context)),
+                                          getImportPathForElement(element));
+        return "var " + name + (!type.isEmpty() ? " " + type : "");
+      }
+    }
+
 
     return element instanceof GoSignatureOwner 
            ? getSignatureOwnerTypePresentation((GoSignatureOwner)element, getImportPathForElement(element)) 
