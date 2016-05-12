@@ -41,7 +41,9 @@ public class GoInspectionUtil {
       return getFunctionResultCount((GoCallExpr)call);
     }
     if (call instanceof GoReferenceExpression) {
-      if (((GoReferenceExpression)call).resolve() instanceof GoVarDefinition) return 1;
+      // todo: always 1?
+      PsiElement resolve = ((GoReferenceExpression)call).resolve();
+      if (resolve instanceof GoVarDefinition || resolve instanceof GoParamDefinition || resolve instanceof GoReceiver) return 1;
     }
     return UNKNOWN_COUNT;
   }
