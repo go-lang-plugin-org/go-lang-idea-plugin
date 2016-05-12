@@ -20,6 +20,7 @@ import com.goide.inspections.GoInspectionUtil;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoElementFactory;
 import com.goide.psi.impl.GoPsiImplUtil;
+import com.goide.psi.impl.GoTypeUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
@@ -217,13 +218,6 @@ public class GoIntroduceVariableBase {
     LinkedHashSet<String> usedNames = getNamesInContext(PsiTreeUtil.getParentOfType(expression, GoBlock.class));
     LinkedHashSet<String> names = ContainerUtil.newLinkedHashSet();
 
-    String typeText = GoPsiImplUtil.getText(expression.getGoType(null));
-    if (StringUtil.isNotEmpty(typeText)) {
-      for (String candidate : NameUtil.getSuggestionsByName(typeText, "", "", false, false, false)) {
-        if (!usedNames.contains(candidate)) names.add(candidate);
-      }
-    }
-
     if (expression instanceof GoCallExpr) {
       GoReferenceExpression callReference = PsiTreeUtil.getChildOfType(expression, GoReferenceExpression.class);
       if (callReference != null) {
@@ -233,6 +227,16 @@ public class GoIntroduceVariableBase {
         }
       }
     }
+
+    GoType type = expression.getGoType(null);
+    String typeText = GoPsiImplUtil.getText(type);
+    if (StringUtil.isNotEmpty(typeText)) {
+      boolean array = GoTypeUtil.isIterable(type) && !GoTypeUtil.isString(type);
+      for (String candidate : NameUtil.getSuggestionsByName(typeText, "", "", false, false, array)) {
+        if (!usedNames.contains(candidate)) names.add(candidate);
+      }
+    }
+
     if (names.isEmpty()) {
       if (usedNames.contains("i")) {
         int counter = 1;

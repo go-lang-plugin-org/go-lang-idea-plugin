@@ -56,6 +56,8 @@ public class GoIntroduceVariableTest extends LightPlatformCodeInsightFixtureTest
   public void testNameSuggestOnDefinedImportAlias() { doTest(); }
   public void testNameSuggestOnDefaultName()        { doTest(); }
   public void testNameSuggestOnParamName()          { doTest(); }
+  public void testNameSuggestOnType()               { doTest(); }
+  public void testNameSuggestOnArrayType()          { doTest(); }
   public void testCompositeLiteral()                { doTest(); }
   public void testIndexedExpression()               { doTest(); }
 
