@@ -59,6 +59,7 @@ idea {
   project {
     jdkName = javaVersion
     languageLevel = javaVersion
+    vcs = 'Git'
   }
   module {
     generatedSourceDirs += file('gen')
