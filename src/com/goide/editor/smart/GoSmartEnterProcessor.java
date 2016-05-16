@@ -16,14 +16,12 @@
 
 package com.goide.editor.smart;
 
-import com.goide.GoLanguage;
 import com.goide.inspections.GoDeferGoInspection;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoElementFactory;
-import com.intellij.codeInsight.CodeInsightUtilCore;
 import com.intellij.lang.SmartEnterProcessorWithFixers;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.RangeMarker;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -60,31 +58,22 @@ public class GoSmartEnterProcessor extends SmartEnterProcessorWithFixers {
     }
   }
 
-  // todo[2016.3]: delete method
-  @Override
-  protected void reformat(PsiElement atCaret) throws IncorrectOperationException {
-    if (!atCaret.isValid()) {
-      return;
-    }
-    super.reformat(atCaret);
-  }
-
-  //todo[2016.3]: add @Override annotation
-  @SuppressWarnings("unused")
-  protected PsiElement restoreElementAtCaret(PsiFile file, PsiElement origElement, RangeMarker marker) {
-    return CodeInsightUtilCore.findElementInRange(file, marker.getStartOffset(), marker.getEndOffset(),
-                                                  origElement.getClass(), GoLanguage.INSTANCE);
-  }
-
   private static class GoDeferExpressionFixer extends Fixer<SmartEnterProcessorWithFixers> {
     @Override
     public void apply(@NotNull Editor editor, @NotNull SmartEnterProcessorWithFixers processor, @NotNull PsiElement element)
       throws IncorrectOperationException {
+      Project project = element.getProject();
       if (element instanceof GoGoStatement) {
-        GoDeferGoInspection.GoAddParensQuickFix.addParensIfNeeded(element.getProject(), ((GoGoStatement)element).getExpression());
+        PsiElement expr = GoDeferGoInspection.GoAddParensQuickFix.addParensIfNeeded(project, ((GoGoStatement)element).getExpression());
+        if (expr != null) {
+          element.replace(GoElementFactory.createGoStatement(project, expr.getText()));
+        }
       }
       else if (element instanceof GoDeferStatement) {
-        GoDeferGoInspection.GoAddParensQuickFix.addParensIfNeeded(element.getProject(), ((GoDeferStatement)element).getExpression());
+        PsiElement expr = GoDeferGoInspection.GoAddParensQuickFix.addParensIfNeeded(project, ((GoDeferStatement)element).getExpression());
+        if (expr != null) {
+          element.replace(GoElementFactory.createDeferStatement(project, expr.getText()));
+        }
       }
     }
   }

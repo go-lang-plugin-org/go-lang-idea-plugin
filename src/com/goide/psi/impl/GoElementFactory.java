@@ -153,6 +153,18 @@ public class GoElementFactory {
   }
 
   @NotNull
+  public static GoDeferStatement createDeferStatement(@NotNull Project project, @NotNull String expressionText) {
+    GoFile file = createFileFromText(project, "package a; func a() {\n  defer " + expressionText + "}");
+    return PsiTreeUtil.findChildOfType(file, GoDeferStatement.class);
+  }
+
+  @NotNull
+  public static GoGoStatement createGoStatement(@NotNull Project project, @NotNull String expressionText) {
+    GoFile file = createFileFromText(project, "package a; func a() {\n  go " + expressionText + "}");
+    return PsiTreeUtil.findChildOfType(file, GoGoStatement.class);
+  }
+
+  @NotNull
   public static GoExpression createExpression(@NotNull Project project, @NotNull String text) {
     GoFile file = createFileFromText(project, "package a; func a() {\n a := " + text + "}");
     return PsiTreeUtil.findChildOfType(file, GoExpression.class);
@@ -175,7 +187,6 @@ public class GoElementFactory {
     GoFile file = createFileFromText(project, "package a; const " + text);
     return PsiTreeUtil.findChildOfType(file, GoConstDeclaration.class);
   }
-
 
   @NotNull
   public static GoConstSpec createConstSpec(@NotNull Project project, @NotNull String name, @Nullable String type, @Nullable String value) {
