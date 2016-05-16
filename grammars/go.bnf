@@ -307,14 +307,10 @@ OperandName ::= ReferenceExpression QualifiedReferenceExpression? {elementType=R
 left QualifiedReferenceExpression ::= '.' identifier {elementType=ReferenceExpression}
 ReferenceExpression ::= identifier { methods=[getReference getQualifier resolve getReadWriteAccess] extends=Expression}
 
-CompositeLit ::= (LiteralTypeExprInner LiteralValue) // the brackets are valuable
-private LiteralTypeExprInner ::=
-    StructType
-  | ArrayOrSliceType
-  | MapType
-  | TypeName
+CompositeLit ::= (LiteralTypeExprInner LiteralValue | TypeName LiteralValue) {pin(".*")="LiteralTypeExprInner"} // the brackets are valuable
+private LiteralTypeExprInner ::= StructType | ArrayOrSliceType | MapType
   
-LiteralTypeExpr ::= LiteralTypeExprInner
+LiteralTypeExpr ::= LiteralTypeExprInner | TypeName
 
 LiteralValue ::= (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">> | <<prevIsArrayType>>) '{' ElementList? '}' {pin=2}
 private ElementList  ::= E ( ',' E? )*
