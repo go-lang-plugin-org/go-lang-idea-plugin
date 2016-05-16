@@ -2,7 +2,7 @@
 
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/go-lang-plugin-org/go-lang-idea-plugin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-## TOC
+## Contents
 + [Reporting errors](#reporting-errors)
 + [Contributing to the code](#contributing-to-the-code)
 + [Submitting test cases](#submitting-test-cases)
