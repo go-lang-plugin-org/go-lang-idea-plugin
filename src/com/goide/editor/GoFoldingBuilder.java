@@ -164,7 +164,7 @@ public class GoFoldingBuilder extends CustomFoldingBuilder implements DumbAware 
 
     for (GoCompositeLit compositeLit : PsiTreeUtil.findChildrenOfType(file, GoCompositeLit.class)) {
       GoLiteralValue literalValue = compositeLit.getLiteralValue();
-      if (literalValue.getElementList().size() > 1) {
+      if (literalValue != null && literalValue.getElementList().size() > 1) {
         fold(literalValue, literalValue.getLbrace(), literalValue.getRbrace(), "{...}", result);
       }
     }
