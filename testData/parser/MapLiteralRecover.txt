@@ -18,13 +18,15 @@ GO_FILE
           VAR_DEFINITION
             PsiElement(identifier)('_')
           PsiElement(:=)(':=')
-      PsiErrorElement:';', <NL> or '}' expected, got '['
-        PsiElement([)('[')
-      PsiElement(])(']')
-      SIMPLE_STATEMENT
-        LEFT_HAND_EXPR_LIST
-          REFERENCE_EXPRESSION
-            PsiElement(identifier)('string')
+          COMPOSITE_LIT
+            ARRAY_OR_SLICE_TYPE
+              PsiElement([)('[')
+              PsiElement(])(']')
+              TYPE
+                TYPE_REFERENCE_EXPRESSION
+                  PsiElement(identifier)('string')
+            PsiErrorElement:'(', '.' or '{' expected, got ''
+              <empty list>
       SIMPLE_STATEMENT
         SHORT_VAR_DECLARATION
           VAR_DEFINITION

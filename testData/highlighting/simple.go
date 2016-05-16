@@ -8,7 +8,7 @@ import "io"
 func x(string) {}
 
 func  main() {
-    println(<error descr="Type []string is not an expression">[]string</error>)
+    println([]string<error descr="'!=', '%', '&', '&^', '(', ')', '*', '+', ',', '-', '.', '...', '/', <, <<, <=, '==', '>', '>=', '>>', '^', '{' or '|' expected, got ')'">)</error>
     ((<error descr="Type string is not an expression">string</error>))
     x((string)("foo"))
     x(<error descr="Type string is not an expression">string</error> + <error descr="Type string is not an expression">string</error>)

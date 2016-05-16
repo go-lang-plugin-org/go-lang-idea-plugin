@@ -453,4 +453,8 @@ public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
     myFixture.addFileToProject("sub/internal/internal.go", "package subInternalPackage; func InternalFunction() {}");
     doCheckResult("package a; import `inte<caret>`", "package a; import `internal`");
   }
+
+  public void testIntArray()  { doTestInclude("package a; var x = []<caret>", "int"); }
+  public void testMapIntInt() { doTestInclude("package a; var x = map[int]<caret>", "int"); }
+  public void testStruct()    { doTestInclude("package a; var x = <caret>", "struct"); }
 }

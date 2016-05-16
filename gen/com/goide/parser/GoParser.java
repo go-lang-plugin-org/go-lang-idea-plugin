@@ -2400,21 +2400,19 @@ public class GoParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LiteralTypeExprInner
+  // LiteralTypeExprInner | TypeName
   public static boolean LiteralTypeExpr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LiteralTypeExpr")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, LITERAL_TYPE_EXPR, "<literal type expr>");
     r = LiteralTypeExprInner(b, l + 1);
+    if (!r) r = TypeName(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   /* ********************************************************** */
-  // StructType
-  //   | ArrayOrSliceType
-  //   | MapType
-  //   | TypeName
+  // StructType | ArrayOrSliceType | MapType
   static boolean LiteralTypeExprInner(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LiteralTypeExprInner")) return false;
     boolean r;
@@ -2422,7 +2420,6 @@ public class GoParser implements PsiParser, LightPsiParser {
     r = StructType(b, l + 1);
     if (!r) r = ArrayOrSliceType(b, l + 1);
     if (!r) r = MapType(b, l + 1);
-    if (!r) r = TypeName(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -4486,14 +4483,37 @@ public class GoParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // LiteralTypeExprInner LiteralValue
+  // LiteralTypeExprInner LiteralValue | TypeName LiteralValue
   public static boolean CompositeLit(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "CompositeLit")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, COMPOSITE_LIT, "<composite lit>");
-    r = LiteralTypeExprInner(b, l + 1);
-    r = r && LiteralValue(b, l + 1);
+    r = CompositeLit_0(b, l + 1);
+    if (!r) r = CompositeLit_1(b, l + 1);
     exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // LiteralTypeExprInner LiteralValue
+  private static boolean CompositeLit_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CompositeLit_0")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = LiteralTypeExprInner(b, l + 1);
+    p = r; // pin = LiteralTypeExprInner
+    r = r && LiteralValue(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // TypeName LiteralValue
+  private static boolean CompositeLit_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CompositeLit_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = TypeName(b, l + 1);
+    r = r && LiteralValue(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 
