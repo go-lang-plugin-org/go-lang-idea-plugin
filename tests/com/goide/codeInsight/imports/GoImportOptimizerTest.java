@@ -17,10 +17,14 @@
 package com.goide.codeInsight.imports;
 
 import com.goide.inspections.GoUnusedImportInspection;
+import com.goide.psi.GoRecursiveVisitor;
 import com.goide.quickfix.GoQuickFixTestBase;
 import com.intellij.codeInsight.actions.OptimizeImportsAction;
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiReference;
 import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 import org.jetbrains.annotations.NotNull;
@@ -47,16 +51,16 @@ public class GoImportOptimizerTest extends GoQuickFixTestBase {
     applySingleQuickFix("Optimize imports");
     myFixture.checkResultByFile(getTestName(true) + "_after.go");
   }
-  
+
   public void testImportWithSameIdentifier() {
     myFixture.addFileToProject("foo/bar/buzz.go", "package bar; func Hello() {}");
-    doTest(); 
+    doTest();
   }
 
   public void testImportWithMultiplePackages() throws Throwable {
     myFixture.addFileToProject("pack/pack_test.go", "package pack_test; func Test() {}");
     myFixture.addFileToProject("pack/pack.go", "package pack;");
-    doTest(); 
+    doTest();
   }
 
   @Override
@@ -65,7 +69,8 @@ public class GoImportOptimizerTest extends GoQuickFixTestBase {
   }
 
   private void doTest() {
-    myFixture.configureByFile(getTestName(true) + ".go");
+    PsiFile file = myFixture.configureByFile(getTestName(true) + ".go");
+    resolveAllReferences(file);
     myFixture.checkHighlighting();
     ApplicationManager.getApplication().runWriteAction(new Runnable() {
       @Override
@@ -75,7 +80,18 @@ public class GoImportOptimizerTest extends GoQuickFixTestBase {
     });
     myFixture.checkResultByFile(getTestName(true) + "_after.go");
   }
-  
+
+  private static void resolveAllReferences(PsiFile file) {
+    file.accept(new GoRecursiveVisitor() {
+      @Override
+      public void visitElement(@NotNull PsiElement o) {
+        for (PsiReference reference : o.getReferences()) {
+          reference.resolve();
+        }
+      }
+    });
+  }
+
   @Override
   public void setUp() throws Exception {
     super.setUp();
@@ -86,9 +102,8 @@ public class GoImportOptimizerTest extends GoQuickFixTestBase {
 
   @Override
   protected LightProjectDescriptor getProjectDescriptor() {
-      return createMockProjectDescriptor();
-    }
-  
+    return createMockProjectDescriptor();
+  }
 
   @NotNull
   @Override
