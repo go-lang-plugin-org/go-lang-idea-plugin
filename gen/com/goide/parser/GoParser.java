@@ -39,13 +39,7 @@ public class GoParser implements PsiParser, LightPsiParser {
     boolean r;
     b = adapt_builder_(t, b, this, EXTENDS_SETS_);
     Marker m = enter_section_(b, 0, _COLLAPSE_, null);
-    if (t == ADD_EXPR) {
-      r = Expression(b, 0, 2);
-    }
-    else if (t == AND_EXPR) {
-      r = Expression(b, 0, 0);
-    }
-    else if (t == ANONYMOUS_FIELD_DEFINITION) {
+    if (t == ANONYMOUS_FIELD_DEFINITION) {
       r = AnonymousFieldDefinition(b, 0);
     }
     else if (t == ARGUMENT_LIST) {
@@ -66,12 +60,6 @@ public class GoParser implements PsiParser, LightPsiParser {
     else if (t == BUILTIN_ARGUMENT_LIST) {
       r = BuiltinArgumentList(b, 0);
     }
-    else if (t == BUILTIN_CALL_EXPR) {
-      r = Expression(b, 0, 6);
-    }
-    else if (t == CALL_EXPR) {
-      r = Expression(b, 0, 6);
-    }
     else if (t == CHANNEL_TYPE) {
       r = ChannelType(b, 0);
     }
@@ -80,12 +68,6 @@ public class GoParser implements PsiParser, LightPsiParser {
     }
     else if (t == COMM_CLAUSE) {
       r = CommClause(b, 0);
-    }
-    else if (t == COMPOSITE_LIT) {
-      r = CompositeLit(b, 0);
-    }
-    else if (t == CONDITIONAL_EXPR) {
-      r = Expression(b, 0, 1);
     }
     else if (t == CONST_DECLARATION) {
       r = ConstDeclaration(b, 0);
@@ -98,9 +80,6 @@ public class GoParser implements PsiParser, LightPsiParser {
     }
     else if (t == CONTINUE_STATEMENT) {
       r = ContinueStatement(b, 0);
-    }
-    else if (t == CONVERSION_EXPR) {
-      r = ConversionExpr(b, 0);
     }
     else if (t == DEFER_STATEMENT) {
       r = DeferStatement(b, 0);
@@ -141,9 +120,6 @@ public class GoParser implements PsiParser, LightPsiParser {
     else if (t == FUNCTION_DECLARATION) {
       r = FunctionDeclaration(b, 0);
     }
-    else if (t == FUNCTION_LIT) {
-      r = FunctionLit(b, 0);
-    }
     else if (t == FUNCTION_TYPE) {
       r = FunctionType(b, 0);
     }
@@ -171,9 +147,6 @@ public class GoParser implements PsiParser, LightPsiParser {
     else if (t == INC_DEC_STATEMENT) {
       r = IncDecStatement(b, 0);
     }
-    else if (t == INDEX_OR_SLICE_EXPR) {
-      r = Expression(b, 0, 6);
-    }
     else if (t == INTERFACE_TYPE) {
       r = InterfaceType(b, 0);
     }
@@ -192,9 +165,6 @@ public class GoParser implements PsiParser, LightPsiParser {
     else if (t == LEFT_HAND_EXPR_LIST) {
       r = LeftHandExprList(b, 0);
     }
-    else if (t == LITERAL) {
-      r = Literal(b, 0);
-    }
     else if (t == LITERAL_TYPE_EXPR) {
       r = LiteralTypeExpr(b, 0);
     }
@@ -210,12 +180,6 @@ public class GoParser implements PsiParser, LightPsiParser {
     else if (t == METHOD_SPEC) {
       r = MethodSpec(b, 0);
     }
-    else if (t == MUL_EXPR) {
-      r = Expression(b, 0, 3);
-    }
-    else if (t == OR_EXPR) {
-      r = Expression(b, 0, -1);
-    }
     else if (t == PACKAGE_CLAUSE) {
       r = PackageClause(b, 0);
     }
@@ -230,9 +194,6 @@ public class GoParser implements PsiParser, LightPsiParser {
     }
     else if (t == PARAMETERS) {
       r = Parameters(b, 0);
-    }
-    else if (t == PARENTHESES_EXPR) {
-      r = ParenthesesExpr(b, 0);
     }
     else if (t == POINTER_TYPE) {
       r = PointerType(b, 0);
@@ -260,9 +221,6 @@ public class GoParser implements PsiParser, LightPsiParser {
     }
     else if (t == SELECT_STATEMENT) {
       r = SelectStatement(b, 0);
-    }
-    else if (t == SELECTOR_EXPR) {
-      r = Expression(b, 0, 6);
     }
     else if (t == SEND_STATEMENT) {
       r = SendStatement(b, 0);
@@ -300,9 +258,6 @@ public class GoParser implements PsiParser, LightPsiParser {
     else if (t == TYPE) {
       r = Type(b, 0);
     }
-    else if (t == TYPE_ASSERTION_EXPR) {
-      r = Expression(b, 0, 6);
-    }
     else if (t == TYPE_CASE_CLAUSE) {
       r = TypeCaseClause(b, 0);
     }
@@ -326,9 +281,6 @@ public class GoParser implements PsiParser, LightPsiParser {
     }
     else if (t == TYPE_SWITCH_STATEMENT) {
       r = TypeSwitchStatement(b, 0);
-    }
-    else if (t == UNARY_EXPR) {
-      r = UnaryExpr(b, 0);
     }
     else if (t == VALUE) {
       r = Value(b, 0);
