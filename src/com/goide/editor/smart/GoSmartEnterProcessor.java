@@ -58,6 +58,18 @@ public class GoSmartEnterProcessor extends SmartEnterProcessorWithFixers {
   }
 
   @Override
+  protected void doEnter(@NotNull PsiElement atCaret, @NotNull PsiFile psiFile, @NotNull Editor editor, boolean afterCompletion)
+    throws IncorrectOperationException {
+    if (myFirstErrorOffset == Integer.MAX_VALUE && !atCaret.isValid()) {
+      // todo: reimplement this with this#restoreElementAtCaret in 2017.1
+      commit(editor);
+      plainEnter(editor);
+      return;
+    }
+    super.doEnter(atCaret, psiFile, editor, afterCompletion);
+  }
+
+  @Override
   protected void reformat(PsiElement atCaret) throws IncorrectOperationException {
     if (!atCaret.isValid()) {
       // todo: reimplement this with this#restoreElementAtCaret in 2017.1
