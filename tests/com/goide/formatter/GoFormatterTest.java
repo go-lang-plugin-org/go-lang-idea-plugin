@@ -52,7 +52,7 @@ public class GoFormatterTest extends GoCodeInsightFixtureTestCase {
     String testName = getTestName(true);
     myFixture.configureByFile(testName + ".go");
     String after = doTest(c, testName);
-    assertSameLinesWithFile(getTestDataPath() + "/" + after, myFixture.getFile().getText());
+    myFixture.checkResultByFile(after);
   }
 
   private String doTest(@Nullable Character c, String testName) {
