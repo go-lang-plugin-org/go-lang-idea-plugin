@@ -16,11 +16,14 @@
 
 package com.goide.editor.smart;
 
+import com.goide.GoLanguage;
 import com.goide.inspections.GoDeferGoInspection;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoElementFactory;
+import com.intellij.codeInsight.CodeInsightUtilCore;
 import com.intellij.lang.SmartEnterProcessorWithFixers;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -57,25 +60,20 @@ public class GoSmartEnterProcessor extends SmartEnterProcessorWithFixers {
     }
   }
 
-  @Override
-  protected void doEnter(@NotNull PsiElement atCaret, @NotNull PsiFile psiFile, @NotNull Editor editor, boolean afterCompletion)
-    throws IncorrectOperationException {
-    if (myFirstErrorOffset == Integer.MAX_VALUE && !atCaret.isValid()) {
-      // todo: reimplement this with this#restoreElementAtCaret in 2017.1
-      commit(editor);
-      plainEnter(editor);
-      return;
-    }
-    super.doEnter(atCaret, psiFile, editor, afterCompletion);
-  }
-
+  // todo[2016.3]: delete method
   @Override
   protected void reformat(PsiElement atCaret) throws IncorrectOperationException {
     if (!atCaret.isValid()) {
-      // todo: reimplement this with this#restoreElementAtCaret in 2017.1
       return;
     }
     super.reformat(atCaret);
+  }
+
+  //todo[2016.3]: add @Override annotation
+  @SuppressWarnings("unused")
+  protected PsiElement restoreElementAtCaret(PsiFile file, PsiElement origElement, RangeMarker marker) {
+    return CodeInsightUtilCore.findElementInRange(file, marker.getStartOffset(), marker.getEndOffset(),
+                                                  origElement.getClass(), GoLanguage.INSTANCE);
   }
 
   private static class GoDeferExpressionFixer extends Fixer<SmartEnterProcessorWithFixers> {
