@@ -23,7 +23,7 @@ import com.intellij.psi.PsiElement;
 
 public interface GoCompositeLit extends GoExpression {
 
-  @NotNull
+  @Nullable
   GoLiteralValue getLiteralValue();
 
   @Nullable
