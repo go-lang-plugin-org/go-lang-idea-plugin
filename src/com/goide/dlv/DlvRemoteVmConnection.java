@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,10 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.concurrency.AsyncPromise;
 import org.jetbrains.debugger.Vm;
 import org.jetbrains.debugger.connection.RemoteVmConnection;
-import org.jetbrains.io.NettyUtil;
-import org.jetbrains.concurrency.AsyncPromise;
+import org.jetbrains.io.NettyKt;
 
 import java.net.InetSocketAddress;
 
@@ -31,17 +31,12 @@ public class DlvRemoteVmConnection extends RemoteVmConnection {
   @NotNull
   @Override
   public Bootstrap createBootstrap(@NotNull InetSocketAddress address, @NotNull final AsyncPromise<Vm> vmResult) {
-    return createBootstrap().handler(new ChannelInitializer() {
+    return NettyKt.oioClientBootstrap().handler(new ChannelInitializer() {
       @Override
       protected void initChannel(@NotNull Channel channel) throws Exception {
         vmResult.setResult(new DlvVm(getDebugEventListener(), channel));
       }
     });
-  }
-
-  @NotNull
-  protected Bootstrap createBootstrap() {
-    return NettyUtil.oioClientBootstrap();
   }
 
   @NotNull
