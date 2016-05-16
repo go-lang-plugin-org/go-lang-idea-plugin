@@ -55,7 +55,7 @@ import org.jetbrains.concurrency.Promise;
 import org.jetbrains.debugger.DebugProcessImpl;
 import org.jetbrains.debugger.Location;
 import org.jetbrains.debugger.StepAction;
-import org.jetbrains.debugger.connection.RemoteVmConnection;
+import org.jetbrains.debugger.connection.VmConnection;
 
 import java.util.Collections;
 import java.util.List;
@@ -66,7 +66,7 @@ import static com.goide.dlv.protocol.DlvApi.*;
 import static com.intellij.util.ObjectUtils.assertNotNull;
 import static com.intellij.util.ObjectUtils.tryCast;
 
-public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> implements Disposable {
+public final class DlvDebugProcess extends DebugProcessImpl<VmConnection<?>> implements Disposable {
   public static final boolean IS_DLV_DISABLED = !GoConstants.AMD64.equals(GoUtil.systemArch());
 
   private final static Logger LOG = Logger.getInstance(DlvDebugProcess.class);
@@ -126,7 +126,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<RemoteVmConnection> 
     return assertNotNull(tryCast(getVm(), DlvVm.class)).getCommandProcessor();
   }
 
-  public DlvDebugProcess(@NotNull XDebugSession session, @NotNull RemoteVmConnection connection, @Nullable ExecutionResult er) {
+  public DlvDebugProcess(@NotNull XDebugSession session, @NotNull VmConnection<?> connection, @Nullable ExecutionResult er) {
     super(session, connection, new MyEditorsProvider(), null, er);
   }
 
