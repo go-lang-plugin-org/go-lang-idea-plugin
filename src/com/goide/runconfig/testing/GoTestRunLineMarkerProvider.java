@@ -55,7 +55,7 @@ public class GoTestRunLineMarkerProvider extends RunLineMarkerContributor {
         return null;
       }
       if (GoRunUtil.isPackageContext(e)) {
-        return new Info(AllIcons.RunConfigurations.TestState.Run_run, TOOLTIP_PROVIDER, ExecutorAction.getActions(0));
+        return new Info(AllIcons.RunConfigurations.TestState.Run, TOOLTIP_PROVIDER, ExecutorAction.getActions(0));
       }
       else if (parent instanceof GoFunctionOrMethodDeclaration) {
         GoTestFunctionType functionType = GoTestFunctionType.fromName(((GoFunctionOrMethodDeclaration)parent).getName());
