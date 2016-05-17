@@ -227,7 +227,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
   }
 
   @NotNull
-  private static String getTypePresentation(@Nullable PsiElement element, @Nullable String contextImportPath) {
+  private static String getTypePresentation(@Nullable PsiElement element, @Nullable final String contextImportPath) {
     if (element instanceof GoType) {
       GoType type = (GoType)element;
       if (type instanceof GoMapType) {

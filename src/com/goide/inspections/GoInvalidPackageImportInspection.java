@@ -157,7 +157,7 @@ public class GoInvalidPackageImportInspection extends GoInspectionBase {
 
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-      GoImportSpec element = ObjectUtils.tryCast(descriptor.getPsiElement(), GoImportSpec.class);
+      final GoImportSpec element = ObjectUtils.tryCast(descriptor.getPsiElement(), GoImportSpec.class);
       if (element != null) {
         WriteCommandAction.runWriteCommandAction(project, new Runnable() {
           @Override

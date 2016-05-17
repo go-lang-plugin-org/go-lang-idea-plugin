@@ -38,15 +38,15 @@ public class GoVarDeclarationInspection extends GoInspectionBase {
     PsiElement assign = varDeclaration instanceof GoShortVarDeclaration ? ((GoShortVarDeclaration)varDeclaration).getVarAssign()
                                                                         : varDeclaration.getAssign();
     if (assign == null) {
-      return Pair.create(ContainerUtil.emptyList(), ContainerUtil.emptyList());
+      return Pair.<List<? extends GoCompositeElement>, List<GoExpression>>create(ContainerUtil.<GoCompositeElement>emptyList(), ContainerUtil.<GoExpression>emptyList());
     }
     if (varDeclaration instanceof GoRecvStatement) {
-      return Pair.create(((GoRecvStatement)varDeclaration).getLeftExpressionsList(), varDeclaration.getRightExpressionsList());
+      return Pair.<List<? extends GoCompositeElement>, List<GoExpression>>create(((GoRecvStatement)varDeclaration).getLeftExpressionsList(), varDeclaration.getRightExpressionsList());
     }
     if (varDeclaration instanceof GoRangeClause) {
-      return Pair.create(((GoRangeClause)varDeclaration).getLeftExpressionsList(), varDeclaration.getRightExpressionsList());
+      return Pair.<List<? extends GoCompositeElement>, List<GoExpression>>create(((GoRangeClause)varDeclaration).getLeftExpressionsList(), varDeclaration.getRightExpressionsList());
     }
-    return Pair.create(varDeclaration.getVarDefinitionList(), varDeclaration.getRightExpressionsList());
+    return Pair.<List<? extends GoCompositeElement>, List<GoExpression>>create(varDeclaration.getVarDefinitionList(), varDeclaration.getRightExpressionsList());
   }
 
   @NotNull

@@ -116,14 +116,14 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
   }
 
   @NotNull
-  private static Set<String> collectAndSortAllPublicProductionNames(@NotNull PrefixMatcher matcher,
+  private static Set<String> collectAndSortAllPublicProductionNames(@NotNull final PrefixMatcher matcher,
                                                                     @NotNull GlobalSearchScope scope, 
                                                                     @Nullable IdFilter idFilter,
                                                                     @NotNull GoFile file) {
     String prefix = matcher.getPrefix();
     final boolean emptyPrefix = prefix.isEmpty();
 
-    Set<String> packagesWithAliases = ContainerUtil.newHashSet();
+    final Set<String> packagesWithAliases = ContainerUtil.newHashSet();
     if (!emptyPrefix) {
       for (Map.Entry<String, Collection<GoImportSpec>> entry : file.getImportMap().entrySet()) {
         for (GoImportSpec spec : entry.getValue()) {

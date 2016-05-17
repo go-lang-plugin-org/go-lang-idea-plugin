@@ -42,7 +42,7 @@ public class GoDeleteQuickFix extends LocalQuickFixBase {
   }
 
   @Override
-  public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+  public void applyFix(@NotNull Project project, @NotNull final ProblemDescriptor descriptor) {
     WriteCommandAction.runWriteCommandAction(project, new Runnable() {
       @Override
       public void run() {
