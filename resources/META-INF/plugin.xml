@@ -202,7 +202,7 @@
 
     <localInspection language="go" displayName="Empty declaration inspection" groupPath="Go"
                      groupName="Declaration redundancy" enabledByDefault="true" level="WARNING"
-                     implementationClass="com.goide.inspections.GoEmptyDeclarationInspection"/>
+                     implementationClass="com.goide.inspections.GoEmptyDeclarationInspection" cleanupTool="true"/>
     <!-- /unused inspections -->
 
     <!-- redeclare inspections -->
