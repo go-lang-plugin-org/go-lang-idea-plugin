@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.stubs.GoConstSpecStub;
 import com.goide.psi.*;
@@ -50,19 +50,19 @@ public class GoConstSpecImpl extends GoStubbedElementImpl<GoConstSpecStub> imple
   @Override
   @NotNull
   public List<GoConstDefinition> getConstDefinitionList() {
-    return findChildrenByClass(GoConstDefinition.class, com.goide.stubs.GoConstDefinitionStub.class);
+    return GoPsiTreeUtil.getStubChildrenOfTypeAsList(this, GoConstDefinition.class);
   }
 
   @Override
   @NotNull
   public List<GoExpression> getExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
+    return GoPsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
   @Override
   @Nullable
   public GoType getType() {
-    return findChildByClass(GoType.class, com.goide.stubs.GoTypeStub.class);
+    return GoPsiTreeUtil.getStubChildOfType(this, GoType.class);
   }
 
   @Override

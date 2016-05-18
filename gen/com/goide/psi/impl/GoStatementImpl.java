@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 import com.intellij.psi.ResolveState;
@@ -46,25 +46,25 @@ public class GoStatementImpl extends GoCompositeElementImpl implements GoStateme
   @Override
   @Nullable
   public GoBlock getBlock() {
-    return findChildByClass(GoBlock.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoBlock.class);
   }
 
   @Override
   @Nullable
   public GoConstDeclaration getConstDeclaration() {
-    return findChildByClass(GoConstDeclaration.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoConstDeclaration.class);
   }
 
   @Override
   @Nullable
   public GoTypeDeclaration getTypeDeclaration() {
-    return findChildByClass(GoTypeDeclaration.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoTypeDeclaration.class);
   }
 
   @Override
   @Nullable
   public GoVarDeclaration getVarDeclaration() {
-    return findChildByClass(GoVarDeclaration.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoVarDeclaration.class);
   }
 
   public boolean processDeclarations(PsiScopeProcessor processor, ResolveState state, PsiElement lastParent, PsiElement place) {

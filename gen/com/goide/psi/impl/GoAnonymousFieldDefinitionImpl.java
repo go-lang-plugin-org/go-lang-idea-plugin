@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.stubs.GoAnonymousFieldDefinitionStub;
 import com.goide.psi.*;
@@ -51,7 +51,7 @@ public class GoAnonymousFieldDefinitionImpl extends GoNamedElementImpl<GoAnonymo
   @Override
   @NotNull
   public GoTypeReferenceExpression getTypeReferenceExpression() {
-    return findNotNullChildByClass(GoTypeReferenceExpression.class);
+    return notNullChild(GoPsiTreeUtil.getChildOfType(this, GoTypeReferenceExpression.class));
   }
 
   @Override

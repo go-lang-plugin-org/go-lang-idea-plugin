@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 import com.intellij.psi.stubs.IStubElementType;
@@ -49,19 +49,19 @@ public class GoParTypeImpl extends GoTypeImpl implements GoParType {
   @Override
   @NotNull
   public GoType getType() {
-    return findNotNullChildByClass(GoType.class);
+    return notNullChild(GoPsiTreeUtil.getStubChildOfType(this, GoType.class));
   }
 
   @Override
   @NotNull
   public PsiElement getLparen() {
-    return findNotNullChildByType(LPAREN);
+    return notNullChild(findChildByType(LPAREN));
   }
 
   @Override
   @NotNull
   public PsiElement getRparen() {
-    return findNotNullChildByType(RPAREN);
+    return notNullChild(findChildByType(RPAREN));
   }
 
   @NotNull

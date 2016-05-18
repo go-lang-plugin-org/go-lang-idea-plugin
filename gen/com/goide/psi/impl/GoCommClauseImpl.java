@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
@@ -44,13 +44,13 @@ public class GoCommClauseImpl extends GoCompositeElementImpl implements GoCommCl
   @Override
   @NotNull
   public GoCommCase getCommCase() {
-    return findNotNullChildByClass(GoCommCase.class);
+    return notNullChild(GoPsiTreeUtil.getChildOfType(this, GoCommCase.class));
   }
 
   @Override
   @NotNull
   public List<GoStatement> getStatementList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoStatement.class);
+    return GoPsiTreeUtil.getChildrenOfTypeAsList(this, GoStatement.class);
   }
 
   @Override

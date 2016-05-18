@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 import com.intellij.psi.stubs.IStubElementType;
@@ -49,7 +49,7 @@ public class GoMapTypeImpl extends GoTypeImpl implements GoMapType {
   @Override
   @NotNull
   public List<GoType> getTypeList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoType.class);
+    return GoPsiTreeUtil.getStubChildrenOfTypeAsList(this, GoType.class);
   }
 
   @Override
@@ -67,7 +67,7 @@ public class GoMapTypeImpl extends GoTypeImpl implements GoMapType {
   @Override
   @NotNull
   public PsiElement getMap() {
-    return findNotNullChildByType(MAP);
+    return notNullChild(findChildByType(MAP));
   }
 
   @Override

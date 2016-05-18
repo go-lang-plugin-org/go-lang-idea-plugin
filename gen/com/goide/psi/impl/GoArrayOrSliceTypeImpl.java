@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 import com.intellij.psi.stubs.IStubElementType;
@@ -49,19 +49,19 @@ public class GoArrayOrSliceTypeImpl extends GoTypeImpl implements GoArrayOrSlice
   @Override
   @Nullable
   public GoExpression getExpression() {
-    return findChildByClass(GoExpression.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoExpression.class);
   }
 
   @Override
   @Nullable
   public GoType getType() {
-    return findChildByClass(GoType.class);
+    return GoPsiTreeUtil.getStubChildOfType(this, GoType.class);
   }
 
   @Override
   @NotNull
   public PsiElement getLbrack() {
-    return findNotNullChildByType(LBRACK);
+    return notNullChild(findChildByType(LBRACK));
   }
 
   @Override

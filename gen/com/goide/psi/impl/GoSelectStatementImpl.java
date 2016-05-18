@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
@@ -44,7 +44,7 @@ public class GoSelectStatementImpl extends GoStatementImpl implements GoSelectSt
   @Override
   @NotNull
   public List<GoCommClause> getCommClauseList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoCommClause.class);
+    return GoPsiTreeUtil.getChildrenOfTypeAsList(this, GoCommClause.class);
   }
 
   @Override
@@ -62,7 +62,7 @@ public class GoSelectStatementImpl extends GoStatementImpl implements GoSelectSt
   @Override
   @NotNull
   public PsiElement getSelect() {
-    return findNotNullChildByType(SELECT);
+    return notNullChild(findChildByType(SELECT));
   }
 
 }

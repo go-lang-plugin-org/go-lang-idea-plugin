@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
@@ -44,13 +44,13 @@ public class GoGotoStatementImpl extends GoStatementImpl implements GoGotoStatem
   @Override
   @Nullable
   public GoLabelRef getLabelRef() {
-    return findChildByClass(GoLabelRef.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoLabelRef.class);
   }
 
   @Override
   @NotNull
   public PsiElement getGoto() {
-    return findNotNullChildByType(GOTO);
+    return notNullChild(findChildByType(GOTO));
   }
 
 }

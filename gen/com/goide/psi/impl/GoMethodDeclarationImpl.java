@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.stubs.GoMethodDeclarationStub;
 import com.goide.psi.*;
@@ -50,25 +50,25 @@ public class GoMethodDeclarationImpl extends GoFunctionOrMethodDeclarationImpl<G
   @Override
   @Nullable
   public GoBlock getBlock() {
-    return findChildByClass(GoBlock.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoBlock.class);
   }
 
   @Override
   @Nullable
   public GoReceiver getReceiver() {
-    return findChildByClass(GoReceiver.class, com.goide.stubs.GoReceiverStub.class);
+    return GoPsiTreeUtil.getStubChildOfType(this, GoReceiver.class);
   }
 
   @Override
   @Nullable
   public GoSignature getSignature() {
-    return findChildByClass(GoSignature.class, com.goide.stubs.GoSignatureStub.class);
+    return GoPsiTreeUtil.getStubChildOfType(this, GoSignature.class);
   }
 
   @Override
   @NotNull
   public PsiElement getFunc() {
-    return findNotNullChildByType(FUNC);
+    return notNullChild(findChildByType(FUNC));
   }
 
   @Override

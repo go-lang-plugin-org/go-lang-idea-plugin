@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
@@ -44,7 +44,7 @@ public class GoTypeDeclarationImpl extends GoCompositeElementImpl implements GoT
   @Override
   @NotNull
   public List<GoTypeSpec> getTypeSpecList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoTypeSpec.class);
+    return GoPsiTreeUtil.getChildrenOfTypeAsList(this, GoTypeSpec.class);
   }
 
   @Override
@@ -62,7 +62,7 @@ public class GoTypeDeclarationImpl extends GoCompositeElementImpl implements GoT
   @Override
   @NotNull
   public PsiElement getType_() {
-    return findNotNullChildByType(TYPE_);
+    return notNullChild(findChildByType(TYPE_));
   }
 
 }

@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.stubs.GoSignatureStub;
 import com.goide.psi.*;
@@ -50,13 +50,13 @@ public class GoSignatureImpl extends GoStubbedElementImpl<GoSignatureStub> imple
   @Override
   @NotNull
   public GoParameters getParameters() {
-    return findNotNullChildByClass(GoParameters.class, com.goide.stubs.GoParametersStub.class);
+    return notNullChild(GoPsiTreeUtil.getStubChildOfType(this, GoParameters.class));
   }
 
   @Override
   @Nullable
   public GoResult getResult() {
-    return findChildByClass(GoResult.class, com.goide.stubs.GoResultStub.class);
+    return GoPsiTreeUtil.getStubChildOfType(this, GoResult.class);
   }
 
 }

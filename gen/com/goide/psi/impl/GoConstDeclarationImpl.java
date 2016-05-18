@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
@@ -44,7 +44,7 @@ public class GoConstDeclarationImpl extends GoCompositeElementImpl implements Go
   @Override
   @NotNull
   public List<GoConstSpec> getConstSpecList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoConstSpec.class);
+    return GoPsiTreeUtil.getChildrenOfTypeAsList(this, GoConstSpec.class);
   }
 
   @Override
@@ -62,7 +62,7 @@ public class GoConstDeclarationImpl extends GoCompositeElementImpl implements Go
   @Override
   @NotNull
   public PsiElement getConst() {
-    return findNotNullChildByType(CONST);
+    return notNullChild(findChildByType(CONST));
   }
 
   @NotNull

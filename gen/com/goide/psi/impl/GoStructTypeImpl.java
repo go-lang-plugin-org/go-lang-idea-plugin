@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 import com.intellij.psi.stubs.IStubElementType;
@@ -49,7 +49,7 @@ public class GoStructTypeImpl extends GoTypeImpl implements GoStructType {
   @Override
   @NotNull
   public List<GoFieldDeclaration> getFieldDeclarationList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoFieldDeclaration.class);
+    return GoPsiTreeUtil.getChildrenOfTypeAsList(this, GoFieldDeclaration.class);
   }
 
   @Override
@@ -67,7 +67,7 @@ public class GoStructTypeImpl extends GoTypeImpl implements GoStructType {
   @Override
   @NotNull
   public PsiElement getStruct() {
-    return findNotNullChildByType(STRUCT);
+    return notNullChild(findChildByType(STRUCT));
   }
 
 }
