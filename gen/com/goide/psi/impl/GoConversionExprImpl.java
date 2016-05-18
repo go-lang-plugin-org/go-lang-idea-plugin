@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
@@ -44,13 +44,13 @@ public class GoConversionExprImpl extends GoBinaryExprImpl implements GoConversi
   @Override
   @Nullable
   public GoExpression getExpression() {
-    return findChildByClass(GoExpression.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoExpression.class);
   }
 
   @Override
   @NotNull
   public GoType getType() {
-    return findNotNullChildByClass(GoType.class);
+    return notNullChild(GoPsiTreeUtil.getChildOfType(this, GoType.class));
   }
 
   @Override
@@ -62,7 +62,7 @@ public class GoConversionExprImpl extends GoBinaryExprImpl implements GoConversi
   @Override
   @NotNull
   public PsiElement getLparen() {
-    return findNotNullChildByType(LPAREN);
+    return notNullChild(findChildByType(LPAREN));
   }
 
   @Override

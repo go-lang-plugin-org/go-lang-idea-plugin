@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
@@ -44,13 +44,13 @@ public class GoElementImpl extends GoCompositeElementImpl implements GoElement {
   @Override
   @Nullable
   public GoKey getKey() {
-    return findChildByClass(GoKey.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoKey.class);
   }
 
   @Override
   @Nullable
   public GoValue getValue() {
-    return findChildByClass(GoValue.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoValue.class);
   }
 
   @Override

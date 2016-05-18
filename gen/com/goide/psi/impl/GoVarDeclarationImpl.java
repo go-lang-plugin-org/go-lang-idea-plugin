@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
@@ -44,7 +44,7 @@ public class GoVarDeclarationImpl extends GoCompositeElementImpl implements GoVa
   @Override
   @NotNull
   public List<GoVarSpec> getVarSpecList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoVarSpec.class);
+    return GoPsiTreeUtil.getChildrenOfTypeAsList(this, GoVarSpec.class);
   }
 
   @Override
@@ -62,7 +62,7 @@ public class GoVarDeclarationImpl extends GoCompositeElementImpl implements GoVa
   @Override
   @NotNull
   public PsiElement getVar() {
-    return findNotNullChildByType(VAR);
+    return notNullChild(findChildByType(VAR));
   }
 
   @NotNull

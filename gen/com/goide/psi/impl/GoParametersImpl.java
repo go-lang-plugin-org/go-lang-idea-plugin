@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.stubs.GoParametersStub;
 import com.goide.psi.*;
@@ -50,19 +50,19 @@ public class GoParametersImpl extends GoStubbedElementImpl<GoParametersStub> imp
   @Override
   @NotNull
   public List<GoParameterDeclaration> getParameterDeclarationList() {
-    return findChildrenByClass(GoParameterDeclaration.class, com.goide.stubs.GoParameterDeclarationStub.class);
+    return GoPsiTreeUtil.getStubChildrenOfTypeAsList(this, GoParameterDeclaration.class);
   }
 
   @Override
   @Nullable
   public GoType getType() {
-    return findChildByClass(GoType.class, com.goide.stubs.GoTypeStub.class);
+    return GoPsiTreeUtil.getStubChildOfType(this, GoType.class);
   }
 
   @Override
   @NotNull
   public PsiElement getLparen() {
-    return findNotNullChildByType(LPAREN);
+    return notNullChild(findChildByType(LPAREN));
   }
 
   @Override

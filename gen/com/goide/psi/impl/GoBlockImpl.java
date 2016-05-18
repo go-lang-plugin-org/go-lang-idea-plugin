@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 import com.intellij.psi.ResolveState;
@@ -46,7 +46,7 @@ public class GoBlockImpl extends GoCompositeElementImpl implements GoBlock {
   @Override
   @NotNull
   public List<GoStatement> getStatementList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoStatement.class);
+    return GoPsiTreeUtil.getChildrenOfTypeAsList(this, GoStatement.class);
   }
 
   @Override

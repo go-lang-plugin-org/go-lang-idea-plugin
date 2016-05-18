@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
@@ -44,19 +44,19 @@ public class GoLabeledStatementImpl extends GoStatementImpl implements GoLabeled
   @Override
   @NotNull
   public GoLabelDefinition getLabelDefinition() {
-    return findNotNullChildByClass(GoLabelDefinition.class);
+    return notNullChild(GoPsiTreeUtil.getChildOfType(this, GoLabelDefinition.class));
   }
 
   @Override
   @Nullable
   public GoStatement getStatement() {
-    return findChildByClass(GoStatement.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoStatement.class);
   }
 
   @Override
   @NotNull
   public PsiElement getColon() {
-    return findNotNullChildByType(COLON);
+    return notNullChild(findChildByType(COLON));
   }
 
 }

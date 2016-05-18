@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
@@ -44,25 +44,25 @@ public class GoTypeSwitchStatementImpl extends GoSwitchStatementImpl implements 
   @Override
   @Nullable
   public GoStatement getStatement() {
-    return findChildByClass(GoStatement.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoStatement.class);
   }
 
   @Override
   @NotNull
   public GoSwitchStart getSwitchStart() {
-    return findNotNullChildByClass(GoSwitchStart.class);
+    return notNullChild(GoPsiTreeUtil.getChildOfType(this, GoSwitchStart.class));
   }
 
   @Override
   @NotNull
   public List<GoTypeCaseClause> getTypeCaseClauseList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoTypeCaseClause.class);
+    return GoPsiTreeUtil.getChildrenOfTypeAsList(this, GoTypeCaseClause.class);
   }
 
   @Override
   @NotNull
   public GoTypeSwitchGuard getTypeSwitchGuard() {
-    return findNotNullChildByClass(GoTypeSwitchGuard.class);
+    return notNullChild(GoPsiTreeUtil.getChildOfType(this, GoTypeSwitchGuard.class));
   }
 
   @Override

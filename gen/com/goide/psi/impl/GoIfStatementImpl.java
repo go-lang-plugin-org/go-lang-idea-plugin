@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
@@ -44,25 +44,25 @@ public class GoIfStatementImpl extends GoStatementImpl implements GoIfStatement 
   @Override
   @Nullable
   public GoBlock getBlock() {
-    return findChildByClass(GoBlock.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoBlock.class);
   }
 
   @Override
   @Nullable
   public GoElseStatement getElseStatement() {
-    return findChildByClass(GoElseStatement.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoElseStatement.class);
   }
 
   @Override
   @Nullable
   public GoExpression getExpression() {
-    return findChildByClass(GoExpression.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoExpression.class);
   }
 
   @Override
   @Nullable
   public GoStatement getStatement() {
-    return findChildByClass(GoStatement.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoStatement.class);
   }
 
   @Override
@@ -74,7 +74,7 @@ public class GoIfStatementImpl extends GoStatementImpl implements GoIfStatement 
   @Override
   @NotNull
   public PsiElement getIf() {
-    return findNotNullChildByType(IF);
+    return notNullChild(findChildByType(IF));
   }
 
 }

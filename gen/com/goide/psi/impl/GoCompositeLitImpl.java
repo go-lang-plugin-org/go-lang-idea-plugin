@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
@@ -44,19 +44,19 @@ public class GoCompositeLitImpl extends GoExpressionImpl implements GoCompositeL
   @Override
   @Nullable
   public GoLiteralValue getLiteralValue() {
-    return findChildByClass(GoLiteralValue.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoLiteralValue.class);
   }
 
   @Override
   @Nullable
   public GoType getType() {
-    return findChildByClass(GoType.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoType.class);
   }
 
   @Override
   @Nullable
   public GoTypeReferenceExpression getTypeReferenceExpression() {
-    return findChildByClass(GoTypeReferenceExpression.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoTypeReferenceExpression.class);
   }
 
 }

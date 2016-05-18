@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
@@ -44,13 +44,13 @@ public class GoCallExprImpl extends GoExpressionImpl implements GoCallExpr {
   @Override
   @NotNull
   public GoArgumentList getArgumentList() {
-    return findNotNullChildByClass(GoArgumentList.class);
+    return notNullChild(GoPsiTreeUtil.getChildOfType(this, GoArgumentList.class));
   }
 
   @Override
   @NotNull
   public GoExpression getExpression() {
-    return findNotNullChildByClass(GoExpression.class);
+    return notNullChild(GoPsiTreeUtil.getChildOfType(this, GoExpression.class));
   }
 
 }

@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
@@ -44,19 +44,19 @@ public class GoSendStatementImpl extends GoStatementImpl implements GoSendStatem
   @Override
   @NotNull
   public List<GoExpression> getExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
+    return GoPsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
   @Override
   @Nullable
   public GoLeftHandExprList getLeftHandExprList() {
-    return findChildByClass(GoLeftHandExprList.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoLeftHandExprList.class);
   }
 
   @Override
   @NotNull
   public PsiElement getSendChannel() {
-    return findNotNullChildByType(SEND_CHANNEL);
+    return notNullChild(findChildByType(SEND_CHANNEL));
   }
 
   @Nullable

@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
@@ -44,25 +44,25 @@ public class GoTypeSwitchGuardImpl extends GoCompositeElementImpl implements GoT
   @Override
   @NotNull
   public GoExpression getExpression() {
-    return findNotNullChildByClass(GoExpression.class);
+    return notNullChild(GoPsiTreeUtil.getChildOfType(this, GoExpression.class));
   }
 
   @Override
   @NotNull
   public GoTypeGuard getTypeGuard() {
-    return findNotNullChildByClass(GoTypeGuard.class);
+    return notNullChild(GoPsiTreeUtil.getChildOfType(this, GoTypeGuard.class));
   }
 
   @Override
   @Nullable
   public GoVarDefinition getVarDefinition() {
-    return findChildByClass(GoVarDefinition.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoVarDefinition.class);
   }
 
   @Override
   @NotNull
   public PsiElement getDot() {
-    return findNotNullChildByType(DOT);
+    return notNullChild(findChildByType(DOT));
   }
 
   @Override

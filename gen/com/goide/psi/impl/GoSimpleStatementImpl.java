@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
@@ -44,19 +44,19 @@ public class GoSimpleStatementImpl extends GoStatementImpl implements GoSimpleSt
   @Override
   @Nullable
   public GoLeftHandExprList getLeftHandExprList() {
-    return findChildByClass(GoLeftHandExprList.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoLeftHandExprList.class);
   }
 
   @Override
   @Nullable
   public GoShortVarDeclaration getShortVarDeclaration() {
-    return findChildByClass(GoShortVarDeclaration.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoShortVarDeclaration.class);
   }
 
   @Override
   @Nullable
   public GoStatement getStatement() {
-    return findChildByClass(GoStatement.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoStatement.class);
   }
 
 }

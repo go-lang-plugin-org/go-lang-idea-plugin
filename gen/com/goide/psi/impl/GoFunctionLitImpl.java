@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 import com.intellij.psi.ResolveState;
@@ -46,19 +46,19 @@ public class GoFunctionLitImpl extends GoExpressionImpl implements GoFunctionLit
   @Override
   @Nullable
   public GoBlock getBlock() {
-    return findChildByClass(GoBlock.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoBlock.class);
   }
 
   @Override
   @Nullable
   public GoSignature getSignature() {
-    return findChildByClass(GoSignature.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoSignature.class);
   }
 
   @Override
   @NotNull
   public PsiElement getFunc() {
-    return findNotNullChildByType(FUNC);
+    return notNullChild(findChildByType(FUNC));
   }
 
   public boolean processDeclarations(PsiScopeProcessor processor, ResolveState state, PsiElement lastParent, PsiElement place) {

@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
@@ -44,31 +44,31 @@ public class GoExprSwitchStatementImpl extends GoSwitchStatementImpl implements 
   @Override
   @NotNull
   public List<GoExprCaseClause> getExprCaseClauseList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExprCaseClause.class);
+    return GoPsiTreeUtil.getChildrenOfTypeAsList(this, GoExprCaseClause.class);
   }
 
   @Override
   @Nullable
   public GoExpression getExpression() {
-    return findChildByClass(GoExpression.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoExpression.class);
   }
 
   @Override
   @Nullable
   public GoStatement getStatement() {
-    return findChildByClass(GoStatement.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoStatement.class);
   }
 
   @Override
   @NotNull
   public GoSwitchStart getSwitchStart() {
-    return findNotNullChildByClass(GoSwitchStart.class);
+    return notNullChild(GoPsiTreeUtil.getChildOfType(this, GoSwitchStart.class));
   }
 
   @Override
   @NotNull
   public PsiElement getLbrace() {
-    return findNotNullChildByType(LBRACE);
+    return notNullChild(findChildByType(LBRACE));
   }
 
   @Override

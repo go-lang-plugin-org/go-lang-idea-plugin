@@ -8,6 +8,7 @@
   elementTypeHolderClass='com.goide.GoTypes'
   elementTypeClass='com.goide.psi.GoCompositeElementType'
   tokenTypeClass='com.goide.psi.GoTokenType'
+  psiTreeUtilClass='com.goide.psi.GoPsiTreeUtil'
   
   psiClassPrefix='Go'
   psiImplClassSuffix='Impl'

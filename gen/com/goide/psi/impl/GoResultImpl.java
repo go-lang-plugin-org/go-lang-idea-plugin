@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.stubs.GoResultStub;
 import com.goide.psi.*;
@@ -50,13 +50,13 @@ public class GoResultImpl extends GoStubbedElementImpl<GoResultStub> implements 
   @Override
   @Nullable
   public GoParameters getParameters() {
-    return findChildByClass(GoParameters.class, com.goide.stubs.GoParametersStub.class);
+    return GoPsiTreeUtil.getStubChildOfType(this, GoParameters.class);
   }
 
   @Override
   @Nullable
   public GoType getType() {
-    return findChildByClass(GoType.class, com.goide.stubs.GoTypeStub.class);
+    return GoPsiTreeUtil.getStubChildOfType(this, GoType.class);
   }
 
   @Override

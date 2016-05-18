@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
@@ -44,25 +44,25 @@ public class GoFieldDeclarationImpl extends GoCompositeElementImpl implements Go
   @Override
   @Nullable
   public GoAnonymousFieldDefinition getAnonymousFieldDefinition() {
-    return findChildByClass(GoAnonymousFieldDefinition.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoAnonymousFieldDefinition.class);
   }
 
   @Override
   @NotNull
   public List<GoFieldDefinition> getFieldDefinitionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoFieldDefinition.class);
+    return GoPsiTreeUtil.getChildrenOfTypeAsList(this, GoFieldDefinition.class);
   }
 
   @Override
   @Nullable
   public GoTag getTag() {
-    return findChildByClass(GoTag.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoTag.class);
   }
 
   @Override
   @Nullable
   public GoType getType() {
-    return findChildByClass(GoType.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoType.class);
   }
 
 }

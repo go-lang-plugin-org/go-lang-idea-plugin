@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.stubs.GoVarSpecStub;
 import com.goide.psi.*;
@@ -52,19 +52,19 @@ public class GoVarSpecImpl extends GoStubbedElementImpl<GoVarSpecStub> implement
   @Override
   @NotNull
   public List<GoExpression> getExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
+    return GoPsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
   @Override
   @Nullable
   public GoType getType() {
-    return findChildByClass(GoType.class, com.goide.stubs.GoTypeStub.class);
+    return GoPsiTreeUtil.getStubChildOfType(this, GoType.class);
   }
 
   @Override
   @NotNull
   public List<GoVarDefinition> getVarDefinitionList() {
-    return findChildrenByClass(GoVarDefinition.class, com.goide.stubs.GoVarDefinitionStub.class);
+    return GoPsiTreeUtil.getStubChildrenOfTypeAsList(this, GoVarDefinition.class);
   }
 
   @Override

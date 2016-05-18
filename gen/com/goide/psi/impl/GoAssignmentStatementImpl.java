@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
@@ -44,19 +44,19 @@ public class GoAssignmentStatementImpl extends GoStatementImpl implements GoAssi
   @Override
   @NotNull
   public List<GoExpression> getExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
+    return GoPsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
   }
 
   @Override
   @NotNull
   public GoLeftHandExprList getLeftHandExprList() {
-    return findNotNullChildByClass(GoLeftHandExprList.class);
+    return notNullChild(GoPsiTreeUtil.getChildOfType(this, GoLeftHandExprList.class));
   }
 
   @Override
   @NotNull
   public GoAssignOp getAssignOp() {
-    return findNotNullChildByClass(GoAssignOp.class);
+    return notNullChild(GoPsiTreeUtil.getChildOfType(this, GoAssignOp.class));
   }
 
 }

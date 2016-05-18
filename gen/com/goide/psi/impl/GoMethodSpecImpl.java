@@ -22,7 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.stubs.GoMethodSpecStub;
 import com.goide.psi.*;
@@ -51,13 +51,13 @@ public class GoMethodSpecImpl extends GoNamedElementImpl<GoMethodSpecStub> imple
   @Override
   @Nullable
   public GoSignature getSignature() {
-    return findChildByClass(GoSignature.class, com.goide.stubs.GoSignatureStub.class);
+    return GoPsiTreeUtil.getStubChildOfType(this, GoSignature.class);
   }
 
   @Override
   @Nullable
   public GoTypeReferenceExpression getTypeReferenceExpression() {
-    return findChildByClass(GoTypeReferenceExpression.class);
+    return GoPsiTreeUtil.getChildOfType(this, GoTypeReferenceExpression.class);
   }
 
   @Override
