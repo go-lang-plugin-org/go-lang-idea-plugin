@@ -20,6 +20,7 @@ package com.goide.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.openapi.util.Trinity;
 
 public interface GoIndexOrSliceExpr extends GoExpression {
 
@@ -31,5 +32,11 @@ public interface GoIndexOrSliceExpr extends GoExpression {
 
   @Nullable
   PsiElement getRbrack();
+
+  @Nullable
+  GoExpression getExpression();
+
+  @NotNull
+  Trinity<GoExpression, GoExpression, GoExpression> getIndices();
 
 }

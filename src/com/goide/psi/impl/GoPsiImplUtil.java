@@ -45,6 +45,7 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileRefe
 import com.intellij.psi.impl.source.tree.LeafElement;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.tree.TokenSet;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiModificationTracker;
@@ -1391,6 +1392,12 @@ public class GoPsiImplUtil {
     return ObjectUtils.chooseNotNull(topMost, first);
   }
 
+  @Nullable
+  public static GoExpression getExpression(@NotNull GoIndexOrSliceExpr slice) {
+    List<GoExpression> leftExpressions = getExpressionsBefore(slice.getExpressionList(), slice.getLbrack());
+    return ContainerUtil.getFirstItem(leftExpressions);
+  }
+
   @NotNull
   public static List<GoExpression> getLeftExpressionsList(@NotNull GoRangeClause rangeClause) {
     return getExpressionsBefore(rangeClause.getExpressionList(), rangeClause.getRange());
@@ -1400,6 +1407,32 @@ public class GoPsiImplUtil {
   public static List<GoExpression> getLeftExpressionsList(@NotNull GoRecvStatement recvStatement) {
     return getExpressionsBefore(recvStatement.getExpressionList(),
                                 ObjectUtils.chooseNotNull(recvStatement.getAssign(), recvStatement.getVarAssign()));
+  }
+
+  @NotNull
+  public static Trinity<GoExpression, GoExpression, GoExpression> getIndices(@NotNull GoIndexOrSliceExpr slice) {
+    GoExpression start = null;
+    GoExpression end = null;
+    GoExpression max = null;
+    ASTNode[] colons = slice.getNode().getChildren(TokenSet.create(GoTypes.COLON));
+    List<GoExpression> exprList = slice.getExpressionList();
+    if (colons.length > 0) {
+      List<GoExpression> exprInRange = getExpressionsInRange(exprList, slice.getLbrack(), colons[0].getPsi());
+      start = exprInRange.isEmpty() ? null : exprInRange.get(0);
+    }
+    if (colons.length == 1) {
+      List<GoExpression> exprInRange = getExpressionsInRange(exprList, colons[0].getPsi(), slice.getRbrack());
+      end = exprInRange.isEmpty() ? null : exprInRange.get(0);
+    }
+    if (colons.length == 2) {
+      List<GoExpression> exprInRange = getExpressionsInRange(exprList, colons[0].getPsi(), colons[1].getPsi());
+      end = exprInRange.isEmpty() ? null : exprInRange.get(0);
+
+      exprInRange = getExpressionsInRange(exprList, colons[1].getPsi(), slice.getRbrack());
+      max = exprInRange.isEmpty() ? null : exprInRange.get(0);
+    }
+
+    return new Trinity<>(start, end, max);
   }
 
   @NotNull
@@ -1441,16 +1474,24 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
+  private static List<GoExpression> getExpressionsInRange(@NotNull List<GoExpression> list,
+                                                          @Nullable final PsiElement start,
+                                                          @Nullable final PsiElement end) {
+    return ContainerUtil.filter(list, new Condition<GoExpression>() {
+      @Override
+      public boolean value(GoExpression expression) {
+        return (end == null || expression.getTextRange().getEndOffset() <= end.getTextRange().getStartOffset()) &&
+               (start == null || expression.getTextRange().getStartOffset() >= start.getTextRange().getEndOffset());
+      }
+    });
+  }
+
+  @NotNull
   private static List<GoExpression> getExpressionsBefore(@NotNull List<GoExpression> list, @Nullable final PsiElement anchor) {
     if (anchor == null) {
       return list;
     }
-    return ContainerUtil.filter(list, new Condition<GoExpression>() {
-      @Override
-      public boolean value(GoExpression expression) {
-        return expression.getTextRange().getEndOffset() <= anchor.getTextRange().getStartOffset();
-      }
-    });
+    return getExpressionsInRange(list, null, anchor);
   }
 
   @NotNull
