@@ -25,6 +25,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
+import com.intellij.openapi.util.Trinity;
 
 public class GoIndexOrSliceExprImpl extends GoExpressionImpl implements GoIndexOrSliceExpr {
 
@@ -57,6 +58,16 @@ public class GoIndexOrSliceExprImpl extends GoExpressionImpl implements GoIndexO
   @Nullable
   public PsiElement getRbrack() {
     return findChildByType(RBRACK);
+  }
+
+  @Nullable
+  public GoExpression getExpression() {
+    return GoPsiImplUtil.getExpression(this);
+  }
+
+  @NotNull
+  public Trinity<GoExpression, GoExpression, GoExpression> getIndices() {
+    return GoPsiImplUtil.getIndices(this);
   }
 
 }
