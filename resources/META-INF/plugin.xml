@@ -232,6 +232,10 @@
     <localInspection language="go" displayName="Struct initialization without field names" groupPath="Go"
                      groupName="Code style issues" enabledByDefault="false" level="WEAK WARNING"
                      implementationClass="com.goide.inspections.GoStructInitializationInspection"/>
+
+    <localInspection language="go" displayName="Redundant blank argument in range inspection" groupPath="Go"
+                     groupName="Code style issues" enabledByDefault="true" level="WEAK WARNING"
+                     implementationClass="com.goide.inspections.GoRedundantBlankArgInRangeInspection"/>
     <!-- /code style issues -->
 
     <!-- probable bugs -->
