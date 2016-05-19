@@ -209,6 +209,9 @@
     <localInspection language="go" displayName="Redundant blank argument in range inspection" groupPath="Go"
                      groupName="Declaration redundancy" enabledByDefault="true" level="WEAK WARNING"
                      implementationClass="com.goide.inspections.GoRedundantBlankArgInRangeInspection"/>
+    <localInspection language="go" displayName="Redundant type declaration in composite literals" groupPath="Go"
+                     groupName="Declaration redundancy" enabledByDefault="true" level="WEAK WARNING"
+                     implementationClass="com.goide.inspections.GoRedundantTypeDeclInCompositeLit"/>
     <!-- /unused inspections -->
 
     <!-- redeclare inspections -->
