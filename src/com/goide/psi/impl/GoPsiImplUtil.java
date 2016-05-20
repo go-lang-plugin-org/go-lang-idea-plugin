@@ -1394,8 +1394,7 @@ public class GoPsiImplUtil {
 
   @Nullable
   public static GoExpression getExpression(@NotNull GoIndexOrSliceExpr slice) {
-    List<GoExpression> leftExpressions = getExpressionsBefore(slice.getExpressionList(), slice.getLbrack());
-    return ContainerUtil.getFirstItem(leftExpressions);
+    return ContainerUtil.getFirstItem(getExpressionsBefore(slice.getExpressionList(), slice.getLbrack()));
   }
 
   @NotNull
@@ -1417,22 +1416,17 @@ public class GoPsiImplUtil {
     ASTNode[] colons = slice.getNode().getChildren(TokenSet.create(GoTypes.COLON));
     List<GoExpression> exprList = slice.getExpressionList();
     if (colons.length > 0) {
-      List<GoExpression> exprInRange = getExpressionsInRange(exprList, slice.getLbrack(), colons[0].getPsi());
-      start = exprInRange.isEmpty() ? null : exprInRange.get(0);
+      start = ContainerUtil.getFirstItem(getExpressionsInRange(exprList, slice.getLbrack(), colons[0].getPsi()));
     }
     if (colons.length == 1) {
-      List<GoExpression> exprInRange = getExpressionsInRange(exprList, colons[0].getPsi(), slice.getRbrack());
-      end = exprInRange.isEmpty() ? null : exprInRange.get(0);
+      end = ContainerUtil.getFirstItem(getExpressionsInRange(exprList, colons[0].getPsi(), slice.getRbrack()));
     }
     if (colons.length == 2) {
-      List<GoExpression> exprInRange = getExpressionsInRange(exprList, colons[0].getPsi(), colons[1].getPsi());
-      end = exprInRange.isEmpty() ? null : exprInRange.get(0);
-
-      exprInRange = getExpressionsInRange(exprList, colons[1].getPsi(), slice.getRbrack());
-      max = exprInRange.isEmpty() ? null : exprInRange.get(0);
+      end = ContainerUtil.getFirstItem(getExpressionsInRange(exprList, colons[0].getPsi(), colons[1].getPsi()));
+      max = ContainerUtil.getFirstItem(getExpressionsInRange(exprList, colons[1].getPsi(), slice.getRbrack()));
     }
 
-    return new Trinity<>(start, end, max);
+    return new Trinity<GoExpression, GoExpression, GoExpression>(start, end, max);
   }
 
   @NotNull
@@ -1477,6 +1471,9 @@ public class GoPsiImplUtil {
   private static List<GoExpression> getExpressionsInRange(@NotNull List<GoExpression> list,
                                                           @Nullable final PsiElement start,
                                                           @Nullable final PsiElement end) {
+    if (start == null && end == null) {
+      return list;
+    }
     return ContainerUtil.filter(list, new Condition<GoExpression>() {
       @Override
       public boolean value(GoExpression expression) {
@@ -1488,9 +1485,6 @@ public class GoPsiImplUtil {
 
   @NotNull
   private static List<GoExpression> getExpressionsBefore(@NotNull List<GoExpression> list, @Nullable final PsiElement anchor) {
-    if (anchor == null) {
-      return list;
-    }
     return getExpressionsInRange(list, null, anchor);
   }
 
