@@ -26,7 +26,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class GoRedundantBlankArgInRangeInspection extends GoInspectionBase implements CleanupLocalInspectionTool {
-
   public final static String DELETE_BLANK_ARGUMENT_QUICK_FIX_NAME = "Delete blank argument";
 
   private static final GoDeleteRangeQuickFix DELETE_BLANK_ARGUMENT_QUICK_FIX =
@@ -62,8 +61,8 @@ public class GoRedundantBlankArgInRangeInspection extends GoInspectionBase imple
   private static void registerBlankArgumentProblem(@NotNull final ProblemsHolder holder,
                                                    @NotNull PsiElement start,
                                                    @NotNull PsiElement end) {
-    ProblemDescriptor descriptor = holder.getManager().createProblemDescriptor(start, end, "Can simplify <code>_</code>",
-                                                                               ProblemHighlightType.LIKE_UNUSED_SYMBOL, true,
+    ProblemDescriptor descriptor = holder.getManager().createProblemDescriptor(start, end, "Redundant <code>_</code> expression",
+                                                                               ProblemHighlightType.LIKE_UNUSED_SYMBOL, holder.isOnTheFly(),
                                                                                DELETE_BLANK_ARGUMENT_QUICK_FIX);
     holder.registerProblem(descriptor);
   }
