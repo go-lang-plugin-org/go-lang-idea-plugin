@@ -16,11 +16,12 @@
 
 <html>
 <body>
-Redundant blank argument in range clause inspection <br>
-_ = range v <br>
-_, _ = range v <br>
-a, _ = range v
+This inspection checks whether expression of range clause is redundant and can be deleted
 <!-- tooltip end -->
-Text after this comment will not be shown in tooltips.
+<p>For example following for statements can be simplified.</p>
+<br>
+<p>for _ = range v</p>
+<p>for _, _ = range v</p>
+<p>for a, _ = range v</p>
 </body>
 </html>
