@@ -29,6 +29,7 @@ import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import org.jetbrains.annotations.NotNull;
@@ -43,6 +44,7 @@ public class GoUnusedFunctionInspection extends GoInspectionBase {
         if (o.isBlank()) return;
         GoFile file = o.getContainingFile();
         String name = o.getName();
+        if (!canRun(name)) return;
         if (GoConstants.MAIN.equals(file.getPackageName()) && GoConstants.MAIN.equals(name)) return;
         if (GoConstants.INIT.equals(name)) return;
         if (GoTestFinder.isTestFile(file) && GoTestFunctionType.fromName(name) != null) return;
@@ -54,5 +56,9 @@ public class GoUnusedFunctionInspection extends GoInspectionBase {
         }
       }
     };
+  }
+
+  protected boolean canRun(String name) {
+    return !StringUtil.isCapitalized(name);
   }
 }
