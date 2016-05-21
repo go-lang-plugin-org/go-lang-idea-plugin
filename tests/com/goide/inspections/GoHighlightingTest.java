@@ -43,6 +43,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       GoUnusedConstInspection.class,
       GoUnusedGlobalVariableInspection.class,
       GoUnusedFunctionInspection.class,
+      GoUnusedExportedFunctionInspection.class,
       GoAssignmentToConstantInspection.class,
       GoDuplicateFunctionOrMethodInspection.class,
       GoDuplicateArgumentInspection.class,
