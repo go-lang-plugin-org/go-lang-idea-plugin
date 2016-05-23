@@ -17,18 +17,24 @@
 package com.goide.highlighting;
 
 import com.goide.GoConstants;
+import com.goide.GoTypes;
 import com.goide.inspections.GoInspectionUtil;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoCType;
 import com.goide.psi.impl.GoPsiImplUtil;
+import com.goide.psi.impl.GoTypeUtil;
+import com.goide.quickfix.GoDeleteRangeQuickFix;
 import com.goide.quickfix.GoEmptySignatureQuickFix;
 import com.goide.quickfix.GoReplaceWithReturnStatementQuickFix;
 import com.google.common.collect.Sets;
+import com.intellij.lang.ASTNode;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.tree.TokenSet;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
@@ -172,8 +178,9 @@ public class GoAnnotator implements Annotator {
         }
         else if (element instanceof GoFunctionDeclaration) {
           GoFunctionDeclaration declaration = (GoFunctionDeclaration)element;
-          if (declaration.getIdentifier().textMatches(GoConstants.INIT) ||  declaration.getIdentifier().textMatches(GoConstants.MAIN) && 
-              GoConstants.MAIN.equals(declaration.getContainingFile().getPackageName())) {
+          if (declaration.getIdentifier().textMatches(GoConstants.INIT) || declaration.getIdentifier().textMatches(GoConstants.MAIN) &&
+                                                                           GoConstants.MAIN
+                                                                             .equals(declaration.getContainingFile().getPackageName())) {
             GoSignature signature = declaration.getSignature();
             if (signature != null) {
               GoResult result = signature.getResult();
@@ -190,6 +197,23 @@ public class GoAnnotator implements Annotator {
               }
             }
           }
+        }
+      }
+    }
+    else if (element instanceof GoIndexOrSliceExpr) {
+      GoIndexOrSliceExpr slice = (GoIndexOrSliceExpr)element;
+      GoExpression expr = slice.getExpression();
+      if (expr == null || slice.getIndices().third == null) {
+        return;
+      }
+      if (GoTypeUtil.isString(expr.getGoType(null))) {
+        ASTNode[] colons = slice.getNode().getChildren(TokenSet.create(GoTypes.COLON));
+        if (colons.length == 2 && slice.getRbrack() != null) {
+          PsiElement secondColon = colons[1].getPsi();
+          Annotation annotation =
+            holder.createErrorAnnotation(new TextRange(secondColon.getTextOffset(), slice.getRbrack().getTextOffset()),
+                                         "Invalid operation " + slice.getText() + " (3-index slice of string)");
+          annotation.registerFix(new GoDeleteRangeQuickFix(secondColon, slice.getRbrack().getPrevSibling(), "Delete third index"));
         }
       }
     }
