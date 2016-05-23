@@ -149,6 +149,10 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testUnusedParameter_test()      { doTest(); }
   public void testVoidFunctionUsedAsValue()   { doTest(); }
   public void testIndexedStringAssign()       { doTest(); }
+  public void testStringSliceWithThirdIndex() { doTest(); }
+  public void testSliceWithThirdIndex()       { doTest(); }
+  public void testStringInStructSliceWithThirdIndex() { doTest(); }
+
 
   public void testAvoidDuplicatedUnusedImportReports() {
     myFixture.addFileToProject("pack1/a.go", "package foo;");
@@ -307,7 +311,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     GoImportOptimizerTest.resolveAllReferences(myFixture.getFile());
     myFixture.checkHighlighting();
   }
-  
+
   public void testMethodOnNonLocalTypeInTheSameDirectory() {
     myFixture.addFileToProject("method/foo.go", "package a; type H struct {}");
     PsiFile psiFile = myFixture.addFileToProject("method/foo_test.go", "package a_test;\n" +

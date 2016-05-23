@@ -37,23 +37,23 @@ public class GoHighlightingAnnotatorTest extends GoCodeInsightFixtureTestCase {
   public void testLabel() {
     doTest();
   }
-  
+
   public void testReceiver() {
     doTest();
   }
-  
+
   public void testFuncAndMethod() {
     doTest();
   }
-  
+
   public void testOctAndHex() {
     doTest();
   }
-  
+
   public void testTypes() {
     doTest();
   }
-  
+
   public void testStructFields() {
     doTest();
   }

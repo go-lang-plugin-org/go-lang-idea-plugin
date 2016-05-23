@@ -16,38 +16,49 @@
 
 package com.goide.quickfix;
 
-import com.intellij.codeInspection.LocalQuickFixBase;
-import com.intellij.codeInspection.ProblemDescriptor;
+import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
+import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class GoDeleteRangeQuickFix extends LocalQuickFixBase {
-  private final Class<? extends PsiElement> myClazz;
-  private final IElementType myElementType;
+public class GoDeleteRangeQuickFix extends LocalQuickFixAndIntentionActionOnPsiElement {
+  private final String myName;
 
-  public GoDeleteRangeQuickFix(@NotNull String name, @NotNull Class<? extends PsiElement> clazz) {
-    super(name);
-    myClazz = clazz;
-    myElementType = null;
+  public GoDeleteRangeQuickFix(@Nullable PsiElement startElement,
+                               @Nullable PsiElement endElement,
+                               String name) {
+    super(startElement, endElement);
+    myName = name;
   }
 
-  public GoDeleteRangeQuickFix(@NotNull String name, @NotNull IElementType elementType) {
-    super(name);
-    myClazz = PsiElement.class;
-    myElementType = elementType;
+  @NotNull
+  @Override
+  public String getText() {
+    return myName;
+  }
+
+  @Nls
+  @NotNull
+  @Override
+  public String getFamilyName() {
+    return "Delete elements";
   }
 
   //delete range include start,end
   @Override
-  public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-    PsiElement start = descriptor.getStartElement();
-    PsiElement end = descriptor.getEndElement();
-    if (start != null && end != null && start.isValid() && end.isValid()) {
+  public void invoke(@NotNull Project project,
+                     @NotNull PsiFile file,
+                     @Nullable("is null when called from inspection") Editor editor,
+                     @NotNull PsiElement start,
+                     @NotNull PsiElement end) {
+    if (start.isValid() && end.isValid()) {
       PsiElement parent = PsiTreeUtil.findCommonParent(start, end);
-      if (myClazz.isInstance(parent) && (myElementType == null || parent.getNode().getElementType() == myElementType)){
+      if (parent != null) {
         parent.getNode().removeRange(start.getNode(), end.getNode().getTreeNext());
       }
     }

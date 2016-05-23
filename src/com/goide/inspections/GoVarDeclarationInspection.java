@@ -69,7 +69,7 @@ public class GoVarDeclarationInspection extends GoInspectionBase {
         for (GoCompositeElement idElement : p.first) {
           if (idElement instanceof GoIndexOrSliceExpr) {
             GoType referenceType = GoPsiImplUtil.getIndexedExpressionReferenceType((GoIndexOrSliceExpr)idElement, null);
-            if (referenceType != null && GoTypeUtil.isString(referenceType.getUnderlyingType())) {
+            if (GoTypeUtil.isString(referenceType)) {
               // https://golang.org/ref/spec#Index_expressions
               // For a of string type: a[x] may not be assigned to
               holder.registerProblem(idElement, "Cannot assign to <code>#ref</code> #loc");
