@@ -21,7 +21,6 @@ import com.intellij.testFramework.LightProjectDescriptor;
 import org.jetbrains.annotations.NotNull;
 
 public class GoRedundantSecondIndexInSlicesInspectionTest extends GoQuickFixTestBase {
-
   @Override
   public void setUp() throws Exception {
     super.setUp();

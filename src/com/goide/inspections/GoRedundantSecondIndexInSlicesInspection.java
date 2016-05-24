@@ -19,14 +19,20 @@ package com.goide.inspections;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.quickfix.GoDeleteQuickFix;
-import com.intellij.codeInspection.*;
+import com.intellij.codeInspection.CleanupLocalInspectionTool;
+import com.intellij.codeInspection.LocalInspectionToolSession;
+import com.intellij.codeInspection.ProblemHighlightType;
+import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.util.Trinity;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 public class GoRedundantSecondIndexInSlicesInspection extends GoInspectionBase implements CleanupLocalInspectionTool {
-
   public final static String DELETE_REDUNDANT_INDEX_QUICK_FIX_NAME = "Delete redundant index";
-
   private static final GoDeleteQuickFix DELETE_REDUNDANT_INDEX_QUICK_FIX =
     new GoDeleteQuickFix(DELETE_REDUNDANT_INDEX_QUICK_FIX_NAME, GoCallExpr.class);
 
@@ -36,29 +42,38 @@ public class GoRedundantSecondIndexInSlicesInspection extends GoInspectionBase i
     return new GoVisitor() {
       @Override
       public void visitIndexOrSliceExpr(@NotNull GoIndexOrSliceExpr o) {
-        if (!(o.getExpression() instanceof GoReferenceExpression) || o.getExpression().getReference() == null
-            || ((GoReferenceExpression)o.getExpression()).getQualifier() != null) {
+        GoExpression expression = o.getExpression();
+        PsiReference reference = expression != null ? expression.getReference() : null;
+        PsiElement resolvedArrayReference = reference != null ? reference.resolve() : null;
+        if (reference == null ||
+            resolvedArrayReference == null ||
+            !(expression instanceof GoReferenceExpression) ||
+            ((GoReferenceExpression)expression).getQualifier() != null) {
           return;
         }
         Trinity<GoExpression, GoExpression, GoExpression> indexes = o.getIndices();
         if (indexes.third == null && indexes.second instanceof GoCallExpr) {
-          GoCallExpr callExpr = (GoCallExpr)indexes.second;
-          GoExpression function = callExpr.getExpression();
-          if (function.textMatches("len") && function instanceof GoReferenceExpression &&
-              GoPsiImplUtil.builtin(((GoReferenceExpression)function).resolve()) &&
-              callExpr.getArgumentList().getExpressionList().size() == 1) {
-            GoExpression secondRightExpr = callExpr.getArgumentList().getExpressionList().get(0);
-            if (secondRightExpr.getReference() != null &&
-                o.getExpression().getReference().resolve() == secondRightExpr.getReference().resolve()) {
-              holder.registerProblem(callExpr, "Redundant index", ProblemHighlightType.LIKE_UNUSED_SYMBOL,
-                                     DELETE_REDUNDANT_INDEX_QUICK_FIX);
+          GoCallExpr call = (GoCallExpr)indexes.second;
+          if (isLenFunctionCall(call)) {
+            GoExpression argument = ContainerUtil.getFirstItem(call.getArgumentList().getExpressionList());
+            if (argument != null && argument.getReference() != null && resolvedArrayReference.equals(argument.getReference().resolve())) {
+              holder.registerProblem(call, "Redundant index", ProblemHighlightType.LIKE_UNUSED_SYMBOL, DELETE_REDUNDANT_INDEX_QUICK_FIX);
             }
           }
         }
       }
     };
   }
+
+  private static boolean isLenFunctionCall(@NotNull GoCallExpr callExpr) {
+    GoExpression functionReferenceExpression = callExpr.getExpression();
+    if (!(functionReferenceExpression instanceof GoReferenceExpression) || !functionReferenceExpression.textMatches("len")) {
+      return false;
+    }
+    List<GoExpression> callArguments = callExpr.getArgumentList().getExpressionList();
+    if (callArguments.size() != 1) {
+      return false;
+    }
+    return GoPsiImplUtil.builtin(((GoReferenceExpression)functionReferenceExpression).resolve());
+  }
 }
-
-
-
