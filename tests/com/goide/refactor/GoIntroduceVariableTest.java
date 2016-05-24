@@ -16,16 +16,16 @@
 
 package com.goide.refactor;
 
+import com.goide.GoCodeInsightFixtureTestCase;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
-import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import org.jetbrains.annotations.NotNull;
 
-public class GoIntroduceVariableTest extends LightPlatformCodeInsightFixtureTestCase {
+public class GoIntroduceVariableTest extends GoCodeInsightFixtureTestCase {
   @NotNull
   @Override
-  protected String getTestDataPath() {
-    return "testData/refactor/introduce-variable";
+  protected String getBasePath() {
+    return "refactor/introduce-variable";
   }
 
   private void doTest() {
