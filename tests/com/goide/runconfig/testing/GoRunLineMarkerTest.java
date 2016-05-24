@@ -20,7 +20,7 @@ import com.goide.runconfig.GoRunConfigurationTestCase;
 
 public class GoRunLineMarkerTest extends GoRunConfigurationTestCase {
   public void testRunTestLineMarker() {
-    myFixture.configureByText("a_test.go", "package m<caret>ain\n" +
+    myFixture.configureByText("a_test.go", "package <caret>main\n" +
                                            "import .`gopkg.in/check.v1`\n" +
                                            "func TestName(){}\n" +
                                            "func BenchmarkName(){}\n" +
@@ -35,14 +35,14 @@ public class GoRunLineMarkerTest extends GoRunConfigurationTestCase {
 
   public void testRunLineMarker() {
     myFixture.configureByText("a.go", "package main\n" +
-                                      "func m<caret>ain(){}");
+                                      "func <caret>main(){}");
     assertEquals(1, myFixture.findGuttersAtCaret().size());
     assertEquals(1, myFixture.findAllGutters().size());
   }
 
   public void testRunLineMarkerInNonMainFile() {
     myFixture.configureByText("a.go", "package not_main\n" +
-                                      "func m<caret>ain(){}");
+                                      "func <caret>main(){}");
     assertEquals(0, myFixture.findGuttersAtCaret().size());
     assertEquals(0, myFixture.findAllGutters().size());
   }
