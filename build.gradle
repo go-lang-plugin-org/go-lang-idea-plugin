@@ -14,8 +14,14 @@
  * limitations under the License.
  */
 
+buildscript {
+  repositories {
+    maven { url 'http://dl.bintray.com/jetbrains/intellij-plugin-service' }
+  }
+}
+
 plugins {
-  id 'org.jetbrains.intellij' version "0.0.42"
+  id 'org.jetbrains.intellij' version "0.1.4"
   id "de.undercouch.download" version "2.0.0"
 }
 
@@ -47,7 +53,6 @@ allprojects {
     publish {
       username publishUsername
       password publishPassword
-      pluginId '5047'
       channel publishChannel
     }
     systemProperty 'dlv.path', customDlvPath
@@ -75,7 +80,7 @@ dependencies {
 // delve packing
 project.afterEvaluate {
   prepareSandbox.doLast {
-    def libraries = "$it.destinationDir/lib/"
+    def libraries = "$it.destinationDir/$intellij.pluginName/lib/"
     def delveFile = fileTree(dir: libraries, include: 'delve*').singleFile
     copy {
       from zipTree(delveFile)
