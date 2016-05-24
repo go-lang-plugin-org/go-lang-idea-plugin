@@ -17,13 +17,13 @@
 package com.goide.codeInsight.imports;
 
 import com.goide.inspections.GoUnusedImportInspection;
-import com.goide.psi.GoRecursiveVisitor;
 import com.goide.quickfix.GoQuickFixTestBase;
 import com.intellij.codeInsight.actions.OptimizeImportsAction;
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiRecursiveElementVisitor;
 import com.intellij.psi.PsiReference;
 import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
@@ -57,7 +57,7 @@ public class GoImportOptimizerTest extends GoQuickFixTestBase {
     doTest();
   }
 
-  public void testImportWithMultiplePackages() throws Throwable {
+  public void testImportWithMultiplePackages() {
     myFixture.addFileToProject("pack/pack_test.go", "package pack_test; func Test() {}");
     myFixture.addFileToProject("pack/pack.go", "package pack;");
     doTest();
@@ -76,13 +76,14 @@ public class GoImportOptimizerTest extends GoQuickFixTestBase {
     myFixture.checkResultByFile(getTestName(true) + "_after.go");
   }
 
-  private static void resolveAllReferences(PsiFile file) {
-    file.accept(new GoRecursiveVisitor() {
+  public static void resolveAllReferences(PsiFile file) {
+    file.accept(new PsiRecursiveElementVisitor() {
       @Override
       public void visitElement(@NotNull PsiElement o) {
         for (PsiReference reference : o.getReferences()) {
           reference.resolve();
         }
+        super.visitElement(o);
       }
     });
   }
