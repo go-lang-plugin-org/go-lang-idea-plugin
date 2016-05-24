@@ -27,11 +27,6 @@ public class GoSelfImportInspectionTest extends GoQuickFixTestBase {
     myFixture.enableInspections(GoSelfImportInspection.class);
   }
 
-  @Override
-  protected boolean isWriteActionRequired() {
-    return false;
-  }
-
   public void testRemoveSelfImport() {
     PsiFile file = myFixture.addFileToProject("path/a.go", "package pack;" +
                                                            "import <error descr=\"Self import is not allowed\"><caret>\"path\"</error>");

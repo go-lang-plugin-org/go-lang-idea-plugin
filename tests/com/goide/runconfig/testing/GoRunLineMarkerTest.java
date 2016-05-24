@@ -46,9 +46,4 @@ public class GoRunLineMarkerTest extends GoRunConfigurationTestCase {
     assertEquals(0, myFixture.findGuttersAtCaret().size());
     assertEquals(0, myFixture.findAllGutters().size());
   }
-
-  @Override
-  protected boolean isWriteActionRequired() {
-    return false;
-  }
 }

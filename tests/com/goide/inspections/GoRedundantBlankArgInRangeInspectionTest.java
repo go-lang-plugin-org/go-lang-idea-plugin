@@ -27,11 +27,6 @@ public class GoRedundantBlankArgInRangeInspectionTest extends GoQuickFixTestBase
     myFixture.enableInspections(GoRedundantBlankArgInRangeInspection.class);
   }
 
-  @Override
-  protected boolean isWriteActionRequired() {
-    return false;
-  }
-
   // Tests ranges
   public void testRangeSimplifyWithOneBlankArg() {
     doTest(GoRedundantBlankArgInRangeInspection.DELETE_BLANK_ARGUMENT_QUICK_FIX_NAME, true);

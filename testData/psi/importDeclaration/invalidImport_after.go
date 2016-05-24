@@ -1,7 +1,7 @@
 package main;
 
 import
-import "package/path" 
+import "package/path"
 
 func main() {
 	vendorpackage.Hello()

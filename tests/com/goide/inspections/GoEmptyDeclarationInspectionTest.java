@@ -26,11 +26,6 @@ public class GoEmptyDeclarationInspectionTest extends GoQuickFixTestBase {
     myFixture.enableInspections(GoEmptyDeclarationInspection.class);
   }
 
-  @Override
-  protected boolean isWriteActionRequired() {
-    return false;
-  }
-
   public void testConstVoidDeclaration() {
     doTest(GoEmptyDeclarationInspection.QUICK_FIX_NAME, true);
   }

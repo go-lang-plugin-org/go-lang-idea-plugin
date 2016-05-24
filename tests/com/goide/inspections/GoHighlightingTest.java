@@ -82,11 +82,6 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
     return "highlighting";
   }
 
-  @Override
-  protected boolean isWriteActionRequired() {
-    return false;
-  }
-
   public void testSimple()                    { doTest(); }
   public void testLabels()                    { doTest(); }
   public void testStruct()                    { doTest(); }

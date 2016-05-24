@@ -1,6 +1,6 @@
 package test
 
 import (
-"test"
-"package/path"
+	"test"
+	"package/path"
 )

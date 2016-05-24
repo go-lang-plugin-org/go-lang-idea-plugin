@@ -62,11 +62,6 @@ public class GoHighlightingAnnotatorTest extends GoCodeInsightFixtureTestCase {
     doTest();
   }
 
-  @Override
-  protected boolean isWriteActionRequired() {
-    return false;
-  }
-
   private void doTest() {
     myFixture.testHighlighting(false, true, false, getTestName(true) + ".go");
   }

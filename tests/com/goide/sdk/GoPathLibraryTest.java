@@ -160,4 +160,9 @@ public class GoPathLibraryTest extends GoCodeInsightFixtureTestCase {
     assertSameElements(Arrays.asList(library.getUrls(OrderRootType.CLASSES)), libUrls);
     assertSameElements(library.getExcludedRootUrls(), exclusionUrls);
   }
+
+  @Override
+  protected boolean isWriteActionRequired() {
+    return true;
+  }
 }

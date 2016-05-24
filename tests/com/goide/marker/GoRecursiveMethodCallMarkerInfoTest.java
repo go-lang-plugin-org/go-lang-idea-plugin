@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,10 +44,5 @@ public class GoRecursiveMethodCallMarkerInfoTest extends GoCodeInsightFixtureTes
       if ("Recursive call".equals(text) && AllIcons.Gutter.RecursiveMethod.equals(gutter.getIcon())) return;
     }
     fail("Not found gutter mark: " + "Recursive call" + " " + AllIcons.Gutter.RecursiveMethod + "\nin\n" + StringUtil.join(textList, "\n"));
-  }
-
-  @Override
-  protected boolean isWriteActionRequired() {
-    return false;
   }
 }

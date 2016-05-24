@@ -153,11 +153,6 @@ public class GoSuppressionFixTest extends GoQuickFixTestBase {
     myFixture.testHighlighting(getTestName(true) + ".go");
   }
 
-  @Override
-  protected boolean isWriteActionRequired() {
-    return false;
-  }
-
   @NotNull
   @Override
   protected String getBasePath() {
