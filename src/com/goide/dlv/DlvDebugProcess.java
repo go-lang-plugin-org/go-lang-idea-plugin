@@ -48,6 +48,7 @@ import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import com.intellij.xdebugger.breakpoints.XBreakpointHandler;
 import com.intellij.xdebugger.breakpoints.XLineBreakpoint;
 import com.intellij.xdebugger.evaluation.XDebuggerEditorsProviderBase;
+import com.intellij.xdebugger.frame.XSuspendContext;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -55,6 +56,7 @@ import org.jetbrains.concurrency.Promise;
 import org.jetbrains.debugger.DebugProcessImpl;
 import org.jetbrains.debugger.Location;
 import org.jetbrains.debugger.StepAction;
+import org.jetbrains.debugger.Vm;
 import org.jetbrains.debugger.connection.VmConnection;
 
 import java.util.Collections;
@@ -176,11 +178,12 @@ public final class DlvDebugProcess extends DebugProcessImpl<VmConnection<?>> imp
   private boolean initBreakpointHandlersAndSetBreakpoints(boolean setBreakpoints) {
     if (!breakpointsInitiated.compareAndSet(false, true)) return false;
 
-    assert getVm() != null : "Vm should be initialized";
+    Vm vm = getVm();
+    assert vm != null : "Vm should be initialized";
 
     if (setBreakpoints) {
       doSetBreakpoints();
-      resume();
+      resume(vm);
     }
 
     return true;
@@ -200,14 +203,18 @@ public final class DlvDebugProcess extends DebugProcessImpl<VmConnection<?>> imp
     send(new DlvRequest.Command(name)).done(myStateConsumer);
   }
 
+  @Nullable
   @Override
-  protected Promise<?> continueVm(@NotNull StepAction stepAction) {
+  protected Promise<?> continueVm(@NotNull Vm vm, @NotNull StepAction stepAction) {
     switch (stepAction) {
       case CONTINUE:
         command(CONTINUE);
         break;
       case IN:
         command(STEP);
+        break;
+      case IN_ASYNC:
+        // todo
         break;
       case OVER:
         command(NEXT);
@@ -226,7 +233,7 @@ public final class DlvDebugProcess extends DebugProcessImpl<VmConnection<?>> imp
   }
 
   @Override
-  public void runToPosition(@NotNull XSourcePosition position) {
+  public void runToPosition(@NotNull XSourcePosition position, @Nullable XSuspendContext context) {
     // todo
   }
 
