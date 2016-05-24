@@ -17,6 +17,7 @@
 package com.goide.inspections;
 
 import com.goide.GoCodeInsightFixtureTestCase;
+import com.goide.codeInsight.imports.GoImportOptimizerTest;
 import com.goide.inspections.unresolved.*;
 import com.goide.project.GoModuleLibrariesService;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -303,6 +304,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testMethodOnNonLocalType() {
     VirtualFile file = myFixture.copyFileToProject(getTestName(true) + ".go", "method/nonlocaltype.go");
     myFixture.configureFromExistingVirtualFile(file);
+    GoImportOptimizerTest.resolveAllReferences(myFixture.getFile());
     myFixture.checkHighlighting();
   }
   
