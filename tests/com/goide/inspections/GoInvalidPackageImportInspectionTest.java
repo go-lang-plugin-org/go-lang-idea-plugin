@@ -36,11 +36,6 @@ public class GoInvalidPackageImportInspectionTest extends GoQuickFixTestBase {
     myFixture.enableInspections(GoInvalidPackageImportInspection.class);
   }
 
-  @Override
-  protected boolean isWriteActionRequired() {
-    return false;
-  }
-
   public void testImportBuiltinPackage() {
     myFixture.addFileToProject("builtin/hello.go", "package builtin");
     myFixture.configureByText("a.go", "package pack; import <error descr=\"Cannot import 'builtin' package\">`builtin`</error>");

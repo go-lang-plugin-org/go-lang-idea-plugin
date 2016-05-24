@@ -61,6 +61,12 @@ abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsi
     }
   }
 
+  // todo[zolotov] remove after 2016.3
+  @Override
+  protected boolean isWriteActionRequired() {
+    return false;
+  }
+
   @Override
   protected final String getTestDataPath() {
     return new File("testData/" + getBasePath()).getAbsolutePath();

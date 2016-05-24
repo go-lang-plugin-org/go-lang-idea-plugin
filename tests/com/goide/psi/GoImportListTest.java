@@ -17,6 +17,7 @@
 package com.goide.psi;
 
 import com.goide.GoCodeInsightFixtureTestCase;
+import com.intellij.openapi.command.WriteCommandAction;
 import org.jetbrains.annotations.NotNull;
 
 public class GoImportListTest extends GoCodeInsightFixtureTestCase {
@@ -32,7 +33,12 @@ public class GoImportListTest extends GoCodeInsightFixtureTestCase {
   
   private void doAddImportTest() {
     myFixture.configureByFile(getTestName(true) + ".go");
-    ((GoFile)myFixture.getFile()).addImport("package/path", null);
+    WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new Runnable() {
+      @Override
+      public void run() {
+        ((GoFile)myFixture.getFile()).addImport("package/path", null);
+      }
+    });
     myFixture.checkResultByFile(getTestName(true) + "_after.go");
   }
 

@@ -17,7 +17,7 @@
 package com.goide.formatter;
 
 import com.goide.GoCodeInsightFixtureTestCase;
-import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -57,7 +57,7 @@ public class GoFormatterTest extends GoCodeInsightFixtureTestCase {
 
   private String doTest(@Nullable Character c, String testName) {
     if (c == null) {
-      ApplicationManager.getApplication().runWriteAction(new Runnable() {
+      WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new Runnable() {
         @Override
         public void run() {
           CodeStyleManager.getInstance(getProject()).reformat(myFixture.getFile());

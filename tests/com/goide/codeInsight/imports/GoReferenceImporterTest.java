@@ -72,11 +72,6 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
     return createMockProjectDescriptor();
   }
 
-  @Override
-  protected boolean isWriteActionRequired() {
-    return false;
-  }
-
   private void doTestAddOnTheFly(boolean goOnTheFlyEnabled, boolean javaOnTheFlyEnabled) {
     DaemonCodeAnalyzerSettings.getInstance().setImportHintEnabled(true);
     updateSettings(goOnTheFlyEnabled, javaOnTheFlyEnabled);

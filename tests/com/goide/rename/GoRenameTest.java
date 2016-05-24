@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,16 +23,16 @@ import org.jetbrains.annotations.NotNull;
 public class GoRenameTest extends GoCodeInsightFixtureTestCase {
   public void testAnonymousField() {
     doTest("package foo; type A struct {*A}; func foo(a A) {a.<caret>A}", "B",
-           "package foo; type B struct {*B}; func foo(a B) {a.B}");
+           "package foo; type B struct { *B }; func foo(a B) {a.B\n}");
   }
 
   public void testType() {
     doTest("package foo; type A<caret> struct {*A}; func foo(a A) {a.A}", "B",
-           "package foo; type B<caret> struct {*B}; func foo(a B) {a.B}");
+           "package foo; type B struct { *B }; func foo(a B) {a.B\n}");
   }
   
   public void testLabel() {
-    doTest("package foo; func foo() {a:{}; goto <caret>a}", "b", "package foo; func foo() {b:{}; goto b}");
+    doTest("package foo; func foo() {a:{}; goto <caret>a}", "b", "package foo; func foo() {\n\tb:{}; goto b\n}");
   }
 
   public void testAliasQualifier() {

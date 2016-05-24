@@ -24,11 +24,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public abstract class GoQuickFixTestBase extends GoCodeInsightFixtureTestCase {
-  @Override
-  protected boolean isWriteActionRequired() {
-    return false;
-  }
-
   protected void doTest(@NotNull String quickFixName) {
     doTest(quickFixName, false);
   }

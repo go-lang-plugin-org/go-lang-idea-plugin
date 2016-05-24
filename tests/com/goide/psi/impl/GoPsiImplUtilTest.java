@@ -379,4 +379,9 @@ public class GoPsiImplUtilTest extends GoCodeInsightFixtureTestCase {
     spec.deleteDefinition(definition);
     myFixture.checkResult("package main\n\n const bar int  ");
   }
+
+  @Override
+  protected boolean isWriteActionRequired() {
+    return true;
+  }
 }

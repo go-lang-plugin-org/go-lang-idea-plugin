@@ -63,11 +63,6 @@ public class GoImportOptimizerTest extends GoQuickFixTestBase {
     doTest();
   }
 
-  @Override
-  protected boolean isWriteActionRequired() {
-    return false;
-  }
-
   private void doTest() {
     PsiFile file = myFixture.configureByFile(getTestName(true) + ".go");
     resolveAllReferences(file);

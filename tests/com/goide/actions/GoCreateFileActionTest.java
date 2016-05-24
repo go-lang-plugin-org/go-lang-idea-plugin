@@ -20,6 +20,7 @@ import com.goide.GoCodeInsightFixtureTestCase;
 import com.goide.psi.GoFile;
 import com.intellij.ide.actions.CreateFileFromTemplateAction;
 import com.intellij.ide.fileTemplates.impl.CustomFileTemplate;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.psi.PsiDirectory;
 import org.jetbrains.annotations.NotNull;
 
@@ -89,7 +90,12 @@ public class GoCreateFileActionTest extends GoCodeInsightFixtureTestCase {
     GoFile file = (GoFile)CreateFileFromTemplateAction.createFileFromTemplate(newFileName, template, dir, null, true);
     assertNotNull(file);
     assertEquals(expectedPackage, file.getPackageName());
-    file.delete();
+    WriteCommandAction.runWriteCommandAction(dir.getProject(), new Runnable() {
+      @Override
+      public void run() {
+        file.delete();
+      }
+    });
   }
 }
 

@@ -1,8 +1,8 @@
 package test
 
 import (
-"test"
-"package/path"
+	"test"
+	"package/path"
 )
 /*
 #cgo LDFLAGS: -L${SRCDIR}/libs -lopus

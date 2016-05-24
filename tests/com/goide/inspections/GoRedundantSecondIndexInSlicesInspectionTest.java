@@ -33,11 +33,6 @@ public class GoRedundantSecondIndexInSlicesInspectionTest extends GoQuickFixTest
     return createMockProjectDescriptor();
   }
 
-  @Override
-  protected boolean isWriteActionRequired() {
-    return false;
-  }
-
   public void testSlice() {
     doTest(GoRedundantSecondIndexInSlicesInspection.DELETE_REDUNDANT_INDEX_QUICK_FIX_NAME, true);
   }
