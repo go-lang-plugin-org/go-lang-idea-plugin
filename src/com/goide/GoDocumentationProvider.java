@@ -19,6 +19,7 @@ package com.goide;
 import com.goide.editor.GoParameterInfoHandler;
 import com.goide.project.GoVendoringUtil;
 import com.goide.psi.*;
+import com.goide.psi.impl.GoCType;
 import com.goide.psi.impl.GoLightType;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.sdk.GoPackageUtil;
@@ -277,6 +278,9 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       }
       if (type instanceof GoSpecType) {
         return getTypePresentation(GoPsiImplUtil.getTypeSpecSafe(type), contextImportPath);
+      }
+      if (type instanceof GoCType) {
+        return "C"; 
       }
       if (type instanceof GoLightType) {
         LOG.error("Cannot build presentable text for type: " + type.getClass().getSimpleName() + " - " + type.getText());
