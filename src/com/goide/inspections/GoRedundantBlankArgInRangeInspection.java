@@ -18,7 +18,10 @@ package com.goide.inspections;
 
 import com.goide.psi.*;
 import com.goide.quickfix.GoDeleteRangeQuickFix;
-import com.intellij.codeInspection.*;
+import com.intellij.codeInspection.CleanupLocalInspectionTool;
+import com.intellij.codeInspection.LocalInspectionToolSession;
+import com.intellij.codeInspection.ProblemHighlightType;
+import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -58,10 +61,9 @@ public class GoRedundantBlankArgInRangeInspection extends GoInspectionBase imple
   private static void registerBlankArgumentProblem(@NotNull final ProblemsHolder holder,
                                                    @NotNull PsiElement start,
                                                    @NotNull PsiElement end) {
-    ProblemDescriptor descriptor = holder.getManager().createProblemDescriptor(start, end, "Redundant <code>_</code> expression",
-                                                                               ProblemHighlightType.LIKE_UNUSED_SYMBOL, holder.isOnTheFly(),
-                                                                               new GoDeleteRangeQuickFix(start, end, DELETE_BLANK_ARGUMENT_QUICK_FIX_NAME));
-    holder.registerProblem(descriptor);
+    GoDeleteRangeQuickFix fix = new GoDeleteRangeQuickFix(start, end, DELETE_BLANK_ARGUMENT_QUICK_FIX_NAME);
+    holder.registerProblem(holder.getManager().createProblemDescriptor(start, end, "Redundant <code>_</code> expression",
+                                                                       ProblemHighlightType.LIKE_UNUSED_SYMBOL, holder.isOnTheFly(), fix));
   }
 
   private static boolean isBlankGoVarDefinition(@Nullable PsiElement o) {
