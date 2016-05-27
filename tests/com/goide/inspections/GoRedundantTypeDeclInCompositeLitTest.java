@@ -20,7 +20,6 @@ import com.goide.quickfix.GoQuickFixTestBase;
 import org.jetbrains.annotations.NotNull;
 
 public class GoRedundantTypeDeclInCompositeLitTest extends GoQuickFixTestBase {
-
   @Override
   public void setUp() throws Exception {
     super.setUp();
@@ -34,60 +33,60 @@ public class GoRedundantTypeDeclInCompositeLitTest extends GoQuickFixTestBase {
 
   //Test Composite literals
   public void testCompositeLitWithOneSimpleRedundantTypeDecl() {
-    doTest(GoRedundantTypeDeclInCompositeLit.DELETE_REDUNDANT_TYPE_DECLARATION_QUICK_FIX_NAME, true);
+    doTest(GoRedundantTypeDeclInCompositeLit.DELETE_TYPE_DECLARATION_QUICK_FIX_NAME, true);
   }
 
   public void testCompositeLitWithKeysAndSimpleRedundantTypeDecl() {
-    doTest(GoRedundantTypeDeclInCompositeLit.DELETE_REDUNDANT_TYPE_DECLARATION_QUICK_FIX_NAME, true);
+    doTest(GoRedundantTypeDeclInCompositeLit.DELETE_TYPE_DECLARATION_QUICK_FIX_NAME, true);
   }
 
   public void testCompositeLitWithInterface() {
-    doTestNoFix(GoRedundantTypeDeclInCompositeLit.DELETE_REDUNDANT_TYPE_DECLARATION_QUICK_FIX_NAME, true);
+    doTestNoFix(GoRedundantTypeDeclInCompositeLit.DELETE_TYPE_DECLARATION_QUICK_FIX_NAME, true);
   }
 
   public void testCompositeLitWithArrays() {
-    doTest(GoRedundantTypeDeclInCompositeLit.DELETE_REDUNDANT_TYPE_DECLARATION_QUICK_FIX_NAME, true);
+    doTest(GoRedundantTypeDeclInCompositeLit.DELETE_TYPE_DECLARATION_QUICK_FIX_NAME, true);
   }
 
   public void testCompositeLitWithArraysInBrackets() {
-    doTestNoFix(GoRedundantTypeDeclInCompositeLit.DELETE_REDUNDANT_TYPE_DECLARATION_QUICK_FIX_NAME, true);
+    doTestNoFix(GoRedundantTypeDeclInCompositeLit.DELETE_TYPE_DECLARATION_QUICK_FIX_NAME, true);
   }
 
   public void testCompositeLitWithMap() {
-    doTest(GoRedundantTypeDeclInCompositeLit.DELETE_REDUNDANT_TYPE_DECLARATION_QUICK_FIX_NAME, true);
+    doTest(GoRedundantTypeDeclInCompositeLit.DELETE_TYPE_DECLARATION_QUICK_FIX_NAME, true);
   }
 
   /*public void testCompositeLitWithInsertedArrays () {
-    doTest(GoRedundantTypeDeclInCompositeLit.DELETE_REDUNDANT_TYPE_DECLARATION_QUICK_FIX_NAME, true);
+    doTest(GoRedundantTypeDeclInCompositeLit.DELETE_TYPE_DECLARATION_QUICK_FIX_NAME, true);
   }
 
   public void testCompositeLitWithStruct() {
-    doTest(GoRedundantTypeDeclInCompositeLit.DELETE_REDUNDANT_TYPE_DECLARATION_QUICK_FIX_NAME, true);
+    doTest(GoRedundantTypeDeclInCompositeLit.DELETE_TYPE_DECLARATION_QUICK_FIX_NAME, true);
   }
 
   public void testCompositeLitWithMapOfStruct() {
-    doTest(GoRedundantTypeDeclInCompositeLit.DELETE_REDUNDANT_TYPE_DECLARATION_QUICK_FIX_NAME, true);
+    doTest(GoRedundantTypeDeclInCompositeLit.DELETE_TYPE_DECLARATION_QUICK_FIX_NAME, true);
   }
 
   public void testCompositeLitWithTwoDimensionalArray() {
-    doTest(GoRedundantTypeDeclInCompositeLit.DELETE_REDUNDANT_TYPE_DECLARATION_QUICK_FIX_NAME, true);
+    doTest(GoRedundantTypeDeclInCompositeLit.DELETE_TYPE_DECLARATION_QUICK_FIX_NAME, true);
   }*/
 
   //Test Composite literals with pointers *T == &T
   public void testCompositeLitWithPointers() {
-    doTest(GoRedundantTypeDeclInCompositeLit.DELETE_REDUNDANT_TYPE_DECLARATION_QUICK_FIX_NAME, true);
+    doTestNoFix(GoRedundantTypeDeclInCompositeLit.DELETE_TYPE_DECLARATION_QUICK_FIX_NAME, true);
   }
 
   public void testCompositeLitWithPointersNoFix() {
-    doTestNoFix(GoRedundantTypeDeclInCompositeLit.DELETE_REDUNDANT_TYPE_DECLARATION_QUICK_FIX_NAME, true);
+    doTestNoFix(GoRedundantTypeDeclInCompositeLit.DELETE_TYPE_DECLARATION_QUICK_FIX_NAME, true);
   }
 
   /*public void testCompositeLitWithPointerAndStructAndInsertedElement() {
-    doTest(GoRedundantTypeDeclInCompositeLit.DELETE_REDUNDANT_TYPE_DECLARATION_QUICK_FIX_NAME, true);
+    doTest(GoRedundantTypeDeclInCompositeLit.DELETE_TYPE_DECLARATION_QUICK_FIX_NAME, true);
   }
 
   public void testCompositeLitWithMapWithPointerAndStruct() {
-    doTest(GoRedundantTypeDeclInCompositeLit.DELETE_REDUNDANT_TYPE_DECLARATION_QUICK_FIX_NAME, true);
+    doTest(GoRedundantTypeDeclInCompositeLit.DELETE_TYPE_DECLARATION_QUICK_FIX_NAME, true);
   }*/
 
   @NotNull
