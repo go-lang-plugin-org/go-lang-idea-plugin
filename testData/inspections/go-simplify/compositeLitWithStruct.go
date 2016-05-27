@@ -7,7 +7,7 @@ type T struct {
 var _ = []struct {
 	x, y int
 }{
-	"bal": struct{ x, y <caret>int }{3, 4},
+	struct{ x, y <caret>int }{3, 4},
 }
 
 func main (){
