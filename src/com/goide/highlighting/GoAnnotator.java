@@ -178,9 +178,9 @@ public class GoAnnotator implements Annotator {
         }
         else if (element instanceof GoFunctionDeclaration) {
           GoFunctionDeclaration declaration = (GoFunctionDeclaration)element;
-          if (declaration.getIdentifier().textMatches(GoConstants.INIT) || declaration.getIdentifier().textMatches(GoConstants.MAIN) &&
-                                                                           GoConstants.MAIN
-                                                                             .equals(declaration.getContainingFile().getPackageName())) {
+          if (declaration.getIdentifier().textMatches(GoConstants.INIT) ||
+              declaration.getIdentifier().textMatches(GoConstants.MAIN) &&
+              GoConstants.MAIN.equals(declaration.getContainingFile().getPackageName())) {
             GoSignature signature = declaration.getSignature();
             if (signature != null) {
               GoResult result = signature.getResult();
@@ -203,17 +203,17 @@ public class GoAnnotator implements Annotator {
     else if (element instanceof GoIndexOrSliceExpr) {
       GoIndexOrSliceExpr slice = (GoIndexOrSliceExpr)element;
       GoExpression expr = slice.getExpression();
-      if (expr == null || slice.getIndices().third == null) {
+      GoExpression thirdIndex = slice.getIndices().third;
+      if (expr == null || thirdIndex == null) {
         return;
       }
       if (GoTypeUtil.isString(expr.getGoType(null))) {
         ASTNode[] colons = slice.getNode().getChildren(TokenSet.create(GoTypes.COLON));
-        if (colons.length == 2 && slice.getRbrack() != null) {
+        if (colons.length == 2) {
           PsiElement secondColon = colons[1].getPsi();
-          Annotation annotation =
-            holder.createErrorAnnotation(new TextRange(secondColon.getTextOffset(), slice.getRbrack().getTextOffset()),
-                                         "Invalid operation " + slice.getText() + " (3-index slice of string)");
-          annotation.registerFix(new GoDeleteRangeQuickFix(secondColon, slice.getRbrack().getPrevSibling(), "Delete third index"));
+          TextRange r = TextRange.create(secondColon.getTextRange().getStartOffset(), thirdIndex.getTextRange().getEndOffset());
+          Annotation annotation = holder.createErrorAnnotation(thirdIndex, "Invalid operation " + slice.getText() + " (3-index slice of string)");
+          annotation.registerFix(new GoDeleteRangeQuickFix(secondColon, thirdIndex, "Delete third index"));
         }
       }
     }

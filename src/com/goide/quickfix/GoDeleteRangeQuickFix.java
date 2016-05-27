@@ -29,9 +29,7 @@ import org.jetbrains.annotations.Nullable;
 public class GoDeleteRangeQuickFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   private final String myName;
 
-  public GoDeleteRangeQuickFix(@Nullable PsiElement startElement,
-                               @Nullable PsiElement endElement,
-                               String name) {
+  public GoDeleteRangeQuickFix(@Nullable PsiElement startElement, @Nullable PsiElement endElement, @NotNull String name) {
     super(startElement, endElement);
     myName = name;
   }
