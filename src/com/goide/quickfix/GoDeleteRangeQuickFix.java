@@ -17,20 +17,24 @@
 package com.goide.quickfix;
 
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoDeleteRangeQuickFix extends LocalQuickFixAndIntentionActionOnPsiElement {
+  private static final Logger LOG = Logger.getInstance(GoDeleteRangeQuickFix.class);
   private final String myName;
-
-  public GoDeleteRangeQuickFix(@Nullable PsiElement startElement, @Nullable PsiElement endElement, @NotNull String name) {
+  
+  public GoDeleteRangeQuickFix(@NotNull PsiElement startElement, @NotNull PsiElement endElement, @NotNull String name) {
     super(startElement, endElement);
+    if (!startElement.getParent().equals(endElement)) {
+      LOG.error("Cannot delete range of elements with different parents");
+    }
     myName = name;
   }
 
@@ -55,8 +59,8 @@ public class GoDeleteRangeQuickFix extends LocalQuickFixAndIntentionActionOnPsiE
                      @NotNull PsiElement start,
                      @NotNull PsiElement end) {
     if (start.isValid() && end.isValid()) {
-      PsiElement parent = PsiTreeUtil.findCommonParent(start, end);
-      if (parent != null) {
+      PsiElement parent = start.getParent();
+      if (parent != null && parent.equals(end.getParent())) {
         parent.getNode().removeRange(start.getNode(), end.getNode().getTreeNext());
       }
     }
