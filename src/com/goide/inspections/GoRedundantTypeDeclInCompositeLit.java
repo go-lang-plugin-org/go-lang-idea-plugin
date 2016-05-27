@@ -17,6 +17,7 @@
 package com.goide.inspections;
 
 import com.goide.psi.*;
+import com.goide.quickfix.GoDeleteAmpersandAndTypeInCompositeLitQuickFix;
 import com.goide.quickfix.GoDeleteQuickFix;
 import com.intellij.codeInspection.CleanupLocalInspectionTool;
 import com.intellij.codeInspection.LocalInspectionToolSession;
@@ -58,7 +59,8 @@ public class GoRedundantTypeDeclInCompositeLit extends GoInspectionBase implemen
                       holder.registerProblem(holder.getManager().createProblemDescriptor(bitAnd, typeExpr,
                                                                                          "Redundant type declaration",
                                                                                          ProblemHighlightType.LIKE_UNUSED_SYMBOL,
-                                                                                         holder.isOnTheFly()));
+                                                                                         holder.isOnTheFly(),
+                                                                                         new GoDeleteAmpersandAndTypeInCompositeLitQuickFix()));
                     }
                   }
                 }

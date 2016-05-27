@@ -74,7 +74,7 @@ public class GoRedundantTypeDeclInCompositeLitTest extends GoQuickFixTestBase {
 
   //Test Composite literals with pointers *T == &T
   public void testCompositeLitWithPointers() {
-    doTestNoFix(GoRedundantTypeDeclInCompositeLit.DELETE_TYPE_DECLARATION_QUICK_FIX_NAME, true);
+    doTest(GoRedundantTypeDeclInCompositeLit.DELETE_TYPE_DECLARATION_QUICK_FIX_NAME, true);
   }
 
   public void testCompositeLitWithPointersNoFix() {
