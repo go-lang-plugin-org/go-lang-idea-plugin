@@ -17,17 +17,17 @@
 package com.goide.inspections;
 
 import com.goide.psi.*;
-import com.goide.quickfix.GoDeleteQuickFix;
-import com.intellij.codeInspection.*;
+import com.goide.quickfix.GoDeleteRangeQuickFix;
+import com.intellij.codeInspection.CleanupLocalInspectionTool;
+import com.intellij.codeInspection.LocalInspectionToolSession;
+import com.intellij.codeInspection.ProblemHighlightType;
+import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoRedundantTypeDeclInCompositeLit extends GoInspectionBase implements CleanupLocalInspectionTool {
   public final static String DELETE_REDUNDANT_TYPE_DECLARATION_QUICK_FIX_NAME = "Delete redundant type declaration";
-  private static final GoDeleteQuickFix DELETE_REDUNDANT_TYPE_DECLARATION_QUICK_FIX =
-    new GoDeleteQuickFix(DELETE_REDUNDANT_TYPE_DECLARATION_QUICK_FIX_NAME, GoTypeReferenceExpression.class);
-
 
   @NotNull
   @Override
@@ -84,10 +84,10 @@ public class GoRedundantTypeDeclInCompositeLit extends GoInspectionBase implemen
                                                               @Nullable PsiElement start,
                                                               @Nullable GoTypeReferenceExpression end) {
     if (start != null && end != null) {
-      ProblemDescriptor descriptor = holder.getManager().createProblemDescriptor(start, end, "Redundant type declaration",
-                                                                                 ProblemHighlightType.LIKE_UNUSED_SYMBOL, true,
-                                                                                 DELETE_REDUNDANT_TYPE_DECLARATION_QUICK_FIX);
-      holder.registerProblem(descriptor);
+      GoDeleteRangeQuickFix fix = new GoDeleteRangeQuickFix(start, end, DELETE_REDUNDANT_TYPE_DECLARATION_QUICK_FIX_NAME);
+      holder.registerProblem(holder.getManager().createProblemDescriptor(start, end, "Redundant type declaration",
+                                                                         ProblemHighlightType.LIKE_UNUSED_SYMBOL, holder.isOnTheFly(),
+                                                                         fix));
     }
   }
 
