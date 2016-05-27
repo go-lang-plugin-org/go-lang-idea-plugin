@@ -51,7 +51,6 @@ public class GoDeleteRangeQuickFix extends LocalQuickFixAndIntentionActionOnPsiE
     return "Delete elements";
   }
 
-  //delete range include start,end
   @Override
   public void invoke(@NotNull Project project,
                      @NotNull PsiFile file,
