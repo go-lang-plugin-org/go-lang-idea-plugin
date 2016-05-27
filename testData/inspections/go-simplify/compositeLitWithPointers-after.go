@@ -5,7 +5,7 @@ type T struct {
 }
 
 var _ = []*T{
-	&T{1, 2},
+	{1, 2},
 }
 
 func main (){

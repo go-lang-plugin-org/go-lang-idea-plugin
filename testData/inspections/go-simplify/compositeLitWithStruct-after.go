@@ -7,7 +7,7 @@ type T struct {
 var _ = map[string]struct {
 	x, y int
 }{
-	struct{ x, y <caret>int }{3, 4},
+	{3, 4},
 }
 
 func main (){

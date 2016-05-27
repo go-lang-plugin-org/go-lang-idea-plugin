@@ -5,7 +5,7 @@ type T struct {
 }
 
 var _ = [][]int{
-	[]int<caret>{3, 4},
+	{3, 4},
 }
 
 func main (){
