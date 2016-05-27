@@ -44,8 +44,9 @@ public class GoRedundantTypeDeclInCompositeLit extends GoInspectionBase implemen
 
         if (expectedType != null) {
           for (GoElement element : literalValue.getElementList()) {
-            if (element.getValue() != null) {
-              GoExpression expr = element.getValue().getExpression();
+            GoValue elementValue = element.getValue();
+            if (elementValue != null) {
+              GoExpression expr = elementValue.getExpression();
               if (expectedType instanceof GoPointerType && expr instanceof GoUnaryExpr) {
                 GoUnaryExpr unaryExpr = (GoUnaryExpr)expr;
                 PsiElement bitAnd = unaryExpr.getBitAnd();
@@ -82,13 +83,12 @@ public class GoRedundantTypeDeclInCompositeLit extends GoInspectionBase implemen
   private static void registerRedundantTypeDeclarationProblem(@NotNull final ProblemsHolder holder,
                                                               @Nullable PsiElement start,
                                                               @Nullable GoTypeReferenceExpression end) {
-    if (start == null || end == null) {
-      return;
+    if (start != null && end != null) {
+      ProblemDescriptor descriptor = holder.getManager().createProblemDescriptor(start, end, "Redundant type declaration",
+                                                                                 ProblemHighlightType.LIKE_UNUSED_SYMBOL, true,
+                                                                                 DELETE_REDUNDANT_TYPE_DECLARATION_QUICK_FIX);
+      holder.registerProblem(descriptor);
     }
-    ProblemDescriptor descriptor = holder.getManager().createProblemDescriptor(start, end, "Redundant type declaration",
-                                                                               ProblemHighlightType.LIKE_UNUSED_SYMBOL, true,
-                                                                               DELETE_REDUNDANT_TYPE_DECLARATION_QUICK_FIX);
-    holder.registerProblem(descriptor);
   }
 
   private static boolean isTypeReferencesEquals(@Nullable GoType pattern, @NotNull GoCompositeLit value) {
