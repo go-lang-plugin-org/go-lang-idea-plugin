@@ -32,7 +32,7 @@ public class GoDeleteRangeQuickFix extends LocalQuickFixAndIntentionActionOnPsiE
   
   public GoDeleteRangeQuickFix(@NotNull PsiElement startElement, @NotNull PsiElement endElement, @NotNull String name) {
     super(startElement, endElement);
-    if (!startElement.getParent().equals(endElement)) {
+    if (!startElement.getParent().equals(endElement.getParent())) {
       LOG.error("Cannot delete range of elements with different parents");
     }
     myName = name;
