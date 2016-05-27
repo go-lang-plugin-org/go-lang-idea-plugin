@@ -105,9 +105,12 @@ public class GoAnnotator implements Annotator {
     else if (element instanceof GoCompositeLit) {
       GoCompositeLit literal = (GoCompositeLit)element;
       if (literal.getType() instanceof GoMapType) {
-        for (GoElement literalElement : literal.getLiteralValue().getElementList()) {
-          if (literalElement.getKey() == null) {
-            holder.createErrorAnnotation(literalElement, "Missing key in map literal");
+        GoLiteralValue literalValue = literal.getLiteralValue();
+        if (literalValue != null) {
+          for (GoElement literalElement : literalValue.getElementList()) {
+            if (literalElement.getKey() == null) {
+              holder.createErrorAnnotation(literalElement, "Missing key in map literal");
+            }
           }
         }
       }
@@ -212,7 +215,7 @@ public class GoAnnotator implements Annotator {
         if (colons.length == 2) {
           PsiElement secondColon = colons[1].getPsi();
           TextRange r = TextRange.create(secondColon.getTextRange().getStartOffset(), thirdIndex.getTextRange().getEndOffset());
-          Annotation annotation = holder.createErrorAnnotation(thirdIndex, "Invalid operation " + slice.getText() + " (3-index slice of string)");
+          Annotation annotation = holder.createErrorAnnotation(r, "Invalid operation " + slice.getText() + " (3-index slice of string)");
           annotation.registerFix(new GoDeleteRangeQuickFix(secondColon, thirdIndex, "Delete third index"));
         }
       }
