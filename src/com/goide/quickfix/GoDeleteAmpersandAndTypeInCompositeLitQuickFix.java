@@ -19,6 +19,7 @@ package com.goide.quickfix;
 import com.goide.inspections.GoRedundantTypeDeclInCompositeLit;
 import com.goide.psi.GoCompositeLit;
 import com.goide.psi.GoExpression;
+import com.goide.psi.GoLiteralValue;
 import com.goide.psi.GoUnaryExpr;
 import com.intellij.codeInspection.LocalQuickFixBase;
 import com.intellij.codeInspection.ProblemDescriptor;
@@ -39,9 +40,9 @@ public class GoDeleteAmpersandAndTypeInCompositeLitQuickFix extends LocalQuickFi
       GoUnaryExpr unaryExpr = (GoUnaryExpr)element;
       GoExpression expr = unaryExpr.getExpression();
       if (unaryExpr.getBitAnd() != null && expr instanceof GoCompositeLit) {
-        GoCompositeLit compositeLit = (GoCompositeLit)expr;
-        if (compositeLit.getLiteralValue() != null) {
-          unaryExpr.replace(compositeLit.getLiteralValue());
+        GoLiteralValue literalValue = ((GoCompositeLit)expr).getLiteralValue();
+        if (literalValue != null) {
+          unaryExpr.replace(literalValue);
         }
       }
     }
