@@ -3,8 +3,8 @@ package main
 import "fmt"
 
 func main() {
-    fmt.Println(test())
-    fmt.Println(test2())
+    fmt.Println(<warning descr="Final return type of 'test()' is a function not a function call">test()</warning>)
+    fmt.Println(<warning descr="Final return type of 'test2()' is a function not a function call">test2()</warning>)
     test3()
     test4()
     test5()

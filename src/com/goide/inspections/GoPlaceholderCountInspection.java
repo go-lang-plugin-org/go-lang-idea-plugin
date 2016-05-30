@@ -16,142 +16,26 @@
 
 package com.goide.inspections;
 
+import com.goide.inspections.GoPlaceholderChecker.Placeholder;
+import com.goide.inspections.GoPlaceholderChecker.PrintVerb;
 import com.goide.psi.*;
+import com.goide.psi.impl.GoPsiImplUtil;
+import com.goide.psi.impl.GoTypeUtil;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.openapi.util.Pair;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.ElementManipulators;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
-import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static com.goide.GoConstants.TESTING_PATH;
 
 public class GoPlaceholderCountInspection extends GoInspectionBase {
-  private static final Pattern PLACEHOLDER_PATTERN =
-    Pattern.compile("((?<!(?:[^%]%|%%%))%(?:#|\\+|-)?((\\[\\d+\\]|\\*?)?\\.?)*(\\d*\\.?\\d*)*\\s?(v|T|t|b|c|d|o|q|x|X|U|b|e|E|f|F|g|G|s|q|x|X|p))");
-
-  private static final Pattern INDEXED_PLACEHOLDER_PATTERN = Pattern.compile("(?:\\[(\\d+)\\])");
-
-  // This holds the name of the known formatting functions and position of the string to be formatted
-  private static final Map<String, Integer> FORMATTING_FUNCTIONS = ContainerUtil.newHashMap(
-    Pair.pair("printf", 0),
-    Pair.pair("sprintf", 0),
-    Pair.pair("errorf", 0),
-    Pair.pair("fprintf", 1),
-    Pair.pair("fscanf", 1),
-    Pair.pair("scanf", 0),
-    Pair.pair("sscanf", 1),
-    Pair.pair("fatalf", 0),
-    Pair.pair("panicf", 0),
-    Pair.pair("logf", 0),
-    Pair.pair("skipf", 0));
-
-  private static int getPlaceholderPosition(@NotNull GoFunctionOrMethodDeclaration function) {
-    Integer position = FORMATTING_FUNCTIONS.get(StringUtil.toLowerCase(function.getName()));
-    if (position != null) {
-      String importPath = function.getContainingFile().getImportPath(false);
-      if ("fmt".equals(importPath) || "log".equals(importPath) || TESTING_PATH.equals(importPath)) {
-        return position;
-      }
-    }
-    return -1;
-  }
-
-  private static int getPlaceholders(@Nullable GoExpression argument) {
-    if (argument == null) return -1;
-
-    String placeholderText = resolve(argument);
-    if (placeholderText == null) return -1;
-
-    Matcher placeholders = PLACEHOLDER_PATTERN.matcher(placeholderText);
-    Matcher countPlaceholders;
-
-    int indexCount = 0;
-    int maxIndexCount = 0;
-
-    while (placeholders.find()) {
-      indexCount++;
-
-      countPlaceholders = INDEXED_PLACEHOLDER_PATTERN.matcher(placeholders.group());
-      while (countPlaceholders.find()) {
-        int index = StringUtil.parseInt(countPlaceholders.group().replaceAll("\\[|\\]", ""), -1);
-        if (index > 0 && index != indexCount) {
-          indexCount = index;
-        }
-        if (maxIndexCount < indexCount) {
-          maxIndexCount = indexCount;
-        }
-      }
-      if (maxIndexCount < indexCount) {
-        maxIndexCount = indexCount;
-      }
-    }
-
-    return maxIndexCount;
-  }
-  
-  private static boolean isStringPlaceholder(GoExpression argument) {
-    GoType goType = argument.getGoType(null);
-    GoTypeReferenceExpression typeReferenceExpression = goType != null ? goType.getTypeReferenceExpression() : null;
-    return typeReferenceExpression != null && typeReferenceExpression.textMatches("string");
-  }
-
-  @Nullable
-  private static String resolve(@NotNull GoExpression argument) {
-    if (argument instanceof GoStringLiteral) return argument.getText();
-
-    PsiReference reference = argument.getReference();
-    PsiElement resolved = reference != null ? reference.resolve() : null;
-
-    if (resolved instanceof GoVarDefinition) {
-      return getValue(((GoVarDefinition)resolved).getValue());
-    }
-    if (resolved instanceof GoConstDefinition) {
-      return getValue(((GoConstDefinition)resolved).getValue());
-    }
-
-    return null;
-  }
-
-  // todo: implement ConstEvaluator
-  @Nullable
-  private static String getValue(@Nullable GoExpression expression) {
-    if (expression instanceof GoStringLiteral) {
-      return expression.getText();
-    }
-    if (expression instanceof GoAddExpr) {
-      String sum = getValue((GoAddExpr)expression);
-      return sum.isEmpty() ? null : sum;
-    }
-
-    return null;
-  }
-
-  // todo: implement ConstEvaluator
-  @NotNull
-  private static String getValue(@Nullable GoAddExpr expression) {
-    if (expression == null) return "";
-    StringBuilder result = new StringBuilder();
-    for (GoExpression expr : expression.getExpressionList()) {
-      if (expr instanceof GoStringLiteral) {
-        result.append(expr.getText());
-      }
-      else if (expr instanceof GoAddExpr) {
-        result.append(getValue(expr));
-      }
-    }
-
-    return result.toString();
-  }
 
   @NotNull
   @Override
@@ -162,24 +46,291 @@ public class GoPlaceholderCountInspection extends GoInspectionBase {
         PsiReference psiReference = o.getExpression().getReference();
         PsiElement resolved = psiReference != null ? psiReference.resolve() : null;
         if (!(resolved instanceof GoFunctionOrMethodDeclaration)) return;
-        int placeholderPosition = getPlaceholderPosition((GoFunctionOrMethodDeclaration)resolved);
-        List<GoExpression> arguments = o.getArgumentList().getExpressionList();
-        if (placeholderPosition < 0 || arguments.size() <= placeholderPosition) return;
-        
-        GoExpression placeholder = arguments.get(placeholderPosition);
-        if (!isStringPlaceholder(placeholder)) {
-          String message = "Value used for formatting text does not appear to be a string";
-          holder.registerProblem(placeholder, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
-          return;
+
+        String functionName = StringUtil.toLowerCase(((GoFunctionOrMethodDeclaration)resolved).getName());
+        if (functionName == null) return;
+
+        if (GoPlaceholderChecker.isFormattingFunction(functionName)) {
+          checkPrintf(holder, o, (GoFunctionOrMethodDeclaration)resolved);
         }
-
-        int parameterCount = arguments.size() - placeholderPosition - 1;
-        int placeholdersCount = getPlaceholders(placeholder);
-        if (placeholdersCount == -1 || placeholdersCount == parameterCount) return;
-
-        String message = String.format("Got %d placeholder(s) for %d arguments(s)", placeholdersCount, parameterCount);
-        holder.registerProblem(placeholder, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+        else if (GoPlaceholderChecker.isPrintingFunction(functionName)) {
+          checkPrint(holder, o, (GoFunctionOrMethodDeclaration)resolved);
+        }
       }
     };
+  }
+
+  private static void checkPrint(@NotNull ProblemsHolder holder,
+                                 @NotNull GoCallExpr callExpr,
+                                 @NotNull GoFunctionOrMethodDeclaration declaration) {
+
+    List<GoExpression> arguments = callExpr.getArgumentList().getExpressionList();
+    if (arguments.isEmpty()) return;
+
+    GoExpression firstArg = arguments.get(0);
+    if (GoTypeUtil.isString(firstArg.getGoType(null))) {
+      String firstArgText = resolve(firstArg);
+      if (firstArgText != null) {
+        if (GoPlaceholderChecker.hasPlaceholder(firstArgText)) {
+          String message = "Possible formatting directive in <code>#ref</code> #loc";
+          holder.registerProblem(firstArg, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+          return;
+        }
+      }
+    }
+
+    // TODO florin: Check first argument for os.Std* output
+    // Ref code: https://github.com/golang/go/blob/79f7ccf2c3931745aeb97c5c985b6ac7b44befb4/src/cmd/vet/print.go#L617
+
+    String declarationName = declaration.getName();
+    boolean isLn = declarationName != null && declarationName.endsWith("ln");
+    for (GoExpression argument : arguments) {
+      GoType goType = argument.getGoType(null);
+      if (isLn && GoTypeUtil.isString(goType)) {
+        String argText = resolve(argument);
+        if (argText != null && argText.endsWith("\\n")) {
+          String message = "Function already ends with new line #loc";
+          TextRange range = TextRange.create(argText.length() - 1, argText.length() + 1);
+          // TODO florin: add quickfix to remove trailing \n
+          // TODO florin: add quickfix to convert \n to a separate argument
+          holder.registerProblem(argument, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, range);
+        }
+      }
+      else if (GoTypeUtil.isFunction(goType)) {
+        String message = "Argument <code>#ref</code> is not a function call #loc";
+        if (argument instanceof GoCallExpr) {
+          message = "Final return type of <code>#ref</code> is a function not a function call #loc";
+        }
+        // TODO florin: add quickfix to convert to function call if possible
+        holder.registerProblem(argument, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+      }
+    }
+  }
+
+  private static void checkPrintf(@NotNull ProblemsHolder holder,
+                                  @NotNull GoCallExpr callExpr,
+                                  @NotNull GoFunctionOrMethodDeclaration declaration) {
+
+    int placeholderPosition = GoPlaceholderChecker.getPlaceholderPosition(declaration);
+    List<GoExpression> arguments = callExpr.getArgumentList().getExpressionList();
+    if (arguments.isEmpty()) return;
+    int callArgsNum = arguments.size();
+    if (placeholderPosition < 0 || callArgsNum <= placeholderPosition) return;
+
+    GoExpression placeholder = arguments.get(placeholderPosition);
+    if (!GoTypeUtil.isString(placeholder.getGoType(null))) {
+      String message = "Value used for formatting text does not appear to be a string #loc";
+      holder.registerProblem(placeholder, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+      return;
+    }
+
+    String placeholderText = resolve(placeholder);
+    if (placeholderText == null) return;
+
+    if (!GoPlaceholderChecker.hasPlaceholder(placeholderText) && callArgsNum > placeholderPosition) {
+      String message = "Value used for formatting text does not appear to contain a placeholder #loc";
+      holder.registerProblem(placeholder, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+      return;
+    }
+
+    callArgsNum--;
+    List<Placeholder> placeholders = GoPlaceholderChecker.parsePrintf(placeholderText);
+    for (Placeholder fmtPlaceholder : placeholders) {
+      if (!checkPrintfArgument(holder, placeholder, callExpr, arguments, callArgsNum, placeholderPosition, fmtPlaceholder)) return;
+    }
+
+    if (hasErrors(holder, placeholder, placeholders)) return;
+    // TODO florin check to see if we are skipping any argument from the formatting string
+    int maxArgsNum = computeMaxArgsNum(placeholders, placeholderPosition);
+
+    if (GoPsiImplUtil.hasVariadic(callExpr.getArgumentList()) && maxArgsNum >= callArgsNum) {
+      return;
+    }
+
+    if (maxArgsNum != callArgsNum) {
+      int expect = maxArgsNum - placeholderPosition;
+      int numArgs = callArgsNum - placeholderPosition;
+      String message = String.format("Got %d placeholder(s) for %d arguments(s) #loc", expect, numArgs);
+      holder.registerProblem(placeholder, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+    }
+
+    // TODO florin: check if all arguments are strings and add quickfix to replace with Println and string concat
+  }
+
+  private static int computeMaxArgsNum(@NotNull List<Placeholder> placeholders, int firstArg) {
+    int maxArgsNum = 0;
+    for (Placeholder placeholder : placeholders) {
+      List<Integer> arguments = placeholder.getArguments();
+      if (arguments.isEmpty()) continue;
+      int max = Collections.max(arguments);
+      if (maxArgsNum < max) {
+        maxArgsNum = max;
+      }
+    }
+
+    return maxArgsNum + firstArg;
+  }
+
+  private static boolean hasErrors(@NotNull ProblemsHolder holder,
+                                   @NotNull GoExpression formatPlaceholder,
+                                   @NotNull List<Placeholder> placeholders) {
+
+    for (Placeholder placeholder : placeholders) {
+      Placeholder.State state = placeholder.getState();
+      if (state == Placeholder.State.MISSING_VERB_AT_END) {
+        String message = "Missing verb at end of format string in <code>#ref</code> call #loc";
+        holder.registerProblem(formatPlaceholder, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+        return true;
+      }
+
+      if (state == Placeholder.State.ARGUMENT_INDEX_NOT_NUMERIC) {
+        String message = "Illegal syntax for <code>#ref</code> argument index, expecting a number #loc";
+        holder.registerProblem(formatPlaceholder, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  private static boolean checkPrintfArgument(@NotNull ProblemsHolder holder,
+                                             @NotNull GoExpression placeholder,
+                                             @NotNull GoCallExpr callExpr,
+                                             @NotNull List<GoExpression> arguments,
+                                             int callArgsNum,
+                                             int firstArg,
+                                             @NotNull Placeholder fmtPlaceholder) {
+
+    PrintVerb v = fmtPlaceholder.getVerb();
+    if (v == null) {
+      String message = "Unrecognized formatting verb <code>#ref</code> call #loc";
+      TextRange range = TextRange.create(fmtPlaceholder.getStartPos() + 1,
+                                         fmtPlaceholder.getStartPos() + 1 + fmtPlaceholder.getPlaceholder().length());
+      // TODO florin: add quickfix to suggest correct printf verbs (maybe take type into account when type info available?)
+      holder.registerProblem(placeholder, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, range);
+      return false;
+    }
+
+    String flags = fmtPlaceholder.getFlags();
+    for (int i = 0; i < flags.length(); i++) {
+      char flag = flags.charAt(i);
+      if (v.getFlags().indexOf(flag) == -1) {
+        String message = String.format("Unrecognized <code>#ref</code> flag for verb %s: %s call #loc", v.getVerb(), flag);
+        TextRange range = TextRange.create(fmtPlaceholder.getStartPos() + 1, fmtPlaceholder.getPlaceholder().length() + 1);
+        // TODO florin: add quickfix to suggest correct printf verbs (maybe take type into account when type info available?)
+        holder.registerProblem(placeholder, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, range);
+        return false;
+      }
+    }
+
+    List<Integer> args = fmtPlaceholder.getArguments();
+    // Verb is good. If len(state.argNums)>trueArgs, we have something like %.*s and all
+    // but the final arg must be an integer.
+    int trueArgs = v == PrintVerb.Percent ? 0 : 1;
+    int nargs = args.size();
+    for (int i = 0; i < nargs - trueArgs; i++) {
+      if (!checkArgumentIndex(holder, placeholder, callExpr, fmtPlaceholder, callArgsNum)) return false;
+      // TODO florin: add argument matching when type comparison can be done
+      // Ref code: https://github.com/golang/go/blob/79f7ccf2c3931745aeb97c5c985b6ac7b44befb4/src/cmd/vet/print.go#L484
+    }
+
+    if (v == PrintVerb.Percent) return true;
+
+    if (!checkArgumentIndex(holder, placeholder, callExpr, fmtPlaceholder, callArgsNum)) return false;
+
+    int argNum = args.get(args.size() - 1);
+    GoExpression expression = arguments.get(argNum + firstArg - 1);
+    if (GoTypeUtil.isFunction(expression.getGoType(null)) && v != PrintVerb.p && v != PrintVerb.T) {
+      String message = "Argument <code>#ref</code> is not a function call #loc";
+      if (expression instanceof GoCallExpr) {
+        message = "Final return type of <code>#ref</code> is a function not a function call #loc";
+      }
+      // TODO florin: add quickfix for this to transform it into a function call
+      holder.registerProblem(expression, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+      return false;
+    }
+
+    // TODO florin: add argument matching when type comparison can be done
+    // Ref code: https://github.com/golang/go/blob/79f7ccf2c3931745aeb97c5c985b6ac7b44befb4/src/cmd/vet/print.go#L502
+
+    return true;
+  }
+
+  private static boolean checkArgumentIndex(@NotNull ProblemsHolder holder,
+                                            @NotNull GoExpression placeholder,
+                                            @NotNull GoCallExpr callExpr,
+                                            @NotNull Placeholder fmtPlaceholder,
+                                            int callArgsNum) {
+
+    int argNum = fmtPlaceholder.getPosition();
+    if (argNum < 0) return false;
+
+    if (argNum == 0) {
+      TextRange range = TextRange.create(fmtPlaceholder.getStartPos() + 3, fmtPlaceholder.getStartPos() + 4);
+      // TODO florin: add quickfix to suggest placeholder value
+      holder.registerProblem(placeholder, "Index value [0] is not allowed #loc", ProblemHighlightType.GENERIC_ERROR_OR_WARNING, range);
+      return false;
+    }
+
+    if (argNum < callArgsNum) return true;
+    if (GoPsiImplUtil.hasVariadic(callExpr.getArgumentList())) return false;
+    if (argNum == callArgsNum) return true;
+
+    // There are bad indexes in the format or there are fewer arguments than the format needs
+    // This is the argument number relative to the format: Printf("%s", "hi") will give 1 for the "hi"
+    int arg = fmtPlaceholder.getPosition();
+    String message = String.format("Got %d placeholder(s) for %d arguments(s)", arg, callArgsNum);
+    holder.registerProblem(placeholder, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+    return false;
+  }
+
+  @Nullable
+  private static String resolve(@NotNull GoExpression argument) {
+    if (argument instanceof GoStringLiteral) return ElementManipulators.getValueText(argument);
+
+    PsiReference reference = argument.getReference();
+    PsiElement resolved = reference != null ? reference.resolve() : null;
+
+    String value = null;
+    if (resolved instanceof GoVarDefinition) {
+      value = getValue(((GoVarDefinition)resolved).getValue());
+    }
+    else if (resolved instanceof GoConstDefinition) {
+      value = getValue(((GoConstDefinition)resolved).getValue());
+    }
+
+    return value;
+  }
+
+  // todo: implement ConstEvaluator
+  @Nullable
+  private static String getValue(@Nullable GoExpression expression) {
+    if (expression instanceof GoStringLiteral) {
+      return ElementManipulators.getValueText(expression);
+    }
+    if (expression instanceof GoAddExpr) {
+      return StringUtil.nullize(getValue((GoAddExpr)expression));
+    }
+
+    return null;
+  }
+
+  // todo: implement ConstEvaluator
+  @Nullable
+  private static String getValue(@Nullable GoAddExpr expression) {
+    if (expression == null) return null;
+    StringBuilder result = new StringBuilder();
+    for (GoExpression expr : expression.getExpressionList()) {
+      if (expr instanceof GoStringLiteral) {
+        result.append(ElementManipulators.getValueText(expr));
+      }
+      else if (expr instanceof GoAddExpr) {
+        // TODO Should we abort and return null here?
+        String value = getValue(expr);
+        if (value != null) result.append(value);
+      }
+    }
+
+    return result.toString();
   }
 }

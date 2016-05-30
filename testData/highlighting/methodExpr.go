@@ -31,8 +31,8 @@ func _() {
 	(T).Mv(t, 7)
 	f1 := T.Mv; f1(t, 7)
 	f2 := (T).Mv; f2(t, 7)
-	fmt.Println((*T).Mp)
-	fmt.Println((*T).Mv)
+	fmt.Println((*T).Mp())
+	fmt.Println((*T).Mv())
 }
 
 type Type interface {
@@ -50,5 +50,5 @@ func (t ArrayType) Size() int64 {
 func _(t *Type) {
     at, _ := (*t).(*ArrayType)
     println(at.Type)
-    println(at.Type.Size)
+    println(at.Type.Size())
 }
