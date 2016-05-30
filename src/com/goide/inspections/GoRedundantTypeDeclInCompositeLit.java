@@ -56,11 +56,10 @@ public class GoRedundantTypeDeclInCompositeLit extends GoInspectionBase implemen
                   if (isTypeReferencesEquals(((GoPointerType)expectedType).getType(), compositeLit)) {
                     GoTypeReferenceExpression typeExpr = compositeLit.getTypeReferenceExpression();
                     if (typeExpr != null) {
-                      holder.registerProblem(holder.getManager().createProblemDescriptor(bitAnd, typeExpr,
-                                                                                         "Redundant type declaration",
+                      GoDeleteAmpersandAndTypeInCompositeLitQuickFix fix = new GoDeleteAmpersandAndTypeInCompositeLitQuickFix();
+                      holder.registerProblem(holder.getManager().createProblemDescriptor(bitAnd, typeExpr, "Redundant type declaration",
                                                                                          ProblemHighlightType.LIKE_UNUSED_SYMBOL,
-                                                                                         holder.isOnTheFly(),
-                                                                                         new GoDeleteAmpersandAndTypeInCompositeLitQuickFix()));
+                                                                                         holder.isOnTheFly(), fix));
                     }
                   }
                 }
@@ -69,7 +68,7 @@ public class GoRedundantTypeDeclInCompositeLit extends GoInspectionBase implemen
                 GoTypeReferenceExpression typeExpr = ((GoCompositeLit)expr).getTypeReferenceExpression();
                 if (typeExpr != null) {
                   GoDeleteQuickFix fix = new GoDeleteQuickFix(DELETE_TYPE_DECLARATION_QUICK_FIX_NAME, GoTypeReferenceExpression.class);
-                  holder.registerProblem(typeExpr, "Redundant type declaration", fix);
+                  holder.registerProblem(typeExpr, "Redundant type declaration", ProblemHighlightType.LIKE_UNUSED_SYMBOL, fix);
                 }
               }
             }
