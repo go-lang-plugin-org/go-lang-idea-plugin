@@ -3,6 +3,8 @@ package placeholderCount
 import "fmt"
 import "log"
 import "testing"
+import "unsafe"
+import "C"
 
 const (
 	myFormatConst      = "%d %d %#[1]x %#x %2.f %d %2.2f %.f %.3f %[9]*.[2]*[3]f %d %f %#[1]x %#x %[2]d %v % d"
@@ -107,4 +109,20 @@ func _(t *testing.T) {
 		1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
 	)
 	fmt.Sprintf(<warning descr="Got 1 placeholder(s) for 2 arguments(s)">"%d"</warning>, 1, 2)
+
+	fmt.Print(<warning descr="Possible formatting directive in '\"%[2]*.[1]*[3]d\"'">"%[2]*.[1]*[3]d"</warning>, 2, 3, myNonFormatFunc)
+	fmt.Print(<warning descr="Possible formatting directive in '\"%[2]*.[1]*[3]d\"'">"%[2]*.[1]*[3]d"</warning>, 2, 3, printf)
+
+	fmt.Println("demo<warning descr="Function already ends with new line">\n</warning>", 2, 3, <warning descr="Argument 'myNonFormatFunc' is not a function call">myNonFormatFunc</warning>)
+	fmt.Println("demo<warning descr="Function already ends with new line">\n</warning>", 2, 3, <warning descr="Argument 'printf' is not a function call">printf</warning>)
+
+	fmt.Print("demo\n", 2, 3, <warning descr="Argument 'myNonFormatFunc' is not a function call">myNonFormatFunc</warning>)
+	fmt.Print("demo\n", 2, 3, <warning descr="Argument 'printf' is not a function call">printf</warning>)
+
+	type X struct{ Y, Z int32 }
+	a := &X{5, 7}
+	fmt.Println(a, "->", C.sum(*((*C.struct_x)(unsafe.Pointer(a)))))
+
+	fmt.Sprintf("asdadad <warning descr="Unrecognized formatting verb '%O' call">%O</warning> asdadad", "demo")
+	fmt.Printf("%[<warning descr="Index value [0] is not allowed">0</warning>]d", 1)
 }

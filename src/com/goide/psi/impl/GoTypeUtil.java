@@ -61,7 +61,9 @@ public class GoTypeUtil {
   private static boolean isBuiltinType(@Nullable GoType type, @Nullable String builtinTypeName) {
     if (builtinTypeName == null) return false;
     type = type != null ? type.getUnderlyingType() : null;
-    return type != null && type.textMatches(builtinTypeName) && GoPsiImplUtil.builtin(type);
+    return type != null &&
+           !(type instanceof GoCType) &&
+           type.textMatches(builtinTypeName) && GoPsiImplUtil.builtin(type);
   }
 
   @NotNull
@@ -118,7 +120,7 @@ public class GoTypeUtil {
     if (statement == null) {
       return Collections.singletonList(getInterfaceIfNull(GoPsiImplUtil.getBuiltinType("bool", exprCaseClause), exprCaseClause));
     }
-    
+
     GoLeftHandExprList leftHandExprList = statement instanceof GoSimpleStatement ? ((GoSimpleStatement)statement).getLeftHandExprList() : null;
     GoExpression expr = leftHandExprList != null ? ContainerUtil.getFirstItem(leftHandExprList.getExpressionList()) : null;
     return Collections.singletonList(getGoType(expr, exprCaseClause));
@@ -237,7 +239,7 @@ public class GoTypeUtil {
       }
       return result;
     }
-    
+
     int position = assignment.getExpressionList().indexOf(expression);
     GoType leftExpression = leftExpressions.size() > position ? leftExpressions.get(position).getGoType(null) : null;
     return Collections.singletonList(getInterfaceIfNull(leftExpression, assignment));
@@ -264,5 +266,9 @@ public class GoTypeUtil {
   @NotNull
   private static GoType getGoType(@Nullable GoTypeOwner element, @NotNull PsiElement context) {
     return getInterfaceIfNull(element != null ? element.getGoType(null) : null, context);
+  }
+
+  public static boolean isFunction(@Nullable GoType goType) {
+    return goType != null && goType.getUnderlyingType() instanceof GoFunctionType;
   }
 }

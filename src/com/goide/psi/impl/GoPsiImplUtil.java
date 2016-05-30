@@ -573,6 +573,10 @@ public class GoPsiImplUtil {
     return stub != null ? stub.isVariadic() : o.getTripleDot() != null;
   }
 
+  public static boolean hasVariadic(@NotNull GoArgumentList argumentList) {
+    return argumentList.getTripleDot() != null;
+  }
+
   @Nullable
   public static GoType getGoTypeInner(@NotNull GoTypeSpec o, @SuppressWarnings("UnusedParameters") @Nullable ResolveState context) {
     return o.getSpecType();

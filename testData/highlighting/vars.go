@@ -72,8 +72,8 @@ var (
 
 func TestIdeaTimeApi() {
 	interval1.Nanoseconds()
-	fmt.Println("%T %T", interval1, interval2)
-	fmt.Println("%d %d", interval1.Nanoseconds(), interval2.Nanoseconds())
+	fmt.Printf("%T %T", interval1, interval2)
+	fmt.Printf("%d %d", interval1.Nanoseconds(), interval2.Nanoseconds())
 }
 
 func _() {

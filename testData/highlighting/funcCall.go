@@ -78,7 +78,7 @@ func <warning>Test23</warning>() (err error) {
 }
 
 func Demo() error {
-    return fmt.Errorf("err")
+    return fmt.Errorf("err %s", "a")
 }
 
 func <warning>main</warning>() {

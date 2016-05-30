@@ -145,6 +145,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testCyclicDefinition()          { doTest(); }
   public void testEmbeddedInterfacePointer()  { doTest(); }
   public void testPlaceholderCount()          { doTest(); }
+  public void testPlaceholderCountVet()       { doTest(); }
   public void testTypeConversion()            { doTest(); }
   public void testInit()                      { doTest(); }
   public void testMainWithWrongSignature()    { doTest(); }
