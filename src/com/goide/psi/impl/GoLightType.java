@@ -26,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class GoLightType<E extends GoCompositeElement> extends LightElement implements GoType {
+public abstract class GoLightType<E extends GoCompositeElement> extends LightElement implements GoType {
   @NotNull protected final E myElement;
 
   protected GoLightType(@NotNull E e) {
