@@ -230,6 +230,7 @@ public class GoFile extends PsiFileBase {
           }
           GoImportString string = spec.getImportString();
           PsiDirectory dir = string.resolve();
+          // todo[zolotov]: implement package modification tracker
           ContainerUtil.addIfNotNull(dependencies, dir);
           Collection<String> packagesInDirectory = GoPackageUtil.getAllPackagesInDirectory(dir, module, true);
           if (!packagesInDirectory.isEmpty()) {
