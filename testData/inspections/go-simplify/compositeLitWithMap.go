@@ -5,7 +5,7 @@ type T struct {
 }
 
 var _ = map[string]T{
-	"foo": <weak_warning descr="Redundant type declaration">T<caret></weak_warning>{},
+	"foo": <warning descr="Redundant type declaration">T<caret></warning>{},
 }
 
 func main (){

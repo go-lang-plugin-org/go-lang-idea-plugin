@@ -5,7 +5,7 @@ type T struct {
 }
 
 var _ = [42]T{
-	<weak_warning descr="Redundant type declaration">T<caret></weak_warning>{},
+	<warning descr="Redundant type declaration">T<caret></warning>{},
 }
 
 func main (){
