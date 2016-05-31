@@ -120,6 +120,7 @@ public class GoPackageUtil {
       public Result<Collection<String>> compute() {
         Module module = ModuleUtilCore.findModuleForPsiElement(dir);
         GoBuildTargetSettings buildTargetSettings = module != null ? GoModuleSettings.getInstance(module).getBuildTargetSettings() : null;
+        // todo[zolotov]: implement package modification tracker
         return buildTargetSettings != null
                ? Result.create(getAllPackagesInDirectoryInner(dir, module, trimTestSuffices), dir, buildTargetSettings)
                : Result.create(getAllPackagesInDirectoryInner(dir, null, trimTestSuffices), dir); 
