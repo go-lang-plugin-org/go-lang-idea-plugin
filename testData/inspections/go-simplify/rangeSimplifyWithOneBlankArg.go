@@ -4,7 +4,7 @@ func _() {
 
   var x []int
 
-  for <weak_warning descr="Redundant '_' expression">_ =<caret> </weak_warning>range x {
+  for <warning descr="Redundant '_' expression">_ =<caret> </warning>range x {
 
   }
 }

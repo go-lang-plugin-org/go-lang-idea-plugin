@@ -203,13 +203,13 @@
                      groupName="Declaration redundancy" enabledByDefault="true" level="WARNING"
                      implementationClass="com.goide.inspections.GoEmptyDeclarationInspection" cleanupTool="true"/>
     <localInspection language="go" displayName="Redundant second index in slices inspection" groupPath="Go"
-                     groupName="Declaration redundancy" enabledByDefault="true" level="WEAK WARNING"
+                     groupName="Declaration redundancy" enabledByDefault="true" level="WARNING"
                      implementationClass="com.goide.inspections.GoRedundantSecondIndexInSlicesInspection"/>
     <localInspection language="go" displayName="Redundant blank argument in range inspection" groupPath="Go"
-                     groupName="Declaration redundancy" enabledByDefault="true" level="WEAK WARNING"
+                     groupName="Declaration redundancy" enabledByDefault="true" level="WARNING"
                      implementationClass="com.goide.inspections.GoRedundantBlankArgInRangeInspection"/>
     <localInspection language="go" displayName="Redundant type declaration in composite literals" groupPath="Go"
-                     groupName="Declaration redundancy" enabledByDefault="true" level="WEAK WARNING"
+                     groupName="Declaration redundancy" enabledByDefault="true" level="WARNING"
                      implementationClass="com.goide.inspections.GoRedundantTypeDeclInCompositeLit"/>
     <!-- /unused inspections -->
 

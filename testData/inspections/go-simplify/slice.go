@@ -8,7 +8,7 @@ var (
     s byte
   }
 
-  _ = a[0: <weak_warning descr="Redundant index">len(a)<caret></weak_warning>]
+  _ = a[0: <warning descr="Redundant index">len(a)<caret></warning>]
 )
 
 func main (){
