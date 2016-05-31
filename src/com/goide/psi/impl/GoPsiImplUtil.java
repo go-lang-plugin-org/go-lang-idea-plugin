@@ -749,15 +749,14 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static List<GoMethodDeclaration> getMethods(@NotNull final GoTypeSpec o) {
-    List<GoMethodDeclaration> result = CachedValuesManager.getCachedValue(o, new CachedValueProvider<List<GoMethodDeclaration>>() {
+    return CachedValuesManager.getCachedValue(o, new CachedValueProvider<List<GoMethodDeclaration>>() {
       @Nullable
       @Override
       public Result<List<GoMethodDeclaration>> compute() {
-        PsiDirectory packageDirectory = o.getContainingFile().getOriginalFile().getParent();
-        return packageDirectory != null ? Result.create(calcMethods(o), packageDirectory) : null;
+        // todo[zolotov]: implement package modification tracker
+        return Result.create(calcMethods(o), PsiModificationTracker.MODIFICATION_COUNT);
       }
     });
-    return result != null ? result : calcMethods(o);
   }
 
   public static boolean allowed(@NotNull PsiFile declarationFile, @Nullable PsiFile referenceFile, @Nullable Module contextModule) {
