@@ -18,6 +18,7 @@ package com.goide.psi.impl;
 
 import com.goide.psi.*;
 import com.goide.stubs.GoTypeStub;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.light.LightElement;
 import com.intellij.psi.stubs.IStubElementType;
@@ -108,6 +109,11 @@ public abstract class GoLightType<E extends GoCompositeElement> extends LightEle
     public String toString() {
       return "MyGoTypeList{myTypes=" + myTypes + '}';
     }
+
+    @Override
+    public String getText() {
+      return StringUtil.join(getTypeList(), GoPsiImplUtil.GET_TEXT_FUNCTION, ", ");
+    }
   }
 
   static class LightFunctionType extends GoLightType<GoSignatureOwner> implements GoFunctionType {
@@ -175,5 +181,4 @@ public abstract class GoLightType<E extends GoCompositeElement> extends LightEle
       return null;
     }
   }
-
 }
