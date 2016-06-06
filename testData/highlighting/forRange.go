@@ -47,4 +47,14 @@ func _(a *Bits) {
 		fmt.Println(i)
 		fmt.Println(x)
 	}
+
+	for i, x := range <error descr="Cannot range over data (type int, int)">a2()</error> {
+        		fmt.Println(i)
+        		fmt.Println(x)
+        	}
+}
+
+func a2() (value int, error int){
+    value, error = 2, 3
+    return
 }
