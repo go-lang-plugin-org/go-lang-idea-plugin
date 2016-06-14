@@ -24,10 +24,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoNamesValidator implements NamesValidator {
+  @Override
   public boolean isKeyword(@NotNull String name, Project project) {
     return GoParserDefinition.KEYWORDS.contains(getLexerType(name));
   }
 
+  @Override
   public boolean isIdentifier(@NotNull String name, Project project) {
     return getLexerType(name) == GoTypes.IDENTIFIER;
   }
