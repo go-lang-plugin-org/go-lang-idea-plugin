@@ -130,6 +130,8 @@
     <iconProvider implementation="com.goide.GoIconProvider"/>
     <codeInsight.lineMarkerProvider language="go" implementationClass="com.goide.marker.GoRecursiveCallMarkerProvider"/>
 
+    <lang.unwrapDescriptor language="go" implementationClass="com.goide.codeInsight.unwrap.GoUnwrapDescriptor"/>
+
     <directoryProjectGenerator implementation="com.goide.GoProjectGenerator"/> <!-- for small IDEs-->
 
     <renamePsiElementProcessor implementation="com.goide.refactor.GoRenameImportSpecProcessor"/>
