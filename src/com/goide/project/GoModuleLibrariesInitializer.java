@@ -193,8 +193,12 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     for (String root : libraryModel.getUrls(OrderRootType.CLASSES)) {
       libraryModel.removeRoot(root, OrderRootType.CLASSES);
     }
+    for (String root : libraryModel.getUrls(OrderRootType.SOURCES)) {
+      libraryModel.removeRoot(root, OrderRootType.SOURCES);
+    }
     for (VirtualFile libraryRoot : libraryRoots) {
-      libraryModel.addRoot(libraryRoot, OrderRootType.CLASSES);
+      libraryModel.addRoot(libraryRoot, OrderRootType.CLASSES); // in order to consider GOPATH as library and show it in Ext. Libraries
+      libraryModel.addRoot(libraryRoot, OrderRootType.SOURCES); // in order to find usages inside GOPATH
     }
     for (VirtualFile root : exclusions) {
       ((LibraryEx.ModifiableModelEx)libraryModel).addExcludedRoot(root.getUrl());
