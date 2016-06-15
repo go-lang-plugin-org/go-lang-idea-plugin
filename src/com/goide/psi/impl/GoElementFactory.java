@@ -128,7 +128,7 @@ public class GoElementFactory {
     GoFile file = createFileFromText(project, "package a; func a() {\n for " + leftSide + " := range " + rightSide + "{\n}\n}");
     return PsiTreeUtil.findChildOfType(file, GoRangeClause.class);
   }
-  
+
   @NotNull
   public static GoRangeClause createRangeClauseAssignment(@NotNull Project project, @NotNull String leftSide, @NotNull String rightSide) {
     GoFile file = createFileFromText(project, "package a; func a() {\n for " + leftSide + " = range " + rightSide + "{\n}\n}");
@@ -140,7 +140,7 @@ public class GoElementFactory {
     GoFile file = createFileFromText(project, "package a; func a() {\n select { case " + leftSide + " := " + rightSide + ":\n}\n}");
     return PsiTreeUtil.findChildOfType(file, GoRecvStatement.class);
   }
-  
+
   @NotNull
   public static GoRecvStatement createRecvStatementAssignment(@NotNull Project project, @NotNull String left, @NotNull String right) {
     GoFile file = createFileFromText(project, "package a; func a() {\n select { case " + left + " = " + right + ":\n}\n}");
@@ -213,5 +213,17 @@ public class GoElementFactory {
     type = StringUtil.isNotEmpty(type) ? " " + type : "";
     value = StringUtil.isNotEmpty(value) ? " = " + value : "";
     return name + type + value;
+  }
+
+  @NotNull
+  public static GoTypeList createTypeList(@NotNull Project project, @NotNull String text) {
+    GoFile file = createFileFromText(project, "package a; func _() (" + text + "){}");
+    return PsiTreeUtil.findChildOfType(file, GoTypeList.class);
+  }
+
+  @NotNull
+  public static GoType createType(@NotNull Project project, @NotNull String text) {
+    GoFile file = createFileFromText(project, "package a; var a " + text);
+    return PsiTreeUtil.findChildOfType(file, GoType.class);
   }
 }
