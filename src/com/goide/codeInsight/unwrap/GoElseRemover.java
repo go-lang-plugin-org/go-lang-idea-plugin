@@ -16,7 +16,6 @@
 
 package com.goide.codeInsight.unwrap;
 
-import com.goide.psi.GoElseStatement;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
 

@@ -21,7 +21,6 @@ import com.goide.psi.impl.GoStatementImpl;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
 
-
 public class GoBracesUnwrapper extends GoUnwrapper {
   public GoBracesUnwrapper() {
     super("Unwrap braces");

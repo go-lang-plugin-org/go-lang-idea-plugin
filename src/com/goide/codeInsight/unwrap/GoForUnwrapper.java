@@ -16,6 +16,7 @@
 
 package com.goide.codeInsight.unwrap;
 
+import com.goide.psi.GoForClause;
 import com.goide.psi.GoForStatement;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
@@ -34,10 +35,10 @@ public class GoForUnwrapper extends GoUnwrapper {
   @Override
   protected void doUnwrap(PsiElement element, Context context) throws IncorrectOperationException {
     GoForStatement forStatement = (GoForStatement)element;
-    if (forStatement.getForClause() != null) {
-      context.extractElement(ContainerUtil.getFirstItem(forStatement.getForClause().getStatementList()), forStatement);
+    GoForClause forClause = forStatement.getForClause();
+    if (forClause != null) {
+      context.extractElement(ContainerUtil.getFirstItem(forClause.getStatementList()), forStatement);
     }
-
     context.extractFromBlock(forStatement.getBlock(), forStatement);
     context.delete(forStatement);
   }
