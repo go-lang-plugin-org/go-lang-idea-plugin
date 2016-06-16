@@ -21,6 +21,7 @@ import com.goide.psi.GoCallExpr;
 import com.goide.psi.GoExpression;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
+import com.intellij.util.ObjectUtils;
 
 import java.util.List;
 
@@ -31,14 +32,17 @@ public class GoFunctionArgumentUnwrapper extends GoUnwrapper {
 
   @Override
   public boolean isApplicableTo(PsiElement e) {
-    return e instanceof GoExpression && e.getParent() instanceof GoArgumentList;
+    return e instanceof GoExpression && e.getParent() instanceof GoArgumentList && e.getParent().getParent() instanceof GoCallExpr;
   }
 
   @Override
   protected void doUnwrap(PsiElement element, Context context) throws IncorrectOperationException {
-    GoCallExpr call = (GoCallExpr)element.getParent().getParent();
-    context.extractElement(element, call);
-    context.delete(call);
+    PsiElement parent = element.getParent();
+    GoCallExpr call = parent != null ? ObjectUtils.tryCast(parent.getParent(), GoCallExpr.class) : null;
+    if (call != null) {
+      context.extractElement(element, call);
+      context.delete(call);
+    }
   }
 
   @Override
