@@ -23,13 +23,10 @@ import com.intellij.codeInsight.unwrap.AbstractUnwrapper;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.impl.source.codeStyle.CodeEditUtil;
-import com.intellij.psi.impl.source.tree.RecursiveTreeElementVisitor;
-import com.intellij.psi.impl.source.tree.TreeElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class GoUnwrapper extends AbstractUnwrapper<GoUnwrapper.Context> {
-
   protected GoUnwrapper(String description) {
     super(description);
   }
@@ -61,15 +58,7 @@ public abstract class GoUnwrapper extends AbstractUnwrapper<GoUnwrapper.Context>
     @Override
     public void addElementToExtract(PsiElement e) {
       super.addElementToExtract(e);
-      if (myIsEffective) {
-        ((TreeElement)e.getNode()).acceptTree(new RecursiveTreeElementVisitor() {
-          @Override
-          protected boolean visitNode(TreeElement element) {
-            CodeEditUtil.setNodeGenerated(element, true);
-            return true;
-          }
-        });
-      }
+      CodeEditUtil.markToReformat(e.getNode(), true);
     }
 
     @Override
