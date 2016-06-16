@@ -16,6 +16,7 @@
 
 package com.goide.refactor;
 
+import com.goide.GoNamesValidator;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.psi.impl.GoTypeUtil;
@@ -31,6 +32,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class GoRefactoringUtil {
+  private final static GoNamesValidator namesValidator = new GoNamesValidator();
 
   private GoRefactoringUtil() {}
 
@@ -90,7 +92,7 @@ public class GoRefactoringUtil {
       if (callReference != null) {
         String name = StringUtil.decapitalize(callReference.getIdentifier().getText());
         for (String candidate : NameUtil.getSuggestionsByName(name, "", "", false, false, false)) {
-          if (!usedNames.contains(candidate)) names.add(candidate);
+          if (!usedNames.contains(candidate) && !namesValidator.isKeyword(candidate, null)) names.add(candidate);
         }
       }
     }
@@ -100,7 +102,7 @@ public class GoRefactoringUtil {
     if (StringUtil.isNotEmpty(typeText)) {
       boolean array = GoTypeUtil.isIterable(type) && !GoTypeUtil.isString(type);
       for (String candidate : NameUtil.getSuggestionsByName(typeText, "", "", false, false, array)) {
-        if (!usedNames.contains(candidate)) {
+        if (!usedNames.contains(candidate) && !typeText.equals(candidate) && !namesValidator.isKeyword(candidate, null)) {
           names.add(candidate);
         }
       }

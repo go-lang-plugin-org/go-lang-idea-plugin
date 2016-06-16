@@ -3,8 +3,8 @@ package a
 import "fmt"
 
 func a() {
-	int := Fmt()
-	a := int
+	i := Fmt()
+	a := i
 }
 
 func Fmt() int {
