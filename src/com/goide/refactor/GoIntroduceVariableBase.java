@@ -19,19 +19,15 @@ package com.goide.refactor;
 import com.goide.inspections.GoInspectionUtil;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoElementFactory;
-import com.goide.psi.impl.GoPsiImplUtil;
-import com.goide.psi.impl.GoTypeUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pass;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.codeStyle.NameUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.IntroduceTargetChooser;
 import com.intellij.refactoring.RefactoringBundle;
@@ -123,9 +119,9 @@ public class GoIntroduceVariableBase {
     return expressions;
   }
 
-  protected static void performOnElement(final GoIntroduceOperation operation) {
+  private static void performOnElement(final GoIntroduceOperation operation) {
     GoExpression expression = operation.getExpression();
-    LinkedHashSet<String> suggestedNames = getSuggestedNames(expression);
+    LinkedHashSet<String> suggestedNames = GoRefactoringUtil.getSuggestedNames(expression);
     operation.setSuggestedNames(suggestedNames);
     operation.setOccurrences(GoRefactoringUtil.getLocalOccurrences(expression));
 
@@ -193,61 +189,6 @@ public class GoIntroduceVariableBase {
     });
     operation.setOccurrences(newOccurrences);
     PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(operation.getEditor().getDocument());
-  }
-
-  private static LinkedHashSet<String> getNamesInContext(PsiElement context) {
-    if (context == null) return ContainerUtil.newLinkedHashSet();
-    LinkedHashSet<String> names = ContainerUtil.newLinkedHashSet();
-
-    for (GoNamedElement namedElement : PsiTreeUtil.findChildrenOfType(context, GoNamedElement.class)) {
-      names.add(namedElement.getName());
-    }
-    names.addAll(((GoFile)context.getContainingFile()).getImportMap().keySet());
-
-    GoFunctionDeclaration functionDeclaration = PsiTreeUtil.getParentOfType(context, GoFunctionDeclaration.class);
-    GoSignature signature = PsiTreeUtil.getChildOfType(functionDeclaration, GoSignature.class);
-    for (GoParamDefinition param : PsiTreeUtil.findChildrenOfType(signature, GoParamDefinition.class)) {
-      names.add(param.getName());
-    }
-    return names;
-  }
-
-  @NotNull
-  private static LinkedHashSet<String> getSuggestedNames(GoExpression expression) {
-    // todo rewrite with names resolve; check occurrences contexts
-    LinkedHashSet<String> usedNames = getNamesInContext(PsiTreeUtil.getParentOfType(expression, GoBlock.class));
-    LinkedHashSet<String> names = ContainerUtil.newLinkedHashSet();
-
-    if (expression instanceof GoCallExpr) {
-      GoReferenceExpression callReference = PsiTreeUtil.getChildOfType(expression, GoReferenceExpression.class);
-      if (callReference != null) {
-        String name = StringUtil.decapitalize(callReference.getIdentifier().getText());
-        for (String candidate : NameUtil.getSuggestionsByName(name, "", "", false, false, false)) {
-          if (!usedNames.contains(candidate)) names.add(candidate);
-        }
-      }
-    }
-
-    GoType type = expression.getGoType(null);
-    String typeText = GoPsiImplUtil.getText(type);
-    if (StringUtil.isNotEmpty(typeText)) {
-      boolean array = GoTypeUtil.isIterable(type) && !GoTypeUtil.isString(type);
-      for (String candidate : NameUtil.getSuggestionsByName(typeText, "", "", false, false, array)) {
-        if (!usedNames.contains(candidate)) names.add(candidate);
-      }
-    }
-
-    if (names.isEmpty()) {
-      if (usedNames.contains("i")) {
-        int counter = 1;
-        while (usedNames.contains("i" + counter)) counter++;
-        names.add("i" + counter);
-      }
-      else {
-        names.add("i");
-      }
-    }
-    return names;
   }
 
   private static void showCannotPerform(GoIntroduceOperation operation, String message) {
