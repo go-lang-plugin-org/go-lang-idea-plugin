@@ -29,8 +29,9 @@ public abstract class GoElseUnwrapperBase extends GoUnwrapper {
 
   @Override
   public void collectElementsToIgnore(PsiElement element, Set<PsiElement> result) {
-    if (element.getParent() instanceof GoIfStatement) {
-      result.add(element.getParent());
+    PsiElement parent = element.getParent();
+    if (parent instanceof GoIfStatement) {
+      result.add(parent);
     }
   }
 

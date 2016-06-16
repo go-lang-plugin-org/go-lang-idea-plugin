@@ -16,27 +16,24 @@
 
 package com.goide.codeInsight.unwrap;
 
+import com.goide.GoCodeInsightFixtureTestCase;
 import com.intellij.codeInsight.unwrap.UnwrapHandler;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiFile;
-import com.intellij.testFramework.LightPlatformCodeInsightTestCase;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public abstract class GoUnwrapTestCase extends LightPlatformCodeInsightTestCase {
-  private final static String FILE_NAME = "a.go";
-
-  protected void assertUnwrapped(String codeBefore, String expectedCodeAfter) {
-    assertUnwrapped(codeBefore, expectedCodeAfter, 0);
+public abstract class GoUnwrapTestCase extends GoCodeInsightFixtureTestCase {
+  protected void assertUnwrapped(@NotNull String codeBefore, @NotNull String codeAfter) {
+    assertUnwrapped(codeBefore, codeAfter, 0);
   }
 
-  protected void assertUnwrapped(String codeBefore, String expectedCodeAfter, final int option) {
-    configureFromFileText(FILE_NAME, createCode(codeBefore));
-
+  protected void assertUnwrapped(@NotNull String codeBefore, @NotNull String codeAfter, final int option) {
+    myFixture.configureByText("a.go", normalizeCode(codeBefore));
     UnwrapHandler h = new UnwrapHandler() {
       @Override
       protected void selectOption(List<AnAction> options, Editor editor, PsiFile file) {
@@ -44,17 +41,13 @@ public abstract class GoUnwrapTestCase extends LightPlatformCodeInsightTestCase 
         options.get(option).actionPerformed(null);
       }
     };
-
-    h.invoke(getProject(), getEditor(), getFile());
-
-    checkResultByText(createCode(expectedCodeAfter));
+    h.invoke(getProject(), myFixture.getEditor(), myFixture.getFile());
+    myFixture.checkResult(normalizeCode(codeAfter));
   }
 
-  protected static void assertOptions(String code, String... expectedOptions) {
-    configureFromFileText(FILE_NAME, createCode(code));
-
-    final List<String> actualOptions = new ArrayList<String>();
-
+  protected void assertOptions(@NotNull String code, String... expectedOptions) {
+    myFixture.configureByText("a.go", normalizeCode(code));
+    List<String> actualOptions = new ArrayList<String>();
     UnwrapHandler h = new UnwrapHandler() {
       @Override
       protected void selectOption(List<AnAction> options, Editor editor, PsiFile file) {
@@ -63,20 +56,19 @@ public abstract class GoUnwrapTestCase extends LightPlatformCodeInsightTestCase 
         }
       }
     };
-
-    h.invoke(getProject(), getEditor(), getFile());
-    assertOrderedEquals(actualOptions, Arrays.asList(expectedOptions));
+    h.invoke(getProject(), myFixture.getEditor(), myFixture.getFile());
+    assertOrderedEquals(actualOptions, expectedOptions);
   }
 
-  private static String createCode(String codeBefore) {
-    StringBuilder result = new StringBuilder();
-    for (String line : StringUtil.tokenize(codeBefore, "\n")) {
-      result.append("\t").append(line).append("\n");
+  private static String normalizeCode(@NotNull String codeBefore) {
+    StringBuilder result = new StringBuilder("package main\nfunc main() {\n");
+    if ("\n".equals(codeBefore)) {
+      result.append(codeBefore);
     }
-    String resultString = result.toString();
-    return "package main\n" +
-           "func main() {\n" +
-           (resultString.isEmpty() ? codeBefore : resultString) +
-           "}";
+    for (String line : StringUtil.splitByLines(codeBefore, false)) {
+      result.append('\t').append(line).append('\n');
+    }
+    result.append("}");
+    return result.toString();
   }
 }
