@@ -22,6 +22,7 @@ import com.goide.project.GoModuleSettings;
 import com.goide.sdk.GoSdkType;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.projectRoots.ProjectJdkTable;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -32,8 +33,11 @@ import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.fixtures.DefaultLightProjectDescriptor;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
+import com.intellij.util.ObjectUtils;
 import com.intellij.util.ThreeState;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,6 +45,21 @@ import java.io.File;
 import java.io.IOException;
 
 abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsightFixtureTestCase {
+  @NotNull
+  protected PsiElement findElementAtCaretOrInSelection() {
+    SelectionModel selectionModel = myFixture.getEditor().getSelectionModel();
+    if (selectionModel.hasSelection()) {
+      PsiElement left = myFixture.getFile().findElementAt(selectionModel.getSelectionStart());
+      PsiElement right = myFixture.getFile().findElementAt(selectionModel.getSelectionEnd() - 1);
+      assertNotNull(left);
+      assertNotNull(right);
+      return ObjectUtils.assertNotNull(PsiTreeUtil.findCommonParent(left, right));
+    }
+    else {
+      return ObjectUtils.assertNotNull(myFixture.getFile().findElementAt(myFixture.getEditor().getCaretModel().getOffset()));
+    }
+  }
+
   @Override
   protected void setUp() throws Exception {
     super.setUp();

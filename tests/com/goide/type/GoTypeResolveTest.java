@@ -19,7 +19,6 @@ package com.goide.type;
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.goide.psi.GoType;
 import com.goide.psi.GoTypeOwner;
-import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.LightProjectDescriptor;
@@ -96,19 +95,7 @@ public class GoTypeResolveTest extends GoCodeInsightFixtureTestCase {
 
   private void doTopLevelTest(@NotNull String text, @NotNull String expectedTypeText) {
     myFixture.configureByText("a.go", "package a;" + text);
-    PsiElement elementAt;
-    SelectionModel selectionModel = myFixture.getEditor().getSelectionModel();
-    if (selectionModel.hasSelection()) {
-      PsiElement left = myFixture.getFile().findElementAt(selectionModel.getSelectionStart());
-      PsiElement right = myFixture.getFile().findElementAt(selectionModel.getSelectionEnd() - 1);
-      assertNotNull(left);
-      assertNotNull(right);
-      elementAt = PsiTreeUtil.findCommonParent(left, right);
-    }
-    else {
-      elementAt = myFixture.getFile().findElementAt(myFixture.getEditor().getCaretModel().getOffset());
-    }
-    assertNotNull(elementAt);
+    PsiElement elementAt = findElementAtCaretOrInSelection();
 
     GoTypeOwner typeOwner = PsiTreeUtil.getNonStrictParentOfType(elementAt, GoTypeOwner.class);
     assertNotNull("Cannot find type owner. Context element: " + elementAt.getText(), typeOwner);
