@@ -471,7 +471,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  private static GoType getBuiltinType(@NotNull final String name, @NotNull PsiElement context) {
+  public static GoType getBuiltinType(@NotNull final String name, @NotNull PsiElement context) {
     GoFile builtin = GoSdkUtil.findBuiltinFile(context);
     if (builtin != null) {
       GoTypeSpec spec = ContainerUtil.find(builtin.getTypes(), new Condition<GoTypeSpec>() {
