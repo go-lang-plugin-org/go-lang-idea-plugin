@@ -20,7 +20,6 @@ import com.goide.GoCodeInsightFixtureTestCase;
 import com.goide.psi.GoExpression;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.psi.impl.GoTypeUtil;
-import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -28,7 +27,6 @@ import com.intellij.testFramework.LightProjectDescriptor;
 import org.jetbrains.annotations.NotNull;
 
 public class GoExpectedTypesTest extends GoCodeInsightFixtureTestCase {
-
   public void testAssignment() {
     doStatementTest("var a int; a = <selection>asd()</selection>", "int");
   }
@@ -43,6 +41,10 @@ public class GoExpectedTypesTest extends GoCodeInsightFixtureTestCase {
 
   public void testTwoVariablesAssignmentWithFewLeftAndRightExpressions() {
     doStatementTest("var (a, c int; b string); a, b, c = 1, <selection>asd()</selection>, \"qwe\"", "string");
+  }
+
+  public void testTwoVariablesAssignmentWithLeftWithoutRightExpressions() {
+    doStatementTest("var (a, c int; b string); a, b, c = 1, <selection>asd()</selection>", "string");
   }
 
   public void testShortVarDeclaration() {
@@ -87,10 +89,6 @@ public class GoExpectedTypesTest extends GoCodeInsightFixtureTestCase {
 
   public void testCallWithOneExpectedType() {
     doTopLevelTest(" func f(int, int){}; func _() { f(1,  <selection>asd()</selection>) }", "int");
-  }
-
-  public void testCallWithThreeExpectedTypes() {
-    doTopLevelTest(" func f(int, int, int){}; func _() { f(<selection>asd()</selection>) }", "int, int, int; int");
   }
 
   public void testCallWithParamDefinition() {
@@ -159,23 +157,10 @@ public class GoExpectedTypesTest extends GoCodeInsightFixtureTestCase {
 
   private void doTopLevelTest(@NotNull String text, @NotNull String expectedTypeText) {
     myFixture.configureByText("a.go", "package a;" + text);
-    PsiElement elementAt;
-    SelectionModel selectionModel = myFixture.getEditor().getSelectionModel();
-    if (selectionModel.hasSelection()) {
-      PsiElement left = myFixture.getFile().findElementAt(selectionModel.getSelectionStart());
-      PsiElement right = myFixture.getFile().findElementAt(selectionModel.getSelectionEnd() - 1);
-      assertNotNull(left);
-      assertNotNull(right);
-      elementAt = PsiTreeUtil.findCommonParent(left, right);
-    }
-    else {
-      elementAt = myFixture.getFile().findElementAt(myFixture.getEditor().getCaretModel().getOffset());
-    }
-    assertNotNull(elementAt);
+    PsiElement elementAt = findElementAtCaretOrInSelection();
 
     GoExpression typeOwner = PsiTreeUtil.getNonStrictParentOfType(elementAt, GoExpression.class);
     assertNotNull("Cannot find type owner. Context element: " + elementAt.getText(), typeOwner);
-
 
     assertEquals(expectedTypeText, StringUtil.join(GoTypeUtil.getExpectedTypes(typeOwner), GoPsiImplUtil.GET_TEXT_FUNCTION, "; "));
   }
