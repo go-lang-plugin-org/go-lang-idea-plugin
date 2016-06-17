@@ -16,24 +16,27 @@
 
 package com.goide.refactor;
 
-import com.goide.GoNamesValidator;
+import com.goide.GoLanguage;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.psi.impl.GoTypeUtil;
 import com.intellij.codeInsight.PsiEquivalenceUtil;
+import com.intellij.lang.LanguageNamesValidation;
+import com.intellij.lang.refactoring.NamesValidator;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiRecursiveElementVisitor;
 import com.intellij.psi.codeStyle.NameUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.containers.*;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
 
 public class GoRefactoringUtil {
-  private final static GoNamesValidator namesValidator = new GoNamesValidator();
-
   private GoRefactoringUtil() {}
 
   @NotNull
@@ -86,13 +89,16 @@ public class GoRefactoringUtil {
     }
     LinkedHashSet<String> usedNames = getNamesInContext(context);
     LinkedHashSet<String> names = ContainerUtil.newLinkedHashSet();
+    NamesValidator namesValidator = LanguageNamesValidation.INSTANCE.forLanguage(GoLanguage.INSTANCE);
 
     if (expression instanceof GoCallExpr) {
       GoReferenceExpression callReference = PsiTreeUtil.getChildOfType(expression, GoReferenceExpression.class);
       if (callReference != null) {
         String name = StringUtil.decapitalize(callReference.getIdentifier().getText());
         for (String candidate : NameUtil.getSuggestionsByName(name, "", "", false, false, false)) {
-          if (!usedNames.contains(candidate) && !namesValidator.isKeyword(candidate, null)) names.add(candidate);
+          if (usedNames.contains(candidate)) continue;
+          if (namesValidator != null && namesValidator.isKeyword(candidate, null)) continue;
+          names.add(candidate);
         }
       }
     }
@@ -102,9 +108,9 @@ public class GoRefactoringUtil {
     if (StringUtil.isNotEmpty(typeText)) {
       boolean array = GoTypeUtil.isIterable(type) && !GoTypeUtil.isString(type);
       for (String candidate : NameUtil.getSuggestionsByName(typeText, "", "", false, false, array)) {
-        if (!usedNames.contains(candidate) && !typeText.equals(candidate) && !namesValidator.isKeyword(candidate, null)) {
-          names.add(candidate);
-        }
+        if (usedNames.contains(candidate) || typeText.equals(candidate)) continue;
+        if (namesValidator != null && namesValidator.isKeyword(candidate, null)) continue;
+        names.add(candidate);
       }
     }
 
