@@ -21,7 +21,6 @@ import com.intellij.openapi.actionSystem.IdeActions;
 import org.jetbrains.annotations.NotNull;
 
 public class GoStatementMoverTest extends GoCodeInsightFixtureTestCase {
-
   public void testSimpleStatement() {
     doTest(false);
     doTest(true);
@@ -103,14 +102,14 @@ public class GoStatementMoverTest extends GoCodeInsightFixtureTestCase {
 
   private void doTest(boolean down) {
     final String testName = getTestName(true);
-    myFixture.configureByFile(getBasePath() + "/" + testName + ".go");
+    myFixture.configureByFile(testName + ".go");
     if (down) {
       myFixture.performEditorAction(IdeActions.ACTION_MOVE_STATEMENT_DOWN_ACTION);
-      myFixture.checkResultByFile(getBasePath() + "/" + testName + "-afterDown.go", true);
+      myFixture.checkResultByFile(testName + "-afterDown.go", true);
     }
     else {
       myFixture.performEditorAction(IdeActions.ACTION_MOVE_STATEMENT_UP_ACTION);
-      myFixture.checkResultByFile(getBasePath() + "/" + testName + "-afterUp.go", true);
+      myFixture.checkResultByFile(testName + "-afterUp.go", true);
     }
   }
 
