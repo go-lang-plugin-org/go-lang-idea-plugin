@@ -129,6 +129,7 @@
     <lang.surroundDescriptor language="go" implementationClass="com.goide.editor.surround.GoSurroundDescriptor"/>
     <iconProvider implementation="com.goide.GoIconProvider"/>
     <codeInsight.lineMarkerProvider language="go" implementationClass="com.goide.marker.GoRecursiveCallMarkerProvider"/>
+    <statementUpDownMover implementation="com.goide.editor.GoStatementMover"/>
 
     <lang.unwrapDescriptor language="go" implementationClass="com.goide.codeInsight.unwrap.GoUnwrapDescriptor"/>
 
