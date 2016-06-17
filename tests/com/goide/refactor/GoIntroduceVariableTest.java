@@ -49,17 +49,20 @@ public class GoIntroduceVariableTest extends GoCodeInsightFixtureTestCase {
     }
   }
 
-  public void testCaretAfterRightParenthesis()      { doTest(); }
-  public void testCaretOnRightParenthesis()         { doTest(); }
-  public void testCaretOnCallParenthesis()          { doTest(); }
-  public void testNameSuggestOnGetterFunction()     { doTest(); }
-  public void testNameSuggestOnDefinedImportAlias() { doTest(); }
-  public void testNameSuggestOnDefaultName()        { doTest(); }
-  public void testNameSuggestOnParamName()          { doTest(); }
-  public void testNameSuggestOnType()               { doTest(); }
-  public void testNameSuggestOnArrayType()          { doTest(); }
-  public void testCompositeLiteral()                { doTest(); }
-  public void testIndexedExpression()               { doTest(); }
+  public void testCaretAfterRightParenthesis()                      { doTest(); }
+  public void testCaretOnRightParenthesis()                         { doTest(); }
+  public void testCaretOnCallParenthesis()                          { doTest(); }
+  public void testNameSuggestOnGetterFunction()                     { doTest(); }
+  public void testNameSuggestOnDefinedImportAlias()                 { doTest(); }
+  public void testNameSuggestOnDefaultName()                        { doTest(); }
+  public void testNameSuggestOnParamName()                          { doTest(); }
+  public void testNameSuggestOnType()                               { doTest(); }
+  public void testNameSuggestOnArrayType()                          { doTest(); }
+  public void testDoNotSuggestKeywordBasedOnType()                  { doTest(); }
+  public void testDoNotSuggestKeywordBasedOnCallName()              { doTest(); }
+
+  public void testCompositeLiteral()                                { doTest(); }
+  public void testIndexedExpression()                               { doTest(); }
 
   public void testMultipleValueResult() { doFailureTest("Expression fmt.Println() returns multiple values."); }
   public void testWrongSelection()      { doFailureTest(RefactoringBundle.message("selected.block.should.represent.an.expression")); }
