@@ -1,6 +1,8 @@
 package a
 
-func a(s string) {
-	i := s
-	println(i)
+func a(s String) {
+	string := s
+	println(string)
 }
+
+type String string
