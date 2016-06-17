@@ -58,13 +58,14 @@ public class GoTypeUtil {
   public static List<GoType> getExpectedTypes(@NotNull GoExpression expression) {
     PsiElement parent = expression.getParent();
     if (parent == null) return Collections.emptyList();
-    List<GoType> result = ContainerUtil.newSmartList();
     if (parent instanceof GoAssignmentStatement) {
       return getExpectedTypesFromAssignmentStatement(expression, (GoAssignmentStatement)parent);
     }
     if (parent instanceof GoRangeClause) {
-      result.add(getGoType(null, parent));
-      return result;
+      return Collections.singletonList(getGoType(null, parent));
+    }
+    if (parent instanceof GoRecvStatement) {
+      return getExpectedTypesFromRecvStatement((GoRecvStatement)parent);
     }
     if (parent instanceof GoVarSpec) {
       return getExpectedTypesFromVarSpec(expression, (GoVarSpec)parent);
@@ -76,76 +77,65 @@ public class GoTypeUtil {
       GoUnaryExpr unaryExpr = (GoUnaryExpr)parent;
       if (unaryExpr.getSendChannel() != null) {
         GoType type = ContainerUtil.getFirstItem(getExpectedTypes(unaryExpr));
-        result.add(GoElementFactory.createType(parent.getProject(), "chan " + getInterfaceIfNull(type, parent).getText()));
+        GoType chanType = GoElementFactory.createType(parent.getProject(), "chan " + getInterfaceIfNull(type, parent).getText());
+        return Collections.singletonList(chanType);
       }
       else {
-        result.add(getInterfaceIfNull(null, parent));
+        return Collections.singletonList(getGoType(null, parent));
       }
-      return result;
     }
     if (parent instanceof GoSendStatement || parent instanceof GoLeftHandExprList && parent.getParent() instanceof GoSendStatement) {
-      return getExpectedTypesFromGoSendStatement(expression, parent);
+      GoSendStatement sendStatement = (GoSendStatement)(parent instanceof GoSendStatement ? parent : parent.getParent());
+      return getExpectedTypesFromGoSendStatement(expression, sendStatement);
     }
     if (parent instanceof GoExprCaseClause) {
       return getExpectedTypesFromExprCaseClause((GoExprCaseClause)parent);
     }
-    return result;
+    return Collections.emptyList();
   }
 
   @NotNull
-  private static List<GoType> getExpectedTypesFromExprCaseClause(@NotNull GoExprCaseClause parent) {
-    List<GoType> result = ContainerUtil.newSmartList();
-    GoExprSwitchStatement switchStatement = PsiTreeUtil.getParentOfType(parent, GoExprSwitchStatement.class);
+  private static List<GoType> getExpectedTypesFromExprCaseClause(@NotNull GoExprCaseClause exprCaseClause) {
+    GoExprSwitchStatement switchStatement = PsiTreeUtil.getParentOfType(exprCaseClause, GoExprSwitchStatement.class);
     assert switchStatement != null;
 
-    GoType type;
     GoExpression switchExpr = switchStatement.getExpression();
     if (switchExpr != null) {
-      type = getGoType(switchExpr, parent);
+      return Collections.singletonList(getGoType(switchExpr, exprCaseClause));
     }
-    else {
-      GoStatement statement = switchStatement.getStatement();
-      if (statement == null) {
-        type = GoElementFactory.createType(parent.getProject(), "bool");
-      }
-      else {
-        GoLeftHandExprList leftHandExprList = ((GoSimpleStatement)statement).getLeftHandExprList();
-        GoExpression expr = leftHandExprList != null ? ContainerUtil.getFirstItem(leftHandExprList.getExpressionList()) : null;
-        type = getGoType(expr, parent);
-      }
+
+    GoStatement statement = switchStatement.getStatement();
+    if (statement == null) {
+      return Collections.singletonList(getInterfaceIfNull(GoPsiImplUtil.getBuiltinType("bool", exprCaseClause), exprCaseClause));
     }
-    result.add(type);
-    return result;
+    
+    GoLeftHandExprList leftHandExprList = statement instanceof GoSimpleStatement ? ((GoSimpleStatement)statement).getLeftHandExprList() : null;
+    GoExpression expr = leftHandExprList != null ? ContainerUtil.getFirstItem(leftHandExprList.getExpressionList()) : null;
+    return Collections.singletonList(getGoType(expr, exprCaseClause));
   }
 
   @NotNull
-  private static List<GoType> getExpectedTypesFromGoSendStatement(@NotNull GoExpression expression, @NotNull PsiElement parent) {
-    List<GoType> result = ContainerUtil.newSmartList();
-    GoSendStatement sendStatement = (GoSendStatement)(parent instanceof GoSendStatement ? parent : parent.getParent());
-    GoLeftHandExprList leftHandExprList = sendStatement.getLeftHandExprList();
-    GoExpression channel =
-      ContainerUtil.getFirstItem(leftHandExprList != null ? leftHandExprList.getExpressionList() : sendStatement.getExpressionList());
-    GoExpression sendExpr = sendStatement.getSendExpression();
+  private static List<GoType> getExpectedTypesFromGoSendStatement(@NotNull GoExpression expression, @NotNull GoSendStatement statement) {
+    GoLeftHandExprList leftHandExprList = statement.getLeftHandExprList();
+    GoExpression channel = ContainerUtil.getFirstItem(leftHandExprList != null ? leftHandExprList.getExpressionList() : statement.getExpressionList());
+    GoExpression sendExpr = statement.getSendExpression();
     assert channel != null;
     if (expression.isEquivalentTo(sendExpr)) {
       GoType chanType = channel.getGoType(null);
       if (chanType instanceof GoChannelType) {
-        result.add(getInterfaceIfNull(((GoChannelType)chanType).getType(), parent));
-        return result;
+        return Collections.singletonList(getInterfaceIfNull(((GoChannelType)chanType).getType(), statement));
       }
     }
     if (expression.isEquivalentTo(channel)) {
       GoType type = sendExpr != null ? sendExpr.getGoType(null) : null;
-      result.add(GoElementFactory.createType(parent.getProject(), "chan " + getInterfaceIfNull(type, parent).getText()));
-      return result;
+      GoType chanType = GoElementFactory.createType(statement.getProject(), "chan " + getInterfaceIfNull(type, statement).getText());
+      return Collections.singletonList(chanType);
     }
-    result.add(getInterfaceIfNull(null, parent));
-    return result;
+    return Collections.singletonList(getInterfaceIfNull(null, statement));
   }
 
   @NotNull
   private static List<GoType> getExpectedTypesFromArgumentList(@NotNull GoExpression expression, @NotNull GoArgumentList argumentList) {
-    List<GoType> result = ContainerUtil.newSmartList();
     PsiElement parentOfParent = argumentList.getParent();
     assert parentOfParent instanceof GoCallExpr;
     PsiReference reference = ((GoCallExpr)parentOfParent).getExpression().getReference();
@@ -166,7 +156,7 @@ public class GoTypeUtil {
                 typeList.add(getInterfaceIfNull(parameterDecl.getType(), argumentList));
               }
             }
-            result.add(createGoTypeListOrGoType(typeList, argumentList));
+            List<GoType> result = ContainerUtil.newSmartList(createGoTypeListOrGoType(typeList, argumentList));
             if (paramsList.size() > 1) {
               assert paramsList.get(0) != null;
               result.add(getInterfaceIfNull(paramsList.get(0).getType(), argumentList));
@@ -178,43 +168,38 @@ public class GoTypeUtil {
             if (position >= 0) {
               int i = 0;
               for (GoParameterDeclaration parameterDecl : paramsList) {
-                int paramDeclSize = parameterDecl.getParamDefinitionList().isEmpty() ? 1 : parameterDecl.getParamDefinitionList().size();
+                int paramDeclSize = Math.max(1, parameterDecl.getParamDefinitionList().size());
                 if (i + paramDeclSize > position) {
-                  result.add(getInterfaceIfNull(parameterDecl.getType(), argumentList));
-                  return result;
+                  return Collections.singletonList(getInterfaceIfNull(parameterDecl.getType(), argumentList));
                 }
-                i+= paramDeclSize;
+                i += paramDeclSize;
               }
             }
-            result.add(getInterfaceIfNull(null, argumentList));
-            return result;
           }
         }
       }
     }
-    result.add(getInterfaceIfNull(null, argumentList));
-    return result;
+    return Collections.singletonList(getInterfaceIfNull(null, argumentList));
+  }
+
+  @NotNull
+  private static List<GoType> getExpectedTypesFromRecvStatement(@NotNull GoRecvStatement recvStatement) {
+    List<GoType> typeList = ContainerUtil.newSmartList();
+    for (GoExpression expr : recvStatement.getLeftExpressionsList()) {
+      typeList.add(getGoType(expr, recvStatement));
+    }
+    return Collections.singletonList(createGoTypeListOrGoType(typeList, recvStatement));
   }
 
   @NotNull
   private static List<GoType> getExpectedTypesFromVarSpec(@NotNull GoExpression expression, @NotNull GoVarSpec varSpec) {
     List<GoType> result = ContainerUtil.newSmartList();
     GoType type = getInterfaceIfNull(varSpec.getType(), varSpec);
-    if (varSpec instanceof GoRecvStatement) {
-      GoRecvStatement recvStatement = (GoRecvStatement)varSpec;
-      type =
-        recvStatement.getAssign() != null ? getGoType(ContainerUtil.getFirstItem(recvStatement.getLeftExpressionsList()), varSpec) : type;
-    }
     if (varSpec.getRightExpressionsList().size() == 1) {
       List<GoType> typeList = ContainerUtil.newSmartList();
       int defListSize = varSpec.getVarDefinitionList().size();
       for (int i = 0; i < defListSize; i++) {
         typeList.add(type);
-      }
-      if (varSpec instanceof GoRecvStatement) {
-        for (GoExpression expr : ((GoRecvStatement)varSpec).getLeftExpressionsList()) {
-          typeList.add(getGoType(expr, varSpec));
-        }
       }
       result.add(createGoTypeListOrGoType(typeList, expression));
       if (defListSize > 1) {
@@ -229,7 +214,6 @@ public class GoTypeUtil {
   @NotNull
   private static List<GoType> getExpectedTypesFromAssignmentStatement(@NotNull GoExpression expression,
                                                                       @NotNull GoAssignmentStatement assignment) {
-    List<GoType> result = ContainerUtil.newSmartList();
     List<GoExpression> leftExpressions = assignment.getLeftHandExprList().getExpressionList();
     if (assignment.getExpressionList().size() == 1) {
       List<GoType> typeList = ContainerUtil.newSmartList();
@@ -237,17 +221,16 @@ public class GoTypeUtil {
         GoType type = expr.getGoType(null);
         typeList.add(type);
       }
-      result.add(createGoTypeListOrGoType(typeList, expression));
+      List<GoType> result = ContainerUtil.newSmartList(createGoTypeListOrGoType(typeList, expression));
       if (leftExpressions.size() > 1) {
         result.add(getGoType(leftExpressions.get(0), assignment));
       }
       return result;
     }
+    
     int position = assignment.getExpressionList().indexOf(expression);
-    result.add(leftExpressions.size() > position
-               ? assignment.getLeftHandExprList().getExpressionList().get(position).getGoType(null)
-               : getInterfaceIfNull(null, assignment));
-    return result;
+    GoType leftExpression = leftExpressions.size() > position ? leftExpressions.get(position).getGoType(null) : null;
+    return Collections.singletonList(getInterfaceIfNull(leftExpression, assignment));
   }
 
   @NotNull
@@ -270,6 +253,6 @@ public class GoTypeUtil {
 
   @NotNull
   private static GoType getGoType(@Nullable GoTypeOwner element, @NotNull PsiElement context) {
-    return getInterfaceIfNull(element == null ? null : element.getGoType(null), context);
+    return getInterfaceIfNull(element != null ? element.getGoType(null) : null, context);
   }
 }
