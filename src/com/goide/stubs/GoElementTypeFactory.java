@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class GoStubElementTypeFactory {
+public class GoElementTypeFactory {
   private static final Map<String, Class> TYPES = new HashMap<String, Class>() {
     {
       put("ARRAY_OR_SLICE_TYPE", GoArrayOrSliceTypeImpl.class);
@@ -45,10 +45,9 @@ public class GoStubElementTypeFactory {
     }
   };
 
-  private GoStubElementTypeFactory() {}
+  private GoElementTypeFactory() {}
 
-  @NotNull
-  public static IStubElementType factory(@NotNull String name) {
+  public static IStubElementType stubFactory(@NotNull String name) {
     if ("CONST_DEFINITION".equals(name)) return new GoConstDefinitionStubElementType(name);
     if ("FIELD_DEFINITION".equals(name)) return new GoFieldDefinitionStubElementType(name);
     if ("ANONYMOUS_FIELD_DEFINITION".equals(name)) return new GoAnonymousFieldDefinitionStubElementType(name);
