@@ -218,8 +218,8 @@ SimpleStatement ::=
   | IncDecStatement
   | (LeftHandExprList [AssignmentStatement | SendStatement]) {pin(".*")=LeftHandExprList}
 
-private TopLevelDeclaration ::= !<<eof>> OneOfDeclarations semi {pin=1 recoverWhile=TopLevelDeclarationRecover}
-private OneOfDeclarations ::=
+private TopLevelDeclaration ::= !<<eof>> TopDeclaration semi {pin=1 recoverWhile=TopLevelDeclarationRecover}
+private TopDeclaration ::=
     ConstDeclaration
   | TypeDeclaration
   | VarDeclaration
