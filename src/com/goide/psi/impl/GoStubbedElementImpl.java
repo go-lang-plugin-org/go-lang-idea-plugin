@@ -45,7 +45,7 @@ public abstract class GoStubbedElementImpl<T extends StubBase<?>> extends StubBa
 
   @Override
   public String toString() {
-    return getNode().getElementType().toString();
+    return getElementType().toString();
   }
 
   @Nullable
