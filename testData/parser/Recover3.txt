@@ -4,6 +4,9 @@ GO_FILE
     PsiElement(identifier)('main')
   IMPORT_LIST
     <empty list>
+  PsiErrorElement:const, func, import, type or var expected, got 'fooo'
+    <empty list>
+  PsiElement(identifier)('fooo')
   METHOD_DECLARATION
     PsiElement(func)('func')
     PsiErrorElement:'(' or identifier expected, got 'func'
@@ -18,3 +21,10 @@ GO_FILE
     BLOCK
       PsiElement({)('{')
       PsiElement(})('}')
+  PsiErrorElement:'foo' unexpected
+    PsiElement(identifier)('foo')
+  FUNCTION_DECLARATION
+    PsiElement(func)('func')
+    PsiElement(identifier)('ex')
+    PsiErrorElement:'(' expected, unexpected end of file
+      <empty list>

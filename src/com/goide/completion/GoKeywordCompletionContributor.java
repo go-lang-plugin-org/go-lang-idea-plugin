@@ -149,13 +149,13 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
   }
 
   private static PsiElementPattern.Capture<PsiElement> topLevelPattern() {
-    return onStatementBeginning(GoTypes.IDENTIFIER).withParent(psiElement(PsiErrorElement.class).withParent(goFileWithPackage()));
+    return onStatementBeginning(GoTypes.IDENTIFIER).withParent(
+      or(psiElement(PsiErrorElement.class).withParent(goFileWithPackage()), psiElement(GoFile.class)));
   }
 
   private static PsiElementPattern.Capture<PsiElement> importPattern() {
-    return onStatementBeginning(GoTypes.IDENTIFIER)
-      .withParent(psiElement(PsiErrorElement.class).afterSiblingSkipping(psiElement().whitespace(),
-                                                                         psiElement(GoImportList.class)));
+    return onStatementBeginning(GoTypes.IDENTIFIER).withParent(psiElement(GoFile.class))
+      .afterSiblingSkipping(psiElement().whitespaceCommentOrError(), psiElement(GoImportList.class));
   }
 
   private static PsiElementPattern.Capture<PsiElement> packagePattern() {

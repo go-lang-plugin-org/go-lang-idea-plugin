@@ -3587,16 +3587,27 @@ public class GoParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // OneOfDeclarations semi
+  // !<<eof>> OneOfDeclarations semi
   static boolean TopLevelDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TopLevelDeclaration")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
-    r = OneOfDeclarations(b, l + 1);
+    r = TopLevelDeclaration_0(b, l + 1);
     p = r; // pin = 1
-    r = r && semi(b, l + 1);
+    r = r && report_error_(b, OneOfDeclarations(b, l + 1));
+    r = p && semi(b, l + 1) && r;
     exit_section_(b, l, m, r, p, TopLevelDeclarationRecover_parser_);
     return r || p;
+  }
+
+  // !<<eof>>
+  private static boolean TopLevelDeclaration_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TopLevelDeclaration_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NOT_);
+    r = !eof(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
   }
 
   /* ********************************************************** */
