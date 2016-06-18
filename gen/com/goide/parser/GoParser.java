@@ -4377,7 +4377,9 @@ public class GoParser implements PsiParser, LightPsiParser {
   // 4: BINARY(MulExpr)
   // 5: PREFIX(UnaryExpr)
   // 6: ATOM(ConversionExpr)
-  // 7: ATOM(CompositeLit) ATOM(OperandName) POSTFIX(BuiltinCallExpr) POSTFIX(CallExpr) POSTFIX(TypeAssertionExpr) BINARY(SelectorExpr) POSTFIX(IndexOrSliceExpr) ATOM(Literal) ATOM(FunctionLit)
+  // 7: ATOM(CompositeLit) ATOM(OperandName) POSTFIX(BuiltinCallExpr) POSTFIX(CallExpr)
+  //    POSTFIX(TypeAssertionExpr) BINARY(SelectorExpr) POSTFIX(IndexOrSliceExpr) ATOM(Literal)
+  //    ATOM(FunctionLit)
   // 8: ATOM(ParenthesesExpr)
   public static boolean Expression(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "Expression")) return false;
