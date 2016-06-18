@@ -2600,25 +2600,6 @@ public class GoParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ConstDeclaration
-  //   | TypeDeclaration
-  //   | VarDeclaration
-  //   | FunctionDeclaration
-  //   | MethodDeclaration
-  static boolean OneOfDeclarations(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "OneOfDeclarations")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = ConstDeclaration(b, l + 1);
-    if (!r) r = TypeDeclaration(b, l + 1);
-    if (!r) r = VarDeclaration(b, l + 1);
-    if (!r) r = FunctionDeclaration(b, l + 1);
-    if (!r) r = MethodDeclaration(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  /* ********************************************************** */
   // package identifier
   public static boolean PackageClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PackageClause")) return false;
@@ -3587,14 +3568,33 @@ public class GoParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !<<eof>> OneOfDeclarations semi
+  // ConstDeclaration
+  //   | TypeDeclaration
+  //   | VarDeclaration
+  //   | FunctionDeclaration
+  //   | MethodDeclaration
+  static boolean TopDeclaration(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TopDeclaration")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = ConstDeclaration(b, l + 1);
+    if (!r) r = TypeDeclaration(b, l + 1);
+    if (!r) r = VarDeclaration(b, l + 1);
+    if (!r) r = FunctionDeclaration(b, l + 1);
+    if (!r) r = MethodDeclaration(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // !<<eof>> TopDeclaration semi
   static boolean TopLevelDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TopLevelDeclaration")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
     r = TopLevelDeclaration_0(b, l + 1);
     p = r; // pin = 1
-    r = r && report_error_(b, OneOfDeclarations(b, l + 1));
+    r = r && report_error_(b, TopDeclaration(b, l + 1));
     r = p && semi(b, l + 1) && r;
     exit_section_(b, l, m, r, p, TopLevelDeclarationRecover_parser_);
     return r || p;
