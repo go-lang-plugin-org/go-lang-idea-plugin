@@ -95,8 +95,16 @@ public class GoPsiImplUtil {
   }
 
   public static boolean isPanic(@NotNull GoCallExpr o) {
+    return stdLibCall(o, "panic");
+  }
+
+  public static boolean isRecover(@NotNull GoCallExpr o) {
+    return stdLibCall(o, "recover");
+  }
+
+  private static boolean stdLibCall(@NotNull GoCallExpr o, String name) {
     GoExpression e = o.getExpression();
-    if (StringUtil.equals("panic", e.getText()) && e instanceof GoReferenceExpression) {
+    if (StringUtil.equals(name, e.getText()) && e instanceof GoReferenceExpression) {
       PsiReference reference = e.getReference();
       PsiElement resolve = reference != null ? reference.resolve() : null;
       if (!(resolve instanceof GoFunctionDeclaration)) return false;

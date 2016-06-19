@@ -386,6 +386,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testDeferInLoop() { doWeakTest(); }
+  public void testDeferGo()     { doWeakTest(); }
 
   public void testCommentStart() { doWeakTest(); }
 

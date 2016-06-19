@@ -255,4 +255,14 @@ public class GoElementFactory {
     GoFile file = createFileFromText(project, "package a; var _ = struct { a string } { " + field + ": " + element + " }");
     return PsiTreeUtil.findChildOfType(file, GoElement.class);
   }
+
+  @NotNull
+  public static PsiElement createCorrectDeferStatement(@NotNull Project project) {
+    GoFile file = createFileFromText(project, "package a; func _() { defer func() {\n" +
+                                              "\tif r := recover(); r != nil {\n" +
+                                              "\t\t\n" +
+                                              "\t}\n" +
+                                              "\t}() }");
+    return PsiTreeUtil.findChildOfType(file, GoDeferStatement.class);
+  }
 }
