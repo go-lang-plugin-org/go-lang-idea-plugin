@@ -17,12 +17,15 @@
 package com.goide.inspections;
 
 import com.goide.quickfix.GoQuickFixTestBase;
+import com.goide.quickfix.GoReplaceWithCorrectDeferRecoverQuickFix;
+import com.intellij.testFramework.LightProjectDescriptor;
 import org.jetbrains.annotations.NotNull;
 
 public class GoDeferGoInspectionTest extends GoQuickFixTestBase {
   @Override
   public void setUp() throws Exception {
     super.setUp();
+    setUpProjectSdk();
     myFixture.enableInspections(GoDeferGoInspection.class);
   }
 
@@ -54,9 +57,16 @@ public class GoDeferGoInspectionTest extends GoQuickFixTestBase {
     myFixture.testHighlighting(getTestName(true) + ".go");
   }
 
+  public void testDeferRecover() { doTest(GoReplaceWithCorrectDeferRecoverQuickFix.QUICK_FIX_NAME, true); }
+
   @NotNull
   @Override
   protected String getBasePath() {
     return "inspections/go-defer-function-call";
+  }
+
+  @Override
+  protected LightProjectDescriptor getProjectDescriptor() {
+    return createMockProjectDescriptor();
   }
 }

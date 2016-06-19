@@ -19,6 +19,8 @@ package com.goide.inspections;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoElementFactory;
 import com.goide.psi.impl.GoPsiImplUtil;
+import com.goide.quickfix.GoDeleteQuickFix;
+import com.goide.quickfix.GoReplaceWithCorrectDeferRecoverQuickFix;
 import com.intellij.codeInspection.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -36,20 +38,58 @@ public class GoDeferGoInspection extends GoInspectionBase {
       @Override
       public void visitDeferStatement(@NotNull GoDeferStatement o) {
         super.visitDeferStatement(o);
+
+        if (o.getExpression() != null && o.getExpression() instanceof GoCallExpr) {
+          GoCallExpr callExpr = (GoCallExpr)o.getExpression();
+
+          if (GoPsiImplUtil.isPanic(callExpr)) {
+            holder.registerProblem(o, "defer should not call panic() directly #loc", ProblemHighlightType.WEAK_WARNING,
+                                   new GoDeleteQuickFix("Delete statement", GoDeferStatement.class));
+            return;
+          }
+
+          if (GoPsiImplUtil.isRecover(callExpr)) {
+            holder.registerProblem(o, "defer should not call recover() directly #loc", ProblemHighlightType.WEAK_WARNING,
+                                   new GoReplaceWithCorrectDeferRecoverQuickFix());
+            return;
+          }
+        }
+
         checkExpression(o.getExpression(), "defer");
       }
 
       @Override
       public void visitGoStatement(@NotNull GoGoStatement o) {
         super.visitGoStatement(o);
+
+        if (o.getExpression() != null && o.getExpression() instanceof GoCallExpr) {
+          GoCallExpr callExpr = (GoCallExpr)o.getExpression();
+
+          if (GoPsiImplUtil.isPanic(callExpr)) {
+            holder.registerProblem(o, "go should not call panic() directly #loc", ProblemHighlightType.WEAK_WARNING,
+                                   new GoDeleteQuickFix("Delete statement", GoGoStatement.class));
+            return;
+          }
+
+          if (GoPsiImplUtil.isRecover(callExpr)) {
+            holder.registerProblem(o, "go should not call recover() directly #loc", ProblemHighlightType.WEAK_WARNING,
+                                   new GoDeleteQuickFix("Delete statement", GoGoStatement.class));
+            return;
+          }
+        }
+
         checkExpression(o.getExpression(), "go");
       }
 
       private void checkExpression(@Nullable GoExpression o, String who) {
-        if (o == null) return;
-        if ((o instanceof GoCallExpr || o instanceof GoBuiltinCallExpr) && !GoPsiImplUtil.isConversionExpression(o)) {
+        if (o == null || o instanceof GoBuiltinCallExpr) return;
+        if (o instanceof GoCallExpr) {
+          if (GoPsiImplUtil.isConversionExpression(o)) {
+            holder.registerProblem(o, who + " requires function call, not conversion #loc", ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+          }
           return;
         }
+
         if (o instanceof GoParenthesesExpr) {
           holder.registerProblem(o, "Expression in " + who + " must not be parenthesized", ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
                                  new GoUnwrapParensExpression());
