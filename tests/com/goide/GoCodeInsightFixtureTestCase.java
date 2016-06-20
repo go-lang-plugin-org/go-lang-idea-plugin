@@ -147,4 +147,17 @@ abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsi
   protected void disableVendoring() {
     GoModuleSettings.getInstance(myFixture.getModule()).setVendoringEnabled(ThreeState.NO);
   }
+
+
+  protected static String normalizeCode(@NotNull String codeBefore) {
+    StringBuilder result = new StringBuilder("package main\nfunc main() {\n");
+    if ("\n".equals(codeBefore)) {
+      result.append(codeBefore);
+    }
+    for (String line : StringUtil.splitByLines(codeBefore, false)) {
+      result.append('\t').append(line).append('\n');
+    }
+    result.append("}");
+    return result.toString();
+  }
 }

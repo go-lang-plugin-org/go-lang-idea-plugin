@@ -51,8 +51,13 @@ public class GoTypeUtil {
   }
 
   public static boolean isString(@Nullable GoType type) {
-    GoType underlyingType = type != null ? type.getUnderlyingType() : null;
-    return underlyingType != null && underlyingType.textMatches("string") && GoPsiImplUtil.builtin(underlyingType);
+    return isBuiltinType(type, "string");
+  }
+
+  public static boolean isBuiltinType(@Nullable GoType type, @Nullable String builtinTypeName) {
+    if (builtinTypeName == null) return false;
+    type = type != null ? type.getUnderlyingType() : null;
+    return type != null && type.textMatches(builtinTypeName) && GoPsiImplUtil.builtin(type);
   }
 
   @NotNull
