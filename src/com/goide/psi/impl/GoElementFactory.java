@@ -215,15 +215,23 @@ public class GoElementFactory {
     return name + type + value;
   }
 
-  @NotNull
   public static GoTypeList createTypeList(@NotNull Project project, @NotNull String text) {
     GoFile file = createFileFromText(project, "package a; func _() (" + text + "){}");
     return PsiTreeUtil.findChildOfType(file, GoTypeList.class);
   }
 
-  @NotNull
   public static GoType createType(@NotNull Project project, @NotNull String text) {
     GoFile file = createFileFromText(project, "package a; var a " + text);
     return PsiTreeUtil.findChildOfType(file, GoType.class);
+  }
+
+  @NotNull
+  public static GoFunctionDeclaration createFunctionDeclarationFromText(@NotNull Project project,
+                                                                        @NotNull String name,
+                                                                        @NotNull String text,
+                                                                        @Nullable String expectedType) {
+    expectedType = expectedType != null && !expectedType.isEmpty() ? expectedType + " " : "";
+    GoFile file = createFileFromText(project, "package a; func " + name + "(" + text + ") " + expectedType + "{\n}");
+    return ContainerUtil.getFirstItem(file.getFunctions());
   }
 }

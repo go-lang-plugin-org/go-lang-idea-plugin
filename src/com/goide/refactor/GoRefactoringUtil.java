@@ -21,9 +21,18 @@ import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.psi.impl.GoTypeUtil;
 import com.intellij.codeInsight.PsiEquivalenceUtil;
+import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.codeInsight.template.Expression;
+import com.intellij.codeInsight.template.ExpressionContext;
+import com.intellij.codeInsight.template.Result;
+import com.intellij.codeInsight.template.TextResult;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiRecursiveElementVisitor;
 import com.intellij.psi.codeStyle.NameUtil;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -32,9 +41,7 @@ import com.intellij.util.text.UniqueNameGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.*;
 
 public class GoRefactoringUtil {
   private final static GoNamesValidator namesValidator = new GoNamesValidator();
@@ -81,6 +88,71 @@ public class GoRefactoringUtil {
 
   public static LinkedHashSet<String> getSuggestedNames(GoExpression expression) {
     return getSuggestedNames(expression, expression);
+  }
+  @NotNull
+  public static Expression createParameterNameSuggestedExpression(GoExpression expression) {
+    GoTopLevelDeclaration topLevelDecl = PsiTreeUtil.getParentOfType(expression, GoTopLevelDeclaration.class);
+    return new ParameterNameExpression(getSuggestedNames(expression, topLevelDecl == null ? null : topLevelDecl.getNextSibling()));
+  }
+
+  private static class ParameterNameExpression extends Expression {
+    private final Set<String> myNames;
+
+    public ParameterNameExpression(@NotNull Set<String> namesSet) {
+      myNames = namesSet;
+    }
+
+    @Nullable
+    @Override
+    public Result calculateResult(ExpressionContext context) {
+      LookupElement[] lookupItems = calculateLookupItems(context);
+      if (lookupItems.length == 0) return new TextResult("");
+
+      return new TextResult(lookupItems[0].getLookupString());
+    }
+
+    @Nullable
+    @Override
+    public Result calculateQuickResult(ExpressionContext context) {
+      return null;
+    }
+
+    @NotNull
+    @Override
+    public LookupElement[] calculateLookupItems(ExpressionContext context) {
+      int offset = context.getStartOffset();
+      Project project = context.getProject();
+      PsiDocumentManager.getInstance(project).commitAllDocuments();
+      assert context.getEditor() != null;
+      PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
+      assert file != null;
+      PsiElement elementAt = file.findElementAt(offset);
+
+      Set<String> parameterNames = new HashSet<String>();
+      GoParameters parameters = PsiTreeUtil.getParentOfType(elementAt, GoParameters.class);
+      if (parameters != null) {
+        GoParamDefinition parameter = PsiTreeUtil.getParentOfType(elementAt, GoParamDefinition.class);
+        for (GoParameterDeclaration paramDecl : parameters.getParameterDeclarationList()) {
+          for (GoParamDefinition paramDef : paramDecl.getParamDefinitionList()) {
+            if (parameter == paramDef) continue;
+            parameterNames.add(paramDef.getName());
+          }
+        }
+      }
+
+      Set<LookupElement> set = new LinkedHashSet<LookupElement>();
+      for (String name : myNames) {
+        String newName = UniqueNameGenerator.generateUniqueName(name, new Condition<String>() {
+          @Override
+          public boolean value(String s) {
+            return !parameterNames.contains(s);
+          }
+        });
+        set.add(LookupElementBuilder.create(newName));
+      }
+
+      return set.toArray(new LookupElement[set.size()]);
+    }
   }
 
   @NotNull

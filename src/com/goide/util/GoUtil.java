@@ -178,13 +178,15 @@ public class GoUtil {
 
     boolean inSameFile = definitionFile.isEquivalentTo(referenceFile);
     if (inSameFile) return true;
-    GoFile refFile = (GoFile)referenceFile;
-    String referencePackage = refFile.getPackageName();
-    String definitionPackage = ((GoFile)definitionFile).getPackageName();
-    boolean inSamePackage = referencePackage != null && referencePackage.equals(definitionPackage);
 
-    if (inSamePackage) return true;
+    if (inSamePackage(referenceFile, definitionFile)) return true;
     return !(reference instanceof GoNamedElement && !((GoNamedElement)reference).isPublic());
+  }
+
+  public static boolean inSamePackage(@NotNull PsiFile firstFile, @NotNull PsiFile secondFile) {
+    String referencePackage = ((GoFile)firstFile).getPackageName();
+    String definitionPackage = ((GoFile)secondFile).getPackageName();
+    return referencePackage != null && referencePackage.equals(definitionPackage);
   }
 
   @NotNull
