@@ -99,6 +99,10 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
                 fixesList.add(new GoReplaceAssignmentWithDeclarationQuickFix(parent));
               }
             }
+
+            if (parent instanceof GoCallExpr && PsiTreeUtil.getParentOfType(o, GoConstDeclaration.class) == null) {
+              fixesList.add(new GoIntroduceFunctionFix(parent, name));
+            }
             fixes = fixesList.toArray(new LocalQuickFix[fixesList.size()]);
           }
           holder.registerProblem(id, "Unresolved reference " + "'" + name + "'", LIKE_UNKNOWN_SYMBOL, fixes);
