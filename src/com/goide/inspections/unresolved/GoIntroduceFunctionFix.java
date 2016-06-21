@@ -124,10 +124,12 @@ public class GoIntroduceFunctionFix extends LocalQuickFixAndIntentionActionOnPsi
           if (file.isEquivalentTo(typeFile) || GoUtil.inSamePackage(typeFile, file)) {
             return spec.getIdentifier().getText();
           }
+          if (!spec.isPublic()) {
+            return GoConstants.INTERFACE_TYPE;
+          }
 
           GoPathScopeHelper scopeHelper = GoPathScopeHelper.fromReferenceFile(file.getProject(), module, file.getVirtualFile());
           boolean isAllowed = scopeHelper.couldBeReferenced(typeFile.getVirtualFile(), file.getVirtualFile());
-
           if (!isAllowed) return GoConstants.INTERFACE_TYPE;
 
           String importPath = typeFile.getImportPath(vendoringEnabled);
