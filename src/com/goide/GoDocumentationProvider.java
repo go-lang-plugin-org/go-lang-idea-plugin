@@ -294,9 +294,8 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
         result.append(StringUtil.join(((GoStructType)type).getFieldDeclarationList(), new Function<GoFieldDeclaration, String>() {
           @Override
           public String fun(GoFieldDeclaration declaration) {
-            //noinspection StringBufferReplaceableByString
-            return new StringBuilder(StringUtil.join(declaration.getFieldDefinitionList(), GoPsiImplUtil.GET_TEXT_FUNCTION, ", "))
-              .append(" ").append(getTypePresentation(declaration.getType(), contextImportPath, func)).toString();
+            return StringUtil.join(declaration.getFieldDefinitionList(), GoPsiImplUtil.GET_TEXT_FUNCTION, ", ") +
+                   " " + getTypePresentation(declaration.getType(), contextImportPath, func);
           }
         }, "; "));
         return result.append("}").toString();
