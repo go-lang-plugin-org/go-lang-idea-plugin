@@ -720,9 +720,13 @@ public class GoPsiImplUtil {
     GoFile file = typeSpec.getContainingFile();
     String packageName = file.getPackageName();
     if (name != null) {
-      return packageName != null && !isBuiltinFile(file) ? packageName + "." + name : name;
+      return !isBuiltinFile(file) ? getFqn(packageName, name) : name;
     }
     return null;
+  }
+
+  public static String getFqn(@Nullable String packageName, @NotNull String elementName) {
+    return StringUtil.isNotEmpty(packageName) ? packageName + "." + elementName : elementName;
   }
 
   @NotNull
@@ -1049,7 +1053,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static String getImportQualifierToUseInFile(@Nullable GoImportSpec importSpec) {
+  public static String getImportQualifierToUseInFile(@Nullable GoImportSpec importSpec, @Nullable String defaultValue) {
     if (importSpec == null || importSpec.isForSideEffects()) {
       return null;
     }
@@ -1057,7 +1061,10 @@ public class GoPsiImplUtil {
       return "";
     }
     String alias = importSpec.getAlias();
-    return alias != null ? alias : importSpec.getLocalPackageName();
+    if (alias != null) {
+      return alias;
+    }
+    return defaultValue != null ? defaultValue : importSpec.getLocalPackageName();
   }
 
   public static boolean shouldGoDeeper(@SuppressWarnings("UnusedParameters") GoImportSpec o) {

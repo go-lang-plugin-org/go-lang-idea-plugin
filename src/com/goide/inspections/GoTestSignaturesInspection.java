@@ -52,7 +52,7 @@ public class GoTestSignaturesInspection extends GoInspectionBase {
       else {
         GoParameterDeclaration param = ContainerUtil.getFirstItem(params);
         GoImportSpec testingImportSpec = file.getImportedPackagesMap().get(GoConstants.TESTING_PATH);
-        String testingAlias = GoPsiImplUtil.getImportQualifierToUseInFile(testingImportSpec);
+        String testingAlias = GoPsiImplUtil.getImportQualifierToUseInFile(testingImportSpec, GoConstants.TESTING_PATH);
         if (GoConstants.TESTING_PATH.equals(file.getImportPath(false))) {
           testingAlias = "";
         }
