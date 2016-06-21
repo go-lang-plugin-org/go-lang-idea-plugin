@@ -150,7 +150,7 @@ public class GoIntroduceFunctionFixTest extends GoQuickFixTestBase {
   }
 
   public void testInOtherPackageWithPrivateType() {
-    myFixture.addFileToProject("a/a.go", "package a; type MyType int; func CreateMyType() myType { return myType{}};");
+    myFixture.addFileToProject("a/a.go", "package a; type myType int; func CreateMyType() myType { return myType{}};");
     PsiFile file = myFixture.addFileToProject("b/b.go", "package b; import . \"a\"; func _() { asd<caret>(CreateMyType());};");
     myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
     applySingleQuickFix(QUICK_FIX_NAME);
