@@ -51,6 +51,20 @@ public class GoElementFactory {
   }
 
   @NotNull
+  public static GoIfStatement createIfStatement(@NotNull Project project,
+                                                @NotNull String condition,
+                                                @NotNull String thenBranch,
+                                                @Nullable String elseBranch) {
+    String elseText = elseBranch != null ? " else {\n" + elseBranch + "\n}" : "";
+    GoFile file = createFileFromText(project, "package a; func _() {\n" +
+                                              "if " + condition + " {\n" +
+                                              thenBranch + "\n" +
+                                              "}" + elseText + "\n" +
+                                              "}");
+    return PsiTreeUtil.findChildOfType(file, GoIfStatement.class);
+  }
+
+  @NotNull
   public static GoImportDeclaration createImportDeclaration(@NotNull Project project, @NotNull String importString,
                                                             @Nullable String alias, boolean withParens) {
     importString = GoPsiImplUtil.isQuotedImportString(importString) ? importString : StringUtil.wrapWithDoubleQuote(importString);
@@ -162,6 +176,12 @@ public class GoElementFactory {
   public static GoGoStatement createGoStatement(@NotNull Project project, @NotNull String expressionText) {
     GoFile file = createFileFromText(project, "package a; func a() {\n  go " + expressionText + "}");
     return PsiTreeUtil.findChildOfType(file, GoGoStatement.class);
+  }
+
+  @NotNull
+  public static GoForStatement createForStatement(@NotNull Project project, @NotNull String text) {
+    GoFile file = createFileFromText(project, "package a; func a() {\n for {\n" + text +  "\n}\n}");
+    return PsiTreeUtil.findChildOfType(file, GoForStatement.class);
   }
 
   @NotNull
