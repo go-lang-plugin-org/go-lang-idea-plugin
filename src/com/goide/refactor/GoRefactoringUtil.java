@@ -36,12 +36,16 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiRecursiveElementVisitor;
 import com.intellij.psi.codeStyle.NameUtil;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.text.UniqueNameGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 public class GoRefactoringUtil {
   private final static GoNamesValidator namesValidator = new GoNamesValidator();
@@ -89,26 +93,25 @@ public class GoRefactoringUtil {
   public static LinkedHashSet<String> getSuggestedNames(GoExpression expression) {
     return getSuggestedNames(expression, expression);
   }
+
   @NotNull
   public static Expression createParameterNameSuggestedExpression(GoExpression expression) {
     GoTopLevelDeclaration topLevelDecl = PsiTreeUtil.getParentOfType(expression, GoTopLevelDeclaration.class);
-    return new ParameterNameExpression(getSuggestedNames(expression, topLevelDecl == null ? null : topLevelDecl.getNextSibling()));
+    return new ParameterNameExpression(getSuggestedNames(expression, topLevelDecl != null ? topLevelDecl.getNextSibling() : null));
   }
 
   private static class ParameterNameExpression extends Expression {
     private final Set<String> myNames;
 
-    public ParameterNameExpression(@NotNull Set<String> namesSet) {
-      myNames = namesSet;
+    public ParameterNameExpression(@NotNull Set<String> names) {
+      myNames = names;
     }
 
     @Nullable
     @Override
     public Result calculateResult(ExpressionContext context) {
-      LookupElement[] lookupItems = calculateLookupItems(context);
-      if (lookupItems.length == 0) return new TextResult("");
-
-      return new TextResult(lookupItems[0].getLookupString());
+      LookupElement firstElement = ArrayUtil.getFirstElement(calculateLookupItems(context));
+      return new TextResult(firstElement != null ? firstElement.getLookupString() : "");
     }
 
     @Nullable
@@ -128,29 +131,23 @@ public class GoRefactoringUtil {
       assert file != null;
       PsiElement elementAt = file.findElementAt(offset);
 
-      Set<String> parameterNames = new HashSet<String>();
+      Set<String> parameterNames = ContainerUtil.newHashSet();
       GoParameters parameters = PsiTreeUtil.getParentOfType(elementAt, GoParameters.class);
       if (parameters != null) {
         GoParamDefinition parameter = PsiTreeUtil.getParentOfType(elementAt, GoParamDefinition.class);
         for (GoParameterDeclaration paramDecl : parameters.getParameterDeclarationList()) {
           for (GoParamDefinition paramDef : paramDecl.getParamDefinitionList()) {
-            if (parameter == paramDef) continue;
-            parameterNames.add(paramDef.getName());
+            if (parameter != paramDef) {
+              parameterNames.add(paramDef.getName());
+            }
           }
         }
       }
 
       Set<LookupElement> set = new LinkedHashSet<LookupElement>();
       for (String name : myNames) {
-        String newName = UniqueNameGenerator.generateUniqueName(name, new Condition<String>() {
-          @Override
-          public boolean value(String s) {
-            return !parameterNames.contains(s);
-          }
-        });
-        set.add(LookupElementBuilder.create(newName));
+        set.add(LookupElementBuilder.create(UniqueNameGenerator.generateUniqueName(name, parameterNames)));
       }
-
       return set.toArray(new LookupElement[set.size()]);
     }
   }
