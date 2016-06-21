@@ -289,6 +289,18 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
         LOG.error("Cannot build presentable text for type: " + type.getClass().getSimpleName() + " - " + type.getText());
         return "";
       }
+      if (type instanceof GoStructType) {
+        StringBuilder result = new StringBuilder("struct {");
+        result.append(StringUtil.join(((GoStructType)type).getFieldDeclarationList(), new Function<GoFieldDeclaration, String>() {
+          @Override
+          public String fun(GoFieldDeclaration declaration) {
+            //noinspection StringBufferReplaceableByString
+            return new StringBuilder(StringUtil.join(declaration.getFieldDefinitionList(), GoPsiImplUtil.GET_TEXT_FUNCTION, ", "))
+              .append(" ").append(getTypePresentation(declaration.getType(), contextImportPath, func)).toString();
+          }
+        }, "; "));
+        return result.append("}").toString();
+      }
       GoTypeReferenceExpression typeRef = GoPsiImplUtil.getTypeReference(type);
       if (typeRef != null) {
         PsiElement resolve = typeRef.resolve();
