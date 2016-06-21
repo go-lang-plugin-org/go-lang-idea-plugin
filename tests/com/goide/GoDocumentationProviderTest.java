@@ -54,6 +54,7 @@ public class GoDocumentationProviderTest extends GoCodeInsightFixtureTestCase {
   public void testMultilineVariable_5()               { doTest(); }
   public void testFieldDeclaration()                  { doTest(); }
   public void testSignature()                         { doTest(); }
+  public void testStruct()                            { doTest(); }
   public void testTypeSpec()                          { doTest(); }
   public void testTypeTopDefinition()                 { doTest(); }
   public void testTypeInnerDefinitionWithoutComment() { doTest(); }

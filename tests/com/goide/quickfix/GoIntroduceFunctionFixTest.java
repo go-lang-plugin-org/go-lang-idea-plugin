@@ -167,6 +167,17 @@ public class GoIntroduceFunctionFixTest extends GoQuickFixTestBase {
                           "func _() { asd(alias.CreateChanOfMyType());}\nfunc asd(myType chan alias.MyType) {\n};");
   }
 
+  public void testInOtherPackageWithStruct() {
+    myFixture.addFileToProject("a/a.go", "package a; type MyType int; func CreateChanOfMyType() struct{ ch chan chan MyType} { return nil};");
+    PsiFile file = myFixture.addFileToProject("b/b.go",
+                                              "package b; import alias \"a\"; func _() { asd<caret>(alias.CreateChanOfMyType());};");
+    myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
+    applySingleQuickFix(QUICK_FIX_NAME);
+    myFixture.checkResult("package b; import alias \"a\"; " +
+                          "func _() { asd(alias.CreateChanOfMyType());}\nfunc asd(myType struct{ ch chan chan alias.MyType }) {\n};");
+  }
+
+
 
   @NotNull
   @Override
