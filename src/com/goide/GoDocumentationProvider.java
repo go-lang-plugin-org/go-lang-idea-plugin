@@ -136,10 +136,11 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       String name = ((GoTypeSpec)element).getName();
       return StringUtil.isNotEmpty(name) ? "type " + name : "";
     }
+    GoDocumentationPresentationFunction presentationFunction = new GoDocumentationPresentationFunction(getImportPathForElement(element));
     if (element instanceof GoConstDefinition) {
       String name = ((GoConstDefinition)element).getName();
       if (StringUtil.isNotEmpty(name)) {
-        String type = getTypePresentation(((GoConstDefinition)element).getGoType(null), getImportPathForElement(element));
+        String type = getTypePresentation(((GoConstDefinition)element).getGoType(null), presentationFunction);
         GoExpression value = ((GoConstDefinition)element).getValue();
         return "const " + name + (!type.isEmpty() ? " " + type : "") + (value != null ? " = " + value.getText() : "");
       }
@@ -147,8 +148,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
     if (element instanceof GoVarDefinition) {
       String name = ((GoVarDefinition)element).getName();
       if (StringUtil.isNotEmpty(name)) {
-        String type = getTypePresentation(((GoVarDefinition)element).getGoType(GoPsiImplUtil.createContextOnElement(context)),
-                                          getImportPathForElement(element));
+        String type = getTypePresentation(((GoVarDefinition)element).getGoType(GoPsiImplUtil.createContextOnElement(context)), presentationFunction);
         GoExpression value = ((GoVarDefinition)element).getValue();
         return "var " + name + (!type.isEmpty() ? " " + type : "") + (value != null ? " = " + value.getText() : "");
       }
@@ -156,28 +156,25 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
     if (element instanceof GoParamDefinition) {
       String name = ((GoParamDefinition)element).getName();
       if (StringUtil.isNotEmpty(name)) {
-        String type = getTypePresentation(((GoParamDefinition)element).getGoType(GoPsiImplUtil.createContextOnElement(context)),
-                                          getImportPathForElement(element));
+        String type = getTypePresentation(((GoParamDefinition)element).getGoType(GoPsiImplUtil.createContextOnElement(context)), presentationFunction);
         return "var " + name + (!type.isEmpty() ? " " + type : "");
       }
     }
     if (element instanceof GoReceiver) {
       String name = ((GoReceiver)element).getName();
       if (StringUtil.isNotEmpty(name)) {
-        String type = getTypePresentation(((GoReceiver)element).getGoType(GoPsiImplUtil.createContextOnElement(context)),
-                                          getImportPathForElement(element));
+        String type = getTypePresentation(((GoReceiver)element).getGoType(GoPsiImplUtil.createContextOnElement(context)), presentationFunction);
         return "var " + name + (!type.isEmpty() ? " " + type : "");
       }
     }
 
 
-    return element instanceof GoSignatureOwner
-           ? getSignatureOwnerTypePresentation((GoSignatureOwner)element, getImportPathForElement(element))
-           : "";
+    return element instanceof GoSignatureOwner ? getSignatureOwnerTypePresentation((GoSignatureOwner)element, presentationFunction) : "";
   }
 
   @NotNull
-  private static String getSignatureOwnerTypePresentation(@NotNull GoSignatureOwner signatureOwner, @Nullable String contextImportPath) {
+  private static String getSignatureOwnerTypePresentation(@NotNull GoSignatureOwner signatureOwner,
+                                                          @NotNull Function<PsiElement, String> presentationFunction) {
     PsiElement identifier = null;
     if (signatureOwner instanceof GoNamedSignatureOwner) {
       identifier = ((GoNamedSignatureOwner)signatureOwner).getIdentifier();
@@ -205,7 +202,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       }
     }
     else if (type != null) {
-      builder.append(' ').append(getTypePresentation(type, contextImportPath));
+      builder.append(' ').append(getTypePresentation(type, presentationFunction));
     }
     return builder.toString();
   }
@@ -216,7 +213,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
     return StringUtil.join(GoParameterInfoHandler.getParameterPresentations(parameters, new Function<PsiElement, String>() {
       @Override
       public String fun(PsiElement element) {
-        return getTypePresentation(element, contextImportPath);
+        return getTypePresentation(element, new GoDocumentationPresentationFunction(contextImportPath));
       }
     }), ", ");
   }
@@ -228,16 +225,14 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
   }
 
   @NotNull
-  public static String getTypePresentation(@Nullable PsiElement element,
-                                           @Nullable String contextImportPath,
-                                           @NotNull Function<PsiElement, String> func) {
+  public static String getTypePresentation(@Nullable PsiElement element, @NotNull Function<PsiElement, String> presentationFunction) {
     if (element instanceof GoType) {
       GoType type = (GoType)element;
       if (type instanceof GoMapType) {
         GoType keyType = ((GoMapType)type).getKeyType();
         GoType valueType = ((GoMapType)type).getValueType();
-        return "map[" + getTypePresentation(keyType, contextImportPath, func) + "]" +
-               getTypePresentation(valueType, contextImportPath, func);
+        return "map[" + getTypePresentation(keyType, presentationFunction) + "]" +
+               getTypePresentation(valueType, presentationFunction);
       }
       if (type instanceof GoChannelType) {
         ASTNode typeNode = type.getNode();
@@ -253,34 +248,34 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
               result.append(XmlStringUtil.escapeString(node.getText()));
             }
           }
-          result.append(" ").append(getTypePresentation(innerType, contextImportPath, func));
+          result.append(" ").append(getTypePresentation(innerType, presentationFunction));
           return result.toString();
         }
       }
       if (type instanceof GoParType) {
-        return "(" + getTypePresentation(((GoParType)type).getActualType(), contextImportPath, func) + ")";
+        return "(" + getTypePresentation(((GoParType)type).getActualType(), presentationFunction) + ")";
       }
       if (type instanceof GoArrayOrSliceType) {
-        return "[]" + getTypePresentation(((GoArrayOrSliceType)type).getType(), contextImportPath, func);
+        return "[]" + getTypePresentation(((GoArrayOrSliceType)type).getType(), presentationFunction);
       }
       if (type instanceof GoPointerType) {
         GoType inner = ((GoPointerType)type).getType();
-        return inner instanceof GoSpecType ? getTypePresentation(inner, contextImportPath, func)
-                                           : "*" + getTypePresentation(inner, contextImportPath, func);
+        return inner instanceof GoSpecType ? getTypePresentation(inner, presentationFunction)
+                                           : "*" + getTypePresentation(inner, presentationFunction);
       }
       if (type instanceof GoTypeList) {
         return "(" + StringUtil.join(((GoTypeList)type).getTypeList(), new Function<GoType, String>() {
           @Override
           public String fun(GoType element) {
-            return getTypePresentation(element, contextImportPath, func);
+            return getTypePresentation(element, presentationFunction);
           }
         }, ", ") + ")";
       }
       if (type instanceof GoFunctionType) {
-        return getSignatureOwnerTypePresentation((GoFunctionType)type, contextImportPath);
+        return getSignatureOwnerTypePresentation((GoFunctionType)type, presentationFunction);
       }
       if (type instanceof GoSpecType) {
-        return getTypePresentation(GoPsiImplUtil.getTypeSpecSafe(type), contextImportPath, func);
+        return getTypePresentation(GoPsiImplUtil.getTypeSpecSafe(type), presentationFunction);
       }
       if (type instanceof GoCType) {
         return "C";
@@ -295,7 +290,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
           @Override
           public String fun(GoFieldDeclaration declaration) {
             return StringUtil.join(declaration.getFieldDefinitionList(), GoPsiImplUtil.GET_TEXT_FUNCTION, ", ") +
-                   " " + getTypePresentation(declaration.getType(), contextImportPath, func);
+                   " " + getTypePresentation(declaration.getType(), presentationFunction);
           }
         }, "; "));
         return result.append("}").toString();
@@ -304,39 +299,12 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       if (typeRef != null) {
         PsiElement resolve = typeRef.resolve();
         if (resolve != null) {
-          return getTypePresentation(resolve, contextImportPath, func);
+          return getTypePresentation(resolve, presentationFunction);
         }
       }
     }
 
-    return func.fun(element);
-  }
-
-  @NotNull
-  private static String getTypePresentation(@Nullable PsiElement element, @Nullable String contextImportPath) {
-    return getTypePresentation(element, contextImportPath, new Function<PsiElement, String>() {
-      @Override
-      public String fun(PsiElement element) {
-        if (element instanceof GoTypeSpec) {
-          String localUrl = getLocalUrlToElement(element);
-          String name = ((GoTypeSpec)element).getName();
-          if (StringUtil.isNotEmpty(name)) {
-            String importPath = getImportPathForElement(element);
-            GoFile file = ((GoTypeSpec)element).getContainingFile();
-            String packageName = file.getPackageName();
-            if (StringUtil.isNotEmpty(packageName) &&
-                !GoPsiImplUtil.isBuiltinFile(file) &&
-                !Comparing.equal(importPath, contextImportPath)) {
-              return String.format("<a href=\"%s%s\">%s</a>.<a href=\"%s%s\">%s</a>",
-                                   DocumentationManagerProtocol.PSI_ELEMENT_PROTOCOL, StringUtil.notNullize(importPath), packageName,
-                                   DocumentationManagerProtocol.PSI_ELEMENT_PROTOCOL, localUrl, name);
-            }
-            return String.format("<a href=\"%s%s\">%s</a>", DocumentationManagerProtocol.PSI_ELEMENT_PROTOCOL, localUrl, name);
-          }
-        }
-        return element != null ? element.getText() : "";
-      }
-    });
+    return presentationFunction.fun(element);
   }
 
   @Nullable
@@ -459,5 +427,35 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       }
     }
     return super.getDocumentationElementForLink(psiManager, link, context);
+  }
+
+  private static class GoDocumentationPresentationFunction implements Function<PsiElement, String> {
+    private final String myContextImportPath;
+
+    public GoDocumentationPresentationFunction(@Nullable String contextImportPath) {
+      myContextImportPath = contextImportPath;
+    }
+
+    @Override
+    public String fun(PsiElement element) {
+      if (element instanceof GoTypeSpec) {
+        String localUrl = getLocalUrlToElement(element);
+        String name = ((GoTypeSpec)element).getName();
+        if (StringUtil.isNotEmpty(name)) {
+          String importPath = getImportPathForElement(element);
+          GoFile file = ((GoTypeSpec)element).getContainingFile();
+          String packageName = file.getPackageName();
+          if (StringUtil.isNotEmpty(packageName) &&
+              !GoPsiImplUtil.isBuiltinFile(file) &&
+              !Comparing.equal(importPath, myContextImportPath)) {
+            return String.format("<a href=\"%s%s\">%s</a>.<a href=\"%s%s\">%s</a>",
+                                 DocumentationManagerProtocol.PSI_ELEMENT_PROTOCOL, StringUtil.notNullize(importPath), packageName,
+                                 DocumentationManagerProtocol.PSI_ELEMENT_PROTOCOL, localUrl, name);
+          }
+          return String.format("<a href=\"%s%s\">%s</a>", DocumentationManagerProtocol.PSI_ELEMENT_PROTOCOL, localUrl, name);
+        }
+      }
+      return element != null ? element.getText() : "";
+    }
   }
 }
