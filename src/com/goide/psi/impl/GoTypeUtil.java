@@ -16,6 +16,7 @@
 
 package com.goide.psi.impl;
 
+import com.goide.GoConstants;
 import com.goide.psi.*;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
@@ -241,14 +242,14 @@ public class GoTypeUtil {
     return GoElementFactory.createTypeList(context.getProject(), StringUtil.join(types, new Function<GoType, String>() {
       @Override
       public String fun(GoType type) {
-        return type == null ? "interface{}" : type.getText();
+        return type == null ? GoConstants.INTERFACE_TYPE : type.getText();
       }
     }, ", "));
   }
 
   @NotNull
   private static GoType getInterfaceIfNull(@Nullable GoType type, @NotNull PsiElement context) {
-    return type == null ? GoElementFactory.createType(context.getProject(), "interface{}") : type;
+    return type == null ? GoElementFactory.createType(context.getProject(), GoConstants.INTERFACE_TYPE) : type;
   }
 
   @NotNull

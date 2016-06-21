@@ -51,6 +51,7 @@ public class GoConstants {
   public static final String TESTING_PATH = "testing";
   public static final String VENDOR = "vendor";
   public static final String INTERNAL = "internal";
+  public static final String INTERFACE_TYPE = "interface{}";
 
   public static final NotificationGroup GO_NOTIFICATION_GROUP = NotificationGroup.balloonGroup("Go plugin notifications");
   public static final NotificationGroup GO_EXECUTION_NOTIFICATION_GROUP = NotificationGroup.toolWindowGroup("Go Execution", ToolWindowId.RUN);
