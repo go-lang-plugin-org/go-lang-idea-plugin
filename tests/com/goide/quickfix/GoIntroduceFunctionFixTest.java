@@ -129,6 +129,15 @@ public class GoIntroduceFunctionFixTest extends GoQuickFixTestBase {
     myFixture.checkResult("package b; import . \"a\"; func _() { asd(CreateMyType());}\nfunc asd(myType MyType) {\n};");
   }
 
+  public void testInOtherPackageWithImportForSideEffects() {
+    myFixture.addFileToProject("a/a.go", "package a; type MyType int");
+    myFixture.addFileToProject("b/b.go", "package b; import `a`; func CreateMyType() b.MyType {return b.MyType{}};");
+    PsiFile file = myFixture.addFileToProject("c/c.go", "package c; import `b`; import _ `a`; func _() { asd<caret>(b.CreateMyType());};");
+    myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
+    applySingleQuickFix(QUICK_FIX_NAME);
+    myFixture.checkResult("package c; import `b`; import _ `a`; func _() { asd(b.CreateMyType());}\nfunc asd(myType interface{}) {\n};");
+  }
+
   public void testInOtherPackageWithTwoAlias() {
     myFixture.addFileToProject("c/c.go", "package c; type MyType int;");
     myFixture.addFileToProject("a/a.go", "package a; import myC \"c\" func CreateMyType() myC.MyType { return myC.MyType{}};");
@@ -176,8 +185,6 @@ public class GoIntroduceFunctionFixTest extends GoQuickFixTestBase {
     myFixture.checkResult("package b; import alias \"a\"; " +
                           "func _() { asd(alias.CreateChanOfMyType());}\nfunc asd(myType struct{ ch chan chan alias.MyType }) {\n};");
   }
-
-
 
   @NotNull
   @Override
