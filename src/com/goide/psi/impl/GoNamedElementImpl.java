@@ -91,7 +91,7 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
     String name = getName();
     if (name == null) return null;
     String packageName = getContainingFile().getPackageName();
-    return StringUtil.isNotEmpty(packageName) ? packageName + "." + name : name;
+    return GoPsiImplUtil.getFqn(packageName, name);
   }
 
   @Override

@@ -57,7 +57,7 @@ public class GotestGenerateAction extends GoGenerateTestActionBase {
   @NotNull
   public static String importTestingPackageIfNeeded(@NotNull GoFile file) {
     GoImportSpec alreadyImportedPackage = file.getImportedPackagesMap().get(GoConstants.TESTING_PATH);
-    String qualifier = GoPsiImplUtil.getImportQualifierToUseInFile(alreadyImportedPackage);
+    String qualifier = GoPsiImplUtil.getImportQualifierToUseInFile(alreadyImportedPackage, GoConstants.TESTING_PATH);
     if (qualifier != null) {
       return qualifier;
     }

@@ -17,6 +17,7 @@
 package com.goide.runconfig.testing;
 
 import com.goide.GoConstants;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -49,10 +50,7 @@ public enum GoTestFunctionType {
 
   @NotNull
   public String getQualifiedParamType(@Nullable String testingQualifier) {
-    if (myParamType == null) {
-      return "";
-    }
-    return "*" + (StringUtil.isNotEmpty(testingQualifier) ? testingQualifier + "." : "") + myParamType; 
+    return myParamType != null ? "*" + GoPsiImplUtil.getFqn(testingQualifier, myParamType) : "";
   }
   
   @NotNull
