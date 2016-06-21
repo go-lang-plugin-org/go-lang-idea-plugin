@@ -16,7 +16,9 @@
 
 package com.goide.inspections.unresolved;
 
+import com.goide.GoConstants;
 import com.goide.GoDocumentationProvider;
+import com.goide.project.GoVendoringUtil;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoElementFactory;
 import com.goide.psi.impl.GoPsiImplUtil;
@@ -34,6 +36,7 @@ import com.intellij.diagnostic.AttachmentFactory;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
@@ -50,10 +53,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 
-class GoIntroduceFunctionFix extends LocalQuickFixAndIntentionActionOnPsiElement implements HighPriorityAction {
+public class GoIntroduceFunctionFix extends LocalQuickFixAndIntentionActionOnPsiElement implements HighPriorityAction {
   private final String myName;
   private static final String FAMILY_NAME = "Create function";
-  private static final String INTERFACE_TYPE = "interface{}";
 
   public GoIntroduceFunctionFix(@NotNull PsiElement element, @NotNull String name) {
     super(element);
@@ -107,72 +109,60 @@ class GoIntroduceFunctionFix extends LocalQuickFixAndIntentionActionOnPsiElement
   }
 
   @NotNull
-  private static List<String> convertTypes(@NotNull PsiFile file, List<GoType> types) {
-    List<String> resultTypes = ContainerUtil.newSmartList();
-    Map<String, GoImportSpec> importMap = ((GoFile)file).getImportedPackagesMap();
-    for (GoType type : types) {
-      resultTypes.add("i " + convertType(file, type, importMap));
-    }
-    return resultTypes;
-  }
-
-  @NotNull
   private static String convertType(@NotNull PsiFile file, @Nullable GoType type, Map<String, GoImportSpec> importMap) {
-    if (type == null) return INTERFACE_TYPE;
-    return GoDocumentationProvider.getTypePresentation(type, ((GoFile)file).getImportPath(true), new Function<PsiElement, String>() {
+    if (type == null) return GoConstants.INTERFACE_TYPE;
+    final Module module = ModuleUtilCore.findModuleForPsiElement(file);
+    boolean vendoringEnabled = GoVendoringUtil.isVendoringEnabled(module);
+    return GoDocumentationProvider.getTypePresentation(type, new Function<PsiElement, String>() {
       @Override
       public String fun(PsiElement element) {
-        if (element instanceof GoStructType) {
-          return element.getText();
-        }
         if (element instanceof GoTypeSpec) {
           GoTypeSpec spec = (GoTypeSpec)element;
           if (GoPsiImplUtil.builtin(spec)) return spec.getIdentifier().getText();
 
-          PsiFile typeFile = spec.getContainingFile();
+          GoFile typeFile = spec.getContainingFile();
           if (file.isEquivalentTo(typeFile) || GoUtil.inSamePackage(typeFile, file)) {
             return spec.getIdentifier().getText();
           }
 
-          GoPathScopeHelper searcher =
-            GoPathScopeHelper.fromReferenceFile(file.getProject(), ModuleUtilCore.findModuleForPsiElement(file), file.getVirtualFile());
-          boolean isAllowed = searcher.couldBeReferenced(typeFile.getVirtualFile(), file.getVirtualFile());
+          GoPathScopeHelper scopeHelper = GoPathScopeHelper.fromReferenceFile(file.getProject(), module, file.getVirtualFile());
+          boolean isAllowed = scopeHelper.couldBeReferenced(typeFile.getVirtualFile(), file.getVirtualFile());
 
-          if (!isAllowed) return INTERFACE_TYPE;
+          if (!isAllowed) return GoConstants.INTERFACE_TYPE;
 
+          String importPath = typeFile.getImportPath(vendoringEnabled);
 
-          String importPath = ((GoFile)typeFile).getImportPath(true);
-          if (importMap.containsKey(importPath)) {
-            GoImportSpec importSpec = importMap.get(importPath);
-            String alias = importSpec.getAlias();
-            return (".".equals(alias) ? "" : (alias == null ? importPath : alias) + ".") +
-                   spec.getIdentifier().getText();
-          }
-          // todo: add import package fix
+          GoImportSpec importSpec = importMap.get(importPath);
+          String packageName = StringUtil.notNullize(typeFile.getPackageName());
+          String qualifier = StringUtil.notNullize(GoPsiImplUtil.getImportQualifierToUseInFile(importSpec, packageName), packageName);
+          
+          // todo: add import package fix if getImportQualifierToUseInFile is null?
+          return GoPsiImplUtil.getFqn(qualifier, spec.getIdentifier().getText());
         }
-        return INTERFACE_TYPE;
+        return GoConstants.INTERFACE_TYPE;
       }
     });
   }
 
   private static void setupFunctionResult(GoFunctionDeclaration function, TemplateBuilderImpl builder) {
-    if (function.getSignature() == null) return;
-    GoResult result = function.getSignature().getResult();
+    GoSignature signature = function.getSignature();
+    GoResult result = signature != null ? signature.getResult() : null;
     if (result != null && !result.isVoid()) {
-      if (result.getType() != null) {
-        if (result.getType() instanceof GoTypeList) {
-          for (GoType type : ((GoTypeList)result.getType()).getTypeList()) {
-            builder.replaceElement(type, type.getText());
-          }
+      GoType resultType = result.getType();
+      if (resultType instanceof GoTypeList) {
+        for (GoType type : ((GoTypeList)resultType).getTypeList()) {
+          builder.replaceElement(type, type.getText());
         }
-        else {
-          builder.replaceElement(result.getType(), result.getType().getText());
-        }
+      }
+      else if (resultType != null) {
+        builder.replaceElement(resultType, resultType.getText());
       }
     }
   }
 
-  private static void setupFunctionParameters(GoFunctionDeclaration function, TemplateBuilderImpl builder, List<GoExpression> args) {
+  private static void setupFunctionParameters(@NotNull GoFunctionDeclaration function,
+                                              @NotNull TemplateBuilderImpl builder,
+                                              @NotNull List<GoExpression> args) {
     if (function.getSignature() == null) return;
     int i = 0;
     List<GoParameterDeclaration> parameterList = function.getSignature().getParameters().getParameterDeclarationList();
@@ -211,18 +201,15 @@ class GoIntroduceFunctionFix extends LocalQuickFixAndIntentionActionOnPsiElement
                                                                  @NotNull String name,
                                                                  @NotNull List<GoExpression> argsList,
                                                                  @Nullable GoType result) {
-    List<String> resultTypes = convertTypes(file, ContainerUtil.map2List(argsList, new Function<GoExpression, GoType>() {
-      @Override
-      public GoType fun(GoExpression expression) {
-        return expression.getGoType(null);
-      }
-    }));
+    List<String> argumentText = ContainerUtil.newSmartList();
+    Map<String, GoImportSpec> importMap = ((GoFile)file).getImportedPackagesMap();
+    for (GoExpression expression : argsList) {
+      argumentText.add("i " + convertType(file, expression.getGoType(null), importMap));
+    }
 
-    String args = StringUtil.join(resultTypes, ", ");
-
-    return GoElementFactory.createFunctionDeclarationFromText(file.getProject(), name, args, result instanceof GoTypeList
-                                                                                             ? "(" + result.getText() + ")"
-                                                                                             : result != null ? result.getText() : "");
+    String args = StringUtil.join(argumentText, ", ");
+    String resultType = result instanceof GoTypeList ? "(" + result.getText() + ")" : result != null ? result.getText() : "";
+    return GoElementFactory.createFunctionDeclarationFromText(file.getProject(), name, args, resultType);
   }
 
   @NotNull
