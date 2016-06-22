@@ -23,17 +23,19 @@ import com.goide.psi.impl.GoTypeUtil;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class GoBoolExpressionSurrounderBase extends GoExpressionSurrounder {
   @Override
   public boolean isApplicable(@NotNull PsiElement[] elements) {
-    if (!super.isApplicable(elements)) return false;
-    return GoTypeUtil.isBuiltinType(getExpression(elements).getGoType(null), "bool");
+    GoExpression expression = getExpression(elements);
+    return expression != null && GoTypeUtil.isBoolean(expression.getGoType(null));
   }
 
-  @NotNull
+  @Nullable
   protected TextRange surroundExpressionWithIfElse(@NotNull PsiElement[] elements, boolean withElse) {
     GoExpression expression = getExpression(elements);
+    if (expression == null) return null;
     String condition = expression.getText();
     GoIfStatement ifStatement = GoElementFactory.createIfStatement(expression.getProject(), condition, "", withElse ? "" : null);
     PsiElement replace = expression.replace(ifStatement);

@@ -20,12 +20,10 @@ public class GoWithParenthesisSurrounderTest extends GoSurrounderTestBase {
   private static final String PARENTHESIS_SURROUNDER = new GoWithParenthesisSurrounder().getTemplateDescription();
 
   public void testParenthesis() {
-    doTest("a := <selection>1 + 2</selection>", "a := (1 + 2)\n",
-           PARENTHESIS_SURROUNDER, true);
+    doTest("a := <selection>1 + 2</selection>", "a := (1 + 2)\n", PARENTHESIS_SURROUNDER, true);
   }
 
   public void testNoParenthesis() {
-    doTest("<selection>a := 1 + 2</selection>}", "<selection>a := 1 + 2</selection>",
-           PARENTHESIS_SURROUNDER, false);
+    doTest("<selection>a := 1 + 2</selection>}", "<selection>a := 1 + 2</selection>", PARENTHESIS_SURROUNDER, false);
   }
 }

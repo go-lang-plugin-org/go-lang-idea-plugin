@@ -42,8 +42,9 @@ public class GoStatementsSurroundDescriptor implements SurroundDescriptor {
   @NotNull
   @Override
   public PsiElement[] getElementsToSurround(PsiFile file, int startOffset, int endOffset) {
-    if (!(file instanceof GoFile)) return PsiElement.EMPTY_ARRAY;
-    return GoPsiTreeUtil.getTopLevelElementsInRange((GoFile)file, startOffset, endOffset, GoStatement.class);
+    return file instanceof GoFile
+           ? GoPsiTreeUtil.getTopLevelElementsInRange((GoFile)file, startOffset, endOffset, GoStatement.class)
+           : PsiElement.EMPTY_ARRAY;
   }
 
   @Override
