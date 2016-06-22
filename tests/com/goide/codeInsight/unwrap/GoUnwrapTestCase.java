@@ -20,7 +20,6 @@ import com.goide.GoCodeInsightFixtureTestCase;
 import com.intellij.codeInsight.unwrap.UnwrapHandler;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 
@@ -58,17 +57,5 @@ public abstract class GoUnwrapTestCase extends GoCodeInsightFixtureTestCase {
     };
     h.invoke(getProject(), myFixture.getEditor(), myFixture.getFile());
     assertOrderedEquals(actualOptions, expectedOptions);
-  }
-
-  private static String normalizeCode(@NotNull String codeBefore) {
-    StringBuilder result = new StringBuilder("package main\nfunc main() {\n");
-    if ("\n".equals(codeBefore)) {
-      result.append(codeBefore);
-    }
-    for (String line : StringUtil.splitByLines(codeBefore, false)) {
-      result.append('\t').append(line).append('\n');
-    }
-    result.append("}");
-    return result.toString();
   }
 }
