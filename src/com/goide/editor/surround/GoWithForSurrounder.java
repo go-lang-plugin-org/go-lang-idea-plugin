@@ -29,7 +29,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoWithForSurrounder extends GoStatementsSurrounder {
-
   @Override
   public String getTemplateDescription() {
     return "for { statements }";

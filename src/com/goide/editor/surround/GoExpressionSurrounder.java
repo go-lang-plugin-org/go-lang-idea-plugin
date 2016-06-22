@@ -29,12 +29,14 @@ import org.jetbrains.annotations.Nullable;
 public abstract class GoExpressionSurrounder implements Surrounder {
   @Override
   public boolean isApplicable(@NotNull PsiElement[] elements) {
-    return elements.length == 1 && elements[0] instanceof GoExpression;
+    return getExpression(elements) != null;
   }
 
   @Nullable
   protected TextRange surroundWithParenthesis(@NotNull PsiElement[] elements, boolean withNot) {
     GoExpression expression = getExpression(elements);
+    if (expression == null) return null;
+
     String text = (withNot ? "!" : "") + "(" + expression.getText() + ")";
     GoExpression parenthExprNode = GoElementFactory.createExpression(expression.getProject(), text);
     PsiElement replace = expression.replace(parenthExprNode);
@@ -42,10 +44,8 @@ public abstract class GoExpressionSurrounder implements Surrounder {
     return TextRange.create(endOffset, endOffset);
   }
 
-  @NotNull
+  @Nullable
   protected GoExpression getExpression(@NotNull PsiElement[] elements) {
-    GoExpression expression = ObjectUtils.tryCast(ArrayUtil.getFirstElement(elements), GoExpression.class);
-    assert expression != null;
-    return expression;
+    return ObjectUtils.tryCast(ArrayUtil.getFirstElement(elements), GoExpression.class);
   }
 }

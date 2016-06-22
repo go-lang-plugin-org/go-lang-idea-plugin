@@ -28,7 +28,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoWithBlockSurrounder extends GoStatementsSurrounder {
-
   @Override
   public String getTemplateDescription() {
     return "{ statements }";

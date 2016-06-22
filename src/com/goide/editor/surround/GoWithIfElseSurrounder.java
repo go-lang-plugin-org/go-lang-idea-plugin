@@ -24,7 +24,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoWithIfElseSurrounder extends GoStatementsSurrounder {
-
   @Override
   public String getTemplateDescription() {
     return "if { statements } else { }";

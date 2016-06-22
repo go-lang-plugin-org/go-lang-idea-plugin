@@ -24,7 +24,8 @@ public class GoWithIfSurrounderTest extends GoSurrounderTestBase {
   }
 
   public void testWithThreeStatements() {
-    doTest("<selection>var b int = 1\nb = true\ntype Type int</selection>", "if <caret>{\n\tvar b int = 1\n\tb = true\n\ttype Type int\n}\n",
+    doTest("<selection>var b int = 1\nb = true\ntype Type int</selection>", 
+           "if <caret>{\n\tvar b int = 1\n\tb = true\n\ttype Type int\n}\n",
            SURROUNDER_DESCRIPTION, true);
   }
 
