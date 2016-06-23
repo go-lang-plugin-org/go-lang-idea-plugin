@@ -16,8 +16,12 @@ public class AsmIntelFunctionFlagsImpl extends AsmIntelElementImpl implements As
     super(node);
   }
 
+  public void accept(@NotNull AsmIntelVisitor visitor) {
+    visitor.visitFunctionFlags(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof AsmIntelVisitor) ((AsmIntelVisitor)visitor).visitFunctionFlags(this);
+    if (visitor instanceof AsmIntelVisitor) accept((AsmIntelVisitor)visitor);
     else super.accept(visitor);
   }
 

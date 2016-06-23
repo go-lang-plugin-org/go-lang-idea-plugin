@@ -16,8 +16,12 @@ public class AsmIntelFunctionHeaderImpl extends AsmIntelElementImpl implements A
     super(node);
   }
 
+  public void accept(@NotNull AsmIntelVisitor visitor) {
+    visitor.visitFunctionHeader(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof AsmIntelVisitor) ((AsmIntelVisitor)visitor).visitFunctionHeader(this);
+    if (visitor instanceof AsmIntelVisitor) accept((AsmIntelVisitor)visitor);
     else super.accept(visitor);
   }
 

@@ -16,8 +16,12 @@ public class AsmIntelLiteralImpl extends AsmIntelElementImpl implements AsmIntel
     super(node);
   }
 
+  public void accept(@NotNull AsmIntelVisitor visitor) {
+    visitor.visitLiteral(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof AsmIntelVisitor) ((AsmIntelVisitor)visitor).visitLiteral(this);
+    if (visitor instanceof AsmIntelVisitor) accept((AsmIntelVisitor)visitor);
     else super.accept(visitor);
   }
 

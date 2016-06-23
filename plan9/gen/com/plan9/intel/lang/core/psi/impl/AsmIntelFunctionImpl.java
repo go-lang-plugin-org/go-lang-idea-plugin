@@ -16,8 +16,12 @@ public class AsmIntelFunctionImpl extends AsmIntelElementImpl implements AsmInte
     super(node);
   }
 
+  public void accept(@NotNull AsmIntelVisitor visitor) {
+    visitor.visitFunction(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof AsmIntelVisitor) ((AsmIntelVisitor)visitor).visitFunction(this);
+    if (visitor instanceof AsmIntelVisitor) accept((AsmIntelVisitor)visitor);
     else super.accept(visitor);
   }
 

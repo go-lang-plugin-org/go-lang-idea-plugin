@@ -16,8 +16,12 @@ public class AsmIntelFrameSizeImpl extends AsmIntelElementImpl implements AsmInt
     super(node);
   }
 
+  public void accept(@NotNull AsmIntelVisitor visitor) {
+    visitor.visitFrameSize(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof AsmIntelVisitor) ((AsmIntelVisitor)visitor).visitFrameSize(this);
+    if (visitor instanceof AsmIntelVisitor) accept((AsmIntelVisitor)visitor);
     else super.accept(visitor);
   }
 

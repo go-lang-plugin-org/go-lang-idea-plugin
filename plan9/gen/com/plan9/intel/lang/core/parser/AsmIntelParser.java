@@ -77,19 +77,19 @@ public class AsmIntelParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '$' Literal ( '-' Literal )?
+  // '$' Literal ['-' Literal]
   public static boolean FrameSize(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FrameSize")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, "<frame size>");
+    Marker m = enter_section_(b, l, _NONE_, FRAME_SIZE, "<frame size>");
     r = consumeToken(b, "$");
     r = r && Literal(b, l + 1);
     r = r && FrameSize_2(b, l + 1);
-    exit_section_(b, l, m, FRAME_SIZE, r, false, null);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // ( '-' Literal )?
+  // ['-' Literal]
   private static boolean FrameSize_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FrameSize_2")) return false;
     FrameSize_2_0(b, l + 1);
@@ -124,14 +124,14 @@ public class AsmIntelParser implements PsiParser, LightPsiParser {
   // ( InstructionStmt | LABEL )*
   public static boolean FunctionBody(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionBody")) return false;
-    Marker m = enter_section_(b, l, _NONE_, "<function body>");
+    Marker m = enter_section_(b, l, _NONE_, FUNCTION_BODY, "<function body>");
     int c = current_position_(b);
     while (true) {
       if (!FunctionBody_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "FunctionBody", c)) break;
       c = current_position_(b);
     }
-    exit_section_(b, l, m, FUNCTION_BODY, true, false, null);
+    exit_section_(b, l, m, true, false, null);
     return true;
   }
 
@@ -152,10 +152,10 @@ public class AsmIntelParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "FunctionFlags")) return false;
     if (!nextTokenIs(b, "<function flags>", LPAREN, FLAG)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, "<function flags>");
+    Marker m = enter_section_(b, l, _NONE_, FUNCTION_FLAGS, "<function flags>");
     r = consumeToken(b, FLAG);
     if (!r) r = FunctionFlags_1(b, l + 1);
-    exit_section_(b, l, m, FUNCTION_FLAGS, r, false, null);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -196,7 +196,7 @@ public class AsmIntelParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // TEXT identifier '(' PSEUDO_REG ')' ',' FunctionFlags ( ',' FrameSize )?
+  // TEXT identifier '(' PSEUDO_REG ')' ',' FunctionFlags [',' FrameSize]
   public static boolean FunctionHeader(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionHeader")) return false;
     if (!nextTokenIs(b, TEXT)) return false;
@@ -213,7 +213,7 @@ public class AsmIntelParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // ( ',' FrameSize )?
+  // [',' FrameSize]
   private static boolean FunctionHeader_7(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionHeader_7")) return false;
     FunctionHeader_7_0(b, l + 1);
@@ -250,10 +250,10 @@ public class AsmIntelParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "Literal")) return false;
     if (!nextTokenIs(b, "<literal>", HEX, INT)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, "<literal>");
+    Marker m = enter_section_(b, l, _NONE_, LITERAL, "<literal>");
     r = consumeToken(b, INT);
     if (!r) r = consumeToken(b, HEX);
-    exit_section_(b, l, m, LITERAL, r, false, null);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -282,10 +282,10 @@ public class AsmIntelParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "Statement")) return false;
     if (!nextTokenIs(b, "<statement>", TEXT, IMPORT)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, "<statement>");
+    Marker m = enter_section_(b, l, _NONE_, STATEMENT, "<statement>");
     r = PreprocessorDirective(b, l + 1);
     if (!r) r = Function(b, l + 1);
-    exit_section_(b, l, m, STATEMENT, r, false, null);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
