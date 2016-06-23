@@ -24,23 +24,13 @@
 }
 
 File ::= Statement*
-
 Statement ::= PreprocessorDirective | Function
-
 PreprocessorDirective ::= import STRING
-
 Function ::= FunctionHeader FunctionBody
-
-FunctionHeader ::= TEXT identifier '(' PSEUDO_REG ')' ',' FunctionFlags ( ',' FrameSize )?
-
+FunctionHeader ::= TEXT identifier '(' PSEUDO_REG ')' ',' FunctionFlags [',' FrameSize]
 FunctionFlags ::= FLAG | '(' FLAG ( '|' FLAG )* ')'
-
-FrameSize ::= '$' Literal ( '-' Literal )?
-
+FrameSize ::= '$' Literal ['-' Literal]
 FunctionBody ::= ( InstructionStmt | LABEL )*
-
 InstructionStmt ::= INSTRUCTION Operands
-
 Operands ::=
-
 Literal ::= int | hex

@@ -17,9 +17,9 @@
 // This is a generated file. Not intended for manual editing.
 package com.plan9.intel.lang.core.psi;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.PsiElement;
+import com.intellij.lang.ASTNode;
 import com.plan9.intel.lang.core.lexer.AsmIntelTokenType;
 import com.plan9.intel.lang.core.psi.impl.*;
 
@@ -53,38 +53,36 @@ public interface AsmIntelTypes {
   IElementType TEXT = new AsmIntelTokenType("TEXT");
 
   class Factory {
-    private Factory() {}
-
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
        if (type == FRAME_SIZE) {
         return new AsmIntelFrameSizeImpl(node);
       }
-      if (type == FUNCTION) {
+      else if (type == FUNCTION) {
         return new AsmIntelFunctionImpl(node);
       }
-      if (type == FUNCTION_BODY) {
+      else if (type == FUNCTION_BODY) {
         return new AsmIntelFunctionBodyImpl(node);
       }
-      if (type == FUNCTION_FLAGS) {
+      else if (type == FUNCTION_FLAGS) {
         return new AsmIntelFunctionFlagsImpl(node);
       }
-      if (type == FUNCTION_HEADER) {
+      else if (type == FUNCTION_HEADER) {
         return new AsmIntelFunctionHeaderImpl(node);
       }
-      if (type == INSTRUCTION_STMT) {
+      else if (type == INSTRUCTION_STMT) {
         return new AsmIntelInstructionStmtImpl(node);
       }
-      if (type == LITERAL) {
+      else if (type == LITERAL) {
         return new AsmIntelLiteralImpl(node);
       }
-      if (type == OPERANDS) {
+      else if (type == OPERANDS) {
         return new AsmIntelOperandsImpl(node);
       }
-      if (type == PREPROCESSOR_DIRECTIVE) {
+      else if (type == PREPROCESSOR_DIRECTIVE) {
         return new AsmIntelPreprocessorDirectiveImpl(node);
       }
-      if (type == STATEMENT) {
+      else if (type == STATEMENT) {
         return new AsmIntelStatementImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
