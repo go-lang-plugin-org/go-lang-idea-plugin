@@ -185,6 +185,7 @@ public class GoIntroduceVariableBase {
           if (occurrenceParent instanceof GoParenthesesExpr) occurrence = occurrenceParent;
           newOccurrences.add(occurrence.replace(GoElementFactory.createReferenceExpression(project, name)));
         }
+        operation.getEditor().getCaretModel().moveToOffset(varDefinition.getIdentifier().getTextRange().getStartOffset());
       }
     });
     operation.setOccurrences(newOccurrences);
