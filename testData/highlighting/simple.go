@@ -785,3 +785,20 @@ func _() {
         var _ func(variableInFunctionType float64)
 	println(<error descr="Unresolved reference 'variableInFunctionType'">variableInFunctionType</error>)
 }
+
+func _() {
+	_ = 'a';<error descr="Missing '">'a</error><error descr="Unresolved reference 'aa'"><error descr="',', ';', <-, <NL>, <assign op> or '}' expected, got 'aa'">a</error>a</error><error descr="Missing '"><error descr="',', ';', <-, <NL>, <assign op> or '}' expected, got ''''">'</error>'</error>
+	_ = <error descr="Empty character literal or unescaped ' in character literal">'''</error>
+	_ = <error descr="Missing '">'
+</error>	;_ = <error descr="Missing '">' </error><error descr="',', ';', <NL> or '}' expected, got 'a'"> </error><error descr="Unresolved reference 'a'">a</error>
+	_ = 'a'
+	_ = <error descr="Missing '">'a</error><error descr="',', ';', <NL> or '}' expected, got ''
+'"> </error><error descr="Missing '">'
+</error>}
+
+func _() {
+	_ = "a"<error descr="',', ';', <NL> or '}' expected, got '\"aaa'"> </error><error descr="New line in string">"aaa</error>
+	_ = ""
+	_ = <error descr="New line in string">"</error>
+	_ = <error descr="New line in string">"  a</error>
+}

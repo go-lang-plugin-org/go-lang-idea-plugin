@@ -331,6 +331,10 @@
     <localInspection language="go" displayName="Underscore used as value" groupPath="Go"
                      groupName="General" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoUnderscoreUsedAsValueInspection"/>
+    <localInspection language="go" displayName="Invalid strings and runes" groupPath="Go"
+                     groupName="General" enabledByDefault="true" level="ERROR" 
+                     implementationClass="com.goide.inspections.GoInvalidStringOrCharInspection"/>
+
     <!-- /general -->
 
     <!-- color schemes -->

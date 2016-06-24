@@ -25,6 +25,18 @@ public class GoQuoteHandlerTest extends GoCodeInsightFixtureTestCase {
     myFixture.checkResult("package t; const c = \"const\" +\n\t\"<caret>value\"");
   }
 
+  public void testRemoveSingleQuote() {
+    myFixture.configureByText("t.go", "package main; const _ = '\\n''<caret>'");
+    myFixture.type('\b');
+    myFixture.checkResult("package main; const _ = '\\n'<caret>");
+  }
+
+  public void testAddSingleQuote() {
+    myFixture.configureByText("t.go", "package main; const _ = '\\n'<caret>");
+    myFixture.type('\'');
+    myFixture.checkResult("package main; const _ = '\\n''<caret>'");
+  }
+
   public void testTypeSingleQuote() { doTypeQuoteTest('\''); }
   public void testTypeDoubleQuote() { doTypeQuoteTest('\"'); }
   public void testTypeBacktick()    { doTypeQuoteTest('`'); }
