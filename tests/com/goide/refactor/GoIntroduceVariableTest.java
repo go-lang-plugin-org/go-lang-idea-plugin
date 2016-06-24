@@ -62,12 +62,14 @@ public class GoIntroduceVariableTest extends GoCodeInsightFixtureTestCase {
   public void testDoNotSuggestNameEqualsToType()                    { doTest(); }
 
   public void testCompositeLiteral()                                { doTest(); }
-  public void testIndexedExpression()                               { doTest(); }
+  public void testIndexedExpression()   { doTest(); }
 
   public void testMultipleValueResult() { doFailureTest("Expression fmt.Println() returns multiple values."); }
   public void testWrongSelection()      { doFailureTest(RefactoringBundle.message("selected.block.should.represent.an.expression")); }
   public void testTopLevelExpression()  { doFailureTest(RefactoringBundle.message("refactoring.introduce.context.error"));}
 
-  public void testReplaceAll()  { doTest(true); }
-  public void testReplaceOnly() { doTest(false);}
+  public void testReplaceAll()          { doTest(true); }
+  public void testReplaceOnly()         { doTest(false);}
+
+  public void testTwoOccurrences()      { doTest(true);}
 }
