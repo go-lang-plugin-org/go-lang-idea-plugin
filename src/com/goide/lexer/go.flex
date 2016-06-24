@@ -94,16 +94,14 @@ ESCAPES = [abfnrtv]
 "..."                                     { return TRIPLE_DOT; }
 "."                                       { return DOT; }
 
-"'\\'"                                                  { yybegin(MAYBE_SEMICOLON); return BAD_CHARACTER; }
-"'" [^\\] "'"?                                           { yybegin(MAYBE_SEMICOLON); return CHAR; }
-"'" \n "'"?                                              { yybegin(MAYBE_SEMICOLON); return CHAR; }
-"'\\" [abfnrtv\\\'] "'"?                                 { yybegin(MAYBE_SEMICOLON); return CHAR; }
-"'\\" {OCT_DIGIT} {OCT_DIGIT} {OCT_DIGIT} "'"?           { yybegin(MAYBE_SEMICOLON); return CHAR; }
-"'\\x" {HEX_DIGIT} {HEX_DIGIT} "'"?                      { yybegin(MAYBE_SEMICOLON); return CHAR; }
-"'\\u" {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} "'"?
-                                                        { yybegin(MAYBE_SEMICOLON); return CHAR; }
-"'\\U" {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} {HEX_DIGIT} "'"?
-                                                        { yybegin(MAYBE_SEMICOLON); return CHAR; }
+"'\\'"                                    { yybegin(MAYBE_SEMICOLON); return BAD_CHARACTER; }
+"'" [^\\] "'"?                            { yybegin(MAYBE_SEMICOLON); return CHAR; }
+"'" \n "'"?                               { yybegin(MAYBE_SEMICOLON); return CHAR; }
+"'\\" [abfnrtv\\\'] "'"?                  { yybegin(MAYBE_SEMICOLON); return CHAR; }
+"'\\"  {OCT_DIGIT} {3} "'"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
+"'\\x" {HEX_DIGIT} {2} "'"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
+"'\\u" {HEX_DIGIT} {4} "'"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
+"'\\U" {HEX_DIGIT} {8} "'"?               { yybegin(MAYBE_SEMICOLON); return CHAR; }
 
 "`" [^`]* "`"?                            { yybegin(MAYBE_SEMICOLON); return RAW_STRING; }
 {STR} ( [^\"\\\n\r] | "\\" ("\\" | {STR} | {ESCAPES} | [0-8xuU] ) )* {STR}? { yybegin(MAYBE_SEMICOLON); return STRING; }
