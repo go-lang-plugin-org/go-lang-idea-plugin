@@ -166,7 +166,6 @@ public class GoUtil {
     if (definition instanceof PsiDirectory && reference instanceof GoReferenceExpressionBase) return true;
     if (reference instanceof GoLabelRef && !(definition instanceof GoLabelDefinition)) return false;
     if (reference instanceof GoTypeReferenceExpression &&
-        !(reference.getParent() instanceof GoReceiverType) &&
         !(definition instanceof GoTypeSpec || definition instanceof GoImportSpec)) {
       return false;
     }

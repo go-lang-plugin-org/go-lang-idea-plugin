@@ -184,7 +184,6 @@ public class GoUnresolvedReferenceInspection extends GoInspectionBase {
   }
 
   private static boolean isProhibited(@NotNull GoCompositeElement o, @Nullable GoCompositeElement qualifier) {
-    if (PsiTreeUtil.getPrevSiblingOfType(o, GoReceiverType.class) != null) return true;
     ASTNode next = FormatterUtil.getNextNonWhitespaceSibling(o.getNode());
     boolean isDot = next != null && next.getElementType() == GoTypes.DOT;
     return isDot || qualifier != null;

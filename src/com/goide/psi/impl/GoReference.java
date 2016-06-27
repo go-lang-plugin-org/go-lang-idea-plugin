@@ -297,12 +297,6 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   private boolean processUnqualifiedResolve(@NotNull GoFile file,
                                             @NotNull GoScopeProcessor processor,
                                             @NotNull ResolveState state) {
-    // todo: rewrite with qualification not with siblings
-    GoReceiverType receiverType = PsiTreeUtil.getPrevSiblingOfType(myElement, GoReceiverType.class);
-    if (receiverType != null) {
-      return processGoType(receiverType, processor, state);
-    }
-
     if (getIdentifier().textMatches("_")) return processor.execute(myElement, state);
 
     PsiElement parent = myElement.getParent();

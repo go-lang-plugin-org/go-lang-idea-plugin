@@ -301,10 +301,6 @@ public class GoVisitor extends PsiElementVisitor {
     visitNamedElement(o);
   }
 
-  public void visitReceiverType(@NotNull GoReceiverType o) {
-    visitType(o);
-  }
-
   public void visitRecvStatement(@NotNull GoRecvStatement o) {
     visitVarSpec(o);
   }

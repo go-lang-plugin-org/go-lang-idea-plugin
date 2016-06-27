@@ -81,9 +81,6 @@ public class GoReferenceCompletionProvider extends CompletionProvider<Completion
                                 (e instanceof GoNamedSignatureOwner || e instanceof GoVarDefinition || e instanceof GoConstDefinition));
         }
       });
-      if (element instanceof GoReferenceExpressionBase && element.getParent() instanceof GoReceiverType) {
-        fillVariantsByReference(new GoReference((GoReferenceExpressionBase)element), file, result);
-      }
     }
     else if (reference instanceof GoCachedReference) {
       ((GoCachedReference)reference).processResolveVariants(new MyGoScopeProcessor(result, file, false));
