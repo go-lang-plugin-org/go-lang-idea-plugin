@@ -96,7 +96,6 @@ public interface GoTypes {
   IElementType POINTER_TYPE = GoElementTypeFactory.stubFactory("POINTER_TYPE");
   IElementType RANGE_CLAUSE = GoElementTypeFactory.stubFactory("RANGE_CLAUSE");
   IElementType RECEIVER = GoElementTypeFactory.stubFactory("RECEIVER");
-  IElementType RECEIVER_TYPE = GoElementTypeFactory.stubFactory("RECEIVER_TYPE");
   IElementType RECV_STATEMENT = GoElementTypeFactory.stubFactory("RECV_STATEMENT");
   IElementType REFERENCE_EXPRESSION = new GoCompositeElementType("REFERENCE_EXPRESSION");
   IElementType RESULT = GoElementTypeFactory.stubFactory("RESULT");
@@ -423,9 +422,6 @@ public interface GoTypes {
       }
       else if (type == RECEIVER) {
         return new GoReceiverImpl(node);
-      }
-      else if (type == RECEIVER_TYPE) {
-        return new GoReceiverTypeImpl(node);
       }
       else if (type == RECV_STATEMENT) {
         return new GoRecvStatementImpl(node);

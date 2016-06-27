@@ -268,7 +268,7 @@ public class GoPsiImplUtil {
   @Nullable
   public static GoTypeReferenceExpression getTypeReference(@Nullable GoType o) {
     if (o == null) return null;
-    if (o instanceof GoReceiverType || o instanceof GoPointerType) {
+    if (o instanceof GoPointerType) {
       return PsiTreeUtil.findChildOfAnyType(o, GoTypeReferenceExpression.class);
     }
     return o.getTypeReferenceExpression();

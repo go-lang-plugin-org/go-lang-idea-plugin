@@ -58,14 +58,6 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
   private ResolveResult[] resolveInner() {
     Collection<ResolveResult> result = new OrderedSet<ResolveResult>();
     processResolveVariants(GoReference.createResolveProcessor(result, myElement));
-    
-    if (result.isEmpty() && myElement.getParent() instanceof GoReceiverType) {
-      PsiElement resolve = new GoReference(myElement).resolve();
-      if (resolve != null) {
-        return PsiElementResolveResult.createResults(resolve);
-      }
-    }
-    
     return result.toArray(new ResolveResult[result.size()]);
   }
   

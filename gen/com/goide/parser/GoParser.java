@@ -204,9 +204,6 @@ public class GoParser implements PsiParser, LightPsiParser {
     else if (t == RECEIVER) {
       r = Receiver(b, 0);
     }
-    else if (t == RECEIVER_TYPE) {
-      r = ReceiverType(b, 0);
-    }
     else if (t == RECV_STATEMENT) {
       r = RecvStatement(b, 0);
     }
@@ -314,8 +311,8 @@ public class GoParser implements PsiParser, LightPsiParser {
     create_token_set_(ADD_EXPR, CONDITIONAL_EXPR, CONVERSION_EXPR, MUL_EXPR,
       OR_EXPR, SELECTOR_EXPR),
     create_token_set_(ARRAY_OR_SLICE_TYPE, CHANNEL_TYPE, FUNCTION_TYPE, INTERFACE_TYPE,
-      MAP_TYPE, PAR_TYPE, POINTER_TYPE, RECEIVER_TYPE,
-      STRUCT_TYPE, TYPE, TYPE_LIST),
+      MAP_TYPE, PAR_TYPE, POINTER_TYPE, STRUCT_TYPE,
+      TYPE, TYPE_LIST),
     create_token_set_(ASSIGNMENT_STATEMENT, BREAK_STATEMENT, CONTINUE_STATEMENT, DEFER_STATEMENT,
       ELSE_STATEMENT, EXPR_SWITCH_STATEMENT, FALLTHROUGH_STATEMENT, FOR_STATEMENT,
       GOTO_STATEMENT, GO_STATEMENT, IF_STATEMENT, INC_DEC_STATEMENT,
@@ -2968,53 +2965,6 @@ public class GoParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "ReceiverTail_1")) return false;
     consumeToken(b, COMMA);
     return true;
-  }
-
-  /* ********************************************************** */
-  // TypeName | '(' ('*' TypeName | ReceiverType) ')'
-  public static boolean ReceiverType(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ReceiverType")) return false;
-    if (!nextTokenIs(b, "<receiver type>", LPAREN, IDENTIFIER)) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, RECEIVER_TYPE, "<receiver type>");
-    r = TypeName(b, l + 1);
-    if (!r) r = ReceiverType_1(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // '(' ('*' TypeName | ReceiverType) ')'
-  private static boolean ReceiverType_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ReceiverType_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, LPAREN);
-    r = r && ReceiverType_1_1(b, l + 1);
-    r = r && consumeToken(b, RPAREN);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // '*' TypeName | ReceiverType
-  private static boolean ReceiverType_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ReceiverType_1_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = ReceiverType_1_1_0(b, l + 1);
-    if (!r) r = ReceiverType(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // '*' TypeName
-  private static boolean ReceiverType_1_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ReceiverType_1_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, MUL);
-    r = r && TypeName(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   /* ********************************************************** */

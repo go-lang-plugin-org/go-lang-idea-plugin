@@ -36,7 +36,6 @@ public class GoElementTypeFactory {
       put("INTERFACE_TYPE", GoInterfaceTypeImpl.class);
       put("MAP_TYPE", GoMapTypeImpl.class);
       put("POINTER_TYPE", GoPointerTypeImpl.class);
-      put("RECEIVER_TYPE", GoReceiverTypeImpl.class);
       put("STRUCT_TYPE", GoStructTypeImpl.class);
       put("TYPE", GoTypeImpl.class);
       put("PAR_TYPE", GoParTypeImpl.class);
