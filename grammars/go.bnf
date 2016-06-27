@@ -342,10 +342,10 @@ fake BinaryExpr ::= Expression+ {
 
 OrExpr ::= Expression '||' Expression
 AndExpr ::= Expression '&&' Expression
-UnaryExpr ::=  unary_op Expression
-ConditionalExpr ::= Expression rel_op Expression
-AddExpr ::= Expression add_op Expression
-MulExpr ::= Expression mul_op Expression
+UnaryExpr ::=  UnaryOp Expression
+ConditionalExpr ::= Expression RelOp Expression
+AddExpr ::= Expression AddOp Expression
+MulExpr ::= Expression MulOp Expression
 ParenthesesExpr ::= '(' <<enterMode "PAR">> Expression <<exitModeSafe "PAR">>')' {pin=1}
 
 BuiltinCallExpr ::= ReferenceExpression <<isBuiltin>> BuiltinArgumentList {pin=2}
@@ -364,10 +364,10 @@ private MaxGroup ::=
   | Literal
   | FunctionLit
 
-private rel_op ::= '==' | '!=' | '<' | '<=' | '>' | '>='
-private add_op ::= '+' | '-' | '|' | '^'
-private mul_op ::= '*' | '/' | '%' | '<<' | '>>' | '&' | '&^'
-private unary_op ::= '+' | '-' | '!' | '^' | '*' | '&' | '<-'
+private RelOp ::= '==' | '!=' | '<' | '<=' | '>' | '>='
+private AddOp ::= '+' | '-' | '|' | '^'
+private MulOp ::= '*' | '/' | '%' | '<<' | '>>' | '&' | '&^'
+private UnaryOp ::= '+' | '-' | '!' | '^' | '*' | '&' | '<-'
 
 SelectorExpr ::= Expression '.' !('(' 'type') Expression
 IndexOrSliceExpr ::= Expression '[' <<enterMode "PAR">> (SliceExprBody | IndexExprBody) <<exitModeSafe "PAR">> ']' {pin=2 methods = [getExpression getIndices]}

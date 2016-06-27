@@ -326,6 +326,20 @@ public class GoParser implements PsiParser, LightPsiParser {
   };
 
   /* ********************************************************** */
+  // '+' | '-' | '|' | '^'
+  static boolean AddOp(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AddOp")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, PLUS);
+    if (!r) r = consumeToken(b, MINUS);
+    if (!r) r = consumeToken(b, BIT_OR);
+    if (!r) r = consumeToken(b, BIT_XOR);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // '*'? TypeName
   public static boolean AnonymousFieldDefinition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AnonymousFieldDefinition")) return false;
@@ -2597,6 +2611,23 @@ public class GoParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // '*' | '/' | '%' | '<<' | '>>' | '&' | '&^'
+  static boolean MulOp(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MulOp")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, MUL);
+    if (!r) r = consumeToken(b, QUOTIENT);
+    if (!r) r = consumeToken(b, REMAINDER);
+    if (!r) r = consumeToken(b, SHIFT_LEFT);
+    if (!r) r = consumeToken(b, SHIFT_RIGHT);
+    if (!r) r = consumeToken(b, BIT_AND);
+    if (!r) r = consumeToken(b, BIT_CLEAR);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // package identifier
   public static boolean PackageClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PackageClause")) return false;
@@ -2995,6 +3026,22 @@ public class GoParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeToken(b, IDENTIFIER);
     exit_section_(b, m, REFERENCE_EXPRESSION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // '==' | '!=' | '<' | '<=' | '>' | '>='
+  static boolean RelOp(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RelOp")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, EQ);
+    if (!r) r = consumeToken(b, NOT_EQ);
+    if (!r) r = consumeToken(b, LESS);
+    if (!r) r = consumeToken(b, LESS_OR_EQUAL);
+    if (!r) r = consumeToken(b, GREATER);
+    if (!r) r = consumeToken(b, GREATER_OR_EQUAL);
+    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -4015,6 +4062,23 @@ public class GoParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // '+' | '-' | '!' | '^' | '*' | '&' | '<-'
+  static boolean UnaryOp(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UnaryOp")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, PLUS);
+    if (!r) r = consumeToken(b, MINUS);
+    if (!r) r = consumeToken(b, NOT);
+    if (!r) r = consumeToken(b, BIT_XOR);
+    if (!r) r = consumeToken(b, MUL);
+    if (!r) r = consumeToken(b, BIT_AND);
+    if (!r) r = consumeToken(b, SEND_CHANNEL);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // Expression | LiteralValue
   public static boolean Value(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Value")) return false;
@@ -4230,20 +4294,6 @@ public class GoParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '+' | '-' | '|' | '^'
-  static boolean add_op(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "add_op")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, PLUS);
-    if (!r) r = consumeToken(b, MINUS);
-    if (!r) r = consumeToken(b, BIT_OR);
-    if (!r) r = consumeToken(b, BIT_XOR);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  /* ********************************************************** */
   // '=' | '+=' | '-=' | '|=' | '^=' | '*=' | '/=' | '%=' | '<<=' | '>>=' | '&=' | '&^='
   public static boolean assign_op(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "assign_op")) return false;
@@ -4266,39 +4316,6 @@ public class GoParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '*' | '/' | '%' | '<<' | '>>' | '&' | '&^'
-  static boolean mul_op(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "mul_op")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, MUL);
-    if (!r) r = consumeToken(b, QUOTIENT);
-    if (!r) r = consumeToken(b, REMAINDER);
-    if (!r) r = consumeToken(b, SHIFT_LEFT);
-    if (!r) r = consumeToken(b, SHIFT_RIGHT);
-    if (!r) r = consumeToken(b, BIT_AND);
-    if (!r) r = consumeToken(b, BIT_CLEAR);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // '==' | '!=' | '<' | '<=' | '>' | '>='
-  static boolean rel_op(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "rel_op")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, EQ);
-    if (!r) r = consumeToken(b, NOT_EQ);
-    if (!r) r = consumeToken(b, LESS);
-    if (!r) r = consumeToken(b, LESS_OR_EQUAL);
-    if (!r) r = consumeToken(b, GREATER);
-    if (!r) r = consumeToken(b, GREATER_OR_EQUAL);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  /* ********************************************************** */
   // '<NL>' | ';' | <<eof>>
   static boolean semi(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "semi")) return false;
@@ -4307,23 +4324,6 @@ public class GoParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, SEMICOLON_SYNTHETIC);
     if (!r) r = consumeToken(b, SEMICOLON);
     if (!r) r = eof(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // '+' | '-' | '!' | '^' | '*' | '&' | '<-'
-  static boolean unary_op(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "unary_op")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, PLUS);
-    if (!r) r = consumeToken(b, MINUS);
-    if (!r) r = consumeToken(b, NOT);
-    if (!r) r = consumeToken(b, BIT_XOR);
-    if (!r) r = consumeToken(b, MUL);
-    if (!r) r = consumeToken(b, BIT_AND);
-    if (!r) r = consumeToken(b, SEND_CHANNEL);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -4373,15 +4373,15 @@ public class GoParser implements PsiParser, LightPsiParser {
         r = Expression(b, l, 1);
         exit_section_(b, l, m, AND_EXPR, r, true, null);
       }
-      else if (g < 2 && rel_op(b, l + 1)) {
+      else if (g < 2 && RelOp(b, l + 1)) {
         r = Expression(b, l, 2);
         exit_section_(b, l, m, CONDITIONAL_EXPR, r, true, null);
       }
-      else if (g < 3 && add_op(b, l + 1)) {
+      else if (g < 3 && AddOp(b, l + 1)) {
         r = Expression(b, l, 3);
         exit_section_(b, l, m, ADD_EXPR, r, true, null);
       }
-      else if (g < 4 && mul_op(b, l + 1)) {
+      else if (g < 4 && MulOp(b, l + 1)) {
         r = Expression(b, l, 4);
         exit_section_(b, l, m, MUL_EXPR, r, true, null);
       }
@@ -4417,7 +4417,7 @@ public class GoParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "UnaryExpr")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, null);
-    r = unary_op(b, l + 1);
+    r = UnaryOp(b, l + 1);
     p = r;
     r = p && Expression(b, l, 5);
     exit_section_(b, l, m, UNARY_EXPR, r, p, null);
