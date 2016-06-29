@@ -29,6 +29,7 @@ import com.intellij.lang.PsiStructureViewFactory;
 import com.intellij.openapi.actionSystem.Shortcut;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.SyntaxTraverser;
@@ -210,8 +211,8 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
       if (element instanceof GoNamedSignatureOwner) {
         GoSignature signature = ((GoNamedSignatureOwner)element).getSignature();
         String signatureText = signature != null ? signature.getText() : "";
-        PsiElement id = ((GoNamedSignatureOwner)element).getIdentifier();
-        return (id != null ? id.getText() : "") + signatureText;
+        String name = ((GoNamedSignatureOwner)element).getName();
+        return StringUtil.notNullize(name) + signatureText;
       }
       if (element instanceof GoTypeSpec) {
         GoType type = ((GoTypeSpec)element).getSpecType().getType();
