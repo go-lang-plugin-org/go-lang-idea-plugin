@@ -17,12 +17,10 @@
 package com.goide.psi;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.StubBasedPsiElement;
-import com.intellij.psi.stubs.StubBase;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface GoFunctionOrMethodDeclaration<T extends StubBase<?>> extends GoTopLevelDeclaration, GoNamedSignatureOwner, StubBasedPsiElement<T> {
+public interface GoFunctionOrMethodDeclaration extends GoTopLevelDeclaration, GoNamedSignatureOwner {
 
   @Nullable
   GoBlock getBlock();

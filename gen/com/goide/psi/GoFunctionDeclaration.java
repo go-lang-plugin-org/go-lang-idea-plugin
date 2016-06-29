@@ -17,12 +17,13 @@
 // This is a generated file. Not intended for manual editing.
 package com.goide.psi;
 
-import com.goide.stubs.GoFunctionDeclarationStub;
+import java.util.List;
+import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.intellij.psi.StubBasedPsiElement;
+import com.goide.stubs.GoFunctionDeclarationStub;
 
-public interface GoFunctionDeclaration extends GoFunctionOrMethodDeclaration<GoFunctionDeclarationStub> {
+public interface GoFunctionDeclaration extends GoFunctionOrMethodDeclaration, StubBasedPsiElement<GoFunctionDeclarationStub> {
 
   @Nullable
   GoBlock getBlock();
