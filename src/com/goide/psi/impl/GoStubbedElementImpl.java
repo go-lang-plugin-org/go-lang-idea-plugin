@@ -60,6 +60,11 @@ public abstract class GoStubbedElementImpl<T extends StubBase<?>> extends StubBa
   }
 
   @Override
+  public PsiElement getParent() {
+    return getParentByStub();
+  }
+
+  @Override
   public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
                                      @NotNull ResolveState state,
                                      PsiElement lastParent,
