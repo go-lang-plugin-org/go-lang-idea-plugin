@@ -21,7 +21,6 @@ import com.goide.project.GoVendoringUtil;
 import com.goide.psi.*;
 import com.goide.sdk.GoPackageUtil;
 import com.goide.stubs.GoNamedStub;
-import com.goide.stubs.GoTypeStub;
 import com.goide.util.GoUtil;
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
@@ -134,11 +133,7 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
   public GoType findSiblingType() {
     T stub = getStub();
     if (stub != null) {
-      PsiElement parent = getParentByStub();
-      // todo: cast is weird
-      return parent instanceof GoStubbedElementImpl ?
-             (GoType)((GoStubbedElementImpl)parent).findChildByClass(GoType.class, GoTypeStub.class) :
-             null;
+      return GoPsiTreeUtil.getStubChildOfType(getParentByStub(), GoType.class);
     }
     return PsiTreeUtil.getNextSiblingOfType(this, GoType.class);
   }
