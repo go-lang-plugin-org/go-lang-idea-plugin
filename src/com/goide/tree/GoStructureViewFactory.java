@@ -32,7 +32,9 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.StubBasedPsiElement;
 import com.intellij.psi.SyntaxTraverser;
+import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
@@ -184,7 +186,12 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
         }
       }
       else if (element instanceof GoFunctionOrMethodDeclaration) {
-        for (GoTypeSpec s : SyntaxTraverser.psiTraverser(((GoFunctionOrMethodDeclaration)element).getBlock()).filter(GoTypeSpec.class)) {
+        StubElement<?> stub = ((StubBasedPsiElement)element).getStub();
+        Iterable<GoTypeSpec> list =
+          stub != null
+          ? GoPsiTreeUtil.getStubChildrenOfTypeAsList(element, GoTypeSpec.class)
+          : SyntaxTraverser.psiTraverser(((GoFunctionOrMethodDeclaration)element).getBlock()).filter(GoTypeSpec.class);
+        for (GoTypeSpec s : list) {
           result.add(new Element(s));
         }
       }
