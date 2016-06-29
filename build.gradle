@@ -17,13 +17,19 @@
 buildscript {
   repositories {
     maven { url 'http://dl.bintray.com/jetbrains/intellij-plugin-service' }
+    jcenter()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+  }
+  dependencies {
+    classpath 'de.undercouch:gradle-download-task:3.1.0-SNAPSHOT'
   }
 }
 
 plugins {
   id 'org.jetbrains.intellij' version "0.1.8"
-  id "de.undercouch.download" version "2.0.0"
 }
+
+apply plugin: 'de.undercouch.download'
 
 version = "${version}.$buildNumber"
 allprojects {
