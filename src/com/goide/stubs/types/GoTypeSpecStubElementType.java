@@ -21,6 +21,7 @@ import com.goide.psi.GoTypeSpec;
 import com.goide.psi.impl.GoTypeSpecImpl;
 import com.goide.stubs.GoTypeSpecStub;
 import com.goide.stubs.index.GoTypesIndex;
+import com.intellij.lang.ASTNode;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubIndexKey;
 import com.intellij.psi.stubs.StubInputStream;
@@ -75,5 +76,10 @@ public class GoTypeSpecStubElementType extends GoNamedStubElementType<GoTypeSpec
   @Override
   protected Collection<StubIndexKey<String, ? extends GoNamedElement>> getExtraIndexKeys() {
     return ContainerUtil.<StubIndexKey<String, ? extends GoNamedElement>>list(GoTypesIndex.KEY);
+  }
+
+  @Override
+  protected boolean shouldCreateStubInBlock(ASTNode node) {
+    return true;
   }
 }

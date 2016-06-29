@@ -16,6 +16,7 @@
 
 package com.goide.parser;
 
+import com.goide.GoParserDefinition;
 import com.goide.GoTypes;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.lang.PsiBuilder;
@@ -56,6 +57,10 @@ public class GoParserUtil extends GeneratedParserUtilBase {
     PsiBuilder.Marker m = builder_.mark();
     do {
       IElementType type = builder_.getTokenType();
+      if (type == GoTypes.TYPE_ && nextIdentifier(builder_)) { // don't count a.(type), only type <ident>
+        m.rollbackTo();
+        return false;
+      }
       i += type == GoTypes.LBRACE ? 1 : type == GoTypes.RBRACE ? -1 : 0;  
       builder_.advanceLexer();
     }
@@ -69,7 +74,16 @@ public class GoParserUtil extends GeneratedParserUtilBase {
     }
     return result;  
   }
-  
+
+  private static boolean nextIdentifier(PsiBuilder builder_) {
+    IElementType e;
+    int i = 0;
+    //noinspection StatementWithEmptyBody
+    while ((e = builder_.rawLookup(++i)) == GoParserDefinition.WS || e == GoParserDefinition.NLS) {
+    }
+    return e == GoTypes.IDENTIFIER;
+  }
+
   public static boolean emptyImportList(PsiBuilder builder_, @SuppressWarnings("UnusedParameters") int level) {
     PsiBuilder.Marker marker = getCurrentMarker(builder_ instanceof PsiBuilderAdapter ? ((PsiBuilderAdapter)builder_).getDelegate() : builder_);
     if (marker != null) {

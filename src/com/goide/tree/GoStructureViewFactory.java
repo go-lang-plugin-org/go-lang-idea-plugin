@@ -31,6 +31,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.SyntaxTraverser;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
@@ -179,6 +180,11 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
         }
         else if (type instanceof GoInterfaceType) {
           for (GoMethodSpec m : ((GoInterfaceType)type).getMethodSpecList()) result.add(new Element(m));
+        }
+      }
+      else if (element instanceof GoFunctionOrMethodDeclaration) {
+        for (GoTypeSpec s : SyntaxTraverser.psiTraverser(((GoFunctionOrMethodDeclaration)element).getBlock()).filter(GoTypeSpec.class)) {
+          result.add(new Element(s));
         }
       }
       return result;
