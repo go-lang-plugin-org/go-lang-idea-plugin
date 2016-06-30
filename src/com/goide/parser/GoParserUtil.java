@@ -50,8 +50,7 @@ public class GoParserUtil extends GeneratedParserUtilBase {
 
   public static boolean consumeBlock(PsiBuilder builder_, @SuppressWarnings("UnusedParameters") int level) {
     PsiFile file = builder_.getUserDataUnprotected(FileContextUtil.CONTAINING_FILE_KEY);
-    if (file == null) return false;
-    VirtualFile data = file.getUserData(IndexingDataKeys.VIRTUAL_FILE);
+    VirtualFile data = file != null ? file.getUserData(IndexingDataKeys.VIRTUAL_FILE) : null;
     if (data == null) return false;
     int i = 0;
     PsiBuilder.Marker m = builder_.mark();
