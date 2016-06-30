@@ -17,6 +17,7 @@
 package com.goide.stubs;
 
 import com.goide.psi.GoNamedElement;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.stubs.NamedStubBase;
 import com.intellij.psi.stubs.StubElement;
@@ -37,5 +38,12 @@ abstract public class GoNamedStub<T extends GoNamedElement> extends NamedStubBas
 
   public boolean isPublic() {
     return myIsPublic;
+  }
+
+  @Override
+  public String toString() {
+    String name = getName();
+    String str = super.toString();
+    return StringUtil.isEmpty(name) ? str : str + ": " + name;
   }
 }
