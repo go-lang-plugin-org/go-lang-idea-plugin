@@ -50,9 +50,9 @@ public class GoBlockImpl extends GoCompositeElementImpl implements GoBlock {
   }
 
   @Override
-  @Nullable
+  @NotNull
   public PsiElement getLbrace() {
-    return findChildByType(LBRACE);
+    return notNullChild(findChildByType(LBRACE));
   }
 
   @Override

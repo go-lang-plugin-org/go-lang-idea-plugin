@@ -455,46 +455,48 @@ public class GoParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // <<consumeBlock>> | '{' ('}' | (<<withOff Statements "BLOCK?" "PAR">> | (!() Statements)) '}')
+  // BlockInner
   public static boolean Block(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Block")) return false;
+    if (!nextTokenIs(b, LBRACE)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, BLOCK, "<block>");
-    r = consumeBlock(b, l + 1);
-    if (!r) r = Block_1(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
+    Marker m = enter_section_(b);
+    r = BlockInner(b, l + 1);
+    exit_section_(b, m, BLOCK, r);
     return r;
   }
 
+  /* ********************************************************** */
   // '{' ('}' | (<<withOff Statements "BLOCK?" "PAR">> | (!() Statements)) '}')
-  private static boolean Block_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Block_1")) return false;
+  static boolean BlockInner(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BlockInner")) return false;
+    if (!nextTokenIs(b, LBRACE)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
     r = consumeToken(b, LBRACE);
     p = r; // pin = 1
-    r = r && Block_1_1(b, l + 1);
+    r = r && BlockInner_1(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
   // '}' | (<<withOff Statements "BLOCK?" "PAR">> | (!() Statements)) '}'
-  private static boolean Block_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Block_1_1")) return false;
+  private static boolean BlockInner_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BlockInner_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, RBRACE);
-    if (!r) r = Block_1_1_1(b, l + 1);
+    if (!r) r = BlockInner_1_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // (<<withOff Statements "BLOCK?" "PAR">> | (!() Statements)) '}'
-  private static boolean Block_1_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Block_1_1_1")) return false;
+  private static boolean BlockInner_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BlockInner_1_1")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
-    r = Block_1_1_1_0(b, l + 1);
+    r = BlockInner_1_1_0(b, l + 1);
     p = r; // pin = 1
     r = r && consumeToken(b, RBRACE);
     exit_section_(b, l, m, r, p, null);
@@ -502,22 +504,22 @@ public class GoParser implements PsiParser, LightPsiParser {
   }
 
   // <<withOff Statements "BLOCK?" "PAR">> | (!() Statements)
-  private static boolean Block_1_1_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Block_1_1_1_0")) return false;
+  private static boolean BlockInner_1_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BlockInner_1_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = withOff(b, l + 1, Statements_parser_, "BLOCK?", "PAR");
-    if (!r) r = Block_1_1_1_0_1(b, l + 1);
+    if (!r) r = BlockInner_1_1_0_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // !() Statements
-  private static boolean Block_1_1_1_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Block_1_1_1_0_1")) return false;
+  private static boolean BlockInner_1_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BlockInner_1_1_0_1")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
-    r = Block_1_1_1_0_1_0(b, l + 1);
+    r = BlockInner_1_1_0_1_0(b, l + 1);
     p = r; // pin = 1
     r = r && Statements(b, l + 1);
     exit_section_(b, l, m, r, p, null);
@@ -525,18 +527,30 @@ public class GoParser implements PsiParser, LightPsiParser {
   }
 
   // !()
-  private static boolean Block_1_1_1_0_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Block_1_1_1_0_1_0")) return false;
+  private static boolean BlockInner_1_1_0_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BlockInner_1_1_0_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NOT_);
-    r = !Block_1_1_1_0_1_0_0(b, l + 1);
+    r = !BlockInner_1_1_0_1_0_0(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   // ()
-  private static boolean Block_1_1_1_0_1_0_0(PsiBuilder b, int l) {
+  private static boolean BlockInner_1_1_0_1_0_0(PsiBuilder b, int l) {
     return true;
+  }
+
+  /* ********************************************************** */
+  // <<consumeBlock>> | BlockInner
+  public static boolean BlockWithConsume(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BlockWithConsume")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _COLLAPSE_, BLOCK, "<block with consume>");
+    r = consumeBlock(b, l + 1);
+    if (!r) r = BlockInner(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
   }
 
   /* ********************************************************** */
@@ -1970,7 +1984,7 @@ public class GoParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // func identifier Signature Block?
+  // func identifier Signature BlockWithConsume?
   public static boolean FunctionDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionDeclaration")) return false;
     if (!nextTokenIs(b, FUNC)) return false;
@@ -1984,10 +1998,10 @@ public class GoParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // Block?
+  // BlockWithConsume?
   private static boolean FunctionDeclaration_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionDeclaration_3")) return false;
-    Block(b, l + 1);
+    BlockWithConsume(b, l + 1);
     return true;
   }
 
@@ -2487,7 +2501,7 @@ public class GoParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // func Receiver identifier Signature Block?
+  // func Receiver identifier Signature BlockWithConsume?
   public static boolean MethodDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MethodDeclaration")) return false;
     if (!nextTokenIs(b, FUNC)) return false;
@@ -2503,10 +2517,10 @@ public class GoParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // Block?
+  // BlockWithConsume?
   private static boolean MethodDeclaration_4(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MethodDeclaration_4")) return false;
-    Block(b, l + 1);
+    BlockWithConsume(b, l + 1);
     return true;
   }
 

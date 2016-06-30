@@ -188,7 +188,9 @@ MapType ::= map '[' Type ']' Type {
 ChannelType ::= ChanTypePrefix Type {pin=1}
 private ChanTypePrefix ::= chan '<-'? | '<-' chan {pin(".*")=1}
 
-Block ::= <<consumeBlock>> | '{' ('}' | (<<withOff Statements "BLOCK?" "PAR">> | (!() Statements)) '}') {pin(".*")=1 methods=[processDeclarations]}
+BlockWithConsume ::= <<consumeBlock>> | BlockInner {elementType=Block} 
+Block ::= BlockInner {methods=[processDeclarations]} 
+private BlockInner ::= '{' ('}' | (<<withOff Statements "BLOCK?" "PAR">> | (!() Statements)) '}') {pin(".*")=1}
 private Statements ::= StatementWithSemi*
 
 private StatementWithSemi ::= Statement (semi|&'}') { pin=1 recoverWhile=StatementRecover }
@@ -273,11 +275,11 @@ VarDefinition ::= identifier {
 
 ShortVarDeclaration ::= VarDefinitionList ':=' ExpressionList {pin=2 extends=VarSpec}
 
-FunctionDeclaration ::= func identifier Signature Block? {
+FunctionDeclaration ::= func identifier Signature BlockWithConsume? {
   pin=2
   stubClass="com.goide.stubs.GoFunctionDeclarationStub"
 }
-MethodDeclaration ::= func Receiver identifier Signature Block? {
+MethodDeclaration ::= func Receiver identifier Signature BlockWithConsume? {
   pin=1
   stubClass="com.goide.stubs.GoMethodDeclarationStub"
   methods=[getReceiverType]
