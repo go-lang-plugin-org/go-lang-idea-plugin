@@ -23,38 +23,9 @@ import com.intellij.openapi.extensions.Extensions;
 import com.intellij.testFramework.ParsingTestCase;
 import org.jetbrains.annotations.NotNull;
 
-public class GoParserTest extends ParsingTestCase {
+public class GoParserTest extends GoParserTestBase {
   public GoParserTest() {
     super("parser", "go", new GoParserDefinition());
-  }
-
-  @NotNull
-  @Override
-  protected String getTestDataPath() {
-    return "testData";
-  }
-
-  @Override
-  protected boolean skipSpaces() {
-    return true;
-  }
-
-  @Override
-  protected void doTest(boolean checkErrors) {
-    super.doTest(true);
-    if (checkErrors) {
-      assertFalse(
-        "PsiFile contains error elements",
-        toParseTreeText(myFile, skipSpaces(), includeRanges()).contains("PsiErrorElement")
-      );
-    }
-  }
-
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    CoreApplicationEnvironment.registerExtensionPoint(
-      Extensions.getRootArea(), "com.intellij.lang.braceMatcher", LanguageExtensionPoint.class);
   }
 
   public void testError()                           { doTest(true);  }
