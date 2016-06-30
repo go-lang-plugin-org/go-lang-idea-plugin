@@ -224,16 +224,29 @@ public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testLoadSdkUsagesForSdkDeclarations() throws Throwable {
-    myFixture.configureByText("bar.go", "package foo; import `fmt`; func _() { fmt.Pri<caret>ntln() }");
+    myFixture.configureByText("bar.go", "package foo; import `io`; type ReaderWrapper interface{io.Rea<caret>der}");
     failOnFileLoading();
-    myFixture.findUsages(myFixture.getElementAtCaret());
+    assertException(new AssertionErrorCase() {
+      @Override
+      public void tryClosure() {
+        try {
+          assertSize(5, myFixture.findUsages(myFixture.getElementAtCaret()));
+        }
+        catch (AssertionError e) {
+          String message = e.getMessage();
+          assertTrue(message.contains("Access to tree elements not allowed in tests"));
+          assertTrue(message.contains("io.go"));
+          throw e;
+        }
+      }
+    });
   }
 
   public void testDoNotLoadSdkUsagesForProjectDeclarations() {
     myFixture.configureByText("foo.go", "package foo; func _() { Println() }");
     myFixture.configureByText("bar.go", "package foo; func Pri<caret>ntln() {}");
     failOnFileLoading();
-    myFixture.findUsages(myFixture.getElementAtCaret());
+    assertSize(1, myFixture.findUsages(myFixture.getElementAtCaret()));
   }
 
   public void testLoadImportedDirectory() throws Throwable {
@@ -245,7 +258,7 @@ public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
       @Override
       public void tryClosure() {
         try {
-          myFixture.findUsages(myFixture.getElementAtCaret());
+          assertSize(1, myFixture.findUsages(myFixture.getElementAtCaret()));
         }
         catch (AssertionError e) {
           String message = e.getMessage();
