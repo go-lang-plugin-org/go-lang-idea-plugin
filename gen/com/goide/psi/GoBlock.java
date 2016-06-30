@@ -28,7 +28,7 @@ public interface GoBlock extends GoCompositeElement {
   @NotNull
   List<GoStatement> getStatementList();
 
-  @Nullable
+  @NotNull
   PsiElement getLbrace();
 
   @Nullable
