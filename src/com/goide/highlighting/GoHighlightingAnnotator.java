@@ -30,8 +30,6 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
 import static com.goide.highlighting.GoSyntaxHighlightingColors.*;
 
 public class GoHighlightingAnnotator implements Annotator {
@@ -136,10 +134,7 @@ public class GoHighlightingAnnotator implements Annotator {
   public void annotate(@NotNull PsiElement o, @NotNull AnnotationHolder holder) {
     if (!o.isValid()) return;
     if (o instanceof GoImportSpec && ((GoImportSpec)o).isDot()) {
-      List<? extends PsiElement> importUsers = o.getUserData(GoReference.IMPORT_USERS);
-      if (importUsers != null) {
-        importUsers.clear();
-      }
+      o.putUserData(GoReference.IMPORT_USERS, null);
     }
     else if (o instanceof GoLiteral) {
       if (((GoLiteral)o).getHex() != null || ((GoLiteral)o).getOct() != null) {
