@@ -46,6 +46,10 @@ public class GoDeferGoInspectionTest extends GoQuickFixTestBase {
     doTest(GoDeferGoInspection.ADD_CALL_QUICK_FIX_NAME, true);
   }
 
+  public void testConversions() {
+    myFixture.testHighlighting(getTestName(true) + ".go");
+  }
+
   public void testValid() {
     myFixture.testHighlighting(getTestName(true) + ".go");
   }
