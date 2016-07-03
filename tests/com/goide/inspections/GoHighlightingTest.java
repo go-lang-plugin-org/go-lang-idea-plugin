@@ -156,8 +156,8 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testStringSliceWithThirdIndex() { doTest(); }
   public void testSliceWithThirdIndex()       { doTest(); }
   public void testAssignToStructFieldInMap()  { doTest(); }
-  public void testStringInStructSliceWithThirdIndex() { doTest(); }
   public void testInfiniteFor()               { doTest(); }
+  public void testStringInStructSliceWithThirdIndex() { doTest(); }
 
   public void testAvoidDuplicatedUnusedImportReports() {
     myFixture.addFileToProject("pack1/a.go", "package foo;");

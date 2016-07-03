@@ -34,7 +34,7 @@ public class GoInfiniteForInspection extends GoInspectionBase {
         super.visitForStatement(o);
 
         if (o.getExpression() == null &&
-            !hasBlock(o.getBlock()) &&
+            isEmpty(o.getBlock()) &&
             !hasRangeClause(o.getRangeClause()) &&
             !hasClause(o.getForClause())) {
           holder.registerProblem(o, "Infinite for loop", ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new GoReplaceWithSelectStatementQuickFix());
@@ -43,18 +43,15 @@ public class GoInfiniteForInspection extends GoInspectionBase {
     };
   }
 
-  private static boolean hasBlock(@Nullable GoBlock block) {
-    return block == null ||
-           !block.getStatementList().isEmpty();
+  private static boolean isEmpty(@Nullable GoBlock block) {
+    return block != null && block.getStatementList().isEmpty();
   }
 
   private static boolean hasRangeClause(@Nullable GoRangeClause rangeClause) {
-    return rangeClause != null &&
-           !rangeClause.getExpressionList().isEmpty();
+    return rangeClause != null && !rangeClause.getExpressionList().isEmpty();
   }
 
   private static boolean hasClause(@Nullable GoForClause forClause) {
-    return forClause != null &&
-           !forClause.getStatementList().isEmpty();
+    return forClause != null && !forClause.getStatementList().isEmpty();
   }
 }
