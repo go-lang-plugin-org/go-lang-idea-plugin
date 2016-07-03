@@ -18,6 +18,7 @@ package com.goide.inspections;
 
 import com.goide.psi.*;
 import com.goide.psi.impl.GoElementFactory;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInspection.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -45,7 +46,10 @@ public class GoDeferGoInspection extends GoInspectionBase {
       }
 
       private void checkExpression(@Nullable GoExpression o, String who) {
-        if (o == null || o instanceof GoCallExpr || o instanceof GoBuiltinCallExpr) return;
+        if (o == null) return;
+        if ((o instanceof GoCallExpr || o instanceof GoBuiltinCallExpr) && !GoPsiImplUtil.isConversionExpression(o)) {
+          return;
+        }
         if (o instanceof GoParenthesesExpr) {
           holder.registerProblem(o, "Expression in " + who + " must not be parenthesized", ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
                                  new GoUnwrapParensExpression());

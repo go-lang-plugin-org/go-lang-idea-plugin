@@ -80,6 +80,20 @@ public class GoPsiImplUtil {
     return resolve != null && isBuiltinFile(resolve.getContainingFile());
   }
 
+  public static boolean isConversionExpression(@Nullable GoExpression expression) {
+    if (expression instanceof GoConversionExpr) {
+      return true;
+    }
+    GoReferenceExpression referenceExpression = null;
+    if (expression instanceof GoCallExpr) {
+      referenceExpression = ObjectUtils.tryCast(((GoCallExpr)expression).getExpression(), GoReferenceExpression.class);
+    }
+    else if (expression instanceof GoBuiltinCallExpr) {
+      referenceExpression = ((GoBuiltinCallExpr)expression).getReferenceExpression();
+    }
+    return referenceExpression != null && referenceExpression.resolve() instanceof GoTypeSpec;
+  }
+
   public static boolean isPanic(@NotNull GoCallExpr o) {
     GoExpression e = o.getExpression();
     if (StringUtil.equals("panic", e.getText()) && e instanceof GoReferenceExpression) {
