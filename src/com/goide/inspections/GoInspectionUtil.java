@@ -35,11 +35,7 @@ public class GoInspectionUtil {
       return 1;
     }
     if (call instanceof GoParenthesesExpr) {
-      GoExpression expr = ((GoParenthesesExpr)call).getExpression();
-      if (expr instanceof GoCallExpr) {
-        return getFunctionResultCount((GoCallExpr)expr);
-      }
-      return 1;
+      return getExpressionResultCount(((GoParenthesesExpr)call).getExpression());
     }
     if (call instanceof GoTypeAssertionExpr) {
       return getTypeAssertionResultCount((GoTypeAssertionExpr)call);
