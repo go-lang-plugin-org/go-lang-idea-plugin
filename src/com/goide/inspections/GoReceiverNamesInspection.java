@@ -25,11 +25,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
+import java.util.Set;
 
 public class GoReceiverNamesInspection extends GoInspectionBase {
-  private static String[] genericNames = {"me", "this", "self"};
-  private static HashSet<String> genericNamesSet = ContainerUtil.newHashSet(genericNames);
+  private static final Set<String> genericNamesSet = ContainerUtil.newHashSet("me", "this", "self");
 
   @NotNull
   @Override
