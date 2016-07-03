@@ -17,17 +17,10 @@
 package com.goide.inspections;
 
 import com.goide.psi.*;
-import com.goide.psi.impl.GoElementFactory;
-import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInspection.LocalInspectionToolSession;
-import com.intellij.codeInspection.LocalQuickFixBase;
-import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 import static com.intellij.codeInspection.ProblemHighlightType.GENERIC_ERROR_OR_WARNING;
 
@@ -41,11 +34,13 @@ public class GoDirectAssignToStructFieldInMapInspection extends GoInspectionBase
         super.visitLeftHandExprList(o);
         for (GoExpression expression : o.getExpressionList()) {
           if (!(expression instanceof GoSelectorExpr)) continue;
-          GoExpression expr = ((GoSelectorExpr)expression).getExpressionList().get(0);
-          if (!(expr instanceof GoIndexOrSliceExpr)) continue;
-          GoType exprType = expr.getGoType(null);
-          if (exprType == null || !(exprType.getParent() instanceof GoMapType)) continue;
-          holder.registerProblem(o, "cannot assign to " + expression.getText(), GENERIC_ERROR_OR_WARNING);
+          GoExpression expr = ContainerUtil.getFirstItem(((GoSelectorExpr)expression).getExpressionList());
+          if (expr instanceof GoIndexOrSliceExpr) {
+            GoType exprType = expr.getGoType(null);
+            if (exprType != null && exprType.getParent() instanceof GoMapType) {
+              holder.registerProblem(o, "cannot assign to " + expression.getText(), GENERIC_ERROR_OR_WARNING);
+            }
+          }
         }
       }
     };
