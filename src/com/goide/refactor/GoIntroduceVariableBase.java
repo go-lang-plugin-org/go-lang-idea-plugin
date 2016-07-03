@@ -194,9 +194,20 @@ public class GoIntroduceVariableBase {
         assert varDefinition.isValid() : "invalid var `" + varDefinition.getText() + "` definition in `" + statement.getText() + "`";
         operation.setVar(varDefinition);
 
+        boolean firstOccurrence = true;
         for (PsiElement occurrence : occurrences) {
           PsiElement occurrenceParent = occurrence.getParent();
           if (occurrenceParent instanceof GoParenthesesExpr) occurrence = occurrenceParent;
+
+          if (firstOccurrence && occurrence instanceof GoExpression) {
+            firstOccurrence = false;
+            PsiElement parent = occurrence.getParent();
+            // single-expression statement
+            if (parent instanceof GoLeftHandExprList && parent.getParent() instanceof GoSimpleStatement) {
+              parent.getParent().delete();
+              continue;
+            }
+          }
           newOccurrences.add(occurrence.replace(GoElementFactory.createReferenceExpression(project, name)));
         }
         operation.getEditor().getCaretModel().moveToOffset(varDefinition.getIdentifier().getTextRange().getStartOffset());
