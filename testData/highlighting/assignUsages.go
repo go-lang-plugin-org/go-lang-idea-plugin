@@ -30,7 +30,7 @@ func returnTwo() (int, int) {
 }
 
 func _() {
-	a, b := (returnTwo())
+	a, b := ((returnTwo()))
 	_, _ = a, b
 }
 
