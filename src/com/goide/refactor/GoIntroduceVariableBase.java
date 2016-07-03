@@ -24,10 +24,13 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Condition;
+import com.intellij.openapi.util.Conditions;
 import com.intellij.openapi.util.Pass;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.SyntaxTraverser;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.IntroduceTargetChooser;
 import com.intellij.refactoring.RefactoringBundle;
@@ -58,15 +61,22 @@ public class GoIntroduceVariableBase {
       showCannotPerform(operation, message);
       return;
     }
-    if (PsiTreeUtil.getParentOfType(expression, GoStatement.class) == null) {
+    List<GoExpression> extractableExpressions = collectExtractableExpressions(expression);
+    if (extractableExpressions.isEmpty()) {
       showCannotPerform(operation, RefactoringBundle.message("refactoring.introduce.context.error"));
       return;
     }
-    List<GoExpression> expressions = collectNestedExpressions(expression);
+    List<GoExpression> expressions = ContainerUtil.filter(extractableExpressions, new Condition<GoExpression>() {
+      @Override
+      public boolean value(GoExpression expression) {
+        return GoInspectionUtil.getExpressionResultCount(expression) == 1;
+      }
+    });
     if (expressions.isEmpty()) {
-      int resultCount = GoInspectionUtil.getExpressionResultCount(expression);
-      showCannotPerform(operation, "Expression " + expression.getText() + "()" +
-                                   (resultCount == 0 ? " doesn't return a value." : " returns multiple values."));
+      GoExpression closestExpression = ContainerUtil.getFirstItem(extractableExpressions);
+      int resultCount = closestExpression != null ? GoInspectionUtil.getExpressionResultCount(closestExpression) : 0;
+      showCannotPerform(operation, "Expression " + (closestExpression != null ? closestExpression.getText() + " " : "") +
+                                   (resultCount == 0 ? "doesn't return a value." : "returns multiple values."));
       return;
     }
     if (expressions.size() == 1 || hasSelection || ApplicationManager.getApplication().isUnitTestMode()) {
@@ -107,16 +117,20 @@ public class GoIntroduceVariableBase {
   }
 
   @NotNull
-  private static List<GoExpression> collectNestedExpressions(GoExpression expression) {
-    List<GoExpression> expressions = ContainerUtil.newArrayList();
-    while (expression != null) {
-      if (!(expression instanceof GoParenthesesExpr) && GoInspectionUtil.getExpressionResultCount(expression) == 1 &&
-          !(expression instanceof GoReferenceExpression && expression.getParent() instanceof GoCallExpr)) {
-        expressions.add(expression);
-      }
-      expression = PsiTreeUtil.getParentOfType(expression, GoExpression.class);
+  private static List<GoExpression> collectExtractableExpressions(@NotNull GoExpression expression) {
+    if (PsiTreeUtil.getParentOfType(expression, GoStatement.class) == null) {
+      return Collections.emptyList();
     }
-    return expressions;
+    return SyntaxTraverser.psiApi().parents(expression).takeWhile(Conditions.notInstanceOf(GoTopLevelDeclaration.class))
+      .filter(GoExpression.class)
+      .filter(Conditions.notInstanceOf(GoParenthesesExpr.class))
+      .filter(new Condition<GoExpression>() {
+        @Override
+        public boolean value(GoExpression expression) {
+          return !(expression instanceof GoReferenceExpression && expression.getParent() instanceof GoCallExpr);
+        }
+      })
+      .toList();
   }
 
   private static void performOnElement(final GoIntroduceOperation operation) {
@@ -194,9 +208,8 @@ public class GoIntroduceVariableBase {
 
   private static void showCannotPerform(GoIntroduceOperation operation, String message) {
     message = RefactoringBundle.getCannotRefactorMessage(message);
-    CommonRefactoringUtil
-      .showErrorHint(operation.getProject(), operation.getEditor(), message, RefactoringBundle.getCannotRefactorMessage(null),
-                     "refactoring.extractVariable");
+    CommonRefactoringUtil.showErrorHint(operation.getProject(), operation.getEditor(), message, 
+                                        RefactoringBundle.getCannotRefactorMessage(null), "refactoring.extractVariable");
   }
 
   private static class GoInplaceVariableIntroducer extends InplaceVariableIntroducer<PsiElement> {
