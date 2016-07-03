@@ -44,6 +44,9 @@ public class GoInspectionUtil {
     if (call instanceof GoTypeAssertionExpr) {
       return getTypeAssertionResultCount((GoTypeAssertionExpr)call);
     }
+    if (GoPsiImplUtil.isConversionExpression(call)) {
+      return 1;
+    }
     if (call instanceof GoCallExpr) {
       return getFunctionResultCount((GoCallExpr)call);
     }

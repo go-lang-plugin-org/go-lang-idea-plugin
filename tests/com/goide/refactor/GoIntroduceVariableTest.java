@@ -67,6 +67,7 @@ public class GoIntroduceVariableTest extends GoCodeInsightFixtureTestCase {
 
   public void testCompositeLiteral()                                { doTest(); }
   public void testIndexedExpression()                               { doTest(); }
+  public void testConversion()                                      { doTest(); }
 
   public void testVoidExpression()      { doFailureTest("Expression fmt.Println() returns multiple values."); }
   public void testVoidCallExpression()  { doFailureTest("Expression fmt.Println() returns multiple values."); }
