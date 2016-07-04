@@ -27,20 +27,21 @@ import com.intellij.psi.ResolveState;
 public interface GoAnonymousFieldDefinition extends GoNamedElement, StubBasedPsiElement<GoAnonymousFieldDefinitionStub> {
 
   @NotNull
-  GoTypeReferenceExpression getTypeReferenceExpression();
-
-  @Nullable
-  PsiElement getMul();
+  GoType getType();
 
   @Nullable
   PsiElement getIdentifier();
 
-  @NotNull
+  @Nullable
   String getName();
 
-  int getTextOffset();
+  @Nullable
+  GoTypeReferenceExpression getTypeReferenceExpression();
 
   @Nullable
-  GoType getGoTypeInner(ResolveState context);
+  GoType getGoTypeInner();
+
+  @Nullable
+  GoType getGoType(ResolveState context);
 
 }

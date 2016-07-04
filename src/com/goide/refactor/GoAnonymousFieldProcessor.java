@@ -16,13 +16,13 @@
 
 package com.goide.refactor;
 
-import com.goide.psi.GoAnonymousFieldDefinition;
-import com.goide.psi.GoTypeSpec;
+import com.goide.psi.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.refactoring.rename.RenamePsiElementProcessor;
+import com.intellij.util.ObjectUtils;
 import com.intellij.util.Query;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,16 +42,21 @@ public class GoAnonymousFieldProcessor extends RenamePsiElementProcessor {
       Query<PsiReference> search = ReferencesSearch.search(element, scope);
       for (PsiReference ref : search) {
         PsiElement refElement = ref.getElement();
-        PsiElement parent = refElement == null ? null : refElement.getParent();
-        if (parent instanceof GoAnonymousFieldDefinition) {
-          allRenames.put(parent, newName);
+        PsiElement type = refElement == null ? null : refElement.getParent();
+        if (!(type instanceof GoType)) continue;
+        PsiElement typeParent = type.getParent();
+        GoPointerType pointer = ObjectUtils.tryCast(typeParent, GoPointerType.class);
+        PsiElement anon = pointer != null ? pointer.getParent() : typeParent;
+        if (anon instanceof GoAnonymousFieldDefinition) {
+          allRenames.put(anon, newName);
         }
       }
     }
     else if (element instanceof GoAnonymousFieldDefinition) {
-      PsiElement type = ((GoAnonymousFieldDefinition)element).getTypeReferenceExpression().resolve();
-      if (type instanceof GoTypeSpec) {
-        allRenames.put(type, newName);
+      GoTypeReferenceExpression reference = ((GoAnonymousFieldDefinition)element).getTypeReferenceExpression();
+      PsiElement resolve = reference != null ? reference.resolve() : null;
+      if (resolve instanceof GoTypeSpec) {
+        allRenames.put(resolve, newName);
       }
     }
   }
