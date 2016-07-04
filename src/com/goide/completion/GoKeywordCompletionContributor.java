@@ -48,7 +48,7 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
     extend(CompletionType.BASIC, importPattern(), new GoKeywordCompletionProvider(KEYWORD_PRIORITY, "import"));
     extend(CompletionType.BASIC, topLevelPattern(), new GoKeywordCompletionProvider(KEYWORD_PRIORITY, "const", "var", "func", "type"));
     extend(CompletionType.BASIC, insideBlockPattern(GoTypes.IDENTIFIER),
-           new GoKeywordCompletionProvider(KEYWORD_PRIORITY, "type", "for", "const", "var", "return", "if", "switch", "go", "defer", 
+           new GoKeywordCompletionProvider(KEYWORD_PRIORITY, "type", "for", "const", "var", "return", "if", "switch", "go", "defer",
                                            "goto"));
     extend(CompletionType.BASIC, insideBlockPattern(GoTypes.IDENTIFIER),
            new GoKeywordCompletionProvider(KEYWORD_PRIORITY, EMPTY_INSERT_HANDLER, "fallthrough"));
@@ -63,16 +63,17 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
     extend(CompletionType.BASIC, typeExpression(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, "chan"));
     extend(CompletionType.BASIC, typeExpression(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY,
                                                                                    ADD_BRACKETS_INSERT_HANDLER, "map"));
-    
+
     extend(CompletionType.BASIC, referenceExpression(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY,
                                                                                         ADD_BRACKETS_INSERT_HANDLER, "map"));
     extend(CompletionType.BASIC, referenceExpression(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY,
                                                                                         BracesInsertHandler.ONE_LINER, "struct"));
-    
+
     extend(CompletionType.BASIC, afterIfBlock(GoTypes.IDENTIFIER), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, "else"));
     extend(CompletionType.BASIC, afterElseKeyword(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, "if"));
     extend(CompletionType.BASIC, insideSwitchStatement(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, "case", "default"));
-    //  todo: "range"
+    extend(CompletionType.BASIC, rangeClause(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY,
+                                                                                AddSpaceInsertHandler.INSTANCE_WITH_AUTO_POPUP, "range"));
   }
 
   @Override
@@ -86,11 +87,20 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
   }
 
   private static ElementPattern<? extends PsiElement> afterIfBlock(@NotNull IElementType tokenType) {
-    PsiElementPattern.Capture<GoStatement> statement = 
+    PsiElementPattern.Capture<GoStatement> statement =
       psiElement(GoStatement.class).afterSiblingSkipping(psiElement().whitespaceCommentEmptyOrError(), psiElement(GoIfStatement.class));
     PsiElementPattern.Capture<GoLeftHandExprList> lh = psiElement(GoLeftHandExprList.class).withParent(statement);
     return psiElement(tokenType).withParent(psiElement(GoReferenceExpressionBase.class).with(new GoNonQualifiedReference()).withParent(lh))
       .andNot(afterElseKeyword()).andNot(onStatementBeginning(tokenType));
+  }
+
+  private static ElementPattern<? extends PsiElement> rangeClause() {
+    return psiElement(GoTypes.IDENTIFIER).andOr(
+      // for a := ran<caret> | for a = ran<caret>
+      psiElement().withParent(psiElement(GoReferenceExpression.class).withParent(GoRangeClause.class).afterLeaf("=", ":=")),
+      // for ran<caret>
+      psiElement().afterLeaf(psiElement(GoTypes.FOR))
+    );
   }
 
   private static ElementPattern<? extends PsiElement> afterElseKeyword() {
@@ -114,7 +124,7 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
       psiElement(GoTypeReferenceExpression.class).with(new GoNonQualifiedReference()));
   }
 
-  private static ElementPattern<? extends PsiElement>referenceExpression() {
+  private static ElementPattern<? extends PsiElement> referenceExpression() {
     return psiElement(GoTypes.IDENTIFIER).withParent(
       psiElement(GoReferenceExpression.class)
         .andNot(insideConstSpec())
@@ -136,9 +146,9 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
     return psiElement(GoTypes.IDENTIFIER)
       .withParent(psiElement(GoExpression.class).withParent(or(psiElement(GoDeferStatement.class), psiElement(GoGoStatement.class))));
   }
-  
+
   private static ElementPattern<? extends PsiElement> anonymousFunction() {
-    return and(referenceExpression(), 
+    return and(referenceExpression(),
                psiElement().withParent(psiElement(GoReferenceExpression.class)
                                          .withParent(or(psiElement(GoArgumentList.class), not(psiElement(GoLeftHandExprList.class))))));
   }
