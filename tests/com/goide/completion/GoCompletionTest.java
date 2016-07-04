@@ -264,6 +264,18 @@ public class GoCompletionTest extends GoCompletionTestBase {
     myFixture.testCompletionVariants(getTestName(true) + ".go", "FuncA", "FuncB");
   }
 
+  public void testRangeKeyword_1() {
+    doTestCompletion();
+  }
+
+  public void testRangeKeyword_2() {
+    doTestCompletion();
+  }
+
+  public void testRangeKeyword_3() {
+    doTestCompletion();
+  }
+
   public void testChanKeyword() {
     doTestCompletion();
   }
