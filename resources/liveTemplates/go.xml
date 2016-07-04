@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!--
-  ~ Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+  ~ Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -67,10 +67,9 @@
       <option name='GO_BLOCK' value='true'/>
     </context>
   </template>
-  <template description='Interface or struct' name='type' toReformat='true' toShortenFQNames='true'
-            value='type $NAME$ $TYPE$ {&#10;	$END$&#10;}'>
+  <template description='Interface or struct' name='type' toReformat='true' toShortenFQNames='true' value='type $NAME$ $TYPE$'>
     <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
-    <variable alwaysStopAt='true' defaultValue='' expression='complete' name='TYPE'/>
+    <variable alwaysStopAt='true' defaultValue='&quot;interface&quot;' expression='complete' name='TYPE'/>
     <context>
       <option name='GO_FILE' value='true'/>
       <option name='GO_BLOCK' value='true'/>
