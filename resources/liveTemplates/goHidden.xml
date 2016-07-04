@@ -100,6 +100,12 @@
       <option name='GO' value='true'/>
     </context>
   </template>
+  <template description='Anonymous struct' id='go_lang_anonymous_struct' name='go_lang_anonymous_struct' toReformat='true' toShortenFQNames='true'
+            value='struct {&#10;	$END$&#10;}{}'>
+    <context>
+      <option name='GO' value='true'/>
+    </context>
+  </template>
   <template description='Variable declaration' id='go_lang_var' name='go_lang_var' toReformat='true' toShortenFQNames='true'
             value='var $NAME$ $TYPE$ = $VALUE$'>
     <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>

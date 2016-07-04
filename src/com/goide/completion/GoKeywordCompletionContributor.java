@@ -66,8 +66,6 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
 
     extend(CompletionType.BASIC, referenceExpression(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY,
                                                                                         ADD_BRACKETS_INSERT_HANDLER, "map"));
-    extend(CompletionType.BASIC, referenceExpression(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY,
-                                                                                        BracesInsertHandler.ONE_LINER, "struct"));
 
     extend(CompletionType.BASIC, afterIfBlock(GoTypes.IDENTIFIER), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, "else"));
     extend(CompletionType.BASIC, afterElseKeyword(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, "if"));
@@ -83,6 +81,10 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
     if (insideGoOrDeferStatements().accepts(position) || anonymousFunction().accepts(position)) {
       InsertHandler<LookupElement> insertHandler = GoKeywordCompletionProvider.createTemplateBasedInsertHandler("go_lang_anonymous_func");
       result.addElement(GoKeywordCompletionProvider.createKeywordLookupElement("func", CONTEXT_KEYWORD_PRIORITY, insertHandler));
+    }
+    if (referenceExpression().accepts(position)) {
+      InsertHandler<LookupElement> insertHandler = GoKeywordCompletionProvider.createTemplateBasedInsertHandler("go_lang_anonymous_struct");
+      result.addElement(GoKeywordCompletionProvider.createKeywordLookupElement("struct", CONTEXT_KEYWORD_PRIORITY, insertHandler));
     }
   }
 
