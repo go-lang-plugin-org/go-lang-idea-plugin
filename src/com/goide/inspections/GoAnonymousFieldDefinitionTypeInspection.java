@@ -16,27 +16,25 @@
 
 package com.goide.inspections;
 
-import com.goide.psi.*;
+import com.goide.psi.GoAnonymousFieldDefinition;
+import com.goide.psi.GoPointerType;
+import com.goide.psi.GoType;
+import com.goide.psi.GoVisitor;
 import com.intellij.codeInspection.LocalInspectionToolSession;
-import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import org.jetbrains.annotations.NotNull;
 
-public class GoEmbeddedInterfacePointerInspection extends GoInspectionBase {
+public class GoAnonymousFieldDefinitionTypeInspection extends GoInspectionBase {
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
+  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder,
+                                     @SuppressWarnings({"UnusedParameters", "For future"}) @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
       public void visitAnonymousFieldDefinition(@NotNull GoAnonymousFieldDefinition o) {
-        if (!(o.getType() instanceof GoPointerType)) return;
-        GoTypeReferenceExpression reference = o.getTypeReferenceExpression();
-        GoType goType = reference != null ? reference.resolveType() : null;
-        if (!(goType instanceof GoSpecType)) return;
-
-        if (!(((GoSpecType)goType).getType() instanceof GoInterfaceType)) return;
-
-        holder.registerProblem(o, "Embedded type cannot be a pointer to interface", ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+        if (o.getTypeReferenceExpression() == null) {
+          holder.registerProblem(o, "Invalid type: must be typeName or *typeName");
+        }
       }
     };
   }

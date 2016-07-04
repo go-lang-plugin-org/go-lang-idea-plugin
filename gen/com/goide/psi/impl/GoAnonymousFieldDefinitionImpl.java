@@ -50,14 +50,8 @@ public class GoAnonymousFieldDefinitionImpl extends GoNamedElementImpl<GoAnonymo
 
   @Override
   @NotNull
-  public GoTypeReferenceExpression getTypeReferenceExpression() {
-    return notNullChild(GoPsiTreeUtil.getChildOfType(this, GoTypeReferenceExpression.class));
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getMul() {
-    return findChildByType(MUL);
+  public GoType getType() {
+    return notNullChild(GoPsiTreeUtil.getStubChildOfType(this, GoType.class));
   }
 
   @Nullable
@@ -65,18 +59,24 @@ public class GoAnonymousFieldDefinitionImpl extends GoNamedElementImpl<GoAnonymo
     return GoPsiImplUtil.getIdentifier(this);
   }
 
-  @NotNull
+  @Nullable
   public String getName() {
     return GoPsiImplUtil.getName(this);
   }
 
-  public int getTextOffset() {
-    return GoPsiImplUtil.getTextOffset(this);
+  @Nullable
+  public GoTypeReferenceExpression getTypeReferenceExpression() {
+    return GoPsiImplUtil.getTypeReferenceExpression(this);
   }
 
   @Nullable
-  public GoType getGoTypeInner(ResolveState context) {
-    return GoPsiImplUtil.getGoTypeInner(this, context);
+  public GoType getGoTypeInner() {
+    return GoPsiImplUtil.getGoTypeInner(this);
+  }
+
+  @Nullable
+  public GoType getGoType(ResolveState context) {
+    return GoPsiImplUtil.getGoType(this, context);
   }
 
 }

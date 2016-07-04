@@ -240,7 +240,8 @@ public class GoPsiImplUtil {
 
   @Nullable
   public static PsiElement getIdentifier(@SuppressWarnings("UnusedParameters") @NotNull GoAnonymousFieldDefinition o) {
-    return null;
+    GoTypeReferenceExpression expression = o.getTypeReferenceExpression();
+    return expression != null ? expression.getIdentifier() : null;
   }
 
   @Nullable
@@ -252,14 +253,30 @@ public class GoPsiImplUtil {
     return null;
   }
 
-  @NotNull
+  @Nullable
   public static String getName(@NotNull GoAnonymousFieldDefinition o) {
-    return o.getTypeReferenceExpression().getIdentifier().getText();
+    PsiElement identifier = o.getIdentifier();
+    return identifier != null ? identifier.getText() : null;
   }
 
-  public static int getTextOffset(@NotNull GoAnonymousFieldDefinition o) {
-    return o.getTypeReferenceExpression().getIdentifier().getTextOffset();
+  @Nullable
+  public static GoTypeReferenceExpression getTypeReferenceExpression(@NotNull GoAnonymousFieldDefinition o) {
+    GoType type = o.getGoTypeInner();
+    return type != null ? type.getTypeReferenceExpression() : null;
   }
+
+  @Nullable
+  public static GoType getGoTypeInner(@NotNull GoAnonymousFieldDefinition o) {
+    GoType type = o.getType();
+    return type instanceof GoPointerType ? ((GoPointerType)type).getType() : type;
+  }
+
+  @Nullable
+  public static GoType getGoType(@NotNull GoAnonymousFieldDefinition o,
+                                 @SuppressWarnings("UnusedParameters") @Nullable ResolveState context) {
+    return o.getType();
+  }
+
 
   @Nullable
   public static String getName(@NotNull GoMethodSpec o) {
@@ -879,12 +896,6 @@ public class GoPsiImplUtil {
       return ContainerUtil.newArrayList(declarations);
     }
     return Collections.emptyList();
-  }
-
-  @Nullable
-  public static GoType getGoTypeInner(@NotNull GoAnonymousFieldDefinition o,
-                                      @SuppressWarnings("UnusedParameters") @Nullable ResolveState context) {
-    return o.getTypeReferenceExpression().resolveType();
   }
 
   @NotNull
