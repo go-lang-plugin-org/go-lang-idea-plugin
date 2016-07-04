@@ -1,0 +1,58 @@
+GO_FILE
+  PACKAGE_CLAUSE
+    PsiElement(package)('package')
+    PsiElement(identifier)('ff')
+  IMPORT_LIST
+    <empty list>
+  FUNCTION_DECLARATION
+    PsiElement(func)('func')
+    PsiElement(identifier)('main')
+    SIGNATURE
+      PARAMETERS
+        PsiElement(()('(')
+        PsiElement())(')')
+    BLOCK
+      PsiElement({)('{')
+      FOR_STATEMENT
+        PsiElement(for)('for')
+        RANGE_CLAUSE
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('a')
+          PsiElement(=)('=')
+          PsiErrorElement:range expected, got 'ran'
+            <empty list>
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('ran')
+      FOR_STATEMENT
+        PsiElement(for)('for')
+        RANGE_CLAUSE
+          VAR_DEFINITION
+            PsiElement(identifier)('b')
+          PsiElement(:=)(':=')
+          PsiErrorElement:',', '=' or range expected, got 'ran'
+            <empty list>
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('ran')
+      FOR_STATEMENT
+        PsiElement(for)('for')
+      PsiErrorElement:'!', '&', '(', '*', '+', '-', ';', <-, <NL>, <expression>, '[', '^', chan, func, identifier, interface, map, struct, '{' or '}' expected, got 'ran'
+        <empty list>
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('ran')
+      FOR_STATEMENT
+        PsiElement(for)('for')
+        FOR_CLAUSE
+          SIMPLE_STATEMENT
+            SHORT_VAR_DECLARATION
+              VAR_DEFINITION
+                PsiElement(identifier)('i')
+              PsiElement(:=)(':=')
+              LITERAL
+                PsiElement(int)('1')
+          PsiElement(;)(';')
+          PsiElement(;)(';')
+        PsiErrorElement:<simple statement> or '{' expected, got '}'
+          <empty list>
+      PsiElement(})('}')

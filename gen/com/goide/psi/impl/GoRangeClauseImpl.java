@@ -71,9 +71,9 @@ public class GoRangeClauseImpl extends GoVarSpecImpl implements GoRangeClause {
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getRange() {
-    return notNullChild(findChildByType(RANGE));
+    return findChildByType(RANGE);
   }
 
   @Nullable

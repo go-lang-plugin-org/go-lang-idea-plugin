@@ -17,11 +17,6 @@
 package com.goide.parser;
 
 import com.goide.GoParserDefinition;
-import com.intellij.core.CoreApplicationEnvironment;
-import com.intellij.lang.LanguageExtensionPoint;
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.testFramework.ParsingTestCase;
-import org.jetbrains.annotations.NotNull;
 
 public class GoParserTest extends GoParserTestBase {
   public GoParserTest() {
@@ -36,6 +31,7 @@ public class GoParserTest extends GoParserTestBase {
   public void testCars()                            { doTest(true);  }
   public void testIfWithNew()                       { doTest(true);  }
   public void testRanges()                          { doTest(true);  }
+  public void testIncompleteRanges()                { doTest(false); }
   public void testTorture()                         { doTest(true);  }
   public void testLiteralValues()                   { doTest(true);  }
   public void testIfComposite()                     { doTest(true);  }

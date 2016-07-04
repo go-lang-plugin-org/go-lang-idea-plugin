@@ -2936,24 +2936,40 @@ public class GoParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ExpressionsOrVariables? range Expression
+  // range Expression | ExpressionsOrVariables range Expression
   public static boolean RangeClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RangeClause")) return false;
-    boolean r, p;
+    boolean r;
     Marker m = enter_section_(b, l, _NONE_, RANGE_CLAUSE, "<range clause>");
     r = RangeClause_0(b, l + 1);
-    r = r && consumeToken(b, RANGE);
-    p = r; // pin = 2
+    if (!r) r = RangeClause_1(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // range Expression
+  private static boolean RangeClause_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RangeClause_0")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = consumeToken(b, RANGE);
+    p = r; // pin = 1
     r = r && Expression(b, l + 1, -1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
-  // ExpressionsOrVariables?
-  private static boolean RangeClause_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "RangeClause_0")) return false;
-    ExpressionsOrVariables(b, l + 1);
-    return true;
+  // ExpressionsOrVariables range Expression
+  private static boolean RangeClause_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RangeClause_1")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = ExpressionsOrVariables(b, l + 1);
+    p = r; // pin = 1
+    r = r && report_error_(b, consumeToken(b, RANGE));
+    r = p && Expression(b, l + 1, -1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */

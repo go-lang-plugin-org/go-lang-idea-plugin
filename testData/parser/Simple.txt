@@ -1449,23 +1449,23 @@ GO_FILE
           PsiElement(})('}')
       FOR_STATEMENT
         PsiElement(for)('for')
-      PsiErrorElement:'!', '&', '(', '*', '+', '-', ';', <-, <NL>, <expression>, '[', '^', chan, func, identifier, interface, map, struct, '{' or '}' expected, got 'b'
-        <empty list>
-      SIMPLE_STATEMENT
-        SHORT_VAR_DECLARATION
+        RANGE_CLAUSE
           VAR_DEFINITION
             PsiElement(identifier)('b')
           PsiElement(,)(',')
           VAR_DEFINITION
             PsiElement(identifier)('i')
           PsiElement(:=)(':=')
-          COMPOSITE_LIT
-            TYPE_REFERENCE_EXPRESSION
-              PsiElement(identifier)('M')
-            LITERAL_VALUE
-              PsiElement({)('{')
-              PsiElement(})('}')
-          PsiElement(,)(',')
+          PsiErrorElement:',', '=' or range expected, got 'M'
+            <empty list>
+          REFERENCE_EXPRESSION
+            PsiElement(identifier)('M')
+        BLOCK
+          PsiElement({)('{')
+          PsiElement(})('}')
+      PsiElement(,)(',')
+      SIMPLE_STATEMENT
+        LEFT_HAND_EXPR_LIST
           LITERAL
             PsiElement(int)('10')
       PsiElement(;)(';')

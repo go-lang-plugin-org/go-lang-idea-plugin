@@ -35,7 +35,7 @@ public interface GoRangeClause extends GoVarSpec {
   @Nullable
   PsiElement getVarAssign();
 
-  @NotNull
+  @Nullable
   PsiElement getRange();
 
   @Nullable

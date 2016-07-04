@@ -413,7 +413,7 @@ TypeListNoPin ::= Type ( ',' Type )* ','? {elementType=TypeList}
 ForStatement ::= for <<enterMode "BLOCK?">> (ForOrRangeClause Block | Block | Expression Block) <<exitModeSafe "BLOCK?">> {pin(".*")="for|ForOrRangeClause"}
 private ForOrRangeClause ::= (ForClause | RangeClause)
 ForClause ::= SimpleStatement? ';' Expression? ';' SimpleStatement? {methods=[processDeclarations]}
-RangeClause ::= ExpressionsOrVariables? range Expression {pin=2 extends=VarSpec methods=[getRangeExpression getLeftExpressionsList getRightExpressionsList]}
+RangeClause ::= range Expression | ExpressionsOrVariables range Expression {pin(".*")=1 extends=VarSpec methods=[getRangeExpression getLeftExpressionsList getRightExpressionsList]}
 private ExpressionsOrVariables ::= ExpressionList '=' | VarDefinitionList ':='
 GoStatement ::= go Expression
 SelectStatement ::= select '{' CommClause* '}'
