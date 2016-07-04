@@ -39,7 +39,7 @@ public abstract class GoParserTestBase extends ParsingTestCase {
 
   @Override
   protected void doTest(boolean checkErrors) {
-    super.doTest(false);
+    super.doTest(true);
     if (checkErrors) {
       assertFalse(
         "PsiFile contains error elements",
