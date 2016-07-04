@@ -183,9 +183,16 @@ public class GoUtil {
   }
 
   public static boolean inSamePackage(@NotNull PsiFile firstFile, @NotNull PsiFile secondFile) {
-    String referencePackage = ((GoFile)firstFile).getPackageName();
-    String definitionPackage = ((GoFile)secondFile).getPackageName();
-    return referencePackage != null && referencePackage.equals(definitionPackage);
+    PsiDirectory containingDirectory = firstFile.getContainingDirectory();
+    if (containingDirectory == null || !containingDirectory.equals(secondFile.getContainingDirectory())) {
+      return false;
+    }
+    if (firstFile instanceof GoFile && secondFile instanceof GoFile) {
+      String referencePackage = ((GoFile)firstFile).getPackageName();
+      String definitionPackage = ((GoFile)secondFile).getPackageName();
+      return referencePackage != null && referencePackage.equals(definitionPackage);
+    }
+    return true;
   }
 
   @NotNull
