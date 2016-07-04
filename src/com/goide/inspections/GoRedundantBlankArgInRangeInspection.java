@@ -38,16 +38,18 @@ public class GoRedundantBlankArgInRangeInspection extends GoInspectionBase imple
       @Override
       public void visitRangeClause(@NotNull GoRangeClause o) {
         List<GoExpression> leftExpressions = o.getLeftExpressionsList();
+        PsiElement range = o.getRange();
+        if (range == null) return;
         if (leftExpressions.size() == 2 && isBlankGoReferenceExpression(leftExpressions.get(1))) {
           if (isBlankGoReferenceExpression(leftExpressions.get(0))) {
-            registerBlankArgumentProblem(holder, leftExpressions.get(0), o.getRange().getPrevSibling());
+            registerBlankArgumentProblem(holder, leftExpressions.get(0), range.getPrevSibling());
           }
           else if (leftExpressions.get(0).getNextSibling() != null) {
             registerBlankArgumentProblem(holder, leftExpressions.get(0).getNextSibling(), leftExpressions.get(1));
           }
         }
         else if (leftExpressions.size() == 1 && isBlankGoReferenceExpression(leftExpressions.get(0))) {
-          registerBlankArgumentProblem(holder, leftExpressions.get(0), o.getRange().getPrevSibling());
+          registerBlankArgumentProblem(holder, leftExpressions.get(0), range.getPrevSibling());
         }
 
         List<GoVarDefinition> leftDefinitions = o.getVarDefinitionList();
