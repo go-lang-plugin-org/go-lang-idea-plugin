@@ -163,15 +163,20 @@ public class GoCompletionTest extends GoCompletionTestBase {
     doTestEquals("package foo; type AA struct {N AA}; func foo(a *AA) {a.<caret>}", "N");
   }
 
-  public void testStructKeyword() throws Exception {
-    doCheckResult(
-      "package main; func main() { d := struct { name str<caret> }; _ = d }", 
-      "package main; func main() { d := struct { name struct{} }; _ = d }"
-                  );
+  public void testStructKeyword() {
+    doCheckResult("package main; func main() { d := struct { name str<caret> }; _ = d }",
+                  "package main; func main() { d := struct { name struct{} }; _ = d }");
   }
-  
-  public void testStructKeyword2() throws Exception {
+
+  public void testStructKeyword2() {
     doTestInclude("package main; func main() { d := struct { name <caret> }; _ = d }", "struct");
+  }
+
+  public void testStructKeyword3() {
+    doCheckResult("package main; func main() { d := str<caret>; _ = d }",
+                  "package main; func main() { d := struct {\n" +
+                  "\t<caret>\n" +
+                  "}{}; _ = d }");
   }
 
   public void testImports() {
