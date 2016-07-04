@@ -69,7 +69,7 @@
   </template>
   <template description='Interface or struct' name='type' toReformat='true' toShortenFQNames='true' value='type $NAME$ $TYPE$'>
     <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
-    <variable alwaysStopAt='true' defaultValue='&quot;interface&quot;' expression='complete' name='TYPE'/>
+    <variable alwaysStopAt='true' defaultValue='' expression='complete' name='TYPE'/>
     <context>
       <option name='GO_FILE' value='true'/>
       <option name='GO_BLOCK' value='true'/>
