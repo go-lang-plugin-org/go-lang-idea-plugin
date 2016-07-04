@@ -261,7 +261,7 @@ public class GoElementFactory {
     return ContainerUtil.getFirstItem(file.getFunctions());
   }
 
-  public static PsiElement createNamedStructField(Project project, String field, String element) {
+  public static PsiElement createNamedStructField(@NotNull Project project, @NotNull String field, @NotNull String element) {
     GoFile file = createFileFromText(project, "package a; var _ = struct { a string } { " + field + ": " + element + " }");
     return PsiTreeUtil.findChildOfType(file, GoElement.class);
   }
