@@ -17,8 +17,6 @@
 package com.goide.inspections;
 
 import com.goide.psi.*;
-import com.goide.runconfig.testing.GoTestFinder;
-import com.goide.runconfig.testing.GoTestFunctionType;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
@@ -51,7 +49,7 @@ public class GoMixedNamedUnnamedParametersInspection extends GoInspectionBase {
     };
   }
 
-  private static void visitDeclaration(@NotNull ProblemsHolder holder, @Nullable GoSignature signature, String ownerType) {
+  private static void visitDeclaration(@NotNull ProblemsHolder holder, @Nullable GoSignature signature, @NotNull String ownerType) {
     if (signature == null) return;
     GoParameters parameters = signature.getParameters();
     visitParameterList(holder, parameters, ownerType, "parameters");
@@ -61,17 +59,14 @@ public class GoMixedNamedUnnamedParametersInspection extends GoInspectionBase {
     visitParameterList(holder, parameters, ownerType, "return parameters");
   }
 
-  private static void visitParameterList(
-    @NotNull ProblemsHolder holder,
-    @Nullable GoParameters parameters,
-    String ownerType,
-    String what) {
+  private static void visitParameterList(@NotNull ProblemsHolder holder, @Nullable GoParameters parameters,
+                                         @NotNull String ownerType, @NotNull String what) {
 
     if (parameters == null || parameters.getParameterDeclarationList().isEmpty()) return;
-    ProgressManager.checkCanceled();
     boolean hasNamed = false;
     boolean hasUnnamed = false;
     for (GoParameterDeclaration parameterDeclaration : parameters.getParameterDeclarationList()) {
+      ProgressManager.checkCanceled();
       if (parameterDeclaration.getParamDefinitionList().isEmpty()) {
         hasUnnamed = true;
       }
@@ -80,11 +75,8 @@ public class GoMixedNamedUnnamedParametersInspection extends GoInspectionBase {
       }
 
       if (hasNamed && hasUnnamed) {
-        holder.registerProblem(
-          parameters,
-          ownerType + " has both named and unnamed " + what + " <code>#ref</code> #loc",
-          ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
-
+        holder.registerProblem(parameters, ownerType + " has both named and unnamed " + what + " <code>#ref</code> #loc",
+                               ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
         return;
       }
     }
