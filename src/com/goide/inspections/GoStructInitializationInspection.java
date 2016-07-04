@@ -17,15 +17,14 @@
 package com.goide.inspections;
 
 import com.goide.psi.*;
+import com.goide.psi.impl.GoElementFactory;
 import com.goide.psi.impl.GoPsiImplUtil;
-import com.goide.quickfix.GoReplaceWithNamedStructFieldQuickFix;
 import com.goide.util.GoUtil;
-import com.intellij.codeInspection.LocalInspectionToolSession;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemHighlightType;
-import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.codeInspection.*;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
@@ -35,6 +34,7 @@ import javax.swing.*;
 import java.util.List;
 
 public class GoStructInitializationInspection extends GoInspectionBase {
+  public static final String REPLACE_WITH_NAMED_STRUCT_FIELD_FIX_NAME = "Replace with named struct field";
   public boolean reportImportedStructs;
 
   @NotNull
@@ -89,9 +89,8 @@ public class GoStructInitializationInspection extends GoInspectionBase {
       GoElement element = elemList.get(elemId);
       if (element.getKey() == null && elemId < structFields.size()) {
         String structFieldName = getFieldName(structFields.get(elemId));
-        LocalQuickFix[] fixes = structFieldName != null
-                                ? new LocalQuickFix[]{new GoReplaceWithNamedStructFieldQuickFix(structFieldName, element)}
-                                : LocalQuickFix.EMPTY_ARRAY;
+        LocalQuickFix[] fixes = structFieldName != null ? new LocalQuickFix[]{new GoReplaceWithNamedStructFieldQuickFix(structFieldName)}
+                                                        : LocalQuickFix.EMPTY_ARRAY;
         holder.registerProblem(element, "Unnamed field initialization", ProblemHighlightType.GENERIC_ERROR_OR_WARNING, fixes);
       }
     }
@@ -102,5 +101,22 @@ public class GoStructInitializationInspection extends GoInspectionBase {
     List<GoFieldDefinition> list = declaration.getFieldDefinitionList();
     GoFieldDefinition fieldDefinition = ContainerUtil.getFirstItem(list);
     return fieldDefinition != null ? fieldDefinition.getIdentifier().getText() : null;
+  }
+
+  private static class GoReplaceWithNamedStructFieldQuickFix extends LocalQuickFixBase {
+    private String myStructField;
+
+    public GoReplaceWithNamedStructFieldQuickFix(@NotNull String structField) {
+      super(REPLACE_WITH_NAMED_STRUCT_FIELD_FIX_NAME);
+      myStructField = structField;
+    }
+
+    @Override
+    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+      PsiElement startElement = descriptor.getStartElement();
+      if (startElement instanceof GoElement) {
+        startElement.replace(GoElementFactory.createNamedStructField(project, myStructField, startElement.getText()));
+      }
+    }
   }
 }

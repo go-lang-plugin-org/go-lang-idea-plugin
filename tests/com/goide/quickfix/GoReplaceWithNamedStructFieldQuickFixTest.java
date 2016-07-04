@@ -32,6 +32,6 @@ public class GoReplaceWithNamedStructFieldQuickFixTest extends GoQuickFixTestBas
     return "quickfixes/replace-with-named-struct-field";
   }
 
-  public void testSimple() { doTest(GoReplaceWithNamedStructFieldQuickFix.QUICK_FIX_NAME); }
+  public void testSimple() { doTest(GoStructInitializationInspection.REPLACE_WITH_NAMED_STRUCT_FIELD_FIX_NAME); }
 
 }
