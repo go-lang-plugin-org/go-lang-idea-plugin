@@ -16,41 +16,49 @@
 
 package com.goide.inspections;
 
-import com.goide.GoCodeInsightFixtureTestCase;
+import com.goide.quickfix.GoQuickFixTestBase;
 import com.intellij.testFramework.LightProjectDescriptor;
 import org.jetbrains.annotations.NotNull;
 
-public class GoStructInitializationInspectionTest extends GoCodeInsightFixtureTestCase {
+public class GoStructInitializationInspectionTest extends GoQuickFixTestBase {
+  private GoStructInitializationInspection myInspectionTool = new GoStructInitializationInspection();
+  private boolean myDefaultReportImportedStructs;
+
   @Override
   public void setUp() throws Exception {
     super.setUp();
     setUpProjectSdk();
+    myFixture.enableInspections(myInspectionTool);
+    myDefaultReportImportedStructs = myInspectionTool.reportImportedStructs;
+  }
+
+  @Override
+  protected void tearDown() throws Exception {
+    myInspectionTool.reportImportedStructs = myDefaultReportImportedStructs;
+    super.tearDown();
+  }
+
+  public void testUninitializedStructLocalOnly() {
+    doTest(false);
+  }
+
+  public void testUninitializedStructImported() {
+    doTest(true);
+  }
+
+  public void testQuickFix() {
+    doTest(GoStructInitializationInspection.REPLACE_WITH_NAMED_STRUCT_FIELD_FIX_NAME, true);
+  }
+
+  private long doTest(boolean allowImportedStructs) {
+    myInspectionTool.reportImportedStructs = allowImportedStructs;
+    return myFixture.testHighlighting(true, false, true, getTestName(true) + ".go");
   }
 
   @NotNull
   @Override
   protected String getBasePath() {
-    return "highlighting";
-  }
-
-  @Override
-  protected boolean isWriteActionRequired() {
-    return false;
-  }
-
-  public void testUninitializedStructLocalOnly() {
-    doWeakTest(false);
-  }
-
-  public void testUninitializedStructImported() {
-    doWeakTest(true);
-  }
-
-  private long doWeakTest(boolean allowImportedStructs) {
-    GoStructInitializationInspection inspection = new GoStructInitializationInspection();
-    inspection.reportImportedStructs = allowImportedStructs;
-    myFixture.enableInspections(inspection);
-    return myFixture.testHighlighting(true, false, true, getTestName(true) + ".go");
+    return "inspections/go-struct-initialization";
   }
 
   @Override
