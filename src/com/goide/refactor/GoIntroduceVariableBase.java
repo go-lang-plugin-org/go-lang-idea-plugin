@@ -88,13 +88,15 @@ public class GoIntroduceVariableBase {
       IntroduceTargetChooser.showChooser(operation.getEditor(), expressions, new Pass<GoExpression>() {
         @Override
         public void pass(GoExpression expression) {
-          operation.setExpression(expression);
-          performOnElement(operation);
+          if (expression.isValid()) {
+            operation.setExpression(expression);
+            performOnElement(operation);
+          }
         }
       }, new Function<GoExpression, String>() {
         @Override
         public String fun(GoExpression expression) {
-          return expression.getText();
+          return expression.isValid() ? expression.getText() : "<invalid expression>";
         }
       });
     }
@@ -133,7 +135,7 @@ public class GoIntroduceVariableBase {
       .toList();
   }
 
-  private static void performOnElement(final GoIntroduceOperation operation) {
+  private static void performOnElement(@NotNull GoIntroduceOperation operation) {
     GoExpression expression = operation.getExpression();
     LinkedHashSet<String> suggestedNames = GoRefactoringUtil.getSuggestedNames(expression);
     operation.setSuggestedNames(suggestedNames);
@@ -167,6 +169,10 @@ public class GoIntroduceVariableBase {
   }
 
   private static void performInplaceIntroduce(GoIntroduceOperation operation) {
+    if (!operation.getExpression().isValid()) {
+      showCannotPerform(operation, RefactoringBundle.message("refactoring.introduce.context.error"));
+      return;
+    }
     performReplace(operation);
     new GoInplaceVariableIntroducer(operation).performInplaceRefactoring(operation.getSuggestedNames());
   }
