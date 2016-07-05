@@ -43,6 +43,7 @@ public class GoLexerTest extends LexerTestCase {
   public void testStructs()           { doTest(); }
   public void testVariables()         { doTest(); }
   public void testEscapedQuote()      { doTest(); }
+  public void testUtf16()             { doTest(); }
 
   private void doTest() {
     try {
