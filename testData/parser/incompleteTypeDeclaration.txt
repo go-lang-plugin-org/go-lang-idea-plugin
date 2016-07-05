@@ -1,0 +1,35 @@
+GO_FILE
+  PACKAGE_CLAUSE
+    PsiElement(package)('package')
+    PsiElement(identifier)('ff')
+  IMPORT_LIST
+    <empty list>
+  TYPE_DECLARATION
+    PsiElement(type)('type')
+    PsiElement(()('(')
+    TYPE_SPEC
+      SPEC_TYPE
+        PsiElement(identifier)('a')
+        PsiErrorElement:<type> expected, got ''
+          <empty list>
+    TYPE_SPEC
+      SPEC_TYPE
+        PsiElement(identifier)('b')
+        PsiErrorElement:<type> expected, got ''
+          <empty list>
+    TYPE_SPEC
+      SPEC_TYPE
+        PsiElement(identifier)('c')
+        PsiErrorElement:<type> expected, got ''
+          <empty list>
+    PsiElement())(')')
+  FUNCTION_DECLARATION
+    PsiElement(func)('func')
+    PsiElement(identifier)('main')
+    SIGNATURE
+      PARAMETERS
+        PsiElement(()('(')
+        PsiElement())(')')
+    BLOCK
+      PsiElement({)('{')
+      PsiElement(})('}')

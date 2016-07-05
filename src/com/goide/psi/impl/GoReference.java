@@ -263,7 +263,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
       if (type instanceof GoSpecType) {
         GoType inner = ((GoSpecType)type).getType();
         if (inner instanceof GoPointerType && state.get(POINTER) != null) return true;
-        if (!processGoType(inner, processor, state.put(DONT_PROCESS_METHODS, true))) return false;
+        if (inner != null && !processGoType(inner, processor, state.put(DONT_PROCESS_METHODS, true))) return false;
       }
       return true;
     }

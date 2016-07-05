@@ -3335,12 +3335,13 @@ public class GoParser implements PsiParser, LightPsiParser {
   public static boolean SpecType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SpecType")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, SPEC_TYPE, null);
     r = consumeToken(b, IDENTIFIER);
+    p = r; // pin = 1
     r = r && Type(b, l + 1);
-    exit_section_(b, m, SPEC_TYPE, r);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */

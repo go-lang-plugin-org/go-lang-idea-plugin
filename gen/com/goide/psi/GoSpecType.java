@@ -17,15 +17,15 @@
 // This is a generated file. Not intended for manual editing.
 package com.goide.psi;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
+import com.goide.stubs.GoTypeStub;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
-import com.goide.stubs.GoTypeStub;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface GoSpecType extends GoType, StubBasedPsiElement<GoTypeStub> {
 
-  @NotNull
+  @Nullable
   GoType getType();
 
   @NotNull
