@@ -27,29 +27,6 @@ import static com.goide.GoParserDefinition.*;
   return;
 %eof}
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////// User code //////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-%{
-
-  private Stack<IElementType> gStringStack = new Stack<IElementType>();
-  private Stack<IElementType> blockStack = new Stack<IElementType>();
-
-  private int afterComment = YYINITIAL;
-  private int afterNls = YYINITIAL;
-  private int afterBrace = YYINITIAL;
-
-  private void clearStacks(){
-    gStringStack.clear();
-    blockStack.clear();
-  }
-
-  private Stack<IElementType> braceCount = new Stack<IElementType>();
-
-%}
-
-
 NL = [\r\n] | \r\n      // NewLine
 WS = [ \t\f]            // Whitespaces
 
