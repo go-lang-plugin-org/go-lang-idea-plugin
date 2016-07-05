@@ -22,8 +22,8 @@ import static com.goide.GoParserDefinition.*;
 %function advance
 %type IElementType
 
-NL = [\r\n] | \r\n      // NewLine
-WS = [ \t\f]            // Whitespaces
+NL = \R
+WS = [ \t\f]
 
 LINE_COMMENT = "//" [^\r\n]*
 MULTILINE_COMMENT = "/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")?

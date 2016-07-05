@@ -44,6 +44,7 @@ public class GoLexerTest extends LexerTestCase {
   public void testVariables()         { doTest(); }
   public void testEscapedQuote()      { doTest(); }
   public void testUtf16()             { doTest(); }
+  public void testCouldNotMatch()     { doTest(); }
 
   private void doTest() {
     try {
