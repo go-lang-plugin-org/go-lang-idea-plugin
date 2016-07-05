@@ -39,9 +39,6 @@ public interface GoAnonymousFieldDefinition extends GoNamedElement, StubBasedPsi
   GoTypeReferenceExpression getTypeReferenceExpression();
 
   @Nullable
-  GoType getGoTypeInner();
-
-  @Nullable
-  GoType getGoType(ResolveState context);
+  GoType getGoTypeInner(ResolveState context);
 
 }
