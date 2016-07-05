@@ -32,7 +32,7 @@ public interface GoIcons {
   Icon METHOD = AllIcons.Nodes.Method;
   Icon FUNCTION = AllIcons.Nodes.Function;
   Icon VARIABLE = AllIcons.Nodes.Variable;
-  Icon CONSTANT = new LayeredIcon(AllIcons.Nodes.Field, AllIcons.Nodes.FinalMark);  // todo: another icon
+  Icon CONSTANT = IconLoader.findIcon("/icons/constant.png");
   Icon PARAMETER = AllIcons.Nodes.Parameter;
   Icon FIELD = AllIcons.Nodes.Field;
   Icon LABEL = null; // todo: we need an icon here!
