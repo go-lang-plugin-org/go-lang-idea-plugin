@@ -17,18 +17,15 @@
 // This is a generated file. Not intended for manual editing.
 package com.goide.psi.impl;
 
-import com.goide.psi.GoPsiTreeUtil;
-import com.goide.psi.GoSpecType;
-import com.goide.psi.GoType;
-import com.goide.psi.GoVisitor;
+import java.util.List;
+import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import com.goide.psi.GoPsiTreeUtil;
+import static com.goide.GoTypes.*;
+import com.goide.psi.*;
 import com.intellij.psi.stubs.IStubElementType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import static com.goide.GoTypes.IDENTIFIER;
 
 public class GoSpecTypeImpl extends GoTypeImpl implements GoSpecType {
 
