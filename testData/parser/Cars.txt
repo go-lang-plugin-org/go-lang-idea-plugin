@@ -61,8 +61,9 @@ GO_FILE
           PsiElement({)('{')
           FIELD_DECLARATION
             ANONYMOUS_FIELD_DEFINITION
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('Car')
+              TYPE
+                TYPE_REFERENCE_EXPRESSION
+                  PsiElement(identifier)('Car')
           PsiElement(})('}')
   METHOD_DECLARATION
     PsiElement(func)('func')
@@ -104,8 +105,9 @@ GO_FILE
           PsiElement({)('{')
           FIELD_DECLARATION
             ANONYMOUS_FIELD_DEFINITION
-              TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('Car')
+              TYPE
+                TYPE_REFERENCE_EXPRESSION
+                  PsiElement(identifier)('Car')
           PsiElement(})('}')
   METHOD_DECLARATION
     PsiElement(func)('func')
