@@ -95,7 +95,7 @@ compiles everything, runs the tests, and builds the plugins. The output appears 
 ### Configuring and debugging in IntelliJ
 
 1. [Download](http://www.jetbrains.com/idea/) IDEA Community or Ultimate
-1. Setup the right version of [Grammar-Kit](https://github.com/JetBrains/Grammar-Kit/releases/download/1.3.1/GrammarKit.zip)
+1. Setup the right version of [Grammar-Kit](https://github.com/JetBrains/Grammar-Kit/releases/download/1.4.1/GrammarKit.zip)
 1. Make sure that **UI Designer** and **Gradle** plugins are turned on
 1. Checkout plugin repo and open the project
 1. Open the copy of go-lang-idea-plugin repository (`File | New | Project from Existing Sources...`) with it. Then import Gradle project. The default project module config should work with a recent IDEA 15 version
