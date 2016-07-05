@@ -918,7 +918,8 @@ public class GoPsiImplUtil {
     if (o instanceof GoParType) return ((GoParType)o).getActualType();
 
     if (o instanceof GoSpecType) {
-      return ((GoSpecType)o).getType().getUnderlyingType();
+      GoType type = ((GoSpecType)o).getType();
+      return type != null ? type.getUnderlyingType() : o;
     }
 
     if (builtin(o)) return o;

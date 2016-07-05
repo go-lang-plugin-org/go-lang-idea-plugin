@@ -151,6 +151,19 @@ public class GoCompletionTest extends GoCompletionTestBase {
     doTestEquals("package foo; func main(){\"<caret>\"}");
   }
 
+  public void testNoKeywordCompletionInsideTypeDeclarationList() {
+    doTestEquals("package foo; type (\n\t<caret>\n)");
+  }
+
+  public void testNoKeywordCompletionInsideConstDeclarationList() {
+    doTestEquals("package foo; const (\n\t<caret>\n)");
+  }
+
+  // #2445
+  public void _testNoKeywordCompletionInsideVarDeclarationList() {
+    doTestEquals("package foo; var (\n\t<caret>\n)");
+  }
+
   public void testNoCompletionInsideComments() {
     doTestEquals("package foo; func main(){/*<caret>*/}");
   }
