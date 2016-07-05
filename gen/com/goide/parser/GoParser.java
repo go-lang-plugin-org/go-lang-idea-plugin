@@ -4209,12 +4209,13 @@ public class GoParser implements PsiParser, LightPsiParser {
   public static boolean VarSpec(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "VarSpec")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, VAR_SPEC, null);
     r = VarDefinitionList(b, l + 1);
+    p = r; // pin = 1
     r = r && VarSpec_1(b, l + 1);
-    exit_section_(b, m, VAR_SPEC, r);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // Type [ '=' ExpressionList ] | '=' ExpressionList

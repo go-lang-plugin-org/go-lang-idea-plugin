@@ -263,6 +263,7 @@ SpecType ::= identifier Type {pin=1 stubClass="com.goide.stubs.GoTypeStub" exten
 VarDeclaration ::= var ( VarSpec | '(' VarSpecs? ')' ) {pin=1 methods=[addSpec deleteSpec]}
 private VarSpecs ::= VarSpec (semi VarSpec)* semi? {pin=1}
 VarSpec ::= VarDefinitionList ( Type [ '=' ExpressionList ] | '=' ExpressionList ) {
+  pin=1
   methods=[processDeclarations deleteDefinition getRightExpressionsList]
   stubClass="com.goide.stubs.GoVarSpecStub"
 }
