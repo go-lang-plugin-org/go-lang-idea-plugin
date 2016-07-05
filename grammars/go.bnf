@@ -138,7 +138,7 @@ FieldDefinition ::= identifier {
 
 AnonymousFieldDefinition ::= Type {
   stubClass="com.goide.stubs.GoAnonymousFieldDefinitionStub"
-  methods=[getIdentifier getName getTypeReferenceExpression getGoTypeInner getGoType]
+  methods=[getIdentifier getName getTypeReferenceExpression getGoTypeInner]
 }
 Tag ::= StringLiteral
 

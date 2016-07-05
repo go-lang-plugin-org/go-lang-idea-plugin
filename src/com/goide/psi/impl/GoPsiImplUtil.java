@@ -261,22 +261,16 @@ public class GoPsiImplUtil {
 
   @Nullable
   public static GoTypeReferenceExpression getTypeReferenceExpression(@NotNull GoAnonymousFieldDefinition o) {
-    GoType type = o.getGoTypeInner();
-    return type != null ? type.getTypeReferenceExpression() : null;
-  }
-
-  @Nullable
-  public static GoType getGoTypeInner(@NotNull GoAnonymousFieldDefinition o) {
     GoType type = o.getType();
-    return type instanceof GoPointerType ? ((GoPointerType)type).getType() : type;
+    GoType unwrap = type instanceof GoPointerType ? ((GoPointerType)type).getType() : type;
+    return unwrap != null ? unwrap.getTypeReferenceExpression() : null;
   }
 
   @Nullable
-  public static GoType getGoType(@NotNull GoAnonymousFieldDefinition o,
-                                 @SuppressWarnings("UnusedParameters") @Nullable ResolveState context) {
+  public static GoType getGoTypeInner(@NotNull GoAnonymousFieldDefinition o,
+                                      @SuppressWarnings("UnusedParameters") @Nullable ResolveState context) {
     return o.getType();
   }
-
 
   @Nullable
   public static String getName(@NotNull GoMethodSpec o) {
