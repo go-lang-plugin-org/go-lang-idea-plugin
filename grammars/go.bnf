@@ -131,6 +131,7 @@ ArrayOrSliceType ::= '[' ('...'|Expression?) ']' Type {pin=1}
 StructType ::= struct '{' Fields? '}' {pin=1}
 private Fields ::= FieldDeclaration (semi FieldDeclaration)* semi? {pin=1}
 FieldDeclaration ::= (FieldDefinitionList Type | AnonymousFieldDefinition) Tag?
+Tag ::= StringLiteral
 private FieldDefinitionList ::= FieldDefinition (',' FieldDefinition)*
 FieldDefinition ::= identifier {
   stubClass="com.goide.stubs.GoFieldDefinitionStub"
@@ -140,7 +141,6 @@ AnonymousFieldDefinition ::= Type {
   stubClass="com.goide.stubs.GoAnonymousFieldDefinitionStub"
   methods=[getIdentifier getName getTypeReferenceExpression getGoTypeInner]
 }
-Tag ::= StringLiteral
 
 PointerType ::= '*' Type {pin=1}
 
