@@ -160,7 +160,7 @@ public class GoCompletionTest extends GoCompletionTestBase {
   }
 
   // #2445
-  public void _testNoKeywordCompletionInsideVarDeclarationList() {
+  public void testNoKeywordCompletionInsideVarDeclarationList() {
     doTestEquals("package foo; var (\n\t<caret>\n)");
   }
 

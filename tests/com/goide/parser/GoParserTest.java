@@ -54,4 +54,5 @@ public class GoParserTest extends GoParserTestBase {
   public void testTypeComma()                       { doTest(false); }
   public void testIncDec()                          { doTest(false); }
   public void testIncompleteTypeDeclaration()       { doTest(false); } 
+  public void testIncompleteVarDeclaration()        { doTest(false); } 
 }
