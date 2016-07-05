@@ -19,10 +19,7 @@ package com.goide;
 import com.goide.categories.Performance;
 import com.goide.completion.GoCompletionUtil;
 import com.goide.inspections.GoUnusedImportInspection;
-import com.goide.inspections.unresolved.GoUnresolvedReferenceInspection;
-import com.goide.inspections.unresolved.GoUnusedFunctionInspection;
-import com.goide.inspections.unresolved.GoUnusedGlobalVariableInspection;
-import com.goide.inspections.unresolved.GoUnusedVariableInspection;
+import com.goide.inspections.unresolved.*;
 import com.goide.project.GoBuildTargetSettings;
 import com.goide.project.GoModuleSettings;
 import com.intellij.analysis.AnalysisScope;
@@ -82,7 +79,11 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testUnusedFunction() {
-    doInspectionTest(new GoUnusedFunctionInspection(), TimeUnit.SECONDS.toMillis(30));
+    doInspectionTest(new GoUnusedFunctionInspection(), TimeUnit.SECONDS.toMillis(15));
+  }
+
+  public void testUnusedExportedFunction() {
+    doInspectionTest(new GoUnusedExportedFunctionInspection(), TimeUnit.SECONDS.toMillis(30));
   }
 
   public void testUnusedImport() {
