@@ -9,14 +9,12 @@ import static com.goide.GoParserDefinition.*;
 
 %%
 
-
 %{
   public _GoLexer() {
     this((java.io.Reader)null);
  }
 %}
 
-%unicode
 %class _GoLexer
 %implements FlexLexer, GoTypes
 %unicode
