@@ -534,21 +534,6 @@ public class _GoLexer implements FlexLexer, GoTypes {
     this((java.io.Reader)null);
  }
 
-  private Stack<IElementType> gStringStack = new Stack<IElementType>();
-  private Stack<IElementType> blockStack = new Stack<IElementType>();
-
-  private int afterComment = YYINITIAL;
-  private int afterNls = YYINITIAL;
-  private int afterBrace = YYINITIAL;
-
-  private void clearStacks(){
-    gStringStack.clear();
-    blockStack.clear();
-  }
-
-  private Stack<IElementType> braceCount = new Stack<IElementType>();
-
-
 
   /**
    * Creates a new scanner
