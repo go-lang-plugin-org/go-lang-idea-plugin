@@ -159,9 +159,13 @@ public class GoCompletionTest extends GoCompletionTestBase {
     doTestEquals("package foo; const (\n\t<caret>\n)");
   }
 
-  // #2445
   public void testNoKeywordCompletionInsideVarDeclarationList() {
     doTestEquals("package foo; var (\n\t<caret>\n)");
+  }
+  
+  // #2445
+  public void _testNoKeywordCompletionInsideVarDeclarationListAfterEquals() {
+    doTestEquals("package foo; var (\n\ta = <caret>\n)");
   }
 
   public void testNoCompletionInsideComments() {
