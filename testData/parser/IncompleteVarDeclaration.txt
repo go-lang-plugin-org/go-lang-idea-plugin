@@ -20,7 +20,8 @@ GO_FILE
     VAR_SPEC
       VAR_DEFINITION
         PsiElement(identifier)('c')
-      PsiErrorElement:',', <type> or '=' expected, got ''
+      PsiElement(=)('=')
+      PsiErrorElement:<expression> expected, got ')'
         <empty list>
     PsiElement())(')')
   FUNCTION_DECLARATION

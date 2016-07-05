@@ -3,7 +3,7 @@ package ff
 var (
   a
   b
-  c
+  c = 
 )
 
 func main() {}

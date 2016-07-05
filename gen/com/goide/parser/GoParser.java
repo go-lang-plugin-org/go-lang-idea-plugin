@@ -4232,12 +4232,13 @@ public class GoParser implements PsiParser, LightPsiParser {
   // Type [ '=' ExpressionList ]
   private static boolean VarSpec_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "VarSpec_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
     r = Type(b, l + 1);
+    p = r; // pin = 1
     r = r && VarSpec_1_0_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // [ '=' ExpressionList ]
@@ -4250,23 +4251,25 @@ public class GoParser implements PsiParser, LightPsiParser {
   // '=' ExpressionList
   private static boolean VarSpec_1_0_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "VarSpec_1_0_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
     r = consumeToken(b, ASSIGN);
+    p = r; // pin = 1
     r = r && ExpressionList(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // '=' ExpressionList
   private static boolean VarSpec_1_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "VarSpec_1_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
     r = consumeToken(b, ASSIGN);
+    p = r; // pin = 1
     r = r && ExpressionList(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
