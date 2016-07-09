@@ -2,6 +2,7 @@
 baseurl: "http://go-ide.com/"
 contentdir: "content"
 layoutdir: "layouts"
+publishdir: "public"
 languageCode: "en-us"
 title: "IntelliJ Go"
 theme: "purehugo"
