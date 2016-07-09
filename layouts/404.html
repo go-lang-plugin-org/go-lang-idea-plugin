@@ -1,0 +1,21 @@
+{{ partial "header.html" . }}
+
+<div id="layout" class="pure-g">
+    {{ partial "sidebar.html" . }}
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <div>
+            <section class="post">
+                    <header class="post-header">
+                        <span class="post-title">Page Not Found</span>
+                    </header>
+            </section>
+            {{ partial "pagination.html" . }}
+            {{ partial "footer.html" . }}
+        </div>
+    </div>
+</div>
+
+{{ partial "analytics.html" . }}
+</body>
+</html>
