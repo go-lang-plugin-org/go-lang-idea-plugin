@@ -6,7 +6,18 @@
     <description>Recent content on IntelliJ Go</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+    <lastBuildDate>Sat, 09 Jul 2016 19:54:02 +0300</lastBuildDate>
     <atom:link href="http://go-ide.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>0.12.1501</title>
+      <link>http://go-ide.com/alpha/0.12.1501/</link>
+      <pubDate>Sat, 09 Jul 2016 19:54:02 +0300</pubDate>
+      
+      <guid>http://go-ide.com/alpha/0.12.1501/</guid>
+      <description>&lt;p&gt;sadf&lt;/p&gt;
+</description>
+    </item>
     
   </channel>
 </rss>
