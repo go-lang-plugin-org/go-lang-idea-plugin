@@ -1,0 +1,15 @@
+---
+baseurl: "http://go-ide.com/"
+contentdir: "content"
+layoutdir: "layouts"
+languageCode: "en-us"
+title: "IntelliJ Go"
+theme: "purehugo"
+Paginate: 10
+indexes:
+    category: "categories"
+canonifyurls: true
+
+params:
+    githubName: "go-lang-plugin-org"
+    description: "Golang plugin for IntelliJ IDEA"
