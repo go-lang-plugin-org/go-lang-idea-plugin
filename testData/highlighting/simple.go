@@ -43,11 +43,11 @@ func <error descr="Duplicate function name">foo</error>() {
 
 var nil int
 
-type int int
-type byte byte
-type bool bool
-type float32 float32
-type string string
+type <warning descr="Type 'int' collides with builtin type">int</warning> int
+type <warning descr="Type 'byte' collides with builtin type">byte</warning> byte
+type <warning descr="Type 'bool' collides with builtin type">bool</warning> bool
+type <warning descr="Type 'float32' collides with builtin type">float32</warning> float32
+type <warning descr="Type 'string' collides with builtin type">string</warning> string
 
 type T struct {
 	a int

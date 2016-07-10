@@ -44,9 +44,9 @@ func (bb *BigBox) Capacity() int {
         return bb.SmallBox.Capacity() * 3
 }
 
-type string string
-type int int
-type bool bool
+type <warning descr="Type 'string' collides with builtin type">string</warning> string
+type <warning descr="Type 'int' collides with builtin type">int</warning> int
+type <warning descr="Type 'bool' collides with builtin type">bool</warning> bool
 
 const (
 	true, false  = 0 == 0, 0 != 0 // Untyped bool.

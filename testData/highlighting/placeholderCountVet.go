@@ -42,7 +42,7 @@ func (errorTest4) Error() int { // Different return type.
 
 type errorTest5 int
 
-func (errorTest5) error() { // niladic; don't complain if no args (was bug)
+func (errorTest5) <warning descr="Method 'error' collides with builtin type">error</warning>() { // niladic; don't complain if no args (was bug)
 }
 
 // This function never executes, but it serves as a simple test for the program.

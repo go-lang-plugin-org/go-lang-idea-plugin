@@ -5,7 +5,7 @@ import "net/url"
 
 type alias Formatter
 
-type int int
+type <warning descr="Type 'int' collides with builtin type">int</warning> int
 
 type Car struct { wheelCount int }
 func (car Car) numberOfWheels() int { return car.wheelCount }
