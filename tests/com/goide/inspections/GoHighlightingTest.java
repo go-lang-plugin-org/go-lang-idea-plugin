@@ -164,6 +164,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testSliceWithThirdIndex()       { doTest(); }
   public void testAssignToStructFieldInMap()  { doTest(); }
   public void testInfiniteFor()               { doTest(); }
+  public void testGh2147()                    { doTest(); }
   public void testAssignmentToReceiver()      { doTest(); }
   public void testMixedNamedUnnamedParameters() { doTest(); }
   public void testStringInStructSliceWithThirdIndex() { doTest(); }
