@@ -4,8 +4,8 @@ import "fmt"
 
 func append1([]Type, ...Type) []Type
 type Type int
-type int int
-type string string
+type <warning descr="Type 'int' collides with builtin type">int</warning> int
+type <warning descr="Type 'string' collides with builtin type">string</warning> string
 
 func println1(o... interface {}) {
     fmt.Println(o)

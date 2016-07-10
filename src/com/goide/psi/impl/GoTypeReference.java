@@ -143,7 +143,7 @@ public class GoTypeReference extends GoReferenceBase<GoTypeReferenceExpression> 
     return true;
   }
 
-  private final static Set<String> DOC_ONLY_TYPES = ContainerUtil.set("Type", "Type1", "IntegerType", "FloatType", "ComplexType");
+  public final static Set<String> DOC_ONLY_TYPES = ContainerUtil.set("Type", "Type1", "IntegerType", "FloatType", "ComplexType");
   private static final Condition<GoTypeSpec> BUILTIN_TYPE = new Condition<GoTypeSpec>() {
     @Override
     public boolean value(GoTypeSpec spec) {
