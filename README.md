@@ -24,7 +24,11 @@ To use them do the following:
  - alpha: https://plugins.jetbrains.com/plugins/alpha/5047
  - nightly: https://plugins.jetbrains.com/plugins/nightly/5047
 
-As this is not yet a stable, 1.x release, some things might not work as expected.
+**NOTE**
+The above links are not meant to be used in browsers, so don't report issues
+about them not working or being inaccessible unless there's an error in the IDE itself.
+
+Since these are not stable releases, some things might not work as expected.
 
 ### Release versions schema
 
@@ -40,10 +44,6 @@ IntelliJ Platfom (IntelliJ IDEA, WebStorm, PyCharm etc.):
  
  If you are not using IntelliJ IDEA, then please check the build number of your IDE
  as that will correspond to the IntelliJ Platform version.
-
-**NOTE**
-The above links are not meant to be used in browsers, so don't report issues
-about them not working or being inaccessible unless there's an error in the IDE itself.
 
 Reporting issues is very important for us as such, please see the section below
 on how to submit a proper bug report.
