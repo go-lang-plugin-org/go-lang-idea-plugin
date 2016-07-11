@@ -5,14 +5,14 @@
 
 **Supported IDEs**
 
-The plugin can be installed on IntelliJ platform versions 141.1532 – 141.9999 and 143.1180 – 143.9999 and 2016.1:
+The plugin can be installed on following IntelliJ-based:
 
-- IntelliJ IDEA 14.1.4, 15.0.2+ or 16 (Ultimate or Community)
-- WebStorm 10.0.4 or 11
-- PhpStorm 9.0 or 10
-- PyCharm 4.5.2+ or 5
-- RubyMine 7.1.3+ or 8
-- CLion 1.0.3+ or 1.2
+- IntelliJ 2016.1+ (Ultimate or Community)
+- WebStorm 2016.1+
+- PhpStorm 2016.1+
+- PyCharm 2016.1+
+- RubyMine 2016.1+
+- CLion 2016.1+
 - Android Studio 1.2.1+
 
 Pre-release builds are available in two forms: nightly and alphas. Alpha builds are usually released at the beginning of every week while nightly builds are released every night.
@@ -33,6 +33,7 @@ IntelliJ Platfom (IntelliJ IDEA, WebStorm, PyCharm etc.):
 
 | Plugin version number | Platform number |
 | ---- | --- |
+| 0.12.x | IntelliJ 2016.2 (IntelliJ IDEA 2016.2) | 
 | 0.11.x | IntelliJ 2016.1 (IntelliJ IDEA 2016.1) | 
 | 0.10.x | IntelliJ 143.1180 - 143.9999 (IntelliJ IDEA 15.0.2+) | 
 | 0.9.x | IntelliJ 141.1532 - 141.9999 (IntelliJ IDEA 14.1) |
