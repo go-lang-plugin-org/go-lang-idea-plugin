@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.16" />
+
+  <title>Alpha &middot; IntelliJ Go</title>
+
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="http://go-ide.com/css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="http://go-ide.com/css/side-menu.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="http://go-ide.com/css/blackburn.css">
+
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  
+  <link rel="alternate" type="application/rss+xml" title="IntelliJ Go" href="http://go-ide.com/topics/alpha/index.xml" />
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/styles/androidstudio.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  
+
+</head>
+
+
+<body>
+<div id="layout">
+
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
+
+  
+  <a class="pure-menu-heading brand" href="http://go-ide.com/">IntelliJ Go</a>
+
+
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="http://go-ide.com/"><i class='fa fa-home'></i>Home</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="http://go-ide.com/topics/alpha"><i class='fa fa-at'></i>Alpha</a>
+      
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="http://go-ide.com/topics/alpha/index.xml"><i class="fa fa-rss fa-fw"></i>RSS</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin" target="_blank"><i class="fa fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </ul>
+</div>
+
+
+  <div>
+  <div class="small-print">
+    <small></small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
+</div>
+
+</div>
+
+
+  <div id="main">
+
+
+<div class="header">
+  <h1>Alpha</h1>
+</div>
+
+<div class="content">
+  
+    <article>
+  <header>
+    <h2><a href="http://go-ide.com/alpha/0.11.1288/">0.11.1288</a></h2>
+
+    <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>11 Apr 2016, 00:00</time>
+  </div>
+
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-folder fa-fw"></i>
+    
+      <a class="post-taxonomy-topic" href="http://go-ide.com/topics/alpha">alpha</a>
+    
+  </div>
+  
+  
+
+  
+
+</div>
+
+  </header>
+
+  <p>
+  <p>Changes since 0.11.1262 (05.04.2016)</p>
+
+<p>This release focuses mostly on fixes. The most critical issues which were fixed in this release are auto-importing packages from unreachable <code>testdata</code> directories and resolving <code>cap</code> expressions.</p>
+
+<p>Also here are couple improvements which this release brings:</p>
+
+<h3 id="go-vet-tool">Go vet tool</h3>
+
+<p><code>go vet</code> tool is built-in tool now and can be invoked on selected file or directory via <code>Code | Go Tools | Go vet</code> menu or via editor menu.</p>
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/14444181/baf211c6-004c-11e6-8efc-0cd133295eec.png" alt="">
+
+
+<h3 id="expression-type">Expression Type</h3>
+
+<p><code>Show info</code> action is reimplemented using built-in <code>Expression Type</code> action which is available by <code>Alt+=</code> (<code>Ctrl+Shift+P</code> on Mac) shortcut. Also it works now on variable/constant definitions.</p>
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/14444213/e4e9c41a-004c-11e6-8904-cd8b195059bb.png" alt="">
+
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/14444218/ea79d302-004c-11e6-9c2d-ce41176206e9.png" alt="">
+
+
+<h3 id="autoscroll-from-source-and-navigate-in-features">Autoscroll from source and Navigate in&hellip; features</h3>
+
+<p>Since this release it&rsquo;s possible to use <code>Autoscroll form source</code> mode in <code>File structure</code> tool window for <code>go</code> sources. <code>Navigate to... | File Structure</code> action works now as well.</p>
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/14444237/f97942d4-004c-11e6-82b6-25f8b44c04b8.png" alt="">
+
+
+  </p>
+
+  
+  <footer>
+    <a href="http://go-ide.com/alpha/0.11.1288/">Read more<i class="fa fa-angle-double-right fa-fw"></i></a>
+  </footer>
+  
+</article>
+
+  
+    <article>
+  <header>
+    <h2><a href="http://go-ide.com/alpha/0.11.1262/">0.11.1262</a></h2>
+
+    <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>05 Apr 2016, 00:00</time>
+  </div>
+
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-folder fa-fw"></i>
+    
+      <a class="post-taxonomy-topic" href="http://go-ide.com/topics/alpha">alpha</a>
+    
+  </div>
+  
+  
+
+  
+
+</div>
+
+  </header>
+
+  <p>
+  <p>Changes since 0.11.1236 (28.03.2016)</p>
+
+<p>To install the plugin, visit the <a href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin#pre-release-builds">readme</a>.</p>
+
+<p>This release focuses mostly on fixes and improvements. It contains fixes in resolution algorithms and in running tests mechanism.</p>
+
+<h2 id="read-write-access">Read/Write access</h2>
+
+<h3 id="new-inspections-and-quick-fixes">New inspections and quick fixes</h3>
+
+<p>In this release, the part which is responsible for detecting read/write access to variables was completely rewritten. Based on this the new inspection  <code>_ used as value inspection</code> is introduced and added new <code>Replace with ':='</code> quick fix for unresolved variables with write access.</p>
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/14285945/0465b840-fb56-11e5-8893-ce0c279fa770.gif" alt="">
+
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/14285957/181c83f0-fb56-11e5-9287-0e7b05922132.png" alt="">
+
+
+<h3 id="improved-inspections-and-quick-fixes">Improved inspections and quick fixes</h3>
+
+<p>Also <code>Introduce constants</code> quick fix won&rsquo;t be suggested for unresolved variables with write access and <code>Cannot assign to constant</code> catches more cases now.</p>
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/14286078/8a1c4dd2-fb56-11e5-8759-47f454b2c8c1.png" alt="">
+
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/14286086/8f55e650-fb56-11e5-81d8-bae0fb096e33.png" alt="">
+
+
+<h3 id="find-usages-grouping">Find usages grouping</h3>
+
+<p>Grouping by read/write access in find usages works more accurate as well.</p>
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/14286090/949ecb54-fb56-11e5-8f8c-35a7cdcf8371.png" alt="">
+
+
+<h2 id="run-configurations">Run configurations</h2>
+
+<p>Now you can see real <code>GOROOT</code> and <code>GOPATH</code> values which are used during compilation and running your application. Also, now there is an easy way to restart run configuration after compilation error.</p>
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/14286403/9ab783d6-fb57-11e5-908e-4f8e555068ce.png" alt="">
+
+
+  </p>
+
+  
+  <footer>
+    <a href="http://go-ide.com/alpha/0.11.1262/">Read more<i class="fa fa-angle-double-right fa-fw"></i></a>
+  </footer>
+  
+</article>
+
+  
+    <article>
+  <header>
+    <h2><a href="http://go-ide.com/alpha/0.11.1236/">0.11.1236</a></h2>
+
+    <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>29 Mar 2016, 00:00</time>
+  </div>
+
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-folder fa-fw"></i>
+    
+      <a class="post-taxonomy-topic" href="http://go-ide.com/topics/alpha">alpha</a>
+    
+  </div>
+  
+  
+
+  
+
+</div>
+
+  </header>
+
+  <p>
+  <p>Changes since 0.10.1137 (11.02.2016)</p>
+
+<p>This release introduces compatibility with IDEA 2016.1 and long-expected vendoring experiment support.</p>
+
+<p>To install the plugin, visit the <a href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin#pre-release-builds">readme</a>.</p>
+
+<h1 id="changes">Changes</h1>
+
+<p>First of all, the plugin now supports IDEA 2016.1 and all IDEs based on this release version.</p>
+
+<p>Also, this is the last update compatible to IDEA 14.1 and all IDEs based on 141.* builds.</p>
+
+<h3 id="vendoring">Vendoring</h3>
+
+<p>With the new version the plugin now supports the Go 1.5 Vendoring Experiment. This means that all imports from vendored packages will be resolved properly. Auto-import quick fix and package completion are also working corresponding to vendoring experiment rules now. Moreover, completion lists are less polluted since the symbols defined in unreachable vendored packages are excluded.</p>
+
+<h3 id="internal-packages">Internal Packages</h3>
+
+<p>Internal package are supported in the same way as vendoring. The special inspection now highlights invalid usages of internal package and unreachable internal packages are filtered out from completion list.</p>
+
+<h3 id="rerun-failed-tests">Rerun Failed Tests</h3>
+
+<p>Another new feature is the ability to <strong>Rerun Failed Tests</strong>: <a href="http://www.youtube.com/watch?v=UDH4XMinjYk">
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/13855322/d638f11e-ec80-11e5-9a24-2110e3730e9e.png" alt="">
+</a></p>
+
+<h3 id="test-function-name-completion-and-auto-import-while-generating-tests">Test function name completion and auto-import while generating tests</h3>
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/14091905/9630c1ae-f54b-11e5-9859-965f17ee3e1a.gif" alt="">
+
+
+  </p>
+
+  
+  <footer>
+    <a href="http://go-ide.com/alpha/0.11.1236/">Read more<i class="fa fa-angle-double-right fa-fw"></i></a>
+  </footer>
+  
+</article>
+
+  
+    <article>
+  <header>
+    <h2><a href="http://go-ide.com/alpha/0.11.1137/">0.11.1137</a></h2>
+
+    <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>11 Feb 2016, 00:00</time>
+  </div>
+
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-folder fa-fw"></i>
+    
+      <a class="post-taxonomy-topic" href="http://go-ide.com/topics/alpha">alpha</a>
+    
+  </div>
+  
+  
+
+  
+
+</div>
+
+  </header>
+
+  <p>
+  <p>Changes since 0.10.1068 (25.01.2016)</p>
+
+<p>This release focuses mostly on fixes and improvements.</p>
+
+<p>To install the plugin, visit the <a href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin#pre-release-builds">readme</a>.</p>
+
+<h1 id="changes">Changes</h1>
+
+<p>In this alpha release, we have to big features.</p>
+
+<p>First of all thanks to @sjamesr now it&rsquo;s possible to run benchmarks right from the IDE:</p>
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/13121445/5fb89054-d5c3-11e5-860d-07de706754b0.png" alt="">
+
+
+<p>And in the second, since Delve is available on Windows you can debug your applications on Windows in IDE (in plugin versions 0.10.* and 0.11.*).</p>
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/13144968/c0d088f6-d65e-11e5-9b78-7968ce84c3f4.png" alt="">
+
+
+<p>Also, we made some fixes in inspections, find usages and improved performance.</p>
+
+<p>For a list of all changes in the plugin, you can visit <a href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin/compare/02c39130d...6a6ad4a4273f4875a97ed14eca358dfaf29a6e9b">this page</a>.</p>
+
+<p>Develop with pleasure!</p>
+
+  </p>
+
+  
+</article>
+
+  
+    <article>
+  <header>
+    <h2><a href="http://go-ide.com/alpha/0.10.1068/">0.10.1068</a></h2>
+
+    <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>25 Jan 2016, 00:00</time>
+  </div>
+
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-folder fa-fw"></i>
+    
+      <a class="post-taxonomy-topic" href="http://go-ide.com/topics/alpha">alpha</a>
+    
+  </div>
+  
+  
+
+  
+
+</div>
+
+  </header>
+
+  <p>
+  <p>Changes since 0.10.740 (20.11.2015)</p>
+
+<p>This release focuses mostly on fixes and improvements.</p>
+
+<p>To install the plugin, visit the <a href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin#pre-release-builds">readme</a>.</p>
+
+<h2 id="general">General</h2>
+
+<p>IDEA 16 EAP support is introduced
+Go 1.6 SDK is supported</p>
+
+<h2 id="plan9">Plan9</h2>
+
+<p>Thanks to @stuartcarnie now we have a syntax highlighting for Plan9 files</p>
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/12535279/eefac0ea-c28e-11e5-9706-f21b33baefbe.png" alt="">
+
+
+<h2 id="inspections-quickfixes">Inspections &amp; QuickFixes</h2>
+
+<ul>
+<li>Report a warning for exported variables and constants in multi-spec declarations and suggest to extract it</li>
+</ul>
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/12535333/382d169a-c290-11e5-8593-535a048f8fc2.gif" alt="">
+
+
+<ul>
+<li>Suggest to delete unused constants and variables</li>
+</ul>
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/12535317/c161c5ce-c28f-11e5-81ea-7a7911b37d6d.gif" alt="">
+
+
+<ul>
+<li>Report a error on missing key in map literal</li>
+</ul>
+
+<p>
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/12535378/fe1e41a2-c291-11e5-829b-d1a53de54680.png" alt="">
+
+- Report a error on not an expression function argument</p>
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/12535381/4a56ff00-c292-11e5-84cc-518419a0aef4.png" alt="">
+
+
+<ul>
+<li>Report a error on types used as expressions</li>
+</ul>
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/12535442/cc5a1364-c294-11e5-9711-b96f02fe4ebc.png" alt="">
+
+
+<ul>
+<li>Report a error about missing argument conversion</li>
+</ul>
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/12535447/eb0a53fa-c294-11e5-9158-8bb8c0d853fc.png" alt="">
+
+
+<ul>
+<li>Highlight unused constants</li>
+</ul>
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/12535458/312ce3fc-c295-11e5-8f5d-3da5f617048d.png" alt="">
+
+
+  </p>
+
+  
+  <footer>
+    <a href="http://go-ide.com/alpha/0.10.1068/">Read more<i class="fa fa-angle-double-right fa-fw"></i></a>
+  </footer>
+  
+</article>
+
+  
+    <article>
+  <header>
+    <h2><a href="http://go-ide.com/alpha/0.10.740/">0.10.740</a></h2>
+
+    <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>20 Nov 2015, 00:00</time>
+  </div>
+
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-folder fa-fw"></i>
+    
+      <a class="post-taxonomy-topic" href="http://go-ide.com/topics/alpha">alpha</a>
+    
+  </div>
+  
+  
+
+  
+
+</div>
+
+  </header>
+
+  <p>
+  <p>Changes since 0.9.550 (30.09.2015)</p>
+
+<p>This release focuses mostly on fixes and improvements.</p>
+
+<p>To install the plugin, visit the <a href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin#pre-release-builds">readme</a>.</p>
+
+<h2 id="debugger">Debugger</h2>
+
+<ul>
+<li>Inline Debugger</li>
+<li>Better representation of arrays and slices in watches</li>
+<li>Evaluate expressions on Alt+Click and Alt+F8</li>
+<li>Navigate to type sources from watches (Ctrl+F4)<br /></li>
+</ul>
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/11431045/f5eb28ac-94a0-11e5-83bb-1b00f7419ea3.png" alt="">
+
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/11431053/0f8a69e4-94a1-11e5-9117-ee568e8de625.png" alt="">
+
+
+<h2 id="quickdoc">QuickDoc</h2>
+
+<ul>
+<li>supports indented blocks</li>
+<li>shows links in documentation</li>
+<li>shows links to type&rsquo;s documentation in function signature</li>
+<li>able to open documentation at godoc.org via <code>External documentation</code> action</li>
+<li>shows function signature on ctrl+hover</li>
+</ul>
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/11431123/4fc8b4f6-94a2-11e5-8dfb-5f641bb339c0.png" alt="">
+
+
+<h2 id="running">Running</h2>
+
+<ul>
+<li>now it&rsquo;s possible to run Example-functions</li>
+<li>coverage is running in <code>atomic</code> mode, so you can check coverage for test running with the <code>-race</code> flag</li>
+</ul>
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/11431038/d932ece0-94a0-11e5-9cdb-cc9b78877965.png" alt="">
+
+
+<h2 id="inspections">Inspections</h2>
+
+<ul>
+<li>Validating StructTags. IDE will raise warnings if it detects a tag value that does not conform to the Go StructTag convention</li>
+<li>Report a warning about defer inside loop</li>
+<li>Report an error on continue outside loop</li>
+<li>Report an error when using assignment instead of comparison in <code>if</code> statements</li>
+</ul>
+
+<p>
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/11431055/1df0dd56-94a1-11e5-8193-10d4ff0dd476.png" alt="">
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/11431059/256e11fc-94a1-11e5-9107-ea9ad61b81aa.png" alt="">
+</p>
+
+  </p>
+
+  
+  <footer>
+    <a href="http://go-ide.com/alpha/0.10.740/">Read more<i class="fa fa-angle-double-right fa-fw"></i></a>
+  </footer>
+  
+</article>
+
+  
+</div>
+
+</div>
+</div>
+<script src="http://go-ide.com/js/ui.js"></script>
+
+
+
+
+</body>
+</html>

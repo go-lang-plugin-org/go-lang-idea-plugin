@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.16" />
+
+  <title>0.11.1236 &middot; IntelliJ Go</title>
+
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="http://go-ide.com/css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="http://go-ide.com/css/side-menu.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="http://go-ide.com/css/blackburn.css">
+
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/styles/androidstudio.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  
+
+</head>
+
+
+<body>
+<div id="layout">
+
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
+
+  
+  <a class="pure-menu-heading brand" href="http://go-ide.com/">IntelliJ Go</a>
+
+
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="http://go-ide.com/"><i class='fa fa-home'></i>Home</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="http://go-ide.com/topics/alpha"><i class='fa fa-at'></i>Alpha</a>
+      
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin" target="_blank"><i class="fa fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </ul>
+</div>
+
+
+  <div>
+  <div class="small-print">
+    <small></small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
+</div>
+
+</div>
+
+
+  <div id="main">
+
+
+<div class="header">
+  <h1>0.11.1236</h1>
+  <h2></h2>
+</div>
+<div class="content">
+  
+
+<p>Changes since 0.10.1137 (11.02.2016)</p>
+
+<p>This release introduces compatibility with IDEA 2016.1 and long-expected vendoring experiment support.</p>
+
+<p>To install the plugin, visit the <a href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin#pre-release-builds">readme</a>.</p>
+
+<h1 id="changes">Changes</h1>
+
+<p>First of all, the plugin now supports IDEA 2016.1 and all IDEs based on this release version.</p>
+
+<p>Also, this is the last update compatible to IDEA 14.1 and all IDEs based on 141.* builds.</p>
+
+<h3 id="vendoring">Vendoring</h3>
+
+<p>With the new version the plugin now supports the Go 1.5 Vendoring Experiment. This means that all imports from vendored packages will be resolved properly. Auto-import quick fix and package completion are also working corresponding to vendoring experiment rules now. Moreover, completion lists are less polluted since the symbols defined in unreachable vendored packages are excluded.</p>
+
+<h3 id="internal-packages">Internal Packages</h3>
+
+<p>Internal package are supported in the same way as vendoring. The special inspection now highlights invalid usages of internal package and unreachable internal packages are filtered out from completion list.</p>
+
+<h3 id="rerun-failed-tests">Rerun Failed Tests</h3>
+
+<p>Another new feature is the ability to <strong>Rerun Failed Tests</strong>: <a href="http://www.youtube.com/watch?v=UDH4XMinjYk">
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/13855322/d638f11e-ec80-11e5-9a24-2110e3730e9e.png" alt="">
+</a></p>
+
+<h3 id="test-function-name-completion-and-auto-import-while-generating-tests">Test function name completion and auto-import while generating tests</h3>
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/14091905/9630c1ae-f54b-11e5-9859-965f17ee3e1a.gif" alt="">
+
+
+<p>Besides the above changes, the release contains several bugfixes related to imports and resolution algorithm.</p>
+
+<p><a href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin/compare/6a6ad4a4273f4875a97ed14eca358dfaf29a6e9b...c021f45efb6f">A list of all changes</a></p>
+
+<p>Develop with pleasure!</p>
+
+</div>
+
+</div>
+</div>
+<script src="http://go-ide.com/js/ui.js"></script>
+
+
+
+
+</body>
+</html>
+

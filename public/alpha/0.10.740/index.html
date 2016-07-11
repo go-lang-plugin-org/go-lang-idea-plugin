@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.16" />
+
+  <title>0.10.740 &middot; IntelliJ Go</title>
+
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="http://go-ide.com/css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="http://go-ide.com/css/side-menu.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="http://go-ide.com/css/blackburn.css">
+
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/styles/androidstudio.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  
+
+</head>
+
+
+<body>
+<div id="layout">
+
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
+
+  
+  <a class="pure-menu-heading brand" href="http://go-ide.com/">IntelliJ Go</a>
+
+
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="http://go-ide.com/"><i class='fa fa-home'></i>Home</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="http://go-ide.com/topics/alpha"><i class='fa fa-at'></i>Alpha</a>
+      
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin" target="_blank"><i class="fa fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </ul>
+</div>
+
+
+  <div>
+  <div class="small-print">
+    <small></small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
+</div>
+
+</div>
+
+
+  <div id="main">
+
+
+<div class="header">
+  <h1>0.10.740</h1>
+  <h2></h2>
+</div>
+<div class="content">
+  
+
+<p>Changes since 0.9.550 (30.09.2015)</p>
+
+<p>This release focuses mostly on fixes and improvements.</p>
+
+<p>To install the plugin, visit the <a href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin#pre-release-builds">readme</a>.</p>
+
+<h2 id="debugger">Debugger</h2>
+
+<ul>
+<li>Inline Debugger</li>
+<li>Better representation of arrays and slices in watches</li>
+<li>Evaluate expressions on Alt+Click and Alt+F8</li>
+<li>Navigate to type sources from watches (Ctrl+F4)<br /></li>
+</ul>
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/11431045/f5eb28ac-94a0-11e5-83bb-1b00f7419ea3.png" alt="">
+
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/11431053/0f8a69e4-94a1-11e5-9117-ee568e8de625.png" alt="">
+
+
+<h2 id="quickdoc">QuickDoc</h2>
+
+<ul>
+<li>supports indented blocks</li>
+<li>shows links in documentation</li>
+<li>shows links to type&rsquo;s documentation in function signature</li>
+<li>able to open documentation at godoc.org via <code>External documentation</code> action</li>
+<li>shows function signature on ctrl+hover</li>
+</ul>
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/11431123/4fc8b4f6-94a2-11e5-8dfb-5f641bb339c0.png" alt="">
+
+
+<h2 id="running">Running</h2>
+
+<ul>
+<li>now it&rsquo;s possible to run Example-functions</li>
+<li>coverage is running in <code>atomic</code> mode, so you can check coverage for test running with the <code>-race</code> flag</li>
+</ul>
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/11431038/d932ece0-94a0-11e5-9cdb-cc9b78877965.png" alt="">
+
+
+<h2 id="inspections">Inspections</h2>
+
+<ul>
+<li>Validating StructTags. IDE will raise warnings if it detects a tag value that does not conform to the Go StructTag convention</li>
+<li>Report a warning about defer inside loop</li>
+<li>Report an error on continue outside loop</li>
+<li>Report an error when using assignment instead of comparison in <code>if</code> statements</li>
+</ul>
+
+<p>
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/11431055/1df0dd56-94a1-11e5-8193-10d4ff0dd476.png" alt="">
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/11431059/256e11fc-94a1-11e5-9107-ea9ad61b81aa.png" alt="">
+</p>
+
+<h2 id="other">Other</h2>
+
+<ul>
+<li>Highlight exit point for function you&rsquo;re staying on</li>
+<li>Added configurable Go file template (File | Settings | Editor | File and Code Templates)</li>
+</ul>
+
+
+<img class="pure-img" src="https://cloud.githubusercontent.com/assets/140920/11431033/c761b3e8-94a0-11e5-914a-3b00ecd42384.gif" alt="">
+
+
+<p>For a list of all changes in the plugin, you can visit <a href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin/compare/386c52c11807...273df35">this page</a>.</p>
+
+<p>Develop with pleasure!</p>
+
+</div>
+
+</div>
+</div>
+<script src="http://go-ide.com/js/ui.js"></script>
+
+
+
+
+</body>
+</html>
+

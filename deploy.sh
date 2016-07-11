@@ -7,6 +7,7 @@ if [ $# -eq 1 ]
 	then message="$1"
 fi
 
+git add public/
 git commit -am "$message"
 git push origin site
 git subtree push --prefix=public origin gh-pages
