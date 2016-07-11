@@ -26,16 +26,16 @@ menu:
         weight: 0
         identifier: "home"
         url: "/"
+      - name: "Alpha"
+        pre: "<i class='fa fa-at'></i>"
+        weight: 2
+        identifier: "alpha"
+        url: "/topics/alpha"
 #      - name: "Changelog"
 #        pre: "<i class='fa fa-clock-o'></i>"
 #        weight: 1
 #        identifier: "changelog"
 #        url: "/changelog"
-#      - name: "Alpha"
-#        pre: "<i class='fa fa-at'></i>"
-#        weight: 2
-#        identifier: "alpha"
-#        url: "/alpha"
 #      - name: "Nightly"
 #        pre: "<i class='fa fa-moon-o'></i>"
 #        weight: 3

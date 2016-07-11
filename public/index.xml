@@ -6,25 +6,405 @@
     <description>Recent content on IntelliJ Go</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 11 Jul 2016 15:16:45 +0300</lastBuildDate>
+    <lastBuildDate>Mon, 11 Apr 2016 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://go-ide.com/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>0.12.1502</title>
-      <link>http://go-ide.com/alpha/0.12.1502/</link>
-      <pubDate>Mon, 11 Jul 2016 15:16:45 +0300</pubDate>
+      <title>0.11.1288</title>
+      <link>http://go-ide.com/alpha/0.11.1288/</link>
+      <pubDate>Mon, 11 Apr 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://go-ide.com/alpha/0.12.1502/</guid>
-      <description></description>
+      <guid>http://go-ide.com/alpha/0.11.1288/</guid>
+      <description>
+
+&lt;p&gt;Changes since 0.11.1262 (05.04.2016)&lt;/p&gt;
+
+&lt;p&gt;This release focuses mostly on fixes. The most critical issues which were fixed in this release are auto-importing packages from unreachable &lt;code&gt;testdata&lt;/code&gt; directories and resolving &lt;code&gt;cap&lt;/code&gt; expressions.&lt;/p&gt;
+
+&lt;p&gt;Also here are couple improvements which this release brings:&lt;/p&gt;
+
+&lt;h3 id=&#34;go-vet-tool&#34;&gt;Go vet tool&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;go vet&lt;/code&gt; tool is built-in tool now and can be invoked on selected file or directory via &lt;code&gt;Code | Go Tools | Go vet&lt;/code&gt; menu or via editor menu.&lt;/p&gt;
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14444181/baf211c6-004c-11e6-8efc-0cd133295eec.png&#34; alt=&#34;&#34;&gt;
+
+
+&lt;h3 id=&#34;expression-type&#34;&gt;Expression Type&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;Show info&lt;/code&gt; action is reimplemented using built-in &lt;code&gt;Expression Type&lt;/code&gt; action which is available by &lt;code&gt;Alt+=&lt;/code&gt; (&lt;code&gt;Ctrl+Shift+P&lt;/code&gt; on Mac) shortcut. Also it works now on variable/constant definitions.&lt;/p&gt;
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14444213/e4e9c41a-004c-11e6-8904-cd8b195059bb.png&#34; alt=&#34;&#34;&gt;
+
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14444218/ea79d302-004c-11e6-9c2d-ce41176206e9.png&#34; alt=&#34;&#34;&gt;
+
+
+&lt;h3 id=&#34;autoscroll-from-source-and-navigate-in-features&#34;&gt;Autoscroll from source and Navigate in&amp;hellip; features&lt;/h3&gt;
+
+&lt;p&gt;Since this release it&amp;rsquo;s possible to use &lt;code&gt;Autoscroll form source&lt;/code&gt; mode in &lt;code&gt;File structure&lt;/code&gt; tool window for &lt;code&gt;go&lt;/code&gt; sources. &lt;code&gt;Navigate to... | File Structure&lt;/code&gt; action works now as well.&lt;/p&gt;
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14444237/f97942d4-004c-11e6-82b6-25f8b44c04b8.png&#34; alt=&#34;&#34;&gt;
+
+
+&lt;h1 id=&#34;changes&#34;&gt;Changes&lt;/h1&gt;
+
+&lt;p&gt;For a list of all changes in the plugin, you can visit &lt;a href=&#34;https://github.com/go-lang-plugin-org/go-lang-idea-plugin/compare/527f2bf...2c63b959&#34;&gt;this page&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Develop with pleasure!&lt;/p&gt;
+</description>
     </item>
     
     <item>
-      <title>0.12.1501</title>
-      <link>http://go-ide.com/alpha/0.12.1501/</link>
-      <pubDate>Sat, 09 Jul 2016 19:54:02 +0300</pubDate>
+      <title>0.11.1262</title>
+      <link>http://go-ide.com/alpha/0.11.1262/</link>
+      <pubDate>Tue, 05 Apr 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://go-ide.com/alpha/0.12.1501/</guid>
-      <description>&lt;p&gt;sadf&lt;/p&gt;
+      <guid>http://go-ide.com/alpha/0.11.1262/</guid>
+      <description>
+
+&lt;p&gt;Changes since 0.11.1236 (28.03.2016)&lt;/p&gt;
+
+&lt;p&gt;To install the plugin, visit the &lt;a href=&#34;https://github.com/go-lang-plugin-org/go-lang-idea-plugin#pre-release-builds&#34;&gt;readme&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;This release focuses mostly on fixes and improvements. It contains fixes in resolution algorithms and in running tests mechanism.&lt;/p&gt;
+
+&lt;h2 id=&#34;read-write-access&#34;&gt;Read/Write access&lt;/h2&gt;
+
+&lt;h3 id=&#34;new-inspections-and-quick-fixes&#34;&gt;New inspections and quick fixes&lt;/h3&gt;
+
+&lt;p&gt;In this release, the part which is responsible for detecting read/write access to variables was completely rewritten. Based on this the new inspection  &lt;code&gt;_ used as value inspection&lt;/code&gt; is introduced and added new &lt;code&gt;Replace with &#39;:=&#39;&lt;/code&gt; quick fix for unresolved variables with write access.&lt;/p&gt;
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14285945/0465b840-fb56-11e5-8893-ce0c279fa770.gif&#34; alt=&#34;&#34;&gt;
+
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14285957/181c83f0-fb56-11e5-9287-0e7b05922132.png&#34; alt=&#34;&#34;&gt;
+
+
+&lt;h3 id=&#34;improved-inspections-and-quick-fixes&#34;&gt;Improved inspections and quick fixes&lt;/h3&gt;
+
+&lt;p&gt;Also &lt;code&gt;Introduce constants&lt;/code&gt; quick fix won&amp;rsquo;t be suggested for unresolved variables with write access and &lt;code&gt;Cannot assign to constant&lt;/code&gt; catches more cases now.&lt;/p&gt;
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14286078/8a1c4dd2-fb56-11e5-8759-47f454b2c8c1.png&#34; alt=&#34;&#34;&gt;
+
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14286086/8f55e650-fb56-11e5-81d8-bae0fb096e33.png&#34; alt=&#34;&#34;&gt;
+
+
+&lt;h3 id=&#34;find-usages-grouping&#34;&gt;Find usages grouping&lt;/h3&gt;
+
+&lt;p&gt;Grouping by read/write access in find usages works more accurate as well.&lt;/p&gt;
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14286090/949ecb54-fb56-11e5-8f8c-35a7cdcf8371.png&#34; alt=&#34;&#34;&gt;
+
+
+&lt;h2 id=&#34;run-configurations&#34;&gt;Run configurations&lt;/h2&gt;
+
+&lt;p&gt;Now you can see real &lt;code&gt;GOROOT&lt;/code&gt; and &lt;code&gt;GOPATH&lt;/code&gt; values which are used during compilation and running your application. Also, now there is an easy way to restart run configuration after compilation error.&lt;/p&gt;
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14286403/9ab783d6-fb57-11e5-908e-4f8e555068ce.png&#34; alt=&#34;&#34;&gt;
+
+
+&lt;h1 id=&#34;changes&#34;&gt;Changes&lt;/h1&gt;
+
+&lt;p&gt;For a list of all changes in the plugin, you can visit &lt;a href=&#34;https://github.com/go-lang-plugin-org/go-lang-idea-plugin/compare/af33ebb...527f2bf&#34;&gt;this page&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Develop with pleasure!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>0.11.1236</title>
+      <link>http://go-ide.com/alpha/0.11.1236/</link>
+      <pubDate>Tue, 29 Mar 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://go-ide.com/alpha/0.11.1236/</guid>
+      <description>
+
+&lt;p&gt;Changes since 0.10.1137 (11.02.2016)&lt;/p&gt;
+
+&lt;p&gt;This release introduces compatibility with IDEA 2016.1 and long-expected vendoring experiment support.&lt;/p&gt;
+
+&lt;p&gt;To install the plugin, visit the &lt;a href=&#34;https://github.com/go-lang-plugin-org/go-lang-idea-plugin#pre-release-builds&#34;&gt;readme&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;changes&#34;&gt;Changes&lt;/h1&gt;
+
+&lt;p&gt;First of all, the plugin now supports IDEA 2016.1 and all IDEs based on this release version.&lt;/p&gt;
+
+&lt;p&gt;Also, this is the last update compatible to IDEA 14.1 and all IDEs based on 141.* builds.&lt;/p&gt;
+
+&lt;h3 id=&#34;vendoring&#34;&gt;Vendoring&lt;/h3&gt;
+
+&lt;p&gt;With the new version the plugin now supports the Go 1.5 Vendoring Experiment. This means that all imports from vendored packages will be resolved properly. Auto-import quick fix and package completion are also working corresponding to vendoring experiment rules now. Moreover, completion lists are less polluted since the symbols defined in unreachable vendored packages are excluded.&lt;/p&gt;
+
+&lt;h3 id=&#34;internal-packages&#34;&gt;Internal Packages&lt;/h3&gt;
+
+&lt;p&gt;Internal package are supported in the same way as vendoring. The special inspection now highlights invalid usages of internal package and unreachable internal packages are filtered out from completion list.&lt;/p&gt;
+
+&lt;h3 id=&#34;rerun-failed-tests&#34;&gt;Rerun Failed Tests&lt;/h3&gt;
+
+&lt;p&gt;Another new feature is the ability to &lt;strong&gt;Rerun Failed Tests&lt;/strong&gt;: &lt;a href=&#34;http://www.youtube.com/watch?v=UDH4XMinjYk&#34;&gt;
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/13855322/d638f11e-ec80-11e5-9a24-2110e3730e9e.png&#34; alt=&#34;&#34;&gt;
+&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;test-function-name-completion-and-auto-import-while-generating-tests&#34;&gt;Test function name completion and auto-import while generating tests&lt;/h3&gt;
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14091905/9630c1ae-f54b-11e5-9859-965f17ee3e1a.gif&#34; alt=&#34;&#34;&gt;
+
+
+&lt;p&gt;Besides the above changes, the release contains several bugfixes related to imports and resolution algorithm.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/go-lang-plugin-org/go-lang-idea-plugin/compare/6a6ad4a4273f4875a97ed14eca358dfaf29a6e9b...c021f45efb6f&#34;&gt;A list of all changes&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Develop with pleasure!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>0.11.1137</title>
+      <link>http://go-ide.com/alpha/0.11.1137/</link>
+      <pubDate>Thu, 11 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://go-ide.com/alpha/0.11.1137/</guid>
+      <description>
+
+&lt;p&gt;Changes since 0.10.1068 (25.01.2016)&lt;/p&gt;
+
+&lt;p&gt;This release focuses mostly on fixes and improvements.&lt;/p&gt;
+
+&lt;p&gt;To install the plugin, visit the &lt;a href=&#34;https://github.com/go-lang-plugin-org/go-lang-idea-plugin#pre-release-builds&#34;&gt;readme&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;changes&#34;&gt;Changes&lt;/h1&gt;
+
+&lt;p&gt;In this alpha release, we have to big features.&lt;/p&gt;
+
+&lt;p&gt;First of all thanks to @sjamesr now it&amp;rsquo;s possible to run benchmarks right from the IDE:&lt;/p&gt;
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/13121445/5fb89054-d5c3-11e5-860d-07de706754b0.png&#34; alt=&#34;&#34;&gt;
+
+
+&lt;p&gt;And in the second, since Delve is available on Windows you can debug your applications on Windows in IDE (in plugin versions 0.10.* and 0.11.*).&lt;/p&gt;
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/13144968/c0d088f6-d65e-11e5-9b78-7968ce84c3f4.png&#34; alt=&#34;&#34;&gt;
+
+
+&lt;p&gt;Also, we made some fixes in inspections, find usages and improved performance.&lt;/p&gt;
+
+&lt;p&gt;For a list of all changes in the plugin, you can visit &lt;a href=&#34;https://github.com/go-lang-plugin-org/go-lang-idea-plugin/compare/02c39130d...6a6ad4a4273f4875a97ed14eca358dfaf29a6e9b&#34;&gt;this page&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Develop with pleasure!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>0.10.1068</title>
+      <link>http://go-ide.com/alpha/0.10.1068/</link>
+      <pubDate>Mon, 25 Jan 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://go-ide.com/alpha/0.10.1068/</guid>
+      <description>
+
+&lt;p&gt;Changes since 0.10.740 (20.11.2015)&lt;/p&gt;
+
+&lt;p&gt;This release focuses mostly on fixes and improvements.&lt;/p&gt;
+
+&lt;p&gt;To install the plugin, visit the &lt;a href=&#34;https://github.com/go-lang-plugin-org/go-lang-idea-plugin#pre-release-builds&#34;&gt;readme&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;general&#34;&gt;General&lt;/h2&gt;
+
+&lt;p&gt;IDEA 16 EAP support is introduced
+Go 1.6 SDK is supported&lt;/p&gt;
+
+&lt;h2 id=&#34;plan9&#34;&gt;Plan9&lt;/h2&gt;
+
+&lt;p&gt;Thanks to @stuartcarnie now we have a syntax highlighting for Plan9 files&lt;/p&gt;
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535279/eefac0ea-c28e-11e5-9706-f21b33baefbe.png&#34; alt=&#34;&#34;&gt;
+
+
+&lt;h2 id=&#34;inspections-quickfixes&#34;&gt;Inspections &amp;amp; QuickFixes&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Report a warning for exported variables and constants in multi-spec declarations and suggest to extract it&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535333/382d169a-c290-11e5-8593-535a048f8fc2.gif&#34; alt=&#34;&#34;&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;Suggest to delete unused constants and variables&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535317/c161c5ce-c28f-11e5-81ea-7a7911b37d6d.gif&#34; alt=&#34;&#34;&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;Report a error on missing key in map literal&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535378/fe1e41a2-c291-11e5-829b-d1a53de54680.png&#34; alt=&#34;&#34;&gt;
+
+- Report a error on not an expression function argument&lt;/p&gt;
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535381/4a56ff00-c292-11e5-84cc-518419a0aef4.png&#34; alt=&#34;&#34;&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;Report a error on types used as expressions&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535442/cc5a1364-c294-11e5-9711-b96f02fe4ebc.png&#34; alt=&#34;&#34;&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;Report a error about missing argument conversion&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535447/eb0a53fa-c294-11e5-9158-8bb8c0d853fc.png&#34; alt=&#34;&#34;&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;Highlight unused constants&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535458/312ce3fc-c295-11e5-8f5d-3da5f617048d.png&#34; alt=&#34;&#34;&gt;
+
+
+&lt;h2 id=&#34;other&#34;&gt;Other&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Less polluted completion list: &lt;code&gt;iota&lt;/code&gt; only inside constant declarations, deleted self-assignments and some keywords&lt;/li&gt;
+&lt;li&gt;Add more foldings for &lt;code&gt;if/else/for/switch/select&lt;/code&gt; statements&lt;/li&gt;
+&lt;li&gt;Show constant value on Cltr+Hover&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535399/ed7fbb04-c292-11e5-9d50-3dce0c5b3966.png&#34; alt=&#34;&#34;&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Various fixes of resolving, types inferring, quick documentation feature, formatting&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Proper completion and resolving for break statements&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535285/06df5400-c28f-11e5-91f6-c0c9ca294c6b.png&#34; alt=&#34;&#34;&gt;
+
+
+&lt;p&gt;For a list of all changes in the plugin, you can visit &lt;a href=&#34;https://github.com/go-lang-plugin-org/go-lang-idea-plugin/compare/273df35...02c39130d&#34;&gt;this page&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Develop with pleasure!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>0.10.740</title>
+      <link>http://go-ide.com/alpha/0.10.740/</link>
+      <pubDate>Fri, 20 Nov 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://go-ide.com/alpha/0.10.740/</guid>
+      <description>
+
+&lt;p&gt;Changes since 0.9.550 (30.09.2015)&lt;/p&gt;
+
+&lt;p&gt;This release focuses mostly on fixes and improvements.&lt;/p&gt;
+
+&lt;p&gt;To install the plugin, visit the &lt;a href=&#34;https://github.com/go-lang-plugin-org/go-lang-idea-plugin#pre-release-builds&#34;&gt;readme&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;debugger&#34;&gt;Debugger&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Inline Debugger&lt;/li&gt;
+&lt;li&gt;Better representation of arrays and slices in watches&lt;/li&gt;
+&lt;li&gt;Evaluate expressions on Alt+Click and Alt+F8&lt;/li&gt;
+&lt;li&gt;Navigate to type sources from watches (Ctrl+F4)&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/11431045/f5eb28ac-94a0-11e5-83bb-1b00f7419ea3.png&#34; alt=&#34;&#34;&gt;
+
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/11431053/0f8a69e4-94a1-11e5-9117-ee568e8de625.png&#34; alt=&#34;&#34;&gt;
+
+
+&lt;h2 id=&#34;quickdoc&#34;&gt;QuickDoc&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;supports indented blocks&lt;/li&gt;
+&lt;li&gt;shows links in documentation&lt;/li&gt;
+&lt;li&gt;shows links to type&amp;rsquo;s documentation in function signature&lt;/li&gt;
+&lt;li&gt;able to open documentation at godoc.org via &lt;code&gt;External documentation&lt;/code&gt; action&lt;/li&gt;
+&lt;li&gt;shows function signature on ctrl+hover&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/11431123/4fc8b4f6-94a2-11e5-8dfb-5f641bb339c0.png&#34; alt=&#34;&#34;&gt;
+
+
+&lt;h2 id=&#34;running&#34;&gt;Running&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;now it&amp;rsquo;s possible to run Example-functions&lt;/li&gt;
+&lt;li&gt;coverage is running in &lt;code&gt;atomic&lt;/code&gt; mode, so you can check coverage for test running with the &lt;code&gt;-race&lt;/code&gt; flag&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/11431038/d932ece0-94a0-11e5-9cdb-cc9b78877965.png&#34; alt=&#34;&#34;&gt;
+
+
+&lt;h2 id=&#34;inspections&#34;&gt;Inspections&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Validating StructTags. IDE will raise warnings if it detects a tag value that does not conform to the Go StructTag convention&lt;/li&gt;
+&lt;li&gt;Report a warning about defer inside loop&lt;/li&gt;
+&lt;li&gt;Report an error on continue outside loop&lt;/li&gt;
+&lt;li&gt;Report an error when using assignment instead of comparison in &lt;code&gt;if&lt;/code&gt; statements&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/11431055/1df0dd56-94a1-11e5-8193-10d4ff0dd476.png&#34; alt=&#34;&#34;&gt;
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/11431059/256e11fc-94a1-11e5-9107-ea9ad61b81aa.png&#34; alt=&#34;&#34;&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;other&#34;&gt;Other&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Highlight exit point for function you&amp;rsquo;re staying on&lt;/li&gt;
+&lt;li&gt;Added configurable Go file template (File | Settings | Editor | File and Code Templates)&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/11431033/c761b3e8-94a0-11e5-914a-3b00ecd42384.gif&#34; alt=&#34;&#34;&gt;
+
+
+&lt;p&gt;For a list of all changes in the plugin, you can visit &lt;a href=&#34;https://github.com/go-lang-plugin-org/go-lang-idea-plugin/compare/386c52c11807...273df35&#34;&gt;this page&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Develop with pleasure!&lt;/p&gt;
 </description>
     </item>
     
