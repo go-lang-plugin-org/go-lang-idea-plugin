@@ -5,12 +5,42 @@ layoutdir: "layouts"
 publishdir: "public"
 languageCode: "en-us"
 title: "IntelliJ Go"
-theme: "purehugo"
-Paginate: 10
-indexes:
-    category: "categories"
+theme: "blackburn"
+paginate: 10
 canonifyurls: true
+indexes:
+  categories: "categories"
+  tag: "tags"
+  topic: "topics"
 
-params:
-    githubName: "go-lang-plugin-org"
-    description: "Golang plugin for IntelliJ IDEA"
+params: 
+  brand: "IntelliJ Go"
+  subtitle: "Golang plugin for IntelliJ-based IDEs"
+  highlightjs: "androidstudio"
+  dateFormat: "02 Jan 2006, 15:04"
+  
+menu:
+  main:
+      - name: "Home"
+        pre: "<i class='fa fa-home'></i>"
+        weight: 0
+        identifier: "home"
+        url: "/"
+#      - name: "Changelog"
+#        pre: "<i class='fa fa-clock-o'></i>"
+#        weight: 1
+#        identifier: "changelog"
+#        url: "/changelog"
+#      - name: "Alpha"
+#        pre: "<i class='fa fa-at'></i>"
+#        weight: 2
+#        identifier: "alpha"
+#        url: "/alpha"
+#      - name: "Nightly"
+#        pre: "<i class='fa fa-moon-o'></i>"
+#        weight: 3
+#        identifier: "nightly"
+#        url: "/nightly"
+
+social:
+ github: "go-lang-plugin-org/go-lang-idea-plugin"

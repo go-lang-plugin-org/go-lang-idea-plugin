@@ -1,26 +1,11 @@
 {{ partial "header.html" . }}
-
-<div id="layout" class="pure-g">
-    {{ partial "sidebar.html" . }}
-
-    <div class="content pure-u-1 pure-u-md-3-4">
-        <div>
-
-            <!-- A wrapper for all the blog posts -->
-            <div class="posts">
-                Releases
-                <ul>
-                    {{ range $name, $title := .Site.Sections }}
-                    <li class="nav-item">{{ $name }}</li>
-                    {{ end }}
-                </ul>
-            </div>
-            {{ partial "pagination.html" . }}
-            {{ partial "footer.html" . }}
-        </div>
-    </div>
+<div class="header">
+    <h1>{{ .Title }}</h1>
+    <h2>{{ .Site.Params.subtitle }}</h2>
 </div>
-
-{{ partial "analytics.html" . }}
-</body>
-</html>
+<div class="content">
+    {{ range first 1 (where .Data.Pages "Title" "Home") }}
+    {{ .Content }}
+    {{ end }}
+</div>
+{{ partial "footer.html" . }}
