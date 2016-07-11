@@ -3,12 +3,22 @@
   
   <url>
     <loc>http://go-ide.com/</loc>
-    <lastmod>2016-07-09T19:54:02+03:00</lastmod>
+    <lastmod>2016-07-11T15:16:45+03:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://go-ide.com/alpha/0.12.1502/</loc>
+    <lastmod>2016-07-11T15:16:45+03:00</lastmod>
   </url>
   
   <url>
     <loc>http://go-ide.com/alpha/0.12.1501/</loc>
     <lastmod>2016-07-09T19:54:02+03:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://go-ide.com/about/</loc>
+    <lastmod>2014-04-09T00:00:00+00:00</lastmod>
   </url>
   
 </urlset>

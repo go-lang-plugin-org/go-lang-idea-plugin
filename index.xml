@@ -6,8 +6,17 @@
     <description>Recent content on IntelliJ Go</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 09 Jul 2016 19:54:02 +0300</lastBuildDate>
+    <lastBuildDate>Mon, 11 Jul 2016 15:16:45 +0300</lastBuildDate>
     <atom:link href="http://go-ide.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>0.12.1502</title>
+      <link>http://go-ide.com/alpha/0.12.1502/</link>
+      <pubDate>Mon, 11 Jul 2016 15:16:45 +0300</pubDate>
+      
+      <guid>http://go-ide.com/alpha/0.12.1502/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>0.12.1501</title>
@@ -16,6 +25,99 @@
       
       <guid>http://go-ide.com/alpha/0.12.1501/</guid>
       <description>&lt;p&gt;sadf&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Home</title>
+      <link>http://go-ide.com/about/</link>
+      <pubDate>Wed, 09 Apr 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://go-ide.com/about/</guid>
+      <description>
+
+
+&lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/main.png&#34; alt=&#34;&#34;&gt;
+
+
+&lt;h1 id=&#34;install-plugin&#34;&gt;Install plugin&lt;/h1&gt;
+
+&lt;p&gt;Use the &lt;code&gt;File | Settings | Plugins | Browse Repositories&lt;/code&gt; dialog to search and install Go plugin.&lt;/p&gt;
+
+&lt;h1 id=&#34;pre-release-builds&#34;&gt;Pre-release builds&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;Supported IDEs&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The plugin can be installed on following IntelliJ-based:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;IntelliJ 2016.1+ (Ultimate or Community)&lt;/li&gt;
+&lt;li&gt;WebStorm 2016.1+&lt;/li&gt;
+&lt;li&gt;PhpStorm 2016.1+&lt;/li&gt;
+&lt;li&gt;PyCharm 2016.1+&lt;/li&gt;
+&lt;li&gt;RubyMine 2016.1+&lt;/li&gt;
+&lt;li&gt;CLion 2016.1+&lt;/li&gt;
+&lt;li&gt;Android Studio 1.2.1+&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Pre-release builds are available in two forms: nightly and alphas. Alpha builds are usually released at the beginning of every week while nightly builds are released every night.&lt;/p&gt;
+
+&lt;p&gt;To use them do the following:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Use &lt;a href=&#34;https://www.jetbrains.com/idea/help/managing-enterprise-plugin-repositories.html&#34;&gt;the instructions&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Paste the URL for the version you need:
+
+&lt;ul&gt;
+&lt;li&gt;alpha: &lt;a href=&#34;https://plugins.jetbrains.com/plugins/alpha/5047&#34;&gt;https://plugins.jetbrains.com/plugins/alpha/5047&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;nightly: &lt;a href=&#34;https://plugins.jetbrains.com/plugins/nightly/5047&#34;&gt;https://plugins.jetbrains.com/plugins/nightly/5047&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;NOTE&lt;/strong&gt;
+The above links are not meant to be used in browsers, so don&amp;rsquo;t report issues
+about them not working or being inaccessible unless there&amp;rsquo;s an error in the IDE itself.&lt;/p&gt;
+
+&lt;p&gt;Since these are not stable releases, some things might not work as expected.&lt;/p&gt;
+
+&lt;h3 id=&#34;release-versions-schema&#34;&gt;Release versions schema&lt;/h3&gt;
+
+&lt;p&gt;Bellow you can see the versions of the plugin which correspond to the versions of the
+IntelliJ Platfom (IntelliJ IDEA, WebStorm, PyCharm etc.):&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Plugin version number&lt;/th&gt;
+&lt;th&gt;Platform number&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;0.12.x&lt;/td&gt;
+&lt;td&gt;IntelliJ 2016.2 (IntelliJ IDEA 2016.2)&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;0.11.x&lt;/td&gt;
+&lt;td&gt;IntelliJ 2016.1 (IntelliJ IDEA 2016.1)&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;0.10.x&lt;/td&gt;
+&lt;td&gt;IntelliJ 143.1180 - 143.9999 (IntelliJ IDEA 15.0.2+)&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;0.9.x&lt;/td&gt;
+&lt;td&gt;IntelliJ 141.1532 - 141.9999 (IntelliJ IDEA 14.1)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;If you are not using IntelliJ IDEA, then please check the build number of your IDE
+ as that will correspond to the IntelliJ Platform version.&lt;/p&gt;
 </description>
     </item>
     

@@ -1,102 +1,267 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IntelliJ Go &middot; IntelliJ Go</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.16" />
 
-    <meta name="description" content="Golang plugin for IntelliJ IDEA">
+  <title>IntelliJ Go</title>
 
-    <meta name="generator" content="Hugo 0.16" />
-    <meta name="twitter:card" content="summary">
-    
-    <meta name="twitter:title" content="IntelliJ Go &middot; IntelliJ Go">
-    <meta name="twitter:description" content="Golang plugin for IntelliJ IDEA">
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
 
-    <meta property="og:type" content="article">
-    <meta property="og:title" content="IntelliJ Go &middot; IntelliJ Go">
-    <meta property="og:description" content="Golang plugin for IntelliJ IDEA">
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-min.css">
+  <!--<![endif]-->
 
-    <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Oxygen:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
-    <!--[if lte IE 8]>
-        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-old-ie-min.css">
-    <![endif]-->
-    <!--[if gt IE 8]><!-->
-        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-min.css">
-    <!--<![endif]-->
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="http://go-ide.com/css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="http://go-ide.com/css/side-menu.css">
+  <!--<![endif]-->
 
-    <link rel="stylesheet" href="http://go-ide.com//css/all.min.css">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="http://go-ide.com/css/blackburn.css">
 
-    <link rel="alternate" type="application/rss+xml" title="IntelliJ Go" href="http://go-ide.com//index.xml" />
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  
+  <link rel="alternate" type="application/rss+xml" title="IntelliJ Go" href="http://go-ide.com/index.xml" />
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/styles/androidstudio.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  
+
 </head>
+
+
 <body>
+<div id="layout">
+
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
+
+  
+  <a class="pure-menu-heading brand" href="http://go-ide.com/">IntelliJ Go</a>
 
 
-<div id="layout" class="pure-g">
-    <div class="sidebar pure-u-1 pure-u-md-1-4">
-    <div class="header">
-        <hgroup>
-            <h1 class="brand-title"><a href="http://go-ide.com/">IntelliJ Go</a></h1>
-            <h2 class="brand-tagline"> Golang plugin for IntelliJ IDEA </h2>
-        </hgroup>
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="http://go-ide.com/"><i class='fa fa-home'></i>Home</a>
+      
+        </li>
+      
+    </ul>
+  </div>
 
-        <nav class="nav">
-            <ul class="nav-list">
-                
-                
-                <li class="nav-item">
-                    <a class="pure-button" href="https://github.com/go-lang-plugin-org "><i class="fa fa-github-alt"></i> github</a>
-                </li>
-                
-                <li class="nav-item">
-                    <a class="pure-button" href="http://go-ide.com//index.xml"><i class="fa fa-rss"></i> rss</a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="http://go-ide.com/index.xml"><i class="fa fa-rss fa-fw"></i>RSS</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin" target="_blank"><i class="fa fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </ul>
 </div>
 
 
-    <div class="content pure-u-1 pure-u-md-3-4">
-        <div>
-
-            
-            <div class="posts">
-                Releases
-                <ul>
-                    
-                    <li class="nav-item">alpha</li>
-                    
-                </ul>
-            </div>
-            
-
-            <div class="footer">
-    <div class="pure-menu pure-menu-horizontal pure-menu-open">
-        <ul>
-            <li>Powered by <a class="hugo" href="https://gohugo.io/" target="_blank">hugo</a></li>
-        </ul>
-    </div>
+  <div>
+  <div class="small-print">
+    <small></small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
 </div>
-<script src="http://go-ide.com//js/all.min.js"></script>
 
-        </div>
-    </div>
 </div>
 
 
-<script>
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  <div id="main">
 
-ga('create', '', 'auto');
-ga('send', 'pageview');
+<div class="header">
+    <h1>IntelliJ Go</h1>
+    <h2>Golang plugin for IntelliJ-based IDEs</h2>
+</div>
+<div class="content">
+    
+    
 
-</script>
+
+<img class="pure-img" src="http://go-ide.com/images/main.png" alt="">
+
+
+<h1 id="install-plugin">Install plugin</h1>
+
+<p>Use the <code>File | Settings | Plugins | Browse Repositories</code> dialog to search and install Go plugin.</p>
+
+<h1 id="pre-release-builds">Pre-release builds</h1>
+
+<p><strong>Supported IDEs</strong></p>
+
+<p>The plugin can be installed on following IntelliJ-based:</p>
+
+<ul>
+<li>IntelliJ 2016.1+ (Ultimate or Community)</li>
+<li>WebStorm 2016.1+</li>
+<li>PhpStorm 2016.1+</li>
+<li>PyCharm 2016.1+</li>
+<li>RubyMine 2016.1+</li>
+<li>CLion 2016.1+</li>
+<li>Android Studio 1.2.1+</li>
+</ul>
+
+<p>Pre-release builds are available in two forms: nightly and alphas. Alpha builds are usually released at the beginning of every week while nightly builds are released every night.</p>
+
+<p>To use them do the following:</p>
+
+<ol>
+<li>Use <a href="https://www.jetbrains.com/idea/help/managing-enterprise-plugin-repositories.html">the instructions</a></li>
+<li>Paste the URL for the version you need:
+
+<ul>
+<li>alpha: <a href="https://plugins.jetbrains.com/plugins/alpha/5047">https://plugins.jetbrains.com/plugins/alpha/5047</a></li>
+<li>nightly: <a href="https://plugins.jetbrains.com/plugins/nightly/5047">https://plugins.jetbrains.com/plugins/nightly/5047</a></li>
+</ul></li>
+</ol>
+
+<p><strong>NOTE</strong>
+The above links are not meant to be used in browsers, so don&rsquo;t report issues
+about them not working or being inaccessible unless there&rsquo;s an error in the IDE itself.</p>
+
+<p>Since these are not stable releases, some things might not work as expected.</p>
+
+<h3 id="release-versions-schema">Release versions schema</h3>
+
+<p>Bellow you can see the versions of the plugin which correspond to the versions of the
+IntelliJ Platfom (IntelliJ IDEA, WebStorm, PyCharm etc.):</p>
+
+<table>
+<thead>
+<tr>
+<th>Plugin version number</th>
+<th>Platform number</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0.12.x</td>
+<td>IntelliJ 2016.2 (IntelliJ IDEA 2016.2)</td>
+</tr>
+
+<tr>
+<td>0.11.x</td>
+<td>IntelliJ 2016.1 (IntelliJ IDEA 2016.1)</td>
+</tr>
+
+<tr>
+<td>0.10.x</td>
+<td>IntelliJ 143.1180 - 143.9999 (IntelliJ IDEA 15.0.2+)</td>
+</tr>
+
+<tr>
+<td>0.9.x</td>
+<td>IntelliJ 141.1532 - 141.9999 (IntelliJ IDEA 14.1)</td>
+</tr>
+</tbody>
+</table>
+
+<p>If you are not using IntelliJ IDEA, then please check the build number of your IDE
+ as that will correspond to the IntelliJ Platform version.</p>
+
+    
+</div>
+</div>
+</div>
+<script src="http://go-ide.com/js/ui.js"></script>
+
+
+
 
 </body>
 </html>
