@@ -22,12 +22,12 @@ params:
 menu:
   main:
       - name: "Home"
-        pre: "<i class='fa fa-home'></i>"
+        pre: "<i class='fa fa-home' style='width: 1em;'></i>"
         weight: 0
         identifier: "home"
         url: "/"
       - name: "Alpha"
-        pre: "<i class='fa fa-at'></i>"
+        pre: "<i class='fa' style='width: 1em;'></i>"
         weight: 2
         identifier: "alpha"
         url: "/topics/alpha"
