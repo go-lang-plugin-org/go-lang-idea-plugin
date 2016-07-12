@@ -29,6 +29,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.ElementManipulators;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -63,19 +64,16 @@ public class GoPlaceholderCountInspection extends GoInspectionBase {
   private static void checkPrint(@NotNull ProblemsHolder holder,
                                  @NotNull GoCallExpr callExpr,
                                  @NotNull GoFunctionOrMethodDeclaration declaration) {
-
     List<GoExpression> arguments = callExpr.getArgumentList().getExpressionList();
-    if (arguments.isEmpty()) return;
+    GoExpression firstArg = ContainerUtil.getFirstItem(arguments);
+    if (firstArg == null) return;
 
-    GoExpression firstArg = arguments.get(0);
     if (GoTypeUtil.isString(firstArg.getGoType(null))) {
       String firstArgText = resolve(firstArg);
-      if (firstArgText != null) {
-        if (GoPlaceholderChecker.hasPlaceholder(firstArgText)) {
-          String message = "Possible formatting directive in <code>#ref</code> #loc";
-          holder.registerProblem(firstArg, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
-          return;
-        }
+      if (GoPlaceholderChecker.hasPlaceholder(firstArgText)) {
+        String message = "Possible formatting directive in <code>#ref</code> #loc";
+        holder.registerProblem(firstArg, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+        return;
       }
     }
 
@@ -90,17 +88,15 @@ public class GoPlaceholderCountInspection extends GoInspectionBase {
         String argText = resolve(argument);
         if (argText != null && argText.endsWith("\\n")) {
           String message = "Function already ends with new line #loc";
-          TextRange range = TextRange.create(argText.length() - 1, argText.length() + 1);
+          TextRange range = TextRange.from(argText.length() - 1, 1);
           // TODO florin: add quickfix to remove trailing \n
           // TODO florin: add quickfix to convert \n to a separate argument
           holder.registerProblem(argument, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, range);
         }
       }
       else if (GoTypeUtil.isFunction(goType)) {
-        String message = "Argument <code>#ref</code> is not a function call #loc";
-        if (argument instanceof GoCallExpr) {
-          message = "Final return type of <code>#ref</code> is a function not a function call #loc";
-        }
+        String message = argument instanceof GoCallExpr ? "Final return type of <code>#ref</code> is a function not a function call #loc"
+                                                        : "Argument <code>#ref</code> is not a function call #loc";
         // TODO florin: add quickfix to convert to function call if possible
         holder.registerProblem(argument, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
       }
@@ -161,10 +157,11 @@ public class GoPlaceholderCountInspection extends GoInspectionBase {
     int maxArgsNum = 0;
     for (Placeholder placeholder : placeholders) {
       List<Integer> arguments = placeholder.getArguments();
-      if (arguments.isEmpty()) continue;
-      int max = Collections.max(arguments);
-      if (maxArgsNum < max) {
-        maxArgsNum = max;
+      if (!arguments.isEmpty()) {
+        int max = Collections.max(arguments);
+        if (maxArgsNum < max) {
+          maxArgsNum = max;
+        }
       }
     }
 
@@ -204,8 +201,7 @@ public class GoPlaceholderCountInspection extends GoInspectionBase {
     PrintVerb v = fmtPlaceholder.getVerb();
     if (v == null) {
       String message = "Unrecognized formatting verb <code>#ref</code> call #loc";
-      TextRange range = TextRange.create(fmtPlaceholder.getStartPos() + 1,
-                                         fmtPlaceholder.getStartPos() + 1 + fmtPlaceholder.getPlaceholder().length());
+      TextRange range = TextRange.from(fmtPlaceholder.getStartPos() + 1, fmtPlaceholder.getPlaceholder().length());
       // TODO florin: add quickfix to suggest correct printf verbs (maybe take type into account when type info available?)
       holder.registerProblem(placeholder, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, range);
       return false;
@@ -286,7 +282,10 @@ public class GoPlaceholderCountInspection extends GoInspectionBase {
 
   @Nullable
   private static String resolve(@NotNull GoExpression argument) {
-    if (argument instanceof GoStringLiteral) return ElementManipulators.getValueText(argument);
+    String argumentValue = getValue(argument);
+    if (argumentValue != null) {
+      return argumentValue;
+    }
 
     PsiReference reference = argument.getReference();
     PsiElement resolved = reference != null ? reference.resolve() : null;
@@ -309,7 +308,7 @@ public class GoPlaceholderCountInspection extends GoInspectionBase {
       return ElementManipulators.getValueText(expression);
     }
     if (expression instanceof GoAddExpr) {
-      return StringUtil.nullize(getValue((GoAddExpr)expression));
+      return StringUtil.nullize(getConcatenationValue((GoAddExpr)expression));
     }
 
     return null;
@@ -317,7 +316,7 @@ public class GoPlaceholderCountInspection extends GoInspectionBase {
 
   // todo: implement ConstEvaluator
   @Nullable
-  private static String getValue(@Nullable GoAddExpr expression) {
+  private static String getConcatenationValue(@Nullable GoAddExpr expression) {
     if (expression == null) return null;
     StringBuilder result = new StringBuilder();
     for (GoExpression expr : expression.getExpressionList()) {

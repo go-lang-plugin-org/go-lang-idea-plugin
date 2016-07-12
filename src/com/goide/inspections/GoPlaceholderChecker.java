@@ -304,8 +304,8 @@ public class GoPlaceholderChecker {
     return state;
   }
 
-  public static boolean hasPlaceholder(@NotNull String formatString) {
-    return StringUtil.containsChar(formatString, '%');
+  public static boolean hasPlaceholder(@Nullable String formatString) {
+    return formatString != null && StringUtil.containsChar(formatString, '%');
   }
 
   private static void parseFlags(@NotNull FormatState state) {
