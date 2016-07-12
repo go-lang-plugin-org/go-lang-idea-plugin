@@ -29,7 +29,7 @@ Pre-release builds are available in two forms: nightly and alphas. Alpha builds 
 
 To use them do the following:
 
-1. Use [the instructions](https://www.jetbrains.com/idea/help/managing-enterprise-plugin-repositories.html)
+1. Use <a href="https://www.jetbrains.com/idea/help/managing-enterprise-plugin-repositories.html" target="_blank">the instructions</a>
 1. Paste the URL for the version you need:
  - alpha: https://plugins.jetbrains.com/plugins/alpha/5047
  - nightly: https://plugins.jetbrains.com/plugins/nightly/5047
