@@ -31,6 +31,19 @@ public abstract class GoCachedReference<T extends PsiElement> extends PsiReferen
     super(element, TextRange.from(0, element.getTextLength()));
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof GoCachedReference)) return false;
+    GoCachedReference other = (GoCachedReference)o;
+    return getElement() == other.getElement();
+  }
+
+  @Override
+  public int hashCode() {
+    return getElement().hashCode();
+  }
+
   private static final ResolveCache.AbstractResolver<PsiReferenceBase, PsiElement> MY_RESOLVER =
     new ResolveCache.AbstractResolver<PsiReferenceBase, PsiElement>() {
       @Override
