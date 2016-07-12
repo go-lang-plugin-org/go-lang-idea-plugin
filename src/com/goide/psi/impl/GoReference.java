@@ -60,6 +60,19 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(), o.getIdentifier().getTextLength()));
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof GoReference)) return false;
+    GoReference other = (GoReference)o;
+    return getElement() == other.getElement();
+  }
+
+  @Override
+  public int hashCode() {
+    return getElement().hashCode();
+  }
+
   @Nullable
   static PsiFile getContextFile(@NotNull ResolveState state) {
     PsiElement element = getContextElement(state);
