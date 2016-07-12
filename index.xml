@@ -426,7 +426,7 @@ Go 1.6 SDK is supported&lt;/p&gt;
 &lt;p&gt;To use them do the following:&lt;/p&gt;
 
 &lt;ol&gt;
-&lt;li&gt;Use &lt;a href=&#34;https://www.jetbrains.com/idea/help/managing-enterprise-plugin-repositories.html&#34;&gt;the instructions&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Use &lt;a href=&#34;https://www.jetbrains.com/idea/help/managing-enterprise-plugin-repositories.html&#34; target=&#34;_blank&#34;&gt;the instructions&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Paste the URL for the version you need:
 
 &lt;ul&gt;
