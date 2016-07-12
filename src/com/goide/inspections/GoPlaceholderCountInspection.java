@@ -88,7 +88,7 @@ public class GoPlaceholderCountInspection extends GoInspectionBase {
         String argText = resolve(argument);
         if (argText != null && argText.endsWith("\\n")) {
           String message = "Function already ends with new line #loc";
-          TextRange range = TextRange.from(argText.length() - 1, 1);
+          TextRange range = TextRange.from(argText.length() - 1, 2);
           // TODO florin: add quickfix to remove trailing \n
           // TODO florin: add quickfix to convert \n to a separate argument
           holder.registerProblem(argument, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, range);
@@ -308,28 +308,14 @@ public class GoPlaceholderCountInspection extends GoInspectionBase {
       return ElementManipulators.getValueText(expression);
     }
     if (expression instanceof GoAddExpr) {
-      return StringUtil.nullize(getConcatenationValue((GoAddExpr)expression));
+      StringBuilder result = new StringBuilder();
+      for (GoExpression expr : ((GoAddExpr)expression).getExpressionList()) {
+        result.append(getValue(expr));
+      }
+      return StringUtil.nullize(result.toString());
     }
-
+    if (expression instanceof GoParenthesesExpr) {
+      return getValue(((GoParenthesesExpr)expression).getExpression());
+    }
     return null;
-  }
-
-  // todo: implement ConstEvaluator
-  @Nullable
-  private static String getConcatenationValue(@Nullable GoAddExpr expression) {
-    if (expression == null) return null;
-    StringBuilder result = new StringBuilder();
-    for (GoExpression expr : expression.getExpressionList()) {
-      if (expr instanceof GoStringLiteral) {
-        result.append(ElementManipulators.getValueText(expr));
-      }
-      else if (expr instanceof GoAddExpr) {
-        // TODO Should we abort and return null here?
-        String value = getValue(expr);
-        if (value != null) result.append(value);
-      }
-    }
-
-    return result.toString();
-  }
-}
+  }}
