@@ -130,7 +130,7 @@ func <warning descr="Unused function 'PrintfTests'">PrintfTests</warning>() {
 	fmt.Println()                              // not an error
 	fmt.Println(<warning descr="Possible formatting directive in '\"%s\"'">"%s"</warning>, "hi")                    // ERROR "possible formatting directive in Println call"
 	fmt.Printf(<warning descr="Got 1 placeholder(s) for 2 arguments(s)">"%s"</warning>, "hi", 3)                  // ERROR "wrong number of args for format in Printf call"
-	_ = fmt.Sprintf("%"+("s"), "hi", 3)        // ERROR "wrong number of args for format in Sprintf call"
+	_ = fmt.Sprintf(<warning descr="Got 1 placeholder(s) for 2 arguments(s)">"%"+("s")</warning>, "hi", 3)        // ERROR "wrong number of args for format in Sprintf call"
 	fmt.Printf("%s%%%d", "hi", 3)              // correct
 	fmt.Printf("%08s", "woo")                  // correct
 	fmt.Printf("% 8s", "woo")                  // correct
