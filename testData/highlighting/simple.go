@@ -802,3 +802,17 @@ func _() {
 	_ = <error descr="New line in string">"</error>
 	_ = <error descr="New line in string">"  a</error>
 }
+
+type foo23213 struct {
+    bar string
+}
+
+var (
+    _ = [](*foo23213){
+        {
+            bar: "whatever",
+        }, {
+
+        },
+    }
+)
