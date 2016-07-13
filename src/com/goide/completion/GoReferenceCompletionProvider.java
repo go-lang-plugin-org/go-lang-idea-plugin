@@ -152,6 +152,9 @@ public class GoReferenceCompletionProvider extends CompletionProvider<Completion
         String name = ((GoLabelDefinition)o).getName();
         if (name != null) return GoCompletionUtil.createLabelLookupElement((GoLabelDefinition)o, name);
       }
+      else if (o instanceof GoFieldDefinition) {
+        return GoCompletionUtil.createFieldLookupElement((GoFieldDefinition)o);
+      }
       else {
         return GoCompletionUtil.createVariableLikeLookupElement((GoNamedElement)o);
       }

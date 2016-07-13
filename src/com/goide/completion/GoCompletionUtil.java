@@ -58,6 +58,7 @@ public class GoCompletionUtil {
   public static final int TYPE_CONVERSION = NOT_IMPORTED_TYPE_CONVERSION + 10;
   public static final int NOT_IMPORTED_VAR_PRIORITY = 5;
   public static final int VAR_PRIORITY = NOT_IMPORTED_VAR_PRIORITY + 10;
+  private static final int FIELD_PRIORITY = CONTEXT_KEYWORD_PRIORITY + 1;
   private static final int LABEL_PRIORITY = 15;
   public static final int PACKAGE_PRIORITY = 5;
 
@@ -266,12 +267,17 @@ public class GoCompletionUtil {
   }
 
   @Nullable
+  public static LookupElement createFieldLookupElement(@NotNull GoFieldDefinition v) {
+    String name = v.getName();
+    if (StringUtil.isEmpty(name)) return null;
+    return createVariableLikeLookupElement(v, name, Lazy.FIELD_DEFINITION_INSERT_HANDLER, FIELD_PRIORITY);
+  }
+
+  @Nullable
   public static LookupElement createVariableLikeLookupElement(@NotNull GoNamedElement v) {
     String name = v.getName();
     if (StringUtil.isEmpty(name)) return null;
-    InsertHandler<LookupElement> insertHandler = v instanceof GoFieldDefinition ? Lazy.FIELD_DEFINITION_INSERT_HANDLER
-                                                                                : Lazy.VARIABLE_OR_FUNCTION_INSERT_HANDLER;
-    return createVariableLikeLookupElement(v, name, insertHandler, VAR_PRIORITY);
+    return createVariableLikeLookupElement(v, name, Lazy.VARIABLE_OR_FUNCTION_INSERT_HANDLER, VAR_PRIORITY);
   }
 
   @NotNull
