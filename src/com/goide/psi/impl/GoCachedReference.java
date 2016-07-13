@@ -71,10 +71,7 @@ public abstract class GoCachedReference<T extends PsiElement> extends PsiReferen
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof GoCachedReference)) return false;
-    GoCachedReference other = (GoCachedReference)o;
-    return getElement() == other.getElement();
+    return this == o || o instanceof GoCachedReference && getElement() == ((GoCachedReference)o).getElement();
   }
 
   @Override
