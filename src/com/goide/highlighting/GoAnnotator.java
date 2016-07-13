@@ -229,10 +229,7 @@ public class GoAnnotator implements Annotator {
     //noinspection ConstantConditions
     GoType exprType = first.getGoType(null); // todo: context
     if (exprType == null) return;
-    GoType baseType = exprType.getUnderlyingType();
-    if (baseType instanceof GoPointerType) {
-      baseType = ((GoPointerType)baseType).getType();
-    }
+    GoType baseType = GoPsiImplUtil.unwrapPointerIfNeeded(exprType.getUnderlyingType());
     if (baseType instanceof GoArrayOrSliceType || baseType instanceof GoChannelType) return;
     holder.createErrorAnnotation(first, "Invalid argument for cap");
   }
