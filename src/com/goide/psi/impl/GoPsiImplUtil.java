@@ -583,10 +583,31 @@ public class GoPsiImplUtil {
     return goValue;
   }
 
-  @Nullable
   // todo: rethink and unify this algorithm
+  @Nullable
   private static GoType calcLiteralType(@Nullable GoValue parentGoValue, @Nullable GoType type) {
     if (type == null) return null;
+    type = findLiteralType(parentGoValue, type);
+
+    if (type instanceof GoParType) {
+      type = ((GoParType)type).getActualType();
+    }
+
+    if (type != null && type.getTypeReferenceExpression() != null) {
+      type = type.getUnderlyingType();
+    }
+
+    if (type instanceof GoPointerType) {
+      GoType inner = ((GoPointerType)type).getType();
+      if (inner != null && inner.getTypeReferenceExpression() != null) {
+        type = inner.getUnderlyingType();
+      }
+    }
+
+    return type instanceof GoSpecType ? ((GoSpecType)type).getType() : type;
+  }
+
+  private static GoType findLiteralType(@Nullable GoValue parentGoValue, @Nullable GoType type) {
     boolean inValue = parentGoValue != null;
     if (inValue && type instanceof GoArrayOrSliceType) {
       type = ((GoArrayOrSliceType)type).getType();
@@ -608,19 +629,7 @@ public class GoPsiImplUtil {
         }
       }
     }
-
-    if (type != null && type.getTypeReferenceExpression() != null) {
-      type = type.getUnderlyingType();
-    }
-
-    if (type instanceof GoPointerType) {
-      GoType inner = ((GoPointerType)type).getType();
-      if (inner != null && inner.getTypeReferenceExpression() != null) {
-        type = inner.getUnderlyingType();
-      }
-    }
-
-    return type instanceof GoSpecType ? ((GoSpecType)type).getType() : type;
+    return type;
   }
 
   @Nullable
