@@ -45,4 +45,19 @@ public class GoLiveTemplateTest extends GoCodeInsightFixtureTestCase {
     myFixture.type("json\t");
     myFixture.checkResult("package main; func main() { json\t<caret> }");
   }
+
+  public void testForInSignature() {
+    myFixture.configureByText("a.go", "package main; func <caret>");
+    myFixture.type("for\t");
+    myFixture.checkResult("package main; func for\t<caret>");
+  }
+
+  public void testForInBlock() {
+    myFixture.configureByText("a.go", "package main; func main() { <caret> }");
+    myFixture.type("for\t");
+    myFixture.checkResult("package main; func main() {\n" +
+                          "\tfor ; ;  {\n" +
+                          "\t\t\n" +
+                          "\t} }");
+  }
 }
