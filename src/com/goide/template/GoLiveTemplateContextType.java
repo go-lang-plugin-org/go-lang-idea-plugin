@@ -153,7 +153,11 @@ abstract public class GoLiveTemplateContextType extends TemplateContextType {
 
     @Override
     protected boolean isInContext(@NotNull PsiElement element) {
-      return !(element instanceof PsiComment) && onStatementBeginning(element);
+      if (element instanceof PsiComment) {
+        return false;
+      }
+      PsiElement parent = element.getParent();
+      return (parent instanceof GoStatement || parent instanceof GoLeftHandExprList) && onStatementBeginning(element);
     }
   }
 }
