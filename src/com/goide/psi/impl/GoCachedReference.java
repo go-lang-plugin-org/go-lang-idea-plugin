@@ -44,11 +44,11 @@ public abstract class GoCachedReference<T extends PsiElement> extends PsiReferen
     return getElement().hashCode();
   }
 
-  private static final ResolveCache.AbstractResolver<PsiReferenceBase, PsiElement> MY_RESOLVER =
-    new ResolveCache.AbstractResolver<PsiReferenceBase, PsiElement>() {
+  private static final ResolveCache.AbstractResolver<GoCachedReference, PsiElement> MY_RESOLVER =
+    new ResolveCache.AbstractResolver<GoCachedReference, PsiElement>() {
       @Override
-      public PsiElement resolve(@NotNull PsiReferenceBase base, boolean b) {
-        return ((GoCachedReference)base).resolveInner();
+      public PsiElement resolve(@NotNull GoCachedReference r, boolean b) {
+        return r.resolveInner();
       }
     };
 
