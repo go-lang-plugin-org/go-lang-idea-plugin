@@ -17,10 +17,7 @@
 package com.goide.quickfix;
 
 import com.goide.inspections.GoRedundantTypeDeclInCompositeLit;
-import com.goide.psi.GoCompositeLit;
-import com.goide.psi.GoExpression;
-import com.goide.psi.GoLiteralValue;
-import com.goide.psi.GoUnaryExpr;
+import com.goide.psi.*;
 import com.intellij.codeInspection.LocalQuickFixBase;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
@@ -36,13 +33,24 @@ public class GoDeleteAmpersandAndTypeInCompositeLitQuickFix extends LocalQuickFi
   @Override
   public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
     PsiElement element = descriptor.getPsiElement();
-    if (element != null && element.isValid() && element instanceof GoUnaryExpr) {
-      GoUnaryExpr unaryExpr = (GoUnaryExpr)element;
-      GoExpression expr = unaryExpr.getExpression();
-      if (unaryExpr.getBitAnd() != null && expr instanceof GoCompositeLit) {
-        GoLiteralValue literalValue = ((GoCompositeLit)expr).getLiteralValue();
-        if (literalValue != null) {
-          unaryExpr.replace(literalValue);
+    if (element != null && element.isValid()) {
+      if (element instanceof GoUnaryExpr) {
+        GoUnaryExpr unaryExpr = (GoUnaryExpr)element;
+        GoExpression expr = unaryExpr.getExpression();
+        if (unaryExpr.getBitAnd() != null && expr instanceof GoCompositeLit) {
+          GoLiteralValue literalValue = ((GoCompositeLit)expr).getLiteralValue();
+          if (literalValue != null) {
+            unaryExpr.replace(literalValue);
+          }
+        }
+      }
+      else if (element instanceof GoTypeReferenceExpression) {
+        PsiElement parent = element.getParent();
+        if (parent instanceof GoCompositeLit) {
+          GoLiteralValue literalValue = ((GoCompositeLit)parent).getLiteralValue();
+          if (literalValue != null) {
+            parent.replace(literalValue);
+          }
         }
       }
     }
