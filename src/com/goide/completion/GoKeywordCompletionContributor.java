@@ -18,6 +18,7 @@ package com.goide.completion;
 
 import com.goide.GoTypes;
 import com.goide.psi.*;
+import com.goide.template.GoLiveTemplateContextType;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -177,10 +178,7 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
   }
 
   private static PsiElementPattern.Capture<PsiElement> onStatementBeginning(@NotNull IElementType... tokenTypes) {
-    return psiElement().withElementType(TokenSet.create(tokenTypes))
-      .afterLeafSkipping(psiElement().whitespaceCommentEmptyOrError().withoutText(string().containsChars("\n")),
-                         or(psiElement(GoTypes.SEMICOLON), psiElement(GoTypes.LBRACE), psiElement(GoTypes.COLON),
-                            psiElement().withText(string().containsChars("\n"))));
+    return psiElement().withElementType(TokenSet.create(tokenTypes)).with(new OnStatementBeginning());
   }
 
   private static PsiFilePattern.Capture<GoFile> goFileWithPackage() {
@@ -218,6 +216,17 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
     public boolean accepts(@NotNull GoReferenceExpression expression, ProcessingContext context) {
       GoStructLiteralCompletion.Variants variants = GoStructLiteralCompletion.allowedVariants(expression);
       return variants == GoStructLiteralCompletion.Variants.FIELD_NAME_ONLY;
+    }
+  }
+
+  private static class OnStatementBeginning extends PatternCondition<PsiElement> {
+    public OnStatementBeginning() {
+      super("on statement beginning");
+    }
+
+    @Override
+    public boolean accepts(@NotNull PsiElement psiElement, ProcessingContext context) {
+      return GoLiveTemplateContextType.Statement.onStatementBeginning(psiElement);   
     }
   }
 }

@@ -75,9 +75,11 @@
 
     <defaultLiveTemplatesProvider implementation="com.goide.template.GoLiveTemplatesProvider"/>
     <liveTemplateContext implementation="com.goide.template.GoEverywhereContextType"/>
-    <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$GoFileContextType"/>
-    <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$GoBlockContextType"/>
-    <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$GoTypeContextType"/>
+    <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$File"/>
+    <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$Block"/>
+    <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$Type"/>
+    <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$Expression"/>
+    <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$Statement"/>
 
     <lang.elementManipulator forClass="com.goide.psi.GoImportString"
                              implementationClass="com.goide.psi.impl.manipulator.GoImportStringManipulator"/>
