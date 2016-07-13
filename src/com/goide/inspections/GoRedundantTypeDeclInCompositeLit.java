@@ -18,7 +18,6 @@ package com.goide.inspections;
 
 import com.goide.psi.*;
 import com.goide.quickfix.GoDeleteAmpersandAndTypeInCompositeLitQuickFix;
-import com.goide.quickfix.GoDeleteQuickFix;
 import com.intellij.codeInspection.CleanupLocalInspectionTool;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
@@ -29,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class GoRedundantTypeDeclInCompositeLit extends GoInspectionBase implements CleanupLocalInspectionTool {
   public final static String DELETE_TYPE_DECLARATION_QUICK_FIX_NAME = "Delete redundant type declaration";
+  private static final GoDeleteAmpersandAndTypeInCompositeLitQuickFix QUICK_FIX = new GoDeleteAmpersandAndTypeInCompositeLitQuickFix();
 
   @NotNull
   @Override
@@ -56,10 +56,9 @@ public class GoRedundantTypeDeclInCompositeLit extends GoInspectionBase implemen
                   if (isTypeReferencesEquals(((GoPointerType)expectedType).getType(), compositeLit)) {
                     GoTypeReferenceExpression typeExpr = compositeLit.getTypeReferenceExpression();
                     if (typeExpr != null) {
-                      GoDeleteAmpersandAndTypeInCompositeLitQuickFix fix = new GoDeleteAmpersandAndTypeInCompositeLitQuickFix();
                       holder.registerProblem(holder.getManager().createProblemDescriptor(bitAnd, typeExpr, "Redundant type declaration",
                                                                                          ProblemHighlightType.LIKE_UNUSED_SYMBOL,
-                                                                                         holder.isOnTheFly(), fix));
+                                                                                         holder.isOnTheFly(), QUICK_FIX));
                     }
                   }
                 }
@@ -67,8 +66,7 @@ public class GoRedundantTypeDeclInCompositeLit extends GoInspectionBase implemen
               else if (expr instanceof GoCompositeLit && isTypeReferencesEquals(expectedType, (GoCompositeLit)expr)) {
                 GoTypeReferenceExpression typeExpr = ((GoCompositeLit)expr).getTypeReferenceExpression();
                 if (typeExpr != null) {
-                  GoDeleteQuickFix fix = new GoDeleteQuickFix(DELETE_TYPE_DECLARATION_QUICK_FIX_NAME, GoTypeReferenceExpression.class);
-                  holder.registerProblem(typeExpr, "Redundant type declaration", ProblemHighlightType.LIKE_UNUSED_SYMBOL, fix);
+                  holder.registerProblem(typeExpr, "Redundant type declaration", ProblemHighlightType.LIKE_UNUSED_SYMBOL, QUICK_FIX);
                 }
               }
             }
