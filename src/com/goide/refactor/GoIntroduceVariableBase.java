@@ -135,7 +135,7 @@ public class GoIntroduceVariableBase {
       .toList();
   }
 
-  private static void performOnElement(@NotNull GoIntroduceOperation operation) {
+  private static void performOnElement(@NotNull final GoIntroduceOperation operation) {
     GoExpression expression = operation.getExpression();
     LinkedHashSet<String> suggestedNames = GoRefactoringUtil.getSuggestedNames(expression);
     operation.setSuggestedNames(suggestedNames);

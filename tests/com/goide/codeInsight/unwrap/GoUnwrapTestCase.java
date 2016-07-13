@@ -46,7 +46,7 @@ public abstract class GoUnwrapTestCase extends GoCodeInsightFixtureTestCase {
 
   protected void assertOptions(@NotNull String code, String... expectedOptions) {
     myFixture.configureByText("a.go", normalizeCode(code));
-    List<String> actualOptions = new ArrayList<String>();
+    final List<String> actualOptions = new ArrayList<String>();
     UnwrapHandler h = new UnwrapHandler() {
       @Override
       protected void selectOption(List<AnAction> options, Editor editor, PsiFile file) {

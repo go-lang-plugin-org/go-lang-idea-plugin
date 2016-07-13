@@ -109,10 +109,10 @@ public class GoIntroduceFunctionFix extends LocalQuickFixAndIntentionActionOnPsi
   }
 
   @NotNull
-  private static String convertType(@NotNull PsiFile file, @Nullable GoType type, Map<String, GoImportSpec> importMap) {
+  private static String convertType(@NotNull final PsiFile file, @Nullable GoType type, final Map<String, GoImportSpec> importMap) {
     if (type == null) return GoConstants.INTERFACE_TYPE;
     final Module module = ModuleUtilCore.findModuleForPsiElement(file);
-    boolean vendoringEnabled = GoVendoringUtil.isVendoringEnabled(module);
+    final boolean vendoringEnabled = GoVendoringUtil.isVendoringEnabled(module);
     return GoDocumentationProvider.getTypePresentation(type, new Function<PsiElement, String>() {
       @Override
       public String fun(PsiElement element) {

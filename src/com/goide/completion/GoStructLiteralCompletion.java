@@ -79,7 +79,7 @@ class GoStructLiteralCompletion {
     boolean hasFieldValueInitializers = false;
 
     GoLiteralValue literalValue = parent(element, GoLiteralValue.class);
-    List<GoElement> fieldInitializers = literalValue != null ? literalValue.getElementList() : Collections.emptyList();
+    List<GoElement> fieldInitializers = literalValue != null ? literalValue.getElementList() : Collections.<GoElement>emptyList();
     for (GoElement initializer : fieldInitializers) {
       if (initializer == element) {
         continue;

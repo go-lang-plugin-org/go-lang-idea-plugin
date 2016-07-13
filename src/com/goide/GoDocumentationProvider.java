@@ -225,7 +225,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
   }
 
   @NotNull
-  public static String getTypePresentation(@Nullable PsiElement element, @NotNull Function<PsiElement, String> presentationFunction) {
+  public static String getTypePresentation(@Nullable PsiElement element, @NotNull final Function<PsiElement, String> presentationFunction) {
     if (element instanceof GoType) {
       GoType type = (GoType)element;
       if (type instanceof GoMapType) {
