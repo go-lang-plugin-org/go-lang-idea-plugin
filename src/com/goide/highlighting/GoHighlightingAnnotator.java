@@ -27,8 +27,11 @@ import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 import static com.goide.highlighting.GoSyntaxHighlightingColors.*;
 
@@ -134,7 +137,16 @@ public class GoHighlightingAnnotator implements Annotator {
   public void annotate(@NotNull PsiElement o, @NotNull AnnotationHolder holder) {
     if (!o.isValid()) return;
     if (o instanceof GoImportSpec && ((GoImportSpec)o).isDot()) {
-      o.putUserData(GoReference.IMPORT_USERS, null);
+      List<? extends PsiElement> importUsers = o.getUserData(GoReference.IMPORT_USERS);
+      if (importUsers != null) {
+        List<PsiElement> newImportUsers = ContainerUtil.newSmartList();
+        for (PsiElement user : importUsers) {
+          if (user.isValid()) {
+            newImportUsers.add(user);
+          }
+        }
+        o.putUserData(GoReference.IMPORT_USERS, newImportUsers.isEmpty() ? null : newImportUsers);
+      }
     }
     else if (o instanceof GoLiteral) {
       if (((GoLiteral)o).getHex() != null || ((GoLiteral)o).getOct() != null) {
