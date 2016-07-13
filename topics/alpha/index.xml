@@ -124,8 +124,8 @@ and for block statements
 &lt;h3 id=&#34;debugger&#34;&gt;Debugger&lt;/h3&gt;
 
 &lt;ul&gt;
-&lt;li&gt;Delve has been been upgraded to support passing parameters on Windows (along many other internal fixes in Delve)&lt;/li&gt;
-&lt;li&gt;The new version of Delve contains the fix of race condition which was lead to skipping breakpoints while debugging with IDE&lt;/li&gt;
+&lt;li&gt;Delve has been upgraded to support passing parameters on Windows (along many other internal fixes in Delve)&lt;/li&gt;
+&lt;li&gt;The new version of Delve contains the fix for race condition which was lead to skipping breakpoints while debugging with IDE&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&#34;other&#34;&gt;Other&lt;/h3&gt;
@@ -138,10 +138,10 @@ less memory for auto-import completion&lt;/li&gt;
 &lt;li&gt;the plugin won&amp;rsquo;t nag you about the wiki page every time you install a new version&lt;/li&gt;
 &lt;li&gt;a new theme based on Darcula is now based&lt;/li&gt;
 &lt;li&gt;improved output of tests that pass&lt;/li&gt;
-&lt;li&gt;introduce variable refactoring will now suggest names based on expression type being used&lt;/li&gt;
+&lt;li&gt;introduce variable refactoring now suggests names based on expression type being used&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;Many other changes and fixes have been introduced to increase the overall stability, functionality and performance of the plugin.&lt;/p&gt;
+&lt;p&gt;Many other changes and fixes have been introduced to increase the overall stability, functionality, and performance of the plugin.&lt;/p&gt;
 
 &lt;p&gt;For a list of all changes in the plugin, you can visit &lt;a href=&#34;https://github.com/go-lang-plugin-org/go-lang-idea-plugin/compare/2c63b95...9534af2f0d9550474f0b82dcadf10550322da6a7&#34;&gt;this page&lt;/a&gt;&lt;/p&gt;
 
