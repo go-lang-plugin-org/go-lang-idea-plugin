@@ -94,7 +94,7 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
       psiElement(GoStatement.class).afterSiblingSkipping(psiElement().whitespaceCommentEmptyOrError(), psiElement(GoIfStatement.class));
     PsiElementPattern.Capture<GoLeftHandExprList> lh = psiElement(GoLeftHandExprList.class).withParent(statement);
     return psiElement(tokenType).withParent(psiElement(GoReferenceExpressionBase.class).with(new GoNonQualifiedReference()).withParent(lh))
-      .andNot(afterElseKeyword()).andNot(onStatementBeginning(tokenType));
+      .andNot(afterElseKeyword()).afterLeaf(psiElement(GoTypes.RBRACE));
   }
 
   private static ElementPattern<? extends PsiElement> rangeClause() {
