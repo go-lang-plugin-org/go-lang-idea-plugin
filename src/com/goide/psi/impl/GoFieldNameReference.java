@@ -43,7 +43,7 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
     GoValue value = PsiTreeUtil.getParentOfType(myElement, GoValue.class);
     if (key == null && (value == null || PsiTreeUtil.getPrevSiblingOfType(value, GoKey.class) != null)) return true;
 
-    GoType type = GoPsiImplUtil.getLiteralType(myElement);
+    GoType type = GoPsiImplUtil.getLiteralType(myElement, true);
     if (!processStructType(fieldProcessor, type)) return false;
     return !(type instanceof GoPointerType && !processStructType(fieldProcessor, ((GoPointerType)type).getType()));
   }
@@ -53,7 +53,7 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
   }
 
   public boolean inStructTypeKey() {
-    return GoPsiImplUtil.getParentGoValue(myElement) == null && GoPsiImplUtil.getLiteralType(myElement) instanceof GoStructType;
+    return GoPsiImplUtil.getParentGoValue(myElement) == null && GoPsiImplUtil.getLiteralType(myElement, false) instanceof GoStructType;
   }
 
   @Nullable

@@ -46,7 +46,7 @@ public class GoStructInitializationInspection extends GoInspectionBase {
         if (PsiTreeUtil.getParentOfType(o, GoReturnStatement.class, GoShortVarDeclaration.class, GoAssignmentStatement.class) == null) {
           return;
         }
-        GoType refType = GoPsiImplUtil.getLiteralType(o);
+        GoType refType = GoPsiImplUtil.getLiteralType(o, true);
         if (refType instanceof GoStructType) {
           processStructType((GoStructType)refType, o, holder);
         }
