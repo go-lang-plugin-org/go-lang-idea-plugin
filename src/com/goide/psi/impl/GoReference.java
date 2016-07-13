@@ -443,10 +443,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof GoReference)) return false;
-    GoReference other = (GoReference)o;
-    return getElement() == other.getElement();
+    return this == o || o instanceof GoReference && getElement() == ((GoReference)o).getElement();
   }
 
   @Override
