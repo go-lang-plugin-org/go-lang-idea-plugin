@@ -22,11 +22,9 @@ import com.goide.highlighting.GoSyntaxHighlighter;
 import com.goide.psi.*;
 import com.intellij.codeInsight.template.TemplateContextType;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiWhiteSpace;
+import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
+import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.ObjectUtils;
@@ -35,7 +33,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 abstract public class GoLiveTemplateContextType extends TemplateContextType {
-  protected GoLiveTemplateContextType(@NotNull @NonNls String id, @NotNull String presentableName, @Nullable Class<? extends TemplateContextType> baseContextType) {
+  protected GoLiveTemplateContextType(@NotNull @NonNls String id,
+                                      @NotNull String presentableName,
+                                      @Nullable Class<? extends TemplateContextType> baseContextType) {
     super(id, presentableName, baseContextType);
   }
 
@@ -66,11 +66,11 @@ abstract public class GoLiveTemplateContextType extends TemplateContextType {
     return new GoSyntaxHighlighter();
   }
 
-  public static class GoFileContextType extends GoLiveTemplateContextType {
-    protected GoFileContextType() {
-      super("GO_FILE", "Go file", GoEverywhereContextType.class);
+  public static class File extends GoLiveTemplateContextType {
+    protected File() {
+      super("GO_FILE", "File", GoEverywhereContextType.class);
     }
-  
+
     @Override
     protected boolean isInContext(@NotNull PsiElement element) {
       if (element instanceof PsiComment) {
@@ -79,26 +79,70 @@ abstract public class GoLiveTemplateContextType extends TemplateContextType {
       return element instanceof GoFile || element.getParent() instanceof GoFile && !(element instanceof GoTopLevelDeclaration);
     }
   }
-  
-  public static class GoTypeContextType extends GoLiveTemplateContextType {
-    protected GoTypeContextType() {
-      super("GO_TYPE", "Go type", GoEverywhereContextType.class);
+
+  public static class Type extends GoLiveTemplateContextType {
+    protected Type() {
+      super("GO_TYPE", "Type", GoEverywhereContextType.class);
     }
-  
+
     @Override
     protected boolean isInContext(@NotNull PsiElement element) {
       return element instanceof GoType;
     }
   }
-  
-  public static class GoBlockContextType extends GoLiveTemplateContextType {
-    protected GoBlockContextType() {
-      super("GO_BLOCK", "Go block", GoEverywhereContextType.class);
+
+  public static class Block extends GoLiveTemplateContextType {
+    protected Block() {
+      super("GO_BLOCK", "Block", GoEverywhereContextType.class);
     }
-  
+
     @Override
     protected boolean isInContext(@NotNull PsiElement element) {
-      return (element instanceof GoLeftHandExprList || element instanceof GoSimpleStatement) && PsiTreeUtil.getParentOfType(element, GoBlock.class) != null;
+      return (element instanceof GoLeftHandExprList || element instanceof GoSimpleStatement) &&
+             PsiTreeUtil.getParentOfType(element, GoBlock.class) != null;
+    }
+  }
+
+  public static class Expression extends GoLiveTemplateContextType {
+    protected Expression() {
+      super("GO_EXPRESSION", "Expression", GoEverywhereContextType.class);
+    }
+
+    @Override
+    protected boolean isInContext(@NotNull PsiElement element) {
+      return element instanceof GoExpression;
+    }
+  }
+
+  public static class Statement extends GoLiveTemplateContextType {
+    protected Statement() {
+      super("GO_STATEMENT", "Statement", GoEverywhereContextType.class);
+    }
+
+    public static boolean onStatementBeginning(@NotNull PsiElement psiElement) {
+      PsiElement prevLeaf = psiElement;
+      while ((prevLeaf = PsiTreeUtil.prevLeaf(prevLeaf)) != null) {
+        if (prevLeaf instanceof PsiComment || prevLeaf instanceof PsiErrorElement) {
+          continue;
+        }
+        if (prevLeaf instanceof PsiWhiteSpace) {
+          if (prevLeaf.textContains('\n')) {
+            return true;
+          }
+          continue;
+        }
+        break;
+      }
+      if (prevLeaf == null) {
+        return false;
+      }
+      IElementType type = prevLeaf.getNode().getElementType();
+      return type == GoTypes.SEMICOLON || type == GoTypes.LBRACE || type == GoTypes.RBRACE || type == GoTypes.COLON;
+    }
+
+    @Override
+    protected boolean isInContext(@NotNull PsiElement element) {
+      return !(element instanceof PsiComment) && onStatementBeginning(element);
     }
   }
 }

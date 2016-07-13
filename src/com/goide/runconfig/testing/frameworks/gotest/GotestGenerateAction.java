@@ -49,8 +49,8 @@ public class GotestGenerateAction extends GoGenerateTestActionBase {
 
   @Override
   protected boolean isValidForFile(@NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file) {
-    GoLiveTemplateContextType.GoFileContextType fileContextType =
-      TemplateContextType.EP_NAME.findExtension(GoLiveTemplateContextType.GoFileContextType.class);
+    GoLiveTemplateContextType.File fileContextType =
+      TemplateContextType.EP_NAME.findExtension(GoLiveTemplateContextType.File.class);
     return fileContextType != null && fileContextType.isInContext(file, editor.getCaretModel().getOffset());
   }
 
