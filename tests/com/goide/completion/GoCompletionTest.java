@@ -522,6 +522,10 @@ public class GoCompletionTest extends GoCompletionTestBase {
     doTestInclude(TYPE + "func main() {WaitGroup{<caret>}};", "counter", "waiters", "sema");
   }
 
+  public void testAnonymousStructField() {
+    doTestInclude(TYPE + "var baz = []*WaitGroup{{<caret>}}", "counter", "waiters", "sema");
+  }
+
   public void testStructField2() {
     doTestInclude(TYPE + "func main() {WaitGroup{foo:bar, <caret>}};", "counter", "waiters", "sema");
   }
