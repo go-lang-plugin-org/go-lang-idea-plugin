@@ -261,9 +261,7 @@ public class GoPsiImplUtil {
 
   @Nullable
   public static GoTypeReferenceExpression getTypeReferenceExpression(@NotNull GoAnonymousFieldDefinition o) {
-    GoType type = o.getType();
-    GoType unwrap = type instanceof GoPointerType ? ((GoPointerType)type).getType() : type;
-    return unwrap != null ? unwrap.getTypeReferenceExpression() : null;
+    return getTypeRefExpression(o.getType());
   }
 
   @Nullable
@@ -290,13 +288,20 @@ public class GoPsiImplUtil {
     return receiver == null ? null : receiver.getType();
   }
 
+  // todo: merge with {@link this#getTypeRefExpression}
   @Nullable
   public static GoTypeReferenceExpression getTypeReference(@Nullable GoType o) {
-    if (o == null) return null;
     if (o instanceof GoPointerType) {
       return PsiTreeUtil.findChildOfAnyType(o, GoTypeReferenceExpression.class);
     }
-    return o.getTypeReferenceExpression();
+    return o != null ? o.getTypeReferenceExpression() : null;
+  }
+
+  // todo: merge with {@link this#getTypeReference}
+  @Nullable
+  public static GoTypeReferenceExpression getTypeRefExpression(@Nullable GoType type) {
+    GoType unwrap = unwrapPointerIfNeeded(type);
+    return unwrap != null ? unwrap.getTypeReferenceExpression() : null;
   }
 
   @Nullable
@@ -484,14 +489,13 @@ public class GoPsiImplUtil {
   @Nullable
   public static GoType getIndexedExpressionReferenceType(@NotNull GoIndexOrSliceExpr o, @Nullable ResolveState context) {
     GoExpression first = ContainerUtil.getFirstItem(o.getExpressionList());
-    GoType firstType = first != null ? first.getGoType(context) : null;
     // todo: calculate type for indexed expressions only
     // https://golang.org/ref/spec#Index_expressions – a[x] is shorthand for (*a)[x]
-    return firstType instanceof GoPointerType ? ((GoPointerType)firstType).getType() : firstType;
+    return unwrapPointerIfNeeded(first != null ? first.getGoType(context) : null);
   }
 
   @Nullable
-  private static GoType unwrapPointerIfNeeded(@Nullable GoType type) {
+  public static GoType unwrapPointerIfNeeded(@Nullable GoType type) {
     return type instanceof GoPointerType ? ((GoPointerType)type).getType() : type;
   }
 
@@ -786,7 +790,7 @@ public class GoPsiImplUtil {
 
   @Nullable
   private static GoType unwrapIfNeeded(@Nullable GoType type) {
-    if (type instanceof GoPointerType) type = ((GoPointerType)type).getType();
+    type = unwrapPointerIfNeeded(type);
     return type != null ? type.getUnderlyingType() : null;
   }
 
