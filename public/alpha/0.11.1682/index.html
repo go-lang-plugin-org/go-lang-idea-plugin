@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.16" />
+
+  <title>0.11.1682 &middot; IntelliJ Go</title>
+
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="http://go-ide.com/css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="http://go-ide.com/css/side-menu.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="http://go-ide.com/css/blackburn.css">
+
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/styles/androidstudio.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  
+
+</head>
+
+
+<body>
+<div id="layout">
+
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
+
+  
+  <a class="pure-menu-heading brand" href="http://go-ide.com/">IntelliJ Go</a>
+
+
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="http://go-ide.com/"><i class='fa fa-home' style='width: 1em;'></i>Home</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="http://go-ide.com/topics/alpha"><i class='fa' style='width: 1em;'></i>Alpha</a>
+      
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin" target="_blank"><i class="fa fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </ul>
+</div>
+
+
+  <div>
+  <div class="small-print">
+    <small></small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
+</div>
+
+</div>
+
+
+  <div id="main">
+
+
+<div class="header">
+  <h1>0.11.1682</h1>
+  <h2></h2>
+</div>
+<div class="content">
+  
+
+<p>Changes since 0.11.1288 (11.04.2016)</p>
+
+<p>This release brings in almost 200 commits that touch almost all the areas of the plugin from adding
+functionality to performance improvements.</p>
+
+<h2 id="changes">Changes</h2>
+
+<h3 id="editing">Editing</h3>
+
+<ul>
+<li><code>Create Function</code> quick fix is available now! It&rsquo;s quite smart and suggests to create function
+with appropriate types or with <code>interface{}</code> types if the original types are not allowed to use
+
+<img class="pure-img" src="http://go-ide.com/images/1654/create_function.gif" alt="">
+</li>
+<li>implemented move statement up/move down actions
+<br/>for variable declarations
+
+<img class="pure-img" src="http://go-ide.com/images/1654/moving_statement_1.gif" alt="">
+
+and for block statements
+
+<img class="pure-img" src="http://go-ide.com/images/1654/moving_statement_2.gif" alt="">
+</li>
+<li>the plugin will now correctly insert <code>\n</code> in strings when requested to do so
+
+<div class="pure-u-1">
+  <img class="pure-img" src="http://go-ide.com/images/1654/enter_in_string_literal.gif" width="319px" >
+</div>
+</li>
+<li>complete statement action (<code>Cmd+Shift+Enter</code>) has been improved
+
+<div class="pure-u-1">
+  <img class="pure-img" src="http://go-ide.com/images/1654/smart_enter.gif" width="300px" >
+</div>
+</li>
+<li>added icons on editor gutter to easy run applications and tests
+
+<div class="pure-u-1">
+  <img class="pure-img" src="http://go-ide.com/images/1654/run_app_gutter.png" width="334px" >
+</div>
+
+
+<div class="pure-u-1">
+  <img class="pure-img" src="http://go-ide.com/images/1654/run_test_gutter.png" width="390px" >
+</div>
+</li>
+<li>added surround action
+
+<img class="pure-img" src="http://go-ide.com/images/1654/surround.gif" alt="">
+</li>
+</ul>
+
+<h3 id="completion">Completion</h3>
+
+<ul>
+<li>functions parameters info are now displayed just after completing function or method
+
+<div class="pure-u-1">
+  <img class="pure-img" src="http://go-ide.com/images/1654/parameter_info_on_completion.gif" width="300px" >
+</div>
+</li>
+<li><code>range</code> keyword completion</li>
+
+<li><p><code>type</code> keyword completion inside blocks</p></li>
+
+<li><p>improve completion in struct literals:</p>
+
+<ul>
+<li>do not suggest field names when value initializer is used.</li>
+<li>do not suggest values when field:value initializer is used.</li>
+<li>only show unassigned fields in completion list.
+
+<div class="pure-u-1">
+  <img class="pure-img" src="http://go-ide.com/images/1654/struct_literal_completion.png" width="370px" >
+</div>
+</li>
+</ul></li>
+</ul>
+
+<h3 id="inspections">Inspections</h3>
+
+<ul>
+<li>added an inspection which highlights redundant declarations and provides corresponding cleanup actions
+
+<div class="pure-u-1">
+  <img class="pure-img" src="http://go-ide.com/images/1654/cleanup_fixes.gif" width="300px" >
+</div>
+</li>
+<li>iterations on pointer to slices are not valid and there&rsquo;s now a new inspection to warn you about this
+
+<div class="pure-u-1">
+  <img class="pure-img" src="http://go-ide.com/images/1654/cannot_range_on_pointer_to_array.png" width="399px" >
+</div>
+</li>
+<li>placeholder count inspection is now valid for Logf, Skipf, Errorf and Fatalf</li>
+<li>defer inspection has now a quickfix to convert functions to function calls
+
+<div class="pure-u-1">
+  <img class="pure-img" src="http://go-ide.com/images/1654/defer_function_call.png" width="326px" >
+</div>
+</li>
+</ul>
+
+<h3 id="debugger">Debugger</h3>
+
+<ul>
+<li>Delve has been been upgraded to support passing parameters on Windows (along many other internal fixes in Delve)</li>
+<li>The new version of Delve contains the fix of race condition which was lead to skipping breakpoints while debugging with IDE</li>
+</ul>
+
+<h3 id="other">Other</h3>
+
+<ul>
+<li>completion, unused inspections and find usages action speed should be better overall and use
+less memory for auto-import completion</li>
+<li>improved type calculation for nested types</li>
+<li>the plugin won&rsquo;t autocomplete live templates in comments anymore</li>
+<li>the plugin won&rsquo;t nag you about the wiki page every time you install a new version</li>
+<li>a new theme based on Darcula is now based</li>
+<li>improved output of tests that pass</li>
+<li>introduce variable refactoring will now suggest names based on expression type being used</li>
+</ul>
+
+<p>Many other changes and fixes have been introduced to increase the overall stability, functionality and performance of the plugin.</p>
+
+<p>For a list of all changes in the plugin, you can visit <a href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin/compare/2c63b95...9534af2f0d9550474f0b82dcadf10550322da6a7">this page</a></p>
+
+<p>Develop with pleasure!</p>
+
+</div>
+
+</div>
+</div>
+<script src="http://go-ide.com/js/ui.js"></script>
+
+
+
+
+</body>
+</html>
+

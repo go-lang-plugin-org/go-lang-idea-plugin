@@ -6,8 +6,148 @@
     <description>Recent content in Alpha on IntelliJ Go</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 11 Apr 2016 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 13 Jul 2016 14:00:36 +0300</lastBuildDate>
     <atom:link href="http://go-ide.com/topics/alpha/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>0.11.1682</title>
+      <link>http://go-ide.com/alpha/0.11.1682/</link>
+      <pubDate>Wed, 13 Jul 2016 14:00:36 +0300</pubDate>
+      
+      <guid>http://go-ide.com/alpha/0.11.1682/</guid>
+      <description>
+
+&lt;p&gt;Changes since 0.11.1288 (11.04.2016)&lt;/p&gt;
+
+&lt;p&gt;This release brings in almost 200 commits that touch almost all the areas of the plugin from adding
+functionality to performance improvements.&lt;/p&gt;
+
+&lt;h2 id=&#34;changes&#34;&gt;Changes&lt;/h2&gt;
+
+&lt;h3 id=&#34;editing&#34;&gt;Editing&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Create Function&lt;/code&gt; quick fix is available now! It&amp;rsquo;s quite smart and suggests to create function
+with appropriate types or with &lt;code&gt;interface{}&lt;/code&gt; types if the original types are not allowed to use
+
+&lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/create_function.gif&#34; alt=&#34;&#34;&gt;
+&lt;/li&gt;
+&lt;li&gt;implemented move statement up/move down actions
+&lt;br/&gt;for variable declarations
+
+&lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/moving_statement_1.gif&#34; alt=&#34;&#34;&gt;
+
+and for block statements
+
+&lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/moving_statement_2.gif&#34; alt=&#34;&#34;&gt;
+&lt;/li&gt;
+&lt;li&gt;the plugin will now correctly insert &lt;code&gt;\n&lt;/code&gt; in strings when requested to do so
+
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/enter_in_string_literal.gif&#34; width=&#34;319px&#34; &gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;complete statement action (&lt;code&gt;Cmd+Shift+Enter&lt;/code&gt;) has been improved
+
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/smart_enter.gif&#34; width=&#34;300px&#34; &gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;added icons on editor gutter to easy run applications and tests
+
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/run_app_gutter.png&#34; width=&#34;334px&#34; &gt;
+&lt;/div&gt;
+
+
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/run_test_gutter.png&#34; width=&#34;390px&#34; &gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;added surround action
+
+&lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/surround.gif&#34; alt=&#34;&#34;&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;completion&#34;&gt;Completion&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;functions parameters info are now displayed just after completing function or method
+
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/parameter_info_on_completion.gif&#34; width=&#34;300px&#34; &gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;range&lt;/code&gt; keyword completion&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;code&gt;type&lt;/code&gt; keyword completion inside blocks&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;improve completion in struct literals:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;do not suggest field names when value initializer is used.&lt;/li&gt;
+&lt;li&gt;do not suggest values when field:value initializer is used.&lt;/li&gt;
+&lt;li&gt;only show unassigned fields in completion list.
+
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/struct_literal_completion.png&#34; width=&#34;370px&#34; &gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;inspections&#34;&gt;Inspections&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;added an inspection which highlights redundant declarations and provides corresponding cleanup actions
+
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/cleanup_fixes.gif&#34; width=&#34;300px&#34; &gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;iterations on pointer to slices are not valid and there&amp;rsquo;s now a new inspection to warn you about this
+
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/cannot_range_on_pointer_to_array.png&#34; width=&#34;399px&#34; &gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;placeholder count inspection is now valid for Logf, Skipf, Errorf and Fatalf&lt;/li&gt;
+&lt;li&gt;defer inspection has now a quickfix to convert functions to function calls
+
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/defer_function_call.png&#34; width=&#34;326px&#34; &gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;debugger&#34;&gt;Debugger&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Delve has been been upgraded to support passing parameters on Windows (along many other internal fixes in Delve)&lt;/li&gt;
+&lt;li&gt;The new version of Delve contains the fix of race condition which was lead to skipping breakpoints while debugging with IDE&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;other&#34;&gt;Other&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;completion, unused inspections and find usages action speed should be better overall and use
+less memory for auto-import completion&lt;/li&gt;
+&lt;li&gt;improved type calculation for nested types&lt;/li&gt;
+&lt;li&gt;the plugin won&amp;rsquo;t autocomplete live templates in comments anymore&lt;/li&gt;
+&lt;li&gt;the plugin won&amp;rsquo;t nag you about the wiki page every time you install a new version&lt;/li&gt;
+&lt;li&gt;a new theme based on Darcula is now based&lt;/li&gt;
+&lt;li&gt;improved output of tests that pass&lt;/li&gt;
+&lt;li&gt;introduce variable refactoring will now suggest names based on expression type being used&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Many other changes and fixes have been introduced to increase the overall stability, functionality and performance of the plugin.&lt;/p&gt;
+
+&lt;p&gt;For a list of all changes in the plugin, you can visit &lt;a href=&#34;https://github.com/go-lang-plugin-org/go-lang-idea-plugin/compare/2c63b95...9534af2f0d9550474f0b82dcadf10550322da6a7&#34;&gt;this page&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Develop with pleasure!&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>0.11.1288</title>
@@ -28,7 +168,9 @@
 &lt;p&gt;&lt;code&gt;go vet&lt;/code&gt; tool is built-in tool now and can be invoked on selected file or directory via &lt;code&gt;Code | Go Tools | Go vet&lt;/code&gt; menu or via editor menu.&lt;/p&gt;
 
 
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14444181/baf211c6-004c-11e6-8efc-0cd133295eec.png&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14444181/baf211c6-004c-11e6-8efc-0cd133295eec.png&#34; width=&#34;566px&#34; &gt;
+&lt;/div&gt;
 
 
 &lt;h3 id=&#34;expression-type&#34;&gt;Expression Type&lt;/h3&gt;
@@ -36,11 +178,15 @@
 &lt;p&gt;&lt;code&gt;Show info&lt;/code&gt; action is reimplemented using built-in &lt;code&gt;Expression Type&lt;/code&gt; action which is available by &lt;code&gt;Alt+=&lt;/code&gt; (&lt;code&gt;Ctrl+Shift+P&lt;/code&gt; on Mac) shortcut. Also it works now on variable/constant definitions.&lt;/p&gt;
 
 
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14444213/e4e9c41a-004c-11e6-8904-cd8b195059bb.png&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14444213/e4e9c41a-004c-11e6-8904-cd8b195059bb.png&#34; width=&#34;529px&#34; &gt;
+&lt;/div&gt;
 
 
 
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14444218/ea79d302-004c-11e6-9c2d-ce41176206e9.png&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14444218/ea79d302-004c-11e6-9c2d-ce41176206e9.png&#34; width=&#34;529px&#34; &gt;
+&lt;/div&gt;
 
 
 &lt;h3 id=&#34;autoscroll-from-source-and-navigate-in-features&#34;&gt;Autoscroll from source and Navigate in&amp;hellip; features&lt;/h3&gt;
@@ -48,7 +194,9 @@
 &lt;p&gt;Since this release it&amp;rsquo;s possible to use &lt;code&gt;Autoscroll form source&lt;/code&gt; mode in &lt;code&gt;File structure&lt;/code&gt; tool window for &lt;code&gt;go&lt;/code&gt; sources. &lt;code&gt;Navigate to... | File Structure&lt;/code&gt; action works now as well.&lt;/p&gt;
 
 
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14444237/f97942d4-004c-11e6-82b6-25f8b44c04b8.png&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14444237/f97942d4-004c-11e6-82b6-25f8b44c04b8.png&#34; width=&#34;283px&#34; &gt;
+&lt;/div&gt;
 
 
 &lt;h1 id=&#34;changes&#34;&gt;Changes&lt;/h1&gt;
@@ -80,11 +228,15 @@
 &lt;p&gt;In this release, the part which is responsible for detecting read/write access to variables was completely rewritten. Based on this the new inspection  &lt;code&gt;_ used as value inspection&lt;/code&gt; is introduced and added new &lt;code&gt;Replace with &#39;:=&#39;&lt;/code&gt; quick fix for unresolved variables with write access.&lt;/p&gt;
 
 
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14285945/0465b840-fb56-11e5-8893-ce0c279fa770.gif&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14285945/0465b840-fb56-11e5-8893-ce0c279fa770.gif&#34; width=&#34;383px&#34; &gt;
+&lt;/div&gt;
 
 
 
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14285957/181c83f0-fb56-11e5-9287-0e7b05922132.png&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14285957/181c83f0-fb56-11e5-9287-0e7b05922132.png&#34; width=&#34;264px&#34; &gt;
+&lt;/div&gt;
 
 
 &lt;h3 id=&#34;improved-inspections-and-quick-fixes&#34;&gt;Improved inspections and quick fixes&lt;/h3&gt;
@@ -92,11 +244,15 @@
 &lt;p&gt;Also &lt;code&gt;Introduce constants&lt;/code&gt; quick fix won&amp;rsquo;t be suggested for unresolved variables with write access and &lt;code&gt;Cannot assign to constant&lt;/code&gt; catches more cases now.&lt;/p&gt;
 
 
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14286078/8a1c4dd2-fb56-11e5-8759-47f454b2c8c1.png&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14286078/8a1c4dd2-fb56-11e5-8759-47f454b2c8c1.png&#34; width=&#34;319px&#34; &gt;
+&lt;/div&gt;
 
 
 
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14286086/8f55e650-fb56-11e5-81d8-bae0fb096e33.png&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14286086/8f55e650-fb56-11e5-81d8-bae0fb096e33.png&#34; width=&#34;295px&#34; &gt;
+&lt;/div&gt;
 
 
 &lt;h3 id=&#34;find-usages-grouping&#34;&gt;Find usages grouping&lt;/h3&gt;
@@ -104,7 +260,9 @@
 &lt;p&gt;Grouping by read/write access in find usages works more accurate as well.&lt;/p&gt;
 
 
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14286090/949ecb54-fb56-11e5-8f8c-35a7cdcf8371.png&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14286090/949ecb54-fb56-11e5-8f8c-35a7cdcf8371.png&#34; width=&#34;418px&#34; &gt;
+&lt;/div&gt;
 
 
 &lt;h2 id=&#34;run-configurations&#34;&gt;Run configurations&lt;/h2&gt;
@@ -112,7 +270,9 @@
 &lt;p&gt;Now you can see real &lt;code&gt;GOROOT&lt;/code&gt; and &lt;code&gt;GOPATH&lt;/code&gt; values which are used during compilation and running your application. Also, now there is an easy way to restart run configuration after compilation error.&lt;/p&gt;
 
 
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14286403/9ab783d6-fb57-11e5-908e-4f8e555068ce.png&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14286403/9ab783d6-fb57-11e5-908e-4f8e555068ce.png&#34; width=&#34;477px&#34; &gt;
+&lt;/div&gt;
 
 
 &lt;h1 id=&#34;changes&#34;&gt;Changes&lt;/h1&gt;
@@ -154,13 +314,17 @@
 &lt;h3 id=&#34;rerun-failed-tests&#34;&gt;Rerun Failed Tests&lt;/h3&gt;
 
 &lt;p&gt;Another new feature is the ability to &lt;strong&gt;Rerun Failed Tests&lt;/strong&gt;: &lt;a href=&#34;http://www.youtube.com/watch?v=UDH4XMinjYk&#34;&gt;
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/13855322/d638f11e-ec80-11e5-9a24-2110e3730e9e.png&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/13855322/d638f11e-ec80-11e5-9a24-2110e3730e9e.png&#34; width=&#34;908px&#34; &gt;
+&lt;/div&gt;
 &lt;/a&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;test-function-name-completion-and-auto-import-while-generating-tests&#34;&gt;Test function name completion and auto-import while generating tests&lt;/h3&gt;
 
 
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14091905/9630c1ae-f54b-11e5-9859-965f17ee3e1a.gif&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/14091905/9630c1ae-f54b-11e5-9859-965f17ee3e1a.gif&#34; width=&#34;437px&#34; &gt;
+&lt;/div&gt;
 
 
 &lt;p&gt;Besides the above changes, the release contains several bugfixes related to imports and resolution algorithm.&lt;/p&gt;
@@ -192,7 +356,9 @@
 &lt;p&gt;First of all thanks to @sjamesr now it&amp;rsquo;s possible to run benchmarks right from the IDE:&lt;/p&gt;
 
 
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/13121445/5fb89054-d5c3-11e5-860d-07de706754b0.png&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/13121445/5fb89054-d5c3-11e5-860d-07de706754b0.png&#34; width=&#34;589px&#34; &gt;
+&lt;/div&gt;
 
 
 &lt;p&gt;And in the second, since Delve is available on Windows you can debug your applications on Windows in IDE (in plugin versions 0.10.* and 0.11.*).&lt;/p&gt;
@@ -223,59 +389,75 @@
 
 &lt;p&gt;To install the plugin, visit the &lt;a href=&#34;https://github.com/go-lang-plugin-org/go-lang-idea-plugin#pre-release-builds&#34;&gt;readme&lt;/a&gt;.&lt;/p&gt;
 
-&lt;h2 id=&#34;general&#34;&gt;General&lt;/h2&gt;
+&lt;h2 id=&#34;changes&#34;&gt;Changes&lt;/h2&gt;
 
 &lt;p&gt;IDEA 16 EAP support is introduced
 Go 1.6 SDK is supported&lt;/p&gt;
 
-&lt;h2 id=&#34;plan9&#34;&gt;Plan9&lt;/h2&gt;
+&lt;h3 id=&#34;plan9&#34;&gt;Plan9&lt;/h3&gt;
 
 &lt;p&gt;Thanks to &lt;a href=&#34;https://github.com/stuartcarnie&#34;&gt;@stuartcarnie&lt;/a&gt; now we have a syntax highlighting for Plan9 files&lt;/p&gt;
 
 
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535279/eefac0ea-c28e-11e5-9706-f21b33baefbe.png&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535279/eefac0ea-c28e-11e5-9706-f21b33baefbe.png&#34; width=&#34;537px&#34; &gt;
+&lt;/div&gt;
 
 
-&lt;h2 id=&#34;inspections-quickfixes&#34;&gt;Inspections &amp;amp; QuickFixes&lt;/h2&gt;
+&lt;h3 id=&#34;inspections-quickfixes&#34;&gt;Inspections &amp;amp; QuickFixes&lt;/h3&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;Report a warning for exported variables and constants in multi-spec declarations and suggest to extract it
 
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535333/382d169a-c290-11e5-8593-535a048f8fc2.gif&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535333/382d169a-c290-11e5-8593-535a048f8fc2.gif&#34; width=&#34;595px&#34; &gt;
+&lt;/div&gt;
 &lt;/p&gt;&lt;/li&gt;
 
 &lt;li&gt;&lt;p&gt;Suggest to delete unused constants and variables
 
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535317/c161c5ce-c28f-11e5-81ea-7a7911b37d6d.gif&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535317/c161c5ce-c28f-11e5-81ea-7a7911b37d6d.gif&#34; width=&#34;495px&#34; &gt;
+&lt;/div&gt;
 &lt;/p&gt;&lt;/li&gt;
 
 &lt;li&gt;&lt;p&gt;Report a error on missing key in map literal
 
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535378/fe1e41a2-c291-11e5-829b-d1a53de54680.png&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535378/fe1e41a2-c291-11e5-829b-d1a53de54680.png&#34; width=&#34;374px&#34; &gt;
+&lt;/div&gt;
 &lt;/p&gt;&lt;/li&gt;
 
 &lt;li&gt;&lt;p&gt;Report a error on not an expression function argument
 
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535381/4a56ff00-c292-11e5-84cc-518419a0aef4.png&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535381/4a56ff00-c292-11e5-84cc-518419a0aef4.png&#34; width=&#34;305px&#34; &gt;
+&lt;/div&gt;
 &lt;/p&gt;&lt;/li&gt;
 
 &lt;li&gt;&lt;p&gt;Report a error on types used as expressions
 
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535442/cc5a1364-c294-11e5-9711-b96f02fe4ebc.png&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535442/cc5a1364-c294-11e5-9711-b96f02fe4ebc.png&#34; width=&#34;264px&#34; &gt;
+&lt;/div&gt;
 &lt;/p&gt;&lt;/li&gt;
 
 &lt;li&gt;&lt;p&gt;Report a error about missing argument conversion
 
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535447/eb0a53fa-c294-11e5-9158-8bb8c0d853fc.png&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535447/eb0a53fa-c294-11e5-9158-8bb8c0d853fc.png&#34; width=&#34;432px&#34; &gt;
+&lt;/div&gt;
 &lt;/p&gt;&lt;/li&gt;
 
 &lt;li&gt;&lt;p&gt;Highlight unused constants
 
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535458/312ce3fc-c295-11e5-8f5d-3da5f617048d.png&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535458/312ce3fc-c295-11e5-8f5d-3da5f617048d.png&#34; width=&#34;245px&#34; &gt;
+&lt;/div&gt;
 &lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&#34;other&#34;&gt;Other&lt;/h2&gt;
+&lt;h3 id=&#34;other&#34;&gt;Other&lt;/h3&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Less polluted completion list: &lt;code&gt;iota&lt;/code&gt; only inside constant declarations, deleted self-assignments and some keywords&lt;/li&gt;
@@ -283,14 +465,18 @@ Go 1.6 SDK is supported&lt;/p&gt;
 
 &lt;li&gt;&lt;p&gt;Show constant value on Ctrl+Hover
 
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535399/ed7fbb04-c292-11e5-9d50-3dce0c5b3966.png&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535399/ed7fbb04-c292-11e5-9d50-3dce0c5b3966.png&#34; width=&#34;250px&#34; &gt;
+&lt;/div&gt;
 &lt;/p&gt;&lt;/li&gt;
 
 &lt;li&gt;&lt;p&gt;Various fixes of resolving, types inferring, quick documentation feature, formatting&lt;/p&gt;&lt;/li&gt;
 
 &lt;li&gt;&lt;p&gt;Proper completion and resolving for break statements
 
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535285/06df5400-c28f-11e5-91f6-c0c9ca294c6b.png&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/12535285/06df5400-c28f-11e5-91f6-c0c9ca294c6b.png&#34; width=&#34;654px&#34; &gt;
+&lt;/div&gt;
 &lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
@@ -323,13 +509,15 @@ Go 1.6 SDK is supported&lt;/p&gt;
 &lt;li&gt;Navigate to type sources from watches (Ctrl+F4)&lt;br /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
+&lt;p&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/11431045/f5eb28ac-94a0-11e5-83bb-1b00f7419ea3.png&#34; width=&#34;480px&#34; &gt;
+&lt;/div&gt;
 
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/11431045/f5eb28ac-94a0-11e5-83bb-1b00f7419ea3.png&#34; alt=&#34;&#34;&gt;
-
-
-
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/11431053/0f8a69e4-94a1-11e5-9117-ee568e8de625.png&#34; alt=&#34;&#34;&gt;
-
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/11431053/0f8a69e4-94a1-11e5-9117-ee568e8de625.png&#34;  &gt;
+&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;h2 id=&#34;quickdoc&#34;&gt;QuickDoc&lt;/h2&gt;
 
@@ -342,7 +530,9 @@ Go 1.6 SDK is supported&lt;/p&gt;
 &lt;/ul&gt;
 
 
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/11431123/4fc8b4f6-94a2-11e5-8dfb-5f641bb339c0.png&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/11431123/4fc8b4f6-94a2-11e5-8dfb-5f641bb339c0.png&#34; width=&#34;1085px&#34; &gt;
+&lt;/div&gt;
 
 
 &lt;h2 id=&#34;running&#34;&gt;Running&lt;/h2&gt;
@@ -353,7 +543,9 @@ Go 1.6 SDK is supported&lt;/p&gt;
 &lt;/ul&gt;
 
 
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/11431038/d932ece0-94a0-11e5-9cdb-cc9b78877965.png&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/11431038/d932ece0-94a0-11e5-9cdb-cc9b78877965.png&#34; width=&#34;480px&#34; &gt;
+&lt;/div&gt;
 
 
 &lt;h2 id=&#34;inspections&#34;&gt;Inspections&lt;/h2&gt;
@@ -366,10 +558,14 @@ Go 1.6 SDK is supported&lt;/p&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/11431055/1df0dd56-94a1-11e5-8193-10d4ff0dd476.png&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/11431055/1df0dd56-94a1-11e5-8193-10d4ff0dd476.png&#34; width=&#34;480px&#34; &gt;
+&lt;/div&gt;
 
 
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/11431059/256e11fc-94a1-11e5-9107-ea9ad61b81aa.png&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/11431059/256e11fc-94a1-11e5-9107-ea9ad61b81aa.png&#34; width=&#34;240px&#34; &gt;
+&lt;/div&gt;
 &lt;/p&gt;
 
 &lt;h2 id=&#34;other&#34;&gt;Other&lt;/h2&gt;
@@ -380,7 +576,9 @@ Go 1.6 SDK is supported&lt;/p&gt;
 &lt;/ul&gt;
 
 
-&lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/11431033/c761b3e8-94a0-11e5-914a-3b00ecd42384.gif&#34; alt=&#34;&#34;&gt;
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;https://cloud.githubusercontent.com/assets/140920/11431033/c761b3e8-94a0-11e5-914a-3b00ecd42384.gif&#34;  &gt;
+&lt;/div&gt;
 
 
 &lt;p&gt;For a list of all changes in the plugin, you can visit &lt;a href=&#34;https://github.com/go-lang-plugin-org/go-lang-idea-plugin/compare/386c52c11807...273df35&#34;&gt;this page&lt;/a&gt;.&lt;/p&gt;
