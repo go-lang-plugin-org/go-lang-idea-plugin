@@ -47,12 +47,12 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   private static final Key<Object> POINTER = Key.create("POINTER");
   private static final Key<Object> DONT_PROCESS_METHODS = Key.create("DONT_PROCESS_METHODS");
 
-  private static final ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase> MY_RESOLVER =
-    new ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase>() {
+  private static final ResolveCache.PolyVariantResolver<GoReference> MY_RESOLVER =
+    new ResolveCache.PolyVariantResolver<GoReference>() {
       @NotNull
       @Override
-      public ResolveResult[] resolve(@NotNull PsiPolyVariantReferenceBase psiPolyVariantReferenceBase, boolean incompleteCode) {
-        return ((GoReference)psiPolyVariantReferenceBase).resolveInner();
+      public ResolveResult[] resolve(@NotNull GoReference r, boolean incompleteCode) {
+        return r.resolveInner();
       }
     };
 
