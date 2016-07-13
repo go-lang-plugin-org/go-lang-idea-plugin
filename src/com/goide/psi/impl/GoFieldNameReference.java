@@ -27,17 +27,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressionBase> {
-  private GoCompositeElement myValue;
-
   public GoFieldNameReference(@NotNull GoReferenceExpressionBase element) {
     super(element);
-    GoCompositeElement place = myElement;
-    while ((place = PsiTreeUtil.getParentOfType(place, GoLiteralValue.class)) != null) {
-      if (place.getParent() instanceof GoValue) {
-        myValue = (GoValue)place.getParent();
-        break;
-      }
-    }
   }
 
   @Override
@@ -52,68 +43,17 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
     GoValue value = PsiTreeUtil.getParentOfType(myElement, GoValue.class);
     if (key == null && (value == null || PsiTreeUtil.getPrevSiblingOfType(value, GoKey.class) != null)) return true;
 
-    GoCompositeLit lit = getLiteral();
-    GoType type = GoPsiImplUtil.getLiteralType(lit);
-    
-    PsiElement p = PsiTreeUtil.getParentOfType(myElement, GoLiteralValue.class);
-    while (lit != null && p != null) {
-      if (p == lit) break;
-      if (p instanceof GoLiteralValue) type = getType(type);
-      p = p.getParent();
-    }
-
+    GoType type = GoPsiImplUtil.getLiteralType(myElement);
     if (!processStructType(fieldProcessor, type)) return false;
     return !(type instanceof GoPointerType && !processStructType(fieldProcessor, ((GoPointerType)type).getType()));
   }
-
-  @Nullable
-  private GoCompositeLit getLiteral() {return PsiTreeUtil.getParentOfType(myElement, GoCompositeLit.class);}
 
   private boolean processStructType(@NotNull GoScopeProcessor fieldProcessor, @Nullable GoType type) {
     return !(type instanceof GoStructType && !type.processDeclarations(fieldProcessor, ResolveState.initial(), null, myElement));
   }
 
-  @Nullable
-  private GoType getType(@Nullable GoType type) { // todo: rethink and unify this algorithm
-    boolean inValue = myValue != null;
-    
-    if (inValue && type instanceof GoArrayOrSliceType) {
-      type = ((GoArrayOrSliceType)type).getType();
-    }
-    else if (type instanceof GoMapType) {
-      type = inValue ? ((GoMapType)type).getValueType() : ((GoMapType)type).getKeyType();
-    }
-    else if (inValue && type instanceof GoSpecType) {
-      GoType inner = ((GoSpecType)type).getType();
-      if (inner instanceof GoArrayOrSliceType) {
-        type = ((GoArrayOrSliceType)inner).getType();
-      }
-      else if (inner instanceof GoStructType) {
-        GoKey key = PsiTreeUtil.getPrevSiblingOfType(myValue, GoKey.class);
-        GoFieldName field = key != null ? key.getFieldName() : null;
-        PsiElement resolve = field != null ? field.resolve() : null;
-        if (resolve instanceof GoFieldDefinition) {
-          type = PsiTreeUtil.getNextSiblingOfType(resolve, GoType.class);
-        }
-      }
-    }
-
-    if (type != null && type.getTypeReferenceExpression() != null) {
-      type = type.getUnderlyingType();
-    }
-
-    if (type instanceof GoPointerType) {
-      GoType inner = ((GoPointerType)type).getType();
-      if (inner != null && inner.getTypeReferenceExpression() != null) {
-        type = inner.getUnderlyingType();
-      }
-    }
-
-    return type instanceof GoSpecType ? ((GoSpecType)type).getType() : type;
-  }
-
   public boolean inStructTypeKey() {
-    return myValue == null && GoPsiImplUtil.getLiteralType(getLiteral()) instanceof GoStructType;
+    return GoPsiImplUtil.getParentGoValue(myElement) == null && GoPsiImplUtil.getLiteralType(myElement) instanceof GoStructType;
   }
 
   @Nullable

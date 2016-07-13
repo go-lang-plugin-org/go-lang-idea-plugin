@@ -28,6 +28,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -69,9 +70,7 @@ class GoStructLiteralCompletion {
       return Variants.NONE;
     }
 
-    GoLiteralValue literalValue = parent(element, GoLiteralValue.class);
-    GoCompositeLit structLiteral = parent(literalValue, GoCompositeLit.class);
-    GoType type = GoPsiImplUtil.getLiteralType(structLiteral);
+    GoType type = GoPsiImplUtil.getLiteralType(element);
     if (!(type instanceof GoStructType)) {
       return Variants.NONE;
     }
@@ -79,7 +78,8 @@ class GoStructLiteralCompletion {
     boolean hasValueInitializers = false;
     boolean hasFieldValueInitializers = false;
 
-    List<GoElement> fieldInitializers = literalValue.getElementList();
+    GoLiteralValue literalValue = parent(element, GoLiteralValue.class);
+    List<GoElement> fieldInitializers = literalValue != null ? literalValue.getElementList() : Collections.emptyList();
     for (GoElement initializer : fieldInitializers) {
       if (initializer == element) {
         continue;
