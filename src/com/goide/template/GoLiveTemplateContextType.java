@@ -53,7 +53,7 @@ abstract public class GoLiveTemplateContextType extends TemplateContextType {
   private static PsiElement getFirstCompositeElement(@Nullable PsiElement at) {
     if (at instanceof PsiComment || at instanceof LeafPsiElement && ((LeafPsiElement)at).getElementType() == GoTypes.STRING) return at;
     PsiElement result = at;
-    while (result != null && (result instanceof PsiWhiteSpace || result.getChildren().length == 0)) {
+    while (result != null && (result instanceof PsiWhiteSpace || result.getNode().getChildren(null).length == 0)) {
       result = result.getParent();
     }
     return result;
@@ -111,6 +111,17 @@ abstract public class GoLiveTemplateContextType extends TemplateContextType {
     @Override
     protected boolean isInContext(@NotNull PsiElement element) {
       return element instanceof GoExpression;
+    }
+  }
+
+  public static class Tag extends GoLiveTemplateContextType {
+    protected Tag() {
+      super("GO_TAG", "Tag", GoEverywhereContextType.class);
+    }
+
+    @Override
+    protected boolean isInContext(@NotNull PsiElement element) {
+      return element instanceof GoStringLiteral && element.getParent() instanceof GoTag;
     }
   }
 

@@ -79,6 +79,7 @@
     <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$Block"/>
     <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$Type"/>
     <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$Expression"/>
+    <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$Tag"/>
     <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$Statement"/>
 
     <lang.elementManipulator forClass="com.goide.psi.GoImportString"
