@@ -149,15 +149,6 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
     return true;
   }
 
-  @Nullable
-  private static GoTypeReferenceExpression getTypeRefExpression(@NotNull GoType type) {
-    if (type instanceof GoPointerType) {
-      GoType inner = ((GoPointerType)type).getType();
-      return inner == null ? null : inner.getTypeReferenceExpression();
-    }
-    return type.getTypeReferenceExpression();
-  }
-
   private boolean processGoType(@NotNull final GoType type, @NotNull final GoScopeProcessor processor, @NotNull final ResolveState state) {
     Boolean result = RecursionManager.doPreventingRecursion(type, true, new Computable<Boolean>() {
       @Override
