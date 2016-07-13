@@ -551,7 +551,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType getLiteralType(@Nullable PsiElement context) {
+  public static GoType getLiteralType(@Nullable PsiElement context, boolean considerLiteralValue) {
     GoCompositeLit lit = PsiTreeUtil.getNonStrictParentOfType(context, GoCompositeLit.class);
     if (lit == null) {
       return null;
@@ -562,7 +562,9 @@ public class GoPsiImplUtil {
       GoType resolve = ref != null ? ref.resolveType() : null;
       type = resolve != null ? resolve.getUnderlyingType() : null;
     }
-
+    if (!considerLiteralValue) {
+      return type;
+    }
     GoValue parentGoValue = getParentGoValue(context);
     PsiElement literalValue = PsiTreeUtil.getParentOfType(context, GoLiteralValue.class);
     while (literalValue != null) {
@@ -577,14 +579,13 @@ public class GoPsiImplUtil {
 
   @Nullable
   public static GoValue getParentGoValue(@NotNull PsiElement element) {
-    GoValue goValue = null;
     PsiElement place = element;
     while ((place = PsiTreeUtil.getParentOfType(place, GoLiteralValue.class)) != null) {
       if (place.getParent() instanceof GoValue) {
-        goValue = (GoValue)place.getParent();
+        return (GoValue)place.getParent();
       }
     }
-    return goValue;
+    return null;
   }
 
   // todo: rethink and unify this algorithm

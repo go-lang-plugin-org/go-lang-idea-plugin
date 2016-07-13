@@ -70,7 +70,7 @@ class GoStructLiteralCompletion {
       return Variants.NONE;
     }
 
-    GoType type = GoPsiImplUtil.getLiteralType(element);
+    GoType type = GoPsiImplUtil.getLiteralType(element, true);
     if (!(type instanceof GoStructType)) {
       return Variants.NONE;
     }
