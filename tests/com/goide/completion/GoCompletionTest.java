@@ -519,11 +519,15 @@ public class GoCompletionTest extends GoCompletionTestBase {
                                      "}\n";
 
   public void testStructField() {
-    doTestInclude(TYPE + "func main() {WaitGroup{<caret>}};", "counter", "waiters", "sema");
+    myFixture.configureByText("a.go", TYPE + "func main() {WaitGroup{<caret>}};");
+    myFixture.completeBasic();
+    myFixture.assertPreferredCompletionItems(0, "counter", "sema", "waiters");
   }
 
   public void testAnonymousStructField() {
-    doTestInclude(TYPE + "var baz = []*WaitGroup{{<caret>}}", "counter", "waiters", "sema");
+    myFixture.configureByText("a.go", TYPE + "var baz = []*WaitGroup{{<caret>}}");
+    myFixture.completeBasic();
+    myFixture.assertPreferredCompletionItems(0, "counter", "sema", "waiters");
   }
 
   public void testStructField2() {
