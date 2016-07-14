@@ -87,7 +87,7 @@ public interface GoTypes {
   IElementType METHOD_SPEC = GoElementTypeFactory.stubFactory("METHOD_SPEC");
   IElementType MUL_EXPR = new GoCompositeElementType("MUL_EXPR");
   IElementType OR_EXPR = new GoCompositeElementType("OR_EXPR");
-  IElementType PACKAGE_CLAUSE = new GoCompositeElementType("PACKAGE_CLAUSE");
+  IElementType PACKAGE_CLAUSE = GoElementTypeFactory.stubFactory("PACKAGE_CLAUSE");
   IElementType PARAMETERS = GoElementTypeFactory.stubFactory("PARAMETERS");
   IElementType PARAMETER_DECLARATION = GoElementTypeFactory.stubFactory("PARAMETER_DECLARATION");
   IElementType PARAM_DEFINITION = GoElementTypeFactory.stubFactory("PARAM_DEFINITION");

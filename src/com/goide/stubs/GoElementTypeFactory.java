@@ -58,6 +58,7 @@ public class GoElementTypeFactory {
     if ("TYPE_SPEC".equals(name)) return new GoTypeSpecStubElementType(name);
     if ("METHOD_SPEC".equals(name)) return new GoMethodSpecStubElementType(name);
     if ("CONST_SPEC".equals(name)) return new GoConstSpecStubElementType(name);
+    if ("PACKAGE_CLAUSE".equals(name)) return new GoPackageClauseStubElementType(name);
     if ("VAR_SPEC".equals(name)) return new GoVarSpecStubElementType(name);
     if ("SHORT_VAR_DECLARATION".equals(name)) return new GoVarSpecStubElementType(name) {
       @NotNull

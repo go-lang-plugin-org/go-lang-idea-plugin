@@ -14,24 +14,15 @@
  * limitations under the License.
  */
 
-// This is a generated file. Not intended for manual editing.
-package com.goide.psi;
+package com.goide.stubs;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.StubBasedPsiElement;
-import com.goide.stubs.GoPackageClauseStub;
+import com.goide.psi.GoPackageClause;
+import com.intellij.psi.stubs.IStubElementType;
+import com.intellij.psi.stubs.StubBase;
+import com.intellij.psi.stubs.StubElement;
 
-public interface GoPackageClause extends GoCompositeElement, StubBasedPsiElement<GoPackageClauseStub> {
-
-  @Nullable
-  PsiElement getIdentifier();
-
-  @NotNull
-  PsiElement getPackage();
-
-  @Nullable
-  String getName();
-
+public class GoPackageClauseStub extends StubBase<GoPackageClause> {
+  public GoPackageClauseStub(StubElement parent, IStubElementType elementType) {
+    super(parent, elementType);
+  }
 }
