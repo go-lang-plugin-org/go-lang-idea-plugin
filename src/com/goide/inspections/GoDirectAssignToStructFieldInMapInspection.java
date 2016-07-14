@@ -37,7 +37,7 @@ public class GoDirectAssignToStructFieldInMapInspection extends GoInspectionBase
           GoExpression expr = ContainerUtil.getFirstItem(((GoSelectorExpr)expression).getExpressionList());
           if (expr instanceof GoIndexOrSliceExpr) {
             GoType exprType = expr.getGoType(null);
-            if (exprType != null && exprType.getParent() instanceof GoMapType) {
+            if (exprType != null && !(exprType instanceof GoPointerType) && exprType.getParent() instanceof GoMapType) {
               holder.registerProblem(o, "cannot assign to " + expression.getText(), GENERIC_ERROR_OR_WARNING);
             }
           }
