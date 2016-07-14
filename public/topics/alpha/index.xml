@@ -68,6 +68,12 @@ and for block statements
 
 &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/surround.gif&#34; alt=&#34;&#34;&gt;
 &lt;/li&gt;
+&lt;li&gt;added unwrap action
+
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/unwrap.gif&#34; width=&#34;530px&#34; &gt;
+&lt;/div&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&#34;completion&#34;&gt;Completion&lt;/h3&gt;
