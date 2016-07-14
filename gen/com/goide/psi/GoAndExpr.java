@@ -21,7 +21,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GoAndExpr extends GoExpression {
+public interface GoAndExpr extends GoBinaryExpr {
 
   @NotNull
   List<GoExpression> getExpressionList();
