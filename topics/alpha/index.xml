@@ -131,7 +131,7 @@ and for block statements.
 
 &lt;ul&gt;
 &lt;li&gt;Delve now supports passing parameters on Windows.&lt;/li&gt;
-&lt;li&gt;A new version of Delve fixes an issue with the race conditions that was causing skipping breakpoints when debugging from the IDE.&lt;/li&gt;
+&lt;li&gt;A new version of Delve fixes an issue with the race condition that was causing skipping breakpoints when debugging from the IDE.&lt;/li&gt;
 &lt;li&gt;Lots of internal improvements in Delve.&lt;/li&gt;
 &lt;/ul&gt;
 
