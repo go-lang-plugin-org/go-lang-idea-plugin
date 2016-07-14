@@ -32,7 +32,7 @@ with the appropriate types or with the &lt;code&gt;interface{}&lt;/code&gt; type
 
 &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/create_function.gif&#34; alt=&#34;&#34;&gt;
 &lt;/li&gt;
-&lt;li&gt;New &lt;code&gt;Move statement up&lt;/code&gt; (&lt;code&gt;Alt-Shift-Up&lt;/code&gt;) and &lt;code&gt;Move statement down&lt;/code&gt; (&lt;code&gt;Alt-Shift-Down&lt;/code&gt;) actions
+&lt;li&gt;New &lt;code&gt;Move statement up&lt;/code&gt; (&lt;code&gt;Cmd-Shift-Up&lt;/code&gt;) and &lt;code&gt;Move statement down&lt;/code&gt; (&lt;code&gt;Cmd-Shift-Down&lt;/code&gt;) actions
 &lt;br/&gt;for variable declarations
 
 &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/moving_statement_1.gif&#34; alt=&#34;&#34;&gt;
