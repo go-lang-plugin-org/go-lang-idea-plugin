@@ -181,33 +181,33 @@ functionality to performance improvements.</p>
 <h3 id="editing">Editing</h3>
 
 <ul>
-<li><code>Create Function</code> quick fix is available now! It&rsquo;s quite smart and suggests to create function
-with appropriate types or with <code>interface{}</code> types if the original types are not allowed to use
+<li><code>Create Function</code> quick-fix is now available! It suggests to create a function
+with the appropriate types or with the <code>interface{}</code> types if the original types are not allowed to be used.
 
 <img class="pure-img" src="http://go-ide.com/images/1654/create_function.gif" alt="">
 </li>
-<li>implemented move statement up/move down actions
+<li>New <code>Move statement up</code> (<code>Alt-Shift-Up</code>) and <code>Move statement down</code> (<code>Alt-Shift-Down</code>) actions
 <br/>for variable declarations
 
 <img class="pure-img" src="http://go-ide.com/images/1654/moving_statement_1.gif" alt="">
 
-and for block statements
+and for block statements.
 
 <img class="pure-img" src="http://go-ide.com/images/1654/moving_statement_2.gif" alt="">
 </li>
-<li>the plugin will now correctly insert <code>\n</code> in strings when requested to do so
+<li><code>\n</code> will now be correctly inserted when you add a new line.
 
 <div class="pure-u-1">
   <img class="pure-img" src="http://go-ide.com/images/1654/enter_in_string_literal.gif" width="319px" >
 </div>
 </li>
-<li>complete statement action (<code>Cmd+Shift+Enter</code>) has been improved
+<li><code>Complete statement</code> action (<code>Cmd+Shift+Enter</code>) has been improved.
 
 <div class="pure-u-1">
   <img class="pure-img" src="http://go-ide.com/images/1654/smart_enter.gif" width="300px" >
 </div>
 </li>
-<li>added icons on editor gutter to easy run applications and tests
+<li>With the new icons on the editor gutter you can now easily run applications and tests.
 
 <div class="pure-u-1">
   <img class="pure-img" src="http://go-ide.com/images/1654/run_app_gutter.png" width="334px" >
@@ -218,11 +218,11 @@ and for block statements
   <img class="pure-img" src="http://go-ide.com/images/1654/run_test_gutter.png" width="390px" >
 </div>
 </li>
-<li>added surround action
+<li>New <code>Surround with</code> action (<code>Alt-Cmd-T</code> on OS X or <code>Ctrl-Alt-T</code> on Windows and Linux).
 
 <img class="pure-img" src="http://go-ide.com/images/1654/surround.gif" alt="">
 </li>
-<li>added unwrap action
+<li>New <code>Unwrap</code> action (<code>Shift-Cmd-Backspace</code> on OS X or <code>Ctrl-Shift-Delete</code> on Windows and Linux).
 
 <div class="pure-u-1">
   <img class="pure-img" src="http://go-ide.com/images/1654/unwrap.gif" width="530px" >
@@ -233,22 +233,22 @@ and for block statements
 <h3 id="completion">Completion</h3>
 
 <ul>
-<li>functions parameters info are now displayed just after completing function or method
+<li>Function parameter info is now displayed right after you complete a function or a method name.
 
 <div class="pure-u-1">
   <img class="pure-img" src="http://go-ide.com/images/1654/parameter_info_on_completion.gif" width="300px" >
 </div>
 </li>
-<li><code>range</code> keyword completion</li>
+<li>Completion for <code>range</code> keyword.</li>
 
-<li><p><code>type</code> keyword completion inside blocks</p></li>
+<li><p>Completion for <code>type</code> keyword inside the blocks.</p></li>
 
-<li><p>improve completion in struct literals:</p>
+<li><p>Improved code completion in <code>struct</code> literals:</p>
 
 <ul>
-<li>do not suggest field names when value initializer is used.</li>
-<li>do not suggest values when field:value initializer is used.</li>
-<li>only show unassigned fields in completion list.
+<li>no suggested field names when <code>value</code> initializer is used;</li>
+<li>no suggested values when <code>field:value</code> initializer is used;</li>
+<li>shows only unassigned fields in the code completion popup.
 
 <div class="pure-u-1">
   <img class="pure-img" src="http://go-ide.com/images/1654/struct_literal_completion.png" width="370px" >
@@ -260,20 +260,20 @@ and for block statements
 <h3 id="inspections">Inspections</h3>
 
 <ul>
-<li>added an inspection which highlights redundant declarations and provides corresponding cleanup actions
+<li>A new inspection now highlights redundant declarations and provides corresponding cleanup actions.
 
 <div class="pure-u-1">
   <img class="pure-img" src="http://go-ide.com/images/1654/cleanup_fixes.gif" width="300px" >
 </div>
 </li>
-<li>iterations on pointer to slices are not valid and there&rsquo;s now a new inspection to warn you about this
+<li>Another new inspection now warns you if the iterations on pointer to slices are not valid.
 
 <div class="pure-u-1">
   <img class="pure-img" src="http://go-ide.com/images/1654/cannot_range_on_pointer_to_array.png" width="399px" >
 </div>
 </li>
-<li>placeholder count inspection is now valid for Logf, Skipf, Errorf and Fatalf</li>
-<li>defer inspection has now a quickfix to convert functions to function calls
+<li>The <code>Placeholder count</code> inspection is now valid for <code>Logf</code>, <code>Skipf</code>, <code>Errorf</code>, and <code>Fatalf</code>.</li>
+<li>The <code>Defer</code> inspection now has a quick-fix to convert functions to function calls.
 
 <div class="pure-u-1">
   <img class="pure-img" src="http://go-ide.com/images/1654/defer_function_call.png" width="326px" >
@@ -284,26 +284,27 @@ and for block statements
 <h3 id="debugger">Debugger</h3>
 
 <ul>
-<li>Delve has been upgraded to support passing parameters on Windows (along many other internal fixes in Delve)</li>
-<li>The new version of Delve contains the fix for race condition which was lead to skipping breakpoints while debugging with IDE</li>
+<li>Delve now supports passing parameters on Windows.</li>
+<li>A new version of Delve fixes an issue with the race conditions that was causing skipping breakpoints when debugging from the IDE.</li>
+<li>Lots of internal improvements in Delve.</li>
 </ul>
 
 <h3 id="other">Other</h3>
 
 <ul>
-<li>completion, unused inspections and find usages action speed should be better overall and use
-less memory for auto-import completion</li>
-<li>improved type calculation for nested types</li>
-<li>the plugin won&rsquo;t autocomplete live templates in comments anymore</li>
-<li>the plugin won&rsquo;t nag you about the wiki page every time you install a new version</li>
-<li>a new theme based on Darcula is now based</li>
-<li>improved output of tests that pass</li>
-<li>introduce variable refactoring now suggests names based on expression type being used</li>
+<li>Improved performance of code completion, unused inspections and find usages actions.</li>
+<li>The auto-import completion now uses less memory.</li>
+<li>Improved type calculation for nested types.</li>
+<li>Code completion for Live templates is now disabled inside the comments.</li>
+<li>The plugin won&rsquo;t nag you about the wiki page every time you install a new version.</li>
+<li>A new Darcula-based editor theme is now available.</li>
+<li>Improved output of passed tests.</li>
+<li>The <code>Introduce variable</code> refactoring now suggests names based on expression type that are used.</li>
 </ul>
 
 <p>Many other changes and fixes have been introduced to increase the overall stability, functionality, and performance of the plugin.</p>
 
-<p>For a list of all changes in the plugin, you can visit <a href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin/compare/2c63b95...9534af2f0d9550474f0b82dcadf10550322da6a7">this page</a></p>
+<p>For a full list of plugin changes, please visit <a href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin/compare/2c63b95...9534af2f0d9550474f0b82dcadf10550322da6a7">this page</a></p>
 
 <p>Develop with pleasure!</p>
 
