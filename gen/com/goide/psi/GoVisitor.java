@@ -28,7 +28,7 @@ public class GoVisitor extends PsiElementVisitor {
   }
 
   public void visitAndExpr(@NotNull GoAndExpr o) {
-    visitExpression(o);
+    visitBinaryExpr(o);
   }
 
   public void visitAnonymousFieldDefinition(@NotNull GoAnonymousFieldDefinition o) {
