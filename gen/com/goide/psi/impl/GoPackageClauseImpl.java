@@ -24,12 +24,18 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
+import com.goide.stubs.GoPackageClauseStub;
 import com.goide.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
 
-public class GoPackageClauseImpl extends GoCompositeElementImpl implements GoPackageClause {
+public class GoPackageClauseImpl extends GoStubbedElementImpl<GoPackageClauseStub> implements GoPackageClause {
 
   public GoPackageClauseImpl(ASTNode node) {
     super(node);
+  }
+
+  public GoPackageClauseImpl(GoPackageClauseStub stub, IStubElementType nodeType) {
+    super(stub, nodeType);
   }
 
   public void accept(@NotNull GoVisitor visitor) {
