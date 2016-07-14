@@ -26,7 +26,7 @@ import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
 
-public class GoAndExprImpl extends GoExpressionImpl implements GoAndExpr {
+public class GoAndExprImpl extends GoBinaryExprImpl implements GoAndExpr {
 
   public GoAndExprImpl(ASTNode node) {
     super(node);
