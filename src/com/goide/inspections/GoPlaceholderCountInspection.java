@@ -310,7 +310,9 @@ public class GoPlaceholderCountInspection extends GoInspectionBase {
     if (expression instanceof GoAddExpr) {
       StringBuilder result = new StringBuilder();
       for (GoExpression expr : ((GoAddExpr)expression).getExpressionList()) {
-        result.append(getValue(expr));
+        String value = getValue(expr);
+        if (value == null) return null;
+        result.append(value);
       }
       return StringUtil.nullize(result.toString());
     }
