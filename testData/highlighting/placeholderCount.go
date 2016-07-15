@@ -126,3 +126,7 @@ func _(t *testing.T) {
 	fmt.Sprintf("asdadad <warning descr="Unrecognized formatting verb '%O' call">%O</warning> asdadad", "demo")
 	fmt.Printf("%[<warning descr="Index value [0] is not allowed">0</warning>]d", 1)
 }
+
+func _(format string, args ...interface{}) {
+	fmt.Fprintf(nil, "\nError: "+format+"\n", args...)
+}
