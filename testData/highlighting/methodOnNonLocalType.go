@@ -1,21 +1,20 @@
 package demo2031
 
 import (
-	. "fmt"
 	"time"
 )
 
 type Duration time.Duration
 
-func (_ *string) <error descr="Method 'Demo' defined on non-local type">Demo</error>() {
+func (_ *<error descr="Unresolved type 'string'">string</error>) Demo() {
 
 }
 
-func (_ int) <error descr="Method 'Demo' defined on non-local type">Demo</error>() {
+func (_ <error descr="Unresolved type 'int'">int</error>) Demo() {
 
 }
 
-func (_ ScanState) <error descr="Method 'Demo' defined on non-local type">Demo</error>() {
+func (_ <error descr="Unresolved type 'ScanState'">ScanState</error>) Demo() {
 
 }
 
