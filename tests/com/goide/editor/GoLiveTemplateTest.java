@@ -39,7 +39,13 @@ public class GoLiveTemplateTest extends GoCodeInsightFixtureTestCase {
     myFixture.type("json\t");
     myFixture.checkResult("package main; type foo struct { a int `json:\"<caret>\"` }");
   }
-  
+
+  public void testJsonInTagAfterComplexType() {
+    myFixture.configureByText("a.go", "package main; type foo struct { a []int <caret> }");
+    myFixture.type("json\t");
+    myFixture.checkResult("package main; type foo struct { a []int `json:\"<caret>\"` }");
+  }
+
   public void testJsonInTagOfAnonymousField() {
     myFixture.configureByText("a.go", "package main; type foo struct { int <caret> }");
     myFixture.type("json\t");
@@ -57,7 +63,7 @@ public class GoLiveTemplateTest extends GoCodeInsightFixtureTestCase {
     myFixture.type("json\t");
     myFixture.checkResult("package main; func main() { json\t<caret> }");
   }
-  
+
   public void testJsonNotInTag_2() {
     myFixture.configureByText("a.go", "package main; type foo struct { int \n<caret> }");
     myFixture.type("json\t");

@@ -161,8 +161,7 @@ abstract public class GoLiveTemplateContextType extends TemplateContextType {
       if (element != null) {
         PsiElement parent = element.getParent();
         if (parent instanceof GoTypeReferenceExpression) {
-          PsiElement grandParent = parent.getParent();
-          return grandParent instanceof GoType && grandParent.getParent() instanceof GoFieldDeclaration;
+          return PsiTreeUtil.skipParentsOfType(parent, GoType.class) instanceof GoFieldDeclaration;
         }
       }
       return false;
