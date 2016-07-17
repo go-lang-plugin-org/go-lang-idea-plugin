@@ -338,9 +338,6 @@
     <localInspection language="go" displayName="Embedded interface pointer" groupPath="Go"
                      groupName="General" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoEmbeddedInterfacePointerInspection"/>
-    <localInspection language="go" displayName="Method defined on non-local type" groupPath="Go"
-                     groupName="General" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.GoMethodOnNonLocalTypeInspection"/>
     <localInspection language="go" displayName="Need trailing comma before newline in composite literal" groupPath="Go"
                      groupName="General" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoAddTrailingCommaInspection"/>
