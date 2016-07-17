@@ -82,7 +82,7 @@ public class GoLiveTemplateTest extends GoCodeInsightFixtureTestCase {
   public void testVarDeclarationInBlock() {
     myFixture.configureByText("a.go", "package main; func main() { <caret> }");
     myFixture.type(":\t");
-    myFixture.checkResult("package main; func main() { name := <caret> }");
+    myFixture.checkResult("package main; func main() {\n\tname :=  }");
   }
 
   public void testVarDeclarationInLabel() {
