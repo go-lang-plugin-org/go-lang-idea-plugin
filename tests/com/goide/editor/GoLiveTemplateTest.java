@@ -35,6 +35,18 @@ public class GoLiveTemplateTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testJsonInTag() {
+    myFixture.configureByText("a.go", "package main; type foo struct { a int <caret> }");
+    myFixture.type("json\t");
+    myFixture.checkResult("package main; type foo struct { a int `json:\"<caret>\"` }");
+  }
+  
+  public void testJsonInTagOfAnonymousField() {
+    myFixture.configureByText("a.go", "package main; type foo struct { int <caret> }");
+    myFixture.type("json\t");
+    myFixture.checkResult("package main; type foo struct { int `json:\"<caret>\"` }");
+  }
+
+  public void testJsonInTagLiteral() {
     myFixture.configureByText("a.go", "package main; type foo struct { a int `<caret>` }");
     myFixture.type("json\t");
     myFixture.checkResult("package main; type foo struct { a int `json:\"<caret>\"` }");
@@ -44,6 +56,12 @@ public class GoLiveTemplateTest extends GoCodeInsightFixtureTestCase {
     myFixture.configureByText("a.go", "package main; func main() { <caret> }");
     myFixture.type("json\t");
     myFixture.checkResult("package main; func main() { json\t<caret> }");
+  }
+  
+  public void testJsonNotInTag_2() {
+    myFixture.configureByText("a.go", "package main; type foo struct { int \n<caret> }");
+    myFixture.type("json\t");
+    myFixture.checkResult("package main; type foo struct { int \njson\t<caret> }");
   }
 
   public void testForInSignature() {
@@ -64,7 +82,7 @@ public class GoLiveTemplateTest extends GoCodeInsightFixtureTestCase {
   public void testVarDeclarationInBlock() {
     myFixture.configureByText("a.go", "package main; func main() { <caret> }");
     myFixture.type(":\t");
-    myFixture.checkResult("package main; func main() { name :=<caret> }");
+    myFixture.checkResult("package main; func main() { name := <caret> }");
   }
 
   public void testVarDeclarationInLabel() {
