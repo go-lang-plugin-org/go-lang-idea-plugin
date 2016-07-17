@@ -146,6 +146,41 @@ abstract public class GoLiveTemplateContextType extends TemplateContextType {
 
     @Override
     protected boolean isInContext(@NotNull PsiElement element) {
+      if (element.getNode().getElementType() == GoTypes.IDENTIFIER) {
+        if (isInsideFieldTypeDeclaration(element)) {
+          return true;
+        }
+        if (isInsideFieldTypeDeclaration(prevVisibleLeafOrNewLine(element))) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    private static boolean isInsideFieldTypeDeclaration(@Nullable PsiElement element) {
+      if (element != null) {
+        PsiElement parent = element.getParent();
+        if (parent instanceof GoTypeReferenceExpression) {
+          PsiElement grandParent = parent.getParent();
+          return grandParent instanceof GoType && grandParent.getParent() instanceof GoFieldDeclaration;
+        }
+      }
+      return false;
+    }
+
+    @Override
+    protected boolean acceptLeaf() {
+      return true;
+    }
+  }
+
+  public static class TagLiteral extends GoLiveTemplateContextType {
+    protected TagLiteral() {
+      super("GO_TAG_LITERAL", "Tag literal", GoEverywhereContextType.class);
+    }
+
+    @Override
+    protected boolean isInContext(@NotNull PsiElement element) {
       return element instanceof GoStringLiteral && element.getParent() instanceof GoTag;
     }
   }

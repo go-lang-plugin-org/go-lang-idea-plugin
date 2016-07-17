@@ -88,16 +88,26 @@
       <option name='GO_STATEMENT' value='true'/>
     </context>
   </template>
-  <template description='xml:""' name='xml' toReformat='true' toShortenFQNames='true'
-            value='xml:"$END$"'>
+  
+  <!-- TAGS -->
+  <template description='`xml:""`' name='xml' toReformat='true' toShortenFQNames='true' value='`xml:"$END$"`'>
     <context>
       <option name='GO_TAG' value='true'/>
     </context>
   </template>
-  <template description='json:""' name='json' toReformat='true' toShortenFQNames='true'
-            value='json:"$END$"'>
+  <template description='`json:""`' name='json' toReformat='true' toShortenFQNames='true' value='`json:"$END$"`'>
     <context>
       <option name='GO_TAG' value='true'/>
+    </context>
+  </template>
+  <template description='xml:""' name='xml' toReformat='true' toShortenFQNames='true' value='xml:"$END$"'>
+    <context>
+      <option name='GO_TAG_LITERAL' value='true'/>
+    </context>
+  </template>
+  <template description='json:""' name='json' toReformat='true' toShortenFQNames='true' value='json:"$END$"'>
+    <context>
+      <option name='GO_TAG_LITERAL' value='true'/>
     </context>
   </template>
 
