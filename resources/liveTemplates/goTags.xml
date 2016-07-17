@@ -16,12 +16,14 @@
   -->
 
 <templateSet group="Go Struct Tags">
-  <template description='`xml:""`' name='xml' toReformat='true' toShortenFQNames='true' value='`xml:"$END$"`'>
+  <template description='`xml:""`' name='xml' toReformat='true' toShortenFQNames='true' value='`xml:"$FIELD_NAME$"$END$`'>
+    <variable alwaysStopAt='true' defaultValue='' expression='snakeCase(fieldName())' name='FIELD_NAME'/>
     <context>
       <option name='GO_TAG' value='true'/>
     </context>
   </template>
-  <template description='`json:""`' name='json' toReformat='true' toShortenFQNames='true' value='`json:"$END$"`'>
+  <template description='`json:""`' name='json' toReformat='true' toShortenFQNames='true' value='`json:"$FIELD_NAME$"$END$`'>
+    <variable alwaysStopAt='true' defaultValue='' expression='snakeCase(fieldName())' name='FIELD_NAME'/>
     <context>
       <option name='GO_TAG' value='true'/>
     </context>

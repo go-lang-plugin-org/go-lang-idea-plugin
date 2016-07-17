@@ -35,27 +35,27 @@ public class GoLiveTemplateTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testJsonInTag() {
-    myFixture.configureByText("a.go", "package main; type foo struct { a int <caret> }");
+    myFixture.configureByText("a.go", "package main; type foo struct { MyFieldDeclaration int <caret> }");
     myFixture.type("json\t");
-    myFixture.checkResult("package main; type foo struct { a int `json:\"<caret>\"` }");
+    myFixture.checkResult("package main; type foo struct { MyFieldDeclaration int `json:\"my_field_declaration\"` }");
   }
 
   public void testJsonInTagAfterComplexType() {
     myFixture.configureByText("a.go", "package main; type foo struct { a []int <caret> }");
     myFixture.type("json\t");
-    myFixture.checkResult("package main; type foo struct { a []int `json:\"<caret>\"` }");
+    myFixture.checkResult("package main; type foo struct { a []int `json:\"a\"` }");
   }
 
-  public void testJsonInTagOfAnonymousField() {
+  public void testXmlInTagOfAnonymousField() {
     myFixture.configureByText("a.go", "package main; type foo struct { int <caret> }");
-    myFixture.type("json\t");
-    myFixture.checkResult("package main; type foo struct { int `json:\"<caret>\"` }");
+    myFixture.type("xml\t");
+    myFixture.checkResult("package main; type foo struct { int `xml:\"<caret>\"` }");
   }
 
-  public void testJsonInTagLiteral() {
+  public void testXmlInTagLiteral() {
     myFixture.configureByText("a.go", "package main; type foo struct { a int `<caret>` }");
-    myFixture.type("json\t");
-    myFixture.checkResult("package main; type foo struct { a int `json:\"<caret>\"` }");
+    myFixture.type("xml\t");
+    myFixture.checkResult("package main; type foo struct { a int `xml:\"a\"` }");
   }
 
   public void testJsonNotInTag() {

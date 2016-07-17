@@ -82,6 +82,7 @@
     <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$Tag"/>
     <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$TagLiteral"/>
     <liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$Statement"/>
+    <liveTemplateMacro implementation="com.goide.template.GoFieldNameMacro"/>
 
     <lang.elementManipulator forClass="com.goide.psi.GoImportString"
                              implementationClass="com.goide.psi.impl.manipulator.GoImportStringManipulator"/>
