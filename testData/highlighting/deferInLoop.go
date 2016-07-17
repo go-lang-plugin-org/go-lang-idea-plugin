@@ -2,7 +2,9 @@ package deferinloop
 
 func noop() {}
 
-func (a int) meth() {
+type b int
+
+func (a b) meth() {
 	for {
 		<weak_warning descr="Possible resource leak, 'defer' is called in a for loop.">defer</weak_warning> noop()
 	}

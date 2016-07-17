@@ -1,5 +1,7 @@
 package main
 
-func (foo int) method() {
+type a int
+
+func (foo a) method() {
     println(fo<caret>o)
 }

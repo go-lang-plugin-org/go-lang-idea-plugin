@@ -1,7 +1,7 @@
-<b>var foo <a href="psi_element://builtin#builtin.int">int</a></b>
+<b>var foo <a href="psi_element://#main.a">a</a></b>
 
 =====
-var foo <a href="psi_element://builtin#builtin.int">int</a>
+var foo <a href="psi_element://#main.a">a</a>
 =====
 No urls
 =====
