@@ -42,11 +42,36 @@ abstract public class GoLiveTemplateContextType extends TemplateContextType {
   @Override
   public boolean isInContext(@NotNull PsiFile file, int offset) {
     if (PsiUtilCore.getLanguageAtOffset(file, offset).isKindOf(GoLanguage.INSTANCE)) {
-      PsiElement element = getFirstCompositeElement(ObjectUtils.notNull(file.findElementAt(offset), file));
-      return element != null && isInContext(element);
+      PsiElement psiElement = ObjectUtils.notNull(file.findElementAt(offset), file);
+      if (!acceptLeaf()) {
+        psiElement = getFirstCompositeElement(psiElement);
+      }
+      return psiElement != null && isInContext(psiElement);
     }
 
     return false;
+  }
+
+  protected boolean acceptLeaf() {
+    return false;
+  }
+
+  @Nullable
+  public static PsiElement prevVisibleLeafOrNewLine(PsiElement element) {
+    PsiElement prevLeaf = element;
+    while ((prevLeaf = PsiTreeUtil.prevLeaf(prevLeaf)) != null) {
+      if (prevLeaf instanceof PsiComment || prevLeaf instanceof PsiErrorElement) {
+        continue;
+      }
+      if (prevLeaf instanceof PsiWhiteSpace) {
+        if (prevLeaf.textContains('\n')) {
+          return prevLeaf;
+        }
+        continue;
+      }
+      break;
+    }
+    return prevLeaf;
   }
 
   @Nullable
@@ -131,21 +156,12 @@ abstract public class GoLiveTemplateContextType extends TemplateContextType {
     }
 
     public static boolean onStatementBeginning(@NotNull PsiElement psiElement) {
-      PsiElement prevLeaf = psiElement;
-      while ((prevLeaf = PsiTreeUtil.prevLeaf(prevLeaf)) != null) {
-        if (prevLeaf instanceof PsiComment || prevLeaf instanceof PsiErrorElement) {
-          continue;
-        }
-        if (prevLeaf instanceof PsiWhiteSpace) {
-          if (prevLeaf.textContains('\n')) {
-            return true;
-          }
-          continue;
-        }
-        break;
-      }
+      PsiElement prevLeaf = prevVisibleLeafOrNewLine(psiElement);
       if (prevLeaf == null) {
         return false;
+      }
+      if (prevLeaf instanceof PsiWhiteSpace) {
+        return true;
       }
       IElementType type = prevLeaf.getNode().getElementType();
       return type == GoTypes.SEMICOLON || type == GoTypes.LBRACE || type == GoTypes.RBRACE || type == GoTypes.COLON;
@@ -156,8 +172,18 @@ abstract public class GoLiveTemplateContextType extends TemplateContextType {
       if (element instanceof PsiComment) {
         return false;
       }
+
       PsiElement parent = element.getParent();
-      return (parent instanceof GoStatement || parent instanceof GoLeftHandExprList) && onStatementBeginning(element);
+      if (parent instanceof PsiErrorElement || parent instanceof GoExpression) {
+        parent = parent.getParent();
+      }
+      return (parent instanceof GoStatement || parent instanceof GoLeftHandExprList || parent instanceof GoBlock) 
+             && onStatementBeginning(element);
+    }
+
+    @Override
+    protected boolean acceptLeaf() {
+      return true;
     }
   }
 }
