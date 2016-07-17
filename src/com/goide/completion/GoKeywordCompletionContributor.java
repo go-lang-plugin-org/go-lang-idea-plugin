@@ -28,6 +28,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -124,7 +125,9 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
 
   private static ElementPattern<? extends PsiElement> typeExpression() {
     return psiElement(GoTypes.IDENTIFIER).withParent(
-      psiElement(GoTypeReferenceExpression.class).with(new GoNonQualifiedReference()));
+      psiElement(GoTypeReferenceExpression.class)
+        .with(new GoNonQualifiedReference())
+        .with(new GoNotInsideReceiver()));
   }
 
   private static ElementPattern<? extends PsiElement> referenceExpression() {
@@ -207,6 +210,17 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
     }
   }
 
+  private static class GoNotInsideReceiver extends PatternCondition<GoReferenceExpressionBase> {
+    public GoNotInsideReceiver() {
+      super("noi inside receiver");
+    }
+
+    @Override
+    public boolean accepts(@NotNull GoReferenceExpressionBase element, ProcessingContext context) {
+      return PsiTreeUtil.getParentOfType(element, GoReceiver.class) == null;
+    }
+  }
+  
   private static class FieldNameInStructLiteral extends PatternCondition<GoReferenceExpression> {
     public FieldNameInStructLiteral() {
       super("field name in struct literal");
