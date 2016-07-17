@@ -27,19 +27,19 @@ public class GoLiveTemplateTest extends GoCodeInsightFixtureTestCase {
                           "\t\t<caret>\n" +
                           "\t} }");
   }
-  
+
   public void testErrAfterIf() {
     myFixture.configureByText("a.go", "package main; func main() { if <caret> }");
     myFixture.type("err\t");
     myFixture.checkResult("package main; func main() { if err\t<caret> }");
   }
-  
+
   public void testJsonInTag() {
     myFixture.configureByText("a.go", "package main; type foo struct { a int `<caret>` }");
     myFixture.type("json\t");
     myFixture.checkResult("package main; type foo struct { a int `json:\"<caret>\"` }");
   }
-  
+
   public void testJsonNotInTag() {
     myFixture.configureByText("a.go", "package main; func main() { <caret> }");
     myFixture.type("json\t");
@@ -59,5 +59,17 @@ public class GoLiveTemplateTest extends GoCodeInsightFixtureTestCase {
                           "\tfor ; ;  {\n" +
                           "\t\t\n" +
                           "\t} }");
+  }
+
+  public void testVarDeclarationInBlock() {
+    myFixture.configureByText("a.go", "package main; func main() { <caret> }");
+    myFixture.type(":\t");
+    myFixture.checkResult("package main; func main() { name :=<caret> }");
+  }
+
+  public void testVarDeclarationInLabel() {
+    myFixture.configureByText("a.go", "package main; func main() { name <caret> }");
+    myFixture.type(":\t");
+    myFixture.checkResult("package main; func main() { name :\t<caret> }");
   }
 }
