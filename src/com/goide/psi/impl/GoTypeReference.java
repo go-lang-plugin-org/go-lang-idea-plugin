@@ -21,6 +21,9 @@ import com.goide.GoTypes;
 import com.goide.psi.*;
 import com.goide.sdk.GoSdkUtil;
 import com.goide.util.GoUtil;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
@@ -33,9 +36,13 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.OrderedSet;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Set;
+
+import static com.goide.psi.impl.GoPsiImplUtil.allowed;
+import static com.goide.psi.impl.GoPsiImplUtil.processNamedElements;
 
 public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReferenceExpression> {
   private final boolean myInsideInterfaceType;
@@ -96,6 +103,23 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
     return processUnqualifiedResolve((GoFile)file, processor, state, true);
   }
 
+  private static boolean processDirectory(@Nullable PsiDirectory dir,
+                                          @Nullable GoFile file,
+                                          @Nullable String packageName,
+                                          @NotNull GoScopeProcessor processor,
+                                          @NotNull ResolveState state,
+                                          boolean localProcessing) {
+    if (dir == null) return true;
+    String filePath = GoReference.getPath(file);
+    Module module = file != null ? ModuleUtilCore.findModuleForPsiElement(file) : null;
+    for (PsiFile f : dir.getFiles()) {
+      if (file == null || !(f instanceof GoFile) || Comparing.equal(GoReference.getPath(f), filePath)) continue;
+      if (packageName != null && !packageName.equals(((GoFile)f).getPackageName())) continue;
+      if (GoPsiImplUtil.allowed(f, file, module) && !GoPsiImplUtil.processNamedElements(processor, state, ((GoFile)f).getTypes(), localProcessing)) return false;
+    }
+    return true;
+  }
+
   private boolean processQualifierExpression(@NotNull GoFile file,
                                              @NotNull GoTypeReferenceExpression qualifier,
                                              @NotNull GoScopeProcessor processor,
@@ -107,7 +131,7 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
       target = ((GoImportSpec)target).getImportString().resolve();
     }
     if (target instanceof PsiDirectory) {
-      GoReference.processDirectory((PsiDirectory)target, file, null, processor, state, false);
+      processDirectory((PsiDirectory)target, file, null, processor, state, false);
     }
     return false;
   }

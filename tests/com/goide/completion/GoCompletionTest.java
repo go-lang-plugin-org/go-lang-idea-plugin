@@ -444,6 +444,10 @@ public class GoCompletionTest extends GoCompletionTestBase {
     doTestExclude("package foo; func (a <caret>) main() { }", "map", "chan", "struct", "interface");
   }
 
+  public void testOnlyLocalTypesInReceiver() {
+    doTestEquals("package foo; type ( t int; s int; ); func (c <caret>)", "s", "t");
+  }
+
   public void testNestedBlocks() {
     doTestInclude("package main; func main() {def := 1; abc := 0; {<caret>}}", "abc", "def");
   }

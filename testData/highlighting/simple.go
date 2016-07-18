@@ -816,3 +816,5 @@ var (
         },
     }
 )
+
+func (c <error>bufio</error>.Reader) aa(d <error>bufio</error>.MaxScanTokenSize){}
