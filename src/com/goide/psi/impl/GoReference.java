@@ -263,7 +263,7 @@ public class GoReference extends PsiPolyVariantReferenceBase<GoReferenceExpressi
   }
 
   @Nullable
-  private static String getPath(@Nullable PsiFile file) {
+  protected static String getPath(@Nullable PsiFile file) {
     if (file == null) return null;
     VirtualFile virtualFile = file.getOriginalFile().getVirtualFile();
     return virtualFile == null ? null : virtualFile.getPath();
