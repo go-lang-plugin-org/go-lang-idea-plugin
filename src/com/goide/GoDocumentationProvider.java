@@ -289,8 +289,13 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
         result.append(StringUtil.join(((GoStructType)type).getFieldDeclarationList(), new Function<GoFieldDeclaration, String>() {
           @Override
           public String fun(GoFieldDeclaration declaration) {
-            return StringUtil.join(declaration.getFieldDefinitionList(), GoPsiImplUtil.GET_TEXT_FUNCTION, ", ") +
-                   " " + getTypePresentation(declaration.getType(), presentationFunction);
+            GoAnonymousFieldDefinition anon = declaration.getAnonymousFieldDefinition();
+            String result = anon != null
+                            ? getTypePresentation(anon.getGoTypeInner(null), presentationFunction)
+                            : StringUtil.join(declaration.getFieldDefinitionList(), GoPsiImplUtil.GET_TEXT_FUNCTION, ", ") +
+                              " " + getTypePresentation(declaration.getType(), presentationFunction);
+            GoTag tag = declaration.getTag();
+            return result + (tag != null ? tag.getText() : "");
           }
         }, "; "));
         return result.append("}").toString();
