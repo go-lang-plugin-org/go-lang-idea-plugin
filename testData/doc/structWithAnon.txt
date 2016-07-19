@@ -1,0 +1,8 @@
+<b>var st struct {<a href="psi_element://builtin#builtin.int64">int64</a>; <a href="psi_element://builtin#builtin.int">int</a>; *<a href="psi_element://builtin#builtin.string">string</a>}</b>
+
+=====
+var st struct {<a href="psi_element://builtin#builtin.int64">int64</a>; <a href="psi_element://builtin#builtin.int">int</a>; *<a href="psi_element://builtin#builtin.string">string</a>}
+=====
+No urls
+=====
+No local urls
