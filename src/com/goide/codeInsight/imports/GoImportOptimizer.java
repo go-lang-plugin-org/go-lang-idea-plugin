@@ -18,7 +18,7 @@ package com.goide.codeInsight.imports;
 
 import com.goide.GoTypes;
 import com.goide.psi.*;
-import com.goide.psi.impl.GoReference;
+import com.goide.psi.impl.GoReferenceBase;
 import com.intellij.lang.ImportOptimizer;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.progress.ProgressManager;
@@ -128,7 +128,7 @@ public class GoImportOptimizer implements ImportOptimizer {
     for (GoImportSpec importEntry : implicitImports) {
       GoImportSpec spec = getImportSpec(importEntry);
       if (spec != null && spec.isDot()) {
-        List<? extends PsiElement> list = spec.getUserData(GoReference.IMPORT_USERS);
+        List<? extends PsiElement> list = spec.getUserData(GoReferenceBase.IMPORT_USERS);
         if (list != null) {
           for (PsiElement e : list) {
             if (e.isValid()) {
