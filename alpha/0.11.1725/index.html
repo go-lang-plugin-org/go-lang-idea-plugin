@@ -7,7 +7,7 @@
   <meta name="description" content="">
   <meta name="generator" content="Hugo 0.16" />
 
-  <title>Topics &middot; IntelliJ Go</title>
+  <title>0.11.1725 &middot; IntelliJ Go</title>
 
   
   
@@ -36,8 +36,6 @@
   <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
 
   
-  
-  <link rel="alternate" type="application/rss+xml" title="IntelliJ Go" href="http://go-ide.com/topics/index.xml" />
   
 
   
@@ -86,10 +84,6 @@
   <div class="pure-menu social">
   <ul class="pure-menu-list">
 
-    
-    <li class="pure-menu-item">
-      <a class="pure-menu-link" href="http://go-ide.com/topics/index.xml"><i class="fa fa-rss fa-fw"></i>RSS</a>
-    </li>
     
 
     
@@ -171,18 +165,45 @@
 
 
 <div class="header">
-  <h1>Topics</h1>
+  <h1>0.11.1725</h1>
+  <h2></h2>
 </div>
 <div class="content">
-  <ul>
   
-  
-    <li>
-      <a href="alpha">alpha</a>
-      <span>&#40;8&#41;</span>
-    </li>
-  
-  </ul>
+
+<p>Changes since 0.11.1682 (13.07.2016)</p>
+
+<p>This release contains several important fixes.</p>
+
+<h2 id="changes">Changes</h2>
+
+<ul>
+<li>Two cases of false positive highlighting were fixed.</li>
+<li><code>Rename package</code> quick fix works for all files in package again.</li>
+<li>Receiver types completion now contains types from current package only.
+
+<div class="pure-u-1">
+  <img class="pure-img" src="http://go-ide.com/images/1725/receiver_type_completion.png" width="226px" >
+</div>
+</li>
+<li>Implemented <a href="https://github.com/fatih">Fatih&rsquo;s</a> idea of completing struct tags.
+Completion items for tags are fully customizable on <code>Settings | Editor | Live Templates | Go Struct Tags</code> page.
+
+<div class="pure-u-1">
+  <img class="pure-img" src="http://go-ide.com/images/1725/json_xml_live_templates.gif" width="480px" >
+</div>
+
+
+<div class="pure-u-1">
+  <img class="pure-img" src="http://go-ide.com/images/1725/json_xml_live_templates_multicursor.gif" width="544px" >
+</div>
+</li>
+</ul>
+
+<p>For a full list of plugin changes, please visit <a href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin/compare/9534af2f0d9550474f0b82dcadf10550322da6a7...16d7e44">this page</a></p>
+
+<p>Develop with pleasure!</p>
+
 </div>
 
 </div>
@@ -194,3 +215,4 @@
 
 </body>
 </html>
+
