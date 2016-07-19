@@ -6,8 +6,51 @@
     <description>Recent content in Alphas on IntelliJ Go</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 13 Jul 2016 14:00:36 +0300</lastBuildDate>
+    <lastBuildDate>Tue, 19 Jul 2016 12:42:27 +0300</lastBuildDate>
     <atom:link href="http://go-ide.com/alpha/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>0.11.1725</title>
+      <link>http://go-ide.com/alpha/0.11.1725/</link>
+      <pubDate>Tue, 19 Jul 2016 12:42:27 +0300</pubDate>
+      
+      <guid>http://go-ide.com/alpha/0.11.1725/</guid>
+      <description>
+
+&lt;p&gt;Changes since 0.11.1682 (13.07.2016)&lt;/p&gt;
+
+&lt;p&gt;This release contains several important fixes.&lt;/p&gt;
+
+&lt;h2 id=&#34;changes&#34;&gt;Changes&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Two cases of false positive highlighting were fixed.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Rename package&lt;/code&gt; quick fix works for all files in package again.&lt;/li&gt;
+&lt;li&gt;Receiver types completion now contains types from current package only.
+
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1725/receiver_type_completion.png&#34; width=&#34;226px&#34; &gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;Implemented &lt;a href=&#34;https://github.com/fatih&#34;&gt;Fatih&amp;rsquo;s&lt;/a&gt; idea of completing struct tags.
+Completion items for tags are fully customizable on &lt;code&gt;Settings | Editor | Live Templates | Go Struct Tags&lt;/code&gt; page.
+
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1725/json_xml_live_templates.gif&#34; width=&#34;480px&#34; &gt;
+&lt;/div&gt;
+
+
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1725/json_xml_live_templates_multicursor.gif&#34; width=&#34;544px&#34; &gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For a full list of plugin changes, please visit &lt;a href=&#34;https://github.com/go-lang-plugin-org/go-lang-idea-plugin/compare/9534af2f0d9550474f0b82dcadf10550322da6a7...16d7e44&#34;&gt;this page&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Develop with pleasure!&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>0.11.1682</title>
