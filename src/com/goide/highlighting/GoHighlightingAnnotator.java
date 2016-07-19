@@ -18,7 +18,7 @@ package com.goide.highlighting;
 
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
-import com.goide.psi.impl.GoReference;
+import com.goide.psi.impl.GoReferenceBase;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.openapi.application.ApplicationManager;
@@ -137,7 +137,7 @@ public class GoHighlightingAnnotator implements Annotator {
   public void annotate(@NotNull PsiElement o, @NotNull AnnotationHolder holder) {
     if (!o.isValid()) return;
     if (o instanceof GoImportSpec && ((GoImportSpec)o).isDot()) {
-      List<? extends PsiElement> importUsers = o.getUserData(GoReference.IMPORT_USERS);
+      List<? extends PsiElement> importUsers = o.getUserData(GoReferenceBase.IMPORT_USERS);
       if (importUsers != null) {
         List<PsiElement> newImportUsers = ContainerUtil.newSmartList();
         for (PsiElement user : importUsers) {
@@ -145,7 +145,7 @@ public class GoHighlightingAnnotator implements Annotator {
             newImportUsers.add(user);
           }
         }
-        o.putUserData(GoReference.IMPORT_USERS, newImportUsers.isEmpty() ? null : newImportUsers);
+        o.putUserData(GoReferenceBase.IMPORT_USERS, newImportUsers.isEmpty() ? null : newImportUsers);
       }
     }
     else if (o instanceof GoLiteral) {

@@ -131,7 +131,7 @@ public class GoReferenceCompletionProvider extends CompletionProvider<Completion
                                                    boolean vendoringEnabled) {
     if (o instanceof GoNamedElement && !((GoNamedElement)o).isBlank() || o instanceof GoImportSpec && !((GoImportSpec)o).isDot()) {
       if (o instanceof GoImportSpec) {
-        return GoCompletionUtil.createPackageLookupElement((GoImportSpec)o, state.get(GoReference.ACTUAL_NAME), vendoringEnabled);
+        return GoCompletionUtil.createPackageLookupElement((GoImportSpec)o, state.get(GoReferenceBase.ACTUAL_NAME), vendoringEnabled);
       }
       else if (o instanceof GoNamedSignatureOwner && ((GoNamedSignatureOwner)o).getName() != null) {
         String name = ((GoNamedSignatureOwner)o).getName();
