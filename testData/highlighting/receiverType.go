@@ -16,3 +16,6 @@ func main() {
 func (v *Vertex) Abs() float64 {
 	return   (*v).X*v.X + v.Y*v.Y
 }
+
+func (<error descr="Unresolved type 'Abs'">Abs</error>) methodOnFunction() {
+}
