@@ -106,10 +106,11 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
                                           @NotNull GoScopeProcessor processor,
                                           @NotNull ResolveState state,
                                           boolean localProcessing) {
-    if (dir == null || Comparing.equal(dir.getVirtualFile().getPath(), GoReference.getPath(file))) return true;
+    if (dir == null) return true;
+    String filePath = GoReference.getPath(file);
     Module module = file != null ? ModuleUtilCore.findModuleForPsiElement(file) : null;
     for (PsiFile f : dir.getFiles()) {
-      if (file == null || !(f instanceof GoFile)) continue;
+      if (file == null || !(f instanceof GoFile) || Comparing.equal(GoReference.getPath(f), filePath)) continue;
       if (packageName != null && !packageName.equals(((GoFile)f).getPackageName())) continue;
       if (!GoPsiImplUtil.allowed(f, file, module)) continue;
       if (!GoPsiImplUtil.processNamedElements(processor, state, ((GoFile)f).getTypes(), localProcessing)) return false;
