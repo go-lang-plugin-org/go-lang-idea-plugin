@@ -170,6 +170,14 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testStringInStructSliceWithThirdIndex() { doTest(); }
   public void testAnonymousFieldDefinition()  { doTest(); }
 
+  public void testDoNotResolveReceiverTypeToFunction() { 
+    myFixture.addFileToProject("pack1/a.go", "package foo; func functionInCurrentPackage() {}");
+    PsiFile file = myFixture.addFileToProject("pack1/b.go", 
+                                              "package foo; func (<error descr=\"Unresolved type 'functionInCurrentPackage'\">functionInCurrentPackage</error>) method() {}");
+    myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
+    myFixture.checkHighlighting();
+  }
+
   public void testAvoidDuplicatedUnusedImportReports() {
     myFixture.addFileToProject("pack1/a.go", "package foo;");
     myFixture.addFileToProject("pack1/b.go", "package foo_test;");
