@@ -41,9 +41,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.Set;
 
-import static com.goide.psi.impl.GoPsiImplUtil.allowed;
-import static com.goide.psi.impl.GoPsiImplUtil.processNamedElements;
-
 public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReferenceExpression> {
   private final boolean myInsideInterfaceType;
 
@@ -109,13 +106,13 @@ public class GoTypeReference extends PsiPolyVariantReferenceBase<GoTypeReference
                                           @NotNull GoScopeProcessor processor,
                                           @NotNull ResolveState state,
                                           boolean localProcessing) {
-    if (dir == null) return true;
-    String filePath = GoReference.getPath(file);
+    if (dir == null || Comparing.equal(dir.getVirtualFile().getPath(), GoReference.getPath(file))) return true;
     Module module = file != null ? ModuleUtilCore.findModuleForPsiElement(file) : null;
     for (PsiFile f : dir.getFiles()) {
-      if (file == null || !(f instanceof GoFile) || Comparing.equal(GoReference.getPath(f), filePath)) continue;
+      if (file == null || !(f instanceof GoFile)) continue;
       if (packageName != null && !packageName.equals(((GoFile)f).getPackageName())) continue;
-      if (GoPsiImplUtil.allowed(f, file, module) && !GoPsiImplUtil.processNamedElements(processor, state, ((GoFile)f).getTypes(), localProcessing)) return false;
+      if (!GoPsiImplUtil.allowed(f, file, module)) continue;
+      if (!GoPsiImplUtil.processNamedElements(processor, state, ((GoFile)f).getTypes(), localProcessing)) return false;
     }
     return true;
   }
