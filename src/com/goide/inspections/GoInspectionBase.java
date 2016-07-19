@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 abstract public class GoInspectionBase extends LocalInspectionTool {
-  private static final PsiElementVisitor DUMMY_VISITOR = new PsiElementVisitor() { };
+  protected static final GoVisitor DUMMY_VISITOR = new GoVisitor() { };
 
   @NotNull
   @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,41 +34,41 @@ public class GoReservedWordUsedAsNameInspection extends GoInspectionBase {
   @NotNull
   @Override
   protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
+    GoFile builtinFile = GoSdkUtil.findBuiltinFile(session.getFile());
+    if (builtinFile == null) return DUMMY_VISITOR;
+
     return new GoVisitor() {
       @Override
       public void visitTypeSpec(@NotNull GoTypeSpec o) {
         super.visitTypeSpec(o);
-        check(o, holder);
+        check(o, builtinFile, holder);
       }
 
       @Override
       public void visitConstDefinition(@NotNull GoConstDefinition o) {
         super.visitConstDefinition(o);
-        check(o, holder);
+        check(o, builtinFile, holder);
       }
 
       @Override
       public void visitFunctionOrMethodDeclaration(@NotNull GoFunctionOrMethodDeclaration o) {
         super.visitFunctionOrMethodDeclaration(o);
-        check(o, holder);
+        check(o, builtinFile, holder);
       }
 
       @Override
       public void visitVarDefinition(@NotNull GoVarDefinition o) {
         super.visitVarDefinition(o);
-        check(o, holder);
+        check(o, builtinFile, holder);
       }
     };
   }
 
-  private static void check(@NotNull GoNamedElement element, @NotNull ProblemsHolder holder) {
-    GoFile builtin = GoSdkUtil.findBuiltinFile(element);
-    if (builtin == null) return;
-
+  private static void check(@NotNull GoNamedElement element, @NotNull GoFile builtinFile, @NotNull ProblemsHolder holder) {
     String name = element.getName();
     if (name == null || GoTypeReference.DOC_ONLY_TYPES.contains(name)) return;
 
-    for (GoTypeSpec builtinTypeDeclaration : builtin.getTypes()) {
+    for (GoTypeSpec builtinTypeDeclaration : builtinFile.getTypes()) {
       if (name.equals(builtinTypeDeclaration.getName())) {
         registerProblem(holder, element, builtinTypeDeclaration);
         return;
@@ -77,7 +77,7 @@ public class GoReservedWordUsedAsNameInspection extends GoInspectionBase {
 
     ProgressManager.checkCanceled();
 
-    for (GoFunctionDeclaration builtinFunctionsDeclaration : builtin.getFunctions()) {
+    for (GoFunctionDeclaration builtinFunctionsDeclaration : builtinFile.getFunctions()) {
       if (name.equals(builtinFunctionsDeclaration.getName())) {
         registerProblem(holder, element, builtinFunctionsDeclaration);
         return;
