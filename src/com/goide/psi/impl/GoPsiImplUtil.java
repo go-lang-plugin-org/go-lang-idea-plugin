@@ -102,9 +102,9 @@ public class GoPsiImplUtil {
     return stdLibCall(o, "recover");
   }
 
-  private static boolean stdLibCall(@NotNull GoCallExpr o, String name) {
+  private static boolean stdLibCall(@NotNull GoCallExpr o, @NotNull String name) {
     GoExpression e = o.getExpression();
-    if (StringUtil.equals(name, e.getText()) && e instanceof GoReferenceExpression) {
+    if (e.textMatches(name) && e instanceof GoReferenceExpression) {
       PsiReference reference = e.getReference();
       PsiElement resolve = reference != null ? reference.resolve() : null;
       if (!(resolve instanceof GoFunctionDeclaration)) return false;
@@ -185,8 +185,8 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static PsiReference getReference(@NotNull GoFieldName o) {
-    final GoFieldNameReference field = new GoFieldNameReference(o);
-    final GoReference ordinal = new GoReference(o);
+    GoFieldNameReference field = new GoFieldNameReference(o);
+    GoReference ordinal = new GoReference(o);
     return new PsiMultiReference(new PsiReference[]{field, ordinal}, o) {
       @Override
       public PsiElement resolve() {
@@ -313,7 +313,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType getGoTypeInner(@NotNull final GoConstDefinition o, @Nullable final ResolveState context) {
+  public static GoType getGoTypeInner(@NotNull GoConstDefinition o, @Nullable ResolveState context) {
     GoType fromSpec = findTypeInConstSpec(o);
     if (fromSpec != null) return fromSpec;
     // todo: stubs 
@@ -358,7 +358,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType getGoType(@NotNull final GoExpression o, @Nullable final ResolveState context) {
+  public static GoType getGoType(@NotNull GoExpression o, @Nullable ResolveState context) {
     return RecursionManager.doPreventingRecursion(o, true, new Computable<GoType>() {
       @Override
       public GoType compute() {
@@ -508,7 +508,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType getBuiltinType(@NotNull final String name, @NotNull PsiElement context) {
+  public static GoType getBuiltinType(@NotNull String name, @NotNull PsiElement context) {
     GoFile builtin = GoSdkUtil.findBuiltinFile(context);
     if (builtin != null) {
       GoTypeSpec spec = ContainerUtil.find(builtin.getTypes(), new Condition<GoTypeSpec>() {
@@ -860,7 +860,7 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static List<GoTypeReferenceExpression> getBaseTypesReferences(@NotNull GoInterfaceType o) {
-    final List<GoTypeReferenceExpression> refs = ContainerUtil.newArrayList();
+    List<GoTypeReferenceExpression> refs = ContainerUtil.newArrayList();
     o.accept(new GoRecursiveVisitor() {
       @Override
       public void visitMethodSpec(@NotNull GoMethodSpec o) {
@@ -871,7 +871,7 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
-  public static List<GoMethodDeclaration> getMethods(@NotNull final GoTypeSpec o) {
+  public static List<GoMethodDeclaration> getMethods(@NotNull GoTypeSpec o) {
     return CachedValuesManager.getCachedValue(o, new CachedValueProvider<List<GoMethodDeclaration>>() {
       @Nullable
       @Override
@@ -987,7 +987,7 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
-  public static GoType getUnderlyingType(@NotNull final GoType o) {
+  public static GoType getUnderlyingType(@NotNull GoType o) {
     GoType type = RecursionManager.doPreventingRecursion(o, true, new Computable<GoType>() {
       @Override
       public GoType compute() {
@@ -1589,8 +1589,8 @@ public class GoPsiImplUtil {
 
   @NotNull
   private static List<GoExpression> getExpressionsInRange(@NotNull List<GoExpression> list,
-                                                          @Nullable final PsiElement start,
-                                                          @Nullable final PsiElement end) {
+                                                          @Nullable PsiElement start,
+                                                          @Nullable PsiElement end) {
     if (start == null && end == null) {
       return list;
     }
@@ -1604,7 +1604,7 @@ public class GoPsiImplUtil {
   }
 
   @NotNull
-  private static List<GoExpression> getExpressionsBefore(@NotNull List<GoExpression> list, @Nullable final PsiElement anchor) {
+  private static List<GoExpression> getExpressionsBefore(@NotNull List<GoExpression> list, @Nullable PsiElement anchor) {
     return getExpressionsInRange(list, null, anchor);
   }
 
