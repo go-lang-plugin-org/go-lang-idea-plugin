@@ -89,4 +89,9 @@ public class GoUnaryExprImpl extends GoExpressionImpl implements GoUnaryExpr {
     return findChildByType(SEND_CHANNEL);
   }
 
+  @Nullable
+  public PsiElement getOperator() {
+    return GoPsiImplUtil.getOperator(this);
+  }
+
 }

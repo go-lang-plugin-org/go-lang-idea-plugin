@@ -61,4 +61,9 @@ public class GoBinaryExprImpl extends GoExpressionImpl implements GoBinaryExpr {
     return p1.size() < 2 ? null : p1.get(1);
   }
 
+  @Nullable
+  public PsiElement getOperator() {
+    return GoPsiImplUtil.getOperator(this);
+  }
+
 }

@@ -1673,7 +1673,47 @@ public class GoPsiImplUtil {
     String string = o.getText();
     if (string == null || string.isEmpty()) return null;
     StringBuilder builder = new StringBuilder();
-    o.createLiteralTextEscaper().decode(new TextRange(1, string.length() - 1) , builder);
+    o.createLiteralTextEscaper().decode(new TextRange(1, string.length() - 1), builder);
     return builder.toString();
+  }
+
+  @Nullable
+  public static PsiElement getOperator(@NotNull GoUnaryExpr o) {
+    PsiElement[] operators =
+      new PsiElement[]{o.getNot(), o.getMinus(), o.getPlus(), o.getBitAnd(), o.getBitXor(), o.getMul(), o.getSendChannel()};
+    return getNotNullElement(operators);
+  }
+
+  @Nullable
+  public static PsiElement getOperator(@NotNull GoBinaryExpr o) {
+    if (o instanceof GoAndExpr) return ((GoAndExpr)o).getCondAnd();
+    if (o instanceof GoOrExpr) return ((GoOrExpr)o).getCondOr();
+    if (o instanceof GoSelectorExpr) return ((GoSelectorExpr)o).getDot();
+    if (o instanceof GoConversionExpr) return ((GoConversionExpr)o).getComma();
+
+    PsiElement[] operators = null;
+    if (o instanceof GoMulExpr) {
+      GoMulExpr m = (GoMulExpr)o;
+      operators = new PsiElement[]{m.getMul(), m.getQuotient(), m.getRemainder(), m.getShiftRight(), m.getShiftLeft(), m.getBitAnd(),
+        m.getBitClear()};
+    }
+    else if (o instanceof GoAddExpr) {
+      GoAddExpr a = (GoAddExpr)o;
+      operators = new PsiElement[]{a.getBitXor(), a.getBitOr(), a.getMinus(), a.getPlus()};
+    }
+    else if (o instanceof GoConditionalExpr) {
+      GoConditionalExpr c = (GoConditionalExpr)o;
+      operators = new PsiElement[]{c.getEq(), c.getNotEq(), c.getGreater(), c.getGreaterOrEqual(), c.getLess(), c.getLessOrEqual()};
+    }
+    return getNotNullElement(operators);
+  }
+
+  @Nullable
+  private static PsiElement getNotNullElement(@Nullable PsiElement[] elements) {
+    if (elements == null) return null;
+    for (int i = 0; i < elements.length; i++) {
+      if (elements[i] != null) return elements[i];
+    }
+    return null;
   }
 }

@@ -339,12 +339,12 @@ Expression ::=
   | ParenthesesExpr {methods=[getGoType] implements="com.goide.psi.GoTypeOwner"}
 
 fake BinaryExpr ::= Expression+ {
-  methods=[left="Expression[0]" right="Expression[1]"]
+  methods=[left="Expression[0]" right="Expression[1]" getOperator]
 }
 
 OrExpr ::= Expression '||' Expression
 AndExpr ::= Expression '&&' Expression
-UnaryExpr ::=  UnaryOp Expression
+UnaryExpr ::=  UnaryOp Expression {methods=[getOperator]}
 ConditionalExpr ::= Expression RelOp Expression
 AddExpr ::= Expression AddOp Expression
 MulExpr ::= Expression MulOp Expression

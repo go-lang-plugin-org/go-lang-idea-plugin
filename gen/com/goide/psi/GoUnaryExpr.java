@@ -47,4 +47,7 @@ public interface GoUnaryExpr extends GoExpression {
   @Nullable
   PsiElement getSendChannel();
 
+  @Nullable
+  PsiElement getOperator();
+
 }
