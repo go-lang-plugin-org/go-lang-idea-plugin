@@ -1646,7 +1646,6 @@ public class GoPsiImplUtil {
     return Read;
   }
 
-  @NotNull
   private static GoExpression getConsiderableExpression(@NotNull GoExpression element) {
     GoExpression result = element;
     while (true) {
@@ -1667,5 +1666,14 @@ public class GoPsiImplUtil {
       }
       return result;
     }
+  }
+
+  @Nullable
+  public static String getDecodeString(@NotNull GoStringLiteral o) {
+    String string = o.getText();
+    if (string == null || string.isEmpty()) return null;
+    StringBuilder builder = new StringBuilder();
+    o.createLiteralTextEscaper().decode(new TextRange(1, string.length() - 1) , builder);
+    return builder.toString();
   }
 }
