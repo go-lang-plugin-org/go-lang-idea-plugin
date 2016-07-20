@@ -20,7 +20,6 @@ import com.goide.psi.*;
 import com.goide.psi.impl.GoElementFactory;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.quickfix.GoDeleteQuickFix;
-import com.goide.quickfix.GoReplaceWithCorrectDeferRecoverQuickFix;
 import com.intellij.codeInspection.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -30,60 +29,57 @@ import org.jetbrains.annotations.Nullable;
 public class GoDeferGoInspection extends GoInspectionBase {
   public static final String ADD_CALL_QUICK_FIX_NAME = "Add function call";
   public static final String UNWRAP_PARENTHESES_QUICK_FIX_NAME = "Unwrap parentheses";
+  public static final String REPLACE_WITH_CORRECT_DEFER_RECOVER = "Replace with correct defer construct";
 
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
+  protected GoVisitor buildGoVisitor(@NotNull ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
+      @SuppressWarnings("DialogTitleCapitalization")
       @Override
       public void visitDeferStatement(@NotNull GoDeferStatement o) {
         super.visitDeferStatement(o);
-
-        if (o.getExpression() != null && o.getExpression() instanceof GoCallExpr) {
-          GoCallExpr callExpr = (GoCallExpr)o.getExpression();
-
+        GoExpression expression = o.getExpression();
+        if (expression instanceof GoCallExpr) {
+          GoCallExpr callExpr = (GoCallExpr)expression;
           if (GoPsiImplUtil.isPanic(callExpr)) {
             holder.registerProblem(o, "defer should not call panic() directly #loc", ProblemHighlightType.WEAK_WARNING,
                                    new GoDeleteQuickFix("Delete statement", GoDeferStatement.class));
             return;
           }
-
           if (GoPsiImplUtil.isRecover(callExpr)) {
             holder.registerProblem(o, "defer should not call recover() directly #loc", ProblemHighlightType.WEAK_WARNING,
                                    new GoReplaceWithCorrectDeferRecoverQuickFix());
             return;
           }
         }
-
-        checkExpression(o.getExpression(), "defer");
+        checkExpression(expression, "defer");
       }
 
+      @SuppressWarnings("DialogTitleCapitalization")
       @Override
       public void visitGoStatement(@NotNull GoGoStatement o) {
         super.visitGoStatement(o);
-
-        if (o.getExpression() != null && o.getExpression() instanceof GoCallExpr) {
-          GoCallExpr callExpr = (GoCallExpr)o.getExpression();
-
+        GoExpression expression = o.getExpression();
+        if (expression instanceof GoCallExpr) {
+          GoCallExpr callExpr = (GoCallExpr)expression;
           if (GoPsiImplUtil.isPanic(callExpr)) {
             holder.registerProblem(o, "go should not call panic() directly #loc", ProblemHighlightType.WEAK_WARNING,
                                    new GoDeleteQuickFix("Delete statement", GoGoStatement.class));
             return;
           }
-
           if (GoPsiImplUtil.isRecover(callExpr)) {
             holder.registerProblem(o, "go should not call recover() directly #loc", ProblemHighlightType.WEAK_WARNING,
                                    new GoDeleteQuickFix("Delete statement", GoGoStatement.class));
             return;
           }
         }
-
-        checkExpression(o.getExpression(), "go");
+        checkExpression(expression, "go");
       }
 
-      private void checkExpression(@Nullable GoExpression o, String who) {
-        if (o == null || o instanceof GoBuiltinCallExpr) return;
-        if (o instanceof GoCallExpr) {
+      private void checkExpression(@Nullable GoExpression o, @NotNull String who) {
+        if (o == null) return;
+        if (o instanceof GoCallExpr || o instanceof GoBuiltinCallExpr) {
           if (GoPsiImplUtil.isConversionExpression(o)) {
             holder.registerProblem(o, who + " requires function call, not conversion #loc", ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
           }
@@ -102,7 +98,7 @@ public class GoDeferGoInspection extends GoInspectionBase {
   }
 
   public static class GoAddParensQuickFix extends LocalQuickFixBase {
-    protected GoAddParensQuickFix() {
+    public GoAddParensQuickFix() {
       super(ADD_CALL_QUICK_FIX_NAME);
     }
 
@@ -122,7 +118,7 @@ public class GoDeferGoInspection extends GoInspectionBase {
   }
 
   private static class GoUnwrapParensExpression extends LocalQuickFixBase {
-    protected GoUnwrapParensExpression() {
+    public GoUnwrapParensExpression() {
       super(UNWRAP_PARENTHESES_QUICK_FIX_NAME);
     }
 
@@ -137,6 +133,26 @@ public class GoDeferGoInspection extends GoInspectionBase {
         if (innerExpression != null) {
           element.replace(GoElementFactory.createExpression(project, innerExpression.getText()));
         }
+      }
+    }
+  }
+
+  public static class GoReplaceWithCorrectDeferRecoverQuickFix extends LocalQuickFixBase {
+    public GoReplaceWithCorrectDeferRecoverQuickFix() {
+      super(REPLACE_WITH_CORRECT_DEFER_RECOVER);
+    }
+
+    @Override
+    public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+      PsiElement element = descriptor.getPsiElement();
+      if (element == null || !element.isValid()) return;
+
+      if (element instanceof GoStatement) {
+        element.replace(GoElementFactory.createDeferStatement(project, "func() {\n" +
+                                                                       "\tif r := recover(); r != nil {\n" +
+                                                                       "\t\t\n" +
+                                                                       "\t}\n" +
+                                                                       "\t}()}"));
       }
     }
   }
