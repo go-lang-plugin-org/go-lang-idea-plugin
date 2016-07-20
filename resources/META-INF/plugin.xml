@@ -211,6 +211,9 @@
     <localInspection language="go" displayName="Unused parameter inspection" groupPath="Go"
                      groupName="Declaration redundancy" enabledByDefault="true" level="WARNING"
                      implementationClass="com.goide.inspections.unresolved.GoUnusedParameterInspection"/>
+    <localInspection language="go" displayName="Bool condition inspection" groupPath="Go"
+                     groupName="Declaration redundancy" enabledByDefault="true" level="WARNING"
+                     implementationClass="com.goide.inspections.GoBoolExpressionsInspection"/>
 
     <localInspection language="go" displayName="Empty declaration inspection" groupPath="Go"
                      groupName="Declaration redundancy" enabledByDefault="true" level="WARNING"
