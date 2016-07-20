@@ -32,4 +32,7 @@ public interface GoBinaryExpr extends GoExpression {
   @Nullable
   GoExpression getRight();
 
+  @Nullable
+  PsiElement getOperator();
+
 }
