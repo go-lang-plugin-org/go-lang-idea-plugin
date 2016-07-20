@@ -133,6 +133,6 @@ public abstract class GoReferenceBase<T extends GoReferenceExpressionBase> exten
 
   protected abstract boolean processFileEntities(@NotNull GoFile file,
                                                  @NotNull GoScopeProcessor processor,
-                                                 @NotNull final ResolveState state,
+                                                 @NotNull ResolveState state,
                                                  boolean localProcessing);
 }
