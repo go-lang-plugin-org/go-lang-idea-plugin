@@ -20,17 +20,15 @@ import com.goide.GoConstants;
 import com.goide.GoDocumentationProvider;
 import com.goide.project.GoVendoringUtil;
 import com.goide.psi.*;
-import com.goide.psi.impl.GoElementFactory;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.psi.impl.GoTypeUtil;
 import com.goide.refactor.GoRefactoringUtil;
 import com.goide.util.GoPathScopeHelper;
 import com.goide.util.GoUtil;
-import com.intellij.codeInsight.CodeInsightUtilCore;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInsight.template.Template;
-import com.intellij.codeInsight.template.TemplateBuilderImpl;
 import com.intellij.codeInsight.template.TemplateManager;
+import com.intellij.codeInsight.template.impl.ConstantNode;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.diagnostic.AttachmentFactory;
 import com.intellij.openapi.application.ApplicationManager;
@@ -39,7 +37,6 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -73,43 +70,32 @@ public class GoIntroduceFunctionFix extends LocalQuickFixAndIntentionActionOnPsi
                 AttachmentFactory.createAttachment(file.getVirtualFile()));
       return;
     }
-
-    if (!(startElement instanceof GoCallExpr)) {
-      return;
-    }
+    if (!(startElement instanceof GoCallExpr)) return;
 
     GoCallExpr call = (GoCallExpr)startElement;
     List<GoExpression> args = call.getArgumentList().getExpressionList();
     GoType resultType = ContainerUtil.getFirstItem(GoTypeUtil.getExpectedTypes(call));
-    GoFunctionDeclaration function = createFunctionDeclaration(file, myName, args, resultType);
 
-    PsiElement anchor = PsiTreeUtil.getParentOfType(call, GoTopLevelDeclaration.class);
-    if (anchor == null) return;
+    PsiElement anchor = PsiTreeUtil.findPrevParent(file, call);
 
-    function = (GoFunctionDeclaration)file.addAfter(function, anchor);
-    if (function == null) return;
-    function = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(function);
-    if (function == null) return;
+    Template template = TemplateManager.getInstance(project).createTemplate("", "");
+    template.addTextSegment("\nfunc " + myName);
 
-    TemplateBuilderImpl builder = new TemplateBuilderImpl(function);
-    setupFunctionParameters(function, builder, args);
-    setupFunctionResult(function, builder);
-    GoBlock body = function.getBlock();
-    builder.setEndVariableAfter(body == null || body.getLbrace() == null ? function : body.getLbrace());
+    setupFunctionParameters(template, args, file);
+    setupFunctionResult(template, resultType);
 
-    function = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(function);
-    if (function == null) return;
+    template.addTextSegment(" {\n\t");
+    template.addEndVariable();
+    template.addTextSegment("\n}");
 
-    Template template = builder.buildTemplate();
-    TextRange range = function.getTextRange();
-    editor.getCaretModel().moveToOffset(range.getStartOffset());
-    editor.getDocument().deleteString(range.getStartOffset(), range.getEndOffset());
+    int offset = anchor.getTextRange().getEndOffset();
+    editor.getCaretModel().moveToOffset(offset);
 
     startTemplate(editor, template, project);
   }
 
   @NotNull
-  private static String convertType(@NotNull PsiFile file, @Nullable GoType type, Map<String, GoImportSpec> importMap) {
+  private static String convertType(@NotNull PsiFile file, @Nullable GoType type, @NotNull Map<String, GoImportSpec> importMap) {
     if (type == null) return GoConstants.INTERFACE_TYPE;
     final Module module = ModuleUtilCore.findModuleForPsiElement(file);
     boolean vendoringEnabled = GoVendoringUtil.isVendoringEnabled(module);
@@ -137,7 +123,7 @@ public class GoIntroduceFunctionFix extends LocalQuickFixAndIntentionActionOnPsi
           GoImportSpec importSpec = importMap.get(importPath);
           String packageName = StringUtil.notNullize(typeFile.getPackageName());
           String qualifier = StringUtil.notNullize(GoPsiImplUtil.getImportQualifierToUseInFile(importSpec, packageName), packageName);
-          
+
           // todo: add import package fix if getImportQualifierToUseInFile is null?
           return GoPsiImplUtil.getFqn(qualifier, spec.getIdentifier().getText());
         }
@@ -146,35 +132,36 @@ public class GoIntroduceFunctionFix extends LocalQuickFixAndIntentionActionOnPsi
     });
   }
 
-  private static void setupFunctionResult(GoFunctionDeclaration function, TemplateBuilderImpl builder) {
-    GoSignature signature = function.getSignature();
-    GoResult result = signature != null ? signature.getResult() : null;
-    if (result != null && !result.isVoid()) {
-      GoType resultType = result.getType();
-      if (resultType instanceof GoTypeList) {
-        for (GoType type : ((GoTypeList)resultType).getTypeList()) {
-          builder.replaceElement(type, type.getText());
-        }
+  private static void setupFunctionResult(@NotNull Template template, @Nullable GoType type) {
+    if (type instanceof GoTypeList) {
+      template.addTextSegment(" (");
+      List<GoType> list = ((GoTypeList)type).getTypeList();
+      for (int i = 0; i < list.size(); i++) {
+        template.addVariable(new ConstantNode(list.get(i).getText()), true);
+        if (i < list.size() - 1) template.addTextSegment(", ");
       }
-      else if (resultType != null) {
-        builder.replaceElement(resultType, resultType.getText());
-      }
+      template.addTextSegment(")");
+      return;
+    }
+    if (type != null) {
+      template.addTextSegment(" ");
+      template.addVariable(new ConstantNode(type.getText()), true);
     }
   }
 
-  private static void setupFunctionParameters(@NotNull GoFunctionDeclaration function,
-                                              @NotNull TemplateBuilderImpl builder,
-                                              @NotNull List<GoExpression> args) {
-    if (function.getSignature() == null) return;
-    int i = 0;
-    List<GoParameterDeclaration> parameterList = function.getSignature().getParameters().getParameterDeclarationList();
-    for (GoParameterDeclaration parameterDeclaration : parameterList) {
-      builder.replaceElement(parameterDeclaration.getType(), parameterDeclaration.getType().getText());
-      for (GoParamDefinition parameter : parameterDeclaration.getParamDefinitionList()) {
-        builder.replaceElement(parameter.getIdentifier(), GoRefactoringUtil.createParameterNameSuggestedExpression(args.get(i)));
-        i++;
-      }
+  private static void setupFunctionParameters(@NotNull Template template,
+                                              @NotNull List<GoExpression> args, PsiFile file) {
+    Map<String, GoImportSpec> importMap = ((GoFile)file).getImportedPackagesMap();
+    template.addTextSegment("(");
+    for (int i = 0; i < args.size(); i++) {
+      GoExpression e  = args.get(i);
+      template.addVariable(GoRefactoringUtil.createParameterNameSuggestedExpression(e), true);
+      template.addTextSegment(" ");
+      String type = convertType(file, e.getGoType(null), importMap);
+      template.addVariable(new ConstantNode(type), true);
+      if (i != args.size() - 1) template.addTextSegment(", ");
     }
+    template.addTextSegment(")");
   }
 
   private static void startTemplate(@NotNull final Editor editor, @NotNull final Template template, @NotNull final Project project) {
@@ -196,22 +183,6 @@ public class GoIntroduceFunctionFix extends LocalQuickFixAndIntentionActionOnPsi
     else {
       ApplicationManager.getApplication().invokeLater(runnable);
     }
-  }
-
-  @NotNull
-  private static GoFunctionDeclaration createFunctionDeclaration(@NotNull PsiFile file,
-                                                                 @NotNull String name,
-                                                                 @NotNull List<GoExpression> argsList,
-                                                                 @Nullable GoType result) {
-    List<String> argumentText = ContainerUtil.newSmartList();
-    Map<String, GoImportSpec> importMap = ((GoFile)file).getImportedPackagesMap();
-    for (GoExpression expression : argsList) {
-      argumentText.add("i " + convertType(file, expression.getGoType(null), importMap));
-    }
-
-    String args = StringUtil.join(argumentText, ", ");
-    String resultType = result instanceof GoTypeList ? "(" + result.getText() + ")" : result != null ? result.getText() : "";
-    return GoElementFactory.createFunctionDeclarationFromText(file.getProject(), name, args, resultType);
   }
 
   @NotNull
