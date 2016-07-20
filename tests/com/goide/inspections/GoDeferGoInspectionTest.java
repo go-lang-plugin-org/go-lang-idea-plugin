@@ -17,7 +17,6 @@
 package com.goide.inspections;
 
 import com.goide.quickfix.GoQuickFixTestBase;
-import com.goide.quickfix.GoReplaceWithCorrectDeferRecoverQuickFix;
 import com.intellij.testFramework.LightProjectDescriptor;
 import org.jetbrains.annotations.NotNull;
 
@@ -57,7 +56,7 @@ public class GoDeferGoInspectionTest extends GoQuickFixTestBase {
     myFixture.testHighlighting(getTestName(true) + ".go");
   }
 
-  public void testDeferRecover() { doTest(GoReplaceWithCorrectDeferRecoverQuickFix.QUICK_FIX_NAME, true); }
+  public void testDeferRecover() { doTest(GoDeferGoInspection.REPLACE_WITH_CORRECT_DEFER_RECOVER, true); }
 
   @NotNull
   @Override
