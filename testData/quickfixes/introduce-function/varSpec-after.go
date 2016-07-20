@@ -7,4 +7,5 @@ func main() {
   )
 }
 func asd() (int, int, int) {
+ <caret>
 }

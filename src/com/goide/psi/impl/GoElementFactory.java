@@ -251,16 +251,6 @@ public class GoElementFactory {
     return PsiTreeUtil.findChildOfType(file, GoType.class);
   }
 
-  @NotNull
-  public static GoFunctionDeclaration createFunctionDeclarationFromText(@NotNull Project project,
-                                                                        @NotNull String name,
-                                                                        @NotNull String text,
-                                                                        @Nullable String expectedType) {
-    expectedType = expectedType != null && !expectedType.isEmpty() ? expectedType + " " : "";
-    GoFile file = createFileFromText(project, "package a; func " + name + "(" + text + ") " + expectedType + "{\n}");
-    return ContainerUtil.getFirstItem(file.getFunctions());
-  }
-
   public static PsiElement createNamedStructField(@NotNull Project project, @NotNull String field, @NotNull String element) {
     GoFile file = createFileFromText(project, "package a; var _ = struct { a string } { " + field + ": " + element + " }");
     return PsiTreeUtil.findChildOfType(file, GoElement.class);

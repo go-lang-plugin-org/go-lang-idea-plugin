@@ -9,5 +9,6 @@ func main() {
 
   asd(i, r, q)
 }
-func asd(i int, i2 struct{ i int }, i3 string) {
+func asd(i int, i2 struct {i int}, i3 string) {
+ <caret>
 }

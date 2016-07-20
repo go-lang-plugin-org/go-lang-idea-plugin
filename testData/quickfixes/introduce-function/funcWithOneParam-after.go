@@ -5,4 +5,5 @@ func main() {
   asd(i)
 }
 func asd(i int) {
+ <caret>
 }

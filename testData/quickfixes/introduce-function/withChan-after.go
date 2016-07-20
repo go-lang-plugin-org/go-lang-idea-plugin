@@ -8,4 +8,5 @@ func main() {
   asd(i)
 }
 func asd(ints chan chan int) {
+ <caret>
 }
