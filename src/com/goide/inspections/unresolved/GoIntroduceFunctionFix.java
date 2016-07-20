@@ -41,7 +41,6 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -97,38 +96,35 @@ public class GoIntroduceFunctionFix extends LocalQuickFixAndIntentionActionOnPsi
   @NotNull
   private static String convertType(@NotNull PsiFile file, @Nullable GoType type, @NotNull Map<String, GoImportSpec> importMap) {
     if (type == null) return GoConstants.INTERFACE_TYPE;
-    final Module module = ModuleUtilCore.findModuleForPsiElement(file);
+    Module module = ModuleUtilCore.findModuleForPsiElement(file);
     boolean vendoringEnabled = GoVendoringUtil.isVendoringEnabled(module);
-    return GoDocumentationProvider.getTypePresentation(type, new Function<PsiElement, String>() {
-      @Override
-      public String fun(PsiElement element) {
-        if (element instanceof GoTypeSpec) {
-          GoTypeSpec spec = (GoTypeSpec)element;
-          if (GoPsiImplUtil.builtin(spec)) return spec.getIdentifier().getText();
+    return GoDocumentationProvider.getTypePresentation(type, element -> {
+      if (element instanceof GoTypeSpec) {
+        GoTypeSpec spec = (GoTypeSpec)element;
+        if (GoPsiImplUtil.builtin(spec)) return spec.getIdentifier().getText();
 
-          GoFile typeFile = spec.getContainingFile();
-          if (file.isEquivalentTo(typeFile) || GoUtil.inSamePackage(typeFile, file)) {
-            return spec.getIdentifier().getText();
-          }
-          if (!spec.isPublic()) {
-            return GoConstants.INTERFACE_TYPE;
-          }
-
-          GoPathScopeHelper scopeHelper = GoPathScopeHelper.fromReferenceFile(file.getProject(), module, file.getVirtualFile());
-          boolean isAllowed = scopeHelper.couldBeReferenced(typeFile.getVirtualFile(), file.getVirtualFile());
-          if (!isAllowed) return GoConstants.INTERFACE_TYPE;
-
-          String importPath = typeFile.getImportPath(vendoringEnabled);
-
-          GoImportSpec importSpec = importMap.get(importPath);
-          String packageName = StringUtil.notNullize(typeFile.getPackageName());
-          String qualifier = StringUtil.notNullize(GoPsiImplUtil.getImportQualifierToUseInFile(importSpec, packageName), packageName);
-
-          // todo: add import package fix if getImportQualifierToUseInFile is null?
-          return GoPsiImplUtil.getFqn(qualifier, spec.getIdentifier().getText());
+        GoFile typeFile = spec.getContainingFile();
+        if (file.isEquivalentTo(typeFile) || GoUtil.inSamePackage(typeFile, file)) {
+          return spec.getIdentifier().getText();
         }
-        return GoConstants.INTERFACE_TYPE;
+        if (!spec.isPublic()) {
+          return GoConstants.INTERFACE_TYPE;
+        }
+
+        GoPathScopeHelper scopeHelper = GoPathScopeHelper.fromReferenceFile(file.getProject(), module, file.getVirtualFile());
+        boolean isAllowed = scopeHelper.couldBeReferenced(typeFile.getVirtualFile(), file.getVirtualFile());
+        if (!isAllowed) return GoConstants.INTERFACE_TYPE;
+
+        String importPath = typeFile.getImportPath(vendoringEnabled);
+
+        GoImportSpec importSpec = importMap.get(importPath);
+        String packageName = StringUtil.notNullize(typeFile.getPackageName());
+        String qualifier = StringUtil.notNullize(GoPsiImplUtil.getImportQualifierToUseInFile(importSpec, packageName), packageName);
+
+        // todo: add import package fix if getImportQualifierToUseInFile is null?
+        return GoPsiImplUtil.getFqn(qualifier, spec.getIdentifier().getText());
       }
+      return GoConstants.INTERFACE_TYPE;
     });
   }
 
@@ -154,7 +150,7 @@ public class GoIntroduceFunctionFix extends LocalQuickFixAndIntentionActionOnPsi
     Map<String, GoImportSpec> importMap = ((GoFile)file).getImportedPackagesMap();
     template.addTextSegment("(");
     for (int i = 0; i < args.size(); i++) {
-      GoExpression e  = args.get(i);
+      GoExpression e = args.get(i);
       template.addVariable(GoRefactoringUtil.createParameterNameSuggestedExpression(e), true);
       template.addTextSegment(" ");
       String type = convertType(file, e.getGoType(null), importMap);
@@ -164,18 +160,11 @@ public class GoIntroduceFunctionFix extends LocalQuickFixAndIntentionActionOnPsi
     template.addTextSegment(")");
   }
 
-  private static void startTemplate(@NotNull final Editor editor, @NotNull final Template template, @NotNull final Project project) {
-    Runnable runnable = new Runnable() {
-      @Override
-      public void run() {
-        if (project.isDisposed() || editor.isDisposed()) return;
-        CommandProcessor.getInstance().executeCommand(project, new Runnable() {
-          @Override
-          public void run() {
-            TemplateManager.getInstance(project).startTemplate(editor, template, null);
-          }
-        }, "Introduce function", null);
-      }
+  private static void startTemplate(@NotNull Editor editor, @NotNull Template template, @NotNull Project project) {
+    Runnable runnable = () -> {
+      if (project.isDisposed() || editor.isDisposed()) return;
+      CommandProcessor.getInstance().executeCommand(project, () ->
+        TemplateManager.getInstance(project).startTemplate(editor, template, null), "Introduce function", null);
     };
     if (ApplicationManager.getApplication().isUnitTestMode()) {
       runnable.run();
