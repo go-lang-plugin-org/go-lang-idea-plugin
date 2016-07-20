@@ -18,6 +18,7 @@ package com.goide.psi.impl;
 
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.goide.psi.*;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
 
 public class GoPsiImplUtilTest extends GoCodeInsightFixtureTestCase {
@@ -378,6 +379,14 @@ public class GoPsiImplUtilTest extends GoCodeInsightFixtureTestCase {
     assertNotNull(spec);
     spec.deleteDefinition(definition);
     myFixture.checkResult("package main\n\n const bar int  ");
+  }
+
+  public void testGoIndexOrSliceExprGetIndices() {
+    PsiFile file = myFixture.configureByText("a.go", "packge main\n var a []int\n var b = a<caret>[1]");
+    myFixture.checkHighlighting();
+    GoIndexOrSliceExpr index = PsiTreeUtil.getParentOfType(file.findElementAt(myFixture.getCaretOffset()), GoIndexOrSliceExpr.class);
+    assert index != null;
+    assertEquals("1", index.getIndices().first.getText());
   }
 
   @Override

@@ -1530,14 +1530,13 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static Trinity<GoExpression, GoExpression, GoExpression> getIndices(@NotNull GoIndexOrSliceExpr slice) {
-    GoExpression start = null;
+    GoExpression start;
     GoExpression end = null;
     GoExpression max = null;
     ASTNode[] colons = slice.getNode().getChildren(TokenSet.create(GoTypes.COLON));
     List<GoExpression> exprList = slice.getExpressionList();
-    if (colons.length > 0) {
-      start = ContainerUtil.getFirstItem(getExpressionsInRange(exprList, slice.getLbrack(), colons[0].getPsi()));
-    }
+
+    start = ContainerUtil.getFirstItem(getExpressionsInRange(exprList, slice.getLbrack(), colons.length > 0 ? colons[0].getPsi() : null));
     if (colons.length == 1) {
       end = ContainerUtil.getFirstItem(getExpressionsInRange(exprList, colons[0].getPsi(), slice.getRbrack()));
     }
