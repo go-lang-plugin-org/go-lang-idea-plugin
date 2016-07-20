@@ -48,13 +48,13 @@ public abstract class GoStatementsSurrounder implements Surrounder {
   }
 
   @Nullable
-  protected abstract TextRange surroundStatements(@NotNull final Project project,
-                                                  @NotNull final PsiElement container,
-                                                  @NotNull final PsiElement[] statements) throws IncorrectOperationException;
+  protected abstract TextRange surroundStatements(@NotNull Project project,
+                                                  @NotNull PsiElement container,
+                                                  @NotNull PsiElement[] statements) throws IncorrectOperationException;
 
   @Nullable
   protected TextRange surroundStatementsWithIfElse(@NotNull Project project,
-                                                   PsiElement container,
+                                                   @NotNull PsiElement container,
                                                    @NotNull PsiElement[] statements,
                                                    boolean withElse) {
     PsiElement first = ArrayUtil.getFirstElement(statements);
@@ -68,6 +68,6 @@ public abstract class GoStatementsSurrounder implements Surrounder {
   }
 
   protected int getOffsetLBraceOfBlock(@Nullable GoBlock block) {
-    return block != null && block.getLbrace() != null ? block.getLbrace().getTextRange().getStartOffset() : -1;
+    return block != null ? block.getLbrace().getTextRange().getStartOffset() : -1;
   }
 }
