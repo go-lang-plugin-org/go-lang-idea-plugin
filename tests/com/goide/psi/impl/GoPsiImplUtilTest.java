@@ -382,10 +382,9 @@ public class GoPsiImplUtilTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testGoIndexOrSliceExprGetIndices() {
-    PsiFile file = myFixture.configureByText("a.go", "packge main\n var a []int\n var b = a<caret>[1]");
-    myFixture.checkHighlighting();
+    PsiFile file = myFixture.configureByText("a.go", "package main\n var a []int\n var b = a<caret>[1]");
     GoIndexOrSliceExpr index = PsiTreeUtil.getParentOfType(file.findElementAt(myFixture.getCaretOffset()), GoIndexOrSliceExpr.class);
-    assert index != null;
+    assertNotNull(index);
     assertEquals("1", index.getIndices().first.getText());
   }
 
