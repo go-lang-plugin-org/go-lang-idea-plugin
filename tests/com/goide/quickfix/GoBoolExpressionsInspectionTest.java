@@ -51,7 +51,6 @@ public class GoBoolExpressionsInspectionTest extends GoParametrizedTestBase {
     });
   }
 
-  @SuppressWarnings("JUnitTestCaseWithNonTrivialConstructors")
   public GoBoolExpressionsInspectionTest(String vars, String expr, String after) {
     this.expr = expr;
     this.vars = vars;

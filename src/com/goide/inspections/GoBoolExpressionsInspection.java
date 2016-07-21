@@ -53,71 +53,57 @@ public class GoBoolExpressionsInspection extends GoInspectionBase {
         if (parent instanceof GoBinaryExpr && isSameOp((GoExpression)parent, and)) return;
 
         List<GoExpression> elements = collect(o, and);
-        List<GoExpression> toRemove = ContainerUtil.newSmartList();
         for (int i = 0; i < elements.size(); i++) {
           GoExpression l = elements.get(i);
-          if (l instanceof GoReferenceExpression &&
-              (l.textMatches("true") || l.textMatches("false")) &&
+          if (l instanceof GoReferenceExpression && (l.textMatches("true") || l.textMatches("false")) &&
               GoPsiImplUtil.builtin(((GoReferenceExpression)l).resolve())) {
-            boolean trueExpr = l.textMatches("true");
-            if (and ^ !trueExpr) {
-              toRemove.add(l);
-            }
-            else {
-              replaceExprByConst(o, trueExpr);
-            }
+            registerProblem(o, holder);
+            return;
           }
           for (int j = i + 1; j < elements.size(); j++) {
             GoExpression r = elements.get(j);
-            if (isEqualsWithNot(l, r) || isEqualsWithNot(r, l)) {
-              replaceExprByConst(o, !and); // and -> false; or -> true
+            if (isEqualsWithNot(l, r) || isEqualsWithNot(r, l) || GoExpressionUtil.identical(l, r)) {
+              registerProblem(o, holder);
               return;
-            }
-            if (GoExpressionUtil.identical(l, r)) {
-              toRemove.add(l);
-              break;
             }
             // todo expr evaluating! x != c1 || x != c2 (c1, c2 const, c1 != c2)
           }
         }
-        if (!toRemove.isEmpty()) {
-          holder.registerProblem(o, "Redundant expression", new GoSimplifyBoolExprQuickFix.RemoveRedundantExpressions(o, elements, toRemove));
-        }
-      }
-
-      private void replaceExprByConst(GoBinaryExpr o, boolean trueExpr) { // todo: what to do if true or false redefined?
-        holder.registerProblem(o, "Redundant expression", new GoSimplifyBoolExprQuickFix.ReplaceAllByBoolConst(o, trueExpr));
-      }
-
-      private boolean isEqualsWithNot(@Nullable GoExpression not, @Nullable GoExpression expr) {
-        return not instanceof GoUnaryExpr &&
-               ((GoUnaryExpr)not).getNot() != null &&
-               GoExpressionUtil.identical(((GoUnaryExpr)not).getExpression(), expr);
-      }
-
-      @NotNull
-      private List<GoExpression> collect(GoBinaryExpr o, boolean and) {
-        List<GoExpression> result = ContainerUtil.newSmartList();
-        result.addAll(processExpr(o.getLeft(), and));
-        result.addAll(processExpr(o.getRight(), and));
-        return result;
-      }
-
-      @NotNull
-      private List<GoExpression> processExpr(@Nullable GoExpression e, boolean and) {
-        if (e == null) return ContainerUtil.emptyList();
-        if (isSameOp(e, and)) {
-          return collect((GoBinaryExpr)e, and);
-        }
-        if (e instanceof GoParenthesesExpr) {
-          return processExpr(((GoParenthesesExpr)e).getExpression(), and);
-        }
-        return Collections.singletonList(e);
-      }
-
-      private boolean isSameOp(GoExpression expr, boolean and) {
-        return and ? expr instanceof GoAndExpr : expr instanceof GoOrExpr;
       }
     };
+  }
+
+  private static void registerProblem(@NotNull GoBinaryExpr o, @NotNull ProblemsHolder holder) {
+    holder.registerProblem(o, "Simplify", new GoSimplifyBoolExprQuickFix(o));
+  }
+
+  public static boolean isEqualsWithNot(@Nullable GoExpression not, @Nullable GoExpression expr) {
+    return not instanceof GoUnaryExpr &&
+           ((GoUnaryExpr)not).getNot() != null &&
+           GoExpressionUtil.identical(((GoUnaryExpr)not).getExpression(), expr);
+  }
+
+  @NotNull
+  public static List<GoExpression> collect(GoBinaryExpr o, boolean and) {
+    List<GoExpression> result = ContainerUtil.newSmartList();
+    result.addAll(processExpr(o.getLeft(), and));
+    result.addAll(processExpr(o.getRight(), and));
+    return result;
+  }
+
+  @NotNull
+  private static List<GoExpression> processExpr(@Nullable GoExpression e, boolean and) {
+    if (e == null) return ContainerUtil.emptyList();
+    if (isSameOp(e, and)) {
+      return collect((GoBinaryExpr)e, and);
+    }
+    if (e instanceof GoParenthesesExpr) {
+      return processExpr(((GoParenthesesExpr)e).getExpression(), and);
+    }
+    return Collections.singletonList(e);
+  }
+
+  private static boolean isSameOp(GoExpression expr, boolean and) {
+    return and ? expr instanceof GoAndExpr : expr instanceof GoOrExpr;
   }
 }
