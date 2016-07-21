@@ -23,6 +23,7 @@ import com.goide.project.GoLibrariesService;
 import com.goide.sdk.GoSdkService;
 import com.goide.sdk.GoSdkUtil;
 import com.intellij.ProjectTopics;
+import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -42,14 +43,13 @@ import com.intellij.util.messages.MessageBusConnection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-
 public class WrongSdkConfigurationNotificationProvider extends EditorNotifications.Provider<EditorNotificationPanel> implements DumbAware {
   private static final Key<EditorNotificationPanel> KEY = Key.create("Setup Go SDK");
+  private static final String DO_NOT_SHOW_NOTIFICATION_ABOUT_EMPTY_GOPATH = "DO_NOT_SHOW_NOTIFICATION_ABOUT_EMPTY_GOPATH";
 
   private final Project myProject;
 
-  public WrongSdkConfigurationNotificationProvider(@NotNull Project project, @NotNull final EditorNotifications notifications) {
+  public WrongSdkConfigurationNotificationProvider(@NotNull Project project, @NotNull EditorNotifications notifications) {
     myProject = project;
     MessageBusConnection connection = myProject.getMessageBus().connect(project);
     connection.subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
@@ -58,12 +58,7 @@ public class WrongSdkConfigurationNotificationProvider extends EditorNotificatio
         notifications.updateAllNotifications();
       }
     });
-    connection.subscribe(GoLibrariesService.LIBRARIES_TOPIC, new GoLibrariesService.LibrariesListener() {
-      @Override
-      public void librariesChanged(@NotNull Collection<String> newRootUrls) {
-        notifications.updateAllNotifications();
-      }
-    });
+    connection.subscribe(GoLibrariesService.LIBRARIES_TOPIC, newRootUrls -> notifications.updateAllNotifications());
   }
 
   @NotNull
@@ -89,36 +84,32 @@ public class WrongSdkConfigurationNotificationProvider extends EditorNotificatio
       return createMissingSdkPanel(myProject, module);
     }
 
-    String goPath = GoSdkUtil.retrieveGoPath(myProject, module);
-    if (StringUtil.isEmpty(goPath.trim())) {
-      return createEmptyGoPathPanel(myProject);
+    if (!PropertiesComponent.getInstance().getBoolean(DO_NOT_SHOW_NOTIFICATION_ABOUT_EMPTY_GOPATH, false)) {
+      String goPath = GoSdkUtil.retrieveGoPath(myProject, module);
+      if (StringUtil.isEmpty(goPath.trim())) {
+        return createEmptyGoPathPanel(myProject);
+      }
     }
 
     return null;
   }
 
   @NotNull
-  private static EditorNotificationPanel createMissingSdkPanel(@NotNull final Project project, @Nullable final Module module) {
+  private static EditorNotificationPanel createMissingSdkPanel(@NotNull Project project, @Nullable Module module) {
     EditorNotificationPanel panel = new EditorNotificationPanel();
     panel.setText(ProjectBundle.message("project.sdk.not.defined"));
-    panel.createActionLabel(ProjectBundle.message("project.sdk.setup"), new Runnable() {
-      @Override
-      public void run() {
-        GoSdkService.getInstance(project).chooseAndSetSdk(module);
-      }
-    });
+    panel.createActionLabel(ProjectBundle.message("project.sdk.setup"), () -> GoSdkService.getInstance(project).chooseAndSetSdk(module));
     return panel;
   }
 
   @NotNull
-  private static EditorNotificationPanel createEmptyGoPathPanel(@NotNull final Project project) {
+  private static EditorNotificationPanel createEmptyGoPathPanel(@NotNull Project project) {
     EditorNotificationPanel panel = new EditorNotificationPanel();
     panel.setText("GOPATH is empty");
-    panel.createActionLabel("Configure Go Libraries", new Runnable() {
-      @Override
-      public void run() {
-        GoLibrariesConfigurableProvider.showModulesConfigurable(project);
-      }
+    panel.createActionLabel("Configure Go Libraries", () -> GoLibrariesConfigurableProvider.showModulesConfigurable(project));
+    panel.createActionLabel("Do not show again", () -> {
+      PropertiesComponent.getInstance().setValue(DO_NOT_SHOW_NOTIFICATION_ABOUT_EMPTY_GOPATH, true);
+      EditorNotifications.getInstance(project).updateAllNotifications();
     });
     return panel;
   }
