@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Releases on IntelliJ Go</title>
+    <link>http://go-ide.com/releases/</link>
+    <description>Recent content in Releases on IntelliJ Go</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 21 Jul 2016 12:42:27 +0300</lastBuildDate>
+    <atom:link href="http://go-ide.com/releases/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>0.11.1725</title>
+      <link>http://go-ide.com/releases/0.11.1725/</link>
+      <pubDate>Thu, 21 Jul 2016 12:42:27 +0300</pubDate>
+      
+      <guid>http://go-ide.com/releases/0.11.1725/</guid>
+      <description>
+
+&lt;p&gt;Changes since 0.11.1288 (11.04.2016)&lt;/p&gt;
+
+&lt;p&gt;This release brings in almost 200 commits that touch almost all the areas of the plugin from adding
+functionality to performance improvements.&lt;/p&gt;
+
+&lt;h2 id=&#34;changes&#34;&gt;Changes&lt;/h2&gt;
+
+&lt;h3 id=&#34;editing&#34;&gt;Editing&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Create Function&lt;/code&gt; quick-fix is now available! It suggests to create a function
+with the appropriate types or with the &lt;code&gt;interface{}&lt;/code&gt; types if the original types are not allowed to be used.
+
+&lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/create_function.gif&#34; alt=&#34;&#34;&gt;
+&lt;/li&gt;
+&lt;li&gt;New &lt;code&gt;Move statement up&lt;/code&gt; (&lt;code&gt;Cmd-Shift-Up&lt;/code&gt;) and &lt;code&gt;Move statement down&lt;/code&gt; (&lt;code&gt;Cmd-Shift-Down&lt;/code&gt;) actions
+&lt;br/&gt;for variable declarations
+
+&lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/moving_statement_1.gif&#34; alt=&#34;&#34;&gt;
+
+and for block statements.
+
+&lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/moving_statement_2.gif&#34; alt=&#34;&#34;&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;\n&lt;/code&gt; will now be correctly inserted when you add a new line.
+
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/enter_in_string_literal.gif&#34; width=&#34;319px&#34; &gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Complete statement&lt;/code&gt; action (&lt;code&gt;Cmd+Shift+Enter&lt;/code&gt;) has been improved.
+
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/smart_enter.gif&#34; width=&#34;300px&#34; &gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;With the new icons on the editor gutter you can now easily run applications and tests.
+
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/run_app_gutter.png&#34; width=&#34;334px&#34; &gt;
+&lt;/div&gt;
+
+
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/run_test_gutter.png&#34; width=&#34;390px&#34; &gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;New &lt;code&gt;Surround with&lt;/code&gt; action (&lt;code&gt;Alt-Cmd-T&lt;/code&gt; on OS X or &lt;code&gt;Ctrl-Alt-T&lt;/code&gt; on Windows and Linux).
+
+&lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/surround.gif&#34; alt=&#34;&#34;&gt;
+&lt;/li&gt;
+&lt;li&gt;New &lt;code&gt;Unwrap&lt;/code&gt; action (&lt;code&gt;Shift-Cmd-Backspace&lt;/code&gt; on OS X or &lt;code&gt;Ctrl-Shift-Delete&lt;/code&gt; on Windows and Linux).
+
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/unwrap.gif&#34; width=&#34;530px&#34; &gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;Implemented &lt;a href=&#34;https://github.com/fatih&#34;&gt;Fatih&amp;rsquo;s&lt;/a&gt; idea of completing struct tags.
+Completion items for tags are fully customizable on &lt;code&gt;Settings | Editor | Live Templates | Go Struct Tags&lt;/code&gt; page.
+
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1725/json_xml_live_templates.gif&#34; width=&#34;480px&#34; &gt;
+&lt;/div&gt;
+
+
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1725/json_xml_live_templates_multicursor.gif&#34; width=&#34;544px&#34; &gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;completion&#34;&gt;Completion&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Receiver types completion now contains types from current package only.
+
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1725/receiver_type_completion.png&#34; width=&#34;226px&#34; &gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;Function parameter info is now displayed right after you complete a function or a method name.
+
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/parameter_info_on_completion.gif&#34; width=&#34;300px&#34; &gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;Completion for &lt;code&gt;range&lt;/code&gt; keyword.&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Completion for &lt;code&gt;type&lt;/code&gt; keyword inside the blocks.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Improved code completion in &lt;code&gt;struct&lt;/code&gt; literals:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;no suggested field names when &lt;code&gt;value&lt;/code&gt; initializer is used;&lt;/li&gt;
+&lt;li&gt;no suggested values when &lt;code&gt;field:value&lt;/code&gt; initializer is used;&lt;/li&gt;
+&lt;li&gt;shows only unassigned fields in the code completion popup.
+
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/struct_literal_completion.png&#34; width=&#34;370px&#34; &gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;inspections&#34;&gt;Inspections&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;A new inspection now highlights redundant declarations and provides corresponding cleanup actions.
+
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/cleanup_fixes.gif&#34; width=&#34;300px&#34; &gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;Another new inspection now warns you if the iterations on pointer to slices are not valid.
+
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/cannot_range_on_pointer_to_array.png&#34; width=&#34;399px&#34; &gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;The &lt;code&gt;Placeholder count&lt;/code&gt; inspection is now valid for &lt;code&gt;Logf&lt;/code&gt;, &lt;code&gt;Skipf&lt;/code&gt;, &lt;code&gt;Errorf&lt;/code&gt;, and &lt;code&gt;Fatalf&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;The &lt;code&gt;Defer&lt;/code&gt; inspection now has a quick-fix to convert functions to function calls.
+
+&lt;div class=&#34;pure-u-1&#34;&gt;
+  &lt;img class=&#34;pure-img&#34; src=&#34;http://go-ide.com/images/1654/defer_function_call.png&#34; width=&#34;326px&#34; &gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;debugger&#34;&gt;Debugger&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Delve now supports passing parameters on Windows.&lt;/li&gt;
+&lt;li&gt;A new version of Delve fixes an issue with the race condition that was causing skipping breakpoints when debugging from the IDE.&lt;/li&gt;
+&lt;li&gt;Lots of internal improvements in Delve.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;other&#34;&gt;Other&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Improved performance of code completion, unused inspections and find usages actions.&lt;/li&gt;
+&lt;li&gt;The auto-import completion now uses less memory.&lt;/li&gt;
+&lt;li&gt;Improved type calculation for nested types.&lt;/li&gt;
+&lt;li&gt;Code completion for Live templates is now disabled inside the comments.&lt;/li&gt;
+&lt;li&gt;The plugin won&amp;rsquo;t nag you about the wiki page every time you install a new version.&lt;/li&gt;
+&lt;li&gt;A new Darcula-based editor theme is now available.&lt;/li&gt;
+&lt;li&gt;Improved output of passed tests.&lt;/li&gt;
+&lt;li&gt;The &lt;code&gt;Introduce variable&lt;/code&gt; refactoring now suggests names based on expression type that are used.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Many other changes and fixes have been introduced to increase the overall stability, functionality, and performance of the plugin.&lt;/p&gt;
+
+&lt;p&gt;For a full list of plugin changes, please visit &lt;a href=&#34;https://github.com/go-lang-plugin-org/go-lang-idea-plugin/compare/2c63b95...16d7e44&#34;&gt;this page&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Develop with pleasure!&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
