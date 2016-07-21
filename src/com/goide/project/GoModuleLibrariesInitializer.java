@@ -115,7 +115,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
         }
       });
 
-      final Project project = myModule.getProject();
+      Project project = myModule.getProject();
       StartupManager.getInstance(project).runWhenProjectIsInitialized(new Runnable() {
         @Override
         public void run() {
@@ -151,7 +151,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     }
   }
 
-  private void attachLibraries(@NotNull final Collection<VirtualFile> libraryRoots, final Set<VirtualFile> exclusions) {
+  private void attachLibraries(@NotNull Collection<VirtualFile> libraryRoots, Set<VirtualFile> exclusions) {
     ApplicationManager.getApplication().assertIsDispatchThread();
 
     if (!libraryRoots.isEmpty()) {
@@ -209,9 +209,9 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   private void removeLibraryIfNeeded() {
     ApplicationManager.getApplication().assertIsDispatchThread();
 
-    final ModifiableModelsProvider modelsProvider = ModifiableModelsProvider.SERVICE.getInstance();
-    final ModifiableRootModel model = modelsProvider.getModuleModifiableModel(myModule);
-    final LibraryOrderEntry goLibraryEntry = OrderEntryUtil.findLibraryOrderEntry(model, getLibraryName());
+    ModifiableModelsProvider modelsProvider = ModifiableModelsProvider.SERVICE.getInstance();
+    ModifiableRootModel model = modelsProvider.getModuleModifiableModel(myModule);
+    LibraryOrderEntry goLibraryEntry = OrderEntryUtil.findLibraryOrderEntry(model, getLibraryName());
     if (goLibraryEntry != null) {
       ApplicationManager.getApplication().runWriteAction(new Runnable() {
         @Override
@@ -241,12 +241,14 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     }
   }
 
-  private static void showNotification(@NotNull final Project project) {
-    PropertiesComponent propertiesComponent = PropertiesComponent.getInstance(project);
+  private static void showNotification(@NotNull Project project) {
+    PropertiesComponent propertiesComponent = PropertiesComponent.getInstance();
+    PropertiesComponent projectPropertiesComponent = PropertiesComponent.getInstance(project);
     boolean shownAlready;
     //noinspection SynchronizationOnLocalVariableOrMethodParameter
     synchronized (propertiesComponent) {
-      shownAlready = propertiesComponent.getBoolean(GO_LIBRARIES_NOTIFICATION_HAD_BEEN_SHOWN, false);
+      shownAlready = propertiesComponent.getBoolean(GO_LIBRARIES_NOTIFICATION_HAD_BEEN_SHOWN, false)
+                     || projectPropertiesComponent.getBoolean(GO_LIBRARIES_NOTIFICATION_HAD_BEEN_SHOWN, false);
       if (!shownAlready) {
         propertiesComponent.setValue(GO_LIBRARIES_NOTIFICATION_HAD_BEEN_SHOWN, String.valueOf(true));
       }
@@ -273,7 +275,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     if (!myModuleInitialized || myModule.isDisposed()) {
       return;
     }
-    final Project project = myModule.getProject();
+    Project project = myModule.getProject();
     String version = GoSdkService.getInstance(project).getSdkVersion(myModule);
     if (!GoVendoringUtil.supportsVendoring(version) || GoVendoringUtil.supportsVendoringByDefault(version)) {
       return;
@@ -345,14 +347,14 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   private class UpdateRequest implements Runnable {
     @Override
     public void run() {
-      final Project project = myModule.getProject();
+      Project project = myModule.getProject();
       if (GoSdkService.getInstance(project).isGoModule(myModule)) {
         synchronized (myLastHandledGoPathSourcesRoots) {
-          final Collection<VirtualFile> goPathSourcesRoots = GoSdkUtil.getGoPathSources(project, myModule);
-          final Set<VirtualFile> excludeRoots = ContainerUtil.newHashSet(ProjectRootManager.getInstance(project).getContentRoots());
+          Collection<VirtualFile> goPathSourcesRoots = GoSdkUtil.getGoPathSources(project, myModule);
+          Set<VirtualFile> excludeRoots = ContainerUtil.newHashSet(ProjectRootManager.getInstance(project).getContentRoots());
           ProgressIndicatorProvider.checkCanceled();
           if (!myLastHandledGoPathSourcesRoots.equals(goPathSourcesRoots) || !myLastHandledExclusions.equals(excludeRoots)) {
-            final Collection<VirtualFile> includeRoots = gatherIncludeRoots(goPathSourcesRoots, excludeRoots);
+            Collection<VirtualFile> includeRoots = gatherIncludeRoots(goPathSourcesRoots, excludeRoots);
             ApplicationManager.getApplication().invokeLater(new Runnable() {
               @Override
               public void run() {
@@ -394,7 +396,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
 
   @NotNull
   private static Collection<VirtualFile> gatherIncludeRoots(Collection<VirtualFile> goPathSourcesRoots, Set<VirtualFile> excludeRoots) {
-    final Collection<VirtualFile> includeRoots = ContainerUtil.newHashSet();
+    Collection<VirtualFile> includeRoots = ContainerUtil.newHashSet();
     for (VirtualFile goPathSourcesDirectory : goPathSourcesRoots) {
       ProgressIndicatorProvider.checkCanceled();
       boolean excludedRootIsAncestor = false;
