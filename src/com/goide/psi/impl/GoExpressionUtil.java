@@ -55,7 +55,7 @@ public class GoExpressionUtil {
       return identical(lSlice.getExpression(), rSlice.getExpression()) && isIndicesIdentical(lSlice.getIndices(), rSlice.getIndices());
     }
     if (l instanceof GoStringLiteral) {
-      return Comparing.equal(((GoStringLiteral)l).getDecodeString(), ((GoStringLiteral)r).getDecodeString());
+      return Comparing.equal(((GoStringLiteral)l).getDecodedText(), ((GoStringLiteral)r).getDecodedText());
     }
     if (l instanceof GoLiteralTypeExpr) {
       GoLiteralTypeExpr lLit = (GoLiteralTypeExpr)l;

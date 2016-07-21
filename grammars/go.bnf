@@ -303,7 +303,7 @@ Literal ::=
 
 StringLiteral ::= string | raw_string {
   implements = "com.intellij.psi.PsiLanguageInjectionHost"
-  methods = [isValidHost updateText createLiteralTextEscaper getDecodeString]
+  methods = [isValidHost updateText createLiteralTextEscaper getDecodedText]
 }
 OperandName ::= ReferenceExpression QualifiedReferenceExpression? {elementType=ReferenceExpression}
 

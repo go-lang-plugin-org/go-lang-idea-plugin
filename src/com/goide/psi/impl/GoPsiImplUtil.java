@@ -375,7 +375,7 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static GoType getGoTypeInner(@NotNull GoExpression o, @Nullable ResolveState context) {
+  private static GoType getGoTypeInner(@NotNull GoExpression o, @Nullable ResolveState context) {
     if (o instanceof GoUnaryExpr) {
       GoUnaryExpr u = (GoUnaryExpr)o;
       GoExpression e = u.getExpression();
@@ -904,7 +904,7 @@ public class GoPsiImplUtil {
       return false;
     }
     // it's not a test or context file is also test from the same package
-    return referenceFile == null 
+    return referenceFile == null
            || !GoTestFinder.isTestFile(declarationFile)
            || GoTestFinder.isTestFile(referenceFile) && Comparing.equal(referenceFile.getParent(), declarationFile.getParent());
   }
@@ -1545,7 +1545,7 @@ public class GoPsiImplUtil {
       max = ContainerUtil.getFirstItem(getExpressionsInRange(exprList, colons[1].getPsi(), slice.getRbrack()));
     }
 
-    return new Trinity<GoExpression, GoExpression, GoExpression>(start, end, max);
+    return Trinity.create(start, end, max);
   }
 
   @NotNull
@@ -1645,6 +1645,7 @@ public class GoPsiImplUtil {
     return Read;
   }
 
+  @NotNull
   private static GoExpression getConsiderableExpression(@NotNull GoExpression element) {
     GoExpression result = element;
     while (true) {
@@ -1668,11 +1669,10 @@ public class GoPsiImplUtil {
   }
 
   @Nullable
-  public static String getDecodeString(@NotNull GoStringLiteral o) {
-    String string = o.getText();
-    if (string == null || string.isEmpty()) return null;
+  public static String getDecodedText(@NotNull GoStringLiteral o) {
     StringBuilder builder = new StringBuilder();
-    o.createLiteralTextEscaper().decode(new TextRange(1, string.length() - 1), builder);
+    TextRange range = ElementManipulators.getManipulator(o).getRangeInElement(o);
+    o.createLiteralTextEscaper().decode(range, builder);
     return builder.toString();
   }
 
@@ -1690,28 +1690,27 @@ public class GoPsiImplUtil {
     if (o instanceof GoSelectorExpr) return ((GoSelectorExpr)o).getDot();
     if (o instanceof GoConversionExpr) return ((GoConversionExpr)o).getComma();
 
-    PsiElement[] operators = null;
     if (o instanceof GoMulExpr) {
       GoMulExpr m = (GoMulExpr)o;
-      operators = new PsiElement[]{m.getMul(), m.getQuotient(), m.getRemainder(), m.getShiftRight(), m.getShiftLeft(), m.getBitAnd(),
-        m.getBitClear()};
+      return getNotNullElement(m.getMul(), m.getQuotient(), m.getRemainder(), m.getShiftRight(), m.getShiftLeft(), m.getBitAnd(),
+                               m.getBitClear());
     }
-    else if (o instanceof GoAddExpr) {
+    if (o instanceof GoAddExpr) {
       GoAddExpr a = (GoAddExpr)o;
-      operators = new PsiElement[]{a.getBitXor(), a.getBitOr(), a.getMinus(), a.getPlus()};
+      return getNotNullElement(a.getBitXor(), a.getBitOr(), a.getMinus(), a.getPlus());
     }
-    else if (o instanceof GoConditionalExpr) {
+    if (o instanceof GoConditionalExpr) {
       GoConditionalExpr c = (GoConditionalExpr)o;
-      operators = new PsiElement[]{c.getEq(), c.getNotEq(), c.getGreater(), c.getGreaterOrEqual(), c.getLess(), c.getLessOrEqual()};
+      return getNotNullElement(c.getEq(), c.getNotEq(), c.getGreater(), c.getGreaterOrEqual(), c.getLess(), c.getLessOrEqual());
     }
-    return getNotNullElement(operators);
+    return null;
   }
 
   @Nullable
-  private static PsiElement getNotNullElement(@Nullable PsiElement[] elements) {
+  private static PsiElement getNotNullElement(@Nullable PsiElement... elements) {
     if (elements == null) return null;
-    for (int i = 0; i < elements.length; i++) {
-      if (elements[i] != null) return elements[i];
+    for (PsiElement e : elements) {
+      if (e != null) return e;
     }
     return null;
   }
