@@ -16,24 +16,29 @@
 
 package com.goide.quickfix;
 
+import com.goide.inspections.GoBoolExpressionsInspection;
 import com.goide.psi.GoAndExpr;
+import com.goide.psi.GoBinaryExpr;
 import com.goide.psi.GoExpression;
+import com.goide.psi.GoReferenceExpression;
 import com.goide.psi.impl.GoElementFactory;
+import com.goide.psi.impl.GoExpressionUtil;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInspection.LocalQuickFixOnPsiElement;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public abstract class GoSimplifyBoolExprQuickFix extends LocalQuickFixOnPsiElement {
+public class GoSimplifyBoolExprQuickFix extends LocalQuickFixOnPsiElement {
 
   public static final String QUICK_FIX_NAME = "Simplify expression";
 
-  private GoSimplifyBoolExprQuickFix(@NotNull PsiElement element) {
+  public GoSimplifyBoolExprQuickFix(@NotNull PsiElement element) {
     super(element);
   }
 
@@ -49,44 +54,61 @@ public abstract class GoSimplifyBoolExprQuickFix extends LocalQuickFixOnPsiEleme
     return "Simplify expression";
   }
 
+  @Override
+  public void invoke(@NotNull Project project, @NotNull PsiFile file, @NotNull PsiElement startElement, @NotNull PsiElement endElement) {
+    if (!(startElement instanceof GoBinaryExpr)) return;
+    GoBinaryExpr o = (GoBinaryExpr)startElement;
+    boolean and = o instanceof GoAndExpr;
 
-  public static class RemoveRedundantExpressions extends GoSimplifyBoolExprQuickFix {
-    private final List<GoExpression> myExpressions;
-    private final List<GoExpression> myToRemove;
+    List<GoExpression> elements = GoBoolExpressionsInspection.collect(o, and);
+    List<GoExpression> toRemove = ContainerUtil.newSmartList();
+    for (int i = 0; i < elements.size(); i++) {
+      GoExpression l = elements.get(i);
+      if (l instanceof GoReferenceExpression &&
+          (l.textMatches("true") || l.textMatches("false")) &&
+          GoPsiImplUtil.builtin(((GoReferenceExpression)l).resolve())) {
+        boolean trueExpr = l.textMatches("true");
+        if (and ^ !trueExpr) {
+          toRemove.add(l);
+        }
+        else {
+          replaceExpressionByBoolConst(o, project, !and);
+          return;
+        }
+      }
+      for (int j = i + 1; j < elements.size(); j++) {
+        GoExpression r = elements.get(j);
+        if (GoBoolExpressionsInspection.isEqualsWithNot(l, r) || GoBoolExpressionsInspection.isEqualsWithNot(r, l)) {
+          replaceExpressionByBoolConst(o, project, !and);
+        }
 
-    public RemoveRedundantExpressions(@NotNull PsiElement element,
-                                      @NotNull List<GoExpression> expressions,
-                                      @NotNull List<GoExpression> toRemove) {
-      super(element);
-      myExpressions = expressions;
-      myToRemove = toRemove;
+        if (GoExpressionUtil.identical(l, r)) toRemove.add(l);
+        // todo expr evaluating! x != c1 || x != c2 (c1, c2 const, c1 != c2)
+      }
     }
 
-    @Override
-    public void invoke(@NotNull Project project, @NotNull PsiFile file, @NotNull PsiElement startElement, @NotNull PsiElement endElement) {
-      for (GoExpression e : myToRemove) {
-        myExpressions.remove(e);
-      }
-      String separator = startElement instanceof GoAndExpr ? " && " : " || ";
-      String text = StringUtil.join(myExpressions, GoPsiImplUtil.GET_TEXT_FUNCTION, separator);
-      GoExpression expression = GoElementFactory.createExpression(project, text);
-      startElement.replace(expression);
+    if (!toRemove.isEmpty()) {
+      removeRedundantExpressions(o, project, elements, toRemove, and);
     }
   }
 
-  public static class ReplaceAllByBoolConst extends GoSimplifyBoolExprQuickFix {
-
-    private final boolean trueVal;
-
-    public ReplaceAllByBoolConst(@NotNull PsiElement element, boolean trueVal) {
-      super(element);
-      this.trueVal = trueVal;
+  private static void removeRedundantExpressions(@NotNull GoBinaryExpr binaryExpr,
+                                          @NotNull Project project,
+                                          @NotNull List<GoExpression> expressions,
+                                          @NotNull List<GoExpression> toRemove,
+                                          boolean and) {
+    for (GoExpression e : toRemove) {
+      expressions.remove(e);
     }
+    String separator = and ? " && " : " || ";
+    String text = StringUtil.join(expressions, GoPsiImplUtil.GET_TEXT_FUNCTION, separator);
+    GoExpression expression = GoElementFactory.createExpression(project, text);
+    binaryExpr.replace(expression);
+  }
 
-    @Override
-    public void invoke(@NotNull Project project, @NotNull PsiFile file, @NotNull PsiElement startElement, @NotNull PsiElement endElement) {
-      GoExpression expression = GoElementFactory.createExpression(project, trueVal ? "true" : "false");
-      startElement.replace(expression);
-    }
+
+  private static void replaceExpressionByBoolConst(@NotNull GoBinaryExpr binaryExpr, @NotNull Project project, boolean value) {
+    GoExpression expression = GoElementFactory.createExpression(project, value ? "true" : "false");
+    binaryExpr.replace(expression);
   }
 }
