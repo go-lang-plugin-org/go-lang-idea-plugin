@@ -26,21 +26,16 @@ menu:
         weight: 0
         identifier: "home"
         url: "/"
+      - name: "Releases"
+        pre: "<i class='fa' style='width: 1em;'></i>"
+        weight: 1
+        identifier: "releases"
+        url: "/topics/releases"
       - name: "Alpha"
         pre: "<i class='fa' style='width: 1em;'></i>"
         weight: 2
         identifier: "alpha"
         url: "/topics/alpha"
-#      - name: "Changelog"
-#        pre: "<i class='fa fa-clock-o'></i>"
-#        weight: 1
-#        identifier: "changelog"
-#        url: "/changelog"
-#      - name: "Nightly"
-#        pre: "<i class='fa fa-moon-o'></i>"
-#        weight: 3
-#        identifier: "nightly"
-#        url: "/nightly"
 
 social:
  github: "go-lang-plugin-org/go-lang-idea-plugin"
