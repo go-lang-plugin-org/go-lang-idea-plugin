@@ -22,7 +22,9 @@ import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.quickfix.GoSimplifyBoolExprQuickFix;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,20 +39,16 @@ public class GoBoolExpressionsInspection extends GoInspectionBase {
     return new GoVisitor() {
       @Override
       public void visitAndExpr(@NotNull GoAndExpr o) {
-        visitExpr(o);
+        visitExpr(o, true);
       }
 
       @Override
       public void visitOrExpr(@NotNull GoOrExpr o) {
-        visitExpr(o);
+        visitExpr(o, false);
       }
 
-      private void visitExpr(GoBinaryExpr o) {
-        boolean and = o instanceof GoAndExpr;
-
-        PsiElement parent = o.getParent();
-        while (parent instanceof GoParenthesesExpr) parent = parent.getParent();
-        if (parent instanceof GoBinaryExpr && isSameOp((GoExpression)parent, and)) return;
+      private void visitExpr(GoBinaryExpr o, boolean and) {
+        if (!isTopmostOperationOfType(o, and)) return;
 
         List<GoExpression> elements = collect(o, and);
         for (int i = 0; i < elements.size(); i++) {
@@ -61,6 +59,7 @@ public class GoBoolExpressionsInspection extends GoInspectionBase {
             return;
           }
           for (int j = i + 1; j < elements.size(); j++) {
+            ProgressManager.checkCanceled();
             GoExpression r = elements.get(j);
             if (isEqualsWithNot(l, r) || isEqualsWithNot(r, l) || GoExpressionUtil.identical(l, r)) {
               registerProblem(o, holder);
@@ -69,6 +68,11 @@ public class GoBoolExpressionsInspection extends GoInspectionBase {
             // todo expr evaluating! x != c1 || x != c2 (c1, c2 const, c1 != c2)
           }
         }
+      }
+
+      private boolean isTopmostOperationOfType(GoBinaryExpr o, boolean isAndType) {
+        PsiElement parent = PsiTreeUtil.skipParentsOfType(o, GoParenthesesExpr.class);
+        return !(parent instanceof GoBinaryExpr) || !isSameOp((GoExpression)parent, isAndType);
       }
     };
   }

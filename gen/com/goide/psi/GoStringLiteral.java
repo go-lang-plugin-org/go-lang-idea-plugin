@@ -40,7 +40,7 @@ public interface GoStringLiteral extends GoExpression, PsiLanguageInjectionHost 
   @NotNull
   GoStringLiteralEscaper createLiteralTextEscaper();
 
-  @Nullable
+  @NotNull
   String getDecodedText();
 
 }

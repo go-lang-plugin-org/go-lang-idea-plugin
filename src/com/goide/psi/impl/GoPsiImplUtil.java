@@ -1668,7 +1668,7 @@ public class GoPsiImplUtil {
     }
   }
 
-  @Nullable
+  @NotNull
   public static String getDecodedText(@NotNull GoStringLiteral o) {
     StringBuilder builder = new StringBuilder();
     TextRange range = ElementManipulators.getManipulator(o).getRangeInElement(o);
@@ -1678,9 +1678,7 @@ public class GoPsiImplUtil {
 
   @Nullable
   public static PsiElement getOperator(@NotNull GoUnaryExpr o) {
-    PsiElement[] operators =
-      new PsiElement[]{o.getNot(), o.getMinus(), o.getPlus(), o.getBitAnd(), o.getBitXor(), o.getMul(), o.getSendChannel()};
-    return getNotNullElement(operators);
+    return getNotNullElement(o.getNot(), o.getMinus(), o.getPlus(), o.getBitAnd(), o.getBitXor(), o.getMul(), o.getSendChannel());
   }
 
   @Nullable

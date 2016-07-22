@@ -68,7 +68,7 @@ public class GoStringLiteralImpl extends GoExpressionImpl implements GoStringLit
     return GoPsiImplUtil.createLiteralTextEscaper(this);
   }
 
-  @Nullable
+  @NotNull
   public String getDecodedText() {
     return GoPsiImplUtil.getDecodedText(this);
   }
