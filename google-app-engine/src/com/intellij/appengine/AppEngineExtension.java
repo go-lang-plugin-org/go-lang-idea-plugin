@@ -30,12 +30,9 @@ public abstract class AppEngineExtension {
 
   public static void enableTestingMode(@NotNull Disposable disposable) {
     ourTestingMode = true;
-    Disposer.register(disposable, new Disposable() {
-      @Override
-      public void dispose() {
-        //noinspection AssignmentToStaticFieldFromInstanceMethod
-        ourTestingMode = false;
-      }
+    Disposer.register(disposable, () -> {
+      //noinspection AssignmentToStaticFieldFromInstanceMethod
+      ourTestingMode = false;
     });
   }
 

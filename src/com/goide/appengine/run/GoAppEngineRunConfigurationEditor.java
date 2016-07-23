@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,9 @@ package com.goide.appengine.run;
 import com.goide.appengine.YamlFilesModificationTracker;
 import com.goide.runconfig.GoRunUtil;
 import com.goide.runconfig.ui.GoCommonSettingsPanel;
-import com.goide.util.GoUtil;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.TextFieldWithHistoryWithBrowseButton;
@@ -77,13 +75,8 @@ public class GoAppEngineRunConfigurationEditor extends SettingsEditor<GoAppEngin
   }
 
   private void initConfigFileField(@NotNull Project project) {
-    GoRunUtil.installFileChooser(project, myConfigFileField, false, false, new Condition<VirtualFile>() {
-      @Override
-      public boolean value(VirtualFile file) {
-        return "yaml".equals(file.getExtension());
-      }
-    });
+    GoRunUtil.installFileChooser(project, myConfigFileField, false, false, file -> "yaml".equals(file.getExtension()));
     myConfigFileField.getChildComponent().setHistory(ContainerUtil.map2List(
-      YamlFilesModificationTracker.getYamlFiles(project, null), GoUtil.RETRIEVE_FILE_PATH_FUNCTION));
+      YamlFilesModificationTracker.getYamlFiles(project, null), VirtualFile::getPath));
   }
 }

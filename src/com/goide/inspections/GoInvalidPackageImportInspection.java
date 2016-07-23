@@ -159,19 +159,16 @@ public class GoInvalidPackageImportInspection extends GoInspectionBase {
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
       GoImportSpec element = ObjectUtils.tryCast(descriptor.getPsiElement(), GoImportSpec.class);
       if (element != null) {
-        WriteCommandAction.runWriteCommandAction(project, new Runnable() {
-          @Override
-          public void run() {
-            PsiElement dot = element.getDot();
-            if (dot != null) {
-              dot.delete();
-              return;
-            }
+        WriteCommandAction.runWriteCommandAction(project, () -> {
+          PsiElement dot = element.getDot();
+          if (dot != null) {
+            dot.delete();
+            return;
+          }
 
-            PsiElement identifier = element.getIdentifier();
-            if (identifier != null) {
-              identifier.delete();
-            }
+          PsiElement identifier = element.getIdentifier();
+          if (identifier != null) {
+            identifier.delete();
           }
         });
       }

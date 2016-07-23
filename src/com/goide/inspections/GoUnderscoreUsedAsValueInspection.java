@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 public class GoUnderscoreUsedAsValueInspection extends GoInspectionBase {
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
+  protected GoVisitor buildGoVisitor(@NotNull ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
       public void visitReferenceExpression(@NotNull GoReferenceExpression o) {

@@ -24,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
+@SuppressWarnings("ConstantConditions")
 public interface GoIcons {
   Icon ICON = IconLoader.findIcon("/icons/go.png");
   Icon TYPE = IconLoader.findIcon("/icons/type.png");
@@ -46,7 +47,7 @@ public interface GoIcons {
     private Helper() {}
 
     @NotNull
-    public static LayeredIcon createIconWithShift(@NotNull final Icon base, Icon mark) {
+    public static LayeredIcon createIconWithShift(@NotNull Icon base, Icon mark) {
       LayeredIcon icon = new LayeredIcon(2) {
         @Override
         public int getIconHeight() {

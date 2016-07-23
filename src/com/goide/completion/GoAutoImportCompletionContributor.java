@@ -121,7 +121,7 @@ public class GoAutoImportCompletionContributor extends CompletionContributor {
                                                                     @Nullable IdFilter idFilter,
                                                                     @NotNull GoFile file) {
     String prefix = matcher.getPrefix();
-    final boolean emptyPrefix = prefix.isEmpty();
+    boolean emptyPrefix = prefix.isEmpty();
 
     Set<String> packagesWithAliases = ContainerUtil.newHashSet();
     if (!emptyPrefix) {

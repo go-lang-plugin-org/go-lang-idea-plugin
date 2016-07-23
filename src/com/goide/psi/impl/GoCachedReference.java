@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,12 +32,7 @@ public abstract class GoCachedReference<T extends PsiElement> extends PsiReferen
   }
 
   private static final ResolveCache.AbstractResolver<GoCachedReference, PsiElement> MY_RESOLVER =
-    new ResolveCache.AbstractResolver<GoCachedReference, PsiElement>() {
-      @Override
-      public PsiElement resolve(@NotNull GoCachedReference r, boolean b) {
-        return r.resolveInner();
-      }
-    };
+    (r, b) -> r.resolveInner();
 
   @Nullable
   protected abstract PsiElement resolveInner();

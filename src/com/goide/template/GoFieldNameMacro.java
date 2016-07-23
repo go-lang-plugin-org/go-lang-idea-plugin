@@ -17,14 +17,13 @@
 package com.goide.template;
 
 import com.goide.psi.GoFieldDeclaration;
-import com.goide.psi.GoFieldDefinition;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.codeInsight.template.*;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -53,12 +52,7 @@ public class GoFieldNameMacro extends Macro {
   @Nullable
   @Override
   public LookupElement[] calculateLookupItems(@NotNull Expression[] params, ExpressionContext context) {
-    return ContainerUtil.map2Array(fieldNames(context), LookupElement.class, new Function<String, LookupElement>() {
-      @Override
-      public LookupElement fun(String s) {
-        return LookupElementBuilder.create(s);
-      }
-    });
+    return ContainerUtil.map2Array(fieldNames(context), LookupElement.class, LookupElementBuilder::create);
   }
 
   @Override
@@ -72,11 +66,6 @@ public class GoFieldNameMacro extends Macro {
     if (fieldDeclaration == null) {
       return Collections.emptySet();
     }
-    return ContainerUtil.map2LinkedSet(fieldDeclaration.getFieldDefinitionList(), new Function<GoFieldDefinition, String>() {
-      @Override
-      public String fun(GoFieldDefinition definition) {
-        return definition.getName();
-      }
-    });
+    return ContainerUtil.map2LinkedSet(fieldDeclaration.getFieldDefinitionList(), PsiNamedElement::getName);
   }
 }

@@ -22,7 +22,6 @@ import com.goide.runconfig.testing.frameworks.gobench.GobenchFramework;
 import com.goide.runconfig.testing.frameworks.gocheck.GocheckFramework;
 import com.goide.runconfig.testing.frameworks.gotest.GotestFramework;
 import com.goide.runconfig.ui.GoCommonSettingsPanel;
-import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
@@ -30,14 +29,11 @@ import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.EditorTextField;
 import com.intellij.ui.ListCellRendererWrapper;
-import com.intellij.util.Producer;
 import org.intellij.lang.regexp.RegExpLanguage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Locale;
 
 public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunConfiguration> {
@@ -136,13 +132,8 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
 
   private void createUIComponents() {
     myPatternEditor = new EditorTextField("", null, RegExpLanguage.INSTANCE.getAssociatedFileType());
-    myPackageField = new GoPackageFieldCompletionProvider(new Producer<Module>() {
-      @Nullable
-      @Override
-      public Module produce() {
-        return myCommonSettingsPanel != null ? myCommonSettingsPanel.getSelectedModule() : null;
-      }
-    }).createEditor(myProject);
+    myPackageField = new GoPackageFieldCompletionProvider(
+      () -> myCommonSettingsPanel != null ? myCommonSettingsPanel.getSelectedModule() : null).createEditor(myProject);
   }
 
   @Nullable
@@ -169,11 +160,6 @@ public class GoTestRunConfigurationEditorForm extends SettingsEditor<GoTestRunCo
     for (GoTestRunConfiguration.Kind kind : GoTestRunConfiguration.Kind.values()) {
       myTestKindComboBox.addItem(kind);
     }
-    myTestKindComboBox.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(@NotNull ActionEvent e) {
-        onTestKindChanged();
-      }
-    });
+    myTestKindComboBox.addActionListener(e -> onTestKindChanged());
   }
 }

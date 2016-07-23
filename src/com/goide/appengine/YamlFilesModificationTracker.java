@@ -71,20 +71,16 @@ public class YamlFilesModificationTracker extends SimpleModificationTracker {
   }
 
   @NotNull
-  public static Collection<VirtualFile> getYamlFiles(@NotNull final Project project, @Nullable final Module module) {
+  public static Collection<VirtualFile> getYamlFiles(@NotNull Project project, @Nullable Module module) {
     UserDataHolder dataHolder = ObjectUtils.notNull(module, project);
-    return CachedValuesManager.getManager(project).getCachedValue(dataHolder, new CachedValueProvider<Collection<VirtualFile>>() {
-      @Nullable
-      @Override
-      public Result<Collection<VirtualFile>> compute() {
-        Collection<VirtualFile> yamlFiles = ApplicationManager.getApplication().runReadAction(new Computable<Collection<VirtualFile>>() {
-          @Override
-          public Collection<VirtualFile> compute() {
-            return FilenameIndex.getAllFilesByExt(project, "yaml", GoUtil.moduleScopeWithoutLibraries(project, module));
-          }
-        });
-        return Result.create(yamlFiles, getInstance(project));
-      }
+    return CachedValuesManager.getManager(project).getCachedValue(dataHolder, () -> {
+      Collection<VirtualFile> yamlFiles = ApplicationManager.getApplication().runReadAction(new Computable<Collection<VirtualFile>>() {
+        @Override
+        public Collection<VirtualFile> compute() {
+          return FilenameIndex.getAllFilesByExt(project, "yaml", GoUtil.moduleScopeWithoutLibraries(project, module));
+        }
+      });
+      return CachedValueProvider.Result.create(yamlFiles, getInstance(project));
     });
   }
 }

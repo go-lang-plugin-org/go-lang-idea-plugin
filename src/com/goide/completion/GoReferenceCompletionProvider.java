@@ -24,7 +24,6 @@ import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.util.Condition;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.PsiMultiReference;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -34,6 +33,8 @@ import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Set;
 
 import static com.goide.completion.GoCompletionUtil.createPrefixMatcher;
 
@@ -72,8 +73,8 @@ public class GoReferenceCompletionProvider extends CompletionProvider<Completion
     }
     else if (reference instanceof GoTypeReference) {
       PsiElement element = reference.getElement();
-      final PsiElement spec = PsiTreeUtil.getParentOfType(element, GoFieldDeclaration.class, GoTypeSpec.class);
-      final boolean insideParameter = PsiTreeUtil.getParentOfType(element, GoParameterDeclaration.class) != null;
+      PsiElement spec = PsiTreeUtil.getParentOfType(element, GoFieldDeclaration.class, GoTypeSpec.class);
+      boolean insideParameter = PsiTreeUtil.getParentOfType(element, GoParameterDeclaration.class) != null;
       ((GoTypeReference)reference).processResolveVariants(new MyGoScopeProcessor(result, file, true) {
         @Override
         protected boolean accept(@NotNull PsiElement e) {
@@ -87,8 +88,8 @@ public class GoReferenceCompletionProvider extends CompletionProvider<Completion
     }
   }
 
-  private static void fillStructFieldNameVariants(@NotNull final PsiFile file,
-                                                  @NotNull final CompletionResultSet result,
+  private static void fillStructFieldNameVariants(@NotNull PsiFile file,
+                                                  @NotNull CompletionResultSet result,
                                                   @NotNull GoStructLiteralCompletion.Variants variants,
                                                   @Nullable GoReferenceExpression refExpression) {
     if (refExpression == null ||
@@ -97,15 +98,15 @@ public class GoReferenceCompletionProvider extends CompletionProvider<Completion
       return;
     }
 
-    final GoLiteralValue literal = PsiTreeUtil.getParentOfType(refExpression, GoLiteralValue.class);
+    GoLiteralValue literal = PsiTreeUtil.getParentOfType(refExpression, GoLiteralValue.class);
     new GoFieldNameReference(refExpression).processResolveVariants(new MyGoScopeProcessor(result, file, false) {
-      final Condition<String> myIsFieldAssigned = GoStructLiteralCompletion.newIsFieldAssignedPredicate(literal);
+      final Set<String> alreadyAssignedFields = GoStructLiteralCompletion.alreadyAssignedFields(literal);
 
       @Override
       public boolean execute(@NotNull PsiElement o, @NotNull ResolveState state) {
         String structFieldName = o instanceof GoFieldDefinition ? ((GoFieldDefinition)o).getName() :
                                  o instanceof GoAnonymousFieldDefinition ? ((GoAnonymousFieldDefinition)o).getName() : null;
-        if (structFieldName != null && myIsFieldAssigned.value(structFieldName)) {
+        if (structFieldName != null && alreadyAssignedFields.contains(structFieldName)) {
           return true;
         }
         return super.execute(o, state);

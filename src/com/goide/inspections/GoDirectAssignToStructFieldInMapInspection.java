@@ -27,7 +27,7 @@ import static com.intellij.codeInspection.ProblemHighlightType.GENERIC_ERROR_OR_
 public class GoDirectAssignToStructFieldInMapInspection extends GoInspectionBase {
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
+  protected GoVisitor buildGoVisitor(@NotNull ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
       public void visitLeftHandExprList(@NotNull GoLeftHandExprList o) {

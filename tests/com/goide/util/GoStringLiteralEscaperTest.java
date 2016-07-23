@@ -24,7 +24,6 @@ import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.psi.LiteralTextEscaper;
 import com.intellij.psi.PsiLanguageInjectionHost;
 import com.intellij.testFramework.PlatformTestUtil;
-import com.intellij.util.ThrowableRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
@@ -177,25 +176,19 @@ public class GoStringLiteralEscaperTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testDecodeLongUnicodeCharString() {
-    PlatformTestUtil.withEncoding(CharsetToolkit.UTF8, new ThrowableRunnable() {
-      @Override
-      public void run() {
-        GoStringLiteral expr = createStringFromText("\\U00008a9e");
-        assertNotNull(expr);
-        String a = decodeRange(expr, TextRange.create(1, 11));
-        assertEquals("語", a);
-      }
+    PlatformTestUtil.withEncoding(CharsetToolkit.UTF8, () -> {
+      GoStringLiteral expr = createStringFromText("\\U00008a9e");
+      assertNotNull(expr);
+      String a = decodeRange(expr, TextRange.create(1, 11));
+      assertEquals("語", a);
     });
   }
 
   public void testQuote() {
-    PlatformTestUtil.withEncoding(CharsetToolkit.UTF8, new ThrowableRunnable() {
-      @Override
-      public void run() {
-        GoStringLiteral expr = createStringFromText("import \\\"fmt\\\"");
-        assertNotNull(expr);
-        assertEquals("\"fmt\"", decodeRange(expr, TextRange.create(8, 15)));
-      }
+    PlatformTestUtil.withEncoding(CharsetToolkit.UTF8, () -> {
+      GoStringLiteral expr = createStringFromText("import \\\"fmt\\\"");
+      assertNotNull(expr);
+      assertEquals("\"fmt\"", decodeRange(expr, TextRange.create(8, 15)));
     });
   }
 

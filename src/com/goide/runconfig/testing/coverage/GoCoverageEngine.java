@@ -45,15 +45,12 @@ import java.util.List;
 import java.util.Set;
 
 public class GoCoverageEngine extends CoverageEngine {
-  private static final Condition<AbstractTreeNode> NODE_TO_COVERAGE = new Condition<AbstractTreeNode>() {
-    @Override
-    public boolean value(AbstractTreeNode node) {
-      Object value = node.getValue();
-      if (value instanceof PsiFile) {
-        return isProductionGoFile((PsiFile)value);
-      }
-      return !StringUtil.equals(node.getName(), Project.DIRECTORY_STORE_FOLDER);
+  private static final Condition<AbstractTreeNode> NODE_TO_COVERAGE = node -> {
+    Object value = node.getValue();
+    if (value instanceof PsiFile) {
+      return isProductionGoFile((PsiFile)value);
     }
+    return !StringUtil.equals(node.getName(), Project.DIRECTORY_STORE_FOLDER);
   };
 
   public static final GoCoverageEngine INSTANCE = new GoCoverageEngine();

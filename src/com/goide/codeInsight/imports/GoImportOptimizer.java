@@ -45,13 +45,13 @@ public class GoImportOptimizer implements ImportOptimizer {
 
   @NotNull
   @Override
-  public Runnable processFile(@NotNull final PsiFile file) {
+  public Runnable processFile(@NotNull PsiFile file) {
     if (!(file instanceof GoFile)) {
       return EmptyRunnable.getInstance();
     }
     MultiMap<String, GoImportSpec> importMap = ((GoFile)file).getImportMap();
-    final Set<PsiElement> importEntriesToDelete = ContainerUtil.newLinkedHashSet();
-    final Set<PsiElement> importIdentifiersToDelete = findRedundantImportIdentifiers(importMap);
+    Set<PsiElement> importEntriesToDelete = ContainerUtil.newLinkedHashSet();
+    Set<PsiElement> importIdentifiersToDelete = findRedundantImportIdentifiers(importMap);
 
     importEntriesToDelete.addAll(findDuplicatedEntries(importMap));
     importEntriesToDelete.addAll(filterUnusedImports(file, importMap).values());
@@ -120,7 +120,7 @@ public class GoImportOptimizer implements ImportOptimizer {
 
   public static MultiMap<String, GoImportSpec> filterUnusedImports(@NotNull PsiFile file, 
                                                                    @NotNull MultiMap<String, GoImportSpec> importMap) {
-    final MultiMap<String, GoImportSpec> result = MultiMap.create();
+    MultiMap<String, GoImportSpec> result = MultiMap.create();
     result.putAllValues(importMap);
     result.remove("_"); // imports for side effects are always used
     

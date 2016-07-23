@@ -51,16 +51,11 @@ public class GoFileIgnoredByBuildToolNotificationProvider extends EditorNotifica
   private final Project myProject;
 
   public GoFileIgnoredByBuildToolNotificationProvider(@NotNull Project project,
-                                                      @NotNull final EditorNotifications notifications,
-                                                      @NotNull final FileEditorManager fileEditorManager) {
+                                                      @NotNull EditorNotifications notifications,
+                                                      @NotNull FileEditorManager fileEditorManager) {
     myProject = project;
     MessageBusConnection connection = myProject.getMessageBus().connect(myProject);
-    connection.subscribe(GoModuleSettings.TOPIC, new GoModuleSettings.BuildTargetListener() {
-      @Override
-      public void changed(@NotNull Module module) {
-        notifications.updateAllNotifications();
-      }
-    });
+    connection.subscribe(GoModuleSettings.TOPIC, module -> notifications.updateAllNotifications());
     connection.subscribe(VirtualFileManager.VFS_CHANGES, new BulkFileListener.Adapter() {
       @Override
       public void after(@NotNull List<? extends VFileEvent> events) {
@@ -100,30 +95,22 @@ public class GoFileIgnoredByBuildToolNotificationProvider extends EditorNotifica
     return null;
   }
 
-  private static EditorNotificationPanel createIgnoredByBuildToolPanel(@NotNull final Project project, @NotNull VirtualFile file) {
+  private static EditorNotificationPanel createIgnoredByBuildToolPanel(@NotNull Project project, @NotNull VirtualFile file) {
     EditorNotificationPanel panel = new EditorNotificationPanel();
     String fileName = file.getName();
     panel.setText("'" + fileName + "' will be ignored by build tool since its name starts with '" + fileName.charAt(0) + "'");
-    panel.createActionLabel("Do not show again", new Runnable() {
-      @Override
-      public void run() {
-        PropertiesComponent.getInstance().setValue(DO_NOT_SHOW_NOTIFICATION_ABOUT_IGNORE_BY_BUILD_TOOL, true);
-        EditorNotifications.getInstance(project).updateAllNotifications();
-      }
+    panel.createActionLabel("Do not show again", () -> {
+      PropertiesComponent.getInstance().setValue(DO_NOT_SHOW_NOTIFICATION_ABOUT_IGNORE_BY_BUILD_TOOL, true);
+      EditorNotifications.getInstance(project).updateAllNotifications();
     });
     return panel;
   }
 
   @NotNull
-  private static EditorNotificationPanel createMismatchedTargetPanel(@NotNull final Module module, @NotNull VirtualFile file) {
+  private static EditorNotificationPanel createMismatchedTargetPanel(@NotNull Module module, @NotNull VirtualFile file) {
     EditorNotificationPanel panel = new EditorNotificationPanel();
     panel.setText("'" + file.getName() + "' doesn't match to target system. File will be ignored by build tool");
-    panel.createActionLabel("Edit Go project settings", new Runnable() {
-      @Override
-      public void run() {
-        GoModuleSettings.showModulesConfigurable(module);
-      }
-    });
+    panel.createActionLabel("Edit Go project settings", () -> GoModuleSettings.showModulesConfigurable(module));
     return panel;
   }
 }

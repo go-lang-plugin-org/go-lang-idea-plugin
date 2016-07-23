@@ -28,7 +28,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 import com.intellij.testIntegration.TestFinder;
-import com.intellij.util.SmartList;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -85,7 +85,7 @@ public class GoTestFinder implements TestFinder {
       PsiDirectory directory = file.getContainingDirectory();
       PsiFile testFile = directory.findFile(FileUtil.getNameWithoutExtension(file.getName()) + GoConstants.TEST_SUFFIX_WITH_EXTENSION);
       if (testFile != null) {
-        return new SmartList<PsiElement>(testFile);
+        return ContainerUtil.newSmartList(testFile);
       }
     }
     return Collections.emptyList();
@@ -99,7 +99,7 @@ public class GoTestFinder implements TestFinder {
       PsiDirectory directory = testFile.getContainingDirectory();
       PsiFile sourceFile = directory.findFile(StringUtil.trimEnd(testFile.getName(), GoConstants.TEST_SUFFIX_WITH_EXTENSION) + EXTENSION);
       if (sourceFile != null) {
-        return new SmartList<PsiElement>(sourceFile);
+        return ContainerUtil.newSmartList(sourceFile);
       }
     }
     return Collections.emptyList();

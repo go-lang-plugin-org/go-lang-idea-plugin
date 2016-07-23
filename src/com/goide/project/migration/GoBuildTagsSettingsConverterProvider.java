@@ -43,7 +43,7 @@ public class GoBuildTagsSettingsConverterProvider extends ConverterProvider {
 
   @NotNull
   @Override
-  public ProjectConverter createConverter(@NotNull final ConversionContext context) {
+  public ProjectConverter createConverter(@NotNull ConversionContext context) {
     return new ProjectConverter() {
       private GoBuildTargetSettings newSettings;
 

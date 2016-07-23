@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,14 @@
 package com.goide.configuration;
 
 import com.intellij.ui.HideableDecorator;
-import com.intellij.util.SmartList;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.util.Collection;
 
 class ListenableHideableDecorator extends HideableDecorator {
-  // ContainerUtil.newSmartList() exists since 14.1
-  private final Collection<MyListener> myListeners = new SmartList<MyListener>();
+  private final Collection<MyListener> myListeners = ContainerUtil.newSmartList();
 
   public ListenableHideableDecorator(@NotNull JPanel panel, @NotNull String displayName, @NotNull JComponent content) {
     super(panel, displayName, false);

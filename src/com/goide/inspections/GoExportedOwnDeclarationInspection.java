@@ -36,7 +36,7 @@ public class GoExportedOwnDeclarationInspection extends GoInspectionBase {
 
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
+  protected GoVisitor buildGoVisitor(@NotNull ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
       public void visitConstDeclaration(@NotNull GoConstDeclaration o) {
@@ -81,35 +81,32 @@ public class GoExportedOwnDeclarationInspection extends GoInspectionBase {
 
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-      final PsiElement element = descriptor.getPsiElement();
+      PsiElement element = descriptor.getPsiElement();
       if (!element.isValid() || !(element instanceof GoConstDefinition)) {
         return;
       }
-      final String name = ((GoConstDefinition)element).getName();
+      String name = ((GoConstDefinition)element).getName();
       if (StringUtil.isEmpty(name)) {
         return;
       }
-      final GoType type = ((GoConstDefinition)element).findSiblingType();
-      final GoExpression value = ((GoConstDefinition)element).getValue();
-      WriteCommandAction.runWriteCommandAction(project, new Runnable() {
-        @Override
-        public void run() {
-          PsiElement parent = element.getParent();
-          PsiElement grandParent = parent != null ? parent.getParent() : null;
-          if (parent instanceof GoConstSpec && grandParent instanceof GoConstDeclaration) {
-            if (!parent.isValid() || ((GoConstSpec)parent).getConstDefinitionList().indexOf(element) <= 0) {
-              return;
-            }
-            String typeText = type != null ? type.getText() : "";
-            String valueText = value != null ? value.getText() : "";
-            ((GoConstSpec)parent).deleteDefinition((GoConstDefinition)element);
-            if (grandParent.isValid()) {
-              ((GoConstDeclaration)grandParent).addSpec(name, typeText, valueText, (GoConstSpec)parent);
-              return;
-            }
+      GoType type = ((GoConstDefinition)element).findSiblingType();
+      GoExpression value = ((GoConstDefinition)element).getValue();
+      WriteCommandAction.runWriteCommandAction(project, () -> {
+        PsiElement parent = element.getParent();
+        PsiElement grandParent = parent != null ? parent.getParent() : null;
+        if (parent instanceof GoConstSpec && grandParent instanceof GoConstDeclaration) {
+          if (!parent.isValid() || ((GoConstSpec)parent).getConstDefinitionList().indexOf(element) <= 0) {
+            return;
           }
-          LOG.error("Cannot run quick fix", AttachmentFactory.createAttachment(element.getContainingFile().getVirtualFile()));
+          String typeText = type != null ? type.getText() : "";
+          String valueText = value != null ? value.getText() : "";
+          ((GoConstSpec)parent).deleteDefinition((GoConstDefinition)element);
+          if (grandParent.isValid()) {
+            ((GoConstDeclaration)grandParent).addSpec(name, typeText, valueText, (GoConstSpec)parent);
+            return;
+          }
         }
+        LOG.error("Cannot run quick fix", AttachmentFactory.createAttachment(element.getContainingFile().getVirtualFile()));
       });
     }
   }
@@ -123,35 +120,32 @@ public class GoExportedOwnDeclarationInspection extends GoInspectionBase {
 
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-      final PsiElement element = descriptor.getPsiElement();
+      PsiElement element = descriptor.getPsiElement();
       if (!element.isValid() || !(element instanceof GoVarDefinition)) {
         return;
       }
-      final String name = ((GoVarDefinition)element).getName();
+      String name = ((GoVarDefinition)element).getName();
       if (StringUtil.isEmpty(name)) {
         return;
       }
-      final GoType type = ((GoVarDefinition)element).findSiblingType();
-      final GoExpression value = ((GoVarDefinition)element).getValue();
-      WriteCommandAction.runWriteCommandAction(project, new Runnable() {
-        @Override
-        public void run() {
-          PsiElement parent = element.getParent();
-          PsiElement grandParent = parent != null ? parent.getParent() : null;
-          if (parent instanceof GoVarSpec && grandParent instanceof GoVarDeclaration) {
-            if (!parent.isValid() || ((GoVarSpec)parent).getVarDefinitionList().indexOf(element) <= 0) {
-              return;
-            }
-            String typeText = type != null ? type.getText() : "";
-            String valueText = value != null ? value.getText() : "";
-            ((GoVarSpec)parent).deleteDefinition((GoVarDefinition)element);
-            if (grandParent.isValid()) {
-              ((GoVarDeclaration)grandParent).addSpec(name, typeText, valueText, (GoVarSpec)parent);
-              return;
-            }
+      GoType type = ((GoVarDefinition)element).findSiblingType();
+      GoExpression value = ((GoVarDefinition)element).getValue();
+      WriteCommandAction.runWriteCommandAction(project, () -> {
+        PsiElement parent = element.getParent();
+        PsiElement grandParent = parent != null ? parent.getParent() : null;
+        if (parent instanceof GoVarSpec && grandParent instanceof GoVarDeclaration) {
+          if (!parent.isValid() || ((GoVarSpec)parent).getVarDefinitionList().indexOf(element) <= 0) {
+            return;
           }
-          LOG.error("Cannot run quick fix", AttachmentFactory.createAttachment(element.getContainingFile().getVirtualFile()));
+          String typeText = type != null ? type.getText() : "";
+          String valueText = value != null ? value.getText() : "";
+          ((GoVarSpec)parent).deleteDefinition((GoVarDefinition)element);
+          if (grandParent.isValid()) {
+            ((GoVarDeclaration)grandParent).addSpec(name, typeText, valueText, (GoVarSpec)parent);
+            return;
+          }
         }
+        LOG.error("Cannot run quick fix", AttachmentFactory.createAttachment(element.getContainingFile().getVirtualFile()));
       });
     }
   }

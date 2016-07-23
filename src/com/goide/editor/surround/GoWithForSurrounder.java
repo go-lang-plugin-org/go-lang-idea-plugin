@@ -18,13 +18,13 @@ package com.goide.editor.surround;
 
 import com.goide.psi.GoForStatement;
 import com.goide.psi.impl.GoElementFactory;
-import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
+import com.intellij.util.NotNullFunction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,7 +39,7 @@ public class GoWithForSurrounder extends GoStatementsSurrounder {
   protected TextRange surroundStatements(@NotNull Project project,
                                          @NotNull PsiElement container,
                                          @NotNull PsiElement[] statements) throws IncorrectOperationException {
-    String text = StringUtil.join(statements, GoPsiImplUtil.GET_TEXT_FUNCTION, "\n");
+    String text = StringUtil.join(statements, (NotNullFunction<PsiElement, String>)PsiElement::getText, "\n");
     GoForStatement forStatement = GoElementFactory.createForStatement(project, text);
     PsiElement first = ArrayUtil.getFirstElement(statements);
     PsiElement last = ArrayUtil.getLastElement(statements);

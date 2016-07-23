@@ -26,7 +26,6 @@ import com.intellij.execution.filters.OpenFileHyperlinkInfo;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
@@ -166,25 +165,15 @@ public class GoConsoleFilter implements Filter {
         return ContainerUtil.getFirstItem(files);
       }
       if (!files.isEmpty()) {
-        final GlobalSearchScope goPathScope = GoPathResolveScope.create(myProject, myModule, null);
-        files = ContainerUtil.filter(files, new Condition<VirtualFile>() {
-          @Override
-          public boolean value(VirtualFile file) {
-            return goPathScope.accept(file);
-          }
-        });
+        GlobalSearchScope goPathScope = GoPathResolveScope.create(myProject, myModule, null);
+        files = ContainerUtil.filter(files, goPathScope::accept);
         if (files.size() == 1) {
           return ContainerUtil.getFirstItem(files);
         }
       }
       if (!files.isEmpty()) {
-        final GlobalSearchScope smallerScope = GoUtil.moduleScopeWithoutLibraries(myProject, myModule);
-        files = ContainerUtil.filter(files, new Condition<VirtualFile>() {
-          @Override
-          public boolean value(VirtualFile file) {
-            return smallerScope.accept(file);
-          }
-        });
+        GlobalSearchScope smallerScope = GoUtil.moduleScopeWithoutLibraries(myProject, myModule);
+        files = ContainerUtil.filter(files, smallerScope::accept);
         if (files.size() == 1) {
           return ContainerUtil.getFirstItem(files);
         }

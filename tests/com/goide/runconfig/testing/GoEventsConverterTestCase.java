@@ -45,10 +45,7 @@ public abstract class GoEventsConverterTestCase extends GoCodeInsightFixtureTest
         converter.processServiceMessages(line + "\n", ProcessOutputTypes.STDOUT, serviceMessageVisitor);
       }
     }
-    catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-    catch (ParseException e) {
+    catch (IOException | ParseException e) {
       throw new RuntimeException(e);
     }
     ((OutputToGeneralTestEventsConverter)converter).flushBufferBeforeTerminating();

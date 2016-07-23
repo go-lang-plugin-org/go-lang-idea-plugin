@@ -55,45 +55,28 @@ public class GoIdFilter extends IdFilter {
   }
 
   public static IdFilter getProductionFilter(@NotNull Project project) {
-    return createIdFilter(project, PRODUCTION_FILTER, new Condition<VirtualFile>() {
-      @Override
-      public boolean value(VirtualFile file) {
-        return !file.isDirectory() && !GoTestFinder.isTestFile(file);
-      }
-    });
+    return createIdFilter(project, PRODUCTION_FILTER, file -> !file.isDirectory() && !GoTestFinder.isTestFile(file));
   }
 
   public static IdFilter getTestsFilter(@NotNull Project project) {
-    return createIdFilter(project, TESTS_FILTER, new Condition<VirtualFile>() {
-      @Override
-      public boolean value(VirtualFile file) {
-        return !file.isDirectory() && GoTestFinder.isTestFile(file);
-      }
-    });
+    return createIdFilter(project, TESTS_FILTER, file -> !file.isDirectory() && GoTestFinder.isTestFile(file));
   }
 
-  private static IdFilter createIdFilter(@NotNull final Project project,
+  private static IdFilter createIdFilter(@NotNull Project project,
                                          @NotNull Key<CachedValue<IdFilter>> cacheKey,
-                                         @NotNull final Condition<VirtualFile> filterCondition) {
-    return CachedValuesManager.getManager(project).getCachedValue(project, cacheKey, new CachedValueProvider<IdFilter>() {
-      @Nullable
-      @Override
-      public Result<IdFilter> compute() {
-        final BitSet bitSet = new BitSet();
-        ContentIterator iterator = new ContentIterator() {
-          @Override
-          public boolean processFile(VirtualFile fileOrDir) {
-            if (filterCondition.value(fileOrDir)) {
-              addToBitSet(bitSet, fileOrDir);
-            }
-            ProgressManager.checkCanceled();
-            return true;
-          }
-        };
-        FileBasedIndex.getInstance().iterateIndexableFiles(iterator, project, null);
-        return Result.create(new GoIdFilter(bitSet), ProjectRootManager.getInstance(project),
-                             VirtualFileManager.VFS_STRUCTURE_MODIFICATIONS);
-      }
+                                         @NotNull Condition<VirtualFile> filterCondition) {
+    return CachedValuesManager.getManager(project).getCachedValue(project, cacheKey, () -> {
+      BitSet bitSet = new BitSet();
+      ContentIterator iterator = fileOrDir -> {
+        if (filterCondition.value(fileOrDir)) {
+          addToBitSet(bitSet, fileOrDir);
+        }
+        ProgressManager.checkCanceled();
+        return true;
+      };
+      FileBasedIndex.getInstance().iterateIndexableFiles(iterator, project, null);
+      return CachedValueProvider.Result.create(new GoIdFilter(bitSet), ProjectRootManager.getInstance(project),
+                                               VirtualFileManager.VFS_STRUCTURE_MODIFICATIONS);
     }, false);
   }
 

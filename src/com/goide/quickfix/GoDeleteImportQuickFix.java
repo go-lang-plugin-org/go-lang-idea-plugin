@@ -36,15 +36,10 @@ public class GoDeleteImportQuickFix extends LocalQuickFixBase {
 
   @Override
   public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-    final PsiElement element = PsiTreeUtil.getNonStrictParentOfType(descriptor.getPsiElement(), GoImportSpec.class);
-    final PsiFile file = element != null ? element.getContainingFile() : null;
+    PsiElement element = PsiTreeUtil.getNonStrictParentOfType(descriptor.getPsiElement(), GoImportSpec.class);
+    PsiFile file = element != null ? element.getContainingFile() : null;
     if (!(file instanceof GoFile)) return;
 
-    WriteCommandAction.runWriteCommandAction(project, new Runnable() {
-      @Override
-      public void run() {
-        ((GoFile)file).deleteImport((GoImportSpec)element);
-      }
-    });
+    WriteCommandAction.runWriteCommandAction(project, () -> ((GoFile)file).deleteImport((GoImportSpec)element));
   }
 }

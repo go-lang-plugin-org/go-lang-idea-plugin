@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,30 +63,24 @@ public class WrongModuleTypeNotificationProvider extends EditorNotifications.Pro
   }
 
   @NotNull
-  private static EditorNotificationPanel createPanel(@NotNull final Project project, @NotNull final Module module) {
+  private static EditorNotificationPanel createPanel(@NotNull Project project, @NotNull Module module) {
     EditorNotificationPanel panel = new EditorNotificationPanel();
     panel.setText("'" + module.getName() + "' is not Go Module, some code insight might not work here");
-    panel.createActionLabel("Change module type to Go and reload project", new Runnable() {
-      @Override
-      public void run() {
-        int message = Messages.showOkCancelDialog(project, "Updating module type requires project reload. Proceed?", "Update Module Type",
-                                                  "Reload project", "Cancel", null);
-        if (message == Messages.YES) {
-          module.setOption(Module.ELEMENT_TYPE, GoModuleType.getInstance().getId());
-          project.save();
-          EditorNotifications.getInstance(project).updateAllNotifications();
-          ProjectManager.getInstance().reloadProject(project);
-        }
+    panel.createActionLabel("Change module type to Go and reload project", () -> {
+      int message = Messages.showOkCancelDialog(project, "Updating module type requires project reload. Proceed?", "Update Module Type",
+                                                "Reload project", "Cancel", null);
+      if (message == Messages.YES) {
+        module.setOption(Module.ELEMENT_TYPE, GoModuleType.getInstance().getId());
+        project.save();
+        EditorNotifications.getInstance(project).updateAllNotifications();
+        ProjectManager.getInstance().reloadProject(project);
       }
     });
-    panel.createActionLabel("Don't show again for this module", new Runnable() {
-      @Override
-      public void run() {
-        Set<String> ignoredModules = getIgnoredModules(project);
-        ignoredModules.add(module.getName());
-        PropertiesComponent.getInstance(project).setValue(DONT_ASK_TO_CHANGE_MODULE_TYPE_KEY, StringUtil.join(ignoredModules, ","));
-        EditorNotifications.getInstance(project).updateAllNotifications();
-      }
+    panel.createActionLabel("Don't show again for this module", () -> {
+      Set<String> ignoredModules = getIgnoredModules(project);
+      ignoredModules.add(module.getName());
+      PropertiesComponent.getInstance(project).setValue(DONT_ASK_TO_CHANGE_MODULE_TYPE_KEY, StringUtil.join(ignoredModules, ","));
+      EditorNotifications.getInstance(project).updateAllNotifications();
     });
     return panel;
   }

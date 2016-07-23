@@ -39,24 +39,11 @@ import com.intellij.psi.search.DelegatingGlobalSearchScope;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.util.Function;
 import com.intellij.util.ThreeState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoUtil {
-  public static final Function<VirtualFile, String> RETRIEVE_FILE_PATH_FUNCTION = new Function<VirtualFile, String>() {
-    @Override
-    public String fun(VirtualFile file) {
-      return file.getPath();
-    }
-  };
-  public static final Function<VirtualFile, VirtualFile> RETRIEVE_FILE_PARENT_FUNCTION = new Function<VirtualFile, VirtualFile>() {
-    @Override
-    public VirtualFile fun(VirtualFile file) {
-      return file.getParent();
-    }
-  };
   private static final String PLUGIN_ID = "ro.redeul.google.go";
 
   private GoUtil() {}
@@ -65,15 +52,11 @@ public class GoUtil {
     return module == null || new GoBuildMatcher(GoTargetSystem.forModule(module)).matchFile(file);
   }
 
-  public static boolean isExcludedFile(@NotNull final GoFile file) {
-    return CachedValuesManager.getCachedValue(file, new CachedValueProvider<Boolean>() {
-      @Nullable
-      @Override
-      public Result<Boolean> compute() {
-        String importPath = file.getImportPath(false);
-        GoExcludedPathsSettings excludedSettings = GoExcludedPathsSettings.getInstance(file.getProject());
-        return Result.create(importPath != null && excludedSettings.isExcluded(importPath), file, excludedSettings);
-      }
+  public static boolean isExcludedFile(@NotNull GoFile file) {
+    return CachedValuesManager.getCachedValue(file, () -> {
+      String importPath = file.getImportPath(false);
+      GoExcludedPathsSettings excludedSettings = GoExcludedPathsSettings.getInstance(file.getProject());
+      return CachedValueProvider.Result.create(importPath != null && excludedSettings.isExcluded(importPath), file, excludedSettings);
     });
   }
 

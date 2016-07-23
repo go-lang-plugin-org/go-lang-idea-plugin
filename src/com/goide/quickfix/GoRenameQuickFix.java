@@ -44,30 +44,27 @@ public class GoRenameQuickFix extends LocalQuickFixOnPsiElement {
   }
 
   @Override
-  public void invoke(@NotNull final Project project,
+  public void invoke(@NotNull Project project,
                      @NotNull PsiFile file,
-                     @NotNull final PsiElement startElement,
+                     @NotNull PsiElement startElement,
                      @NotNull PsiElement endElement) {
     if (!FileModificationService.getInstance().preparePsiElementsForWrite(startElement)) return;
 
-    Runnable runnable = new Runnable() {
-      @Override
-      public void run() {
-        AsyncResult<DataContext> dataContextContainer = DataManager.getInstance().getDataContextFromFocus();
-        dataContextContainer.doWhenDone(new Consumer<DataContext>() {
-          @Override
-          public void consume(DataContext dataContext) {
-            RenameHandler renameHandler = RenameHandlerRegistry.getInstance().getRenameHandler(dataContext);
-            if (renameHandler != null) {
-              renameHandler.invoke(project, new PsiElement[]{startElement}, dataContext);
-            }
-            else {
-              RefactoringActionHandler renameRefactoringHandler = RefactoringActionHandlerFactory.getInstance().createRenameHandler();
-              renameRefactoringHandler.invoke(project, new PsiElement[]{startElement}, dataContext);
-            }
+    Runnable runnable = () -> {
+      AsyncResult<DataContext> dataContextContainer = DataManager.getInstance().getDataContextFromFocus();
+      dataContextContainer.doWhenDone(new Consumer<DataContext>() {
+        @Override
+        public void consume(DataContext dataContext) {
+          RenameHandler renameHandler = RenameHandlerRegistry.getInstance().getRenameHandler(dataContext);
+          if (renameHandler != null) {
+            renameHandler.invoke(project, new PsiElement[]{startElement}, dataContext);
           }
-        });
-      }
+          else {
+            RefactoringActionHandler renameRefactoringHandler = RefactoringActionHandlerFactory.getInstance().createRenameHandler();
+            renameRefactoringHandler.invoke(project, new PsiElement[]{startElement}, dataContext);
+          }
+        }
+      });
     };
     if (ApplicationManager.getApplication().isUnitTestMode()) {
       runnable.run();

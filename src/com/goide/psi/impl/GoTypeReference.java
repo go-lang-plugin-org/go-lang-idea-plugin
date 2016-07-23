@@ -47,17 +47,11 @@ public class GoTypeReference extends GoReferenceBase<GoTypeReferenceExpression> 
   }
 
   private static final ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase> MY_RESOLVER =
-    new ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase>() {
-      @NotNull
-      @Override
-      public ResolveResult[] resolve(@NotNull PsiPolyVariantReferenceBase psiPolyVariantReferenceBase, boolean incompleteCode) {
-        return ((GoTypeReference)psiPolyVariantReferenceBase).resolveInner();
-      }
-    };
+    (psiPolyVariantReferenceBase, incompleteCode) -> ((GoTypeReference)psiPolyVariantReferenceBase).resolveInner();
 
   @NotNull
   private ResolveResult[] resolveInner() {
-    Collection<ResolveResult> result = new OrderedSet<ResolveResult>();
+    Collection<ResolveResult> result = new OrderedSet<>();
     processResolveVariants(createResolveProcessor(result, myElement));
     return result.toArray(new ResolveResult[result.size()]);
   }
@@ -132,24 +126,16 @@ public class GoTypeReference extends GoReferenceBase<GoTypeReferenceExpression> 
       if (FormatterUtil.getPrevious(type != null ? type.getNode() : null, GoTypes.CASE) == null) return true;
       GoFile builtinFile = GoSdkUtil.findBuiltinFile(myElement);
       if (builtinFile == null) return false;
-      GoVarDefinition nil = ContainerUtil.find(builtinFile.getVars(), new Condition<GoVarDefinition>() {
-        @Override
-        public boolean value(GoVarDefinition v) {
-          return GoConstants.NIL.equals(v.getName());
-        }
-      });
+      GoVarDefinition nil = ContainerUtil.find(builtinFile.getVars(), v -> GoConstants.NIL.equals(v.getName()));
       if (nil != null && !processor.execute(nil, state)) return false;
     }
     return true;
   }
 
   public final static Set<String> DOC_ONLY_TYPES = ContainerUtil.set("Type", "Type1", "IntegerType", "FloatType", "ComplexType");
-  private static final Condition<GoTypeSpec> BUILTIN_TYPE = new Condition<GoTypeSpec>() {
-    @Override
-    public boolean value(GoTypeSpec spec) {
-      String name = spec.getName();
-      return name != null && !DOC_ONLY_TYPES.contains(name);
-    }
+  private static final Condition<GoTypeSpec> BUILTIN_TYPE = spec -> {
+    String name = spec.getName();
+    return name != null && !DOC_ONLY_TYPES.contains(name);
   };
 
   @NotNull

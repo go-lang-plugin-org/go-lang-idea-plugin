@@ -407,7 +407,7 @@
   <!-- GAE -->
 
   <!-- START plugin.xml of future GAE module -->
-  <!-- todo[IDEA 17] It's supposed that GAE-core module will be moved to IDEA source and bundled in IDEA 16 -->
+  <!-- todo[IDEA 17] It's supposed that GAE-core module will be moved to IDEA source and bundled in IDEA 17 -->
   <!--<id>com.intellij.appengine</id>-->
   <depends optional="true" config-file="google-app-engine-core-yaml.xml">org.jetbrains.plugins.yaml</depends>
   <extensionPoints>

@@ -42,13 +42,7 @@ public class GoReference extends GoReferenceBase<GoReferenceExpressionBase> {
   private static final Key<Object> DONT_PROCESS_METHODS = Key.create("DONT_PROCESS_METHODS");
 
   private static final ResolveCache.PolyVariantResolver<GoReference> MY_RESOLVER =
-    new ResolveCache.PolyVariantResolver<GoReference>() {
-      @NotNull
-      @Override
-      public ResolveResult[] resolve(@NotNull GoReference r, boolean incompleteCode) {
-        return r.resolveInner();
-      }
-    };
+    (r, incompleteCode) -> r.resolveInner();
 
   public GoReference(@NotNull GoReferenceExpressionBase o) {
     super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(), o.getIdentifier().getTextLength()));
@@ -63,7 +57,7 @@ public class GoReference extends GoReferenceBase<GoReferenceExpressionBase> {
   @NotNull
   private ResolveResult[] resolveInner() {
     if (!myElement.isValid()) return ResolveResult.EMPTY_ARRAY;
-    Collection<ResolveResult> result = new OrderedSet<ResolveResult>();
+    Collection<ResolveResult> result = new OrderedSet<>();
     processResolveVariants(createResolveProcessor(result, myElement));
     return result.toArray(new ResolveResult[result.size()]);
   }
@@ -126,21 +120,18 @@ public class GoReference extends GoReferenceBase<GoReferenceExpressionBase> {
     return true;
   }
 
-  private boolean processGoType(@NotNull final GoType type, @NotNull final GoScopeProcessor processor, @NotNull final ResolveState state) {
-    Boolean result = RecursionManager.doPreventingRecursion(type, true, new Computable<Boolean>() {
-      @Override
-      public Boolean compute() {
-        if (type instanceof GoParType) return processGoType(((GoParType)type).getActualType(), processor, state);
-        if (!processExistingType(type, processor, state)) return false;
-        if (type instanceof GoPointerType) {
-          if (!processPointer((GoPointerType)type, processor, state.put(POINTER, true))) return false;
-          GoType pointer = ((GoPointerType)type).getType();
-          if (pointer instanceof GoPointerType) {
-            return processPointer((GoPointerType)pointer, processor, state.put(POINTER, true));
-          }
+  private boolean processGoType(@NotNull GoType type, @NotNull GoScopeProcessor processor, @NotNull ResolveState state) {
+    Boolean result = RecursionManager.doPreventingRecursion(type, true, () -> {
+      if (type instanceof GoParType) return processGoType(((GoParType)type).getActualType(), processor, state);
+      if (!processExistingType(type, processor, state)) return false;
+      if (type instanceof GoPointerType) {
+        if (!processPointer((GoPointerType)type, processor, state.put(POINTER, true))) return false;
+        GoType pointer = ((GoPointerType)type).getType();
+        if (pointer instanceof GoPointerType) {
+          return processPointer((GoPointerType)pointer, processor, state.put(POINTER, true));
         }
-        return processTypeRef(type, processor, state);
       }
+      return processTypeRef(type, processor, state);
     });
     return Boolean.TRUE.equals(result);
   }
@@ -312,23 +303,13 @@ public class GoReference extends GoReferenceBase<GoReferenceExpressionBase> {
   @Override
   protected boolean processFileEntities(@NotNull GoFile file,
                                         @NotNull GoScopeProcessor processor,
-                                        @NotNull final ResolveState state,
+                                        @NotNull ResolveState state,
                                         boolean localProcessing) {
-    if (!processNamedElements(processor, state, file.getConstants(), new Condition<GoNamedElement>() {
-        @Override
-        public boolean value(@NotNull GoNamedElement o) {
-          return !Comparing.equal(GoConstants.IOTA, o.getName()) ||
-                 !builtin(o) ||
-                 PsiTreeUtil.getParentOfType(getContextElement(state), GoConstSpec.class) != null;
-        }
-      }, localProcessing, false)) return false;
+    if (!processNamedElements(processor, state, file.getConstants(), o -> !Comparing.equal(GoConstants.IOTA, o.getName()) ||
+                                                                    !builtin(o) ||
+           PsiTreeUtil.getParentOfType(getContextElement(state), GoConstSpec.class) != null, localProcessing, false)) return false;
     if (!processNamedElements(processor, state, file.getVars(), localProcessing)) return false;
-    Condition<GoNamedElement> dontProcessInit = new Condition<GoNamedElement>() {
-      @Override
-      public boolean value(@NotNull GoNamedElement o) {
-        return o instanceof GoFunctionDeclaration && !Comparing.equal(o.getName(), GoConstants.INIT);
-      }
-    };
+    Condition<GoNamedElement> dontProcessInit = o -> o instanceof GoFunctionDeclaration && !Comparing.equal(o.getName(), GoConstants.INIT);
     if (!processNamedElements(processor, state, file.getFunctions(), dontProcessInit, localProcessing, false)) return false;
     return processNamedElements(processor, state, file.getTypes(), localProcessing);
   }

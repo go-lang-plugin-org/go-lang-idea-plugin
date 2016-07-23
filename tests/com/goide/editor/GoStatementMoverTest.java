@@ -101,7 +101,7 @@ public class GoStatementMoverTest extends GoCodeInsightFixtureTestCase {
   }
 
   private void doTest(boolean down) {
-    final String testName = getTestName(true);
+    String testName = getTestName(true);
     myFixture.configureByFile(testName + ".go");
     if (down) {
       myFixture.performEditorAction(IdeActions.ACTION_MOVE_STATEMENT_DOWN_ACTION);

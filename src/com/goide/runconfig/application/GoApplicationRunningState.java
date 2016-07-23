@@ -65,7 +65,7 @@ public class GoApplicationRunningState extends GoRunningState<GoApplicationConfi
   @NotNull
   @Override
   protected ProcessHandler startProcess() throws ExecutionException {
-    final ProcessHandler processHandler = myCompilationFailed ? new GoNopProcessHandler() : super.startProcess();
+    ProcessHandler processHandler = myCompilationFailed ? new GoNopProcessHandler() : super.startProcess();
     processHandler.addProcessListener(new ProcessAdapter() {
       @Override
       public void startNotified(ProcessEvent event) {

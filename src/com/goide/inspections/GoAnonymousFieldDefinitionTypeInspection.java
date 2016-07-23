@@ -17,8 +17,6 @@
 package com.goide.inspections;
 
 import com.goide.psi.GoAnonymousFieldDefinition;
-import com.goide.psi.GoPointerType;
-import com.goide.psi.GoType;
 import com.goide.psi.GoVisitor;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
@@ -27,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 public class GoAnonymousFieldDefinitionTypeInspection extends GoInspectionBase {
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder,
+  protected GoVisitor buildGoVisitor(@NotNull ProblemsHolder holder,
                                      @SuppressWarnings({"UnusedParameters", "For future"}) @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override

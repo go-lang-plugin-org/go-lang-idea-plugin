@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,12 +85,7 @@ class GoIntroduceVariableDialog extends RefactoringDialog {
     String[] names = ArrayUtil.toStringArray(myOperation.getSuggestedNames());
     myNameField = new NameSuggestionsField(names, myOperation.getProject(), GoFileType.INSTANCE);
     myNameField.setBorder(IdeBorderFactory.createEmptyBorder(3, 5, 2, 3));
-    myNameField.addDataChangedListener(new NameSuggestionsField.DataChanged() {
-      @Override
-      public void dataChanged() {
-        validateButtons();
-      }
-    });
+    myNameField.addDataChangedListener(this::validateButtons);
 
     JLabel label = new JLabel(UIUtil.replaceMnemonicAmpersand(RefactoringBundle.message("name.prompt")));
     label.setLabelFor(myNameField);

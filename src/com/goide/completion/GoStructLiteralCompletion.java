@@ -18,10 +18,7 @@ package com.goide.completion;
 
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.Conditions;
 import com.intellij.psi.PsiElement;
-import com.intellij.util.Function;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.Contract;
@@ -96,27 +93,17 @@ class GoStructLiteralCompletion {
   }
 
   @NotNull
-  static Condition<String> newIsFieldAssignedPredicate(@Nullable GoLiteralValue literal) {
+  static Set<String> alreadyAssignedFields(@Nullable GoLiteralValue literal) {
     if (literal == null) {
-      return Conditions.alwaysFalse();
+      return Collections.emptySet();
     }
 
-    final Set<String> assignedFields = ContainerUtil.map2SetNotNull(literal.getElementList(), new Function<GoElement, String>() {
-      @Override
-      public String fun(GoElement element) {
-        GoKey key = element.getKey();
-        GoFieldName fieldName = key != null ? key.getFieldName() : null;
-        PsiElement identifier = fieldName != null ? fieldName.getIdentifier() : null;
-        return identifier != null ? identifier.getText() : null;
-      }
+    return ContainerUtil.map2SetNotNull(literal.getElementList(), element -> {
+      GoKey key = element.getKey();
+      GoFieldName fieldName = key != null ? key.getFieldName() : null;
+      PsiElement identifier = fieldName != null ? fieldName.getIdentifier() : null;
+      return identifier != null ? identifier.getText() : null;
     });
-
-    return new Condition<String>() {
-      @Override
-      public boolean value(String fieldName) {
-        return assignedFields.contains(fieldName);
-      }
-    };
   }
 
   @Contract("null,_->null")

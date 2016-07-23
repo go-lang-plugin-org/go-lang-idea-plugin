@@ -43,13 +43,10 @@ public class GoDeleteQuickFix extends LocalQuickFixBase {
 
   @Override
   public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-    WriteCommandAction.runWriteCommandAction(project, new Runnable() {
-      @Override
-      public void run() {
-        PsiElement element = ObjectUtils.tryCast(descriptor.getStartElement(), myClazz);
-        if (element != null && (myElementType == null || element.getNode().getElementType() == myElementType)) {
-          element.delete();
-        }
+    WriteCommandAction.runWriteCommandAction(project, () -> {
+      PsiElement element = ObjectUtils.tryCast(descriptor.getStartElement(), myClazz);
+      if (element != null && (myElementType == null || element.getNode().getElementType() == myElementType)) {
+        element.delete();
       }
     });
   }

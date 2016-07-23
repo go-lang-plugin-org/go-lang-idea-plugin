@@ -90,12 +90,7 @@ public class GoCreateFileActionTest extends GoCodeInsightFixtureTestCase {
     GoFile file = (GoFile)CreateFileFromTemplateAction.createFileFromTemplate(newFileName, template, dir, null, true);
     assertNotNull(file);
     assertEquals(expectedPackage, file.getPackageName());
-    WriteCommandAction.runWriteCommandAction(dir.getProject(), new Runnable() {
-      @Override
-      public void run() {
-        file.delete();
-      }
-    });
+    WriteCommandAction.runWriteCommandAction(dir.getProject(), file::delete);
   }
 }
 

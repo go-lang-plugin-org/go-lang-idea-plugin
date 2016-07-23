@@ -40,25 +40,17 @@ public class GoGetPackageFix extends LocalQuickFixBase implements HighPriorityAc
     myPackage = packageName;
   }
 
-  public static void applyFix(@NotNull final Project project,
-                              @Nullable final Module module,
-                              @NotNull final String packageName,
-                              final boolean startInBackground) {
+  public static void applyFix(@NotNull Project project,
+                              @Nullable Module module,
+                              @NotNull String packageName,
+                              boolean startInBackground) {
     String sdkPath = GoSdkService.getInstance(project).getSdkHomePath(module);
     if (StringUtil.isEmpty(sdkPath)) return;
-    CommandProcessor.getInstance().runUndoTransparentAction(new Runnable() {
-      @Override
-      public void run() {
-        Consumer<Boolean> consumer = new Consumer<Boolean>() {
-          @Override
-          public void consume(Boolean aBoolean) {
-            VirtualFileManager.getInstance().asyncRefresh(null);
-          }
-        };
-        GoExecutor.in(project, module).withPresentableName("go get -t " + packageName + "/...")
-          .withParameters("get", "-t", packageName+"/...").showNotifications(false, true).showOutputOnError()
-          .executeWithProgress(!startInBackground, consumer);
-      }
+    CommandProcessor.getInstance().runUndoTransparentAction(() -> {
+      Consumer<Boolean> consumer = aBoolean -> VirtualFileManager.getInstance().asyncRefresh(null);
+      GoExecutor.in(project, module).withPresentableName("go get -t " + packageName + "/...")
+        .withParameters("get", "-t", packageName+"/...").showNotifications(false, true).showOutputOnError()
+        .executeWithProgress(!startInBackground, consumer);
     });
   }
 

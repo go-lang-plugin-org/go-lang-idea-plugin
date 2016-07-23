@@ -57,9 +57,9 @@ public class GoRefactoringUtil {
   }
 
   @NotNull
-  public static List<PsiElement> getOccurrences(@NotNull final PsiElement pattern, @Nullable PsiElement context) {
+  public static List<PsiElement> getOccurrences(@NotNull PsiElement pattern, @Nullable PsiElement context) {
     if (context == null) return Collections.emptyList();
-    final List<PsiElement> occurrences = ContainerUtil.newArrayList();
+    List<PsiElement> occurrences = ContainerUtil.newArrayList();
     PsiRecursiveElementVisitor visitor = new PsiRecursiveElementVisitor() {
       @Override
       public void visitElement(@NotNull PsiElement element) {
@@ -143,7 +143,7 @@ public class GoRefactoringUtil {
         }
       }
 
-      Set<LookupElement> set = new LinkedHashSet<LookupElement>();
+      Set<LookupElement> set = ContainerUtil.newHashSet();
       for (String name : myNames) {
         set.add(LookupElementBuilder.create(UniqueNameGenerator.generateUniqueName(name, parameterNames)));
       }

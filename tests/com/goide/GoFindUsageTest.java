@@ -28,7 +28,6 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.testFramework.exceptionCases.AssertionErrorCase;
 import com.intellij.usageView.UsageInfo;
-import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,12 +44,7 @@ public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
     String replace = StringUtil.replace(text, USAGE, "");
     myFixture.configureByText("a.go", replace);
     PsiElement atCaret = myFixture.getElementAtCaret();
-    List<Integer> actual = ContainerUtil.map(myFixture.findUsages(atCaret), new Function<UsageInfo, Integer>() {
-      @Override
-      public Integer fun(@NotNull UsageInfo info) {
-        return info.getNavigationOffset();
-      }
-    });
+    List<Integer> actual = ContainerUtil.map(myFixture.findUsages(atCaret), UsageInfo::getNavigationOffset);
     assertSameElements(actual, offsets);
   }
 

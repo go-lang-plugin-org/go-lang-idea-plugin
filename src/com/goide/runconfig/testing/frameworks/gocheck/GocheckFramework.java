@@ -29,7 +29,6 @@ import com.intellij.execution.testframework.sm.runner.OutputToGeneralTestEventsC
 import com.intellij.openapi.module.Module;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.stubs.StubIndex;
-import com.intellij.util.Processor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -67,12 +66,7 @@ public class GocheckFramework extends GoTestFramework {
     if (module == null) return false;
     return !StubIndex.getInstance().processElements(GoPackagesIndex.KEY, "check", module.getProject(),
                                                     GoUtil.goPathResolveScope(module, null), GoFile.class,
-                                                    new Processor<GoFile>() {
-                                                      @Override
-                                                      public boolean process(GoFile file) {
-                                                        return !isGoCheckImportPath(file.getImportPath(true));
-                                                      }
-                                                    });
+                                                    file -> !isGoCheckImportPath(file.getImportPath(true)));
   }
 
   private static boolean isGoCheckImportPath(String importPath) {

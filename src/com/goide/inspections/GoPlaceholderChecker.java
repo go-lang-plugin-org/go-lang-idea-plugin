@@ -23,7 +23,10 @@ import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static com.goide.GoConstants.TESTING_PATH;
 import static com.goide.inspections.GoPlaceholderChecker.PrintfArgumentType.*;
@@ -196,7 +199,7 @@ public class GoPlaceholderChecker {
 
   @NotNull
   public static List<Placeholder> parsePrintf(@NotNull String placeholderText) {
-    List<Placeholder> placeholders = new ArrayList<Placeholder>();
+    List<Placeholder> placeholders = ContainerUtil.newArrayList();
     int argNum = 1;
     int w;
     for (int i = 0; i < placeholderText.length(); i += w) {
@@ -253,7 +256,7 @@ public class GoPlaceholderChecker {
     private final int startPos;         // index of the first character of the placeholder in the formatting string
 
     // the successive argument numbers that are consumed, adjusted to refer to actual arg in call
-    private final List<Integer> argNums = new ArrayList<Integer>();
+    private final List<Integer> argNums = ContainerUtil.newArrayList();
 
     // Keep track of the parser state
     private Placeholder.State state;

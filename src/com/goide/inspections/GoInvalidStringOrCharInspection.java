@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 public class GoInvalidStringOrCharInspection extends GoInspectionBase {
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder,
+  protected GoVisitor buildGoVisitor(@NotNull ProblemsHolder holder,
                                      @SuppressWarnings({"UnusedParameters", "For future"}) @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
 

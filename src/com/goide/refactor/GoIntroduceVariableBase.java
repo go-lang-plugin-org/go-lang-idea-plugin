@@ -24,7 +24,6 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Conditions;
 import com.intellij.openapi.util.Pass;
 import com.intellij.psi.PsiDocumentManager;
@@ -38,7 +37,6 @@ import com.intellij.refactoring.introduce.inplace.InplaceVariableIntroducer;
 import com.intellij.refactoring.introduce.inplace.OccurrencesChooser;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -48,7 +46,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 public class GoIntroduceVariableBase {
-  protected static void performAction(final GoIntroduceOperation operation) {
+  protected static void performAction(GoIntroduceOperation operation) {
     SelectionModel selectionModel = operation.getEditor().getSelectionModel();
     boolean hasSelection = selectionModel.hasSelection();
     GoExpression expression =
@@ -66,12 +64,8 @@ public class GoIntroduceVariableBase {
       showCannotPerform(operation, RefactoringBundle.message("refactoring.introduce.context.error"));
       return;
     }
-    List<GoExpression> expressions = ContainerUtil.filter(extractableExpressions, new Condition<GoExpression>() {
-      @Override
-      public boolean value(GoExpression expression) {
-        return GoInspectionUtil.getExpressionResultCount(expression) == 1;
-      }
-    });
+    List<GoExpression> expressions = ContainerUtil.filter(extractableExpressions,
+                                                          expression12 -> GoInspectionUtil.getExpressionResultCount(expression12) == 1);
     if (expressions.isEmpty()) {
       GoExpression closestExpression = ContainerUtil.getFirstItem(extractableExpressions);
       int resultCount = closestExpression != null ? GoInspectionUtil.getExpressionResultCount(closestExpression) : 0;
@@ -93,12 +87,7 @@ public class GoIntroduceVariableBase {
             performOnElement(operation);
           }
         }
-      }, new Function<GoExpression, String>() {
-        @Override
-        public String fun(GoExpression expression) {
-          return expression.isValid() ? expression.getText() : "<invalid expression>";
-        }
-      });
+      }, expression1 -> expression1.isValid() ? expression1.getText() : "<invalid expression>");
     }
   }
 
@@ -126,12 +115,7 @@ public class GoIntroduceVariableBase {
     return SyntaxTraverser.psiApi().parents(expression).takeWhile(Conditions.notInstanceOf(GoTopLevelDeclaration.class))
       .filter(GoExpression.class)
       .filter(Conditions.notInstanceOf(GoParenthesesExpr.class))
-      .filter(new Condition<GoExpression>() {
-        @Override
-        public boolean value(GoExpression expression) {
-          return !(expression instanceof GoReferenceExpression && expression.getParent() instanceof GoCallExpr);
-        }
-      })
+      .filter(expression1 -> !(expression1 instanceof GoReferenceExpression && expression1.getParent() instanceof GoCallExpr))
       .toList();
   }
 
@@ -177,47 +161,44 @@ public class GoIntroduceVariableBase {
     new GoInplaceVariableIntroducer(operation).performInplaceRefactoring(operation.getSuggestedNames());
   }
 
-  private static void performReplace(final GoIntroduceOperation operation) {
-    final Project project = operation.getProject();
-    final PsiElement expression = operation.getExpression();
-    final List<PsiElement> occurrences = operation.isReplaceAll() ? operation.getOccurrences() : Collections.singletonList(expression);
-    final PsiElement anchor = GoRefactoringUtil.findLocalAnchor(occurrences);
+  private static void performReplace(GoIntroduceOperation operation) {
+    Project project = operation.getProject();
+    PsiElement expression = operation.getExpression();
+    List<PsiElement> occurrences = operation.isReplaceAll() ? operation.getOccurrences() : Collections.singletonList(expression);
+    PsiElement anchor = GoRefactoringUtil.findLocalAnchor(occurrences);
     if (anchor == null) {
       showCannotPerform(operation, RefactoringBundle.message("refactoring.introduce.context.error"));
       return;
     }
-    final GoBlock context = (GoBlock)anchor.getParent();
-    final String name = operation.getName();
-    final List<PsiElement> newOccurrences = ContainerUtil.newArrayList();
-    WriteCommandAction.runWriteCommandAction(project, new Runnable() {
-      @Override
-      public void run() {
-        GoStatement declarationStatement = GoElementFactory.createShortVarDeclarationStatement(project, name, (GoExpression)expression);
-        PsiElement newLine = GoElementFactory.createNewLine(project);
-        PsiElement statement = context.addBefore(declarationStatement, context.addBefore(newLine, anchor));
-        GoVarDefinition varDefinition = PsiTreeUtil.findChildOfType(statement, GoVarDefinition.class);
-        assert varDefinition != null;
-        assert varDefinition.isValid() : "invalid var `" + varDefinition.getText() + "` definition in `" + statement.getText() + "`";
-        operation.setVar(varDefinition);
+    GoBlock context = (GoBlock)anchor.getParent();
+    String name = operation.getName();
+    List<PsiElement> newOccurrences = ContainerUtil.newArrayList();
+    WriteCommandAction.runWriteCommandAction(project, () -> {
+      GoStatement declarationStatement = GoElementFactory.createShortVarDeclarationStatement(project, name, (GoExpression)expression);
+      PsiElement newLine = GoElementFactory.createNewLine(project);
+      PsiElement statement = context.addBefore(declarationStatement, context.addBefore(newLine, anchor));
+      GoVarDefinition varDefinition = PsiTreeUtil.findChildOfType(statement, GoVarDefinition.class);
+      assert varDefinition != null;
+      assert varDefinition.isValid() : "invalid var `" + varDefinition.getText() + "` definition in `" + statement.getText() + "`";
+      operation.setVar(varDefinition);
 
-        boolean firstOccurrence = true;
-        for (PsiElement occurrence : occurrences) {
-          PsiElement occurrenceParent = occurrence.getParent();
-          if (occurrenceParent instanceof GoParenthesesExpr) occurrence = occurrenceParent;
+      boolean firstOccurrence = true;
+      for (PsiElement occurrence : occurrences) {
+        PsiElement occurrenceParent = occurrence.getParent();
+        if (occurrenceParent instanceof GoParenthesesExpr) occurrence = occurrenceParent;
 
-          if (firstOccurrence && occurrence instanceof GoExpression) {
-            firstOccurrence = false;
-            PsiElement parent = occurrence.getParent();
-            // single-expression statement
-            if (parent instanceof GoLeftHandExprList && parent.getParent() instanceof GoSimpleStatement) {
-              parent.getParent().delete();
-              continue;
-            }
+        if (firstOccurrence && occurrence instanceof GoExpression) {
+          firstOccurrence = false;
+          PsiElement parent = occurrence.getParent();
+          // single-expression statement
+          if (parent instanceof GoLeftHandExprList && parent.getParent() instanceof GoSimpleStatement) {
+            parent.getParent().delete();
+            continue;
           }
-          newOccurrences.add(occurrence.replace(GoElementFactory.createReferenceExpression(project, name)));
         }
-        operation.getEditor().getCaretModel().moveToOffset(varDefinition.getIdentifier().getTextRange().getStartOffset());
+        newOccurrences.add(occurrence.replace(GoElementFactory.createReferenceExpression(project, name)));
       }
+      operation.getEditor().getCaretModel().moveToOffset(varDefinition.getIdentifier().getTextRange().getStartOffset());
     });
     operation.setOccurrences(newOccurrences);
     PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(operation.getEditor().getDocument());

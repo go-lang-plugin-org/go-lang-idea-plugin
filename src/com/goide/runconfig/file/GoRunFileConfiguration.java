@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,11 +66,11 @@ public class GoRunFileConfiguration extends GoRunConfigurationWithMain<GoRunFile
   protected GoRunFileRunningState newRunningState(@NotNull ExecutionEnvironment env, @NotNull Module module) {
     String path = getFilePath();
     if (!"go".equals(PathUtil.getFileExtension(path))) {
-      final VirtualFile f = LocalFileSystem.getInstance().refreshAndFindFileByPath(path);
+      VirtualFile f = LocalFileSystem.getInstance().refreshAndFindFileByPath(path);
       if (f != null && f.getFileType() == ScratchFileType.INSTANCE) {
         String suffixWithoutExt = "." + UUID.randomUUID().toString().substring(0, 4);
-        final String suffix = suffixWithoutExt + ".go";
-        final String before = f.getName();
+        String suffix = suffixWithoutExt + ".go";
+        String before = f.getName();
         String beforeWithoutExt = FileUtil.getNameWithoutExtension(before);
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
           @Override

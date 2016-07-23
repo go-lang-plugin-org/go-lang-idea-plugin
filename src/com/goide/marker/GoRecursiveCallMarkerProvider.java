@@ -30,7 +30,7 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.FunctionUtil;
-import com.intellij.util.containers.HashSet;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -45,7 +45,7 @@ public class GoRecursiveCallMarkerProvider implements LineMarkerProvider {
 
   @Override
   public void collectSlowLineMarkers(@NotNull List<PsiElement> elements, @NotNull Collection<LineMarkerInfo> result) {
-    Set<Integer> lines = new HashSet<Integer>();
+    Set<Integer> lines = ContainerUtil.newHashSet();
     for (PsiElement element : elements) {
       if (element instanceof GoCallExpr) {
         PsiElement resolve = GoPsiImplUtil.resolveCall((GoCallExpr)element);

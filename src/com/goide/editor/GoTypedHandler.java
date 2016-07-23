@@ -35,25 +35,22 @@ public class GoTypedHandler extends TypedActionHandlerBase {
   }
 
   @Override
-  public void execute(@NotNull final Editor editor, char c, @NotNull DataContext dataContext) {
+  public void execute(@NotNull Editor editor, char c, @NotNull DataContext dataContext) {
     if (myOriginalHandler != null) myOriginalHandler.execute(editor, c, dataContext);
     if (c != 'e') return;
-    final Project project = editor.getProject();
+    Project project = editor.getProject();
     if (project == null) return;
     int offset = editor.getCaretModel().getOffset();
     if (offset < 4) return;
-    final TextRange from = TextRange.from(offset - 4, 4);
+    TextRange from = TextRange.from(offset - 4, 4);
     String text = editor.getDocument().getText(from);
     if ("case".equals(text)) {
       PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
-      ApplicationManager.getApplication().runWriteAction(new Runnable() {
-        @Override
-        public void run() {
-          if (project.isDisposed()) return;
-          PsiFile file = PsiUtilBase.getPsiFileInEditor(editor, project);
-          if (file == null) return;
-          CodeStyleManager.getInstance(project).adjustLineIndent(file, from);
-        }
+      ApplicationManager.getApplication().runWriteAction(() -> {
+        if (project.isDisposed()) return;
+        PsiFile file = PsiUtilBase.getPsiFileInEditor(editor, project);
+        if (file == null) return;
+        CodeStyleManager.getInstance(project).adjustLineIndent(file, from);
       });
     }
   }

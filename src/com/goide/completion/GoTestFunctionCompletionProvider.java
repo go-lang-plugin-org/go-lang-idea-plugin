@@ -59,43 +59,37 @@ public class GoTestFunctionCompletionProvider extends CompletionProvider<Complet
     PsiFile file = parameters.getOriginalFile();
     PsiDirectory containingDirectory = file.getContainingDirectory();
     if (file instanceof GoFile && containingDirectory != null) {
-      final CompletionResultSet resultSet = result.withPrefixMatcher(new CamelHumpMatcher(result.getPrefixMatcher().getPrefix(), false));
+      CompletionResultSet resultSet = result.withPrefixMatcher(new CamelHumpMatcher(result.getPrefixMatcher().getPrefix(), false));
 
       Collection<String> allPackageFunctionNames = collectAllFunctionNames(containingDirectory);      
-      final Set<String> allTestFunctionNames = collectAllTestNames(allPackageFunctionNames, project, (GoFile)file);
+      Set<String> allTestFunctionNames = collectAllTestNames(allPackageFunctionNames, project, (GoFile)file);
       
-      final String fileNameWithoutTestPrefix = StringUtil.trimEnd(file.getName(), GoConstants.TEST_SUFFIX_WITH_EXTENSION) + ".go";
+      String fileNameWithoutTestPrefix = StringUtil.trimEnd(file.getName(), GoConstants.TEST_SUFFIX_WITH_EXTENSION) + ".go";
       GlobalSearchScope packageScope = GoPackageUtil.packageScope(containingDirectory, ((GoFile)file).getCanonicalPackageName());
       GlobalSearchScope scope = new GoUtil.ExceptTestsScope(packageScope);
       IdFilter idFilter = GoIdFilter.getFilesFilter(scope);
-      for (final String functionName : allPackageFunctionNames) {
-        GoFunctionIndex.process(functionName, project, scope, idFilter, new Processor<GoFunctionDeclaration>() {
-          @Override
-          public boolean process(GoFunctionDeclaration declaration) {
-            addVariants(declaration, functionName, fileNameWithoutTestPrefix, allTestFunctionNames, resultSet);
-            return false;
-          }
+      for (String functionName : allPackageFunctionNames) {
+        GoFunctionIndex.process(functionName, project, scope, idFilter, declaration -> {
+          addVariants(declaration, functionName, fileNameWithoutTestPrefix, allTestFunctionNames, resultSet);
+          return false;
         });
       }
 
       Collection<String> methodKeys = ContainerUtil.newTroveSet();
-      StubIndex.getInstance().processAllKeys(GoMethodIndex.KEY, new CancellableCollectProcessor<String>(methodKeys), scope, idFilter);
-      for (final String key : methodKeys) {
-        Processor<GoMethodDeclaration> processor = new Processor<GoMethodDeclaration>() {
-          @Override
-          public boolean process(GoMethodDeclaration declaration) {
-            GoMethodDeclarationStubElementType.calcTypeText(declaration);
-            String typeText = key.substring(Math.min(key.indexOf('.') + 1, key.length()));
-            String methodName = declaration.getName();
-            if (methodName != null) {
-              if (!declaration.isPublic() || declaration.isBlank()) {
-                return true;
-              }
-              String lookupString = !typeText.isEmpty() ? StringUtil.capitalize(typeText) + "_" + methodName : methodName;
-              addVariants(declaration, lookupString, fileNameWithoutTestPrefix, allTestFunctionNames, resultSet);
+      StubIndex.getInstance().processAllKeys(GoMethodIndex.KEY, new CancellableCollectProcessor<>(methodKeys), scope, idFilter);
+      for (String key : methodKeys) {
+        Processor<GoMethodDeclaration> processor = declaration -> {
+          GoMethodDeclarationStubElementType.calcTypeText(declaration);
+          String typeText = key.substring(Math.min(key.indexOf('.') + 1, key.length()));
+          String methodName = declaration.getName();
+          if (methodName != null) {
+            if (!declaration.isPublic() || declaration.isBlank()) {
+              return true;
             }
-            return true;
+            String lookupString = !typeText.isEmpty() ? StringUtil.capitalize(typeText) + "_" + methodName : methodName;
+            addVariants(declaration, lookupString, fileNameWithoutTestPrefix, allTestFunctionNames, resultSet);
           }
+          return true;
         };
         GoMethodIndex.process(key, project, scope, idFilter, processor);
       }
@@ -143,18 +137,15 @@ public class GoTestFunctionCompletionProvider extends CompletionProvider<Complet
 
   @NotNull
   private static Set<String> collectAllTestNames(@NotNull Collection<String> names, @NotNull Project project, @NotNull GoFile file) {
-    final Set<String> result = ContainerUtil.newHashSet();
+    Set<String> result = ContainerUtil.newHashSet();
     GlobalSearchScope packageScope = GoPackageUtil.packageScope(file);
     GlobalSearchScope scope = new GoUtil.TestsScope(packageScope);
     IdFilter idFilter = GoIdFilter.getFilesFilter(packageScope);
-    for (final String name : names) {
+    for (String name : names) {
       if (GoTestFunctionType.fromName(name) != null) {
-        GoFunctionIndex.process(name, project, scope, idFilter, new Processor<GoFunctionDeclaration>() {
-          @Override
-          public boolean process(GoFunctionDeclaration declaration) {
-            result.add(name);
-            return false;
-          }
+        GoFunctionIndex.process(name, project, scope, idFilter, declaration -> {
+          result.add(name);
+          return false;
         });
       }
     }
@@ -202,19 +193,17 @@ public class GoTestFunctionCompletionProvider extends CompletionProvider<Complet
           }
           else {
             PsiElement lbrace = block.getLbrace();
-            if (lbrace != null) {
-              PsiElement rbrace = block.getRbrace();
-              int lbraceEndOffset = lbrace.getTextRange().getEndOffset();
-              int startLine = document.getLineNumber(lbraceEndOffset);
-              int endLine = rbrace != null ? document.getLineNumber(rbrace.getTextRange().getStartOffset()) : startLine;
-              int lineDiff = endLine - startLine;
-              if (lineDiff < 2) {
-                document.insertString(lbraceEndOffset, StringUtil.repeat("\n", 2 - lineDiff));
-              }
-              int offsetToMove = document.getLineStartOffset(startLine + 1);
-              context.getEditor().getCaretModel().moveToOffset(offsetToMove);
-              CodeStyleManager.getInstance(context.getProject()).adjustLineIndent(document, offsetToMove);
+            PsiElement rbrace = block.getRbrace();
+            int lbraceEndOffset = lbrace.getTextRange().getEndOffset();
+            int startLine = document.getLineNumber(lbraceEndOffset);
+            int endLine = rbrace != null ? document.getLineNumber(rbrace.getTextRange().getStartOffset()) : startLine;
+            int lineDiff = endLine - startLine;
+            if (lineDiff < 2) {
+              document.insertString(lbraceEndOffset, StringUtil.repeat("\n", 2 - lineDiff));
             }
+            int offsetToMove = document.getLineStartOffset(startLine + 1);
+            context.getEditor().getCaretModel().moveToOffset(offsetToMove);
+            CodeStyleManager.getInstance(context.getProject()).adjustLineIndent(document, offsetToMove);
           }
         }
       }

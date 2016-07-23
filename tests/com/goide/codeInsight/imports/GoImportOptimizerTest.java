@@ -67,12 +67,8 @@ public class GoImportOptimizerTest extends GoQuickFixTestBase {
     PsiFile file = myFixture.configureByFile(getTestName(true) + ".go");
     resolveAllReferences(file);
     myFixture.checkHighlighting();
-    ApplicationManager.getApplication().runWriteAction(new Runnable() {
-      @Override
-      public void run() {
-        OptimizeImportsAction.actionPerformedImpl(DataManager.getInstance().getDataContext(myFixture.getEditor().getContentComponent()));
-      }
-    });
+    ApplicationManager.getApplication().runWriteAction(
+      () -> OptimizeImportsAction.actionPerformedImpl(DataManager.getInstance().getDataContext(myFixture.getEditor().getContentComponent())));
     myFixture.checkResultByFile(getTestName(true) + "_after.go");
   }
 

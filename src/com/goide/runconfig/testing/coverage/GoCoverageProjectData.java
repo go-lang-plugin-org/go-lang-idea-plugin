@@ -48,7 +48,7 @@ public class GoCoverageProjectData extends ProjectData {
     }
   }
 
-  public void addData(final String filePath, int startLine, int startColumn, int endLine, int endColumn, int statements, int hits) {
+  public void addData(String filePath, int startLine, int startColumn, int endLine, int endColumn, int statements, int hits) {
     FileData fileData = ContainerUtil.getOrCreate(myFilesData, filePath, new Factory<FileData>() {
       @Override
       public FileData create() {

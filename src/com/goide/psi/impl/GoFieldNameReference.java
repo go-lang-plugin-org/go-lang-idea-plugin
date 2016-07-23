@@ -32,7 +32,7 @@ public class GoFieldNameReference extends GoCachedReference<GoReferenceExpressio
   }
 
   @Override
-  public boolean processResolveVariants(@NotNull final GoScopeProcessor processor) {
+  public boolean processResolveVariants(@NotNull GoScopeProcessor processor) {
     GoScopeProcessor fieldProcessor = processor instanceof GoFieldProcessor ? processor : new GoFieldProcessor(myElement) {
       @Override
       public boolean execute(@NotNull PsiElement e, @NotNull ResolveState state) {

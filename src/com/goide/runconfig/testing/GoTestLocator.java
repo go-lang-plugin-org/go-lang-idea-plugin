@@ -16,7 +16,6 @@
 
 package com.goide.runconfig.testing;
 
-import com.goide.psi.GoFunctionDeclaration;
 import com.goide.psi.GoMethodDeclaration;
 import com.goide.psi.GoTypeSpec;
 import com.goide.stubs.index.GoFunctionIndex;
@@ -28,7 +27,6 @@ import com.intellij.execution.testframework.sm.runner.SMTestLocator;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.indexing.IdFilter;
 import org.jetbrains.annotations.NotNull;
@@ -48,7 +46,7 @@ public class GoTestLocator implements SMTestLocator {
   @Override
   public List<Location> getLocation(@NotNull String protocolId,
                                     @NotNull String path,
-                                    @NotNull final Project project,
+                                    @NotNull Project project,
                                     @NotNull GlobalSearchScope scope) {
     if (PROTOCOL.equals(protocolId)) {
       IdFilter idFilter = GoIdFilter.getTestsFilter(project);
@@ -56,12 +54,7 @@ public class GoTestLocator implements SMTestLocator {
       // Location is a function name, e.g. `TestCheckItOut`
       if (locationDataItems.size() == 1) {
         return ContainerUtil.mapNotNull(GoFunctionIndex.find(path, project, scope, idFilter),
-                                        new Function<GoFunctionDeclaration, Location>() {
-                                          @Override
-                                          public Location fun(GoFunctionDeclaration function) {
-                                            return PsiLocation.fromPsiElement(project, function);
-                                          }
-                                        });
+                                        function -> PsiLocation.fromPsiElement(project, function));
       }
 
       // Location is a method name, e.g. `FooSuite.TestCheckItOut`
@@ -80,12 +73,7 @@ public class GoTestLocator implements SMTestLocator {
     else if (SUITE_PROTOCOL.equals(protocolId)) {
       IdFilter idFilter = GoIdFilter.getTestsFilter(project);
       return ContainerUtil.mapNotNull(GoTypesIndex.find(path, project, scope, idFilter),
-                                      new Function<GoTypeSpec, Location>() {
-                                        @Override
-                                        public Location fun(GoTypeSpec spec) {
-                                          return PsiLocation.fromPsiElement(project, spec);
-                                        }
-                                      });
+                                      spec -> PsiLocation.fromPsiElement(project, spec));
     }
     else {
       return Collections.emptyList();

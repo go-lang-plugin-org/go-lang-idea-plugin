@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.stubs.StubBase;
 import com.intellij.psi.stubs.StubElement;
-import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.io.StringRef;
 import org.jetbrains.annotations.NotNull;
@@ -51,14 +50,9 @@ public class GoConstSpecStub extends StubBase<GoConstSpec> {
     if (myList == null) {
       String text = getExpressionsText();
       if (!StringUtil.isNotEmpty(text)) return myList = ContainerUtil.emptyList();
-      final Project project = getPsi().getProject();
+      Project project = getPsi().getProject();
       List<String> split = StringUtil.split(text, ";");
-      myList = ContainerUtil.map(split, new Function<String, GoExpression>() {
-        @Override
-        public GoExpression fun(@NotNull String s) {
-          return GoElementFactory.createExpression(project, s);
-        }
-      });
+      myList = ContainerUtil.map(split, s -> GoElementFactory.createExpression(project, s));
     }
     return myList;
   }

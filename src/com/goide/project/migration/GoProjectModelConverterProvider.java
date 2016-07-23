@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,7 +60,7 @@ public class GoProjectModelConverterProvider extends ConverterProvider {
 
   @NotNull
   @Override
-  public ProjectConverter createConverter(@NotNull final ConversionContext context) {
+  public ProjectConverter createConverter(@NotNull ConversionContext context) {
     return new ProjectConverter() {
       private final Collection<File> additionalCreatedFiles = ContainerUtil.newArrayList();
       private final Collection<File> additionalAffectedFiles = ContainerUtil.newArrayList();

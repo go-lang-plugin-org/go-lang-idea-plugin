@@ -39,7 +39,7 @@ import org.jetbrains.annotations.NotNull;
 
 @State(name = GoConstants.GO_MODULE_SESTTINGS_SERVICE_NAME, storages = @Storage(file = StoragePathMacros.MODULE_FILE))
 public class GoModuleSettings implements PersistentStateComponent<GoModuleSettings.GoModuleSettingsState> {
-  public static final Topic<BuildTargetListener> TOPIC = new Topic<BuildTargetListener>("build target changed", BuildTargetListener.class);
+  public static final Topic<BuildTargetListener> TOPIC = Topic.create("build target changed", BuildTargetListener.class);
 
   @NotNull
   private final GoModuleSettingsState myState = new GoModuleSettingsState();

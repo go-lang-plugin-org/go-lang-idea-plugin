@@ -33,11 +33,8 @@ public class GoImportListTest extends GoCodeInsightFixtureTestCase {
   
   private void doAddImportTest() {
     myFixture.configureByFile(getTestName(true) + ".go");
-    WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new Runnable() {
-      @Override
-      public void run() {
-        ((GoFile)myFixture.getFile()).addImport("package/path", null);
-      }
+    WriteCommandAction.runWriteCommandAction(myFixture.getProject(), () -> {
+      ((GoFile)myFixture.getFile()).addImport("package/path", null);
     });
     myFixture.checkResultByFile(getTestName(true) + "_after.go");
   }

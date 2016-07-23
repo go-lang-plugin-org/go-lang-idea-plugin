@@ -48,7 +48,7 @@ public abstract class GoRunningState<T extends GoRunConfigurationBase<?>> extend
   @Override
   protected ProcessHandler startProcess() throws ExecutionException {
     GoExecutor executor = patchExecutor(createCommonExecutor());
-    final GeneralCommandLine commandLine = executor.withParameterString(myConfiguration.getParams()).createCommandLine();
+    GeneralCommandLine commandLine = executor.withParameterString(myConfiguration.getParams()).createCommandLine();
     KillableColoredProcessHandler handler = new KillableColoredProcessHandler(commandLine);
     ProcessTerminatedListener.attach(handler);
     return handler;

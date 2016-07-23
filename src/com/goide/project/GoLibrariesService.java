@@ -25,7 +25,6 @@ import com.intellij.openapi.util.ModificationTracker;
 import com.intellij.openapi.util.SimpleModificationTracker;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.messages.Topic;
 import com.intellij.util.xmlb.XmlSerializerUtil;
@@ -37,7 +36,7 @@ import java.util.Collection;
 import java.util.Set;
 
 public abstract class GoLibrariesService<T extends GoLibrariesState> extends SimpleModificationTracker implements PersistentStateComponent<T> {
-  public static final Topic<LibrariesListener> LIBRARIES_TOPIC = new Topic<LibrariesListener>("libraries changes", LibrariesListener.class);
+  public static final Topic<LibrariesListener> LIBRARIES_TOPIC = Topic.create("libraries changes", LibrariesListener.class);
   protected final T myState = createState();
 
   @NotNull
@@ -104,12 +103,7 @@ public abstract class GoLibrariesService<T extends GoLibrariesState> extends Sim
 
   @NotNull
   private static Collection<? extends VirtualFile> goRootsFromUrls(@NotNull Collection<String> urls) {
-    return ContainerUtil.mapNotNull(urls, new Function<String, VirtualFile>() {
-      @Override
-      public VirtualFile fun(String url) {
-        return VirtualFileManager.getInstance().findFileByUrl(url);
-      }
-    });
+    return ContainerUtil.mapNotNull(urls, url -> VirtualFileManager.getInstance().findFileByUrl(url));
   }
 
   public interface LibrariesListener {

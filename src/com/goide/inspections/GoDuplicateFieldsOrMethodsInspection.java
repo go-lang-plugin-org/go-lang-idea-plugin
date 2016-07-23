@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,12 +31,12 @@ import static com.intellij.codeInspection.ProblemHighlightType.GENERIC_ERROR_OR_
 public class GoDuplicateFieldsOrMethodsInspection extends GoInspectionBase {
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder,
+  protected GoVisitor buildGoVisitor(@NotNull ProblemsHolder holder,
                                      @SuppressWarnings({"UnusedParameters", "For future"}) @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
-      public void visitStructType(@NotNull final GoStructType type) {
-        final List<GoNamedElement> fields = ContainerUtil.newArrayList();
+      public void visitStructType(@NotNull GoStructType type) {
+        List<GoNamedElement> fields = ContainerUtil.newArrayList();
         type.accept(new GoRecursiveVisitor() {
           @Override
           public void visitFieldDefinition(@NotNull GoFieldDefinition o) {

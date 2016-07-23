@@ -58,7 +58,7 @@ public class GoVendoringUI implements Disposable {
     myPanel.setBorder(IdeBorderFactory.createTitledBorder("Vendor experiment"));
   }
 
-  public void initPanel(@NotNull final Module module) {
+  public void initPanel(@NotNull Module module) {
     if (!module.isDisposed()) {
       MessageBusConnection connection = module.getMessageBus().connect(this);
       //noinspection unchecked

@@ -30,7 +30,7 @@ import java.net.InetSocketAddress;
 public class DlvRemoteVmConnection extends RemoteVmConnection {
   @NotNull
   @Override
-  public Bootstrap createBootstrap(@NotNull InetSocketAddress address, @NotNull final AsyncPromise<Vm> vmResult) {
+  public Bootstrap createBootstrap(@NotNull InetSocketAddress address, @NotNull AsyncPromise<Vm> vmResult) {
     return NettyKt.oioClientBootstrap().handler(new ChannelInitializer() {
       @Override
       protected void initChannel(@NotNull Channel channel) throws Exception {
