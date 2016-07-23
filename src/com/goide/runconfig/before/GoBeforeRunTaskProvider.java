@@ -33,7 +33,6 @@ import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.util.Consumer;
 import com.intellij.util.concurrency.Semaphore;
 import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.Nullable;
@@ -119,14 +118,14 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
   public boolean executeTask(DataContext context,
                              RunConfiguration configuration,
                              ExecutionEnvironment env,
-                             final GoCommandBeforeRunTask task) {
-    final Semaphore done = new Semaphore();
-    final Ref<Boolean> result = new Ref<Boolean>(false);
+                             GoCommandBeforeRunTask task) {
+    Semaphore done = new Semaphore();
+    Ref<Boolean> result = Ref.create(false);
 
     GoRunConfigurationBase goRunConfiguration = (GoRunConfigurationBase)configuration;
-    final Module module = goRunConfiguration.getConfigurationModule().getModule();
-    final Project project = configuration.getProject();
-    final String workingDirectory = goRunConfiguration.getWorkingDirectory();
+    Module module = goRunConfiguration.getConfigurationModule().getModule();
+    Project project = configuration.getProject();
+    String workingDirectory = goRunConfiguration.getWorkingDirectory();
 
     UIUtil.invokeAndWaitIfNeeded(new Runnable() {
       @Override
@@ -149,12 +148,7 @@ public class GoBeforeRunTaskProvider extends BeforeRunTaskProvider<GoCommandBefo
               result.set(event.getExitCode() == 0);
             }
           })
-          .executeWithProgress(false, new Consumer<Boolean>() {
-            @Override
-            public void consume(Boolean result) {
-              VirtualFileManager.getInstance().asyncRefresh(null);
-            }
-          });
+          .executeWithProgress(false, result1 -> VirtualFileManager.getInstance().asyncRefresh(null));
       }
     });
 

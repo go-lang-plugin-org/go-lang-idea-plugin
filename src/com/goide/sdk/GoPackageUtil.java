@@ -37,7 +37,6 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.CachedValue;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -86,45 +85,31 @@ public class GoPackageUtil {
   @NotNull
   public static GlobalSearchScope packageScope(@NotNull GoFile file) {
     List<GoFile> files = getAllPackageFiles(file);
-    return GlobalSearchScope.filesWithLibrariesScope(file.getProject(), ContainerUtil.map(files, new Function<GoFile, VirtualFile>() {
-      @Override
-      public VirtualFile fun(GoFile file) {
-        return file.getVirtualFile();
-      }
-    }));
+    return GlobalSearchScope.filesWithLibrariesScope(file.getProject(), ContainerUtil.map(files, PsiFile::getVirtualFile));
   }
   
   @NotNull
   public static GlobalSearchScope packageScope(@NotNull PsiDirectory psiDirectory, @Nullable String packageName) {
     List<GoFile> files = getAllPackageFiles(psiDirectory, packageName);
-    return GlobalSearchScope.filesWithLibrariesScope(psiDirectory.getProject(), ContainerUtil.map(files, new Function<GoFile, VirtualFile>() {
-      @Override
-      public VirtualFile fun(GoFile file) {
-        return file.getVirtualFile();
-      }
-    }));
+    return GlobalSearchScope.filesWithLibrariesScope(psiDirectory.getProject(), ContainerUtil.map(files, PsiFile::getVirtualFile));
   }
 
   @NotNull
-  public static Collection<String> getAllPackagesInDirectory(@Nullable final PsiDirectory dir,
+  public static Collection<String> getAllPackagesInDirectory(@Nullable PsiDirectory dir,
                                                              @Nullable Module contextModule,
-                                                             final boolean trimTestSuffices) {
+                                                             boolean trimTestSuffices) {
     if (dir == null) return Collections.emptyList();
     if (contextModule != null) {
       return getAllPackagesInDirectoryInner(dir, contextModule, trimTestSuffices);
     }
     Key<CachedValue<Collection<String>>> key = trimTestSuffices ? PACKAGES_TEST_TRIMMED_CACHE : PACKAGES_CACHE;
-    return CachedValuesManager.getManager(dir.getProject()).getCachedValue(dir, key, new CachedValueProvider<Collection<String>>() {
-      @Nullable
-      @Override
-      public Result<Collection<String>> compute() {
-        Module module = ModuleUtilCore.findModuleForPsiElement(dir);
-        GoBuildTargetSettings buildTargetSettings = module != null ? GoModuleSettings.getInstance(module).getBuildTargetSettings() : null;
-        // todo[zolotov]: implement package modification tracker
-        return buildTargetSettings != null
-               ? Result.create(getAllPackagesInDirectoryInner(dir, module, trimTestSuffices), dir, buildTargetSettings)
-               : Result.create(getAllPackagesInDirectoryInner(dir, null, trimTestSuffices), dir); 
-      }
+    return CachedValuesManager.getManager(dir.getProject()).getCachedValue(dir, key, () -> {
+      Module module = ModuleUtilCore.findModuleForPsiElement(dir);
+      GoBuildTargetSettings buildTargetSettings = module != null ? GoModuleSettings.getInstance(module).getBuildTargetSettings() : null;
+      // todo[zolotov]: implement package modification tracker
+      return buildTargetSettings != null
+             ? CachedValueProvider.Result.create(getAllPackagesInDirectoryInner(dir, module, trimTestSuffices), dir, buildTargetSettings)
+             : CachedValueProvider.Result.create(getAllPackagesInDirectoryInner(dir, null, trimTestSuffices), dir); 
     }, false);
   }
 

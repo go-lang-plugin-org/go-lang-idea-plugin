@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.ColoredTextContainer;
 import com.intellij.ui.SimpleTextAttributes;
-import com.intellij.util.Consumer;
 import com.intellij.xdebugger.XDebuggerUtil;
 import com.intellij.xdebugger.XSourcePosition;
 import com.intellij.xdebugger.evaluation.XDebuggerEvaluator;
@@ -53,7 +52,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.concurrency.Promise;
 
 import javax.swing.*;
-import java.util.List;
 
 class DlvStackFrame extends XStackFrame {
   private final DlvDebugProcess myProcess;
@@ -77,47 +75,34 @@ class DlvStackFrame extends XStackFrame {
     return new XDebuggerEvaluator() {
       @Override
       public void evaluate(@NotNull String expression,
-                           @NotNull final XEvaluationCallback callback,
+                           @NotNull XEvaluationCallback callback,
                            @Nullable XSourcePosition expressionPosition) {
         myProcessor.send(new DlvRequest.EvalSymbol(expression, myId))
-          .done(new Consumer<DlvApi.Variable>() {
-            @Override
-            public void consume(@NotNull DlvApi.Variable variable) {
-              callback.evaluated(createXValue(variable, AllIcons.Debugger.Watch));
-            }
-          })
-          .rejected(new Consumer<Throwable>() {
-            @Override
-            public void consume(@NotNull Throwable throwable) {
-              callback.errorOccurred(throwable.getMessage());
-            }
-          });
+          .done(variable -> callback.evaluated(createXValue(variable, AllIcons.Debugger.Watch)))
+          .rejected(throwable -> callback.errorOccurred(throwable.getMessage()));
       }
 
       @Nullable
       @Override
-      public TextRange getExpressionRangeAtOffset(@NotNull final Project project,
-                                                  @NotNull final Document document,
-                                                  final int offset,
+      public TextRange getExpressionRangeAtOffset(@NotNull Project project,
+                                                  @NotNull Document document,
+                                                  int offset,
                                                   boolean sideEffectsAllowed) {
-        final Ref<TextRange> currentRange = Ref.create(null);
-        PsiDocumentManager.getInstance(project).commitAndRunReadAction(new Runnable() {
-          @Override
-          public void run() {
-            try {
-              PsiElement elementAtCursor =
-                DebuggerUtilsEx.findElementAt(PsiDocumentManager.getInstance(project).getPsiFile(document), offset);
-              GoTypeOwner e = PsiTreeUtil.getParentOfType(elementAtCursor,
-                                                          GoExpression.class,
-                                                          GoVarDefinition.class,
-                                                          GoConstDefinition.class,
-                                                          GoParamDefinition.class);
-              if (e != null) {
-                currentRange.set(e.getTextRange());
-              }
+        Ref<TextRange> currentRange = Ref.create(null);
+        PsiDocumentManager.getInstance(project).commitAndRunReadAction(() -> {
+          try {
+            PsiElement elementAtCursor =
+              DebuggerUtilsEx.findElementAt(PsiDocumentManager.getInstance(project).getPsiFile(document), offset);
+            GoTypeOwner e = PsiTreeUtil.getParentOfType(elementAtCursor,
+                                                        GoExpression.class,
+                                                        GoVarDefinition.class,
+                                                        GoConstDefinition.class,
+                                                        GoParamDefinition.class);
+            if (e != null) {
+              currentRange.set(e.getTextRange());
             }
-            catch (IndexNotReadyException ignored) {
-            }
+          }
+          catch (IndexNotReadyException ignored) {
           }
         });
         return currentRange.get();
@@ -166,20 +151,14 @@ class DlvStackFrame extends XStackFrame {
   }
 
   @Override
-  public void computeChildren(@NotNull final XCompositeNode node) {
-    send(new DlvRequest.ListLocalVars(myId)).done(new Consumer<List<DlvApi.Variable>>() {
-      @Override
-      public void consume(@NotNull List<DlvApi.Variable> variables) {
-        final XValueChildrenList xVars = new XValueChildrenList(variables.size());
-        for (DlvApi.Variable v : variables) xVars.add(v.name, createXValue(v, GoIcons.VARIABLE));
-        send(new DlvRequest.ListFunctionArgs(myId)).done(new Consumer<List<DlvApi.Variable>>() {
-          @Override
-          public void consume(@NotNull List<DlvApi.Variable> args) {
-            for (DlvApi.Variable v : args) xVars.add(v.name, createXValue(v, GoIcons.PARAMETER));
-            node.addChildren(xVars, true);
-          }
-        });
-      }
+  public void computeChildren(@NotNull XCompositeNode node) {
+    send(new DlvRequest.ListLocalVars(myId)).done(variables -> {
+      XValueChildrenList xVars = new XValueChildrenList(variables.size());
+      for (DlvApi.Variable v : variables) xVars.add(v.name, createXValue(v, GoIcons.VARIABLE));
+      send(new DlvRequest.ListFunctionArgs(myId)).done(args -> {
+        for (DlvApi.Variable v : args) xVars.add(v.name, createXValue(v, GoIcons.PARAMETER));
+        node.addChildren(xVars, true);
+      });
     });
   }
 }

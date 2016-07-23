@@ -58,23 +58,19 @@ public class GoTargetSystem {
   }
 
   @NotNull
-  public static GoTargetSystem forModule(@NotNull final Module module) {
-    return CachedValuesManager.getManager(module.getProject()).getCachedValue(module, new CachedValueProvider<GoTargetSystem>() {
-      @Nullable
-      @Override
-      public Result<GoTargetSystem> compute() {
-        GoBuildTargetSettings settings = GoModuleSettings.getInstance(module).getBuildTargetSettings();
-        String os = realValue(settings.os, GoUtil.systemOS());
-        String arch = realValue(settings.arch, GoUtil.systemArch());
-        ThreeState cgo = settings.cgo == ThreeState.UNSURE ? GoUtil.systemCgo(os, arch) : settings.cgo;
-        String moduleSdkVersion = GoSdkService.getInstance(module.getProject()).getSdkVersion(module);
-        String[] customFlags = GoSdkService.getInstance(module.getProject()).isAppEngineSdk(module)
-                               ? ArrayUtil.prepend(GAE_BUILD_FLAG, settings.customFlags)
-                               : settings.customFlags;
-        String compiler = GoBuildTargetSettings.ANY_COMPILER.equals(settings.compiler) ? null : settings.compiler;
-        GoTargetSystem result = new GoTargetSystem(os, arch, realValue(settings.goVersion, moduleSdkVersion), compiler, cgo, customFlags);
-        return Result.create(result, settings);
-      }
+  public static GoTargetSystem forModule(@NotNull Module module) {
+    return CachedValuesManager.getManager(module.getProject()).getCachedValue(module, () -> {
+      GoBuildTargetSettings settings = GoModuleSettings.getInstance(module).getBuildTargetSettings();
+      String os = realValue(settings.os, GoUtil.systemOS());
+      String arch = realValue(settings.arch, GoUtil.systemArch());
+      ThreeState cgo = settings.cgo == ThreeState.UNSURE ? GoUtil.systemCgo(os, arch) : settings.cgo;
+      String moduleSdkVersion = GoSdkService.getInstance(module.getProject()).getSdkVersion(module);
+      String[] customFlags = GoSdkService.getInstance(module.getProject()).isAppEngineSdk(module)
+                             ? ArrayUtil.prepend(GAE_BUILD_FLAG, settings.customFlags)
+                             : settings.customFlags;
+      String compiler = GoBuildTargetSettings.ANY_COMPILER.equals(settings.compiler) ? null : settings.compiler;
+      GoTargetSystem result = new GoTargetSystem(os, arch, realValue(settings.goVersion, moduleSdkVersion), compiler, cgo, customFlags);
+      return CachedValueProvider.Result.create(result, settings);
     });
   }
 

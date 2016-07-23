@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -42,7 +41,7 @@ public class GoDuplicateReturnArgumentInspection extends GoDuplicateArgumentInsp
   @NotNull
   private static Set<String> getParamNames(@NotNull GoSignature o) {
     List<GoParameterDeclaration> params = o.getParameters().getParameterDeclarationList();
-    Set<String> names = new LinkedHashSet<String>();
+    Set<String> names = ContainerUtil.newLinkedHashSet();
     for (GoParameterDeclaration fp : params) {
       for (GoParamDefinition parameter : fp.getParamDefinitionList()) {
         if (parameter.isBlank()) continue;

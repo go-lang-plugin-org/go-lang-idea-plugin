@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,26 +23,19 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.usages.PsiElementUsageGroupBase;
-import com.intellij.usages.Usage;
-import com.intellij.usages.UsageGroup;
 import com.intellij.usages.impl.FileStructureGroupRuleProvider;
 import com.intellij.usages.rules.PsiElementUsage;
 import com.intellij.usages.rules.UsageGroupingRule;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoFileStructureGroupRuleProvider implements FileStructureGroupRuleProvider {
-  public static final UsageGroupingRule USAGE_GROUPING_RULE = new UsageGroupingRule() {
-    @Nullable
-    @Override
-    public UsageGroup groupUsage(@NotNull Usage usage) {
-      PsiElement psiElement = usage instanceof PsiElementUsage ? ((PsiElementUsage)usage).getElement() : null;
-      GoNamedElement topmostElement = PsiTreeUtil.getParentOfType(psiElement, GoTypeSpec.class, GoFunctionOrMethodDeclaration.class);
-      if (topmostElement != null) {
-        return new PsiElementUsageGroupBase<GoNamedElement>(topmostElement);
-      }
-      return null;
+  public static final UsageGroupingRule USAGE_GROUPING_RULE = usage -> {
+    PsiElement psiElement = usage instanceof PsiElementUsage ? ((PsiElementUsage)usage).getElement() : null;
+    GoNamedElement topmostElement = PsiTreeUtil.getParentOfType(psiElement, GoTypeSpec.class, GoFunctionOrMethodDeclaration.class);
+    if (topmostElement != null) {
+      return new PsiElementUsageGroupBase<>(topmostElement);
     }
+    return null;
   };
 
   @Nullable

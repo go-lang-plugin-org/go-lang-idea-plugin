@@ -44,47 +44,36 @@ public class GoIdeaSdkService extends GoSdkService {
   }
 
   @Override
-  public String getSdkHomePath(@Nullable final Module module) {
+  public String getSdkHomePath(@Nullable Module module) {
     ComponentManager holder = ObjectUtils.notNull(module, myProject);
-    return CachedValuesManager.getManager(myProject).getCachedValue(holder, new CachedValueProvider<String>() {
-      @Nullable
-      @Override
-      public Result<String> compute() {
-        Sdk sdk = getGoSdk(module);
-        return Result.create(sdk != null ? sdk.getHomePath() : null, GoIdeaSdkService.this);
-      }
+    return CachedValuesManager.getManager(myProject).getCachedValue(holder, () -> {
+      Sdk sdk = getGoSdk(module);
+      return CachedValueProvider.Result.create(sdk != null ? sdk.getHomePath() : null, this);
     });
   }
 
   @Nullable
   @Override
-  public String getSdkVersion(@Nullable final Module module) {
+  public String getSdkVersion(@Nullable Module module) {
     String parentVersion = super.getSdkVersion(module);
     if (parentVersion != null) {
       return parentVersion;
     }
 
     ComponentManager holder = ObjectUtils.notNull(module, myProject);
-    return CachedValuesManager.getManager(myProject).getCachedValue(holder, new CachedValueProvider<String>() {
-      @Nullable
-      @Override
-      public Result<String> compute() {
-        Sdk sdk = getGoSdk(module);
-        return Result.create(sdk != null ? sdk.getVersionString() : null, GoIdeaSdkService.this);
-      }
+    return CachedValuesManager.getManager(myProject).getCachedValue(holder, () -> {
+      Sdk sdk = getGoSdk(module);
+      return CachedValueProvider.Result.create(sdk != null ? sdk.getVersionString() : null, this);
     });
   }
 
   @Override
-  public void chooseAndSetSdk(@Nullable final Module module) {
+  public void chooseAndSetSdk(@Nullable Module module) {
     Sdk projectSdk = ProjectSettingsService.getInstance(myProject).chooseAndSetSdk();
     if (projectSdk == null && module != null) {
-      ApplicationManager.getApplication().runWriteAction(new Runnable() {
-        @Override
-        public void run() {
-          if (!module.isDisposed()) {
-            ModuleRootModificationUtil.setSdkInherited(module);
-          }
+      ApplicationManager.getApplication().runWriteAction(() -> {
+        if (!module.isDisposed()) {
+          ModuleRootModificationUtil.setSdkInherited(module);
         }
       });
     }

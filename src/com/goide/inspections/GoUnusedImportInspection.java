@@ -24,7 +24,6 @@ import com.goide.psi.impl.GoElementFactory;
 import com.goide.quickfix.GoRenameQuickFix;
 import com.intellij.codeInspection.*;
 import com.intellij.find.FindManager;
-import com.intellij.lang.ImportOptimizer;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -49,14 +48,7 @@ public class GoUnusedImportInspection extends GoInspectionBase {
         return;
       }
       PsiFile file = element.getContainingFile();
-      ImportOptimizer optimizer = new GoImportOptimizer();
-      final Runnable runnable = optimizer.processFile(file);
-      WriteCommandAction.runWriteCommandAction(project, new Runnable() {
-        @Override
-        public void run() {
-          runnable.run();
-        }
-      });
+      WriteCommandAction.runWriteCommandAction(project, new GoImportOptimizer().processFile(file));
     }
   };
 

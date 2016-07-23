@@ -16,20 +16,22 @@
 
 package com.goide.inspections;
 
-import com.goide.psi.*;
+import com.goide.psi.GoPointerType;
+import com.goide.psi.GoReceiver;
+import com.goide.psi.GoReferenceExpression;
+import com.goide.psi.GoVisitor;
 import com.intellij.codeInsight.highlighting.ReadWriteAccessDetector;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
-import static com.intellij.codeInspection.ProblemHighlightType.GENERIC_ERROR_OR_WARNING;
 import static com.intellij.codeInspection.ProblemHighlightType.WEAK_WARNING;
 
 public class GoAssignmentToReceiverInspection extends GoInspectionBase {
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
+  protected GoVisitor buildGoVisitor(@NotNull ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
       public void visitReferenceExpression(@NotNull GoReferenceExpression o) {

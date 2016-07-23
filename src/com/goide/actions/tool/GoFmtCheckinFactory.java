@@ -33,15 +33,14 @@ import com.intellij.openapi.vcs.ui.RefreshableOnComponent;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
-import com.intellij.util.Consumer;
 import com.intellij.util.PairConsumer;
+import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -50,11 +49,11 @@ public class GoFmtCheckinFactory extends CheckinHandlerFactory {
 
   @Override
   @NotNull
-  public CheckinHandler createHandler(@NotNull final CheckinProjectPanel panel, @NotNull CommitContext commitContext) {
+  public CheckinHandler createHandler(@NotNull CheckinProjectPanel panel, @NotNull CommitContext commitContext) {
     return new CheckinHandler() {
       @Override
       public RefreshableOnComponent getBeforeCheckinConfigurationPanel() {
-        final JCheckBox checkBox = new JCheckBox("Go fmt");
+        JCheckBox checkBox = new JCheckBox("Go fmt");
         return new RefreshableOnComponent() {
           @Override
           @NotNull
@@ -83,16 +82,13 @@ public class GoFmtCheckinFactory extends CheckinHandlerFactory {
       @Override
       public ReturnResult beforeCheckin(@Nullable CommitExecutor executor, PairConsumer<Object, Object> additionalDataConsumer) {
         if (enabled(panel)) {
-          final Ref<Boolean> success = new Ref<Boolean>(true);
+          Ref<Boolean> success = Ref.create(true);
           FileDocumentManager.getInstance().saveAllDocuments();
           for (PsiFile file : getPsiFiles()) {
             VirtualFile virtualFile = file.getVirtualFile();
             new GoFmtFileAction().doSomething(virtualFile, ModuleUtilCore.findModuleForPsiElement(file), file.getProject(), "Go fmt", true,
-                                              new Consumer<Boolean>() {
-                                                @Override
-                                                public void consume(Boolean result) {
-                                                  if (!result) success.set(false);
-                                                }
+                                              result -> {
+                                                if (!result) success.set(false);
                                               });
           }
           if (!success.get()) {
@@ -121,7 +117,7 @@ public class GoFmtCheckinFactory extends CheckinHandlerFactory {
       @NotNull
       private List<PsiFile> getPsiFiles() {
         Collection<VirtualFile> files = panel.getVirtualFiles();
-        List<PsiFile> psiFiles = new ArrayList<PsiFile>();
+        List<PsiFile> psiFiles = ContainerUtil.newArrayList();
         PsiManager manager = PsiManager.getInstance(panel.getProject());
         for (VirtualFile file : files) {
           PsiFile psiFile = manager.findFile(file);

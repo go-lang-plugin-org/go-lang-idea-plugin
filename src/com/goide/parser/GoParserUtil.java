@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,6 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.indexing.IndexingDataKeys;
 import gnu.trove.TObjectIntHashMap;
-import gnu.trove.TObjectIntProcedure;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,7 +43,7 @@ public class GoParserUtil extends GeneratedParserUtilBase {
   @NotNull
   private static TObjectIntHashMap<String> getParsingModes(@NotNull PsiBuilder builder_) {
     TObjectIntHashMap<String> flags = builder_.getUserDataUnprotected(MODES_KEY);
-    if (flags == null) builder_.putUserDataUnprotected(MODES_KEY, flags = new TObjectIntHashMap<String>());
+    if (flags == null) builder_.putUserDataUnprotected(MODES_KEY, flags = new TObjectIntHashMap<>());
     return flags;
   }
 
@@ -100,9 +99,9 @@ public class GoParserUtil extends GeneratedParserUtilBase {
   }
 
   public static boolean withOff(PsiBuilder builder_, int level_, Parser parser, String... modes) {
-    final TObjectIntHashMap<String> map = getParsingModes(builder_);
+    TObjectIntHashMap<String> map = getParsingModes(builder_);
 
-    TObjectIntHashMap<String> prev = new TObjectIntHashMap<String>();
+    TObjectIntHashMap<String> prev = new TObjectIntHashMap<>();
     
     for (String mode : modes) {
       int p = map.get(mode);
@@ -114,12 +113,9 @@ public class GoParserUtil extends GeneratedParserUtilBase {
     
     boolean result = parser.parse(builder_, level_);
     
-    prev.forEachEntry(new TObjectIntProcedure<String>() {
-      @Override
-      public boolean execute(String mode, int p) {
-        map.put(mode, p);
-        return true;
-      }
+    prev.forEachEntry((mode, p) -> {
+      map.put(mode, p);
+      return true;
     });
     
     return result;

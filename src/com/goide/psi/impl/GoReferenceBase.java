@@ -114,8 +114,8 @@ public abstract class GoReferenceBase<T extends GoReferenceExpressionBase> exten
   }
 
   @NotNull
-  protected GoScopeProcessor createResolveProcessor(@NotNull final Collection<ResolveResult> result,
-                                                    @NotNull final GoReferenceExpressionBase o) {
+  protected GoScopeProcessor createResolveProcessor(@NotNull Collection<ResolveResult> result,
+                                                    @NotNull GoReferenceExpressionBase o) {
     return new GoScopeProcessor() {
       @Override
       public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state) {

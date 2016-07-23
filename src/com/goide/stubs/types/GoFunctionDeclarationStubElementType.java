@@ -36,13 +36,8 @@ import java.util.Collection;
 public class GoFunctionDeclarationStubElementType extends GoNamedStubElementType<GoFunctionDeclarationStub, GoFunctionDeclaration> {
   public static final GoFunctionDeclaration[] EMPTY_ARRAY = new GoFunctionDeclaration[0];
 
-  public static final ArrayFactory<GoFunctionDeclaration> ARRAY_FACTORY = new ArrayFactory<GoFunctionDeclaration>() {
-    @NotNull
-    @Override
-    public GoFunctionDeclaration[] create(int count) {
-      return count == 0 ? EMPTY_ARRAY : new GoFunctionDeclaration[count];
-    }
-  };
+  public static final ArrayFactory<GoFunctionDeclaration> ARRAY_FACTORY =
+    count -> count == 0 ? EMPTY_ARRAY : new GoFunctionDeclaration[count];
   
   private static final ArrayList<StubIndexKey<String, ? extends GoNamedElement>> EXTRA_KEYS =
     ContainerUtil.newArrayList(GoFunctionIndex.KEY);

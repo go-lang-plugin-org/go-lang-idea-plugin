@@ -44,6 +44,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Function;
+import com.intellij.util.NotNullFunction;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.indexing.IdFilter;
 import com.intellij.xml.util.XmlStringUtil;
@@ -209,13 +210,8 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
 
   @NotNull
   private static String getParametersAsString(@NotNull GoParameters parameters) {
-    final String contextImportPath = getImportPathForElement(parameters);
-    return StringUtil.join(GoParameterInfoHandler.getParameterPresentations(parameters, new Function<PsiElement, String>() {
-      @Override
-      public String fun(PsiElement element) {
-        return getTypePresentation(element, new GoDocumentationPresentationFunction(contextImportPath));
-      }
-    }), ", ");
+    String contextImportPath = getImportPathForElement(parameters);
+    return StringUtil.join(GoParameterInfoHandler.getParameterPresentations(parameters, element -> getTypePresentation(element, new GoDocumentationPresentationFunction(contextImportPath))), ", ");
   }
 
   @Nullable
@@ -264,12 +260,7 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
                                            : "*" + getTypePresentation(inner, presentationFunction);
       }
       if (type instanceof GoTypeList) {
-        return "(" + StringUtil.join(((GoTypeList)type).getTypeList(), new Function<GoType, String>() {
-          @Override
-          public String fun(GoType element) {
-            return getTypePresentation(element, presentationFunction);
-          }
-        }, ", ") + ")";
+        return "(" + StringUtil.join(((GoTypeList)type).getTypeList(), element1 -> getTypePresentation(element1, presentationFunction), ", ") + ")";
       }
       if (type instanceof GoFunctionType) {
         return getSignatureOwnerTypePresentation((GoFunctionType)type, presentationFunction);
@@ -286,17 +277,14 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
       }
       if (type instanceof GoStructType) {
         StringBuilder result = new StringBuilder("struct {");
-        result.append(StringUtil.join(((GoStructType)type).getFieldDeclarationList(), new Function<GoFieldDeclaration, String>() {
-          @Override
-          public String fun(GoFieldDeclaration declaration) {
-            GoAnonymousFieldDefinition anon = declaration.getAnonymousFieldDefinition();
-            String result = anon != null
-                            ? getTypePresentation(anon.getGoTypeInner(null), presentationFunction)
-                            : StringUtil.join(declaration.getFieldDefinitionList(), GoPsiImplUtil.GET_TEXT_FUNCTION, ", ") +
-                              " " + getTypePresentation(declaration.getType(), presentationFunction);
-            GoTag tag = declaration.getTag();
-            return result + (tag != null ? tag.getText() : "");
-          }
+        result.append(StringUtil.join(((GoStructType)type).getFieldDeclarationList(), declaration -> {
+          GoAnonymousFieldDefinition anon = declaration.getAnonymousFieldDefinition();
+          String result1 = anon != null
+                          ? getTypePresentation(anon.getGoTypeInner(null), presentationFunction)
+                          : StringUtil.join(declaration.getFieldDefinitionList(), (NotNullFunction<PsiElement, String>)PsiElement::getText, ", ") +
+                            " " + getTypePresentation(declaration.getType(), presentationFunction);
+          GoTag tag = declaration.getTag();
+          return result1 + (tag != null ? tag.getText() : "");
         }, "; "));
         return result.append("}").toString();
       }

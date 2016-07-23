@@ -32,9 +32,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.rt.coverage.data.ClassData;
 import com.intellij.rt.coverage.data.LineData;
 import com.intellij.rt.coverage.data.ProjectData;
-import com.intellij.util.Processor;
 import gnu.trove.TIntObjectHashMap;
-import gnu.trove.TObjectProcedure;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -90,7 +88,7 @@ public class GoCoverageRunner extends CoverageRunner {
   public static GoCoverageProjectData parseCoverage(@NotNull BufferedReader dataReader,
                                                     @NotNull Project project,
                                                     @Nullable Module module) throws IOException {
-    final GoCoverageProjectData result = new GoCoverageProjectData();
+    GoCoverageProjectData result = new GoCoverageProjectData();
     String line;
 
     while ((line = dataReader.readLine()) != null) {
@@ -120,42 +118,36 @@ public class GoCoverageRunner extends CoverageRunner {
       result.addData(filePath, lineStart, columnStart, lineEnd, columnEnd, statements, hit);
     }
 
-    result.processFiles(new Processor<GoCoverageProjectData.FileData>() {
-      @Override
-      public boolean process(GoCoverageProjectData.FileData fileData) {
-        ClassData classData = result.getOrCreateClassData(fileData.myFilePath);
-        int max = -1;
-        TIntObjectHashMap<LineData> linesMap = new TIntObjectHashMap<LineData>();
-        for (GoCoverageProjectData.RangeData rangeData : fileData.myRangesData.values()) {
-          for (int i = rangeData.startLine; i <= rangeData.endLine; i++) {
-            LineData existingData = linesMap.get(i);
-            if (existingData != null) {
-              existingData.setHits(existingData.getHits() + rangeData.hits);
-              // emulate partial
-              existingData.setFalseHits(0, 0);
-              existingData.setTrueHits(0, 0);
-            }
-            else {
-              LineData newData = new LineData(i, null);
-              newData.setHits(newData.getHits() + rangeData.hits);
-              linesMap.put(i, newData);
-            }
+    result.processFiles(fileData -> {
+      ClassData classData = result.getOrCreateClassData(fileData.myFilePath);
+      int max = -1;
+      TIntObjectHashMap<LineData> linesMap = new TIntObjectHashMap<>();
+      for (GoCoverageProjectData.RangeData rangeData : fileData.myRangesData.values()) {
+        for (int i = rangeData.startLine; i <= rangeData.endLine; i++) {
+          LineData existingData = linesMap.get(i);
+          if (existingData != null) {
+            existingData.setHits(existingData.getHits() + rangeData.hits);
+            // emulate partial
+            existingData.setFalseHits(0, 0);
+            existingData.setTrueHits(0, 0);
           }
-          max = Math.max(max, rangeData.endLine);
+          else {
+            LineData newData = new LineData(i, null);
+            newData.setHits(newData.getHits() + rangeData.hits);
+            linesMap.put(i, newData);
+          }
         }
-
-        final LineData[] linesArray = new LineData[max + 1];
-        linesMap.forEachValue(new TObjectProcedure<LineData>() {
-          @Override
-          public boolean execute(LineData data) {
-            data.fillArrays();
-            linesArray[data.getLineNumber()] = data;
-            return true;
-          }
-        });
-        classData.setLines(linesArray);
-        return true;
+        max = Math.max(max, rangeData.endLine);
       }
+
+      LineData[] linesArray = new LineData[max + 1];
+      linesMap.forEachValue(data -> {
+        data.fillArrays();
+        linesArray[data.getLineNumber()] = data;
+        return true;
+      });
+      classData.setLines(linesArray);
+      return true;
     });
 
     return result;

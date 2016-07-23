@@ -48,52 +48,43 @@ public class GoSmallIDEsSdkService extends GoSdkService {
   @Override
   public String getSdkHomePath(@Nullable Module module) {
     ComponentManager holder = ObjectUtils.notNull(module, myProject);
-    return CachedValuesManager.getManager(myProject).getCachedValue(holder, new CachedValueProvider<String>() {
+    return CachedValuesManager.getManager(myProject).getCachedValue(holder, () -> CachedValueProvider.Result
+      .create(ApplicationManager.getApplication().runReadAction(new Computable<String>() {
       @Nullable
       @Override
-      public Result<String> compute() {
-        return Result.create(ApplicationManager.getApplication().runReadAction(new Computable<String>() {
-          @Nullable
-          @Override
-          public String compute() {
-            LibraryTable table = LibraryTablesRegistrar.getInstance().getLibraryTable(myProject);
-            for (Library library : table.getLibraries()) {
-              String libraryName = library.getName();
-              if (libraryName != null && libraryName.startsWith(LIBRARY_NAME)) {
-                for (VirtualFile root : library.getFiles(OrderRootType.CLASSES)) {
-                  if (isGoSdkLibRoot(root)) {
-                    return libraryRootToSdkPath(root);
-                  }
-                }
+      public String compute() {
+        LibraryTable table = LibraryTablesRegistrar.getInstance().getLibraryTable(myProject);
+        for (Library library : table.getLibraries()) {
+          String libraryName = library.getName();
+          if (libraryName != null && libraryName.startsWith(LIBRARY_NAME)) {
+            for (VirtualFile root : library.getFiles(OrderRootType.CLASSES)) {
+              if (isGoSdkLibRoot(root)) {
+                return libraryRootToSdkPath(root);
               }
             }
-            return null;
           }
-        }), GoSmallIDEsSdkService.this);
+        }
+        return null;
       }
-    });
+    }), this));
   }
 
   @Nullable
   @Override
-  public String getSdkVersion(@Nullable final Module module) {
+  public String getSdkVersion(@Nullable Module module) {
     String parentVersion = super.getSdkVersion(module);
     if (parentVersion != null) {
       return parentVersion;
     }
 
     ComponentManager holder = ObjectUtils.notNull(module, myProject);
-    return CachedValuesManager.getManager(myProject).getCachedValue(holder, new CachedValueProvider<String>() {
-      @Nullable
-      @Override
-      public Result<String> compute() {
-        String result = null;
-        String sdkHomePath = getSdkHomePath(module);
-        if (sdkHomePath != null) {
-          result = GoSdkUtil.retrieveGoVersion(sdkHomePath);
-        }
-        return Result.create(result, GoSmallIDEsSdkService.this);
+    return CachedValuesManager.getManager(myProject).getCachedValue(holder, () -> {
+      String result = null;
+      String sdkHomePath = getSdkHomePath(module);
+      if (sdkHomePath != null) {
+        result = GoSdkUtil.retrieveGoVersion(sdkHomePath);
       }
+      return CachedValueProvider.Result.create(result, this);
     });
   }
 

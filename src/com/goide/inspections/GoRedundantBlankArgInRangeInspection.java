@@ -33,7 +33,7 @@ public class GoRedundantBlankArgInRangeInspection extends GoInspectionBase imple
 
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
+  protected GoVisitor buildGoVisitor(@NotNull ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
       public void visitRangeClause(@NotNull GoRangeClause o) {
@@ -60,7 +60,7 @@ public class GoRedundantBlankArgInRangeInspection extends GoInspectionBase imple
     };
   }
 
-  private static void registerBlankArgumentProblem(@NotNull final ProblemsHolder holder,
+  private static void registerBlankArgumentProblem(@NotNull ProblemsHolder holder,
                                                    @NotNull PsiElement start,
                                                    @NotNull PsiElement end) {
     GoDeleteRangeQuickFix fix = new GoDeleteRangeQuickFix(start, end, DELETE_BLANK_ARGUMENT_QUICK_FIX_NAME);

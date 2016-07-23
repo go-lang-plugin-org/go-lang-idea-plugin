@@ -18,7 +18,6 @@ package com.goide.configuration;
 
 import com.goide.project.GoApplicationLibrariesService;
 import com.goide.project.GoLibrariesService;
-import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.fileChooser.FileChooserDialog;
 import com.intellij.openapi.fileChooser.FileChooserFactory;
 import com.intellij.openapi.options.Configurable;
@@ -28,7 +27,10 @@ import com.intellij.openapi.util.Iconable;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.ui.*;
+import com.intellij.ui.CollectionListModel;
+import com.intellij.ui.ColoredListCellRenderer;
+import com.intellij.ui.SimpleTextAttributes;
+import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.components.JBCheckBox;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.IconUtil;
@@ -40,8 +42,6 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Collection;
 
 import static com.intellij.openapi.fileChooser.FileChooserDescriptorFactory.createMultipleFoldersDescriptor;
@@ -52,17 +52,17 @@ public class GoLibrariesConfigurable implements SearchableConfigurable, Configur
   private final String[] myReadOnlyPaths;
   private final JBCheckBox myUseEnvGoPathCheckBox = new JBCheckBox("Use GOPATH that's defined in system environment");
   private final JPanel myPanel = new JPanel(new BorderLayout());
-  private final CollectionListModel<ListItem> myListModel = new CollectionListModel<ListItem>();
+  private final CollectionListModel<ListItem> myListModel = new CollectionListModel<>();
 
   public GoLibrariesConfigurable(@NotNull String displayName, @NotNull GoLibrariesService librariesService, String... urls) {
     myDisplayName = displayName;
     myLibrariesService = librariesService;
     myReadOnlyPaths = urls;
 
-    final JBList filesList = new JBList(myListModel);
+    JBList filesList = new JBList(myListModel);
     filesList.setCellRenderer(new ColoredListCellRenderer() {
       @Override
-      protected void customizeCellRenderer(JList list, Object value, int index, boolean selected, boolean hasFocus) {
+      protected void customizeCellRenderer(@NotNull JList list, Object value, int index, boolean selected, boolean hasFocus) {
         ListItem item = (ListItem)value;
         String url = item.url;
         if (item.readOnly) {
@@ -80,69 +80,57 @@ public class GoLibrariesConfigurable implements SearchableConfigurable, Configur
     });
 
     ToolbarDecorator decorator = ToolbarDecorator.createDecorator(filesList)
-      .setAddAction(new AnActionButtonRunnable() {
-        @Override
-        public void run(AnActionButton button) {
-          FileChooserDialog fileChooser = FileChooserFactory.getInstance()
-            .createFileChooser(createMultipleFoldersDescriptor(), null, filesList);
+      .setAddAction(button -> {
+        FileChooserDialog fileChooser = FileChooserFactory.getInstance()
+          .createFileChooser(createMultipleFoldersDescriptor(), null, filesList);
 
-          VirtualFile fileToSelect = null;
-          ListItem lastItem = ContainerUtil.getLastItem(myListModel.getItems());
-          if (lastItem != null) {
-            fileToSelect = VirtualFileManager.getInstance().findFileByUrl(lastItem.url);
-          }
+        VirtualFile fileToSelect = null;
+        ListItem lastItem = ContainerUtil.getLastItem(myListModel.getItems());
+        if (lastItem != null) {
+          fileToSelect = VirtualFileManager.getInstance().findFileByUrl(lastItem.url);
+        }
 
-          VirtualFile[] newDirectories = fileChooser.choose(null, fileToSelect);
-          if (newDirectories.length > 0) {
-            for (VirtualFile newDirectory : newDirectories) {
-              String newDirectoryUrl = newDirectory.getUrl();
-              boolean alreadyAdded = false;
-              for (ListItem item : myListModel.getItems()) {
-                if (newDirectoryUrl.equals(item.url) && !item.readOnly) {
-                  filesList.clearSelection();
-                  filesList.setSelectedValue(item, true);
-                  scrollToSelection(filesList);
-                  alreadyAdded = true;
-                  break;
-                }
+        VirtualFile[] newDirectories = fileChooser.choose(null, fileToSelect);
+        if (newDirectories.length > 0) {
+          for (VirtualFile newDirectory : newDirectories) {
+            String newDirectoryUrl = newDirectory.getUrl();
+            boolean alreadyAdded = false;
+            for (ListItem item : myListModel.getItems()) {
+              if (newDirectoryUrl.equals(item.url) && !item.readOnly) {
+                filesList.clearSelection();
+                filesList.setSelectedValue(item, true);
+                scrollToSelection(filesList);
+                alreadyAdded = true;
+                break;
               }
-              if (!alreadyAdded) {
-                myListModel.add(new ListItem(newDirectoryUrl, false));
-              }
+            }
+            if (!alreadyAdded) {
+              myListModel.add(new ListItem(newDirectoryUrl, false));
             }
           }
         }
       })
-      .setRemoveActionUpdater(new AnActionButtonUpdater() {
-        @Override
-        public boolean isEnabled(AnActionEvent event) {
-          for (Object selectedValue : filesList.getSelectedValues()) {
-            if (((ListItem)selectedValue).readOnly) {
-              return false;
-            }
+      .setRemoveActionUpdater(event -> {
+        for (Object selectedValue : filesList.getSelectedValuesList()) {
+          if (((ListItem)selectedValue).readOnly) {
+            return false;
           }
-          return true;
         }
+        return true;
       })
-      .setRemoveAction(new AnActionButtonRunnable() {
-        @Override
-        public void run(AnActionButton button) {
-          for (Object selectedValue : filesList.getSelectedValues()) {
-            myListModel.remove((ListItem)selectedValue);
-          }
+      .setRemoveAction(button -> {
+        for (Object selectedValue : filesList.getSelectedValuesList()) {
+          myListModel.remove((ListItem)selectedValue);
         }
       });
     myPanel.add(decorator.createPanel(), BorderLayout.CENTER);
     if (librariesService instanceof GoApplicationLibrariesService) {
-      myUseEnvGoPathCheckBox.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(@NotNull ActionEvent event) {
-          if (myUseEnvGoPathCheckBox.isSelected()) {
-            addReadOnlyPaths();
-          }
-          else {
-            removeReadOnlyPaths();
-          }
+      myUseEnvGoPathCheckBox.addActionListener(event -> {
+        if (myUseEnvGoPathCheckBox.isSelected()) {
+          addReadOnlyPaths();
+        }
+        else {
+          removeReadOnlyPaths();
         }
       });
       myPanel.add(myUseEnvGoPathCheckBox, BorderLayout.SOUTH);
@@ -206,13 +194,7 @@ public class GoLibrariesConfigurable implements SearchableConfigurable, Configur
   }
 
   private void removeReadOnlyPaths() {
-    Collection<ListItem> toRemove = ContainerUtil.newArrayList();
-    for (ListItem item : myListModel.getItems()) {
-      if (item.readOnly) toRemove.add(item);
-    }
-    for (ListItem item : toRemove) {
-      myListModel.remove(item);
-    }
+    myListModel.getItems().stream().filter(item -> item.readOnly).forEach(myListModel::remove);
   }
 
   @Override

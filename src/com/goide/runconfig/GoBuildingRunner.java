@@ -77,13 +77,13 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
 
   @NotNull
   @Override
-  protected Promise<RunProfileStarter> prepare(@NotNull ExecutionEnvironment environment, @NotNull final RunProfileState state)
+  protected Promise<RunProfileStarter> prepare(@NotNull ExecutionEnvironment environment, @NotNull RunProfileState state)
     throws ExecutionException {
-    final File outputFile = getOutputFile(environment, (GoApplicationRunningState)state);
+    File outputFile = getOutputFile(environment, (GoApplicationRunningState)state);
     FileDocumentManager.getInstance().saveAllDocuments();
 
-    final AsyncPromise<RunProfileStarter> buildingPromise = new AsyncPromise<RunProfileStarter>();
-    final GoHistoryProcessListener historyProcessListener = new GoHistoryProcessListener();
+    AsyncPromise<RunProfileStarter> buildingPromise = new AsyncPromise<>();
+    GoHistoryProcessListener historyProcessListener = new GoHistoryProcessListener();
     ((GoApplicationRunningState)state).createCommonExecutor()
       .withParameters("build")
       .withParameterString(((GoApplicationRunningState)state).getGoBuildParams())
@@ -113,7 +113,7 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
   @NotNull
   private static File getOutputFile(@NotNull ExecutionEnvironment environment, @NotNull GoApplicationRunningState state)
     throws ExecutionException {
-    final File outputFile;
+    File outputFile;
     String outputDirectoryPath = state.getConfiguration().getOutputFilePath();
     RunnerAndConfigurationSettings settings = environment.getRunnerAndConfigurationSettings();
     String configurationName = settings != null ? settings.getName() : "application";
@@ -177,7 +177,7 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
     public RunContentDescriptor execute(@NotNull RunProfileState state, @NotNull ExecutionEnvironment env)
       throws ExecutionException {
       if (state instanceof GoApplicationRunningState) {
-        final int port = findFreePort();
+        int port = findFreePort();
         FileDocumentManager.getInstance().saveAllDocuments();
         ((GoApplicationRunningState)state).setHistoryProcessHandler(myHistoryProcessListener);
         ((GoApplicationRunningState)state).setOutputFilePath(myOutputFilePath);
@@ -185,7 +185,7 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
         ((GoApplicationRunningState)state).setCompilationFailed(myCompilationFailed);
 
         // start debugger
-        final ExecutionResult executionResult = state.execute(env.getExecutor(), GoBuildingRunner.this);
+        ExecutionResult executionResult = state.execute(env.getExecutor(), GoBuildingRunner.this);
         if (executionResult == null) {
           throw new ExecutionException("Cannot run debugger");
         }
@@ -238,22 +238,11 @@ public class GoBuildingRunner extends AsyncGenericProgramRunner {
   }
 
   private static int findFreePort() {
-    ServerSocket socket = null;
-    try {
-      socket = new ServerSocket(0);
+    try(ServerSocket socket = new ServerSocket(0)) {
       socket.setReuseAddress(true);
       return socket.getLocalPort();
     }
     catch (Exception ignore) {
-    }
-    finally {
-      if (socket != null) {
-        try {
-          socket.close();
-        }
-        catch (Exception ignore) {
-        }
-      }
     }
     throw new IllegalStateException("Could not find a free TCP/IP port to start dlv");
   }

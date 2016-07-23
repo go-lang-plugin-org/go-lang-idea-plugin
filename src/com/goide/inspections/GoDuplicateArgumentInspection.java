@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,16 +20,16 @@ import com.goide.psi.*;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class GoDuplicateArgumentInspection extends GoInspectionBase {
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
+  protected GoVisitor buildGoVisitor(@NotNull ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
       public void visitCompositeElement(@NotNull GoCompositeElement o) {
@@ -42,7 +42,7 @@ public class GoDuplicateArgumentInspection extends GoInspectionBase {
 
   protected void check(@Nullable GoSignature o, @NotNull ProblemsHolder holder) {
     if (o != null) {
-      checkParameters(holder, o.getParameters(), new LinkedHashSet<String>());
+      checkParameters(holder, o.getParameters(), ContainerUtil.newLinkedHashSet());
     }
   }
 

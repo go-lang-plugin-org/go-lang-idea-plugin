@@ -23,7 +23,6 @@ import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.psi.PsiFile;
 import com.intellij.testFramework.LightProjectDescriptor;
-import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 
 import java.util.Collection;
@@ -174,16 +173,13 @@ public class GoInvalidPackageImportInspectionTest extends GoQuickFixTestBase {
   }
 
   public void testImportPackageWithoutBuildableSource() {
-    final PsiFile file = myFixture.addFileToProject("withSources/a.go", "package withSources");
+    PsiFile file = myFixture.addFileToProject("withSources/a.go", "package withSources");
     myFixture.addFileToProject("withIgnoredFiles/a.go", "package documentation");
     myFixture.addFileToProject("withIgnoredFiles/.b.go", "package withIgnoredFiles");
     myFixture.addFileToProject("withIgnoredFiles/_b.go", "package withIgnoredFiles");
-    WriteCommandAction.runWriteCommandAction(myFixture.getProject(), new Runnable() {
-      @Override
-      public void run() {
-        //noinspection ConstantConditions
-        file.getParent().getParent().createSubdirectory("withoutSources");
-      }
+    WriteCommandAction.runWriteCommandAction(myFixture.getProject(), () -> {
+      //noinspection ConstantConditions
+      file.getParent().getParent().createSubdirectory("withoutSources");
     });
     myFixture.configureByText("a.go", "package pack\n" +
                                       "import `withSources`\n" +
@@ -234,12 +230,7 @@ public class GoInvalidPackageImportInspectionTest extends GoQuickFixTestBase {
   }
 
   private Collection<String> getIntentionNames() {
-    return ContainerUtil.map(myFixture.getAvailableIntentions(), new Function<IntentionAction, String>() {
-      @Override
-      public String fun(IntentionAction action) {
-        return action.getText();
-      }
-    });
+    return ContainerUtil.map(myFixture.getAvailableIntentions(), IntentionAction::getText);
   }
 
   @Override

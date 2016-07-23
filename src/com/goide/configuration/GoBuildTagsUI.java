@@ -38,7 +38,6 @@ import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.Collection;
@@ -80,24 +79,21 @@ public class GoBuildTagsUI implements Disposable {
     myCgoCombo.setModel(myCgoComboModel);
     myCompilerCombo.setModel(createModel(GoConstants.KNOWN_COMPILERS, GoBuildTargetSettings.ANY_COMPILER));
 
-    ActionListener updateCgoListener = new ActionListener() {
-      @Override
-      public void actionPerformed(@NotNull ActionEvent event) {
-        String selected = StringUtil.notNullize(myCgoComboModel.getSelected(), myDefaultCgo);
-        String oldDefault = myDefaultCgo;
-        String os = expandDefault(selected(myOSCombo, myDefaultOSValue), GoUtil.systemOS());
-        String arch = expandDefault(selected(myArchCombo, myDefaultArchValue), GoUtil.systemArch());
+    ActionListener updateCgoListener = event -> {
+      String selected = StringUtil.notNullize(myCgoComboModel.getSelected(), myDefaultCgo);
+      String oldDefault = myDefaultCgo;
+      String os = expandDefault(selected(myOSCombo, myDefaultOSValue), GoUtil.systemOS());
+      String arch = expandDefault(selected(myArchCombo, myDefaultArchValue), GoUtil.systemArch());
 
-        myDefaultCgo = "Default (" + cgo(GoUtil.systemCgo(os, arch)) + ")";
-        myCgoComboModel.update(ContainerUtil.newArrayList(myDefaultCgo, ENABLED, DISABLED));
-        myCgoComboModel.setSelectedItem(oldDefault.equals(selected) ? myDefaultCgo : selected);
-      }
+      myDefaultCgo = "Default (" + cgo(GoUtil.systemCgo(os, arch)) + ")";
+      myCgoComboModel.update(ContainerUtil.newArrayList(myDefaultCgo, ENABLED, DISABLED));
+      myCgoComboModel.setSelectedItem(oldDefault.equals(selected) ? myDefaultCgo : selected);
     };
     myOSCombo.addActionListener(updateCgoListener);
     myArchCombo.addActionListener(updateCgoListener);
   }
 
-  public void initPanel(@NotNull final Module module) {
+  public void initPanel(@NotNull Module module) {
     if (!module.isDisposed()) {
       MessageBusConnection connection = module.getMessageBus().connect(this);
       connection.subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
@@ -160,7 +156,7 @@ public class GoBuildTagsUI implements Disposable {
   private static MutableCollectionComboBoxModel<String> createModel(@NotNull Collection<String> values, @NotNull String defaultValue) {
     List<String> items = ContainerUtil.newArrayList(defaultValue);
     items.addAll(ContainerUtil.sorted(values));
-    return new MutableCollectionComboBoxModel<String>(items, defaultValue);
+    return new MutableCollectionComboBoxModel<>(items, defaultValue);
   }
 
   public boolean isModified(@NotNull GoBuildTargetSettings buildTargetSettings) {

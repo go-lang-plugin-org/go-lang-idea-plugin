@@ -32,21 +32,18 @@ import com.intellij.execution.process.ProcessTerminatedListener;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.testframework.AbstractTestProxy;
-import com.intellij.execution.testframework.TestFrameworkRunningModel;
 import com.intellij.execution.testframework.actions.AbstractRerunFailedTestsAction;
 import com.intellij.execution.testframework.autotest.ToggleAutoTestAction;
 import com.intellij.execution.testframework.sm.SMTestRunnerConnectionUtil;
 import com.intellij.execution.testframework.sm.runner.ui.SMTRunnerConsoleView;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.util.Getter;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
-import com.intellij.util.Function;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
@@ -73,19 +70,14 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
 
     GoTestConsoleProperties consoleProperties = new GoTestConsoleProperties(myConfiguration, executor);
     String frameworkName = myConfiguration.getTestFramework().getName();
-    final ConsoleView consoleView = SMTestRunnerConnectionUtil.createAndAttachConsole(frameworkName, processHandler, consoleProperties);
+    ConsoleView consoleView = SMTestRunnerConnectionUtil.createAndAttachConsole(frameworkName, processHandler, consoleProperties);
     consoleView.addMessageFilter(new GoConsoleFilter(myConfiguration.getProject(), myModule, myConfiguration.getWorkingDirectoryUrl()));
     ProcessTerminatedListener.attach(processHandler);
 
     DefaultExecutionResult executionResult = new DefaultExecutionResult(consoleView, processHandler);
     AbstractRerunFailedTestsAction rerunFailedTestsAction = consoleProperties.createRerunFailedTestsAction(consoleView);
     if (rerunFailedTestsAction != null) {
-      rerunFailedTestsAction.setModelProvider(new Getter<TestFrameworkRunningModel>() {
-        @Override
-        public TestFrameworkRunningModel get() {
-          return ((SMTRunnerConsoleView)consoleView).getResultsViewer();
-        }
-      });
+      rerunFailedTestsAction.setModelProvider(((SMTRunnerConsoleView)consoleView)::getResultsViewer);
       executionResult.setRestartActions(rerunFailedTestsAction, new ToggleAutoTestAction());
     }
     else {
@@ -167,11 +159,6 @@ public class GoTestRunningState extends GoRunningState<GoTestRunConfiguration> {
   }
 
   public void setFailedTests(@NotNull List<AbstractTestProxy> failedTests) {
-    myFailedTestsPattern = "^" + StringUtil.join(failedTests, new Function<AbstractTestProxy, String>() {
-      @Override
-      public String fun(AbstractTestProxy proxy) {
-        return proxy.getName();
-      }
-    }, "|") + "$";
+    myFailedTestsPattern = "^" + StringUtil.join(failedTests, AbstractTestProxy::getName, "|") + "$";
   }
 }

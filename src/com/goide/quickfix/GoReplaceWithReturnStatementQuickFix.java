@@ -49,17 +49,14 @@ public class GoReplaceWithReturnStatementQuickFix extends LocalQuickFixAndIntent
   }
 
   @Override
-  public void invoke(@NotNull final Project project,
+  public void invoke(@NotNull Project project,
                      @NotNull PsiFile file,
                      @Nullable("is null when called from inspection") Editor editor,
-                     @NotNull final PsiElement startElement,
+                     @NotNull PsiElement startElement,
                      @NotNull PsiElement endElement) {
-    WriteCommandAction.runWriteCommandAction(project, new Runnable() {
-      @Override
-      public void run() {
-        if (startElement instanceof GoStatement) {
-          startElement.replace(GoElementFactory.createReturnStatement(project));
-        }
+    WriteCommandAction.runWriteCommandAction(project, () -> {
+      if (startElement instanceof GoStatement) {
+        startElement.replace(GoElementFactory.createReturnStatement(project));
       }
     });
   }

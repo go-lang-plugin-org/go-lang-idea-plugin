@@ -31,7 +31,6 @@ import com.intellij.ui.HideableDecorator;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
-import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -57,7 +56,7 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
   }
 
   @Nullable
-  private Configurable createConfigurable(final boolean dialogMode) {
+  private Configurable createConfigurable(boolean dialogMode) {
     return new CompositeConfigurable<UnnamedConfigurable>() {
 
       @Nullable
@@ -103,14 +102,7 @@ public class GoLibrariesConfigurableProvider extends ConfigurableProvider {
       @Override
       protected List<UnnamedConfigurable> createConfigurables() {
         List<UnnamedConfigurable> result = ContainerUtil.newArrayList();
-
-        String[] urlsFromEnv = ContainerUtil.map2Array(GoSdkUtil.getGoPathsRootsFromEnvironment(), String.class, 
-                                                       new Function<VirtualFile, String>() {
-          @Override
-            public String fun(VirtualFile file) {
-              return file.getUrl();
-            }
-          });
+        String[] urlsFromEnv = ContainerUtil.map2Array(GoSdkUtil.getGoPathsRootsFromEnvironment(), String.class, VirtualFile::getUrl);
         result.add(new GoLibrariesConfigurable("Global libraries", GoApplicationLibrariesService.getInstance(), urlsFromEnv));
         if (!myProject.isDefault()) {
           result.add(new GoLibrariesConfigurable("Project libraries", GoProjectLibrariesService.getInstance(myProject)));

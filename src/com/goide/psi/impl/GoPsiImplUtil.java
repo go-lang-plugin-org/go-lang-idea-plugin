@@ -68,13 +68,6 @@ import static com.intellij.codeInsight.highlighting.ReadWriteAccessDetector.Acce
 public class GoPsiImplUtil {
   private static final Logger LOG = Logger.getInstance(GoPsiImplUtil.class);
   private static final Key<SmartPsiElementPointer<PsiElement>> CONTEXT = Key.create("CONTEXT");
-  public static final NotNullFunction<PsiElement, String> GET_TEXT_FUNCTION = new NotNullFunction<PsiElement, String>() {
-    @NotNull
-    @Override
-    public String fun(@NotNull PsiElement element) {
-      return element.getText();
-    }
-  };
 
   public static boolean builtin(@Nullable PsiElement resolve) {
     return resolve != null && isBuiltinFile(resolve.getContainingFile());
@@ -317,20 +310,16 @@ public class GoPsiImplUtil {
     GoType fromSpec = findTypeInConstSpec(o);
     if (fromSpec != null) return fromSpec;
     // todo: stubs 
-    return RecursionManager.doPreventingRecursion(o, true, new NullableComputable<GoType>() {
-      @Nullable
-      @Override
-      public GoType compute() {
-        GoConstSpec prev = PsiTreeUtil.getPrevSiblingOfType(o.getParent(), GoConstSpec.class);
-        while (prev != null) {
-          GoType type = prev.getType();
-          if (type != null) return type;
-          GoExpression expr = ContainerUtil.getFirstItem(prev.getExpressionList()); // not sure about first
-          if (expr != null) return expr.getGoType(context);
-          prev = PsiTreeUtil.getPrevSiblingOfType(prev, GoConstSpec.class);
-        }
-        return null;
+    return RecursionManager.doPreventingRecursion(o, true, (NullableComputable<GoType>)() -> {
+      GoConstSpec prev = PsiTreeUtil.getPrevSiblingOfType(o.getParent(), GoConstSpec.class);
+      while (prev != null) {
+        GoType type = prev.getType();
+        if (type != null) return type;
+        GoExpression expr = ContainerUtil.getFirstItem(prev.getExpressionList()); // not sure about first
+        if (expr != null) return expr.getGoType(context);
+        prev = PsiTreeUtil.getPrevSiblingOfType(prev, GoConstSpec.class);
       }
+      return null;
     });
   }
 
@@ -359,18 +348,10 @@ public class GoPsiImplUtil {
 
   @Nullable
   public static GoType getGoType(@NotNull GoExpression o, @Nullable ResolveState context) {
-    return RecursionManager.doPreventingRecursion(o, true, new Computable<GoType>() {
-      @Override
-      public GoType compute() {
-        if (context != null) return unwrapParType(o, context);
-        return CachedValuesManager.getCachedValue(o, new CachedValueProvider<GoType>() {
-          @Nullable
-          @Override
-          public Result<GoType> compute() {
-            return Result.create(unwrapParType(o, createContextOnElement(o)), PsiModificationTracker.MODIFICATION_COUNT);
-          }
-        });
-      }
+    return RecursionManager.doPreventingRecursion(o, true, () -> {
+      if (context != null) return unwrapParType(o, context);
+      return CachedValuesManager.getCachedValue(o, () -> CachedValueProvider.Result
+        .create(unwrapParType(o, createContextOnElement(o)), PsiModificationTracker.MODIFICATION_COUNT));
     });
   }
 
@@ -511,12 +492,7 @@ public class GoPsiImplUtil {
   public static GoType getBuiltinType(@NotNull String name, @NotNull PsiElement context) {
     GoFile builtin = GoSdkUtil.findBuiltinFile(context);
     if (builtin != null) {
-      GoTypeSpec spec = ContainerUtil.find(builtin.getTypes(), new Condition<GoTypeSpec>() {
-        @Override
-        public boolean value(GoTypeSpec spec) {
-          return name.equals(spec.getName());
-        }
-      });
+      GoTypeSpec spec = ContainerUtil.find(builtin.getTypes(), spec1 -> name.equals(spec1.getName()));
       if (spec != null) {
         return spec.getSpecType().getType(); // todo
       }
@@ -850,12 +826,7 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static List<GoMethodSpec> getMethods(@NotNull GoInterfaceType o) {
-    return ContainerUtil.filter(o.getMethodSpecList(), new Condition<GoMethodSpec>() {
-      @Override
-      public boolean value(@NotNull GoMethodSpec spec) {
-        return spec.getIdentifier() != null;
-      }
-    });
+    return ContainerUtil.filter(o.getMethodSpecList(), spec -> spec.getIdentifier() != null);
   }
 
   @NotNull
@@ -872,13 +843,9 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static List<GoMethodDeclaration> getMethods(@NotNull GoTypeSpec o) {
-    return CachedValuesManager.getCachedValue(o, new CachedValueProvider<List<GoMethodDeclaration>>() {
-      @Nullable
-      @Override
-      public Result<List<GoMethodDeclaration>> compute() {
-        // todo[zolotov]: implement package modification tracker
-        return Result.create(calcMethods(o), PsiModificationTracker.MODIFICATION_COUNT);
-      }
+    return CachedValuesManager.getCachedValue(o, () -> {
+      // todo[zolotov]: implement package modification tracker
+      return CachedValueProvider.Result.create(calcMethods(o), PsiModificationTracker.MODIFICATION_COUNT);
     });
   }
 
@@ -960,7 +927,7 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static String joinPsiElementText(List<? extends PsiElement> items) {
-    return StringUtil.join(items, GET_TEXT_FUNCTION, ", ");
+    return StringUtil.join(items, (NotNullFunction<PsiElement, String>)PsiElement::getText, ", ");
   }
 
   @Nullable
@@ -988,12 +955,7 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static GoType getUnderlyingType(@NotNull GoType o) {
-    GoType type = RecursionManager.doPreventingRecursion(o, true, new Computable<GoType>() {
-      @Override
-      public GoType compute() {
-        return getTypeInner(o);
-      }
-    });
+    GoType type = RecursionManager.doPreventingRecursion(o, true, () -> getTypeInner(o));
     return ObjectUtils.notNull(type, o);
   }
 
@@ -1593,13 +1555,8 @@ public class GoPsiImplUtil {
     if (start == null && end == null) {
       return list;
     }
-    return ContainerUtil.filter(list, new Condition<GoExpression>() {
-      @Override
-      public boolean value(GoExpression expression) {
-        return (end == null || expression.getTextRange().getEndOffset() <= end.getTextRange().getStartOffset()) &&
-               (start == null || expression.getTextRange().getStartOffset() >= start.getTextRange().getEndOffset());
-      }
-    });
+    return ContainerUtil.filter(list, expression -> (end == null || expression.getTextRange().getEndOffset() <= end.getTextRange().getStartOffset()) &&
+                                                (start == null || expression.getTextRange().getStartOffset() >= start.getTextRange().getEndOffset()));
   }
 
   @NotNull

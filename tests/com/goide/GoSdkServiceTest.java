@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package com.goide;
 
 import com.goide.sdk.GoSdkService;
-import com.intellij.openapi.Disposable;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
@@ -88,38 +87,32 @@ public class GoSdkServiceTest extends UsefulTestCase {
     setIsWindows(value, SystemInfo.isLinux, "isLinux");
   }
 
-  private void setIsWindows(boolean value, final boolean oldValue, @NotNull String fieldName) {
+  private void setIsWindows(boolean value, boolean oldValue, @NotNull String fieldName) {
     try {
-      final Field field = SystemInfo.class.getField(fieldName);
+      Field field = SystemInfo.class.getField(fieldName);
       field.setAccessible(true);
       Field modifiersField = Field.class.getDeclaredField("modifiers");
       modifiersField.setAccessible(true);
       modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
       field.set(null, value);
 
-      Disposer.register(getTestRootDisposable(), new Disposable() {
-        @Override
-        public void dispose() {
-          try {
-            field.set(null, oldValue);
-          }
-          catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-          }
+      Disposer.register(getTestRootDisposable(), () -> {
+        try {
+          field.set(null, oldValue);
+        }
+        catch (IllegalAccessException e) {
+          throw new RuntimeException(e);
         }
       });
     }
-    catch (IllegalAccessException e) {
-      throw new RuntimeException(e);
-    }
-    catch (NoSuchFieldException e) {
+    catch (IllegalAccessException | NoSuchFieldException e) {
       throw new RuntimeException(e);
     }
   }
 
   private static File createDir(String... children) {
     try {
-      final File dir = FileUtil.createTempDirectory("goSdk", "test");
+      File dir = FileUtil.createTempDirectory("goSdk", "test");
       for (String child : children) {
         File file = new File(dir, child);
         FileUtil.createParentDirs(file);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package com.goide.runconfig.ui;
 import com.goide.runconfig.GoRunUtil;
 import com.goide.runconfig.application.GoApplicationConfiguration;
 import com.goide.runconfig.testing.ui.GoPackageFieldCompletionProvider;
-import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
@@ -27,13 +26,10 @@ import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.EditorTextField;
 import com.intellij.ui.ListCellRendererWrapper;
-import com.intellij.util.Producer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Locale;
 
 public class GoApplicationConfigurationEditorForm extends SettingsEditor<GoApplicationConfiguration> {
@@ -91,13 +87,8 @@ public class GoApplicationConfigurationEditorForm extends SettingsEditor<GoAppli
   }
 
   private void createUIComponents() {
-    myPackageField = new GoPackageFieldCompletionProvider(new Producer<Module>() {
-      @Nullable
-      @Override
-      public Module produce() {
-        return myCommonSettingsPanel != null ? myCommonSettingsPanel.getSelectedModule() : null;
-      }
-    }).createEditor(myProject);
+    myPackageField = new GoPackageFieldCompletionProvider(
+      () -> myCommonSettingsPanel != null ? myCommonSettingsPanel.getSelectedModule() : null).createEditor(myProject);
   }
 
   @Nullable
@@ -119,12 +110,7 @@ public class GoApplicationConfigurationEditorForm extends SettingsEditor<GoAppli
     for (GoApplicationConfiguration.Kind kind : GoApplicationConfiguration.Kind.values()) {
       myRunKindComboBox.addItem(kind);
     }
-    myRunKindComboBox.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(@NotNull ActionEvent e) {
-        onRunKindChanged();
-      }
-    });
+    myRunKindComboBox.addActionListener(e -> onRunKindChanged());
   }
 
   @NotNull

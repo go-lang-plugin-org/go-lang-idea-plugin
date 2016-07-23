@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,14 @@ import com.intellij.openapi.module.ModuleConfigurationEditor;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.ui.configuration.*;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class GoModuleEditorsProvider implements ModuleConfigurationEditorProvider {
+  @Override
   public ModuleConfigurationEditor[] createEditors(@NotNull ModuleConfigurationState state) {
     ModifiableRootModel rootModel = state.getRootModel();
     Module module = rootModel.getModule();
@@ -37,7 +38,7 @@ public class GoModuleEditorsProvider implements ModuleConfigurationEditorProvide
     }
 
     String moduleName = module.getName();
-    List<ModuleConfigurationEditor> editors = new ArrayList<ModuleConfigurationEditor>();
+    List<ModuleConfigurationEditor> editors = ContainerUtil.newArrayList();
     editors.add(new ContentEntriesEditor(moduleName, state));
     editors.add(new OutputEditorEx(state));
     editors.add(new ClasspathEditor(state));
@@ -49,6 +50,7 @@ public class GoModuleEditorsProvider implements ModuleConfigurationEditorProvide
       super(state);
     }
 
+    @Override
     protected JComponent createComponentImpl() {
       JComponent component = super.createComponentImpl();
       component.remove(1); // todo: looks ugly

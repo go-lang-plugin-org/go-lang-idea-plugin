@@ -21,17 +21,18 @@ import com.intellij.codeInsight.unwrap.UnwrapHandler;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiFile;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class GoUnwrapTestCase extends GoCodeInsightFixtureTestCase {
   protected void assertUnwrapped(@NotNull String codeBefore, @NotNull String codeAfter) {
     assertUnwrapped(codeBefore, codeAfter, 0);
   }
 
-  protected void assertUnwrapped(@NotNull String codeBefore, @NotNull String codeAfter, final int option) {
+  protected void assertUnwrapped(@NotNull String codeBefore, @NotNull String codeAfter, int option) {
     myFixture.configureByText("a.go", normalizeCode(codeBefore));
     UnwrapHandler h = new UnwrapHandler() {
       @Override
@@ -46,13 +47,11 @@ public abstract class GoUnwrapTestCase extends GoCodeInsightFixtureTestCase {
 
   protected void assertOptions(@NotNull String code, String... expectedOptions) {
     myFixture.configureByText("a.go", normalizeCode(code));
-    List<String> actualOptions = new ArrayList<String>();
+    List<String> actualOptions = ContainerUtil.newArrayList();
     UnwrapHandler h = new UnwrapHandler() {
       @Override
       protected void selectOption(List<AnAction> options, Editor editor, PsiFile file) {
-        for (AnAction each : options) {
-          actualOptions.add(each.getTemplatePresentation().getText());
-        }
+        actualOptions.addAll(options.stream().map(each -> each.getTemplatePresentation().getText()).collect(Collectors.toList()));
       }
     };
     h.invoke(getProject(), myFixture.getEditor(), myFixture.getFile());

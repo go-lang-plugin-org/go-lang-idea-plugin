@@ -47,16 +47,16 @@ public abstract class GoTestRunConfigurationProducerBase extends RunConfiguratio
   }
 
   @Override
-  protected boolean setupConfigurationFromContext(@NotNull final GoTestRunConfiguration configuration,
+  protected boolean setupConfigurationFromContext(@NotNull GoTestRunConfiguration configuration,
                                                   ConfigurationContext context,
                                                   Ref sourceElement) {
-    final PsiElement contextElement = GoRunUtil.getContextElement(context);
+    PsiElement contextElement = GoRunUtil.getContextElement(context);
     if (contextElement == null) {
       return false;
     }
 
     Module module = ModuleUtilCore.findModuleForPsiElement(contextElement);
-    final Project project = contextElement.getProject();
+    Project project = contextElement.getProject();
     if (module == null || !GoSdkService.getInstance(project).isGoModule(module)) return false;
     if (!myFramework.isAvailable(module)) return false;
 

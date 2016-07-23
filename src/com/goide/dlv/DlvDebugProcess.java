@@ -20,7 +20,6 @@ import com.goide.GoConstants;
 import com.goide.GoFileType;
 import com.goide.dlv.breakpoint.DlvBreakpointProperties;
 import com.goide.dlv.breakpoint.DlvBreakpointType;
-import com.goide.dlv.protocol.DlvApi;
 import com.goide.dlv.protocol.DlvRequest;
 import com.goide.util.GoUtil;
 import com.intellij.execution.ExecutionResult;
@@ -41,7 +40,6 @@ import com.intellij.psi.PsiFileFactory;
 import com.intellij.util.Consumer;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.io.socketConnection.ConnectionStatus;
-import com.intellij.util.io.socketConnection.SocketConnectionListener;
 import com.intellij.xdebugger.XDebugSession;
 import com.intellij.xdebugger.XSourcePosition;
 import com.intellij.xdebugger.breakpoints.XBreakpoint;
@@ -72,35 +70,26 @@ public final class DlvDebugProcess extends DebugProcessImpl<VmConnection<?>> imp
   private final static Logger LOG = Logger.getInstance(DlvDebugProcess.class);
   private final AtomicBoolean breakpointsInitiated = new AtomicBoolean();
   private final AtomicBoolean connectedListenerAdded = new AtomicBoolean();
-  private static final Consumer<Throwable> THROWABLE_CONSUMER = new Consumer<Throwable>() {
-    @Override
-    public void consume(@NotNull Throwable throwable) {
-      LOG.info(throwable);
-    }
-  };
+  private static final Consumer<Throwable> THROWABLE_CONSUMER = LOG::info;
 
   @NotNull
   private final Consumer<DebuggerState> myStateConsumer = new Consumer<DebuggerState>() {
     @Override
-    public void consume(@NotNull final DebuggerState o) {
+    public void consume(@NotNull DebuggerState o) {
       if (o.exited) {
         stop();
         return;
       }
 
-      final XBreakpoint<DlvBreakpointProperties> find = findBreak(o.breakPoint);
-      send(new DlvRequest.StacktraceGoroutine())
-        .done(new Consumer<List<DlvApi.Location>>() {
-          @Override
-          public void consume(@NotNull List<DlvApi.Location> locations) {
-            DlvSuspendContext context = new DlvSuspendContext(DlvDebugProcess.this, o.currentThread.id, locations, getProcessor());
-            XDebugSession session = getSession();
-            if (find == null) {
-              session.positionReached(context);
-            }
-            else {
-              session.breakpointReached(find, null, context);
-            }
+      XBreakpoint<DlvBreakpointProperties> find = findBreak(o.breakPoint);
+      send(new DlvRequest.StacktraceGoroutine()).done(locations -> {
+          DlvSuspendContext context = new DlvSuspendContext(DlvDebugProcess.this, o.currentThread.id, locations, getProcessor());
+          XDebugSession session = getSession();
+          if (find == null) {
+            session.positionReached(context);
+          }
+          else {
+            session.breakpointReached(find, null, context);
           }
         });
     }
@@ -161,12 +150,9 @@ public final class DlvDebugProcess extends DebugProcessImpl<VmConnection<?>> imp
     }
 
     if (connectedListenerAdded.compareAndSet(false, true)) {
-      getConnection().addListener(new SocketConnectionListener() {
-        @Override
-        public void statusChanged(@NotNull ConnectionStatus status) {
-          if (status == ConnectionStatus.CONNECTED) {
-            initBreakpointHandlersAndSetBreakpoints(true);
-          }
+      getConnection().addListener(status -> {
+        if (status == ConnectionStatus.CONNECTED) {
+          initBreakpointHandlersAndSetBreakpoints(true);
         }
       });
     }
@@ -264,26 +250,20 @@ public final class DlvDebugProcess extends DebugProcessImpl<VmConnection<?>> imp
     }
 
     @Override
-    public void registerBreakpoint(@NotNull final XLineBreakpoint<DlvBreakpointProperties> breakpoint) {
+    public void registerBreakpoint(@NotNull XLineBreakpoint<DlvBreakpointProperties> breakpoint) {
       XSourcePosition breakpointPosition = breakpoint.getSourcePosition();
       if (breakpointPosition == null) return;
       VirtualFile file = breakpointPosition.getFile();
       int line = breakpointPosition.getLine();
       send(new DlvRequest.CreateBreakpoint(file.getPath(), line + 1))
-        .done(new Consumer<Breakpoint>() {
-          @Override
-          public void consume(@NotNull Breakpoint b) {
-            breakpoint.putUserData(ID, b.id);
-            breakpoints.put(b.id, breakpoint);
-            getSession().updateBreakpointPresentation(breakpoint, AllIcons.Debugger.Db_verified_breakpoint, null);
-          }
+        .done(b -> {
+          breakpoint.putUserData(ID, b.id);
+          breakpoints.put(b.id, breakpoint);
+          getSession().updateBreakpointPresentation(breakpoint, AllIcons.Debugger.Db_verified_breakpoint, null);
         })
-        .rejected(new Consumer<Throwable>() {
-          @Override
-          public void consume(@Nullable Throwable t) {
-            String message = t == null ? null : t.getMessage();
-            getSession().updateBreakpointPresentation(breakpoint, AllIcons.Debugger.Db_invalid_breakpoint, message);
-          }
+        .rejected(t -> {
+          String message = t == null ? null : t.getMessage();
+          getSession().updateBreakpointPresentation(breakpoint, AllIcons.Debugger.Db_invalid_breakpoint, message);
         });
     }
 

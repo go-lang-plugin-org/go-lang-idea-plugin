@@ -113,14 +113,10 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
   @Override
   public GoType getGoType(@Nullable ResolveState context) {
     if (context != null) return getGoTypeInner(context);
-    return CachedValuesManager.getCachedValue(this, new CachedValueProvider<GoType>() {
-      @Nullable
-      @Override
-      public Result<GoType> compute() {
-        return Result.create(getGoTypeInner(GoPsiImplUtil.createContextOnElement(GoNamedElementImpl.this)), 
-                             PsiModificationTracker.MODIFICATION_COUNT);
-      }
-    });
+    return CachedValuesManager.getCachedValue(this,
+                                              () -> CachedValueProvider.Result
+                                                .create(getGoTypeInner(GoPsiImplUtil.createContextOnElement(this)),
+                                                        PsiModificationTracker.MODIFICATION_COUNT));
   }
 
   @Nullable
@@ -150,7 +146,7 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
   public ItemPresentation getPresentation() {
     String text = UsageViewUtil.createNodeText(this);
     if (text != null) {
-      final boolean vendoringEnabled = GoVendoringUtil.isVendoringEnabled(ModuleUtilCore.findModuleForPsiElement(getContainingFile()));
+      boolean vendoringEnabled = GoVendoringUtil.isVendoringEnabled(ModuleUtilCore.findModuleForPsiElement(getContainingFile()));
       return new ItemPresentation() {
         @Nullable
         @Override

@@ -38,12 +38,10 @@ import com.intellij.psi.PsiFile;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBList;
-import com.intellij.util.NotNullFunction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.TestOnly;
 
-import javax.swing.*;
 import java.util.Collection;
 
 public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionOnPsiElement {
@@ -62,23 +60,20 @@ public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionO
     myIsOneTheFly = isOnTheFly;
   }
 
-  private static void renamePackagesInDirectory(@NotNull final Project project,
-                                                @NotNull final PsiDirectory dir,
-                                                @NotNull final String newName) {
-    WriteCommandAction.runWriteCommandAction(project, new Runnable() {
-      @Override
-      public void run() {
-        Module module = ModuleUtilCore.findModuleForPsiElement(dir);
-        for (PsiFile file : dir.getFiles()) {
-          if (file instanceof GoFile && GoPsiImplUtil.allowed(file, null, module)) {
-            GoPackageClause packageClause = ((GoFile)file).getPackage();
-            String oldName = ((GoFile)file).getPackageName();
-            if (packageClause != null && oldName != null) {
-              String fullName = GoTestFinder.isTestFile(file) && StringUtil.endsWith(oldName, GoConstants.TEST_SUFFIX)
-                                ? newName + GoConstants.TEST_SUFFIX
-                                : newName;
-              packageClause.replace(GoElementFactory.createPackageClause(project, fullName));
-            }
+  private static void renamePackagesInDirectory(@NotNull Project project,
+                                                @NotNull PsiDirectory dir,
+                                                @NotNull String newName) {
+    WriteCommandAction.runWriteCommandAction(project, () -> {
+      Module module = ModuleUtilCore.findModuleForPsiElement(dir);
+      for (PsiFile file : dir.getFiles()) {
+        if (file instanceof GoFile && GoPsiImplUtil.allowed(file, null, module)) {
+          GoPackageClause packageClause = ((GoFile)file).getPackage();
+          String oldName = ((GoFile)file).getPackageName();
+          if (packageClause != null && oldName != null) {
+            String fullName = GoTestFinder.isTestFile(file) && StringUtil.endsWith(oldName, GoConstants.TEST_SUFFIX)
+                              ? newName + GoConstants.TEST_SUFFIX
+                              : newName;
+            packageClause.replace(GoElementFactory.createPackageClause(project, fullName));
           }
         }
       }
@@ -88,18 +83,15 @@ public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionO
   @TestOnly
   public static void setTestingPackageName(@NotNull String packageName, @NotNull Disposable disposable) {
     myTestingPackageName = packageName;
-    Disposer.register(disposable, new Disposable() {
-      @Override
-      public void dispose() {
-        //noinspection AssignmentToStaticFieldFromInstanceMethod
-        myTestingPackageName = null;
-      }
+    Disposer.register(disposable, () -> {
+      //noinspection AssignmentToStaticFieldFromInstanceMethod
+      myTestingPackageName = null;
     });
   }
 
   @Override
-  public void invoke(@NotNull final Project project,
-                     @NotNull final PsiFile file,
+  public void invoke(@NotNull Project project,
+                     @NotNull PsiFile file,
                      @Nullable("is null when called from inspection") Editor editor,
                      @NotNull PsiElement startElement,
                      @NotNull PsiElement endElement) {
@@ -108,24 +100,17 @@ public class GoMultiplePackagesQuickFix extends LocalQuickFixAndIntentionActionO
                                 myTestingPackageName != null ? myTestingPackageName : myPackageName);
       return;
     }
-    final JBList list = new JBList(myPackages);
-    list.installCellRenderer(new NotNullFunction<Object, JComponent>() {
-      @NotNull
-      @Override
-      public JComponent fun(@NotNull Object o) {
-        JBLabel label = new JBLabel(o.toString());
-        label.setBorder(IdeBorderFactory.createEmptyBorder(2, 4, 2, 4));
-        return label;
-      }
+    JBList list = new JBList(myPackages);
+    list.installCellRenderer(o -> {
+      JBLabel label = new JBLabel(o.toString());
+      label.setBorder(IdeBorderFactory.createEmptyBorder(2, 4, 2, 4));
+      return label;
     });
 
-    JBPopupFactory.getInstance().createListPopupBuilder(list).setTitle("Choose package name").setItemChoosenCallback(new Runnable() {
-      @Override
-      public void run() {
-        String name = (String)list.getSelectedValue();
-        if (name != null) {
-          renamePackagesInDirectory(project, file.getContainingDirectory(), name);
-        }
+    JBPopupFactory.getInstance().createListPopupBuilder(list).setTitle("Choose package name").setItemChoosenCallback(() -> {
+      String name = (String)list.getSelectedValue();
+      if (name != null) {
+        renamePackagesInDirectory(project, file.getContainingDirectory(), name);
       }
     }).createPopup().showInBestPositionFor(editor);
   }

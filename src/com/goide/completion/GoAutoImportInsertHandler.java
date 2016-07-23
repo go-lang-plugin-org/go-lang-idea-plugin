@@ -34,10 +34,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GoAutoImportInsertHandler<T extends GoNamedElement> implements InsertHandler<LookupElement> {
-  public static final InsertHandler<LookupElement> SIMPLE_INSERT_HANDLER = new GoAutoImportInsertHandler<GoNamedElement>();
-  public static final InsertHandler<LookupElement> TYPE_CONVERSION_INSERT_HANDLER = new GoAutoImportInsertHandler<GoTypeSpec>(
+  public static final InsertHandler<LookupElement> SIMPLE_INSERT_HANDLER = new GoAutoImportInsertHandler<>();
+  public static final InsertHandler<LookupElement> TYPE_CONVERSION_INSERT_HANDLER = new GoAutoImportInsertHandler<>(
     GoCompletionUtil.Lazy.TYPE_CONVERSION_INSERT_HANDLER, GoTypeSpec.class);
-  public static final InsertHandler<LookupElement> FUNCTION_INSERT_HANDLER = new GoAutoImportInsertHandler<GoFunctionDeclaration>(
+  public static final InsertHandler<LookupElement> FUNCTION_INSERT_HANDLER = new GoAutoImportInsertHandler<>(
     GoCompletionUtil.Lazy.VARIABLE_OR_FUNCTION_INSERT_HANDLER, GoFunctionDeclaration.class);
 
   @Nullable private final InsertHandler<LookupElement> myDelegate;
@@ -47,7 +47,7 @@ public class GoAutoImportInsertHandler<T extends GoNamedElement> implements Inse
     this(null, null);
   }
 
-  private GoAutoImportInsertHandler(@Nullable final InsertHandler<LookupElement> delegate, @Nullable Class<T> clazz) {
+  private GoAutoImportInsertHandler(@Nullable InsertHandler<LookupElement> delegate, @Nullable Class<T> clazz) {
     myDelegate = delegate;
     myClass = clazz;
   }

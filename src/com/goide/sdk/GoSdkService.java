@@ -159,12 +159,9 @@ public abstract class GoSdkService extends SimpleModificationTracker {
   @TestOnly
   public static void setTestingSdkVersion(@Nullable String version, @NotNull Disposable disposable) {
     ourTestSdkVersion = version;
-    Disposer.register(disposable, new Disposable() {
-      @Override
-      public void dispose() {
-        //noinspection AssignmentToStaticFieldFromInstanceMethod
-        ourTestSdkVersion = null;
-      }
+    Disposer.register(disposable, () -> {
+      //noinspection AssignmentToStaticFieldFromInstanceMethod
+      ourTestSdkVersion = null;
     });
   }
 }

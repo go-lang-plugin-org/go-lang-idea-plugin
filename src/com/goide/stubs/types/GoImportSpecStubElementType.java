@@ -31,13 +31,7 @@ import java.io.IOException;
 
 public class GoImportSpecStubElementType extends GoNamedStubElementType<GoImportSpecStub, GoImportSpec> {
   public static final GoImportSpec[] EMPTY_ARRAY = new GoImportSpec[0];
-  public static final ArrayFactory<GoImportSpec> ARRAY_FACTORY = new ArrayFactory<GoImportSpec>() {
-    @NotNull
-    @Override
-    public GoImportSpec[] create(int count) {
-      return count == 0 ? EMPTY_ARRAY : new GoImportSpec[count];
-    }
-  };
+  public static final ArrayFactory<GoImportSpec> ARRAY_FACTORY = count -> count == 0 ? EMPTY_ARRAY : new GoImportSpec[count];
 
   public GoImportSpecStubElementType(@NotNull String name) {
     super(name);

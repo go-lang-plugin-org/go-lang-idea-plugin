@@ -36,6 +36,7 @@ public class GoGotoContributorBase<T extends GoNamedElement> implements GotoClas
   private final StubIndexKey<String, T>[] myIndexKeys;
   @NotNull private final Class<T> myClazz;
 
+  @SafeVarargs
   public GoGotoContributorBase(@NotNull Class<T> clazz, @NotNull StubIndexKey<String, T>... key) {
     myIndexKeys = key;
     myClazz = clazz;
@@ -56,6 +57,7 @@ public class GoGotoContributorBase<T extends GoNamedElement> implements GotoClas
   @Override
   public void processNames(@NotNull Processor<String> processor, @NotNull GlobalSearchScope scope, IdFilter filter) {
     for (StubIndexKey<String, T> key : myIndexKeys) {
+      ProgressManager.checkCanceled();
       StubIndex.getInstance().processAllKeys(key, processor, scope, filter);
     }
   }
@@ -74,16 +76,12 @@ public class GoGotoContributorBase<T extends GoNamedElement> implements GotoClas
   @Nullable
   @Override
   public String getQualifiedName(NavigationItem item) {
-    if (item instanceof GoNamedElement) {
-      return ((GoNamedElement)item).getQualifiedName();
-    }
-    return null;
+    return item instanceof GoNamedElement ? ((GoNamedElement)item).getQualifiedName() : null;
   }
 
   @Nullable
   @Override
   public String getQualifiedNameSeparator() {
-    // todo[IDEA 16]: replace with null 
-    return ".";
+    return null;
   }
 }

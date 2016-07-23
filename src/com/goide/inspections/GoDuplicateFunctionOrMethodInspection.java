@@ -31,7 +31,6 @@ import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.Processor;
 import com.intellij.util.indexing.IdFilter;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,66 +40,60 @@ import static com.goide.GoConstants.MAIN;
 public class GoDuplicateFunctionOrMethodInspection extends GoInspectionBase {
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
+  protected GoVisitor buildGoVisitor(@NotNull ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
-      public void visitMethodDeclaration(@NotNull final GoMethodDeclaration method) {
+      public void visitMethodDeclaration(@NotNull GoMethodDeclaration method) {
         if (method.isBlank()) return;
 
-        final String methodName = method.getName();
+        String methodName = method.getName();
         if (methodName == null) return;
 
         String typeText = GoMethodDeclarationStubElementType.calcTypeText(method);
         if (typeText == null) return;
 
-        final GoFile file = method.getContainingFile();
+        GoFile file = method.getContainingFile();
         GlobalSearchScope scope = GoPackageUtil.packageScope(file);
         IdFilter idFilter = GoIdFilter.getFilesFilter(scope);
-        final Module module = ModuleUtilCore.findModuleForPsiElement(file);
+        Module module = ModuleUtilCore.findModuleForPsiElement(file);
         String key = file.getPackageName() + "." + typeText;
-        GoMethodIndex.process(key, file.getProject(), scope, idFilter, new Processor<GoMethodDeclaration>() {
-          @Override
-          public boolean process(GoMethodDeclaration declaration) {
-            ProgressManager.checkCanceled();
-            if (!method.isEquivalentTo(declaration)) {
-              if (Comparing.equal(declaration.getName(), methodName)
-                  && GoPsiImplUtil.allowed(declaration.getContainingFile(), file, module)) {
-                PsiElement identifier = method.getNameIdentifier();
-                holder.registerProblem(identifier == null ? method : identifier, "Duplicate method name");
-                return false;
-              }
+        GoMethodIndex.process(key, file.getProject(), scope, idFilter, declaration -> {
+          ProgressManager.checkCanceled();
+          if (!method.isEquivalentTo(declaration)) {
+            if (Comparing.equal(declaration.getName(), methodName)
+                && GoPsiImplUtil.allowed(declaration.getContainingFile(), file, module)) {
+              PsiElement identifier = method.getNameIdentifier();
+              holder.registerProblem(identifier == null ? method : identifier, "Duplicate method name");
+              return false;
             }
-            return true;
           }
+          return true;
         });
       }
 
       @Override
-      public void visitFunctionDeclaration(@NotNull final GoFunctionDeclaration func) {
+      public void visitFunctionDeclaration(@NotNull GoFunctionDeclaration func) {
         if (func.isBlank()) return;
 
         String funcName = func.getName();
         if (funcName == null) return;
         if (INIT.equals(funcName) && zeroArity(func)) return;
 
-        final GoFile file = func.getContainingFile();
-        final boolean isMainFunction = MAIN.equals(funcName) && MAIN.equals(file.getPackageName()) && zeroArity(func);
-        final Module module = ModuleUtilCore.findModuleForPsiElement(file);
-        final GlobalSearchScope scope = GoPackageUtil.packageScope(file);
-        final IdFilter idFilter = GoIdFilter.getFilesFilter(scope);
-        GoFunctionIndex.process(funcName, file.getProject(), scope, idFilter, new Processor<GoFunctionDeclaration>() {
-          @Override
-          public boolean process(GoFunctionDeclaration declaration) {
-            ProgressManager.checkCanceled();
-            if (!func.isEquivalentTo(declaration) && GoPsiImplUtil.allowed(declaration.getContainingFile(), file, module)) {
-              if (!isMainFunction || Comparing.equal(declaration.getContainingFile(), file)) {
-                PsiElement identifier = func.getNameIdentifier();
-                holder.registerProblem(identifier == null ? func : identifier, "Duplicate function name");
-                return false;
-              }
+        GoFile file = func.getContainingFile();
+        boolean isMainFunction = MAIN.equals(funcName) && MAIN.equals(file.getPackageName()) && zeroArity(func);
+        Module module = ModuleUtilCore.findModuleForPsiElement(file);
+        GlobalSearchScope scope = GoPackageUtil.packageScope(file);
+        IdFilter idFilter = GoIdFilter.getFilesFilter(scope);
+        GoFunctionIndex.process(funcName, file.getProject(), scope, idFilter, declaration -> {
+          ProgressManager.checkCanceled();
+          if (!func.isEquivalentTo(declaration) && GoPsiImplUtil.allowed(declaration.getContainingFile(), file, module)) {
+            if (!isMainFunction || Comparing.equal(declaration.getContainingFile(), file)) {
+              PsiElement identifier = func.getNameIdentifier();
+              holder.registerProblem(identifier == null ? func : identifier, "Duplicate function name");
+              return false;
             }
-            return true;
           }
+          return true;
         });
       }
     };

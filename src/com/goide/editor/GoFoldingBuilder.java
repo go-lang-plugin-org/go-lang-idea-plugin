@@ -30,7 +30,6 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.TokenType;
-import com.intellij.psi.search.PsiElementProcessor;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
@@ -90,7 +89,7 @@ public class GoFoldingBuilder extends CustomFoldingBuilder implements DumbAware 
   }
 
   @Override
-  protected void buildLanguageFoldRegions(@NotNull final List<FoldingDescriptor> result,
+  protected void buildLanguageFoldRegions(@NotNull List<FoldingDescriptor> result,
                                           @NotNull PsiElement root,
                                           @NotNull Document document,
                                           boolean quick) {
@@ -170,22 +169,19 @@ public class GoFoldingBuilder extends CustomFoldingBuilder implements DumbAware 
     }
 
     if (!quick) {
-      final Set<PsiElement> processedComments = ContainerUtil.newHashSet();
-      PsiTreeUtil.processElements(file, new PsiElementProcessor() {
-        @Override
-        public boolean execute(@NotNull PsiElement element) {
-          ASTNode node = element.getNode();
-          IElementType type = node.getElementType();
-          TextRange range = element.getTextRange();
-          if (type == GoParserDefinition.MULTILINE_COMMENT && range.getLength() > 2) {
-            result.add(new NamedFoldingDescriptor(node, range, null, "/*...*/"));
-          }
-          if (type == GoParserDefinition.LINE_COMMENT) {
-            addCommentFolds(element, processedComments, result);
-          }
-          foldTypes(element, result); // folding for inner types
-          return true;
+      Set<PsiElement> processedComments = ContainerUtil.newHashSet();
+      PsiTreeUtil.processElements(file, element -> {
+        ASTNode node = element.getNode();
+        IElementType type = node.getElementType();
+        TextRange range = element.getTextRange();
+        if (type == GoParserDefinition.MULTILINE_COMMENT && range.getLength() > 2) {
+          result.add(new NamedFoldingDescriptor(node, range, null, "/*...*/"));
         }
+        if (type == GoParserDefinition.LINE_COMMENT) {
+          addCommentFolds(element, processedComments, result);
+        }
+        foldTypes(element, result); // folding for inner types
+        return true;
       });
     }
   }

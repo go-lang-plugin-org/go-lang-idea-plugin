@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package com.goide.editor;
 
 import com.goide.GoTypes;
 import com.goide.psi.*;
-import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.lang.parameterInfo.*;
@@ -27,6 +26,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Function;
+import com.intellij.util.NotNullFunction;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -154,7 +154,7 @@ public class GoParameterInfoHandler implements ParameterInfoHandlerWithTabAction
     GoSignature signature = p instanceof GoSignatureOwner ? ((GoSignatureOwner)p).getSignature() : null;
     if (signature == null) return null;
     GoParameters parameters = signature.getParameters();
-    List<String> parametersPresentations = getParameterPresentations(parameters, GoPsiImplUtil.GET_TEXT_FUNCTION);
+    List<String> parametersPresentations = getParameterPresentations(parameters, (NotNullFunction<PsiElement, String>)PsiElement::getText);
     
     StringBuilder builder = new StringBuilder();
     int start = 0;

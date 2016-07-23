@@ -33,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
 public class GoReservedWordUsedAsNameInspection extends GoInspectionBase {
   @NotNull
   @Override
-  protected GoVisitor buildGoVisitor(@NotNull final ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
+  protected GoVisitor buildGoVisitor(@NotNull ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     GoFile builtinFile = GoSdkUtil.findBuiltinFile(session.getFile());
     if (builtinFile == null) return DUMMY_VISITOR;
 

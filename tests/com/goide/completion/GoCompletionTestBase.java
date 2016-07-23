@@ -21,11 +21,10 @@ import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.Lookup;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.testFramework.UsefulTestCase;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -46,12 +45,8 @@ public abstract class GoCompletionTestBase extends GoCodeInsightFixtureTestCase 
     myFixture.complete(type, count);
     List<String> stringList = myFixture.getLookupElementStrings();
 
-    assertNotNull(
-      "\nPossibly the single variant has been completed.\n" +
-      "File after:\n" +
-      myFixture.getFile().getText(),
-      stringList);
-    Collection<String> varList = new ArrayList<String>(Arrays.asList(variants));
+    assertNotNull("\nPossibly the single variant has been completed.\nFile after:\n" + myFixture.getFile().getText(), stringList);
+    Collection<String> varList = ContainerUtil.newArrayList(variants);
     if (checkType == CheckType.ORDERED_EQUALS) {
       UsefulTestCase.assertOrderedEquals(stringList, variants);
     }

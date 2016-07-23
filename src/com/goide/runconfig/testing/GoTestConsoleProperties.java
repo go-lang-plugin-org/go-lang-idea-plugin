@@ -130,7 +130,7 @@ public class GoTestConsoleProperties extends SMTRunnerConsoleProperties implemen
 
     @NotNull
     @Override
-    protected Filter getFilter(@NotNull final Project project, @NotNull final GlobalSearchScope searchScope) {
+    protected Filter getFilter(@NotNull Project project, @NotNull GlobalSearchScope searchScope) {
       return super.getFilter(project, searchScope).and(new Filter() {
         @Override
         public boolean shouldAccept(AbstractTestProxy test) {

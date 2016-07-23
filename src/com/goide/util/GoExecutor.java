@@ -208,11 +208,11 @@ public class GoExecutor {
     Logger.getInstance(getClass()).assertTrue(!ApplicationManager.getApplication().isDispatchThread(),
                                               "It's bad idea to run external tool on EDT");
     Logger.getInstance(getClass()).assertTrue(myProcessHandler == null, "Process has already run with this executor instance");
-    final Ref<Boolean> result = Ref.create(false);
+    Ref<Boolean> result = Ref.create(false);
     GeneralCommandLine commandLine = null;
     try {
       commandLine = createCommandLine();
-      final GeneralCommandLine finalCommandLine = commandLine;
+      GeneralCommandLine finalCommandLine = commandLine;
       myProcessHandler = new KillableColoredProcessHandler(finalCommandLine) {
         @Override
         public void startNotify() {
@@ -222,7 +222,7 @@ public class GoExecutor {
           super.startNotify();
         }
       };
-      final GoHistoryProcessListener historyProcessListener = new GoHistoryProcessListener();
+      GoHistoryProcessListener historyProcessListener = new GoHistoryProcessListener();
       myProcessHandler.addProcessListener(historyProcessListener);
       for (ProcessListener listener : myProcessListeners) {
         myProcessHandler.addProcessListener(listener);
@@ -247,12 +247,7 @@ public class GoExecutor {
             }
           }
           else if (myShowOutputOnError) {
-            ApplicationManager.getApplication().invokeLater(new Runnable() {
-              @Override
-              public void run() {
-                showOutput(myProcessHandler, historyProcessListener);
-              }
-            });
+            ApplicationManager.getApplication().invokeLater(() -> showOutput(myProcessHandler, historyProcessListener));
           }
         }
       };
@@ -283,7 +278,7 @@ public class GoExecutor {
     executeWithProgress(modal, Consumer.EMPTY_CONSUMER);
   }
 
-  public void executeWithProgress(final boolean modal, @NotNull final Consumer<Boolean> consumer) {
+  public void executeWithProgress(boolean modal, @NotNull Consumer<Boolean> consumer) {
     ProgressManager.getInstance().run(new Task.Backgroundable(myProject, getPresentableName(), true) {
       private boolean doNotStart;
 
@@ -322,13 +317,10 @@ public class GoExecutor {
     return myProcessHandler;
   }
 
-  private void showNotification(@NotNull final String message, final NotificationType type) {
-    ApplicationManager.getApplication().invokeLater(new Runnable() {
-      @Override
-      public void run() {
-        String title = getPresentableName();
-        Notifications.Bus.notify(GoConstants.GO_EXECUTION_NOTIFICATION_GROUP.createNotification(title, message, type, null), myProject);
-      }
+  private void showNotification(@NotNull String message, NotificationType type) {
+    ApplicationManager.getApplication().invokeLater(() -> {
+      String title = getPresentableName();
+      Notifications.Bus.notify(GoConstants.GO_EXECUTION_NOTIFICATION_GROUP.createNotification(title, message, type, null), myProject);
     });
   }
 

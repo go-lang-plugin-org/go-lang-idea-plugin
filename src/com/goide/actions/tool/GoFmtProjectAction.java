@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.Consumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,13 +50,9 @@ public class GoFmtProjectAction extends DumbAwareAction {
     }
   }
 
-  private static void fmt(@NotNull Project project, @Nullable Module module, @NotNull String presentation, @NotNull final VirtualFile dir) {
+  private static void fmt(@NotNull Project project, @Nullable Module module, @NotNull String presentation, @NotNull VirtualFile dir) {
     GoExecutor.in(project, module).withPresentableName(presentation).withWorkDirectory(dir.getPath())
-      .withParameters("fmt", "./...").showOutputOnError().executeWithProgress(false, new Consumer<Boolean>() {
-      @Override
-      public void consume(Boolean result) {
-        VfsUtil.markDirtyAndRefresh(true, true, true, dir);
-      }
-    });
+      .withParameters("fmt", "./...").showOutputOnError().executeWithProgress(false,
+                                                                              result -> VfsUtil.markDirtyAndRefresh(true, true, true, dir));
   }
 }

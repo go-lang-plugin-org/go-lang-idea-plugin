@@ -90,18 +90,15 @@ public class GoCompletionUtil {
         }
       }
     };
-    public static final InsertHandler<LookupElement> TYPE_CONVERSION_INSERT_HANDLER = new InsertHandler<LookupElement>() {
-      @Override
-      public void handleInsert(InsertionContext context, LookupElement item) {
-        PsiElement element = item.getPsiElement();
-        if (element instanceof GoTypeSpec) {
-          GoType type = ((GoTypeSpec)element).getSpecType().getType();
-          if (type instanceof GoStructType || type instanceof GoArrayOrSliceType || type instanceof GoMapType) {
-            BracesInsertHandler.ONE_LINER.handleInsert(context, item);
-          }
-          else {
-            ParenthesesInsertHandler.WITH_PARAMETERS.handleInsert(context, item);
-          }
+    public static final InsertHandler<LookupElement> TYPE_CONVERSION_INSERT_HANDLER = (context, item) -> {
+      PsiElement element = item.getPsiElement();
+      if (element instanceof GoTypeSpec) {
+        GoType type = ((GoTypeSpec)element).getSpecType().getType();
+        if (type instanceof GoStructType || type instanceof GoArrayOrSliceType || type instanceof GoMapType) {
+          BracesInsertHandler.ONE_LINER.handleInsert(context, item);
+        }
+        else {
+          ParenthesesInsertHandler.WITH_PARAMETERS.handleInsert(context, item);
         }
       }
     };
@@ -175,12 +172,9 @@ public class GoCompletionUtil {
   @TestOnly
   public static void disableTypeInfoInLookup(@NotNull Disposable disposable) {
     typesDisabled = true;
-    Disposer.register(disposable, new Disposable() {
-      @Override
-      public void dispose() {
-        //noinspection AssignmentToStaticFieldFromInstanceMethod
-        typesDisabled = false;
-      }
+    Disposer.register(disposable, () -> {
+      //noinspection AssignmentToStaticFieldFromInstanceMethod
+      typesDisabled = false;
     });
   }
 

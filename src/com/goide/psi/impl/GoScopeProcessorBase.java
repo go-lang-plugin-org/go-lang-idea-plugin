@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public abstract class GoScopeProcessorBase extends GoScopeProcessor {
-  @NotNull private final OrderedSet<GoNamedElement> myResult = new OrderedSet<GoNamedElement>();
+  @NotNull private final OrderedSet<GoNamedElement> myResult = new OrderedSet<>();
   @NotNull protected final PsiElement myOrigin;
   @NotNull private final PsiElement myRequestedNameElement;
   protected final boolean myIsCompletion;

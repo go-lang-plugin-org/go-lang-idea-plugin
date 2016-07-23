@@ -19,10 +19,8 @@ package com.goide.editor;
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.intellij.codeInsight.highlighting.HighlightUsagesHandler;
 import com.intellij.codeInsight.highlighting.HighlightUsagesHandlerBase;
-import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.testFramework.LightProjectDescriptor;
-import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -188,12 +186,7 @@ public class GoExitPointsHighlightingTest extends GoCodeInsightFixtureTestCase {
     List<PsiElement> targets = handler.getTargets();
     assertEquals(1, targets.size());
     handler.computeUsages(targets);
-    List<String> textUsages = ContainerUtil.map(handler.getReadUsages(), new Function<TextRange, String>() {
-      @Override
-      public String fun(TextRange range) {
-        return range.substring(myFixture.getFile().getText());
-      }
-    });
+    List<String> textUsages = ContainerUtil.map(handler.getReadUsages(), range -> range.substring(myFixture.getFile().getText()));
     assertSameElements(textUsages, usages);
   }
 }

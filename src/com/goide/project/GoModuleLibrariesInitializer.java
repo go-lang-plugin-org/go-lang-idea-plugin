@@ -84,12 +84,9 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
   @TestOnly
   public static void setTestingMode(@NotNull Disposable disposable) {
     isTestingMode = true;
-    Disposer.register(disposable, new Disposable() {
-      @Override
-      public void dispose() {
-        //noinspection AssignmentToStaticFieldFromInstanceMethod
-        isTestingMode = false;
-      }
+    Disposer.register(disposable, () -> {
+      //noinspection AssignmentToStaticFieldFromInstanceMethod
+      isTestingMode = false;
     });
   }
 
@@ -108,23 +105,15 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
           scheduleUpdate();
         }
       });
-      myConnection.subscribe(GoLibrariesService.LIBRARIES_TOPIC, new GoLibrariesService.LibrariesListener() {
-        @Override
-        public void librariesChanged(@NotNull Collection<String> newRootUrls) {
-          scheduleUpdate();
-        }
-      });
+      myConnection.subscribe(GoLibrariesService.LIBRARIES_TOPIC, newRootUrls -> scheduleUpdate());
 
       Project project = myModule.getProject();
-      StartupManager.getInstance(project).runWhenProjectIsInitialized(new Runnable() {
-        @Override
-        public void run() {
-          if (!project.isDisposed() && !myModule.isDisposed()) {
-            for (PsiFileSystemItem vendor : FilenameIndex.getFilesByName(project, GoConstants.VENDOR, GoUtil.moduleScope(myModule), true)) {
-              if (vendor.isDirectory()) {
-                showVendoringNotification();
-                break;
-              }
+      StartupManager.getInstance(project).runWhenProjectIsInitialized(() -> {
+        if (!project.isDisposed() && !myModule.isDisposed()) {
+          for (PsiFileSystemItem vendor : FilenameIndex.getFilesByName(project, GoConstants.VENDOR, GoUtil.moduleScope(myModule), true)) {
+            if (vendor.isDirectory()) {
+              showVendoringNotification();
+              break;
             }
           }
         }
@@ -155,24 +144,21 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     ApplicationManager.getApplication().assertIsDispatchThread();
 
     if (!libraryRoots.isEmpty()) {
-      ApplicationManager.getApplication().runWriteAction(new Runnable() {
-        @Override
-        public void run() {
-          ModuleRootManager model = ModuleRootManager.getInstance(myModule);
-          LibraryOrderEntry goLibraryEntry = OrderEntryUtil.findLibraryOrderEntry(model, getLibraryName());
+      ApplicationManager.getApplication().runWriteAction(() -> {
+        ModuleRootManager model = ModuleRootManager.getInstance(myModule);
+        LibraryOrderEntry goLibraryEntry = OrderEntryUtil.findLibraryOrderEntry(model, getLibraryName());
 
-          if (goLibraryEntry != null && goLibraryEntry.isValid()) {
-            Library library = goLibraryEntry.getLibrary();
-            if (library != null && !((LibraryEx)library).isDisposed()) {
-              fillLibrary(library, libraryRoots, exclusions);
-            }
-          }
-          else {
-            LibraryTable libraryTable = LibraryTablesRegistrar.getInstance().getLibraryTable(myModule.getProject());
-            Library library = libraryTable.createLibrary(getLibraryName());
+        if (goLibraryEntry != null && goLibraryEntry.isValid()) {
+          Library library = goLibraryEntry.getLibrary();
+          if (library != null && !((LibraryEx)library).isDisposed()) {
             fillLibrary(library, libraryRoots, exclusions);
-            ModuleRootModificationUtil.addDependency(myModule, library);
           }
+        }
+        else {
+          LibraryTable libraryTable = LibraryTablesRegistrar.getInstance().getLibraryTable(myModule.getProject());
+          Library library = libraryTable.createLibrary(getLibraryName());
+          fillLibrary(library, libraryRoots, exclusions);
+          ModuleRootModificationUtil.addDependency(myModule, library);
         }
       });
       showNotification(myModule.getProject());
@@ -213,31 +199,23 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
     ModifiableRootModel model = modelsProvider.getModuleModifiableModel(myModule);
     LibraryOrderEntry goLibraryEntry = OrderEntryUtil.findLibraryOrderEntry(model, getLibraryName());
     if (goLibraryEntry != null) {
-      ApplicationManager.getApplication().runWriteAction(new Runnable() {
-        @Override
-        public void run() {
-          Library library = goLibraryEntry.getLibrary();
-          if (library != null) {
-            LibraryTable table = library.getTable();
-            if (table != null) {
-              table.removeLibrary(library);
-              model.removeOrderEntry(goLibraryEntry);
-              modelsProvider.commitModuleModifiableModel(model);
-            }
+      ApplicationManager.getApplication().runWriteAction(() -> {
+        Library library = goLibraryEntry.getLibrary();
+        if (library != null) {
+          LibraryTable table = library.getTable();
+          if (table != null) {
+            table.removeLibrary(library);
+            model.removeOrderEntry(goLibraryEntry);
+            modelsProvider.commitModuleModifiableModel(model);
           }
-          else {
-            modelsProvider.disposeModuleModifiableModel(model);
-          }
+        }
+        else {
+          modelsProvider.disposeModuleModifiableModel(model);
         }
       });
     }
     else {
-      ApplicationManager.getApplication().runWriteAction(new Runnable() {
-        @Override
-        public void run() {
-          modelsProvider.disposeModuleModifiableModel(model);
-        }
-      });
+      ApplicationManager.getApplication().runWriteAction(() -> modelsProvider.disposeModuleModifiableModel(model));
     }
   }
 
@@ -355,12 +333,9 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
           ProgressIndicatorProvider.checkCanceled();
           if (!myLastHandledGoPathSourcesRoots.equals(goPathSourcesRoots) || !myLastHandledExclusions.equals(excludeRoots)) {
             Collection<VirtualFile> includeRoots = gatherIncludeRoots(goPathSourcesRoots, excludeRoots);
-            ApplicationManager.getApplication().invokeLater(new Runnable() {
-              @Override
-              public void run() {
-                if (!myModule.isDisposed() && GoSdkService.getInstance(project).isGoModule(myModule)) {
-                  attachLibraries(includeRoots, excludeRoots);
-                }
+            ApplicationManager.getApplication().invokeLater(() -> {
+              if (!myModule.isDisposed() && GoSdkService.getInstance(project).isGoModule(myModule)) {
+                attachLibraries(includeRoots, excludeRoots);
               }
             });
 
@@ -370,7 +345,7 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
             myLastHandledExclusions.clear();
             myLastHandledExclusions.addAll(excludeRoots);
 
-            List<String> paths = ContainerUtil.map(goPathSourcesRoots, GoUtil.RETRIEVE_FILE_PATH_FUNCTION);
+            List<String> paths = ContainerUtil.map(goPathSourcesRoots, VirtualFile::getPath);
             myWatchedRequests.clear();
             myWatchedRequests.addAll(LocalFileSystem.getInstance().addRootsToWatch(paths, true));
           }
@@ -381,12 +356,9 @@ public class GoModuleLibrariesInitializer implements ModuleComponent {
           LocalFileSystem.getInstance().removeWatchedRoots(myWatchedRequests);
           myLastHandledGoPathSourcesRoots.clear();
           myLastHandledExclusions.clear();
-          ApplicationManager.getApplication().invokeLater(new Runnable() {
-            @Override
-            public void run() {
-              if (!myModule.isDisposed() && GoSdkService.getInstance(project).isGoModule(myModule)) {
-                removeLibraryIfNeeded();
-              }
+          ApplicationManager.getApplication().invokeLater(() -> {
+            if (!myModule.isDisposed() && GoSdkService.getInstance(project).isGoModule(myModule)) {
+              removeLibraryIfNeeded();
             }
           });
         }

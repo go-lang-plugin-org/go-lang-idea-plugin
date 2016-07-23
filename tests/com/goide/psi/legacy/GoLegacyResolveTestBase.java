@@ -19,7 +19,6 @@ package com.goide.psi.legacy;
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.goide.project.GoModuleLibrariesService;
 import com.goide.psi.GoFile;
-import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
@@ -27,7 +26,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.FilteringProcessor;
-import com.intellij.util.Processor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -134,26 +132,15 @@ public abstract class GoLegacyResolveTestBase extends GoCodeInsightFixtureTestCa
   }
 
   private void doDirectoryTest(@NotNull VirtualFile file) {
-    VfsUtilCore.processFilesRecursively(
-      file,
-      new FilteringProcessor<VirtualFile>(
-        new Condition<VirtualFile>() {
-          @Override
-          public boolean value(@NotNull VirtualFile virtualFile) {
-            return !virtualFile.isDirectory() && virtualFile.getName().endsWith(".go");
-          }
-        },
-        new Processor<VirtualFile>() {
-          @Override
-          public boolean process(@NotNull VirtualFile virtualFile) {
-            PsiFile goFile = myFixture.getPsiManager().findFile(virtualFile);
-            assert goFile instanceof GoFile;
-            processPsiFile((GoFile)goFile);
-            return true;
-          }
-        }
-      )
-    );
+    VfsUtilCore.processFilesRecursively(file, new FilteringProcessor<>(
+                                          virtualFile -> !virtualFile.isDirectory() && virtualFile.getName().endsWith(".go"),
+                                          virtualFile -> {
+                                            PsiFile goFile = myFixture.getPsiManager().findFile(virtualFile);
+                                            assert goFile instanceof GoFile;
+                                            processPsiFile((GoFile)goFile);
+                                            return true;
+                                          }
+                                        ));
     doResolveTest();
   }
 }

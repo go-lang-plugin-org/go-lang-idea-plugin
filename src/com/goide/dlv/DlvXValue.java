@@ -30,7 +30,6 @@ import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.impl.FileEditorManagerImpl;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
@@ -39,7 +38,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.SyntaxTraverser;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.Consumer;
 import com.intellij.util.ThreeState;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.xdebugger.XDebugSession;
@@ -107,29 +105,21 @@ class DlvXValue extends XNamedValue {
   public XValueModifier getModifier() {
     return new XValueModifier() {
       @Override
-      public void setValue(@NotNull String newValue, @NotNull final XModificationCallback callback) {
+      public void setValue(@NotNull String newValue, @NotNull XModificationCallback callback) {
         myProcessor.send(new DlvRequest.SetSymbol(myVariable.name, newValue, myFrameId))
-          .processed(new Consumer<Object>() {
-            @Override
-            public void consume(@Nullable Object o) {
-              if (o != null) {
-                callback.valueModified();
-              }
+          .processed(o -> {
+            if (o != null) {
+              callback.valueModified();
             }
           })
-          .rejected(new Consumer<Throwable>() {
-            @Override
-            public void consume(@NotNull Throwable throwable) {
-              callback.errorOccurred(throwable.getMessage());
-            }
-          });
+          .rejected(throwable -> callback.errorOccurred(throwable.getMessage()));
       }
     };
   }
 
   @NotNull
   private XValuePresentation getPresentation() {
-    final String value = myVariable.value;
+    String value = myVariable.value;
     if (myVariable.isNumber()) return new XNumericValuePresentation(value);
     if (myVariable.isString()) return new XStringValuePresentation(value);
     if (myVariable.isBool()) {
@@ -156,25 +146,20 @@ class DlvXValue extends XNamedValue {
   private static PsiElement findTargetElement(@NotNull Project project,
                                               @NotNull XSourcePosition position,
                                               @NotNull Editor editor,
-                                              @NotNull final String name) {
+                                              @NotNull String name) {
     PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument());
     if (file == null || !file.getVirtualFile().equals(position.getFile())) return null;
     ASTNode leafElement = file.getNode().findLeafElementAt(position.getOffset());
     if (leafElement == null) return null;
     GoTopLevelDeclaration topLevel = PsiTreeUtil.getTopmostParentOfType(leafElement.getPsi(), GoTopLevelDeclaration.class);
     SyntaxTraverser<PsiElement> traverser = SyntaxTraverser.psiTraverser(topLevel)
-      .filter(new Condition<PsiElement>() {
-        @Override
-        public boolean value(PsiElement e) {
-          return e instanceof GoNamedElement && Comparing.equal(name, ((GoNamedElement)e).getName());
-        }
-      });
+      .filter(e -> e instanceof GoNamedElement && Comparing.equal(name, ((GoNamedElement)e).getName()));
     Iterator<PsiElement> iterator = traverser.iterator();
     return iterator.hasNext() ? iterator.next() : null;
   }
 
   @Override
-  public void computeSourcePosition(@NotNull final XNavigatable navigatable) {
+  public void computeSourcePosition(@NotNull XNavigatable navigatable) {
     readActionInPooledThread(new Runnable() {
       @Override
       public void run() {
@@ -200,13 +185,8 @@ class DlvXValue extends XNamedValue {
     });
   }
 
-  private static void readActionInPooledThread(@NotNull final Runnable runnable) {
-    ApplicationManager.getApplication().executeOnPooledThread(new Runnable() {
-      @Override
-      public void run() {
-        ApplicationManager.getApplication().runReadAction(runnable);
-      }
-    });
+  private static void readActionInPooledThread(@NotNull Runnable runnable) {
+    ApplicationManager.getApplication().executeOnPooledThread(() -> ApplicationManager.getApplication().runReadAction(runnable));
   }
 
   @Nullable
@@ -222,13 +202,8 @@ class DlvXValue extends XNamedValue {
 
   @NotNull
   @Override
-  public ThreeState computeInlineDebuggerData(@NotNull final XInlineDebuggerDataCallback callback) {
-    computeSourcePosition(new XNavigatable() {
-      @Override
-      public void setSourcePosition(@Nullable XSourcePosition sourcePosition) {
-        callback.computed(sourcePosition);
-      }
-    });
+  public ThreeState computeInlineDebuggerData(@NotNull XInlineDebuggerDataCallback callback) {
+    computeSourcePosition(callback::computed);
     return ThreeState.YES;
   }
 
@@ -243,29 +218,26 @@ class DlvXValue extends XNamedValue {
   }
 
   @Override
-  public void computeTypeSourcePosition(@NotNull final XNavigatable navigatable) {
-    readActionInPooledThread(new Runnable() {
-      @Override
-      public void run() {
-        boolean isStructure = myVariable.isStructure();
-        boolean isPtr = myVariable.isPtr();
-        if (!isStructure && !isPtr) return;
-        Project project = getProject();
-        if (project == null) return;
-        String dlvType = myVariable.type;
-        String fqn = dlvType.replaceFirst(isPtr ? "\\*struct " : "struct ", "");
-        List<String> split = StringUtil.split(fqn, ".");
-        boolean noFqn = split.size() == 1;
-        if (split.size() == 2 || noFqn) {
-          String name = ContainerUtil.getLastItem(split);
-          assert name != null;
-          Collection<GoTypeSpec> types = GoTypesIndex.find(name, project, GlobalSearchScope.allScope(project), null);
-          for (GoTypeSpec type : types) {
-            if (noFqn || Comparing.equal(fqn, type.getQualifiedName())) {
-              navigatable.setSourcePosition(XDebuggerUtil.getInstance().createPositionByOffset(
-                type.getContainingFile().getVirtualFile(), type.getTextOffset()));
-              return;
-            }
+  public void computeTypeSourcePosition(@NotNull XNavigatable navigatable) {
+    readActionInPooledThread(() -> {
+      boolean isStructure = myVariable.isStructure();
+      boolean isPtr = myVariable.isPtr();
+      if (!isStructure && !isPtr) return;
+      Project project = getProject();
+      if (project == null) return;
+      String dlvType = myVariable.type;
+      String fqn = dlvType.replaceFirst(isPtr ? "\\*struct " : "struct ", "");
+      List<String> split = StringUtil.split(fqn, ".");
+      boolean noFqn = split.size() == 1;
+      if (split.size() == 2 || noFqn) {
+        String name = ContainerUtil.getLastItem(split);
+        assert name != null;
+        Collection<GoTypeSpec> types = GoTypesIndex.find(name, project, GlobalSearchScope.allScope(project), null);
+        for (GoTypeSpec type : types) {
+          if (noFqn || Comparing.equal(fqn, type.getQualifiedName())) {
+            navigatable.setSourcePosition(XDebuggerUtil.getInstance().createPositionByOffset(
+              type.getContainingFile().getVirtualFile(), type.getTextOffset()));
+            return;
           }
         }
       }

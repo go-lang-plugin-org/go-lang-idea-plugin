@@ -22,7 +22,6 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -250,12 +249,7 @@ public class GoTypeUtil {
     if (types.size() < 2) {
       return getInterfaceIfNull(ContainerUtil.getFirstItem(types), context);
     }
-    return GoElementFactory.createTypeList(context.getProject(), StringUtil.join(types, new Function<GoType, String>() {
-      @Override
-      public String fun(GoType type) {
-        return type == null ? GoConstants.INTERFACE_TYPE : type.getText();
-      }
-    }, ", "));
+    return GoElementFactory.createTypeList(context.getProject(), StringUtil.join(types, type -> type == null ? GoConstants.INTERFACE_TYPE : type.getText(), ", "));
   }
 
   @NotNull

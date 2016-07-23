@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,13 +34,7 @@ import java.io.IOException;
 public class GoVarSpecStubElementType extends GoStubElementType<GoVarSpecStub, GoVarSpec> {
   public static final GoVarSpec[] EMPTY_ARRAY = new GoVarSpec[0];
 
-  public static final ArrayFactory<GoVarSpec> ARRAY_FACTORY = new ArrayFactory<GoVarSpec>() {
-    @NotNull
-    @Override
-    public GoVarSpec[] create(int count) {
-      return count == 0 ? EMPTY_ARRAY : new GoVarSpec[count];
-    }
-  };
+  public static final ArrayFactory<GoVarSpec> ARRAY_FACTORY = count -> count == 0 ? EMPTY_ARRAY : new GoVarSpec[count];
   
   public GoVarSpecStubElementType(@NotNull String name) {
     super(name);
