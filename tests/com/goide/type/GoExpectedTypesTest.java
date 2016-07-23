@@ -23,7 +23,6 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.LightProjectDescriptor;
-import com.intellij.util.NotNullFunction;
 import org.jetbrains.annotations.NotNull;
 
 public class GoExpectedTypesTest extends GoCodeInsightFixtureTestCase {
@@ -162,8 +161,7 @@ public class GoExpectedTypesTest extends GoCodeInsightFixtureTestCase {
     GoExpression typeOwner = PsiTreeUtil.getNonStrictParentOfType(elementAt, GoExpression.class);
     assertNotNull("Cannot find type owner. Context element: " + elementAt.getText(), typeOwner);
 
-    assertEquals(expectedTypeText, StringUtil.join(GoTypeUtil.getExpectedTypes(typeOwner),
-                                                   (NotNullFunction<PsiElement, String>)PsiElement::getText, "; "));
+    assertEquals(expectedTypeText, StringUtil.join(GoTypeUtil.getExpectedTypes(typeOwner), PsiElement::getText, "; "));
   }
 
   private void doStatementTest(@NotNull String text, @NotNull String expectedTypeText) {

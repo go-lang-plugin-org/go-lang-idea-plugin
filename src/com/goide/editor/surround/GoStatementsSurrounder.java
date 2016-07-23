@@ -27,7 +27,6 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.NotNullFunction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -59,7 +58,7 @@ public abstract class GoStatementsSurrounder implements Surrounder {
                                                    boolean withElse) {
     PsiElement first = ArrayUtil.getFirstElement(statements);
     PsiElement last = ArrayUtil.getLastElement(statements);
-    String block = StringUtil.join(statements, (NotNullFunction<PsiElement, String>)PsiElement::getText, "\n");
+    String block = StringUtil.join(statements, PsiElement::getText, "\n");
     GoIfStatement ifStatement = GoElementFactory.createIfStatement(project, "", block, withElse ? "" : null);
     ifStatement = (GoIfStatement)container.addAfter(ifStatement, last);
     container.deleteChildRange(first, last);
