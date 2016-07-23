@@ -38,7 +38,7 @@ public class GoExcludePathLookupActionProvider implements LookupActionProvider {
   @Override
   public void fillActions(LookupElement element, Lookup lookup, Consumer<LookupElementAction> consumer) {
     PsiElement psiElement = element.getPsiElement();
-    PsiFile file = psiElement != null ? psiElement.getContainingFile() : null;
+    PsiFile file = psiElement != null && psiElement.isValid() ? psiElement.getContainingFile() : null;
     String importPath = file instanceof GoFile ? ((GoFile)file).getImportPath(false) : null;
     if (importPath != null) {
       Project project = psiElement.getProject();
@@ -72,7 +72,7 @@ public class GoExcludePathLookupActionProvider implements LookupActionProvider {
       ApplicationManager.getApplication().invokeLater(new Runnable() {
         @Override
         public void run() {
-          final GoAutoImportConfigurable configurable = new GoAutoImportConfigurable(myProject, true);
+          GoAutoImportConfigurable configurable = new GoAutoImportConfigurable(myProject, true);
           ShowSettingsUtil.getInstance().editConfigurable(myProject, configurable, new Runnable() {
               @Override
               public void run() {
