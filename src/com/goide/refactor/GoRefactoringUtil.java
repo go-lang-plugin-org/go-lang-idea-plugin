@@ -143,7 +143,7 @@ public class GoRefactoringUtil {
         }
       }
 
-      Set<LookupElement> set = ContainerUtil.newHashSet();
+      Set<LookupElement> set = ContainerUtil.newLinkedHashSet();
       for (String name : myNames) {
         set.add(LookupElementBuilder.create(UniqueNameGenerator.generateUniqueName(name, parameterNames)));
       }
