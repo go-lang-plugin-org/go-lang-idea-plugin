@@ -44,7 +44,6 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Function;
-import com.intellij.util.NotNullFunction;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.indexing.IdFilter;
 import com.intellij.xml.util.XmlStringUtil;
@@ -279,12 +278,11 @@ public class GoDocumentationProvider extends AbstractDocumentationProvider {
         StringBuilder result = new StringBuilder("struct {");
         result.append(StringUtil.join(((GoStructType)type).getFieldDeclarationList(), declaration -> {
           GoAnonymousFieldDefinition anon = declaration.getAnonymousFieldDefinition();
-          String result1 = anon != null
-                          ? getTypePresentation(anon.getGoTypeInner(null), presentationFunction)
-                          : StringUtil.join(declaration.getFieldDefinitionList(), (NotNullFunction<PsiElement, String>)PsiElement::getText, ", ") +
-                            " " + getTypePresentation(declaration.getType(), presentationFunction);
+          String fieldString = anon != null ? getTypePresentation(anon.getGoTypeInner(null), presentationFunction)
+                                            : StringUtil.join(declaration.getFieldDefinitionList(), PsiElement::getText, ", ") +
+                                              " " + getTypePresentation(declaration.getType(), presentationFunction);
           GoTag tag = declaration.getTag();
-          return result1 + (tag != null ? tag.getText() : "");
+          return fieldString + (tag != null ? tag.getText() : "");
         }, "; "));
         return result.append("}").toString();
       }

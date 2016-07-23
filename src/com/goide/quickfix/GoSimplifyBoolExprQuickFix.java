@@ -29,7 +29,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.util.NotNullFunction;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -102,7 +101,7 @@ public class GoSimplifyBoolExprQuickFix extends LocalQuickFixOnPsiElement {
       expressions.remove(e);
     }
     String separator = and ? " && " : " || ";
-    String text = StringUtil.join(expressions, (NotNullFunction<PsiElement, String>)PsiElement::getText, separator);
+    String text = StringUtil.join(expressions, PsiElement::getText, separator);
     GoExpression expression = GoElementFactory.createExpression(project, text);
     binaryExpr.replace(expression);
   }

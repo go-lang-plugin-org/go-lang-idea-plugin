@@ -50,7 +50,6 @@ import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.NotNullFunction;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.PathUtil;
 import com.intellij.util.containers.ContainerUtil;
@@ -927,7 +926,7 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static String joinPsiElementText(List<? extends PsiElement> items) {
-    return StringUtil.join(items, (NotNullFunction<PsiElement, String>)PsiElement::getText, ", ");
+    return StringUtil.join(items, PsiElement::getText, ", ");
   }
 
   @Nullable
