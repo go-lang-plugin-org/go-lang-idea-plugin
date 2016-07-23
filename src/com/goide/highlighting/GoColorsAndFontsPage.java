@@ -201,11 +201,11 @@ public class GoColorsAndFontsPage implements ColorSettingsPage {
            "}\n" +
            "\n" +
            "func <lf>variableFunc</lf>(<fp>demo1</fp> <bt>int</bt>) {\n" +
-           "    <fp>demo1</fpm> = 3\n" +
+           "    <fp>demo1</fp> = 3\n" +
            "    <lv>a</lv> := <tr>PublicStruct</tr>{}\n" +
            "    <lv>a</lv>.<lf>privateFunc</lf>()\n" +
            "    <lv>demo2</lv> := 4\n" +
-           "    if <sv>demo1</sv>, <sv>demo2</sv> := <lf>privateFunc</lf>(); <pv>demo1</pv> != 3 {\n" +
+           "    if <sv>demo1</sv>, <sv>demo2</sv> := <lf>privateFunc</lf>(); <sv>demo1</sv> != 3 {\n" +
            "        _ = <sv>demo1</sv>\n" +
            "        _ = <sv>demo2</sv>\n" +
            "        return\n" +
