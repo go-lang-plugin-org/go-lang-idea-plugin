@@ -35,6 +35,7 @@ import java.util.List;
 
 public class GoStructInitializationInspection extends GoInspectionBase {
   public static final String REPLACE_WITH_NAMED_STRUCT_FIELD_FIX_NAME = "Replace with named struct field";
+  // This should read: reportLocalStructs (sorry for confusion)
   public boolean reportImportedStructs;
 
   @NotNull
@@ -42,13 +43,14 @@ public class GoStructInitializationInspection extends GoInspectionBase {
   protected GoVisitor buildGoVisitor(@NotNull ProblemsHolder holder, @NotNull LocalInspectionToolSession session) {
     return new GoVisitor() {
       @Override
-      public void visitCompositeLit(@NotNull GoCompositeLit o) {
+      public void visitLiteralValue(@NotNull GoLiteralValue o) {
         if (PsiTreeUtil.getParentOfType(o, GoReturnStatement.class, GoShortVarDeclaration.class, GoAssignmentStatement.class) == null) {
           return;
         }
-        GoType refType = GoPsiImplUtil.getLiteralType(o, true);
+        PsiElement parent = o.getParent();
+        GoType refType = GoPsiImplUtil.getLiteralType(parent, false);
         if (refType instanceof GoStructType) {
-          processStructType((GoStructType)refType, o, holder);
+          processStructType(holder, o, (GoStructType)refType);
         }
       }
     };
@@ -59,36 +61,25 @@ public class GoStructInitializationInspection extends GoInspectionBase {
     return new SingleCheckboxOptionsPanel("Report for local type definitions as well", this, "reportImportedStructs");
   }
 
-  private static boolean hasAnonymousStructField(@NotNull List<GoFieldDeclaration> fields) {
-    // TODO Anonymous structs have a more complex resolution process and can't be referred directly
-    // Also quick fixing them would require producing a struct and add it
-    for (GoFieldDeclaration field : fields) {
-      if (field.getAnonymousFieldDefinition() != null) return true;
-    }
-    return false;
-  }
-
-  private void processStructType(@NotNull GoStructType structType,
-                                 @NotNull GoCompositeLit compositeLit,
-                                 @NotNull ProblemsHolder holder) {
-    if (reportImportedStructs || GoUtil.inSamePackage(structType.getContainingFile(), compositeLit.getContainingFile())) {
+  private void processStructType(@NotNull ProblemsHolder holder,
+                                 @NotNull GoLiteralValue element,
+                                 @NotNull GoStructType structType) {
+    if (reportImportedStructs || !GoUtil.inSamePackage(structType.getContainingFile(), element.getContainingFile())) {
       List<GoFieldDeclaration> fields = structType.getFieldDeclarationList();
-      if (!hasAnonymousStructField(fields)) {
-        processLiteralValue(holder, fields, compositeLit.getLiteralValue());
-      }
+      processLiteralValue(holder, element, fields);
     }
   }
 
   private static void processLiteralValue(@NotNull ProblemsHolder holder,
-                                          @NotNull List<GoFieldDeclaration> structFields,
-                                          @Nullable GoLiteralValue o) {
+                                          @Nullable GoLiteralValue o,
+                                          List<GoFieldDeclaration> fields) {
     if (o == null) return;
-    List<GoElement> elemList = o.getElementList();
-    for (int elemId = 0; elemId < elemList.size(); elemId++) {
+    List<GoElement> vals = o.getElementList();
+    for (int elemId = 0; elemId < vals.size(); elemId++) {
       ProgressManager.checkCanceled();
-      GoElement element = elemList.get(elemId);
-      if (element.getKey() == null && elemId < structFields.size()) {
-        String structFieldName = getFieldName(structFields.get(elemId));
+      GoElement element = vals.get(elemId);
+      if (element.getKey() == null && elemId < fields.size()) {
+        String structFieldName = getFieldName(fields.get(elemId));
         LocalQuickFix[] fixes = structFieldName != null ? new LocalQuickFix[]{new GoReplaceWithNamedStructFieldQuickFix(structFieldName)}
                                                         : LocalQuickFix.EMPTY_ARRAY;
         holder.registerProblem(element, "Unnamed field initialization", ProblemHighlightType.GENERIC_ERROR_OR_WARNING, fixes);

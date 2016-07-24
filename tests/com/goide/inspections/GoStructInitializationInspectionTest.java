@@ -38,12 +38,12 @@ public class GoStructInitializationInspectionTest extends GoQuickFixTestBase {
     super.tearDown();
   }
 
-  public void testUninitializedStructLocalOnly() {
-    doTest(false);
+  public void testUninitializedStructWithLocal() {
+    doTest(true);
   }
 
-  public void testUninitializedStructImported() {
-    doTest(true);
+  public void testUninitializedStructImportedOnly() {
+    doTest(false);
   }
 
   public void testQuickFix() {

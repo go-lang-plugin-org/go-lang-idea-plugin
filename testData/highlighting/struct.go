@@ -119,7 +119,7 @@ func <warning>NewA</warning>(b int) *A {
 
 func _() {
 	tr := &url.Userinfo{
-		<error>username</error>:"Name",
+		<error descr="Unknown field 'username' in struct literal">username</error>:"Name",
 	}
 	_ = tr
 }
