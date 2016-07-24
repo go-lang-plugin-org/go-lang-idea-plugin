@@ -1,9 +1,9 @@
 package foo
 
+import "io"
+
 func _() {
-    _ = struct {
-        x string
-    }{
-	    x: "string",
-    }
+	_ = io.LimitedReader{
+		R: nil,
+	}
 }
