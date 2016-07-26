@@ -20,9 +20,21 @@ import com.goide.psi.GoPackageClause;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.stubs.StubBase;
 import com.intellij.psi.stubs.StubElement;
+import com.intellij.util.io.StringRef;
 
 public class GoPackageClauseStub extends StubBase<GoPackageClause> {
-  public GoPackageClauseStub(StubElement parent, IStubElementType elementType) {
+  private final String myName;
+  public GoPackageClauseStub(StubElement parent, IStubElementType elementType, String name) {
     super(parent, elementType);
+    myName = name;
+  }
+
+  public GoPackageClauseStub(StubElement stub, IStubElementType elementType, StringRef ref) {
+    super(stub, elementType);
+    myName = ref != null ? ref.getString() : null;
+  }
+
+  public String getName() {
+    return myName;
   }
 }

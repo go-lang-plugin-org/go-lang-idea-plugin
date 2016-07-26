@@ -40,16 +40,17 @@ public class GoPackageClauseStubElementType extends GoStubElementType<GoPackageC
   @NotNull
   @Override
   public GoPackageClauseStub createStub(@NotNull GoPackageClause psi, StubElement parentStub) {
-    return new GoPackageClauseStub(parentStub, this);
+    return new GoPackageClauseStub(parentStub, this, psi.getName());
   }
 
   @Override
   public void serialize(@NotNull GoPackageClauseStub stub, @NotNull StubOutputStream dataStream) throws IOException {
+    dataStream.writeName(stub.getName());
   }
 
   @NotNull
   @Override
   public GoPackageClauseStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub) throws IOException {
-    return new GoPackageClauseStub(parentStub, this);
+    return new GoPackageClauseStub(parentStub, this, dataStream.readName());
   }
 }
