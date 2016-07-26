@@ -375,8 +375,6 @@ public class GoFile extends PsiFileBase {
 
   @Nullable
   public String getPackageName() {
-    GoFileStub stub = getStub();
-    if (stub != null) return stub.getPackageName();
     GoPackageClause packageClause = getPackage();
     return packageClause != null ? packageClause.getName() : null;
   }

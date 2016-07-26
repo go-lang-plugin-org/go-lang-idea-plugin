@@ -246,6 +246,8 @@ public class GoPsiImplUtil {
 
   @Nullable
   public static String getName(@NotNull GoPackageClause packageClause) {
+    GoPackageClauseStub stub = packageClause.getStub();
+    if (stub != null) return stub.getName();
     PsiElement packageIdentifier = packageClause.getIdentifier();
     if (packageIdentifier != null) {
       return packageIdentifier.getText().trim();
