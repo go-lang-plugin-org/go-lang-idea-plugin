@@ -89,6 +89,6 @@ func f(d time.Duration) {
 }
 
 func _() {
-	time := time.Now();
+	<warning descr="Variable 'time' collides with imported package name">time</warning> := time.Now();
 	fmt.Println(time) 
 }
