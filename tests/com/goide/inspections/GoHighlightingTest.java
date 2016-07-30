@@ -55,6 +55,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       GoFunctionCallInspection.class,
       GoDeferGoInspection.class,
       GoReservedWordUsedAsNameInspection.class,
+      GoImportUsedAsNameInspection.class,
       GoMultiplePackagesInspection.class,
       GoCgoInTestInspection.class,
       GoTestSignaturesInspection.class,
@@ -167,6 +168,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testGh2147()                    { doTest(); }
   public void testAssignmentToReceiver()      { doTest(); }
   public void testReservedWordUsedAsName()    { doTest(); }
+  public void testImportUsedAsName()          { doTest(); }
   public void testMixedNamedUnnamedParameters() { doTest(); }
   public void testStringInStructSliceWithThirdIndex() { doTest(); }
   public void testAnonymousFieldDefinition()  { doTest(); }

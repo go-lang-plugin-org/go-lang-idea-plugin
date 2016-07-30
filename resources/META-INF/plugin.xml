@@ -266,6 +266,9 @@
     <localInspection language="go" displayName="Reserved word used as name" groupPath="Go"
                      groupName="Probable bugs" enabledByDefault="true" level="WARNING"
                      implementationClass="com.goide.inspections.GoReservedWordUsedAsNameInspection"/>
+    <localInspection language="go" displayName="Imported package name as name identifier" groupPath="Go"
+                     groupName="Probable bugs" enabledByDefault="true" level="WARNING"
+                     implementationClass="com.goide.inspections.GoImportUsedAsNameInspection"/>
     <localInspection language="go" displayName="Malformed struct tag" groupPath="Go"
                      groupName="Probable bugs" enabledByDefault="true" level="WARNING"
                      implementationClass="com.goide.inspections.GoStructTagInspection"/>
