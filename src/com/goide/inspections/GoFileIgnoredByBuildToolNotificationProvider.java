@@ -33,6 +33,7 @@ import com.intellij.openapi.vfs.newvfs.BulkFileListener;
 import com.intellij.openapi.vfs.newvfs.events.VFileEvent;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
+import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 import com.intellij.ui.EditorNotificationPanel;
 import com.intellij.ui.EditorNotifications;
 import com.intellij.util.containers.ContainerUtil;
@@ -82,6 +83,9 @@ public class GoFileIgnoredByBuildToolNotificationProvider extends EditorNotifica
   public EditorNotificationPanel createNotificationPanel(@NotNull VirtualFile file, @NotNull FileEditor fileEditor) {
     if (file.getFileType() == GoFileType.INSTANCE) {
       PsiFile psiFile = PsiManager.getInstance(myProject).findFile(file);
+      if (InjectedLanguageUtil.findInjectionHost(psiFile) != null) {
+        return null;
+      }
       Module module = psiFile != null ? ModuleUtilCore.findModuleForPsiElement(psiFile) : null;
       if (GoUtil.fileToIgnore(file.getName())) {
         if (!PropertiesComponent.getInstance().getBoolean(DO_NOT_SHOW_NOTIFICATION_ABOUT_IGNORE_BY_BUILD_TOOL, false)) {
