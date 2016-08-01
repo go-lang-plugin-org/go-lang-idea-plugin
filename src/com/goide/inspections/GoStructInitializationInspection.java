@@ -67,19 +67,15 @@ public class GoStructInitializationInspection extends GoInspectionBase {
     return new SingleCheckboxOptionsPanel("Report for local type definitions as well", this, "reportLocalStructs");
   }
 
-  private void processStructType(@NotNull ProblemsHolder holder,
-                                 @NotNull GoLiteralValue element,
-                                 @NotNull GoStructType structType) {
+  private void processStructType(@NotNull ProblemsHolder holder, @NotNull GoLiteralValue element, @NotNull GoStructType structType) {
     if (reportLocalStructs || !GoUtil.inSamePackage(structType.getContainingFile(), element.getContainingFile())) {
-      List<GoFieldDeclaration> fields = structType.getFieldDeclarationList();
-      processLiteralValue(holder, element, fields);
+      processLiteralValue(holder, element, structType.getFieldDeclarationList());
     }
   }
 
   private static void processLiteralValue(@NotNull ProblemsHolder holder,
-                                          @Nullable GoLiteralValue o,
-                                          List<GoFieldDeclaration> fields) {
-    if (o == null) return;
+                                          @NotNull GoLiteralValue o,
+                                          @NotNull List<GoFieldDeclaration> fields) {
     List<GoElement> vals = o.getElementList();
     for (int elemId = 0; elemId < vals.size(); elemId++) {
       ProgressManager.checkCanceled();
