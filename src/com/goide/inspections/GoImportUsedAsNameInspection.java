@@ -17,18 +17,14 @@
 package com.goide.inspections;
 
 import com.goide.psi.*;
-import com.goide.psi.impl.GoTypeReference;
 import com.goide.quickfix.GoRenameQuickFix;
-import com.goide.sdk.GoSdkUtil;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.ElementDescriptionUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.usageView.UsageViewTypeLocation;
-import com.intellij.util.containers.MultiMap;
 import org.jetbrains.annotations.NotNull;
 
 public class GoImportUsedAsNameInspection extends GoInspectionBase {
@@ -64,24 +60,17 @@ public class GoImportUsedAsNameInspection extends GoInspectionBase {
 
   private static void check(@NotNull GoNamedElement element, @NotNull ProblemsHolder holder) {
     String name = element.getName();
-    if (name == null) return;
-
-    MultiMap<String, GoImportSpec> imports = element.getContainingFile().getImportMap();
-    for (String importName : imports.keySet()) {
-      if (name.equals(importName)) {
-        registerProblem(holder, element);
-        return;
-      }
+    if (name != null && element.getContainingFile().getImportMap().containsKey(name)) {
+      registerProblem(holder, element);
     }
   }
 
-  private static void registerProblem(@NotNull ProblemsHolder holder,
-                                      @NotNull GoNamedElement element) {
+  private static void registerProblem(@NotNull ProblemsHolder holder, @NotNull GoNamedElement element) {
     PsiElement identifier = element.getIdentifier();
-    if (identifier == null) return;
-
-    String elementDescription = ElementDescriptionUtil.getElementDescription(element, UsageViewTypeLocation.INSTANCE);
-    String message = StringUtil.capitalize(elementDescription) + " <code>#ref</code> collides with imported package name #loc";
-    holder.registerProblem(identifier, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new GoRenameQuickFix(element));
+    if (identifier != null) {
+      String elementDescription = ElementDescriptionUtil.getElementDescription(element, UsageViewTypeLocation.INSTANCE);
+      String message = StringUtil.capitalize(elementDescription) + " <code>#ref</code> collides with imported package name #loc";
+      holder.registerProblem(identifier, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new GoRenameQuickFix(element));
+    }
   }
 }
