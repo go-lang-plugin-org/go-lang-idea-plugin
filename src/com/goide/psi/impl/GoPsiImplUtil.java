@@ -1197,8 +1197,8 @@ public class GoPsiImplUtil {
     return ch == '"' || ch == '\'' || ch == '`';
   }
 
-  public static boolean isValidHost(@SuppressWarnings("UnusedParameters") @NotNull GoStringLiteral o) {
-    return true;
+  public static boolean isValidHost(@NotNull GoStringLiteral o) {
+    return PsiTreeUtil.getParentOfType(o, GoImportString.class) == null;
   }
 
   @NotNull
