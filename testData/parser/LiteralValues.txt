@@ -9,34 +9,44 @@ GO_FILE
       PsiElement(()('(')
       IMPORT_SPEC
         IMPORT_STRING
-          PsiElement(string)('"bytes"')
+          STRING_LITERAL
+            PsiElement(string)('"bytes"')
       IMPORT_SPEC
         IMPORT_STRING
-          PsiElement(string)('"encoding/json"')
+          STRING_LITERAL
+            PsiElement(string)('"encoding/json"')
       IMPORT_SPEC
         IMPORT_STRING
-          PsiElement(string)('"errors"')
+          STRING_LITERAL
+            PsiElement(string)('"errors"')
       IMPORT_SPEC
         IMPORT_STRING
-          PsiElement(string)('"fmt"')
+          STRING_LITERAL
+            PsiElement(string)('"fmt"')
       IMPORT_SPEC
         IMPORT_STRING
-          PsiElement(string)('"io"')
+          STRING_LITERAL
+            PsiElement(string)('"io"')
       IMPORT_SPEC
         IMPORT_STRING
-          PsiElement(string)('"net"')
+          STRING_LITERAL
+            PsiElement(string)('"net"')
       IMPORT_SPEC
         IMPORT_STRING
-          PsiElement(string)('"net/textproto"')
+          STRING_LITERAL
+            PsiElement(string)('"net/textproto"')
       IMPORT_SPEC
         IMPORT_STRING
-          PsiElement(string)('"strings"')
+          STRING_LITERAL
+            PsiElement(string)('"strings"')
       IMPORT_SPEC
         IMPORT_STRING
-          PsiElement(string)('"sync/atomic"')
+          STRING_LITERAL
+            PsiElement(string)('"sync/atomic"')
       IMPORT_SPEC
         IMPORT_STRING
-          PsiElement(string)('"text/template"')
+          STRING_LITERAL
+            PsiElement(string)('"text/template"')
       PsiElement())(')')
   TYPE_DECLARATION
     PsiElement(type)('type')

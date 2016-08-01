@@ -7,12 +7,14 @@ GO_FILE
       PsiElement(import)('import')
       IMPORT_SPEC
         IMPORT_STRING
-          PsiElement(string)('"fmt"')
+          STRING_LITERAL
+            PsiElement(string)('"fmt"')
     IMPORT_DECLARATION
       PsiElement(import)('import')
       IMPORT_SPEC
         IMPORT_STRING
-          PsiElement(string)('"strconv"')
+          STRING_LITERAL
+            PsiElement(string)('"strconv"')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
     PsiElement(identifier)('main')
