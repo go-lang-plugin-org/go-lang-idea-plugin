@@ -26,11 +26,8 @@ import com.intellij.psi.PsiReference;
 
 public interface GoImportString extends GoCompositeElement {
 
-  @Nullable
-  PsiElement getRawString();
-
-  @Nullable
-  PsiElement getString();
+  @NotNull
+  GoStringLiteral getStringLiteral();
 
   @NotNull
   PsiReference[] getReferences();

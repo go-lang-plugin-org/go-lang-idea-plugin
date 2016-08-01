@@ -13,31 +13,40 @@ GO_FILE
       PsiElement(()('(')
       IMPORT_SPEC
         IMPORT_STRING
-          PsiElement(string)('"bytes"')
+          STRING_LITERAL
+            PsiElement(string)('"bytes"')
       IMPORT_SPEC
         IMPORT_STRING
-          PsiElement(string)('"errors"')
+          STRING_LITERAL
+            PsiElement(string)('"errors"')
       IMPORT_SPEC
         IMPORT_STRING
-          PsiElement(string)('"fmt"')
+          STRING_LITERAL
+            PsiElement(string)('"fmt"')
       IMPORT_SPEC
         IMPORT_STRING
-          PsiElement(string)('"io"')
+          STRING_LITERAL
+            PsiElement(string)('"io"')
       IMPORT_SPEC
         IMPORT_STRING
-          PsiElement(string)('"os"')
+          STRING_LITERAL
+            PsiElement(string)('"os"')
       IMPORT_SPEC
         IMPORT_STRING
-          PsiElement(string)('"path"')
+          STRING_LITERAL
+            PsiElement(string)('"path"')
       IMPORT_SPEC
         IMPORT_STRING
-          PsiElement(string)('"strconv"')
+          STRING_LITERAL
+            PsiElement(string)('"strconv"')
       IMPORT_SPEC
         IMPORT_STRING
-          PsiElement(string)('"strings"')
+          STRING_LITERAL
+            PsiElement(string)('"strings"')
       IMPORT_SPEC
         IMPORT_STRING
-          PsiElement(string)('"time"')
+          STRING_LITERAL
+            PsiElement(string)('"time"')
       PsiElement())(')')
   VAR_DECLARATION
     PsiElement(var)('var')

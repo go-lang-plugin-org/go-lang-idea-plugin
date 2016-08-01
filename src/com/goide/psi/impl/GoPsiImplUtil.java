@@ -1152,7 +1152,7 @@ public class GoPsiImplUtil {
     return false;
   }
 
-  public static boolean shouldGoDeeper(@SuppressWarnings("UnusedParameters") GoType o) {
+  public static boolean shouldGoDeeper(@NotNull GoType o) {
     return o instanceof GoInterfaceType || o instanceof GoStructType;
   }
 
@@ -1162,7 +1162,7 @@ public class GoPsiImplUtil {
 
   @NotNull
   public static String getPath(@NotNull GoImportString o) {
-    return unquote(o.getText());
+    return o.getStringLiteral().getDecodedText();
   }
 
   @NotNull

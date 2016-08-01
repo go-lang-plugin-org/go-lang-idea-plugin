@@ -171,6 +171,14 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testStringInStructSliceWithThirdIndex() { doTest(); }
   public void testAnonymousFieldDefinition()  { doTest(); }
 
+  public void testCodedImportString() {
+    myFixture.addFileToProject("a/a.go", "package a\n const A = 3");
+    PsiFile file = myFixture.addFileToProject("b/b.go", "package b\n import \"\\u0061\" \n" +
+                                                        "const <warning descr=\"Unused constant 'my'\">my</warning> = a.A");
+    myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
+    myFixture.checkHighlighting();
+  }
+
   public void testDoNotResolveReceiverTypeToFunction() { 
     myFixture.addFileToProject("pack1/a.go", "package foo; func functionInCurrentPackage() {}");
     PsiFile file = myFixture.addFileToProject("pack1/b.go", 

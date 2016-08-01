@@ -8,11 +8,13 @@ GO_FILE
       PsiElement(()('(')
       IMPORT_SPEC
         IMPORT_STRING
-          PsiElement(string)('"testing"')
+          STRING_LITERAL
+            PsiElement(string)('"testing"')
       IMPORT_SPEC
         PsiElement(.)('.')
         IMPORT_STRING
-          PsiElement(string)('"github.com/smartystreets/goconvey/convey"')
+          STRING_LITERAL
+            PsiElement(string)('"github.com/smartystreets/goconvey/convey"')
       PsiElement())(')')
   FUNCTION_DECLARATION
     PsiElement(func)('func')

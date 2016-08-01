@@ -2219,14 +2219,13 @@ public class GoParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // string | raw_string
+  // StringLiteral
   public static boolean ImportString(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ImportString")) return false;
     if (!nextTokenIs(b, "<import string>", RAW_STRING, STRING)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, IMPORT_STRING, "<import string>");
-    r = consumeToken(b, STRING);
-    if (!r) r = consumeToken(b, RAW_STRING);
+    r = StringLiteral(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }

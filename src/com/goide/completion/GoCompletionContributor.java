@@ -101,7 +101,8 @@ public class GoCompletionContributor extends CompletionContributor {
   }
 
   private static PsiElementPattern.Capture<PsiElement> importString() {
-    return psiElement().withElementType(GoParserDefinition.STRING_LITERALS).withParent(GoImportString.class);
+    return psiElement().withElementType(GoParserDefinition.STRING_LITERALS).withParent(GoStringLiteral.class)
+      .withSuperParent(2, GoImportString.class);
   }
 
   private static PsiElementPattern.Capture<PsiElement> referenceExpression() {
