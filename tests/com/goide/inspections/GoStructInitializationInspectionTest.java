@@ -22,19 +22,19 @@ import org.jetbrains.annotations.NotNull;
 
 public class GoStructInitializationInspectionTest extends GoQuickFixTestBase {
   private GoStructInitializationInspection myInspectionTool = new GoStructInitializationInspection();
-  private boolean myDefaultReportImportedStructs;
+  private boolean myDefaultReportLocalStructs;
 
   @Override
   public void setUp() throws Exception {
     super.setUp();
     setUpProjectSdk();
     myFixture.enableInspections(myInspectionTool);
-    myDefaultReportImportedStructs = myInspectionTool.reportImportedStructs;
+    myDefaultReportLocalStructs = myInspectionTool.reportLocalStructs;
   }
 
   @Override
   protected void tearDown() throws Exception {
-    myInspectionTool.reportImportedStructs = myDefaultReportImportedStructs;
+    myInspectionTool.reportLocalStructs = myDefaultReportLocalStructs;
     super.tearDown();
   }
 
@@ -50,8 +50,8 @@ public class GoStructInitializationInspectionTest extends GoQuickFixTestBase {
     doTest(GoStructInitializationInspection.REPLACE_WITH_NAMED_STRUCT_FIELD_FIX_NAME, true);
   }
 
-  private long doTest(boolean allowImportedStructs) {
-    myInspectionTool.reportImportedStructs = allowImportedStructs;
+  private long doTest(boolean allowLocalStructs) {
+    myInspectionTool.reportLocalStructs = allowLocalStructs;
     return myFixture.testHighlighting(true, false, true, getTestName(true) + ".go");
   }
 

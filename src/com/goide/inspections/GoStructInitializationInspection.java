@@ -24,9 +24,12 @@ import com.intellij.codeInspection.*;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.InvalidDataException;
+import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
+import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,8 +38,11 @@ import java.util.List;
 
 public class GoStructInitializationInspection extends GoInspectionBase {
   public static final String REPLACE_WITH_NAMED_STRUCT_FIELD_FIX_NAME = "Replace with named struct field";
-  // This should read: reportLocalStructs (sorry for confusion)
-  public boolean reportImportedStructs;
+  public boolean reportLocalStructs;
+  /**
+   * @deprecated use reportLocalStructs
+   */
+  @SuppressWarnings("WeakerAccess") public Boolean reportImportedStructs;
 
   @NotNull
   @Override
@@ -58,13 +64,13 @@ public class GoStructInitializationInspection extends GoInspectionBase {
 
   @Override
   public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel("Report for local type definitions as well", this, "reportImportedStructs");
+    return new SingleCheckboxOptionsPanel("Report for local type definitions as well", this, "reportLocalStructs");
   }
 
   private void processStructType(@NotNull ProblemsHolder holder,
                                  @NotNull GoLiteralValue element,
                                  @NotNull GoStructType structType) {
-    if (reportImportedStructs || !GoUtil.inSamePackage(structType.getContainingFile(), element.getContainingFile())) {
+    if (reportLocalStructs || !GoUtil.inSamePackage(structType.getContainingFile(), element.getContainingFile())) {
       List<GoFieldDeclaration> fields = structType.getFieldDeclarationList();
       processLiteralValue(holder, element, fields);
     }
@@ -109,5 +115,19 @@ public class GoStructInitializationInspection extends GoInspectionBase {
         startElement.replace(GoElementFactory.createNamedStructField(project, myStructField, startElement.getText()));
       }
     }
+  }
+
+  @Override
+  public void readSettings(@NotNull Element node) throws InvalidDataException {
+    super.readSettings(node);
+    if (reportImportedStructs != null) {
+      reportLocalStructs = reportImportedStructs;
+    }
+  }
+
+  @Override
+  public void writeSettings(@NotNull Element node) throws WriteExternalException {
+    reportImportedStructs = null;
+    super.writeSettings(node);
   }
 }
