@@ -25,7 +25,6 @@ public class GoDeferGoInspectionTest extends GoQuickFixTestBase {
   @Override
   public void setUp() throws Exception {
     super.setUp();
-    setUpProjectSdk();
     myFixture.enableInspections(GoDeferGoInspection.class);
   }
 

@@ -44,7 +44,6 @@ public abstract class GoParametrizedTestBase extends GoQuickFixTestBase {
   public void setUp() throws Exception {
     safeEdt(() -> {
       super.setUp();
-      setUpProjectSdk();
       myFixture.enableInspections(GoBoolExpressionsInspection.class);
     });
   }

@@ -35,7 +35,6 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   @Override
   public void setUp() throws Exception {
     super.setUp();
-    setUpProjectSdk();
     myFixture.enableInspections(
       GoUnresolvedReferenceInspection.class,
       GoDuplicateFieldsOrMethodsInspection.class,

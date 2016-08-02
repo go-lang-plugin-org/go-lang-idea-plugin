@@ -168,10 +168,4 @@ public class GoExpectedTypesTest extends GoCodeInsightFixtureTestCase {
   private void doStatementTest(@NotNull String text, @NotNull String expectedTypeText) {
     doTopLevelTest("func _() {\n" + text + "\n}", expectedTypeText);
   }
-
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    setUpProjectSdk();
-  }
 }

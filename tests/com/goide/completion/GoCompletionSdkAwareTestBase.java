@@ -20,9 +20,4 @@ import com.goide.SdkAware;
 
 @SdkAware
 public abstract class GoCompletionSdkAwareTestBase extends GoCompletionTestBase {
-  @Override
-  public void setUp() throws Exception {
-    super.setUp();
-    setUpProjectSdk();
-  }
 }

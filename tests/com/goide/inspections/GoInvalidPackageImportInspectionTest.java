@@ -32,7 +32,6 @@ public class GoInvalidPackageImportInspectionTest extends GoQuickFixTestBase {
   @Override
   public void setUp() throws Exception {
     super.setUp();
-    setUpProjectSdk();
     myFixture.enableInspections(GoInvalidPackageImportInspection.class);
   }
 

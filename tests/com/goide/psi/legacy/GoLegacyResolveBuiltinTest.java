@@ -26,12 +26,6 @@ public class GoLegacyResolveBuiltinTest extends GoLegacyResolveTestBase {
   protected String getBasePath() { return "psi/resolve/builtin"; }
 
   @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    setUpProjectSdk();
-  }
-
-  @Override
   protected boolean allowNullDefinition() {
     return true;
   }

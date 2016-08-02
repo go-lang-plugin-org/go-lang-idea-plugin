@@ -116,10 +116,4 @@ public class GoTypeResolveTest extends GoCodeInsightFixtureTestCase {
   private void doExpressionTest(@NotNull String text, @NotNull String expectedTypeText) {
     doStatementTest("a := " + text, expectedTypeText);
   }
-
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    setUpProjectSdk();
-  }
 }

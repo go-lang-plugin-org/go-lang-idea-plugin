@@ -29,12 +29,6 @@ import java.util.List;
 @SdkAware
 public abstract class GoSurrounderTestBase extends GoCodeInsightFixtureTestCase {
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    setUpProjectSdk();
-  }
-
   protected void doTest(@NotNull String codeBefore,
                         @NotNull String expectedCodeAfter,
                         @NotNull String surrounderDescription,

@@ -29,7 +29,6 @@ public class GoIntroduceFunctionFixTest extends GoQuickFixTestBase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();
-    setUpProjectSdk();
     myFixture.enableInspections(GoUnresolvedReferenceInspection.class);
   }
 
