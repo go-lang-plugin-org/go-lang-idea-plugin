@@ -78,7 +78,7 @@ public class DlvApi {
     // ID is a unique identifier for the thread.
     public int id;
     // PC is the current program counter for the thread.
-    public int pc;
+    public long pc;
     // File is the file for the program counter.
     public String file;
     // Line is the line number for the program counter.
@@ -88,7 +88,7 @@ public class DlvApi {
   }
 
   public static class Location {
-    public int pc;
+    public long pc;
     public String file;
     public int line;
     public Function function;
@@ -193,7 +193,7 @@ public class DlvApi {
     // ID is a unique identifier for the goroutine.
     public int id;
     // PC is the current program counter for the goroutine.
-    public int pc;
+    public long pc;
     // File is the file for the program counter.
     public String file;
     // Line is the line number for the program counter.
