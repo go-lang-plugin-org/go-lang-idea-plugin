@@ -47,7 +47,6 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();
-    setUpProjectSdk();
     myFixture.enableInspections(GoUnresolvedReferenceInspection.class);
     ((CodeInsightTestFixtureImpl)myFixture).canChangeDocumentDuringHighlighting(true);
     CodeInsightSettings codeInsightSettings = CodeInsightSettings.getInstance();

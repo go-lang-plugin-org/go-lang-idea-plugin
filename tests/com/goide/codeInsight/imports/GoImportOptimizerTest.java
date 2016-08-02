@@ -90,7 +90,6 @@ public class GoImportOptimizerTest extends GoQuickFixTestBase {
     super.setUp();
     ((CodeInsightTestFixtureImpl)myFixture).canChangeDocumentDuringHighlighting(true);
     myFixture.enableInspections(GoUnusedImportInspection.class);
-    setUpProjectSdk();
   }
 
   @NotNull

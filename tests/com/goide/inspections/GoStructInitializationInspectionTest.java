@@ -28,7 +28,6 @@ public class GoStructInitializationInspectionTest extends GoQuickFixTestBase {
   @Override
   public void setUp() throws Exception {
     super.setUp();
-    setUpProjectSdk();
     myFixture.enableInspections(myInspectionTool);
     myDefaultReportLocalStructs = myInspectionTool.reportLocalStructs;
   }

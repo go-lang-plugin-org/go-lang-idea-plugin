@@ -60,10 +60,4 @@ public abstract class GoRunConfigurationTestCase extends GoCodeInsightFixtureTes
     }
     assertSameLinesWithFile(getTestDataPath() + "/" + getTestName(true) + ".xml", JDOMUtil.writeElement(configurationsElement));
   }
-
-  @Override
-  public void setUp() throws Exception {
-    super.setUp();
-    setUpProjectSdk();
-  }
 }

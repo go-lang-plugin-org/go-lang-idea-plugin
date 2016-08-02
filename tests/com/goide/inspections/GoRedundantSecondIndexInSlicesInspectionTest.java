@@ -26,7 +26,6 @@ public class GoRedundantSecondIndexInSlicesInspectionTest extends GoQuickFixTest
   public void setUp() throws Exception {
     super.setUp();
     myFixture.enableInspections(GoRedundantSecondIndexInSlicesInspection.class);
-    setUpProjectSdk();
   }
 
   public void testSlice() {

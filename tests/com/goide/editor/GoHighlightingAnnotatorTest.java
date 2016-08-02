@@ -25,12 +25,6 @@ import org.jetbrains.annotations.NotNull;
 @TestDataPath("$PROJECT_ROOT/testData/colorHighlighting")
 public class GoHighlightingAnnotatorTest extends GoCodeInsightFixtureTestCase {
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    setUpProjectSdk();
-  }
-
   public void testSimple() {
     doTest();
   }

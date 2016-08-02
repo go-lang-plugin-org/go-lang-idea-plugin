@@ -24,7 +24,6 @@ public class GoReplaceWithImportForSideEffectsQuickFixTest extends GoQuickFixTes
   @Override
   public void setUp() throws Exception {
     super.setUp();
-    setUpProjectSdk();
     myFixture.enableInspections(GoUnusedImportInspection.class);
   }
 

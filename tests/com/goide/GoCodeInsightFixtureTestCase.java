@@ -63,6 +63,7 @@ abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsi
     super.setUp();
     GoApplicationLibrariesService.getInstance().setLibraryRootUrls("temp:///");
     GoModuleSettings.getInstance(myFixture.getModule()).setVendoringEnabled(ThreeState.YES);
+    if (isSdkAware()) setUpProjectSdk();
   }
   
   @Override
@@ -106,7 +107,7 @@ abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsi
     };
   }
 
-  protected void setUpProjectSdk() {
+  private void setUpProjectSdk() {
     ApplicationManager.getApplication().runWriteAction(() -> {
       Sdk sdk = getProjectDescriptor().getSdk();
       ProjectJdkTable.getInstance().addJdk(sdk);
@@ -152,6 +153,8 @@ abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsi
 
   @Override
   protected LightProjectDescriptor getProjectDescriptor() {
-    return annotatedWith(SdkAware.class) ? createMockProjectDescriptor() : null;
+    return isSdkAware() ? createMockProjectDescriptor() : null;
   }
+
+  private boolean isSdkAware() {return annotatedWith(SdkAware.class);}
 }
