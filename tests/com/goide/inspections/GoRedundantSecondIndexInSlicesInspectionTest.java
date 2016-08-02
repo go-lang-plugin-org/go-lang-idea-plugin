@@ -16,21 +16,17 @@
 
 package com.goide.inspections;
 
+import com.goide.SdkAware;
 import com.goide.quickfix.GoQuickFixTestBase;
-import com.intellij.testFramework.LightProjectDescriptor;
 import org.jetbrains.annotations.NotNull;
 
+@SdkAware
 public class GoRedundantSecondIndexInSlicesInspectionTest extends GoQuickFixTestBase {
   @Override
   public void setUp() throws Exception {
     super.setUp();
     myFixture.enableInspections(GoRedundantSecondIndexInSlicesInspection.class);
     setUpProjectSdk();
-  }
-
-  @Override
-  protected LightProjectDescriptor getProjectDescriptor() {
-    return createMockProjectDescriptor();
   }
 
   public void testSlice() {

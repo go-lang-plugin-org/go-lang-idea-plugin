@@ -32,6 +32,7 @@ import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.testFramework.fixtures.DefaultLightProjectDescriptor;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import com.intellij.util.ObjectUtils;
@@ -89,7 +90,7 @@ abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsi
   }
 
   @NotNull
-  protected static DefaultLightProjectDescriptor createMockProjectDescriptor() {
+  private static DefaultLightProjectDescriptor createMockProjectDescriptor() {
     return new DefaultLightProjectDescriptor() {
       @NotNull
       @Override
@@ -147,5 +148,10 @@ abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsi
     }
     result.append("}");
     return result.toString();
+  }
+
+  @Override
+  protected LightProjectDescriptor getProjectDescriptor() {
+    return annotatedWith(SdkAware.class) ? createMockProjectDescriptor() : null;
   }
 }

@@ -17,10 +17,11 @@
 package com.goide.editor;
 
 import com.goide.GoCodeInsightFixtureTestCase;
-import com.intellij.testFramework.LightProjectDescriptor;
+import com.goide.SdkAware;
 import com.intellij.testFramework.TestDataPath;
 import org.jetbrains.annotations.NotNull;
 
+@SdkAware
 @TestDataPath("$PROJECT_ROOT/testData/colorHighlighting")
 public class GoHighlightingAnnotatorTest extends GoCodeInsightFixtureTestCase {
 
@@ -70,11 +71,6 @@ public class GoHighlightingAnnotatorTest extends GoCodeInsightFixtureTestCase {
   @Override
   protected String getBasePath() {
     return "colorHighlighting";
-  }
-
-  @Override
-  protected LightProjectDescriptor getProjectDescriptor() {
-    return createMockProjectDescriptor();
   }
 }
 

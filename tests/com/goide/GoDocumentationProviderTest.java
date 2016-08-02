@@ -23,17 +23,14 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.testFramework.LightProjectDescriptor;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.List;
 
+@SdkAware
 public class GoDocumentationProviderTest extends GoCodeInsightFixtureTestCase {
-  @Override
-  protected LightProjectDescriptor getProjectDescriptor() {
-    return createMockProjectDescriptor();
-  }
+
   public void testPrintln()                           { doTest(); }
   public void testFprintln()                          { doTest(); }
   public void testMethod()                            { doTest(); }

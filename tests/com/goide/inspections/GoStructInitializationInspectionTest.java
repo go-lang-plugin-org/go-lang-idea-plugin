@@ -16,10 +16,11 @@
 
 package com.goide.inspections;
 
+import com.goide.SdkAware;
 import com.goide.quickfix.GoQuickFixTestBase;
-import com.intellij.testFramework.LightProjectDescriptor;
 import org.jetbrains.annotations.NotNull;
 
+@SdkAware
 public class GoStructInitializationInspectionTest extends GoQuickFixTestBase {
   private GoStructInitializationInspection myInspectionTool = new GoStructInitializationInspection();
   private boolean myDefaultReportLocalStructs;
@@ -59,10 +60,5 @@ public class GoStructInitializationInspectionTest extends GoQuickFixTestBase {
   @Override
   protected String getBasePath() {
     return "inspections/go-struct-initialization";
-  }
-
-  @Override
-  protected LightProjectDescriptor getProjectDescriptor() {
-    return createMockProjectDescriptor();
   }
 }

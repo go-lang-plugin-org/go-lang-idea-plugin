@@ -17,6 +17,7 @@
 package com.goide.inspections;
 
 import com.goide.GoCodeInsightFixtureTestCase;
+import com.goide.SdkAware;
 import com.goide.codeInsight.imports.GoImportOptimizerTest;
 import com.goide.inspections.unresolved.*;
 import com.goide.project.GoModuleLibrariesService;
@@ -25,11 +26,11 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
-import com.intellij.testFramework.LightProjectDescriptor;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
+@SdkAware
 public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   @Override
   public void setUp() throws Exception {
@@ -473,10 +474,5 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
                                               "package main; import _ \"a/pack\"; import _ \"b/pack\"; import . \"c/pack\"; import . \"d/pack\"; func main() { Bar(); Baz() }");
     myFixture.configureFromExistingVirtualFile(file.getVirtualFile());
     myFixture.checkHighlighting();
-  }
-
-  @Override
-  protected LightProjectDescriptor getProjectDescriptor() {
-    return createMockProjectDescriptor();
   }
 }

@@ -16,21 +16,17 @@
 
 package com.goide.inspections;
 
+import com.goide.SdkAware;
 import com.goide.quickfix.GoQuickFixTestBase;
-import com.intellij.testFramework.LightProjectDescriptor;
 import org.jetbrains.annotations.NotNull;
 
+@SdkAware
 public class GoTestSignaturesInspectionTest extends GoQuickFixTestBase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();
     setUpProjectSdk();
     myFixture.enableInspections(GoTestSignaturesInspection.class);
-  }
-
-  @Override
-  protected LightProjectDescriptor getProjectDescriptor() {
-    return createMockProjectDescriptor();
   }
 
   @NotNull

@@ -25,7 +25,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.PsiManagerImpl;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.testFramework.exceptionCases.AssertionErrorCase;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.containers.ContainerUtil;
@@ -36,6 +35,7 @@ import java.util.List;
 
 import static com.intellij.util.containers.ContainerUtil.newArrayList;
 
+@SdkAware
 public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
   private static final String USAGE = "/*usage*/";
 
@@ -84,11 +84,6 @@ public class GoFindUsageTest extends GoCodeInsightFixtureTestCase {
     myFixture.addFileToProject("bar/bar.go", "package bar; import \"..\"; type bar struct { f *foo.Foo }");
     myFixture.configureByText("foo.go", "package foo; type Foo struct{}; func (*Foo) M<caret>ethod() {}");
     assertSize(1, myFixture.findUsages(myFixture.getElementAtCaret()));
-  }
-
-  @Override
-  protected LightProjectDescriptor getProjectDescriptor() {
-    return createMockProjectDescriptor();
   }
 
   public void testOverride() {

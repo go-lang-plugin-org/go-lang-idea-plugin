@@ -16,17 +16,18 @@
 
 package com.goide.inspections;
 
+import com.goide.SdkAware;
 import com.goide.quickfix.GoDeleteImportQuickFix;
 import com.goide.quickfix.GoQuickFixTestBase;
 import com.goide.sdk.GoSdkService;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.psi.PsiFile;
-import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.util.containers.ContainerUtil;
 
 import java.util.Collection;
 
+@SdkAware
 public class GoInvalidPackageImportInspectionTest extends GoQuickFixTestBase {
   @Override
   public void setUp() throws Exception {
@@ -233,8 +234,4 @@ public class GoInvalidPackageImportInspectionTest extends GoQuickFixTestBase {
     return ContainerUtil.map(myFixture.getAvailableIntentions(), IntentionAction::getText);
   }
 
-  @Override
-  protected LightProjectDescriptor getProjectDescriptor() {
-    return createMockProjectDescriptor();
-  }
 }
