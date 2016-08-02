@@ -17,13 +17,14 @@
 package com.goide.type;
 
 import com.goide.GoCodeInsightFixtureTestCase;
+import com.goide.SdkAware;
 import com.goide.psi.GoType;
 import com.goide.psi.GoTypeOwner;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.testFramework.LightProjectDescriptor;
 import org.jetbrains.annotations.NotNull;
 
+@SdkAware
 public class GoTypeResolveTest extends GoCodeInsightFixtureTestCase {
   public void testAnon() {
     doTopLevelTest("type A struct{};type E A;type B struct{ E };func (e E) foo() {};func main() { b := B{}; b.<caret>E }", "E");
@@ -114,11 +115,6 @@ public class GoTypeResolveTest extends GoCodeInsightFixtureTestCase {
 
   private void doExpressionTest(@NotNull String text, @NotNull String expectedTypeText) {
     doStatementTest("a := " + text, expectedTypeText);
-  }
-
-  @Override
-  protected LightProjectDescriptor getProjectDescriptor() {
-    return createMockProjectDescriptor();
   }
 
   @Override

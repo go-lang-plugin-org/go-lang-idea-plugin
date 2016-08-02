@@ -17,26 +17,21 @@
 package com.goide.editor;
 
 import com.goide.GoCodeInsightFixtureTestCase;
+import com.goide.SdkAware;
 import com.intellij.codeInsight.highlighting.HighlightUsagesHandler;
 import com.intellij.codeInsight.highlighting.HighlightUsagesHandlerBase;
 import com.intellij.psi.PsiElement;
-import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-
+@SdkAware
 public class GoExitPointsHighlightingTest extends GoCodeInsightFixtureTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();
     setUpProjectSdk();
-  }
-
-  @Override
-  protected LightProjectDescriptor getProjectDescriptor() {
-    return createMockProjectDescriptor();
   }
 
   public void testBasicExitPoints() {

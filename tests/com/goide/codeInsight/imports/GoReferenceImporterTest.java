@@ -17,6 +17,7 @@
 package com.goide.codeInsight.imports;
 
 import com.goide.GoCodeInsightFixtureTestCase;
+import com.goide.SdkAware;
 import com.goide.inspections.unresolved.GoUnresolvedReferenceInspection;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzerSettings;
@@ -26,11 +27,11 @@ import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.PsiFile;
-import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 
 import java.util.List;
 
+@SdkAware
 public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
   private boolean defaultJavaOnTheFly;
   private boolean defaultJavaMemberOnTheFly;
@@ -65,11 +66,6 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
       //noinspection ThrowFromFinallyBlock
       super.tearDown();
     }
-  }
-
-  @Override
-  protected LightProjectDescriptor getProjectDescriptor() {
-    return createMockProjectDescriptor();
   }
 
   private void doTestAddOnTheFly(boolean goOnTheFlyEnabled, boolean javaOnTheFlyEnabled) {

@@ -17,14 +17,15 @@
 package com.goide.type;
 
 import com.goide.GoCodeInsightFixtureTestCase;
+import com.goide.SdkAware;
 import com.goide.psi.GoExpression;
 import com.goide.psi.impl.GoTypeUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.testFramework.LightProjectDescriptor;
 import org.jetbrains.annotations.NotNull;
 
+@SdkAware
 public class GoExpectedTypesTest extends GoCodeInsightFixtureTestCase {
   public void testAssignment() {
     doStatementTest("var a int; a = <selection>asd()</selection>", "int");
@@ -166,11 +167,6 @@ public class GoExpectedTypesTest extends GoCodeInsightFixtureTestCase {
 
   private void doStatementTest(@NotNull String text, @NotNull String expectedTypeText) {
     doTopLevelTest("func _() {\n" + text + "\n}", expectedTypeText);
-  }
-
-  @Override
-  protected LightProjectDescriptor getProjectDescriptor() {
-    return createMockProjectDescriptor();
   }
 
   @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,10 @@
 
 package com.goide.psi.legacy;
 
-import com.intellij.testFramework.LightProjectDescriptor;
+import com.goide.SdkAware;
 import org.jetbrains.annotations.NotNull;
 
+@SdkAware
 public class GoLegacyResolveBuiltinTest extends GoLegacyResolveTestBase {
   @NotNull
   @Override
@@ -33,11 +34,6 @@ public class GoLegacyResolveBuiltinTest extends GoLegacyResolveTestBase {
   @Override
   protected boolean allowNullDefinition() {
     return true;
-  }
-
-  @Override
-  protected LightProjectDescriptor getProjectDescriptor() {
-    return createMockProjectDescriptor();
   }
   
   public void testMethodName()        { doFileTest(); } 

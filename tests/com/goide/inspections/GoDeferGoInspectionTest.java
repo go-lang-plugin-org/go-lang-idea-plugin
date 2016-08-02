@@ -16,10 +16,11 @@
 
 package com.goide.inspections;
 
+import com.goide.SdkAware;
 import com.goide.quickfix.GoQuickFixTestBase;
-import com.intellij.testFramework.LightProjectDescriptor;
 import org.jetbrains.annotations.NotNull;
 
+@SdkAware
 public class GoDeferGoInspectionTest extends GoQuickFixTestBase {
   @Override
   public void setUp() throws Exception {
@@ -62,10 +63,5 @@ public class GoDeferGoInspectionTest extends GoQuickFixTestBase {
   @Override
   protected String getBasePath() {
     return "inspections/go-defer-function-call";
-  }
-
-  @Override
-  protected LightProjectDescriptor getProjectDescriptor() {
-    return createMockProjectDescriptor();
   }
 }

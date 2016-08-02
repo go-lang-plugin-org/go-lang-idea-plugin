@@ -19,7 +19,6 @@ package com.goide;
 import com.goide.inspections.GoBoolExpressionsInspection;
 import com.goide.quickfix.GoQuickFixTestBase;
 import com.intellij.testFramework.EdtTestUtil;
-import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.testFramework.TestRunnerUtil;
 import com.intellij.util.ThrowableRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -30,6 +29,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 @RunWith(Parameterized.class)
+@SdkAware
 public abstract class GoParametrizedTestBase extends GoQuickFixTestBase {
 
   protected abstract void doTest();
@@ -54,11 +54,6 @@ public abstract class GoParametrizedTestBase extends GoQuickFixTestBase {
   @Override
   public void tearDown() {
     safeEdt(super::tearDown);
-  }
-
-  @Override
-  protected LightProjectDescriptor getProjectDescriptor() {
-    return createMockProjectDescriptor();
   }
 
   private void safeEdt(@NotNull ThrowableRunnable<Throwable> r) {

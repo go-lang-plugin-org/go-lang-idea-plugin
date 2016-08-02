@@ -17,26 +17,22 @@
 package com.goide.editor.surround;
 
 import com.goide.GoCodeInsightFixtureTestCase;
+import com.goide.SdkAware;
 import com.intellij.codeInsight.generation.surroundWith.SurroundWithHandler;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiFile;
-import com.intellij.testFramework.LightProjectDescriptor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+@SdkAware
 public abstract class GoSurrounderTestBase extends GoCodeInsightFixtureTestCase {
 
   @Override
   protected void setUp() throws Exception {
     super.setUp();
     setUpProjectSdk();
-  }
-
-  @Override
-  protected LightProjectDescriptor getProjectDescriptor() {
-    return createMockProjectDescriptor();
   }
 
   protected void doTest(@NotNull String codeBefore,

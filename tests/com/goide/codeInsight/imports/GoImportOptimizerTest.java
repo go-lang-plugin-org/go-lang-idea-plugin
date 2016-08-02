@@ -16,6 +16,7 @@
 
 package com.goide.codeInsight.imports;
 
+import com.goide.SdkAware;
 import com.goide.inspections.GoUnusedImportInspection;
 import com.goide.quickfix.GoQuickFixTestBase;
 import com.intellij.codeInsight.actions.OptimizeImportsAction;
@@ -25,10 +26,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiRecursiveElementVisitor;
 import com.intellij.psi.PsiReference;
-import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 import org.jetbrains.annotations.NotNull;
 
+@SdkAware
 public class GoImportOptimizerTest extends GoQuickFixTestBase {
   public void testUnusedImports()                                        { doTest(); }
   public void testUnusedImportsWithSemicolon()                           { doTest(); }
@@ -90,11 +91,6 @@ public class GoImportOptimizerTest extends GoQuickFixTestBase {
     ((CodeInsightTestFixtureImpl)myFixture).canChangeDocumentDuringHighlighting(true);
     myFixture.enableInspections(GoUnusedImportInspection.class);
     setUpProjectSdk();
-  }
-
-  @Override
-  protected LightProjectDescriptor getProjectDescriptor() {
-    return createMockProjectDescriptor();
   }
 
   @NotNull

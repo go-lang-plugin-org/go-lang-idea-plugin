@@ -14,23 +14,14 @@
  * limitations under the License.
  */
 
-package com.goide.quickfix;
+package com.goide;
 
-import com.goide.SdkAware;
-import com.goide.inspections.GoUnusedImportInspection;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@SdkAware
-public class GoReplaceWithImportForSideEffectsQuickFixTest extends GoQuickFixTestBase {
-  @Override
-  public void setUp() throws Exception {
-    super.setUp();
-    setUpProjectSdk();
-    myFixture.enableInspections(GoUnusedImportInspection.class);
-  }
-
-  public void testSimple() {
-    myFixture.configureByText("a.go", "package pack; import \"fm<caret>t\"");
-    applySingleQuickFix("Import for side-effects");
-    myFixture.checkResult("package pack; import _ \"fmt\"");
-  }
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface SdkAware {
 }

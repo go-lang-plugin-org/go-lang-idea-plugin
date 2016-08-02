@@ -16,11 +16,12 @@
 
 package com.goide.quickfix;
 
+import com.goide.SdkAware;
 import com.goide.inspections.unresolved.GoUnresolvedReferenceInspection;
 import com.intellij.psi.PsiFile;
-import com.intellij.testFramework.LightProjectDescriptor;
 import org.jetbrains.annotations.NotNull;
 
+@SdkAware
 public class GoIntroduceFunctionFixTest extends GoQuickFixTestBase {
 
   private final static String QUICK_FIX_NAME = "Create function asd";
@@ -30,11 +31,6 @@ public class GoIntroduceFunctionFixTest extends GoQuickFixTestBase {
     super.setUp();
     setUpProjectSdk();
     myFixture.enableInspections(GoUnresolvedReferenceInspection.class);
-  }
-
-  @Override
-  protected LightProjectDescriptor getProjectDescriptor() {
-    return createMockProjectDescriptor();
   }
 
   public void testSimpleFunction() {
