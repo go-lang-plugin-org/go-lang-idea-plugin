@@ -16,6 +16,7 @@
 
 package com.goide.completion;
 
+import com.goide.SdkAware;
 import com.goide.sdk.GoSdkService;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.Lookup;
@@ -24,7 +25,8 @@ import com.intellij.psi.PsiFile;
 import java.io.IOException;
 import java.util.List;
 
-public class GoCompletionSdkAwareTest extends GoCompletionSdkAwareTestBase {
+@SdkAware
+public class GoCompletionSdkAwareTest extends GoCompletionTestBase {
   public void testFormatter() {
     doTestInclude("package main; import . \"fmt\"; type alias <caret>", "Formatter");
   }

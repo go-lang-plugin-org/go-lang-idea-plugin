@@ -16,7 +16,6 @@
 
 package com.goide;
 
-import com.goide.inspections.GoBoolExpressionsInspection;
 import com.goide.quickfix.GoQuickFixTestBase;
 import com.intellij.testFramework.EdtTestUtil;
 import com.intellij.testFramework.TestRunnerUtil;
@@ -29,8 +28,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 @RunWith(Parameterized.class)
-@SdkAware
 public abstract class GoParametrizedTestBase extends GoQuickFixTestBase {
+
+  protected void enableInspections(){}
 
   protected abstract void doTest();
 
@@ -44,7 +44,7 @@ public abstract class GoParametrizedTestBase extends GoQuickFixTestBase {
   public void setUp() throws Exception {
     safeEdt(() -> {
       super.setUp();
-      myFixture.enableInspections(GoBoolExpressionsInspection.class);
+      enableInspections();
     });
   }
 
