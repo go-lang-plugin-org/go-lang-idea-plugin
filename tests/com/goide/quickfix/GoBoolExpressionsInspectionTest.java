@@ -17,17 +17,17 @@
 package com.goide.quickfix;
 
 import com.goide.GoParametrizedTestBase;
-import com.intellij.codeInsight.intention.IntentionAction;
+import com.goide.SdkAware;
+import com.goide.inspections.GoBoolExpressionsInspection;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 @RunWith(Parameterized.class)
+@SdkAware
 public class GoBoolExpressionsInspectionTest extends GoParametrizedTestBase {
-
   private final String expr;
   private final String vars;
   private final String after;
@@ -48,6 +48,16 @@ public class GoBoolExpressionsInspectionTest extends GoParametrizedTestBase {
       {"var b,c,d bool", "!b && b", "false"},
       {"var b,c,d bool", "(b && c) || (c && b)", "c && b"},
       {"var b,c,d bool", "(b == c || c == b) || (b == c)", "b == c"},
+
+      {"var c1, c2 = 1, 2; var a, b, c int", "b == c1 || b == c2", "b == c1 || b == c2"},
+      {"var c1, c2 = 1, 2; var a, b, c int", "b == c1 || b != c2", "b != c2"},
+      {"var c1, c2 = 1, 2; var a, b, c int", "b == c1 && b == c2", "false"},
+      {"var c1, c2 = 1, 2; var a, b, c int", "b != c1 && b != c2", "b != c1 && b != c2"},
+      {"var c1, c2 = 1, 2; var a, b, c int", "b != c1 || b != c2", "true"},
+      {"var c1, c2, c3 = 1, 2, 1; var a, b, c int", "b == c1 || b == c3", "b == c3"},
+      {"var c1, c2, c3 = 1, 2, 1; var a, b, c int", "b != c1 || b != c3", "b != c3"},
+      {"var c1, c2, c3 = 1, 2, 1; var a, b, c int", "b == c1 || b != c3", "true"},
+      {"var c1, c2, c3 = 1, 2, 1; var a, b, c int", "b == c1 && b != c3", "false"},
     });
   }
 
@@ -58,6 +68,11 @@ public class GoBoolExpressionsInspectionTest extends GoParametrizedTestBase {
   }
 
   @Override
+  protected void enableInspections() {
+    myFixture.enableInspections(GoBoolExpressionsInspection.class);
+  }
+
+  @Override
   public void doTest() {
     myFixture.configureByText("a.go", "package main\n func main(){\n" + vars + "\nvar a = " + expr + "<caret>" + "\n}");
     if (!expr.equals(after)) {
@@ -65,8 +80,7 @@ public class GoBoolExpressionsInspectionTest extends GoParametrizedTestBase {
       myFixture.checkResult("package main\n func main(){\n" + vars + "\nvar a = " + after + "<caret>" + "\n}");
     }
     else {
-      List<IntentionAction> availableIntentions = myFixture.filterAvailableIntentions(GoSimplifyBoolExprQuickFix.QUICK_FIX_NAME);
-      assertEmpty(availableIntentions);
+      assertEmpty(myFixture.filterAvailableIntentions(GoSimplifyBoolExprQuickFix.QUICK_FIX_NAME));
     }
   }
 }

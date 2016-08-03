@@ -17,6 +17,7 @@
 package com.goide.util;
 
 import com.goide.GoParametrizedTestBase;
+import com.goide.SdkAware;
 import com.goide.psi.GoCallExpr;
 import com.goide.psi.GoExpression;
 import com.goide.psi.impl.GoExpressionUtil;
@@ -31,6 +32,7 @@ import java.util.Collection;
 import java.util.List;
 
 @RunWith(Parameterized.class)
+@SdkAware
 public class GoExpressionUtilTest extends GoParametrizedTestBase {
   private final String vars;
   private final String left;
