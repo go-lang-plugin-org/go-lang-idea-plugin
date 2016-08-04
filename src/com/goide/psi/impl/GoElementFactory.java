@@ -255,4 +255,10 @@ public class GoElementFactory {
     GoFile file = createFileFromText(project, "package a; var _ = struct { a string } { " + field + ": " + element + " }");
     return PsiTreeUtil.findChildOfType(file, GoElement.class);
   }
+
+  @NotNull
+  public static GoTypeDeclaration createTypeDeclaration(@NotNull Project project, @NotNull String name, @NotNull GoType type) {
+    GoFile file = createFileFromText(project, "package a; type " + name + " " + type.getText());
+    return PsiTreeUtil.findChildOfType(file, GoTypeDeclaration.class);
+  }
 }

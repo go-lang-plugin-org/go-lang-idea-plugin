@@ -18,6 +18,7 @@ package com.goide.inspections;
 
 import com.goide.psi.GoAnonymousFieldDefinition;
 import com.goide.psi.GoVisitor;
+import com.goide.quickfix.GoCreateWrapperTypeQuickFix;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +32,8 @@ public class GoAnonymousFieldDefinitionTypeInspection extends GoInspectionBase {
       @Override
       public void visitAnonymousFieldDefinition(@NotNull GoAnonymousFieldDefinition o) {
         if (o.getTypeReferenceExpression() == null) {
-          holder.registerProblem(o, "Invalid type: must be typeName or *typeName");
+          holder.registerProblem(o, "Invalid type " + o.getType().getText() + ": must be typeName or *typeName",
+                                 new GoCreateWrapperTypeQuickFix(o.getType()));
         }
       }
     };
