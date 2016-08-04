@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-package com.goide.quickfix;
+package com.goide.inspections;
 
-import com.goide.inspections.unresolved.GoUnresolvedReferenceInspection;
+import com.goide.quickfix.GoCreateWrapperTypeQuickFix;
+import com.goide.quickfix.GoQuickFixTestBase;
 import org.jetbrains.annotations.NotNull;
 
-public class GoCreateTypeQuickFixTest extends GoQuickFixTestBase {
-  private static final String CREATE_TYPE_A = "Create type 'A'";
-
+public class GoAnonymousFieldDefinitionTypeInspectionTest extends GoQuickFixTestBase{
   @Override
-  protected void setUp() throws Exception {
+  public void setUp() throws Exception {
     super.setUp();
-    myFixture.enableInspections(GoUnresolvedReferenceInspection.class);
+    myFixture.enableInspections(GoAnonymousFieldDefinitionTypeInspection.class);
   }
 
+  public void testSimple()        { doTest(); }
+
+  private void doTest() {
+    doTest(GoCreateWrapperTypeQuickFix.QUICKFIX_NAME, true);
+  }
   @NotNull
   @Override
   protected String getBasePath() {
-    return "quickfixes/create-type";
+    return "inspections/anon-field";
   }
-
-  public void testSimple()      { doTest(CREATE_TYPE_A);      }
-  public void testGlobal()      { doTest(CREATE_TYPE_A);      }
-  public void testProhibited()  { doTestNoFix(CREATE_TYPE_A); }
 }
