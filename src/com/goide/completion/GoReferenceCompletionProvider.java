@@ -118,10 +118,15 @@ public class GoReferenceCompletionProvider extends CompletionProvider<Completion
                                  @NotNull ResolveState state,
                                  boolean forTypes,
                                  boolean vendoringEnabled,
+                                 @NotNull Set<String> processedNames,
                                  @NotNull CompletionResultSet set) {
     LookupElement lookup = createLookupElement(o, state, forTypes, vendoringEnabled);
     if (lookup != null) {
-      set.addElement(lookup);
+      String lookupString = lookup.getLookupString();
+      if (!processedNames.contains(lookupString)) {
+        set.addElement(lookup);
+        processedNames.add(lookupString);
+      }
     }
   }
 
@@ -167,6 +172,7 @@ public class GoReferenceCompletionProvider extends CompletionProvider<Completion
     @NotNull private final CompletionResultSet myResult;
     private final boolean myForTypes;
     private final boolean myVendoringEnabled;
+    private final Set<String> myProcessedNames = ContainerUtil.newHashSet();
 
     public MyGoScopeProcessor(@NotNull CompletionResultSet result, @NotNull PsiFile originalFile, boolean forTypes) {
       myResult = result;
@@ -177,7 +183,7 @@ public class GoReferenceCompletionProvider extends CompletionProvider<Completion
     @Override
     public boolean execute(@NotNull PsiElement o, @NotNull ResolveState state) {
       if (accept(o)) {
-        addElement(o, state, myForTypes, myVendoringEnabled, myResult);
+        addElement(o, state, myForTypes, myVendoringEnabled, myProcessedNames, myResult);
       }
       return true;
     }

@@ -656,6 +656,11 @@ public class GoCompletionTest extends GoCompletionTestBase {
     doTestInclude(source, "s");
   }
 
+  public void testDoNotCompleteVariableTwice() {
+    doCheckResult("package t; func _() {\n err := 1; for { err := 1; return er<caret> } }", 
+                  "package t; func _() {\n err := 1; for { err := 1; return err<caret> } }"); 
+  }
+
   private void doTestEmptyCompletion() {
     myFixture.testCompletionVariants(getTestName(true) + ".go");
   }
