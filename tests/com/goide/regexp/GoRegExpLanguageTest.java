@@ -14,10 +14,19 @@
  * limitations under the License.
  */
 
-package com.goide.completion;
+package com.goide.regexp;
 
+import com.goide.GoCodeInsightFixtureTestCase;
 import com.goide.SdkAware;
 
 @SdkAware
-public abstract class GoCompletionSdkAwareTestBase extends GoCompletionTestBase {
+public class GoRegExpLanguageTest extends GoCodeInsightFixtureTestCase {
+  public void testInjectingAndHighlighting() {
+    myFixture.testHighlighting(getTestName(true) + ".go");
+  }
+
+  @Override
+  protected String getBasePath() {
+    return "regexp";
+  }
 }
