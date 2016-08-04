@@ -106,6 +106,10 @@
     <lang.elementManipulator forClass="com.goide.psi.impl.GoStringLiteralImpl"
                              implementationClass="com.goide.psi.impl.manipulator.GoStringManipulator"/>
 
+    <languageInjector implementation="com.goide.regexp.GoRegexInjector"/>
+    <regExpLanguageHost forClass="com.goide.psi.GoStringLiteral" implementationClass="com.goide.regexp.GoRegexHost"/>
+    <lang.parserDefinition language="GoRegExp" implementationClass="com.goide.regexp.GoRegExpParserDefinition"/>
+
     <completion.contributor language="go" implementationClass="com.goide.completion.GoCompletionContributor"/>
     <completion.contributor language="go" implementationClass="com.goide.completion.GoKeywordCompletionContributor"/>
     <completion.contributor language="go" order="last" implementationClass="com.goide.completion.GoAutoImportCompletionContributor"/>
