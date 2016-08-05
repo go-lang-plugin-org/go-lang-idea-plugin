@@ -40,7 +40,7 @@ public class GoExpressionUtilTest extends GoParametrizedTestBase {
   private final boolean ok;
 
 
-  @Parameterized.Parameters
+  @Parameterized.Parameters(name = "{1} == {2}; {0}")
   public static Collection<Object[]> data() {
     return Arrays.asList(new Object[][]{
       {"var a = 1", "a", "a", true},
