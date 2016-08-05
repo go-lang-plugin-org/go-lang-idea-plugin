@@ -44,11 +44,13 @@ public class GoRegexInjector implements LanguageInjector {
     if (ContainerUtil.getFirstItem(((GoArgumentList)argumentList).getExpressionList()) != topMostExpression) return;
 
     GoCallExpr callExpression = ObjectUtils.tryCast(argumentList.getParent(), GoCallExpr.class);
-    GoSignatureOwner resolvedCall = GoPsiImplUtil.resolveCall(callExpression);
-    if (resolvedCall instanceof GoFunctionDeclaration && REGEXP_FUNCTION_NAMES.contains(((GoFunctionDeclaration)resolvedCall).getName())) {
-      PsiFile file = resolvedCall.getContainingFile();
-      if (file instanceof GoFile && "regexp".equals(((GoFile)file).getImportPath(false))) {
-        injectionPlacesRegistrar.addPlace(GoRegExpLanguage.INSTANCE, ElementManipulators.getValueTextRange(host), null, null);
+    if (callExpression != null && REGEXP_FUNCTION_NAMES.contains(callExpression.getExpression().getText())) {
+      GoSignatureOwner resolvedCall = GoPsiImplUtil.resolveCall(callExpression);
+      if (resolvedCall instanceof GoFunctionDeclaration) {
+        PsiFile file = resolvedCall.getContainingFile();
+        if (file instanceof GoFile && "regexp".equals(((GoFile)file).getImportPath(false))) {
+          injectionPlacesRegistrar.addPlace(GoRegExpLanguage.INSTANCE, ElementManipulators.getValueTextRange(host), null, null);
+        }
       }
     }
   }
