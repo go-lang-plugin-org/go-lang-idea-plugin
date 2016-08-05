@@ -16,7 +16,6 @@
 
 package com.goide;
 
-import com.goide.quickfix.GoQuickFixTestBase;
 import com.intellij.testFramework.EdtTestUtil;
 import com.intellij.testFramework.TestRunnerUtil;
 import com.intellij.util.ThrowableRunnable;
@@ -28,10 +27,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 @RunWith(Parameterized.class)
-public abstract class GoParametrizedTestBase extends GoQuickFixTestBase {
-
-  protected void enableInspections(){}
-
+public abstract class GoParametrizedTestBase extends GoCodeInsightFixtureTestCase {
   protected abstract void doTest();
 
   @Test
@@ -39,13 +35,11 @@ public abstract class GoParametrizedTestBase extends GoQuickFixTestBase {
     safeEdt(this::doTest);
   }
 
+  @SuppressWarnings("SetUpDoesntCallSuperSetUp")
   @Before
   @Override
   public void setUp() throws Exception {
-    safeEdt(() -> {
-      super.setUp();
-      enableInspections();
-    });
+    safeEdt(super::setUp);
   }
 
   @SuppressWarnings("TearDownDoesntCallSuperTearDown")

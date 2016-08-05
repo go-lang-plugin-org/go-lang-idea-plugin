@@ -20,6 +20,7 @@ import com.goide.project.GoApplicationLibrariesService;
 import com.goide.project.GoBuildTargetSettings;
 import com.goide.project.GoModuleSettings;
 import com.goide.sdk.GoSdkType;
+import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.module.ModuleType;
@@ -37,10 +38,12 @@ import com.intellij.testFramework.fixtures.DefaultLightProjectDescriptor;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.ThreeState;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsightFixtureTestCase {
   @NotNull
@@ -157,4 +160,11 @@ abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsi
   }
 
   private boolean isSdkAware() {return annotatedWith(SdkAware.class);}
+
+  protected void applySingleQuickFix(@NotNull String quickFixName) {
+    List<IntentionAction> availableIntentions = myFixture.filterAvailableIntentions(quickFixName);
+    IntentionAction action = ContainerUtil.getFirstItem(availableIntentions);
+    assertNotNull(action);
+    myFixture.launchAction(action);
+  }
 }

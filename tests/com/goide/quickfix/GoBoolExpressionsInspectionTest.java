@@ -19,6 +19,7 @@ package com.goide.quickfix;
 import com.goide.GoParametrizedTestBase;
 import com.goide.SdkAware;
 import com.goide.inspections.GoBoolExpressionsInspection;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
@@ -61,15 +62,15 @@ public class GoBoolExpressionsInspectionTest extends GoParametrizedTestBase {
     });
   }
 
+  @Before
+  public void enableInspections() {
+    myFixture.enableInspections(GoBoolExpressionsInspection.class);
+  }
+
   public GoBoolExpressionsInspectionTest(String vars, String expr, String after) {
     this.expr = expr;
     this.vars = vars;
     this.after = after;
-  }
-
-  @Override
-  protected void enableInspections() {
-    myFixture.enableInspections(GoBoolExpressionsInspection.class);
   }
 
   @Override

@@ -18,7 +18,6 @@ package com.goide.quickfix;
 
 import com.goide.GoCodeInsightFixtureTestCase;
 import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -33,13 +32,6 @@ public abstract class GoQuickFixTestBase extends GoCodeInsightFixtureTestCase {
     configure(checkHighlighting, testName);
     applySingleQuickFix(quickFixName);
     myFixture.checkResultByFile(testName + "-after.go", true);
-  }
-
-  protected void applySingleQuickFix(@NotNull String quickFixName) {
-    List<IntentionAction> availableIntentions = myFixture.filterAvailableIntentions(quickFixName);
-    IntentionAction action = ContainerUtil.getFirstItem(availableIntentions);
-    assertNotNull(action);
-    myFixture.launchAction(action);
   }
 
   protected void doTestNoFix(@NotNull String name) {
