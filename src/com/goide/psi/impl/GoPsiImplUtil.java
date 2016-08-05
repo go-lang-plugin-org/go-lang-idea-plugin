@@ -31,6 +31,7 @@ import com.goide.util.GoUtil;
 import com.intellij.codeInsight.highlighting.ReadWriteAccessDetector;
 import com.intellij.diagnostic.AttachmentFactory;
 import com.intellij.lang.ASTNode;
+import com.intellij.lang.parser.GeneratedParserUtilBase;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -63,10 +64,16 @@ import java.util.List;
 
 import static com.goide.psi.impl.GoLightType.*;
 import static com.intellij.codeInsight.highlighting.ReadWriteAccessDetector.Access.*;
+import static com.intellij.openapi.util.Conditions.equalTo;
 
 public class GoPsiImplUtil {
   private static final Logger LOG = Logger.getInstance(GoPsiImplUtil.class);
   private static final Key<SmartPsiElementPointer<PsiElement>> CONTEXT = Key.create("CONTEXT");
+
+  @NotNull
+  public static SyntaxTraverser<PsiElement> goTraverser() {
+    return SyntaxTraverser.psiTraverser().forceDisregardTypes(equalTo(GeneratedParserUtilBase.DUMMY_BLOCK));
+  }
 
   public static boolean builtin(@Nullable PsiElement resolve) {
     return resolve != null && isBuiltinFile(resolve.getContainingFile());
@@ -249,10 +256,7 @@ public class GoPsiImplUtil {
     GoPackageClauseStub stub = packageClause.getStub();
     if (stub != null) return stub.getName();
     PsiElement packageIdentifier = packageClause.getIdentifier();
-    if (packageIdentifier != null) {
-      return packageIdentifier.getText().trim();
-    }
-    return null;
+    return packageIdentifier != null ? packageIdentifier.getText().trim() : null;
   }
 
   @Nullable
