@@ -48,6 +48,9 @@ public class GoReadWriteAccessDetector extends ReadWriteAccessDetector {
   @NotNull
   @Override
   public Access getExpressionAccess(@Nullable PsiElement e) {
+    if (e instanceof GoFieldName) {
+      return e.getParent() instanceof GoKey ? Access.Write : Access.Read;
+    }
     GoReferenceExpression referenceExpression = PsiTreeUtil.getNonStrictParentOfType(e, GoReferenceExpression.class);
     return referenceExpression != null ? referenceExpression.getReadWriteAccess() : Access.Read;
   }
