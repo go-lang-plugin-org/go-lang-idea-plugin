@@ -83,7 +83,7 @@ public class GoFile extends PsiFileBase {
       GoFileStub stub = getStub();
       if (stub != null) {
         StubElement<GoPackageClause> packageClauseStub = stub.getPackageClauseStub();
-        CachedValueProvider.Result.create(packageClauseStub != null ? packageClauseStub.getPsi() : null, this);
+        return CachedValueProvider.Result.create(packageClauseStub != null ? packageClauseStub.getPsi() : null, this);
       }
       return CachedValueProvider.Result.create(findChildByClass(GoPackageClause.class), this);
     });
