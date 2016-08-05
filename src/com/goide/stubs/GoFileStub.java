@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,9 @@
 package com.goide.stubs;
 
 import com.goide.GoFileElementType;
-import com.goide.GoTypes;
 import com.goide.psi.GoFile;
-import com.goide.stubs.types.GoPackageClauseStubElementType;
 import com.intellij.psi.stubs.PsiFileStubImpl;
 import com.intellij.psi.tree.IStubFileElementType;
-import com.intellij.util.ObjectUtils;
 import com.intellij.util.io.StringRef;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,12 +34,6 @@ public class GoFileStub extends PsiFileStubImpl<GoFile> {
   public GoFileStub(@Nullable GoFile file, StringRef buildFlags) {
     super(file);
     myBuildFlags = buildFlags;
-  }
-
-  @Nullable
-  public String getPackageName() {
-    GoPackageClauseStub packageStub = ObjectUtils.tryCast(findChildStubByType((GoPackageClauseStubElementType)GoTypes.PACKAGE_CLAUSE), GoPackageClauseStub.class);
-    return packageStub != null ? packageStub.getName() : null;
   }
 
   @NotNull

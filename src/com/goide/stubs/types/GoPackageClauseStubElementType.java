@@ -27,8 +27,10 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 
 public class GoPackageClauseStubElementType extends GoStubElementType<GoPackageClauseStub, GoPackageClause> {
-  public GoPackageClauseStubElementType(@NotNull String name) {
-    super(name);
+  public static final GoPackageClauseStubElementType INSTANCE = new GoPackageClauseStubElementType();
+
+  private GoPackageClauseStubElementType() {
+    super("PACKAGE_CLAUSE");
   }
 
   @NotNull

@@ -75,7 +75,7 @@ public class GoMethodDeclarationStubElementType extends GoNamedStubElementType<G
     if (!StringUtil.isEmpty(typeName)) {
       StubElement parent = stub.getParentStub();
       if (parent instanceof GoFileStub) {
-        String packageName = ((GoFileStub)parent).getPackageName();
+        String packageName = ((GoFileStub)parent).getPsi().getPackageName();
         if (!StringUtil.isEmpty(typeName)) {
           sink.occurrence(GoMethodIndex.KEY, packageName + "." + typeName);
         }
