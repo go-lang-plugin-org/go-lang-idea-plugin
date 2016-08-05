@@ -109,6 +109,23 @@ public class GoReadWriteAccessTest extends GoCodeInsightFixtureTestCase {
     doTest("select {\n\tcase foo <- (*b<caret>ar):\n}", Read);
   }
 
+  public void testFieldInInitializer() {
+    myFixture.configureByText("a.go", "package main\n" +
+                                      "type aStruct struct {\n" +
+                                      "\taField string\n" +
+                                      "}\n" +
+                                      "func newStruct() aStruct {\n" +
+                                      "\treturn aStruct{\n" +
+                                      "\t\taFie<caret>ld: \"a value\",\n" +
+                                      "\t}\n" +
+                                      "}");
+    PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset());
+    GoFieldName goFieldName = PsiTreeUtil.getNonStrictParentOfType(element, GoFieldName.class);
+    assertNotNull(goFieldName);
+    //noinspection ConstantConditions
+    assertEquals(Write, ReadWriteAccessDetector.findDetector(goFieldName.getReference().resolve()).getExpressionAccess(goFieldName));
+  }
+
   private void doTest(@NotNull String expressionText, @NotNull ReadWriteAccessDetector.Access expectedAccess) {
     myFixture.configureByText("a.go", "package main; func _() {\n" + expressionText + "\n}");
     PsiElement element = myFixture.getFile().findElementAt(myFixture.getCaretOffset());
