@@ -30,7 +30,6 @@ import java.util.EnumSet;
 public class GoRegExpParserDefinition extends RegExpParserDefinition {
   private static final IFileElementType GO_REGEXP_FILE = new IFileElementType("GO_REGEXP_FILE", GoRegExpLanguage.INSTANCE);
   private final EnumSet<RegExpCapability> CAPABILITIES = EnumSet.of(RegExpCapability.UNICODE_CATEGORY_SHORTHAND,
-                                                                    RegExpCapability.CARET_NEGATED_PROPERTIES,
                                                                     RegExpCapability.NESTED_CHARACTER_CLASSES,
                                                                     RegExpCapability.OCTAL_NO_LEADING_ZERO,
                                                                     RegExpCapability.POSIX_BRACKET_EXPRESSIONS);

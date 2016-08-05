@@ -16,14 +16,11 @@
 
 package com.goide.regexp;
 
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiElement;
 import com.intellij.util.containers.ContainerUtil;
 import org.intellij.lang.regexp.RegExpLanguageHost;
 import org.intellij.lang.regexp.psi.RegExpChar;
 import org.intellij.lang.regexp.psi.RegExpGroup;
 import org.intellij.lang.regexp.psi.RegExpNamedGroupRef;
-import org.intellij.lang.regexp.psi.RegExpSimpleClass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -87,43 +84,6 @@ public class GoRegexHost implements RegExpLanguageHost {
   @Override
   public String[][] getKnownCharacterClasses() {
     return Lazy.CHARACTER_CLASSES;
-  }
-
-  @Override
-  public boolean supportsSimpleClass(RegExpSimpleClass simpleClass) {
-    switch (simpleClass.getKind()) {
-      case HORIZONTAL_SPACE:
-      case NON_HORIZONTAL_SPACE:
-      case NON_VERTICAL_SPACE:
-      case XML_NAME_START:
-      case NON_XML_NAME_START:
-      case XML_NAME_PART:
-      case NON_XML_NAME_PART:
-      case UNICODE_GRAPHEME:
-      case UNICODE_LINEBREAK:
-        return false;
-
-      case ANY:
-      case DIGIT:
-      case NON_DIGIT:
-      case WORD:
-      case NON_WORD:
-      case SPACE:
-      case NON_SPACE:
-      case VERTICAL_SPACE:
-        return true;
-    }
-    return false;
-  }
-
-  @Override
-  public boolean supportsLiteralBackspace(RegExpChar aChar) {
-    return false;
-  }
-
-  @Override
-  public boolean supportsInlineOptionFlag(char flag, PsiElement context) {
-    return StringUtil.containsChar("imsU", flag);
   }
 
   private interface Lazy {
