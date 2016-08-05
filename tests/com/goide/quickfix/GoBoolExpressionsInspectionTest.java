@@ -51,14 +51,7 @@ public class GoBoolExpressionsInspectionTest extends GoParametrizedTestBase {
       {"var b,c,d bool", "(b == c || c == b) || (b == c)", "b == c"},
 
       {"var c1, c2 = 1, 2; var a, b, c int", "b == c1 || b == c2", "b == c1 || b == c2"},
-      {"var c1, c2 = 1, 2; var a, b, c int", "b == c1 || b != c2", "b != c2"},
-      {"var c1, c2 = 1, 2; var a, b, c int", "b == c1 && b == c2", "false"},
       {"var c1, c2 = 1, 2; var a, b, c int", "b != c1 && b != c2", "b != c1 && b != c2"},
-      {"var c1, c2 = 1, 2; var a, b, c int", "b != c1 || b != c2", "true"},
-      {"var c1, c2, c3 = 1, 2, 1; var a, b, c int", "b == c1 || b == c3", "b == c3"},
-      {"var c1, c2, c3 = 1, 2, 1; var a, b, c int", "b != c1 || b != c3", "b != c3"},
-      {"var c1, c2, c3 = 1, 2, 1; var a, b, c int", "b == c1 || b != c3", "true"},
-      {"var c1, c2, c3 = 1, 2, 1; var a, b, c int", "b == c1 && b != c3", "false"},
     });
   }
 
