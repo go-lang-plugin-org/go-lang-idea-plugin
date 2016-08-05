@@ -60,7 +60,7 @@ public class GoFileElementType extends IStubFileElementType<GoFileStub> {
   @Override
   public void indexStub(@NotNull GoFileStub stub, @NotNull IndexSink sink) {
     super.indexStub(stub, sink);
-    String packageName = stub.getPsi().getPackageName();
+    String packageName = stub.getPackageName();
     if (StringUtil.isNotEmpty(packageName)) {
       sink.occurrence(GoPackagesIndex.KEY, packageName);
     }

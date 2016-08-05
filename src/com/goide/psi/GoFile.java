@@ -82,8 +82,8 @@ public class GoFile extends PsiFileBase {
     return CachedValuesManager.getCachedValue(this, () -> {
       GoFileStub stub = getStub();
       if (stub != null) {
-        StubElement<GoPackageClause> packageClause = stub.findChildStubByType(GoPackageClauseStubElementType.INSTANCE);
-        return CachedValueProvider.Result.create(packageClause != null ? packageClause.getPsi() : null, this);
+        StubElement<GoPackageClause> packageClauseStub = stub.getPackageClauseStub();
+        CachedValueProvider.Result.create(packageClauseStub != null ? packageClauseStub.getPsi() : null, this);
       }
       return CachedValueProvider.Result.create(findChildByClass(GoPackageClause.class), this);
     });
@@ -317,6 +317,10 @@ public class GoFile extends PsiFileBase {
   @Nullable
   public String getPackageName() {
     return CachedValuesManager.getCachedValue(this, () -> {
+      GoFileStub stub = getStub();
+      if (stub != null) {
+        return CachedValueProvider.Result.create(stub.getPackageName(), this);
+      }
       GoPackageClause packageClause = getPackage();
       return CachedValueProvider.Result.create(packageClause != null ? packageClause.getName() : null, this);
     });

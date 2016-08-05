@@ -18,7 +18,10 @@ package com.goide.stubs;
 
 import com.goide.GoFileElementType;
 import com.goide.psi.GoFile;
+import com.goide.psi.GoPackageClause;
+import com.goide.stubs.types.GoPackageClauseStubElementType;
 import com.intellij.psi.stubs.PsiFileStubImpl;
+import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.tree.IStubFileElementType;
 import com.intellij.util.io.StringRef;
 import org.jetbrains.annotations.NotNull;
@@ -45,5 +48,16 @@ public class GoFileStub extends PsiFileStubImpl<GoFile> {
   @Nullable
   public String getBuildFlags() {
     return myBuildFlags.getString();
+  }
+
+  @Nullable
+  public StubElement<GoPackageClause> getPackageClauseStub() {
+    return findChildStubByType(GoPackageClauseStubElementType.INSTANCE);
+  }
+
+  @Nullable
+  public String getPackageName() {
+    StubElement<GoPackageClause> stub = getPackageClauseStub();
+    return stub instanceof GoPackageClauseStub ? ((GoPackageClauseStub)stub).getName() : null;  
   }
 }
