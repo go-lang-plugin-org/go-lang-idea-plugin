@@ -27,13 +27,12 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
 public class GoStringLiteralEscaperEscapeStringTest {
-
-  @Parameterized.Parameter
+  @Parameterized.Parameter 
   public String input;
   @Parameterized.Parameter(1)
   public String expected;
 
-  @Parameterized.Parameters
+  @Parameterized.Parameters(name = "{0}")
   public static Collection<Object[]> data() {
     return Arrays.asList(new Object[][]{
       {"abc", "abc"},

@@ -33,7 +33,7 @@ public class GoBoolExpressionsInspectionTest extends GoParametrizedTestBase {
   private final String vars;
   private final String after;
 
-  @Parameterized.Parameters
+  @Parameterized.Parameters(name = "{1}")
   public static Collection<Object[]> data() {
     return Arrays.asList(new Object[][]{
       {"var b bool", "b || true", "true"},
