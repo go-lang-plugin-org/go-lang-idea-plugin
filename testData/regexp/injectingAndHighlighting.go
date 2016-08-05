@@ -19,7 +19,7 @@ func main() {
 	var _ = regexp.MustCompile(`x<weak_warning descr="Repetition range replaceable by '+'">{1,}?</weak_warning>`);
 	var _ = regexp.MustCompile(`x{3}?`);
 
-	var _ = regexp.MustCompile(`\p{^Han}`)
+	var _ = regexp.MustCompile(`\p{<error descr="Character family name expected">^</error><error descr="Unclosed character family">H</error>an<error descr="Pattern expected">}</error>`)
 	var _ = regexp.MustCompile(`.`)
 	var _ = regexp.MustCompile(`[xyz]`)
 	var _ = regexp.MustCompile(`[^xyz]`)
@@ -32,18 +32,18 @@ func main() {
 	var _ = regexp.MustCompile(`\p{Han}`)
 	var _ = regexp.MustCompile(`\PN`)
 	var _ = regexp.MustCompile(`\P{Han}`)
-	var _ = regexp.MustCompile(`\P{^Coptic}`)
+	var _ = regexp.MustCompile(`\P{<error descr="Character family name expected">^</error><error descr="Unclosed character family">C</error>optic<error descr="Pattern expected">}</error>`)
 	var _ = regexp.MustCompile(`y`)
 	var _ = regexp.MustCompile(`|y`)
 	var _ = regexp.MustCompile(`(re)`)
 	var _ = regexp.MustCompile(`(?P<name>re)`)
 	var _ = regexp.MustCompile(`(?:re)`)
-	var _ = regexp.MustCompile(`(?<error descr="Unknown inline option flag">f</error><error descr="Unknown inline option flag">l</error><error descr="Unknown inline option flag">a</error><error descr="Unknown inline option flag">g</error>s)`)
-	var _ = regexp.MustCompile(`(?<error descr="Unknown inline option flag">f</error><error descr="Unknown inline option flag">l</error><error descr="Unknown inline option flag">a</error><error descr="Unknown inline option flag">g</error>s:re)`)
+	var _ = regexp.MustCompile(`(?flags)`)
+	var _ = regexp.MustCompile(`(?flags:re)`)
 
 	var _ = regexp.MustCompile(`(?im-sU)`)
 	var _ = regexp.MustCompile(`(?imsU:re)`)
-	var _ = regexp.MustCompile(`(?ims<error descr="Unknown inline option flag">G</error>U:re)`)
+	var _ = regexp.MustCompile(`(?imsGU:re)`)
 
 	var _ = regexp.MustCompile(`^`)
 	var _ = regexp.MustCompile(`$`)

@@ -24,6 +24,7 @@ import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.psi.LiteralTextEscaper;
 import com.intellij.psi.PsiLanguageInjectionHost;
 import com.intellij.testFramework.PlatformTestUtil;
+import com.intellij.util.ThrowableRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
@@ -176,7 +177,7 @@ public class GoStringLiteralEscaperTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testDecodeLongUnicodeCharString() {
-    PlatformTestUtil.withEncoding(CharsetToolkit.UTF8, () -> {
+    PlatformTestUtil.withEncoding(CharsetToolkit.UTF8, (ThrowableRunnable)() -> {
       GoStringLiteral expr = createStringFromText("\\U00008a9e");
       assertNotNull(expr);
       String a = decodeRange(expr, TextRange.create(1, 11));
@@ -185,7 +186,7 @@ public class GoStringLiteralEscaperTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testQuote() {
-    PlatformTestUtil.withEncoding(CharsetToolkit.UTF8, () -> {
+    PlatformTestUtil.withEncoding(CharsetToolkit.UTF8, (ThrowableRunnable)() -> {
       GoStringLiteral expr = createStringFromText("import \\\"fmt\\\"");
       assertNotNull(expr);
       assertEquals("\"fmt\"", decodeRange(expr, TextRange.create(8, 15)));

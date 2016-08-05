@@ -53,7 +53,7 @@ public abstract class GoNamedStubElementType<S extends GoNamedStub<T>, T extends
       StubElement parent = stub.getParentStub();
       while (parent != null) {
         if (parent instanceof GoFileStub) {
-          packageName = ((GoFileStub)parent).getPsi().getPackageName();
+          packageName = ((GoFileStub)parent).getPackageName();
           break;
         }
         parent = parent.getParentStub();
