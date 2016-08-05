@@ -44,7 +44,9 @@ public class GoRegexInjector implements LanguageInjector {
     if (ContainerUtil.getFirstItem(((GoArgumentList)argumentList).getExpressionList()) != topMostExpression) return;
 
     GoCallExpr callExpression = ObjectUtils.tryCast(argumentList.getParent(), GoCallExpr.class);
-    if (callExpression != null && REGEXP_FUNCTION_NAMES.contains(callExpression.getExpression().getText())) {
+    if (callExpression == null) return;
+    GoReferenceExpression referenceExpression = ObjectUtils.tryCast(callExpression.getExpression(), GoReferenceExpression.class);
+    if (referenceExpression != null && REGEXP_FUNCTION_NAMES.contains(referenceExpression.getIdentifier().getText())) {
       GoSignatureOwner resolvedCall = GoPsiImplUtil.resolveCall(callExpression);
       if (resolvedCall instanceof GoFunctionDeclaration) {
         PsiFile file = resolvedCall.getContainingFile();
