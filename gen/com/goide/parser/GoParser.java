@@ -4134,13 +4134,14 @@ public class GoParser implements PsiParser, LightPsiParser {
   // '(' VarSpecs? ')'
   private static boolean VarDeclaration_1_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "VarDeclaration_1_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
     r = consumeToken(b, LPAREN);
-    r = r && VarDeclaration_1_1_1(b, l + 1);
-    r = r && consumeToken(b, RPAREN);
-    exit_section_(b, m, null, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, VarDeclaration_1_1_1(b, l + 1));
+    r = p && consumeToken(b, RPAREN) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // VarSpecs?
