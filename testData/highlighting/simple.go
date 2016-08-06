@@ -35,6 +35,53 @@ Label:
 	goto Label
 }
 
+func _() int {
+	for i := 1; ; i++ {
+		break
+	}
+<error descr="Missing return at end of function">}</error>
+
+func _() int {
+	Label:
+	for i := 1; ; i++ {
+		break Label
+	}
+<error descr="Missing return at end of function">}</error>
+
+func _() int {
+	Label:
+	for i := 1; ; i++ {
+		if (true ) {
+			break Label
+		}
+ 	}
+<error descr="Missing return at end of function">}</error>
+
+func _() int {
+	Label:
+	for i := 1; ; i++ {
+		goto Label
+ 	}
+}
+
+
+func _() int {
+	for true {
+		return 1
+	}
+<error descr="Missing return at end of function">}</error>
+
+func _() int {
+	for i := 1; ; i++ {
+	}
+}
+
+func _() int {
+	for i := 1; i < 10; i++ {
+		return 1
+	}
+<error descr="Missing return at end of function">}</error>
+
 func <error descr="Duplicate function name">foo</error>() {
     i := 1
     for (i) {return 0}
