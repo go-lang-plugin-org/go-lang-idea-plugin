@@ -34,3 +34,55 @@ GO_FILE
     BLOCK
       PsiElement({)('{')
       PsiElement(})('}')
+  TYPE_DECLARATION
+    PsiElement(type)('type')
+    TYPE_SPEC
+      SPEC_TYPE
+        PsiElement(identifier)('foo')
+        STRUCT_TYPE
+          PsiElement(struct)('struct')
+          PsiElement({)('{')
+          FIELD_DECLARATION
+            FIELD_DEFINITION
+              PsiElement(identifier)('bar')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('string')
+          PsiElement(})('}')
+  VAR_DECLARATION
+    PsiElement(var)('var')
+    PsiElement(()('(')
+    VAR_SPEC
+      VAR_DEFINITION
+        PsiElement(identifier)('baz')
+      PsiElement(=)('=')
+      COMPOSITE_LIT
+        ARRAY_OR_SLICE_TYPE
+          PsiElement([)('[')
+          PsiElement(])(']')
+          POINTER_TYPE
+            PsiElement(*)('*')
+            TYPE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('foo')
+        LITERAL_VALUE
+          PsiElement({)('{')
+          ELEMENT
+            VALUE
+              LITERAL_VALUE
+                PsiElement({)('{')
+                PsiElement(})('}')
+          PsiElement(,)(',')
+          PsiElement(})('}')
+    PsiErrorElement:')' or identifier expected, got 'func'
+      <empty list>
+  FUNCTION_DECLARATION
+    PsiElement(func)('func')
+    PsiElement(identifier)('foo1')
+    SIGNATURE
+      PARAMETERS
+        PsiElement(()('(')
+        PsiElement())(')')
+    BLOCK
+      PsiElement({)('{')
+      PsiElement(})('}')

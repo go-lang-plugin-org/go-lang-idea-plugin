@@ -260,7 +260,7 @@ TypeSpec ::= SpecType {
 }
 SpecType ::= identifier Type {pin=1 stubClass="com.goide.stubs.GoTypeStub" extends="com.goide.psi.impl.GoTypeImpl" implements=Type}
 
-VarDeclaration ::= var ( VarSpec | '(' VarSpecs? ')' ) {pin=1 methods=[addSpec deleteSpec]}
+VarDeclaration ::= var ( VarSpec | '(' VarSpecs? ')' ) {pin(".*")=1 methods=[addSpec deleteSpec]}
 private VarSpecs ::= VarSpec (semi VarSpec)* semi? {pin=1}
 VarSpec ::= VarDefinitionList ( Type [ '=' ExpressionList ] | '=' ExpressionList ) {
   pin(".*")=1

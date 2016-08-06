@@ -8,3 +8,17 @@ var (
 
 func main() {}
 
+type foo struct {
+	bar string
+}
+
+var (
+	baz = []*foo{
+		{
+
+		},
+	}
+
+func foo1() {
+	
+}
