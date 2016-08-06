@@ -3,7 +3,7 @@
   <component name="ExternalDependencies">
     <plugin id="DevKit" />
     <plugin id="com.intellij.uiDesigner" />
-    <plugin id="org.jetbrains.idea.grammar" min-version="1.4.1" max-version="1.4.1" />
+    <plugin id="org.jetbrains.idea.grammar" min-version="1.4.2" max-version="1.4.2" />
     <plugin id="org.jetbrains.plugins.gradle" />
   </component>
 </project>
