@@ -1,0 +1,9 @@
+GoFileStub
+  PACKAGE_CLAUSE:GoPackageClauseStub
+  FUNCTION_DECLARATION:GoFunctionDeclarationStub: main
+    SIGNATURE:GoSignatureStub
+      PARAMETERS:GoParametersStub
+    TYPE_SPEC:GoTypeSpecStub: A
+      SPEC_TYPE:GoTypeStub
+        STRUCT_TYPE:GoTypeStub
+          TYPE:GoTypeStub

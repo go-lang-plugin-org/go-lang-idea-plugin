@@ -29,22 +29,15 @@ import com.intellij.codeInspection.InspectionProfileEntry;
 import com.intellij.codeInspection.ex.InspectionManagerEx;
 import com.intellij.codeInspection.ex.InspectionToolRegistrar;
 import com.intellij.codeInspection.ex.InspectionToolWrapper;
-import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileVisitor;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiFileFactory;
-import com.intellij.psi.impl.DebugUtil;
 import com.intellij.testFramework.InspectionTestUtil;
 import com.intellij.testFramework.PlatformTestUtil;
-import com.intellij.testFramework.UsefulTestCase;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 import com.intellij.testFramework.fixtures.impl.GlobalInspectionContextForTests;
-import com.intellij.util.indexing.FileContentImpl;
-import com.intellij.util.indexing.IndexingDataKeys;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.experimental.categories.Category;
@@ -178,19 +171,7 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
           if (file.getFileType() != GoFileType.INSTANCE) return CONTINUE;
           try {
             System.out.print(".");
-            String path = file.getPath();
-            String fileContent = FileUtil.loadFile(new File(path), "UTF-8", true).trim();
-            PsiFile psi = PsiFileFactory.getInstance(getProject()).createFileFromText(file.getName(), file.getFileType(), fileContent);
-            assertFalse(path + " contains error elements", DebugUtil.psiToString(psi, true).contains("PsiErrorElement"));
-            String full = DebugUtil.stubTreeToString(GoFileElementType.INSTANCE.getBuilder().buildStubTree(psi));
-            psi.putUserData(IndexingDataKeys.VIRTUAL_FILE, file);
-            FileContentImpl content = new FileContentImpl(file, fileContent, file.getCharset());
-            PsiFile psiFile = content.getPsiFile();
-            String fast = DebugUtil.stubTreeToString(GoFileElementType.INSTANCE.getBuilder().buildStubTree(psiFile));
-            if (!Comparing.strEqual(full, fast)) {
-              System.err.println(path);
-              UsefulTestCase.assertSameLines(full, fast);
-            }
+            buildStubTreeText(getProject(), file, FileUtil.loadFile(new File(file.getPath()), "UTF-8", true).trim());
           }
           catch (IOException ignored) {
           }
