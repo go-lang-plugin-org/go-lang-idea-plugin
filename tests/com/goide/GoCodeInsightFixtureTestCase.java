@@ -54,10 +54,15 @@ import java.io.IOException;
 import java.util.List;
 
 abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsightFixtureTestCase {
-  protected static String buildStubTreeText(@NotNull Project project, @NotNull VirtualFile file, String fileContent) throws IOException {
+  protected static String buildStubTreeText(@NotNull Project project,
+                                            @NotNull VirtualFile file,
+                                            @NotNull String fileContent,
+                                            boolean checkErrors) throws IOException {
     String path = file.getPath();
     PsiFile psi = PsiFileFactory.getInstance(project).createFileFromText(file.getName(), file.getFileType(), fileContent);
-    assertFalse(path + " contains error elements", DebugUtil.psiToString(psi, true).contains("PsiErrorElement"));
+    if (checkErrors) {
+      assertFalse(path + " contains error elements", DebugUtil.psiToString(psi, true).contains("PsiErrorElement"));
+    }
     String full = DebugUtil.stubTreeToString(GoFileElementType.INSTANCE.getBuilder().buildStubTree(psi));
     psi.putUserData(IndexingDataKeys.VIRTUAL_FILE, file);
     FileContentImpl content = new FileContentImpl(file, fileContent, file.getCharset());
