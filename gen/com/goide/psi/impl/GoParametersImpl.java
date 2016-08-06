@@ -30,12 +30,12 @@ import com.intellij.psi.stubs.IStubElementType;
 
 public class GoParametersImpl extends GoStubbedElementImpl<GoParametersStub> implements GoParameters {
 
-  public GoParametersImpl(ASTNode node) {
-    super(node);
-  }
-
   public GoParametersImpl(GoParametersStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
+  }
+
+  public GoParametersImpl(ASTNode node) {
+    super(node);
   }
 
   public void accept(@NotNull GoVisitor visitor) {

@@ -24,9 +24,6 @@ import com.intellij.psi.PsiElement;
 public interface GoElseStatement extends GoStatement {
 
   @Nullable
-  GoBlock getBlock();
-
-  @Nullable
   GoIfStatement getIfStatement();
 
   @NotNull

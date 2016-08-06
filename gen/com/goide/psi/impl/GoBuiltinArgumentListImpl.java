@@ -42,33 +42,9 @@ public class GoBuiltinArgumentListImpl extends GoArgumentListImpl implements GoB
   }
 
   @Override
-  @NotNull
-  public List<GoExpression> getExpressionList() {
-    return GoPsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
-  }
-
-  @Override
   @Nullable
   public GoType getType() {
     return GoPsiTreeUtil.getChildOfType(this, GoType.class);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getLparen() {
-    return notNullChild(findChildByType(LPAREN));
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getRparen() {
-    return findChildByType(RPAREN);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getTripleDot() {
-    return findChildByType(TRIPLE_DOT);
   }
 
 }

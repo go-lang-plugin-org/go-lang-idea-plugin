@@ -33,7 +33,7 @@ public class GoChannelTypeImpl extends GoTypeImpl implements GoChannelType {
     super(node);
   }
 
-  public GoChannelTypeImpl(com.goide.stubs.GoTypeStub stub, IStubElementType nodeType) {
+  public GoChannelTypeImpl(GoTypeStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
   }
 

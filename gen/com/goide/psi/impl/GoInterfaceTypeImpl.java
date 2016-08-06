@@ -25,6 +25,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
+import com.goide.stubs.GoTypeStub;
 import com.intellij.psi.stubs.IStubElementType;
 
 public class GoInterfaceTypeImpl extends GoTypeImpl implements GoInterfaceType {
@@ -33,7 +34,7 @@ public class GoInterfaceTypeImpl extends GoTypeImpl implements GoInterfaceType {
     super(node);
   }
 
-  public GoInterfaceTypeImpl(com.goide.stubs.GoTypeStub stub, IStubElementType nodeType) {
+  public GoInterfaceTypeImpl(GoTypeStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
   }
 

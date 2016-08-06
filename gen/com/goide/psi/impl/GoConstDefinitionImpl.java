@@ -31,12 +31,12 @@ import com.intellij.psi.stubs.IStubElementType;
 
 public class GoConstDefinitionImpl extends GoNamedElementImpl<GoConstDefinitionStub> implements GoConstDefinition {
 
-  public GoConstDefinitionImpl(ASTNode node) {
-    super(node);
-  }
-
   public GoConstDefinitionImpl(GoConstDefinitionStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
+  }
+
+  public GoConstDefinitionImpl(ASTNode node) {
+    super(node);
   }
 
   public void accept(@NotNull GoVisitor visitor) {

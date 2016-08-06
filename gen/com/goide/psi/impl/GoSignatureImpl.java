@@ -30,12 +30,12 @@ import com.intellij.psi.stubs.IStubElementType;
 
 public class GoSignatureImpl extends GoStubbedElementImpl<GoSignatureStub> implements GoSignature {
 
-  public GoSignatureImpl(ASTNode node) {
-    super(node);
-  }
-
   public GoSignatureImpl(GoSignatureStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
+  }
+
+  public GoSignatureImpl(ASTNode node) {
+    super(node);
   }
 
   public void accept(@NotNull GoVisitor visitor) {

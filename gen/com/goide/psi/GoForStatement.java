@@ -24,9 +24,6 @@ import com.intellij.psi.PsiElement;
 public interface GoForStatement extends GoStatement {
 
   @Nullable
-  GoBlock getBlock();
-
-  @Nullable
   GoExpression getExpression();
 
   @Nullable

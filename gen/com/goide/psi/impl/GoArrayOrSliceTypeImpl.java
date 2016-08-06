@@ -25,6 +25,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
+import com.goide.stubs.GoTypeStub;
 import com.intellij.psi.stubs.IStubElementType;
 
 public class GoArrayOrSliceTypeImpl extends GoTypeImpl implements GoArrayOrSliceType {
@@ -33,7 +34,7 @@ public class GoArrayOrSliceTypeImpl extends GoTypeImpl implements GoArrayOrSlice
     super(node);
   }
 
-  public GoArrayOrSliceTypeImpl(com.goide.stubs.GoTypeStub stub, IStubElementType nodeType) {
+  public GoArrayOrSliceTypeImpl(GoTypeStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
   }
 

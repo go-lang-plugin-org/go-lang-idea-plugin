@@ -23,9 +23,6 @@ import com.intellij.psi.PsiElement;
 
 public interface GoConditionalExpr extends GoBinaryExpr {
 
-  @NotNull
-  List<GoExpression> getExpressionList();
-
   @Nullable
   PsiElement getEq();
 

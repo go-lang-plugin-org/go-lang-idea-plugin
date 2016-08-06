@@ -23,9 +23,6 @@ import com.intellij.psi.PsiElement;
 
 public interface GoMulExpr extends GoBinaryExpr {
 
-  @NotNull
-  List<GoExpression> getExpressionList();
-
   @Nullable
   PsiElement getBitAnd();
 

@@ -30,12 +30,12 @@ import com.intellij.psi.stubs.IStubElementType;
 
 public class GoResultImpl extends GoStubbedElementImpl<GoResultStub> implements GoResult {
 
-  public GoResultImpl(ASTNode node) {
-    super(node);
-  }
-
   public GoResultImpl(GoResultStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
+  }
+
+  public GoResultImpl(ASTNode node) {
+    super(node);
   }
 
   public void accept(@NotNull GoVisitor visitor) {

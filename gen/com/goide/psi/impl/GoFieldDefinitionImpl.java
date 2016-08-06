@@ -30,12 +30,12 @@ import com.intellij.psi.stubs.IStubElementType;
 
 public class GoFieldDefinitionImpl extends GoNamedElementImpl<GoFieldDefinitionStub> implements GoFieldDefinition {
 
-  public GoFieldDefinitionImpl(ASTNode node) {
-    super(node);
-  }
-
   public GoFieldDefinitionImpl(GoFieldDefinitionStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
+  }
+
+  public GoFieldDefinitionImpl(ASTNode node) {
+    super(node);
   }
 
   public void accept(@NotNull GoVisitor visitor) {

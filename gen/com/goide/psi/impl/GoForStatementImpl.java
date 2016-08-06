@@ -43,12 +43,6 @@ public class GoForStatementImpl extends GoStatementImpl implements GoForStatemen
 
   @Override
   @Nullable
-  public GoBlock getBlock() {
-    return GoPsiTreeUtil.getChildOfType(this, GoBlock.class);
-  }
-
-  @Override
-  @Nullable
   public GoExpression getExpression() {
     return GoPsiTreeUtil.getChildOfType(this, GoExpression.class);
   }

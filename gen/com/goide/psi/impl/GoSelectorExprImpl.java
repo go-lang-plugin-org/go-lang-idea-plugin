@@ -43,12 +43,6 @@ public class GoSelectorExprImpl extends GoBinaryExprImpl implements GoSelectorEx
 
   @Override
   @NotNull
-  public List<GoExpression> getExpressionList() {
-    return GoPsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
-  }
-
-  @Override
-  @NotNull
   public PsiElement getDot() {
     return notNullChild(findChildByType(DOT));
   }

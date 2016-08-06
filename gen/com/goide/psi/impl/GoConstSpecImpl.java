@@ -30,12 +30,12 @@ import com.intellij.psi.stubs.IStubElementType;
 
 public class GoConstSpecImpl extends GoStubbedElementImpl<GoConstSpecStub> implements GoConstSpec {
 
-  public GoConstSpecImpl(ASTNode node) {
-    super(node);
-  }
-
   public GoConstSpecImpl(GoConstSpecStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
+  }
+
+  public GoConstSpecImpl(ASTNode node) {
+    super(node);
   }
 
   public void accept(@NotNull GoVisitor visitor) {

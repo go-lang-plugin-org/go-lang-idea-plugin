@@ -42,12 +42,6 @@ public class GoMulExprImpl extends GoBinaryExprImpl implements GoMulExpr {
   }
 
   @Override
-  @NotNull
-  public List<GoExpression> getExpressionList() {
-    return GoPsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
-  }
-
-  @Override
   @Nullable
   public PsiElement getBitAnd() {
     return findChildByType(BIT_AND);
