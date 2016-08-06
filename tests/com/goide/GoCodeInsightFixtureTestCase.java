@@ -24,21 +24,29 @@ import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.module.ModuleType;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.ProjectJdkTable;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.impl.ProjectJdkImpl;
 import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiFileFactory;
+import com.intellij.psi.impl.DebugUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.LightProjectDescriptor;
+import com.intellij.testFramework.UsefulTestCase;
 import com.intellij.testFramework.fixtures.DefaultLightProjectDescriptor;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.ThreeState;
 import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.indexing.FileContentImpl;
+import com.intellij.util.indexing.IndexingDataKeys;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -46,6 +54,22 @@ import java.io.IOException;
 import java.util.List;
 
 abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsightFixtureTestCase {
+  protected static String buildStubTreeText(@NotNull Project project, @NotNull VirtualFile file, String fileContent) throws IOException {
+    String path = file.getPath();
+    PsiFile psi = PsiFileFactory.getInstance(project).createFileFromText(file.getName(), file.getFileType(), fileContent);
+    assertFalse(path + " contains error elements", DebugUtil.psiToString(psi, true).contains("PsiErrorElement"));
+    String full = DebugUtil.stubTreeToString(GoFileElementType.INSTANCE.getBuilder().buildStubTree(psi));
+    psi.putUserData(IndexingDataKeys.VIRTUAL_FILE, file);
+    FileContentImpl content = new FileContentImpl(file, fileContent, file.getCharset());
+    PsiFile psiFile = content.getPsiFile();
+    String fast = DebugUtil.stubTreeToString(GoFileElementType.INSTANCE.getBuilder().buildStubTree(psiFile));
+    if (!Comparing.strEqual(full, fast)) {
+      System.err.println(path);
+      UsefulTestCase.assertSameLines(full, fast);
+    }
+    return fast;
+  }
+
   @NotNull
   protected PsiElement findElementAtCaretOrInSelection() {
     SelectionModel selectionModel = myFixture.getEditor().getSelectionModel();
