@@ -30,12 +30,12 @@ import com.intellij.psi.stubs.IStubElementType;
 
 public class GoParTypeImpl extends GoTypeImpl implements GoParType {
 
-  public GoParTypeImpl(ASTNode node) {
-    super(node);
-  }
-
   public GoParTypeImpl(GoTypeStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
+  }
+
+  public GoParTypeImpl(ASTNode node) {
+    super(node);
   }
 
   public void accept(@NotNull GoVisitor visitor) {

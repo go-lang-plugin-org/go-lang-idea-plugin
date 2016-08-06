@@ -30,12 +30,12 @@ import com.intellij.psi.stubs.IStubElementType;
 
 public class GoPointerTypeImpl extends GoTypeImpl implements GoPointerType {
 
-  public GoPointerTypeImpl(ASTNode node) {
-    super(node);
-  }
-
   public GoPointerTypeImpl(GoTypeStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
+  }
+
+  public GoPointerTypeImpl(ASTNode node) {
+    super(node);
   }
 
   public void accept(@NotNull GoVisitor visitor) {
