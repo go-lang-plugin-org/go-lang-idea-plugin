@@ -30,6 +30,11 @@ func (b *Boom) Run(a aaa) (r1 aaa, r2 aaa) {
    b.err + a + r1 + r2
 <error descr="Missing return at end of function">}</error>
 
+func _() int {
+Label:
+	goto Label
+}
+
 func <error descr="Duplicate function name">foo</error>() {
     i := 1
     for (i) {return 0}

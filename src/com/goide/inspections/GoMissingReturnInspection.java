@@ -50,8 +50,9 @@ public class GoMissingReturnInspection extends GoInspectionBase {
                            brace == null ? new LocalQuickFix[]{} : new LocalQuickFix[]{new AddReturnFix(block)});
   }
 
+  // https://tip.golang.org/ref/spec#Terminating_statements
   private static boolean isTerminating(@Nullable GoCompositeElement s) {
-    if (s instanceof GoReturnStatement || s instanceof GoGoStatement) {
+    if (s instanceof GoReturnStatement || s instanceof GoGotoStatement) {
       return true;
     }
     if (s instanceof GoSimpleStatement) {
@@ -100,19 +101,16 @@ public class GoMissingReturnInspection extends GoInspectionBase {
         if (clause.getDefault() != null) {
           hasDefault = true;
         }
-        GoStatement last = ContainerUtil.getLastItem(clause.getStatementList());
-        if (last == null || !isTerminating(last)) return false;
+        if (!isTerminating(ContainerUtil.getLastItem(clause.getStatementList()))) {
+          return false;
+        }
       }
       return hasDefault;
     }
     else if (s instanceof GoSelectStatement) {
       GoSelectStatement selectStatement = (GoSelectStatement)s;
       for (GoCommClause clause : selectStatement.getCommClauseList()) {
-        List<GoStatement> statements = clause.getStatementList();
-        if (statements.isEmpty()) {
-          return false;
-        }
-        if (!isTerminating(statements.get(statements.size() - 1))) {
+        if (!isTerminating(ContainerUtil.getLastItem(clause.getStatementList()))) {
           return false;
         }
       }
