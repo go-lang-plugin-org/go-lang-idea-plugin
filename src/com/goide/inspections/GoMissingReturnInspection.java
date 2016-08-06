@@ -16,6 +16,7 @@
 
 package com.goide.inspections;
 
+import com.goide.highlighting.exitpoint.GoBreakStatementExitPointHandler;
 import com.goide.psi.*;
 import com.goide.psi.impl.GoPsiImplUtil;
 import com.intellij.codeInsight.template.Template;
@@ -78,19 +79,19 @@ public class GoMissingReturnInspection extends GoInspectionBase {
     else if (s instanceof GoForStatement) {
       GoForStatement f = (GoForStatement)s;
       GoForClause forClause = f.getForClause();
-      if (forClause != null && forClause.getExpression() == null) return true;
-      if (f.getExpression() == null && forClause == null && f.getRangeClause() == null) return true;
-      return isTerminating(f.getBlock());
+      if (forClause != null && forClause.getExpression() != null || f.getExpression() != null || f.getRangeClause() != null) return false;
+      GoBlock block = f.getBlock();
+      return block == null || !hasReferringBreakStatement(f);
     }
     else if (s instanceof GoExprSwitchStatement) {
       boolean hasDefault = false;
       List<GoExprCaseClause> list = ((GoExprSwitchStatement)s).getExprCaseClauseList();
       for (GoExprCaseClause clause : list) {
-        PsiElement def = clause.getDefault();
-        if (def != null) hasDefault = true;
-        GoStatement last = ContainerUtil.getLastItem(clause.getStatementList());
-        if (last instanceof GoFallthroughStatement) continue;
-        if (last == null || !isTerminating(last)) return false;
+        hasDefault |= clause.getDefault() != null;
+        List<GoStatement> statements = clause.getStatementList();
+        if (hasReferringBreakStatement(s)) return false;
+        GoStatement last = ContainerUtil.getLastItem(statements);
+        if (!(last instanceof GoFallthroughStatement) && !isTerminating(last)) return false;
       }
       return hasDefault;
     }
@@ -98,21 +99,20 @@ public class GoMissingReturnInspection extends GoInspectionBase {
       boolean hasDefault = false;
       List<GoTypeCaseClause> list = ((GoTypeSwitchStatement)s).getTypeCaseClauseList();
       for (GoTypeCaseClause clause : list) {
-        if (clause.getDefault() != null) {
-          hasDefault = true;
-        }
-        if (!isTerminating(ContainerUtil.getLastItem(clause.getStatementList()))) {
-          return false;
-        }
+        hasDefault |= clause.getDefault() != null;
+        List<GoStatement> statements = clause.getStatementList();
+        if (hasReferringBreakStatement(s)) return false;
+        GoStatement last = ContainerUtil.getLastItem(statements);
+        if (!(last instanceof GoFallthroughStatement) && !isTerminating(last)) return false;
       }
       return hasDefault;
     }
     else if (s instanceof GoSelectStatement) {
       GoSelectStatement selectStatement = (GoSelectStatement)s;
       for (GoCommClause clause : selectStatement.getCommClauseList()) {
-        if (!isTerminating(ContainerUtil.getLastItem(clause.getStatementList()))) {
-          return false;
-        }
+        List<GoStatement> statements = clause.getStatementList();
+        if (hasReferringBreakStatement(selectStatement)) return false;
+        if (!isTerminating(ContainerUtil.getLastItem(statements))) return false;
       }
       return true;
     }
@@ -124,6 +124,22 @@ public class GoMissingReturnInspection extends GoInspectionBase {
       return isTerminating(((GoStatement)s).getBlock());
     }
     return false;
+  }
+
+  private static boolean hasReferringBreakStatement(@NotNull PsiElement breakStatementOwner) {
+    return !GoPsiImplUtil.goTraverser().withRoot(breakStatementOwner).traverse().filter(GoBreakStatement.class).filter(statement -> {
+      PsiElement owner = GoBreakStatementExitPointHandler.getBreakStatementOwnerOrResolve(statement);
+      if (breakStatementOwner.equals(owner)) {
+        return true;
+      }
+      if (owner instanceof GoLabelDefinition) {
+        PsiElement parent = owner.getParent();
+        if (parent instanceof GoLabeledStatement && breakStatementOwner.equals(((GoLabeledStatement)parent).getStatement())) {
+          return true;
+        }
+      }
+      return false;
+    }).isEmpty();
   }
 
   @NotNull
@@ -160,10 +176,10 @@ public class GoMissingReturnInspection extends GoInspectionBase {
     }
 
     @Override
-    public void invoke(@NotNull Project project, 
+    public void invoke(@NotNull Project project,
                        @NotNull PsiFile file,
                        @Nullable("is null when called from inspection") Editor editor,
-                       @NotNull PsiElement startElement, 
+                       @NotNull PsiElement startElement,
                        @NotNull PsiElement endElement) {
       if (!(file instanceof GoFile) || editor == null || !(startElement instanceof GoBlock)) return;
 

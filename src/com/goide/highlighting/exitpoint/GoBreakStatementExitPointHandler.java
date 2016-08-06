@@ -120,7 +120,7 @@ public class GoBreakStatementExitPointHandler extends HighlightUsagesHandlerBase
   }
 
   @Nullable
-  private static PsiElement getBreakStatementOwnerOrResolve(@NotNull GoBreakStatement breakStatement) {
+  public static PsiElement getBreakStatementOwnerOrResolve(@NotNull GoBreakStatement breakStatement) {
     GoLabelRef label = breakStatement.getLabelRef();
     if (label != null) {
       return label.getReference().resolve();
