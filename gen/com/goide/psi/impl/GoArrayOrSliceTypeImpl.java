@@ -30,12 +30,12 @@ import com.intellij.psi.stubs.IStubElementType;
 
 public class GoArrayOrSliceTypeImpl extends GoTypeImpl implements GoArrayOrSliceType {
 
-  public GoArrayOrSliceTypeImpl(ASTNode node) {
-    super(node);
-  }
-
   public GoArrayOrSliceTypeImpl(GoTypeStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
+  }
+
+  public GoArrayOrSliceTypeImpl(ASTNode node) {
+    super(node);
   }
 
   public void accept(@NotNull GoVisitor visitor) {

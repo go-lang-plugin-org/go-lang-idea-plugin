@@ -30,12 +30,12 @@ import com.intellij.psi.stubs.IStubElementType;
 
 public class GoRecvStatementImpl extends GoVarSpecImpl implements GoRecvStatement {
 
-  public GoRecvStatementImpl(ASTNode node) {
-    super(node);
-  }
-
   public GoRecvStatementImpl(GoVarSpecStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
+  }
+
+  public GoRecvStatementImpl(ASTNode node) {
+    super(node);
   }
 
   public void accept(@NotNull GoVisitor visitor) {

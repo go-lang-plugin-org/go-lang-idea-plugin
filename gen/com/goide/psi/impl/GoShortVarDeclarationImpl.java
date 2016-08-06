@@ -30,12 +30,12 @@ import com.intellij.psi.stubs.IStubElementType;
 
 public class GoShortVarDeclarationImpl extends GoVarSpecImpl implements GoShortVarDeclaration {
 
-  public GoShortVarDeclarationImpl(ASTNode node) {
-    super(node);
-  }
-
   public GoShortVarDeclarationImpl(GoVarSpecStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
+  }
+
+  public GoShortVarDeclarationImpl(ASTNode node) {
+    super(node);
   }
 
   public void accept(@NotNull GoVisitor visitor) {

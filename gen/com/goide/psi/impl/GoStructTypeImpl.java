@@ -30,12 +30,12 @@ import com.intellij.psi.stubs.IStubElementType;
 
 public class GoStructTypeImpl extends GoTypeImpl implements GoStructType {
 
-  public GoStructTypeImpl(ASTNode node) {
-    super(node);
-  }
-
   public GoStructTypeImpl(GoTypeStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
+  }
+
+  public GoStructTypeImpl(ASTNode node) {
+    super(node);
   }
 
   public void accept(@NotNull GoVisitor visitor) {

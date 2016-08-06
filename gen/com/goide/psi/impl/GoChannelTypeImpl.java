@@ -29,12 +29,12 @@ import com.intellij.psi.stubs.IStubElementType;
 
 public class GoChannelTypeImpl extends GoTypeImpl implements GoChannelType {
 
-  public GoChannelTypeImpl(ASTNode node) {
-    super(node);
-  }
-
   public GoChannelTypeImpl(GoTypeStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
+  }
+
+  public GoChannelTypeImpl(ASTNode node) {
+    super(node);
   }
 
   public void accept(@NotNull GoVisitor visitor) {
