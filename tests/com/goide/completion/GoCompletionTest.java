@@ -232,7 +232,7 @@ public class GoCompletionTest extends GoCompletionTestBase {
   }
 
   public void testBlockKeywordsInsideCaseStatement() {
-    myFixture.testCompletionVariants(getTestName(true) + ".go", "for", "const", "var", "return", "if", "switch", "go", "defer", "select",
+    myFixture.testCompletionVariants(getTestName(true) + ".go", "break", "for", "const", "var", "return", "if", "switch", "go", "defer", "select",
                                      "fallthrough", "goto", "main", "struct", "map", "case", "default", "type");
   }
 
@@ -274,6 +274,11 @@ public class GoCompletionTest extends GoCompletionTestBase {
 
   public void testForStatementKeywords() {
     myFixture.testCompletionVariants(getTestName(true) + ".go", "bar", "break", "const", "continue", "defer", "for", "go", "if", "return",
+                                     "fallthrough", "goto", "select", "switch", "var", "struct", "map", "type");
+  }
+  
+  public void testForStatementKeywordsInsideFuncLit() {
+    myFixture.testCompletionVariants(getTestName(true) + ".go", "bar", "const", "defer", "for", "go", "if", "return",
                                      "fallthrough", "goto", "select", "switch", "var", "struct", "map", "type");
   }
 

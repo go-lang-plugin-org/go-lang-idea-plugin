@@ -18,6 +18,7 @@ package com.goide.completion;
 
 import com.goide.GoTypes;
 import com.goide.psi.*;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.template.GoLiveTemplateContextType;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
@@ -61,7 +62,9 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
     extend(CompletionType.BASIC, typeExpression(),
            new GoKeywordCompletionProvider(KEYWORD_PRIORITY, BracesInsertHandler.ONE_LINER, "interface", "struct"));
     extend(CompletionType.BASIC, insideForStatement(GoTypes.IDENTIFIER),
-           new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, EMPTY_INSERT_HANDLER, "break", "continue"));
+           new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, EMPTY_INSERT_HANDLER, "continue"));
+    extend(CompletionType.BASIC, insideBreakStatementOwner(GoTypes.IDENTIFIER),
+           new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, EMPTY_INSERT_HANDLER, "break"));
     extend(CompletionType.BASIC, typeExpression(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY, "chan"));
     extend(CompletionType.BASIC, typeExpression(), new GoKeywordCompletionProvider(CONTEXT_KEYWORD_PRIORITY,
                                                                                    ADD_BRACKETS_INSERT_HANDLER, "map"));
@@ -112,7 +115,11 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
   }
 
   private static ElementPattern<? extends PsiElement> insideForStatement(@NotNull IElementType tokenType) {
-    return insideBlockPattern(tokenType).inside(GoForStatement.class);
+    return insideBlockPattern(tokenType).inside(false, psiElement(GoForStatement.class), psiElement(GoFunctionLit.class));
+  }
+  
+  private static ElementPattern<? extends PsiElement> insideBreakStatementOwner(@NotNull IElementType tokenType) {
+    return insideBlockPattern(tokenType).with(new InsideBreakStatementOwner());
   }
 
   private static ElementPattern<? extends PsiElement> insideConstSpec() {
@@ -140,7 +147,8 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
   }
 
   private static ElementPattern<? extends PsiElement> insideSwitchStatement() {
-    return onStatementBeginning(GoTypes.IDENTIFIER, GoTypes.CASE, GoTypes.DEFAULT).inside(GoCaseClause.class);
+    return onStatementBeginning(GoTypes.IDENTIFIER, GoTypes.CASE, GoTypes.DEFAULT)
+      .inside(false, psiElement(GoCaseClause.class), psiElement(GoFunctionLit.class));
   }
 
   private static ElementPattern<? extends PsiElement> typeDeclaration() {
@@ -241,6 +249,15 @@ public class GoKeywordCompletionContributor extends CompletionContributor implem
     @Override
     public boolean accepts(@NotNull PsiElement psiElement, ProcessingContext context) {
       return GoLiveTemplateContextType.Statement.onStatementBeginning(psiElement);   
+    }
+  }
+
+  private static class InsideBreakStatementOwner extends PatternCondition<PsiElement> {
+    public InsideBreakStatementOwner() {super("inside break statement owner");}
+
+    @Override
+    public boolean accepts(@NotNull PsiElement element, ProcessingContext context) {
+      return GoPsiImplUtil.getBreakStatementOwner(element) != null;
     }
   }
 }
