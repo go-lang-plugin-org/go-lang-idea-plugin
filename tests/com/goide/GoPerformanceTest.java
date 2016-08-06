@@ -171,7 +171,7 @@ public class GoPerformanceTest extends GoCodeInsightFixtureTestCase {
           if (file.getFileType() != GoFileType.INSTANCE) return CONTINUE;
           try {
             System.out.print(".");
-            buildStubTreeText(getProject(), file, FileUtil.loadFile(new File(file.getPath()), "UTF-8", true).trim());
+            buildStubTreeText(getProject(), file, FileUtil.loadFile(new File(file.getPath()), "UTF-8", true).trim(), true);
           }
           catch (IOException ignored) {
           }

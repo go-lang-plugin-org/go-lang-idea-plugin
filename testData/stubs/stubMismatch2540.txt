@@ -1,0 +1,33 @@
+GoFileStub
+  PACKAGE_CLAUSE:GoPackageClauseStub
+  IMPORT_SPEC:GoImportSpecStub
+  IMPORT_SPEC:GoImportSpecStub
+  FUNCTION_DECLARATION:GoFunctionDeclarationStub: main
+    SIGNATURE:GoSignatureStub
+      PARAMETERS:GoParametersStub
+  FUNCTION_DECLARATION:GoFunctionDeclarationStub: asasd
+    SIGNATURE:GoSignatureStub
+      PARAMETERS:GoParametersStub
+        PARAMETER_DECLARATION:GoParameterDeclarationStub
+          PARAM_DEFINITION:GoParamDefinitionStub: int
+          TYPE:GoTypeStub
+        PARAMETER_DECLARATION:GoParameterDeclarationStub
+          PARAM_DEFINITION:GoParamDefinitionStub: qe
+          STRUCT_TYPE:GoTypeStub
+            FIELD_DEFINITION:GoFieldDefinitionStub: x
+            TYPE:GoTypeStub
+        PARAMETER_DECLARATION:GoParameterDeclarationStub
+          PARAM_DEFINITION:GoParamDefinitionStub: strings
+          TYPE:GoTypeStub
+      RESULT:GoResultStub
+        TYPE_LIST:GoTypeStub
+          TYPE:GoTypeStub
+          TYPE:GoTypeStub
+  FUNCTION_DECLARATION:GoFunctionDeclarationStub: lenz
+    SIGNATURE:GoSignatureStub
+      PARAMETERS:GoParametersStub
+        PARAMETER_DECLARATION:GoParameterDeclarationStub
+          PARAM_DEFINITION:GoParamDefinitionStub: a
+          TYPE:GoTypeStub
+      RESULT:GoResultStub
+        TYPE:GoTypeStub
