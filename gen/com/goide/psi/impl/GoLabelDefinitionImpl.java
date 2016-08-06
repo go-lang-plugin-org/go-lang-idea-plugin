@@ -30,12 +30,12 @@ import com.intellij.psi.stubs.IStubElementType;
 
 public class GoLabelDefinitionImpl extends GoNamedElementImpl<GoLabelDefinitionStub> implements GoLabelDefinition {
 
-  public GoLabelDefinitionImpl(ASTNode node) {
-    super(node);
-  }
-
   public GoLabelDefinitionImpl(GoLabelDefinitionStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
+  }
+
+  public GoLabelDefinitionImpl(ASTNode node) {
+    super(node);
   }
 
   public void accept(@NotNull GoVisitor visitor) {

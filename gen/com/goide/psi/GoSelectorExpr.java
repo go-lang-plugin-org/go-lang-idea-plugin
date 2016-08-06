@@ -24,9 +24,6 @@ import com.intellij.psi.PsiElement;
 public interface GoSelectorExpr extends GoBinaryExpr {
 
   @NotNull
-  List<GoExpression> getExpressionList();
-
-  @NotNull
   PsiElement getDot();
 
 }

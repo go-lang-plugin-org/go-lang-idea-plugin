@@ -31,12 +31,12 @@ import com.intellij.psi.stubs.IStubElementType;
 
 public class GoAnonymousFieldDefinitionImpl extends GoNamedElementImpl<GoAnonymousFieldDefinitionStub> implements GoAnonymousFieldDefinition {
 
-  public GoAnonymousFieldDefinitionImpl(ASTNode node) {
-    super(node);
-  }
-
   public GoAnonymousFieldDefinitionImpl(GoAnonymousFieldDefinitionStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
+  }
+
+  public GoAnonymousFieldDefinitionImpl(ASTNode node) {
+    super(node);
   }
 
   public void accept(@NotNull GoVisitor visitor) {

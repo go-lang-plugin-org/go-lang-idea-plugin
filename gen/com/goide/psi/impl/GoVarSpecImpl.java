@@ -32,12 +32,12 @@ import com.intellij.psi.stubs.IStubElementType;
 
 public class GoVarSpecImpl extends GoStubbedElementImpl<GoVarSpecStub> implements GoVarSpec {
 
-  public GoVarSpecImpl(ASTNode node) {
-    super(node);
-  }
-
   public GoVarSpecImpl(GoVarSpecStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
+  }
+
+  public GoVarSpecImpl(ASTNode node) {
+    super(node);
   }
 
   public void accept(@NotNull GoVisitor visitor) {

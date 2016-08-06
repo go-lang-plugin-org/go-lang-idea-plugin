@@ -25,6 +25,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
+import com.goide.stubs.GoVarSpecStub;
 import com.intellij.psi.stubs.IStubElementType;
 
 public class GoRangeClauseImpl extends GoVarSpecImpl implements GoRangeClause {
@@ -33,7 +34,7 @@ public class GoRangeClauseImpl extends GoVarSpecImpl implements GoRangeClause {
     super(node);
   }
 
-  public GoRangeClauseImpl(com.goide.stubs.GoVarSpecStub stub, IStubElementType nodeType) {
+  public GoRangeClauseImpl(GoVarSpecStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
   }
 
@@ -48,20 +49,8 @@ public class GoRangeClauseImpl extends GoVarSpecImpl implements GoRangeClause {
 
   @Override
   @NotNull
-  public List<GoExpression> getExpressionList() {
-    return GoPsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
-  }
-
-  @Override
-  @NotNull
   public List<GoVarDefinition> getVarDefinitionList() {
     return GoPsiTreeUtil.getStubChildrenOfTypeAsList(this, GoVarDefinition.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getAssign() {
-    return findChildByType(ASSIGN);
   }
 
   @Override

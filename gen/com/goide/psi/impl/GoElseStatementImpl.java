@@ -43,12 +43,6 @@ public class GoElseStatementImpl extends GoStatementImpl implements GoElseStatem
 
   @Override
   @Nullable
-  public GoBlock getBlock() {
-    return GoPsiTreeUtil.getChildOfType(this, GoBlock.class);
-  }
-
-  @Override
-  @Nullable
   public GoIfStatement getIfStatement() {
     return GoPsiTreeUtil.getChildOfType(this, GoIfStatement.class);
   }

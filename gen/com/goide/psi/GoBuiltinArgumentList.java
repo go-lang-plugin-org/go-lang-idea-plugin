@@ -23,19 +23,7 @@ import com.intellij.psi.PsiElement;
 
 public interface GoBuiltinArgumentList extends GoArgumentList {
 
-  @NotNull
-  List<GoExpression> getExpressionList();
-
   @Nullable
   GoType getType();
-
-  @NotNull
-  PsiElement getLparen();
-
-  @Nullable
-  PsiElement getRparen();
-
-  @Nullable
-  PsiElement getTripleDot();
 
 }

@@ -25,6 +25,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
+import com.goide.stubs.GoVarSpecStub;
 import com.intellij.psi.stubs.IStubElementType;
 
 public class GoShortVarDeclarationImpl extends GoVarSpecImpl implements GoShortVarDeclaration {
@@ -33,7 +34,7 @@ public class GoShortVarDeclarationImpl extends GoVarSpecImpl implements GoShortV
     super(node);
   }
 
-  public GoShortVarDeclarationImpl(com.goide.stubs.GoVarSpecStub stub, IStubElementType nodeType) {
+  public GoShortVarDeclarationImpl(GoVarSpecStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
   }
 
@@ -44,18 +45,6 @@ public class GoShortVarDeclarationImpl extends GoVarSpecImpl implements GoShortV
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof GoVisitor) accept((GoVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @NotNull
-  public List<GoExpression> getExpressionList() {
-    return GoPsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
-  }
-
-  @Override
-  @NotNull
-  public List<GoVarDefinition> getVarDefinitionList() {
-    return GoPsiTreeUtil.getStubChildrenOfTypeAsList(this, GoVarDefinition.class);
   }
 
   @Override

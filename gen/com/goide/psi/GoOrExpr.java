@@ -24,9 +24,6 @@ import com.intellij.psi.PsiElement;
 public interface GoOrExpr extends GoBinaryExpr {
 
   @NotNull
-  List<GoExpression> getExpressionList();
-
-  @NotNull
   PsiElement getCondOr();
 
 }

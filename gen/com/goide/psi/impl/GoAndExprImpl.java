@@ -43,12 +43,6 @@ public class GoAndExprImpl extends GoBinaryExprImpl implements GoAndExpr {
 
   @Override
   @NotNull
-  public List<GoExpression> getExpressionList() {
-    return GoPsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
-  }
-
-  @Override
-  @NotNull
   public PsiElement getCondAnd() {
     return notNullChild(findChildByType(COND_AND));
   }

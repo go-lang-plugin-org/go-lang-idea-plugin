@@ -24,12 +24,6 @@ import com.intellij.psi.PsiElement;
 public interface GoShortVarDeclaration extends GoVarSpec {
 
   @NotNull
-  List<GoExpression> getExpressionList();
-
-  @NotNull
-  List<GoVarDefinition> getVarDefinitionList();
-
-  @NotNull
   PsiElement getVarAssign();
 
 }

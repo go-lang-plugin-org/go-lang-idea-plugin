@@ -42,12 +42,6 @@ public class GoConditionalExprImpl extends GoBinaryExprImpl implements GoConditi
   }
 
   @Override
-  @NotNull
-  public List<GoExpression> getExpressionList() {
-    return GoPsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
-  }
-
-  @Override
   @Nullable
   public PsiElement getEq() {
     return findChildByType(EQ);

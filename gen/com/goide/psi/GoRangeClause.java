@@ -24,13 +24,7 @@ import com.intellij.psi.PsiElement;
 public interface GoRangeClause extends GoVarSpec {
 
   @NotNull
-  List<GoExpression> getExpressionList();
-
-  @NotNull
   List<GoVarDefinition> getVarDefinitionList();
-
-  @Nullable
-  PsiElement getAssign();
 
   @Nullable
   PsiElement getVarAssign();

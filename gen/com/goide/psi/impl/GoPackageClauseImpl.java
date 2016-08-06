@@ -30,12 +30,12 @@ import com.intellij.psi.stubs.IStubElementType;
 
 public class GoPackageClauseImpl extends GoStubbedElementImpl<GoPackageClauseStub> implements GoPackageClause {
 
-  public GoPackageClauseImpl(ASTNode node) {
-    super(node);
-  }
-
   public GoPackageClauseImpl(GoPackageClauseStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
+  }
+
+  public GoPackageClauseImpl(ASTNode node) {
+    super(node);
   }
 
   public void accept(@NotNull GoVisitor visitor) {

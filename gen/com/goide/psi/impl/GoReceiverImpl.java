@@ -31,12 +31,12 @@ import com.intellij.psi.stubs.IStubElementType;
 
 public class GoReceiverImpl extends GoNamedElementImpl<GoReceiverStub> implements GoReceiver {
 
-  public GoReceiverImpl(ASTNode node) {
-    super(node);
-  }
-
   public GoReceiverImpl(GoReceiverStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
+  }
+
+  public GoReceiverImpl(ASTNode node) {
+    super(node);
   }
 
   public void accept(@NotNull GoVisitor visitor) {

@@ -30,9 +30,6 @@ public interface GoRecvStatement extends GoVarSpec {
   List<GoVarDefinition> getVarDefinitionList();
 
   @Nullable
-  PsiElement getAssign();
-
-  @Nullable
   PsiElement getVarAssign();
 
   @Nullable

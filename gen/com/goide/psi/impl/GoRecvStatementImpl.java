@@ -25,6 +25,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.goide.psi.GoPsiTreeUtil;
 import static com.goide.GoTypes.*;
 import com.goide.psi.*;
+import com.goide.stubs.GoVarSpecStub;
 import com.intellij.psi.stubs.IStubElementType;
 
 public class GoRecvStatementImpl extends GoVarSpecImpl implements GoRecvStatement {
@@ -33,7 +34,7 @@ public class GoRecvStatementImpl extends GoVarSpecImpl implements GoRecvStatemen
     super(node);
   }
 
-  public GoRecvStatementImpl(com.goide.stubs.GoVarSpecStub stub, IStubElementType nodeType) {
+  public GoRecvStatementImpl(GoVarSpecStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
   }
 
@@ -56,12 +57,6 @@ public class GoRecvStatementImpl extends GoVarSpecImpl implements GoRecvStatemen
   @NotNull
   public List<GoVarDefinition> getVarDefinitionList() {
     return GoPsiTreeUtil.getStubChildrenOfTypeAsList(this, GoVarDefinition.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getAssign() {
-    return findChildByType(ASSIGN);
   }
 
   @Override

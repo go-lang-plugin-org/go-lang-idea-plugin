@@ -31,12 +31,12 @@ import com.intellij.psi.stubs.IStubElementType;
 
 public class GoMethodSpecImpl extends GoNamedElementImpl<GoMethodSpecStub> implements GoMethodSpec {
 
-  public GoMethodSpecImpl(ASTNode node) {
-    super(node);
-  }
-
   public GoMethodSpecImpl(GoMethodSpecStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
+  }
+
+  public GoMethodSpecImpl(ASTNode node) {
+    super(node);
   }
 
   public void accept(@NotNull GoVisitor visitor) {

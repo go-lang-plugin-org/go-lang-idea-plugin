@@ -30,12 +30,12 @@ import com.intellij.psi.stubs.IStubElementType;
 
 public class GoFunctionDeclarationImpl extends GoFunctionOrMethodDeclarationImpl<GoFunctionDeclarationStub> implements GoFunctionDeclaration {
 
-  public GoFunctionDeclarationImpl(ASTNode node) {
-    super(node);
-  }
-
   public GoFunctionDeclarationImpl(GoFunctionDeclarationStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
+  }
+
+  public GoFunctionDeclarationImpl(ASTNode node) {
+    super(node);
   }
 
   public void accept(@NotNull GoVisitor visitor) {

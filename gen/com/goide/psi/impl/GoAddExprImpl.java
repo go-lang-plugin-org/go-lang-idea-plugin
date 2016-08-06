@@ -42,12 +42,6 @@ public class GoAddExprImpl extends GoBinaryExprImpl implements GoAddExpr {
   }
 
   @Override
-  @NotNull
-  public List<GoExpression> getExpressionList() {
-    return GoPsiTreeUtil.getChildrenOfTypeAsList(this, GoExpression.class);
-  }
-
-  @Override
   @Nullable
   public PsiElement getBitOr() {
     return findChildByType(BIT_OR);
