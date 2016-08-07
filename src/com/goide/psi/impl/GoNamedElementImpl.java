@@ -207,7 +207,7 @@ public abstract class GoNamedElementImpl<T extends GoNamedStub<?>> extends GoStu
   @NotNull
   @Override
   public SearchScope getUseScope() {
-    if (this instanceof GoVarDefinition || this instanceof GoConstDefinition) {
+    if (this instanceof GoVarDefinition || this instanceof GoConstDefinition || this instanceof GoLabelDefinition) {
       GoBlock block = PsiTreeUtil.getParentOfType(this, GoBlock.class);
       if (block != null) return new LocalSearchScope(block);
     }
