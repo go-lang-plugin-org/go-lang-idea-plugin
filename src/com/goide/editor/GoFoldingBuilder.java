@@ -129,7 +129,7 @@ public class GoFoldingBuilder extends CustomFoldingBuilder implements DumbAware 
       foldTypes(type.getSpecType().getType(), result);
     }
 
-    for (GoExprCaseClause caseClause : PsiTreeUtil.findChildrenOfType(file, GoExprCaseClause.class)) {
+    for (GoCaseClause caseClause : PsiTreeUtil.findChildrenOfType(file, GoCaseClause.class)) {
       PsiElement colon = caseClause.getColon();
       if (colon != null && !caseClause.getStatementList().isEmpty()) {
         fold(caseClause, colon.getNextSibling(), caseClause, "...", result);
