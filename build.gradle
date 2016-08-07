@@ -60,7 +60,6 @@ allprojects {
       password publishPassword
       channels publishChannel
     }
-    intellijRepo intellijRepoUrl
     systemProperty 'dlv.path', customDlvPath
   }
 }
