@@ -95,15 +95,10 @@ public class GoCoverageCalculationTest extends GoCodeInsightFixtureTestCase {
 
   @NotNull
   private GoCoverageProjectData parseData(@NotNull String coverageSource) throws IOException {
-    BufferedReader reader = new BufferedReader(new FileReader(new File(getTestDataPath(), coverageSource)));
-    try {
+    try (BufferedReader reader = new BufferedReader(new FileReader(new File(getTestDataPath(), coverageSource)))) {
       GoCoverageProjectData data = GoCoverageRunner.parseCoverage(reader, myFixture.getProject(), myModule);
       assertNotNull(data);
       return data;
-    }
-    finally {
-      //noinspection ThrowFromFinallyBlock
-      reader.close();
     }
   }
 
