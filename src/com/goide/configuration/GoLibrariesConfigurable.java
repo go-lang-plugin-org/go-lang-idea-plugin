@@ -43,6 +43,8 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.intellij.openapi.fileChooser.FileChooserDescriptorFactory.createMultipleFoldersDescriptor;
 
@@ -194,7 +196,10 @@ public class GoLibrariesConfigurable implements SearchableConfigurable, Configur
   }
 
   private void removeReadOnlyPaths() {
-    myListModel.getItems().stream().filter(item -> item.readOnly).forEach(myListModel::remove);
+    List<ListItem> toRemove = myListModel.getItems().stream().filter(item -> item.readOnly).collect(Collectors.toList());
+    for (ListItem item : toRemove) {
+      myListModel.remove(item);
+    }
   }
 
   @Override
