@@ -197,6 +197,9 @@
     <localInspection language="go" displayName="Unused import inspection" groupPath="Go"
                      groupName="Declaration redundancy" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoUnusedImportInspection"/>
+    <localInspection language="go" displayName="Unused label inspection" groupPath="Go"
+                     groupName="Declaration redundancy" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.unresolved.GoUnusedLabelInspection"/>
     <localInspection language="go" displayName="Unused variable inspection" groupPath="Go"
                      groupName="Declaration redundancy" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.unresolved.GoUnusedVariableInspection"/>
