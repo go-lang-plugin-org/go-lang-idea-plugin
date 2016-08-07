@@ -49,9 +49,7 @@ public abstract class GoRunConfigurationWithMain<T extends GoRunningState> exten
   @Override
   public void writeExternal(Element element) throws WriteExternalException {
     super.writeExternal(element);
-    if (StringUtil.isNotEmpty(myFilePath)) {
-      JDOMExternalizerUtil.addElementWithValueAttribute(element, FILE_PATH_ATTRIBUTE_NAME, myFilePath);
-    }
+    addNonEmptyElement(element, FILE_PATH_ATTRIBUTE_NAME, myFilePath);
   }
 
   protected void checkFileConfiguration() throws RuntimeConfigurationError {

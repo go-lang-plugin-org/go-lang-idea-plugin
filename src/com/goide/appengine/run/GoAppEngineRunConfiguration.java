@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -96,18 +96,10 @@ public class GoAppEngineRunConfiguration extends GoRunConfigurationBase<GoAppEng
   @Override
   public void writeExternal(Element element) throws WriteExternalException {
     super.writeExternal(element);
-    if (StringUtil.isNotEmpty(myHost)) {
-      JDOMExternalizerUtil.addElementWithValueAttribute(element, HOST_NAME, myHost);
-    }
-    if (StringUtil.isNotEmpty(myPort)) {
-      JDOMExternalizerUtil.addElementWithValueAttribute(element, PORT_NAME, myPort);
-    }
-    if (StringUtil.isNotEmpty(myAdminPort)) {
-      JDOMExternalizerUtil.addElementWithValueAttribute(element, ADMIN_PORT_NAME, myAdminPort);
-    }
-    if (StringUtil.isNotEmpty(myConfigFile)) {
-      JDOMExternalizerUtil.addElementWithValueAttribute(element, CONFIG_FILE, myConfigFile);
-    }
+    addNonEmptyElement(element, HOST_NAME, myHost);
+    addNonEmptyElement(element, PORT_NAME, myPort);
+    addNonEmptyElement(element, ADMIN_PORT_NAME, myAdminPort);
+    addNonEmptyElement(element, CONFIG_FILE, myConfigFile);
   }
 
   @Override
