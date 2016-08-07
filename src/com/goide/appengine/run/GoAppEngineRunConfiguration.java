@@ -131,12 +131,6 @@ public class GoAppEngineRunConfiguration extends GoRunConfigurationBase<GoAppEng
 
   @NotNull
   @Override
-  protected ModuleBasedConfiguration createInstance() {
-    return new GoAppEngineRunConfiguration(getProject(), getName(), GoAppEngineRunConfigurationType.getInstance());
-  }
-
-  @NotNull
-  @Override
   public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
     return new GoAppEngineRunConfigurationEditor(getProject());
   }
