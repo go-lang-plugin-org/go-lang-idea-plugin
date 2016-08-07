@@ -84,28 +84,10 @@ public class GoMissingReturnInspection extends GoInspectionBase {
       return block == null || !hasReferringBreakStatement(f);
     }
     else if (s instanceof GoExprSwitchStatement) {
-      boolean hasDefault = false;
-      List<GoExprCaseClause> list = ((GoExprSwitchStatement)s).getExprCaseClauseList();
-      for (GoExprCaseClause clause : list) {
-        hasDefault |= clause.getDefault() != null;
-        List<GoStatement> statements = clause.getStatementList();
-        if (hasReferringBreakStatement(s)) return false;
-        GoStatement last = ContainerUtil.getLastItem(statements);
-        if (!(last instanceof GoFallthroughStatement) && !isTerminating(last)) return false;
-      }
-      return hasDefault;
+      return isTerminating((GoExprSwitchStatement)s, ((GoExprSwitchStatement)s).getExprCaseClauseList());
     }
-    else if (s instanceof GoTypeSwitchStatement) { // todo: almost the same code 
-      boolean hasDefault = false;
-      List<GoTypeCaseClause> list = ((GoTypeSwitchStatement)s).getTypeCaseClauseList();
-      for (GoTypeCaseClause clause : list) {
-        hasDefault |= clause.getDefault() != null;
-        List<GoStatement> statements = clause.getStatementList();
-        if (hasReferringBreakStatement(s)) return false;
-        GoStatement last = ContainerUtil.getLastItem(statements);
-        if (!(last instanceof GoFallthroughStatement) && !isTerminating(last)) return false;
-      }
-      return hasDefault;
+    else if (s instanceof GoTypeSwitchStatement) {
+      return isTerminating((GoTypeSwitchStatement)s, ((GoTypeSwitchStatement)s).getTypeCaseClauseList());
     }
     else if (s instanceof GoSelectStatement) {
       GoSelectStatement selectStatement = (GoSelectStatement)s;
@@ -124,6 +106,18 @@ public class GoMissingReturnInspection extends GoInspectionBase {
       return isTerminating(((GoStatement)s).getBlock());
     }
     return false;
+  }
+
+  private static boolean isTerminating(@NotNull GoSwitchStatement switchStatement, @NotNull List<? extends GoCaseClause> clauses) {
+    boolean hasDefault = false;
+    for (GoCaseClause clause : clauses) {
+      hasDefault |= clause.getDefault() != null;
+      List<GoStatement> statements = clause.getStatementList();
+      if (hasReferringBreakStatement(switchStatement)) return false;
+      GoStatement last = ContainerUtil.getLastItem(statements);
+      if (!(last instanceof GoFallthroughStatement) && !isTerminating(last)) return false;
+    }
+    return hasDefault;
   }
 
   private static boolean hasReferringBreakStatement(@NotNull PsiElement breakStatementOwner) {
