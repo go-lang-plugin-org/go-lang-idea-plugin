@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,5 +16,19 @@
 
 package com.goide.psi;
 
+import com.intellij.psi.PsiElement;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+
 public interface GoCaseClause extends GoCompositeElement {
+  @Nullable
+  PsiElement getColon();
+
+  @NotNull
+  List<GoStatement> getStatementList();
+
+  @Nullable
+  PsiElement getDefault();
 }
