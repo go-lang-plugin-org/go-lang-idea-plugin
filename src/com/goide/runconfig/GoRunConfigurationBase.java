@@ -112,9 +112,9 @@ public abstract class GoRunConfigurationBase<RunningState extends GoRunningState
   public void writeExternal(Element element) throws WriteExternalException {
     super.writeExternal(element);
     writeModule(element);
-    addNonEmptyElement(element, myWorkingDirectory, WORKING_DIRECTORY_NAME);
-    addNonEmptyElement(element, myGoParams, GO_PARAMETERS_NAME);
-    addNonEmptyElement(element, myParams, PARAMETERS_NAME);
+    addNonEmptyElement(element, WORKING_DIRECTORY_NAME, myWorkingDirectory);
+    addNonEmptyElement(element, GO_PARAMETERS_NAME, myGoParams);
+    addNonEmptyElement(element, PARAMETERS_NAME, myParams);
     if (!myCustomEnvironment.isEmpty()) {
       EnvironmentVariablesComponent.writeExternal(element, myCustomEnvironment);
     }
