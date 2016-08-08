@@ -60,7 +60,9 @@ public class GoImportUsedAsNameInspection extends GoInspectionBase {
 
   private static void check(@NotNull GoNamedElement element, @NotNull ProblemsHolder holder) {
     String name = element.getName();
-    if (name != null && element.getContainingFile().getImportMap().containsKey(name)) {
+    if (StringUtil.isNotEmpty(name) &&
+        !"_".equals(name) &&
+        element.getContainingFile().getImportMap().containsKey(name)) {
       registerProblem(holder, element);
     }
   }
