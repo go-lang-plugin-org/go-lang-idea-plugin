@@ -7,8 +7,9 @@ GO_FILE
       PsiElement(import)('import')
       PsiElement(()('(')
       IMPORT_SPEC
-        STRING_LITERAL
-          PsiElement(string)('"fmt"')
+        IMPORT_STRING
+          STRING_LITERAL
+            PsiElement(string)('"fmt"')
       PsiElement())(')')
   FUNCTION_DECLARATION
     PsiElement(func)('func')
