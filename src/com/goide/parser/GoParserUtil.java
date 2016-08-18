@@ -135,10 +135,10 @@ public class GoParserUtil extends GeneratedParserUtilBase {
     return getParsingModes(builder_).get(mode) == 0;
   }
 
-  public static boolean prevIsArrayType(@NotNull PsiBuilder builder_, @SuppressWarnings("UnusedParameters") int level) {
+  public static boolean prevIsType(@NotNull PsiBuilder builder_, @SuppressWarnings("UnusedParameters") int level) {
     LighterASTNode marker = builder_.getLatestDoneMarker();
     IElementType type = marker != null ? marker.getTokenType() : null;
-    return type == GoTypes.ARRAY_OR_SLICE_TYPE || type == GoTypes.MAP_TYPE;
+    return type == GoTypes.ARRAY_OR_SLICE_TYPE || type == GoTypes.MAP_TYPE || type == GoTypes.STRUCT_TYPE;
   }
   
   public static boolean keyOrValueExpression(@NotNull PsiBuilder builder_, int level) {

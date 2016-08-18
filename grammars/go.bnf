@@ -315,7 +315,7 @@ private LiteralTypeExprInner ::= StructType | ArrayOrSliceType | MapType
   
 LiteralTypeExpr ::= LiteralTypeExprInner | TypeName
 
-LiteralValue ::= (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">> | <<prevIsArrayType>>) '{' ElementList? '}' {pin=2}
+LiteralValue ::= (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">> | <<prevIsType>>) '{' ElementList? '}' {pin=2}
 private ElementList  ::= E ( ',' E? )*
 private E ::= <<withOn "PAR" Element>> | (!() Element) {recoverWhile=E_recover}
 private E_recover ::= !('}'|',')

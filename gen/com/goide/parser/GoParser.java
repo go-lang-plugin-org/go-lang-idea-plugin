@@ -2435,7 +2435,7 @@ public class GoParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">> | <<prevIsArrayType>>) '{' ElementList? '}'
+  // (<<isModeOff "BLOCK?">> | <<isModeOn "PAR">> | <<prevIsType>>) '{' ElementList? '}'
   public static boolean LiteralValue(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LiteralValue")) return false;
     boolean r, p;
@@ -2449,14 +2449,14 @@ public class GoParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // <<isModeOff "BLOCK?">> | <<isModeOn "PAR">> | <<prevIsArrayType>>
+  // <<isModeOff "BLOCK?">> | <<isModeOn "PAR">> | <<prevIsType>>
   private static boolean LiteralValue_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LiteralValue_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = isModeOff(b, l + 1, "BLOCK?");
     if (!r) r = isModeOn(b, l + 1, "PAR");
-    if (!r) r = prevIsArrayType(b, l + 1);
+    if (!r) r = prevIsType(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
