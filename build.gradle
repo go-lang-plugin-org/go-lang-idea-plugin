@@ -59,7 +59,7 @@ allprojects {
   }
 }
 
-publishTask {
+publishPlugin {
   username publishUsername
   password publishPassword
   channels publishChannel
