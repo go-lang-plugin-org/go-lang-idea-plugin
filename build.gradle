@@ -55,13 +55,14 @@ allprojects {
     downloadSources Boolean.valueOf(sources)
     sameSinceUntilBuild Boolean.valueOf(isEAP)
     alternativeIdePath localIdePath
-    publish {
-      username publishUsername
-      password publishPassword
-      channels publishChannel
-    }
     systemProperty 'dlv.path', customDlvPath
   }
+}
+
+publishTask {
+  username publishUsername
+  password publishPassword
+  channels publishChannel
 }
 
 apply plugin: 'idea'
