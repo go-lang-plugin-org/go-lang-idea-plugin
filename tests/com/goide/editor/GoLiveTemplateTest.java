@@ -96,4 +96,10 @@ public class GoLiveTemplateTest extends GoCodeInsightFixtureTestCase {
     myFixture.type(":\t");
     myFixture.checkResult("package main; func main() { name :\t<caret> }");
   }
+
+  public void testMainAfterPackageClause() {
+    myFixture.configureByText("a.go", "package mai<caret>");
+    myFixture.type("n\t");
+    myFixture.checkResult("package main\t<caret>");
+  }
 }
