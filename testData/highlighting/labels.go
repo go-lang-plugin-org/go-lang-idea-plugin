@@ -30,3 +30,26 @@ func _() {
 		}
 	}
 }
+
+func _() {
+	Label:
+	if (false) {
+		goto Label
+	}
+	func() {
+		if (false) {
+			goto Label
+		}
+		Label:
+	}()
+}
+
+func _() {
+	Label:
+	if (false) {
+		goto Label
+	}
+	func() {
+		goto <error descr="Unresolved label 'Label'">Label</error>
+	}()
+}

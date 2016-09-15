@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,9 @@ public class GoLabelReference extends GoCachedReference<GoLabelRef> {
 
   @NotNull
   private Collection<GoLabelDefinition> getLabelDefinitions() {
-    return PsiTreeUtil.findChildrenOfType(PsiTreeUtil.getTopmostParentOfType(myElement, GoBlock.class), GoLabelDefinition.class);
+    GoFunctionLit functionLit = PsiTreeUtil.getParentOfType(myElement, GoFunctionLit.class);
+    PsiElement blockToSearch = functionLit != null ? functionLit.getBlock() : PsiTreeUtil.getTopmostParentOfType(myElement, GoBlock.class); 
+    return PsiTreeUtil.findChildrenOfType(blockToSearch, GoLabelDefinition.class);
   }
 
   @Nullable
