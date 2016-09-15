@@ -30,6 +30,7 @@ public class GoImportListTest extends GoCodeInsightFixtureTestCase {
   public void testDoNotModifyCImport_1()                                { doAddImportTest(); }
   public void testDoNotModifyCImport_2()                                { doAddImportTest(); }
   public void testInvalidImport()                                       { doAddImportTest(); }
+  public void testInvalidImport2()                                      { doAddImportTest(); }
   
   private void doAddImportTest() {
     myFixture.configureByFile(getTestName(true) + ".go");
