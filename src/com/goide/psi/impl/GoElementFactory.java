@@ -71,6 +71,11 @@ public class GoElementFactory {
   }
 
   @NotNull
+  public static GoImportDeclaration createEmptyImportDeclaration(@NotNull Project project) {
+    return PsiTreeUtil.findChildOfType(createFileFromText(project, "package main\nimport (\n\n)"), GoImportDeclaration.class);
+  }
+                                                            
+  @NotNull
   public static GoImportDeclaration createImportDeclaration(@NotNull Project project, @NotNull String importString,
                                                             @Nullable String alias, boolean withParens) {
     importString = GoPsiImplUtil.isQuotedImportString(importString) ? importString : StringUtil.wrapWithDoubleQuote(importString);
