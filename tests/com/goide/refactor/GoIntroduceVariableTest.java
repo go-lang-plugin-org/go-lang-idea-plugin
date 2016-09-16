@@ -60,6 +60,7 @@ public class GoIntroduceVariableTest extends GoCodeInsightFixtureTestCase {
   public void testDoNotSuggestKeywordBasedOnType()                  { doTest(); }
   public void testDoNotSuggestKeywordBasedOnCallName()              { doTest(); }
   public void testDoNotSuggestNameEqualsToType()                    { doTest(); }
+  public void testExtractFunctionLiteral()                          { doTest(); }
   
   public void testExtractSingleExpressionStatement_1()              { doTest(); }
   public void testExtractSingleExpressionStatement_2()              { doTest(); }
