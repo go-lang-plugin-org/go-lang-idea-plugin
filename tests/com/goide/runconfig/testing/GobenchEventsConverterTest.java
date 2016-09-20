@@ -24,6 +24,10 @@ public class GobenchEventsConverterTest extends GoEventsConverterTestCase {
     doTest();
   }
 
+  public void testBenchmarkWithoutSuffix() {
+    doTest();
+  }
+
   public void testFailedBenchmark() {
     doTest();
   }
