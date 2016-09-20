@@ -1,0 +1,3 @@
+PASS
+Benchmark    20000000               109 ns/op
+ok      github.com/cydev/stok/storage   2.311s

@@ -30,8 +30,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GobenchEventsConverter extends GoTestEventsConverterBaseImpl {
-  private static final Pattern RUN = Pattern.compile("^(Benchmark" + GoConstants.IDENTIFIER_REGEX + ")");
-  private static final Pattern FAIL = Pattern.compile("^--- FAIL: (Benchmark" + GoConstants.IDENTIFIER_REGEX + ").*");
+  private static final Pattern RUN = Pattern.compile("^(Benchmark(" + GoConstants.TEST_NAME_REGEX + ")?)");
+  private static final Pattern FAIL = Pattern.compile("^--- FAIL: (Benchmark(" + GoConstants.TEST_NAME_REGEX + ")?).*");
 
   public GobenchEventsConverter(@NotNull TestConsoleProperties properties) {
     super(GobenchFramework.NAME, properties);
