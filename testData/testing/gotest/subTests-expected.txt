@@ -1,0 +1,96 @@
+TestStarted
+    - locationHint=gotest://TestFoo
+    - name=TestFoo
+  TestStarted
+      - locationHint=gotest://TestFoo/k[h]kjh_khk_jh
+      - name=TestFoo/k[h]kjh_khk_jh
+    TestStarted
+        - locationHint=gotest://TestFoo/#00
+        - name=TestFoo/#00
+      TestStarted
+          - locationHint=gotest://TestFoo/#00#01
+          - name=TestFoo/#00#01
+        TestStarted
+            - locationHint=gotest://TestFoo/#01
+            - name=TestFoo/#01
+          TestStarted
+              - locationHint=gotest://TestFoo/Bar
+              - name=TestFoo/Bar
+            TestStarted
+                - locationHint=gotest://TestFoo/Bar/Buzz2
+                - name=TestFoo/Bar/Buzz2
+              TestStarted
+                  - locationHint=gotest://TestFoo/Bar/Buzz2#01
+                  - name=TestFoo/Bar/Buzz2#01
+                TestStarted
+                    - locationHint=gotest://TestFoo/Bar#01
+                    - name=TestFoo/Bar#01
+                  TestStarted
+                      - locationHint=gotest://TestFoo/Bar#01/Buzz2
+                      - name=TestFoo/Bar#01/Buzz2
+                    TestStarted
+                        - locationHint=gotest://TestFoo/Bar#01/Buzz2#01
+                        - name=TestFoo/Bar#01/Buzz2#01
+                    TestFinished
+                        - duration=42
+                        - name=TestFoo
+                    TestStdOut
+                        - name=TestFoo/Bar#01/Buzz2#01
+                        - out=    
+                  TestFinished
+                      - duration=42
+                      - name=TestFoo/k[h]kjh_khk_jh
+                  TestStdOut
+                      - name=TestFoo/Bar#01/Buzz2#01
+                      - out=    
+                TestFinished
+                    - duration=42
+                    - name=TestFoo/#00
+                TestStdOut
+                    - name=TestFoo/Bar#01/Buzz2#01
+                    - out=    
+              TestFinished
+                  - duration=42
+                  - name=TestFoo/#00#01
+              TestStdOut
+                  - name=TestFoo/Bar#01/Buzz2#01
+                  - out=    
+            TestFinished
+                - duration=42
+                - name=TestFoo/#01
+            TestStdOut
+                - name=TestFoo/Bar#01/Buzz2#01
+                - out=    
+          TestFinished
+              - duration=42
+              - name=TestFoo/Bar
+          TestStdOut
+              - name=TestFoo/Bar#01/Buzz2#01
+              - out=        
+        TestFinished
+            - duration=42
+            - name=TestFoo/Bar/Buzz2
+        TestStdOut
+            - name=TestFoo/Bar#01/Buzz2#01
+            - out=        
+      TestFinished
+          - duration=42
+          - name=TestFoo/Bar/Buzz2#01
+      TestStdOut
+          - name=TestFoo/Bar#01/Buzz2#01
+          - out=    
+    TestFinished
+        - duration=42
+        - name=TestFoo/Bar#01
+    TestStdOut
+        - name=TestFoo/Bar#01/Buzz2#01
+        - out=        
+  TestFinished
+      - duration=42
+      - name=TestFoo/Bar#01/Buzz2
+  TestStdOut
+      - name=TestFoo/Bar#01/Buzz2#01
+      - out=        
+TestFinished
+    - duration=42
+    - name=TestFoo/Bar#01/Buzz2#01
