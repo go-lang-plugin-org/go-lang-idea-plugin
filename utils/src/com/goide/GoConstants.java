@@ -34,8 +34,8 @@ public class GoConstants {
   public static final String GO_LIBRARIES_CONFIG_FILE = "goLibraries.xml";
   public static final String GO_MODULE_SESTTINGS_SERVICE_NAME = "Go";
 
-  public static final String IDENTIFIER_REGEX = "[\\p{javaLetter}_][\\p{javaLetterOrDigit}_]*";
-
+  private static final String IDENTIFIER_REGEX = "[\\p{javaLetter}_][\\p{javaLetterOrDigit}_]*";
+  public static final String TEST_NAME_REGEX = IDENTIFIER_REGEX + "(/\\S*)?";
   public static final String TESTDATA_NAME = "testdata";
   public static final String TEST_SUFFIX = "_test";
   public static final String TEST_SUFFIX_WITH_EXTENSION = "_test.go";

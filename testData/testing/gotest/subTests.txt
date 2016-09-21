@@ -1,0 +1,24 @@
+=== RUN   TestFoo
+=== RUN   TestFoo/k[h]kjh_khk_jh
+=== RUN   TestFoo/#00
+=== RUN   TestFoo/#00#01
+=== RUN   TestFoo/#01
+=== RUN   TestFoo/Bar
+=== RUN   TestFoo/Bar/Buzz2
+=== RUN   TestFoo/Bar/Buzz2#01
+=== RUN   TestFoo/Bar#01
+=== RUN   TestFoo/Bar#01/Buzz2
+=== RUN   TestFoo/Bar#01/Buzz2#01
+--- PASS: TestFoo (0.00s)
+    --- PASS: TestFoo/k[h]kjh_khk_jh (0.00s)
+    --- PASS: TestFoo/#00 (0.00s)
+    --- PASS: TestFoo/#00#01 (0.00s)
+    --- PASS: TestFoo/#01 (0.00s)
+    --- PASS: TestFoo/Bar (0.00s)
+        --- PASS: TestFoo/Bar/Buzz2 (0.00s)
+        --- PASS: TestFoo/Bar/Buzz2#01 (0.00s)
+    --- PASS: TestFoo/Bar#01 (0.00s)
+        --- PASS: TestFoo/Bar#01/Buzz2 (0.00s)
+        --- PASS: TestFoo/Bar#01/Buzz2#01 (0.00s)
+PASS
+ok  	foo	0.010s

@@ -27,10 +27,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GotestEventsConverter extends GoTestEventsConverterBaseImpl {
-  private static final Pattern RUN = Pattern.compile("^=== RUN\\s+(" + GoConstants.IDENTIFIER_REGEX + ")");
-  private static final Pattern PASSED = Pattern.compile("--- PASS:\\s+(" + GoConstants.IDENTIFIER_REGEX + ")");
-  private static final Pattern SKIP = Pattern.compile("--- SKIP:\\s+(" + GoConstants.IDENTIFIER_REGEX + ")");
-  private static final Pattern FAILED = Pattern.compile("--- FAIL:\\s+(" + GoConstants.IDENTIFIER_REGEX + ")");
+  private static final Pattern RUN = Pattern.compile("^=== RUN\\s+(" + GoConstants.TEST_NAME_REGEX + ")");
+  private static final Pattern PASSED = Pattern.compile("--- PASS:\\s+(" + GoConstants.TEST_NAME_REGEX + ")");
+  private static final Pattern SKIP = Pattern.compile("--- SKIP:\\s+(" + GoConstants.TEST_NAME_REGEX + ")");
+  private static final Pattern FAILED = Pattern.compile("--- FAIL:\\s+(" + GoConstants.TEST_NAME_REGEX + ")");
   private static final Pattern FINISHED = Pattern.compile("^(PASS)|(FAIL)$");
 
   public GotestEventsConverter(@NotNull TestConsoleProperties consoleProperties) {

@@ -39,15 +39,15 @@ public class GotestEventsConverterTest extends GoEventsConverterTestCase {
   public void testSingleTestLeadingSpaceOk() {
     doTest();
   }
-  
+
   public void testSkipTest() {
     doTest();
   }
-  
+
   public void testStdOut() {
     doTest();
   }
-  
+
   public void testOneLineEvents() {
     doTest();
   }
@@ -56,12 +56,16 @@ public class GotestEventsConverterTest extends GoEventsConverterTestCase {
     doTest();
   }
 
+  public void testSubTests() {
+    doTest();
+  }
+
   @NotNull
   @Override
   protected String getBasePath() {
     return "testing/gotest";
   }
-  
+
   @NotNull
   @Override
   protected GoTestFramework getTestFramework() {
