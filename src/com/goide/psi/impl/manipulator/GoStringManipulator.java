@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,26 @@ public class GoStringManipulator extends AbstractElementManipulator<GoStringLite
   @NotNull
   @Override
   public TextRange getRangeInElement(@NotNull GoStringLiteralImpl element) {
-    return element.getTextLength() > 2 ? TextRange.from(1, element.getTextLength() - 2) : TextRange.EMPTY_RANGE;
+    if (element.getTextLength() == 0) {
+      return TextRange.EMPTY_RANGE;
+    }
+    String s = element.getText();
+    char quote = s.charAt(0);
+    int startOffset = isQuote(quote) ? 1 : 0;
+    int endOffset = s.length();
+    if (s.length() > 1) {
+      char lastChar = s.charAt(s.length() - 1);
+      if (isQuote(quote) && lastChar == quote) {
+        endOffset = s.length() - 1;
+      }
+      if (!isQuote(quote) && isQuote(lastChar)) {
+        endOffset = s.length() - 1;
+      }
+    }
+    return TextRange.create(startOffset, endOffset);
+  }
+
+  private static boolean isQuote(char ch) {
+    return ch == '"' || ch == '\'' || ch == '`';
   }
 }
