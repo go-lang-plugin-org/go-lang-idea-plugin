@@ -75,7 +75,8 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       GoAssignmentToReceiverInspection.class,
       GoInvalidStringOrCharInspection.class,
       GoMixedNamedUnnamedParametersInspection.class,
-      GoAnonymousFieldDefinitionTypeInspection.class
+      GoAnonymousFieldDefinitionTypeInspection.class,
+      GoStringIndexIsByteInspection.class
     );
   }
 
@@ -172,6 +173,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
   public void testMixedNamedUnnamedParameters() { doTest(); }
   public void testStringInStructSliceWithThirdIndex() { doTest(); }
   public void testAnonymousFieldDefinition()  { doTest(); }
+  public void testStringIndexIsByte()         { doTest(); }
 
   public void testCodedImportString() {
     myFixture.addFileToProject("a/a.go", "package a\n const A = 3");
