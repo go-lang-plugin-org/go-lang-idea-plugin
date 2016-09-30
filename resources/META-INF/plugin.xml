@@ -366,6 +366,9 @@
     <localInspection language="go" displayName="Mixed named and unnamed parameters" groupPath="Go"
                      groupName="General" enabledByDefault="true" level="ERROR"
                      implementationClass="com.goide.inspections.GoMixedNamedUnnamedParametersInspection"/>
+    <localInspection language="go" displayName="Mismatched types: byte and string" groupPath="Go"
+                     groupName="General" enabledByDefault="true" level="ERROR"
+                     implementationClass="com.goide.inspections.GoStringIndexIsByteInspection"/>
     <!-- /general -->
 
     <!-- color schemes -->
