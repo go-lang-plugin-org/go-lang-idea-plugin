@@ -65,6 +65,12 @@ publishPlugin {
   channels publishChannel
 }
 
+patchPluginXml {
+    if (customSinceBuild) {
+        sinceBuild customSinceBuild
+    }
+}
+
 apply plugin: 'idea'
 idea {
   project {
