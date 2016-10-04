@@ -15,24 +15,6 @@
   -->
 
 <idea-plugin version="2" xmlns:xi="http://www.w3.org/2001/XInclude">
-  <id>ro.redeul.google.go</id>
-  <name>Go</name>
-  <version>1.0</version>
-  <vendor url="https://github.com/go-lang-plugin-org"/>
-  <category>Custom Languages</category>
-
-  <description><![CDATA[
-    Support for Go programming language.
-    ]]></description>
-
-  <change-notes>
-    <![CDATA[
-    ]]>
-  </change-notes>
-
-  <depends>com.intellij.modules.lang</depends>
-  <depends optional="true" config-file="java-deps.xml">com.intellij.modules.java</depends>
-  <depends optional="true" config-file="coverage.xml">com.intellij.modules.coverage</depends>
   <xi:include href="app-engine.xml" xpointer="xpointer(/idea-plugin/*)"/>
   <!-- plan9 assembler -->
   <xi:include href="plan9.xml" xpointer="xpointer(/idea-plugin/*)"/>
@@ -65,7 +47,7 @@
     <applicationService serviceImplementation="com.goide.project.GoApplicationLibrariesService"/>
     <projectService serviceImplementation="com.goide.project.GoProjectLibrariesService"/>
     <moduleService serviceImplementation="com.goide.project.GoModuleLibrariesService"/>
-    <projectConfigurable id="go" groupId="language" provider="com.goide.configuration.GoConfigurableProvider" 
+    <projectConfigurable id="go" groupId="language" provider="com.goide.configuration.GoConfigurableProvider"
                          dynamic="true" bundle="com.goide.GoBundle"/>
 
     <moduleService serviceImplementation="com.goide.project.GoModuleSettings"/>
@@ -411,11 +393,7 @@
     <component>
       <implementation-class>com.goide.ui.ProjectTutorialNotification</implementation-class>
     </component>
-    <component>
-      <implementation-class>com.goide.UpdateComponent</implementation-class>
-    </component>
   </application-components>
-
 
   <!-- GAE -->
 
