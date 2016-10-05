@@ -18,22 +18,23 @@ package com.goide.inspections;
 
 import com.goide.GoTypes;
 import com.goide.psi.*;
+import com.goide.psi.impl.GoPsiImplUtil;
 import com.goide.psi.impl.GoTypeUtil;
-import com.goide.quickfix.GoStringIndexIsByteQuickFix;
+import com.goide.quickfix.GoConvertStringToByteQuickFix;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.util.Trinity;
 import com.intellij.psi.tree.TokenSet;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
-import static com.goide.psi.impl.GoPsiImplUtil.getFirstElementOfType;
+import java.util.Arrays;
 
-public class GoStringIndexIsByteInspection extends GoInspectionBase {
-
+public class GoStringAndByteTypeMismatchInspection extends GoInspectionBase {
   private static final String TEXT_HINT = "Mismatched types: byte and string";
-  private static final GoStringIndexIsByteQuickFix STRING_INDEX_IS_BYTE_QUICK_FIX = new GoStringIndexIsByteQuickFix();
+  private static final GoConvertStringToByteQuickFix STRING_INDEX_IS_BYTE_QUICK_FIX = new GoConvertStringToByteQuickFix();
 
   @NotNull
   @Override
@@ -45,16 +46,16 @@ public class GoStringIndexIsByteInspection extends GoInspectionBase {
         GoExpression left = o.getLeft();
         GoExpression right = o.getRight();
 
-        GoIndexOrSliceExpr indexExpr = getFirstElementOfType(GoIndexOrSliceExpr.class, left, right);
-        GoStringLiteral stringLiteral = getFirstElementOfType(GoStringLiteral.class, left, right);
+        GoIndexOrSliceExpr indexExpr = ContainerUtil.findInstance(Arrays.asList(left, right), GoIndexOrSliceExpr.class);
+        GoStringLiteral stringLiteral = ContainerUtil.findInstance(Arrays.asList(left, right), GoStringLiteral.class);
 
         if (indexExpr == null || stringLiteral == null) {
           return;
         }
 
         if (isStringIndexExpression(indexExpr)) {
-          LocalQuickFix[] fixes =
-            isSingleCharLiteral(stringLiteral) ? new LocalQuickFix[]{STRING_INDEX_IS_BYTE_QUICK_FIX} : LocalQuickFix.EMPTY_ARRAY;
+          LocalQuickFix[] fixes = GoPsiImplUtil.isSingleCharLiteral(stringLiteral) ? new LocalQuickFix[]{STRING_INDEX_IS_BYTE_QUICK_FIX}
+                                                                                   : LocalQuickFix.EMPTY_ARRAY;
           holder.registerProblem(o, TEXT_HINT, ProblemHighlightType.GENERIC_ERROR, fixes);
         }
       }
@@ -63,9 +64,7 @@ public class GoStringIndexIsByteInspection extends GoInspectionBase {
 
   private static boolean isStringIndexExpression(@NotNull GoIndexOrSliceExpr expr) {
     GoExpression expression = expr.getExpression();
-    GoType type = expression != null ? expression.getGoType(null) : null;
-
-    if (!GoTypeUtil.isString(type)) {
+    if (expression == null || !GoTypeUtil.isString(expression.getGoType(null))) {
       return false;
     }
 
@@ -73,9 +72,5 @@ public class GoStringIndexIsByteInspection extends GoInspectionBase {
     return indices.getSecond() == null
            && indices.getThird() == null
            && expr.getNode().getChildren(TokenSet.create(GoTypes.COLON)).length == 0;
-  }
-
-  public static boolean isSingleCharLiteral(@NotNull GoStringLiteral literal) {
-    return literal.getDecodedText().length() == 1;
   }
 }

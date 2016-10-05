@@ -1676,14 +1676,7 @@ public class GoPsiImplUtil {
     return null;
   }
 
-  @Nullable
-  public static <T extends PsiElement> T getFirstElementOfType(@NotNull Class<T> clazz, @Nullable PsiElement... elements) {
-    if (elements == null) return null;
-    for (PsiElement e : elements) {
-      if (clazz.isInstance(e)) {
-        return clazz.cast(e);
-      }
-    }
-    return null;
+  public static boolean isSingleCharLiteral(@NotNull GoStringLiteral literal) {
+    return literal.getDecodedText().length() == 1;
   }
 }

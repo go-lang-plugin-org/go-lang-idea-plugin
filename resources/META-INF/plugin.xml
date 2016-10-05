@@ -368,7 +368,7 @@
                      implementationClass="com.goide.inspections.GoMixedNamedUnnamedParametersInspection"/>
     <localInspection language="go" displayName="Mismatched types: byte and string" groupPath="Go"
                      groupName="General" enabledByDefault="true" level="ERROR"
-                     implementationClass="com.goide.inspections.GoStringIndexIsByteInspection"/>
+                     implementationClass="com.goide.inspections.GoStringAndByteTypeMismatchInspection"/>
     <!-- /general -->
 
     <!-- color schemes -->
