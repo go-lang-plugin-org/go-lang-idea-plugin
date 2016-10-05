@@ -21,41 +21,41 @@ import com.goide.psi.GoStringLiteral;
 import com.intellij.codeInspection.LocalQuickFixBase;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.ElementManipulators;
 import com.intellij.psi.PsiElement;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
-import static com.goide.inspections.GoStringIndexIsByteInspection.isSingleCharLiteral;
+import java.util.Arrays;
+
 import static com.goide.psi.impl.GoElementFactory.createExpression;
-import static com.goide.psi.impl.GoPsiImplUtil.getFirstElementOfType;
-import static com.intellij.psi.ElementManipulators.getValueTextRange;
+import static com.goide.psi.impl.GoPsiImplUtil.isSingleCharLiteral;
 import static java.lang.String.format;
 
-public class GoStringIndexIsByteQuickFix extends LocalQuickFixBase {
-
+public class GoConvertStringToByteQuickFix extends LocalQuickFixBase {
   public static final String NAME = "Convert string to byte";
 
-  public GoStringIndexIsByteQuickFix() {
+  public GoConvertStringToByteQuickFix() {
     super(NAME);
   }
 
   @Override
   public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
     PsiElement element = descriptor.getPsiElement();
-    if (!(element instanceof GoConditionalExpr)) {
+    if (!(element instanceof GoConditionalExpr) || !element.isValid()) {
       return;
     }
 
     GoConditionalExpr expr = (GoConditionalExpr)element;
-    GoStringLiteral literal = getFirstElementOfType(GoStringLiteral.class, expr.getLeft(), expr.getRight());
+    GoStringLiteral literal = ContainerUtil.findInstance(Arrays.asList(expr.getLeft(), expr.getRight()), GoStringLiteral.class);
     if (literal == null || !isSingleCharLiteral(literal)) {
       return;
     }
-
     literal.replace(createExpression(project, extractSingleCharFromText(literal)));
   }
 
   @NotNull
   private static String extractSingleCharFromText(@NotNull GoStringLiteral element) {
-    return format("'%s'", getValueTextRange(element).substring(element.getText()));
+    return format("'%s'", ElementManipulators.getValueText(element));
   }
 }

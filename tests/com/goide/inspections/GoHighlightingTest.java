@@ -76,7 +76,7 @@ public class GoHighlightingTest extends GoCodeInsightFixtureTestCase {
       GoInvalidStringOrCharInspection.class,
       GoMixedNamedUnnamedParametersInspection.class,
       GoAnonymousFieldDefinitionTypeInspection.class,
-      GoStringIndexIsByteInspection.class
+      GoStringAndByteTypeMismatchInspection.class
     );
   }
 
