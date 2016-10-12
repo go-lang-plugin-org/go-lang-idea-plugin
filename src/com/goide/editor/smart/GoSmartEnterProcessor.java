@@ -107,11 +107,11 @@ public class GoSmartEnterProcessor extends SmartEnterProcessorWithFixers {
     }
   }
 
-  private static class PlainEnterProcessor extends FixEnterProcessor {
+  public static class PlainEnterProcessor extends FixEnterProcessor {
     @Nullable
     private static GoBlock findBlock(@Nullable PsiElement element) {
-      element = PsiTreeUtil.getParentOfType(element, GoStatement.class, GoBlock.class, GoFunctionOrMethodDeclaration.class,
-                                            GoFunctionLit.class);
+      element = PsiTreeUtil.getNonStrictParentOfType(element, GoStatement.class, GoBlock.class, GoFunctionOrMethodDeclaration.class,
+                                                     GoFunctionLit.class);
       if (element instanceof GoSimpleStatement && element.getParent() instanceof GoStatement) {
         element = element.getParent();
       }
@@ -127,8 +127,7 @@ public class GoSmartEnterProcessor extends SmartEnterProcessorWithFixers {
     public boolean doEnter(PsiElement psiElement, PsiFile file, @NotNull Editor editor, boolean modified) {
       GoBlock block = findBlock(psiElement);
       if (block != null) {
-        int offset = block.getTextOffset() + 1;
-        editor.getCaretModel().moveToOffset(offset);
+        editor.getCaretModel().moveToOffset(block.getLbrace().getTextRange().getEndOffset());
       }
       plainEnter(editor);
       return true;
