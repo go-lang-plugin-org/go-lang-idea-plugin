@@ -175,6 +175,12 @@
 
     <lang.inspectionSuppressor language="go" implementationClass="com.goide.inspections.suppression.GoInspectionSuppressor"/>
 
+    <!-- intentions -->
+    <intentionAction>
+      <bundleName>com.goide.GoBundle</bundleName>
+      <categoryKey>go.intentions.category</categoryKey>
+      <className>com.goide.intentions.GoAddFunctionBlockIntention</className>
+    </intentionAction>
     <!-- unused inspections -->
     <localInspection language="go" displayName="Unused import inspection" groupPath="Go"
                      groupName="Declaration redundancy" enabledByDefault="true" level="ERROR"
