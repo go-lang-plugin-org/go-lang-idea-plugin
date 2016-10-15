@@ -37,11 +37,8 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
   private boolean defaultJavaMemberOnTheFly;
   private boolean defaultGoOnTheFly;
 
-  private static void updateSettings(boolean goOnTheFlyEnabled, boolean javaOnTheFlyEnabled) {
-    CodeInsightSettings codeInsightSettings = CodeInsightSettings.getInstance();
-    codeInsightSettings.ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY = javaOnTheFlyEnabled;
-    codeInsightSettings.ADD_MEMBER_IMPORTS_ON_THE_FLY = javaOnTheFlyEnabled;
-    GoCodeInsightSettings.getInstance().setAddUnambiguousImportsOnTheFly(goOnTheFlyEnabled);
+  private static void updateSettings(boolean onTheFlyEnabled) {
+    GoCodeInsightSettings.getInstance().setAddUnambiguousImportsOnTheFly(onTheFlyEnabled);
   }
 
   @Override
@@ -53,13 +50,18 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
     defaultJavaOnTheFly = codeInsightSettings.ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY;
     defaultJavaMemberOnTheFly = codeInsightSettings.ADD_MEMBER_IMPORTS_ON_THE_FLY;
     defaultGoOnTheFly = GoCodeInsightSettings.getInstance().isAddUnambiguousImportsOnTheFly();
+
+    codeInsightSettings.ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY = true;
+    codeInsightSettings.ADD_MEMBER_IMPORTS_ON_THE_FLY = true;
   }
 
   @Override
   protected void tearDown() throws Exception {
     try {
-      updateSettings(defaultGoOnTheFly, defaultJavaOnTheFly);
-      CodeInsightSettings.getInstance().ADD_MEMBER_IMPORTS_ON_THE_FLY = defaultJavaMemberOnTheFly;
+      updateSettings(defaultGoOnTheFly);
+      CodeInsightSettings codeInsightSettings = CodeInsightSettings.getInstance();
+      codeInsightSettings.ADD_MEMBER_IMPORTS_ON_THE_FLY = defaultJavaMemberOnTheFly;
+      codeInsightSettings.ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY = defaultJavaOnTheFly;
     }
     finally {
       //noinspection ThrowFromFinallyBlock
@@ -67,22 +69,22 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
     }
   }
 
-  private void doTestAddOnTheFly(boolean goOnTheFlyEnabled, boolean javaOnTheFlyEnabled) {
+  private void doTestAddOnTheFly(boolean goOnTheFlyEnabled) {
     DaemonCodeAnalyzerSettings.getInstance().setImportHintEnabled(true);
-    updateSettings(goOnTheFlyEnabled, javaOnTheFlyEnabled);
+    updateSettings(goOnTheFlyEnabled);
 
     String initial = "package a; func a() {\n fmt.Println() <caret> \n}";
     myFixture.configureByText("a.go", initial);
     myFixture.doHighlighting();
     myFixture.doHighlighting();
     String after = "package a;\n\nimport \"fmt\"\n\nfunc a() {\n fmt.Println()  \n}";
-    String result = goOnTheFlyEnabled && javaOnTheFlyEnabled ? after : initial;
+    String result = goOnTheFlyEnabled ? after : initial;
     myFixture.checkResult(result);
   }
 
   public void testUndo() {
     DaemonCodeAnalyzerSettings.getInstance().setImportHintEnabled(true);
-    updateSettings(true, true);
+    updateSettings(true);
     myFixture.configureByText("a.go", "package main\n\nfunc main() { <caret> }");
     myFixture.type("fmt.");
     myFixture.doHighlighting();
@@ -94,55 +96,46 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
   }
 
   public void testOnTheFlyEnabled() {
-    doTestAddOnTheFly(true, true);
+    doTestAddOnTheFly(true);
   }
 
   public void testOnTheFlyDisabled() {
-    doTestAddOnTheFly(false, true);
+    doTestAddOnTheFly(false);
   }
 
-  public void testOnTheFlyEnabledJavaOnTheFlyDisabled() {
-    doTestAddOnTheFly(true, false);
-  }
-
-  public void testOnTheFlyDisabledJavaOnTheFlyDisabled() {
-    doTestAddOnTheFly(false, false);
-  }
-
-  private void doTestImportOwnPath(String file, String text, String testFileText, String testText, String path, boolean shouldImport) {
-    updateSettings(false, false);
-
-    myFixture.addFileToProject(FileUtil.join(path, file), text);
-    PsiFile testFile = myFixture.addFileToProject(FileUtil.join(path, testFileText), testText);
+  private void doTestImportOwnPath(String text, String testText, boolean shouldImport) {
+    updateSettings(false);
+    myFixture.addFileToProject(FileUtil.join("pack", "a.go"), text);
+    PsiFile testFile = myFixture.addFileToProject(FileUtil.join("pack", "a_test.go"), testText);
     myFixture.configureFromExistingVirtualFile(testFile.getVirtualFile());
-    List<IntentionAction> actions = myFixture.filterAvailableIntentions("Import " + path + "?");
+    List<IntentionAction> actions = myFixture.filterAvailableIntentions("Import " + "pack" + "?");
     assertTrue(shouldImport != actions.isEmpty());
   }
 
   public void testOwnAddPathFromTest() {
-    doTestImportOwnPath("a.go", "package myPack; func Func() {}",
-                        "a_test.go", "package myPack_test; func TestFunc() { my<caret>Pack.Func() }",
-                        "pack", true);
+    doTestImportOwnPath("package myPack; func Func() {}",
+                        "package myPack_test; func TestFunc() { my<caret>Pack.Func() }",
+                        true);
   }
 
   public void testDoNotImportOwnPathFromDifferentPackage() {
-    doTestImportOwnPath("a.go", "package pack1; func Func() {}",
-                        "a_test.go", "package pack2_test; func TestFunc() { pack<caret>1.Func() }",
-                        "pack", false);
+    doTestImportOwnPath("package pack1; func Func() {}",
+                        "package pack2_test; func TestFunc() { pack<caret>1.Func() }",
+                        false);
   }
 
   public void testCompleteDifferentPackageFromTest() {
     myFixture.configureByText("a.go", "package foo; func a() { fmt.Print<caret> }");
     assertNotEmpty(myFixture.getLookupElementStrings());
   }
-  
+
   public void testImportVendoringPackage() {
     myFixture.addFileToProject("vendor/a/b/c.go", "package b");
     myFixture.configureByText("a.go", "package a; func a() { b<caret>.Println() }");
     myFixture.launchAction(myFixture.findSingleIntention("Import a/b?"));
     myFixture.checkResult("package a;\n\nimport \"a/b\"\n\nfunc a() { b<caret>.Println() }");
-  } 
-  
+  }
+
   public void testImportVendoringPackageWithDisabledVendoring() {
     disableVendoring();
     myFixture.addFileToProject("vendor/a/b/c.go", "package b");
@@ -150,17 +143,17 @@ public class GoReferenceImporterTest extends GoCodeInsightFixtureTestCase {
     myFixture.launchAction(myFixture.findSingleIntention("Import vendor/a/b?"));
     myFixture.checkResult("package a;\n\nimport \"vendor/a/b\"\n\nfunc a() { b<caret>.Println() }");
   }
-  
+
   public void testImportBuiltinPackage() {
     myFixture.configureByText("a.go", "package a; func a() { built<caret>in.Println() }");
     assertEmpty(myFixture.filterAvailableIntentions("Import builtin?"));
-  } 
-  
+  }
+
   public void testImportSdkTestData() {
     myFixture.configureByText("a.go", "package a; func _() { println(p<caret>kg.ExportedConstant) } ");
     assertEmpty(myFixture.filterAvailableIntentions("Import doc/testdata?"));
   }
-  
+
   public void testImportVendoredBuiltinPackage() {
     myFixture.addFileToProject("vendor/builtin/builtin.go", "package builtin");
     myFixture.configureByText("a.go", "package a; func a() { built<caret>in.Println() }");
