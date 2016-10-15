@@ -167,7 +167,7 @@ public class GoRefactoringUtil {
         String name = StringUtil.decapitalize(callReference.getIdentifier().getText());
         for (String candidate : NameUtil.getSuggestionsByName(name, "", "", false, false, false)) {
           if (usedNames.contains(candidate)) continue;
-          if (namesValidator != null && namesValidator.isKeyword(candidate, null)) continue;
+          if (!isValidName(namesValidator, candidate)) continue;
           names.add(candidate);
         }
       }
@@ -179,7 +179,7 @@ public class GoRefactoringUtil {
       boolean array = GoTypeUtil.isIterable(type) && !GoTypeUtil.isString(type);
       for (String candidate : NameUtil.getSuggestionsByName(typeText, "", "", false, false, array)) {
         if (usedNames.contains(candidate) || typeText.equals(candidate)) continue;
-        if (namesValidator != null && namesValidator.isKeyword(candidate, null)) continue;
+        if (!isValidName(namesValidator, candidate)) continue;
         names.add(candidate);
       }
     }
@@ -188,6 +188,10 @@ public class GoRefactoringUtil {
       names.add(UniqueNameGenerator.generateUniqueName("i", usedNames));
     }
     return names;
+  }
+
+  private static boolean isValidName(NamesValidator namesValidator, String candidate) {
+    return namesValidator != null && !namesValidator.isKeyword(candidate, null) && namesValidator.isIdentifier(candidate, null);
   }
 
   @NotNull
