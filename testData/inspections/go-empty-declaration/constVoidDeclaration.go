@@ -1,6 +1,6 @@
 package main
 
-<warning descr="Empty declaration 'const( )'">const(
+<warning>const(
 
 )<caret></warning>
 
