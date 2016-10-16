@@ -37,7 +37,7 @@ import java.util.Map;
 import static com.goide.psi.impl.GoPsiImplUtil.allowed;
 
 public abstract class GoReferenceBase<T extends GoReferenceExpressionBase> extends PsiPolyVariantReferenceBase<T> {
-  public static final Key<List<? extends PsiElement>> IMPORT_USERS = Key.create("IMPORT_USERS");
+  public static final Key<List<PsiElement>> IMPORT_USERS = Key.create("IMPORT_USERS");
   public static final Key<String> ACTUAL_NAME = Key.create("ACTUAL_NAME");
 
   public GoReferenceBase(T element, TextRange range) {
@@ -51,13 +51,13 @@ public abstract class GoReferenceBase<T extends GoReferenceExpressionBase> exten
     return virtualFile == null ? null : virtualFile.getPath();
   }
 
-  private static void putIfAbsent(@NotNull PsiElement importElement, @NotNull PsiElement usage) {
-    List<PsiElement> newList = ContainerUtil.newSmartList(usage);
-    List<? extends PsiElement> list = importElement.getUserData(IMPORT_USERS);
-    if (list != null) {
-      newList.addAll(list);
+  private static void putIfAbsent(@NotNull GoImportSpec importSpec, @NotNull PsiElement usage) {
+    //noinspection SynchronizationOnLocalVariableOrMethodParameter
+    synchronized (importSpec) {
+      List<PsiElement> newUsages = ContainerUtil.newSmartList(usage);
+      newUsages.addAll(IMPORT_USERS.get(importSpec, ContainerUtil.emptyList()));
+      importSpec.putUserData(IMPORT_USERS, newUsages);
     }
-    importElement.putUserData(IMPORT_USERS, newList);
   }
 
   protected boolean processDirectory(@Nullable PsiDirectory dir,

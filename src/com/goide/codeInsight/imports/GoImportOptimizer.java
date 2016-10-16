@@ -127,17 +127,8 @@ public class GoImportOptimizer implements ImportOptimizer {
     Collection<GoImportSpec> implicitImports = ContainerUtil.newArrayList(result.get("."));
     for (GoImportSpec importEntry : implicitImports) {
       GoImportSpec spec = getImportSpec(importEntry);
-      if (spec != null && spec.isDot()) {
-        List<? extends PsiElement> list = spec.getUserData(GoReferenceBase.IMPORT_USERS);
-        if (list != null) {
-          for (PsiElement e : list) {
-            if (e.isValid()) {
-              result.remove(".", importEntry);
-              break;
-            }
-            ProgressManager.checkCanceled();
-          }
-        }
+      if (spec != null && spec.isDot() && hasImportUsers(spec)) {
+        result.remove(".", importEntry);
       }
     }
     
@@ -194,8 +185,24 @@ public class GoImportOptimizer implements ImportOptimizer {
     return result;
   }
 
+  private static boolean hasImportUsers(@NotNull GoImportSpec spec) {
+    //noinspection SynchronizationOnLocalVariableOrMethodParameter
+    synchronized (spec) {
+      List<PsiElement> list = spec.getUserData(GoReferenceBase.IMPORT_USERS);
+      if (list != null) {
+        for (PsiElement e : list) {
+          if (e.isValid()) {
+            return true;
+          }
+          ProgressManager.checkCanceled();
+        }
+      }
+    }
+    return false;
+  }
+
   @NotNull
-  public static Set<GoImportSpec> findDuplicatedEntries(@NotNull MultiMap<String, GoImportSpec> importMap) {
+  private static Set<GoImportSpec> findDuplicatedEntries(@NotNull MultiMap<String, GoImportSpec> importMap) {
     Set<GoImportSpec> duplicatedEntries = ContainerUtil.newLinkedHashSet();
     for (Map.Entry<String, Collection<GoImportSpec>> imports : importMap.entrySet()) {
       Collection<GoImportSpec> importsWithSameName = imports.getValue();

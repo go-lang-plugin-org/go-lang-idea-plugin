@@ -32,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.goide.highlighting.GoSyntaxHighlightingColors.*;
 
@@ -137,15 +138,14 @@ public class GoHighlightingAnnotator implements Annotator {
   public void annotate(@NotNull PsiElement o, @NotNull AnnotationHolder holder) {
     if (!o.isValid()) return;
     if (o instanceof GoImportSpec && ((GoImportSpec)o).isDot()) {
-      List<? extends PsiElement> importUsers = o.getUserData(GoReferenceBase.IMPORT_USERS);
-      if (importUsers != null) {
-        List<PsiElement> newImportUsers = ContainerUtil.newSmartList();
-        for (PsiElement user : importUsers) {
-          if (user.isValid()) {
-            newImportUsers.add(user);
-          }
+      //noinspection SynchronizationOnLocalVariableOrMethodParameter
+      synchronized (o) {
+        List<PsiElement> importUsers = o.getUserData(GoReferenceBase.IMPORT_USERS);
+        if (importUsers != null) {
+          List<PsiElement> newImportUsers = ContainerUtil.newSmartList();
+          newImportUsers.addAll(importUsers.stream().filter(PsiElement::isValid).collect(Collectors.toList()));
+          o.putUserData(GoReferenceBase.IMPORT_USERS, newImportUsers.isEmpty() ? null : newImportUsers);
         }
-        o.putUserData(GoReferenceBase.IMPORT_USERS, newImportUsers.isEmpty() ? null : newImportUsers);
       }
     }
     else if (o instanceof GoLiteral) {
