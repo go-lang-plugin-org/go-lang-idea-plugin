@@ -24,6 +24,7 @@ import com.goide.psi.impl.GoElementFactory;
 import com.goide.quickfix.GoRenameQuickFix;
 import com.intellij.codeInspection.*;
 import com.intellij.find.FindManager;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -104,18 +105,14 @@ public class GoUnusedImportInspection extends GoInspectionBase {
       }
     }
 
-    if (!problemsHolder.isOnTheFly()) {
-      resolveAllReferences(file);
-    }
+    if (!problemsHolder.isOnTheFly() || ApplicationManager.getApplication().isUnitTestMode()) resolveAllReferences(file);
     MultiMap<String, GoImportSpec> unusedImportsMap = GoImportOptimizer.filterUnusedImports(file, importMap);
     Set<GoImportSpec> unusedImportSpecs = ContainerUtil.newHashSet(unusedImportsMap.values());
     for (PsiElement importEntry : unusedImportSpecs) {
       GoImportSpec spec = GoImportOptimizer.getImportSpec(importEntry);
-      if (spec != null) {
-        if (spec.getImportString().resolve() != null) {
-          problemsHolder.registerProblem(spec, "Unused import", ProblemHighlightType.GENERIC_ERROR, OPTIMIZE_QUICK_FIX,
-                                         IMPORT_FOR_SIDE_EFFECTS_QUICK_FIX);
-        }
+      if (spec != null && spec.getImportString().resolve() != null) {
+        problemsHolder.registerProblem(spec, "Unused import", ProblemHighlightType.GENERIC_ERROR, OPTIMIZE_QUICK_FIX,
+                                       IMPORT_FOR_SIDE_EFFECTS_QUICK_FIX);
       }
     }
   }
