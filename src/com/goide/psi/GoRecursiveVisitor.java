@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ * Copyright 2013-2016 Sergey Ignatov, Alexander Zolotov, Florin Patan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,21 +24,19 @@ import org.jetbrains.annotations.NotNull;
 public class GoRecursiveVisitor extends GoVisitor {
   @Override
   public void visitCompositeElement(@NotNull GoCompositeElement o) {
+    super.visitCompositeElement(o);
     for (PsiElement psiElement : o.getChildren()) {
-      if (psiElement instanceof GoCompositeElement) {
-        psiElement.accept(this);
-        ProgressIndicatorProvider.checkCanceled();
-      }
+      psiElement.accept(this);
+      ProgressIndicatorProvider.checkCanceled();
     }
   }
 
   @Override
   public void visitFile(@NotNull PsiFile file) {
+    super.visitFile(file);
     for (PsiElement psiElement : file.getChildren()) {
-      if (psiElement instanceof GoCompositeElement) {
-        psiElement.accept(this);
-        ProgressIndicatorProvider.checkCanceled();
-      }
+      psiElement.accept(this);
+      ProgressIndicatorProvider.checkCanceled();
     }
   }
 }
