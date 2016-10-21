@@ -56,12 +56,6 @@ public class GoPathLibraryTest extends GoCodeInsightFixtureTestCase {
   private final Collection<VirtualFile> tempRootsToClean = ContainerUtil.newHashSet();
 
   @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    GoModuleLibrariesInitializer.setTestingMode(getTestRootDisposable());
-  }
-
-  @Override
   protected void tearDown() throws Exception {
     try {
       for (VirtualFile file : tempRootsToClean) {

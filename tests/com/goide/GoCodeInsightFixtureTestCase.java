@@ -18,6 +18,7 @@ package com.goide;
 
 import com.goide.project.GoApplicationLibrariesService;
 import com.goide.project.GoBuildTargetSettings;
+import com.goide.project.GoModuleLibrariesInitializer;
 import com.goide.project.GoModuleSettings;
 import com.goide.sdk.GoSdkType;
 import com.intellij.codeInsight.intention.IntentionAction;
@@ -47,6 +48,7 @@ import com.intellij.util.ThreeState;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.indexing.FileContentImpl;
 import com.intellij.util.indexing.IndexingDataKeys;
+import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -95,7 +97,11 @@ abstract public class GoCodeInsightFixtureTestCase extends LightPlatformCodeInsi
     super.setUp();
     GoApplicationLibrariesService.getInstance().setLibraryRootUrls("temp:///");
     GoModuleSettings.getInstance(myFixture.getModule()).setVendoringEnabled(ThreeState.YES);
-    if (isSdkAware()) setUpProjectSdk();
+    if (isSdkAware()) {
+      GoModuleLibrariesInitializer.setTestingMode(getTestRootDisposable());
+      setUpProjectSdk();
+    }
+    UIUtil.dispatchAllInvocationEvents();
   }
   
   @Override
