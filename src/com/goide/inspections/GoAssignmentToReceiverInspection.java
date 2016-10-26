@@ -19,6 +19,7 @@ package com.goide.inspections;
 import com.goide.psi.GoPointerType;
 import com.goide.psi.GoReceiver;
 import com.goide.psi.GoReferenceExpression;
+import com.goide.psi.GoUnaryExpr;
 import com.goide.psi.GoVisitor;
 import com.intellij.codeInsight.highlighting.ReadWriteAccessDetector;
 import com.intellij.codeInspection.LocalInspectionToolSession;
@@ -41,6 +42,13 @@ public class GoAssignmentToReceiverInspection extends GoInspectionBase {
           if (resolve instanceof GoReceiver) {
             String message = "Assignment to method receiver doesn't propagate to other calls";
             if (((GoReceiver)resolve).getType() instanceof GoPointerType) {
+              if (o.getParent() instanceof GoUnaryExpr) {
+                GoUnaryExpr p = (GoUnaryExpr)o.getParent();
+                if (p.getMul() != null) {
+                  // pointer dereference
+                  return;
+                }
+              }
               message = "Assignment to method receiver propagates only to callees but not to callers";
             }
             holder.registerProblem(o, message, WEAK_WARNING);
