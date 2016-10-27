@@ -1,0 +1,2 @@
+s := S{}
+<spot>s.foo = `bar`</spot>

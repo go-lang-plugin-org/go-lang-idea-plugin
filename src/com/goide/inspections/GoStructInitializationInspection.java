@@ -108,7 +108,7 @@ public class GoStructInitializationInspection extends GoInspectionBase {
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
       PsiElement startElement = descriptor.getStartElement();
       if (startElement instanceof GoElement) {
-        startElement.replace(GoElementFactory.createNamedStructField(project, myStructField, startElement.getText()));
+        startElement.replace(GoElementFactory.createLiteralValueElement(project, myStructField, startElement.getText()));
       }
     }
   }

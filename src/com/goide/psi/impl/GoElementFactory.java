@@ -256,8 +256,8 @@ public class GoElementFactory {
     return PsiTreeUtil.findChildOfType(file, GoType.class);
   }
 
-  public static PsiElement createNamedStructField(@NotNull Project project, @NotNull String field, @NotNull String element) {
-    GoFile file = createFileFromText(project, "package a; var _ = struct { a string } { " + field + ": " + element + " }");
+  public static PsiElement createLiteralValueElement(@NotNull Project project, @NotNull String key, @NotNull String value) {
+    GoFile file = createFileFromText(project, "package a; var _ = struct { a string } { " + key + ": " + value + " }");
     return PsiTreeUtil.findChildOfType(file, GoElement.class);
   }
 

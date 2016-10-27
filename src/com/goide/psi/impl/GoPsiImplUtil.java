@@ -1354,6 +1354,20 @@ public class GoPsiImplUtil {
     specToDelete.delete();
   }
 
+  public static void deleteExpressionFromAssignment(@NotNull GoAssignmentStatement assignment,
+                                                    @NotNull GoExpression expressionToDelete) {
+    GoExpression expressionValue = getRightExpression(assignment, expressionToDelete);
+    if (expressionValue != null) {
+      if (assignment.getExpressionList().size() == 1) {
+        assignment.delete();
+      }
+      else {
+        deleteElementFromCommaSeparatedList(expressionToDelete);
+        deleteElementFromCommaSeparatedList(expressionValue);
+      }
+    }
+  }
+
   public static void deleteDefinition(@NotNull GoVarSpec spec, @NotNull GoVarDefinition definitionToDelete) {
     List<GoVarDefinition> definitionList = spec.getVarDefinitionList();
     int index = definitionList.indexOf(definitionToDelete);
@@ -1678,5 +1692,11 @@ public class GoPsiImplUtil {
 
   public static boolean isSingleCharLiteral(@NotNull GoStringLiteral literal) {
     return literal.getDecodedText().length() == 1;
+  }
+
+  @Nullable
+  public static GoExpression getRightExpression(@NotNull GoAssignmentStatement assignment, @NotNull GoExpression leftExpression) {
+    int fieldIndex = assignment.getLeftHandExprList().getExpressionList().indexOf(leftExpression);
+    return getByIndex(assignment.getExpressionList(), fieldIndex);
   }
 }

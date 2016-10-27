@@ -181,6 +181,11 @@
       <categoryKey>go.intentions.category</categoryKey>
       <className>com.goide.intentions.GoAddFunctionBlockIntention</className>
     </intentionAction>
+    <intentionAction>
+      <bundleName>com.goide.GoBundle</bundleName>
+      <categoryKey>go.intentions.category</categoryKey>
+      <className>com.goide.intentions.GoMoveToStructInitializationIntention</className>
+    </intentionAction>
     <!-- unused inspections -->
     <localInspection language="go" displayName="Unused import inspection" groupPath="Go"
                      groupName="Declaration redundancy" enabledByDefault="true" level="ERROR"
