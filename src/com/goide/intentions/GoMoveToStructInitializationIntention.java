@@ -97,7 +97,7 @@ public class GoMoveToStructInitializationIntention extends BaseElementAtCaretInt
   }
 
   @Nullable
-  private static GoReferenceExpression unwrapParensAndCast(@NotNull PsiElement e) {
+  private static GoReferenceExpression unwrapParensAndCast(@Nullable PsiElement e) {
     while (e instanceof GoParenthesesExpr) {
       e = ((GoParenthesesExpr)e).getExpression();
     }
@@ -116,18 +116,23 @@ public class GoMoveToStructInitializationIntention extends BaseElementAtCaretInt
 
   private static boolean isAssignedInPreviousStatement(@NotNull GoExpression referenceExpression,
                                                        @NotNull GoAssignmentStatement assignment) {
-    GoReferenceExpression rightExpression = ObjectUtils.tryCast(GoPsiImplUtil.getRightExpression(assignment, referenceExpression),
-                                                                GoReferenceExpression.class);
+    GoReferenceExpression rightExpression =
+      unwrapParensAndCast(GoPsiImplUtil.getRightExpression(assignment, getTopmostExpression(referenceExpression)));
 
     PsiElement resolve = rightExpression != null ? rightExpression.resolve() : null;
     GoStatement previousElement = resolve != null ? PsiTreeUtil.getPrevSiblingOfType(assignment, GoStatement.class) : null;
     return previousElement != null && exists(getLeftHandElements(previousElement), e -> isResolvedTo(e, resolve));
   }
 
+  @NotNull
+  private static GoExpression getTopmostExpression(@NotNull GoExpression expression) {
+    return ObjectUtils.notNull(PsiTreeUtil.getTopmostParentOfType(expression, GoExpression.class), expression);
+  }
+
   private static boolean isResolvedTo(@Nullable PsiElement e, @Nullable PsiElement resolve) {
     if (e instanceof GoVarDefinition) return resolve == e;
 
-    GoReferenceExpression refExpression = ObjectUtils.tryCast(e, GoReferenceExpression.class);
+    GoReferenceExpression refExpression = unwrapParensAndCast(e);
     return refExpression != null && refExpression.resolve() == resolve;
   }
 
@@ -241,8 +246,7 @@ public class GoMoveToStructInitializationIntention extends BaseElementAtCaretInt
     if (literalValue == null) return;
 
     for (GoReferenceExpression expression : data.getReferenceExpressions()) {
-      GoExpression parentExpression = PsiTreeUtil.getTopmostParentOfType(expression, GoExpression.class);
-      GoExpression anchor = parentExpression != null ? parentExpression : expression;
+      GoExpression anchor = getTopmostExpression(expression);
       GoExpression fieldValue = GoPsiImplUtil.getRightExpression(data.getAssignment(), anchor);
       if (fieldValue == null) continue;
 
