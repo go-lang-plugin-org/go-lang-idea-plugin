@@ -49,6 +49,7 @@ public class GoMoveToStructInitializationIntentionTest extends GoQuickFixTestBas
   public void testMultipleAssignmentsMiddle()               { doTest(); }
   public void testMultipleFieldsPartlyAssigned()            { doTest(); }
   public void testWithParens()                              { doTest(); }
+  public void testFieldExtractedFromParens()                { doTest(); }
 
   public void testDuplicateFields()                         { doTest(); }
   public void testMultiReturnFunction()                     { doTestNoFix(); }
@@ -56,6 +57,9 @@ public class GoMoveToStructInitializationIntentionTest extends GoQuickFixTestBas
   public void testExistingDeclaration()                     { doTestNoFix(); }
   public void testNotExistingField()                        { doTestNoFix(); }
   public void testJustAssignedVarWrongCaret()               { doTestNoFix(); }
+  public void testJustAssignedVarWrongCaretWithParens()     { doTestNoFix(); }
   public void testJustInitializedVarWrongCaret()            { doTestNoFix(); }
+  public void testJustAssignedVarBothParens()               { doTestNoFix(); }
+  public void testJustAssignedFieldParens()                 { doTestNoFix(); }
 }
 
