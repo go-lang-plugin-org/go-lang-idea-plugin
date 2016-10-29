@@ -212,8 +212,9 @@ public class GoPlaceholderCountInspection extends GoInspectionBase {
       char flag = flags.charAt(i);
       if (v.getFlags().indexOf(flag) == -1) {
         String message = String.format("Unrecognized <code>#ref</code> flag for verb %s: %s call #loc", v.getVerb(), flag);
-        TextRange range = TextRange.create(fmtPlaceholder.getStartPos() + 1, fmtPlaceholder.getPlaceholder().length() + 1);
+        TextRange range = TextRange.from(fmtPlaceholder.getStartPos() + 1, fmtPlaceholder.getPlaceholder().length());
         // TODO florin: add quickfix to suggest correct printf verbs (maybe take type into account when type info available?)
+        // TODO florin: cover with tests
         holder.registerProblem(placeholder, message, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, range);
         return false;
       }
