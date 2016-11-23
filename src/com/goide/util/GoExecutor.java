@@ -213,7 +213,7 @@ public class GoExecutor {
     try {
       commandLine = createCommandLine();
       GeneralCommandLine finalCommandLine = commandLine;
-      myProcessHandler = new KillableColoredProcessHandler(finalCommandLine) {
+      myProcessHandler = new KillableColoredProcessHandler(finalCommandLine, true) {
         @Override
         public void startNotify() {
           if (myShowGoEnvVariables) {
