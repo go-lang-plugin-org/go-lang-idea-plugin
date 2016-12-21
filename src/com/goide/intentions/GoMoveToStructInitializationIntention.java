@@ -58,7 +58,7 @@ public class GoMoveToStructInitializationIntention extends BaseElementAtCaretInt
 
   @Nullable
   private static Data getData(@NotNull PsiElement element) {
-    if (!element.isValid() || !element.isWritable()) return null;
+    if (!element.isValid()) return null;
     GoAssignmentStatement assignment = getValidAssignmentParent(element);
     GoReferenceExpression selectedFieldReference = assignment != null ? getFieldReferenceExpression(element, assignment) : null;
     GoCompositeLit compositeLit = selectedFieldReference != null ? getStructLiteralByReference(selectedFieldReference, assignment) : null;
