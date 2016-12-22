@@ -23,7 +23,7 @@
 
   <description><![CDATA[
     <p>Support for Go programming language.</p>
-    <p>The plugin <strong>DOES NOT</strong> support all feature that Gogland does. See <a href="https://jetbrains.com/go">FAQ</a> for
+    <p>The plugin <strong>DOES NOT</strong> support all feature that Gogland does. See <a href="https://jetbrains.com/go">Gogland</a> for
       details.</p>
     ]]></description>
 
