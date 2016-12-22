@@ -16,54 +16,15 @@
 
 <idea-plugin version="2" xmlns:xi="http://www.w3.org/2001/XInclude">
   <id>ro.redeul.google.go</id>
-  <name>Go</name>
+  <name>Go Lang Plugin</name>
   <version>1.0</version>
   <vendor url="https://github.com/go-lang-plugin-org"/>
   <category>Custom Languages</category>
 
   <description><![CDATA[
-    Support for Go programming language.
-
-    Please note, that the following features are available in Gogland but not in this plugin:
-    <ul>
-      <li>Navigation</li>
-      <ul>
-        <li>Go to inheritor structures</li>
-        <li>Go to super interfaces</li>
-      </ul>
-      <li>Type-aware completion (aka Smart completion)</li>
-      <li>Extract function refactoring</li>
-      <li>Implement type</li>
-      <li>Inspections and quick-fixes</li>
-      <ul>
-        <li>Introduce method</li>
-        <li>Introduce field</li>
-        <li>Delete unused parameter</li>
-        <li>Show symbol duplicates</li>
-        <li>Add/delete missing/redundant expressions in case of assignment count mismatch</li>
-        <li>Properly implemented Duplicated symbols inspection</li>
-        <li>Recursive type detection</li>
-        <li>Invalid const initialization</li>
-      </ul>
-      <li>Tests and coverage</li>
-      <ul>
-        <li>Sub-tests support (runner, navigation, gutter actions)</li>
-        <li>Debugging tests</li>
-      </ul>
-      <li>Debugger</li>
-      <ul>
-        <li>Step out</li>
-        <li>100x faster performance</li>
-      </ul>
-      <li>General</li>
-      <ul>
-        <li>Highlighting of go:generate comments</li>
-        <li>Quick documentation for struct fields</li>
-        <li>Semantic highlighting</li>
-        <li>Parameter name hints</li>
-        <li>SQL auto-injection</li>
-      </ul>
-    </ul>
+    <p>Support for Go programming language.</p>
+    <p>The plugin <strong>DOES NOT</strong> support all feature that Gogland does. See <a href="https://jetbrains.com/go">FAQ</a> for
+      details.</p>
     ]]></description>
 
   <change-notes>
