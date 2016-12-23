@@ -22,9 +22,8 @@
   <category>Custom Languages</category>
 
   <description><![CDATA[
-    <p>Support for Go programming language.</p>
-    <p>The plugin <strong>DOES NOT</strong> support all features that Gogland does. See <a href="https://jetbrains.com/go">Gogland</a> for
-      details.</p>
+    <p>Basic support for Go programming language.</p>
+    <p>For advanced support please see <a href="https://jetbrains.com/go">Gogland</a>.</p>
     ]]></description>
 
   <change-notes>
