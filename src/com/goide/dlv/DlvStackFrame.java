@@ -21,7 +21,6 @@ import com.goide.dlv.protocol.DlvApi;
 import com.goide.dlv.protocol.DlvRequest;
 import com.goide.psi.*;
 import com.goide.sdk.GoSdkService;
-import com.intellij.debugger.impl.DebuggerUtilsEx;
 import com.intellij.execution.configurations.ModuleBasedConfiguration;
 import com.intellij.execution.configurations.RunProfile;
 import com.intellij.icons.AllIcons;
@@ -37,6 +36,7 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.ColoredTextContainer;
 import com.intellij.ui.SimpleTextAttributes;
@@ -81,6 +81,11 @@ class DlvStackFrame extends XStackFrame {
           .done(variable -> callback.evaluated(createXValue(variable, AllIcons.Debugger.Watch)))
           .rejected(throwable -> callback.errorOccurred(throwable.getMessage()));
       }
+      
+      @Nullable
+      private PsiElement findElementAt(@Nullable PsiFile file, int offset) {
+        return file != null ? file.findElementAt(offset) : null;
+      }
 
       @Nullable
       @Override
@@ -91,8 +96,7 @@ class DlvStackFrame extends XStackFrame {
         Ref<TextRange> currentRange = Ref.create(null);
         PsiDocumentManager.getInstance(project).commitAndRunReadAction(() -> {
           try {
-            PsiElement elementAtCursor =
-              DebuggerUtilsEx.findElementAt(PsiDocumentManager.getInstance(project).getPsiFile(document), offset);
+            PsiElement elementAtCursor = findElementAt(PsiDocumentManager.getInstance(project).getPsiFile(document), offset);
             GoTypeOwner e = PsiTreeUtil.getParentOfType(elementAtCursor,
                                                         GoExpression.class,
                                                         GoVarDefinition.class,
