@@ -29,6 +29,7 @@ import com.intellij.lang.PsiStructureViewFactory;
 import com.intellij.openapi.actionSystem.Shortcut;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -229,7 +230,12 @@ public class GoStructureViewFactory implements PsiStructureViewFactory {
         return ((GoTypeSpec)element).getName() + appendix;
       }
       if (element instanceof GoNamedElement) {
-        GoType type = ((GoNamedElement)element).getGoType(null);
+        GoType type = null;
+        try {
+          type = ((GoNamedElement)element).getGoType(null);
+        }
+        catch (IndexNotReadyException ignored) {
+        }
         String typeText = type == null || element instanceof GoAnonymousFieldDefinition ? "" : separator + GoPsiImplUtil.getText(type);
         return ((GoNamedElement)element).getName() + typeText;
       }
