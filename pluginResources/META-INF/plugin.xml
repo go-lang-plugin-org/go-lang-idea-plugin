@@ -16,7 +16,7 @@
 
 <idea-plugin version="2" xmlns:xi="http://www.w3.org/2001/XInclude">
   <id>ro.redeul.google.go</id>
-  <name>Go</name>
+  <name>Go language (golang.org) support plugin</name>
   <version>1.0</version>
   <vendor url="https://github.com/go-lang-plugin-org"/>
   <category>Custom Languages</category>
