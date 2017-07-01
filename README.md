@@ -3,6 +3,39 @@
 [![Build Status](https://teamcity.jetbrains.com/app/rest/builds/buildType:(id:IntellijIdeaPlugins_Go_Test)/statusIcon.svg?guest=1)](https://teamcity.jetbrains.com/viewType.html?buildTypeId=IntellijIdeaPlugins_Go_Test&guest=1) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/go-lang-plugin-org/go-lang-idea-plugin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ## Pre-release builds
 
+Please note, that the following features are available in [Gogland, JetBrains's official IDE](https://www.jetbrains.com/go/), or [JetBrains maintained plugin](https://plugins.jetbrains.com/plugin/9568-go), but **not in this plugin**:
+
+- Navigation
+  - Go to inheritor structures
+  - Go to super interfaces
+- Type-aware completion (aka Smart completion)
+- Extract function refactoring
+- Implement type
+- Inspections and quick-fixes
+    - Introduce method
+    - Introduce field
+    - Delete unused parameter
+    - Show symbol duplicates
+    - Add/delete missing/redundant expressions in case of assignment count mismatch
+    - Properly implemented Duplicated symbols inspection
+    - Recursive type detection
+    - Invalid const initialization
+- Tests and coverage
+    - Sub-tests support (runner, navigation, gutter actions)
+    - Debugging tests
+- Debugger
+    - Step out
+    - 100x faster performance
+- General
+    - Highlighting of go:generate comments
+    - Quick documentation for struct fields
+    - Semantic highlighting
+    - Parameter name hints
+    - SQL auto-injection
+    - Support for Go 1.9+
+    - Support for AppEngine 1.9.54+
+
+
 **Supported IDEs**
 
 The plugin can be installed on following IntelliJ-based:
