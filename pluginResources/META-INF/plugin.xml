@@ -24,7 +24,7 @@
   <description><![CDATA[
     Support for Go programming language.
 
-    Please note, that the following features are available in Gogland but not in this plugin:
+    Please note, that the following features are available in GoLand but not in this plugin:
     <ul>
       <li>Navigation</li>
       <ul>

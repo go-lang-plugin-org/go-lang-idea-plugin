@@ -3,7 +3,7 @@
 [![Build Status](https://teamcity.jetbrains.com/app/rest/builds/buildType:(id:IntellijIdeaPlugins_Go_Test)/statusIcon.svg?guest=1)](https://teamcity.jetbrains.com/viewType.html?buildTypeId=IntellijIdeaPlugins_Go_Test&guest=1) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/go-lang-plugin-org/go-lang-idea-plugin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ## Pre-release builds
 
-Please note, that the following features are available in [Gogland, JetBrains's official IDE](https://www.jetbrains.com/go/), or [JetBrains maintained plugin](https://plugins.jetbrains.com/plugin/9568-go), but **not in this plugin**:
+Please note, that the following features are available in [GoLand, JetBrains's official IDE](https://www.jetbrains.com/go/), or [JetBrains maintained plugin](https://plugins.jetbrains.com/plugin/9568-go), but **not in this plugin**:
 
 - Navigation
   - Go to inheritor structures
