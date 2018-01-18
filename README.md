@@ -1,5 +1,10 @@
 # Go plugin for IntelliJ
 
+# Deprecation notice
+
+This project is officially not maintained anymore. If you are using [GoLand](https://jetbrains.com/go) or [IntelliJ IDEA Ultimate](https://jetbrains.com/idea) 2017.3 or later, please report your issue at the official tracker: https://youtrack.jetbrains.com/issues/Go
+
+
 [![Build Status](https://teamcity.jetbrains.com/app/rest/builds/buildType:(id:IntellijIdeaPlugins_Go_Test)/statusIcon.svg?guest=1)](https://teamcity.jetbrains.com/viewType.html?buildTypeId=IntellijIdeaPlugins_Go_Test&guest=1) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/go-lang-plugin-org/go-lang-idea-plugin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ## Pre-release builds
 
